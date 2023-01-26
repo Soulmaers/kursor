@@ -18,6 +18,14 @@ td {
     border-bottom: 20px solid lightgray
 }
 
+.detalisation {
+    width: 35%;
+    min-height: 600px;
+    border-right: 20px solid lightgray;
+    display: none;
+    flex-direction: column;
+}
+
 .menu {
     display: flex;
     margin-left: 50px;

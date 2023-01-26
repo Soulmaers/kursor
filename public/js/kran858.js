@@ -498,3 +498,17 @@ menu2.forEach(el => {
         el.style.backgroundColor = 'lightgray'
     }
 })
+
+const detaly = document.querySelector('.detaly');
+
+detaly.addEventListener('click', detalyFn)
+function detalyFn(e) {
+    e.preventDefault();
+    const detalisation = document.querySelector('.detalisation');
+    const wrapperLeft = document.querySelector('.wrapper_left');
+    const wrapperRigth = document.querySelector('.wrapper_right');
+    detalisation.style.display = 'flex';
+    wrapperLeft.style.display = 'none';
+    wrapperRigth.style.display = 'none';
+
+}
