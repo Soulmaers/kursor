@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Прототип интерфейса</title>
+    <link rel="stylesheet" type="text/css" href="css/pp933.css" />
+    <link rel="Shortcut Icon" href="../image/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto:wght@300&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.css "
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <script src=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.js "
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="menu">
+            <ul class="list_menu_left">
+                <li class="list_item_menu"><a class="link_menu" href="index.html">Мониторинг</a>
+                <li class="list_item_menu"><a class="link_menu detaly" href="#">Детализация</a>
+            </ul>
+            <ul class="list_menu_center">
+                <li class="list_item_menu car_item"><a class="link_menu car" href="./index.html">TDRMX 652</a>
+                <li class="list_item_menu car_item"><a class="link_menu car" href="./pp933.html">PP933</a>
+                <li class="list_item_menu car_item"><a class="link_menu car" href="./kran858.html">Кран 858</a>
+            </ul>
+        </div>
+    </header>
+
+
+    <main class="main">
+        <div class="wrapper_left">
+            <div class="wrapper_up">
+
+
+                <div id="map" style="width: 100%; height: 300px"></div>
+                <!-- Get the leaflet JavaScript file -->
+
+            </div>
+            <div class="speedGraf">
+                <div class="form_speed">
+                    <label>Интервал
+                        <select class="select_speed">
+                            <option disabled selected value="0">Указанный интервал</option>
+                            <option class="option_int" value="1">За сутки</option>
+                            <option class="option_int" value="2">За неделю</option>
+                            <option class="option_int" value="3">За месяц</option>
+                        </select>
+                    </label>
+                    <label>От
+                        <input class="input_date" type="date" value="" placeholder="выберите дату От">
+                    </label>
+                    <label>До
+                        <input class="input_date" type="date" value="" placeholder="выберите дату До">
+                    </label>
+                    <div class="btn_speed">
+                        <button class="btm_form">Очистить</button>
+                        <button class="btm_form control">Выполнить</button>
+                    </div>
+                </div>
+                <div class="grafik1">
+                    <canvas id="myChartg1" width="600" height="250"></canvas>
+                </div>
+            </div>
+            <div class="wrapper_button">
+
+                <button class="btnsens">Давление</button>
+                <button class="btnsens">Температура</button>
+            </div>
+            <div class="title_sens">Параметры:</div>
+            <ul class="obo">
+            </ul>
+        </div>
+        <div class="wrapper_right">
+            <div class="container_left">
+                <div class="save">
+                    <button class="btn_save">Сохранить конфигуратор</button>
+                </div>
+                <div class="clear">
+                    <button class="btn_clear">Очистить модель</button>
+                </div>
+                <div class="change">
+
+                    <input class="job" type="number" value="0.069" placeholder="Введите коэффициент">
+
+                </div>
+                <div class="dropdown">
+                    <button class="dropbtn">Кол-во осей</button>
+                    <ul class="dropdown-content">
+                        <li class="linkSelect">1</li>
+                        <li class="linkSelect">2</li>
+                        <li class="linkSelect">3</li>
+                        <li class="linkSelect">4</li>
+                        <li class="linkSelect">5</li>
+                        <li class="linkSelect">6</li>
+                        <li class="linkSelect">7</li>
+                        <li class="linkSelect">8</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="wrapper_containt">
+                <div class="header_car">
+                    <h2 class="title_two">PP933</h2>
+                </div>
+                <div class="moduleConfig">
+
+                    <div class="dropdownOs">
+                        <button class="dropbtnOs">Ось</button>
+                        <ul class="dropdown-contentOs">
+                            <li class="linkSelectOs">Тягач</li>
+                            <li class="linkSelectOs">Прицеп</li>
+                        </ul>
+                    </div>
+                    <div class="dropdownTires">
+                        <button class="dropbtnTires">Кол-во колёс</button>
+                        <ul class="dropdown-contentTires">
+                            <li class="linkSelectTires">2</li>
+                            <li class="linkSelectTires">4</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card c2_4_4">
+                    <div class="container_2_4_4">
+                        <div class=" osi">
+                            <div class="tires_spark">
+                                <div class="tires mod">
+
+                                    <a class="tires_link" id="1" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+
+                                    <a class="tires_link" id="2" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="centerOs" id="1"></div>
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="3" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="4" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=" osi">
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="5" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="6" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="centerOs" id="2"></div>
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="7" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="8" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=" osi">
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="9" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="10" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="centerOs" id="3"></div>
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="11" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="12" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=" osi">
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="13" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="14" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="centerOs" id="4"></div>
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="15" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="16" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=" osi">
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="17" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="18" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="centerOs" id="5"></div>
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="19" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="20" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=" osi">
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="21" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="22" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="centerOs" id="6"></div>
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="23" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="24" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="osi">
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="25" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="26" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="centerOs" id="7"></div>
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="27" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="28" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=" osi">
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="29" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="30" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="centerOs" id="8"></div>
+                            <div class="tires_spark">
+                                <div class="tires mod">
+                                    <a class="tires_link" id="31" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                                <div class="tires mod">
+                                    <a class="tires_link" id="32" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                        <div class='place'></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="grafik">
+                    <canvas id="myChartg" width="600" height="250"></canvas>
+                </div>
+            </div>
+
+
+        </div>
+
+    </main>
+
+    <!--
+    <h1>Auth-test</h1>
+    <form class="form">
+        <input type="text" name="name">
+        <input type="text" name="second_name">
+        <input type="email" name="email">
+        <input type="text" name="password">
+        <button type="submit">Отправить</button>
+    </form>
+
+
+    <form class="formin">
+        <input type="email" name="email">
+        <input type="text" name="password">
+        <button type="submit">Отправить</button>
+    </form>
+-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="https://hst-api.wialon.com/wsdk/script/wialon.js"></script>
+    <script type="module" src="js/kran858.js"></script>
+
+</body>
+
+</html>

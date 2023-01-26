@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Прототип интерфейса</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="Shortcut Icon" href="../image/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto:wght@300&display=swap"
+        rel="stylesheet">
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="menu">
+            <ul class="list_menu_left">
+                <li class="list_item_menu"><a class="link_menu" href="index.html">Мониторинг</a>
+                <li class="list_item_menu"><a class="link_menu detaly" href="#">Детализация</a>
+            </ul>
+            <ul class="list_menu_center">
+                <li class="list_item_menu car_item"><a class="link_menu car" href="#">TDRMX 652</a>
+                <li class="list_item_menu car_item"><a class="link_menu car" href="./pp933.html">PP933</a>
+                <li class="list_item_menu car_item"><a class="link_menu car" href="./kran858.html">Кран 858</a>
+            </ul>
+        </div>
+    </header>
+
+    <main class="main">
+
+        <div class="detalisation">
+            <div class="format">
+                <h3 class="title_det">Мониторинг эксплуатации шин</h3>
+                <ul class="item_det">
+                    <li class="list_det">Индикатор остаточного протектора</li>
+                    <li class="list_det">График протектора</li>
+                    <li class="list_det">Иконка (батарейка) на остаток протектора</li>
+                    <li class="list_det">Советчик шинному инженеру</li>
+                    <li class="list_det">Система управления жизненным циклом крупногабаритных шин</li>
+                </ul>
+            </div>
+            <div class="format">
+                <h3 class="title_det">Дополнительные параметры ТС</h3>
+                <ul class="item_det">
+                    <li class="list_det">Датчик удара (слабый, сильный)</li>
+                    <li class="list_det">CAN шина</li>
+                    <li class="list_det">Обороты двигателя</li>
+                    <li class="list_det">Температура ОЖ</li>
+                    <li class="list_det">Нагрузка на ось(только с CAN шины)</li>
+                    <li class="list_det">Система подсчета расходов по платону</li>y
+                    <li class="list_det">Проверка качества вождения</li>
+                    <li class="list_det">Проверка штрафов из ГИБДД через гос.услуги</li>
+                </ul>
+            </div>
+        </div>
+        <div class="wrapper_left">
+            <div class="grafik">
+                <canvas id="myChartg" width="600" height="250"></canvas>
+            </div>
+            <div class="btn24">График датчиков за последние 24 часа</div>
+            <div class="grafik1">
+                <canvas id="myChartg1" width="600" height="250"></canvas>
+            </div>
+            <div class="wrapper_right_dash">
+
+                <div class="dash_card">
+                    <h2 class="dash_title">
+                        Соотношение отклонений по давлению
+                    </h2>
+                    <div class="dash_board">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+                <div class="dash_card">
+                    <h2 class="dash_title">
+                        Соотношение отклонений по температуре
+                    </h2>
+                    <div class="dash_board">
+                        <canvas id="myChart2"></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="wrapper_right">
+            <div class="wrapper_containt">
+                <div class="left_widjet">
+                    <div class="container_widget">
+                        <div class="value_pole">
+                            <div class="max_min_text">max</div>
+                            <input class="max_min_value max_value" type="number" id="m01">
+                        </div>
+
+                        <div class="value_pole">
+                            <div class="max_min_text">min</div>
+                            <input class="max_min_value min_value" minlength="2" type="number" id="m11">
+                        </div>
+                    </div>
+                    <div class="container_widget">
+                        <div class="value_pole">
+                            <div class="max_min_text">max</div>
+                            <input class="max_min_value max_value" type="number" id="m02">
+                        </div>
+
+                        <div class="value_pole">
+                            <div class="max_min_text">min</div>
+                            <input class="max_min_value min_value" type="number" id="m12">
+                        </div>
+                    </div>
+                    <div class="container_widget">
+                        <div class="value_pole">
+                            <div class="max_min_text">max</div>
+                            <input class="max_min_value max_value" type="number" id="m03">
+                        </div>
+
+                        <div class="value_pole">
+                            <div class="max_min_text ">min</div>
+                            <input class="max_min_value min_value" type="number" id="m13">
+                        </div>
+                    </div>
+                    <div class="container_widget">
+                        <div class="value_pole">
+                            <div class="max_min_text">max</div>
+                            <input class="max_min_value max_value" type="number" id="m04">
+                        </div>
+
+                        <div class="value_pole">
+                            <div class="max_min_text">min</div>
+                            <input class="max_min_value min_value" type="number" id="m14">
+                        </div>
+                    </div>
+                    <div class="container_widget">
+                        <div class="value_pole">
+                            <div class="max_min_text">max</div>
+                            <input class="max_min_value max_value" type="number" id="m05">
+                        </div>
+
+                        <div class="value_pole">
+                            <div class="max_min_text">min</div>
+                            <input class="max_min_value min_value" type="number" id="m15">
+                        </div>
+                    </div>
+                </div>
+                <div class="card c2_4_4">
+                    <h2 class="title_two"></h2>
+                    <div class="container_2_4_4">
+                        <div class="akb">
+                            <p class="akbText"></p>
+                        </div>
+                        <div class="front_axle">
+                            <div class="tires">
+                                <span class="place">name tires1 пробег</span>
+                                <a class="tires_link" href="#">
+                                    <div class="tiresD tiresD733"></div>
+                                    <div class="tiresT tiresT733"></div>
+                                </a>
+                            </div>
+                            <div class="tires">
+                                <span class="place">name tires2 пробег</span>
+                                <a class="tires_link" href="#">
+                                    <div class="tiresD tiresD733"> </div>
+                                    <div class="tiresT tiresT733"></div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="front_center">
+                            <div class="tires_spark">
+                                <div class="tires">
+                                    <span class="place">name tires3 пробег</span>
+                                    <a class="tires_link" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                    </a>
+                                </div>
+                                <div class="tires">
+                                    <span class="place">name tires4 пробег</span>
+                                    <a class="tires_link" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="tires_spark">
+                                <div class="tires">
+                                    <span class="place">name tires5 пробег</span>
+                                    <a class="tires_link" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                    </a>
+                                </div>
+                                <div class="tires">
+                                    <span class="place">name tires6 пробег</span>
+                                    <a class="tires_link" href="#">
+                                        <div class="tiresD tiresD733"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rear">
+                            <div class="rear_axle">
+                                <div class="tires">
+                                    <span class="place">name tires7 пробег</span>
+                                    <a class="tires_link" href="#">
+                                        <div class="tiresD tiresD7333"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                    </a>
+                                </div>
+                                <div class="tires">
+                                    <span class="place">name tires8 пробег</span>
+                                    <a class="tires_link" href="#">
+                                        <div class="tiresD tiresD7333"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="rear_axle">
+                                <div class="tires">
+                                    <span class="place">name tires9 пробег</span>
+                                    <a class="tires_link" href="#">
+                                        <div class="tiresD tiresD7333"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                    </a>
+                                </div>
+                                <div class="tires">
+                                    <span class="place">name tires10 пробег</span>
+                                    <a class="tires_link" href="#">
+                                        <div class="tiresD tiresD7333"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="rear_axle">
+                                <div class="tires">
+                                    <span class="place">name tires11 пробег</span>
+                                    <a class="tires_link" href="#">
+                                        <div class="tiresD tiresD7333"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                    </a>
+                                </div>
+                                <div class="tires">
+                                    <span class="place">name tires12 пробег</span>
+                                    <a class="tires_link" href="#">
+                                        <div class="tiresD tiresD7333"> </div>
+                                        <div class="tiresT tiresT733"></div>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                        <input class="number number_local" maxlength="9" id="n01">
+                        <div class="spareContainer">
+                            <div class="spare">
+                                <div class="spareWill1"></div>
+                                <div class="spareWill2"></div>
+                                <div class="imgSpare"><img class="img" src="./image/kol.png"></div>
+                            </div>
+                            <div class="spare">
+                                <div class="spareWill1"></div>
+                                <div class="spareWill2"></div>
+                                <div class="imgSpare"><img class="img" src="./image/kol.png"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+                <div class="profil">
+
+                    <div class="bigDiv">
+                        <div class="odometr">
+                            <p class="odom"></p>
+                            <p class="odd">км</p>
+                        </div>
+                        <div class="toT">
+                            <p class="tovalue"></p>
+                            <p class="to">ТО Тягача</p>
+                        </div>
+                        <div class="toP">
+                            <p class="tovalue"></p>
+                            <p class="to">ТО Прицепа</p>
+                        </div>
+                        <input class="number2 number_local" maxlength="9" id="n02">
+                        <div class="oil">
+                            <p class="oilText"></p>
+                        </div>
+                        <div class="lowDiv oneLow">
+                            <div class="frontSpare">
+                                <div class="tiresProfil spareWill1"></div>
+                                <div class="tiresProfil spareWill12"></div>
+                                <div class="imgDivTires"><img class="img" src="./image/kol.png"></div>
+                            </div>
+                        </div>
+                        <div class="lowDiv twoLow">
+                            <div class="frontSpare sparka">
+                                <div class="tiresUp">
+                                    <div class="tiresProfil spareWill1_1"></div>
+                                    <div class="tiresProfil spareWill1_2"></div>
+                                </div>
+                                <div class="tiresDown">
+                                    <div class="tiresProfil spareWill1_3"></div>
+                                    <div class="tiresProfil spareWill1_4"></div>
+                                </div>
+                                <div class="imgDivTires"><img class="img" src="./image/kol.png"></div>
+                            </div>
+                        </div>
+                        <div class="three">
+                            <div class="lowDiv threeLow">
+                                <div class="frontSpare">
+                                    <div class="tiresProfilr spareWill1"></div>
+                                    <div class="tiresProfilr spareWill12"></div>
+                                    <div class="imgDivTires"><img class="img" src="./image/kol.png"></div>
+                                </div>
+                            </div>
+
+                            <div class="lowDiv threeLow">
+                                <div class="frontSpare">
+                                    <div class="tiresProfilr spareWill1"></div>
+                                    <div class="tiresProfilr spareWill12"></div>
+                                    <div class="imgDivTires"><img class="img" src="./image/kol.png"></div>
+                                </div>
+                            </div>
+
+                            <div class="lowDiv threeLow">
+                                <div class="frontSpare">
+                                    <div class="tiresProfilr spareWill1"></div>
+                                    <div class="tiresProfilr spareWill12"></div>
+                                    <div class="imgDivTires"><img class="img" src="./image/kol.png"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="techInfo">
+                        <h2 class="techTitle">Основные показатели колеса</h2>
+                        <div class="tth">
+                            <ul class="techInfo_list">
+                                <li class="techItem">
+                                    <p class="techText">Марка</p>
+                                </li>
+                                <li class="techItem">
+                                    <p class="techText">Модель</p>
+                                </li>
+                                <li class="techItem">
+                                    <p class="techText">Рабочее давление в PSI</p>
+                                </li>
+
+                                <li class="techItem">
+                                    <p class="techText od">min и max отклонение в BAR</p>
+                                </li>
+                                <li class="techItem">
+                                    <p class="techText">Текущий пробег колеса</p>
+                                </li>
+                                <li class="techItem">
+                                    <p class="techText">Дата монтажа</p>
+                                </li>
+                                <li class="techItem">
+                                    <p class="techText">Пробег по паспорту</p>
+                                </li>
+                                <li class="techItem">
+                                    <p class="techText">Остаточный пробег колеса в км</p>
+                                </li>
+                                <li class="techItem">
+                                    <p class="techText">Оставшаяся глубина протектора</p>
+                                </li>
+                                <li class="techItem">
+                                    <p class="techText">Дата замера протектора</p>
+                                </li>
+
+                            </ul>
+                            <form class="techForm">
+                                <input class="techInput" id='1'>
+                                <input class="techInput" id='2'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='3'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b1'></p>
+                                </div>
+
+                                <div class="min_max">
+                                    <p class="techText barDd">min</p>
+                                    <p class="techInput br validation barMin" id='n1'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n2'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='t1'>
+                                <input class="techInput dateChangeTires" type="date" id='5'>
+                                <input class="techInput passProb validation" type="number" id='p1'>
+                                <p class="techInput resProb" id='r1'></p>
+                                <input class="techInput" id='pr1'>
+                                <input class="techInput dateChangeTires" type="date" id='dat1'>
+
+                            </form>
+                            <form class="techForm">
+                                <input class="techInput" id='8'>
+                                <input class="techInput" id='9'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='10'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b2'></p>
+                                </div>
+                                <div class="min_max">
+                                    <p class="techText barDd">min</p>
+                                    <p class="techInput br validation barMin" id='n3'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n4'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='11'>
+                                <input class="techInput dateChangeTires" type="date" id='12'>
+                                <input class="techInput passProb validation" type="number" id='13'>
+                                <p class="techInput resProb" id='14'></p>
+                                <input class="techInput" id='pr2'>
+                                <input class="techInput dateChangeTires" type="date" id='dat2'>
+                            </form>
+                            <form class="techForm">
+                                <input class="techInput" id='15'>
+                                <input class="techInput" id='16'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='17'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b3'></p>
+                                </div>
+                                <div class="min_max">
+                                    <p class="techText barDd">min</p>
+                                    <p class="techInput br validation barMin" id='n5'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n6'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='18'>
+                                <input class="techInput dateChangeTires" type="date" id='19'>
+                                <input class="techInput passProb validation" type="number" id='20'>
+                                <p class="techInput resProb" id='21'></p>
+                                <input class="techInput" id='pr3'>
+                                <input class="techInput dateChangeTires" type="date" id='dat3'>
+                            </form>
+                            <form class="techForm">
+                                <input class="techInput" id='22'>
+                                <input class="techInput" id='23'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='24'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b4'></p>
+                                </div>
+                                <div class="min_max">
+                                    <p class="techText barDd">min</p>
+                                    <p class="techInput br validation barMin" id='n7'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n8'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='25'>
+                                <input class="techInput dateChangeTires" type="date" id='26'>
+                                <input class="techInput passProb validation" type="number" id='27'>
+                                <p class="techInput resProb" id='28'></p>
+                                <input class="techInput" id='pr4'>
+                                <input class="techInput dateChangeTires" type="date" id='dat4'>
+                            </form>
+                            <form class="techForm">
+                                <input class="techInput" id='29'>
+                                <input class="techInput" id='30'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='31'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b5'></p>
+                                </div>
+                                <div class="min_max">
+                                    <p class="techText barDd">min</p>
+                                    <p class="techInput br validation barMin" id='n9'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n10'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='32'>
+                                <input class="techInput dateChangeTires" type="date" id='33'>
+                                <input class="techInput passProb validation" type="number" id='34'>
+                                <p class="techInput resProb" id='35'></p>
+                                <input class="techInput" id='pr5'>
+                                <input class="techInput dateChangeTires" type="date" id='dat5'>
+                            </form>
+                            <form class="techForm">
+                                <input class="techInput" id='36'>
+                                <input class="techInput" id='37'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='38'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b6'></p>
+                                </div>
+                                <div class="min_max">
+                                    <p class="techText barDd">min</p>
+                                    <p class="techInput br validation barMin" id='n11'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n12'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='39'>
+                                <input class="techInput dateChangeTires" type="date" id='40'>
+                                <input class="techInput passProb validation" type="number" id='41'>
+                                <p class="techInput resProb" id='42'></p>
+                                <input class="techInput" id='pr6'>
+                                <input class="techInput dateChangeTires" type="date" id='dat6'>
+                            </form>
+                            <form class="techForm">
+                                <input class="techInput" id='43'>
+                                <input class="techInput" id='44'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='45'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b7'></p>
+                                </div>
+                                <div class="min_max">
+                                    <p class="techText barDd">min</p>
+                                    <p class="techInput br validation barMin" id='n13'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n14'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='46'>
+                                <input class="techInput dateChangeTires" type="date" id='47'>
+                                <input class="techInput passProb validation" type="number" id='48'>
+                                <p class="techInput resProb" id='49'></p>
+                                <input class="techInput" id='pr7'>
+                                <input class="techInput dateChangeTires" type="date" id='dat7'>
+                            </form>
+                            <form class="techForm">
+                                <input class="techInput" id='50'>
+                                <input class="techInput" id='51'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='52'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b8'></p>
+                                </div>
+                                <div class="min_max">
+                                    <p class="techText barDd">min</p>
+                                    <p class="techInput br validation barMin" id='n15'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n16'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='53'>
+                                <input class="techInput dateChangeTires" type="date" id='54'>
+                                <input class="techInput passProb validation" type="number" id='55'>
+                                <p class="techInput resProb" id='56'></p>
+                                <input class="techInput" id='pr8'>
+                                <input class="techInput dateChangeTires" type="date" id='dat8'>
+                            </form>
+                            <form class="techForm">
+                                <input class="techInput" id='57'>
+                                <input class="techInput" id='58'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='59'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b9'></p>
+                                </div>
+                                <div class="min_max">
+                                    <p class="techText barDd">min</p>
+                                    <p class="techInput br validation barMin" id='n17'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n18'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='60'>
+                                <input class="techInput dateChangeTires" type="date" id='61'>
+                                <input class="techInput passProb validation" type="number" id='62'>
+                                <p class="techInput resProb" id='63'></p>
+                                <input class="techInput" id='pr9'>
+                                <input class="techInput dateChangeTires" type="date" id='dat9'>
+                            </form>
+                            <form class="techForm">
+                                <input class="techInput" id='64'>
+                                <input class="techInput" id='65'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='66'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b10'></p>
+                                </div>
+                                <div class="min_max">
+                                    <p class="techText barDd">min</p>
+                                    <p class="techInput br validation barMin" id='n19'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n20'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='67'>
+                                <input class="techInput dateChangeTires" type="date" id='68'>
+                                <input class="techInput passProb validation" type="number" id='69'>
+                                <p class="techInput resProb" id='70'></p>
+                                <input class="techInput" id='pr10'>
+                                <input class="techInput dateChangeTires" type="date" id='dat10'>
+                            </form>
+                            <form class="techForm">
+                                <input class="techInput" id='71'>
+                                <input class="techInput" id='72'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='73'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b11'></p>
+                                </div>
+                                <div class="min_max">
+                                    <p class="techText barDd">min</p>
+                                    <p class="techInput br validation barMin" id='n21'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n22'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='74'>
+                                <input class="techInput dateChangeTires" type="date" id='75'>
+                                <input class="techInput passProb validation" type="number" id='76'>
+                                <p class="techInput resProb" id='77'></p>
+                                <input class="techInput" id='pr11'>
+                                <input class="techInput dateChangeTires" type="date" id='dat11'>
+                            </form>
+                            <form class="techForm">
+                                <input class="techInput" id='78'>
+                                <input class="techInput" id='79'>
+                                <div class="enter">
+                                    <input class="techInput jobDav validation" type="number" id='80'>
+                                    <p class="techText barD">BAR</p>
+                                    <p class="techInput bar" id='b12'></p>
+                                </div>
+                                <div class="min_max">
+                                    <p class="techText barDd ">min</p>
+                                    <p class="techInput br validation barMin" id='n23'></p>
+                                    <p class="techText barDd">max</p>
+                                    <p class="techInput br validation barMax" id='n24'></p>
+                                </div>
+
+                                <input class="techInput toProb validation" type="number" id='81'>
+                                <input class="techInput dateChangeTires" type="date" id='82'>
+                                <input class="techInput passProb validation" type="number" id='83'>
+                                <p class="techInput resProb" id='84'></p>
+                                <input class="techInput" id='pr12'>
+                                <input class="techInput dateChangeTires" type="date" id='dat12'>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+            </div>
+            <!--<div class="card">
+                <h2 class="title">Объект3</h2>
+                <div class="container">
+                    <div class="front_axle">
+                        <div class="left_tires" id="left_tires"></div>
+                        <div class="right_tires" id="right_tires"></div>
+                    </div>
+                    <div class="rear_axle">
+                        <div class="left_tires" id="left_tires"></div>
+                        <div class="right_tires" id="right_tires"></div>
+                    </div>
+                </div>
+        </div>-->
+
+
+
+        </div>
+
+    </main>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="https://code.jquery.com/jquery-1.11.2.js"></script>
+
+
+    <script src="https://hst-api.wialon.com/wsdk/script/wialon.js"></script>
+    <!-- <script src="js/script.js"></script>-->
+    <script src="js/script.js"></script>
+
+
+</body>
+
+</html>
