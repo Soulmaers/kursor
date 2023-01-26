@@ -1,6 +1,7 @@
-import { divClear } from './func.js'
-import { view } from '../kran858.js'
+//import { divClear } from './func.js'
+import { view3 } from '../tdrmx339.js'
 //import { view2 } from '../kran858.js'
+import { divClear3 } from './func3.js'
 import { map } from './osm.js'
 const osi = document.querySelectorAll('.osi')
 const tires = document.querySelectorAll('.tires')
@@ -9,10 +10,10 @@ const centerOs = document.querySelectorAll('.centerOs');
 
 
 
-let iss;
-export const geoPosition = () => {
+let iss3;
+export const geoPosition3 = () => {
     console.log('запрос')
-    fetch('/api/datawialonGeo', {
+    fetch('/api/datawialonGeo3', {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
@@ -22,12 +23,12 @@ export const geoPosition = () => {
         .then((res) => {
             const geo = res
             console.log(geo)
-            const center = [geo.geoY, geo.geoX]
+            const center = [geo.geoY3, geo.geoX3]
             console.log('запрос2')
             console.log(center)
             //map.setView([59.9386, 30.3141], 8);
             //  L.marker(center).addTo(map);
-            if (!iss) {
+            if (!iss3) {
                 var LeafIcon = L.Icon.extend({
                     options: {
                         iconSize: [28, 28],
@@ -44,23 +45,28 @@ export const geoPosition = () => {
                 })
 
                 // var myIcon2 = L.divIcon({ className: 'my-div-icon' });
-                iss = L.marker(center, { icon: greenIcon }).bindPopup('Кран858').addTo(map);
+                iss3 = L.marker(center, { icon: greenIcon }).bindPopup('TDRMX339').addTo(map);
                 //marker.bindPopup("Popup content");
-                iss.on('mouseover', function (e) {
+                iss3.on('mouseover', function (e) {
                     this.openPopup();
                 });
-                iss.on('mouseout', function (e) {
+                iss3.on('mouseout', function (e) {
                     this.closePopup();
                 });
             }
-            iss.setLatLng(center, /*{ icon: greenIcon }*/).update();
-            setTimeout(geoPosition, 6000);
+            iss3.setLatLng(center, /*{ icon: greenIcon }*/).update();
+            setTimeout(geoPosition3, 6000);
         })
 }
 
 
-export const loadModel = () => {
-    fetch('api/model', {
+
+export const loadModel3 = () => {
+    const osi = document.querySelectorAll('.osi')
+    //const tires = document.querySelectorAll('.tires')
+    //const tiresInside = document.querySelectorAll('.tiresInside')
+    const centerOs = document.querySelectorAll('.centerOs');
+    fetch('api/model3', {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
@@ -70,6 +76,7 @@ export const loadModel = () => {
         .then((res) => {
             const model = res
             console.log(model.values)
+            console.log(osi)
             if (model.values.length > 0) {
                 model.values.forEach(el => {
                     osi[el.osi - 1].style.display = 'flex';
@@ -95,7 +102,7 @@ export const loadModel = () => {
                 console.log('база пустая')
             }
         }),
-        fetch('api/tyres', {
+        fetch('api/tyres3', {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -106,7 +113,7 @@ export const loadModel = () => {
                 const params = res
                 console.log(params.values)
 
-                fetch('api/wialon', {
+                fetch('api/wialon3', {
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json',
@@ -120,7 +127,7 @@ export const loadModel = () => {
                             if (prev.name < next.name) return -1;
                             if (prev.name < next.name) return 1;
                         })
-                        view(data.values, params.values)
+                        view3(data.values, params.values)
                     })
             })
 }
@@ -128,10 +135,14 @@ export const loadModel = () => {
 
 
 
-export const reqDelete = () => {
-    const div = document.querySelector('.alarm')
-    div.style.display = 'none'
-    fetch('api/delete', {
+
+
+export const reqDelete3 = () => {
+    const div3 = document.querySelector('.alarm')
+    div3.style.display = 'none'
+    const wrapAlarm = document.querySelector('.wrap_alarm')
+    wrapAlarm.style.display = 'none'
+    fetch('api/delete3', {
         method: "DELETE",
         headers: {
             'Content-Type': 'application/json',
@@ -139,9 +150,9 @@ export const reqDelete = () => {
     })
         .then((res) => res.json())
         .then((res) => console.log(res))
-    divClear(osi)
-    divClear(tiresInside)
-    divClear(tires)
+    divClear3(osi)
+    divClear3(tiresInside)
+    divClear3(tires)
     centerOs.forEach(e => {
         e.style.backgroundImage = "url('../image/line.png')"
     })
@@ -151,8 +162,8 @@ export const reqDelete = () => {
 
 
 
-export const paramsDelete = () => {
-    fetch('api/paramsDelete', {
+export const paramsDelete3 = () => {
+    fetch('api/paramsDelete3', {
         method: "DELETE",
         headers: {
             'Content-Type': 'application/json',
@@ -175,12 +186,12 @@ export const paramsDelete = () => {
 
 
 
-export function postModel(arrTwo) {
+export function postModel3(arrTwo) {
     console.log(arrTwo)
     // const base = [];
     // base.push(osy, trailer, tyres)
     //   console.log(tu)
-    fetch('api/model', {
+    fetch('api/model3', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -189,22 +200,5 @@ export function postModel(arrTwo) {
     })
         .then((res) => res.json())
 }
-
-
-export function postModel2(arrTwo) {
-    console.log(arrTwo)
-    // const base = [];
-    // base.push(osy, trailer, tyres)
-    //   console.log(tu)
-    fetch('api/model2', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(arrTwo),
-    })
-        .then((res) => res.json())
-}
-
 
 

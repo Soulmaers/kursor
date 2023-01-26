@@ -2,9 +2,9 @@
 const wialon = require('wialon');
 const express = require('express');
 const connection = require('./db')
-const { allParams, lostSens, geo, geo2 } = require('./sort')
+const { allParams, lostSens, geo, geo2, geo3 } = require('./sort')
 
-const { prms1, prms, prms2, prms22 } = require('./params')
+const { prms1, prms, prms2, prms22, prms222 } = require('./params')
 const app = express();
 app.use(express.json());
 
@@ -32,6 +32,9 @@ let gX;
 
 let gY2;
 let gX2;
+
+let gY3;
+let gX3;
 
 function getMainInfo() {
     console.log('запуск')
@@ -64,6 +67,20 @@ function getMainInfo() {
         })
         .then(function (data) {
             geo2(data)
+            //    gY2 = geoY;
+            //  gX2 = geoX;
+            //  console.log(geoY, geoX)
+            //console.log(gY, gX)
+
+            //  геопозиция
+        })
+
+    session.request('core/search_item', prms222)
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function (data) {
+            geo3(data)
             //    gY2 = geoY;
             //  gX2 = geoX;
             //  console.log(geoY, geoX)
@@ -145,6 +162,41 @@ function getMainInfo() {
                     })
                 }
             });
+
+
+
+            const selectBase3 = `SELECT id FROM params3 WHERE 1`
+            connection.query(selectBase3, function (err, results) {
+                if (err) console.log(err);
+                // console.log(results);
+                //  console.log(results.length);
+                if (results.length <= 1) {
+                    console.log('старт222')
+                    // const datas = [['M', 300], ['R', 200], ['P', 500]]
+                    const sql = `INSERT INTO params3(name,value) VALUES?`;
+                    connection.query(sql, [sensorr], function (err, results) {
+                        if (err) console.log(err);
+                        // console.log(results);
+                    });
+                    connection.end();
+                }
+                else if (results.length > 1) {
+                    console.log('старт2')
+                    let count = 0;
+                    sensorr.forEach(el => {
+                        count++
+                        const sql = `UPDATE params3  SET name='${el[0]}', value='${el[1]}' WHERE id=${count}`;
+                        // const data = [34, "Tom"];
+                        connection.query(sql, function (err, results) {
+                            if (err) console.log(err);
+                            //console.log(results);
+                        });
+                        //  connection.end();
+                    })
+                }
+            });
+
+
 
 
         })

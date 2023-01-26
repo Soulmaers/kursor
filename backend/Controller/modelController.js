@@ -36,6 +36,22 @@ exports.deleteView2 = (req, res) => {
     }
 }
 
+exports.deleteView3 = (req, res) => {
+    // console.log(req.body)
+    // console.log('запрос')
+    try {
+        const postModel = "DELETE FROM model3"
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            response.status(200, results, res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
 exports.paramsDeleteView = (req, res) => {
     try {
         const postModel = "DELETE FROM tyres"
@@ -54,6 +70,21 @@ exports.paramsDeleteView = (req, res) => {
 exports.paramsDeleteView2 = (req, res) => {
     try {
         const postModel = "DELETE FROM tyres2"
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            response.status(200, results, res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+
+exports.paramsDeleteView3 = (req, res) => {
+    try {
+        const postModel = "DELETE FROM tyres3"
         connection.query(postModel, function (err, results) {
             if (err) console.log(err);
             //console.log(results)
@@ -97,6 +128,24 @@ exports.model2 = (req, res) => {
         console.log(e)
     }
 }
+
+exports.model3 = (req, res) => {
+    console.log(req.body)
+    //  console.log('запрос')
+    try {
+        const postModel3 = `INSERT INTO model3(osi, trailer, tyres) VALUES?`
+        connection.query(postModel3, [req.body], function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            response.status(200, results, res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
 exports.tyres = (req, res) => {
     console.log(req.body)
     //  console.log('запрос')
@@ -118,6 +167,22 @@ exports.tyres2 = (req, res) => {
     //  console.log('запрос')
     try {
         const postModel = `INSERT INTO tyres2(tyresdiv, pressure, temp) VALUES?`
+        connection.query(postModel, [req.body], function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            response.status(200, results, res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+exports.tyres3 = (req, res) => {
+    console.log(req.body)
+    //  console.log('запрос')
+    try {
+        const postModel = `INSERT INTO tyres3(tyresdiv, pressure, temp) VALUES?`
         connection.query(postModel, [req.body], function (err, results) {
             if (err) console.log(err);
             //console.log(results)
@@ -159,6 +224,21 @@ exports.modelView2 = (req, res) => {
     }
 }
 
+exports.modelView3 = (req, res) => {
+    // console.log('ответ')
+    try {
+        const selectBase = `SELECT osi, trailer,tyres FROM model3 WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            response.status(200, results, res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
 
 exports.tyresView = (req, res) => {
     try {
@@ -177,6 +257,21 @@ exports.tyresView = (req, res) => {
 exports.tyresView2 = (req, res) => {
     try {
         const selectBase = `SELECT tyresdiv, pressure,temp FROM tyres2 WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            response.status(200, results, res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
+exports.tyresView3 = (req, res) => {
+    try {
+        const selectBase = `SELECT tyresdiv, pressure,temp FROM tyres3 WHERE 1`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             //console.log(results)

@@ -1,5 +1,5 @@
 //import { divClear } from './func.js'
-import { view2 } from '../kran858.js'
+import { view2 } from '../pp933.js'
 //import { view2 } from '../kran858.js'
 import { divClear2 } from './func2.js'
 import { map } from './osm.js'

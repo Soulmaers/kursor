@@ -37,6 +37,23 @@ exports.datawialon2 = (req, res) => {
     }
 }
 
+exports.datawialon3 = (req, res) => {
+
+    // console.log('запрос')
+    try {
+        const selectBase = `SELECT name, value FROM params3 WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            // console.log(results)
+            response.status(200, results, res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
 exports.datawialonGeo = (req, res) => {
     try {
         console.log('запрос')
@@ -53,6 +70,17 @@ exports.datawialonGeo2 = (req, res) => {
         console.log('запрос')
         console.log(geoY, geoX)
         res.json({ geoY2, geoX2 })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+exports.datawialonGeo3 = (req, res) => {
+    try {
+        console.log('запрос')
+        console.log(geoY, geoX)
+        res.json({ geoY3, geoX3 })
     }
     catch (e) {
         console.log(e)

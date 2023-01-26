@@ -44,6 +44,11 @@ const prms22 = {
     "flags": 1025
 };
 
+const prms222 = {
+    "id": 26421451,
+    "flags": 1025
+};
+
 
 
 module.exports = {
@@ -51,6 +56,7 @@ module.exports = {
     prms,
     prms2,
     prms22,
+    prms222,
     prms12,
     carId
 }

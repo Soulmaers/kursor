@@ -4,6 +4,7 @@ function allParams(data) {
     // console.log(arr1[5][0].lmsg.p)
     sensors = Object.entries(arr1[5][3].lmsg.p)
     sensor = Object.entries(arr1[5][0].lmsg.p)
+    sensorr = Object.entries(arr1[5][1].lmsg.p)
 }
 
 
@@ -42,6 +43,16 @@ function geo2(data) {
     //console.log(geoY, geoX)
 }
 
+function geo3(data) {
+    const arr2 = Object.values(data);
+    // console.log(arr2)
+    // console.log(arr1[5][0].lmsg.p)
+    geoX3 = arr2[0].pos.x
+    geoY3 = arr2[0].pos.y
+
+    //console.log(geoY, geoX)
+}
+
 
 
 
@@ -49,7 +60,8 @@ module.exports = {
     lostSens,
     allParams,
     geo,
-    geo2
+    geo2,
+    geo3
 
 
 
