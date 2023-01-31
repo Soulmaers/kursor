@@ -1,6 +1,7 @@
 import { text } from './content.js'
 import { viewMenuParams } from './paramsTyresView.js'
 import { postModel } from './requests.js'
+import { pricep } from './visual.js'
 
 
 //viewMenuParams()
@@ -81,14 +82,21 @@ function modul() {
 }
 
 function os(arr) {
+    const cont2 = document.createElement('div');
+    const container = document.querySelector('.container')
+    cont2.classList.add('cont')
+    container.appendChild(cont2)
+
     const arrayTrailer = [];
+    //const arrPricep = [];
     const linkSelectOs = document.querySelectorAll('.linkSelectOs')
     const linkSelectTires = document.querySelectorAll('.linkSelectTires')
     linkSelectOs.forEach(e =>
         e.addEventListener('click', () => {
             arrayTrailer.push(e)
             e.textContent == 'Прицеп' ?
-                arr[arr.length - 1].style.backgroundImage = "url('../image/line_gray.png')" :
+                pricep(arr[arr.length - 1])
+                :
                 arr[arr.length - 1].style.backgroundImage = "url('../image/line_red.png')"
         }))
 

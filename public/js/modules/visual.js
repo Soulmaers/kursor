@@ -6,9 +6,11 @@ import { geoPosition } from './requests.js'
 
 let start;
 let time;
+//let timeParams;
 export function visual(el) {
     console.log(el)
     clearInterval(time)
+    // clearInterval(timeParams)
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const wrapperRight = document.querySelector('.wrapper_right')
@@ -24,7 +26,7 @@ export function visual(el) {
     viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
     titleCar.textContent = el.textContent
     loadParamsView()//запрос в базу и получение параметров
-    setInterval(loadParamsView, 5000)
+    //  setInterval(loadParamsView, 5000)
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
@@ -32,6 +34,7 @@ export function visual(el) {
         start = el;
         geoPosition();
         time = setInterval(geoPosition, 6000) //отрисовываем карту osm
+
 
         console.log(start)
     }
@@ -251,6 +254,10 @@ export function viewOs() {
         osi.forEach(el => {
             el.style.display = 'none'
         })
+        const cont2 = document.createElement('div');
+        cont2.classList.add('cont')
+        //  const container = document.querySelector('.container')
+        container.appendChild(cont2)
     }
     //eventBtnTyres();
     viewMenuParams()
@@ -275,6 +282,12 @@ export const divClear = (arr) => {
         //  arr.style.display = 'none';
         arr.remove();
     }
+}
 
-
+export const pricep = (elem) => {
+    const cont = document.querySelector('.cont')
+    console.log(elem.parentNode)
+    cont.prepend(elem.parentNode)
+    cont.style.marginTop = '72px'
+    elem.style.backgroundImage = "url('../image/line_gray.png')"
 }

@@ -1,5 +1,5 @@
 
-import { view, sensor, viewConfigurator } from './visual.js'
+import { view, sensor, viewConfigurator, pricep } from './visual.js'
 import { saveTyres } from './event.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 import { liCreate } from './visual.js'
@@ -34,11 +34,10 @@ export function viewMenuParams() {
     koleso(kolesos, btnsens)
 }
 
+
 export function loadParamsView() {
     const active = document.querySelectorAll('.color')
-    // console.log(active)
     const activePost = active[0].textContent.replace(/\s+/g, '')
-    // console.log(JSON.stringify({ activePost }))
     fetch('api/modelView', {
         method: "POST",
         headers: {
@@ -56,7 +55,8 @@ export function loadParamsView() {
                     osi[el.osi - 1].style.display = 'flex';
                     centerOs[el.osi - 1].style.display = 'flex';
                     el.trailer == 'Прицеп' ?
-                        centerOs[el.osi - 1].style.backgroundImage = "url('../image/line_gray.png')" :
+                        pricep(centerOs[el.osi - 1])
+                        :
                         centerOs[el.osi - 1].style.backgroundImage = "url('../image/line_red.png')"
                     if (el.tyres == 2) {
                         centerOs[el.osi - 1].previousElementSibling.children[0].style.display = 'flex';
@@ -75,39 +75,43 @@ export function loadParamsView() {
             else {
                 console.log('база пустая')
             }
-        }),
-        fetch('api/tyresView', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ activePost }))
         })
-            .then((res) => res.json())
-            .then((res) => {
-                const params = res
-                //    console.log(params)
-                // console.log(JSON.stringify({ body }))
-                fetch('api/wialon', {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: (JSON.stringify({ activePost }))
-                })
-                    .then((res) => res.json())
-                    .then((res) => {
-                        const data = res
-                        //    console.log(data)
-                        data.values.sort((prev, next) => {
-                            if (prev.name < next.name) return -1;
-                            if (prev.name < next.name) return 1;
-                        })
-                        //   console.log(data.values, params.values)
-                        view(data.values)
-                        viewConfigurator(data.values, params.values)
-                    })
+    viewPokasateli()
+    setInterval(viewPokasateli, 6000)
+
+}
+
+function viewPokasateli() {
+    const active = document.querySelectorAll('.color')
+    const activePost = active[0].textContent.replace(/\s+/g, '')
+    fetch('api/tyresView', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost }))
+    })
+        .then((res) => res.json())
+        .then((res) => {
+            const params = res
+            fetch('api/wialon', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: (JSON.stringify({ activePost }))
             })
+                .then((res) => res.json())
+                .then((res) => {
+                    const data = res
+                    data.values.sort((prev, next) => {
+                        if (prev.name < next.name) return -1;
+                        if (prev.name < next.name) return 1;
+                    })
+                    view(data.values)
+                    viewConfigurator(data.values, params.values)
+                })
+        })
 }
 function koleso(kol, btnsens) {
     liCreate()
