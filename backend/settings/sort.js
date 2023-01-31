@@ -1,13 +1,15 @@
 
 function allParams(data) {
-    const arr1 = Object.values(data);
+    const allParams = Object.values(data);
+    console.log(allParams)
     // console.log(arr1[5][0].lmsg.p)
-    sensors = Object.entries(arr1[5][3].lmsg.p)
-    sensor = Object.entries(arr1[5][0].lmsg.p)
-    sensorr = Object.entries(arr1[5][1].lmsg.p)
+    sensors = Object.entries(allParams[5][3].lmsg.p)
+    sensor = Object.entries(allParams[5][0].lmsg.p)
 }
 
 
+
+/*
 function lostSens(data) {
     const arr = Object.values(data);
     //console.log(data)
@@ -21,47 +23,28 @@ function lostSens(data) {
     temperatureSensor.push(arr[11]); temperatureSensor.push(arr[19]); temperatureSensor.push(arr[28]); temperatureSensor.push(arr[27]);
 
 
-}
+}*/
 
 function geo(data) {
-    const arr2 = Object.values(data);
+    // const arr2 = Object.values(data);
     // console.log(arr2)
     // console.log(arr1[5][0].lmsg.p)
-    geoX = arr2[0].pos.x
-    geoY = arr2[0].pos.y
+    geoX = data.x
+    geoY = data.y
 
-    // console.log(geoY, geoX)
+    console.log(geoY, geoX)
 }
 
-function geo2(data) {
-    const arr2 = Object.values(data);
-    // console.log(arr2)
-    // console.log(arr1[5][0].lmsg.p)
-    geoX2 = arr2[0].pos.x
-    geoY2 = arr2[0].pos.y
 
-    //console.log(geoY, geoX)
-}
-
-function geo3(data) {
-    const arr2 = Object.values(data);
-    // console.log(arr2)
-    // console.log(arr1[5][0].lmsg.p)
-    geoX3 = arr2[0].pos.x
-    geoY3 = arr2[0].pos.y
-
-    //console.log(geoY, geoX)
-}
 
 
 
 
 module.exports = {
-    lostSens,
+
     allParams,
     geo,
-    geo2,
-    geo3
+
 
 
 

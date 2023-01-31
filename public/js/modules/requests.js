@@ -1,162 +1,64 @@
-import { divClear } from './func.js'
-import { view } from '../kran858.js'
-//import { view2 } from '../kran858.js'
-import { map } from './osm.js'
-const osi = document.querySelectorAll('.osi')
-const tires = document.querySelectorAll('.tires')
-const tiresInside = document.querySelectorAll('.tiresInside')
-const centerOs = document.querySelectorAll('.centerOs');
 
+import { divClear, osmView } from './visual.js'
 
-
-let iss;
-export const geoPosition = () => {
-    console.log('запрос')
-    fetch('/api/datawialonGeo', {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-        .then((res) => res.json())
-        .then((res) => {
-            const geo = res
-            console.log(geo)
-            const center = [geo.geoY, geo.geoX]
-            console.log('запрос2')
-            console.log(center)
-            //map.setView([59.9386, 30.3141], 8);
-            //  L.marker(center).addTo(map);
-            if (!iss) {
-                var LeafIcon = L.Icon.extend({
-                    options: {
-                        iconSize: [28, 28],
-                        //   shadowSize: [50, 64],
-                        iconAnchor: [0, 0],
-                        // shadowAnchor: [4, 62],
-                        popupAnchor: [0, 0]
-                    }
-                });
-
-                var greenIcon = new LeafIcon({
-                    iconUrl: '../../image/iconCar.png',
-                    // shadowUrl: 'er.png'
-                })
-
-                // var myIcon2 = L.divIcon({ className: 'my-div-icon' });
-                iss = L.marker(center, { icon: greenIcon }).bindPopup('Кран858').addTo(map);
-                //marker.bindPopup("Popup content");
-                iss.on('mouseover', function (e) {
-                    this.openPopup();
-                });
-                iss.on('mouseout', function (e) {
-                    this.closePopup();
-                });
-            }
-            iss.setLatLng(center, /*{ icon: greenIcon }*/).update();
-            setTimeout(geoPosition, 6000);
-        })
-}
-
-
-export const loadModel = () => {
+export function postModel(model) {
+    const active = document.querySelectorAll('.color')
+    const activePost = active[0].textContent.replace(/\s+/g, '')
+    console.log(activePost)
     fetch('api/model', {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-        .then((res) => res.json())
-        .then((res) => {
-            const model = res
-            console.log(model.values)
-            if (model.values.length > 0) {
-                model.values.forEach(el => {
-                    osi[el.osi - 1].style.display = 'flex';
-                    centerOs[el.osi - 1].style.display = 'flex';
-                    el.trailer == 'Прицеп' ?
-                        centerOs[el.osi - 1].style.backgroundImage = "url('../image/line_red.png')" :
-                        centerOs[el.osi - 1].style.backgroundImage = "url('../image/line_gray.png')"
-                    if (el.tyres == 2) {
-                        centerOs[el.osi - 1].previousElementSibling.children[0].style.display = 'flex';
-                        centerOs[el.osi - 1].nextElementSibling.children[1].style.display = 'flex';
-                        centerOs[el.osi - 1].previousElementSibling.children[1].style.display = 'none';
-                        centerOs[el.osi - 1].nextElementSibling.children[0].style.display = 'none';
-                    }
-                    else {
-                        centerOs[el.osi - 1].previousElementSibling.children[0].style.display = 'flex';
-                        centerOs[el.osi - 1].previousElementSibling.children[1].style.display = 'flex';
-                        centerOs[el.osi - 1].nextElementSibling.children[0].style.display = 'flex';
-                        centerOs[el.osi - 1].nextElementSibling.children[1].style.display = 'flex';
-                    }
-                })
-            }
-            else {
-                console.log('база пустая')
-            }
-        }),
-        fetch('api/tyres', {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                const params = res
-                console.log(params.values)
-
-                fetch('api/wialon', {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                    .then((res) => res.json())
-                    .then((res) => {
-                        const data = res
-
-                        data.values.sort((prev, next) => {
-                            if (prev.name < next.name) return -1;
-                            if (prev.name < next.name) return 1;
-                        })
-                        view(data.values, params.values)
-                    })
-            })
-}
-
-
-
-
-export const reqDelete = () => {
-    const div = document.querySelector('.alarm')
-    div.style.display = 'none'
-    fetch('api/delete', {
-        method: "DELETE",
+        method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ model, activePost }),
+    })
+        .then((res) => res.json())
+}
+
+
+export function postTyres(tyres) {
+    const active = document.querySelectorAll('.color')
+    const activePost = active[0].textContent.replace(/\s+/g, '')
+    fetch('api/tyres', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ tyres, activePost }),
+    })
+        .then((res) => res.json())
+        .then(res => console.log(res))
+}
+
+
+export const reqDelete = (name) => {
+    //const div = document.querySelector('.alarm')
+    const centerOs = document.querySelectorAll('.centerOs')
+    const osi = document.querySelectorAll('.osi')
+    const tires = document.querySelectorAll('.tires')
+    fetch('api/delete', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name }),
     })
         .then((res) => res.json())
         .then((res) => console.log(res))
+    console.log(osi)
     divClear(osi)
-    divClear(tiresInside)
     divClear(tires)
-    centerOs.forEach(e => {
-        e.style.backgroundImage = "url('../image/line.png')"
-    })
-
+    divClear(centerOs)
 }
 
 
-
-
-export const paramsDelete = () => {
+export const paramsDelete = (name) => {
     fetch('api/paramsDelete', {
-        method: "DELETE",
+        method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ name }),
     })
         .then((res) => res.json())
         .then((res) => console.log(res))
@@ -175,36 +77,56 @@ export const paramsDelete = () => {
 
 
 
-export function postModel(arrTwo) {
-    console.log(arrTwo)
-    // const base = [];
-    // base.push(osy, trailer, tyres)
-    //   console.log(tu)
-    fetch('api/model', {
+export const geoPosition = (map) => {
+    let iss;
+    const active = document.querySelectorAll('.color')[0].textContent
+    console.log(active)
+    // const activePost = active[0].textContent.replace(/\s+/g, '')
+    fetch('/api/datawialonGeo', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(arrTwo),
+        body: JSON.stringify({ active }),
+
     })
         .then((res) => res.json())
+        .then((res) => {
+            const geo = res
+            //console.log(geo)
+            const center = [geo.geoY, geo.geoX,]
+            console.log('запрос2')
+            console.log(center)
+            //map.setView([59.9386, 30.3141], 8);
+            // L.marker(center).addTo(map);
+            if (!iss) {
+                var LeafIcon = L.Icon.extend({
+                    options: {
+                        iconSize: [28, 28],
+                        //   shadowSize: [50, 64],
+                        iconAnchor: [0, 0],
+                        // shadowAnchor: [4, 62],
+                        popupAnchor: [0, 0]
+                    }
+                });
+
+                var greenIcon = new LeafIcon({
+                    iconUrl: '../../image/iconCar.png',
+                    // shadowUrl: 'er.png'
+                })
+
+                // var myIcon2 = L.divIcon({ className: 'my-div-icon' });
+                iss = L.marker(center, { icon: greenIcon }).bindPopup(active).addTo(map);
+                //map.panTo(new L.LatLng(center));
+                //marker.bindPopup("Popup content");
+                iss.on('mouseover', function (e) {
+                    this.openPopup();
+                });
+                iss.on('mouseout', function (e) {
+                    this.closePopup();
+                });
+            }
+            iss.setLatLng(center, /*{ icon: greenIcon }*/).update();
+            //  setTimeout(geoPosition, 6000);
+        })
 }
-
-
-export function postModel2(arrTwo) {
-    console.log(arrTwo)
-    // const base = [];
-    // base.push(osy, trailer, tyres)
-    //   console.log(tu)
-    fetch('api/model2', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(arrTwo),
-    })
-        .then((res) => res.json())
-}
-
-
-

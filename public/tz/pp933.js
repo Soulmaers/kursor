@@ -1,143 +1,149 @@
 
 'use strict'
-import { init, foreachArr3, sensor3, liCreate3, alertCreate3, alarmMin3, alarmMax3 } from './modules/func3.js'
+import { foreachArr, checked, init, liCreate, sensor, alarmMin, alarmMax, alertCreate } from './modules/func.js'
 import { map } from './modules/osm.js'
-import { loadModel3, postModel3, paramsDelete3, reqDelete3, geoPosition3 } from './modules/requests3.js'
+
+import { reqDelete, loadModel, postModel, paramsDelete, geoPosition } from './modules/requests.js'
 import { graf } from './modules/wialon.js'
 
+//const alarmMax = document.querySelector('.div_max')
+//const alarmMin = document.querySelector('.div_min')
+//const info = document.querySelector('.info')
+const linkSelect = document.querySelectorAll('.linkSelect');
+const centerOs = document.querySelectorAll('.centerOs');
+const moduleConfig = document.querySelector('.moduleConfig')
+const tiresLink = document.querySelectorAll('.tires_link')
+const linkSelectOs = document.querySelectorAll('.linkSelectOs')
+const linkSelectTires = document.querySelectorAll('.linkSelectTires')
+const wrapperButton = document.querySelector('.wrapper_button')
+const tiresD = document.querySelectorAll('.tiresD')
+const btnsens = document.querySelectorAll('.btnsens')
+const titleSens = document.querySelector('.title_sens')
+const obo = document.querySelector('.obo')
+const osi = document.querySelectorAll('.osi')
+const speedGraf = document.querySelector('.speedGraf')
+const car = document.querySelector('.title_two')
+const inputDate = document.querySelectorAll('.input_date')
+const selectSpeed = document.querySelector('.select_speed')
+const btnClear = document.querySelector('.btn_clear')
+const btnSave = document.querySelector('.btn_save')
+const job = document.querySelector('.job')
+const tyres = document.querySelectorAll('.tires')
+const place = document.querySelectorAll('.place')
 
-
-const linkSelect3 = document.querySelectorAll('.linkSelect');
-const centerOs3 = document.querySelectorAll('.centerOs');
-const moduleConfig3 = document.querySelector('.moduleConfig')
-const tiresLink3 = document.querySelectorAll('.tires_link')
-const linkSelectOs3 = document.querySelectorAll('.linkSelectOs')
-const linkSelectTires3 = document.querySelectorAll('.linkSelectTires')
-const wrapperButton3 = document.querySelector('.wrapper_button')
-
-const btnsens3 = document.querySelectorAll('.btnsens')
-const titleSens3 = document.querySelector('.title_sens')
-const obo3 = document.querySelector('.obo')
-const osi3 = document.querySelectorAll('.osi')
-const speedGraf3 = document.querySelector('.speedGraf')
-const car3 = document.querySelector('.title_two')
-const inputDate3 = document.querySelectorAll('.input_date')
-const selectSpeed3 = document.querySelector('.select_speed')
-const btnClear3 = document.querySelector('.btn_clear')
-const btnSave3 = document.querySelector('.btn_save')
-const job3 = document.querySelector('.job')
-const tyres3 = document.querySelectorAll('.tires')
-const place3 = document.querySelectorAll('.place')
-//const btnsens2 = document.querySelectorAll('.btnsens')
-//const titleSens2 = document.querySelector('.title_sens')
-//console.log(place)
+console.log(tiresD)
 
 
 
 //setTimeout(geoPosition, 3000)
-geoPosition3();
+geoPosition();
 //создание дива для аларма
-alertCreate3();
+alertCreate();
 
 //валидация токена на wialon
 init();
 //запрос в базу и получение параметров датчиков
 //загрузка текущей модели конфигуратора из базы
-loadModel3(osi3, centerOs3);
-setInterval(loadModel3, 5000)
+loadModel();
+setInterval(loadModel, 5000)
 //очистка модели из базы и удаление отрисовки
-btnClear3.addEventListener('click', reqDelete3)
-btnClear3.addEventListener('click', paramsDelete3)
+btnClear.addEventListener('click', reqDelete)
+btnClear.addEventListener('click', paramsDelete)
 //обработка выбора графика скорости за интервал
 //checked()
 //управление графиком скорости
 
-const btnForm3 = document.querySelectorAll('.btm_form')
+const btnForm = document.querySelectorAll('.btm_form')
 //const inputDate = document.querySelectorAll('.input_date')
-const grafView3 = document.querySelector('.grafik1')
+const grafView = document.querySelector('.grafik1')
 //const selectSpeed = document.querySelector('.select_speed')
 
 
-speed(btnForm3, inputDate3, grafView3, selectSpeed3)
+speed(btnForm, inputDate, grafView, selectSpeed)
 //генерация списка под параметры датчиков с базы
-liCreate3()
+liCreate()
 
 
-function speed(btnForm3, inputDate3, grafView3, selectSpeed3) {
-    console.log(btnForm3)
-    btnForm3.forEach(el =>
+
+export function speed(btnForm, inputDate, grafView, selectSpeed) {
+
+    console.log(btnForm)
+    btnForm.forEach(el =>
         el.addEventListener('click', () => {
-            if (el.textContent === 'Выполнить' && inputDate3[0].value !== '' && inputDate3[1].value !== '') {
-                grafView3.style.display = 'block'
+            if (el.textContent === 'Выполнить' && inputDate[0].value !== '' && inputDate[1].value !== '') {
+                grafView.style.display = 'block'
                 dataInput()
                 // dataInput2()
             }
-            if (el.textContent === 'Выполнить' && inputDate3[0].value == '' && inputDate3[1].value == '') {
-                grafView3.style.display = 'block'
+            if (el.textContent === 'Выполнить' && inputDate[0].value == '' && inputDate[1].value == '') {
+                grafView.style.display = 'block'
                 dataSelect()
                 //  dataSelect2()
             }
             if (el.textContent === 'Очистить') {
-                selectSpeed3.value = 0;
-                inputDate3.forEach(e => {
+                selectSpeed.value = 0;
+                inputDate.forEach(e => {
                     e.value = ''
                     //  console.log('очистил')
-                    grafView3.style.display = 'none'
+                    grafView.style.display = 'none'
                 })
             }
         }))
 }
 
+
+
+
 export function dataInput() {
-    selectSpeed3.value = 0;
+    selectSpeed.value = 0;
     const arrDate = [];
-    inputDate3.forEach(e => {
+    inputDate.forEach(e => {
         arrDate.push(e.value)
     })
     let t01 = new Date(arrDate[0])
     let timeFrom = Math.floor(t01.setHours(t01.getHours()) / 1000)
     let t02 = new Date(arrDate[1])
     let nowDate = Math.floor(t02.setHours(t02.getHours()) / 1000)
-    graf(timeFrom, nowDate, 30, 25343786)
+    graf(timeFrom, nowDate, 30, 25766831)
 }
 
 let nowDate = Math.round(new Date().getTime() / 1000)
 let nDate = new Date();
 export function dataSelect() {
-    switch (selectSpeed3.value) {
+    switch (selectSpeed.value) {
         case '1': {
             let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 24) / 1000);
-            graf(timeFrom, nowDate, 30, 25343786)
+            graf(timeFrom, nowDate, 30, 25766831)
         }
             break;
         case '2': {
             let timeFrom = Math.round(nDate.setDate(nDate.getDate() - 7) / 1000);
-            graf(timeFrom, nowDate, 100, 25343786)
+            graf(timeFrom, nowDate, 100, 25766831)
         }
             break;
         case '3': {
             let timeFrom = Math.round(nDate.setMonth(nDate.getMonth() - 1) / 1000);
-            graf(timeFrom, nowDate, 300, 25343786)
+            graf(timeFrom, nowDate, 300, 25766831)
         }
             break;
     }
 }
 
-car3.addEventListener('click', () => {
+car.addEventListener('click', () => {
     console.log('нажал на машину')
-    speedGraf3.style.display = 'block';
-    obo3.style.display = 'none'
-    titleSens3.style.display = 'none'
-    wrapperButton3.style.display = 'none'
+    speedGraf.style.display = 'block';
+    obo.style.display = 'none'
+    titleSens.style.display = 'none'
+    wrapperButton.style.display = 'none'
 })
 
 const array = [];
 function modul() {
-    centerOs3.forEach(el => {
+    centerOs.forEach(el => {
         el.addEventListener('click', () => {
-            centerOs3.forEach(el => el.classList.remove('os'));
+            centerOs.forEach(el => el.classList.remove('os'));
             el.classList.add('os')
-            moduleConfig3.style.display = 'flex'
+            moduleConfig.style.display = 'flex'
             array.push(el)
             console.log('нажал ось')
         })
@@ -148,7 +154,7 @@ modul()
 
 function os(arr) {
     const arrayTrailer = [];
-    linkSelectOs3.forEach(e =>
+    linkSelectOs.forEach(e =>
         e.addEventListener('click', () => {
             arrayTrailer.push(e)
             e.textContent == 'Прицеп' ?
@@ -156,7 +162,7 @@ function os(arr) {
                 arr[arr.length - 1].style.backgroundImage = "url('../image/line_gray.png')"
         }))
 
-    linkSelectTires3.forEach(e =>
+    linkSelectTires.forEach(e =>
         e.addEventListener('click', () => {
 
             const arrayTyres = []
@@ -184,53 +190,53 @@ function os(arr) {
 
 const massiv = []
 function validation(arrayTrailer, arrayTyres) {
-    const osy3 = array[array.length - 1].id;
-    const trailer3 = arrayTrailer.length ? arrayTrailer[arrayTrailer.length - 1].textContent : 'Тягач'
-    const tyres3 = arrayTyres[arrayTyres.length - 1].textContent
-    console.log(osy3, trailer3, tyres3)
+    const osy = array[array.length - 1].id;
+    const trailer = arrayTrailer.length ? arrayTrailer[arrayTrailer.length - 1].textContent : 'Тягач'
+    const tyres = arrayTyres[arrayTyres.length - 1].textContent
+    console.log(osy, trailer, tyres)
     const mass = [];
-    mass.push(osy3, trailer3, tyres3)
+    mass.push(osy, trailer, tyres)
     //console.log(mass)
     massiv.push(mass)
     console.log(massiv)
 }
 
-btnSave3.addEventListener('click', () => {
-    postModel3(massiv)
+btnSave.addEventListener('click', () => {
+    postModel(massiv)
 
 })
 
 function select() {
-    linkSelect3.forEach(el =>
+    linkSelect.forEach(el =>
         el.addEventListener('click', () => {
             console.log('нажал конфиг')
-            moduleConfig3.style.display = 'none'
-            osi3.forEach(it =>
+            moduleConfig.style.display = 'none'
+            osi.forEach(it =>
                 it.style.display = 'none')
             switch (el.textContent) {
                 case '1':
-                    foreachArr3(osi3, centerOs3, 1)
+                    foreachArr(osi, centerOs, 1)
                     break;
                 case '2':
-                    foreachArr3(osi3, centerOs3, 2)
+                    foreachArr(osi, centerOs, 2)
                     break;
                 case '3':
-                    foreachArr3(osi3, centerOs3, 3)
+                    foreachArr(osi, centerOs, 3)
                     break;
                 case '4':
-                    foreachArr3(osi3, centerOs3, 4)
+                    foreachArr(osi, centerOs, 4)
                     break;
                 case '5':
-                    foreachArr3(osi3, centerOs3, 5)
+                    foreachArr(osi, centerOs, 5)
                     break;
                 case '6':
-                    foreachArr3(osi3, centerOs3, 6)
+                    foreachArr(osi, centerOs, 6)
                     break;
                 case '7':
-                    foreachArr3(osi3, centerOs3, 7)
+                    foreachArr(osi, centerOs, 7)
                     break;
                 case '8':
-                    foreachArr3(osi3, centerOs3, 8)
+                    foreachArr(osi, centerOs, 8)
                     break;
             }
         }))
@@ -240,7 +246,7 @@ select()
 
 //let div = document.createElement('div');
 //div.className = "alarm";
-export function view3(arr, params) {
+export function view(arr, params) {
     const alerts = [];
     console.log(alerts)
     //div.style.display = 'none';
@@ -249,7 +255,7 @@ export function view3(arr, params) {
     console.log(arr)
     console.log(params)
     arr.forEach((el, index) => {
-        msg3[index].textContent = `${el.name}:${el.value}`
+        msg[index].textContent = `${el.name}:${el.value}`
         let parapmsPress;
 
         parapmsPress = (el.value)
@@ -277,15 +283,15 @@ export function view3(arr, params) {
         })
 
         if (alerts.some(element => element < 6) == true) {
-            alarmMin3();
+            alarmMin();
         }
         if (alerts.some(element => element > 9.9) == true) {
-            alarmMax3();
+            alarmMax();
         }
     })
 
 }
-const msg3 = document.querySelectorAll('.msg')
+const msg = document.querySelectorAll('.msg')
 
 
 
@@ -293,24 +299,24 @@ const msg3 = document.querySelectorAll('.msg')
 
 const kolesos = [];
 function fn() {
-    tiresLink3.forEach(e => {
+    tiresLink.forEach(e => {
         e.addEventListener('click', () => {
             kolesos.push(e)
             console.log(kolesos[kolesos.length - 1].id)
 
-            speedGraf3.style.display = 'none';
-            sensor3(btnsens3, titleSens3)
-            tiresLink3.forEach(e => {
-                obo3.style.display = 'none'
-                titleSens3.style.display = 'none'
-                wrapperButton3.style.display = 'none'
-                const msg3 = document.querySelectorAll('.msg')
-                msg3.forEach(el => el.classList.remove('act'))
+            speedGraf.style.display = 'none';
+            sensor(btnsens, titleSens)
+            tiresLink.forEach(e => {
+                obo.style.display = 'none'
+                titleSens.style.display = 'none'
+                wrapperButton.style.display = 'none'
+                const msg = document.querySelectorAll('.msg')
+                msg.forEach(el => el.classList.remove('act'))
                 //  console.log('убрали')
             });
-            wrapperButton3.style.display = 'flex';
+            wrapperButton.style.display = 'flex';
             //  console.log('поставили')
-            tiresLink3.forEach(el => el.classList.remove('tiresActiv'));
+            tiresLink.forEach(el => el.classList.remove('tiresActiv'));
             e.classList.add('tiresActiv')
             //console.log('нажал')
 
@@ -324,7 +330,7 @@ function koleso(kol) {
     const paramTemp = [];
     let prmsD = [];
     let prmsT = [];
-    msg3.forEach(el => {
+    msg.forEach(el => {
         el.addEventListener('click', () => {
             const arrSpreed = [...el.textContent]
             let value;
@@ -333,22 +339,22 @@ function koleso(kol) {
                     value = arrSpreed.splice(arrSpreed.indexOf(el) + 1, arrSpreed.length - 1).join('')
                 }
             })
-            if (btnsens3[0].classList.contains('actBTN')) {
+            if (btnsens[0].classList.contains('actBTN')) {
                 arrSpreed.forEach(el => {
                     if (el === ':') {
                         prmsD.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                     }
                 })
-                console.log(job3.value)
-                const valJob = (job3.value.length == 0) ? value : value * job3.value
+                console.log(job.value)
+                const valJob = (job.value.length == 0) ? value : value * job.value
                 valJob.length > 10 ?
                     kol[kol.length - 1].children[0].textContent = '-' :
-                    kol[kol.length - 1].children[0].textContent = valJob + '\nБар'
-                kol[kol.length - 1].children[0].style.background = objColor[generFront(valJob)];
+                    kol[kol.length - 1].children[0].textContent = value + '\nБар'
+                kol[kol.length - 1].children[0].style.background = objColor[generDav(value)];
                 paramPress.push(el)
                 console.log(paramPress)
             }
-            if (btnsens3[1].classList.contains('actBTN')) {
+            if (btnsens[1].classList.contains('actBTN')) {
                 arrSpreed.forEach(el => {
                     if (el === ':') {
                         prmsT.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
@@ -405,8 +411,8 @@ function valid(paramPress, paramTemp) {
     massivionbd.push(massbd)
     console.log(massivion)
     console.log(massivionbd)
-    btnSave3.addEventListener('click', () => {
-        postTyres3(massivionbd);
+    btnSave.addEventListener('click', () => {
+        postTyres(massivionbd);
     })
     //postTyres(massivionbd);
     // views(massivion)
@@ -414,8 +420,8 @@ function valid(paramPress, paramTemp) {
 }
 
 
-function postTyres3(arr) {
-    fetch('api/tyres3', {
+function postTyres(arr) {
+    fetch('api/tyres', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -460,9 +466,8 @@ const views = (arr) => {
     })
 }
 */
-
-
 //условия для подсветки шин D и T
+
 
 function generDav(el) {
     //  modulAlarm();
@@ -479,6 +484,8 @@ function generDav(el) {
     }
     return generatedValue;
 };
+
+
 
 
 function generFront(el) {
@@ -518,27 +525,13 @@ const objColor = {
 }
 
 
-const menu3 = document.querySelectorAll('.car_item')
-menu3.forEach(el => {
+const menu = document.querySelectorAll('.car_item')
+menu.forEach(el => {
     el.addEventListener('click', menuBtn)
     function menuBtn() {
-        menu3.forEach(el => {
+        menu.forEach(el => {
             el.style.backgroundColor = '#fff'
         })
         el.style.backgroundColor = 'lightgray'
     }
 })
-
-const detaly = document.querySelector('.detaly');
-
-detaly.addEventListener('click', detalyFn)
-function detalyFn(e) {
-    e.preventDefault();
-    const detalisation = document.querySelector('.detalisation');
-    const wrapperLeft = document.querySelector('.wrapper_left');
-    const wrapperRigth = document.querySelector('.wrapper_right');
-    detalisation.style.display = 'flex';
-    wrapperLeft.style.display = 'none';
-    wrapperRigth.style.display = 'none';
-
-}

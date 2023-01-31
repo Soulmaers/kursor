@@ -1,15 +1,21 @@
 const response = require('../response')
 //const wialon = require('wialon');
-const getMainInfo = require('../settings/config')
+//const session = wialon().session;
+const { getMainInfo } = require('../settings/wialon.js')
+const { createTable } = require('../settings/wialon.js')
+
+const { prms } = require('../settings/params')
 const connection = require('../settings/db')
 //const { gY, gX } = require('../settings/config')
 
 
+
+
 exports.datawialon = (req, res) => {
 
-    // console.log('запрос')
+    //console.log(req.body.activePost)
     try {
-        const selectBase = `SELECT name, value FROM params WHERE 1`
+        const selectBase = `SELECT name, value FROM ${req.body.activePost} WHERE 1`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             // console.log(results)
@@ -21,68 +27,27 @@ exports.datawialon = (req, res) => {
     }
 }
 
-exports.datawialon2 = (req, res) => {
 
-    // console.log('запрос')
-    try {
-        const selectBase = `SELECT name, value FROM params2 WHERE 1`
-        connection.query(selectBase, function (err, results) {
-            if (err) console.log(err);
-            // console.log(results)
-            response.status(200, results, res)
-        })
-    }
-    catch (e) {
-        console.log(e)
-    }
-}
 
-exports.datawialon3 = (req, res) => {
 
-    // console.log('запрос')
-    try {
-        const selectBase = `SELECT name, value FROM params3 WHERE 1`
-        connection.query(selectBase, function (err, results) {
-            if (err) console.log(err);
-            // console.log(results)
-            response.status(200, results, res)
-        })
-    }
-    catch (e) {
-        console.log(e)
-    }
-}
 
 
 exports.datawialonGeo = (req, res) => {
+    console.log(req.body.active)
+
+    //  console.log(geoX, geoY)
+    // createTable(req.body.active)
     try {
+        getMainInfo(req.body.active, res)
+        //   console.log(getMainInfo(req.body.active))
+        //   setInterval(getMainInfo, 3000, req.body.active);
         console.log('запрос')
-        console.log(geoY, geoX)
-        res.json({ geoY, geoX })
+        //console.log(geoX, geoY)
+        // console.log(geoY, geoX)
+        res.json({ geoX, geoY })
     }
     catch (e) {
         console.log(e)
     }
 }
 
-exports.datawialonGeo2 = (req, res) => {
-    try {
-        console.log('запрос')
-        console.log(geoY, geoX)
-        res.json({ geoY2, geoX2 })
-    }
-    catch (e) {
-        console.log(e)
-    }
-}
-
-exports.datawialonGeo3 = (req, res) => {
-    try {
-        console.log('запрос')
-        console.log(geoY, geoX)
-        res.json({ geoY3, geoX3 })
-    }
-    catch (e) {
-        console.log(e)
-    }
-}

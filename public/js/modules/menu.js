@@ -1,22 +1,20 @@
-const detaly = document.querySelector('.detaly');
 
-detaly.addEventListener('click', detalyFn)
-function detalyFn(e) {
-    e.preventDefault();
-    detalisation = document.querySelector('.detalisation');
-    wrapperLeft = document.querySelector('.wrapper_left');
-    wrapperRigth = document.querySelector('.wrapper_right');
-    detalisation.style.display = 'flex';
-    wrapperLeft.style.display = 'none';
-    wrapperRigth.style.display = 'none';
+import { navigator } from './navigator.js'
+import { speed } from './speed.js'
+export function init() {
+    wialon.core.Session.getInstance().initSession("https://hst-api.wialon.com");
+    wialon.core.Session.getInstance().loginToken("0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178", "", // try to login
+        function (code) {
+            if (code) {
+                return;
+            }
 
-}
+            zapros() //делаем запрос на wialon получаем объекты
 
+        });
+};
 
-
-/*
-function zapros() {
-    console.log('запрос')
+export function zapros() {
     const flags = 1 + 1024
     const prms = {
         "spec": {
@@ -37,18 +35,18 @@ function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
-            arr1 = Object.values(result);
+            const arr1 = Object.values(result);
             const arrCar = arr1[5];
-            console.log(arrCar)
-            navBarNameCar(arrCar);
+            console.log(arr1[5])
+            navBarNameCar(arrCar); //отрисовываем меню с именами объектов
+            navigator()
+            speed(arrCar)
         });
 
 }
 
-function navBarNameCar(arrCar) {
-    console.log(arrCar)
+export function navBarNameCar(arrCar) {
     const ul = document.createElement('ul')
-    console.log(ul)
     ul.classList.add('list_menu_center')
     arrCar.forEach(el => {
         const li = document.createElement('li')
@@ -61,6 +59,11 @@ function navBarNameCar(arrCar) {
         ul.appendChild(li)
         li.appendChild(a)
     })
-    document.body.appendChild(ul);
+    const menu = document.querySelector('.menu')
+    menu.appendChild(ul);
+    // navigator(); //запускаем  условия по клику на кнопку меню
+}
 
-}*/
+
+
+

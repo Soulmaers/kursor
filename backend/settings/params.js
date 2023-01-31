@@ -34,6 +34,13 @@ const prms = {
 };
 
 
+
+
+
+
+
+/*
+
 const prms2 = {
     "id": 25766831, //25343786,-pres //25594204 dtrmx, //25766831-кран
     "flags": 1025
@@ -43,20 +50,10 @@ const prms22 = {
     "id": 25343786, //25343786,-pres //25594204 dtrmx, //25766831-кран
     "flags": 1025
 };
-
-const prms222 = {
-    "id": 26421451,
-    "flags": 1025
-};
-
+*/
 
 
 module.exports = {
-    prms1,
     prms,
-    prms2,
-    prms22,
-    prms222,
-    prms12,
     carId
 }
