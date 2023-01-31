@@ -148,10 +148,14 @@ function koleso(kol, btnsens) {
                         prmsT.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                     }
                 })
-                value.length > 10 ?
-                    kol[kol.length - 1].children[1].textContent = '-' :
+                if (value === '-128' || value === '-51' || value.length > 10) {
+                    value = 'err'
+                    kol[kol.length - 1].children[1].textContent = value
+                }
+                else {
                     kol[kol.length - 1].children[1].textContent = value + '°'
-                kol[kol.length - 1].children[1].style.background = objColor[generT(value)];
+                    kol[kol.length - 1].children[1].style.background = objColor[generT(value)];
+                }
                 paramTemp.push(el)
                 valid(paramPress, paramTemp)
             }

@@ -58,10 +58,9 @@ export function generFront(el) {
 
 export function generT(el) {
     let generatedValue;
-    if (el >= -50 && el <= 35)
-        generatedValue = 4;
-    if (el > 36)
-        generatedValue = 1;
+    if (el >= -40 && el <= 35)
+        generatedValue = 5;
+
 
     return generatedValue;
 };
@@ -70,4 +69,5 @@ export const objColor = {
     1: '#e03636',
     2: '#9ba805',
     3: '#3eb051',
+    5: '#fff'
 }

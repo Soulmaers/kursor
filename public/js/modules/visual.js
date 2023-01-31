@@ -5,8 +5,10 @@ import { geoPosition } from './requests.js'
 
 
 let start;
+let time;
 export function visual(el) {
     console.log(el)
+    clearInterval(time)
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const wrapperRight = document.querySelector('.wrapper_right')
@@ -23,17 +25,20 @@ export function visual(el) {
     titleCar.textContent = el.textContent
     loadParamsView()//запрос в базу и получение параметров
     setInterval(loadParamsView, 5000)
-    if (!start || start !== el) {
-        osmView(); //отрисовываем карту osm
-        start = el;
-        console.log(start)
-    }
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
+    if (!start || start !== el) {
+        start = el;
+        geoPosition();
+        time = setInterval(geoPosition, 6000) //отрисовываем карту osm
 
+        console.log(start)
+    }
 }
 export function visualNone(e) {
+
+
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const wrapperRight = document.querySelector('.wrapper_right')
@@ -71,23 +76,7 @@ export function clearGraf() {
     })
 }
 
-//создаем карту osm
-export function osmView() {
-    let count = 0;
-    count++
-    console.log(count)
-    const container = L.DomUtil.get('map');
-    if (container != null) {
-        container._leaflet_id = null;
-    }
-    const map = L.map('map')
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-    map.setView([59.9386, 30.3141], 7)
-    geoPosition(map);
-    setInterval(geoPosition, 6000, map)
-}
+
 
 //создаем список под параметры
 export function liCreate() {
@@ -153,8 +142,18 @@ export function viewConfigurator(arg, params) {
                 }
             }
             if (el.name == item.temp) {
-                tiresLink[item.tyresdiv - 1].children[1].textContent = el.value + '°'
-                tiresLink[item.tyresdiv - 1].children[1].style.background = objColor[generT(el.value)];
+                //       console.log(el.value)
+                if (el.value === '-128' || el.value === '-51') {
+                    el.value = 'err'
+                    tiresLink[item.tyresdiv - 1].children[1].textContent = el.value
+                    //  console.log(tiresLink[item.tyresdiv - 1].children[1].textContent)
+                }
+                if (el.value > -40 && el.value < 60) {
+                    tiresLink[item.tyresdiv - 1].children[1].textContent = el.value + '°'
+                    //  console.log(tiresLink[item.tyresdiv - 1].children[1].textContent)
+                    tiresLink[item.tyresdiv - 1].children[1].style.background = objColor[generT(el.value)];
+
+                }
             }
         })
 
@@ -187,7 +186,7 @@ function alarmMin() {
     info.style.display = 'flex'
 }
 
-function alarmClear() {
+export function alarmClear() {
     const div = document.querySelector('.alarm')
     div.style.display = 'none'
     const alarmMinn = document.querySelector('.dav_min')

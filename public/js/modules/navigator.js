@@ -2,7 +2,7 @@ import { visual, visualNone, clearGraf, viewOs } from './visual.js'
 import { massiv } from './configurator.js';
 import { massivionbd } from './paramsTyresView.js';
 import { btnClear } from './event.js';
-
+//import { geoPosition } from './requests.js'
 
 export function navigator() {
     const nav = document.querySelectorAll('.car')
@@ -19,6 +19,7 @@ export function navigator() {
                     console.log('удаляемм')
                     it.remove();
                 })
+
                 visualNone(e);  //скрываем для всех кнопок левый фрейм
                 clearGraf(); //очистка графика скорости при нажатии на кнопку другой машины
                 massiv.length = 0;

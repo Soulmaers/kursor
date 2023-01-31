@@ -1,5 +1,5 @@
 
-import { divClear, osmView } from './visual.js'
+import { divClear } from './visual.js'
 
 export function postModel(model) {
     const active = document.querySelectorAll('.color')
@@ -77,7 +77,20 @@ export const paramsDelete = (name) => {
 
 
 
-export const geoPosition = (map) => {
+export const geoPosition = () => {
+    let count = 0;
+    count++
+    // console.log(new Date())
+    const container = L.DomUtil.get('map');
+    if (container != null) {
+        container._leaflet_id = null;
+    }
+    const map = L.map('map')
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+
     let iss;
     const active = document.querySelectorAll('.color')[0].textContent
     console.log(active)
@@ -95,10 +108,12 @@ export const geoPosition = (map) => {
             const geo = res
             //console.log(geo)
             const center = [geo.geoY, geo.geoX,]
+            map.setView(center, 10)
             console.log('запрос2')
             console.log(center)
             //map.setView([59.9386, 30.3141], 8);
             // L.marker(center).addTo(map);
+            map.flyTo(center, 10)
             if (!iss) {
                 var LeafIcon = L.Icon.extend({
                     options: {

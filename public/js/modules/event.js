@@ -1,4 +1,5 @@
 import { postTyres, reqDelete, paramsDelete } from './requests.js'
+import { alarmClear } from './visual.js'
 
 export function saveTyres(arr) {
     const btnSave = document.querySelector('.btn_save')
@@ -15,6 +16,7 @@ btnClear.addEventListener('click', () => {
     console.log(active)
     const activePost = active[0].textContent.replace(/\s+/g, '')
     console.log('запуск')
+    alarmClear()
     reqDelete(activePost);
     paramsDelete(activePost);
 })
