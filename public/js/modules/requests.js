@@ -74,10 +74,8 @@ export const paramsDelete = (name) => {
     })
 }
 
-
-
-
-export const geoPosition = () => {
+export const geoPosition = (geo) => {
+    // console.log(geo)
     let count = 0;
     count++
     // console.log(new Date())
@@ -86,11 +84,14 @@ export const geoPosition = () => {
         container._leaflet_id = null;
     }
     const map = L.map('map')
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    });
+    map.addLayer(layer);
 
-
+    const polyline = L.polyline(geo, { color: 'rgb(0, 0, 204)' });
+    //console.log(polyline)
+    polyline.addTo(map);
     let iss;
     const active = document.querySelectorAll('.color')[0].textContent
     console.log(active)
@@ -108,25 +109,25 @@ export const geoPosition = () => {
             const geo = res
             //console.log(geo)
             const center = [geo.geoY, geo.geoX,]
-            map.setView(center, 10)
+            map.setView(center, 15)
             console.log('запрос2')
             console.log(center)
             //map.setView([59.9386, 30.3141], 8);
             // L.marker(center).addTo(map);
-            map.flyTo(center, 10)
+            map.flyTo(center, 15)
             if (!iss) {
                 var LeafIcon = L.Icon.extend({
                     options: {
-                        iconSize: [28, 28],
+                        iconSize: [30, 30],
                         //   shadowSize: [50, 64],
-                        iconAnchor: [0, 0],
+                        iconAnchor: [10, 18],
                         // shadowAnchor: [4, 62],
                         popupAnchor: [0, 0]
                     }
                 });
 
                 var greenIcon = new LeafIcon({
-                    iconUrl: '../../image/iconCar.png',
+                    iconUrl: '../../image/iconCar2.png',
                     // shadowUrl: 'er.png'
                 })
 

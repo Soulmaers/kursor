@@ -1,7 +1,8 @@
 import { text } from './content.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
-import { geoPosition } from './requests.js'
+//import { geoPosition } from './requests.js'
+import { geoloc } from './wialon.js'
 
 
 let start;
@@ -32,16 +33,13 @@ export function visual(el) {
     })
     if (!start || start !== el) {
         start = el;
-        geoPosition();
-        time = setInterval(geoPosition, 6000) //отрисовываем карту osm
-
-
+        geoloc()
+        time = setInterval(geoloc, 120000) //отрисовываем карту osm
         console.log(start)
+        //  geoloc();
     }
 }
 export function visualNone(e) {
-
-
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const wrapperRight = document.querySelector('.wrapper_right')
@@ -107,16 +105,12 @@ export function sensor(btnsens, titleSens, obo) {
         }))
 }
 
-export function view(arg, params) {
-    // liCreate()
+export function view(arg) {
     const msg = document.querySelectorAll('.msg')
-    // console.log(arg)
-    // console.log(params)
     arg.forEach((el, index) => {
         msg[index].textContent = `${el.name}:${el.value}`
     })
 }
-
 export function viewConfigurator(arg, params) {
     const alerts = [];
     const tiresLink = document.querySelectorAll('.tires_link')
@@ -155,11 +149,9 @@ export function viewConfigurator(arg, params) {
                     tiresLink[item.tyresdiv - 1].children[1].textContent = el.value + '°'
                     //  console.log(tiresLink[item.tyresdiv - 1].children[1].textContent)
                     tiresLink[item.tyresdiv - 1].children[1].style.background = objColor[generT(el.value)];
-
                 }
             }
         })
-
         if (alerts.some(element => element < 6) == true) {
             alarmMin();
         }

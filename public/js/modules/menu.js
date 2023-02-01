@@ -1,6 +1,8 @@
 
 import { navigator } from './navigator.js'
 import { speed } from './speed.js'
+
+
 export function init() {
     wialon.core.Session.getInstance().initSession("https://hst-api.wialon.com");
     wialon.core.Session.getInstance().loginToken("0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178", "", // try to login
@@ -41,6 +43,8 @@ export function zapros() {
             navBarNameCar(arrCar); //отрисовываем меню с именами объектов
             navigator()
             speed(arrCar)
+            return arrCar
+            //   geoloc(arrCar)
         });
 
 }
