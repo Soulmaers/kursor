@@ -48,6 +48,8 @@ export function visualNone(e) {
     const moduleConfig = document.querySelector('.moduleConfig')
     const wrapperButton = document.querySelector('.wrapper_button')
     const container = document.querySelector('.container')
+    const techInfo = document.querySelector('.techInfo')
+    techInfo.style.display = 'none'
     wrapperUp.style.display = 'none'
     wrapperRight.style.display = 'none'
     speedGraf.style.display = 'none'

@@ -353,6 +353,14 @@ input[type="date"] {
 
 }
 
+.buttonTth {
+  margin-left: 10%;
+  margin-bottom: 10px;
+  color: #fff;
+  background-color: gray;
+  cursor: pointer;
+
+}
 
 
 .jobDav {
