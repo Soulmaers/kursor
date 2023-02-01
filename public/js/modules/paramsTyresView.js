@@ -3,6 +3,7 @@ import { view, sensor, viewConfigurator, pricep } from './visual.js'
 import { saveTyres } from './event.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 import { liCreate } from './visual.js'
+import { tech } from './tech.js'
 
 
 const kolesos = [];
@@ -29,10 +30,25 @@ export function viewMenuParams() {
             wrapperButton.style.display = 'flex';
             tiresLink.forEach(el => el.classList.remove('tiresActiv'));
             e.classList.add('tiresActiv')
+            tech()
         })
     })
     koleso(kolesos, btnsens)
 }
+
+/*
+inputPassprob.forEach((el2, index) => {
+    inputResProb[index].textContent = el2.value - inputToProb[index].value;
+    el2.addEventListener('input', () => {
+        inputResProb[index].textContent = el2.value - inputToProb[index].value;
+    })
+})
+inputToProb.forEach((el2, index) => {
+    inputResProb[index].textContent = inputPassprob[index].value - el2.value;
+    el2.addEventListener('input', () => {
+        inputResProb[index].textContent = inputPassprob[index].value - el2.value;
+    })
+})*/
 
 
 export function loadParamsView() {

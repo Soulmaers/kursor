@@ -127,6 +127,7 @@ function os(arr) {
 
 
 
+
 export const massiv = []
 function validation(arrayTrailer, arrayTyres) {
     const osy = lostOs[lostOs.length - 1].id;

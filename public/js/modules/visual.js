@@ -127,7 +127,6 @@ export function viewConfigurator(arg, params) {
                 tiresLink.forEach(e => {
                     if (e.id == item.tyresdiv) {
                         e.children[0].textContent = el.value
-                        console.log(e.children[0])
                         e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                         alerts.push(e.children[0].textContent)
                         e.children[0].textContent = parapmsPress + '\nБар'

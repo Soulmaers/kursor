@@ -245,13 +245,146 @@ td {
 
 .wrapper_right {
   display: none;
-
+  justify-content: space-between;
   width: 64.5%;
   min-height: 600px;
   padding: 30px;
 
 }
 
+.techInfo {
+  width: 50%;
+  border: 1px solid gray;
+  display: none;
+  margin-bottom: 8px;
+}
+
+.psi {
+  display: flex;
+  justify-content: space-around;
+}
+
+.techTitle {
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.techInfo_list {
+  list-style: none;
+  margin: 0;
+}
+
+.techForm {
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+  margin-bottom: 8px;
+}
+
+
+.formTth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+}
+
+.min_max {
+  display: flex;
+  justify-content: space-between;
+  width: 198px;
+}
+
+.barDd {
+  margin-left: 0;
+}
+
+.barD {
+  margin: 0 5px;
+}
+
+.br {
+  width: 50px;
+  height: 15px;
+  border: 1px solid gray;
+  margin-bottom: 0;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.barDd:nth-child(n+2) {
+  margin-left: 10px;
+}
+
+.dateChangeTires {
+  width: 170px;
+  height: 16px;
+  border: 1px solid gray;
+  margin-bottom: 0;
+  font-size: 1rem;
+  text-align: center;
+
+  font-weight: 100;
+
+}
+
+input[type="date"] {
+  font-weight: 100;
+  font-family: Roboto;
+
+}
+
+.resProb {
+  width: 195px;
+  height: 16px;
+  border: 1px solid gray;
+  margin-bottom: 0;
+  font-size: 1rem;
+  text-align: center;
+  color: darkblue;
+}
+
+.bar {
+  width: 60px;
+  height: 15px;
+
+  margin-left: 10px;
+  font-size: 1rem;
+  text-align: center;
+
+}
+
+
+
+.jobDav {
+  width: 20%;
+  height: 15px;
+}
+
+.enter {
+  display: flex;
+  align-items: center;
+  width: 198px;
+}
+
+.tth {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid gray;
+  padding: 0 25px;
+
+}
+
+.titleTth {
+  font-size: 1rem;
+  font-family: Roboto;
+  margin: 15px 0;
+}
 
 .color {
   background-color: lightgray;
