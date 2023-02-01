@@ -48,9 +48,11 @@ export function loadParamsView() {
         .then((res) => res.json())
         .then((res) => {
             const model = res
+            console.log(model)
             const osi = document.querySelectorAll('.osi')
             const centerOs = document.querySelectorAll('.centerOs')
             if (model.values.length > 0) {
+                console.log('база целая')
                 model.values.forEach(el => {
                     osi[el.osi - 1].style.display = 'flex';
                     centerOs[el.osi - 1].style.display = 'flex';
@@ -75,13 +77,15 @@ export function loadParamsView() {
             else {
                 console.log('база пустая')
             }
+
         })
     viewPokasateli()
     setInterval(viewPokasateli, 6000)
 
 }
-
+//viewPokasateli()
 function viewPokasateli() {
+    console.log('стартh')
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
     fetch('api/tyresView', {
@@ -94,6 +98,7 @@ function viewPokasateli() {
         .then((res) => res.json())
         .then((res) => {
             const params = res
+            console.log(params)
             fetch('api/wialon', {
                 method: "POST",
                 headers: {
@@ -104,6 +109,7 @@ function viewPokasateli() {
                 .then((res) => res.json())
                 .then((res) => {
                     const data = res
+                    console.log(data)
                     data.values.sort((prev, next) => {
                         if (prev.name < next.name) return -1;
                         if (prev.name < next.name) return 1;

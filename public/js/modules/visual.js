@@ -112,8 +112,11 @@ export function view(arg) {
     })
 }
 export function viewConfigurator(arg, params) {
+    console.log(arg, params)
     const alerts = [];
     const tiresLink = document.querySelectorAll('.tires_link')
+    //const tiresLinkId = document.getElementById('.tires_link')
+    console.log(tiresLink[0].id)
     const active = document.querySelectorAll('.color')[0].textContent
     arg.forEach((el) => {
         let parapmsPress;
@@ -121,35 +124,47 @@ export function viewConfigurator(arg, params) {
         let signal;
         params.forEach(item => {
             if (el.name == item.pressure) {
-                tiresLink[item.tyresdiv - 1].children[0].textContent = parapmsPress
-                tiresLink[item.tyresdiv - 1].children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
-                alerts.push(tiresLink[item.tyresdiv - 1].children[0].textContent)
-                tiresLink[item.tyresdiv - 1].children[0].textContent = parapmsPress + '\nБар'
+                tiresLink.forEach(e => {
+                    if (e.id == item.tyresdiv) {
+                        e.children[0].textContent = el.value
+                        console.log(e.children[0])
+                        e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
+                        alerts.push(e.children[0].textContent)
+                        e.children[0].textContent = parapmsPress + '\nБар'
+                        if (active == 'КранГаличанин Р858ОР178') {
+                            signal = objColor[generDav(parapmsPress)]
+                        }
+                        else {
+                            signal = objColor[generFront(parapmsPress)]
+                        }
+                        e.children[0].style.background = signal;
+                        if (parapmsPress < 6 || parapmsPress > 9.9) {
+                            e.style.borderRadius = '15px'
+                            e.style.border = '3px solid red'
+                        }
 
-                if (active == 'КранГаличанин Р858ОР178') {
-                    signal = objColor[generDav(parapmsPress)]
-                }
-                else {
-                    signal = objColor[generFront(parapmsPress)]
-                }
-                tiresLink[item.tyresdiv - 1].children[0].style.background = signal;
-                if (parapmsPress < 6 || parapmsPress > 9.9) {
-                    tiresLink[item.tyresdiv - 1].style.borderRadius = '15px'
-                    tiresLink[item.tyresdiv - 1].style.border = '3px solid red'
-                }
+                    }
+
+                    // console.log(elem)
+                })
+
             }
             if (el.name == item.temp) {
-                //       console.log(el.value)
-                if (el.value === '-128' || el.value === '-51') {
-                    el.value = 'err'
-                    tiresLink[item.tyresdiv - 1].children[1].textContent = el.value
-                    //  console.log(tiresLink[item.tyresdiv - 1].children[1].textContent)
-                }
-                if (el.value > -40 && el.value < 60) {
-                    tiresLink[item.tyresdiv - 1].children[1].textContent = el.value + '°'
-                    //  console.log(tiresLink[item.tyresdiv - 1].children[1].textContent)
-                    tiresLink[item.tyresdiv - 1].children[1].style.background = objColor[generT(el.value)];
-                }
+                tiresLink.forEach(e => {
+                    if (e.id == item.tyresdiv) {
+                        //       console.log(el.value)
+                        if (el.value === '-128' || el.value === '-51') {
+                            el.value = 'err'
+                            e.children[1].textContent = el.value
+                            //  console.log(tiresLink[item.tyresdiv - 1].children[1].textContent)
+                        }
+                        if (el.value > -40 && el.value < 60) {
+                            e.children[1].textContent = el.value + '°'
+                            //  console.log(tiresLink[item.tyresdiv - 1].children[1].textContent)
+                            e.children[1].style.background = objColor[generT(el.value)];
+                        }
+                    }
+                })
             }
         })
         if (alerts.some(element => element < 6) == true) {
