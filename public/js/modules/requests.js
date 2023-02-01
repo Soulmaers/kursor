@@ -89,7 +89,7 @@ export const geoPosition = (geo) => {
     });
     map.addLayer(layer);
 
-    const polyline = L.polyline(geo, { color: 'rgb(0, 0, 204)' });
+    const polyline = L.polyline(geo, { color: 'rgb(0, 0, 204)', weight: 1 });
     //console.log(polyline)
     polyline.addTo(map);
     let iss;
