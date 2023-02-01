@@ -139,15 +139,13 @@ export function viewConfigurator(arg, params) {
                         }
                         e.children[0].style.background = signal;
                         if (parapmsPress < 6 || parapmsPress > 9.9) {
-                            e.style.borderRadius = '15px'
-                            e.style.border = '3px solid red'
+                            e.classList.add('alarmCheck')
+                            // e.style.borderRadius = '15px'
+                            //e.style.border = '3px solid red'
                         }
-
                     }
-
                     // console.log(elem)
                 })
-
             }
             if (el.name == item.temp) {
                 tiresLink.forEach(e => {

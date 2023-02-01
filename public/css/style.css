@@ -65,6 +65,11 @@ td {
   text-align: center;
 }
 
+.alarmCheck {
+  border: 3px solid red;
+  border-radius: 15px;
+}
+
 .info {
   display: none;
   flex-direction: column;
