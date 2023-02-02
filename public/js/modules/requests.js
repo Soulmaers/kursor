@@ -183,7 +183,18 @@ export function viewTech(id) {
         body: JSON.stringify({ id, activePost })
     })
         .then((res) => res.json())
-        .then(res => console.log(res))
-
+        .then(res => {
+            const nval = (Object.entries(res.values[0]))
+            const massVal = nval.shift()
+            console.log(nval)
+            const formValue = document.querySelectorAll('.formValue')
+            formValue.forEach((el, index) => {
+                el.value = nval[index][1]
+            })
+            const inputPSI = document.querySelector('.jobDav')
+            const inputBar = document.querySelector('.bar')
+            inputBar.textContent = (inputPSI.value / 14.504).toFixed(1);
+        }
+        )
 }
 

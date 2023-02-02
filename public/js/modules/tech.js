@@ -22,8 +22,10 @@ export function tech() {
             }
         })
     })
+
     inputPSI.addEventListener('input', () => {
         inputBar.textContent = (inputPSI.value / 14.504).toFixed(1);
+        console.log(inputBar.textContent)
     })
     const tyresActive = document.querySelector('.tiresActiv')
     viewTech(tyresActive.id);
