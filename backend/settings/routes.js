@@ -27,7 +27,9 @@ module.exports = (app) => {
     app
         .route('/api/datawialonGeo')
         .post(dataWialon.datawialonGeo)
-
+    app
+        .route('/api/tech')
+        .post(modelController.tech)
 
     app
         .route('/api/model')
@@ -36,6 +38,10 @@ module.exports = (app) => {
     app
         .route('/api/tyres')
         .post(modelController.tyres)
+
+    app
+        .route('/api/techView')
+        .post(modelController.techView)
 
     app
         .route('/api/modelView')

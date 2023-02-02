@@ -39,7 +39,76 @@ exports.paramsDeleteView = (req, res) => {
 
 }
 
+exports.tech = (req, res) => {
+    //   console.log(req.body.activePost)
+    //  console.log(req.body.arr[1])
+    //  console.log(req.body.arrValue)
+    const value = [req.body.arrValue];
+    console.log(value)
+    // value.push()
+    const tableModel = 'tech' + req.body.activePost
+    // console.log(tableModel)
+    try {
+        const sql = `create table if not exists ${tableModel}(
+            id int(255) primary key auto_increment,
+            idTyres int(255) not null,
+            ${req.body.arr[0]} varchar(255),
+            ${req.body.arr[1]} varchar(255),
+            ${req.body.arr[2]} int(255),
+            ${req.body.arr[3]} int(255),
+            ${req.body.arr[4]} int(255),
+            ${req.body.arr[5]} varchar(255),
+            ${req.body.arr[6]} int(255),
+            ${req.body.arr[7]} int(255),
+            ${req.body.arr[8]} varchar(255)
+            )`
+        connection.query(sql, function (err, results) {
+            if (err) console.log(err);
+            else console.log("Таблица tech создана");
+        })
+        const selectBase = `SELECT idTyres FROM ${tableModel} WHERE 1`
+        connection.query(selectBase, function (err, results) {
 
+            if (err) console.log(err);
+            if (results.length === 0) {
+                console.log('запусккк')
+                const sql = `INSERT INTO  ${tableModel}( idTyres, ${req.body.arr[0]},${req.body.arr[1]},${req.body.arr[2]},${req.body.arr[3]},
+                        ${req.body.arr[4]},${req.body.arr[5]},${req.body.arr[6]},${req.body.arr[7]},${req.body.arr[8]}) VALUES?`;
+                connection.query(sql, [value], function (err, results) {
+                    if (err) console.log(err);
+                });
+            }
+            if (results.length > 0) {
+                let count = value[0][0];
+                const mas = []
+                results.forEach(el => {
+                    mas.push(el.idTyres)
+                });
+                if (!mas.includes(parseInt(value[0][0]))) {
+                    console.log('запусккк2')
+                    const sql = `INSERT INTO  ${tableModel}( idTyres, ${req.body.arr[0]},${req.body.arr[1]},${req.body.arr[2]},${req.body.arr[3]},
+                                ${req.body.arr[4]},${req.body.arr[5]},${req.body.arr[6]},${req.body.arr[7]},${req.body.arr[8]}) VALUES?`;
+                    connection.query(sql, [value], function (err, results) {
+                        if (err) console.log(err);
+                    });
+                }
+                if (mas.includes(parseInt(value[0][0]))) {
+                    console.log('запусккк3')
+                    console.log(value[0])
+                    const sql = `UPDATE ${tableModel} SET idTyres='${value[0][0]}', ${req.body.arr[0]}='${value[0][1]}', ${req.body.arr[1]}='${value[0][2]}',${req.body.arr[2]}='${value[0][3]}',
+                        ${req.body.arr[3]}='${value[0][4]}',${req.body.arr[4]}='${value[0][5]}',${req.body.arr[5]}='${value[0][6]}',${req.body.arr[6]}='${value[0][7]}',
+                        ${req.body.arr[7]}='${value[0][8]}', ${req.body.arr[8]}='${value[0][9]}'WHERE idTyres=${count} `;
+                    connection.query(sql, [value], function (err, results) {
+                        if (err) console.log(err);
+                    });
+                }
+            }
+        });
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 
 exports.model = (req, res) => {
     console.log(req.body.activePost)
@@ -85,6 +154,9 @@ exports.tyres = (req, res) => {
             if (err) console.log(err);
             else console.log("Таблица значений колес создана");
         })
+
+
+
         const postModel = `INSERT INTO ${tableTyres}(tyresdiv, pressure, temp) VALUES?`
         connection.query(postModel, [req.body.tyres], function (err, results) {
             if (err) console.log(err);
@@ -97,7 +169,23 @@ exports.tyres = (req, res) => {
     }
 }
 
-
+exports.techView = (req, res) => {
+    //  console.log(req.body.activePost)
+    const tableModelView = 'tech' + req.body.activePost
+    console.log(req.body.id)
+    const count = req.body.id
+    try {
+        const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, protector, protectorDate FROM ${tableModelView} WHERE  idTyres=${count}`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            response.status(200, results, res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 
 exports.modelView = (req, res) => {
     //  console.log(req.body.activePost)

@@ -58,6 +58,7 @@ function createNameTable(name) {
 }
 
 function postParametrs(name, param) {
+    //   console.log(param)
     const selectBase = `SELECT id FROM ${name} WHERE 1`
     connection.query(selectBase, function (err, results) {
         if (err) console.log(err);

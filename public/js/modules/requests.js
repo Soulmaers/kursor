@@ -146,3 +146,44 @@ export const geoPosition = (geo) => {
             //  setTimeout(geoPosition, 6000);
         })
 }
+
+
+
+export function reqTech(arr, id) {
+    console.log('запуск')
+    const active = document.querySelectorAll('.color')
+    const activePost = active[0].textContent.replace(/\s+/g, '')
+    const arrValue = [];
+    const formValue = document.querySelectorAll('.formValue')
+    arrValue.push(id)
+    formValue.forEach(el => {
+        arrValue.push(el.value)
+    })
+    fetch('api/tech', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, arr, arrValue, activePost }),
+    })
+        .then((res) => res.json())
+        .then(res => console.log(res))
+
+}
+
+export function viewTech(id) {
+    const active = document.querySelectorAll('.color')
+    const activePost = active[0].textContent.replace(/\s+/g, '')
+
+    fetch('api/techView', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, activePost })
+    })
+        .then((res) => res.json())
+        .then(res => console.log(res))
+
+}
+

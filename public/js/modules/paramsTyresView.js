@@ -28,9 +28,14 @@ export function viewMenuParams() {
                 msg.forEach(el => el.classList.remove('act'))
             });
             wrapperButton.style.display = 'flex';
-            tiresLink.forEach(el => el.classList.remove('tiresActiv'));
+            tiresLink.forEach(el => {
+                el.classList.remove('tiresActiv')
+            }
+            );
+
+
             e.classList.add('tiresActiv')
-            tech()
+            tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
         })
     })
     koleso(kolesos, btnsens)
