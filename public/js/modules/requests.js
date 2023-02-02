@@ -194,7 +194,11 @@ export function viewTech(id) {
             const inputPSI = document.querySelector('.jobDav')
             const inputBar = document.querySelector('.bar')
             inputBar.textContent = (inputPSI.value / 14.504).toFixed(1);
+            const probeg = document.querySelectorAll('.probeg')
+            probeg[2].textContent = probeg[1].value - probeg[0].value
         }
         )
+
+
 }
 
