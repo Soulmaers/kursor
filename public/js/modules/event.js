@@ -37,6 +37,7 @@ detaly.addEventListener('click', () => {
 const buttonTth = document.querySelector('.buttonTth')
 buttonTth.addEventListener('click', () => {
     const techText = document.querySelectorAll('.tech')
+    console.log(techText)
     const arrNameCol = [];
     techText.forEach(el => {
         arrNameCol.push(el.id)

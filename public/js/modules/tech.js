@@ -29,6 +29,52 @@ export function tech() {
     })
     const tyresActive = document.querySelector('.tiresActiv')
     viewTech(tyresActive.id);
+    // fff()
 }
 
 
+var formTth = document.querySelectorAll('.formTth')
+//Create array of options to be added
+var marka = ["BFGoodrich", "Bridgestone", "Continental", "Cordiant", "Dunlop", "Cordiant", "Gislaved", "Goodyear", "Hankook", "Kumho", "Michelin"];
+//Create and append select list
+var selectList = document.createElement("datalist");
+selectList.id = "suggestions";
+selectList.name = "mySelect";
+selectList.classList.add('selContent')
+console.log(formTth[0])
+formTth[0].appendChild(selectList);
+//Create and append the options
+//const option = document.document.querySelectorAll(".option");
+//const option = document.createElement("option");
+//option.classList.add('option')
+//console.log(option)
+//option.value = ''
+//option.text = ''
+//selectList.appendChild(option);
+const input = document.createElement("input");
+input.autoComplete = "on"
+input.setAttribute('list', 'suggestions');
+input.classList.add('formValue')
+input.classList.add('techInput')
+formTth[0].appendChild(input);
+
+
+
+marka.forEach(el => {
+    const option = document.createElement("option");
+    // option.classList.add('option')
+    option.value = el;
+    option.text = el;
+    selectList.appendChild(option);
+
+})
+
+
+/*
+function combo() {
+    const theinput = document.getElementById(ids);
+    var idx = mySelect.selectedIndex;
+    var content = mySelect.options[idx].innerHTML;
+    theinput.value = content;
+}
+combo()*/

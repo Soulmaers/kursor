@@ -152,7 +152,9 @@ td {
   margin-top: 10px;
 }
 
-
+.formValue {
+  width: 100%
+}
 
 .tires:hover .place,
 .place:hover {
@@ -173,8 +175,8 @@ td {
   position: absolute;
   height: 34px;
   width: 75px;
-  top: 14%;
-  left: 35%;
+  top: 28%;
+  left: 48%;
   background-color: #fff;
   visibility: visible;
   border-radius: 5px;

@@ -159,6 +159,7 @@ export function reqTech(arr, id) {
     formValue.forEach(el => {
         arrValue.push(el.value)
     })
+    console.log(arrValue)
     fetch('api/tech', {
         method: "POST",
         headers: {
