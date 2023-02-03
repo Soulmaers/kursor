@@ -161,6 +161,63 @@ td {
   opacity: 1;
 }
 
+.oform,
+.selContent {
+  width: 190px;
+}
+
+.styleOption {
+  width: 190px;
+}
+
+#input {
+  width: 300px;
+}
+
+.drop-down__list {
+  position: absolute;
+  list-style-type: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.drop-down__item {
+  padding: 7px;
+  background: gray;
+  color: #fff;
+  margin-bottom: 2px;
+  transition: all .2s;
+}
+
+.drop-down__item:focus,
+.drop-down__item:hover {
+  background: grey;
+}
+
+.drop-down__item:active {
+  transition: none;
+  background: #fff;
+  color: gray
+}
+
+.buh {
+  width: 24px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+
+
+
+
+
 .place {
   display: block;
   opacity: 0;

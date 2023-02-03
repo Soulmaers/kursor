@@ -1,6 +1,6 @@
 import { postTyres, reqDelete, paramsDelete, reqTech } from './requests.js'
 import { alarmClear } from './visual.js'
-
+import { data } from './content.js'
 export function saveTyres(arr) {
     const btnSave = document.querySelector('.btn_save')
     btnSave.addEventListener('click', () => {
@@ -45,4 +45,83 @@ buttonTth.addEventListener('click', () => {
     const tyresActive = document.querySelector('.tiresActiv')
     reqTech(arrNameCol, tyresActive.id);
 })
+
+
+
+class DropDownList {
+    constructor({ element, data, btn }) {
+        this.element = element;
+        this.data = data;
+        this.btn = btn;
+        this.listElement = null;
+        this._onElementInput = this._onElementInput.bind(this);
+        this._onElementKursor = this._onElementKursor.bind(this);
+        this._onItemListClick = this._onItemListClick.bind(this);
+        this._onDocumentKeyDown = this._onDocumentKeyDown.bind(this);
+        this.bind();
+    }
+    _onDocumentKeyDown({ keyCode }) {
+        console.log(keyCode);
+    }
+    _onElementInput({ target }) {
+        this.removeList();
+
+        if (!target.value) {
+            return
+        }
+        this.createList(this.data.filter(it => it.toLowerCase().indexOf(target.value.toLowerCase()) !== -1));
+        this.appendList();
+    }
+    _onElementKursor() {
+        this.removeList();
+        this.createList(this.data);
+        this.appendList();
+    }
+    _onItemListClick({ target }) {
+        console.log('удаление')
+        this.element.value = target.textContent;
+        this.removeList();
+    }
+    createList(data) {
+        console.log(data)
+        this.listElement = document.createElement(`ul`);
+        this.listElement.className = `drop-down__list`;
+        this.listElement.innerHTML = data.map(it => `<li tabindex="0" class="drop-down__item">${it}</li>`).join(``);
+
+        [...this.listElement.querySelectorAll(`.drop-down__item`)].forEach(it => {
+            it.addEventListener(`click`, this._onItemListClick);
+        });
+        document.addEventListener(`keydown`, this._onDocumentKeyDown);
+    }
+    appendList() {
+        const { left, width, bottom } = this.element.getBoundingClientRect();
+        this.listElement.style.width = width + `px`;
+        this.listElement.style.left = left + `px`;
+        this.listElement.style.top = bottom + `px`;
+        this.listElement.style.display = 'block'
+        document.body.appendChild(this.listElement);
+    }
+
+    removeList() {
+        if (this.listElement) {
+            this.listElement.remove();
+            this.listElement = null;
+        }
+        // document.removeEventListener(`keydown`, this._onDocumentKeyDown);
+    }
+    bind() {
+        this.element.addEventListener(`input`, this._onElementInput);
+        this.btn.addEventListener(`click`, this._onElementKursor);
+        document.addEventListener('click', (e) => {
+            if (e.target !== this.btn) {
+                this.removeList()
+            }
+
+        })
+    }
+}
+new DropDownList({ element: document.querySelector(`#input`), btn: document.querySelector('.buh'), data });
+
+
+
 

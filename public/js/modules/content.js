@@ -71,3 +71,7 @@ export const objColor = {
     3: '#3eb051',
     5: '#fff'
 }
+
+
+
+export const data = ["BFGoodrich", "Bridgestone", "Continental", "Cordiant", "Dunlop", "Nokian Tyres", "Gislaved", "Goodyear", "Hankook", "Kumho", "Michelin"];
