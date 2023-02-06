@@ -4,7 +4,6 @@ const passport = require('passport')
 const path = require('path')
 
 const routes = require('./settings/routes')
-const routes2 = require('./settings/routes')
 const app = express();
 
 

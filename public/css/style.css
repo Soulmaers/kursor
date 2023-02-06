@@ -179,19 +179,21 @@ td {
   margin: 5px 0 0 0;
   max-height: 400px;
   overflow: auto;
+  cursor: pointer;
 }
 
 .drop-down__item {
   padding: 7px;
   background: gray;
   color: #fff;
-  margin-bottom: 2px;
+
   transition: all .2s;
 }
 
 .drop-down__item:focus,
 .drop-down__item:hover {
-  background: grey;
+  background: #fff;
+  color: gray
 }
 
 .drop-down__item:active {
