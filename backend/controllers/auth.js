@@ -1,9 +1,48 @@
-const response = require('../../response')
-const db = require('../settings/db')
+//const response = require('../../response')
+//const db = require('../settings/db')
 //const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const path = require('path')
+//const jwt = require('jsonwebtoken')
+//const path = require('path')
 
+
+
+module.exports.page = async function (req, res) {
+    res.render('form.ejs', { message: req.flash('loginMessage') }); // load the index.ejs file
+
+}
+module.exports.login = async function (req, res) {
+    res.render('form.ejs', { message: req.flash('loginMessage') });
+
+}
+module.exports.loginPost = async function (req, res) {
+    console.log(res);
+
+    if (req.body.remember) {
+        req.session.cookie.maxAge = 1000 * 60 * 3;
+    } else {
+        req.session.cookie.expires = false;
+    }
+    res.redirect('/');
+};
+module.exports.profile = async function (req, res) {
+    console.log(req.user)
+    res.render('in.ejs', {
+        user: req.user // get the user out of session and pass to template
+    })
+}
+
+module.exports.logout = async function (req, res) {
+    req.logout();
+    res.redirect('/');
+
+}
+
+
+
+
+
+
+/*
 exports.getAllUsers = (req, res) => {
     console.log(req.body)
     db.query('SELECT  `name` FROM `users`', (error, rows, fields) => {
@@ -83,4 +122,4 @@ exports.signin = (req, res) => {
     })
 
 
-}
+}*/

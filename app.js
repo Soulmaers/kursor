@@ -42,15 +42,15 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 
 
-require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+//require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 
 app.use(express.static(__dirname + '/public'));
 //const inHTML = path.resolve(__dirname, 'public/in.html');
 //app.get('/cont', (req, res) => res.sendFile(inHTML))
 
-
-routes(app);
+app.use(routes)
+//routes(app);
 module.exports = app
 
 

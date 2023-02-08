@@ -4,7 +4,7 @@ const response = require('../../response')
 const connection = require('../settings/db')
 
 
-exports.deleteView = (req, res) => {
+module.exports.deleteView = (req, res) => {
     console.log(req.body.name)
     const tableModel = 'model' + req.body.name
     try {
@@ -22,7 +22,7 @@ exports.deleteView = (req, res) => {
 
 
 
-exports.paramsDeleteView = (req, res) => {
+module.exports.paramsDeleteView = (req, res) => {
     console.log(req.body.name)
     const tableTyres = 'tyres' + req.body.name
     try {
@@ -39,7 +39,7 @@ exports.paramsDeleteView = (req, res) => {
 
 }
 
-exports.tech = (req, res) => {
+module.exports.tech = (req, res) => {
     //   console.log(req.body.activePost)
     //  console.log(req.body.arr[1])
     //  console.log(req.body.arrValue)
@@ -110,7 +110,7 @@ exports.tech = (req, res) => {
     }
 }
 
-exports.model = (req, res) => {
+module.exports.model = (req, res) => {
     console.log(req.body.activePost)
     const tableModel = 'model' + req.body.activePost
     // console.log(tableModel)
@@ -139,7 +139,7 @@ exports.model = (req, res) => {
 }
 
 
-exports.tyres = (req, res) => {
+module.exports.tyres = (req, res) => {
     //  console.log(req.body.activePost)
     const tableTyres = 'tyres' + req.body.activePost
     // console.log(tableModel)
@@ -169,7 +169,7 @@ exports.tyres = (req, res) => {
     }
 }
 
-exports.techView = (req, res) => {
+module.exports.techView = (req, res) => {
     //  console.log(req.body.activePost)
     const tableModelView = 'tech' + req.body.activePost
     console.log(req.body.id)
@@ -187,7 +187,7 @@ exports.techView = (req, res) => {
     }
 }
 
-exports.modelView = (req, res) => {
+module.exports.modelView = (req, res) => {
     //  console.log(req.body.activePost)
     const tableModelView = 'model' + req.body.activePost
     try {
@@ -205,7 +205,7 @@ exports.modelView = (req, res) => {
 
 
 
-exports.tyresView = (req, res) => {
+module.exports.tyresView = (req, res) => {
     // console.log(req.body.activePost)
     const tableTyresView = 'tyres' + req.body.activePost
     try {

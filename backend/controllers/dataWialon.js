@@ -11,7 +11,7 @@ const connection = require('../settings/db')
 
 
 
-exports.datawialon = (req, res) => {
+module.exports.datawialon = (req, res) => {
 
     //console.log(req.body.activePost)
     try {
@@ -32,7 +32,7 @@ exports.datawialon = (req, res) => {
 
 
 
-exports.datawialonGeo = (req, res) => {
+module.exports.datawialonGeo = (req, res) => {
     console.log(req.body.active)
 
     //  console.log(geoX, geoY)
