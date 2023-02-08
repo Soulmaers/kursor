@@ -12,16 +12,13 @@ function isAuthenticated(req, res, next) {
     if (!req.isAuthenticated()) {
         return next();
     }
-    res.redirect('/login')
+    res.redirect('/')
 }
 
 module.exports = router
 
-
-
 router.get('/', controller.page)
-router.get('/login', controller.login)
-router.post('/login', passport.authenticate('local-login', {
+router.post('/', passport.authenticate('local-login', {
     successRedirect: '/profile', // redirect to the secure profile section
     failureRedirect: '/', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages

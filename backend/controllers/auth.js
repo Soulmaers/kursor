@@ -10,12 +10,8 @@ module.exports.page = async function (req, res) {
     res.render('form.ejs', { message: req.flash('loginMessage') }); // load the index.ejs file
 
 }
-module.exports.login = async function (req, res) {
-    res.render('form.ejs', { message: req.flash('loginMessage') });
-
-}
 module.exports.loginPost = async function (req, res) {
-    console.log(res);
+    console.log(req.body.remember);
 
     if (req.body.remember) {
         req.session.cookie.maxAge = 1000 * 60 * 3;
