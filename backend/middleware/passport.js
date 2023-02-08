@@ -1,5 +1,11 @@
 
 const LocalStrategy = require('passport-local').Strategy;
+const JwtStrategy = require('passport-jwt').Strategy
+const ExtractJwt = require('passport-jwt').ExtractJwt
+const options = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: 'jwt-key'
+}
 
 
 const mysql = require('mysql');
@@ -19,6 +25,9 @@ module.exports = function (passport) {
         //    connection.end();
     });
 
+   
+
+    
     passport.use(
         'local-login',
         new LocalStrategy({
