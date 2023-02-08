@@ -32,29 +32,13 @@ export function viewMenuParams() {
                 el.classList.remove('tiresActiv')
             }
             );
-
-
             e.classList.add('tiresActiv')
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
+            console.log('licreate2')
         })
     })
     koleso(kolesos, btnsens)
 }
-
-/*
-inputPassprob.forEach((el2, index) => {
-    inputResProb[index].textContent = el2.value - inputToProb[index].value;
-    el2.addEventListener('input', () => {
-        inputResProb[index].textContent = el2.value - inputToProb[index].value;
-    })
-})
-inputToProb.forEach((el2, index) => {
-    inputResProb[index].textContent = inputPassprob[index].value - el2.value;
-    el2.addEventListener('input', () => {
-        inputResProb[index].textContent = inputPassprob[index].value - el2.value;
-    })
-})*/
-
 
 export function loadParamsView() {
     const active = document.querySelectorAll('.color')
@@ -141,16 +125,13 @@ function viewPokasateli() {
         })
 }
 function koleso(kol, btnsens) {
-    liCreate()
     const msg = document.querySelectorAll('.msg')
     const paramPress = [];
     const paramTemp = [];
     let prmsD = [];
     let prmsT = [];
-    // console.log(msg)
     msg.forEach(el => {
         el.addEventListener('click', () => {
-            //    console.log('запуск')
             const arrSpreed = [...el.textContent]
             let value;
             arrSpreed.forEach(el => {
@@ -159,13 +140,11 @@ function koleso(kol, btnsens) {
                 }
             })
             if (btnsens[0].classList.contains('actBTN')) {
-                //  console.log('запуск1')
                 arrSpreed.forEach(el => {
                     if (el === ':') {
                         prmsD.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                     }
                 })
-                //console.log(job3.value)
                 const valJob = value
                 valJob.length > 10 ?
                     kol[kol.length - 1].children[0].textContent = '-' :

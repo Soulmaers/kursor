@@ -4,16 +4,8 @@ const controller = require('../controllers/auth')
 const controllerWialon = require('../controllers/dataWialon')
 const controllerModel = require('../controllers/modelController')
 const isLoggedIn = require('../middleware/auth.js')
-//const isAuthenticated = require('../middleware/auth.js')
 const passport = require('passport')
 const router = express.Router()
-
-function isAuthenticated(req, res, next) {
-    if (!req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/')
-}
 
 module.exports = router
 
@@ -24,7 +16,7 @@ router.post('/', passport.authenticate('local-login', {
     failureFlash: true // allow flash messages
 }), controller.loginPost)
 router.get('/profile', isLoggedIn, controller.profile)
-router.get('/logout', isAuthenticated, controller.logout)
+router.get('/logout', controller.logout)
 
 
 

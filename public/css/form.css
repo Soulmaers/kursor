@@ -29,7 +29,7 @@ div.wrapper {
 .auth_header {
     width: 100%;
     height: 72px;
-    background-image: url(../../public/image/headerform.png);
+
     background-size: contain;
     background-repeat: no-repeat;
 }

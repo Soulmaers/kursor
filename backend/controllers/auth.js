@@ -27,10 +27,13 @@ module.exports.profile = async function (req, res) {
     })
 }
 
-module.exports.logout = async function (req, res) {
-    req.logout();
-    res.redirect('/');
-
+module.exports.logout = async function (req, res, next) {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.redirect('/');
+    })
 }
 
 

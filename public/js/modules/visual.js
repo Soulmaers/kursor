@@ -81,17 +81,22 @@ export function clearGraf() {
     })
 }
 
-
-
 //создаем список под параметры
-export function liCreate() {
+export function liCreate(arg) {
     const obo = document.querySelector('.obo')
-    const count = 97;
-    for (let i = 0; i < count; i++) {
+    if (obo.children.length !== 0) {
+        const list = Array.from(obo.children)
+        list.forEach(el => {
+            el.remove();
+        })
+    }
+    const count = arg.length
+    for (let i = 0; i <= count; i++) {
         let li = document.createElement('li');
         li.className = "msg";
         obo.append(li);
     }
+
 }
 
 //отрисовываем список под параметры
@@ -110,13 +115,16 @@ export function sensor(btnsens, titleSens, obo) {
 }
 
 export function view(arg) {
+    console.log('licreate')
+    liCreate(arg)
     const msg = document.querySelectorAll('.msg')
     arg.forEach((el, index) => {
         msg[index].textContent = `${el.name}:${el.value}`
     })
+    viewMenuParams()
 }
 export function viewConfigurator(arg, params) {
-    console.log(arg, params)
+    //  console.log(arg, params)
     const alerts = [];
     const tiresLink = document.querySelectorAll('.tires_link')
     //const tiresLinkId = document.getElementById('.tires_link')
@@ -268,7 +276,7 @@ export function viewOs() {
         container.appendChild(cont2)
     }
     //eventBtnTyres();
-    viewMenuParams()
+    // viewMenuParams()
     //  const tiresLink = document.querySelectorAll('.tires_link')
     // console.log(tiresLink)
 }
