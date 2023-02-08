@@ -3,7 +3,7 @@ import { init } from './modules/menu.js'
 import { speed } from './modules/speed.js'
 import { liCreate } from './modules/visual.js'
 import { select } from './modules/configurator.js'
-
+//import { auth } from './modules/auth.js'
 
 //запуск функции атворизации на wialon--> запрос параметров созданых объектов--> отрисовка меню
 init();
@@ -30,6 +30,5 @@ const Obj = {
     'КранГаличанин Р858ОР178': 25766831
 
 }
-
 
 

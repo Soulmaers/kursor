@@ -1,9 +1,10 @@
 
 
-/*
+
 let form = document.querySelector('.form')
-let formin = document.querySelector('.formin')
+let formin = document.querySelector('.auth_form')
 // Заменим обработчик submit формы
+/*
 form.addEventListener("submit", function (e) {
     // отключим поведение по умолчанию
     e.preventDefault();
@@ -25,7 +26,7 @@ form.addEventListener("submit", function (e) {
             // user = localStorage.getItem("user");
             // console.log("user", JSON.parse(user));
         });
-});
+});*/
 
 formin.addEventListener("submit", function (e) {
     // отключим поведение по умолчанию
@@ -84,4 +85,3 @@ function modals(list) {
         }
     }
 }
-*/

@@ -64,6 +64,8 @@ export function navBarNameCar(arrCar) {
         li.appendChild(a)
     })
     const menu = document.querySelector('.menu')
+    const header = document.querySelector('.header')
+    //  console.log(listMenuLeft)
     menu.appendChild(ul);
     // navigator(); //запускаем  условия по клику на кнопку меню
 }

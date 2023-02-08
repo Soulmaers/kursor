@@ -1,0 +1,33 @@
+<%- include('layout-start') %>
+
+    <div class="container_start">
+        <div class="wrappers">
+            <!-- show any messages that come back with authentication -->
+
+            <div class="auth_header">
+                <img class="imgs" src="../image/headerform.png" alt="road">
+
+            </div>
+            <div class="wrap_cont">
+                <h3 class="title_form">Датчики давления</h3>
+                <% if (message.length> 0) { %>
+                    <div class="alert alert-danger" style=" color: red">
+                        <%= message %>
+                    </div>
+                    <% } %>
+                        <form class="auth_form" action="/login" method="post">
+                            <input class="inp" id="username" type="text" name="username" placeholder="Введите логин"
+                                required>
+                            <input class="inp" type="password" name="password" placeholder="Введите пароль" required>
+                            <button class="btn" type="submit" name="form_auth_submit">Войти</button>
+                        </form>
+
+                        <div class="footer_form">
+                            <span class="infos">Телефон: 123456789</span>
+                            <span class="infos">e-mail: admin@cursor-gps.ru</span>
+                        </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('layout-end') %>

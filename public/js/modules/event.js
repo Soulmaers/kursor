@@ -21,6 +21,8 @@ btnClear.addEventListener('click', () => {
     paramsDelete(activePost);
 })
 
+
+/*
 const detaly = document.querySelector('.detaly')
 detaly.addEventListener('click', () => {
     const wrapperUp = document.querySelector('.wrapper_up')
@@ -31,7 +33,7 @@ detaly.addEventListener('click', () => {
     speedGraf.style.display = 'none'
     const detalisation = document.querySelector('.detalisation')
     detalisation.style.display = 'flex'
-})
+})*/
 
 
 const buttonTth = document.querySelector('.buttonTth')

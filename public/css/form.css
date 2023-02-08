@@ -1,0 +1,111 @@
+.container_start {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgray;
+
+    min-height: 1000px;
+    border: 1px solid rgb(84, 74, 228)
+}
+
+.wrappers {
+    width: 270px;
+    min-height: 350px;
+    border: 1px solid rgb(84, 74, 228);
+    background-color: rgb(31, 4, 104);
+
+}
+
+div.wrapper {
+    width: 100%;
+    border: none;
+    background-color: rgb(31, 4, 104);
+    box-shadow: none;
+    height: 200px;
+    margin: 0 auto;
+
+}
+
+.auth_header {
+    width: 100%;
+    height: 72px;
+    background-image: url(../../public/image/headerform.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+
+
+
+
+.pattern {
+    display: none;
+}
+
+.title_form {
+    margin-top: 40px;
+    color: beige;
+    font-family: roboto;
+}
+
+.wrap_cont,
+.auth_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.auth_form {
+    margin-top: 40px;
+}
+
+
+.inp:nth-child(n+2) {
+    margin-top: 20px;
+}
+
+.imgs {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.inp,
+.btn {
+    max-width: 100%;
+    margin-top: 15px;
+    padding: 8px 0;
+    border: none;
+    border-radius: 3px;
+}
+
+.inp {
+    padding-left: 5px;
+}
+
+.btn {
+    margin-top: 30px;
+    cursor: pointer;
+    width: 100%;
+    background-color: blueviolet;
+    color: #fff;
+    font-weight: bold;
+    font-family: roboto;
+}
+
+.footer_form {
+    margin: 40px 0;
+    display: flex;
+    flex-direction: column;
+    color: beige;
+    font-family: roboto;
+    font-size: 0.85rem;
+}
+
+.user {
+    width: 25%;
+    list-style-type: none;
+    display: flex;
+
+}

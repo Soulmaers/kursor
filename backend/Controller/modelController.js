@@ -1,4 +1,4 @@
-const response = require('../response')
+const response = require('../../response')
 //const wialon = require('wialon');
 //const getMainInfo = require('../settings/config')
 const connection = require('../settings/db')

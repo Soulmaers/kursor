@@ -1,19 +1,21 @@
-const response = require('../response')
+const response = require('../../response')
 const db = require('../settings/db')
 //const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const path = require('path')
 
 exports.getAllUsers = (req, res) => {
-
-    db.query('SELECT  `name`, `second_name`, `email` FROM `users`', (error, rows, fields) => {
+    console.log(req.body)
+    db.query('SELECT  `name` FROM `users`', (error, rows, fields) => {
         if (error) {
             response.status(404, error, res)
         }
+
         else {
-            response.status(200, rows, res)
+            res.redirect('/cont');
         }
     })
-
+    //  res.redirect('/cont')
 }
 
 exports.signup = (req, res) => {
@@ -52,24 +54,25 @@ exports.signup = (req, res) => {
 
 
 exports.signin = (req, res) => {
-    console.log(req.body)
-    db.query("SELECT `id`, `email`, `password` FROM `users` WHERE `email`='" + req.body.email + "'", (error, rows, fields) => {
+    console.log(req.body.login)
+    console.log(req.body.pass)
+    db.query("SELECT `id`, `name`, `password` FROM `users` WHERE `name`='" + req.body.login + "'", (error, rows, fields) => {
         if (error) {
             response.status(404, error, res)
         }
         else if (rows.length <= 0) {
-            response.status(404, { message: `Пользователь с email - ${req.body.email} не найден` }, res)
+            response.status(404, { message: `Пользователь с name - ${req.body.login} не найден` }, res)
         }
         else {
             const row = JSON.parse(JSON.stringify(rows))
             row.map(rw => {
                 //const password =bcrypt.compareSync(req.body.password, rw.password)
-                if (req.body.password == rw.password) {
+                if (req.body.pass == rw.password) {
                     const token = jwt.sign({
                         userId: rw.id,
                         email: rw.email
                     }, 'jwt-key', { expiresIn: 120 * 120 })
-                    response.status(200, { token: `Bearer ${token}`, message: 'Вы авторизованы' }, res)
+                    response.status(200, { token: `Bearer ${token}`, message: 'Вы авторизованы' }, res);
                 } else {
                     response.status(404, { message: 'Пароль не верный' }, res)
                 }

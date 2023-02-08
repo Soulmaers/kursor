@@ -18,10 +18,12 @@ export function visual(el) {
     const titleCar = document.querySelector('.title_two')
     const detalisation = document.querySelector('.detalisation')
     const btnsens = document.querySelectorAll('.btnsens')
+    const main = document.querySelector('.main')
     alarmClear();
     detalisation.style.display = 'none'
     wrapperUp.style.display = 'block'
     wrapperRight.style.display = 'flex'
+    main.style.display = 'flex'
     speedGraf.style.display = 'block'
     el.parentNode.classList.add('color')
     viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора

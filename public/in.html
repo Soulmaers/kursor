@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Прототип интерфейса</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="Shortcut Icon" href="../image/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto:wght@300&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.css "
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <script src=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.js "
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="menu">
+            <ul class="list_menu_left">
+                <li class="list_item_menu"><a class="link_menu" href="#">Мониторинг</a>
+
+            </ul>
+
+            <!--
+            <ul class="list_menu_center">
+                <li class="list_item_menu car_item"><a class="link_menu car" href="./tdrmx.html">TDRMX 652</a>
+                <li class="list_item_menu car_item"><a class="link_menu car" href="./pp933.html">PP933</a>
+                <li class="list_item_menu car_item"><a class="link_menu car" href="./kran858.html">Кран 858</a>
+            </ul>
+        </div> -->
+    </header>
+
+    <main class="main">
+
+
+        <div class="wrapper_left">
+            <div class="detalisation">
+                <div class="format">
+                    <h3 class="title_det">Мониторинг эксплуатации шин</h3>
+                    <ul class="item_det">
+                        <li class="list_det">Индикатор остаточного протектора</li>
+                        <li class="list_det">График протектора</li>
+                        <li class="list_det">Иконка (батарейка) на остаток протектора</li>
+                        <li class="list_det">Советчик шинному инженеру</li>
+                        <li class="list_det">Система управления жизненным циклом крупногабаритных шин</li>
+                    </ul>
+                </div>
+                <div class="format">
+                    <h3 class="title_det">Дополнительные параметры ТС</h3>
+                    <ul class="item_det">
+                        <li class="list_det">Датчик удара (слабый, сильный)</li>
+                        <li class="list_det">CAN шина</li>
+                        <li class="list_det">Обороты двигателя</li>
+                        <li class="list_det">Температура ОЖ</li>
+                        <li class="list_det">Нагрузка на ось(только с CAN шины)</li>
+                        <li class="list_det">Система подсчета расходов по платону</li>y
+                        <li class="list_det">Проверка качества вождения</li>
+                        <li class="list_det">Проверка штрафов из ГИБДД через гос.услуги</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="wrapper_up">
+                <div id="map" style="width: 100%; height: 300px"></div>
+
+                <!-- Get the leaflet JavaScript file -->
+
+            </div>
+            <div class="speedGraf">
+                <div class="form_speed">
+                    <label>Интервал
+                        <select class="select_speed">
+                            <option disabled selected value="0">Указанный интервал</option>
+                            <option class="option_int" value="1">За сутки</option>
+                            <option class="option_int" value="2">За неделю</option>
+                            <option class="option_int" value="3">За месяц</option>
+                        </select>
+                    </label>
+                    <label>От
+                        <input class="input_date" type="date" value="" placeholder="выберите дату От">
+                    </label>
+                    <label>До
+                        <input class="input_date" type="date" value="" placeholder="выберите дату До">
+                    </label>
+                    <div class="btn_speed">
+                        <button class="btm_form">Очистить</button>
+                        <button class="btm_form control">Выполнить</button>
+                    </div>
+                </div>
+                <div class="grafik1">
+                    <canvas id="myChartg1" width="400" height="250"></canvas>
+                </div>
+            </div>
+            <div class="wrapper_button">
+
+                <button class="btnsens">Давление</button>
+                <button class="btnsens">Температура</button>
+            </div>
+            <div class="title_sens">Параметры:</div>
+            <ul class="obo">
+            </ul>
+        </div>
+        <div class="wrapper_right">
+            <div class="container_left">
+                <div class="save">
+                    <button class="btn_save">Сохранить конфигуратор</button>
+                </div>
+                <div class="clear">
+                    <button class="btn_clear">Очистить модель</button>
+                </div>
+                <!--
+                <div class="change">
+
+                    <input class="job" type="number" value="0.069" placeholder="Введите коэффициент">
+
+                </div>-->
+                <div class="dropdown">
+                    <button class="dropbtn">Кол-во осей</button>
+                    <ul class="dropdown-content">
+                        <li class="linkSelect">1</li>
+                        <li class="linkSelect">2</li>
+                        <li class="linkSelect">3</li>
+                        <li class="linkSelect">4</li>
+                        <li class="linkSelect">5</li>
+                        <li class="linkSelect">6</li>
+                        <li class="linkSelect">7</li>
+                        <li class="linkSelect">8</li>
+                    </ul>
+                </div>
+                <div class="wrap_alarm">
+                    <span class="dav_max">ВНИМАНИЕ! Критически высокое давление!</span>
+                    <span class="dav_min">ВНИМАНИЕ! Критически низкое давление!</span>
+                    <span class="info">Уведомление отправлено ответственному на <span
+                            class="mail">zavgar@cursor-gps.ru</span> </span>
+                </div>
+            </div>
+
+            <div class="wrapper_containt">
+                <div class="header_car">
+                    <div class="alarm"></div>
+                    <h2 class="title_two"></h2>
+                </div>
+                <div class="moduleConfig">
+
+                    <div class="dropdownOs">
+                        <button class="dropbtnOs">Ось</button>
+                        <ul class="dropdown-contentOs">
+                            <li class="linkSelectOs">Тягач</li>
+                            <li class="linkSelectOs">Прицеп</li>
+                        </ul>
+                    </div>
+                    <div class="dropdownTires">
+                        <button class="dropbtnTires">Кол-во колёс</button>
+                        <ul class="dropdown-contentTires">
+                            <li class="linkSelectTires">2</li>
+                            <li class="linkSelectTires">4</li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="techInfo">
+                <h2 class="techTitle">Основные показатели колеса</h2>
+
+
+                <div class="tth">
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="marka">Марка</h3>
+                        <div class="formTth "> <input class="formValue techInput" id="input"> <button
+                                class="buh">&#8595</button></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="modelT">Модель</h3>
+                        <div class="formTth "><input class="formValue techInput"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="psi">Рабочее давление в PSI</h3>
+                        <div class="formTth  psi">
+                            <input class="techInput formValue jobDav validation" type="number">
+                            <p class="techText titleTth barD" id="bar">BAR</p>
+                            <p class="techInput bar job"></p>
+                        </div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="changeBar">min и max отклонение в BAR</h3>
+                        <div class="formTth formValue"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="probegNow">Текущий пробег колеса</h3>
+                        <div class="formTth"><input class="techInput formValue probeg"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="montaj">Дата монтажа</h3>
+                        <div class="formTth"> <input class="formValue dateChangeTires" type="date"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="probegPass">Пробег по паспорту</h3>
+                        <div class="formTth"><input class="formValue techInput probeg"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth" id="probegVal">Остаточный пробег колеса в км</h3>
+                        <div class="formTth">
+                            <p class="techInput probeg job"></p>
+                        </div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="protector">Оставшаяся глубина протектора</h3>
+                        <div class="formTth formValue"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="protectorDate">Дата замера протектора</h3>
+                        <div class="formTth"><input class="formValue dateChangeTires" type="date"></div>
+                    </div>
+                </div>
+                <button class="buttonTth">Сохранить</button>
+    </main>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="https://hst-api.wialon.com/wsdk/script/wialon.js"></script>
+    <script type="module" src="js/main.js"></script>
+
+</body>
+
+</html>
