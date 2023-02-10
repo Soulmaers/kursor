@@ -1143,13 +1143,27 @@ input[type="date"] {
   cursor: pointer;
 }
 
+.carList {
+  color: #000;
+  cursor: pointer;
+}
 
+.carList:hover {
+  color: gray;
+  cursor: pointer;
+}
 
+.linkMenu {
+  text-decoration: none;
+  font-family: Roboto;
 
+  font-weight: 900;
+  font-size: 1rem;
+}
 
 
 .car:hover {
-  font-size: 1.2rem;
+
   color: #fff;
 }
 
@@ -1317,4 +1331,232 @@ div.wrapper {
 .logout:hover {
   color: #fff;
   font-size: 1.2rem;
+}
+
+
+.list_name {
+  width: 20%;
+  border: 1px solid gray;
+
+
+}
+
+.list_profil {
+  width: 30%;
+  border: 1px solid gray;
+}
+
+.list_trail {
+  width: 50%;
+  border: 1px solid gray;
+}
+
+
+.bigDiv {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0 5px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+}
+
+.traile {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0 5px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+}
+
+.trail {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  list-style-type: none;
+  margin: 0;
+
+}
+
+
+
+.cont3 {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0 5px;
+}
+
+.tiresProfil {
+  font-size: 0.6rem;
+  font-weight: bold;
+}
+
+
+.list_item_menu_section {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100px;
+  list-style-type: none;
+  margin: 0;
+  padding-left: 10px;
+  border: 1px solid gray;
+}
+
+.section {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1%;
+}
+
+.list_att {
+  display: flex;
+  border: 2px solid gray;
+}
+
+.list_item1 {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+
+  font-family: Roboto;
+  font-weight: bold;
+}
+
+.list_item2 {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+
+  font-family: Roboto;
+  font-weight: bold;
+}
+
+.list_item3 {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+
+  font-family: Roboto;
+  font-weight: bold;
+}
+
+.list_arr {
+  display: flex;
+}
+
+
+
+.osi_list {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+
+.osi_list:nth-child(n+2) {
+  margin-left: 5px;
+}
+
+.frontSpare {
+  display: flex;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  position: relative;
+}
+
+.imgDivTires {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 13px;
+  bottom: 13px;
+  border: 2px solid #000;
+  border-radius: 50%;
+}
+
+.img {
+  width: 40px;
+  height: 40px;
+}
+
+
+
+.spareWill1 {
+  width: 34px;
+  height: 70px;
+  border-right: 2px solid #000;
+  border-radius: 100% 0 0 100% / 50% 0 0 50%;
+}
+
+.spareWill12 {
+  width: 34px;
+  height: 70px;
+  border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+}
+
+
+
+.tiresUp {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 34px;
+  height: 70px;
+  display: flex;
+  border-right: 2px solid #000;
+}
+
+.tiresDown {
+  display: flex;
+  width: 34px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+}
+
+.spareWill1_1 {
+  width: 35px;
+  height: 34px;
+  border-top: 2px solid #000;
+  border-radius: 0 0 0 100%;
+}
+
+.spareWill1_2 {
+  width: 35px;
+  height: 34px;
+  border-radius: 100% 0 0 0;
+}
+
+.spareWill1_3 {
+  width: 35px;
+  height: 34px;
+  border-bottom: 2px solid #000;
+  border-radius: 0 100% 0 0;
+}
+
+.spareWill1_4 {
+  width: 35px;
+  height: 34px;
+  border-radius: 0 0 100% 0;
 }

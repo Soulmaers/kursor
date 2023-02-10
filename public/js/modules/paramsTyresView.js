@@ -36,12 +36,17 @@ export function viewMenuParams() {
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
             console.log('licreate2')
         })
+
     })
     koleso(kolesos, btnsens)
 }
 
 export function loadParamsView() {
+    console.log('запуск')
     const active = document.querySelectorAll('.color')
+    /* if (active[0].textContent == 'Кран 858') {
+         active[0].textContent = 'КранГаличанин Р858ОР178'
+     }*/
     const activePost = active[0].textContent.replace(/\s+/g, '')
     fetch('api/modelView', {
         method: "POST",
@@ -90,7 +95,7 @@ export function loadParamsView() {
 }
 //viewPokasateli()
 function viewPokasateli() {
-    console.log('стартh')
+    //  console.log('стартh')
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
     fetch('api/tyresView', {
@@ -103,7 +108,7 @@ function viewPokasateli() {
         .then((res) => res.json())
         .then((res) => {
             const params = res
-            console.log(params)
+            //   console.log(params)
             fetch('api/wialon', {
                 method: "POST",
                 headers: {
@@ -114,18 +119,22 @@ function viewPokasateli() {
                 .then((res) => res.json())
                 .then((res) => {
                     const data = res
-                    console.log(data)
+                    // console.log(data)
                     data.values.sort((prev, next) => {
                         if (prev.name < next.name) return -1;
                         if (prev.name < next.name) return 1;
                     })
                     view(data.values)
+                    //   console.log(data.values, params.values)
                     viewConfigurator(data.values, params.values)
                 })
         })
 }
 function koleso(kol, btnsens) {
+    const active = document.querySelectorAll('.color')
+    liCreate()
     const msg = document.querySelectorAll('.msg')
+    // console.log(msg)
     const paramPress = [];
     const paramTemp = [];
     let prmsD = [];
@@ -145,7 +154,14 @@ function koleso(kol, btnsens) {
                         prmsD.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                     }
                 })
+                if (active[0].textContent == 'PressurePro 933') {
+                    value = (value * 0.069).toFixed(1)
+                }
+                else {
+                    value
+                }
                 const valJob = value
+
                 valJob.length > 10 ?
                     kol[kol.length - 1].children[0].textContent = '-' :
                     kol[kol.length - 1].children[0].textContent = valJob + '\nБар'
@@ -167,6 +183,7 @@ function koleso(kol, btnsens) {
                     kol[kol.length - 1].children[1].style.background = objColor[generT(value)];
                 }
                 paramTemp.push(el)
+                console.log(paramPress, paramTemp)
                 valid(paramPress, paramTemp)
             }
             kol[kol.length - 1].children[2].textContent = 'p:' + prmsD[prmsD.length - 1] + '\nt:' + prmsT[prmsT.length - 1]
@@ -202,5 +219,6 @@ function valid(paramPress, paramTemp) {
     massbd.push(kolId, value, value2)
     massivion.push(mass)
     massivionbd.push(massbd)
+    console.log(massivionbd)
     saveTyres(massivionbd)
 }

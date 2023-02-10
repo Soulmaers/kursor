@@ -17,6 +17,25 @@ export const text = `<div class=" osi">
     </div>`
 
 
+export const twoTyres = ` 
+    <div class="frontSpare">
+        <div class="tiresProfil spareWill1"></div>
+        <div class="tiresProfil spareWill12"></div>
+        <div class="imgDivTires"><img class="img" src="./image/kol.png"></div>
+           </div>`
+
+export const forTyres = `
+<div class="frontSpare sparka">
+    <div class="tiresUp">
+        <div class="tiresProfil spareWill1_1"></div>
+        <div class="tiresProfil spareWill1_2"></div>
+    </div>
+    <div class="tiresDown">
+        <div class="tiresProfil spareWill1_3"></div>
+        <div class="tiresProfil spareWill1_4"></div>
+    </div>
+    <div class="imgDivTires"><img class="img" src="./image/kol.png"></div>
+</div>`
 
 export function generDav(el) {
     //  modulAlarm();
@@ -38,12 +57,12 @@ export function generDav(el) {
 
 export function generFront(el) {
     let generatedValue;
-    if (el >= 8 && el <= 9) {
+    if (el >= 8 && el <= 10) {
         generatedValue = 3;
         //  console.log('al')
         //  div.style.display = 'none';
     }
-    if (el >= 7.5 && el < 8 || el > 9 && el <= 13) {
+    if (el >= 7.5 && el < 8 || el > 10 && el <= 13) {
         generatedValue = 2;
         //  console.log('al')
         //  div.style.display = 'none';
@@ -67,7 +86,7 @@ export function generT(el) {
 //создаем объект где ключ-результат условия, а свойства - соответсующее условию значение
 export const objColor = {
     1: '#e03636',
-    2: '#9ba805',
+    2: '#d6d938',
     3: '#3eb051',
     5: '#fff'
 }

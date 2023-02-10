@@ -12,7 +12,7 @@ module.exports.deleteView = (req, res) => {
         connection.query(postModel, function (err, results) {
             if (err) console.log(err);
             //console.log(results)
-            response.status(200, results, res)
+            response.status(200, results, '', res)
         })
     }
     catch (e) {
@@ -30,7 +30,7 @@ module.exports.paramsDeleteView = (req, res) => {
         connection.query(postModel, function (err, results) {
             if (err) console.log(err);
             //console.log(results)
-            response.status(200, results, res)
+            response.status(200, results, '', res)
         })
     }
     catch (e) {
@@ -44,7 +44,7 @@ module.exports.tech = (req, res) => {
     //  console.log(req.body.arr[1])
     //  console.log(req.body.arrValue)
     const value = [req.body.arrValue];
-    console.log(value)
+    // console.log(value)
     // value.push()
     const tableModel = 'tech' + req.body.activePost
     // console.log(tableModel)
@@ -111,7 +111,7 @@ module.exports.tech = (req, res) => {
 }
 
 module.exports.model = (req, res) => {
-    console.log(req.body.activePost)
+    //  console.log(req.body.activePost)
     const tableModel = 'model' + req.body.activePost
     // console.log(tableModel)
     try {
@@ -130,7 +130,7 @@ module.exports.model = (req, res) => {
         connection.query(postModel, [req.body.model], function (err, results) {
             if (err) console.log(err);
             //console.log(results)
-            response.status(200, results, res)
+            response.status(200, results, '', res)
         })
     }
     catch (e) {
@@ -161,7 +161,7 @@ module.exports.tyres = (req, res) => {
         connection.query(postModel, [req.body.tyres], function (err, results) {
             if (err) console.log(err);
             //console.log(results)
-            response.status(200, results, res)
+            response.status(200, results, '', res)
         })
     }
     catch (e) {
@@ -172,14 +172,14 @@ module.exports.tyres = (req, res) => {
 module.exports.techView = (req, res) => {
     //  console.log(req.body.activePost)
     const tableModelView = 'tech' + req.body.activePost
-    console.log(req.body.id)
+    //console.log(req.body.id)
     const count = req.body.id
     try {
         const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, protector, protectorDate FROM ${tableModelView} WHERE  idTyres=${count}`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             //console.log(results)
-            response.status(200, results, res)
+            response.status(200, results, '', res)
         })
     }
     catch (e) {
@@ -195,7 +195,7 @@ module.exports.modelView = (req, res) => {
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             //console.log(results)
-            response.status(200, results, res)
+            response.status(200, results, '', res)
         })
     }
     catch (e) {
@@ -213,11 +213,48 @@ module.exports.tyresView = (req, res) => {
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             //console.log(results)
-            response.status(200, results, res)
+            response.status(200, results, '', res)
         })
     }
     catch (e) {
         console.log(e)
     }
+}
+
+
+
+
+module.exports.listModel = (req, res) => {
+
+    const nameCar = 'model' + req.body.car.replace(/\s+/g, '')
+    try {
+        const selectBase = `SELECT osi, trailer,tyres FROM ${nameCar} WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            res.json({ status: 200, result: results, message: req.body.car })
+            //  response.status(200, results, req.body.car, res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
+module.exports.listTyres = (req, res) => {
+    // console.log(req.body.car)
+    const nameCar = 'tyres' + req.body.car.replace(/\s+/g, '')
+    try {
+        const selectBase = `SELECT tyresdiv, pressure,temp FROM ${nameCar} WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            response.status(200, results, req.body.car, res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+
 }
 

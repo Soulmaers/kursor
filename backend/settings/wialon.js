@@ -21,7 +21,7 @@ function init() {
             //  console.log('обновление')
             // setInterval(getMainInfo, 5000);
             createTable();
-            setInterval(createTable, 5000);
+            setInterval(createTable, 15000);
             //  saprosGeo()
         })
 
@@ -58,26 +58,28 @@ function createNameTable(name) {
 }
 
 function postParametrs(name, param) {
-    //   console.log(param)
+    // console.log(name)
     const selectBase = `SELECT id FROM ${name} WHERE 1`
     connection.query(selectBase, function (err, results) {
         if (err) console.log(err);
-        if (results.length <= 1) {
+        if (results.length < 1) {
             const sql = `INSERT INTO ${name}(name,value) VALUES?`;
             connection.query(sql, [param], function (err, results) {
                 if (err) console.log(err);
             });
             //   connection.end();
         }
-        else if (results.length > 1) {
-            //   console.log('старт')
+        else if (results.length > 0) {
+            // console.log('старт')
             let count = 0;
+            //  console.log(param)
             param.forEach(el => {
                 count++
                 const sql = `UPDATE ${name} SET name='${el[0]}', value='${el[1]}' WHERE id=${count}`;
                 connection.query(sql, function (err, results) {
                     if (err) console.log(err);
                 });
+                //  console.log('готово')
                 //  connection.end();
             })
         }

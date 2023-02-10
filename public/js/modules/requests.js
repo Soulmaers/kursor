@@ -75,7 +75,7 @@ export const paramsDelete = (name) => {
 }
 
 export const geoPosition = (geo) => {
-    // console.log(geo)
+    console.log('запуск геокарты')
     let count = 0;
     count++
     // console.log(new Date())

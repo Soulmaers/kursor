@@ -38,6 +38,7 @@ export function select() {
                 centerOsDiv.setAttribute("id", `${index}`);
             })
             const tires = document.querySelectorAll('.tires')
+            console.log(tires)
             let indexTires = 0;
 
             tires.forEach(el => {

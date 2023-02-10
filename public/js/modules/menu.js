@@ -1,7 +1,7 @@
 
 import { navigator } from './navigator.js'
 import { speed } from './speed.js'
-
+import { viewList, viewShina } from './visual.js'
 
 export function init() {
     wialon.core.Session.getInstance().initSession("https://hst-api.wialon.com");
@@ -41,14 +41,25 @@ export function zapros() {
             const arrCar = arr1[5];
             console.log(arr1[5])
             navBarNameCar(arrCar); //отрисовываем меню с именами объектов
-            navigator()
+            navBarNameCarList(arrCar);
+
+            arrCar.forEach(el => {
+                //   el.nm.replace(/\s+/g, '')
+                loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями
+            })
+
+            const nav = document.querySelectorAll('.car')
+            const navlist = document.querySelectorAll('.carList')
+
+            navigator(nav)
+            navigator(navlist)
+
             speed(arrCar)
             return arrCar
             //   geoloc(arrCar)
         });
 
 }
-
 export function navBarNameCar(arrCar) {
     const ul = document.createElement('ul')
     ul.classList.add('list_menu_center')
@@ -60,16 +71,88 @@ export function navBarNameCar(arrCar) {
         a.classList.add('link_menu')
         a.classList.add('car')
         a.innerHTML = `${el.nm}`;
+        /*  if (el.nm == 'КранГаличанин Р858ОР178') {
+              a.innerHTML = 'Кран 858'
+          }*/
         ul.appendChild(li)
         li.appendChild(a)
     })
     const menu = document.querySelector('.menu')
-    const header = document.querySelector('.header')
-    //  console.log(listMenuLeft)
+
     menu.appendChild(ul);
-    // navigator(); //запускаем  условия по клику на кнопку меню
+
 }
 
+export function navBarNameCarList(arrCar) {
+    const listName = document.querySelector('.list_name')
+    console.log('работает')
+    // const ul = document.createElement('ul')
+    //ul.classList.add('list_menu_section')
+    arrCar.forEach(el => {
+
+        const li = document.createElement('li')
+        li.classList.add('list_item_menu_section')
+        li.classList.add('car_item')
+        const a = document.createElement('a')
+        a.classList.add('link_menu')
+        a.classList.add('carList')
+
+        a.innerHTML = `${el.nm}`;
+        /* if (el.nm == 'КранГаличанин Р858ОР178') {
+             a.innerHTML = 'Кран 858'
+         }*/
+        listName.appendChild(li)
+        li.appendChild(a)
+    })
+    // listName.appendChild(ul);
+}
+
+
+
+
+function loadParamsViewList(car) {
+    // console.log(car)
+    fetch('api/listModel', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ car }))
+    })
+        .then((res) => res.json())
+        .then((res) => {
+            const model = res
+            //  console.log(model)
+            fetch('api/listTyres', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: (JSON.stringify({ car }))
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    const models = res
+                    fetch('api/wialonAll', {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: (JSON.stringify({ car }))
+                    })
+                        .then((res) => res.json())
+                        .then((res) => {
+                            const data = res
+                            //  console.log(data)
+                            //  console.log(models)
+                            // console.log(model, models)
+                            viewList(model)
+                            viewShina(data.message, data.result, models.values)
+                        })
+                })
+
+        })
+}
 
 
 
