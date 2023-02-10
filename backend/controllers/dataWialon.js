@@ -13,13 +13,28 @@ const connection = require('../settings/db')
 
 module.exports.datawialon = (req, res) => {
 
-    //console.log(req.body.activePost)
+
     try {
         const selectBase = `SELECT name, value FROM ${req.body.activePost} WHERE 1`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             // console.log(results)
-            response.status(200, results, res)
+            response.status(200, results, '', res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+module.exports.datawialonAll = (req, res) => {
+    const nameCar = req.body.car.replace(/\s+/g, '')
+    //console.log(req.body.activePost)
+    try {
+        const selectBase = `SELECT name, value FROM ${nameCar} WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            // console.log(results)
+            res.json({ status: 200, result: results, message: req.body.car })
         })
     }
     catch (e) {
@@ -33,7 +48,7 @@ module.exports.datawialon = (req, res) => {
 
 
 module.exports.datawialonGeo = (req, res) => {
-    console.log(req.body.active)
+    //  console.log(req.body.active)
 
     //  console.log(geoX, geoY)
     // createTable(req.body.active)

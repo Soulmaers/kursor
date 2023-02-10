@@ -4,14 +4,15 @@ import { massivionbd } from './paramsTyresView.js';
 import { btnClear } from './event.js';
 //import { geoPosition } from './requests.js'
 
-export function navigator() {
-    const nav = document.querySelectorAll('.car')
-
-
+export function navigator(nav) {
+    const navList = document.querySelectorAll('.carList')
+    console.log(nav[3].textContent)
+    // console.log(navList)
     nav.forEach(el => {
         el.addEventListener('click', route)
         function route() {
             console.log(el)
+            console.log('запускНавигатора')
 
             nav.forEach(e => {
                 const msg = document.querySelectorAll('.msg')

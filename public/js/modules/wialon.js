@@ -47,10 +47,11 @@ export function graf(t1, t2, int, id) {
 }
 
 export function geoloc() {
+    // console.log('запуск карты')
     let nowDate = Math.round(new Date().getTime() / 1000)
     let nDate = new Date();
     let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
-    console.log(timeFrom)
+    //  console.log(timeFrom)
 
 
     const flags = 1 + 1024
@@ -75,11 +76,11 @@ export function geoloc() {
             }
             const arr1 = Object.values(result);
             const arrCar = arr1[5];
-            console.log(arr1[5])
+            //  console.log(arr1[5])
 
             arrCar.forEach(it => {
                 const active = document.querySelector('.color')
-                //      console.log(active)
+                //  console.log(active)
                 if (it.nm === active.textContent) {
                     const prmsT = {
                         "itemId": it.id,
@@ -89,7 +90,7 @@ export function geoloc() {
                         "flagsMask": 65281,
                         "loadCount": 82710
                     }
-
+                    //  console.log('запуск гео')
 
                     const remoteT = wialon.core.Remote.getInstance();
                     remoteT.remoteCall('messages/load_interval', prmsT,
@@ -110,7 +111,7 @@ export function geoloc() {
                             geo.forEach((el, index) => {
                                 el.push(arr2[1][index].pos.y, arr2[1][index].pos.x);
                             })
-                            //  console.log(geo)
+
                             geoPosition(geo);
                         })
                 }

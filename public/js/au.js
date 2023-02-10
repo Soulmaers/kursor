@@ -8,7 +8,7 @@ formin.addEventListener("submit", function (e) {
     let formAuth = new FormData(formin);
     formAuth = JSON.stringify(Object.fromEntries(formAuth));
     console.log(formAuth)
-    fetch('/api/auth/signin', {
+    fetch('/login', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -19,20 +19,9 @@ formin.addEventListener("submit", function (e) {
         .then((res) => {
             let user = res;
             console.log(user);
-            // localStorage.setItem("user", JSON.stringify(user));
-            // user = localStorage.getItem("user");
-            //  console.log(user.values.message);
-            //  alert(user.values.message)
-            //  console.log(user.values.token);
-            //  console.log(user.values.url);
 
-
-            /* if (user.values.url) {
-                 window.location.replace(user.values.url)
-             }*/
             views(user)
-            // modals()
-            //console.log("user", JSON.parse(user));
+
         })
 
 });
@@ -40,7 +29,7 @@ formin.addEventListener("submit", function (e) {
 
 function views(token) {
     console.log(token)
-    fetch('api/users', {
+    fetch('/profile', {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',

@@ -1,15 +1,15 @@
-import { text } from './content.js'
+import { text, twoTyres, forTyres } from './content.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
 //import { geoPosition } from './requests.js'
 import { geoloc } from './wialon.js'
-
+import { navigator } from './navigator.js'
 
 let start;
 let time;
 //let timeParams;
 export function visual(el) {
-    console.log(el)
+    // console.log(el)
     clearInterval(time)
     // clearInterval(timeParams)
     const wrapperUp = document.querySelector('.wrapper_up')
@@ -19,8 +19,10 @@ export function visual(el) {
     const detalisation = document.querySelector('.detalisation')
     const btnsens = document.querySelectorAll('.btnsens')
     const main = document.querySelector('.main')
+    const section = document.querySelector('.section')
     alarmClear();
-    detalisation.style.display = 'none'
+    //detalisation.style.display = 'none'
+    section.style.display = 'none'
     wrapperUp.style.display = 'block'
     wrapperRight.style.display = 'flex'
     main.style.display = 'flex'
@@ -37,7 +39,8 @@ export function visual(el) {
         start = el;
         geoloc()
         time = setInterval(geoloc, 120000) //отрисовываем карту osm
-        console.log(start)
+
+
         //  geoloc();
     }
 }
@@ -82,22 +85,34 @@ export function clearGraf() {
 }
 
 //создаем список под параметры
-export function liCreate(arg) {
+export function liCreate() {
     const obo = document.querySelector('.obo')
-    if (obo.children.length !== 0) {
-        const list = Array.from(obo.children)
-        list.forEach(el => {
-            el.remove();
-        })
-    }
-    const count = arg.length
-    for (let i = 0; i <= count; i++) {
+    const count = 150;
+    for (let i = 0; i < count; i++) {
         let li = document.createElement('li');
         li.className = "msg";
         obo.append(li);
     }
-
 }
+
+/*
+const obo = document.querySelector('.obo')
+if (obo.children.length !== 0) {
+    const list = Array.from(obo.children)
+    list.forEach(el => {
+        el.remove();
+    })
+}
+const count = arg.length
+for (let i = 0; i <= count; i++) {
+    let li = document.createElement('li');
+    li.className = "msg";
+    obo.append(li);
+}*/
+
+
+
+
 
 //отрисовываем список под параметры
 export function sensor(btnsens, titleSens, obo) {
@@ -115,45 +130,65 @@ export function sensor(btnsens, titleSens, obo) {
 }
 
 export function view(arg) {
-    console.log('licreate')
-    liCreate(arg)
+
+    //liCreate(arg)
     const msg = document.querySelectorAll('.msg')
+    //console.log(msg)
+    // console.log(arg)
     arg.forEach((el, index) => {
         msg[index].textContent = `${el.name}:${el.value}`
     })
-    viewMenuParams()
+
 }
 export function viewConfigurator(arg, params) {
     //  console.log(arg, params)
     const alerts = [];
     const tiresLink = document.querySelectorAll('.tires_link')
     //const tiresLinkId = document.getElementById('.tires_link')
-    console.log(tiresLink[0].id)
+    //const active = document.querySelectorAll('.color')
     const active = document.querySelectorAll('.color')[0].textContent
     arg.forEach((el) => {
         let parapmsPress;
-        parapmsPress = (el.value)
+        // parapmsPress = (el.value)
         let signal;
+        let done;
         params.forEach(item => {
             if (el.name == item.pressure) {
                 tiresLink.forEach(e => {
                     if (e.id == item.tyresdiv) {
-                        e.children[0].textContent = el.value
-                        e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
-                        alerts.push(e.children[0].textContent)
-                        e.children[0].textContent = parapmsPress + '\nБар'
-                        if (active == 'КранГаличанин Р858ОР178') {
-                            signal = objColor[generDav(parapmsPress)]
+
+                        if (active === 'PressurePro 933') {
+                            done = (el.value * 0.069).toFixed(1)
+                            console.log(el.value)
                         }
                         else {
-                            signal = objColor[generFront(parapmsPress)]
+                            done = el.value
+                        }
+
+                        e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
+                        console.log(e.children[0].textContent)
+                        alerts.push(e.children[0].textContent)
+                        e.children[0].textContent = done + '\nБар'
+
+
+                        if (active == 'КранГаличанин Р858ОР178') {
+                            signal = objColor[generDav(done)]
+                            if (done < 6 || done > 9.9) {
+                                e.classList.add('alarmCheck')
+                                // e.style.borderRadius = '15px'
+                                //e.style.border = '3px solid red'
+                            }
+                        }
+                        else {
+                            signal = objColor[generFront(done)]
+                            if (done < 8 || done > 10) {
+                                e.classList.add('alarmCheck')
+                                // e.style.borderRadius = '15px'
+                                //e.style.border = '3px solid red'
+                            }
                         }
                         e.children[0].style.background = signal;
-                        if (parapmsPress < 6 || parapmsPress > 9.9) {
-                            e.classList.add('alarmCheck')
-                            // e.style.borderRadius = '15px'
-                            //e.style.border = '3px solid red'
-                        }
+
                     }
                     // console.log(elem)
                 })
@@ -161,26 +196,30 @@ export function viewConfigurator(arg, params) {
             if (el.name == item.temp) {
                 tiresLink.forEach(e => {
                     if (e.id == item.tyresdiv) {
-                        //       console.log(el.value)
+
                         if (el.value === '-128' || el.value === '-51') {
                             el.value = 'err'
                             e.children[1].textContent = el.value
-                            //  console.log(tiresLink[item.tyresdiv - 1].children[1].textContent)
+
                         }
                         if (el.value > -40 && el.value < 60) {
                             e.children[1].textContent = el.value + '°'
-                            //  console.log(tiresLink[item.tyresdiv - 1].children[1].textContent)
+
                             e.children[1].style.background = objColor[generT(el.value)];
                         }
                     }
                 })
             }
         })
-        if (alerts.some(element => element < 6) == true) {
-            alarmMin();
-        }
-        if (alerts.some(element => element > 9.9) == true) {
-            alarmMax();
+
+        if (active == 'КранГаличанин Р858ОР178') {
+            if (alerts.some(element => element < 6) == true) {
+
+                alarmMin();
+            }
+            if (alerts.some(element => element > 9.9) == true) {
+                alarmMax();
+            }
         }
     })
 }
@@ -272,13 +311,9 @@ export function viewOs() {
         })
         const cont2 = document.createElement('div');
         cont2.classList.add('cont')
-        //  const container = document.querySelector('.container')
         container.appendChild(cont2)
     }
-    //eventBtnTyres();
-    // viewMenuParams()
-    //  const tiresLink = document.querySelectorAll('.tires_link')
-    // console.log(tiresLink)
+    viewMenuParams()
 }
 
 
@@ -301,9 +336,151 @@ export const divClear = (arr) => {
 }
 
 export const pricep = (elem) => {
+    console.log('отработка прицеп')
     const cont = document.querySelector('.cont')
-    console.log(elem.parentNode)
     cont.prepend(elem.parentNode)
     cont.style.marginTop = '72px'
     elem.style.backgroundImage = "url('../image/line_gray.png')"
 }
+
+
+const convert = (ob) => {
+    const uniq = new Set(ob.map(e => JSON.stringify(e)));
+    return Array.from(uniq).map(e => JSON.parse(e));
+}
+
+export function viewList(model) {
+
+    const modelUniq = convert(model.result)
+    const listProfil = document.querySelector('.list_profil')
+    const listCar = document.createElement('div')
+    listCar.classList.add('bigDiv')
+    const nameCar = model.message.replace(/\s+/g, '')
+
+    listCar.classList.add(`${nameCar}`)
+    listProfil.appendChild(listCar)
+    modelUniq.forEach(os => {
+        const osi = document.createElement('div')
+        os.trailer === 'Прицеп' ? (osi.classList.add('osi_list'), osi.classList.add('trail')) : osi.classList.add('osi_list')
+        listCar.appendChild(osi)
+        os.tyres === 2 ? osi.innerHTML = twoTyres : osi.innerHTML = forTyres
+    })
+
+    const listTrail = document.querySelector('.list_trail')
+    const trail = document.createElement('div')
+    trail.classList.add('traile')
+    trail.classList.add(`${nameCar}`)
+    console.log(listTrail)
+    listTrail.appendChild(trail)
+    const cont3 = document.createElement('div');
+    cont3.classList.add('cont3')
+    const trailer = document.querySelectorAll('.traile')
+    trailer.forEach(e => {
+        e.appendChild(cont3)
+    })
+    const bigDivCar = document.querySelectorAll(`.${nameCar}`)
+    var childTrail = bigDivCar[0].querySelectorAll('.trail');
+    childTrail.forEach(el => {
+        cont3.appendChild(el)
+    })
+}
+
+export function viewShina(message, arg, params) {
+    const modelUniqValues = convert(params)
+    const nameCar = message.replace(/\s+/g, '')
+    const bigDiv = document.querySelectorAll(`.${nameCar}`)
+    var child = bigDiv[0].querySelectorAll('.tiresProfil');
+    const listTrailer = document.querySelector('.list_trail')
+    var trail = listTrailer.querySelectorAll(`.${nameCar}`);
+    var childTrail = trail[0].querySelectorAll('.tiresProfil');
+    const r = [];
+    const allKol = [];
+    allKol.push(...child, ...childTrail)
+    modelUniqValues.forEach(el => {
+        r.push(el.tyresdiv)
+    })
+    r.forEach((el, index) => {
+        allKol[index].setAttribute('id', el);
+    })
+    arg.forEach((el) => {
+        let parapmsPress;
+        parapmsPress = (el.value)
+        params.forEach((item) => {
+            if (el.name == item.pressure) {
+                allKol.forEach(e => {
+                    if (e.id == item.tyresdiv) {
+                        //  e.textContent = el.value
+                        nameCar === 'КранГаличанинР858ОР178' ?
+                            e.style.background = objColor[generDav(parapmsPress)] :
+                            e.style.background = objColor[generFront(parapmsPress)]
+
+                    }
+                })
+            }
+        })
+    })
+}
+
+
+/*
+export function viewConfigurator(arg, params) {
+    //  console.log(arg, params)
+    const alerts = [];
+    const tiresLink = document.querySelectorAll('.tires_link')
+    //const tiresLinkId = document.getElementById('.tires_link')
+    console.log(tiresLink[0].id)
+    const active = document.querySelectorAll('.color')[0].textContent
+    arg.forEach((el) => {
+        let parapmsPress;
+        parapmsPress = (el.value)
+        let signal;
+        params.forEach(item => {
+            if (el.name == item.pressure) {
+                tiresLink.forEach(e => {
+                    if (e.id == item.tyresdiv) {
+                        e.children[0].textContent = el.value
+                        e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
+                        alerts.push(e.children[0].textContent)
+                        e.children[0].textContent = parapmsPress + '\nБар'
+                        if (active == 'КранГаличанин Р858ОР178') {
+                            signal = objColor[generDav(parapmsPress)]
+                        }
+                        else {
+                            signal = objColor[generFront(parapmsPress)]
+                        }
+                        e.children[0].style.background = objColor[generFront(parapmsPress)]
+                        if (parapmsPress < 6 || parapmsPress > 9.9) {
+                            e.classList.add('alarmCheck')
+                            // e.style.borderRadius = '15px'
+                            //e.style.border = '3px solid red'
+                        }
+                    }
+                    // console.log(elem)
+                })
+            }
+            if (el.name == item.temp) {
+                tiresLink.forEach(e => {
+                    if (e.id == item.tyresdiv) {
+                        //       console.log(el.value)
+                        if (el.value === '-128' || el.value === '-51') {
+                            el.value = 'err'
+                            e.children[1].textContent = el.value
+                            //  console.log(tiresLink[item.tyresdiv - 1].children[1].textContent)
+                        }
+                        if (el.value > -40 && el.value < 60) {
+                            e.children[1].textContent = el.value + '°'
+                            //  console.log(tiresLink[item.tyresdiv - 1].children[1].textContent)
+                            e.children[1].style.background = objColor[generT(el.value)];
+                        }
+                    }
+                })
+            }
+        })
+        if (alerts.some(element => element < 6) == true) {
+            alarmMin();
+        }
+        if (alerts.some(element => element > 9.9) == true) {
+            alarmMax();
+        }
+    })
+}*/
