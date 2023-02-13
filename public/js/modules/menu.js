@@ -1,7 +1,8 @@
 
 import { navigator } from './navigator.js'
 import { speed } from './speed.js'
-import { viewList, viewShina } from './visual.js'
+import { viewList, viewOs } from './visual.js'
+import { loadParamsView } from './paramsTyresView.js'
 
 export function init() {
     wialon.core.Session.getInstance().initSession("https://hst-api.wialon.com");
@@ -41,18 +42,19 @@ export function zapros() {
             const arrCar = arr1[5];
             console.log(arr1[5])
             navBarNameCar(arrCar); //отрисовываем меню с именами объектов
-            navBarNameCarList(arrCar);
+            //    navBarNameCarList(arrCar);
 
             arrCar.forEach(el => {
                 //   el.nm.replace(/\s+/g, '')
                 loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями
+                //      setInterval(loadParamsViewList, 6000, el.nm)
             })
 
             const nav = document.querySelectorAll('.car')
             const navlist = document.querySelectorAll('.carList')
 
             navigator(nav)
-            navigator(navlist)
+            // navigator(navlist)
 
             speed(arrCar)
             return arrCar
@@ -68,7 +70,7 @@ export function navBarNameCar(arrCar) {
         li.classList.add('list_item_menu')
         li.classList.add('car_item')
         const a = document.createElement('a')
-        a.classList.add('link_menu')
+        a.classList.add('link_menus')
         a.classList.add('car')
         a.innerHTML = `${el.nm}`;
         /*  if (el.nm == 'КранГаличанин Р858ОР178') {
@@ -78,24 +80,20 @@ export function navBarNameCar(arrCar) {
         li.appendChild(a)
     })
     const menu = document.querySelector('.menu')
-
     menu.appendChild(ul);
 
-}
 
-export function navBarNameCarList(arrCar) {
     const listName = document.querySelector('.list_name')
     console.log('работает')
     // const ul = document.createElement('ul')
     //ul.classList.add('list_menu_section')
     arrCar.forEach(el => {
-
         const li = document.createElement('li')
         li.classList.add('list_item_menu_section')
         li.classList.add('car_item')
         const a = document.createElement('a')
         a.classList.add('link_menu')
-        a.classList.add('carList')
+        a.classList.add('car')
 
         a.innerHTML = `${el.nm}`;
         /* if (el.nm == 'КранГаличанин Р858ОР178') {
@@ -104,13 +102,14 @@ export function navBarNameCarList(arrCar) {
         listName.appendChild(li)
         li.appendChild(a)
     })
-    // listName.appendChild(ul);
+    //viewOs()
+
 }
 
 
 
-
 function loadParamsViewList(car) {
+    //  console.log('запуск')
     // console.log(car)
     fetch('api/listModel', {
         method: "POST",
@@ -146,8 +145,8 @@ function loadParamsViewList(car) {
                             //  console.log(data)
                             //  console.log(models)
                             // console.log(model, models)
-                            viewList(model)
-                            viewShina(data.message, data.result, models.values)
+                            viewList(model, data.message, data.result, models.values)
+
                         })
                 })
 

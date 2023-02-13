@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const passport = require('passport')
 const path = require('path')
+//const session = request('express-session')
 
 const routes = require('./backend/settings/routes')
 const app = express();
@@ -18,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cookieParser());
 app.use(passport.initialize())
+//app.use(passport.session());
 
 // set up our express application
 app.use(morgan('dev')); // log every request to the console

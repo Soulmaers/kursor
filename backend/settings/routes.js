@@ -14,12 +14,12 @@ router.post('/', passport.authenticate('local-login', {
     successRedirect: '/profile', // redirect to the secure profile section
     failureRedirect: '/', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
-}), controller.loginPost)
+}))
 
 
 router.get('/profile', isLoggedIn, controller.profile)
 router.get('/logout', controller.logout)
-
+router.get('/spisok', isLoggedIn, controller.spisok)
 
 
 router.post('/api/wialon', controllerWialon.datawialon)

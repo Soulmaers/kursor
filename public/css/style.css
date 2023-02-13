@@ -42,6 +42,14 @@ td {
 .link_menu {
   text-decoration: none;
   font-family: Roboto;
+  color: #000;
+  font-weight: 900;
+  font-size: 1rem;
+}
+
+.link_menus {
+  text-decoration: none;
+  font-family: Roboto;
   color: lightgray;
   font-weight: 900;
   font-size: 1rem;
@@ -69,7 +77,7 @@ td {
 
 
 .main {
-  display: none;
+  display: flex;
   width: 100%;
 
 
@@ -267,14 +275,14 @@ td {
 
 
 .wrapper_left {
-  width: 25%;
+  width: 350px;
   min-height: 600px;
   box-sizing: border-box;
-  border-right: 20px solid lightgray;
+  border-left: 10px solid lightgray;
 }
 
 .wrapper_up {
-  display: none;
+  display: flex;
   margin: 5px;
   min-height: 250px;
   background-color: lightgray;
@@ -331,21 +339,20 @@ td {
 
 
 .wrapper_right {
-  display: none;
+  display: flex;
   flex-wrap: wrap;
   box-sizing: border-box;
-  width: 70%;
+  width: 100%;
   min-height: 600px;
   padding: 30px;
 
 }
 
 .techInfo {
-  width: 35%;
-
+  width: 350px;
   box-sizing: border-box;
   display: none;
-  margin-bottom: 8px;
+  margin: 0 10px;
 }
 
 .psi {
@@ -692,11 +699,12 @@ input[type="date"] {
 }
 
 .wrapper_containt {
-  width: 25%;
+  width: 220px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0 10px;
 
 }
 
@@ -813,7 +821,7 @@ input[type="date"] {
 }
 
 .container_left {
-  width: 25%;
+  width: 220px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -1086,21 +1094,21 @@ input[type="date"] {
 }
 
 .input_date {
-  margin-left: 90px;
+
   margin-top: 5px;
   width: 180px;
   padding: 3px 8px;
 }
 
 .select_speed {
-  margin-left: 38px;
+
   width: 200px;
   padding: 3px 8px;
 }
 
 .btn_speed {
   margin-top: 5px;
-  margin-left: 146px;
+
 }
 
 .btm_form {
@@ -1139,7 +1147,7 @@ input[type="date"] {
 
 
 .car {
-  color: lightgray;
+
   cursor: pointer;
 }
 
@@ -1161,11 +1169,18 @@ input[type="date"] {
   font-size: 1rem;
 }
 
-
-.car:hover {
-
-  color: #fff;
+.link_menu:hover {
+  color: gray;
+  cursor: pointer;
 }
+
+.link_menus:hover {
+  color: #fff;
+  cursor: pointer;
+}
+
+
+
 
 .list_item_menu:nth-child(n+2) {
   margin-left: 15px;
@@ -1335,44 +1350,44 @@ div.wrapper {
 
 
 .list_name {
-  width: 20%;
-  border: 1px solid gray;
+  width: 150px;
+
 
 
 }
 
 .list_profil {
-  width: 30%;
-  border: 1px solid gray;
+  width: 150px;
+
 }
 
 .list_trail {
-  width: 50%;
-  border: 1px solid gray;
+  width: 150px;
+
 }
 
 
 .bigDiv {
-  height: 100px;
+  height: 60px;
   display: flex;
   align-items: center;
   width: 100%;
   list-style-type: none;
   margin: 0;
   padding: 0 5px;
-  border: 1px solid gray;
+
   box-sizing: border-box;
 }
 
 .traile {
-  height: 100px;
+  height: 60px;
   display: flex;
   align-items: center;
   width: 100%;
   list-style-type: none;
   margin: 0;
   padding: 0 5px;
-  border: 1px solid gray;
+
   box-sizing: border-box;
 }
 
@@ -1409,15 +1424,15 @@ div.wrapper {
   align-items: center;
   box-sizing: border-box;
   width: 100%;
-  height: 100px;
+  height: 60px;
   list-style-type: none;
   margin: 0;
   padding-left: 10px;
-  border: 1px solid gray;
+
 }
 
 .section {
-  width: 50%;
+  width: 30%;
   display: flex;
   flex-direction: column;
   margin-top: 1%;
@@ -1425,11 +1440,11 @@ div.wrapper {
 
 .list_att {
   display: flex;
-  border: 2px solid gray;
+
 }
 
 .list_item1 {
-  width: 20%;
+  width: 150px;
   display: flex;
   justify-content: center;
 
@@ -1438,7 +1453,7 @@ div.wrapper {
 }
 
 .list_item2 {
-  width: 30%;
+  width: 150px;
   display: flex;
   justify-content: center;
 
@@ -1447,7 +1462,7 @@ div.wrapper {
 }
 
 .list_item3 {
-  width: 50%;
+  width: 150px;
   display: flex;
   justify-content: center;
 
@@ -1459,11 +1474,13 @@ div.wrapper {
   display: flex;
 }
 
-
+.wrapperFull {
+  display: flex;
+}
 
 .osi_list {
-  width: 70px;
-  height: 70px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid #000;
   display: flex;
@@ -1479,40 +1496,40 @@ div.wrapper {
 
 .frontSpare {
   display: flex;
-  width: 70px;
-  height: 70px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 2px solid #000;
   position: relative;
 }
 
 .imgDivTires {
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   position: absolute;
-  left: 13px;
-  bottom: 13px;
+  left: 7.5px;
+  bottom: 10px;
   border: 2px solid #000;
   border-radius: 50%;
+
 }
 
 .img {
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
 }
 
 
-
 .spareWill1 {
-  width: 34px;
-  height: 70px;
+  width: 18px;
+  height: 40px;
   border-right: 2px solid #000;
   border-radius: 100% 0 0 100% / 50% 0 0 50%;
 }
 
 .spareWill12 {
-  width: 34px;
-  height: 70px;
+  width: 20px;
+  height: 40px;
   border-radius: 0 100% 100% 0 / 0 50% 50% 0;
 }
 
@@ -1521,42 +1538,42 @@ div.wrapper {
 .tiresUp {
   display: flex;
   flex-direction: column-reverse;
-  width: 34px;
-  height: 70px;
+  width: 18px;
+  height: 40px;
   display: flex;
   border-right: 2px solid #000;
 }
 
 .tiresDown {
   display: flex;
-  width: 34px;
-  height: 70px;
+  width: 20px;
+  height: 40px;
   display: flex;
   flex-direction: column;
 }
 
 .spareWill1_1 {
-  width: 35px;
-  height: 34px;
+  width: 18px;
+  height: 18px;
   border-top: 2px solid #000;
   border-radius: 0 0 0 100%;
 }
 
 .spareWill1_2 {
-  width: 35px;
-  height: 34px;
+  width: 18px;
+  height: 20px;
   border-radius: 100% 0 0 0;
 }
 
 .spareWill1_3 {
-  width: 35px;
-  height: 34px;
+  width: 20px;
+  height: 18px;
   border-bottom: 2px solid #000;
   border-radius: 0 100% 0 0;
 }
 
 .spareWill1_4 {
-  width: 35px;
-  height: 34px;
+  width: 20px;
+  height: 20px;
   border-radius: 0 0 100% 0;
 }

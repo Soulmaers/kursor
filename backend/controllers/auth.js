@@ -10,22 +10,22 @@ module.exports.page = async function (req, res) {
     res.render('form.ejs', { message: req.flash('loginMessage') }); // load the index.ejs file
 
 }
-module.exports.loginPost = async function (req, res) {
-    console.log(req.body.remember);
 
-    if (req.body.remember) {
-        req.session.cookie.maxAge = 1000 * 60 * 3;
-    } else {
-        req.session.cookie.expires = false;
-    }
-    res.redirect('/');
-};
 module.exports.profile = async function (req, res) {
-    console.log(req.user)
+    // console.log(req.user)
     res.render('in.ejs', {
         user: req.user // get the user out of session and pass to template
     })
 }
+
+
+module.exports.spisok = async function (req, res) {
+    // console.log(req.user)
+    res.render('in.ejs', {
+        user: req.user // get the user out of session and pass to template
+    })
+}
+
 
 module.exports.logout = async function (req, res, next) {
     req.logout(function (err) {

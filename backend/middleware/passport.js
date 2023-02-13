@@ -35,7 +35,7 @@ module.exports = function (passport) {
         },
             function (req, username, password, done) { // callback with email and password from our form
                 // connection.connect();
-                console.log('РАБОТАЕМ')
+               // console.log('РАБОТАЕМ')
                 connection.query("SELECT * FROM users WHERE name = ?", [username], function (err, rows) {
                     console.log(rows[0])
                     if (err)

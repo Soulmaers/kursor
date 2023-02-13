@@ -46,7 +46,7 @@ export function generDav(el) {
     if (el <= 5.9) {
         generatedValue = 1;
     }
-    else {
+    else if (el < 10 && el > 5.9) {
         generatedValue = 3;
     }
     return generatedValue;

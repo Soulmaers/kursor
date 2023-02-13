@@ -43,11 +43,20 @@ export function viewMenuParams() {
 
 export function loadParamsView() {
     console.log('запуск')
+    let activePost;
     const active = document.querySelectorAll('.color')
     /* if (active[0].textContent == 'Кран 858') {
          active[0].textContent = 'КранГаличанин Р858ОР178'
      }*/
-    const activePost = active[0].textContent.replace(/\s+/g, '')
+    if (active[0] == undefined) {
+        const listItem = document.querySelectorAll('.link_menu')[0]
+        console.log(listItem.textContent)
+        activePost = listItem.textContent.replace(/\s+/g, '')
+    }
+    else {
+        activePost = active[0].textContent.replace(/\s+/g, '')
+    }
+
     fetch('api/modelView', {
         method: "POST",
         headers: {
@@ -96,8 +105,19 @@ export function loadParamsView() {
 //viewPokasateli()
 function viewPokasateli() {
     //  console.log('стартh')
+    let activePost;
     const active = document.querySelectorAll('.color')
-    const activePost = active[0].textContent.replace(/\s+/g, '')
+    /* if (active[0].textContent == 'Кран 858') {
+         active[0].textContent = 'КранГаличанин Р858ОР178'
+     }*/
+    if (active[0] == undefined) {
+        const listItem = document.querySelectorAll('.link_menu')[0]
+        activePost = listItem.textContent.replace(/\s+/g, '')
+    }
+    else {
+        activePost = active[0].textContent.replace(/\s+/g, '')
+    }
+
     fetch('api/tyresView', {
         method: "POST",
         headers: {
