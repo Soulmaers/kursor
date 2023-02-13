@@ -247,7 +247,9 @@ td {
 
 
 
-
+.tires_link {
+  position: relative;
+}
 
 
 
@@ -265,9 +267,9 @@ td {
   transition: opacity 300ms;
   position: absolute;
   height: 34px;
-  width: 75px;
-  top: 28%;
-  left: 48%;
+  width: 120px;
+  top: 2%;
+
   background-color: #fff;
   visibility: visible;
   border-radius: 5px;
@@ -354,6 +356,7 @@ td {
   box-sizing: border-box;
   display: none;
   margin: 0 10px;
+  border: 1px solid lightgray;
 }
 
 .psi {
@@ -900,6 +903,7 @@ input[type="date"] {
 }
 
 .header_car {
+  width: 240px;
   display: flex;
   justify-content: center;
 }
@@ -1445,6 +1449,7 @@ div.wrapper {
 .config {
   display: flex;
   border: 1px solid lightgray;
+  padding-right: 70px;
 }
 
 .list_att {
@@ -1517,7 +1522,7 @@ div.wrapper {
   height: 20px;
   position: absolute;
   left: 7.5px;
-  bottom: 10px;
+  bottom: 9px;
   border: 2px solid #000;
   border-radius: 50%;
 

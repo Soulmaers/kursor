@@ -9,6 +9,7 @@ export function navigator(nav) {
     const navList = document.querySelectorAll('.carList')
     viewOs();
     geolocTwo()
+
     // console.log(navList)
     nav.forEach(el => {
         el.addEventListener('click', route)
