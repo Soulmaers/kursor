@@ -1,14 +1,14 @@
 import { visual, visualNone, clearGraf, viewOs } from './visual.js'
 import { massiv } from './configurator.js';
 import { massivionbd, loadParamsView } from './paramsTyresView.js';
-import { geoloc } from './wialon.js';
+import { geolocTwo } from './wialon.js';
 //import { geoPosition } from './requests.js'
 
 export function navigator(nav) {
     loadParamsView()//запрос в базу и получение параметров
     const navList = document.querySelectorAll('.carList')
     viewOs();
-    //  geoloc()
+    geolocTwo()
     // console.log(navList)
     nav.forEach(el => {
         el.addEventListener('click', route)
