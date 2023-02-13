@@ -53,7 +53,7 @@ export function loadParamsView() {
         const listItem = document.querySelectorAll('.link_menu')[0]
         console.log(listItem.textContent)
         activePost = listItem.textContent.replace(/\s+/g, '')
-        titleCar.textContent = listItem
+        titleCar.textContent = listItem.textContent
     }
     else {
         activePost = active[0].textContent.replace(/\s+/g, '')
