@@ -193,7 +193,8 @@ td {
 
 .tires:hover .place,
 .place:hover {
-  opacity: 1;
+  opacity: 2;
+  z-index: 1;
 }
 
 .oform,
@@ -267,7 +268,7 @@ td {
   transition: opacity 300ms;
   position: absolute;
   height: 34px;
-  width: 120px;
+  width: 130px;
   top: 2%;
 
   background-color: #fff;
@@ -520,6 +521,14 @@ input[type="date"] {
   border-right: 1px solid gray;
 }
 
+.titleTths {
+  font-size: 1rem;
+  font-family: Roboto;
+  margin: 0;
+  width: 62%;
+  border-right: 1px solid gray;
+}
+
 .color {
   color: #fff;
   font-size: 2rem;
@@ -704,7 +713,7 @@ input[type="date"] {
 }
 
 .wrapper_containt {
-  width: 220px;
+  width: 260px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

@@ -151,11 +151,22 @@ export const geoPosition = (geo) => {
 
 export function reqTech(arr, id) {
     console.log('запуск')
+    let activePost;
     const active = document.querySelectorAll('.color')
-    const activePost = active[0].textContent.replace(/\s+/g, '')
+    if (active[0] == undefined) {
+        const listItem = document.querySelectorAll('.link_menu')[0]
+        console.log(listItem.textContent)
+        activePost = listItem.textContent.replace(/\s+/g, '')
+
+    }
+    else {
+        activePost = active[0].textContent.replace(/\s+/g, '')
+    }
     const arrValue = [];
     const formValue = document.querySelectorAll('.formValue')
+    console.log(JSON.stringify({ id, arr, arrValue, activePost }))
     arrValue.push(id)
+
     formValue.forEach(el => {
         arrValue.push(el.value)
     })
@@ -173,8 +184,17 @@ export function reqTech(arr, id) {
 }
 
 export function viewTech(id) {
+    let activePost;
     const active = document.querySelectorAll('.color')
-    const activePost = active[0].textContent.replace(/\s+/g, '')
+    if (active[0] == undefined) {
+        const listItem = document.querySelectorAll('.link_menu')[0]
+        console.log(listItem.textContent)
+        activePost = listItem.textContent.replace(/\s+/g, '')
+
+    }
+    else {
+        activePost = active[0].textContent.replace(/\s+/g, '')
+    }
 
     fetch('api/techView', {
         method: "POST",
