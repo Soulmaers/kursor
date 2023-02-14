@@ -53,7 +53,7 @@ var ctx = c.getContext("2d");
 
 
 ctx.beginPath();
-ctx.lineWidth = "5";
+ctx.lineWidth = "1";
 ctx.strokeStyle = "#000";
 ctx.moveTo(0, 60);
 ctx.lineTo(0, 17);
@@ -67,6 +67,8 @@ ctx.fillStyle = '#FF4F00';
 ctx.fill();
 ctx.stroke();
 
+
+/*
 ctx.beginPath();
 ctx.lineWidth = "3";
 ctx.strokeStyle = "#000";
@@ -77,18 +79,43 @@ ctx.lineTo(95, 0);
 ctx.fillStyle = '#000';
 ctx.fill();
 ctx.stroke();
+*/
+ctx.beginPath();
+ctx.lineWidth = "2";
+ctx.strokeStyle = "#000";
+ctx.moveTo(0, 0);
+ctx.lineTo(0, 50);
+ctx.lineTo(4, 50);
+ctx.lineTo(9, 0);
+ctx.fillStyle = '#fff';
+ctx.fill();
+ctx.stroke();
+
+ctx.beginPath();
+ctx.lineWidth = "2";
+ctx.strokeStyle = "#000";
+ctx.moveTo(346, 0);
+ctx.lineTo(346, 50);
+ctx.lineTo(342, 50);
+ctx.lineTo(337, 0);
+ctx.fillStyle = '#fff';
+ctx.fill();
+ctx.stroke();
+
+
 
 
 ctx.beginPath();
-ctx.lineWidth = "3";
+ctx.lineWidth = "2";
 ctx.strokeStyle = "#000";
-ctx.moveTo(253, 0);
-ctx.lineTo(258, 30);
-ctx.lineTo(265, 30);
-ctx.lineTo(270, 0);
-ctx.fillStyle = '#000';
+ctx.moveTo(164, 0);
+ctx.lineTo(169, 50);
+ctx.lineTo(176, 50);
+ctx.lineTo(181, 0);
+ctx.fillStyle = '#fff';
 ctx.fill();
 ctx.stroke();
+
 /*
 var formTth = document.querySelectorAll('.formTth')
 //Create array of options to be added
