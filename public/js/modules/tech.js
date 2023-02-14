@@ -74,6 +74,8 @@ ctx.moveTo(78, 0);
 ctx.lineTo(83, 30);
 ctx.lineTo(90, 30);
 ctx.lineTo(95, 0);
+ctx.fillStyle = '#000';
+ctx.fill();
 ctx.stroke();
 
 
@@ -84,6 +86,8 @@ ctx.moveTo(253, 0);
 ctx.lineTo(258, 30);
 ctx.lineTo(265, 30);
 ctx.lineTo(270, 0);
+ctx.fillStyle = '#000';
+ctx.fill();
 ctx.stroke();
 /*
 var formTth = document.querySelectorAll('.formTth')
