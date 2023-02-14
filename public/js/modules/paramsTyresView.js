@@ -45,13 +45,13 @@ export function loadParamsView() {
 
     const titleCar = document.querySelector('.title_two')
     const listItem = document.querySelectorAll('.link_menu')[0]
-    console.log(listItem)
-    console.log('запуск')
+    // console.log(listItem)
+    //  console.log('запуск')
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.link_menu')[0]
-        console.log(listItem.textContent)
+        //    console.log(listItem.textContent)
         activePost = listItem.textContent.replace(/\s+/g, '')
         titleCar.textContent = listItem.textContent
     }
@@ -74,7 +74,9 @@ export function loadParamsView() {
             const centerOs = document.querySelectorAll('.centerOs')
             if (model.values.length > 0) {
                 console.log('база целая')
+                console.log(model.values)
                 model.values.forEach(el => {
+
                     osi[el.osi - 1].style.display = 'flex';
                     centerOs[el.osi - 1].style.display = 'flex';
                     el.trailer == 'Прицеп' ?

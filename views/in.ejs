@@ -152,12 +152,12 @@
                             </div>
                         </div>
                         <div class="modal">
-                            <h3 class="titleTths techs">Оставшаяся глубина протектора</h3>
+                            <h3 class="titleTths techs">Оставшаяся глубина протектора мм.</h3>
                             <div class="formTth ">
                                 <h4 class="titleTth tech" id="protectorVnesh">внеш.</h4><input
-                                    class="techInput formValue" type="number">
+                                    class="techInput formValue" step="0.1" type="number">
                                 <h4 class="titleTth tech" id="protectorVnut">внут.</h4><input
-                                    class="techInput formValue" type="number">
+                                    class="techInput formValue" step="0.1" type="number">
                             </div>
                         </div>
                         <div class="modal">
@@ -166,6 +166,22 @@
                         </div>
                     </div>
                     <button class="buttonTth">Сохранить</button>
+
+                    <div class="protector">
+                        <div class="headerMM">
+                            <div class="titleMM"></div>
+                            <div class="titleMM"></div>
+                        </div>
+                        <div class="progressBar">
+                            <canvas id="drawLine" width="346" height="60"></canvas>
+                            <!--   <div class="progress">
+                        </div>
+                        <div class="progress2">
+                        </div>-->
+
+                        </div>
+                    </div>
+
 
                 </div>
                 <div class="wrapper_left">

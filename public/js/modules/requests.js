@@ -85,7 +85,7 @@ export const geoPosition = (geo) => {
     }
     const map = L.map('map')
     const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
     });
     map.addLayer(layer);
 
@@ -205,9 +205,24 @@ export function viewTech(id) {
     })
         .then((res) => res.json())
         .then(res => {
+            console.log(res.values)
+
+            const titleMM = document.querySelectorAll('.titleMM')
+            if (res.values.length == 0) {
+                titleMM[0].textContent = ''
+                titleMM[1].textContent = ''
+            }
+            else if (res.values.length > 0)
+                titleMM[0].textContent = res.values[0].protectorVnesh
+            titleMM[1].textContent = res.values[0].protectorVnut
+
             const nval = (Object.entries(res.values[0]))
             const massVal = nval.shift()
             console.log(nval)
+            console.log(res.values[0].protectorVnesh)
+
+
+
             const formValue = document.querySelectorAll('.formValue')
             formValue.forEach((el, index) => {
                 el.value = nval[index][1]

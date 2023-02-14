@@ -137,6 +137,7 @@ function validation(arrayTrailer, arrayTyres) {
     const mass = [];
     mass.push(osy, trailer, tyres)
     massiv.push(mass)
+    console.log(massiv)
     const btnSave = document.querySelector('.btn_save')
     btnSave.addEventListener('click', () => {
         postModel(massiv) //передаем модель и отправляем запрос на сервер в базу

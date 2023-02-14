@@ -485,6 +485,8 @@ input[type="date"] {
   width: 198px;
 }
 
+
+
 .tth {
   display: flex;
   flex-direction: column;
@@ -720,7 +722,9 @@ input[type="date"] {
   align-items: center;
   margin: 0 10px;
 
+
 }
+
 
 .check {
   width: 100%;
@@ -1599,4 +1603,41 @@ div.wrapper {
   width: 20px;
   height: 20px;
   border-radius: 0 0 100% 0;
+}
+
+
+
+
+.protector {
+  margin-top: 20px;
+  width: 348px;
+  height: 120px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.progressBar {
+  margin-top: 10px;
+  display: flex;
+  width: 346px;
+  height: 60px;
+  border: 2px solid #000;
+  background-color: #000;
+
+}
+
+
+
+.headerMM {
+  margin-top: 5px;
+  width: 350px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.titleMM {
+  width: 30px;
+  height: 20px;
+  border: 1px solid gray;
 }

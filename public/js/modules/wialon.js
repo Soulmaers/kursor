@@ -199,7 +199,7 @@ export function geolocTwo() {
 
 
 const geoPositionTwo = (geo) => {
-    console.log('запуск геокарты')
+    // console.log('запуск геокарты')
     let count = 0;
     count++
     // console.log(new Date())
@@ -218,7 +218,7 @@ const geoPositionTwo = (geo) => {
     polyline.addTo(map);
     let iss;
     const active = document.querySelectorAll('.link_menu')[0].textContent
-    console.log(active)
+    // console.log(active)
     // const activePost = active[0].textContent.replace(/\s+/g, '')
     fetch('/api/datawialonGeo', {
         method: "POST",
@@ -234,8 +234,8 @@ const geoPositionTwo = (geo) => {
             //console.log(geo)
             const center = [geo.geoY, geo.geoX,]
             map.setView(center, 15)
-            console.log('запрос2')
-            console.log(center)
+            //  console.log('запрос2')
+            //  console.log(center)
             //map.setView([59.9386, 30.3141], 8);
             // L.marker(center).addTo(map);
             map.flyTo(center, 15)

@@ -152,7 +152,7 @@ export function viewConfigurator(arg, params) {
      }*/
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.link_menu')[0]
-        console.log(listItem.textContent)
+        //  console.log(listItem.textContent)
         activePost = listItem.textContent.replace(/\s+/g, '')
     }
     else {
@@ -210,7 +210,7 @@ export function viewConfigurator(arg, params) {
                 })
             }
         })
-        console.log(activePost)
+        //    console.log(activePost)
         if (activePost == 'КранГаличанинР858ОР178') {
             if (alerts.some(element => element < 6) == true) {
                 alarmMin();
@@ -365,6 +365,14 @@ export function viewList(model, message, result, values) {
     //    listCar.remove();
 
     const modelUniq = convert(model.result)
+    modelUniq.forEach(el => {
+        el
+
+    })
+
+
+
+    console.log(modelUniq)
     const listProfil = document.querySelector('.list_profil')
     const listCar = document.createElement('div')
     listCar.classList.add('bigDiv')
@@ -372,7 +380,11 @@ export function viewList(model, message, result, values) {
 
     listCar.classList.add(`${nameCar}`)
     listProfil.appendChild(listCar)
+    // let count = modelUniq.osi
+    // console.log(count)
     modelUniq.forEach(os => {
+
+
         const osi = document.createElement('div')
         os.trailer === 'Прицеп' ? (osi.classList.add('osi_list'), osi.classList.add('trail')) : osi.classList.add('osi_list')
         listCar.appendChild(osi)
@@ -383,7 +395,7 @@ export function viewList(model, message, result, values) {
     const trail = document.createElement('div')
     trail.classList.add('traile')
     trail.classList.add(`${nameCar}`)
-    console.log(listTrail)
+    // console.log(listTrail)
     listTrail.appendChild(trail)
     const cont3 = document.createElement('div');
     cont3.classList.add('cont3')
@@ -401,7 +413,7 @@ export function viewList(model, message, result, values) {
 }
 
 export function viewShina(message, arg, params) {
-    console.log('запуск')
+    //   console.log('запуск')
     const modelUniqValues = convert(params)
     const nameCar = message.replace(/\s+/g, '')
     const bigDiv = document.querySelectorAll(`.${nameCar}`)
@@ -426,7 +438,7 @@ export function viewShina(message, arg, params) {
                     //    console.log(e)
                     if (e.id == item.tyresdiv) {
                         if (nameCar == 'PressurePro933') {
-                            console.log((el.value * 0.069).toFixed(1))
+                            //   console.log((el.value * 0.069).toFixed(1))
                             integer = parseFloat((el.value * 0.069).toFixed(1))
 
                             e.style.background = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
@@ -435,7 +447,7 @@ export function viewShina(message, arg, params) {
                             integer = el.value
                             if ((nameCar == 'КранГаличанинР858ОР178')) {
                                 e.style.background = objColor[generDav(integer)]
-                                console.log(nameCar)
+                                //   console.log(nameCar)
                             }
                             else {
                                 //   console.log('красимостальное')

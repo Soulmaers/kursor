@@ -59,12 +59,10 @@ module.exports.tech = (req, res) => {
             ${req.body.arr[4]} int(255),
             ${req.body.arr[5]} varchar(255),
             ${req.body.arr[6]} int(255),
-            ${req.body.arr[7]} int(255),
-            ${req.body.arr[8]} int(255),
-            ${req.body.arr[9]} varchar(255),
-            ${req.body.arr[10]} varchar(255)
-        
-           
+            ${req.body.arr[7]} varchar(255),
+            ${req.body.arr[8]} varchar(255),
+            ${req.body.arr[9]}  varchar(255)
+                             
             )`
         connection.query(sql, function (err, results) {
             if (err) console.log(err);
