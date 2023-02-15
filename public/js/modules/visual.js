@@ -518,9 +518,9 @@ export function viewDinamic(arr) {
         ctx2.lineTo(348, y2);
         ctx2.lineTo(348, 60);
         ctx2.lineTo(0, 60);
-        ctx2.fillStyle = "rgba(255,165,0, 0.5)";
+        ctx2.fillStyle = "rgba(255,104,0, 1)";
         ctx2.fill();
-        ctx2.stroke();
+        //  ctx2.stroke();
 
         ctx2.beginPath();
         ctx2.lineWidth = "1";
@@ -529,9 +529,9 @@ export function viewDinamic(arr) {
         ctx2.lineTo(5, 50);
         ctx2.lineTo(10, 0);
         ctx2.lineTo(0, 0);
-        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx2.fill();
-        ctx2.stroke();
+        //  ctx2.stroke();
 
         ctx2.beginPath();
         ctx2.lineWidth = "1";
@@ -542,9 +542,9 @@ export function viewDinamic(arr) {
         ctx2.lineTo(166.5 + 10, 50);
         ctx2.lineTo(166.5 + 15, 0);
         //  ctx2.lineTo(0, 0);
-        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx2.fill();
-        ctx2.stroke();
+        //ctx2.stroke();
 
 
 
@@ -555,9 +555,11 @@ export function viewDinamic(arr) {
         ctx2.lineTo(348 - 5, 50);
         ctx2.lineTo(348 - 10, 0);
         ctx2.lineTo(348, 0);
-        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fillStyle = "rgba(14, 12, 11, 1);";
         ctx2.fill();
-        ctx2.stroke();
+        //  ctx2.stroke();
+
+
 
     }
     if (arrAll.length == 3) {
@@ -584,9 +586,9 @@ export function viewDinamic(arr) {
         ctx2.lineTo(174, y2);
         ctx2.lineTo(174, 60);
         ctx2.lineTo(0, 60);
-        ctx2.fillStyle = "rgba( 255,165,0, 0.5)";
+        ctx2.fillStyle = "rgba(255,104,0, 1)";
         ctx2.fill();
-        ctx2.stroke();
+        //  ctx2.stroke();
 
         ctx2.beginPath();
         ctx2.lineWidth = "1";
@@ -596,20 +598,23 @@ export function viewDinamic(arr) {
         ctx2.lineTo(5, 50);
         ctx2.lineTo(10, 0);
         ctx2.lineTo(0, 0);
-        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx2.fill();
-        ctx2.stroke();
+        // ctx2.stroke();
 
         ctx2.beginPath();
-        ctx2.lineWidth = "1";
-        ctx2.strokeStyle = "#000";
+        //ctx2.lineWidth = "1";
+        //ctx2.strokeStyle = "#000";
         ctx2.moveTo(174, 50);
         ctx2.lineTo(174 - 5, 50);
         ctx2.lineTo(174 - 10, 0);
         ctx2.lineTo(174, 0);
-        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx2.fill();
-        ctx2.stroke();
+        //  ctx2.stroke();
+
+
+
 
         const c3 = document.getElementById("drawLine3");
         c3.width = 174
@@ -622,9 +627,9 @@ export function viewDinamic(arr) {
         ctx3.lineTo(174, y3);
         ctx3.lineTo(174, 60);
         ctx3.lineTo(0, 60);
-        ctx3.fillStyle = "rgba( 255,165,0,0.5)";
+        ctx3.fillStyle = "rgba(255,104,0, 1)";
         ctx3.fill();
-        ctx3.stroke();
+        // ctx3.stroke();
 
         ctx3.beginPath();
         ctx3.lineWidth = "1";
@@ -635,9 +640,9 @@ export function viewDinamic(arr) {
         ctx3.lineTo(10, 0);
         ctx3.lineTo(0, 0);
         //ctx2.lineTo(0, 60);
-        ctx3.fillStyle = "rgba(255,255,255, 1)";
+        ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx3.fill();
-        ctx3.stroke();
+        //  ctx3.stroke();
 
         ctx3.beginPath();
         ctx3.lineWidth = "1";
@@ -647,9 +652,9 @@ export function viewDinamic(arr) {
         ctx3.lineTo(164, 0);
         ctx3.lineTo(174, 0);
         //ctx2.lineTo(0, 60);
-        ctx3.fillStyle = "rgba(255,255,255, 1)";
+        ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx3.fill();
-        ctx3.stroke();
+        //  ctx3.stroke();
 
 
 
@@ -680,9 +685,9 @@ export function viewDinamic(arr) {
         ctx2.lineTo(116, y2);
         ctx2.lineTo(116, 60);
         ctx2.lineTo(0, 60);
-        ctx2.fillStyle = "rgba( 255,165,0, 0.5)";
+        ctx2.fillStyle = "rgba(255,104,0, 1)";
         ctx2.fill();
-        ctx2.stroke();
+        // ctx2.stroke();
 
         ctx2.beginPath();
         ctx2.lineWidth = "1";
@@ -692,9 +697,9 @@ export function viewDinamic(arr) {
         ctx2.lineTo(5, 50);
         ctx2.lineTo(10, 0);
         ctx2.lineTo(0, 0);
-        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx2.fill();
-        ctx2.stroke();
+        //  ctx2.stroke();
 
         ctx2.beginPath();
         ctx2.lineWidth = "1";
@@ -703,9 +708,9 @@ export function viewDinamic(arr) {
         ctx2.lineTo(116 - 5, 50);
         ctx2.lineTo(116 - 10, 0);
         ctx2.lineTo(116, 0);
-        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx2.fill();
-        ctx2.stroke();
+        //  ctx2.stroke();
 
         const c3 = document.getElementById("drawLine3");
         const ctx3 = c3.getContext("2d");
@@ -718,9 +723,9 @@ export function viewDinamic(arr) {
         ctx3.lineTo(116, y3);
         ctx3.lineTo(116, 60);
         ctx3.lineTo(0, 60);
-        ctx3.fillStyle = "rgba( 255,165,0, 0.5)";
+        ctx3.fillStyle = "rgba(255,104,0, 1)";
         ctx3.fill();
-        ctx3.stroke();
+        // ctx3.stroke();
 
         ctx3.beginPath();
         ctx3.lineWidth = "1";
@@ -731,9 +736,9 @@ export function viewDinamic(arr) {
         ctx3.lineTo(10, 0);
         ctx3.lineTo(0, 0);
         //ctx2.lineTo(0, 60);
-        ctx3.fillStyle = "rgba(255,255,255, 1)";
+        ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx3.fill();
-        ctx3.stroke();
+        // ctx3.stroke();
 
         ctx3.beginPath();
         ctx3.lineWidth = "1";
@@ -743,9 +748,9 @@ export function viewDinamic(arr) {
         ctx3.lineTo(106, 0);
         ctx3.lineTo(116, 0);
         //ctx2.lineTo(0, 60);
-        ctx3.fillStyle = "rgba(255,255,255, 1)";
+        ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx3.fill();
-        ctx3.stroke();
+        // ctx3.stroke();
 
         const c4 = document.getElementById("drawLine4");
         const ctx4 = c4.getContext("2d");
@@ -758,9 +763,9 @@ export function viewDinamic(arr) {
         ctx4.lineTo(116, y4);
         ctx4.lineTo(116, 60);
         ctx4.lineTo(0, 60);
-        ctx4.fillStyle = "rgba(255,165,0, 0.5)";
+        ctx4.fillStyle = "rgba(255,104,0, 1)";
         ctx4.fill();
-        ctx4.stroke();
+        //  ctx4.stroke();
 
         ctx4.beginPath();
         ctx4.lineWidth = "1";
@@ -771,9 +776,9 @@ export function viewDinamic(arr) {
         ctx4.lineTo(10, 0);
         ctx4.lineTo(0, 0);
         //ctx2.lineTo(0, 60);
-        ctx4.fillStyle = "rgba(255,255,255, 1)";
+        ctx4.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx4.fill();
-        ctx4.stroke();
+        //  ctx4.stroke();
 
         ctx4.beginPath();
         ctx4.lineWidth = "1";
@@ -783,9 +788,9 @@ export function viewDinamic(arr) {
         ctx4.lineTo(106, 0);
         ctx4.lineTo(116, 0);
         //ctx2.lineTo(0, 60);
-        ctx4.fillStyle = "rgba(255,255,255, 1)";
+        ctx4.fillStyle = 'rgba(14, 12, 11, 1)';
         ctx4.fill();
-        ctx4.stroke();
+        // ctx4.stroke();
     }
 
 
