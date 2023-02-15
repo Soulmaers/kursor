@@ -46,7 +46,7 @@ ctx.strokeStyle = "black"; //цвет линии
 ctx.lineWidth = "2"; //толщина линии
 ctx.stroke(); // обводка линии 
 */
-/*
+
 var c = document.getElementById("drawLine");
 var ctx = c.getContext("2d");
 
@@ -98,129 +98,129 @@ ctx.fillStyle = "rgba(255,255,255, 1)";
 ctx.fill();
 ctx.stroke();
 
-*/
 
 
 
-/*
-var c2 = document.getElementById("drawLine2");
-var ctx2 = c2.getContext("2d");
-ctx2.beginPath();
-ctx2.lineWidth = "0.01";
-ctx2.strokeStyle = "#000";
-ctx2.moveTo(0, 60);
-ctx2.lineTo(0, 20);
-ctx2.lineTo(116, 10);
-ctx2.lineTo(116, 60);
-ctx2.lineTo(0, 60);
+
+
+var c22 = document.getElementById("drawLine22");
+var ctx22 = c22.getContext("2d");
+ctx22.beginPath();
+ctx22.lineWidth = "0.01";
+ctx22.strokeStyle = "#000";
+ctx22.moveTo(0, 60);
+ctx22.lineTo(0, 20);
+ctx22.lineTo(116, 10);
+ctx22.lineTo(116, 60);
+ctx22.lineTo(0, 60);
 //ctx2.lineTo(0, 60);
-ctx2.fillStyle = "rgba(255,255,0, 0.5)";
-ctx2.fill();
+ctx22.fillStyle = "rgba(255,255,0, 0.5)";
+ctx22.fill();
+ctx22.stroke();
+
+ctx22.beginPath();
+ctx22.lineWidth = "0.01";
+ctx22.strokeStyle = "#000";
+ctx22.moveTo(0, 0);
+ctx22.lineTo(0, 50);
+ctx22.lineTo(5, 50);
+ctx22.lineTo(10, 0);
+ctx22.lineTo(0, 0);
+//ctx2.lineTo(0, 60);
+ctx22.fillStyle = "rgba(255,255,255, 1)";
+ctx22.fill();
 //ctx2.stroke();
 
-ctx2.beginPath();
-ctx2.lineWidth = "0.01";
-ctx2.strokeStyle = "#000";
-ctx2.moveTo(0, 0);
-ctx2.lineTo(0, 50);
-ctx2.lineTo(5, 50);
-ctx2.lineTo(10, 0);
-ctx2.lineTo(0, 0);
+ctx22.beginPath();
+ctx22.lineWidth = "0.01";
+ctx22.strokeStyle = "#000";
+ctx22.moveTo(116, 50);
+ctx22.lineTo(111, 50);
+ctx22.lineTo(106, 0);
+ctx22.lineTo(116, 0);
 //ctx2.lineTo(0, 60);
-ctx2.fillStyle = "rgba(255,255,255, 1)";
-ctx2.fill();
-//ctx2.stroke();
-
-ctx2.beginPath();
-ctx2.lineWidth = "0.01";
-ctx2.strokeStyle = "#000";
-ctx2.moveTo(116, 50);
-ctx2.lineTo(111, 50);
-ctx2.lineTo(106, 0);
-ctx2.lineTo(116, 0);
-//ctx2.lineTo(0, 60);
-ctx2.fillStyle = "rgba(255,255,255, 1)";
-ctx2.fill();
-ctx2.stroke();
+ctx22.fillStyle = "rgba(255,255,255, 1)";
+ctx22.fill();
+ctx22.stroke();
 
 
 
 //lдоп. функционал 3 сегмента
-var c3 = document.getElementById("drawLine3");
-var ctx3 = c3.getContext("2d");
-ctx3.beginPath();
-ctx3.lineWidth = "0.01";
-ctx3.strokeStyle = "#000";
-ctx3.moveTo(0, 10);
-ctx3.lineTo(116, 10);
-ctx3.lineTo(116, 60);
-ctx3.lineTo(0, 60);
-ctx3.fillStyle = "rgba(0,128,0, 0.5)";
-ctx3.fill();
+var c33 = document.getElementById("drawLine33");
+var ctx33 = c33.getContext("2d");
+ctx33.beginPath();
+ctx33.lineWidth = "0.01";
+ctx33.strokeStyle = "#000";
+ctx33.moveTo(0, 10);
+ctx33.lineTo(116, 10);
+ctx33.lineTo(116, 60);
+ctx33.lineTo(0, 60);
+ctx33.fillStyle = "rgba(0,128,0, 0.5)";
+ctx33.fill();
 
-ctx3.beginPath();
-ctx3.lineWidth = "0.01";
-ctx3.strokeStyle = "#000";
-ctx3.moveTo(0, 0);
-ctx3.lineTo(0, 50);
-ctx3.lineTo(5, 50);
-ctx3.lineTo(10, 0);
-ctx3.lineTo(0, 0);
+ctx33.beginPath();
+ctx33.lineWidth = "0.01";
+ctx33.strokeStyle = "#000";
+ctx33.moveTo(0, 0);
+ctx33.lineTo(0, 50);
+ctx33.lineTo(5, 50);
+ctx33.lineTo(10, 0);
+ctx33.lineTo(0, 0);
 //ctx2.lineTo(0, 60);
-ctx3.fillStyle = "rgba(255,255,255, 1)";
-ctx3.fill();
+ctx33.fillStyle = "rgba(255,255,255, 1)";
+ctx33.fill();
 //ctx2.stroke();
 
-ctx3.beginPath();
-ctx3.lineWidth = "0.01";
-ctx3.strokeStyle = "#000";
-ctx3.moveTo(116, 50);
-ctx3.lineTo(111, 50);
-ctx3.lineTo(106, 0);
-ctx3.lineTo(116, 0);
+ctx33.beginPath();
+ctx33.lineWidth = "0.01";
+ctx33.strokeStyle = "#000";
+ctx33.moveTo(116, 50);
+ctx33.lineTo(111, 50);
+ctx33.lineTo(106, 0);
+ctx33.lineTo(116, 0);
 //ctx2.lineTo(0, 60);
-ctx3.fillStyle = "rgba(255,255,255, 1)";
-ctx3.fill();
-ctx3.stroke();
+ctx33.fillStyle = "rgba(255,255,255, 1)";
+ctx33.fill();
+ctx33.stroke();
 
 
-var c4 = document.getElementById("drawLine4");
-var ctx4 = c4.getContext("2d");
-ctx4.beginPath();
-ctx4.lineWidth = "0.01";
-ctx4.strokeStyle = "#000";
-ctx4.moveTo(0, 10);
-ctx4.lineTo(116, 30);
-ctx4.lineTo(116, 60);
-ctx4.lineTo(0, 60);
-ctx4.fillStyle = "rgba(255,0,0, 0.5)";
-ctx4.fill();
+var c44 = document.getElementById("drawLine44");
+var ctx44 = c44.getContext("2d");
+ctx44.beginPath();
+ctx44.lineWidth = "0.01";
+ctx44.strokeStyle = "#000";
+ctx44.moveTo(0, 10);
+ctx44.lineTo(116, 30);
+ctx44.lineTo(116, 60);
+ctx44.lineTo(0, 60);
+ctx44.fillStyle = "rgba(255,0,0, 0.5)";
+ctx44.fill();
 
-ctx4.beginPath();
-ctx4.lineWidth = "0.01";
-ctx4.strokeStyle = "#000";
-ctx4.moveTo(0, 0);
-ctx4.lineTo(0, 50);
-ctx4.lineTo(5, 50);
-ctx4.lineTo(10, 0);
-ctx4.lineTo(0, 0);
+ctx44.beginPath();
+ctx44.lineWidth = "0.01";
+ctx44.strokeStyle = "#000";
+ctx44.moveTo(0, 0);
+ctx44.lineTo(0, 50);
+ctx44.lineTo(5, 50);
+ctx44.lineTo(10, 0);
+ctx44.lineTo(0, 0);
 //ctx2.lineTo(0, 60);
-ctx4.fillStyle = "rgba(255,255,255, 1)";
-ctx4.fill();
+ctx44.fillStyle = "rgba(255,255,255, 1)";
+ctx44.fill();
 //ctx2.stroke();
 
-ctx4.beginPath();
-ctx4.lineWidth = "0.01";
-ctx4.strokeStyle = "#000";
-ctx4.moveTo(116, 50);
-ctx4.lineTo(111, 50);
-ctx4.lineTo(106, 0);
-ctx4.lineTo(116, 0);
+ctx44.beginPath();
+ctx44.lineWidth = "0.01";
+ctx44.strokeStyle = "#000";
+ctx44.moveTo(116, 50);
+ctx44.lineTo(111, 50);
+ctx44.lineTo(106, 0);
+ctx44.lineTo(116, 0);
 //ctx2.lineTo(0, 60);
-ctx4.fillStyle = "rgba(255,255,255, 1)";
-ctx4.fill();
-ctx4.stroke();
-*/
+ctx44.fillStyle = "rgba(255,255,255, 1)";
+ctx44.fill();
+ctx44.stroke();
+
 
 /*
 var formTth = document.querySelectorAll('.formTth')

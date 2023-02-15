@@ -1697,6 +1697,18 @@ div.wrapper {
   position: relative;
 }
 
+.progressBar3 {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 374px;
+  height: 60px;
+
+  background-image: url(../image/003.png);
+  position: relative;
+}
+
 
 
 
