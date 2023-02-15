@@ -515,7 +515,7 @@ export function viewDinamic(arr) {
         ctx2.lineTo(116, y2);
         ctx2.lineTo(116, 60);
         ctx2.lineTo(0, 60);
-        ctx2.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx2.fillStyle = "rgba(255,165,0, 0.5)";
         ctx2.fill();
 
         ctx2.beginPath();
@@ -563,7 +563,7 @@ export function viewDinamic(arr) {
         ctx2.lineTo(116, y2);
         ctx2.lineTo(116, 60);
         ctx2.lineTo(0, 60);
-        ctx2.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx2.fillStyle = "rgba( 255,165,0, 0.5)";
         ctx2.fill();
 
         ctx2.beginPath();
@@ -597,7 +597,7 @@ export function viewDinamic(arr) {
         ctx3.lineTo(116, y3);
         ctx3.lineTo(116, 60);
         ctx3.lineTo(0, 60);
-        ctx3.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx3.fillStyle = "rgba( 255,165,0,0.5)";
         ctx3.fill();
 
         ctx3.beginPath();
@@ -651,7 +651,7 @@ export function viewDinamic(arr) {
         ctx2.lineTo(116, y2);
         ctx2.lineTo(116, 60);
         ctx2.lineTo(0, 60);
-        ctx2.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx2.fillStyle = "rgba( 255,165,0, 0.5)";
         ctx2.fill();
 
         ctx2.beginPath();
@@ -685,7 +685,7 @@ export function viewDinamic(arr) {
         ctx3.lineTo(116, y3);
         ctx3.lineTo(116, 60);
         ctx3.lineTo(0, 60);
-        ctx3.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx3.fillStyle = "rgba( 255,165,0, 0.5)";
         ctx3.fill();
 
         ctx3.beginPath();
@@ -722,7 +722,7 @@ export function viewDinamic(arr) {
         ctx4.lineTo(116, y4);
         ctx4.lineTo(116, 60);
         ctx4.lineTo(0, 60);
-        ctx4.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx4.fillStyle = "rgba(255,165,0, 0.5)";
         ctx4.fill();
 
         ctx4.beginPath();
