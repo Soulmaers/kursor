@@ -507,24 +507,24 @@ export function viewDinamic(arr) {
         // progressBar2.style.margin = '0 auto'
 
         const c2 = document.getElementById("drawLine2");
-        c2.style.width = '348px'
-        // c2.style.heigth = '60px'
+        c2.width = 348
+        c2.heigth = 60
         const ctx2 = c2.getContext("2d");
         ctx2.beginPath();
-        ctx2.lineWidth = "0.01";
+        ctx2.lineWidth = "1";
         ctx2.strokeStyle = "#000";
         ctx2.moveTo(0, 60);
         ctx2.lineTo(0, y1);
-        ctx2.lineTo(298, y2);
-        ctx2.lineTo(298, 60);
+        ctx2.lineTo(348, y2);
+        ctx2.lineTo(348, 60);
         ctx2.lineTo(0, 60);
         ctx2.fillStyle = "rgba(255,165,0, 0.5)";
         ctx2.fill();
+        ctx2.stroke();
 
         ctx2.beginPath();
-        ctx2.lineWidth = "0.5";
+        ctx2.lineWidth = "1";
         ctx2.strokeStyle = "#000";
-
         ctx2.moveTo(0, 50);
         ctx2.lineTo(5, 50);
         ctx2.lineTo(10, 0);
@@ -534,13 +534,13 @@ export function viewDinamic(arr) {
         ctx2.stroke();
 
         ctx2.beginPath();
-        ctx2.lineWidth = "0.5";
+        ctx2.lineWidth = "1";
         ctx2.strokeStyle = "#000";
 
-        ctx2.moveTo(141.5, 0);
-        ctx2.lineTo(141.5 + 5, 50);
-        ctx2.lineTo(141.5 + 10, 50);
-        ctx2.lineTo(141.5 + 15, 0);
+        ctx2.moveTo(166.5, 0);
+        ctx2.lineTo(166.5 + 5, 50);
+        ctx2.lineTo(166.5 + 10, 50);
+        ctx2.lineTo(166.5 + 15, 0);
         //  ctx2.lineTo(0, 0);
         ctx2.fillStyle = "rgba(255,255,255, 1)";
         ctx2.fill();
@@ -549,12 +549,12 @@ export function viewDinamic(arr) {
 
 
         ctx2.beginPath();
-        ctx2.lineWidth = "0.5";
+        ctx2.lineWidth = "1";
         ctx2.strokeStyle = "#000";
-        ctx2.moveTo(298, 50);
-        ctx2.lineTo(298 - 5, 50);
-        ctx2.lineTo(298 - 10, 0);
-        ctx2.lineTo(298, 0);
+        ctx2.moveTo(348, 50);
+        ctx2.lineTo(348 - 5, 50);
+        ctx2.lineTo(348 - 10, 0);
+        ctx2.lineTo(348, 0);
         ctx2.fillStyle = "rgba(255,255,255, 1)";
         ctx2.fill();
         ctx2.stroke();
@@ -573,7 +573,7 @@ export function viewDinamic(arr) {
         const c2 = document.getElementById("drawLine2");
         const ctx2 = c2.getContext("2d");
         ctx2.beginPath();
-        ctx2.lineWidth = "0.01";
+        ctx2.lineWidth = "1";
         ctx2.strokeStyle = "#000";
         ctx2.moveTo(0, 60);
         ctx2.lineTo(0, y1);
@@ -582,9 +582,10 @@ export function viewDinamic(arr) {
         ctx2.lineTo(0, 60);
         ctx2.fillStyle = "rgba( 255,165,0, 0.5)";
         ctx2.fill();
+        ctx2.stroke();
 
         ctx2.beginPath();
-        ctx2.lineWidth = "0.01";
+        ctx2.lineWidth = "1";
         ctx2.strokeStyle = "#000";
         ctx2.moveTo(0, 0);
         ctx2.lineTo(0, 50);
@@ -595,7 +596,7 @@ export function viewDinamic(arr) {
         ctx2.fill();
 
         ctx2.beginPath();
-        ctx2.lineWidth = "0.01";
+        ctx2.lineWidth = "1";
         ctx2.strokeStyle = "#000";
         ctx2.moveTo(116, 50);
         ctx2.lineTo(116 - 5, 50);
@@ -608,7 +609,7 @@ export function viewDinamic(arr) {
         const c3 = document.getElementById("drawLine3");
         const ctx3 = c3.getContext("2d");
         ctx3.beginPath();
-        ctx3.lineWidth = "0.01";
+        ctx3.lineWidth = "1";
         ctx3.strokeStyle = "#000";
         ctx3.moveTo(0, y2);
         ctx3.lineTo(116, y3);
@@ -616,9 +617,10 @@ export function viewDinamic(arr) {
         ctx3.lineTo(0, 60);
         ctx3.fillStyle = "rgba( 255,165,0,0.5)";
         ctx3.fill();
+        ctx3.stroke();
 
         ctx3.beginPath();
-        ctx3.lineWidth = "0.01";
+        ctx3.lineWidth = "1";
         ctx3.strokeStyle = "#000";
         ctx3.moveTo(0, 0);
         ctx3.lineTo(0, 50);
@@ -631,7 +633,7 @@ export function viewDinamic(arr) {
         //ctx2.stroke();
 
         ctx3.beginPath();
-        ctx3.lineWidth = "0.01";
+        ctx3.lineWidth = "1";
         ctx3.strokeStyle = "#000";
         ctx3.moveTo(116, 50);
         ctx3.lineTo(111, 50);
@@ -661,7 +663,7 @@ export function viewDinamic(arr) {
         const c2 = document.getElementById("drawLine2");
         const ctx2 = c2.getContext("2d");
         ctx2.beginPath();
-        ctx2.lineWidth = "0.01";
+        ctx2.lineWidth = "1";
         ctx2.strokeStyle = "#000";
         ctx2.moveTo(0, 60);
         ctx2.lineTo(0, y1);
@@ -670,9 +672,10 @@ export function viewDinamic(arr) {
         ctx2.lineTo(0, 60);
         ctx2.fillStyle = "rgba( 255,165,0, 0.5)";
         ctx2.fill();
+        ctx2.stroke();
 
         ctx2.beginPath();
-        ctx2.lineWidth = "0.1";
+        ctx2.lineWidth = "1";
         ctx2.strokeStyle = "#000";
         ctx2.moveTo(0, 0);
         ctx2.lineTo(0, 50);
@@ -683,7 +686,7 @@ export function viewDinamic(arr) {
         ctx2.fill();
 
         ctx2.beginPath();
-        ctx2.lineWidth = "0.1";
+        ctx2.lineWidth = "1";
         ctx2.strokeStyle = "#000";
         ctx2.moveTo(116, 50);
         ctx2.lineTo(116 - 5, 50);
@@ -696,7 +699,7 @@ export function viewDinamic(arr) {
         const c3 = document.getElementById("drawLine3");
         const ctx3 = c3.getContext("2d");
         ctx3.beginPath();
-        ctx3.lineWidth = "0.01";
+        ctx3.lineWidth = "1";
         ctx3.strokeStyle = "#000";
         ctx3.moveTo(0, y2);
         ctx3.lineTo(116, y3);
@@ -704,9 +707,10 @@ export function viewDinamic(arr) {
         ctx3.lineTo(0, 60);
         ctx3.fillStyle = "rgba( 255,165,0, 0.5)";
         ctx3.fill();
+        ctx3.stroke();
 
         ctx3.beginPath();
-        ctx3.lineWidth = "0.1";
+        ctx3.lineWidth = "1";
         ctx3.strokeStyle = "#000";
         ctx3.moveTo(0, 0);
         ctx3.lineTo(0, 50);
@@ -719,7 +723,7 @@ export function viewDinamic(arr) {
         //ctx2.stroke();
 
         ctx3.beginPath();
-        ctx3.lineWidth = "0.1";
+        ctx3.lineWidth = "1";
         ctx3.strokeStyle = "#000";
         ctx3.moveTo(116, 50);
         ctx3.lineTo(111, 50);
@@ -733,7 +737,7 @@ export function viewDinamic(arr) {
         const c4 = document.getElementById("drawLine4");
         const ctx4 = c4.getContext("2d");
         ctx4.beginPath();
-        ctx4.lineWidth = "0.01";
+        ctx4.lineWidth = "1";
         ctx4.strokeStyle = "#000";
         ctx4.moveTo(0, y3);
         ctx4.lineTo(116, y4);
@@ -741,9 +745,10 @@ export function viewDinamic(arr) {
         ctx4.lineTo(0, 60);
         ctx4.fillStyle = "rgba(255,165,0, 0.5)";
         ctx4.fill();
+        ctx4.stroke();
 
         ctx4.beginPath();
-        ctx4.lineWidth = "0.1";
+        ctx4.lineWidth = "1";
         ctx4.strokeStyle = "#000";
         ctx4.moveTo(0, 0);
         ctx4.lineTo(0, 50);
@@ -756,7 +761,7 @@ export function viewDinamic(arr) {
         //ctx2.stroke();
 
         ctx4.beginPath();
-        ctx4.lineWidth = "0.1";
+        ctx4.lineWidth = "1";
         ctx4.strokeStyle = "#000";
         ctx4.moveTo(116, 50);
         ctx4.lineTo(111, 50);
