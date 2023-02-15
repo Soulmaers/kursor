@@ -213,13 +213,20 @@ export function viewTech(id) {
                 titleMM[1].textContent = ''
             }
             else if (res.values.length > 0) {
-                titleMM[0].textContent = res.values[0].protectorVnesh
-                titleMM[1].textContent = res.values[0].protectorVnut
-
+                titleMM[0].textContent = res.values[0].protector1
+                titleMM[1].textContent = res.values[0].protector2
+                titleMM[2].textContent = res.values[0].protector3
+                titleMM[3].textContent = res.values[0].protector4
                 const protector = [];
-                protector.push(res.values[0].protectorVnesh, res.values[0].protectorVnut)
-                console.log(protector)
-                viewDinamic(protector)
+                protector.push(res.values[0].protector1, res.values[0].protector2, res.values[0].protector3, res.values[0].protector4)
+                const protectorClear = [];
+                protector.forEach(el => {
+                    if (el !== '') {
+                        protectorClear.push(el)
+                    }
+                })
+                console.log(protectorClear)
+                viewDinamic(protectorClear)
 
                 const nval = (Object.entries(res.values[0]))
                 const massVal = nval.shift()
