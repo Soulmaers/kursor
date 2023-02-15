@@ -1692,7 +1692,7 @@ div.wrapper {
   align-items: flex-end;
   width: 374px;
   height: 60px;
-
+  border: 1px solid #000;
   background-image: url(../image/003.png);
   position: relative;
 }
@@ -1717,5 +1717,5 @@ div.wrapper {
   width: 116px;
   height: 60px;
   background-color: rgba(255, 255, 255, 0.5);
-
+  border: 1px solid #000;
 }
