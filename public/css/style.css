@@ -353,7 +353,7 @@ td {
 }
 
 .techInfo {
-  width: 350px;
+  width: 374px;
   box-sizing: border-box;
   display: none;
   margin: 0 10px;
@@ -1610,9 +1610,9 @@ div.wrapper {
 
 .protector {
   margin-top: 20px;
-  width: 348px;
+  width: 374px;
   height: 120px;
-
+  align-items: flex-end;
   display: flex;
   flex-direction: column;
 }
@@ -1622,19 +1622,51 @@ div.wrapper {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  width: 360px;
+  width: 370px;
   height: 60px;
   border: 2px solid #000;
   background-image: url(../image/003.png);
+  position: relative;
+
 
 
 }
 
+.mm,
+.mm12 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 0.5rem;
+  font-weight: bold;
+  color: #000;
+  margin: 0;
+}
+
+.mm6 {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  font-size: 0.5rem;
+  font-weight: bold;
+  color: #000;
+  margin: 0;
+}
+
+.mm0 {
+  position: absolute;
+  top: 80%;
+  left: 0;
+  font-size: 0.5rem;
+  font-weight: bold;
+  color: #000;
+  margin: 0;
+}
 
 
 .headerMM {
   margin-top: 5px;
-  width: 350px;
+  width: 346px;
   display: flex;
   justify-content: space-around;
 }
@@ -1648,5 +1680,33 @@ div.wrapper {
 
 #drawLine {
   border-top: 1px solid #000;
+  box-sizing: border-box;
 
+}
+
+
+.progressBar2 {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 374px;
+  height: 60px;
+
+  background-image: url(../image/003.png);
+  position: relative;
+}
+
+
+#drawLine2,
+#drawLine3,
+#drawLine4 {
+
+  box-sizing: border-box;
+
+}
+
+.contBar2 {
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.5);
 }

@@ -463,3 +463,61 @@ export function viewShina(message, arg, params) {
         })
     })
 }
+
+
+export function viewDinamic(elem1, elem2) {
+    console.log(elem1)
+    const s = elem1.replace(/^0+/, '')
+    console.log(s)
+    var c = document.getElementById("drawLine");
+    var ctx = c.getContext("2d");
+
+    ctx.beginPath();
+    ctx.lineWidth = "1";
+    ctx.strokeStyle = "#000";
+    ctx.moveTo(0, 60);
+    ctx.lineTo(0, 17);
+    ctx.lineTo(346, 9);
+    ctx.lineTo(346, 60);
+    ctx.lineTo(173, 60);
+
+    ctx.lineTo(0, 60);
+    ctx.fillStyle = "rgba(204,85,0, 0.5)";
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.lineWidth = "1";
+    ctx.strokeStyle = "#000";
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, 50);
+    ctx.lineTo(4, 50);
+    ctx.lineTo(9, 0);
+    ctx.fillStyle = "rgba(255,255,255, 1)";
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.lineWidth = "1";
+    ctx.strokeStyle = "#000";
+    ctx.moveTo(346, 0);
+    ctx.lineTo(346, 50);
+    ctx.lineTo(342, 50);
+    ctx.lineTo(337, 0);
+    ctx.fillStyle = "rgba(255,255,255, 1)";
+    ctx.fill();
+    ctx.stroke();
+
+
+    ctx.beginPath();
+    ctx.lineWidth = "1";
+    ctx.strokeStyle = "#000";
+    ctx.moveTo(164, 0);
+    ctx.lineTo(169, 50);
+    ctx.lineTo(176, 50);
+    ctx.lineTo(181, 0);
+    ctx.fillStyle = "rgba(255,255,255, 1)";
+    ctx.fill();
+    ctx.stroke();
+
+}

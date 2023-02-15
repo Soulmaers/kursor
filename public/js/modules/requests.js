@@ -1,5 +1,5 @@
 
-import { divClear } from './visual.js'
+import { divClear, viewDinamic } from './visual.js'
 
 export function postModel(model) {
     const active = document.querySelectorAll('.color')
@@ -215,6 +215,7 @@ export function viewTech(id) {
             else if (res.values.length > 0)
                 titleMM[0].textContent = res.values[0].protectorVnesh
             titleMM[1].textContent = res.values[0].protectorVnut
+            viewDinamic(res.values[0].protectorVnesh, res.values[0].protectorVnut)
 
             const nval = (Object.entries(res.values[0]))
             const massVal = nval.shift()

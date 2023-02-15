@@ -47,10 +47,8 @@ ctx.lineWidth = "2"; //толщина линии
 ctx.stroke(); // обводка линии 
 */
 
-
 var c = document.getElementById("drawLine");
 var ctx = c.getContext("2d");
-
 
 ctx.beginPath();
 ctx.lineWidth = "1";
@@ -60,62 +58,169 @@ ctx.lineTo(0, 17);
 ctx.lineTo(346, 9);
 ctx.lineTo(346, 60);
 ctx.lineTo(173, 60);
-ctx.lineTo(173, 0);
-ctx.lineTo(173, 60);
+
 ctx.lineTo(0, 60);
-ctx.fillStyle = "rgba(204,85,0, 0.8)";
-opacity: 0.7;
+ctx.fillStyle = "rgba(204,85,0, 0.5)";
 ctx.fill();
 ctx.stroke();
 
-
-/*
 ctx.beginPath();
-ctx.lineWidth = "3";
-ctx.strokeStyle = "#000";
-ctx.moveTo(78, 0);
-ctx.lineTo(83, 30);
-ctx.lineTo(90, 30);
-ctx.lineTo(95, 0);
-ctx.fillStyle = '#000';
-ctx.fill();
-ctx.stroke();
-*/
-ctx.beginPath();
-ctx.lineWidth = "2";
+ctx.lineWidth = "1";
 ctx.strokeStyle = "#000";
 ctx.moveTo(0, 0);
 ctx.lineTo(0, 50);
 ctx.lineTo(4, 50);
 ctx.lineTo(9, 0);
-ctx.fillStyle = '#fff';
+ctx.fillStyle = "rgba(255,255,255, 1)";
 ctx.fill();
 ctx.stroke();
 
 ctx.beginPath();
-ctx.lineWidth = "2";
+ctx.lineWidth = "1";
 ctx.strokeStyle = "#000";
 ctx.moveTo(346, 0);
 ctx.lineTo(346, 50);
 ctx.lineTo(342, 50);
 ctx.lineTo(337, 0);
-ctx.fillStyle = '#fff';
+ctx.fillStyle = "rgba(255,255,255, 1)";
 ctx.fill();
 ctx.stroke();
 
 
-
-
 ctx.beginPath();
-ctx.lineWidth = "2";
+ctx.lineWidth = "1";
 ctx.strokeStyle = "#000";
 ctx.moveTo(164, 0);
 ctx.lineTo(169, 50);
 ctx.lineTo(176, 50);
 ctx.lineTo(181, 0);
-ctx.fillStyle = '#fff';
+ctx.fillStyle = "rgba(255,255,255, 1)";
 ctx.fill();
 ctx.stroke();
+
+
+
+
+
+
+var c2 = document.getElementById("drawLine2");
+var ctx2 = c2.getContext("2d");
+ctx2.beginPath();
+ctx2.lineWidth = "0.01";
+ctx2.strokeStyle = "#000";
+ctx2.moveTo(0, 60);
+ctx2.lineTo(0, 20);
+ctx2.lineTo(116, 10);
+ctx2.lineTo(116, 60);
+ctx2.lineTo(0, 60);
+//ctx2.lineTo(0, 60);
+ctx2.fillStyle = "rgba(204,85,0, 0.5)";
+ctx2.fill();
+//ctx2.stroke();
+
+ctx2.beginPath();
+ctx2.lineWidth = "0.01";
+ctx2.strokeStyle = "#000";
+ctx2.moveTo(0, 0);
+ctx2.lineTo(0, 50);
+ctx2.lineTo(5, 50);
+ctx2.lineTo(10, 0);
+ctx2.lineTo(0, 0);
+//ctx2.lineTo(0, 60);
+ctx2.fillStyle = "rgba(255,255,255, 1)";
+ctx2.fill();
+//ctx2.stroke();
+
+ctx2.beginPath();
+ctx2.lineWidth = "0.01";
+ctx2.strokeStyle = "#000";
+ctx2.moveTo(116, 50);
+ctx2.lineTo(111, 50);
+ctx2.lineTo(106, 0);
+ctx2.lineTo(116, 0);
+//ctx2.lineTo(0, 60);
+ctx2.fillStyle = "rgba(255,255,255, 1)";
+ctx2.fill();
+ctx2.stroke();
+
+
+
+//lдоп. функционал 3 сегмента
+var c3 = document.getElementById("drawLine3");
+var ctx3 = c3.getContext("2d");
+ctx3.beginPath();
+ctx3.lineWidth = "0.01";
+ctx3.strokeStyle = "#000";
+ctx3.moveTo(0, 10);
+ctx3.lineTo(116, 10);
+ctx3.lineTo(116, 60);
+ctx3.lineTo(0, 60);
+ctx3.fillStyle = "rgba(204,85,0, 0.5)";
+ctx3.fill();
+
+ctx3.beginPath();
+ctx3.lineWidth = "0.01";
+ctx3.strokeStyle = "#000";
+ctx3.moveTo(0, 0);
+ctx3.lineTo(0, 50);
+ctx3.lineTo(5, 50);
+ctx3.lineTo(10, 0);
+ctx3.lineTo(0, 0);
+//ctx2.lineTo(0, 60);
+ctx3.fillStyle = "rgba(255,255,255, 1)";
+ctx3.fill();
+//ctx2.stroke();
+
+ctx3.beginPath();
+ctx3.lineWidth = "0.01";
+ctx3.strokeStyle = "#000";
+ctx3.moveTo(116, 50);
+ctx3.lineTo(111, 50);
+ctx3.lineTo(106, 0);
+ctx3.lineTo(116, 0);
+//ctx2.lineTo(0, 60);
+ctx3.fillStyle = "rgba(255,255,255, 1)";
+ctx3.fill();
+ctx3.stroke();
+
+
+var c4 = document.getElementById("drawLine4");
+var ctx4 = c4.getContext("2d");
+ctx4.beginPath();
+ctx4.lineWidth = "0.01";
+ctx4.strokeStyle = "#000";
+ctx4.moveTo(0, 10);
+ctx4.lineTo(116, 30);
+ctx4.lineTo(116, 60);
+ctx4.lineTo(0, 60);
+ctx4.fillStyle = "rgba(204,85,0, 0.5)";
+ctx4.fill();
+
+ctx4.beginPath();
+ctx4.lineWidth = "0.01";
+ctx4.strokeStyle = "#000";
+ctx4.moveTo(0, 0);
+ctx4.lineTo(0, 50);
+ctx4.lineTo(5, 50);
+ctx4.lineTo(10, 0);
+ctx4.lineTo(0, 0);
+//ctx2.lineTo(0, 60);
+ctx4.fillStyle = "rgba(255,255,255, 1)";
+ctx4.fill();
+//ctx2.stroke();
+
+ctx4.beginPath();
+ctx4.lineWidth = "0.01";
+ctx4.strokeStyle = "#000";
+ctx4.moveTo(116, 50);
+ctx4.lineTo(111, 50);
+ctx4.lineTo(106, 0);
+ctx4.lineTo(116, 0);
+//ctx2.lineTo(0, 60);
+ctx4.fillStyle = "rgba(255,255,255, 1)";
+ctx4.fill();
+ctx4.stroke();
+
 
 /*
 var formTth = document.querySelectorAll('.formTth')
