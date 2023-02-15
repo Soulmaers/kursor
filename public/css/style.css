@@ -1713,6 +1713,9 @@ div.wrapper {
 
 
 .contBar2 {
+  border: 1px solid #000;
+  border-bottom: none;
+  border-right: none;
   display: none;
   width: 116px;
   height: 60px;
