@@ -502,18 +502,21 @@ export function viewDinamic(arr) {
         y1 = (120 - arrAll[0]) / 2
         y2 = (120 - arrAll[1]) / 2
         conts[0].style.display = 'block'
-        progressBar2.style.width = '142px'
-        progressBar2.style.margin = '0 auto'
+        conts[0].style.width = '348px'
+        //progressBar2.style.width = '142px'
+        // progressBar2.style.margin = '0 auto'
 
         const c2 = document.getElementById("drawLine2");
+        c2.style.width = '348px'
+        // c2.style.heigth = '60px'
         const ctx2 = c2.getContext("2d");
         ctx2.beginPath();
         ctx2.lineWidth = "0.01";
         ctx2.strokeStyle = "#000";
         ctx2.moveTo(0, 60);
         ctx2.lineTo(0, y1);
-        ctx2.lineTo(116, y2);
-        ctx2.lineTo(116, 60);
+        ctx2.lineTo(298, y2);
+        ctx2.lineTo(298, 60);
         ctx2.lineTo(0, 60);
         ctx2.fillStyle = "rgba(255,165,0, 0.5)";
         ctx2.fill();
@@ -534,10 +537,10 @@ export function viewDinamic(arr) {
         ctx2.lineWidth = "0.5";
         ctx2.strokeStyle = "#000";
 
-        ctx2.moveTo(50.5, 0);
-        ctx2.lineTo(50.5 + 5, 50);
-        ctx2.lineTo(50.5 + 10, 50);
-        ctx2.lineTo(50.5 + 15, 0);
+        ctx2.moveTo(141.5, 0);
+        ctx2.lineTo(141.5 + 5, 50);
+        ctx2.lineTo(141.5 + 10, 50);
+        ctx2.lineTo(141.5 + 15, 0);
         //  ctx2.lineTo(0, 0);
         ctx2.fillStyle = "rgba(255,255,255, 1)";
         ctx2.fill();
@@ -548,10 +551,10 @@ export function viewDinamic(arr) {
         ctx2.beginPath();
         ctx2.lineWidth = "0.5";
         ctx2.strokeStyle = "#000";
-        ctx2.moveTo(116, 50);
-        ctx2.lineTo(116 - 5, 50);
-        ctx2.lineTo(116 - 10, 0);
-        ctx2.lineTo(116, 0);
+        ctx2.moveTo(298, 50);
+        ctx2.lineTo(298 - 5, 50);
+        ctx2.lineTo(298 - 10, 0);
+        ctx2.lineTo(298, 0);
         ctx2.fillStyle = "rgba(255,255,255, 1)";
         ctx2.fill();
         ctx2.stroke();
