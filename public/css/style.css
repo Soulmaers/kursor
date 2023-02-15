@@ -1620,10 +1620,10 @@ div.wrapper {
 .progressBar {
   margin-top: 10px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-end;
   width: 360px;
-  height: 70px;
+  height: 60px;
   border: 2px solid #000;
   background-image: url(../image/003.png);
 
@@ -1648,4 +1648,5 @@ div.wrapper {
 
 #drawLine {
   border-top: 1px solid #000;
+
 }

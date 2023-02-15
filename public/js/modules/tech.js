@@ -63,7 +63,8 @@ ctx.lineTo(173, 60);
 ctx.lineTo(173, 0);
 ctx.lineTo(173, 60);
 ctx.lineTo(0, 60);
-ctx.fillStyle = '#FF4F00';
+ctx.fillStyle = "rgba(204,85,0, 0.8)";
+opacity: 0.7;
 ctx.fill();
 ctx.stroke();
 
