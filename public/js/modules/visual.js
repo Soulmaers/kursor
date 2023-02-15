@@ -465,59 +465,364 @@ export function viewShina(message, arg, params) {
 }
 
 
-export function viewDinamic(elem1, elem2) {
-    console.log(elem1)
-    const s = elem1.replace(/^0+/, '')
-    console.log(s)
-    var c = document.getElementById("drawLine");
-    var ctx = c.getContext("2d");
+export function viewDinamic(arr) {
+    const conts = document.querySelectorAll('.contBar2')
+    conts.forEach(el => {
+        el.style.display = 'none'
+    })
+    const c2 = document.getElementById("drawLine2");
+    const ctx2 = c2.getContext("2d");
+    const c3 = document.getElementById("drawLine3");
+    const ctx3 = c3.getContext("2d");
+    const c4 = document.getElementById("drawLine4");
+    const ctx4 = c4.getContext("2d");
 
-    ctx.beginPath();
-    ctx.lineWidth = "1";
-    ctx.strokeStyle = "#000";
-    ctx.moveTo(0, 60);
-    ctx.lineTo(0, 17);
-    ctx.lineTo(346, 9);
-    ctx.lineTo(346, 60);
-    ctx.lineTo(173, 60);
-
-    ctx.lineTo(0, 60);
-    ctx.fillStyle = "rgba(204,85,0, 0.5)";
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.lineWidth = "1";
-    ctx.strokeStyle = "#000";
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, 50);
-    ctx.lineTo(4, 50);
-    ctx.lineTo(9, 0);
-    ctx.fillStyle = "rgba(255,255,255, 1)";
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.lineWidth = "1";
-    ctx.strokeStyle = "#000";
-    ctx.moveTo(346, 0);
-    ctx.lineTo(346, 50);
-    ctx.lineTo(342, 50);
-    ctx.lineTo(337, 0);
-    ctx.fillStyle = "rgba(255,255,255, 1)";
-    ctx.fill();
-    ctx.stroke();
+    ctx2.clearRect(0, 0, 116, 60);
+    ctx3.clearRect(0, 0, 116, 60);
+    ctx4.clearRect(0, 0, 116, 60);
 
 
-    ctx.beginPath();
-    ctx.lineWidth = "1";
-    ctx.strokeStyle = "#000";
-    ctx.moveTo(164, 0);
-    ctx.lineTo(169, 50);
-    ctx.lineTo(176, 50);
-    ctx.lineTo(181, 0);
-    ctx.fillStyle = "rgba(255,255,255, 1)";
-    ctx.fill();
-    ctx.stroke();
+
+    //  const conts = document.querySelectorAll('.contBar2')
+    const progressBar2 = document.querySelector('.progressBar2')
+    const arrAll = [];
+    // const arrTest = [74, 82, 104, 65]
+    arr.forEach(el => {
+        arrAll.push(el * 10)
+    })
+    console.log(arrAll)
+    console.log(conts)
+    let y1;
+    let y2;
+    let y3;
+    let y4;
+
+
+    if (arrAll.length == 2) {
+        y1 = (120 - arrAll[0]) / 2
+        y2 = (120 - arrAll[1]) / 2
+        conts[0].style.display = 'block'
+        progressBar2.style.width = '142px'
+        progressBar2.style.margin = '0 auto'
+
+        const c2 = document.getElementById("drawLine2");
+        const ctx2 = c2.getContext("2d");
+        ctx2.beginPath();
+        ctx2.lineWidth = "0.01";
+        ctx2.strokeStyle = "#000";
+        ctx2.moveTo(0, 60);
+        ctx2.lineTo(0, y1);
+        ctx2.lineTo(116, y2);
+        ctx2.lineTo(116, 60);
+        ctx2.lineTo(0, 60);
+        ctx2.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx2.fill();
+
+        ctx2.beginPath();
+        ctx2.lineWidth = "0.5";
+        ctx2.strokeStyle = "#000";
+
+        ctx2.moveTo(0, 50);
+        ctx2.lineTo(5, 50);
+        ctx2.lineTo(10, 0);
+        ctx2.lineTo(0, 0);
+        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fill();
+        ctx2.stroke();
+
+
+        ctx2.beginPath();
+        ctx2.lineWidth = "0.5";
+        ctx2.strokeStyle = "#000";
+        ctx2.moveTo(116, 50);
+        ctx2.lineTo(116 - 5, 50);
+        ctx2.lineTo(116 - 10, 0);
+        ctx2.lineTo(116, 0);
+        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fill();
+        ctx2.stroke();
+
+    }
+    if (arrAll.length == 3) {
+        y1 = (120 - arrAll[0]) / 2
+        y2 = (120 - arrAll[1]) / 2
+        y3 = (120 - arrAll[2]) / 2
+
+        conts[0].style.display = 'block'
+        conts[1].style.display = 'block'
+        progressBar2.style.width = '284px'
+        progressBar2.style.margin = '0 auto'
+
+        const c2 = document.getElementById("drawLine2");
+        const ctx2 = c2.getContext("2d");
+        ctx2.beginPath();
+        ctx2.lineWidth = "0.01";
+        ctx2.strokeStyle = "#000";
+        ctx2.moveTo(0, 60);
+        ctx2.lineTo(0, y1);
+        ctx2.lineTo(116, y2);
+        ctx2.lineTo(116, 60);
+        ctx2.lineTo(0, 60);
+        ctx2.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx2.fill();
+
+        ctx2.beginPath();
+        ctx2.lineWidth = "0.01";
+        ctx2.strokeStyle = "#000";
+        ctx2.moveTo(0, 0);
+        ctx2.lineTo(0, 50);
+        ctx2.lineTo(5, 50);
+        ctx2.lineTo(10, 0);
+        ctx2.lineTo(0, 0);
+        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fill();
+
+        ctx2.beginPath();
+        ctx2.lineWidth = "0.01";
+        ctx2.strokeStyle = "#000";
+        ctx2.moveTo(116, 50);
+        ctx2.lineTo(116 - 5, 50);
+        ctx2.lineTo(116 - 10, 0);
+        ctx2.lineTo(116, 0);
+        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fill();
+        ctx2.stroke();
+
+        const c3 = document.getElementById("drawLine3");
+        const ctx3 = c3.getContext("2d");
+        ctx3.beginPath();
+        ctx3.lineWidth = "0.01";
+        ctx3.strokeStyle = "#000";
+        ctx3.moveTo(0, y2);
+        ctx3.lineTo(116, y3);
+        ctx3.lineTo(116, 60);
+        ctx3.lineTo(0, 60);
+        ctx3.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx3.fill();
+
+        ctx3.beginPath();
+        ctx3.lineWidth = "0.01";
+        ctx3.strokeStyle = "#000";
+        ctx3.moveTo(0, 0);
+        ctx3.lineTo(0, 50);
+        ctx3.lineTo(5, 50);
+        ctx3.lineTo(10, 0);
+        ctx3.lineTo(0, 0);
+        //ctx2.lineTo(0, 60);
+        ctx3.fillStyle = "rgba(255,255,255, 1)";
+        ctx3.fill();
+        //ctx2.stroke();
+
+        ctx3.beginPath();
+        ctx3.lineWidth = "0.01";
+        ctx3.strokeStyle = "#000";
+        ctx3.moveTo(116, 50);
+        ctx3.lineTo(111, 50);
+        ctx3.lineTo(106, 0);
+        ctx3.lineTo(116, 0);
+        //ctx2.lineTo(0, 60);
+        ctx3.fillStyle = "rgba(255,255,255, 1)";
+        ctx3.fill();
+        ctx3.stroke();
+
+
+
+    }
+    if (arrAll.length === 4) {
+        conts.forEach(e => {
+            e.style.display = 'block'
+        })
+        console.log(conts)
+        y1 = (120 - arrAll[0]) / 2
+        y2 = (120 - arrAll[1]) / 2
+        y3 = (120 - arrAll[2]) / 2
+        y4 = (120 - arrAll[3]) / 2
+
+        progressBar2.style.width = '374px'
+        progressBar2.style.margin = '0 auto'
+
+        const c2 = document.getElementById("drawLine2");
+        const ctx2 = c2.getContext("2d");
+        ctx2.beginPath();
+        ctx2.lineWidth = "0.01";
+        ctx2.strokeStyle = "#000";
+        ctx2.moveTo(0, 60);
+        ctx2.lineTo(0, y1);
+        ctx2.lineTo(116, y2);
+        ctx2.lineTo(116, 60);
+        ctx2.lineTo(0, 60);
+        ctx2.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx2.fill();
+
+        ctx2.beginPath();
+        ctx2.lineWidth = "0.1";
+        ctx2.strokeStyle = "#000";
+        ctx2.moveTo(0, 0);
+        ctx2.lineTo(0, 50);
+        ctx2.lineTo(5, 50);
+        ctx2.lineTo(10, 0);
+        ctx2.lineTo(0, 0);
+        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fill();
+
+        ctx2.beginPath();
+        ctx2.lineWidth = "0.1";
+        ctx2.strokeStyle = "#000";
+        ctx2.moveTo(116, 50);
+        ctx2.lineTo(116 - 5, 50);
+        ctx2.lineTo(116 - 10, 0);
+        ctx2.lineTo(116, 0);
+        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fill();
+        ctx2.stroke();
+
+        const c3 = document.getElementById("drawLine3");
+        const ctx3 = c3.getContext("2d");
+        ctx3.beginPath();
+        ctx3.lineWidth = "0.01";
+        ctx3.strokeStyle = "#000";
+        ctx3.moveTo(0, y2);
+        ctx3.lineTo(116, y3);
+        ctx3.lineTo(116, 60);
+        ctx3.lineTo(0, 60);
+        ctx3.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx3.fill();
+
+        ctx3.beginPath();
+        ctx3.lineWidth = "0.1";
+        ctx3.strokeStyle = "#000";
+        ctx3.moveTo(0, 0);
+        ctx3.lineTo(0, 50);
+        ctx3.lineTo(5, 50);
+        ctx3.lineTo(10, 0);
+        ctx3.lineTo(0, 0);
+        //ctx2.lineTo(0, 60);
+        ctx3.fillStyle = "rgba(255,255,255, 1)";
+        ctx3.fill();
+        //ctx2.stroke();
+
+        ctx3.beginPath();
+        ctx3.lineWidth = "0.1";
+        ctx3.strokeStyle = "#000";
+        ctx3.moveTo(116, 50);
+        ctx3.lineTo(111, 50);
+        ctx3.lineTo(106, 0);
+        ctx3.lineTo(116, 0);
+        //ctx2.lineTo(0, 60);
+        ctx3.fillStyle = "rgba(255,255,255, 1)";
+        ctx3.fill();
+        ctx3.stroke();
+
+        const c4 = document.getElementById("drawLine4");
+        const ctx4 = c4.getContext("2d");
+        ctx4.beginPath();
+        ctx4.lineWidth = "0.01";
+        ctx4.strokeStyle = "#000";
+        ctx4.moveTo(0, y3);
+        ctx4.lineTo(116, y4);
+        ctx4.lineTo(116, 60);
+        ctx4.lineTo(0, 60);
+        ctx4.fillStyle = "rgba(0,0,0, 0.5)";
+        ctx4.fill();
+
+        ctx4.beginPath();
+        ctx4.lineWidth = "0.1";
+        ctx4.strokeStyle = "#000";
+        ctx4.moveTo(0, 0);
+        ctx4.lineTo(0, 50);
+        ctx4.lineTo(5, 50);
+        ctx4.lineTo(10, 0);
+        ctx4.lineTo(0, 0);
+        //ctx2.lineTo(0, 60);
+        ctx4.fillStyle = "rgba(255,255,255, 1)";
+        ctx4.fill();
+        //ctx2.stroke();
+
+        ctx4.beginPath();
+        ctx4.lineWidth = "0.1";
+        ctx4.strokeStyle = "#000";
+        ctx4.moveTo(116, 50);
+        ctx4.lineTo(111, 50);
+        ctx4.lineTo(106, 0);
+        ctx4.lineTo(116, 0);
+        //ctx2.lineTo(0, 60);
+        ctx4.fillStyle = "rgba(255,255,255, 1)";
+        ctx4.fill();
+        ctx4.stroke();
+    }
+
+
+
+    // let y;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
+
+
+
+
+/*
+var c = document.getElementById("drawLine");
+var ctx = c.getContext("2d");
+
+ctx.beginPath();
+ctx.lineWidth = "1";
+ctx.strokeStyle = "#000";
+ctx.moveTo(0, 60);
+ctx.lineTo(0, y1);
+ctx.lineTo(346, y2);
+ctx.lineTo(346, 60);
+ctx.lineTo(173, 60);
+
+ctx.lineTo(0, 60);
+ctx.fillStyle = "rgba(204,85,0, 0.5)";
+ctx.fill();
+ctx.stroke();
+
+ctx.beginPath();
+ctx.lineWidth = "1";
+ctx.strokeStyle = "#000";
+ctx.moveTo(0, 0);
+ctx.lineTo(0, 50);
+ctx.lineTo(4, 50);
+ctx.lineTo(9, 0);
+ctx.fillStyle = "rgba(255,255,255, 1)";
+ctx.fill();
+ctx.stroke();
+
+ctx.beginPath();
+ctx.lineWidth = "1";
+ctx.strokeStyle = "#000";
+ctx.moveTo(346, 0);
+ctx.lineTo(346, 50);
+ctx.lineTo(342, 50);
+ctx.lineTo(337, 0);
+ctx.fillStyle = "rgba(255,255,255, 1)";
+ctx.fill();
+ctx.stroke();
+
+
+ctx.beginPath();
+ctx.lineWidth = "1";
+ctx.strokeStyle = "#000";
+ctx.moveTo(164, 0);
+ctx.lineTo(169, 50);
+ctx.lineTo(176, 50);
+ctx.lineTo(181, 0);
+ctx.fillStyle = "rgba(255,255,255, 1)";
+ctx.fill();
+ctx.stroke();
+*/

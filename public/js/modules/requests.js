@@ -212,22 +212,27 @@ export function viewTech(id) {
                 titleMM[0].textContent = ''
                 titleMM[1].textContent = ''
             }
-            else if (res.values.length > 0)
+            else if (res.values.length > 0) {
                 titleMM[0].textContent = res.values[0].protectorVnesh
-            titleMM[1].textContent = res.values[0].protectorVnut
-            viewDinamic(res.values[0].protectorVnesh, res.values[0].protectorVnut)
+                titleMM[1].textContent = res.values[0].protectorVnut
 
-            const nval = (Object.entries(res.values[0]))
-            const massVal = nval.shift()
-            console.log(nval)
-            console.log(res.values[0].protectorVnesh)
+                const protector = [];
+                protector.push(res.values[0].protectorVnesh, res.values[0].protectorVnut)
+                console.log(protector)
+                viewDinamic(protector)
+
+                const nval = (Object.entries(res.values[0]))
+                const massVal = nval.shift()
+                //   console.log(nval)
+                //   console.log(res.values[0].protectorVnesh)
 
 
 
-            const formValue = document.querySelectorAll('.formValue')
-            formValue.forEach((el, index) => {
-                el.value = nval[index][1]
-            })
+                const formValue = document.querySelectorAll('.formValue')
+                formValue.forEach((el, index) => {
+                    el.value = nval[index][1]
+                })
+            }
             const inputPSI = document.querySelector('.jobDav')
             const inputBar = document.querySelector('.bar')
             inputBar.textContent = (inputPSI.value / 14.504).toFixed(1);

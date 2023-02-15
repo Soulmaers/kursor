@@ -1698,15 +1698,12 @@ div.wrapper {
 }
 
 
-#drawLine2,
-#drawLine3,
-#drawLine4 {
 
-  box-sizing: border-box;
-
-}
 
 .contBar2 {
+  display: none;
+  width: 116px;
   height: 60px;
   background-color: rgba(255, 255, 255, 0.5);
+
 }

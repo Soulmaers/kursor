@@ -46,7 +46,7 @@ ctx.strokeStyle = "black"; //цвет линии
 ctx.lineWidth = "2"; //толщина линии
 ctx.stroke(); // обводка линии 
 */
-
+/*
 var c = document.getElementById("drawLine");
 var ctx = c.getContext("2d");
 
@@ -98,11 +98,11 @@ ctx.fillStyle = "rgba(255,255,255, 1)";
 ctx.fill();
 ctx.stroke();
 
+*/
 
 
 
-
-
+/*
 var c2 = document.getElementById("drawLine2");
 var ctx2 = c2.getContext("2d");
 ctx2.beginPath();
@@ -220,7 +220,7 @@ ctx4.lineTo(116, 0);
 ctx4.fillStyle = "rgba(255,255,255, 1)";
 ctx4.fill();
 ctx4.stroke();
-
+*/
 
 /*
 var formTth = document.querySelectorAll('.formTth')
