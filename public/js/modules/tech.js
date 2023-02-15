@@ -114,7 +114,7 @@ ctx2.lineTo(116, 10);
 ctx2.lineTo(116, 60);
 ctx2.lineTo(0, 60);
 //ctx2.lineTo(0, 60);
-ctx2.fillStyle = "rgba(204,85,0, 0.5)";
+ctx2.fillStyle = "rgba(255,255,0, 0.5)";
 ctx2.fill();
 //ctx2.stroke();
 
@@ -155,7 +155,7 @@ ctx3.moveTo(0, 10);
 ctx3.lineTo(116, 10);
 ctx3.lineTo(116, 60);
 ctx3.lineTo(0, 60);
-ctx3.fillStyle = "rgba(204,85,0, 0.5)";
+ctx3.fillStyle = "rgba(0,128,0, 0.5)";
 ctx3.fill();
 
 ctx3.beginPath();
@@ -193,7 +193,7 @@ ctx4.moveTo(0, 10);
 ctx4.lineTo(116, 30);
 ctx4.lineTo(116, 60);
 ctx4.lineTo(0, 60);
-ctx4.fillStyle = "rgba(204,85,0, 0.5)";
+ctx4.fillStyle = "rgba(255,0,0, 0.5)";
 ctx4.fill();
 
 ctx4.beginPath();
