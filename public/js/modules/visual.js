@@ -530,6 +530,20 @@ export function viewDinamic(arr) {
         ctx2.fill();
         ctx2.stroke();
 
+        ctx2.beginPath();
+        ctx2.lineWidth = "0.5";
+        ctx2.strokeStyle = "#000";
+
+        ctx2.moveTo(50.5, 0);
+        ctx2.lineTo(50.5 + 5, 50);
+        ctx2.lineTo(50.5 + 10, 50);
+        ctx2.lineTo(50.5 + 15, 0);
+        //  ctx2.lineTo(0, 0);
+        ctx2.fillStyle = "rgba(255,255,255, 1)";
+        ctx2.fill();
+        ctx2.stroke();
+
+
 
         ctx2.beginPath();
         ctx2.lineWidth = "0.5";
