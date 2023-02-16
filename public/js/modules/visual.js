@@ -483,7 +483,7 @@ export function viewDinamic(arr) {
     let y2;
     let y3;
     let y4;
-    if (arrAll.length == []) {
+    if (arr.length === 0) {
         conts.forEach(e => {
             e.style.display = 'block'
             e.style.width = '116px'

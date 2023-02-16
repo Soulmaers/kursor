@@ -222,7 +222,7 @@ export function viewTech(id) {
             const text = document.querySelectorAll('.text')
             const titleMM = document.querySelectorAll('.titleMM')
             console.log(titleMM)
-            if (!res.values) {
+            if (res.values.length === 0) {
                 number.forEach(e => {
                     e.textContent = ''
                 })
