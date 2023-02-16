@@ -155,7 +155,7 @@ export function reqTech(arr, id) {
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.link_menu')[0]
-        console.log(listItem.textContent)
+        //  console.log(listItem.textContent)
         activePost = listItem.textContent.replace(/\s+/g, '')
 
     }
@@ -164,13 +164,13 @@ export function reqTech(arr, id) {
     }
     const arrValue = [];
     const formValue = document.querySelectorAll('.formValue')
-    console.log(JSON.stringify({ id, arr, arrValue, activePost }))
+    // console.log(JSON.stringify({ id, arr, arrValue, activePost }))
     arrValue.push(id)
 
     formValue.forEach(el => {
         arrValue.push(el.value)
     })
-    console.log(arrValue)
+    // console.log(arrValue)
     fetch('api/tech', {
         method: "POST",
         headers: {
@@ -211,8 +211,10 @@ export function viewTech(id) {
 
 
             const keys = [];
-            for (let key in res.values[0]) {
-                keys.push(key);
+            if (res.values) {
+                for (let key in res.values[0]) {
+                    keys.push(key);
+                }
             }
             console.log(keys)
 
@@ -220,7 +222,7 @@ export function viewTech(id) {
             const text = document.querySelectorAll('.text')
             const titleMM = document.querySelectorAll('.titleMM')
             console.log(titleMM)
-            if (res.values.length == 0) {
+            if (!res.values) {
                 number.forEach(e => {
                     e.textContent = ''
                 })
