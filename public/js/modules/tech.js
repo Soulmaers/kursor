@@ -46,7 +46,7 @@ ctx.strokeStyle = "black"; //цвет линии
 ctx.lineWidth = "2"; //толщина линии
 ctx.stroke(); // обводка линии 
 */
-
+/*
 var c = document.getElementById("drawLine");
 var ctx = c.getContext("2d");
 
@@ -99,7 +99,7 @@ ctx.fill();
 ctx.stroke();
 
 
-
+*/
 
 
 

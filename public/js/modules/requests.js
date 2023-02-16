@@ -216,22 +216,39 @@ export function viewTech(id) {
             console.log(keys)
 
             const number = document.querySelectorAll('.number')
-            const valuePro = document.querySelectorAll('.valuePro')
-
-            console.log(valuePro[0])
+            const text = document.querySelectorAll('.text')
+            const titleMM = document.querySelectorAll('.titleMM')
+            console.log(titleMM)
             if (res.values.length == 0) {
                 number.forEach(e => {
+                    e.textContent = ''
+                })
+                text.forEach(e => {
                     e.textContent = ''
                 })
 
             }
             else if (res.values.length > 0) {
-
+                number[0].textContent = keys[8]
+                number[1].textContent = keys[9]
+                number[2].textContent = keys[10]
+                number[3].textContent = keys[11]
+                text[0].textContent = res.values[0].N1
+                text[1].textContent = res.values[0].N2
+                text[2].textContent = res.values[0].N3
+                text[3].textContent = res.values[0].N4
 
                 console.log(res.values[0].N1)
                 const protector = [];
                 protector.push(res.values[0].N1, res.values[0].N2, res.values[0].N3, res.values[0].N4)
                 const protectorClear = [];
+
+                titleMM.forEach(el => {
+                    el.style.display = 'flex';
+                    if (el.children[1].textContent == '') {
+                        el.style.display = 'none';
+                    }
+                })
                 protector.forEach(el => {
                     if (el !== '') {
                         protectorClear.push(el)

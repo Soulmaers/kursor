@@ -466,34 +466,14 @@ export function viewShina(message, arg, params) {
 }
 
 
-export function viewDinamic(arr, keys) {
+export function viewDinamic(arr) {
     const conts = document.querySelectorAll('.contBar2')
     const titleMM = document.querySelectorAll('.titleMM')
-    const valuePro = document.querySelectorAll('.valuePro')
     conts.forEach(el => {
         el.style.display = 'none'
     })
 
     const arrAll = [];
-
-
-
-    //number[0].textContent = keys[8]
-    //number[1].textContent = keys[9]
-    //number[2].textContent = keys[10]
-    //number[3].textContent = keys[11]
-
-    /*
-    valuePro[0].children[0].textContent = 'ост.:' + res.values[0].N1
-    valuePro[0].children[1].textContent = 'изн.:' + (120 / 10 - res.values[0].N1).toFixed(1)
-    valuePro[1].children[0].textContent = 'ост.:' + res.values[0].N2
-    valuePro[1].children[1].textContent = 'изн.:' + (120 / 10 - res.values[0].N2).toFixed(1)
-    valuePro[2].children[0].textContent = 'ост.:' + res.values[0].N3
-    valuePro[2].children[1].textContent = 'изн.:' + (120 / 10 - res.values[0].N3).toFixed(1)
-    valuePro[3].children[0].textContent = 'ост.:' + res.values[0].N4
-    valuePro[3].children[1].textContent = 'изн.:' + (120 / 10 - res.values[0].N4).toFixed(1)
-*/
-
 
 
 
@@ -513,19 +493,6 @@ export function viewDinamic(arr, keys) {
         conts[0].style.width = '348px'
         protekGrafTwo(y1, y2)
 
-        titleMM[0].style.display = 'flex'
-        titleMM[1].style.display = 'flex'
-
-        titleMM[0].style.position = 'absolute'
-        titleMM[0].style.bottom = 0
-        titleMM[0].style.left = '30px'
-        position: absolute;
-        bottom: 0;
-        left: '30px';
-        valuePro[0].children[0].textContent = 'ост.:' + arrAll[0] / 10
-        valuePro[0].children[1].textContent = 'изн.:' + (120 / 10 - arrAll[0] / 10).toFixed(1)
-        valuePro[1].children[0].textContent = 'ост.:' + arrAll[1] / 10
-        valuePro[1].children[1].textContent = 'изн.:' + (120 / 10 - arrAll[1] / 10).toFixed(1)
 
 
     }
