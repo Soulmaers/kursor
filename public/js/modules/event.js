@@ -47,6 +47,7 @@ buttonTth.addEventListener('click', () => {
     })
     const tyresActive = document.querySelector('.tiresActiv')
     console.log(tyresActive.id)
+
     reqTech(arrNameCol, tyresActive.id);
     viewTech(tyresActive.id);
 })

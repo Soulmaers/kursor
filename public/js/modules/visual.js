@@ -3,7 +3,7 @@ import { objColor, generT, generFront, generDav } from './content.js'
 import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
 //import { geoPosition } from './requests.js'
 import { geoloc } from './wialon.js'
-import { protekGrafTwo, protekGrafThree, protekGrafFour } from './canvas.js'
+import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
 import { navigator } from './navigator.js'
 
 let start;
@@ -468,7 +468,7 @@ export function viewShina(message, arg, params) {
 
 export function viewDinamic(arr) {
     const conts = document.querySelectorAll('.contBar2')
-
+    console.log(arr)
     conts.forEach(el => {
         el.style.display = 'none'
     })
@@ -483,7 +483,13 @@ export function viewDinamic(arr) {
     let y2;
     let y3;
     let y4;
-
+    if (arrAll.length == []) {
+        conts.forEach(e => {
+            e.style.display = 'block'
+            e.style.width = '116px'
+        })
+        protekGrafFree()
+    }
     if (arrAll.length == 2) {
         y1 = (120 - arrAll[0]) / 2
         y2 = (120 - arrAll[1]) / 2
