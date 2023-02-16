@@ -495,7 +495,7 @@ export function viewDinamic(arr) {
         y2 = (120 - arrAll[1]) / 2
         conts[0].style.display = 'block'
         conts[0].style.width = '348px'
-        protekGrafTwo(y1, y2)
+        protekGrafTwo(y1, y2, arr)
     }
     if (arrAll.length == 3) {
         y1 = (120 - arrAll[0]) / 2
@@ -506,7 +506,7 @@ export function viewDinamic(arr) {
         conts[1].style.display = 'block'
         conts[0].style.width = '174px'
         conts[1].style.width = '174px'
-        protekGrafThree(y1, y2, y3)
+        protekGrafThree(y1, y2, y3, arr)
     }
     if (arrAll.length === 4) {
         conts.forEach(e => {
@@ -518,7 +518,7 @@ export function viewDinamic(arr) {
         y2 = (120 - arrAll[1]) / 2
         y3 = (120 - arrAll[2]) / 2
         y4 = (120 - arrAll[3]) / 2
-        protekGrafFour(y1, y2, y3, y4)
+        protekGrafFour(y1, y2, y3, y4, arr)
     }
 }
 

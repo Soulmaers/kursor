@@ -92,5 +92,29 @@ export const objColor = {
 }
 
 
+export function gener(el) {
+    let generatedValue;
+    if (el >= 8 && el < 12) {
+        generatedValue = 4;
+    }
+    if (el >= 6 && el < 8) {
+        generatedValue = 3;
+    }
+    if (el >= 4 && el < 6) {
+        generatedValue = 2;
+    }
+    if (el < 4) {
+        generatedValue = 1;
+    }
+    return generatedValue;
+};
+
+
+export const objColors = {
+    4: 'green',
+    3: 'yellow',
+    2: 'orange',
+    1: 'red'
+}
 
 export const data = ["BFGoodrich", "Bridgestone", "Continental", "Cordiant", "Dunlop", "Nokian Tyres", "Gislaved", "Goodyear", "Hankook", "Kumho", "Michelin"];

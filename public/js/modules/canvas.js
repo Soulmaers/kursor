@@ -1,4 +1,4 @@
-
+import { objColors, gener } from './content.js'
 
 //отрисовка графика скорости
 export function chrt1(arr, time) {
@@ -72,7 +72,22 @@ export function chrt1(arr, time) {
 
 
 
-export function protekGrafTwo(y1, y2) {
+export function protekGrafTwo(y1, y2, arr) {
+    let number;
+    const arrNum = [];
+
+    arr.forEach(el => {
+        arrNum.push(Number(el));
+    })
+    if (arrNum[0] <= arrNum[1]) {
+        number = arrNum[0]
+    }
+    else {
+        number = arrNum[1]
+    }
+
+
+    console.log(typeof arrNum[0])
     const c2 = document.getElementById("drawLine2");
     c2.width = 348
     c2.heigth = 60
@@ -85,7 +100,7 @@ export function protekGrafTwo(y1, y2) {
     ctx2.lineTo(348, y2);
     ctx2.lineTo(348, 60);
     ctx2.lineTo(0, 60);
-    ctx2.fillStyle = "rgba(255,104,0, 1)";
+    ctx2.fillStyle = objColors[gener(number)];
     ctx2.fill();
     //  ctx2.stroke();
 
@@ -130,7 +145,28 @@ export function protekGrafTwo(y1, y2) {
 
 
 
-export function protekGrafThree(y1, y2, y3) {
+export function protekGrafThree(y1, y2, y3, arr) {
+
+    let number;
+    const arrNum = [];
+
+    arr.forEach(el => {
+        arrNum.push(Number(el));
+    })
+    if (arrNum[0] <= arrNum[1] && arrNum[0] <= arrNum[2]) {
+        number = arrNum[0]
+    }
+    if (arrNum[1] <= arrNum[0] && arrNum[1] <= arrNum[2]) {
+        number = arrNum[1]
+    }
+    if (arrNum[2] <= arrNum[0] && arrNum[2] <= arrNum[1]) {
+        number = arrNum[2]
+    }
+
+
+
+
+
     const c2 = document.getElementById("drawLine2");
     const ctx2 = c2.getContext("2d");
     c2.width = 174
@@ -143,7 +179,7 @@ export function protekGrafThree(y1, y2, y3) {
     ctx2.lineTo(174, y2);
     ctx2.lineTo(174, 60);
     ctx2.lineTo(0, 60);
-    ctx2.fillStyle = "rgba(255,104,0, 1)";
+    ctx2.fillStyle = objColors[gener(number)];
     ctx2.fill();
     //  ctx2.stroke();
 
@@ -184,7 +220,7 @@ export function protekGrafThree(y1, y2, y3) {
     ctx3.lineTo(174, y3);
     ctx3.lineTo(174, 60);
     ctx3.lineTo(0, 60);
-    ctx3.fillStyle = "rgba(255,104,0, 1)";
+    ctx3.fillStyle = objColors[gener(number)];
     ctx3.fill();
     // ctx3.stroke();
 
@@ -217,9 +253,30 @@ export function protekGrafThree(y1, y2, y3) {
 }
 
 
+export function protekGrafFour(y1, y2, y3, y4, arr) {
 
 
-export function protekGrafFour(y1, y2, y3, y4) {
+    let number;
+    const arrNum = [];
+
+    arr.forEach(el => {
+        arrNum.push(Number(el));
+    })
+    if (arrNum[0] <= arrNum[1] && arrNum[0] <= arrNum[2] && arrNum[0] <= arrNum[3]) {
+        number = arrNum[0]
+    }
+    if (arrNum[1] <= arrNum[0] && arrNum[1] <= arrNum[2] && arrNum[1] <= arrNum[3]) {
+        number = arrNum[1]
+    }
+    if (arrNum[2] <= arrNum[0] && arrNum[2] <= arrNum[1] && arrNum[2] <= arrNum[3]) {
+        number = arrNum[2]
+    }
+    if (arrNum[3] <= arrNum[0] && arrNum[3] <= arrNum[1] && arrNum[3] <= arrNum[2]) {
+        number = arrNum[3]
+    }
+
+
+
     const c2 = document.getElementById("drawLine2");
     const ctx2 = c2.getContext("2d");
     c2.width = 116
@@ -232,7 +289,7 @@ export function protekGrafFour(y1, y2, y3, y4) {
     ctx2.lineTo(116, y2);
     ctx2.lineTo(116, 60);
     ctx2.lineTo(0, 60);
-    ctx2.fillStyle = "rgba(255,104,0, 1)";
+    ctx2.fillStyle = objColors[gener(number)];
     ctx2.fill();
     // ctx2.stroke();
 
@@ -270,7 +327,7 @@ export function protekGrafFour(y1, y2, y3, y4) {
     ctx3.lineTo(116, y3);
     ctx3.lineTo(116, 60);
     ctx3.lineTo(0, 60);
-    ctx3.fillStyle = "rgba(255,104,0, 1)";
+    ctx3.fillStyle = objColors[gener(number)];
     ctx3.fill();
     // ctx3.stroke();
 
@@ -310,7 +367,7 @@ export function protekGrafFour(y1, y2, y3, y4) {
     ctx4.lineTo(116, y4);
     ctx4.lineTo(116, 60);
     ctx4.lineTo(0, 60);
-    ctx4.fillStyle = "rgba(255,104,0, 1)";
+    ctx4.fillStyle = objColors[gener(number)];
     ctx4.fill();
     //  ctx4.stroke();
 
