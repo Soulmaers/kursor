@@ -362,36 +362,44 @@ const convert = (ob) => {
 
 let startList = 0;
 export function viewList(model, message, result, values) {
-
-    //    listCar.remove();
-
+    /*
+        if (startList >= 4) {
+            const bigDiv = document.querySelectorAll('.bigDiv')
+            const trail = document.querySelectorAll('.trail')
+            const osi = document.querySelectorAll('.osi')
+            const cont3 = document.querySelectorAll('.cont3')
+    
+            bigDiv.forEach(e => {
+                e.remove()
+            })
+            trail.forEach(e => {
+                e.remove()
+            })
+            osi.forEach(e => {
+                e.remove()
+            })
+            cont3.forEach(e => {
+                e.remove()
+            })
+    
+        }*/
     const modelUniq = convert(model.result)
     modelUniq.forEach(el => {
         el
-
     })
-
-
-
-    //   console.log(modelUniq)
     const listProfil = document.querySelector('.list_profil')
     const listCar = document.createElement('div')
     listCar.classList.add('bigDiv')
     const nameCar = model.message.replace(/\s+/g, '')
-
     listCar.classList.add(`${nameCar}`)
     listProfil.appendChild(listCar)
-    // let count = modelUniq.osi
-    // console.log(count)
+
     modelUniq.forEach(os => {
-
-
         const osi = document.createElement('div')
         os.trailer === 'Прицеп' ? (osi.classList.add('osi_list'), osi.classList.add('trail')) : osi.classList.add('osi_list')
         listCar.appendChild(osi)
         os.tyres === 2 ? osi.innerHTML = twoTyres : osi.innerHTML = forTyres
     })
-
     const listTrail = document.querySelector('.list_trail')
     const trail = document.createElement('div')
     trail.classList.add('traile')
@@ -410,11 +418,12 @@ export function viewList(model, message, result, values) {
         cont3.appendChild(el)
     })
     viewShina(message, result, values)
-    setInterval(viewShina, 6000, message, result, values)
+    //  setInterval(viewShina, 6000, message, result, values)
+    startList++
 }
 
 export function viewShina(message, arg, params) {
-    //   console.log('запуск')
+    // console.log(message, arg, params)
     const modelUniqValues = convert(params)
     const nameCar = message.replace(/\s+/g, '')
     const bigDiv = document.querySelectorAll(`.${nameCar}`)

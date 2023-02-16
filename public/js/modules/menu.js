@@ -47,7 +47,7 @@ export function zapros() {
             arrCar.forEach(el => {
                 //   el.nm.replace(/\s+/g, '')
                 loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями
-                // setInterval(loadParamsViewList, 6000, el.nm)
+                //  setInterval(loadParamsViewList, 6000, el.nm)
             })
 
             const nav = document.querySelectorAll('.car')
