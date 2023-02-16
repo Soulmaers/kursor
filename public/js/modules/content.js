@@ -94,6 +94,9 @@ export const objColor = {
 
 export function gener(el) {
     let generatedValue;
+    if (el === 12) {
+        generatedValue = 5;
+    }
     if (el >= 8 && el < 12) {
         generatedValue = 4;
     }
@@ -111,6 +114,7 @@ export function gener(el) {
 
 
 export const objColors = {
+    5: 'rgba(255,104,0, 1)',
     4: 'green',
     3: 'yellow',
     2: 'orange',

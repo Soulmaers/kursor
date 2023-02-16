@@ -128,8 +128,6 @@ export function protekGrafTwo(y1, y2, arr) {
     ctx2.fill();
     //ctx2.stroke();
 
-
-
     ctx2.beginPath();
     ctx2.lineWidth = "1";
     ctx2.strokeStyle = "#000";
@@ -162,11 +160,6 @@ export function protekGrafThree(y1, y2, y3, arr) {
     if (arrNum[2] <= arrNum[0] && arrNum[2] <= arrNum[1]) {
         number = arrNum[2]
     }
-
-
-
-
-
     const c2 = document.getElementById("drawLine2");
     const ctx2 = c2.getContext("2d");
     c2.width = 174
@@ -274,7 +267,6 @@ export function protekGrafFour(y1, y2, y3, y4, arr) {
     if (arrNum[3] <= arrNum[0] && arrNum[3] <= arrNum[1] && arrNum[3] <= arrNum[2]) {
         number = arrNum[3]
     }
-
 
 
     const c2 = document.getElementById("drawLine2");
