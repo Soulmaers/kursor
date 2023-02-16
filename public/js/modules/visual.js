@@ -3,6 +3,7 @@ import { objColor, generT, generFront, generDav } from './content.js'
 import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
 //import { geoPosition } from './requests.js'
 import { geoloc } from './wialon.js'
+import { protekGrafTwo, protekGrafThree, protekGrafFour } from './canvas.js'
 import { navigator } from './navigator.js'
 
 let start;
@@ -465,100 +466,66 @@ export function viewShina(message, arg, params) {
 }
 
 
-export function viewDinamic(arr) {
+export function viewDinamic(arr, keys) {
     const conts = document.querySelectorAll('.contBar2')
+    const titleMM = document.querySelectorAll('.titleMM')
+    const valuePro = document.querySelectorAll('.valuePro')
     conts.forEach(el => {
         el.style.display = 'none'
     })
-    const c2 = document.getElementById("drawLine2");
-    const ctx2 = c2.getContext("2d");
-    const c3 = document.getElementById("drawLine3");
-    const ctx3 = c3.getContext("2d");
-    const c4 = document.getElementById("drawLine4");
-    const ctx4 = c4.getContext("2d");
 
-    ctx2.clearRect(0, 0, 116, 60);
-    ctx3.clearRect(0, 0, 116, 60);
-    ctx4.clearRect(0, 0, 116, 60);
-
-
-
-    //  const conts = document.querySelectorAll('.contBar2')
-    const progressBar2 = document.querySelector('.progressBar2')
     const arrAll = [];
-    // const arrTest = [74, 82, 104, 65]
+
+
+
+    //number[0].textContent = keys[8]
+    //number[1].textContent = keys[9]
+    //number[2].textContent = keys[10]
+    //number[3].textContent = keys[11]
+
+    /*
+    valuePro[0].children[0].textContent = 'ост.:' + res.values[0].N1
+    valuePro[0].children[1].textContent = 'изн.:' + (120 / 10 - res.values[0].N1).toFixed(1)
+    valuePro[1].children[0].textContent = 'ост.:' + res.values[0].N2
+    valuePro[1].children[1].textContent = 'изн.:' + (120 / 10 - res.values[0].N2).toFixed(1)
+    valuePro[2].children[0].textContent = 'ост.:' + res.values[0].N3
+    valuePro[2].children[1].textContent = 'изн.:' + (120 / 10 - res.values[0].N3).toFixed(1)
+    valuePro[3].children[0].textContent = 'ост.:' + res.values[0].N4
+    valuePro[3].children[1].textContent = 'изн.:' + (120 / 10 - res.values[0].N4).toFixed(1)
+*/
+
+
+
+
     arr.forEach(el => {
         arrAll.push(el * 10)
     })
-    console.log(arrAll)
-    console.log(arr)
+
     let y1;
     let y2;
     let y3;
     let y4;
-
 
     if (arrAll.length == 2) {
         y1 = (120 - arrAll[0]) / 2
         y2 = (120 - arrAll[1]) / 2
         conts[0].style.display = 'block'
         conts[0].style.width = '348px'
-        //progressBar2.style.width = '142px'
-        // progressBar2.style.margin = '0 auto'
+        protekGrafTwo(y1, y2)
 
-        const c2 = document.getElementById("drawLine2");
-        c2.width = 348
-        c2.heigth = 60
-        const ctx2 = c2.getContext("2d");
-        ctx2.beginPath();
-        ctx2.lineWidth = "1";
-        ctx2.strokeStyle = "#000";
-        ctx2.moveTo(0, 60);
-        ctx2.lineTo(0, y1);
-        ctx2.lineTo(348, y2);
-        ctx2.lineTo(348, 60);
-        ctx2.lineTo(0, 60);
-        ctx2.fillStyle = "rgba(255,104,0, 1)";
-        ctx2.fill();
-        //  ctx2.stroke();
+        titleMM[0].style.display = 'flex'
+        titleMM[1].style.display = 'flex'
 
-        ctx2.beginPath();
-        ctx2.lineWidth = "1";
-        ctx2.strokeStyle = "#000";
-        ctx2.moveTo(0, 50);
-        ctx2.lineTo(5, 50);
-        ctx2.lineTo(10, 0);
-        ctx2.lineTo(0, 0);
-        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx2.fill();
-        //  ctx2.stroke();
-
-        ctx2.beginPath();
-        ctx2.lineWidth = "1";
-        ctx2.strokeStyle = "#000";
-
-        ctx2.moveTo(166.5, 0);
-        ctx2.lineTo(166.5 + 5, 50);
-        ctx2.lineTo(166.5 + 10, 50);
-        ctx2.lineTo(166.5 + 15, 0);
-        //  ctx2.lineTo(0, 0);
-        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx2.fill();
-        //ctx2.stroke();
-
-
-
-        ctx2.beginPath();
-        ctx2.lineWidth = "1";
-        ctx2.strokeStyle = "#000";
-        ctx2.moveTo(348, 50);
-        ctx2.lineTo(348 - 5, 50);
-        ctx2.lineTo(348 - 10, 0);
-        ctx2.lineTo(348, 0);
-        ctx2.fillStyle = "rgba(14, 12, 11, 1);";
-        ctx2.fill();
-        //  ctx2.stroke();
-
+        titleMM[0].style.position = 'absolute'
+        titleMM[0].style.bottom = 0
+        titleMM[0].style.left = '30px'
+        position: absolute;
+        bottom: 0;
+        left: '30px';
+        valuePro[0].children[0].textContent = 'ост.:' + arrAll[0] / 10
+        valuePro[0].children[1].textContent = 'изн.:' + (120 / 10 - arrAll[0] / 10).toFixed(1)
+        valuePro[1].children[0].textContent = 'ост.:' + arrAll[1] / 10
+        valuePro[1].children[1].textContent = 'изн.:' + (120 / 10 - arrAll[1] / 10).toFixed(1)
 
 
     }
@@ -571,93 +538,7 @@ export function viewDinamic(arr) {
         conts[1].style.display = 'block'
         conts[0].style.width = '174px'
         conts[1].style.width = '174px'
-        // progressBar2.style.width = '284px'
-        // progressBar2.style.margin = '0 auto'
-
-        const c2 = document.getElementById("drawLine2");
-        const ctx2 = c2.getContext("2d");
-        c2.width = 174
-        c2.heigth = 60
-        ctx2.beginPath();
-        ctx2.lineWidth = "1";
-        ctx2.strokeStyle = "#000";
-        ctx2.moveTo(0, 60);
-        ctx2.lineTo(0, y1);
-        ctx2.lineTo(174, y2);
-        ctx2.lineTo(174, 60);
-        ctx2.lineTo(0, 60);
-        ctx2.fillStyle = "rgba(255,104,0, 1)";
-        ctx2.fill();
-        //  ctx2.stroke();
-
-        ctx2.beginPath();
-        ctx2.lineWidth = "1";
-        ctx2.strokeStyle = "#000";
-        ctx2.moveTo(0, 0);
-        ctx2.lineTo(0, 50);
-        ctx2.lineTo(5, 50);
-        ctx2.lineTo(10, 0);
-        ctx2.lineTo(0, 0);
-        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx2.fill();
-        // ctx2.stroke();
-
-        ctx2.beginPath();
-        //ctx2.lineWidth = "1";
-        //ctx2.strokeStyle = "#000";
-        ctx2.moveTo(174, 50);
-        ctx2.lineTo(174 - 5, 50);
-        ctx2.lineTo(174 - 10, 0);
-        ctx2.lineTo(174, 0);
-        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx2.fill();
-        //  ctx2.stroke();
-
-
-
-
-        const c3 = document.getElementById("drawLine3");
-        c3.width = 174
-        c3.heigth = 60
-        const ctx3 = c3.getContext("2d");
-        ctx3.beginPath();
-        ctx3.lineWidth = "1";
-        ctx3.strokeStyle = "#000";
-        ctx3.moveTo(0, y2);
-        ctx3.lineTo(174, y3);
-        ctx3.lineTo(174, 60);
-        ctx3.lineTo(0, 60);
-        ctx3.fillStyle = "rgba(255,104,0, 1)";
-        ctx3.fill();
-        // ctx3.stroke();
-
-        ctx3.beginPath();
-        ctx3.lineWidth = "1";
-        ctx3.strokeStyle = "#000";
-        ctx3.moveTo(0, 0);
-        ctx3.lineTo(0, 50);
-        ctx3.lineTo(5, 50);
-        ctx3.lineTo(10, 0);
-        ctx3.lineTo(0, 0);
-        //ctx2.lineTo(0, 60);
-        ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx3.fill();
-        //  ctx3.stroke();
-
-        ctx3.beginPath();
-        ctx3.lineWidth = "1";
-        ctx3.strokeStyle = "#000";
-        ctx3.moveTo(174, 50);
-        ctx3.lineTo(169, 50);
-        ctx3.lineTo(164, 0);
-        ctx3.lineTo(174, 0);
-        //ctx2.lineTo(0, 60);
-        ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx3.fill();
-        //  ctx3.stroke();
-
-
-
+        protekGrafThree(y1, y2, y3)
     }
     if (arrAll.length === 4) {
         conts.forEach(e => {
@@ -669,149 +550,10 @@ export function viewDinamic(arr) {
         y2 = (120 - arrAll[1]) / 2
         y3 = (120 - arrAll[2]) / 2
         y4 = (120 - arrAll[3]) / 2
-
-        // progressBar2.style.width = '374px'
-        // progressBar2.style.margin = '0 auto'
-
-        const c2 = document.getElementById("drawLine2");
-        const ctx2 = c2.getContext("2d");
-        c2.width = 116
-        c2.heigth = 60
-        ctx2.beginPath();
-        // ctx2.lineWidth = "1";
-        // ctx2.strokeStyle = "#000";
-        ctx2.moveTo(0, 60);
-        ctx2.lineTo(0, y1);
-        ctx2.lineTo(116, y2);
-        ctx2.lineTo(116, 60);
-        ctx2.lineTo(0, 60);
-        ctx2.fillStyle = "rgba(255,104,0, 1)";
-        ctx2.fill();
-        // ctx2.stroke();
-
-        ctx2.beginPath();
-        ctx2.lineWidth = "1";
-        ctx2.strokeStyle = "#000";
-        ctx2.moveTo(0, 0);
-        ctx2.lineTo(0, 50);
-        ctx2.lineTo(5, 50);
-        ctx2.lineTo(10, 0);
-        ctx2.lineTo(0, 0);
-        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx2.fill();
-        //  ctx2.stroke();
-
-        ctx2.beginPath();
-        ctx2.lineWidth = "1";
-        ctx2.strokeStyle = "#000";
-        ctx2.moveTo(116, 50);
-        ctx2.lineTo(116 - 5, 50);
-        ctx2.lineTo(116 - 10, 0);
-        ctx2.lineTo(116, 0);
-        ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx2.fill();
-        //  ctx2.stroke();
-
-        const c3 = document.getElementById("drawLine3");
-        const ctx3 = c3.getContext("2d");
-        c3.width = 116
-        c3.heigth = 60
-        ctx3.beginPath();
-        //  ctx3.lineWidth = "1";
-        // ctx3.strokeStyle = "#000";
-        ctx3.moveTo(0, y2);
-        ctx3.lineTo(116, y3);
-        ctx3.lineTo(116, 60);
-        ctx3.lineTo(0, 60);
-        ctx3.fillStyle = "rgba(255,104,0, 1)";
-        ctx3.fill();
-        // ctx3.stroke();
-
-        ctx3.beginPath();
-        ctx3.lineWidth = "1";
-        ctx3.strokeStyle = "#000";
-        ctx3.moveTo(0, 0);
-        ctx3.lineTo(0, 50);
-        ctx3.lineTo(5, 50);
-        ctx3.lineTo(10, 0);
-        ctx3.lineTo(0, 0);
-        //ctx2.lineTo(0, 60);
-        ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx3.fill();
-        // ctx3.stroke();
-
-        ctx3.beginPath();
-        ctx3.lineWidth = "1";
-        ctx3.strokeStyle = "#000";
-        ctx3.moveTo(116, 50);
-        ctx3.lineTo(111, 50);
-        ctx3.lineTo(106, 0);
-        ctx3.lineTo(116, 0);
-        //ctx2.lineTo(0, 60);
-        ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx3.fill();
-        // ctx3.stroke();
-
-        const c4 = document.getElementById("drawLine4");
-        const ctx4 = c4.getContext("2d");
-        c4.width = 116
-        c4.heigth = 60
-        ctx4.beginPath();
-        //  ctx4.lineWidth = "1";
-        //  ctx4.strokeStyle = "#000";
-        ctx4.moveTo(0, y3);
-        ctx4.lineTo(116, y4);
-        ctx4.lineTo(116, 60);
-        ctx4.lineTo(0, 60);
-        ctx4.fillStyle = "rgba(255,104,0, 1)";
-        ctx4.fill();
-        //  ctx4.stroke();
-
-        ctx4.beginPath();
-        ctx4.lineWidth = "1";
-        ctx4.strokeStyle = "#000";
-        ctx4.moveTo(0, 0);
-        ctx4.lineTo(0, 50);
-        ctx4.lineTo(5, 50);
-        ctx4.lineTo(10, 0);
-        ctx4.lineTo(0, 0);
-        //ctx2.lineTo(0, 60);
-        ctx4.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx4.fill();
-        //  ctx4.stroke();
-
-        ctx4.beginPath();
-        ctx4.lineWidth = "1";
-        ctx4.strokeStyle = "#000";
-        ctx4.moveTo(116, 50);
-        ctx4.lineTo(111, 50);
-        ctx4.lineTo(106, 0);
-        ctx4.lineTo(116, 0);
-        //ctx2.lineTo(0, 60);
-        ctx4.fillStyle = 'rgba(14, 12, 11, 1)';
-        ctx4.fill();
-        // ctx4.stroke();
+        protekGrafFour(y1, y2, y3, y4)
     }
-
-
-
-    // let y;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
+
 
 
 

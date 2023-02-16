@@ -207,26 +207,38 @@ export function viewTech(id) {
         .then(res => {
             console.log(res.values)
 
-            const titleMM = document.querySelectorAll('.titleMM')
+
+
+            const keys = [];
+            for (let key in res.values[0]) {
+                keys.push(key);
+            }
+            console.log(keys)
+
+            const number = document.querySelectorAll('.number')
+            const valuePro = document.querySelectorAll('.valuePro')
+
+            console.log(valuePro[0])
             if (res.values.length == 0) {
-                titleMM[0].textContent = ''
-                titleMM[1].textContent = ''
+                number.forEach(e => {
+                    e.textContent = ''
+                })
+
             }
             else if (res.values.length > 0) {
-                titleMM[0].textContent = res.values[0].protector1
-                titleMM[1].textContent = res.values[0].protector2
-                titleMM[2].textContent = res.values[0].protector3
-                titleMM[3].textContent = res.values[0].protector4
+
+
+                console.log(res.values[0].N1)
                 const protector = [];
-                protector.push(res.values[0].protector1, res.values[0].protector2, res.values[0].protector3, res.values[0].protector4)
+                protector.push(res.values[0].N1, res.values[0].N2, res.values[0].N3, res.values[0].N4)
                 const protectorClear = [];
                 protector.forEach(el => {
                     if (el !== '') {
                         protectorClear.push(el)
                     }
                 })
-                console.log(protectorClear)
-                viewDinamic(protectorClear)
+                console.log(protectorClear, keys)
+                viewDinamic(protectorClear, keys)
 
                 const nval = (Object.entries(res.values[0]))
                 const massVal = nval.shift()

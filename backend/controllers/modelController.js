@@ -180,7 +180,7 @@ module.exports.techView = (req, res) => {
     console.log(tableModelView)
     const count = req.body.id
     try {
-        const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, protector1, protector2,protector3, protector4, protectorDate FROM ${tableModelView} WHERE  idTyres=${count}`
+        const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, N1, N2,N3, N4, protectorDate FROM ${tableModelView} WHERE  idTyres=${count}`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             //console.log(results)

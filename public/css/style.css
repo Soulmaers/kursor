@@ -1672,9 +1672,26 @@ div.wrapper {
 }
 
 .titleMM {
-  width: 30px;
-  height: 20px;
-  border: 1px solid gray;
+  display: none;
+  align-items: center;
+
+  font-size: 0.5rem;
+  font-weight: bold;
+
+}
+
+
+
+
+
+.valuePro {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.text {
+  margin: 0;
 }
 
 
