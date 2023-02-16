@@ -184,6 +184,7 @@ export function reqTech(arr, id) {
 }
 
 export function viewTech(id) {
+    console.log(id)
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
@@ -233,10 +234,10 @@ export function viewTech(id) {
                 number[1].textContent = keys[9]
                 number[2].textContent = keys[10]
                 number[3].textContent = keys[11]
-                text[0].textContent = res.values[0].N1
-                text[1].textContent = res.values[0].N2
-                text[2].textContent = res.values[0].N3
-                text[3].textContent = res.values[0].N4
+                text[0].textContent = res.values[0].N1 + 'мм'
+                text[1].textContent = res.values[0].N2 + 'мм'
+                text[2].textContent = res.values[0].N3 + 'мм'
+                text[3].textContent = res.values[0].N4 + 'мм'
 
                 console.log(res.values[0].N1)
                 const protector = [];
@@ -245,7 +246,7 @@ export function viewTech(id) {
 
                 titleMM.forEach(el => {
                     el.style.display = 'flex';
-                    if (el.children[1].textContent == '') {
+                    if (el.children[1].textContent == 'мм' || el.children[1].textContent == '') {
                         el.style.display = 'none';
                     }
                 })
@@ -255,7 +256,7 @@ export function viewTech(id) {
                     }
                 })
                 console.log(protectorClear, keys)
-                viewDinamic(protectorClear, keys)
+                viewDinamic(protectorClear)
 
                 const nval = (Object.entries(res.values[0]))
                 const massVal = nval.shift()

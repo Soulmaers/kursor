@@ -1,4 +1,4 @@
-import { postTyres, reqDelete, paramsDelete, reqTech } from './requests.js'
+import { postTyres, reqDelete, paramsDelete, reqTech, viewTech } from './requests.js'
 import { alarmClear } from './visual.js'
 import { data } from './content.js'
 export function saveTyres(arr) {
@@ -36,6 +36,7 @@ detaly.addEventListener('click', () => {
 })*/
 
 
+
 const buttonTth = document.querySelector('.buttonTth')
 buttonTth.addEventListener('click', () => {
     const techText = document.querySelectorAll('.tech')
@@ -45,7 +46,9 @@ buttonTth.addEventListener('click', () => {
         arrNameCol.push(el.id)
     })
     const tyresActive = document.querySelector('.tiresActiv')
+    console.log(tyresActive.id)
     reqTech(arrNameCol, tyresActive.id);
+    viewTech(tyresActive.id);
 })
 
 

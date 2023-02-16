@@ -55,7 +55,7 @@ module.exports.tech = (req, res) => {
             ${req.body.arr[0]} varchar(255),
             ${req.body.arr[1]} varchar(255),
             ${req.body.arr[2]} int(255),
-            ${req.body.arr[3]} int(255),
+            ${req.body.arr[3]} varchar(255),
             ${req.body.arr[4]} int(255),
             ${req.body.arr[5]} varchar(255),
             ${req.body.arr[6]} int(255),
@@ -98,11 +98,13 @@ module.exports.tech = (req, res) => {
                 }
                 if (mas.includes(parseInt(value[0][0]))) {
                     console.log('запусккк3')
-                    console.log(value[0])
-                    const sql = `UPDATE ${tableModel} SET idTyres='${value[0][0]}', ${req.body.arr[0]}='${value[0][1]}', ${req.body.arr[1]}='${value[0][2]}',${req.body.arr[2]}='${value[0][3]}',
+                    console.log(req.body.arr[11])
+                    console.log(value[0][12])
+                    const sql = `UPDATE ${tableModel} SET idTyres='${value[0][0]}', ${req.body.arr[0]}='${value[0][1]}', 
+                    ${req.body.arr[1]}='${value[0][2]}',${req.body.arr[2]}='${value[0][3]}',
                         ${req.body.arr[3]}='${value[0][4]}',${req.body.arr[4]}='${value[0][5]}',${req.body.arr[5]}='${value[0][6]}',${req.body.arr[6]}='${value[0][7]}',
-                        ${req.body.arr[7]}='${value[0][8]}', ${req.body.arr[8]}='${value[0][9]}, ${req.body.arr[9]}='${value[0][10]},
-                        ${req.body.arr[10]}='${value[0][11]},${req.body.arr[11]}='${value[0][12]}'WHERE idTyres=${count} `;
+                        ${req.body.arr[7]}='${value[0][8]}', ${req.body.arr[8]}='${value[0][9]}', ${req.body.arr[9]}='${value[0][10]}',
+                        ${req.body.arr[10]}='${value[0][11]}', ${req.body.arr[11]}='${value[0][12]}'WHERE idTyres=${count}`;
                     connection.query(sql, [value], function (err, results) {
                         if (err) console.log(err);
                     });
@@ -177,13 +179,14 @@ module.exports.tyres = (req, res) => {
 module.exports.techView = (req, res) => {
     //  console.log(req.body.activePost)
     const tableModelView = 'tech' + req.body.activePost
-    console.log(tableModelView)
+    console.log('работаем')
     const count = req.body.id
+    console.log(count)
     try {
         const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, N1, N2,N3, N4, protectorDate FROM ${tableModelView} WHERE  idTyres=${count}`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
-            //console.log(results)
+            console.log(results)
             response.status(200, results, '', res)
         })
     }

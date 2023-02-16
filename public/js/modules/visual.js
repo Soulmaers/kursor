@@ -373,7 +373,7 @@ export function viewList(model, message, result, values) {
 
 
 
-    console.log(modelUniq)
+    //   console.log(modelUniq)
     const listProfil = document.querySelector('.list_profil')
     const listCar = document.createElement('div')
     listCar.classList.add('bigDiv')
@@ -468,14 +468,12 @@ export function viewShina(message, arg, params) {
 
 export function viewDinamic(arr) {
     const conts = document.querySelectorAll('.contBar2')
-    const titleMM = document.querySelectorAll('.titleMM')
+
     conts.forEach(el => {
         el.style.display = 'none'
     })
 
     const arrAll = [];
-
-
 
     arr.forEach(el => {
         arrAll.push(el * 10)
@@ -492,9 +490,6 @@ export function viewDinamic(arr) {
         conts[0].style.display = 'block'
         conts[0].style.width = '348px'
         protekGrafTwo(y1, y2)
-
-
-
     }
     if (arrAll.length == 3) {
         y1 = (120 - arrAll[0]) / 2
