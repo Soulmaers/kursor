@@ -227,7 +227,7 @@ export function viewTech(id) {
                 text.forEach(e => {
                     e.textContent = ''
                 })
-
+                viewDinamic([])
             }
             else if (res.values.length > 0) {
                 number[0].textContent = keys[8]
