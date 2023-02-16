@@ -678,8 +678,8 @@ export function viewDinamic(arr) {
         c2.width = 116
         c2.heigth = 60
         ctx2.beginPath();
-        ctx2.lineWidth = "1";
-        ctx2.strokeStyle = "#000";
+        // ctx2.lineWidth = "1";
+        // ctx2.strokeStyle = "#000";
         ctx2.moveTo(0, 60);
         ctx2.lineTo(0, y1);
         ctx2.lineTo(116, y2);
@@ -717,8 +717,8 @@ export function viewDinamic(arr) {
         c3.width = 116
         c3.heigth = 60
         ctx3.beginPath();
-        ctx3.lineWidth = "1";
-        ctx3.strokeStyle = "#000";
+        //  ctx3.lineWidth = "1";
+        // ctx3.strokeStyle = "#000";
         ctx3.moveTo(0, y2);
         ctx3.lineTo(116, y3);
         ctx3.lineTo(116, 60);
@@ -757,8 +757,8 @@ export function viewDinamic(arr) {
         c4.width = 116
         c4.heigth = 60
         ctx4.beginPath();
-        ctx4.lineWidth = "1";
-        ctx4.strokeStyle = "#000";
+        //  ctx4.lineWidth = "1";
+        //  ctx4.strokeStyle = "#000";
         ctx4.moveTo(0, y3);
         ctx4.lineTo(116, y4);
         ctx4.lineTo(116, 60);
