@@ -67,7 +67,7 @@ export function zapros() {
 
 
 function loadParamsViewList(car) {
-    console.log('запуск')
+    //  console.log('запуск')
     // console.log(car)
     fetch('api/listModel', {
         method: "POST",

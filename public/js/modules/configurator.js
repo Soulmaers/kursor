@@ -98,7 +98,7 @@ function os(arr) {
             e.textContent == 'Прицеп' ?
                 pricep(arr[arr.length - 1])
                 :
-                arr[arr.length - 1].style.backgroundImage = "url('../image/line_red.png')"
+                arr[arr.length - 1].style.backgroundImage = "url('../image/line_blue.png')"
         }))
 
     linkSelectTires.forEach(e =>

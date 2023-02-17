@@ -14,9 +14,11 @@ export function viewMenuParams() {
     const wrapperButton = document.querySelector('.wrapper_button')
     const obo = document.querySelector('.obo')
     const tiresLink = document.querySelectorAll('.tires_link')
+
     tiresLink.forEach(e => {
         e.addEventListener('click', () => {
-            console.log('старт')
+            console.log('нажал')
+
             kolesos.push(e)
             speedGraf.style.display = 'none';
             sensor(btnsens, titleSens, obo)
@@ -28,13 +30,18 @@ export function viewMenuParams() {
                 msg.forEach(el => el.classList.remove('act'))
             });
             wrapperButton.style.display = 'flex';
+            //  const techInfo = document.querySelector('.techInfo')
+
             tiresLink.forEach(el => {
                 el.classList.remove('tiresActiv')
             }
             );
+
             e.classList.add('tiresActiv')
+            //  techInfo.style.display = (techInfo.style.display != 'block') ? 'block' : 'none';
+
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
-            console.log('licreate2')
+
         })
 
     })
@@ -82,7 +89,7 @@ export function loadParamsView() {
                     el.trailer == 'Прицеп' ?
                         pricep(centerOs[el.osi - 1])
                         :
-                        centerOs[el.osi - 1].style.backgroundImage = "url('../image/line_red.png')"
+                        centerOs[el.osi - 1].style.backgroundImage = "url('../image/line_blue.png')"
                     if (el.tyres == 2) {
                         centerOs[el.osi - 1].previousElementSibling.children[0].style.display = 'flex';
                         centerOs[el.osi - 1].nextElementSibling.children[1].style.display = 'flex';
