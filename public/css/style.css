@@ -458,7 +458,7 @@ input[type="date"] {
 }
 
 .buttonTth {
-  margin-top: 10px;
+
   background-color: gray;
   padding: 10px 9px;
   font-size: 13px;
@@ -1607,15 +1607,27 @@ div.wrapper {
 }
 
 
-
+.radioVal {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-family: Roboto;
+  font-weight: bold;
+}
 
 .protector {
   margin-top: 20px;
 
   height: 120px;
-  align-items: flex-end;
+
   display: flex;
   flex-direction: column;
+  align-items: center;
+}
+
+.title_prot {
+  font-weight: bold;
+  font-size: 1rem;
 }
 
 

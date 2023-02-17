@@ -22,6 +22,8 @@ btnClear.addEventListener('click', () => {
 })
 
 
+
+
 /*
 const detaly = document.querySelector('.detaly')
 detaly.addEventListener('click', () => {
@@ -51,6 +53,10 @@ buttonTth.addEventListener('click', () => {
     reqTech(arrNameCol, tyresActive.id);
     viewTech(tyresActive.id);
 })
+
+
+
+
 
 
 

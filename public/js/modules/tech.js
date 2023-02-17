@@ -1,6 +1,10 @@
 import { viewTech } from './requests.js'
 
 export function tech() {
+    const rad = document.querySelectorAll('[name=radio]')
+    rad.forEach(i => {
+        i.checked === false
+    })
     const formValue = document.querySelectorAll('.formValue')
     const job = document.querySelectorAll('.job')
     console.log(formValue)

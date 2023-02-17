@@ -246,7 +246,7 @@ export function viewTech(id) {
                 const protector = [];
                 protector.push(res.values[0].N1, res.values[0].N2, res.values[0].N3, res.values[0].N4)
                 const protectorClear = [];
-
+                const protectorClearRigth = [];
                 titleMM.forEach(el => {
                     el.style.display = 'flex';
                     if (el.children[1].textContent == 'мм' || el.children[1].textContent == '') {
@@ -256,17 +256,22 @@ export function viewTech(id) {
                 protector.forEach(el => {
                     if (el !== '') {
                         protectorClear.push(el)
+                        protectorClearRigth.push(el)
                     }
                 })
-                //  console.log(protectorClear, keys)
+                console.log(protectorClear)
+                const reverseprotectorClear = protectorClearRigth.reverse();
+                const rad = document.querySelectorAll('[name=radio]')
+
+                rad.forEach(el => {
+                    el.addEventListener('change', () => {
+                        el.id === '1' ? viewDinamic(protectorClear) : viewDinamic(reverseprotectorClear)
+                    })
+                })
                 viewDinamic(protectorClear)
 
                 const nval = (Object.entries(res.values[0]))
                 const massVal = nval.shift()
-                //   console.log(nval)
-                //   console.log(res.values[0].protectorVnesh)
-
-
 
                 const formValue = document.querySelectorAll('.formValue')
                 formValue.forEach((el, index) => {
