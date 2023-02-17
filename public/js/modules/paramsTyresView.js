@@ -50,7 +50,7 @@ export function loadParamsView() {
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
-        const listItem = document.querySelectorAll('.link_menu')[0]
+        const listItem = document.querySelectorAll('.listItem')[0]
         //    console.log(listItem.textContent)
         activePost = listItem.textContent.replace(/\s+/g, '')
         titleCar.textContent = listItem.textContent
@@ -115,7 +115,7 @@ function viewPokasateli() {
          active[0].textContent = 'КранГаличанин Р858ОР178'
      }*/
     if (active[0] == undefined) {
-        const listItem = document.querySelectorAll('.link_menu')[0]
+        const listItem = document.querySelectorAll('.listItem')[0]
         activePost = listItem.textContent.replace(/\s+/g, '')
     }
     else {

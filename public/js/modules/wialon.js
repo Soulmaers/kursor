@@ -77,11 +77,15 @@ export function geoloc() {
             const arr1 = Object.values(result);
             const arrCar = arr1[5];
             //  console.log(arr1[5])
+            const active = document.querySelector('.color')
 
+            //   console.log(act)
             arrCar.forEach(it => {
                 const active = document.querySelector('.color')
+                const act = active.children[0].textContent
                 //  console.log(active)
-                if (it.nm === active.textContent) {
+                if (it.nm === act) {
+                    console.log(act)
                     const prmsT = {
                         "itemId": it.id,
                         "timeFrom": timeFrom,//1657205816,
@@ -90,7 +94,7 @@ export function geoloc() {
                         "flagsMask": 65281,
                         "loadCount": 82710
                     }
-                    //  console.log('запуск гео')
+                    console.log('запуск гео')
 
                     const remoteT = wialon.core.Remote.getInstance();
                     remoteT.remoteCall('messages/load_interval', prmsT,
@@ -217,7 +221,8 @@ const geoPositionTwo = (geo) => {
     //console.log(polyline)
     polyline.addTo(map);
     let iss;
-    const active = document.querySelectorAll('.link_menu')[0].textContent
+    const act = document.querySelectorAll('.listItem')
+    const active = act[0].children[0].textContent
     // console.log(active)
     // const activePost = active[0].textContent.replace(/\s+/g, '')
     fetch('/api/datawialonGeo', {

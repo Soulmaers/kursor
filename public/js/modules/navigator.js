@@ -4,13 +4,13 @@ import { massivionbd, loadParamsView } from './paramsTyresView.js';
 import { geolocTwo } from './wialon.js';
 //import { geoPosition } from './requests.js'
 
-export function navigator(nav) {
-    // loadParamsView()//запрос в базу и получение параметров
-    const navList = document.querySelectorAll('.carList')
+export function navigator() {
+    loadParamsView()//запрос в базу и получение параметров
+    const nav = document.querySelectorAll('.listItem')
     viewOs();
-    geolocTwo()
-
-    // console.log(navList)
+    geolocTwo();
+    nav[0].classList.add('color')
+    console.log(nav)
     nav.forEach(el => {
         el.addEventListener('click', route)
         function route() {

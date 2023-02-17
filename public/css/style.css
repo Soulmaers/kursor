@@ -532,10 +532,12 @@ input[type="date"] {
 }
 
 .color {
-  color: #fff;
+  color: #000;
   font-size: 2rem;
+  font-weight: bold;
   font-family: Roboto;
   border: 1px solid #000;
+  background-color: rgb(204, 204, 204);
 }
 
 .linkSelect {
@@ -1371,8 +1373,6 @@ div.wrapper {
 .list_name {
   width: 150px;
 
-
-
 }
 
 .list_profil {
@@ -1452,7 +1452,7 @@ div.wrapper {
 
 .section {
   width: 30%;
-  display: flex;
+  display: none;
   flex-direction: column;
   margin-top: 1%;
   border: 1px solid lightgray;
@@ -1503,6 +1503,7 @@ div.wrapper {
 
 .wrapperFull {
   display: flex;
+
 }
 
 .osi_list {
@@ -1755,4 +1756,61 @@ input[type="number"]:focus {
   height: 60px;
   background-color: rgba(14, 12, 11, 1);
 
+}
+
+
+.sections {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1%;
+  border: 1px solid lightgray;
+}
+
+.list_arr2 {
+  display: flex;
+  flex-direction: column;
+  width: 470px;
+  border: 1px solid rgb(51, 51, 51);
+}
+
+
+.list_name2 {
+  border: 1px solid rgb(51, 51, 51);
+  font-size: 1rem;
+  width: 150px;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  box-sizing: border-box;
+}
+
+.list_profil2 {
+  border: 1px solid rgb(51, 51, 51);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  width: 150px;
+  padding-left: 5px;
+  box-sizing: border-box;
+
+}
+
+.list_trail2 {
+  box-sizing: border-box;
+  border: 1px solid rgb(51, 51, 51);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  width: 170px;
+  padding-left: 5px;
+
+}
+
+.listItem {
+  cursor: pointer;
+  box-sizing: border-box;
+
+  width: 470px;
+  display: flex;
 }

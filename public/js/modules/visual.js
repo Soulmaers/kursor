@@ -27,7 +27,8 @@ export function visual(el) {
     wrapperRight.style.display = 'flex'
     main.style.display = 'flex'
     speedGraf.style.display = 'block'
-    el.parentNode.classList.add('color')
+    el.classList.add('color')
+    console.log(el)
     viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
     titleCar.textContent = el.textContent
     loadParamsView()
@@ -62,7 +63,7 @@ export function visualNone(e) {
     wrapperButton.style.display = 'none'
     titleSens.style.display = 'none'
     moduleConfig.style.display = 'none'
-    e.parentNode.classList.remove('color')
+    e.classList.remove('color')
     if (container.childNodes.length > 0) {
         console.log('удаление')
         container.childNodes.forEach(it => {
@@ -152,7 +153,7 @@ export function viewConfigurator(arg, params) {
          active[0].textContent = 'КранГаличанин Р858ОР178'
      }*/
     if (active[0] == undefined) {
-        const listItem = document.querySelectorAll('.link_menu')[0]
+        const listItem = document.querySelectorAll('.listItem')[0]
         //  console.log(listItem.textContent)
         activePost = listItem.textContent.replace(/\s+/g, '')
     }
@@ -428,6 +429,8 @@ export function viewShina(message, arg, params) {
     const nameCar = message.replace(/\s+/g, '')
     const bigDiv = document.querySelectorAll(`.${nameCar}`)
     var child = bigDiv[0].querySelectorAll('.tiresProfil');
+
+    console.log(child)
     const listTrailer = document.querySelector('.list_trail')
     var trail = listTrailer.querySelectorAll(`.${nameCar}`);
     var childTrail = trail[0].querySelectorAll('.tiresProfil');

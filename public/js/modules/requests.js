@@ -93,8 +93,9 @@ export const geoPosition = (geo) => {
     //console.log(polyline)
     polyline.addTo(map);
     let iss;
-    const active = document.querySelectorAll('.color')[0].textContent
-    console.log(active)
+    const act = document.querySelector('.color')
+    const active = act.children[0].textContent
+    console.log(act)
     // const activePost = active[0].textContent.replace(/\s+/g, '')
     fetch('/api/datawialonGeo', {
         method: "POST",
