@@ -114,11 +114,11 @@ export function gener(el) {
 
 
 export const objColors = {
-    5: 'rgba(255,104,0, 1)',
+    5: "green",
     4: 'green',
-    3: 'yellow',
-    2: 'orange',
-    1: 'red'
+    3: 'rgba(273,255,33,0.8)',
+    2: 'rgba(255,79,0,0.8)',
+    1: 'rgba(176,0,0,1)'
 }
 
 export const data = ["BFGoodrich", "Bridgestone", "Continental", "Cordiant", "Dunlop", "Nokian Tyres", "Gislaved", "Goodyear", "Hankook", "Kumho", "Michelin"];

@@ -70,24 +70,11 @@ export function chrt1(arr, time) {
 }
 
 
-
+const min = arr => arr.reduce((x, y) => Math.min(x, y));
 
 export function protekGrafTwo(y1, y2, arr) {
-    let number;
-    const arrNum = [];
+    let number = min(arr)
 
-    arr.forEach(el => {
-        arrNum.push(Number(el));
-    })
-    if (arrNum[0] <= arrNum[1]) {
-        number = arrNum[0]
-    }
-    else {
-        number = arrNum[1]
-    }
-
-
-    console.log(typeof arrNum[0])
     const c2 = document.getElementById("drawLine2");
     c2.width = 348
     c2.heigth = 60
@@ -144,22 +131,8 @@ export function protekGrafTwo(y1, y2, arr) {
 
 
 export function protekGrafThree(y1, y2, y3, arr) {
+    let number = min(arr)
 
-    let number;
-    const arrNum = [];
-
-    arr.forEach(el => {
-        arrNum.push(Number(el));
-    })
-    if (arrNum[0] <= arrNum[1] && arrNum[0] <= arrNum[2]) {
-        number = arrNum[0]
-    }
-    if (arrNum[1] <= arrNum[0] && arrNum[1] <= arrNum[2]) {
-        number = arrNum[1]
-    }
-    if (arrNum[2] <= arrNum[0] && arrNum[2] <= arrNum[1]) {
-        number = arrNum[2]
-    }
     const c2 = document.getElementById("drawLine2");
     const ctx2 = c2.getContext("2d");
     c2.width = 174
@@ -198,9 +171,6 @@ export function protekGrafThree(y1, y2, y3, arr) {
     ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx2.fill();
     //  ctx2.stroke();
-
-
-
 
     const c3 = document.getElementById("drawLine3");
     c3.width = 174
@@ -248,26 +218,7 @@ export function protekGrafThree(y1, y2, y3, arr) {
 
 export function protekGrafFour(y1, y2, y3, y4, arr) {
 
-
-    let number;
-    const arrNum = [];
-
-    arr.forEach(el => {
-        arrNum.push(Number(el));
-    })
-    if (arrNum[0] <= arrNum[1] && arrNum[0] <= arrNum[2] && arrNum[0] <= arrNum[3]) {
-        number = arrNum[0]
-    }
-    if (arrNum[1] <= arrNum[0] && arrNum[1] <= arrNum[2] && arrNum[1] <= arrNum[3]) {
-        number = arrNum[1]
-    }
-    if (arrNum[2] <= arrNum[0] && arrNum[2] <= arrNum[1] && arrNum[2] <= arrNum[3]) {
-        number = arrNum[2]
-    }
-    if (arrNum[3] <= arrNum[0] && arrNum[3] <= arrNum[1] && arrNum[3] <= arrNum[2]) {
-        number = arrNum[3]
-    }
-
+    let number = min(arr)
 
     const c2 = document.getElementById("drawLine2");
     const ctx2 = c2.getContext("2d");
@@ -406,7 +357,7 @@ export function protekGrafFree() {
     ctx2.lineTo(116, 0);
     ctx2.lineTo(116, 60);
     ctx2.lineTo(0, 60);
-    ctx2.fillStyle = "rgba(255,104,0, 1)";
+    ctx2.fillStyle = "green";
     ctx2.fill();
     // ctx2.stroke();
 
@@ -444,7 +395,7 @@ export function protekGrafFree() {
     ctx3.lineTo(116, 0);
     ctx3.lineTo(116, 60);
     ctx3.lineTo(0, 60);
-    ctx3.fillStyle = "rgba(255,104,0, 1)";
+    ctx3.fillStyle = "green";
     ctx3.fill();
     // ctx3.stroke();
 
@@ -484,7 +435,7 @@ export function protekGrafFree() {
     ctx4.lineTo(116, 0);
     ctx4.lineTo(116, 60);
     ctx4.lineTo(0, 60);
-    ctx4.fillStyle = "rgba(255,104,0, 1)";
+    ctx4.fillStyle = 'green'
     ctx4.fill();
     //  ctx4.stroke();
 
