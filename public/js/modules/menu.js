@@ -53,7 +53,7 @@ export function zapros() {
 
             const nav = document.querySelectorAll('.listItem')
             const navlist = document.querySelectorAll('.carList')
-            setTimeout(navigator, 300)
+            setTimeout(navigator, 1300)
             //  navigator(nav)
             // navigator(nav)
             // navigator(navlist)
