@@ -361,110 +361,61 @@ const convert = (ob) => {
     return Array.from(uniq).map(e => JSON.parse(e));
 }
 
-let startList = 0;
-export function viewList(model, message, result, values) {
-    /*
-        if (startList >= 4) {
-            const bigDiv = document.querySelectorAll('.bigDiv')
-            const trail = document.querySelectorAll('.trail')
-            const osi = document.querySelectorAll('.osi')
-            const cont3 = document.querySelectorAll('.cont3')
-    
-            bigDiv.forEach(e => {
-                e.remove()
-            })
-            trail.forEach(e => {
-                e.remove()
-            })
-            osi.forEach(e => {
-                e.remove()
-            })
-            cont3.forEach(e => {
-                e.remove()
-            })
-    
-        }*/
-    const modelUniq = convert(model.result)
-    modelUniq.forEach(el => {
-        el
-    })
-    const listProfil = document.querySelector('.list_profil')
-    const listCar = document.createElement('div')
-    listCar.classList.add('bigDiv')
-    const nameCar = model.message.replace(/\s+/g, '')
-    listCar.classList.add(`${nameCar}`)
-    listProfil.appendChild(listCar)
 
+export function contur(model, message, arg, params) {
+    //   console.log(model, message)
+    const nameCar = model.message.replace(/\s+/g, '')
+    const listArr = document.querySelector('.list_arr2')
+    const listItemCar = document.createElement('div')
+    listItemCar.classList.add('listItem')
+    listItemCar.classList.add(`${nameCar}`)
+    listArr.appendChild(listItemCar)
+
+    const listName = document.createElement('div')
+    listName.classList.add('list_name2')
+    listItemCar.appendChild(listName)
+    listName.textContent = message
+    const listProfil = document.createElement('div')
+    listProfil.classList.add('list_profil2')
+    listItemCar.appendChild(listProfil)
+    const listTrail = document.createElement('div')
+    listTrail.classList.add('list_trail2')
+    listItemCar.appendChild(listTrail)
+    const modelUniq = convert(model.result)
     modelUniq.forEach(os => {
         const osi = document.createElement('div')
-        os.trailer === 'Прицеп' ? (osi.classList.add('osi_list'), osi.classList.add('trail')) : osi.classList.add('osi_list')
-        listCar.appendChild(osi)
+        osi.classList.add('osi_list')
+        os.trailer === 'Прицеп' ? listTrail.appendChild(osi) : listProfil.appendChild(osi)
         os.tyres === 2 ? osi.innerHTML = twoTyres : osi.innerHTML = forTyres
     })
-    const listTrail = document.querySelector('.list_trail')
-    const trail = document.createElement('div')
-    trail.classList.add('traile')
-    trail.classList.add(`${nameCar}`)
-    // console.log(listTrail)
-    listTrail.appendChild(trail)
-    const cont3 = document.createElement('div');
-    cont3.classList.add('cont3')
-    const trailer = document.querySelectorAll('.traile')
-    trailer.forEach(e => {
-        e.appendChild(cont3)
-    })
-    const bigDivCar = document.querySelectorAll(`.${nameCar}`)
-    var childTrail = bigDivCar[0].querySelectorAll('.trail');
-    childTrail.forEach(el => {
-        cont3.appendChild(el)
-    })
-    viewShina(message, result, values)
-    //  setInterval(viewShina, 6000, message, result, values)
-    startList++
-}
-
-export function viewShina(message, arg, params) {
-    // console.log(message, arg, params)
+    const listItem = document.querySelector(`.${nameCar}`)
+    const shina = listItem.querySelectorAll('.tiresProfil');
     const modelUniqValues = convert(params)
-    const nameCar = message.replace(/\s+/g, '')
-    const bigDiv = document.querySelectorAll(`.${nameCar}`)
-    var child = bigDiv[0].querySelectorAll('.tiresProfil');
-
-    console.log(child)
-    const listTrailer = document.querySelector('.list_trail')
-    var trail = listTrailer.querySelectorAll(`.${nameCar}`);
-    var childTrail = trail[0].querySelectorAll('.tiresProfil');
     const r = [];
-    const allKol = [];
     let integer;
-    allKol.push(...child, ...childTrail)
     modelUniqValues.forEach(el => {
         r.push(el.tyresdiv)
     })
     r.forEach((el, index) => {
-        allKol[index].setAttribute('id', el);
+        shina[index].setAttribute('id', el);
     })
     arg.forEach((el) => {
         params.forEach((item) => {
             if (el.name == item.pressure) {
-                allKol.forEach(e => {
-                    //    console.log(e)
+                shina.forEach(e => {
                     if (e.id == item.tyresdiv) {
                         if (nameCar == 'PressurePro933') {
-                            //   console.log((el.value * 0.069).toFixed(1))
                             integer = parseFloat((el.value * 0.069).toFixed(1))
-
                             e.style.background = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
                         }
                         else {
                             integer = el.value
                             if ((nameCar == 'КранГаличанинР858ОР178')) {
                                 e.style.background = objColor[generDav(integer)]
-                                //   console.log(nameCar)
+
                             }
                             else {
-                                //   console.log('красимостальное')
-                                //console.log(e)
+
                                 e.style.background = objColor[generFront(integer)]
                             }
 
@@ -475,7 +426,9 @@ export function viewShina(message, arg, params) {
             }
         })
     })
+    // 
 }
+
 
 
 export function viewDinamic(arr) {

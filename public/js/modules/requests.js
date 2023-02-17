@@ -242,7 +242,7 @@ export function viewTech(id) {
                 text[2].textContent = res.values[0].N3 + 'мм'
                 text[3].textContent = res.values[0].N4 + 'мм'
 
-                console.log(res.values[0].N1)
+                // console.log(res.values[0].N1)
                 const protector = [];
                 protector.push(res.values[0].N1, res.values[0].N2, res.values[0].N3, res.values[0].N4)
                 const protectorClear = [];
@@ -258,7 +258,7 @@ export function viewTech(id) {
                         protectorClear.push(el)
                     }
                 })
-                console.log(protectorClear, keys)
+                //  console.log(protectorClear, keys)
                 viewDinamic(protectorClear)
 
                 const nval = (Object.entries(res.values[0]))
