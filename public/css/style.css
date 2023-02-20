@@ -1549,15 +1549,16 @@ div.wrapper {
 
 
 .spareWill1 {
-  width: 18px;
+  width: 19px;
   height: 40px;
-  border-right: 2px solid #000;
+  border-right: 1px solid #000;
   border-radius: 100% 0 0 100% / 50% 0 0 50%;
 }
 
 .spareWill12 {
-  width: 20px;
+  width: 19px;
   height: 40px;
+  border-left: 1px solid #000;
   border-radius: 0 100% 100% 0 / 0 50% 50% 0;
 }
 
@@ -1582,27 +1583,29 @@ div.wrapper {
 
 .spareWill1_1 {
   width: 18px;
-  height: 18px;
-  border-top: 2px solid #000;
+  height: 19px;
+  border-top: 1px solid #000;
   border-radius: 0 0 0 100%;
 }
 
 .spareWill1_2 {
   width: 18px;
-  height: 20px;
+  height: 19px;
+  border-bottom: 1px solid #000;
   border-radius: 100% 0 0 0;
 }
 
 .spareWill1_3 {
   width: 20px;
-  height: 18px;
-  border-bottom: 2px solid #000;
+  height: 19px;
+  border-bottom: 1px solid #000;
   border-radius: 0 100% 0 0;
 }
 
 .spareWill1_4 {
   width: 20px;
-  height: 20px;
+  height: 19px;
+  border-top: 1px solid #000;
   border-radius: 0 0 100% 0;
 }
 

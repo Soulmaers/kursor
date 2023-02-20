@@ -95,6 +95,9 @@ export const geoPosition = (geo) => {
         wrap.appendChild(maps)
 
     const map = L.map('map')
+    map.attributionControl.setPrefix(false)
+    const leaf = document.querySelector('.leaflet-control-attribution');
+    leaf.style.display = 'none';
     const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
     });
