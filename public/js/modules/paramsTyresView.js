@@ -109,13 +109,20 @@ export function loadParamsView() {
             }
 
         })
+
     viewPokasateli()
     setInterval(viewPokasateli, 6000)
-
 }
-//viewPokasateli()
-function viewPokasateli() {
-    //  console.log('стартh')
+
+export function viewPokasateli() {
+
+    const btnShina = document.querySelector('.btn_icon')
+    if (btnShina.classList.contains('active') === true) {
+
+        return
+    }
+
+    console.log('работаем')
     let activePost;
     const active = document.querySelectorAll('.color')
     /* if (active[0].textContent == 'Кран 858') {
@@ -160,6 +167,9 @@ function viewPokasateli() {
                     viewConfigurator(data.values, params.values)
                 })
         })
+
+    //   btnShina.classList.contains('active') === true ?  : viewPokasateli(), setInterval(viewPokasateli, 6000);
+
 }
 function koleso(kol, btnsens) {
     const active = document.querySelectorAll('.color')

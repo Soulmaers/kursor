@@ -1,6 +1,10 @@
-import { postTyres, reqDelete, paramsDelete, reqTech, viewTech } from './requests.js'
-import { alarmClear } from './visual.js'
+import { postTyres, reqDelete, paramsDelete, reqTech, viewTech, loadParamsViewShina } from './requests.js'
+import { alarmClear, viewOs } from './visual.js'
 import { data } from './content.js'
+import { loadParamsView } from './paramsTyresView.js'
+import { visual, visualNone } from './visual.js'
+
+
 export function saveTyres(arr) {
     const btnSave = document.querySelector('.btn_save')
     btnSave.addEventListener('click', () => {
@@ -21,7 +25,16 @@ btnClear.addEventListener('click', () => {
     paramsDelete(activePost);
 })
 
-
+const btnShina = document.querySelector('.btn_icon')
+btnShina.addEventListener('click', () => {
+    btnShina.classList.toggle('active')
+    const e = document.querySelector('.color')
+    console.log(e)
+    visualNone(e);
+    visual(e)
+    //  viewOs();
+    // loadParamsView()
+})
 
 
 /*
@@ -53,6 +66,13 @@ buttonTth.addEventListener('click', () => {
     reqTech(arrNameCol, tyresActive.id);
     viewTech(tyresActive.id);
 })
+
+
+
+
+
+
+
 
 
 

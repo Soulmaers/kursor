@@ -18,6 +18,11 @@ export function init() {
         });
 };
 
+const wrapContaint = document.querySelector('.wrapper_containt')
+const cont = document.createElement('div')
+cont.classList.add('container2')
+wrapContaint.appendChild(cont);
+
 export function zapros() {
     const flags = 1 + 1024
     const prms = {

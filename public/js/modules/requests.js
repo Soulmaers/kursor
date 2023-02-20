@@ -296,3 +296,71 @@ export function viewTech(id) {
 
 }
 
+
+
+
+export function loadParamsViewShina() {
+
+    const titleCar = document.querySelector('.title_two')
+    const listItem = document.querySelectorAll('.link_menu')[0]
+    // console.log(listItem)
+    //  console.log('запуск')
+    let activePost;
+    const active = document.querySelectorAll('.color')
+    if (active[0] == undefined) {
+        const listItem = document.querySelectorAll('.listItem')[0]
+        //    console.log(listItem.textContent)
+        activePost = listItem.textContent.replace(/\s+/g, '')
+        titleCar.textContent = listItem.textContent
+    }
+    else {
+        activePost = active[0].textContent.replace(/\s+/g, '')
+    }
+
+    fetch('api/modelView', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost }))
+    })
+        .then((res) => res.json())
+        .then((res) => {
+            const model = res
+            console.log(model)
+            const osi = document.querySelectorAll('.osi')
+            const centerOs = document.querySelectorAll('.centerOs')
+            if (model.values.length > 0) {
+                console.log('база целая')
+                console.log(model.values)
+                model.values.forEach(el => {
+
+                    osi[el.osi - 1].style.display = 'flex';
+                    centerOs[el.osi - 1].style.display = 'flex';
+                    el.trailer == 'Прицеп' ?
+                        pricep(centerOs[el.osi - 1])
+                        :
+                        centerOs[el.osi - 1].style.backgroundImage = "url('../image/line_blue.png')"
+                    if (el.tyres == 2) {
+                        centerOs[el.osi - 1].previousElementSibling.children[0].style.display = 'flex';
+                        centerOs[el.osi - 1].nextElementSibling.children[1].style.display = 'flex';
+                        centerOs[el.osi - 1].previousElementSibling.children[1].style.display = 'none';
+                        centerOs[el.osi - 1].nextElementSibling.children[0].style.display = 'none';
+                    }
+                    else {
+                        centerOs[el.osi - 1].previousElementSibling.children[0].style.display = 'flex';
+                        centerOs[el.osi - 1].previousElementSibling.children[1].style.display = 'flex';
+                        centerOs[el.osi - 1].nextElementSibling.children[0].style.display = 'flex';
+                        centerOs[el.osi - 1].nextElementSibling.children[1].style.display = 'flex';
+                    }
+                })
+            }
+            else {
+                console.log('база пустая')
+            }
+
+        })
+
+
+}
+

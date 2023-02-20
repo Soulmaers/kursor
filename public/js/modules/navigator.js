@@ -5,13 +5,14 @@ import { geoloc, iconParams } from './wialon.js';
 //import { geoPosition } from './requests.js'
 
 export function navigator() {
-    loadParamsView()//запрос в базу и получение параметров
+    // loadParamsView()//запрос в базу и получение параметров
     const nav = document.querySelectorAll('.listItem')
-    viewOs();
-    geoloc();
-    iconParams()
-    setInterval(iconParams, 6000)
+    // viewOs();
+    // geoloc();
+    // iconParams()
+    //  setInterval(iconParams, 6000)
     nav[0].classList.add('color')
+    visual(nav[0])
     console.log(nav)
     nav.forEach(el => {
         el.addEventListener('click', route)

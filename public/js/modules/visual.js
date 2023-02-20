@@ -34,6 +34,7 @@ export function visual(el) {
     loadParamsView()
     //  setInterval(loadParamsView, 5000)
     iconParams()
+    setInterval(iconParams, 6000)
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
@@ -65,9 +66,12 @@ export function visualNone(e) {
     titleSens.style.display = 'none'
     moduleConfig.style.display = 'none'
     e.classList.remove('color')
-    if (container.childNodes.length > 0) {
+    if (container.children.length > 0) {
         console.log('удаление')
-        container.childNodes.forEach(it => {
+        console.log(container.children)
+        const containerArr = Array.from(container.children)
+        containerArr.forEach(it => {
+            console.log('удаление цикл')
             it.remove();
         })
     }
@@ -150,6 +154,8 @@ export function viewConfigurator(arg, params) {
     //const active = document.querySelectorAll('.color')
     let activePost;
     const active = document.querySelectorAll('.color')
+    const alarm = document.querySelector('.alarm')
+    const alarmCheck = document.querySelector('.alarmCheck')
     /* if (active[0].textContent == 'Кран 858') {
          active[0].textContent = 'КранГаличанин Р858ОР178'
      }*/
@@ -161,6 +167,9 @@ export function viewConfigurator(arg, params) {
     else {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
+    const btnShina = document.querySelector('.btn_icon')
+
+
     arg.forEach((el) => {
         let parapmsPress;
         // parapmsPress = 
@@ -233,6 +242,7 @@ export function viewConfigurator(arg, params) {
         }
 
     })
+
 }
 
 
@@ -266,6 +276,12 @@ export function alarmClear() {
     info.style.display = 'none'
     const alarmMaxx = document.querySelector('.dav_max')
     alarmMaxx.style.display = 'none'
+    const alarmCheck = document.querySelectorAll('.alarmCheck')
+    alarmCheck.forEach(e => {
+        e.style.borderTopLeftRadius = 'none'
+        e.style.border = 'none'
+    })
+
 }
 
 function alarmMax() {
@@ -280,9 +296,12 @@ function alarmMax() {
 
 export function viewOs() {
     const container = document.querySelector('.container')
-    if (container.childNodes.length > 0) {
+    if (container.children.length > 0) {
         console.log('удаление')
-        container.childNodes.forEach(it => {
+        console.log(container.children)
+        const containerArr = Array.from(container.children)
+        containerArr.forEach(it => {
+            console.log('удаление цикл')
             it.remove();
         })
     }
