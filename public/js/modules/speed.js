@@ -1,7 +1,7 @@
 import { graf } from './graf.js'
 
 export function speed(arrCar) {
-    console.log('да')
+    // console.log('да')
     const speedGraf = document.querySelector('.speedGraf')
     speedGraf.style.display = 'block'
     const btnForm = document.querySelectorAll('.btm_form')

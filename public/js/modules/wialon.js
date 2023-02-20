@@ -85,7 +85,7 @@ export function geoloc() {
                 const act = active.children[0].textContent
                 //  console.log(active)
                 if (it.nm === act) {
-                    console.log(act)
+                    //  console.log(act)
                     const prmsT = {
                         "itemId": it.id,
                         "timeFrom": timeFrom,//1657205816,
@@ -94,7 +94,7 @@ export function geoloc() {
                         "flagsMask": 65281,
                         "loadCount": 82710
                     }
-                    console.log('запуск гео')
+                    //   console.log('запуск гео')
 
                     const remoteT = wialon.core.Remote.getInstance();
                     remoteT.remoteCall('messages/load_interval', prmsT,
@@ -146,7 +146,7 @@ export function iconParams() {
             }
             const arr1 = Object.values(result);
             const arrCar = arr1[5];
-            console.log(arr1[5])
+            //    console.log(arr1[5])
 
             //check = arr1[5][2].lmsg.p.pwr_ext;
             loadAkb(arrCar);
@@ -159,7 +159,7 @@ function loadAkb(arrCar) {
     const active = document.querySelector('.color')
     const act = active.children[0].textContent
     let val;
-    console.log(act)
+    //  console.log(act)
     arrCar.forEach(it => {
         if (it.nm === act) {
             val = (it.lmsg.p.pwr_ext).toFixed(1);
@@ -167,5 +167,5 @@ function loadAkb(arrCar) {
             akb.textContent = val
         }
     })
-    console.log(val)
+    //  console.log(val)
 }

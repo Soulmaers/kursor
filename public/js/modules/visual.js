@@ -28,7 +28,7 @@ export function visual(el) {
     main.style.display = 'flex'
     speedGraf.style.display = 'block'
     el.classList.add('color')
-    console.log(el)
+    //  console.log(el)
     viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
     titleCar.textContent = el.textContent
     loadParamsView()
@@ -68,10 +68,10 @@ export function visualNone(e) {
     e.classList.remove('color')
     if (container.children.length > 0) {
         console.log('удаление')
-        console.log(container.children)
+        //  console.log(container.children)
         const containerArr = Array.from(container.children)
         containerArr.forEach(it => {
-            console.log('удаление цикл')
+            //    console.log('удаление цикл')
             it.remove();
         })
     }
@@ -297,8 +297,8 @@ function alarmMax() {
 export function viewOs() {
     const container = document.querySelector('.container')
     if (container.children.length > 0) {
-        console.log('удаление')
-        console.log(container.children)
+        // console.log('удаление')
+        //  console.log(container.children)
         const containerArr = Array.from(container.children)
         containerArr.forEach(it => {
             console.log('удаление цикл')

@@ -73,8 +73,12 @@ export const paramsDelete = (name) => {
         e.style.background = '#fff'
     })
 }
-
 export const geoPosition = (geo) => {
+    const mapss = document.getElementById('map')
+    if (mapss) {
+        mapss.remove();
+    }
+
     console.log('запуск геокарты')
     let count = 0;
     count++
@@ -83,6 +87,13 @@ export const geoPosition = (geo) => {
     if (container != null) {
         container._leaflet_id = null;
     }
+    const wrap = document.querySelector('.wrapper_up')
+    const maps = document.createElement('div')
+    maps.setAttribute('id', 'map')
+    maps.style.width = '336px';
+    maps.style.height = '300px',
+        wrap.appendChild(maps)
+
     const map = L.map('map')
     const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
@@ -95,7 +106,7 @@ export const geoPosition = (geo) => {
     let iss;
     const act = document.querySelector('.color')
     const active = act.children[0].textContent
-    console.log(act)
+    // console.log(act)
     // const activePost = active[0].textContent.replace(/\s+/g, '')
     fetch('/api/datawialonGeo', {
         method: "POST",
@@ -111,8 +122,8 @@ export const geoPosition = (geo) => {
             //console.log(geo)
             const center = [geo.geoY, geo.geoX,]
             map.setView(center, 15)
-            console.log('запрос2')
-            console.log(center)
+            //   console.log('запрос2')
+            //    console.log(center)
             //map.setView([59.9386, 30.3141], 8);
             // L.marker(center).addTo(map);
             map.flyTo(center, 15)

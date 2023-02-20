@@ -49,11 +49,11 @@ export function viewMenuParams() {
 }
 
 export function loadParamsView() {
-
+    clearInterval(viewPokasateli)
     const titleCar = document.querySelector('.title_two')
     const listItem = document.querySelectorAll('.link_menu')[0]
     // console.log(listItem)
-    //  console.log('запуск')
+    console.log('запуск')
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
@@ -76,12 +76,12 @@ export function loadParamsView() {
         .then((res) => res.json())
         .then((res) => {
             const model = res
-            console.log(model)
+            // console.log(model)
             const osi = document.querySelectorAll('.osi')
             const centerOs = document.querySelectorAll('.centerOs')
             if (model.values.length > 0) {
-                console.log('база целая')
-                console.log(model.values)
+                //   console.log('база целая')
+                //  console.log(model.values)
                 model.values.forEach(el => {
 
                     osi[el.osi - 1].style.display = 'flex';
@@ -115,14 +115,12 @@ export function loadParamsView() {
 }
 
 export function viewPokasateli() {
-
+    console.log('запускВиджет')
     const btnShina = document.querySelector('.btn_icon')
     if (btnShina.classList.contains('active') === true) {
-
         return
     }
 
-    console.log('работаем')
     let activePost;
     const active = document.querySelectorAll('.color')
     /* if (active[0].textContent == 'Кран 858') {

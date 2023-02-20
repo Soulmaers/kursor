@@ -13,12 +13,12 @@ export function navigator() {
     //  setInterval(iconParams, 6000)
     nav[0].classList.add('color')
     visual(nav[0])
-    console.log(nav)
+    // console.log(nav)
     nav.forEach(el => {
         el.addEventListener('click', route)
         function route() {
-            console.log(el)
-            console.log('запускНавигатора')
+            // console.log(el)
+            //   console.log('запускНавигатора')
 
             nav.forEach(e => {
                 const msg = document.querySelectorAll('.msg')
