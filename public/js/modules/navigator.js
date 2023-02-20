@@ -1,7 +1,7 @@
 import { visual, visualNone, clearGraf, viewOs } from './visual.js'
 import { massiv } from './configurator.js';
 import { massivionbd, loadParamsView } from './paramsTyresView.js';
-import { geoloc } from './wialon.js';
+import { geoloc, iconParams } from './wialon.js';
 //import { geoPosition } from './requests.js'
 
 export function navigator() {
@@ -9,6 +9,8 @@ export function navigator() {
     const nav = document.querySelectorAll('.listItem')
     viewOs();
     geoloc();
+    iconParams()
+    setInterval(iconParams, 6000)
     nav[0].classList.add('color')
     console.log(nav)
     nav.forEach(el => {
@@ -37,7 +39,5 @@ export function navigator() {
     })
 
 }
-
-
 
 

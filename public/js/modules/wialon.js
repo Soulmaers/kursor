@@ -123,6 +123,49 @@ export function geoloc() {
         })
 }
 
+export function iconParams() {
+    const flags = 1 + 1024
+    const prms = {
+        "spec": {
+            "itemsType": "avl_unit",
+            "propName": "sys_name",
+            "propValueMask": "*",
+            "sortType": "sys_name"
+        },
+        "force": 1,
+        "flags": flags,
+        "from": 0,
+        "to": 0
+    };
 
+    const remote1 = wialon.core.Remote.getInstance();
+    remote1.remoteCall('core/search_items', prms,
+        function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            const arr1 = Object.values(result);
+            const arrCar = arr1[5];
+            console.log(arr1[5])
 
+            //check = arr1[5][2].lmsg.p.pwr_ext;
+            loadAkb(arrCar);
 
+        });
+
+}
+
+function loadAkb(arrCar) {
+    const active = document.querySelector('.color')
+    const act = active.children[0].textContent
+    let val;
+    console.log(act)
+    arrCar.forEach(it => {
+        if (it.nm === act) {
+            val = (it.lmsg.p.pwr_ext).toFixed(1);
+            const akb = document.querySelector('.akb_value')
+            akb.textContent = val
+        }
+    })
+    console.log(val)
+}

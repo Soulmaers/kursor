@@ -43,7 +43,7 @@ export function zapros() {
             const arrCar = arr1[5];
             console.log(arr1[5])
 
-
+            //check = arr1[5][2].lmsg.p.pwr_ext;
             arrCar.forEach(el => {
                 //   el.nm.replace(/\s+/g, '')
                 loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями

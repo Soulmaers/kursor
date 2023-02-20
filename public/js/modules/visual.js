@@ -2,7 +2,7 @@ import { text, twoTyres, forTyres } from './content.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
 //import { geoPosition } from './requests.js'
-import { geoloc } from './wialon.js'
+import { geoloc, iconParams } from './wialon.js'
 import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
 import { navigator } from './navigator.js'
 
@@ -33,6 +33,7 @@ export function visual(el) {
     titleCar.textContent = el.textContent
     loadParamsView()
     //  setInterval(loadParamsView, 5000)
+    iconParams()
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
