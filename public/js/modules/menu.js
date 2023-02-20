@@ -105,7 +105,10 @@ function loadParamsViewList(car) {
                             // console.log(model, models)
                             // viewList(model, data.message, data.result, models.values)
                             contur(model, data.message, data.result, models.values);
+                            //    setTimeout(navigator, 1300)
+
                         })
+
                 })
 
         })

@@ -222,6 +222,7 @@ export function viewTech(id) {
             const number = document.querySelectorAll('.number')
             const text = document.querySelectorAll('.text')
             const titleMM = document.querySelectorAll('.titleMM')
+            const rad = document.querySelectorAll('[name=radio]')
             console.log(titleMM)
             if (res.values.length === 0) {
                 number.forEach(e => {
@@ -230,7 +231,13 @@ export function viewTech(id) {
                 text.forEach(e => {
                     e.textContent = ''
                 })
+                rad.forEach(el => {
+                    el.addEventListener('change', () => {
+                        viewDinamic([])
+                    })
+                })
                 viewDinamic([])
+
             }
             else if (res.values.length > 0) {
                 number[0].textContent = keys[8]
@@ -261,7 +268,7 @@ export function viewTech(id) {
                 })
                 console.log(protectorClear)
                 const reverseprotectorClear = protectorClearRigth.reverse();
-                const rad = document.querySelectorAll('[name=radio]')
+
 
                 rad.forEach(el => {
                     el.addEventListener('change', () => {

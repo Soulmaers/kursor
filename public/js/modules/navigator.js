@@ -1,14 +1,14 @@
 import { visual, visualNone, clearGraf, viewOs } from './visual.js'
 import { massiv } from './configurator.js';
 import { massivionbd, loadParamsView } from './paramsTyresView.js';
-import { geolocTwo } from './wialon.js';
+import { geoloc } from './wialon.js';
 //import { geoPosition } from './requests.js'
 
 export function navigator() {
     loadParamsView()//запрос в базу и получение параметров
     const nav = document.querySelectorAll('.listItem')
     viewOs();
-    geolocTwo();
+    geoloc();
     nav[0].classList.add('color')
     console.log(nav)
     nav.forEach(el => {
