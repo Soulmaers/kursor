@@ -192,13 +192,13 @@ export function viewConfigurator(arg, params) {
                             signal = objColor[generDav(done)]
 
                             if (done < 6 || done > 9.9) {
-                                e.classList.add('alarmCheck')
+                                // e.classList.add('alarmCheck')
                             }
                         }
                         else {
                             signal = objColor[generFront(done)]
                             if (done < 8 || done > 10) {
-                                e.classList.add('alarmCheck')
+                                //   e.classList.add('alarmCheck')
                             }
                         }
                         e.children[0].style.background = signal;
@@ -381,8 +381,9 @@ const convert = (ob) => {
     return Array.from(uniq).map(e => JSON.parse(e));
 }
 
-
+let count = 0;
 export function contur(model, message, arg, params) {
+    count++
     //   console.log(model, message)
     const nameCar = model.message.replace(/\s+/g, '')
     const listArr = document.querySelector('.list_arr2')
@@ -446,8 +447,11 @@ export function contur(model, message, arg, params) {
             }
         })
     })
-    // 
+    if (count >= 4) {
+        navigator();
+    }
 }
+
 
 
 

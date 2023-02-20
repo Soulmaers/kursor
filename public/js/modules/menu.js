@@ -58,14 +58,12 @@ export function zapros() {
 
             const nav = document.querySelectorAll('.listItem')
             const navlist = document.querySelectorAll('.carList')
-            setTimeout(navigator, 1300)
-            //  navigator(nav)
-            // navigator(nav)
-            // navigator(navlist)
+            //  setTimeout(navigator, 1300)
+
 
             speed(arrCar)
             return arrCar
-            //   geoloc(arrCar)
+
         });
 
 }
@@ -110,7 +108,7 @@ function loadParamsViewList(car) {
                             // console.log(model, models)
                             // viewList(model, data.message, data.result, models.values)
                             contur(model, data.message, data.result, models.values);
-                            //    setTimeout(navigator, 1300)
+
 
                         })
 
