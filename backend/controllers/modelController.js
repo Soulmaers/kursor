@@ -221,7 +221,7 @@ module.exports.tyresView = (req, res) => {
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             //console.log(results)
-            response.status(200, results, '', res)
+            response.status(200, results, req.body.activePost, res)
         })
     }
     catch (e) {

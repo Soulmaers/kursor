@@ -1,8 +1,16 @@
 import { postTyres, reqDelete, paramsDelete, reqTech, viewTech, loadParamsViewShina } from './requests.js'
 import { alarmClear, viewOs } from './visual.js'
 import { data } from './content.js'
-import { loadParamsView } from './paramsTyresView.js'
+import { getDash } from './dash.js'
 import { visual, visualNone } from './visual.js'
+
+
+const btnDash = document.querySelector('.dash')
+btnDash.addEventListener('click', () => {
+    getDash()
+    // setInterval(getDash, 6000)
+})
+
 
 
 export function saveTyres(arr) {

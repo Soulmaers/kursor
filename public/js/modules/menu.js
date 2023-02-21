@@ -22,8 +22,9 @@ const wrapContaint = document.querySelector('.wrapper_containt')
 const cont = document.createElement('div')
 cont.classList.add('container2')
 wrapContaint.appendChild(cont);
-
+export let dann;
 export function zapros() {
+
     const flags = 1 + 1024
     const prms = {
         "spec": {
@@ -60,10 +61,9 @@ export function zapros() {
             const navlist = document.querySelectorAll('.carList')
             //  setTimeout(navigator, 1300)
 
-
+            dann = arrCar
             speed(arrCar)
-            return arrCar
-
+            return dann
         });
 
 }

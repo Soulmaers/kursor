@@ -561,9 +561,11 @@ input[type="date"] {
 .dropbtn {
   background-color: gray;
   padding: 12px 40px;
-  font-size: 16px;
+  font-size: 0.8rem;
+  font-family: Roboto;
   border: none;
   color: #fff;
+  width: 170px;
 }
 
 .dropbtnOs {
@@ -853,22 +855,26 @@ input[type="date"] {
 .save {
   display: inline-block;
   height: 40px;
-
+  width: 170px;
 }
 
 .btn_clear {
   background-color: gray;
   padding: 10px 32px;
-  font-size: 13px;
+  font-size: 0.8rem;
+  font-family: Roboto;
   border: none;
   color: #fff;
   cursor: pointer;
+  width: 170px;
 }
 
 .btn_save {
+  width: 170px;
   background-color: gray;
   padding: 10px 9px;
-  font-size: 13px;
+  font-size: 0.8rem;
+  font-family: Roboto;
   border: none;
   color: #fff;
   cursor: pointer;

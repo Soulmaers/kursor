@@ -147,7 +147,8 @@ export function view(arg) {
 
 }
 export function viewConfigurator(arg, params) {
-    //  console.log(arg, params)
+    const parametrs = convert(params)
+    console.log(parametrs)
     const alerts = [];
     const tiresLink = document.querySelectorAll('.tires_link')
     //const tiresLinkId = document.getElementById('.tires_link')
@@ -175,7 +176,7 @@ export function viewConfigurator(arg, params) {
         // parapmsPress = 
         let signal;
         let done;
-        params.forEach(item => {
+        parametrs.forEach(item => {
             if (el.name == item.pressure) {
                 tiresLink.forEach(e => {
                     if (e.id == item.tyresdiv) {
@@ -222,7 +223,7 @@ export function viewConfigurator(arg, params) {
                 })
             }
         })
-        //    console.log(activePost)
+
         if (activePost == 'КранГаличанинР858ОР178') {
             if (alerts.some(element => element < 6) == true) {
                 alarmMin();
@@ -242,7 +243,7 @@ export function viewConfigurator(arg, params) {
         }
 
     })
-
+    console.log(alerts)
 }
 
 
