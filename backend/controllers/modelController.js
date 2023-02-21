@@ -229,6 +229,31 @@ module.exports.tyresView = (req, res) => {
     }
 }
 
+module.exports.tyresViewtest = (req, res) => {
+    // console.log(req.body.activePost)
+    // const tableTyresView = 'tyres' + req.body.massiv
+    try {
+        const selectBase = `SELECT tyresdiv, pressure, temp
+        FROM   (
+                SELECT tyresdiv, pressure, temp FROM ${'tyres' + req.body.massiv[0]}
+                UNION ALL SELECT tyresdiv, pressure, temp FROM ${'tyres' + req.body.massiv[1]}
+                UNION ALL SELECT tyresdiv, pressure, temp FROM ${'tyres' + req.body.massiv[2]}
+                UNION ALL SELECT tyresdiv, pressure, temp FROM ${'tyres' + req.body.massiv[3]}
+               ) AS f
+        WHERE  1`
+
+        //`SELECT tyresdiv, pressure,temp FROM ${tableTyresView} WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            res.json({ status: 200, result: results, message: req.body.massiv })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
 
 
 

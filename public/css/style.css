@@ -1849,7 +1849,7 @@ input[type="number"]:focus {
 .icon_akb {
   box-sizing: border-box;
   padding: 30px 0;
-  background-image: url(../image/АКБ2.jpg);
+  background-image: url(../image/АКБ.jpg);
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -1862,6 +1862,7 @@ input[type="number"]:focus {
   font-size: 0.85rem;
   font-weight: bold;
   margin: 0;
+  margin-top: 10px;
 
 }
 

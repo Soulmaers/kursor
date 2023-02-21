@@ -24,14 +24,17 @@ router.get('/spisok', isLoggedIn, controller.spisok)
 
 router.post('/api/wialon', controllerWialon.datawialon)
 router.post('/api/wialonAll', controllerWialon.datawialonAll)
+router.post('/api/wialonAlltest', controllerWialon.datawialonAlltest)
 router.post('/api/datawialonGeo', controllerWialon.datawialonGeo)
 
 router.post('/api/tech', controllerModel.tech)
 router.post('/api/model', controllerModel.model)
 router.post('/api/tyres', controllerModel.tyres)
 router.post('/api/techView', controllerModel.techView)
+
 router.post('/api/modelView', controllerModel.modelView)
 router.post('/api/tyresView', controllerModel.tyresView)
+router.post('/api/tyresViewtest', controllerModel.tyresViewtest)
 router.post('/api/delete', controllerModel.deleteView)
 router.post('/api/paramsDelete', controllerModel.paramsDeleteView)
 

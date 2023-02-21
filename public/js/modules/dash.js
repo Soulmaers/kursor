@@ -1,43 +1,49 @@
 import { zapros, dann } from './menu.js'
 
 export function getDash() {
-
-    //  console.log(dann)
+    const massiv = [];
+    console.log(dann)
     dann.forEach(el => {
         const activePost = el.nm.replace(/\s+/g, '')
+        massiv.push(activePost)
 
-        //   console.log(act)
-        fetch('api/tyresView', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ activePost }))
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                const params = res
-                //console.log(params)
-                fetch('api/wialon', {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: (JSON.stringify({ activePost }))
-                })
-                    .then((res) => res.json())
-                    .then((res) => {
-                        const data = res
-                        //     console.log(data)
 
-                        data.values.sort((prev, next) => {
-                            if (prev.name < next.name) return -1;
-                            if (prev.name < next.name) return 1;
-                        })
-                        dashAllSort(data.values, params.values, params.message)
-                    })
-            })
     })
+    console.log(massiv)
+    //   console.log(act)
+    fetch('api/tyresViewtest', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ massiv }))
+    })
+        .then((res) => res.json())
+        .then((res) => {
+            const params = res
+            console.log(params)
+            fetch('api/wialonAlltest', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: (JSON.stringify({ massiv }))
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    const data = res
+                    console.log(data)
+                    //    massiv.push(data)
+                    dashAllSort(data)
+                    /*
+                                    data.values.sort((prev, next) => {
+                                        if (prev.name < next.name) return -1;
+                                        if (prev.name < next.name) return 1;
+                                    })
+                                      */
+                })
+        })
+
 }
 
 const convert = (ob) => {
@@ -46,12 +52,14 @@ const convert = (ob) => {
 }
 
 const arrAllArg = [];
-const arrSmall = [];
 
 
 
-function dashAllSort(arg, params, message) {
+function dashAllSort() {
+    const arrSmall = [];
+    console.log('запуск')
 
+    /*
     const parametrs = convert(params)
     console.log(parametrs)
     console.log(arg)
@@ -60,9 +68,6 @@ function dashAllSort(arg, params, message) {
     //const tiresLinkId = document.getElementById('.tires_link')
     //const active = document.querySelectorAll('.color')
     let activePost;
-
-
-
     arg.forEach((el) => {
         let parapmsPress;
         // parapmsPress = 
@@ -76,7 +81,13 @@ function dashAllSort(arg, params, message) {
                 arrSmall.push(el.value)
             }
         })
+
     })
     arrAllArg.push(arrSmall)
+
+
+    console.log(arrSmall)
     console.log(arrAllArg)
+    // console.log(finish)
+*/
 }
