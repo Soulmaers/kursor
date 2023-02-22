@@ -460,7 +460,7 @@ export function contur(model, message, arg, params) {
         })
     })
 
-    if (count >= 2) {
+    if (count >= 4) {
         navigator();
 
     }
