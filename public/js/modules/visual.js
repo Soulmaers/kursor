@@ -1,4 +1,4 @@
-import { text, twoTyres, forTyres } from './content.js'
+import { text } from './content.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
 //import { geoPosition } from './requests.js'
@@ -378,94 +378,11 @@ export const pricep = (elem) => {
 }
 
 
-const convert = (ob) => {
+export const convert = (ob) => {
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
     return Array.from(uniq).map(e => JSON.parse(e));
 }
 
-let count = 0;
-export function contur(model, message, arg, params) {
-    count++
-
-    // console.log(model, message, arg, params)
-    dashView(message)
-    const nameCar = model.message.replace(/\s+/g, '')
-
-    const listArr = document.querySelector('.list_arr2')
-    const listItemCar = document.createElement('div')
-    listItemCar.classList.add('listItem')
-    listItemCar.classList.add(`${nameCar}`)
-    listArr.appendChild(listItemCar)
-
-    const listName = document.createElement('div')
-    listName.classList.add('list_name2')
-    listItemCar.appendChild(listName)
-    listName.textContent = message
-    const listProfil = document.createElement('div')
-    listProfil.classList.add('list_profil2')
-    listItemCar.appendChild(listProfil)
-    const listTrail = document.createElement('div')
-    listTrail.classList.add('list_trail2')
-    listItemCar.appendChild(listTrail)
-
-    const modelUniq = convert(model.result)
-    console.log(modelUniq)
-    modelUniq.forEach(os => {
-        const osi = document.createElement('div')
-        osi.classList.add('osi_list')
-        os.trailer === 'Прицеп' ? listTrail.appendChild(osi) : listProfil.appendChild(osi)
-        os.tyres === 2 ? osi.innerHTML = twoTyres : osi.innerHTML = forTyres
-    })
-    const listItem = document.querySelector(`.${nameCar}`)
-    const shina = listItem.querySelectorAll('.tiresProfil');
-    //console.log(shina)
-    const modelUniqValues = convert(params)
-    const r = [];
-    let integer;
-    // console.log(modelUniqValues)
-    modelUniqValues.forEach(el => {
-        r.push(el.tyresdiv)
-    })
-    const uniq = convert(r)
-    // console.log(uniq)
-
-    uniq.forEach((el, index) => {
-        shina[index].setAttribute('id', el);
-    })
-    arg.forEach((el) => {
-        modelUniqValues.forEach((item) => {
-            if (el.name == item.pressure) {
-                shina.forEach(e => {
-                    if (e.id == item.tyresdiv) {
-                        if (nameCar == 'PressurePro933') {
-                            integer = parseFloat((el.value * 0.069).toFixed(1))
-                            e.style.background = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
-                        }
-                        else {
-                            integer = el.value
-                            //    console.log(integer)
-                            if ((nameCar == 'КранГаличанинР858ОР178')) {
-                                e.style.background = objColor[generDav(integer)]
-
-                            }
-                            else {
-
-                                e.style.background = objColor[generFront(integer)]
-                            }
-
-                        }
-
-                    }
-                })
-            }
-        })
-    })
-
-    //if (count >= 4) {
-    // navigator();
-
-    // }
-}
 
 
 

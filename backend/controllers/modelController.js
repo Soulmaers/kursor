@@ -283,14 +283,14 @@ module.exports.listModel = (req, res) => {
 
 
 module.exports.listTyres = (req, res) => {
-    // console.log(req.body.car)
+    console.log(req.body)
     const nameCar = 'tyres' + req.body.car.replace(/\s+/g, '')
     try {
         const selectBase = `SELECT tyresdiv, pressure,temp FROM ${nameCar} WHERE 1`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             //console.log(results)
-            response.status(200, results, req.body.car, res)
+            res.json({ status: 200, result: results, message: req.body.car })
         })
     }
     catch (e) {
