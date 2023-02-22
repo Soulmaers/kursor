@@ -17,6 +17,9 @@ export const text = `<div class=" osi">
     </div>`
 
 
+
+
+
 export const twoTyres = ` 
     <div class="frontSpare">
         <div class="tiresProfil spareWill1"></div>

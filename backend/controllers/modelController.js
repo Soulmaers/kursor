@@ -42,7 +42,7 @@ module.exports.paramsDeleteView = (req, res) => {
 module.exports.tech = (req, res) => {
     //   console.log(req.body.activePost)
     //  console.log(req.body.arr[1])
-    //  console.log(req.body.arrValue)
+    console.log(req.body.arrValue)
     const value = [req.body.arrValue];
     console.log(value)
     // value.push()
@@ -133,6 +133,11 @@ module.exports.model = (req, res) => {
             else console.log("Таблица модели создана");
         })
 
+
+
+
+
+
         const postModel = `INSERT INTO ${tableModel}(osi, trailer, tyres) VALUES?`
         connection.query(postModel, [req.body.model], function (err, results) {
             if (err) console.log(err);
@@ -147,9 +152,8 @@ module.exports.model = (req, res) => {
 
 
 module.exports.tyres = (req, res) => {
-    //  console.log(req.body.activePost)
     const tableTyres = 'tyres' + req.body.activePost
-    // console.log(tableModel)
+    console.log(req.body.tyres)
     try {
         const sql = `create table if not exists ${tableTyres}(
             id int(255) primary key auto_increment,
@@ -161,14 +165,42 @@ module.exports.tyres = (req, res) => {
             if (err) console.log(err);
             else console.log("Таблица значений колес создана");
         })
-
-
-
-        const postModel = `INSERT INTO ${tableTyres}(tyresdiv, pressure, temp) VALUES?`
-        connection.query(postModel, [req.body.tyres], function (err, results) {
+        const selectBase = `SELECT tyresdiv FROM ${tableTyres} WHERE 1`
+        connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
-            //console.log(results)
-            response.status(200, results, '', res)
+            if (results.length === 0) {
+                const postModel = `INSERT INTO ${tableTyres}(tyresdiv, pressure, temp) VALUES?`
+                connection.query(postModel, [req.body.tyres], function (err, results) {
+                    if (err) console.log(err);
+                    //console.log(results)
+                    response.status(200, results, '', res)
+                })
+            }
+            if (results.length > 0) {
+                let count = req.body.tyres[0][0];
+                console.log(req.body.tyres[0][0])
+                console.log(results[0].tyresdiv)
+                const mas = []
+                results.forEach(el => {
+                    mas.push(el.tyresdiv)
+                });
+                console.log(mas)
+                if (!mas.includes(req.body.tyres[0][0])) {
+                    console.log('запусккк2')
+                    const sql = `INSERT INTO  ${tableTyres}(tyresdiv, pressure, temp) VALUES?`;
+                    connection.query(sql, [req.body.tyres], function (err, results) {
+                        if (err) console.log(err);
+                    });
+                }
+                if (mas.includes(req.body.tyres[0][0])) {
+                    console.log('запусккк3')
+                    const sql = `UPDATE ${tableTyres} SET tyresdiv='${req.body.tyres[0][0]}', pressure='${req.body.tyres[0][1]}', 
+                    temp='${req.body.tyres[0][2]}'WHERE tyresdiv=${count}`;
+                    connection.query(sql, [req.body.tyres], function (err, results) {
+                        if (err) console.log(err);
+                    });
+                }
+            }
         })
     }
     catch (e) {
@@ -229,30 +261,7 @@ module.exports.tyresView = (req, res) => {
     }
 }
 
-module.exports.tyresViewtest = (req, res) => {
-    // console.log(req.body.activePost)
-    // const tableTyresView = 'tyres' + req.body.massiv
-    try {
-        const selectBase = `SELECT tyresdiv, pressure, temp
-        FROM   (
-                SELECT tyresdiv, pressure, temp FROM ${'tyres' + req.body.massiv[0]}
-                UNION ALL SELECT tyresdiv, pressure, temp FROM ${'tyres' + req.body.massiv[1]}
-                UNION ALL SELECT tyresdiv, pressure, temp FROM ${'tyres' + req.body.massiv[2]}
-                UNION ALL SELECT tyresdiv, pressure, temp FROM ${'tyres' + req.body.massiv[3]}
-               ) AS f
-        WHERE  1`
 
-        //`SELECT tyresdiv, pressure,temp FROM ${tableTyresView} WHERE 1`
-        connection.query(selectBase, function (err, results) {
-            if (err) console.log(err);
-            //console.log(results)
-            res.json({ status: 200, result: results, message: req.body.massiv })
-        })
-    }
-    catch (e) {
-        console.log(e)
-    }
-}
 
 
 

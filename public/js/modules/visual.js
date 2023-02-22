@@ -5,6 +5,7 @@ import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
 import { geoloc, iconParams } from './wialon.js'
 import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
 import { navigator } from './navigator.js'
+import { dashView } from './dash.js'
 
 let start;
 let time;
@@ -148,7 +149,7 @@ export function view(arg) {
 }
 export function viewConfigurator(arg, params) {
     const parametrs = convert(params)
-    console.log(parametrs)
+    //  console.log(parametrs)
     const alerts = [];
     const tiresLink = document.querySelectorAll('.tires_link')
     //const tiresLinkId = document.getElementById('.tires_link')
@@ -243,7 +244,7 @@ export function viewConfigurator(arg, params) {
         }
 
     })
-    console.log(alerts)
+    //   console.log(alerts)
 }
 
 
@@ -385,7 +386,8 @@ const convert = (ob) => {
 let count = 0;
 export function contur(model, message, arg, params) {
     count++
-    //   console.log(model, message)
+    console.log(model, message, arg, params)
+    dashView(message)
     const nameCar = model.message.replace(/\s+/g, '')
     const listArr = document.querySelector('.list_arr2')
     const listItemCar = document.createElement('div')
@@ -412,17 +414,22 @@ export function contur(model, message, arg, params) {
     })
     const listItem = document.querySelector(`.${nameCar}`)
     const shina = listItem.querySelectorAll('.tiresProfil');
+    console.log(shina)
     const modelUniqValues = convert(params)
     const r = [];
     let integer;
+    console.log(modelUniqValues)
     modelUniqValues.forEach(el => {
         r.push(el.tyresdiv)
     })
-    r.forEach((el, index) => {
+    const uniq = convert(r)
+    console.log(uniq)
+
+    uniq.forEach((el, index) => {
         shina[index].setAttribute('id', el);
     })
     arg.forEach((el) => {
-        params.forEach((item) => {
+        modelUniqValues.forEach((item) => {
             if (el.name == item.pressure) {
                 shina.forEach(e => {
                     if (e.id == item.tyresdiv) {
@@ -432,6 +439,7 @@ export function contur(model, message, arg, params) {
                         }
                         else {
                             integer = el.value
+                            //    console.log(integer)
                             if ((nameCar == 'КранГаличанинР858ОР178')) {
                                 e.style.background = objColor[generDav(integer)]
 
@@ -450,6 +458,7 @@ export function contur(model, message, arg, params) {
     })
     if (count >= 4) {
         navigator();
+
     }
 }
 

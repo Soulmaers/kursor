@@ -7,13 +7,31 @@ import { visual, visualNone } from './visual.js'
 
 const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {
+
+    const dash = document.querySelector('.wrapper_right_dash')
+    const sections = document.querySelector('.sections')
+    const main = document.querySelector('.main')
+    dash.style.display = 'flex'
+    sections.style.display = 'none'
+    main.style.display = 'none'
     getDash()
-    // setInterval(getDash, 6000)
-})
+    setInterval(getDash, 6000)
+
+
+
+});
+
+
+
+
+
+
+
 
 
 
 export function saveTyres(arr) {
+
     const btnSave = document.querySelector('.btn_save')
     btnSave.addEventListener('click', () => {
         postTyres(arr);

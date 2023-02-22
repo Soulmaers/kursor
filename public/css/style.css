@@ -1915,3 +1915,38 @@ input[type="number"]:focus {
   font-size: 0.9rem;
   background-color: lightgray;
 }
+
+.wrapper_right_dash {
+  display: none;
+  border: 1px solid gray;
+
+}
+
+.dash_card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid gray;
+}
+
+.dash_title,
+.title_change {
+  font-family: Roboto;
+  font-size: 1rem;
+}
+
+.configChange {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+}
+
+.check_box {
+  display: flex;
+  flex-direction: column;
+}
