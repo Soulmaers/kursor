@@ -2,7 +2,7 @@
 //const db = require('../settings/db')
 //const bcrypt = require('bcryptjs')
 //const jwt = require('jsonwebtoken')
-//const path = require('path')
+const { init } = require('../settings/wialon.js')
 
 
 
@@ -20,10 +20,11 @@ module.exports.profile = async function (req, res) {
 
 
 module.exports.spisok = async function (req, res) {
-    // console.log(req.user)
+    console.log(req.user)
     res.render('in.ejs', {
         user: req.user // get the user out of session and pass to template
     })
+    init(req.user)
 }
 
 

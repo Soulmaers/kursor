@@ -5,9 +5,11 @@ import { contur } from './visual.js'
 import { loadParamsView } from './paramsTyresView.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 
-export function init() {
+//0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
+
+export function init(kluch) {
     wialon.core.Session.getInstance().initSession("https://hst-api.wialon.com");
-    wialon.core.Session.getInstance().loginToken("0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178", "", // try to login
+    wialon.core.Session.getInstance().loginToken(kluch, "", // try to login
         function (code) {
             if (code) {
                 return;
@@ -25,7 +27,7 @@ wrapContaint.appendChild(cont);
 export let dann;
 export function zapros() {
 
-    const flags = 1 + 1024
+    const flags = 1 + 1024//4096
     const prms = {
         "spec": {
             "itemsType": "avl_unit",
@@ -45,6 +47,7 @@ export function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
+            //  console.log(result)
             const arr1 = Object.values(result);
             const arrCar = arr1[5];
             console.log(arr1[5])
@@ -53,7 +56,7 @@ export function zapros() {
             arrCar.forEach(el => {
                 //   el.nm.replace(/\s+/g, '')
                 loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями
-                //  setInterval(loadParamsViewList, 6000, el.nm)
+                //setInterval(loadParamsViewList, 6000, el.nm)
 
             })
 
@@ -116,4 +119,6 @@ function loadParamsViewList(car) {
 
         })
 }
+
+
 

@@ -386,9 +386,11 @@ const convert = (ob) => {
 let count = 0;
 export function contur(model, message, arg, params) {
     count++
+
     console.log(model, message, arg, params)
     dashView(message)
     const nameCar = model.message.replace(/\s+/g, '')
+
     const listArr = document.querySelector('.list_arr2')
     const listItemCar = document.createElement('div')
     listItemCar.classList.add('listItem')
@@ -405,6 +407,7 @@ export function contur(model, message, arg, params) {
     const listTrail = document.createElement('div')
     listTrail.classList.add('list_trail2')
     listItemCar.appendChild(listTrail)
+
     const modelUniq = convert(model.result)
     modelUniq.forEach(os => {
         const osi = document.createElement('div')
@@ -456,7 +459,8 @@ export function contur(model, message, arg, params) {
             }
         })
     })
-    if (count >= 4) {
+
+    if (count >= 2) {
         navigator();
 
     }

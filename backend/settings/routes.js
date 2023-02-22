@@ -11,7 +11,7 @@ module.exports = router
 
 router.get('/', controller.page)
 router.post('/', passport.authenticate('local-login', {
-    successRedirect: '/profile', // redirect to the secure profile section
+    successRedirect: '/spisok', // redirect to the secure profile section
     failureRedirect: '/', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
 }))
