@@ -1,5 +1,5 @@
-import { zapros, dann } from './menu.js'
-
+import { dann } from './menu.js'
+import { convert } from './visual.js'
 
 
 export function dashView(nameCar) {
@@ -14,11 +14,6 @@ export function dashView(nameCar) {
     box.appendChild(list)
 
 }
-
-
-
-
-
 
 
 export function getDash() {
@@ -63,84 +58,44 @@ export function getDash() {
     })
     //  setTimeout(console.log, 1000, massiv)
     setTimeout(dashAllSort, 1000, dataArr, paramsArr)
+
 }
 
-const convert = (ob) => {
-    const uniq = new Set(ob.map(e => JSON.stringify(e)));
-    return Array.from(uniq).map(e => JSON.parse(e));
-}
+
 
 function dashAllSort(dataArr, paramsArr) {
-    console.log('запуск')
-
+    console.log(dataArr.length)
+    console.log(paramsArr)
     const all = []
+    const paramsNewArr = [];
     dataArr.forEach(e => {
         const arr = new Object();
         arr.name = e.message;
         arr.params = [];
         all.push(arr)
-
     })
-
-
+    paramsArr.forEach(e => {
+        paramsNewArr.push(convert(e.values))
+    })
+    console.log(paramsNewArr)
     const arrSmall = [];
-    const parametrs0 = convert(paramsArr[0].values)
-    const parametrs1 = convert(paramsArr[1].values)
-    const parametrs2 = convert(paramsArr[2].values)
-    const parametrs3 = convert(paramsArr[3].values)
-
-    dataArr[0].values.forEach((el) => {
-        parametrs0.forEach(item => {
-            if (el.name == item.pressure) {
-                all.forEach(it => {
-                    if (it.name === dataArr[0].message) {
-                        el.value >= 100 ? it.params.push((el.value * 0.069).toFixed(1)) : it.params.push(el.value)
-                        el.value >= 100 ? arrSmall.push((el.value * 0.069).toFixed(1)) : arrSmall.push(el.value)
-                    }
-                })
-            }
-        })
-    })
-    dataArr[1].values.forEach((el) => {
-        parametrs1.forEach(item => {
-            if (el.name == item.pressure) {
-                all.forEach(it => {
-                    if (it.name === dataArr[1].message) {
-                        el.value >= 100 ? it.params.push((el.value * 0.069).toFixed(1)) : it.params.push(el.value)
-                        el.value >= 100 ? arrSmall.push((el.value * 0.069).toFixed(1)) : arrSmall.push(el.value)
-                    }
-                })
-            }
-        })
-    })
-    dataArr[2].values.forEach((el) => {
-        parametrs2.forEach(item => {
-            if (el.name == item.pressure) {
-                all.forEach(it => {
-                    if (it.name === dataArr[2].message) {
-                        el.value >= 100 ? it.params.push((el.value * 0.069).toFixed(1)) : it.params.push(el.value)
-                        el.value >= 100 ? arrSmall.push((el.value * 0.069).toFixed(1)) : arrSmall.push(el.value)
-                    }
-                })
-            }
-        })
-    })
-    dataArr[3].values.forEach((el) => {
-        parametrs3.forEach(item => {
-            if (el.name == item.pressure) {
-                all.forEach(it => {
-                    if (it.name === dataArr[3].message) {
-                        el.value >= 100 ? it.params.push((el.value * 0.069).toFixed(1)) : it.params.push(el.value)
-                        el.value >= 100 ? arrSmall.push((el.value * 0.069).toFixed(1)) : arrSmall.push(el.value)
-                    }
-                })
-            }
+    dataArr.forEach((el, index) => {
+        el.values.forEach(e => {
+            paramsNewArr[index].forEach(it => {
+                if (e.name == it.pressure) {
+                    all.forEach(item => {
+                        if (item.name === el.message) {
+                            e.value >= 100 ? item.params.push((e.value * 0.069).toFixed(1)) : item.params.push(e.value)
+                            e.value >= 100 ? arrSmall.push((e.value * 0.069).toFixed(1)) : arrSmall.push(e.value)
+                        }
+                    })
+                }
+            })
         })
     })
     const checkboxes = document.querySelectorAll('.input');
     let enabledSettings = []
     checkboxes.forEach(function (checkbox) {
-        //  console.log(checkbox)
         const mas = [];
         checkbox.addEventListener('change', function () {
             if (this.id !== "Все") {
@@ -159,10 +114,8 @@ function dashAllSort(dataArr, paramsArr) {
                 })
                 console.log('мас условие')
                 dashDav(mas)
-                //setInterval(dashDav, 6000, mas)
                 mas.length = 0;
             }
-
             if (this.id == "Все") {
                 const ide = document.getElementById('Все')
                 checkboxes.forEach(el => {
@@ -182,14 +135,11 @@ function dashAllSort(dataArr, paramsArr) {
         dashDav(arrSmall)
     }
     console.log(all)
-    //  dashDav(arrSmall)
 }
 
 
 function dashDav(arr) {
     console.log(arr)
-    // const arrTiresFront = arrayD.slice(0, 6);
-    //  const arrTiresRear = arrayD.slice(6, 12);
     let countRed = 0;
     let countYellow = 0;
     let countGreen = 0;
@@ -204,27 +154,21 @@ function dashDav(arr) {
             countRed++
         }
     })
-    //  console.log(countGreen)
     const resultRed = Math.round(countRed / arr.length * 100);
     const resultYellow = Math.round(countYellow / arr.length * 100);
     const resultGreen = Math.round(countGreen / arr.length * 100);
     const arrD = [resultRed, resultYellow, resultGreen];
     console.log(arrD)
-    // return arrD
-
-
     const newBoad = document.getElementById('myChart')
     if (newBoad) {
         newBoad.remove();
     }
 
-
-
     const dashBoard = document.querySelector('.dash_board')
     const board = document.createElement('canvas')
     board.setAttribute('id', 'myChart')
-
     dashBoard.appendChild(board)
+
     Chart.register(ChartDataLabels);
 
 
