@@ -387,7 +387,7 @@ let count = 0;
 export function contur(model, message, arg, params) {
     count++
 
-    console.log(model, message, arg, params)
+    // console.log(model, message, arg, params)
     dashView(message)
     const nameCar = model.message.replace(/\s+/g, '')
 
@@ -409,6 +409,7 @@ export function contur(model, message, arg, params) {
     listItemCar.appendChild(listTrail)
 
     const modelUniq = convert(model.result)
+    console.log(modelUniq)
     modelUniq.forEach(os => {
         const osi = document.createElement('div')
         osi.classList.add('osi_list')
@@ -417,16 +418,16 @@ export function contur(model, message, arg, params) {
     })
     const listItem = document.querySelector(`.${nameCar}`)
     const shina = listItem.querySelectorAll('.tiresProfil');
-    console.log(shina)
+    //console.log(shina)
     const modelUniqValues = convert(params)
     const r = [];
     let integer;
-    console.log(modelUniqValues)
+    // console.log(modelUniqValues)
     modelUniqValues.forEach(el => {
         r.push(el.tyresdiv)
     })
     const uniq = convert(r)
-    console.log(uniq)
+    // console.log(uniq)
 
     uniq.forEach((el, index) => {
         shina[index].setAttribute('id', el);
@@ -460,10 +461,10 @@ export function contur(model, message, arg, params) {
         })
     })
 
-    if (count >= 4) {
-        navigator();
+    //if (count >= 4) {
+    // navigator();
 
-    }
+    // }
 }
 
 
@@ -471,7 +472,7 @@ export function contur(model, message, arg, params) {
 
 export function viewDinamic(arr) {
     const conts = document.querySelectorAll('.contBar2')
-    console.log(arr)
+    //  console.log(arr)
     conts.forEach(el => {
         el.style.display = 'none'
     })

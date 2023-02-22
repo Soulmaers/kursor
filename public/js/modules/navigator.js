@@ -42,3 +42,4 @@ export function navigator() {
 }
 
 
+setTimeout(navigator, 1000)
