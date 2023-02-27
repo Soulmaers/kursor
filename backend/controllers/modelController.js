@@ -283,7 +283,7 @@ module.exports.listModel = (req, res) => {
 
 
 module.exports.listTyres = (req, res) => {
-    console.log(req.body)
+    //console.log(req.body)
     const nameCar = 'tyres' + req.body.car.replace(/\s+/g, '')
     try {
         const selectBase = `SELECT tyresdiv, pressure,temp FROM ${nameCar} WHERE 1`

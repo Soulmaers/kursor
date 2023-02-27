@@ -251,19 +251,17 @@ export function viewTech(id) {
                     })
                 })
                 viewDinamic([])
-
             }
             else if (res.values.length > 0) {
                 number[0].textContent = keys[8]
                 number[1].textContent = keys[9]
                 number[2].textContent = keys[10]
                 number[3].textContent = keys[11]
-                text[0].textContent = res.values[0].N1 + 'мм'
-                text[1].textContent = res.values[0].N2 + 'мм'
-                text[2].textContent = res.values[0].N3 + 'мм'
-                text[3].textContent = res.values[0].N4 + 'мм'
+                text[0].textContent = res.values[0].N1 + 'мм',
+                    text[1].textContent = res.values[0].N2 + 'мм',
+                    text[2].textContent = res.values[0].N3 + 'мм',
+                    text[3].textContent = res.values[0].N4 + 'мм';
 
-                // console.log(res.values[0].N1)
                 const protector = [];
                 protector.push(res.values[0].N1, res.values[0].N2, res.values[0].N3, res.values[0].N4)
                 const protectorClear = [];
@@ -280,20 +278,26 @@ export function viewTech(id) {
                         protectorClearRigth.push(el)
                     }
                 })
-                console.log(protectorClear)
                 const reverseprotectorClear = protectorClearRigth.reverse();
-
 
                 rad.forEach(el => {
                     el.addEventListener('change', () => {
-                        el.id === '1' ? viewDinamic(protectorClear) : viewDinamic(reverseprotectorClear)
+                        el.id === '1' ? (viewDinamic(protectorClear),
+                            text[0].textContent = res.values[0].N1 + 'мм',
+                            text[1].textContent = res.values[0].N2 + 'мм',
+                            text[2].textContent = res.values[0].N3 + 'мм',
+                            text[3].textContent = res.values[0].N4 + 'мм') :
+                            (viewDinamic(reverseprotectorClear),
+                                text[3].textContent = res.values[0].N1 + 'мм',
+                                text[2].textContent = res.values[0].N2 + 'мм',
+                                text[1].textContent = res.values[0].N3 + 'мм',
+                                text[0].textContent = res.values[0].N4 + 'мм')
                     })
                 })
                 viewDinamic(protectorClear)
 
                 const nval = (Object.entries(res.values[0]))
                 const massVal = nval.shift()
-
                 const formValue = document.querySelectorAll('.formValue')
                 formValue.forEach((el, index) => {
                     el.value = nval[index][1]
@@ -311,26 +315,20 @@ export function viewTech(id) {
 }
 
 
-
-
 export function loadParamsViewShina() {
-
     const titleCar = document.querySelector('.title_two')
     const listItem = document.querySelectorAll('.link_menu')[0]
-    // console.log(listItem)
-    //  console.log('запуск')
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.listItem')[0]
-        //    console.log(listItem.textContent)
+
         activePost = listItem.textContent.replace(/\s+/g, '')
         titleCar.textContent = listItem.textContent
     }
     else {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
-
     fetch('api/modelView', {
         method: "POST",
         headers: {
@@ -341,12 +339,10 @@ export function loadParamsViewShina() {
         .then((res) => res.json())
         .then((res) => {
             const model = res
-            console.log(model)
+
             const osi = document.querySelectorAll('.osi')
             const centerOs = document.querySelectorAll('.centerOs')
             if (model.values.length > 0) {
-                console.log('база целая')
-                console.log(model.values)
                 model.values.forEach(el => {
 
                     osi[el.osi - 1].style.display = 'flex';
@@ -374,7 +370,5 @@ export function loadParamsViewShina() {
             }
 
         })
-
-
 }
 

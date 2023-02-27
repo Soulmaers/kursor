@@ -35,7 +35,7 @@ function init(user) {
 }
 //init()
 
-function createTable(name) {
+function createTable() {
     session.request('core/search_items', prms)
         .catch(function (err) {
             console.log(err);
@@ -45,6 +45,7 @@ function createTable(name) {
             allCar[5][1].forEach(el => {
                 const nameTable = el.nm.replace(/\s+/g, '')
                 const sensor = Object.entries(el.lmsg.p)
+                console.log(sensor.length)
                 createNameTable(nameTable)
                 postParametrs(nameTable, sensor)
 
@@ -70,6 +71,7 @@ function postParametrs(name, param) {
     connection.query(selectBase, function (err, results) {
         if (err) console.log(err);
         if (results.length < 1) {
+            console.log('создаем')
             const sql = `INSERT INTO ${name}(name,value) VALUES?`;
             connection.query(sql, [param], function (err, results) {
                 if (err) console.log(err);
@@ -77,7 +79,7 @@ function postParametrs(name, param) {
             //   connection.end();
         }
         else if (results.length > 0) {
-            // console.log('старт')
+            console.log('старт')
             let count = 0;
             //  console.log(param)
             param.forEach(el => {
