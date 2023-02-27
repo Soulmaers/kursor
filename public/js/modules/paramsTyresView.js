@@ -14,11 +14,15 @@ export function viewMenuParams() {
     const wrapperButton = document.querySelector('.wrapper_button')
     const obo = document.querySelector('.obo')
     const tiresLink = document.querySelectorAll('.tires_link')
-
+    const techInfo = document.querySelector('.techInfo')
     tiresLink.forEach(e => {
         e.addEventListener('click', () => {
+            if (e.classList.contains('tiresActiv')) {
+                e.classList.remove('tiresActiv')
+                techInfo.style.display = 'none'
+                return
+            }
             console.log('нажал')
-
             kolesos.push(e)
             speedGraf.style.display = 'none';
             sensor(btnsens, titleSens, obo)
@@ -28,22 +32,13 @@ export function viewMenuParams() {
                 wrapperButton.style.display = 'none'
                 const msg = document.querySelectorAll('.msg')
                 msg.forEach(el => el.classList.remove('act'))
+                e.classList.remove('tiresActiv')
             });
             wrapperButton.style.display = 'flex';
-            //  const techInfo = document.querySelector('.techInfo')
-
-            tiresLink.forEach(el => {
-                el.classList.remove('tiresActiv')
-            }
-            );
-
             e.classList.add('tiresActiv')
-            //  techInfo.style.display = (techInfo.style.display != 'block') ? 'block' : 'none';
-
+            techInfo.style.display = 'block'
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
-
         })
-
     })
     koleso(kolesos, btnsens)
 }

@@ -14,7 +14,7 @@ export function tech() {
     const inputPSI = document.querySelector('.jobDav')
     const inputBar = document.querySelector('.bar')
     const techInfo = document.querySelector('.techInfo')
-    techInfo.style.display = 'block'
+    //techInfo.style.display = 'block'
     const probeg = document.querySelectorAll('.probeg')
     probeg.forEach(el => {
         el.addEventListener('input', () => {
