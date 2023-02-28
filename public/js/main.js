@@ -13,6 +13,10 @@ const save = document.querySelector('.save')
 const clear = document.querySelector('.clear')
 const dropdown = document.querySelector('.dropdown')
 const modal = document.querySelectorAll('.modal')
+const radioModule = document.querySelector('.radioModule')
+const radioVal = document.querySelector('.radioVal')
+
+
 console.log(login)
 if (login !== 'TDRMX') {
     console.log('старт11')
@@ -27,6 +31,10 @@ if (login === 'TDRMX') {
     modal[4].style.display = 'none'
     modal[7].style.display = 'none'
     modal[8].style.display = 'none'
+    radioModule.style.display = 'none'
+    radioVal.style.marginTop = '10px'
+    radioVal.style.marginLeft = '10px'
+    radioVal.style.justifyContent = 'start'
     kluch = '7d21706dbf99ed8dd9257b8b1fcc5ab3FDEAE2E1E11A17F978AC054411BB0A0CBD9051B3'
     init(kluch);
 }

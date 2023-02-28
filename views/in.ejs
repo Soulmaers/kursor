@@ -157,7 +157,9 @@
                         <p class="title_text akb_value"></p>
                     </div>
                     <div class="icon_item icon_kluch"></div>
-                    <div class="icon_item icon_speed"></div>
+                    <div class="icon_item icon_speed">
+                        <p class="title_text probeg_value"></p>
+                    </div>
                     <div class="icon_item icon_oil"></div>
                     <div class="icon_item icon_parking"></div>
                     <div class="icon_item icon_shina"></div>
@@ -179,12 +181,12 @@
                         <div class="modal">
                             <h3 class="titleTth tech" id="psi">Рабочее давление в PSI</h3>
                             <div class="formTth  psi">
-                                <input class="techInput formValue jobDav validation" type="number">
+                                <input class="techInput formValue jobDav validation" type="number" placeholder="130">
                                 <p class="techText titleTth barD" id="bar">BAR</p>
                                 <p class="techInput bar job"></p>
                             </div>
                         </div>
-                        <div class="modal">
+                        <div class="modal hiddenPos">
                             <h3 class="titleTth tech" id="changeBar">min и max отклонение в BAR</h3>
                             <div class="formTth formValue"></div>
                         </div>
@@ -227,9 +229,11 @@
 
                     <div class="radioVal">
                         <button class="buttonTth">Сохранить</button>
-                        <p>Сторона колеса</p>
-                        <p><input class="radio" name="radio" type="radio" id='1' value="left" checked> Левое</p>
-                        <p><input class="radio" name="radio" type="radio" id="rigth" value="rigth"> Правое</p>
+                        <div class="radioModule">
+                            <p>Сторона колеса</p>
+                            <p><input class="radio" name="radio" type="radio" id='1' value="left" checked> Левое</p>
+                            <p><input class="radio" name="radio" type="radio" id="rigth" value="rigth"> Правое</p>
+                        </div>
                     </div>
 
 

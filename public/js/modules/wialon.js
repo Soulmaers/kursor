@@ -153,18 +153,37 @@ export function iconParams() {
 
         });
 
+
+
 }
 
+function addZero(digits_length, source) {
+    let text = source + '';
+    while (text.length < digits_length)
+        text = '0' + text;
+    return text;
+}
 function loadAkb(arrCar) {
     const active = document.querySelector('.color')
     const act = active.children[0].textContent
-    let val;
+    let akb;
+    let probeg;
     //  console.log(act)
+    console.log(arrCar)
     arrCar.forEach(it => {
         if (it.nm === act) {
-            val = (it.lmsg.p.pwr_ext).toFixed(1);
-            const akb = document.querySelector('.akb_value')
-            akb.textContent = val
+            akb = (it.lmsg.p.pwr_ext).toFixed(1);
+            if (it.lmsg.p.mileage) {
+                probeg = (it.lmsg.p.mileage).toFixed(0);
+                const odometr = addZero(8, probeg)
+                const probegElem = document.querySelector('.probeg_value')
+                probegElem.textContent = odometr
+                //  console.log(odometr)
+            }
+            //  console.log(akb)
+            const akbElem = document.querySelector('.akb_value')
+            akbElem.textContent = akb
+
         }
     })
     //  console.log(val)
