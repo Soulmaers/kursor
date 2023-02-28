@@ -1950,3 +1950,25 @@ input[type="number"]:focus {
   display: flex;
   flex-direction: column;
 }
+
+
+.hiddenPos {
+  display: none;
+}
+
+.radioModule {
+  display: flex;
+}
+
+.icon_speed {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 93px;
+}
+
+.probeg_value {
+  color: #008200;
+  font-size: 1.1rem;
+  margin-top: 5px;
+}
