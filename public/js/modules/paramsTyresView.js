@@ -106,7 +106,7 @@ export function loadParamsView() {
         })
 
     viewPokasateli()
-    setInterval(viewPokasateli, 6000)
+    setInterval(viewPokasateli, 12000)
 }
 
 export function viewPokasateli() {

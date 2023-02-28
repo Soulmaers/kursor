@@ -13,12 +13,14 @@ const save = document.querySelector('.save')
 const clear = document.querySelector('.clear')
 const dropdown = document.querySelector('.dropdown')
 const modal = document.querySelectorAll('.modal')
-
+console.log(login)
 if (login !== 'TDRMX') {
+    console.log('старт11')
     kluch = '0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178'
     init(kluch);
 }
 if (login === 'TDRMX') {
+    console.log('старт22')
     save.style.display = 'none'
     clear.style.display = 'none'
     dropdown.style.display = 'none'

@@ -148,22 +148,17 @@ export function view(arg) {
 
 }
 export function viewConfigurator(arg, params) {
+    console.log(arg)
+    console.log(params)
     const parametrs = convert(params)
-    //  console.log(parametrs)
     const alerts = [];
     const tiresLink = document.querySelectorAll('.tires_link')
-    //const tiresLinkId = document.getElementById('.tires_link')
-    //const active = document.querySelectorAll('.color')
     let activePost;
     const active = document.querySelectorAll('.color')
     const alarm = document.querySelector('.alarm')
     const alarmCheck = document.querySelector('.alarmCheck')
-    /* if (active[0].textContent == 'Кран 858') {
-         active[0].textContent = 'КранГаличанин Р858ОР178'
-     }*/
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.listItem')[0]
-        //  console.log(listItem.textContent)
         activePost = listItem.textContent.replace(/\s+/g, '')
     }
     else {
@@ -171,60 +166,79 @@ export function viewConfigurator(arg, params) {
     }
     const btnShina = document.querySelector('.btn_icon')
 
+    const par = [];
+    arg.forEach(el => {
+        par.push(el.name)
+    })
 
-    arg.forEach((el) => {
-        let parapmsPress;
-        // parapmsPress = 
+    parametrs.forEach(item => {
         let signal;
         let done;
-        parametrs.forEach(item => {
-            if (el.name == item.pressure) {
-                tiresLink.forEach(e => {
-                    if (e.id == item.tyresdiv) {
-                        if (activePost === 'PressurePro933') {
-                            done = parseFloat((el.value * 0.069).toFixed(1))
-                        }
-                        else {
-                            done = parseFloat(el.value)
-                        }
-                        alerts.push(done)
-                        e.children[0].textContent = done + '\nБар'
-                        e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
-                        if (activePost == 'КранГаличанинР858ОР178') {
-                            signal = objColor[generDav(done)]
-
-                            if (done < 6 || done > 9.9) {
-                                // e.classList.add('alarmCheck')
-                            }
-                        }
-                        else {
-                            signal = objColor[generFront(done)]
-                            if (done < 8 || done > 10) {
-                                //   e.classList.add('alarmCheck')
-                            }
-                        }
-                        e.children[0].style.background = signal;
-
-                    }
-                })
+        tiresLink.forEach(e => {
+            // console.log(e.children[0].textContent)
+            if (e.id == item.tyresdiv) {
+                if (!par.includes(item.pressure)) {
+                    console.log('не тру')
+                    e.children[0].textContent = 'off'
+                    e.children[0].style.color = '#000'
+                }
+                if (!par.includes(item.temp)) {
+                    console.log('не тру')
+                    e.children[1].textContent = 'off'
+                }
             }
-            if (el.name == item.temp) {
-                tiresLink.forEach(e => {
-                    if (e.id == item.tyresdiv) {
-                        if (el.value === '-128' || el.value === '-51') {
-                            el.value = 'err'
-                            e.children[1].textContent = el.value
-                        }
-                        if (el.value > -50 && el.value < 36) {
-                            e.children[1].textContent = el.value + '°'
+            else {
+                arg.forEach((el) => {
+                    if (el.name == item.pressure) {
+                        tiresLink.forEach(e => {
+                            if (e.id == item.tyresdiv) {
+                                console.log('тру')
+                                if (activePost === 'PressurePro933') {
+                                    done = parseFloat((el.value * 0.069).toFixed(1))
+                                }
+                                else {
+                                    done = parseFloat(el.value)
+                                }
+                                alerts.push(done)
+                                e.children[0].textContent = done + '\nБар'
 
-                            e.children[1].style.background = objColor[generT(el.value)];
-                        }
+                                e.children[0].style.color = '#fff'
+                                e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
+                                if (activePost == 'КранГаличанинР858ОР178') {
+                                    signal = objColor[generDav(done)]
+
+                                    if (done < 6 || done > 9.9) {
+                                        // e.classList.add('alarmCheck')
+                                    }
+                                }
+                                else {
+                                    signal = objColor[generFront(done)]
+                                    if (done < 8 || done > 10) {
+                                        //   e.classList.add('alarmCheck')
+                                    }
+                                }
+                                e.children[0].style.background = signal;
+                            }
+                        })
+                    }
+                    if (el.name == item.temp) {
+                        tiresLink.forEach(e => {
+                            if (e.id == item.tyresdiv) {
+                                if (el.value === '-128' || el.value === '-51') {
+                                    el.value = 'err'
+                                    e.children[1].textContent = el.value
+                                }
+                                if (el.value >= -50 && el.value < 36) {
+                                    e.children[1].textContent = el.value + '°'
+
+                                    e.children[1].style.background = objColor[generT(el.value)];
+                                }
+                            }
+                        })
                     }
                 })
             }
         })
-
         if (activePost == 'КранГаличанинР858ОР178') {
             if (alerts.some(element => element < 6) == true) {
                 alarmMin();
@@ -242,9 +256,7 @@ export function viewConfigurator(arg, params) {
                 alarmMin();
             }
         }
-
     })
-    //   console.log(alerts)
 }
 
 

@@ -6,20 +6,18 @@ const controllerModel = require('../controllers/modelController')
 const isLoggedIn = require('../middleware/auth.js')
 const passport = require('passport')
 const router = express.Router()
+const jwt = require('jsonwebtoken');
 
 module.exports = router
 
+
 router.get('/', controller.page)
-router.post('/', passport.authenticate('local-login', {
-    successRedirect: '/spisok', // redirect to the secure profile section
-    failureRedirect: '/', // redirect back to the signup page if there is an error
-    failureFlash: true // allow flash messages
-}))
-
-
-router.get('/profile', isLoggedIn, controller.profile)
+router.post('/', controller.sing)
 router.get('/logout', controller.logout)
-router.get('/spisok', isLoggedIn, controller.spisok)
+//router.get('/spisok', isLoggedIn, controller.spisok)
+
+router.get('/action', passport.authenticate('jwt', { session: false }), controller.action)
+
 
 
 router.post('/api/wialon', controllerWialon.datawialon)

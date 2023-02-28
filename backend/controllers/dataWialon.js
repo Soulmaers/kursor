@@ -2,7 +2,7 @@ const response = require('../../response')
 //const wialon = require('wialon');
 //const session = wialon().session;
 const { getMainInfo } = require('../settings/wialon.js')
-const { createTable } = require('../settings/wialon.js')
+//const { createTable } = require('../settings/wialon.js')
 
 const { prms } = require('../settings/params')
 const connection = require('../settings/db')
