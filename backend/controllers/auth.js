@@ -30,7 +30,7 @@ module.exports.sing = async function (req, res) {
                     const token = jwt.sign({
                         userId: rw.id,
                         user: rw.name
-                    }, 'jwt-key', { expiresIn: 120 * 120 })
+                    }, 'jwt-key', { expiresIn: 1200 * 1200 })
                     //res.json(`Bearer ${token}`)
                     res.cookie('AuthToken', `${token}`)
                     //  console.log(res.cookies)
