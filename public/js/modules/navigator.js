@@ -36,4 +36,4 @@ export function navigator() {
 }
 
 
-setTimeout(navigator, 1700)
+setTimeout(navigator, 2000)
