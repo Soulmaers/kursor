@@ -29,7 +29,7 @@ module.exports = function (passport) {
             //  console.log(opts.jwtFromRequest)
             console.log('работаем')
             try {
-                db.query("SELECT `id`, `name` FROM `users` WHERE `id`='" + payload.userId + "'", (error, rows, fields) => {
+                db.query("SELECT `id`, `name`,`role` FROM `users` WHERE `id`='" + payload.userId + "'", (error, rows, fields) => {
                     //     console.log('работаем')
                     if (error) {
                         console.log('ошибка' + error)

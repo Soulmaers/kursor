@@ -7,7 +7,6 @@ import { visual, visualNone } from './visual.js'
 
 const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {
-
     const dash = document.querySelector('.wrapper_right_dash')
     const sections = document.querySelector('.sections')
     const main = document.querySelector('.main')
@@ -17,21 +16,10 @@ btnDash.addEventListener('click', () => {
     getDash()
     setInterval(getDash, 6000)
 
-
-
 });
 
 
-
-
-
-
-
-
-
-
 export function saveTyres(arr) {
-
     const btnSave = document.querySelector('.btn_save')
     btnSave.addEventListener('click', () => {
         postTyres(arr);
@@ -39,8 +27,11 @@ export function saveTyres(arr) {
     })
 
 }
+
+
 //очистка модели из базы и удаление отрисовки
-export const btnClear = document.querySelector('.btn_clear')
+export function btnDel(){
+ const btnClear = document.querySelector('.btn_clear')
 btnClear.addEventListener('click', () => {
     const active = document.querySelectorAll('.color')
     console.log(active)
@@ -50,7 +41,7 @@ btnClear.addEventListener('click', () => {
     reqDelete(activePost);
     paramsDelete(activePost);
 })
-
+}
 const btnShina = document.querySelector('.btn_icon')
 btnShina.addEventListener('click', () => {
     btnShina.classList.toggle('active')

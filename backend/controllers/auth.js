@@ -52,10 +52,14 @@ module.exports.sing = async function (req, res) {
 }
 
 module.exports.action = function (req, res) {
+    console.log(req.user)
     if (req.user) {
         const login = req.user[0].name
+        const role = req.user[0].role
+        console.log(login)
         res.render('in.ejs', {
-            user: login
+            user: login,
+            role:role
         })
         init(login)
     }

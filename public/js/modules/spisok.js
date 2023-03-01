@@ -1,49 +1,34 @@
-import { convert } from './visual.js'
+import { convert, visual } from './visual.js'
 import { dashView } from './dash.js'
+import { navigator } from './navigator.js'
 import { twoTyres, forTyres } from './content.js'
 import { objColor, generFront, generDav } from './content.js'
 
-export function loadParamsViewList(car) {
-    fetch('api/listModel', {
+
+
+export async function loadParamsViewList(car) {
+    console.log(1)
+    const params = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
         body: (JSON.stringify({ car }))
-    })
-        .then((res) => res.json())
-        .then((res) => {
-            const model = res
-            fetch('api/listTyres', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: (JSON.stringify({ car }))
-            })
-                .then((res) => res.json())
-                .then((res) => {
-                    const models = res
-                    fetch('api/wialonAll', {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: (JSON.stringify({ car }))
-                    })
-                        .then((res) => res.json())
-                        .then((res) => {
-                            const data = res
-                            contur(model, data.message, data.result, models.result);
-                        })
-                })
-        })
+    }
+
+    const mod = await fetch('api/listModel', params)
+    const model = await mod.json()
+    const tyr = await fetch('api/listTyres', params)
+    const models = await tyr.json()
+    const dat = await fetch('api/wialonAll', params)
+    const data = await dat.json()
+
+    contur(model, data.message, data.result, models.result);
 }
 
 
-
-
 function contur(model, message, arg, params) {
+
     dashView(message)
     const nameCar = model.message.replace(/\s+/g, '')
     const listArr = document.querySelector('.list_arr2')
@@ -62,6 +47,7 @@ function contur(model, message, arg, params) {
     listTrail.classList.add('list_trail2')
     listItemCar.appendChild(listTrail)
     const modelUniq = convert(model.result)
+
     modelUniq.forEach(os => {
         const osi = document.createElement('div')
         osi.classList.add('osi_list')
@@ -103,35 +89,31 @@ function contur(model, message, arg, params) {
             }
         })
     })
+
+
 }
 
 function zaprosSpisok() {
+    console.log('список')
     const list = document.querySelectorAll('.listItem')
-    list.forEach(el => {
+    list.forEach(async el => {
         const car = el.children[0].textContent
-        fetch('api/listTyres', {
+        const param = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
             body: (JSON.stringify({ car }))
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                const params = res
-                fetch('api/wialonAll', {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: (JSON.stringify({ car }))
-                })
-                    .then((res) => res.json())
-                    .then((res) => {
-                        const data = res
-                        viewListKoleso(data, params, el)
-                    })
-            })
+        }
+
+
+        const par = await fetch('api/listTyres', param)
+        const params = await par.json()
+
+        const dat = await fetch('api/wialonAll', param)
+        const data = await dat.json()
+
+        viewListKoleso(data, params, el)
     })
 }
 

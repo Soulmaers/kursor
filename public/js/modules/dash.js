@@ -4,7 +4,7 @@ import { convert } from './visual.js'
 
 export function dashView(nameCar) {
     const box = document.querySelector('.check_box')
-    console.log(nameCar)
+    //  console.log(nameCar)
     //  console.log(check)
     const activePost = nameCar.replace(/\s+/g, '')
     const list = document.createElement('p')
@@ -16,54 +16,34 @@ export function dashView(nameCar) {
 }
 
 
-export function getDash() {
+export async function getDash() {
     const dataArr = [];
     const paramsArr = [];
-    dann.forEach(el => {
+    dann.forEach(async el => {
         const activePost = el.nm.replace(/\s+/g, '')
-
-        fetch('api/tyresView', {
+        const param = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
             body: (JSON.stringify({ activePost }))
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                const params = res
-                // console.log(params)
-                paramsArr.push(params)
-                fetch('api/wialon', {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: (JSON.stringify({ activePost }))
-                })
-                    .then((res) => res.json())
-                    .then((res) => {
-                        const data = res
-                        // console.log(data)
-                        dataArr.push(data)
-                        // dashAllSort(data)
-                        /*
-                                        data.values.sort((prev, next) => {
-                                            if (prev.name < next.name) return -1;
-                                            if (prev.name < next.name) return 1;
-                                        })
-                                          */
-                    })
-            })
+        }
+        const tyr = await fetch('api/tyresView', param)
+        const params = await tyr.json();
+        paramsArr.push(params)
+        const dat = await fetch('api/wialon', param)
+        const data = await dat.json();
+        dataArr.push(data)
     })
-    //  setTimeout(console.log, 1000, massiv)
+    console.log(dataArr, paramsArr)
+    // return (dataArr, paramsArr)
     setTimeout(dashAllSort, 1000, dataArr, paramsArr)
-
+    // dashAllSort(dataArr, paramsArr)
 }
 
 
 
-function dashAllSort(dataArr, paramsArr) {
+export function dashAllSort(dataArr, paramsArr) {
     console.log(dataArr.length)
     console.log(paramsArr)
     const all = []

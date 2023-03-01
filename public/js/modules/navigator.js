@@ -5,6 +5,7 @@ import { geoloc, iconParams } from './wialon.js';
 
 export function navigator() {
     const nav = document.querySelectorAll('.listItem')
+
     nav[0].classList.add('color')
     visual(nav[0])
 

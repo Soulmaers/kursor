@@ -10,7 +10,7 @@ import { dashView } from './dash.js'
 let start;
 let time;
 //let timeParams;
-export function visual(el) {
+export async function visual(el) {
     // console.log(el)
     clearInterval(time)
     // clearInterval(timeParams)
@@ -30,9 +30,9 @@ export function visual(el) {
     speedGraf.style.display = 'block'
     el.classList.add('color')
     //  console.log(el)
-    viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
+    await viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
     titleCar.textContent = el.textContent
-    loadParamsView()
+    await loadParamsView()
     //  setInterval(loadParamsView, 5000)
     iconParams()
     setInterval(iconParams, 6000)
@@ -150,8 +150,8 @@ export function view(arg) {
 
 }
 export function viewConfigurator(arg, params) {
-    console.log(arg)
-    console.log(params)
+    // console.log(arg)
+    //  console.log(params)
     const parametrs = convert(params)
     const alerts = [];
     const tiresLink = document.querySelectorAll('.tires_link')
@@ -180,13 +180,14 @@ export function viewConfigurator(arg, params) {
             // console.log(e.children[0].textContent)
             if (e.id == item.tyresdiv) {
                 if (!par.includes(item.pressure)) {
-                    console.log('не тру')
+                    // console.log('не тру')
                     e.children[0].textContent = 'off'
                     e.children[0].style.color = '#000'
                 }
                 if (!par.includes(item.temp)) {
-                    console.log('не тру')
+                    //  console.log('не тру')
                     e.children[1].textContent = 'off'
+
                 }
             }
             else {
@@ -194,7 +195,7 @@ export function viewConfigurator(arg, params) {
                     if (el.name == item.pressure) {
                         tiresLink.forEach(e => {
                             if (e.id == item.tyresdiv) {
-                                console.log('тру')
+                                //    console.log('тру')
                                 if (activePost === 'PressurePro933') {
                                     done = parseFloat((el.value * 0.069).toFixed(1))
                                 }
@@ -310,7 +311,7 @@ function alarmMax() {
 }
 
 
-export function viewOs() {
+export async function viewOs() {
     const container = document.querySelector('.container')
     if (container.children.length > 0) {
         // console.log('удаление')

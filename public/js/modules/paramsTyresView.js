@@ -43,7 +43,7 @@ export function viewMenuParams() {
     koleso(kolesos, btnsens)
 }
 
-export function loadParamsView() {
+export async function loadParamsView() {
     clearInterval(viewPokasateli)
     const titleCar = document.querySelector('.title_two')
     const listItem = document.querySelectorAll('.link_menu')[0]
