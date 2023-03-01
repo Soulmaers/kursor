@@ -10,7 +10,7 @@ const app = express();
 
 
 module.exports.page = async function (req, res) {
-    res.render('form.ejs');
+    res.render('form.ejs', { message: '' });
 }
 
 module.exports.sing = async function (req, res) {
@@ -19,7 +19,8 @@ module.exports.sing = async function (req, res) {
             response.status(404, error, res)
         }
         else if (rows.length <= 0) {
-            res.render('form.ejs')
+            res.render('form.ejs', { message: 'Пользователь не найден!' })
+
             //  response.status(404, { message: `Пользователь с именем - ${req.body.username} не найден` }, '', res)
         }
         else {
@@ -38,7 +39,8 @@ module.exports.sing = async function (req, res) {
 
                     return;
                 } else {
-                    res.render('form.ejs')
+                    res.render('form.ejs', { message: 'Не верный пароль!' })
+
                 }
                 return true
             })
