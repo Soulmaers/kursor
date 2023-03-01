@@ -30,10 +30,10 @@ module.exports.sing = async function (req, res) {
                     const token = jwt.sign({
                         userId: rw.id,
                         user: rw.name
-                    }, 'jwt-key', { expiresIn: 1200 * 1200 })
+                    }, 'jwt-key', { expiresIn: '30d' })
                     //res.json(`Bearer ${token}`)
                     res.cookie('AuthToken', `${token}`)
-                    //  console.log(res.cookies)
+                    console.log(res.cookie)
                     res.cookie('name', `${rw.name}`)
                     res.redirect('/action');
 
@@ -52,8 +52,6 @@ module.exports.sing = async function (req, res) {
 }
 
 module.exports.action = function (req, res) {
-    console.log('работаем')
-    console.log(req.cookies.AuthToken)
     if (req.user) {
         const login = req.user[0].name
         res.render('in.ejs', {
@@ -62,7 +60,7 @@ module.exports.action = function (req, res) {
         init(login)
     }
     else {
-        console.log('ошибка')
+        res.render('form.ejs')
     }
 }
 

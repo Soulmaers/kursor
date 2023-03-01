@@ -1,13 +1,22 @@
 const JwtStrategy = require('passport-jwt').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt
-const { response } = require('express')
 const db = require('../settings/db')
 
+
+
 const cookieExtractor = function (req) {
-    console.log(req.cookies['AuthToken'])
+    console.log('job2')
+    // console.log(req.cookies['AuthToken'])
     var token = null;
     if (req && req.cookies.AuthToken) token = req.cookies['AuthToken'];
+    // console.log(token)
+
     return token;
+    //  const jwtExample = req.cookies['AuthToken']
+    // console.log(valid)
+
+    // console.log(req.cookies)
+
 };
 
 module.exports = function (passport) {
@@ -17,13 +26,13 @@ module.exports = function (passport) {
     //  console.log('работаем')
     passport.use(
         new JwtStrategy(opts, (payload, done) => {
-            // console.log(token)
+            //  console.log(opts.jwtFromRequest)
             console.log('работаем')
             try {
                 db.query("SELECT `id`, `name` FROM `users` WHERE `id`='" + payload.userId + "'", (error, rows, fields) => {
-                    console.log('работаем')
+                    //     console.log('работаем')
                     if (error) {
-                        console.log(error)
+                        console.log('ошибка' + error)
                     } else {
                         //  console.log(rows)
                         const user = rows
@@ -31,7 +40,7 @@ module.exports = function (passport) {
                             //   console.log(user[0].name)
                             done(null, user)
                         } else {
-                            done(null, false,)
+                            done(null, false)
                         }
                     }
 
