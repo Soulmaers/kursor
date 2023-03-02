@@ -348,7 +348,7 @@ td {
   box-sizing: border-box;
   width: 100%;
   min-height: 600px;
- 
+
 
 
 }
@@ -944,7 +944,7 @@ input[type="date"] {
   display: flex;
   justify-content: space-between;
   cursor: pointer;
- 
+
 
 }
 
@@ -1974,51 +1974,86 @@ input[type="number"]:focus {
 }
 
 
-.modalCenterOs{
+.modalCenterOs {
   display: none;
-width: 270px;
-background-color: lightgray;
-border:1px solid gray;
-position: relative;
-position: absolute;
-top:40px;
-right: -193px;
-z-index: 2;
+  width: 270px;
+  background-color: lightgray;
+  border: 1px solid gray;
+  position: relative;
+  position: absolute;
+  top: 40px;
+  right: -193px;
+  z-index: 2;
 }
-.modalList{
-  padding:15px 0 5px 5px;
-  margin:0;
+
+.modalList {
+  padding: 15px 0 5px 5px;
+  margin: 0;
   list-style-type: none;
 }
-.modalInput{
-  border:none;
+
+.modalInput {
+  border: none;
   background: none;
-  margin:2px 0;
+  margin: 2px 0;
   max-width: 40px;
 }
 
-.modalItem{
+.modalItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.8rem;
   font-family: Roboto;
-  color:#000;
+  color: #000;
 }
-.modalText{
-  color:#000;
-  margin:2px 0;
+
+.modalText {
+  color: #000;
+  margin: 2px 0;
 }
-.btnModal{
+
+.btnModal {
   cursor: pointer;
-border:none;
-color:#000;
-background: none;
+  border: none;
+  color: #000;
+  background: none;
 
 }
-.modalClear{
+
+.btnModal:active {
+
+  color: #fff;
+
+}
+
+.modalClear {
   cursor: pointer;
   position: absolute;
-  top:0;
-  right:5px;
+  top: 0;
+  right: 5px;
+}
+
+.modalTitle {
+  display: none;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 5px;
+}
+
+.modalNameOs {
+  color: #000;
+  margin: 2px 0;
+  font-size: 0.8rem;
+  font-family: Roboto;
+  font-weight: bold;
+}
+
+.modalNumberOs {
+  color: #000;
+  margin: 2px 0;
+  font-size: 0.8rem;
+  font-family: Roboto;
+  font-weight: bold;
 }

@@ -117,6 +117,82 @@ module.exports.tech = (req, res) => {
     }
 }
 
+
+module.exports.modalBar = (req, res) => {
+    //   console.log(req.body.activePost)
+    //  console.log(req.body.arr[1])
+    console.log(req.body.arrValue)
+    const value = [req.body.arrValue];
+    console.log(value)
+    // value.push()
+    const tableModel = 'bar' + req.body.activePost
+    console.log(tableModel)
+    try {
+        const sql = `create table if not exists ${tableModel}(
+            id int(255) primary key auto_increment,
+            idOs int(255) not null,
+            ${req.body.arr[0]} varchar(255),
+            ${req.body.arr[1]} varchar(255),
+            ${req.body.arr[2]} varchar(255),
+            ${req.body.arr[3]} varchar(255),
+            ${req.body.arr[4]} varchar(255),
+            ${req.body.arr[5]} varchar(255)             
+            )`
+        connection.query(sql, function (err, results) {
+            if (err) console.log(err);
+            else console.log("Таблица bar создана");
+        })
+        const selectBase = `SELECT idOs FROM ${tableModel} WHERE 1`
+        connection.query(selectBase, function (err, results) {
+
+            if (err) console.log(err);
+            if (results.length === 0) {
+                console.log('запусккк')
+                const sql = `INSERT INTO  ${tableModel}( idOs, ${req.body.arr[0]},${req.body.arr[1]},${req.body.arr[2]},${req.body.arr[3]},
+                        ${req.body.arr[4]},${req.body.arr[5]}) VALUES?`;
+                connection.query(sql, [value], function (err, results) {
+                    if (err) console.log(err);
+                    else res.json("Данные добавлены");
+                });
+            }
+            if (results.length > 0) {
+                let count = value[0][0];
+                const mas = []
+                results.forEach(el => {
+                    mas.push(el.idOs)
+                });
+                if (!mas.includes(parseInt(value[0][0]))) {
+                    console.log('запусккк2')
+                    const sql = `INSERT INTO  ${tableModel}( idOs, ${req.body.arr[0]},${req.body.arr[1]},${req.body.arr[2]},${req.body.arr[3]},
+                                ${req.body.arr[4]},${req.body.arr[5]}) VALUES?`;
+                    connection.query(sql, [value], function (err, results) {
+                        if (err) console.log(err);
+                        else res.json("Новые данные добавлены");
+                    });
+                }
+                if (mas.includes(parseInt(value[0][0]))) {
+                    console.log('запусккк3')
+                    console.log(req.body.arr[11])
+                    console.log(value[0][12])
+                    const sql = `UPDATE ${tableModel} SET idOs='${value[0][0]}', ${req.body.arr[0]}='${value[0][1]}', 
+                    ${req.body.arr[1]}='${value[0][2]}',${req.body.arr[2]}='${value[0][3]}',
+                        ${req.body.arr[3]}='${value[0][4]}',${req.body.arr[4]}='${value[0][5]}',${req.body.arr[5]}='${value[0][6]}' WHERE idOs=${count}`;
+                    connection.query(sql, [value], function (err, results) {
+                        if (err) console.log(err);
+                        else res.json("Данные обновлены");
+                    });
+                }
+            }
+        });
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
+
+
 module.exports.model = (req, res) => {
     //  console.log(req.body.activePost)
     const tableModel = 'model' + req.body.activePost
@@ -226,6 +302,28 @@ module.exports.techView = (req, res) => {
         console.log(e)
     }
 }
+
+
+module.exports.barView = (req, res) => {
+    //  console.log(req.body.activePost)
+    const tableModelView = 'bar' + req.body.activePost
+    console.log('работаем')
+    const count = req.body.id
+    console.log(count)
+    try {
+        const selectBase = `SELECT idOs, knd, kvd, dnn, dvn, dnmin, dnmax FROM ${tableModelView} WHERE  idOs=${count}`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            console.log(results)
+            response.status(200, results, '', res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
 
 module.exports.modelView = (req, res) => {
     //  console.log(req.body.activePost)

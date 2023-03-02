@@ -163,6 +163,43 @@ export const geoPosition = (geo) => {
 }
 
 
+export async function reqModalBar(arr, id) {
+    console.log('запуск')
+    let activePost;
+    const active = document.querySelectorAll('.color')
+    if (active[0] == undefined) {
+        const listItem = document.querySelectorAll('.link_menu')[0]
+        //  console.log(listItem.textContent)
+        activePost = listItem.textContent.replace(/\s+/g, '')
+
+    }
+    else {
+        activePost = active[0].textContent.replace(/\s+/g, '')
+    }
+    const arrValue = [];
+    const modalInput = document.querySelectorAll('.modalInput')
+    // console.log(JSON.stringify({ id, arr, arrValue, activePost }))
+    arrValue.push(id)
+
+    modalInput.forEach(el => {
+        arrValue.push(el.value)
+    })
+    console.log(id)
+    console.log(arr)
+    console.log(arrValue)
+    console.log(activePost)
+
+    const bar = await fetch('api/modalBar', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, arr, arrValue, activePost }),
+    })
+    const result = await bar.json();
+    console.log(result)
+
+}
 
 export function reqTech(arr, id) {
     console.log('запуск')
@@ -186,6 +223,7 @@ export function reqTech(arr, id) {
         arrValue.push(el.value)
     })
     // console.log(arrValue)
+
     fetch('api/tech', {
         method: "POST",
         headers: {
@@ -195,6 +233,45 @@ export function reqTech(arr, id) {
     })
         .then((res) => res.json())
         .then(res => console.log(res))
+
+}
+
+
+export async function viewBar(id) {
+    console.log(id)
+    let activePost;
+    const active = document.querySelectorAll('.color')
+    if (active[0] == undefined) {
+        const listItem = document.querySelectorAll('.link_menu')[0]
+        console.log(listItem.textContent)
+        activePost = listItem.textContent.replace(/\s+/g, '')
+
+    }
+    else {
+        activePost = active[0].textContent.replace(/\s+/g, '')
+    }
+
+    const bar = await fetch('api/barView', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, activePost })
+    })
+    const barValue = await bar.json();
+    console.log(barValue)
+    const keys = [];
+    if (barValue.values.length) {
+        for (let key in barValue.values[0]) {
+            keys.push(key);
+        }
+        const nval = (Object.entries(barValue.values[0]))
+        nval.shift()
+        const modalInput = document.querySelectorAll('.modalInput')
+        modalInput.forEach((el, index) => {
+            el.value = nval[index][1]
+        })
+    }
 
 }
 

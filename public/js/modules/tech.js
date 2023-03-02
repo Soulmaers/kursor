@@ -2,14 +2,15 @@ import { viewTech } from './requests.js'
 
 
 
-export function radCecked(){
+export function radCecked() {
     const rad = document.querySelectorAll('[name=radio]')
 
     rad[0].checked === true;
 }
 
 export function tech() {
-  
+    const modalCenterOs = document.querySelector('.modalCenterOs')
+    modalCenterOs.style.display = 'none';
     const formValue = document.querySelectorAll('.formValue')
     const job = document.querySelectorAll('.job')
     console.log(formValue)
