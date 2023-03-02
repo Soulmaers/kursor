@@ -4,8 +4,12 @@ import { navigator } from './navigator.js'
 import { twoTyres, forTyres } from './content.js'
 import { objColor, generFront, generDav } from './content.js'
 
+/*
+let isLoaded = false
 
-
+if(isLoaded === true){
+    navigator();
+}*/
 export async function loadParamsViewList(car) {
     console.log(1)
     const params = {
@@ -24,6 +28,7 @@ export async function loadParamsViewList(car) {
     const data = await dat.json()
 
     contur(model, data.message, data.result, models.result);
+    return [model,  models, data]
 }
 
 

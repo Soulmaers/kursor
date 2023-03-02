@@ -348,6 +348,7 @@ td {
   box-sizing: border-box;
   width: 100%;
   min-height: 600px;
+ 
 
 
 }
@@ -719,13 +720,13 @@ input[type="date"] {
 }
 
 .wrapper_containt {
-  width: 260px;
+  width: 280px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0 10px;
-
+  position: relative;
 
 }
 
@@ -895,8 +896,8 @@ input[type="date"] {
 .container {
   display: flex;
   flex-direction: column;
-
   padding: 0 20px;
+
 }
 
 .os {
@@ -943,7 +944,7 @@ input[type="date"] {
   display: flex;
   justify-content: space-between;
   cursor: pointer;
-
+ 
 
 }
 
@@ -1222,7 +1223,6 @@ input[type="date"] {
   justify-content: center;
   align-items: center;
   background-color: lightgray;
-
   min-height: 1000px;
   border: 1px solid rgb(84, 74, 228)
 }
@@ -1971,4 +1971,54 @@ input[type="number"]:focus {
   color: #008200;
   font-size: 1.1rem;
   margin-top: 5px;
+}
+
+
+.modalCenterOs{
+  display: none;
+width: 270px;
+background-color: lightgray;
+border:1px solid gray;
+position: relative;
+position: absolute;
+top:40px;
+right: -193px;
+z-index: 2;
+}
+.modalList{
+  padding:15px 0 5px 5px;
+  margin:0;
+  list-style-type: none;
+}
+.modalInput{
+  border:none;
+  background: none;
+  margin:2px 0;
+  max-width: 40px;
+}
+
+.modalItem{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-family: Roboto;
+  color:#000;
+}
+.modalText{
+  color:#000;
+  margin:2px 0;
+}
+.btnModal{
+  cursor: pointer;
+border:none;
+color:#000;
+background: none;
+
+}
+.modalClear{
+  cursor: pointer;
+  position: absolute;
+  top:0;
+  right:5px;
 }

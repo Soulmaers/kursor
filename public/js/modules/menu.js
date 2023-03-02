@@ -26,6 +26,7 @@ cont.classList.add('container2')
 wrapContaint.appendChild(cont);
 export let dann;
 
+
 export function zapros() {
 
     const flags = 1 + 1024//4096
@@ -43,22 +44,27 @@ export function zapros() {
     };
     const remote1 = wialon.core.Remote.getInstance();
     remote1.remoteCall('core/search_items', prms,
-        function (code, result) {
+       function (code, result) {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
             const arr1 = Object.values(result);
             const arrCar = arr1[5];
             dann = arrCar
-            arrCar.forEach(el => {
-                loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями
+        
+       arrCar.forEach( el => {
+             
+               loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями
+        
             })
-
+   
             //  dann = arrCar
             speed(arrCar)
             return dann
         });
+       // navigator()
 
+//console.log(allMassiv[0].length)
 }
 
 

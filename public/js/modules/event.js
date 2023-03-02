@@ -5,6 +5,12 @@ import { getDash } from './dash.js'
 import { visual, visualNone } from './visual.js'
 
 
+
+
+
+
+
+
 const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {
     const dash = document.querySelector('.wrapper_right_dash')
@@ -27,6 +33,12 @@ export function saveTyres(arr) {
     })
 
 }
+
+
+
+
+
+
 
 
 //очистка модели из базы и удаление отрисовки

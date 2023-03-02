@@ -5,7 +5,7 @@ import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
 import { geoloc, iconParams } from './wialon.js'
 import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
 import { navigator } from './navigator.js'
-import { dashView } from './dash.js'
+import {  modalOs } from './modalOs.js'
 
 let start;
 let time;
@@ -60,7 +60,9 @@ export function visualNone(e) {
     const wrapperButton = document.querySelector('.wrapper_button')
     const container = document.querySelector('.container')
     const techInfo = document.querySelector('.techInfo')
+    const modalCenterOs=document.querySelector('.modalCenterOs')
     techInfo.style.display = 'none'
+    modalCenterOs.style.display = 'none'
     wrapperUp.style.display = 'none'
     wrapperRight.style.display = 'none'
     speedGraf.style.display = 'none'
@@ -206,7 +208,7 @@ export function viewConfigurator(arg, params) {
                                 e.children[0].textContent = done + '\nБар'
 
                                 e.children[0].style.color = '#fff'
-                                e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
+                               // e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                                 if (activePost == 'КранГаличанинР858ОР178') {
                                     signal = objColor[generDav(done)]
 
@@ -349,11 +351,11 @@ export async function viewOs() {
             tiresD.classList.add('tiresD')
             const tiresT = document.createElement('div');
             tiresT.classList.add('tiresT')
-            const place = document.createElement('div');
-            place.classList.add('place')
+           // const place = document.createElement('div');
+           // place.classList.add('place')
             link.appendChild(tiresD);
             link.appendChild(tiresT);
-            link.appendChild(place);
+          //  link.appendChild(place);
         })
         osi.forEach(el => {
             el.style.display = 'none'
@@ -363,6 +365,7 @@ export async function viewOs() {
         container.appendChild(cont2)
     }
     viewMenuParams()
+    modalOs();
 }
 
 
