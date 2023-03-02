@@ -5,7 +5,7 @@ import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
 import { geoloc, iconParams } from './wialon.js'
 import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
 import { navigator } from './navigator.js'
-import {  modalOs } from './modalOs.js'
+import { modalOs } from './modalOs.js'
 
 let start;
 let time;
@@ -60,7 +60,7 @@ export function visualNone(e) {
     const wrapperButton = document.querySelector('.wrapper_button')
     const container = document.querySelector('.container')
     const techInfo = document.querySelector('.techInfo')
-    const modalCenterOs=document.querySelector('.modalCenterOs')
+    const modalCenterOs = document.querySelector('.modalCenterOs')
     techInfo.style.display = 'none'
     modalCenterOs.style.display = 'none'
     wrapperUp.style.display = 'none'
@@ -208,7 +208,7 @@ export function viewConfigurator(arg, params) {
                                 e.children[0].textContent = done + '\nБар'
 
                                 e.children[0].style.color = '#fff'
-                               // e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
+                                // e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                                 if (activePost == 'КранГаличанинР858ОР178') {
                                     signal = objColor[generDav(done)]
 
@@ -351,11 +351,11 @@ export async function viewOs() {
             tiresD.classList.add('tiresD')
             const tiresT = document.createElement('div');
             tiresT.classList.add('tiresT')
-           // const place = document.createElement('div');
-           // place.classList.add('place')
+            // const place = document.createElement('div');
+            // place.classList.add('place')
             link.appendChild(tiresD);
             link.appendChild(tiresT);
-          //  link.appendChild(place);
+            //  link.appendChild(place);
         })
         osi.forEach(el => {
             el.style.display = 'none'
@@ -389,10 +389,12 @@ export const divClear = (arr) => {
 
 export const pricep = (elem) => {
     console.log('отработка прицеп')
+    console.log(elem)
     const cont = document.querySelector('.cont')
-    cont.prepend(elem.parentNode)
+    cont.append(elem.parentNode)
     cont.style.marginTop = '72px'
     elem.style.backgroundImage = "url('../image/line_gray.png')"
+    elem.classList.add('pricep')
 }
 
 

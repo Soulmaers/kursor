@@ -259,7 +259,7 @@ export async function viewBar(id) {
         body: JSON.stringify({ id, activePost })
     })
     const barValue = await bar.json();
-    console.log(barValue)
+    console.log(barValue.values)
     const keys = [];
     if (barValue.values.length) {
         for (let key in barValue.values[0]) {

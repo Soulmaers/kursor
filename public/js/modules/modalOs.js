@@ -30,7 +30,14 @@ export function modalOs() {
             const centerOsActiv = document.querySelector('.centerOsActiv')
             const modalNumberOs = document.querySelector('.modalNumberOs')
             const modalTitle = document.querySelector('.modalTitle')
-            modalNumberOs.textContent = centerOsActiv.id
+
+
+            if (e.classList.contains('pricep')) {
+                modalNumberOs.textContent = centerOsActiv.id + '-' + 'Прицеп'
+            }
+            else {
+                modalNumberOs.textContent = centerOsActiv.id + '-' + 'Тягач'
+            }
             modalTitle.style.display = 'flex'
             viewBar(centerOsActiv.id);
         })
