@@ -180,6 +180,7 @@ function koleso(kol, btnsens) {
             arrSpreed.forEach(el => {
                 if (el === ':') {
                     value = arrSpreed.splice(arrSpreed.indexOf(el) + 1, arrSpreed.length - 1).join('')
+                    console.log(value)
                 }
             })
             if (btnsens[0].classList.contains('actBTN')) {

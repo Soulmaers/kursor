@@ -308,10 +308,16 @@ td {
 }
 
 .wrap_alarm {
+
   width: 170px;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
+  border: 1px solid gray;
+  padding: 2px 15px;
+  box-sizing: border-box;
+  text-align: center;
+  position: relative;
 }
 
 .btnsens {
@@ -768,10 +774,7 @@ input[type="date"] {
 
 .table {
   text-align: center;
-  width: 100%;
-  padding: 0 10px;
-  table-layout: fixed;
-
+  width: 100%
 }
 
 .table_data {
@@ -849,6 +852,7 @@ input[type="date"] {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 
@@ -2056,4 +2060,81 @@ input[type="number"]:focus {
   font-size: 0.8rem;
   font-family: Roboto;
   font-weight: bold;
+}
+
+
+.titleTable {
+  display: flex;
+}
+
+
+.alarmStorage {
+  display: none;
+  width: 665px;
+  border: 1px solid gray;
+  z-index: 2;
+  background-color: #fff;
+  position: absolute;
+  top: 166px;
+  left: 25px;
+}
+
+.oneName {
+  width: 565px;
+}
+
+.td {
+  height: 5px;
+  background-color: lightgray;
+  font-family: Roboto;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0 5px;
+
+}
+
+
+.mainAlarm {
+  width: 164px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 15px;
+  font-size: 1rem;
+  font-family: Roboto;
+  font-weight: 700;
+
+}
+
+
+.plus {
+  width: 20px;
+  height: 20px;
+  background-image: url(../image/icon_max.png);
+  background-size: cover;
+  position: absolute;
+  top: 7px;
+  left: 5px;
+  cursor: pointer;
+}
+
+.minus {
+  display: none;
+  width: 18px;
+  height: 18px;
+  background-image: url(../image/icon_min.png);
+  background-size: cover;
+  position: absolute;
+  top: 7px;
+  left: 5px;
+  cursor: pointer;
+}
+
+.ogon {
+
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 6px;
+  right: 8px;
 }

@@ -1,10 +1,10 @@
 import { text } from './content.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
-//import { geoPosition } from './requests.js'
+
 import { geoloc, iconParams } from './wialon.js'
 import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
-import { navigator } from './navigator.js'
+import { alarmFind } from './alarmStorage.js'
 import { modalOs } from './modalOs.js'
 
 let start;
@@ -34,8 +34,10 @@ export async function visual(el) {
     titleCar.textContent = el.textContent
     await loadParamsView()
     //  setInterval(loadParamsView, 5000)
+    console.log(el)
     iconParams()
     setInterval(iconParams, 6000)
+    alarmFind(el)
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
@@ -61,6 +63,19 @@ export function visualNone(e) {
     const container = document.querySelector('.container')
     const techInfo = document.querySelector('.techInfo')
     const modalCenterOs = document.querySelector('.modalCenterOs')
+    const plus = document.querySelector('.plus')
+    const minus = document.querySelector('.minus')
+    const alarmStorage = document.querySelector('.alarmStorage')
+    const oneName = document.querySelector('.oneName')
+
+
+
+
+
+    plus.style.display = 'block'
+    minus.style.display = 'none'
+    alarmStorage.style.display = 'none'
+
     techInfo.style.display = 'none'
     modalCenterOs.style.display = 'none'
     wrapperUp.style.display = 'none'
@@ -76,6 +91,13 @@ export function visualNone(e) {
         //  console.log(container.children)
         const containerArr = Array.from(container.children)
         containerArr.forEach(it => {
+            //    console.log('удаление цикл')
+            it.remove();
+        })
+
+
+        const tr = document.querySelectorAll('tr')
+        tr.forEach(it => {
             //    console.log('удаление цикл')
             it.remove();
         })
@@ -152,6 +174,8 @@ export function view(arg) {
 
 }
 export function viewConfigurator(arg, params) {
+    // const massItog = [];
+
     // console.log(arg)
     //  console.log(params)
     const parametrs = convert(params)
@@ -168,18 +192,14 @@ export function viewConfigurator(arg, params) {
     else {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
-    const btnShina = document.querySelector('.btn_icon')
-
     const par = [];
     arg.forEach(el => {
         par.push(el.name)
     })
-
     parametrs.forEach(item => {
         let signal;
         let done;
         tiresLink.forEach(e => {
-            // console.log(e.children[0].textContent)
             if (e.id == item.tyresdiv) {
                 if (!par.includes(item.pressure)) {
                     // console.log('не тру')
@@ -189,60 +209,51 @@ export function viewConfigurator(arg, params) {
                 if (!par.includes(item.temp)) {
                     //  console.log('не тру')
                     e.children[1].textContent = 'off'
+                }
+                else {
+                    arg.forEach((el) => {
+                        if (el.name === item.pressure) {
 
+                            if (activePost === 'PressurePro933') {
+                                done = parseFloat((el.value * 0.069).toFixed(1))
+                            }
+                            else {
+                                done = parseFloat(el.value)
+                            }
+                            alerts.push(done)
+                            e.children[0].textContent = done + '\nБар'
+                            if (activePost == 'КранГаличанинР858ОР178') {
+                                signal = objColor[generDav(done)]
+
+                            }
+                            else {
+                                signal = objColor[generFront(done)]
+
+                            }
+                            e.children[0].style.background = signal;
+
+                        }
+                        if (el.name === item.temp) {
+                            //  massTemp.push(item.temp, el.value)
+                            //  console.log(el.name)
+                            tiresLink.forEach(e => {
+                                if (e.id == item.tyresdiv) {
+                                    if (el.value === '-128' || el.value === '-50') {
+                                        el.value = 'err'
+                                        e.children[1].textContent = el.value
+                                    }
+                                    if (el.value >= -51 && el.value < 36) {
+                                        e.children[1].textContent = el.value + '°'
+
+                                        e.children[1].style.background = objColor[generT(el.value)];
+                                    }
+                                }
+                            })
+                        }
+                    })
                 }
             }
-            else {
-                arg.forEach((el) => {
-                    if (el.name == item.pressure) {
-                        tiresLink.forEach(e => {
-                            if (e.id == item.tyresdiv) {
-                                //    console.log('тру')
-                                if (activePost === 'PressurePro933') {
-                                    done = parseFloat((el.value * 0.069).toFixed(1))
-                                }
-                                else {
-                                    done = parseFloat(el.value)
-                                }
-                                alerts.push(done)
-                                e.children[0].textContent = done + '\nБар'
 
-                                e.children[0].style.color = '#fff'
-                                // e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
-                                if (activePost == 'КранГаличанинР858ОР178') {
-                                    signal = objColor[generDav(done)]
-
-                                    if (done < 6 || done > 9.9) {
-                                        // e.classList.add('alarmCheck')
-                                    }
-                                }
-                                else {
-                                    signal = objColor[generFront(done)]
-                                    if (done < 8 || done > 10) {
-                                        //   e.classList.add('alarmCheck')
-                                    }
-                                }
-                                e.children[0].style.background = signal;
-                            }
-                        })
-                    }
-                    if (el.name == item.temp) {
-                        tiresLink.forEach(e => {
-                            if (e.id == item.tyresdiv) {
-                                if (el.value === '-128' || el.value === '-51') {
-                                    el.value = 'err'
-                                    e.children[1].textContent = el.value
-                                }
-                                if (el.value >= -50 && el.value < 36) {
-                                    e.children[1].textContent = el.value + '°'
-
-                                    e.children[1].style.background = objColor[generT(el.value)];
-                                }
-                            }
-                        })
-                    }
-                })
-            }
         })
         if (activePost == 'КранГаличанинР858ОР178') {
             if (alerts.some(element => element < 6) == true) {
@@ -261,8 +272,13 @@ export function viewConfigurator(arg, params) {
                 alarmMin();
             }
         }
+
     })
+
+
 }
+
+
 
 
 /*
@@ -280,21 +296,31 @@ function alertCreate() {
 function alarmMin() {
     const div = document.querySelector('.alarm')
     div.style.display = 'block'
-    const alarmMinn = document.querySelector('.dav_min')
-    const info = document.querySelector('.info')
-    alarmMinn.style.display = 'flex'
-    info.style.display = 'flex'
+    const wrapAlarm = document.querySelector('.wrap_alarm ')
+    wrapAlarm.style.display = 'flex'
+
 }
+function alarmMax() {
+    const div = document.querySelector('.alarm')
+    div.style.display = 'block'
+    const wrapAlarm = document.querySelector('.wrap_alarm ')
+    wrapAlarm.style.display = 'flex'
+}
+
+
 
 export function alarmClear() {
     const div = document.querySelector('.alarm')
     div.style.display = 'none'
-    const alarmMinn = document.querySelector('.dav_min')
-    const info = document.querySelector('.info')
-    alarmMinn.style.display = 'none'
-    info.style.display = 'none'
-    const alarmMaxx = document.querySelector('.dav_max')
-    alarmMaxx.style.display = 'none'
+
+    const wrapAlarm = document.querySelector('.wrap_alarm ')
+    wrapAlarm.style.display = 'none'
+    //  const alarmMinn = document.querySelector('.dav_min')
+    //const info = document.querySelector('.info')
+    // alarmMinn.style.display = 'none'
+    // info.style.display = 'none'
+    //  const alarmMaxx = document.querySelector('.dav_max')
+    // alarmMaxx.style.display = 'none'
     const alarmCheck = document.querySelectorAll('.alarmCheck')
     alarmCheck.forEach(e => {
         e.style.borderTopLeftRadius = 'none'
@@ -303,14 +329,6 @@ export function alarmClear() {
 
 }
 
-function alarmMax() {
-    const div = document.querySelector('.alarm')
-    div.style.display = 'block'
-    const alarmMaxx = document.querySelector('.dav_max')
-    const info = document.querySelector('.info')
-    alarmMaxx.style.display = 'flex'
-    info.style.display = 'flex'
-}
 
 
 export async function viewOs() {

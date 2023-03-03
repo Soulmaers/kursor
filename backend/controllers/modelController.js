@@ -365,7 +365,6 @@ module.exports.tyresView = (req, res) => {
 
 
 module.exports.listModel = (req, res) => {
-
     const nameCar = 'model' + req.body.car.replace(/\s+/g, '')
     try {
         const selectBase = `SELECT osi, trailer,tyres FROM ${nameCar} WHERE 1`
@@ -387,14 +386,55 @@ module.exports.listTyres = (req, res) => {
         const selectBase = `SELECT tyresdiv, pressure,temp FROM ${nameCar} WHERE 1`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
-            //console.log(results)
+            //   console.log(results)
             res.json({ status: 200, result: results, message: req.body.car })
         })
     }
     catch (e) {
         console.log(e)
     }
-
-
 }
 
+module.exports.alarmStorage = (req, res) => {
+    const name = req.body.name
+    const value = [req.body.dannie];
+    const tableModel = 'alarm' + name
+    try {
+        const sql = `create table if not exists ${tableModel}(
+            id int(255) primary key auto_increment,
+            name varchar(255) not null,
+            data varchar(255),
+            time varchar(255),
+            senspressure varchar(255),
+            bar varchar(255),
+                    temp varchar(255),
+            alarm varchar(255) not null        
+            )`
+        connection.query(sql, function (err, results) {
+            if (err) console.log('ошибка');
+            else console.log("Таблица alarm создана");
+        })
+        const sqls = `INSERT INTO  ${tableModel} (name, data, time, senspressure, bar,
+                            temp, alarm) VALUES?`;
+        connection.query(sqls, [value], function (err, results) {
+            if (err) console.log(err);
+            else res.json("Данные добавлены");
+        });
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
+module.exports.alarmFind = (req, res) => {
+    console.log('работаем?')
+    const name = req.body.activePost
+    const tableModel = 'alarm' + name
+    const sqls1 = `SELECT data,time,senspressure,bar,temp,alarm  FROM ${tableModel} WHERE 1`
+    connection.query(sqls1, function (err, results) {
+        if (err) console.log(err);
+        //     console.log(results)
+        res.json(results);
+    });
+}

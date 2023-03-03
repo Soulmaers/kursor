@@ -3,7 +3,7 @@ import { dashView } from './dash.js'
 import { navigator } from './navigator.js'
 import { twoTyres, forTyres } from './content.js'
 import { objColor, generFront, generDav } from './content.js'
-
+import { proverka } from './alarmStorage.js'
 /*
 let isLoaded = false
 
@@ -28,7 +28,7 @@ export async function loadParamsViewList(car) {
     const data = await dat.json()
 
     contur(model, data.message, data.result, models.result);
-    return [model,  models, data]
+    return [model, models, data]
 }
 
 
@@ -122,11 +122,13 @@ function zaprosSpisok() {
     })
 }
 
-setInterval(zaprosSpisok, 6000)
+setInterval(zaprosSpisok, 2000)
 
 function viewListKoleso(arg, params, nameCar) {
+    const massItog = [];
     const shina = nameCar.querySelectorAll('.tiresProfil');
     const modelUniqValues = convert(params.result)
+    const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
     const r = [];
     let integer;
     modelUniqValues.forEach(el => {
@@ -141,23 +143,35 @@ function viewListKoleso(arg, params, nameCar) {
             if (el.name == item.pressure) {
                 shina.forEach(e => {
                     if (e.id == item.tyresdiv) {
-                        if (nameCar.children[0].textContent == 'PressurePro 933') {
+                        if (activePost == 'PressurePro933') {
                             integer = parseFloat((el.value * 0.069).toFixed(1))
+                            e.classList.add('done')
                             e.style.background = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
                         }
                         else {
                             integer = el.value
-                            if ((nameCar.children[0].textContent == 'КранГаличанин Р858ОР178')) {
+                            if ((activePost == 'КранГаличанинР858ОР178')) {
+                                e.classList.add('done')
                                 e.style.background = objColor[generDav(integer)]
                             }
                             else {
+                                e.classList.add('done')
                                 e.style.background = objColor[generFront(integer)]
                             }
                         }
+                        arg.result.forEach((it) => {
+                            if (it.name === item.temp) {
+                                e.classList.add('done')
+                                massItog.push([activePost, e, item.pressure, integer, parseFloat(it.value)])
+                                //     console.log(nameCar.children[0].textContent, e, item.pressure, integer, item.temp, it.value)
+                            }
+                        })
                     }
                 })
             }
         })
     })
+    // console.log(massItog)
+    proverka(massItog, activePost)
 }
 
