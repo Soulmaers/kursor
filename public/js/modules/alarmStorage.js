@@ -147,7 +147,7 @@ async function alarmBase(tyres, data, alarm, name) {
         body: JSON.stringify({ dannie, name })
     })
     const storList = await stor.json();
-    console.log(storList)
+    // console.log(storList)
 
 }
 
@@ -170,7 +170,7 @@ function createDate() {
 
 
 export async function alarmFind(name) {
-    console.log(name)
+    // console.log(name)
     const activePost = name.children[0].textContent.replace(/\s+/g, '')
 
     const stor = await fetch('api/alarmFind', {
@@ -187,41 +187,61 @@ export async function alarmFind(name) {
         //console.log(storValue)
     })
 
-    console.log(storValue)
-    viewAlarmStorage(storValue)
+    //  console.log(storValue)
+    viewAlarmStorage(activePost, storValue)
+    colorStorage(activePost, storValue)
+    // console.log(name)
 
 }
 
 
-function viewAlarmStorage(stor) {
+function viewAlarmStorage(name, stor) {
+    console.log(name)
+    //const nameClass = stor.children[0].textContent.replace(/\s+/g, '')
+    // console.log(nameClass)
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
-
-
-
-
-
-
 
     stor.forEach(el => {
         const tr = document.createElement('tr')
         tr.classList.add('tr')
+        tr.classList.add(`${name}`)
         tbody.appendChild(tr)
         el.forEach(it => {
             const td = document.createElement('td')
             td.classList.add('td')
             td.textContent = it
             tr.appendChild(td)
+
         })
+        if (el[el.length - 1] !== 'Потеря связи с датчиком' || el[el.length - 1] !== 'Потеря связи с датчиком') {
+            const arrName = tbody.querySelectorAll(`.${name}`)
+
+            arrName.forEach(e => {
+                e.children[3].style.background = 'yellow';
+            })
+
+        }
+        else {
+            const arrName = tbody.querySelector(`.${name}`)
+            arrName.forEach(e => {
+                e.children[4].style.background = 'yellow';
+            })
+        }
     })
 
 }
 
+function colorStorage(stor) {
+    const td = document.querySelectorAll('.td')
+    console.log(stor)
+    console.log(td)
 
+}
 const plus = document.querySelector('.plus')
 const minus = document.querySelector('.minus')
 const alarmStorage = document.querySelector('.alarmStorage')
-const oneName = document.querySelector('.oneName')
+
 
 
 plus.addEventListener('click', () => {
