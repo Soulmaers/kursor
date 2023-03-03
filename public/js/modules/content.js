@@ -21,8 +21,8 @@ export const tr = `<tr class="tr oneName">
                                                     <td class="td">Дата</td>
                                                     <td class="td">Время</td>
                                                     <td class="td">Колесо</td>
-                                                    <td class="td">p, БАР</td>
-                                                    <td class="td">t°,C</td>
+                                                    <td class="td">P, БАР</td>
+                                                    <td class="td">t,°C</td>
                                                     <td class="td">Уведомление</td>
                                                 </tr>`
 
