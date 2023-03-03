@@ -7,9 +7,9 @@ export function proverka(arr, name) {
     let alarm;
     arr.forEach(el => {
         if (name === 'КранГаличанинР858ОР178') {
-            console.log('кран')
+            //  console.log('кран')
             if (el[5] == -51 || el[5] == -128) {
-                console.log('нет датчика')
+                //  console.log('нет датчика')
                 if (!el[1].classList.contains('alarmIn')) {
                     el[1].classList.add('alarmIn')
                     alarm = 'Потеря связи с датчиком'
@@ -19,7 +19,7 @@ export function proverka(arr, name) {
                     alarmBase(el, data, alarm, name)
                 }
                 else {
-                    console.log('уже есть аларм')
+                    //   console.log('уже есть аларм')
                 }
             }
             else {
@@ -33,7 +33,7 @@ export function proverka(arr, name) {
                         alarmBase(el, data, alarm, name)
                     }
                     else {
-                        console.log('уже есть аларм')
+                        //  console.log('уже есть аларм')
                     }
                 }
                 if (el[3] > 9.9) {
@@ -46,7 +46,7 @@ export function proverka(arr, name) {
                         alarmBase(el, data, alarm, name)
                     }
                     else {
-                        console.log('уже есть аларм')
+                        //  console.log('уже есть аларм')
                     }
                 }
                 if (el[5] > 36) {
@@ -59,15 +59,15 @@ export function proverka(arr, name) {
                         alarmBase(el, data, alarm, name)
                     }
                     else {
-                        console.log('уже есть аларм')
+                        //   console.log('уже есть аларм')
                     }
                 }
             }
         }
         else {
-            console.log('не кран')
+            //  console.log('не кран')
             if (el[5] == -51 || el[5] == -128) {
-                console.log('нет датчика')
+                // console.log('нет датчика')
                 if (!el[1].classList.contains('alarmIn')) {
                     el[1].classList.add('alarmIn')
                     alarm = 'Потеря связи с датчиком'
@@ -77,7 +77,7 @@ export function proverka(arr, name) {
                     alarmBase(el, data, alarm, name)
                 }
                 else {
-                    console.log('уже есть аларм')
+                    //  console.log('уже есть аларм')
                 }
             }
             else {
@@ -92,10 +92,12 @@ export function proverka(arr, name) {
                         alarmBase(el, data, alarm, name)
                     }
                     else {
-                        console.log('уже есть аларм')
+                        //  console.log('уже есть аларм')
                     }
                 }
                 if (el[3] > 10) {
+                    console.log(el[1])
+
                     if (!el[1].classList.contains('alarmIn')) {
                         el[1].classList.add('alarmIn')
                         alarm = 'Критически высокое давление'
@@ -103,6 +105,8 @@ export function proverka(arr, name) {
                         el.shift();
                         //  console.log(el)
                         alarmBase(el, data, alarm, name)
+
+                        console.log('это')
                     }
                     else {
                         console.log('уже есть аларм')
@@ -118,7 +122,7 @@ export function proverka(arr, name) {
                         alarmBase(el, data, alarm, name)
                     }
                     else {
-                        console.log('уже есть аларм')
+                        //сonsole.log('уже есть аларм')
                     }
                 }
 
@@ -128,9 +132,6 @@ export function proverka(arr, name) {
         }
     })
 }
-
-
-
 
 async function alarmBase(tyres, data, alarm, name) {
     tyres.shift()
@@ -170,9 +171,11 @@ function createDate() {
 
 
 export async function alarmFind(name) {
-    // console.log(name)
+    // console.log(name[0])
+    //const active = document.querySelector('.color')
+    //  console.log(active)
     const activePost = name.children[0].textContent.replace(/\s+/g, '')
-
+    console.log(activePost)
     const stor = await fetch('api/alarmFind', {
         method: "POST",
         headers: {
@@ -189,16 +192,21 @@ export async function alarmFind(name) {
 
     //  console.log(storValue)
     viewAlarmStorage(activePost, storValue)
-    colorStorage(activePost, storValue)
-    // console.log(name)
 
+    // console.log(name)
+    // setInterval(alarmFind, 6000)
 }
 
 
 function viewAlarmStorage(name, stor) {
-    console.log(name)
-    //const nameClass = stor.children[0].textContent.replace(/\s+/g, '')
-    // console.log(nameClass)
+    console.log('ап')
+    /*
+    const tr = document.querySelectorAll('tr')
+    tr.forEach(it => {
+        //    console.log('удаление цикл')
+        it.remove();
+    })*/
+
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
 
@@ -232,12 +240,7 @@ function viewAlarmStorage(name, stor) {
 
 }
 
-function colorStorage(stor) {
-    const td = document.querySelectorAll('.td')
-    console.log(stor)
-    console.log(td)
 
-}
 const plus = document.querySelector('.plus')
 const minus = document.querySelector('.minus')
 const alarmStorage = document.querySelector('.alarmStorage')

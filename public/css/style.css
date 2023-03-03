@@ -465,19 +465,22 @@ input[type="date"] {
 }
 
 .buttonTth {
-
-  background-color: gray;
-  padding: 10px 9px;
-  font-size: 13px;
-  border: none;
-  color: #fff;
+  height: 32px;
+  width: 94px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 0;
+  font-size: 0.9rem;
+  font-family: Roboto;
+  font-weight: 700;
+  color: #000;
   cursor: pointer;
-
 }
 
 .buttonTth:active {
   background-color: #fff;
-  color: gray;
+  color: #000;
 
 }
 
@@ -566,13 +569,15 @@ input[type="date"] {
 
 /* Dropdown Button */
 .dropbtn {
-  background-color: gray;
-  padding: 12px 40px;
-  font-size: 0.8rem;
+  width: 164px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 15px;
+  font-size: 0.9rem;
   font-family: Roboto;
-  border: none;
-  color: #fff;
-  width: 170px;
+  font-weight: 700;
+  color: #000;
 }
 
 .dropbtnOs {
@@ -596,8 +601,16 @@ input[type="date"] {
 .dropdown {
   position: relative;
   display: inline-block;
-  height: 50px;
 
+  width: 170px;
+  margin: 1px 0;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 0;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
 }
 
 
@@ -703,11 +716,13 @@ input[type="date"] {
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
-  background-color: gray;
+  background: #fff;
+  color: #000
 }
 
 .dropdownOs:hover .dropbtnOs {
-  background-color: gray;
+  background: #fff;
+  color: #000
 }
 
 .dropdownTires:hover .dropbtnTires {
@@ -856,44 +871,81 @@ input[type="date"] {
 }
 
 
-.clear,
-.save {
-  display: inline-block;
-  height: 40px;
+.clear {
   width: 170px;
+  margin: 1px 0;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 0;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+
+}
+
+.save {
+  width: 170px;
+
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 0;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
 }
 
 .btn_clear {
-  background-color: gray;
-  padding: 10px 32px;
-  font-size: 0.8rem;
+  width: 164px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 15px;
+  font-size: 0.9rem;
   font-family: Roboto;
-  border: none;
-  color: #fff;
+  font-weight: 700;
+  color: #000;
   cursor: pointer;
-  width: 170px;
 }
 
 .btn_save {
-  width: 170px;
-  background-color: gray;
-  padding: 10px 9px;
-  font-size: 0.8rem;
+  height: 32px;
+  width: 164px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 0;
+  font-size: 0.85rem;
   font-family: Roboto;
-  border: none;
-  color: #fff;
+  font-weight: 700;
+  color: #000;
   cursor: pointer;
 }
 
+.wrarbtn {
+  width: 100px;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 0;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+}
+
+
 .btn_clear:active {
   background-color: #fff;
-  color: gray;
+  color: #000;
 
 }
 
 .btn_save:active {
   background-color: #fff;
-  color: gray;
+  color: #000;
+
+
 
 }
 
@@ -2103,6 +2155,7 @@ input[type="number"]:focus {
   font-size: 1rem;
   font-family: Roboto;
   font-weight: 700;
+  color: #000;
 
 }
 

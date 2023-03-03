@@ -431,10 +431,10 @@ module.exports.alarmFind = (req, res) => {
     console.log('работаем?')
     const name = req.body.activePost
     const tableModel = 'alarm' + name
-    const sqls1 = `SELECT data,time,senspressure,bar,temp,alarm  FROM ${tableModel} WHERE 1`
+    const sqls1 = `SELECT data, time, senspressure, bar, temp, alarm  FROM ${tableModel} WHERE 1`
     connection.query(sqls1, function (err, results) {
         if (err) console.log(err);
-        //     console.log(results)
+        console.log(results)
         res.json(results);
     });
 }

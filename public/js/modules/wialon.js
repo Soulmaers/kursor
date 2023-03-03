@@ -3,7 +3,7 @@ import { zapros } from './menu.js';
 import { geoPosition } from './requests.js'
 //запрос на wialon за данными по скорости
 export function graf(t1, t2, int, id) {
-    console.log(t1, t2, int, id)
+    //console.log(t1, t2, int, id)
     const prms2 = {
         "itemId": id,   //25343786,
 
@@ -20,7 +20,7 @@ export function graf(t1, t2, int, id) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
             const arr2 = Object.values(result);
-            console.log(arr2)
+            // console.log(arr2)
             const arrIterTime = [];
             const arrIterTimeDate = [];
             arr2[1].forEach(el => {
@@ -34,7 +34,7 @@ export function graf(t1, t2, int, id) {
             })
             let t = 0;
             const arrIterTimeDateT = arrIterTimeDate.filter(e => (++t) % int === 0);
-            console.log(arrIterTimeDateT)
+            // console.log(arrIterTimeDateT)
             const arrSpee = [];
             arr2[1].forEach(el => {
                 arrSpee.push(el.pos.s)
@@ -169,7 +169,7 @@ function loadAkb(arrCar) {
     let akb;
     let probeg;
     //  console.log(act)
-    console.log(arrCar)
+    // console.log(arrCar)
     arrCar.forEach(it => {
         if (it.nm === act) {
             akb = (it.lmsg.p.pwr_ext).toFixed(1);

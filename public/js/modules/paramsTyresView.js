@@ -110,7 +110,7 @@ export async function loadParamsView() {
 }
 
 export function viewPokasateli() {
-    console.log('запускВиджет')
+    // console.log('запускВиджет')
     const btnShina = document.querySelector('.btn_icon')
     if (btnShina.classList.contains('active') === true) {
         return

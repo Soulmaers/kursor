@@ -145,23 +145,23 @@ function viewListKoleso(arg, params, nameCar) {
                     if (e.id == item.tyresdiv) {
                         if (activePost == 'PressurePro933') {
                             integer = parseFloat((el.value * 0.069).toFixed(1))
-                            e.classList.add('done')
+                            // e.classList.add('done')
                             e.style.background = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
                         }
                         else {
                             integer = el.value
                             if ((activePost == 'КранГаличанинР858ОР178')) {
-                                e.classList.add('done')
+                                //  e.classList.add('done')
                                 e.style.background = objColor[generDav(integer)]
                             }
                             else {
-                                e.classList.add('done')
+                                //  e.classList.add('done')
                                 e.style.background = objColor[generFront(integer)]
                             }
                         }
                         arg.result.forEach((it) => {
                             if (it.name === item.temp) {
-                                e.classList.add('done')
+                                //      e.classList.add('done')
                                 massItog.push([activePost, e, item.pressure, integer, parseFloat(it.value)])
                                 //     console.log(nameCar.children[0].textContent, e, item.pressure, integer, item.temp, it.value)
                             }

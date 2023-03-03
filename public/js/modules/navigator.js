@@ -1,7 +1,7 @@
 import { visual, visualNone, clearGraf, viewOs } from './visual.js'
 import { massiv } from './configurator.js';
 import { massivionbd, loadParamsView } from './paramsTyresView.js';
-import { geoloc, iconParams } from './wialon.js';
+import { alarmFind } from './alarmStorage.js';
 
 export function navigator() {
     const nav = document.querySelectorAll('.listItem')

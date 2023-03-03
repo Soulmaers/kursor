@@ -38,6 +38,8 @@ export async function visual(el) {
     iconParams()
     setInterval(iconParams, 6000)
     alarmFind(el)
+    //setInterval(alarmFind, 6000, el)
+
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
@@ -272,15 +274,8 @@ export function viewConfigurator(arg, params) {
                 alarmMin();
             }
         }
-
     })
-
-
 }
-
-
-
-
 /*
 function alertCreate() {
     let div = document.createElement('div');
@@ -291,7 +286,6 @@ function alertCreate() {
 //alertCreate()
 
 */
-
 
 function alarmMin() {
     const div = document.querySelector('.alarm')
@@ -406,8 +400,8 @@ export const divClear = (arr) => {
 }
 
 export const pricep = (elem) => {
-    console.log('отработка прицеп')
-    console.log(elem)
+    // console.log('отработка прицеп')
+    // console.log(elem)
     const cont = document.querySelector('.cont')
     cont.append(elem.parentNode)
     cont.style.marginTop = '72px'
