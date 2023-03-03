@@ -896,6 +896,19 @@ input[type="date"] {
   cursor: pointer;
 }
 
+.wrap_state {
+  width: 110px;
+  background-color: #fff;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 2px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+
+}
+
 .btn_clear {
   width: 164px;
   border: 1px solid gray;
@@ -944,9 +957,11 @@ input[type="date"] {
 .btn_save:active {
   background-color: #fff;
   color: #000;
+}
 
-
-
+.btn_icon:active {
+  background-color: #fff;
+  color: #000;
 }
 
 .container {
@@ -1959,17 +1974,17 @@ input[type="number"]:focus {
 
 
 .btn_icon {
+  width: 104px;
+  height: 32px;
+  border: 1px solid gray;
   box-sizing: border-box;
-
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Roboto;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 0.9rem;
   background-color: lightgray;
+  padding: 5px 2px;
+  font-size: 0.85rem;
+  font-family: Roboto;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
 }
 
 .wrapper_right_dash {
