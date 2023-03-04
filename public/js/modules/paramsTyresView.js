@@ -12,6 +12,8 @@ export function viewMenuParams() {
     const titleSens = document.querySelector('.title_sens')
     const btnsens = document.querySelectorAll('.btnsens')
     const wrapperButton = document.querySelector('.wrapper_button')
+    const wrapperMap = document.querySelector('.wrapper_left')
+    console.log(wrapperMap)
     const obo = document.querySelector('.obo')
     const tiresLink = document.querySelectorAll('.tires_link')
     const techInfo = document.querySelector('.techInfo')
@@ -20,6 +22,7 @@ export function viewMenuParams() {
             if (e.classList.contains('tiresActiv')) {
                 e.classList.remove('tiresActiv')
                 techInfo.style.display = 'none'
+                wrapperMap.style.display = 'block'
                 return
             }
             console.log('нажал')
@@ -37,6 +40,7 @@ export function viewMenuParams() {
             wrapperButton.style.display = 'flex';
             e.classList.add('tiresActiv')
             techInfo.style.display = 'block'
+            wrapperMap.style.display = 'none'
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
         })
     })
