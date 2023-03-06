@@ -1,8 +1,15 @@
 import { tr } from './content.js'
 
 
+
+
+
+
+
+
+
 export function proverka(arr, name) {
-    console.log('job')
+    console.log(arr)
     let alarm;
     arr.forEach(el => {
         // console.log(el)
@@ -10,7 +17,7 @@ export function proverka(arr, name) {
             alarm = 'Потеря связи с датчиком'
             const data = createDate()
             el.shift();
-            alarmBase(el, data, alarm, name)
+            //    alarmBase(el, data, alarm, name)
         }
         else {
             if (name === 'КранГаличанинР858ОР178') {
@@ -18,19 +25,19 @@ export function proverka(arr, name) {
                     alarm = 'Критически низкое давление'
                     const data = createDate()
                     el.shift();
-                    alarmBase(el, data, alarm, name)
+                    //  alarmBase(el, data, alarm, name)
                 }
                 if (el[3] > 9.9) {
                     alarm = 'Критически высокое давление'
                     const data = createDate()
                     el.shift();
-                    alarmBase(el, data, alarm, name)
+                    //   alarmBase(el, data, alarm, name)
                 }
                 if (el[4] > 36) {
                     alarm = 'Критически высокая температура'
                     const data = createDate()
                     el.shift();
-                    alarmBase(el, data, alarm, name)
+                    //  alarmBase(el, data, alarm, name)
                 }
             }
             else {
@@ -38,25 +45,26 @@ export function proverka(arr, name) {
                     alarm = 'Критически низкое давление'
                     const data = createDate()
                     el.shift();
-                    alarmBase(el, data, alarm, name)
+                    // alarmBase(el, data, alarm, name)
                 }
                 if (el[3] > 10) {
                     alarm = 'Критически высокое давление'
                     const data = createDate()
                     el.shift();
-                    alarmBase(el, data, alarm, name)
+                    //  alarmBase(el, data, alarm, name)
                 }
                 if (el[4] > 36) {
                     alarm = 'Критически высокая температура'
                     const data = createDate()
                     el.shift();
-                    alarmBase(el, data, alarm, name)
+                    //  alarmBase(el, data, alarm, name)
                 }
             }
         }
     })
 }
 
+/*
 async function alarmBase(tyres, data, alarm, name) {
     tyres.shift()
     const dannie = data.concat(tyres)
@@ -70,7 +78,7 @@ async function alarmBase(tyres, data, alarm, name) {
         body: JSON.stringify({ dannie, name })
     })
     const storList = await stor.json();
-}
+}*/
 
 
 function createDate() {
@@ -104,13 +112,21 @@ export async function alarmFind(name) {
         body: JSON.stringify({ activePost })
     })
     const storList = await stor.json();
+    //console.log(storList)
     const storValue = [];
     storList.forEach(e => {
         storValue.push(Object.values(e))
-        //console.log(storValue)
-    })
 
-    // console.log(storValue)
+    })
+    const origin = [];
+    //  console.log(storValue)
+    storValue.forEach(el => {
+        // console.log(sort(el))
+        const val = sort(el)
+        origin.push(val)
+
+    })
+    console.log(origin)
     viewAlarmStorage(activePost, storValue)
 
     // console.log(name)
@@ -118,6 +134,28 @@ export async function alarmFind(name) {
 }
 
 
+function sort(el) {
+    // console.log('ап')
+    // console.log(el)
+    const testAr = [];
+    //  console.log(storValue)
+    //  console.log(storValue[1])
+    //  console.log(...storValue[1])
+
+    testAr.push(el[0], el[1])
+    const joi = [];
+    joi.push(el[2], el[3], el[4]);
+
+    const joinDone = joi.join('')
+    // console.log(testAr)
+    // console.log(joinDone)
+
+
+    const finish = [];
+    finish.push(testAr[0], testAr[1], joinDone, el[5], el[6])
+    // console.log(finish)
+    return finish
+}
 function viewAlarmStorage(name, stor) {
     console.log('ап')
 

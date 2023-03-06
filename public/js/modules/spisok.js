@@ -3,7 +3,7 @@ import { dashView } from './dash.js'
 import { navigator } from './navigator.js'
 import { twoTyres, forTyres } from './content.js'
 import { objColor, generFront, generDav } from './content.js'
-import { proverka } from './alarmStorage.js'
+//import { proverka, restFn } from './alarmStorage.js'
 /*
 let isLoaded = false
 
@@ -118,7 +118,7 @@ function zaprosSpisok() {
         const dat = await fetch('api/wialonAll', param)
         const data = await dat.json()
 
-        viewListKoleso(data, params, el)
+        // viewListKoleso(data, params, el)
     })
 }
 setTimeout(zaprosSpisok, 2000);
@@ -162,8 +162,10 @@ function viewListKoleso(arg, params, nameCar) {
                         arg.result.forEach((it) => {
                             if (it.name === item.temp) {
                                 //      e.classList.add('done')
+
                                 massItog.push([activePost, e, item.pressure, integer, parseFloat(it.value)])
-                                //     console.log(nameCar.children[0].textContent, e, item.pressure, integer, item.temp, it.value)
+                                //console.log(massItog)
+                                //  console.log(activePost, e, item.pressure, integer, item.temp, it.value)
                             }
                         })
                     }
@@ -172,6 +174,7 @@ function viewListKoleso(arg, params, nameCar) {
         })
     })
     // console.log(massItog)
-    proverka(massItog, activePost)
+    //   proverka(massItog, activePost)
+    //  restFn(massItog, activePost)
 }
 
