@@ -283,6 +283,7 @@ td {
   min-height: 600px;
   box-sizing: border-box;
   border: 1px solid lightgray;
+  z-index: -1;
 }
 
 .wrapper_up {
@@ -2143,7 +2144,7 @@ input[type="number"]:focus {
   z-index: 2;
   background-color: #fff;
   position: absolute;
-  top: 166px;
+  top: 149px;
   left: 25px;
 }
 

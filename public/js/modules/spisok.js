@@ -121,8 +121,8 @@ function zaprosSpisok() {
         viewListKoleso(data, params, el)
     })
 }
-
-setInterval(zaprosSpisok, 2000)
+setTimeout(zaprosSpisok, 2000);
+setInterval(zaprosSpisok, 60000)
 
 function viewListKoleso(arg, params, nameCar) {
     const massItog = [];

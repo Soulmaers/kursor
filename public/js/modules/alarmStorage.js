@@ -2,133 +2,57 @@ import { tr } from './content.js'
 
 
 export function proverka(arr, name) {
-    //  console.log(arr)
-    // console.log(name)
+    console.log('job')
     let alarm;
     arr.forEach(el => {
-        if (name === 'КранГаличанинР858ОР178') {
-            //  console.log('кран')
-            if (el[5] == -51 || el[5] == -128) {
-                //  console.log('нет датчика')
-                if (!el[1].classList.contains('alarmIn')) {
-                    el[1].classList.add('alarmIn')
-                    alarm = 'Потеря связи с датчиком'
-                    const data = createDate()
-                    el.shift();
-                    //  console.log(el)
-                    alarmBase(el, data, alarm, name)
-                }
-                else {
-                    //   console.log('уже есть аларм')
-                }
-            }
-            else {
-                if (el[3] < 6) {
-                    if (!el[1].classList.contains('alarmIn')) {
-                        el[1].classList.add('alarmIn')
-                        alarm = 'Критически низкое давление'
-                        const data = createDate()
-                        el.shift();
-                        //   console.log(el)
-                        alarmBase(el, data, alarm, name)
-                    }
-                    else {
-                        //  console.log('уже есть аларм')
-                    }
-                }
-                if (el[3] > 9.9) {
-                    if (!el[1].classList.contains('alarmIn')) {
-                        el[1].classList.add('alarmIn')
-                        alarm = 'Критически высокое давление'
-                        const data = createDate()
-                        el.shift();
-                        //   console.log(el)
-                        alarmBase(el, data, alarm, name)
-                    }
-                    else {
-                        //  console.log('уже есть аларм')
-                    }
-                }
-                if (el[5] > 36) {
-                    if (!el[1].classList.contains('alarmIn')) {
-                        el[1].classList.add('alarmIn')
-                        alarm = 'Критически высокая температура'
-                        const data = createDate()
-                        el.shift();
-                        //    console.log(el)
-                        alarmBase(el, data, alarm, name)
-                    }
-                    else {
-                        //   console.log('уже есть аларм')
-                    }
-                }
-            }
+        // console.log(el)
+        if (el[4] == -51 || el[4] == -128 || el[4] == -50) {
+            alarm = 'Потеря связи с датчиком'
+            const data = createDate()
+            el.shift();
+            alarmBase(el, data, alarm, name)
         }
         else {
-            //  console.log('не кран')
-            if (el[5] == -51 || el[5] == -128) {
-                // console.log('нет датчика')
-                if (!el[1].classList.contains('alarmIn')) {
-                    el[1].classList.add('alarmIn')
-                    alarm = 'Потеря связи с датчиком'
+            if (name === 'КранГаличанинР858ОР178') {
+                if (el[3] < 6) {
+                    alarm = 'Критически низкое давление'
                     const data = createDate()
                     el.shift();
-                    //  console.log(el)
                     alarmBase(el, data, alarm, name)
                 }
-                else {
-                    //  console.log('уже есть аларм')
+                if (el[3] > 9.9) {
+                    alarm = 'Критически высокое давление'
+                    const data = createDate()
+                    el.shift();
+                    alarmBase(el, data, alarm, name)
+                }
+                if (el[4] > 36) {
+                    alarm = 'Критически высокая температура'
+                    const data = createDate()
+                    el.shift();
+                    alarmBase(el, data, alarm, name)
                 }
             }
             else {
-
                 if (el[3] < 8) {
-                    if (!el[1].classList.contains('alarmIn')) {
-                        el[1].classList.add('alarmIn')
-                        alarm = 'Критически низкое давление'
-                        const data = createDate()
-                        el.shift();
-                        // console.log(el)
-                        alarmBase(el, data, alarm, name)
-                    }
-                    else {
-                        //  console.log('уже есть аларм')
-                    }
+                    alarm = 'Критически низкое давление'
+                    const data = createDate()
+                    el.shift();
+                    alarmBase(el, data, alarm, name)
                 }
                 if (el[3] > 10) {
-                    console.log(el[1])
-
-                    if (!el[1].classList.contains('alarmIn')) {
-                        el[1].classList.add('alarmIn')
-                        alarm = 'Критически высокое давление'
-                        const data = createDate()
-                        el.shift();
-                        //  console.log(el)
-                        alarmBase(el, data, alarm, name)
-
-                        console.log('это')
-                    }
-                    else {
-                        console.log('уже есть аларм')
-                    }
+                    alarm = 'Критически высокое давление'
+                    const data = createDate()
+                    el.shift();
+                    alarmBase(el, data, alarm, name)
                 }
-                if (el[5] > 36) {
-                    if (!el[1].classList.contains('alarmIn')) {
-                        el[1].classList.add('alarmIn')
-                        alarm = 'Критически высокая температура'
-                        const data = createDate()
-                        el.shift();
-                        //   console.log(el)
-                        alarmBase(el, data, alarm, name)
-                    }
-                    else {
-                        //сonsole.log('уже есть аларм')
-                    }
+                if (el[4] > 36) {
+                    alarm = 'Критически высокая температура'
+                    const data = createDate()
+                    el.shift();
+                    alarmBase(el, data, alarm, name)
                 }
-
-
             }
-
         }
     })
 }
@@ -138,8 +62,6 @@ async function alarmBase(tyres, data, alarm, name) {
     const dannie = data.concat(tyres)
     dannie.unshift(name)
     dannie.push(alarm)
-    //  console.log(dannie)
-
     const stor = await fetch('api/alarmStorage', {
         method: "POST",
         headers: {
@@ -148,8 +70,6 @@ async function alarmBase(tyres, data, alarm, name) {
         body: JSON.stringify({ dannie, name })
     })
     const storList = await stor.json();
-    // console.log(storList)
-
 }
 
 
@@ -190,7 +110,7 @@ export async function alarmFind(name) {
         //console.log(storValue)
     })
 
-    //  console.log(storValue)
+    // console.log(storValue)
     viewAlarmStorage(activePost, storValue)
 
     // console.log(name)
@@ -200,12 +120,6 @@ export async function alarmFind(name) {
 
 function viewAlarmStorage(name, stor) {
     console.log('ап')
-    /*
-    const tr = document.querySelectorAll('tr')
-    tr.forEach(it => {
-        //    console.log('удаление цикл')
-        it.remove();
-    })*/
 
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
@@ -222,18 +136,18 @@ function viewAlarmStorage(name, stor) {
             tr.appendChild(td)
 
         })
-        if (el[el.length - 1] !== 'Потеря связи с датчиком' || el[el.length - 1] !== 'Потеря связи с датчиком') {
+        if (el[el.length - 1] == 'Потеря связи с датчиком') {
             const arrName = tbody.querySelectorAll(`.${name}`)
-
+            //   console.log(arrName)
             arrName.forEach(e => {
-                e.children[3].style.background = 'yellow';
+                e.children[4].style.background = 'yellow';
             })
 
         }
         else {
-            const arrName = tbody.querySelector(`.${name}`)
+            const arrName = tbody.querySelectorAll(`.${name}`)
             arrName.forEach(e => {
-                e.children[4].style.background = 'yellow';
+                e.children[3].style.background = 'yellow';
             })
         }
     })
