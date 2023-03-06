@@ -283,7 +283,7 @@ td {
   min-height: 600px;
   box-sizing: border-box;
   border: 1px solid lightgray;
-  z-index: -1;
+
 }
 
 .wrapper_up {
@@ -295,7 +295,7 @@ td {
 }
 
 .wrapper_button {
-  margin-top: 10px;
+  margin-top: 30px;
   display: none;
   justify-content: space-around;
 }

@@ -40,6 +40,7 @@ export function viewMenuParams() {
             wrapperButton.style.display = 'flex';
             e.classList.add('tiresActiv')
             techInfo.style.display = 'block'
+            speedGraf.style.display = 'block';
             wrapperMap.style.display = 'none'
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
         })

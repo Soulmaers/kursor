@@ -112,7 +112,7 @@ ctx.stroke();
 */
 
 
-
+/*
 var c22 = document.getElementById("drawLine22");
 var ctx22 = c22.getContext("2d");
 ctx22.beginPath();
