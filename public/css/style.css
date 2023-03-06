@@ -929,7 +929,7 @@ input[type="date"] {
   box-sizing: border-box;
   background-color: lightgray;
   padding: 5px 0;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-family: Roboto;
   font-weight: 700;
   color: #000;
@@ -1693,6 +1693,7 @@ div.wrapper {
   align-items: center;
   font-family: Roboto;
   font-weight: bold;
+  font-size: 0.9rem;
 }
 
 .protector {
@@ -1980,7 +1981,7 @@ input[type="number"]:focus {
   box-sizing: border-box;
   background-color: lightgray;
   padding: 5px 2px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-family: Roboto;
   font-weight: 700;
   color: #000;

@@ -17,6 +17,7 @@ export async function visual(el) {
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const wrapperRight = document.querySelector('.wrapper_right')
+    const wrapperLeft = document.querySelector('.wrapper_left')
     const titleCar = document.querySelector('.title_two')
     const btnsens = document.querySelectorAll('.btnsens')
     const main = document.querySelector('.main')
@@ -26,6 +27,7 @@ export async function visual(el) {
     //  section.style.display = 'none'
     wrapperUp.style.display = 'block'
     wrapperRight.style.display = 'flex'
+    wrapperLeft.style.display = 'block'
     main.style.display = 'flex'
     speedGraf.style.display = 'block'
     el.classList.add('color')
