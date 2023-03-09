@@ -32,7 +32,7 @@ function init(user) {
             //  console.log('обновление')
             // setInterval(getMainInfo, 5000);
             createTable();
-            setInterval(createTable, 15000);
+            setInterval(createTable, 30000);
             //  saprosGeo()
         })
 }
@@ -151,50 +151,50 @@ const convert = (ob) => {
 
 function zaprosSpisokb(name) {
     const massItog = [];
-    name.forEach(itey => {
-        const nameCar = 'tyres' + itey
-        try {
-            const selectBase = `SELECT tyresdiv, pressure,temp FROM ${nameCar} WHERE 1`
-            connection.query(selectBase, function (err, results) {
-                if (err) console.log(err);
-                const params = results
-                const modelUniqValues = convert(params)
-                try {
-                    const selectBase = `SELECT name, value FROM ${itey} WHERE 1`
-                    connection.query(selectBase, function (err, results) {
-                        if (err) console.log(err);
-                        const data = results
-                        let integer;
-                        data.forEach((el) => {
-                            modelUniqValues.forEach((item) => {
-                                //   console.log(item.pressure)
-                                if (el.name == item.pressure) {
+    name[3]
+    const nameCar = 'tyres' + name[3]
+    try {
+        const selectBase = `SELECT tyresdiv, pressure,temp FROM ${nameCar} WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            const params = results
+            const modelUniqValues = convert(params)
+            try {
+                const selectBase = `SELECT name, value FROM ${name[3]} WHERE 1`
+                connection.query(selectBase, function (err, results) {
+                    if (err) console.log(err);
+                    const data = results
+                    let integer;
+                    data.forEach((el) => {
+                        modelUniqValues.forEach((item) => {
+                            //   console.log(item.pressure)
+                            if (el.name == item.pressure) {
 
-                                    if (itey == 'PressurePro933') {
-                                        integer = parseFloat((el.value * 0.069).toFixed(1))
-                                    }
-                                    else {
-                                        integer = el.value
-                                    }
-                                    data.forEach((it) => {
-                                        if (it.name === item.temp) {
-                                            massItog.push([itey, item.pressure, integer, parseFloat(it.value)])
-                                        }
-                                    })
+                                if (name[3] == 'PressurePro933') {
+                                    integer = parseFloat((el.value * 0.069).toFixed(1))
                                 }
-                            })
+                                else {
+                                    integer = el.value
+                                }
+                                data.forEach((it) => {
+                                    if (it.name === item.temp) {
+                                        massItog.push([name[3], item.pressure, integer, parseFloat(it.value)])
+                                    }
+                                })
+                            }
                         })
                     })
-                }
-                catch (e) {
-                    console.log(e)
-                }
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
+                })
+            }
+            catch (e) {
+                console.log(e)
+            }
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
     setTimeout(proverka, 1000, massItog)
 }
 
@@ -212,41 +212,74 @@ function createDate() {
     return [today, time]
     // console.log(today)
 }
-//let mass;
+
+
+let count = 0;
 function proverka(arr) {
     console.log(arr)
-    let alarm;
     arr.forEach(el => {
-        if (el[0] === 'КранГаличанинР858ОР178') {
+        //  console.log(el)
+        let alarm;
+        const name = 0 + el[0] + el[1]
+        console.log(name)
+        // const tableModel = 'alarm' + name
+        const sqls1 = `SELECT data, time, senspressure, bar, temp, alarm  FROM ${name} WHERE 1`
+        connection.query(sqls1, function (err, results) {
+            if (err) console.log(err);
+            if (results == undefined) {
 
-            if (el[2] < 6) {
-                alarm = 'Критически низкое давление'
-                const data = createDate()
-                alarmBase(data, el, alarm)
+                if (el[2] < '6') {
+                    console.log('таблица нет, аларм есть')
+                    const data = createDate()
+                    alarm = 'Критически низкое давление'
+                    alarmBase(data, el, alarm)
+                }
+                else {
+                    console.log('таблица нет, аларма нет')
+                    return
+                }
             }
             else {
-                alarm = 'Норма'
-                const data = createDate()
-                alarmBase(data, el, alarm)
+                if (el[2] < '6') {
+                    console.log('таблица есть, аларм есть')
+                    console.log(results[results.length - 1].bar)
+                    console.log(el)
+                    if (results[results.length - 1].bar == el[2]) {
+                        console.log('повторные данные')
+                        return
+                    } else {
+                        console.log('таблица есть, изменение аларма')
+                        const data = createDate()
+                        alarm = 'Критически низкое давление'
+                        alarmBase(data, el, alarm)
+                    }
+                }
+                else {
+                    console.log('таблица есть, аларма нет')
+                    const data = createDate()
+                    alarm = 'Норма'
+                    //  alarmBase(data, el, alarm)
+                }
             }
-        }
+            //  res.json(results);
+        });
+
+
+
     })
+
 }
 
 
 
 function alarmBase(data, tyres, alarm) {
-    console.log('job')
-    // tyres.shift()
+    console.log(tyres)
     const dannie = data.concat(tyres)
-    // dannie.unshift(name)
-    dannie.push(alarm)
-    // console.log(dannie)
-
-
     const name = dannie[2]
+    dannie.push(alarm)
+    console.log(dannie)
     const value = [dannie];
-    const tableModel = 'alarm' + name
+    const tableModel = count + dannie[2] + dannie[3]
     try {
         const sql = `create table if not exists ${tableModel}(
             id int(255) primary key auto_increment,
@@ -260,13 +293,20 @@ function alarmBase(data, tyres, alarm) {
             )`
         connection.query(sql, function (err, results) {
             if (err) console.log('ошибка');
-            else console.log("Таблица alarm создана");
+
+            else {
+                // console.log(results)
+                count++
+                console.log(count)
+                console.log("Таблица alarm создана")
+            };
         })
         const sqls = `INSERT INTO  ${tableModel} (data, time, name, senspressure, bar,
                             temp, alarm) VALUES?`;
         connection.query(sqls, [value], function (err, results) {
             if (err) console.log(err);
             console.log("Данные добавлены");
+
         });
     }
     catch (e) {
@@ -276,18 +316,11 @@ function alarmBase(data, tyres, alarm) {
 }
 
 
-
-
-
-
 //const y = c
 module.exports = {
     getMainInfo,
     createTable,
     init
-
-
-
 }
 
 

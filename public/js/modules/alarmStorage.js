@@ -1,11 +1,5 @@
 import { tr } from './content.js'
-
-
-
-
-
-
-
+import { convert } from './visual.js'
 
 
 export function proverka(arr, name) {
@@ -103,59 +97,41 @@ export async function alarmFind(name) {
     //const active = document.querySelector('.color')
     //  console.log(active)
     const activePost = name.children[0].textContent.replace(/\s+/g, '')
-    console.log(activePost)
-    const stor = await fetch('api/alarmFind', {
+    const par = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ activePost })
-    })
-    const storList = await stor.json();
-    //console.log(storList)
+    }
+    // console.log(activePost)   
+    const tyres = await fetch('api/tyresView', par)
+    const tyresmassiv = await tyres.json();
+    const sorTyres = convert(tyresmassiv.values)
     const storValue = [];
-    storList.forEach(e => {
-        storValue.push(Object.values(e))
 
+
+    console.log(sorTyres)
+    sorTyres.forEach(async e => {
+        e.pressure
+        //  console.log('0' + activePost + e.pressure)
+        const activeName = '0' + activePost + e.pressure
+        console.log(activeName)
+        const stor = await fetch('api/alarmFind', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ activeName })
+        })
+        const storList = await stor.json();
+        storList.forEach(e => {
+            storValue.push(Object.values(e))
+            viewAlarmStorage(activePost, storValue)
+        })
     })
-    const origin = [];
-    //  console.log(storValue)
-    storValue.forEach(el => {
-        // console.log(sort(el))
-        const val = sort(el)
-        origin.push(val)
-
-    })
-    console.log(origin)
-    viewAlarmStorage(activePost, storValue)
-
-    // console.log(name)
-    // setInterval(alarmFind, 6000)
 }
 
-
-function sort(el) {
-    // console.log('ап')
-    // console.log(el)
-    const testAr = [];
-    //  console.log(storValue)
-    //  console.log(storValue[1])
-    //  console.log(...storValue[1])
-
-    testAr.push(el[0], el[1])
-    const joi = [];
-    joi.push(el[2], el[3], el[4]);
-
-    const joinDone = joi.join('')
-    // console.log(testAr)
-    // console.log(joinDone)
-
-
-    const finish = [];
-    finish.push(testAr[0], testAr[1], joinDone, el[5], el[6])
-    // console.log(finish)
-    return finish
-}
 function viewAlarmStorage(name, stor) {
     console.log('ап')
 

@@ -118,7 +118,7 @@ function zaprosSpisok() {
         const dat = await fetch('api/wialonAll', param)
         const data = await dat.json()
 
-        // viewListKoleso(data, params, el)
+        viewListKoleso(data, params, el)
     })
 }
 setTimeout(zaprosSpisok, 2000);
