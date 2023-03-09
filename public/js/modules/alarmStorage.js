@@ -115,7 +115,7 @@ export async function alarmFind(name) {
     sorTyres.forEach(async e => {
         e.pressure
         //  console.log('0' + activePost + e.pressure)
-        const activeName = '0' + activePost + e.pressure
+        const activeName = activePost + e.pressure
         console.log(activeName)
         const stor = await fetch('api/alarmFind', {
             method: "POST",

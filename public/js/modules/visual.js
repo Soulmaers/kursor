@@ -226,6 +226,7 @@ export function viewConfigurator(arg, params) {
                             }
                             alerts.push(done)
                             e.children[0].textContent = done + '\nБар'
+                            e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                             if (activePost == 'КранГаличанинР858ОР178') {
                                 signal = objColor[generDav(done)]
 
@@ -365,11 +366,11 @@ export async function viewOs() {
             tiresD.classList.add('tiresD')
             const tiresT = document.createElement('div');
             tiresT.classList.add('tiresT')
-            // const place = document.createElement('div');
-            // place.classList.add('place')
+            const place = document.createElement('div');
+            place.classList.add('place')
             link.appendChild(tiresD);
             link.appendChild(tiresT);
-            //  link.appendChild(place);
+            link.appendChild(place);
         })
         osi.forEach(el => {
             el.style.display = 'none'
