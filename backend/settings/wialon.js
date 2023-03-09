@@ -279,7 +279,7 @@ function alarmBase(data, tyres, alarm) {
     dannie.push(alarm)
     console.log(dannie)
     const value = [dannie];
-    const tableModel = count + dannie[2] + dannie[3]
+    const tableModel = dannie[2] + dannie[3]
     try {
         const sql = `create table if not exists ${tableModel}(
             id int(255) primary key auto_increment,
