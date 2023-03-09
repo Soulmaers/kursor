@@ -115,7 +115,7 @@ export async function alarmFind(name) {
     sorTyres.forEach(async e => {
         e.pressure
         //  console.log('0' + activePost + e.pressure)
-        const activeName = activePost + e.pressure
+        const activeName = 'alarm' + activePost + e.pressure
         console.log(activeName)
         const stor = await fetch('api/alarmFind', {
             method: "POST",
@@ -135,10 +135,9 @@ export async function alarmFind(name) {
 
 function viewAlarmStorage(name, stor) {
     console.log('ап')
-
+    console.log(stor)
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
-
     stor.forEach(el => {
         const tr = document.createElement('tr')
         tr.classList.add('tr')
@@ -149,22 +148,14 @@ function viewAlarmStorage(name, stor) {
             td.classList.add('td')
             td.textContent = it
             tr.appendChild(td)
-
         })
-        if (el[el.length - 1] == 'Потеря связи с датчиком') {
-            const arrName = tbody.querySelectorAll(`.${name}`)
-            //   console.log(arrName)
-            arrName.forEach(e => {
+        const arrName = tbody.querySelectorAll(`.${name}`)
+        arrName.forEach(e => {
+            e.children[3].style.background = 'yellow';
+            if (e.children[4].textContent == '-51') {
                 e.children[4].style.background = 'yellow';
-            })
-
-        }
-        else {
-            const arrName = tbody.querySelectorAll(`.${name}`)
-            arrName.forEach(e => {
-                e.children[3].style.background = 'yellow';
-            })
-        }
+            }
+        })
     })
 
 }

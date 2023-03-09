@@ -32,7 +32,7 @@ function init(user) {
             //  console.log('обновление')
             // setInterval(getMainInfo, 5000);
             createTable();
-            //   setInterval(createTable, 30000);
+            setInterval(createTable, 30000);
             //  saprosGeo()
         })
 }
@@ -178,7 +178,7 @@ function zaprosSpisokb(name) {
                                     }
                                     data.forEach((it) => {
                                         if (it.name === item.temp) {
-                                            massItog.push([itey, item.pressure, integer, parseFloat(it.value)])
+                                            massItog.push([itey, item.pressure, parseFloat(integer), parseFloat(it.value)])
                                         }
                                     })
                                 }
@@ -195,7 +195,7 @@ function zaprosSpisokb(name) {
             console.log(e)
         }
     })
-    // setTimeout(proverka, 1000, massItog)
+    setTimeout(proverka, 1000, massItog)
 }
 
 
@@ -220,7 +220,7 @@ function proverka(arr) {
     arr.forEach(el => {
         //  console.log(el)
         let alarm;
-        const name = el[0] + el[1]
+        const name = 'alarm' + el[0] + el[1]
         console.log(name)
         // const tableModel = 'alarm' + name
         const sqls1 = `SELECT data, time, senspressure, bar, temp, alarm  FROM ${name} WHERE 1`
@@ -228,19 +228,35 @@ function proverka(arr) {
             if (err) console.log(err);
             if (results == undefined) {
 
-                if (el[2] < '6') {
+                if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
                     console.log('таблица нет, аларм есть')
                     const data = createDate()
-                    alarm = 'Критически низкое давление'
+                    alarm = 'Потеря связи с датчиком'
                     alarmBase(data, el, alarm)
                 }
                 else {
-                    console.log('таблица нет, аларма нет')
-                    return
+                    if (el[2] < 6) {
+                        console.log('таблица нет, аларм есть')
+                        const data = createDate()
+                        alarm = 'Критически низкое давление'
+                        alarmBase(data, el, alarm)
+                    }
+                    if (el[2] > 10) {
+                        console.log('таблица нет, аларм есть')
+                        const data = createDate()
+                        alarm = 'Критически высокое давление'
+                        alarmBase(data, el, alarm)
+                    }
+                    else {
+                        console.log('таблица нет, аларма нет')
+                        return
+                    }
+
                 }
+
             }
             else {
-                if (el[2] < '6') {
+                if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
                     console.log('таблица есть, аларм есть')
                     console.log(results[results.length - 1].bar)
                     console.log(el)
@@ -250,16 +266,54 @@ function proverka(arr) {
                     } else {
                         console.log('таблица есть, изменение аларма')
                         const data = createDate()
-                        alarm = 'Критически низкое давление'
+                        alarm = 'Потеря связи с датчиком'
                         alarmBase(data, el, alarm)
                     }
                 }
                 else {
-                    console.log('таблица есть, аларма нет')
-                    const data = createDate()
-                    alarm = 'Норма'
-                    alarmBase(data, el, alarm)
+                    if (el[2] < 6) {
+                        console.log('таблица есть, аларм есть')
+                        console.log(results[results.length - 1].bar)
+                        console.log(el)
+                        if (results[results.length - 1].bar == el[2]) {
+                            console.log('повторные данные')
+                            return
+                        } else {
+                            console.log('таблица есть, изменение аларма')
+                            const data = createDate()
+                            alarm = 'Критически низкое давление'
+                            alarmBase(data, el, alarm)
+                        }
+                    }
+                    if (el[2] > 10) {
+                        console.log('таблица есть, аларм есть')
+                        console.log(results[results.length - 1].bar)
+                        console.log(el)
+                        if (results[results.length - 1].bar == el[2]) {
+                            console.log('повторные данные')
+                            return
+                        } else {
+                            console.log('таблица есть, изменение аларма')
+                            const data = createDate()
+                            alarm = 'Критически высокое давление'
+                            alarmBase(data, el, alarm)
+                        }
+                    }
+                    else {
+                        console.log('таблица есть, аларма нет')
+                        if (results[results.length - 1].bar == el[2]) {
+                            console.log('повторные данные')
+                            return
+                        } else {
+                            console.log('таблица есть, изменение аларма')
+                            const data = createDate()
+                            alarm = 'Норма'
+                            alarmBase(data, el, alarm)
+                        }
+                    }
+
                 }
+
             }
             //  res.json(results);
         });
@@ -279,7 +333,7 @@ function alarmBase(data, tyres, alarm) {
     dannie.push(alarm)
     console.log(dannie)
     const value = [dannie];
-    const tableModel = dannie[2] + dannie[3]
+    const tableModel = 'alarm' + dannie[2] + dannie[3]
     try {
         const sql = `create table if not exists ${tableModel}(
             id int(255) primary key auto_increment,
