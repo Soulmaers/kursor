@@ -2210,6 +2210,7 @@ input[type="number"]:focus {
 
 .tr {
   display: none;
+  background: lightgray;
 }
 
 .norma {
@@ -2218,9 +2219,21 @@ input[type="number"]:focus {
 
 .views {
   display: table-row;
+  background: lightgray;
 }
 
 .oneName {
   width: 565px;
   display: table-row;
+  background: lightgray;
+}
+
+.activeList {
+  background: #fff;
+
+}
+
+.td {
+  background: none;
+
 }

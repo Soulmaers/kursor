@@ -128,6 +128,7 @@ export async function alarmFind(name) {
 function viewAlarmStorage(name, stor) {
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
+    console.log(stor)
     stor.forEach(el => {
         let count = 0;
         el.forEach(it => {
@@ -136,6 +137,7 @@ function viewAlarmStorage(name, stor) {
             tr.classList.add('tr')
             tr.classList.add('trnone')
             tr.classList.add(`${name}`)
+
             tbody.appendChild(tr)
             const toSearch = "Норма";
             if (count == 1) {
@@ -168,6 +170,17 @@ function viewAlarmStorage(name, stor) {
         if (e.children[4].textContent == '-51' || e.children[4].textContent == '-50') {
             e.children[4].style.background = 'yellow';
         }
+    })
+    const v = document.querySelectorAll('.views')
+    v.forEach(el => {
+        el.addEventListener('click', () => {
+            if (el.nextSibling.classList.contains('norma') == false) {
+                el.nextSibling.style.display = 'table-row'
+                el.classList.add('activeList')
+                console.log(el)
+            }
+        })
+
     })
 }
 const plus = document.querySelector('.plus')
