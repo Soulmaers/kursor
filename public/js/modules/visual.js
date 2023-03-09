@@ -381,8 +381,45 @@ export async function viewOs() {
     }
     viewMenuParams()
     modalOs();
+    const btnShina = document.querySelector('.btn_icon')
+    btnShina.classList.contains('active') ? styleShinaActive(btnShina) : styleShina(btnShina)
 }
-
+function styleShinaActive(arg) {
+    arg.textContent = 'Давление'
+    const tyresD = document.querySelectorAll('.tiresD')
+    const tyresT = document.querySelectorAll('.tiresT')
+    const centerOs = document.querySelectorAll('.centerOs')
+    const osi = document.querySelectorAll('.osi')
+    // console.log(tyresD)
+    osi.forEach(e => {
+        e.style.width = '330px'
+    })
+    tyresD.forEach(e => {
+        e.style.width = '60px'
+    })
+    tyresT.forEach(e => {
+        e.style.width = '60px'
+    })
+    centerOs.forEach(e => {
+        e.style.width = '300px'
+    })
+}
+function styleShina(arg) {
+    arg.textContent = 'Состояние шин'
+    const tyresD = document.querySelectorAll('.tiresD')
+    const tyresT = document.querySelectorAll('.tiresT')
+    const centerOs = document.querySelectorAll('.centerOs')
+    console.log(tyresD)
+    tyresD.forEach(e => {
+        e.style.width = '30px'
+    })
+    tyresT.forEach(e => {
+        e.style.width = '30px'
+    })
+    centerOs.forEach(e => {
+        e.style.width = '150px'
+    })
+}
 
 //обработка массива для скрытия осей и других элементов
 export const divClear = (arr) => {
