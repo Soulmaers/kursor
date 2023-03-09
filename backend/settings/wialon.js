@@ -218,7 +218,7 @@ function createDate() {
 function proverka(arr) {
     console.log(arr)
     arr.forEach(el => {
-        //  console.log(el)
+        console.log(el[4])
         let alarm;
         const name = 'alarm' + el[0] + el[1]
         console.log(name)
@@ -301,7 +301,8 @@ function proverka(arr) {
                     }
                     else {
                         console.log('таблица есть, аларма нет')
-                        if (results[results.length - 1].bar == el[2]) {
+                        //   console.log()
+                        if (results[results.length - 1].alarm === 'Норма') {
                             console.log('повторные данные')
                             return
                         } else {

@@ -93,9 +93,6 @@ function createDate() {
 
 
 export async function alarmFind(name) {
-    // console.log(name[0])
-    //const active = document.querySelector('.color')
-    //  console.log(active)
     const activePost = name.children[0].textContent.replace(/\s+/g, '')
     const par = {
         method: "POST",
@@ -104,17 +101,13 @@ export async function alarmFind(name) {
         },
         body: JSON.stringify({ activePost })
     }
-    // console.log(activePost)   
     const tyres = await fetch('api/tyresView', par)
     const tyresmassiv = await tyres.json();
     const sorTyres = convert(tyresmassiv.values)
-    const storValue = [];
-
-
     console.log(sorTyres)
+    const storValue = [];
     sorTyres.forEach(async e => {
         e.pressure
-        //  console.log('0' + activePost + e.pressure)
         const activeName = 'alarm' + activePost + e.pressure
         console.log(activeName)
         const stor = await fetch('api/alarmFind', {
@@ -126,46 +119,60 @@ export async function alarmFind(name) {
         })
         const storList = await stor.json();
         console.log(storList)
-        storList.forEach(e => {
-            storValue.push(Object.values(e))
-            viewAlarmStorage(activePost, storValue)
-        })
+        storValue.push(storList)
     })
+    setTimeout(viewAlarmStorage, 1000, activePost, storValue)
 }
 
+
 function viewAlarmStorage(name, stor) {
-    console.log('ап')
-    console.log(stor)
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
     stor.forEach(el => {
-        const tr = document.createElement('tr')
-        tr.classList.add('tr')
-        tr.classList.add(`${name}`)
-        tbody.appendChild(tr)
+        let count = 0;
         el.forEach(it => {
-            const td = document.createElement('td')
-            td.classList.add('td')
-            td.textContent = it
-            tr.appendChild(td)
-        })
-        const arrName = tbody.querySelectorAll(`.${name}`)
-        arrName.forEach(e => {
-            e.children[3].style.background = 'yellow';
-            if (e.children[4].textContent == '-51') {
-                e.children[4].style.background = 'yellow';
+            count++
+            const tr = document.createElement('tr')
+            tr.classList.add('tr')
+            tr.classList.add('trnone')
+            tr.classList.add(`${name}`)
+            tbody.appendChild(tr)
+            const toSearch = "Норма";
+            if (count == 1) {
+                tr.classList.add('views')
+                //  tr.style.color = 'blue';
+            }
+            if (it.alarm == toSearch) {
+                tr.classList.add('norma')
+                //  tr.style.display = 'none';
+            }
+            for (var key in it) {
+                const td = document.createElement('td')
+                td.classList.add('td')
+                td.textContent = it[key]
+                tr.appendChild(td)
+            }
+            const t = document.querySelectorAll('.tr')
+            for (let i = 0; i < t.length; i++) {
+                if (t[i].children[5].textContent == 'Норма' && t[i + 1] !== undefined) {
+                    t[i + 1].classList.add('views')
+                    //  t[i + 1].style.color = 'blue'
+                }
             }
         })
     })
 
+    const arrName = tbody.querySelectorAll(`.${name}`)
+    arrName.forEach(e => {
+        e.children[3].style.background = 'yellow';
+        if (e.children[4].textContent == '-51' || e.children[4].textContent == '-50') {
+            e.children[4].style.background = 'yellow';
+        }
+    })
 }
-
-
 const plus = document.querySelector('.plus')
 const minus = document.querySelector('.minus')
 const alarmStorage = document.querySelector('.alarmStorage')
-
-
 
 plus.addEventListener('click', () => {
     alarmStorage.style.display = 'block';
@@ -173,7 +180,6 @@ plus.addEventListener('click', () => {
     minus.style.display = 'block'
 
 })
-
 minus.addEventListener('click', () => {
     alarmStorage.style.display = 'none';
     plus.style.display = 'block';

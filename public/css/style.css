@@ -2148,9 +2148,7 @@ input[type="number"]:focus {
   left: 25px;
 }
 
-.oneName {
-  width: 565px;
-}
+
 
 .td {
   height: 5px;
@@ -2207,4 +2205,22 @@ input[type="number"]:focus {
   position: absolute;
   top: 6px;
   right: 8px;
+}
+
+
+.tr {
+  display: none;
+}
+
+.norma {
+  display: none;
+}
+
+.views {
+  display: table-row;
+}
+
+.oneName {
+  width: 565px;
+  display: table-row;
 }
