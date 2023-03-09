@@ -125,6 +125,7 @@ export async function alarmFind(name) {
             body: JSON.stringify({ activeName })
         })
         const storList = await stor.json();
+        console.log(storList)
         storList.forEach(e => {
             storValue.push(Object.values(e))
             viewAlarmStorage(activePost, storValue)

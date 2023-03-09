@@ -435,11 +435,9 @@ module.exports.alarmFind = (req, res) => {
     const sqls1 = `SELECT data, time, senspressure, bar, temp, alarm  FROM ${tableModel} WHERE 1`
     connection.query(sqls1, function (err, results) {
         if (err) console.log(err);
-        console.log(results)
-        if (results == undefined) {
-            console.log('нет таблицы')
-        }
-        else
-            res.json(results);
-    });
+        res.json(results)
+
+
+
+    })
 }
