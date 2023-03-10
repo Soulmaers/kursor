@@ -17,14 +17,14 @@ export const text = `<div class=" osi">
     </div>`
 
 
-export const tr = `<tr class="tr oneName">
-                                                    <td class="td">Дата</td>
-                                                    <td class="td">Время</td>
-                                                    <td class="td">Колесо</td>
-                                                    <td class="td">P, бар</td>
-                                                    <td class="td">t,°C</td>
-                                                    <td class="td">Уведомления</td>
-                                                </tr>`
+export const tr = `<h3 class="tr oneName">
+                                                    <p class="td">Дата</p>
+                                                    <p class="td">Время</p>
+                                                    <p class="td">Колесо</p>
+                                                    <p class="td">P, бар</p>
+                                                    <p class="td">t,°C</p>
+                                                    <p class="td">Уведомления</p>
+                                                </h3>`
 
 
 export const twoTyres = ` 

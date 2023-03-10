@@ -133,7 +133,7 @@ function viewAlarmStorage(name, stor) {
         let count = 0;
         el.forEach(it => {
             count++
-            const tr = document.createElement('tr')
+            const tr = document.createElement('div')
             tr.classList.add('tr')
             tr.classList.add('trnone')
             tr.classList.add(`${name}`)
@@ -149,7 +149,7 @@ function viewAlarmStorage(name, stor) {
                 //  tr.style.display = 'none';
             }
             for (var key in it) {
-                const td = document.createElement('td')
+                const td = document.createElement('p')
                 td.classList.add('td')
                 td.textContent = it[key]
                 tr.appendChild(td)
@@ -175,7 +175,7 @@ function viewAlarmStorage(name, stor) {
     v.forEach(el => {
         el.addEventListener('click', () => {
             if (el.nextSibling.classList.contains('norma') == false) {
-                el.nextSibling.style.display = 'table-row'
+                el.nextSibling.style.display = 'flex'
                 el.classList.add('activeList')
                 console.log(el)
             }
