@@ -124,7 +124,7 @@ function viewPicture(arr, id, elem) {
             e.style.display = 'block'
             e.style.width = '20px'
         })
-        protekGrafFreeAll()
+        protekGrafFreeAll(arr, id, elem)
     }
     if (arrAll.length == 2) {
         y1 = ((120 - arrAll[0]) / 6).toFixed(0)
@@ -474,7 +474,7 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
 
 
 
-export function protekGrafFreeAll(id) {
+export function protekGrafFreeAll(arr, id, elem) {
     const c2 = document.getElementById(`${id}p`);
     const ctx2 = c2.getContext("2d");
     c2.width = 20
