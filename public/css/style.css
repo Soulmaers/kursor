@@ -1095,9 +1095,10 @@ input[type="date"] {
   color: #000;
   background-color: #FFF;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-align: center;
 }

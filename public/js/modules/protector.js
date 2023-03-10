@@ -170,7 +170,15 @@ const min = arr => arr.reduce((x, y) => Math.min(x, y));
 
 export function protekGrafTwoAll(y1, y2, arr, id, elem) {
     let number = min(arr)
-    elem.children[1].textContent = number + 'мм'
+    const dan = document.createElement('div')
+    const dan1 = document.createElement('div')
+    dan.classList.add('dan')
+    dan1.classList.add('dan')
+    elem.children[1].appendChild(dan)
+    elem.children[1].appendChild(dan1)
+    dan.textContent = number + 'мм'
+    dan1.textContent = (number / 10 * 100).toFixed(0) + '%'
+    //elem.children[1].textContent = number / 10 * 100 + '%';
     elem.children[1].style.color = objColors[gener(number)];
     console.log(id)
     const c2 = document.getElementById(`${id}p`);
@@ -231,7 +239,16 @@ export function protekGrafTwoAll(y1, y2, arr, id, elem) {
 export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
     console.log(y1, y2, y3)
     let number = min(arr)
-    elem.children[1].textContent = number + 'мм'
+
+    const dan = document.createElement('div')
+    const dan1 = document.createElement('div')
+    dan.classList.add('dan')
+    dan1.classList.add('dan')
+    elem.children[1].appendChild(dan)
+    elem.children[1].appendChild(dan1)
+    dan.textContent = number + 'мм'
+    dan1.textContent = (number / 10 * 100).toFixed(0) + '%'
+    //elem.children[1].textContent = number / 10 * 100 + '%';
     elem.children[1].style.color = objColors[gener(number)];
     console.log(id)
     console.log('работаем')
@@ -322,7 +339,15 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
 export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     console.log(elem)
     let number = min(arr)
-    elem.children[1].textContent = number + 'мм'
+    const dan = document.createElement('div')
+    const dan1 = document.createElement('div')
+    dan.classList.add('dan')
+    dan1.classList.add('dan')
+    elem.children[1].appendChild(dan)
+    elem.children[1].appendChild(dan1)
+    dan.textContent = number + 'мм'
+    dan1.textContent = (number / 10 * 100).toFixed(0) + '%'
+    //elem.children[1].textContent = number / 10 * 100 + '%';
     elem.children[1].style.color = objColors[gener(number)];
     const c2 = document.getElementById(`${id}p`);
     //  console.log(c2)
