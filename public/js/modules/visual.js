@@ -401,10 +401,14 @@ function styleShinaActive(arg) {
     })
     tyresD.forEach(e => {
         e.style.width = '60px'
-        e.style.alignItems = 'flex-end'
+        // e.style.alignItems = 'flex-end'
+        e.style.background = 'black';
+        e.style.borderBottom = 'none'
     })
     tyresT.forEach(e => {
         e.style.width = '60px'
+        e.style.background = 'black';
+        e.style.borderTop = 'none'
     })
     centerOs.forEach(e => {
         e.style.width = '300px'

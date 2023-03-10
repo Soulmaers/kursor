@@ -82,6 +82,7 @@ function fnCanvas(arg) {
                 canvas.setAttribute('height', 20);
                 canvas2.setAttribute('height', 20);
                 canvas3.setAttribute('height', 20);
+                // canvas.setAttribute('border-radius', '30% 0 0 0');
                 // canvas.style.height = '40px'
                 // canvas2.style.height = '40px'
                 //  canvas3.style.height = '40px'
