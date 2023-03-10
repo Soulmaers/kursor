@@ -302,7 +302,7 @@ function proverka(arr) {
                     else {
                         console.log('таблица есть, аларма нет')
                         //   console.log()
-                        if (results[results.length - 1].alarm === 'Норма' || results[results.length - 1].alarm === 'Потеря связи с датчиком') {
+                        if (results[results.length - 1].alarm === 'Норма') {
                             console.log('повторные данные')
                             return
                         } else {

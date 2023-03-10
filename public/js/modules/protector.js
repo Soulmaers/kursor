@@ -89,7 +89,7 @@ function fnCanvas(arg) {
                 //  canvas.style.width = '20px'
                 //  canvas2.style.width = '20px'
                 //  canvas3.style.width = '20px'
-                viewPicture(protec, it.id);
+                viewPicture(protec, it.id, it);
             }
 
 
@@ -101,7 +101,7 @@ function fnCanvas(arg) {
 }
 
 
-function viewPicture(arr, id) {
+function viewPicture(arr, id, elem) {
     const conts = document.querySelectorAll(`.contBar${id}`)
     console.log(arr)
     conts.forEach(el => {
@@ -132,7 +132,7 @@ function viewPicture(arr, id) {
 
         conts[0].style.display = 'block'
         conts[0].style.width = '60px'
-        protekGrafTwoAll(y1, y2, arr, id)
+        protekGrafTwoAll(y1, y2, arr, id, elem)
     }
     if (arrAll.length == 3) {
         console.log('условия 3')
@@ -145,7 +145,7 @@ function viewPicture(arr, id) {
         conts[0].style.width = '30px'
         conts[1].style.width = '30px'
         console.log(conts)
-        protekGrafThreeAll(y1, y2, y3, arr, id)
+        protekGrafThreeAll(y1, y2, y3, arr, id, elem)
     }
     if (arrAll.length === 4) {
         conts.forEach(e => {
@@ -157,7 +157,7 @@ function viewPicture(arr, id) {
         y2 = ((120 - arrAll[1]) / 6).toFixed(0)
         y3 = ((120 - arrAll[2]) / 6).toFixed(0)
         y4 = ((120 - arrAll[3]) / 6).toFixed(0)
-        protekGrafFourAll(y1, y2, y3, y4, arr, id)
+        protekGrafFourAll(y1, y2, y3, y4, arr, id, elem)
     }
 
 
@@ -168,9 +168,11 @@ function viewPicture(arr, id) {
 
 const min = arr => arr.reduce((x, y) => Math.min(x, y));
 
-export function protekGrafTwoAll(y1, y2, arr, id) {
+export function protekGrafTwoAll(y1, y2, arr, id, elem) {
     let number = min(arr)
-
+    elem.children[1].textContent = number + 'мм'
+    elem.children[1].style.color = objColors[gener(number)];
+    console.log(id)
     const c2 = document.getElementById(`${id}p`);
     c2.width = 60
     c2.heigth = 20
@@ -226,9 +228,11 @@ export function protekGrafTwoAll(y1, y2, arr, id) {
 
 
 
-export function protekGrafThreeAll(y1, y2, y3, arr, id) {
+export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
     console.log(y1, y2, y3)
     let number = min(arr)
+    elem.children[1].textContent = number + 'мм'
+    elem.children[1].style.color = objColors[gener(number)];
     console.log(id)
     console.log('работаем')
     const c2 = document.getElementById(`${id}p`);
@@ -315,10 +319,11 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id) {
 }
 
 
-export function protekGrafFourAll(y1, y2, y3, y4, arr, id) {
-
+export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
+    console.log(elem)
     let number = min(arr)
-
+    elem.children[1].textContent = number + 'мм'
+    elem.children[1].style.color = objColors[gener(number)];
     const c2 = document.getElementById(`${id}p`);
     //  console.log(c2)
     const ctx2 = c2.getContext("2d");

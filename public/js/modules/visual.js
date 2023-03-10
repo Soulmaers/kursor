@@ -401,7 +401,7 @@ function styleShinaActive(arg) {
     })
     tyresD.forEach(e => {
         e.style.width = '60px'
-        // e.style.alignItems = 'flex-end'
+        //e.style.alignItems = 'flex-start'
         e.style.background = 'black';
         e.style.borderBottom = 'none'
     })
