@@ -186,8 +186,8 @@ function viewAlarmStorage(name, stor) {
                         v.forEach(e => {
                             e.classList.remove('activeList')
                         })*/
-
-            if (el.nextSibling.classList.contains('norma') == false) {
+            console.log(el.textContent)
+            if (el.nextSibling.classList.contains('norma') == false && el.nextSibling.children[2].textContent == el.children[2].textContent) {
                 el.nextSibling.style.display = 'flex'
                 el.classList.add('activeList')
                 el.classList.add('actfon')
