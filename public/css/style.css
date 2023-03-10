@@ -1974,7 +1974,7 @@ input[type="number"]:focus {
 
 .btn_icon {
   width: 104px;
-  height: 32px;
+  height: 42px;
   border: 1px solid gray;
   box-sizing: border-box;
   background-color: lightgray;
@@ -1984,6 +1984,9 @@ input[type="number"]:focus {
   font-weight: 700;
   color: #000;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .wrapper_right_dash {

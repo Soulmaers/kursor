@@ -385,7 +385,7 @@ export async function viewOs() {
     btnShina.classList.contains('active') ? styleShinaActive(btnShina) : styleShina(btnShina)
 }
 function styleShinaActive(arg) {
-    arg.textContent = 'Давление'
+    arg.textContent = 'Давление/Температура'
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
     const centerOs = document.querySelectorAll('.centerOs')
