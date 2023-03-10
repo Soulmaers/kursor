@@ -174,9 +174,24 @@ function viewAlarmStorage(name, stor) {
     const v = document.querySelectorAll('.views')
     v.forEach(el => {
         el.addEventListener('click', () => {
+            if (el.classList.contains('activeList')) {
+                console.log('делит класс')
+                el.nextSibling.style.display = 'none'
+                el.nextSibling.style.background = 'none';
+                el.classList.remove('activeList')
+                el.classList.remove('actfon')
+                return
+            }
+            /*
+                        v.forEach(e => {
+                            e.classList.remove('activeList')
+                        })*/
+
             if (el.nextSibling.classList.contains('norma') == false) {
                 el.nextSibling.style.display = 'flex'
                 el.classList.add('activeList')
+                el.classList.add('actfon')
+                el.nextSibling.style.background = 'rgb(204, 227, 235)';
                 console.log(el)
             }
         })
