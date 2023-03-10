@@ -99,9 +99,9 @@ export function generT(el) {
 };
 //создаем объект где ключ-результат условия, а свойства - соответсующее условию значение
 export const objColor = {
-    1: '#e03636',
-    2: '#d6d938',
-    3: '#3eb051',
+    1: '#FF0000',
+    2: '#FFFF00',
+    3: '#009933',
     5: '#fff'
 }
 
@@ -128,11 +128,11 @@ export function gener(el) {
 
 
 export const objColors = {
-    5: "green",
-    4: 'green',
-    3: 'rgba(273,255,33,0.8)',
-    2: 'rgba(255,79,0,0.8)',
-    1: 'rgba(176,0,0,1)'
+    5: '#009933',//зеленый
+    4: '#009933', //зеленый
+    3: '#FFFF00',//желтый
+    2: '#FF6633',//оранж
+    1: '#FF0000'//красный
 }
 
 export const data = ["BFGoodrich", "Bridgestone", "Continental", "Cordiant", "Dunlop", "Nokian Tyres", "Gislaved", "Goodyear", "Hankook", "Kumho", "Michelin"];

@@ -45,6 +45,7 @@ export function saveTyres(arr) {
 export function btnDel() {
     const btnClear = document.querySelector('.btn_clear')
     btnClear.addEventListener('click', () => {
+        btnClear.textContent = 'Вы уверены'
         const active = document.querySelectorAll('.color')
         console.log(active)
         const activePost = active[0].textContent.replace(/\s+/g, '')
