@@ -411,6 +411,7 @@ function styleShinaActive(arg) {
         e.style.background = 'black';
         e.style.borderTop = 'none'
         e.style.fontSize = '0.8rem'
+        e.style.justifyContent = 'flex-start'
     })
     centerOs.forEach(e => {
         e.style.width = '300px'
