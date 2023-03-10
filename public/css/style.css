@@ -1074,7 +1074,7 @@ input[type="date"] {
   color: #fff;
   background-color: #FFF;
   display: flex;
-  flex-direction: column;
+
   justify-content: center;
   align-items: center;
   font-size: 0.7rem;
@@ -1849,6 +1849,13 @@ input[type="number"]:focus {
 
 }
 
+
+
+
+.wrapCanvas {
+  display: flex;
+  border: 1px solid #000;
+}
 
 .sections {
   width: 30%;

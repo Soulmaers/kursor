@@ -1,6 +1,10 @@
 
 //    <div class="centerOs" id="1"></div>
 
+
+
+
+
 export const text = `<div class=" osi">
         <div class="tires_spark">
             <div class="tires mod">

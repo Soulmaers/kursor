@@ -34,6 +34,7 @@ router.post('/api/modalBar', controllerModel.modalBar)
 router.post('/api/model', controllerModel.model)
 router.post('/api/tyres', controllerModel.tyres)
 router.post('/api/techView', controllerModel.techView)
+router.post('/api/techViewAll', controllerModel.techViewAll)
 router.post('/api/barView', controllerModel.barView)
 
 router.post('/api/modelView', controllerModel.modelView)

@@ -6,6 +6,7 @@ import { geoloc, iconParams } from './wialon.js'
 import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
 import { alarmFind } from './alarmStorage.js'
 import { modalOs } from './modalOs.js'
+import { reqProtectorBase } from './protector.js'
 
 let start;
 let time;
@@ -364,6 +365,9 @@ export async function viewOs() {
             el.appendChild(link);
             const tiresD = document.createElement('div');
             tiresD.classList.add('tiresD')
+
+
+
             const tiresT = document.createElement('div');
             tiresT.classList.add('tiresT')
             const place = document.createElement('div');
@@ -385,6 +389,7 @@ export async function viewOs() {
     btnShina.classList.contains('active') ? styleShinaActive(btnShina) : styleShina(btnShina)
 }
 function styleShinaActive(arg) {
+    reqProtectorBase()
     arg.textContent = 'Давление/Температура'
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
@@ -396,6 +401,7 @@ function styleShinaActive(arg) {
     })
     tyresD.forEach(e => {
         e.style.width = '60px'
+        e.style.alignItems = 'flex-end'
     })
     tyresT.forEach(e => {
         e.style.width = '60px'
@@ -467,7 +473,7 @@ export function viewDinamic(arr) {
     })
 
     const arrAll = [];
-
+    console.log(arr)
     arr.forEach(el => {
         arrAll.push(el * 10)
     })

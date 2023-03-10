@@ -302,7 +302,23 @@ module.exports.techView = (req, res) => {
         console.log(e)
     }
 }
+module.exports.techViewAll = (req, res) => {
+    //  console.log(req.body.activePost)
+    const tableModelView = 'tech' + req.body.activePost
+    console.log('работаем')
 
+    try {
+        const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, N1, N2,N3, N4, protectorDate FROM ${tableModelView} WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            console.log(results)
+            response.status(200, results, '', res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 
 module.exports.barView = (req, res) => {
     //  console.log(req.body.activePost)
