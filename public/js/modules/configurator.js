@@ -34,6 +34,9 @@ export function select() {
                 index++
                 const centerOsDiv = document.createElement('div');
                 centerOsDiv.classList.add('centerOs')
+                const vnut = document.createElement('div')
+                vnut.classList.add('vnut')
+                centerOsDiv.appendChild(vnut)
                 el.children[0].insertAdjacentElement('afterEnd', centerOsDiv);
                 centerOsDiv.setAttribute("id", `${index}`);
             })
@@ -92,13 +95,15 @@ function os(arr) {
     //const arrPricep = [];
     const linkSelectOs = document.querySelectorAll('.linkSelectOs')
     const linkSelectTires = document.querySelectorAll('.linkSelectTires')
+
     linkSelectOs.forEach(e =>
         e.addEventListener('click', () => {
             arrayTrailer.push(e)
+
             e.textContent == 'Прицеп' ?
                 pricep(arr[arr.length - 1])
                 :
-                arr[arr.length - 1].style.backgroundImage = "url('../image/line_blue.png')"
+                arr[arr.length - 1].children[0].style.background = '#3333ff'
         }))
 
     linkSelectTires.forEach(e =>
@@ -110,10 +115,12 @@ function os(arr) {
             arr[arr.length - 1].nextElementSibling.children[0].style.display = 'none';
             arr[arr.length - 1].nextElementSibling.children[1].style.display = 'none';
             if (e.textContent == 2) {
+                arr[arr.length - 1].children[0].style.width = '150px'
                 arr[arr.length - 1].previousElementSibling.children[0].style.display = 'flex';
                 arr[arr.length - 1].nextElementSibling.children[1].style.display = 'flex';
             }
             if (e.textContent == 4) {
+                arr[arr.length - 1].children[0].style.width = '82px'
                 arr[arr.length - 1].previousElementSibling.children[0].style.display = 'flex';
                 arr[arr.length - 1].previousElementSibling.children[1].style.display = 'flex';
                 arr[arr.length - 1].nextElementSibling.children[0].style.display = 'flex';

@@ -878,6 +878,51 @@ input[type="date"] {
 
 }
 
+.wrap_pod {
+  display: none;
+  width: 170px;
+  margin: 1px 0;
+  border: 1px solid gray;
+  padding: 2px 1px;
+  box-sizing: border-box;
+}
+
+.pod {
+  width: 164px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 1px;
+  font-size: 0.9rem;
+  font-family: Roboto;
+  font-weight: 700;
+  color: #000;
+  text-align: center;
+}
+
+.yes,
+.no {
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 5px;
+  font-size: 0.9rem;
+  font-family: Roboto;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
+}
+
+.yes:hover {
+  color: #000;
+  background: #fff;
+}
+
+.no:hover {
+  color: #000;
+  background: #fff;
+}
+
 .save {
   width: 170px;
 
@@ -999,11 +1044,20 @@ input[type="date"] {
 }
 
 .centerOs {
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 150px;
   height: 88px;
   cursor: pointer;
-  background-image: url(../image/line.png);
+
+}
+
+.vnut {
+  width: 150px;
+  height: 11px;
+  background-color: gray;
+
 }
 
 .osi {

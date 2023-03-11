@@ -44,8 +44,23 @@ export function saveTyres(arr) {
 //очистка модели из базы и удаление отрисовки
 export function btnDel() {
     const btnClear = document.querySelector('.btn_clear')
+    const wrapPod = document.querySelector('.wrap_pod')
+    const yes = document.querySelector('.yes')
+    const no = document.querySelector('.no')
     btnClear.addEventListener('click', () => {
-        btnClear.textContent = 'Вы уверены'
+
+        wrapPod.style.display = 'flex';
+        btnClear.style.display = 'none';
+    })
+
+    no.addEventListener('click', () => {
+        wrapPod.style.display = 'none';
+        btnClear.style.display = 'block';
+
+    })
+    yes.addEventListener('click', () => {
+        wrapPod.style.display = 'none';
+        btnClear.style.display = 'block';
         const active = document.querySelectorAll('.color')
         console.log(active)
         const activePost = active[0].textContent.replace(/\s+/g, '')
@@ -54,7 +69,10 @@ export function btnDel() {
         reqDelete(activePost);
         paramsDelete(activePost);
     })
+
 }
+
+
 const btnShina = document.querySelector('.btn_icon')
 btnShina.addEventListener('click', () => {
     btnShina.classList.toggle('active')

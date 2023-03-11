@@ -330,6 +330,7 @@ export function alarmClear() {
 
 
 export async function viewOs() {
+    console.log('рисуем оси')
     const container = document.querySelector('.container')
     if (container.children.length > 0) {
         // console.log('удаление')
@@ -351,6 +352,9 @@ export async function viewOs() {
             index++
             const centerOsDiv = document.createElement('div');
             centerOsDiv.classList.add('centerOs')
+            const vnut = document.createElement('vnut')
+            vnut.classList.add('vnut')
+            centerOsDiv.appendChild(vnut)
             el.children[0].insertAdjacentElement('afterEnd', centerOsDiv);
             centerOsDiv.setAttribute("id", `${index}`);
         })
@@ -394,6 +398,7 @@ function styleShinaActive(arg) {
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
     const centerOs = document.querySelectorAll('.centerOs')
+    const vnut = document.querySelectorAll('.vnut')
     const osi = document.querySelectorAll('.osi')
     const place = document.querySelectorAll('.place')
     // console.log(tyresD)
@@ -416,6 +421,7 @@ function styleShinaActive(arg) {
     centerOs.forEach(e => {
         e.style.width = '300px'
     })
+
     place.forEach(e => {
         e.style.display = 'none';
     })
@@ -461,7 +467,8 @@ export const pricep = (elem) => {
     const cont = document.querySelector('.cont')
     cont.append(elem.parentNode)
     cont.style.marginTop = '72px'
-    elem.style.backgroundImage = "url('../image/line_gray.png')"
+    console.log(elem.children[0])
+    elem.children[0].style.background = "#00FFFF"
     elem.classList.add('pricep')
 }
 
