@@ -44,23 +44,24 @@ export function saveTyres(arr) {
 //очистка модели из базы и удаление отрисовки
 export function btnDel() {
     const btnClear = document.querySelector('.btn_clear')
+    const clear = document.querySelector('.clear')
     const wrapPod = document.querySelector('.wrap_pod')
     const yes = document.querySelector('.yes')
     const no = document.querySelector('.no')
     btnClear.addEventListener('click', () => {
 
         wrapPod.style.display = 'flex';
-        btnClear.style.display = 'none';
+        clear.style.display = 'none';
     })
 
     no.addEventListener('click', () => {
         wrapPod.style.display = 'none';
-        btnClear.style.display = 'block';
+        clear.style.display = 'block';
 
     })
     yes.addEventListener('click', () => {
         wrapPod.style.display = 'none';
-        btnClear.style.display = 'block';
+        clear.style.display = 'block';
         const active = document.querySelectorAll('.color')
         console.log(active)
         const activePost = active[0].textContent.replace(/\s+/g, '')
