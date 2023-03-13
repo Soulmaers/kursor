@@ -2342,8 +2342,40 @@ input[type="number"]:focus {
 
 @media (max-width: 640px) {
 
-  .main {
+
+  .wrapperFull {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .config {
+    flex-direction: column;
+    padding: 0;
+    width: 80%;
+  }
+
+  .wrapper_right {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .icon {
+    width: 20%;
+  }
+
+  .wrapper_left {
     display: none;
+  }
+
+  .main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .wrapper_containt {
+    width: 80%;
   }
 
   .sections {

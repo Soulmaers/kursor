@@ -26,10 +26,10 @@ export async function visual(el) {
     alarmClear();
     //detalisation.style.display = 'none'
     //  section.style.display = 'none'
-    // wrapperUp.style.display = 'block'
-    //wrapperRight.style.display = 'flex'
-    //wrapperLeft.style.display = 'block'
-    //main.style.display = 'flex'
+    wrapperUp.style.display = 'block'
+    wrapperRight.style.display = 'flex'
+    wrapperLeft.style.display = 'block'
+    main.style.display = 'flex'
     // speedGraf.style.display = 'block'
     el.classList.add('color')
     //  console.log(el)
@@ -84,10 +84,10 @@ export function visualNone(e) {
     techInfo.style.display = 'none'
     modalCenterOs.style.display = 'none'
 
-    
-    //wrapperUp.style.display = 'none'
-    // wrapperRight.style.display = 'none'
-    //speedGraf.style.display = 'none'
+
+    wrapperUp.style.display = 'none'
+    wrapperRight.style.display = 'none'
+    speedGraf.style.display = 'none'
 
 
 
