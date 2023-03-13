@@ -1641,8 +1641,8 @@ div.wrapper {
 }
 
 .osi_list {
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   border: 1px solid #000;
   display: flex;
@@ -1654,41 +1654,42 @@ div.wrapper {
 
 .frontSpare {
   display: flex;
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   border: 2px solid #000;
   position: relative;
 }
 
 .imgDivTires {
-  width: 20px;
-  height: 20px;
+  display: flex;
+  width: 10px;
+  height: 10px;
   position: absolute;
-  left: 8px;
-  bottom: 9px;
+  left: 3px;
+  bottom: 4px;
   border: 2px solid #000;
   border-radius: 50%;
 
 }
 
 .img {
-  width: 20px;
-  height: 20px;
+  width: 10px;
+  height: 10px;
 }
 
 
 .spareWill1 {
-  width: 19px;
-  height: 40px;
-  border-right: 1px solid #000;
+  width: 9.5px;
+  height: 20px;
+  border-right: 0.5px solid #000;
   border-radius: 100% 0 0 100% / 50% 0 0 50%;
 }
 
 .spareWill12 {
-  width: 19px;
-  height: 40px;
-  border-left: 1px solid #000;
+  width: 9.5px;
+  height: 20px;
+  border-left: 0.5px solid #000;
   border-radius: 0 100% 100% 0 / 0 50% 50% 0;
 }
 
@@ -1697,45 +1698,45 @@ div.wrapper {
 .tiresUp {
   display: flex;
   flex-direction: column-reverse;
-  width: 18px;
-  height: 40px;
+  width: 9px;
+  height: 20px;
   display: flex;
-  border-right: 2px solid #000;
+  border-right: 1px solid #000;
 }
 
 .tiresDown {
   display: flex;
-  width: 20px;
-  height: 40px;
+  width: 10px;
+  height: 20px;
   display: flex;
   flex-direction: column;
 }
 
 .spareWill1_1 {
-  width: 18px;
-  height: 19px;
-  border-top: 1px solid #000;
+  width: 9px;
+  height: 9.5px;
+  border-top: 0.5px solid #000;
   border-radius: 0 0 0 100%;
 }
 
 .spareWill1_2 {
-  width: 18px;
-  height: 19px;
-  border-bottom: 1px solid #000;
+  width: 9px;
+  height: 9.5px;
+  border-bottom: 0.5px solid #000;
   border-radius: 100% 0 0 0;
 }
 
 .spareWill1_3 {
-  width: 20px;
-  height: 19px;
-  border-bottom: 1px solid #000;
+  width: 10px;
+  height: 9.5px;
+  border-bottom: 0.5px solid #000;
   border-radius: 0 100% 0 0;
 }
 
 .spareWill1_4 {
-  width: 20px;
-  height: 19px;
-  border-top: 1px solid #000;
+  width: 10px;
+  height: 9.5px;
+  border-top: 0.5px solid #000;
   border-radius: 0 0 100% 0;
 }
 
