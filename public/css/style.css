@@ -2335,3 +2335,33 @@ input[type="number"]:focus {
   text-align: center;
   width: 100%
 }
+
+
+
+
+
+@media (max-width: 640px) {
+
+  .main {
+    display: none;
+  }
+
+  .sections {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 1%;
+    border: 1px solid lightgray;
+  }
+
+  .wrapper_up {
+    display: none;
+  }
+
+  .menu,
+  .list_menu_left {
+    justify-content: center;
+  }
+}

@@ -148,6 +148,7 @@ function viewAlarmStorage(name, stor) {
                 tr.classList.add('norma')
                 //  tr.style.display = 'none';
             }
+
             for (var key in it) {
                 const td = document.createElement('p')
                 td.classList.add('td')
@@ -172,7 +173,20 @@ function viewAlarmStorage(name, stor) {
         }
     })
     const v = document.querySelectorAll('.views')
-    v.forEach(el => {
+    console.log(v)
+    //const vv = Array.from(v)
+    var arrg = Array.prototype.slice.call(v);
+    arrg.sort(function (a, b) {
+        return a.children[3].innerHTML - b.children[3].innerHTML
+    });
+    console.log(arrg)
+    arrg.forEach(e => {
+
+        e.innerHTML = e.innerHTML
+    })
+
+    console.log(arrg)
+    arrg.forEach(el => {
         el.addEventListener('click', () => {
             if (el.classList.contains('activeList')) {
                 console.log('делит класс')
