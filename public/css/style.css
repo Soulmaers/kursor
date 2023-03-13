@@ -1070,7 +1070,12 @@ input[type="date"] {
 
 }
 
-
+.side {
+  display: flex;
+  justify-content: space-between;
+  width: 210px;
+  margin: 10px 0;
+}
 
 .osi:nth-child(n+2) {
   margin-top: 15px;

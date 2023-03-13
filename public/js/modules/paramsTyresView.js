@@ -102,7 +102,7 @@ export async function loadParamsView() {
                         centerOs[el.osi - 1].nextElementSibling.children[0].style.display = 'none';
                     }
                     else {
-                        centerOs[el.osi - 1].children[0].style.width = '82px'
+                        centerOs[el.osi - 1].children[0].style.width = '74px'
                         centerOs[el.osi - 1].previousElementSibling.children[0].style.display = 'flex';
                         centerOs[el.osi - 1].previousElementSibling.children[1].style.display = 'flex';
                         centerOs[el.osi - 1].nextElementSibling.children[0].style.display = 'flex';

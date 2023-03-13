@@ -120,7 +120,7 @@ function os(arr) {
                 arr[arr.length - 1].nextElementSibling.children[1].style.display = 'flex';
             }
             if (e.textContent == 4) {
-                arr[arr.length - 1].children[0].style.width = '82px'
+                arr[arr.length - 1].children[0].style.width = '74px'
                 arr[arr.length - 1].previousElementSibling.children[0].style.display = 'flex';
                 arr[arr.length - 1].previousElementSibling.children[1].style.display = 'flex';
                 arr[arr.length - 1].nextElementSibling.children[0].style.display = 'flex';
