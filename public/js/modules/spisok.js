@@ -34,7 +34,7 @@ export async function loadParamsViewList(car) {
     return [model, models, data]
 }
 
-setTimeout(conturTest, 700, testov)
+setTimeout(conturTest, 3000, testov)
 function conturTest(testov) {
     console.log(testov)
     // dashView(message)
@@ -198,7 +198,7 @@ function zaprosSpisok() {
         viewListKoleso(data, params, el)
     })
 }
-setTimeout(zaprosSpisok, 1000);
+setTimeout(zaprosSpisok, 3500);
 setInterval(zaprosSpisok, 60000)
 
 function viewListKoleso(arg, params, nameCar) {
