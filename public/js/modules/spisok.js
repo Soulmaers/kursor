@@ -58,7 +58,7 @@ function conturTest(testov) {
         listTrail.classList.add('list_trail2')
         listItemCar.appendChild(listTrail)
         const modelUniq = convert(elem[0].result)
-
+        console.log(modelUniq)
         modelUniq.forEach(os => {
             const osi = document.createElement('div')
             osi.classList.add('osi_list')
