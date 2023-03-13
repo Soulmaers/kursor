@@ -83,9 +83,15 @@ export function visualNone(e) {
 
     techInfo.style.display = 'none'
     modalCenterOs.style.display = 'none'
+
+    
     //wrapperUp.style.display = 'none'
     // wrapperRight.style.display = 'none'
     //speedGraf.style.display = 'none'
+
+
+
+
     obo.style.display = 'none'
     wrapperButton.style.display = 'none'
     titleSens.style.display = 'none'
