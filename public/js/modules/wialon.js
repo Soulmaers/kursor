@@ -150,11 +150,7 @@ export function iconParams() {
 
             //check = arr1[5][2].lmsg.p.pwr_ext;
             loadAkb(arrCar);
-
         });
-
-
-
 }
 
 function addZero(digits_length, source) {
@@ -168,8 +164,6 @@ function loadAkb(arrCar) {
     const act = active.children[0].textContent
     let akb;
     let probeg;
-    //  console.log(act)
-    // console.log(arrCar)
     arrCar.forEach(it => {
         if (it.nm === act) {
             akb = (it.lmsg.p.pwr_ext).toFixed(1);
