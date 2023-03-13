@@ -109,7 +109,7 @@ export async function alarmFind(name) {
     sorTyres.forEach(async e => {
         e.pressure
         const activeName = 'alarm' + activePost + e.pressure
-        console.log(activeName)
+        // console.log(activeName)
         const stor = await fetch('api/alarmFind', {
             method: "POST",
             headers: {
@@ -118,7 +118,7 @@ export async function alarmFind(name) {
             body: JSON.stringify({ activeName })
         })
         const storList = await stor.json();
-        console.log(storList)
+        // console.log(storList)
         storValue.push(storList)
     })
     setTimeout(viewAlarmStorage, 1000, activePost, storValue)
@@ -182,11 +182,8 @@ function viewAlarmStorage(name, stor) {
                 el.classList.remove('actfon')
                 return
             }
-            /*
-                        v.forEach(e => {
-                            e.classList.remove('activeList')
-                        })*/
             console.log(el.textContent)
+            getSiblings(el)
             if (el.nextSibling.classList.contains('norma') == false && el.nextSibling.children[2].textContent == el.children[2].textContent) {
                 el.nextSibling.style.display = 'flex'
                 el.classList.add('activeList')
@@ -198,6 +195,23 @@ function viewAlarmStorage(name, stor) {
 
     })
 }
+
+function getSiblings(elem) {
+    var siblings = [];
+    var sibling = elem;
+
+    sibling = elem;
+    while (sibling.nextSibling.classList.contains('norma') == false && sibling.nextSibling.children[2].textContent == sibling.children[2].textContent) {
+        sibling = sibling.nextSibling;
+        sibling.nodeType == 1 && siblings.push(sibling);
+    }
+    siblings.forEach(e => {
+        e.classList.add('views')
+    })
+    return console.log(siblings);
+}
+
+
 const plus = document.querySelector('.plus')
 const minus = document.querySelector('.minus')
 const alarmStorage = document.querySelector('.alarmStorage')

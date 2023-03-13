@@ -59,7 +59,7 @@ module.exports.action = function (req, res) {
         console.log(login)
         res.render('in.ejs', {
             user: login,
-            role:role
+            role: role
         })
         init(login)
     }

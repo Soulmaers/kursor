@@ -8,6 +8,7 @@ const { prms, prms2 } = require('./params')
 const app = express();
 app.use(express.json());
 
+
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
 const session = wialon().session;
@@ -39,6 +40,8 @@ function init(user) {
 //init()
 
 function createTable() {
+
+    console.log('go')
     session.request('core/search_items', prms)
         .catch(function (err) {
             console.log(err);
@@ -73,7 +76,7 @@ function createNameTable(name) {
 }
 
 function postParametrs(name, param) {
-    // console.log(name)
+    console.log('go2')
     const selectBase = `SELECT id FROM ${name} WHERE 1`
     connection.query(selectBase, function (err, results) {
         if (err) console.log(err);
@@ -227,7 +230,6 @@ function proverka(arr) {
         connection.query(sqls1, function (err, results) {
             if (err) console.log(err);
             if (results == undefined) {
-
                 if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
                     console.log('таблица нет, аларм есть')
                     const data = createDate()
@@ -248,7 +250,7 @@ function proverka(arr) {
                         alarmBase(data, el, alarm)
                     }
                     else {
-                        console.log('таблица нет, аларма нет')
+                        console.log('таблицы нет, аларма нет')
                         return
                     }
 
@@ -258,9 +260,9 @@ function proverka(arr) {
             else {
                 if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
                     console.log('таблица есть, аларм есть')
-                    console.log(results[results.length - 1].bar)
+                    console.log(results[results.length - 1].temp)
                     console.log(el)
-                    if (results[results.length - 1].bar == el[2]) {
+                    if (results[results.length - 1].temp == el[3]) {
                         console.log('повторные данные')
                         return
                     } else {
@@ -275,7 +277,7 @@ function proverka(arr) {
                         console.log('таблица есть, аларм есть')
                         console.log(results[results.length - 1].bar)
                         console.log(el)
-                        if (results[results.length - 1].bar == el[2]) {
+                        if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
                             console.log('повторные данные')
                             return
                         } else {
@@ -289,7 +291,7 @@ function proverka(arr) {
                         console.log('таблица есть, аларм есть')
                         console.log(results[results.length - 1].bar)
                         console.log(el)
-                        if (results[results.length - 1].bar == el[2]) {
+                        if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
                             console.log('повторные данные')
                             return
                         } else {
@@ -375,7 +377,8 @@ function alarmBase(data, tyres, alarm) {
 module.exports = {
     getMainInfo,
     createTable,
-    init
+    init,
+
 }
 
 
