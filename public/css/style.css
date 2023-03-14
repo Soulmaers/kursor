@@ -2356,14 +2356,40 @@ input[type="number"]:focus {
   }
 
   .wrapper_right {
-    width: 70%;
+    width: 80%;
     display: flex;
     justify-content: center;
   }
 
   .icon {
-    width: 30%;
+    width: 20%;
     box-sizing: border-box;
+  }
+
+
+  .icon_item {
+    width: 100%;
+    height: 55px;
+  }
+
+  .wrap_state {
+    width: 100%;
+
+  }
+
+  .icon_akb {
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .title_text {
+    font-size: 0.7rem;
+    margin-top: 2px;
+  }
+
+  .btn_icon {
+    width: 100%;
+    font-size: 0.6rem;
   }
 
   .wrapper_left {
@@ -2376,9 +2402,7 @@ input[type="number"]:focus {
     justify-content: center;
   }
 
-  .wrapper_containt {
-    width: 80%;
-  }
+
 
   .sections {
     width: 100%;

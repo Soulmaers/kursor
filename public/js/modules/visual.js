@@ -400,7 +400,7 @@ export async function viewOs() {
 }
 function styleShinaActive(arg) {
     reqProtectorBase()
-    arg.textContent = 'Давление/Температура'
+    arg.textContent = 'Давление\nТемпература'
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
     const centerOs = document.querySelectorAll('.centerOs')
