@@ -233,7 +233,7 @@ function dashDav(arr) {
                         }
                         count++
                         console.log(count)
-                        return value + '%' + `(${arrDC[count - 1]})`;
+                        return value + '%' + '\n' + `(${arrDC[count - 1]})`;
                     }
                 }
             }

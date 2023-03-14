@@ -141,6 +141,7 @@ td {
 }
 
 
+
 #map {
   width: 300px;
   height: 300px;
@@ -2667,4 +2668,7 @@ input[type="number"]:focus {
     background-size: cover;
   }
 
+  .wrapper_left {
+    margin-top: 20px;
+  }
 }

@@ -159,7 +159,9 @@ function viewAlarmStorage(name, stor) {
             for (let i = 0; i < t.length; i++) {
                 if (t[i].children[5].textContent == 'Норма' && t[i + 1] !== undefined) {
                     t[i + 1].classList.add('views')
-                    //  t[i + 1].style.color = 'blue'
+                    t[i + 1].classList.add('viewsOut')
+                    t[i + 1].style.color = 'blue'
+                    //t[i + 1].style.marginLeft = '20px'
                 }
             }
         })
@@ -187,8 +189,10 @@ function viewAlarmStorage(name, stor) {
     })*/
 
     //console.log(arrg)
+    const massEl = [];
     v.forEach(el => {
         el.addEventListener('click', () => {
+
             if (el.classList.contains('activeList')) {
                 console.log('делит класс')
                 el.nextSibling.style.display = 'none'
@@ -203,6 +207,7 @@ function viewAlarmStorage(name, stor) {
                 el.nextSibling.style.display = 'flex'
                 el.classList.add('activeList')
                 el.classList.add('actfon')
+                el.nextSibling.style.marginLeft = '20px'
                 el.nextSibling.style.background = 'rgb(204, 227, 235)';
                 console.log(el)
             }
