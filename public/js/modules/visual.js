@@ -60,6 +60,8 @@ export function visualNone(e) {
     probegElem.textContent = ''
     const oilElem = document.querySelector('.oil_value')
     oilElem.textContent = ''
+    const toElem = document.querySelector('.to_value')
+    toElem.textContent = ''
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const wrapperRight = document.querySelector('.wrapper_right')

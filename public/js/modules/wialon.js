@@ -189,6 +189,8 @@ function loadAkb(arrCar) {
             //  console.log(akb)
             const akbElem = document.querySelector('.akb_value')
             akbElem.textContent = akb + 'V'
+            const akbElems = document.querySelector('.akb_values')
+            akbElems.textContent = akb + 'V'
 
         }
     })

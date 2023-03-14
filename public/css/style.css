@@ -677,6 +677,10 @@ input[type="date"] {
   margin: 0 0;
 }
 
+.card_speeds {
+  display: none;
+}
+
 /* Links inside the dropdown */
 .dropdown-content .linkSelect {
   color: black;
@@ -745,7 +749,12 @@ input[type="date"] {
 
 
 
-
+.card_speed {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
 
 .moduleConfig {
@@ -2013,7 +2022,7 @@ input[type="number"]:focus {
   font-size: 0.7rem;
   font-weight: bold;
   margin: 0;
-  margin-top: 10px;
+
 
 }
 
@@ -2044,7 +2053,7 @@ input[type="number"]:focus {
 
 .icon_item {
   width: 110px;
-  height: 85px;
+  height: 75px;
 
 }
 
@@ -2118,13 +2127,13 @@ input[type="number"]:focus {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  height: 93px;
+
 }
 
 .probeg_value {
   color: #008200;
   font-size: 0.9rem;
-  margin-top: 5px;
+
 }
 
 
@@ -2229,6 +2238,11 @@ input[type="number"]:focus {
   left: 25px;
 }
 
+
+.akb_value {
+  margin-top: 12px;
+}
+
 .akb_value,
 .to_value {
   color: red
@@ -2244,7 +2258,7 @@ input[type="number"]:focus {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  height: 93px;
+
 }
 
 .td:nth-child(n+2) {
@@ -2376,6 +2390,7 @@ input[type="number"]:focus {
 @media (max-width: 640px) {
 
 
+
   .wrapperFull {
     display: flex;
     flex-direction: column;
@@ -2408,7 +2423,7 @@ input[type="number"]:focus {
 
   .icon_item {
     width: 100%;
-    height: 45px;
+    height: 38px;
   }
 
   .wrap_state {
@@ -2416,7 +2431,7 @@ input[type="number"]:focus {
 
   }
 
-
+  .icon_akb_min,
   .icon_kluch,
   .icon_speed,
   .icon_oil,
@@ -2435,26 +2450,32 @@ input[type="number"]:focus {
     right: 0;
   }
 
-  .icon_akb {
-    background-size: contain;
-    background-repeat: no-repeat;
+
+
+  .card_speeds {
     display: flex;
-    flex-direction: row;
+
+    width: 100%;
+
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-end;
-    padding: 0;
+    align-items: center;
+  }
+
+  .akb_values {
+    font-size: 0.9rem;
+    color: red;
   }
 
   .title_text {
     font-size: 0.7rem;
-    margin-top: 5px;
+
   }
 
   .probeg_value {
     color: #008200;
     font-size: 0.55rem;
-    padding-top: 5px;
-    margin-top: 5px;
+
   }
 
 
@@ -2607,6 +2628,19 @@ input[type="number"]:focus {
     margin: 40px 0;
   }
 
+  .card_speed {
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .icon_akb {
+    display: none;
+  }
+
+  .icon_akb_min {
+    background-image: url(../image/AKB00.jpg);
+    background-size: cover;
+  }
 
   .icon_kluch {
     background-image: url(../image/30911.png);
