@@ -2503,4 +2503,19 @@ input[type="number"]:focus {
 
     margin-right: 1%
   }
+
+
+  .btn_save,
+  .btn_clear,
+  .pod,
+  .yes,
+  .no,
+  .dropbtn {
+    font-size: 0.7rem;
+  }
+
+  .mainAlarm {
+    font-size: 0.8rem;
+  }
+
 }
