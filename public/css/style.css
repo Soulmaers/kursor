@@ -2234,6 +2234,12 @@ input[type="number"]:focus {
   color: red
 }
 
+.akb_value,
+.to_value {
+  font-size: 0.9rem;
+  ;
+}
+
 .icon_kluch {
   display: flex;
   justify-content: center;
