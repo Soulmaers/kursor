@@ -30,7 +30,7 @@ export async function visual(el) {
     wrapperRight.style.display = 'flex'
     wrapperLeft.style.display = 'block'
     main.style.display = 'flex'
-    // speedGraf.style.display = 'block'
+    speedGraf.style.display = 'block'
     el.classList.add('color')
     //  console.log(el)
     await viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
