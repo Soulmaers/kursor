@@ -58,6 +58,8 @@ export async function visual(el) {
 export function visualNone(e) {
     const probegElem = document.querySelector('.probeg_value')
     probegElem.textContent = ''
+    const oilElem = document.querySelector('.oil_value')
+    oilElem.textContent = ''
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const wrapperRight = document.querySelector('.wrapper_right')

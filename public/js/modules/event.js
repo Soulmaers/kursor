@@ -181,9 +181,12 @@ class DropDownList {
     }
     appendList() {
         const { left, width, bottom } = this.element.getBoundingClientRect();
+        console.log(left, width, bottom)
+
         this.listElement.style.width = width + `px`;
-        this.listElement.style.left = left + `px`;
-        this.listElement.style.top = bottom + `px`;
+        // this.listElement.style.height = height + `px`;
+        this.listElement.style.left = window.scrollX + left + `px`;
+        this.listElement.style.top = window.scrollY + bottom + `px`;
         this.listElement.style.display = 'block'
         document.body.appendChild(this.listElement);
     }

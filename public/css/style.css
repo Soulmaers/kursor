@@ -2417,6 +2417,10 @@ input[type="number"]:focus {
 
   }
 
+  .modalCenterOs {
+    right: 0;
+  }
+
   .icon_akb {
     background-size: contain;
     background-repeat: no-repeat;
