@@ -1146,7 +1146,7 @@ input[type="date"] {
   height: 40px;
   border: 2px solid gray;
   border-radius: 30% 30% 0 0;
-  color: #fff;
+  color: #000;
   background-color: #FFF;
   display: flex;
 
