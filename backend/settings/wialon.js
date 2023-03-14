@@ -230,34 +230,37 @@ function proverka(arr) {
         connection.query(sqls1, function (err, results) {
             if (err) console.log(err);
             if (results == undefined) {
+
+                /*
                 if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
                     console.log('таблица нет, аларм есть')
                     const data = createDate()
                     alarm = 'Потеря связи с датчиком'
                     alarmBase(data, el, alarm)
+                }*/
+                //  else {
+                if (el[2] < 6) {
+                    console.log('таблица нет, аларм есть')
+                    const data = createDate()
+                    alarm = 'Критически низкое давление'
+                    alarmBase(data, el, alarm)
+                }
+                if (el[2] > 10) {
+                    console.log('таблица нет, аларм есть')
+                    const data = createDate()
+                    alarm = 'Критически высокое давление'
+                    alarmBase(data, el, alarm)
                 }
                 else {
-                    if (el[2] < 6) {
-                        console.log('таблица нет, аларм есть')
-                        const data = createDate()
-                        alarm = 'Критически низкое давление'
-                        alarmBase(data, el, alarm)
-                    }
-                    if (el[2] > 10) {
-                        console.log('таблица нет, аларм есть')
-                        const data = createDate()
-                        alarm = 'Критически высокое давление'
-                        alarmBase(data, el, alarm)
-                    }
-                    else {
-                        console.log('таблицы нет, аларма нет')
-                        return
-                    }
-
+                    console.log('таблицы нет, аларма нет')
+                    return
                 }
+
+                //     }
 
             }
             else {
+                /*
                 if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
                     console.log('таблица есть, аларм есть')
                     console.log(results[results.length - 1].temp)
@@ -272,50 +275,50 @@ function proverka(arr) {
                         alarmBase(data, el, alarm)
                     }
                 }
-                else {
-                    if (el[2] < 6) {
-                        console.log('таблица есть, аларм есть')
-                        console.log(results[results.length - 1].bar)
-                        console.log(el)
-                        if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                            console.log('повторные данные')
-                            return
-                        } else {
-                            console.log('таблица есть, изменение аларма')
-                            const data = createDate()
-                            alarm = 'Критически низкое давление'
-                            alarmBase(data, el, alarm)
-                        }
+                else {*/
+                if (el[2] < 6) {
+                    console.log('таблица есть, аларм есть')
+                    console.log(results[results.length - 1].bar)
+                    console.log(el)
+                    if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
+                        console.log('повторные данные')
+                        return
+                    } else {
+                        console.log('таблица есть, изменение аларма')
+                        const data = createDate()
+                        alarm = 'Критически низкое давление'
+                        alarmBase(data, el, alarm)
                     }
-                    if (el[2] > 10) {
-                        console.log('таблица есть, аларм есть')
-                        console.log(results[results.length - 1].bar)
-                        console.log(el)
-                        if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                            console.log('повторные данные')
-                            return
-                        } else {
-                            console.log('таблица есть, изменение аларма')
-                            const data = createDate()
-                            alarm = 'Критически высокое давление'
-                            alarmBase(data, el, alarm)
-                        }
-                    }
-                    else {
-                        console.log('таблица есть, аларма нет')
-                        //   console.log()
-                        if (results[results.length - 1].alarm === 'Норма') {
-                            console.log('повторные данные')
-                            return
-                        } else {
-                            console.log('таблица есть, изменение аларма')
-                            const data = createDate()
-                            alarm = 'Норма'
-                            alarmBase(data, el, alarm)
-                        }
-                    }
-
                 }
+                if (el[2] > 10) {
+                    console.log('таблица есть, аларм есть')
+                    console.log(results[results.length - 1].bar)
+                    console.log(el)
+                    if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
+                        console.log('повторные данные')
+                        return
+                    } else {
+                        console.log('таблица есть, изменение аларма')
+                        const data = createDate()
+                        alarm = 'Критически высокое давление'
+                        alarmBase(data, el, alarm)
+                    }
+                }
+                else if (el[2] >= 6 || el[2] <= 10) {
+                    console.log('таблица есть, аларма нет')
+                    //   console.log()
+                    if (results[results.length - 1].alarm === 'Норма') {
+                        console.log('повторные данные')
+                        return
+                    } else {
+                        console.log('таблица есть, изменение аларма')
+                        const data = createDate()
+                        alarm = 'Норма'
+                        alarmBase(data, el, alarm)
+                    }
+                }
+
+                // }
 
             }
             //  res.json(results);
