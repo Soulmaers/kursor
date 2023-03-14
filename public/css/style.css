@@ -2229,8 +2229,16 @@ input[type="number"]:focus {
   left: 25px;
 }
 
-.akb_value {
+.akb_value,
+.to_value {
   color: red
+}
+
+.icon_kluch {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 93px;
 }
 
 .td:nth-child(n+2) {

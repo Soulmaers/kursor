@@ -173,6 +173,8 @@ function loadAkb(arrCar) {
                 const odometr = addZero(8, probeg)
                 const probegElem = document.querySelector('.probeg_value')
                 probegElem.textContent = odometr + 'км'
+                const toElem = document.querySelector('.to_value')
+                toElem.textContent = (10000 - probeg) + 'км'
                 //  console.log(odometr)
             }
             if (it.lmsg.p.rs485fuel_level6) {
