@@ -164,6 +164,7 @@ function loadAkb(arrCar) {
     const act = active.children[0].textContent
     let akb;
     let probeg;
+    let oil;
     arrCar.forEach(it => {
         if (it.nm === act) {
             akb = (it.lmsg.p.pwr_ext).toFixed(1);
@@ -171,12 +172,19 @@ function loadAkb(arrCar) {
                 probeg = (it.lmsg.p.mileage).toFixed(0);
                 const odometr = addZero(8, probeg)
                 const probegElem = document.querySelector('.probeg_value')
-                probegElem.textContent = odometr
+                probegElem.textContent = odometr + 'км'
+                //  console.log(odometr)
+            }
+            if (it.lmsg.p.rs485fuel_level6) {
+                oil = (it.lmsg.p.rs485fuel_level6 * 0.0589).toFixed(0);
+
+                const oilElem = document.querySelector('.oil_value')
+                oilElem.textContent = oil + 'л'
                 //  console.log(odometr)
             }
             //  console.log(akb)
             const akbElem = document.querySelector('.akb_value')
-            akbElem.textContent = akb
+            akbElem.textContent = akb + 'V'
 
         }
     })

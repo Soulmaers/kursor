@@ -192,6 +192,23 @@ td {
   z-index: 1;
 }
 
+.oil_value {
+
+  color: yellow;
+  font-size: 0.7rem;
+  padding-top: 5px;
+  margin-top: 5px;
+
+
+}
+
+.icon_oil {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 93px;
+}
+
 .oform,
 .selContent {
   width: 190px;
@@ -1992,8 +2009,8 @@ input[type="number"]:focus {
 }
 
 .title_text {
-  color: red;
-  font-size: 0.85rem;
+
+  font-size: 0.7rem;
   font-weight: bold;
   margin: 0;
   margin-top: 10px;
@@ -2106,7 +2123,7 @@ input[type="number"]:focus {
 
 .probeg_value {
   color: #008200;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   margin-top: 5px;
 }
 
@@ -2212,7 +2229,9 @@ input[type="number"]:focus {
   left: 25px;
 }
 
-
+.akb_value {
+  color: red
+}
 
 .td:nth-child(n+2) {
   margin-left: 5px;
@@ -2390,6 +2409,7 @@ input[type="number"]:focus {
   .icon_parking,
   .icon_shina {
     background-size: contain;
+    background-position: center;
     background-repeat: no-repeat;
     display: flex;
     justify-content: center;
@@ -2409,9 +2429,15 @@ input[type="number"]:focus {
 
   .title_text {
     font-size: 0.7rem;
-    margin-top: 2px;
+    margin-top: 5px;
   }
 
+  .probeg_value {
+    color: #008200;
+    font-size: 0.7rem;
+    padding-top: 5px;
+    margin-top: 5px;
+  }
 
 
   .btn_icon {
