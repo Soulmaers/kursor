@@ -61,12 +61,32 @@ export function dashAllSort(dataArr, paramsArr) {
     const arrSmall = [];
     dataArr.forEach((el, index) => {
         el.values.forEach(e => {
+            console.log(e.name)
             paramsNewArr[index].forEach(it => {
+
+
                 if (e.name == it.pressure) {
                     all.forEach(item => {
                         if (item.name === el.message) {
                             e.value >= 100 ? item.params.push((e.value * 0.069).toFixed(1)) : item.params.push(e.value)
                             e.value >= 100 ? arrSmall.push((e.value * 0.069).toFixed(1)) : arrSmall.push(e.value)
+                            console.log(arrSmall)
+                        }
+                    })
+
+                }
+                if (e.name === it.temp) {
+                    console.log('совпадение')
+                    all.forEach(elem => {
+                        console.log(e.name)
+                        console.log(el.message)
+                        if (elem.name === el.message) {
+                            if (e.value == -50 || e.value == -51 || e.value == -128) {
+                                elem.params.push(e.value)
+                                arrSmall.push(e.value)
+                            }
+
+                            // console.log(arrSmall)
                         }
                     })
                 }
@@ -123,6 +143,7 @@ function dashDav(arr) {
     let countRed = 0;
     let countYellow = 0;
     let countGreen = 0;
+    let countGray = 0;
     arr.forEach((el) => {
         if (el >= 8 && el <= 9) {
             countGreen++
@@ -130,15 +151,29 @@ function dashDav(arr) {
         if (el >= 7.5 && el < 8 || el > 9 && el <= 13) {
             countYellow++
         }
-        if (el > -100 && el < 7.5 || el > 13 || el === -348201.3876) {
+        if (el > -100 && el < 7.5 || el > 13) {
             countRed++
+        }
+        if (el <= -50) {
+            countGray++
         }
     })
     const resultRed = Math.round(countRed / arr.length * 100);
     const resultYellow = Math.round(countYellow / arr.length * 100);
     const resultGreen = Math.round(countGreen / arr.length * 100);
-    const arrD = [resultRed, resultYellow, resultGreen];
-    console.log(arrD)
+    const resultGray = Math.round(countGray / arr.length * 100);
+    let arrD;
+    let arrDC;
+    if (countGray == 0) {
+
+        arrD = [resultRed, resultYellow, resultGreen];
+        arrDC = [countRed, countYellow, countGreen];
+    }
+    else {
+        arrD = [resultRed, resultYellow, resultGreen, resultGray];
+        arrDC = [countRed, countYellow, countGreen, countGray];
+    }
+
     const newBoad = document.getElementById('myChart')
     if (newBoad) {
         newBoad.remove();
@@ -151,7 +186,7 @@ function dashDav(arr) {
 
     Chart.register(ChartDataLabels);
 
-
+    let count = 0;
     const ctx = document.getElementById('myChart')
     const chart = new Chart(ctx, {
 
@@ -160,7 +195,8 @@ function dashDav(arr) {
             labels: [
                 'Критически',
                 'Повышенное/Пониженное',
-                'Норма'
+                'Норма',
+                'Потеря датчика'
             ],
             datasets: [{
                 label: 'Дашбоард',
@@ -168,7 +204,8 @@ function dashDav(arr) {
                 backgroundColor: [
                     '#e03636',
                     '#9ba805',
-                    '#3eb051'
+                    '#3eb051',
+                    '#808080'
                 ],
                 hoverOffset: 4
             }]
@@ -190,7 +227,13 @@ function dashDav(arr) {
                         lineHeight: 1.6
                     },
                     formatter: function (value) {
-                        return value + '%';
+                        console.log(arrDC)
+                        if (count >= arrDC.length) {
+                            count = 0;
+                        }
+                        count++
+                        console.log(count)
+                        return value + '%' + `(${arrDC[count - 1]})`;
                     }
                 }
             }

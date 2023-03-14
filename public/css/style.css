@@ -324,7 +324,7 @@ td {
 .wrap_alarm {
 
   width: 170px;
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   border: 1px solid gray;
@@ -2000,7 +2000,7 @@ input[type="number"]:focus {
 .icon_akb {
   box-sizing: border-box;
   padding: 30px 0;
-  background-image: url(../image/АКБ.jpg);
+  background-image: url(../image/AKB00.JPG);
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -2023,12 +2023,12 @@ input[type="number"]:focus {
 }
 
 .icon_speed {
-  background-image: url(../image/309.png);
+  background-image: url(../image/3091.png);
   background-size: cover;
 }
 
 .icon_oil {
-  background-image: url(../image/306.png);
+  background-image: url(../image/3066.png);
   background-size: cover;
 }
 
@@ -2452,7 +2452,7 @@ input[type="number"]:focus {
 
   .probeg_value {
     color: #008200;
-    font-size: 0.7rem;
+    font-size: 0.55rem;
     padding-top: 5px;
     margin-top: 5px;
   }
@@ -2605,6 +2605,32 @@ input[type="number"]:focus {
 
   .wrapper_button {
     margin: 40px 0;
+  }
+
+
+  .icon_kluch {
+    background-image: url(../image/30911.png);
+    background-size: cover;
+  }
+
+  .icon_speed {
+    background-image: url(../image/30811.png);
+    background-size: cover;
+  }
+
+  .icon_oil {
+    background-image: url(../image/3066.png);
+    background-size: cover;
+  }
+
+  .icon_parking {
+    background-image: url(../image/311.png);
+    background-size: cover;
+  }
+
+  .icon_shina {
+    background-image: url(../image/304.png);
+    background-size: cover;
   }
 
 }

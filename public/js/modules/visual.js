@@ -302,15 +302,15 @@ function alertCreate() {
 function alarmMin() {
     const div = document.querySelector('.alarm')
     div.style.display = 'block'
-    const wrapAlarm = document.querySelector('.wrap_alarm ')
-    wrapAlarm.style.display = 'flex'
+    const ogon = document.querySelector('.ogon')
+    ogon.style.display = 'block'
 
 }
 function alarmMax() {
     const div = document.querySelector('.alarm')
     div.style.display = 'block'
-    const wrapAlarm = document.querySelector('.wrap_alarm ')
-    wrapAlarm.style.display = 'flex'
+    const ogon = document.querySelector('.ogon')
+    ogon.style.display = 'block'
 }
 
 
@@ -319,8 +319,8 @@ export function alarmClear() {
     const div = document.querySelector('.alarm')
     div.style.display = 'none'
 
-    const wrapAlarm = document.querySelector('.wrap_alarm ')
-    wrapAlarm.style.display = 'none'
+    const ogon = document.querySelector('.ogon')
+    ogon.style.display = 'none'
     //  const alarmMinn = document.querySelector('.dav_min')
     //const info = document.querySelector('.info')
     // alarmMinn.style.display = 'none'
