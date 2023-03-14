@@ -1,7 +1,7 @@
 import { tr } from './content.js'
 import { convert } from './visual.js'
 
-
+/*
 export function proverka(arr, name) {
     console.log(arr)
     let alarm;
@@ -57,7 +57,7 @@ export function proverka(arr, name) {
         }
     })
 }
-
+*/
 /*
 async function alarmBase(tyres, data, alarm, name) {
     tyres.shift()
@@ -175,6 +175,7 @@ function viewAlarmStorage(name, stor) {
     const v = document.querySelectorAll('.views')
     console.log(v)
     //const vv = Array.from(v)
+    /*
     var arrg = Array.prototype.slice.call(v);
     arrg.sort(function (a, b) {
         return a.children[3].innerHTML - b.children[3].innerHTML
@@ -183,10 +184,10 @@ function viewAlarmStorage(name, stor) {
     arrg.forEach(e => {
 
         e.innerHTML = e.innerHTML
-    })
+    })*/
 
-    console.log(arrg)
-    arrg.forEach(el => {
+    //console.log(arrg)
+    v.forEach(el => {
         el.addEventListener('click', () => {
             if (el.classList.contains('activeList')) {
                 console.log('делит класс')
