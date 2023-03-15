@@ -1,97 +1,6 @@
 import { tr } from './content.js'
 import { convert } from './visual.js'
 
-/*
-export function proverka(arr, name) {
-    console.log(arr)
-    let alarm;
-    arr.forEach(el => {
-        // console.log(el)
-        if (el[4] == -51 || el[4] == -128 || el[4] == -50) {
-            alarm = 'Потеря связи с датчиком'
-            const data = createDate()
-            el.shift();
-            //    alarmBase(el, data, alarm, name)
-        }
-        else {
-            if (name === 'КранГаличанинР858ОР178') {
-                if (el[3] < 6) {
-                    alarm = 'Критически низкое давление'
-                    const data = createDate()
-                    el.shift();
-                    //  alarmBase(el, data, alarm, name)
-                }
-                if (el[3] > 9.9) {
-                    alarm = 'Критически высокое давление'
-                    const data = createDate()
-                    el.shift();
-                    //   alarmBase(el, data, alarm, name)
-                }
-                if (el[4] > 36) {
-                    alarm = 'Критически высокая температура'
-                    const data = createDate()
-                    el.shift();
-                    //  alarmBase(el, data, alarm, name)
-                }
-            }
-            else {
-                if (el[3] < 8) {
-                    alarm = 'Критически низкое давление'
-                    const data = createDate()
-                    el.shift();
-                    // alarmBase(el, data, alarm, name)
-                }
-                if (el[3] > 10) {
-                    alarm = 'Критически высокое давление'
-                    const data = createDate()
-                    el.shift();
-                    //  alarmBase(el, data, alarm, name)
-                }
-                if (el[4] > 36) {
-                    alarm = 'Критически высокая температура'
-                    const data = createDate()
-                    el.shift();
-                    //  alarmBase(el, data, alarm, name)
-                }
-            }
-        }
-    })
-}
-*/
-/*
-async function alarmBase(tyres, data, alarm, name) {
-    tyres.shift()
-    const dannie = data.concat(tyres)
-    dannie.unshift(name)
-    dannie.push(alarm)
-    const stor = await fetch('api/alarmStorage', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ dannie, name })
-    })
-    const storList = await stor.json();
-}*/
-
-
-function createDate() {
-    let today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const yyyy = today.getFullYear();
-    today = dd + '.' + mm + '.' + yyyy;
-    let time = new Date();
-    const hh = String(time.getHours()).padStart(2, '0');
-    const min = String(time.getMinutes() + 1).padStart(2, '0'); //January is 0!
-    time = hh + '.' + min
-    return [today, time]
-    // console.log(today)
-}
-
-
-
-
 export async function alarmFind(name) {
     const activePost = name.children[0].textContent.replace(/\s+/g, '')
     const par = {
@@ -154,7 +63,6 @@ function viewAlarmStorage(name, stor) {
             for (let i = 0; i < t.length; i++) {
                 if (t[i].children[5].textContent == 'Норма' && t[i + 1] !== undefined) {
                     t[i + 1].classList.add('views')
-                    // t[i + 1].style.color = 'blue'
                 }
                 if (t[i].nextSibling !== null) {
                     if (t[i].classList.contains('views') && !t[i].nextSibling.classList.contains('views') && !t[i].nextSibling.classList.contains('norma')) {
@@ -163,6 +71,24 @@ function viewAlarmStorage(name, stor) {
                 }
             }
         })
+    })
+    const t = document.querySelectorAll('.tr')
+    console.log(t)
+    t.forEach(el => {
+        if (el.nextSibling !== null && !el.classList.contains('norma') && el.children[2].textContent !== el.nextSibling.children[2].textContent
+            && !el.classList.contains('oneName') || !el.classList.contains('norma')
+            && !el.nextSibling) {
+            el.classList.add('alarmOpen')
+            el.style.border = '1px solid black'
+            const alarmFire = document.createElement('div')
+            alarmFire.classList.add('alarmFire')
+            el.appendChild(alarmFire)
+            alarmFire.innerHTML = '&#128293'
+            el.style.position = 'relative'
+            alarmFire.style.position = 'absolute'
+            alarmFire.style.right = '9px';
+            alarmFire.style.top = 0;
+        }
     })
     const best = document.querySelectorAll('.best')
     best.forEach(el => {
@@ -242,36 +168,9 @@ function nextAll(elem) {
     console.log(elem.parentNode.children)
     return [].filter.call(elem.parentNode.children, function (child) {
         if (child === elem) next = true;
-
         return next && child !== elem
     })
 };
-//var div = document.querySelector(".test"), next = nextAll(div);
-/*next.forEach(function (el) {
-    el.classList.add('red');
-});*/
-
-
-
-
-
-/*
-function getSiblings(elem) {
-    var siblings = [];
-    var sibling = elem;
-
-    sibling = elem;
-    while (sibling.nextSibling.classList.contains('norma') == false
-        && sibling.nextSibling.children[2].textContent == sibling.children[2].textContent) {
-        sibling = sibling.nextSibling;
-        sibling.nodeType == 1 && siblings.push(sibling);
-    }
-    siblings.forEach(e => {
-        e.classList.add('views')
-    })
-    return console.log(siblings);
-}*/
-
 
 const plus = document.querySelector('.plus')
 const minus = document.querySelector('.minus')
