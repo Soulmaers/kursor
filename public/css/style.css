@@ -1205,6 +1205,26 @@ input[type="date"] {
   font-size: 0.8rem;
 }
 
+.controll {
+  width: 200px;
+  min-height: 200px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border: 1px solid gray;
+  position: relative;
+}
+
+.configClear {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+}
+
 .tiresT {
   width: 30px;
   height: 40px;

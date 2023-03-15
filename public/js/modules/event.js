@@ -44,7 +44,17 @@ export function saveTyres(arr) {
 
 
 
+const configs = document.querySelector('.configs')
+const configClear = document.querySelector('.configClear')
 
+configs.addEventListener('click', () => {
+    const controll = document.querySelector('.controll')
+    controll.style.display = 'flex'
+})
+configClear.addEventListener('click', () => {
+    const controll = document.querySelector('.controll')
+    controll.style.display = 'none'
+})
 
 
 
@@ -79,6 +89,10 @@ export function btnDel() {
     })
 
 }
+
+
+
+
 
 const dropdown = document.querySelector('.dropdown')
 const dropdownContent = document.querySelector('.dropdown-content')
