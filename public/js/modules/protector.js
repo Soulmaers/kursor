@@ -109,11 +109,9 @@ function viewPicture(arr, id, elem) {
         el.style.display = 'none'
     })
     const arrAll = [];
-
     arr.forEach(el => {
         arrAll.push(el * 10)
     })
-
     let y1;
     let y2;
     let y3;
@@ -137,9 +135,9 @@ function viewPicture(arr, id, elem) {
     }
     if (arrAll.length == 3) {
         console.log('условия 3')
-        y1 = ((200 - arrAll[0]) / 10).toFixed(0)
-        y2 = ((200 - arrAll[1]) / 10).toFixed(0)
-        y3 = ((200 - arrAll[2]) / 10).toFixed(0)
+        y1 = ((120 - arrAll[0]) / 6).toFixed(0)
+        y2 = ((120 - arrAll[1]) / 6).toFixed(0)
+        y3 = ((120 - arrAll[2]) / 6).toFixed(0)
 
         conts[0].style.display = 'block'
         conts[1].style.display = 'block'
@@ -154,10 +152,10 @@ function viewPicture(arr, id, elem) {
             e.style.width = '20px'
         })
         console.log(conts)
-        y1 = ((200 - arrAll[0]) / 10).toFixed(0)
-        y2 = ((200 - arrAll[1]) / 10).toFixed(0)
-        y3 = ((200 - arrAll[2]) / 10).toFixed(0)
-        y4 = ((200 - arrAll[3]) / 10).toFixed(0)
+        y1 = ((120 - arrAll[0]) / 6).toFixed(0)
+        y2 = ((120 - arrAll[1]) / 6).toFixed(0)
+        y3 = ((120 - arrAll[2]) / 6).toFixed(0)
+        y4 = ((120 - arrAll[3]) / 6).toFixed(0)
         protekGrafFourAll(y1, y2, y3, y4, arr, id, elem)
     }
 
@@ -170,6 +168,7 @@ function viewPicture(arr, id, elem) {
 const min = arr => arr.reduce((x, y) => Math.min(x, y));
 
 export function protekGrafTwoAll(y1, y2, arr, id, elem) {
+    console.log(y1, y2, arr, id, elem)
     let number = min(arr)
     const dan = document.createElement('div')
     const dan1 = document.createElement('div')
@@ -178,7 +177,7 @@ export function protekGrafTwoAll(y1, y2, arr, id, elem) {
     elem.children[1].appendChild(dan)
     elem.children[1].appendChild(dan1)
     dan.textContent = number + 'мм'
-    dan1.textContent = (number / 10 * 100).toFixed(0) + '%'
+    dan1.textContent = (number / 18 * 100).toFixed(0) + '%'
     //elem.children[1].textContent = number / 10 * 100 + '%';
     elem.children[1].style.color = objColors[gener(number)];
     console.log(id)

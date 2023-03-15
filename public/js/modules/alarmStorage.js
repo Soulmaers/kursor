@@ -73,7 +73,7 @@ function viewAlarmStorage(name, stor) {
         })
     })
     const t = document.querySelectorAll('.tr')
-    console.log(t)
+    //console.log(t)
     t.forEach(el => {
         if (el.nextSibling !== null && !el.classList.contains('norma') && el.children[2].textContent !== el.nextSibling.children[2].textContent
             && !el.classList.contains('oneName') || !el.classList.contains('norma')
@@ -91,7 +91,7 @@ function viewAlarmStorage(name, stor) {
             console.log(el)
             const prevElem = prevAll(el)
             let count = 0;
-            console.log(prevElem)
+            //    console.log(prevElem)
             prevElem.forEach(e => {
                 if (e.children[2].textContent == el.children[2].textContent && e.classList.contains('best')) {
                     count++
