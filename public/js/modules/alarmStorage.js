@@ -199,6 +199,17 @@ function viewAlarmStorage(name, stor) {
                 el.nextSibling.style.background = 'none';
                 el.classList.remove('activeList')
                 el.classList.remove('actfon')
+                const next = nextAll(el)
+                let countt = 0;
+                next.forEach(function (it) {
+                    if (it.classList.contains('norma') !== false) {
+                        countt++
+                    }
+                    if (it.classList.contains('norma') == false
+                        && it.children[2].textContent == el.children[2].textContent && countt < 1)
+                        it.classList.remove('red');
+
+                });
                 return
             }
             //  console.log(el.textContent)

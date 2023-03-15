@@ -36,7 +36,7 @@ export async function loadParamsViewList(car) {
 
 setTimeout(conturTest, 3000, testov)
 function conturTest(testov) {
-    console.log(testov)
+    console.log('один раз')
     // dashView(message)
     testov.forEach(elem => {
         dashView(elem[0].message)
@@ -108,7 +108,7 @@ function conturTest(testov) {
 }
 
 
-
+/*
 function contur(model, message, arg, params) {
 
     dashView(message)
@@ -173,7 +173,7 @@ function contur(model, message, arg, params) {
     })
 
 
-}
+}*/
 
 function zaprosSpisok() {
     console.log('список')
