@@ -2514,6 +2514,7 @@ input[type="number"]:focus {
   .btn_icon {
     width: 100%;
     font-size: 0.6rem;
+    height: 50px;
   }
 
   .wrapper_left {
@@ -2622,7 +2623,7 @@ input[type="number"]:focus {
   }
 
   .container_flash {
-    width: 20%;
+    width: 30%;
     padding: 1px 1px;
 
     margin-right: 1%
@@ -2697,6 +2698,10 @@ input[type="number"]:focus {
   .icon_shina {
     background-image: url(../image/304.png);
     background-size: cover;
+  }
+
+  .well {
+    justify-content: center;
   }
 
   .wrapper_left {
