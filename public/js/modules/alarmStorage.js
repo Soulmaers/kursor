@@ -182,7 +182,7 @@ function viewAlarmStorage(name, stor) {
         itemOut.style.position = 'absolute'
         itemOut.style.left = '2px';
         itemOut.style.top = '5px';
-        el.children[6].addEventListener('click', () => {
+        el.addEventListener('click', () => {
             if (el.classList.contains('activeListtt')) {
                 const next = nextAll(el)
                 let countt = 0;
@@ -218,6 +218,7 @@ function viewAlarmStorage(name, stor) {
             redHidden.forEach(el => {
                 Array.from(el.children).forEach(it => {
                     it.style.fontSize = '11px'
+                    it.style.fontWeight = 'normal'
                     it.style.color = '#000'
                 })
             })
