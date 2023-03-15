@@ -8,8 +8,13 @@ import { visual, visualNone } from './visual.js'
 
 
 
-
-
+const iconStrela = document.querySelector('.iconStrela')
+iconStrela.addEventListener('click', () => {
+    const sections = document.querySelector('.sections')
+    sections.style.display = 'flex'
+    const comeback = document.querySelector('.comeback')
+    comeback.style.display = 'none'
+})
 
 const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {

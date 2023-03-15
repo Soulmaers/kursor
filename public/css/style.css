@@ -18,7 +18,7 @@ td {
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  border-bottom: 20px solid lightgray;
+
   background-color: rgba(6, 28, 71, 1)
 }
 
@@ -2368,6 +2368,37 @@ input[type="number"]:focus {
   margin: 0
 }
 
+.comeback {
+  display: none;
+  width: 100%;
+  max-height: 30px;
+  background-color: lightgray;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+
+.titleName {
+  margin-left: 15px;
+  font-size: 0.7rem;
+}
+
+.iconStrela {
+  background-image: url(../image/str.png);
+  background-size: cover;
+  background-position: center;
+  width: 20px;
+  height: 15px;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+.red {
+  background-color: rgb(204, 227, 235);
+  margin-left: 20px;
+  display: flex
+}
+
 .actfon {
   background-color: rgb(204, 227, 235)
 }
@@ -2582,7 +2613,7 @@ input[type="number"]:focus {
     align-items: center;
     justify-content: space-around;
     width: 100%;
-    border-bottom: 20px solid lightgray;
+
     background-color: rgba(6, 28, 71, 1);
   }
 

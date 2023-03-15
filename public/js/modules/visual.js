@@ -12,6 +12,7 @@ let start;
 let time;
 //let timeParams;
 export async function visual(el) {
+
     // console.log(el)
     clearInterval(time)
     // clearInterval(timeParams)
@@ -55,6 +56,11 @@ export async function visual(el) {
         //  geoloc();
     }
 }
+
+
+
+
+
 export function visualNone(e) {
     const probegElem = document.querySelector('.probeg_value')
     probegElem.textContent = ''

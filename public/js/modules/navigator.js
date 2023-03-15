@@ -12,6 +12,7 @@ export function navigator() {
     nav.forEach(el => {
         el.addEventListener('click', route)
         function route() {
+
             // console.log(el)
             //   console.log('запускНавигатора')
 
@@ -27,7 +28,24 @@ export function navigator() {
                 massivionbd.length = 0;
             })
             visual(el)
+            const widthWind = document.querySelector('body').offsetWidth;
+            console.log(widthWind)
+            if (widthWind <= 640) {
+                console.log('ап')
+                const comeback = document.querySelector('.comeback')
+                comeback.style.display = 'flex'
+                const sections = document.querySelector('.sections')
+                sections.style.display = 'none'
+                const nameCar = document.querySelector('.color')
+                console.log(nameCar)
+                const titleName = document.querySelector('.titleName')
+                titleName.textContent = nameCar.children[0].textContent
 
+            }
+            else {
+                console.log('пап')
+
+            }
 
         }
 

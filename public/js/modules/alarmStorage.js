@@ -159,7 +159,7 @@ function viewAlarmStorage(name, stor) {
             for (let i = 0; i < t.length; i++) {
                 if (t[i].children[5].textContent == 'Норма' && t[i + 1] !== undefined) {
                     t[i + 1].classList.add('views')
-                    t[i + 1].classList.add('viewsOut')
+                    //   t[i + 1].classList.add('viewsOut')
                     t[i + 1].style.color = 'blue'
                     //t[i + 1].style.marginLeft = '20px'
                 }
@@ -201,9 +201,22 @@ function viewAlarmStorage(name, stor) {
                 el.classList.remove('actfon')
                 return
             }
-            console.log(el.textContent)
-            getSiblings(el)
-            if (el.nextSibling.classList.contains('norma') == false && el.nextSibling.children[2].textContent == el.children[2].textContent) {
+            //  console.log(el.textContent)
+            // getSiblings(el)
+            const next = nextAll(el)
+            console.log(next)
+            let countt = 0;
+            next.forEach(function (it) {
+                if (it.classList.contains('norma') !== false) {
+                    countt++
+                }
+                if (it.classList.contains('norma') == false
+                    && it.children[2].textContent == el.children[2].textContent && countt < 1)
+                    it.classList.add('red');
+
+            });
+            if (el.nextSibling.classList.contains('norma') == false &&
+                el.nextSibling.children[2].textContent == el.children[2].textContent) {
                 el.nextSibling.style.display = 'flex'
                 el.classList.add('activeList')
                 el.classList.add('actfon')
@@ -216,12 +229,31 @@ function viewAlarmStorage(name, stor) {
     })
 }
 
+function nextAll(elem) {
+    var next = false;
+    console.log(elem.parentNode.children)
+    return [].filter.call(elem.parentNode.children, function (child) {
+        if (child === elem) next = true;
+        return next && child !== elem
+    })
+};
+//var div = document.querySelector(".test"), next = nextAll(div);
+/*next.forEach(function (el) {
+    el.classList.add('red');
+});*/
+
+
+
+
+
+/*
 function getSiblings(elem) {
     var siblings = [];
     var sibling = elem;
 
     sibling = elem;
-    while (sibling.nextSibling.classList.contains('norma') == false && sibling.nextSibling.children[2].textContent == sibling.children[2].textContent) {
+    while (sibling.nextSibling.classList.contains('norma') == false
+        && sibling.nextSibling.children[2].textContent == sibling.children[2].textContent) {
         sibling = sibling.nextSibling;
         sibling.nodeType == 1 && siblings.push(sibling);
     }
@@ -229,7 +261,7 @@ function getSiblings(elem) {
         e.classList.add('views')
     })
     return console.log(siblings);
-}
+}*/
 
 
 const plus = document.querySelector('.plus')
