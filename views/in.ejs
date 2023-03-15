@@ -108,27 +108,29 @@
             <div class="wrapper_right">
                 <div class="config">
                     <div class="container_left">
-                        <% if (role!=='Пользователь' ) { %><%-include('control') %>
-                                <% } %>
-                                    <div class="wrap_alarm">
-                                        <!--   <span class="dav_max">ВНИМАНИЕ! Критически высокое давление!</span>
+                        <div class="controll">
+                            <% if (role!=='Пользователь' ) { %><%-include('control') %>
+                                    <% } %>
+                        </div>
+                        <div class="wrap_alarm">
+                            <!--   <span class="dav_max">ВНИМАНИЕ! Критически высокое давление!</span>
                                         <span class="dav_min">ВНИМАНИЕ! Критически низкое давление!</span>
                                    
                                        <span class="info">Уведомление отправлено ответственному на <span
                                                 class="mail">zavgar@cursor-gps.ru</span> </span>-->
-                                        <div class="mainAlarm">Уведомления</div>
-                                        <div class="plus"></div>
-                                        <div class="minus"></div>
-                                        <div class="border"><span class="ogon">&#128293</span></div>
+                            <div class="mainAlarm">Уведомления</div>
+                            <div class="plus"></div>
+                            <div class="minus"></div>
+                            <div class="border"><span class="ogon">&#128293</span></div>
 
-                                    </div>
-                                    <div class="alarmStorage">
+                        </div>
+                        <div class="alarmStorage">
 
-                                        <div class="tbody">
+                            <div class="tbody">
 
-                                        </div>
+                            </div>
 
-                                    </div>
+                        </div>
 
                     </div>
 

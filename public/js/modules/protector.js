@@ -128,8 +128,8 @@ function viewPicture(arr, id, elem) {
         protekGrafFreeAll(arr, id, elem)
     }
     if (arrAll.length == 2) {
-        y1 = ((120 - arrAll[0]) / 6).toFixed(0)
-        y2 = ((120 - arrAll[1]) / 6).toFixed(0)
+        y1 = ((200 - arrAll[0]) / 10).toFixed(0)
+        y2 = ((200 - arrAll[1]) / 10).toFixed(0)
 
         conts[0].style.display = 'block'
         conts[0].style.width = '60px'
@@ -137,9 +137,9 @@ function viewPicture(arr, id, elem) {
     }
     if (arrAll.length == 3) {
         console.log('условия 3')
-        y1 = ((120 - arrAll[0]) / 6).toFixed(0)
-        y2 = ((120 - arrAll[1]) / 6).toFixed(0)
-        y3 = ((120 - arrAll[2]) / 6).toFixed(0)
+        y1 = ((200 - arrAll[0]) / 10).toFixed(0)
+        y2 = ((200 - arrAll[1]) / 10).toFixed(0)
+        y3 = ((200 - arrAll[2]) / 10).toFixed(0)
 
         conts[0].style.display = 'block'
         conts[1].style.display = 'block'
@@ -154,10 +154,10 @@ function viewPicture(arr, id, elem) {
             e.style.width = '20px'
         })
         console.log(conts)
-        y1 = ((120 - arrAll[0]) / 6).toFixed(0)
-        y2 = ((120 - arrAll[1]) / 6).toFixed(0)
-        y3 = ((120 - arrAll[2]) / 6).toFixed(0)
-        y4 = ((120 - arrAll[3]) / 6).toFixed(0)
+        y1 = ((200 - arrAll[0]) / 10).toFixed(0)
+        y2 = ((200 - arrAll[1]) / 10).toFixed(0)
+        y3 = ((200 - arrAll[2]) / 10).toFixed(0)
+        y4 = ((200 - arrAll[3]) / 10).toFixed(0)
         protekGrafFourAll(y1, y2, y3, y4, arr, id, elem)
     }
 
