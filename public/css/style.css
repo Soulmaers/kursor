@@ -13,6 +13,12 @@ td {
   border: 1px solid #666;
 }
 
+
+.burger {
+  display: none;
+}
+
+
 .header {
   display: flex;
   align-items: center;
@@ -23,10 +29,39 @@ td {
 }
 
 .menu {
-  width: 65%;
+  width: 50%;
   display: flex;
   align-items: center;
   padding: 10px 0;
+}
+
+.control_panel {
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+
+  padding: 10px 0;
+}
+
+.auth,
+.configs {
+  color: lightgray;
+  font-family: Roboto;
+  font-size: 0.8rem;
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: none;
+
+}
+
+.auth:hover {
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.configs:hover {
+  font-size: 0.9rem;
+  color: #fff;
 }
 
 .list_menu {
@@ -2597,7 +2632,53 @@ input[type="number"]:focus {
   .menu {
     padding: 0;
     width: 40%;
+  }
 
+  .monitoring:hover {
+    font-size: 0.6rem;
+  }
+
+  .auth,
+  .configs {
+    color: lightgray;
+    font-family: Roboto;
+    font-size: 0.55rem;
+    font-weight: 900;
+    cursor: pointer;
+    text-decoration: none;
+
+  }
+
+  .control_panel {
+    display: none;
+  }
+
+  .burger {
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .menu_burger {
+    width: 25px;
+    height: 3px;
+    background-color: lightgray;
+    cursor: pointer;
+  }
+
+  .menu_burger:nth-child(n+2) {
+    margin-top: 3px;
+  }
+
+  .auth:hover {
+    font-size: 0.55rem;
+  }
+
+  .configs:hover {
+    font-size: 0.55rem;
   }
 
   .list_att {

@@ -109,6 +109,28 @@ btnShina.addEventListener('click', () => {
 })
 
 
+
+const burger = document.querySelector('.burger')
+burger.addEventListener('click', () => {
+    const control = document.querySelector('.control_panel')
+    const adminka = document.querySelector('.container_flash')
+    if (burger.classList.contains('burgerActive')) {
+        adminka.style.display = 'flex'
+        control.style.display = 'none'
+        burger.classList.remove('burgerActive')
+        return
+    }
+
+    adminka.style.display = 'none'
+    control.style.display = 'flex'
+    control.style.width = 30 + '%'
+    control.style.background = 'rgba(6, 28, 71, 1)'
+    control.style.paddingBottom = '5px'
+    control.style.paddingTop = '5px'
+    burger.classList.add('burgerActive')
+
+})
+
 /*
 const detaly = document.querySelector('.detaly')
 detaly.addEventListener('click', () => {
