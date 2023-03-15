@@ -73,6 +73,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
     console.log(widthWind)
     if (widthWind <= 640) {
         console.log('ап')
+        const main = document.querySelector('.main')
+        main.style.display = 'none'
+
     }
     console.log('пап')
 });

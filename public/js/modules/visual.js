@@ -30,7 +30,14 @@ export async function visual(el) {
     wrapperUp.style.display = 'block'
     wrapperRight.style.display = 'flex'
     wrapperLeft.style.display = 'block'
-    main.style.display = 'flex'
+    const widthWind = document.querySelector('body').offsetWidth;
+    if (widthWind <= 640) {
+        main.style.display = 'none'
+    }
+    else {
+        main.style.display = 'flex'
+    }
+    //main.style.display = 'flex'
     speedGraf.style.display = 'block'
     el.classList.add('color')
     //  console.log(el)
@@ -417,6 +424,8 @@ function styleShinaActive(arg) {
     const vnut = document.querySelectorAll('.vnut')
     const osi = document.querySelectorAll('.osi')
     const place = document.querySelectorAll('.place')
+    const main = document.querySelector('.main')
+    main.style.display = 'flex'
     // console.log(tyresD)
     osi.forEach(e => {
         e.style.width = '330px'

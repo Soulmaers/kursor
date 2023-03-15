@@ -36,6 +36,8 @@ export function navigator() {
                 comeback.style.display = 'flex'
                 const sections = document.querySelector('.sections')
                 sections.style.display = 'none'
+                const main = document.querySelector('.main')
+                main.style.display = 'flex'
                 const nameCar = document.querySelector('.color')
                 console.log(nameCar)
                 const titleName = document.querySelector('.titleName')

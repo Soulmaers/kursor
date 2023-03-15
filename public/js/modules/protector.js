@@ -4,6 +4,7 @@ import { convert } from './visual.js'
 import { objColors, gener } from './content.js'
 
 export async function reqProtectorBase() {
+    console.log('рабоатем?')
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {

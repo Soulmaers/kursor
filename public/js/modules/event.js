@@ -14,6 +14,8 @@ iconStrela.addEventListener('click', () => {
     sections.style.display = 'flex'
     const comeback = document.querySelector('.comeback')
     comeback.style.display = 'none'
+    const main = document.querySelector('.main')
+    main.style.display = 'none'
 })
 
 const btnDash = document.querySelector('.dash')
@@ -87,7 +89,8 @@ btnShina.addEventListener('click', () => {
     console.log(e)
     visualNone(e);
     visual(e)
-
+    const main = document.querySelector('.main')
+    main.style.display = 'flex'
     //  viewOs();
     // loadParamsView()
 })
