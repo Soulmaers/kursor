@@ -2394,7 +2394,7 @@ input[type="number"]:focus {
 }
 
 .red {
-  background-color: rgb(204, 227, 235);
+
   margin-left: 20px;
   display: flex
 }
@@ -2418,6 +2418,23 @@ input[type="number"]:focus {
   margin-left: 15px;
 }
 
+.itemIn {
+  display: flex;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+  background-image: url(../image/down3.png);
+  background-size: cover;
+}
+
+.itemOut {
+  display: none;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+  background-image: url(../image/up3.png);
+  background-size: cover;
+}
 
 @media (max-width: 640px) {
 

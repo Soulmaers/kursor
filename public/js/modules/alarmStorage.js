@@ -128,7 +128,6 @@ export async function alarmFind(name) {
 function viewAlarmStorage(name, stor) {
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
-    console.log(stor)
     stor.forEach(el => {
         let count = 0;
         el.forEach(it => {
@@ -137,18 +136,14 @@ function viewAlarmStorage(name, stor) {
             tr.classList.add('tr')
             tr.classList.add('trnone')
             tr.classList.add(`${name}`)
-
             tbody.appendChild(tr)
             const toSearch = "Норма";
             if (count == 1) {
                 tr.classList.add('views')
-                //  tr.style.color = 'blue';
             }
             if (it.alarm == toSearch) {
                 tr.classList.add('norma')
-                //  tr.style.display = 'none';
             }
-
             for (var key in it) {
                 const td = document.createElement('p')
                 td.classList.add('td')
@@ -159,46 +154,36 @@ function viewAlarmStorage(name, stor) {
             for (let i = 0; i < t.length; i++) {
                 if (t[i].children[5].textContent == 'Норма' && t[i + 1] !== undefined) {
                     t[i + 1].classList.add('views')
-                    //   t[i + 1].classList.add('viewsOut')
-                    t[i + 1].style.color = 'blue'
-                    //t[i + 1].style.marginLeft = '20px'
+                    // t[i + 1].style.color = 'blue'
+                }
+                if (t[i].nextSibling !== null) {
+                    if (t[i].classList.contains('views') && !t[i].nextSibling.classList.contains('views') && !t[i].nextSibling.classList.contains('norma')) {
+                        t[i].classList.add('best')
+                    }
                 }
             }
         })
     })
-
-    const arrName = tbody.querySelectorAll(`.${name}`)
-    arrName.forEach(e => {
-        e.children[3].style.background = 'yellow';
-        if (e.children[4].textContent == '-51' || e.children[4].textContent == '-50') {
-            e.children[4].style.background = 'yellow';
-        }
-    })
-    const v = document.querySelectorAll('.views')
-    console.log(v)
-    //const vv = Array.from(v)
-    /*
-    var arrg = Array.prototype.slice.call(v);
-    arrg.sort(function (a, b) {
-        return a.children[3].innerHTML - b.children[3].innerHTML
-    });
-    console.log(arrg)
-    arrg.forEach(e => {
-
-        e.innerHTML = e.innerHTML
-    })*/
-
-    //console.log(arrg)
-    const massEl = [];
-    v.forEach(el => {
-        el.addEventListener('click', () => {
-
-            if (el.classList.contains('activeList')) {
-                console.log('делит класс')
-                el.nextSibling.style.display = 'none'
-                el.nextSibling.style.background = 'none';
-                el.classList.remove('activeList')
-                el.classList.remove('actfon')
+    const best = document.querySelectorAll('.best')
+    best.forEach(el => {
+        const wrapItem = document.createElement('div')
+        wrapItem.classList.add('wrapItem')
+        el.appendChild(wrapItem)
+        const itemIn = document.createElement('div')
+        itemIn.classList.add('itemIn')
+        const itemOut = document.createElement('div')
+        itemOut.classList.add('itemOut')
+        wrapItem.appendChild(itemIn)
+        wrapItem.appendChild(itemOut)
+        el.style.position = 'relative'
+        itemIn.style.position = 'absolute'
+        itemIn.style.left = '2px';
+        itemIn.style.top = '5px';
+        itemOut.style.position = 'absolute'
+        itemOut.style.left = '2px';
+        itemOut.style.top = '5px';
+        el.children[6].addEventListener('click', () => {
+            if (el.classList.contains('activeListtt')) {
                 const next = nextAll(el)
                 let countt = 0;
                 next.forEach(function (it) {
@@ -208,14 +193,13 @@ function viewAlarmStorage(name, stor) {
                     if (it.classList.contains('norma') == false
                         && it.children[2].textContent == el.children[2].textContent && countt < 1)
                         it.classList.remove('red');
-
                 });
+                itemIn.style.display = 'flex'
+                itemOut.style.display = 'none'
+                el.classList.remove('activeListtt')
                 return
             }
-            //  console.log(el.textContent)
-            // getSiblings(el)
             const next = nextAll(el)
-            console.log(next)
             let countt = 0;
             next.forEach(function (it) {
                 if (it.classList.contains('norma') !== false) {
@@ -224,20 +208,32 @@ function viewAlarmStorage(name, stor) {
                 if (it.classList.contains('norma') == false
                     && it.children[2].textContent == el.children[2].textContent && countt < 1)
                     it.classList.add('red');
-
             });
-            if (el.nextSibling.classList.contains('norma') == false &&
-                el.nextSibling.children[2].textContent == el.children[2].textContent) {
-                el.nextSibling.style.display = 'flex'
-                el.classList.add('activeList')
-                el.classList.add('actfon')
-                el.nextSibling.style.marginLeft = '20px'
-                el.nextSibling.style.background = 'rgb(204, 227, 235)';
-                console.log(el)
-            }
+            el.classList.add('activeListtt')
+            itemIn.style.display = 'none'
+            itemOut.style.display = 'flex'
+
+            const redHidden = document.querySelectorAll('.red')
+            console.log(redHidden)
+            redHidden.forEach(el => {
+                Array.from(el.children).forEach(it => {
+                    it.style.fontSize = '11px'
+                    it.style.color = '#000'
+                })
+            })
         })
 
     })
+
+
+    const arrName = tbody.querySelectorAll(`.${name}`)
+    arrName.forEach(e => {
+        e.children[3].style.background = 'yellow';
+        if (e.children[4].textContent == '-51' || e.children[4].textContent == '-50') {
+            e.children[4].style.background = 'yellow';
+        }
+    })
+
 }
 
 function nextAll(elem) {
@@ -245,6 +241,7 @@ function nextAll(elem) {
     console.log(elem.parentNode.children)
     return [].filter.call(elem.parentNode.children, function (child) {
         if (child === elem) next = true;
+
         return next && child !== elem
     })
 };
