@@ -593,6 +593,7 @@ input[type="date"] {
   font-family: Roboto;
   font-weight: 700;
   color: #000;
+  cursor: pointer;
 }
 
 .dropbtnOs {
@@ -616,7 +617,6 @@ input[type="date"] {
 .dropdown {
   position: relative;
   display: inline-block;
-
   width: 170px;
   margin: 1px 0;
   flex-direction: column;
@@ -721,9 +721,7 @@ input[type="date"] {
 }
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-  display: block;
-}
+
 
 .dropdownOs:hover .dropdown-contentOs {
   display: block;
@@ -734,7 +732,7 @@ input[type="date"] {
 }
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {
+.dropbtn:active {
   background: #fff;
   color: #000
 }

@@ -80,6 +80,19 @@ export function btnDel() {
 
 }
 
+const dropdown = document.querySelector('.dropdown')
+const dropdownContent = document.querySelector('.dropdown-content')
+dropdown.addEventListener('click', () => {
+    if (dropdown.classList.contains('btnActive')) {
+        dropdownContent.style.display = 'none'
+        dropdown.classList.remove('btnActive')
+        return
+    }
+    dropdown.classList.add('btnActive')
+    dropdownContent.style.display = 'block'
+})
+
+
 
 const btnShina = document.querySelector('.btn_icon')
 btnShina.addEventListener('click', () => {

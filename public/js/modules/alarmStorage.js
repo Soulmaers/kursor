@@ -88,6 +88,31 @@ function viewAlarmStorage(name, stor) {
             alarmFire.style.position = 'absolute'
             alarmFire.style.right = '9px';
             alarmFire.style.top = 0;
+            console.log(el)
+            const prevElem = prevAll(el)
+            let count = 0;
+            console.log(prevElem)
+            prevElem.forEach(e => {
+                if (e.children[2].textContent == el.children[2].textContent && e.classList.contains('best')) {
+                    count++
+                    if (count == 1) {
+                        e.classList.add('alarmOpen')
+                        console.log(e)
+                    }
+                }
+            })
+            function prevAll(el) {
+                const prevElements = []
+                let prevElement = el.parentNode.firstElementChild
+
+                while (prevElement !== el) {
+                    prevElements.push(prevElement)
+                    prevElement = prevElement.nextElementSibling
+                }
+
+                return prevElements
+            }
+
         }
     })
     const best = document.querySelectorAll('.best')
@@ -165,7 +190,7 @@ function viewAlarmStorage(name, stor) {
 
 function nextAll(elem) {
     var next = false;
-    console.log(elem.parentNode.children)
+    //  console.log(elem.parentNode.children)
     return [].filter.call(elem.parentNode.children, function (child) {
         if (child === elem) next = true;
         return next && child !== elem
