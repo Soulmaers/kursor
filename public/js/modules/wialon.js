@@ -195,4 +195,5 @@ function loadAkb(arrCar) {
         }
     })
     //  console.log(val)
+
 }

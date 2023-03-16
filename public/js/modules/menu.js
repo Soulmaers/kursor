@@ -1,7 +1,7 @@
 
 import { navigator } from './navigator.js'
 import { speed } from './speed.js'
-import { loadParamsViewList } from './spisok.js'
+import { loadParamsViewList, conturTest } from './spisok.js'
 import { loadParamsView } from './paramsTyresView.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 
@@ -56,7 +56,9 @@ export function zapros() {
                 return loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями
             })
             )
-            console.log(test)
+            const tt = new Date()
+            console.log(test, tt)
+            conturTest(test)
             //  dann = arrCar
             speed(arrCar)
             return dann
@@ -66,24 +68,6 @@ export function zapros() {
     //console.log(allMassiv[0].length)
 }
 
-/*
-const example = async data => {
-
-    await Promise.all(exampleArr.map(item => {
-            return fetch запрос на каждый item
-        }
-    });
-
-    другой fetch запрос
-};*/
 
 
-window.addEventListener('load', () => { /* Страница загружена, включая все ресурсы */
-    setTimeout(load, 3200)
 
-})
-
-function load() {
-    const preloader = document.querySelector('.preloader') /* находим блок Preloader */
-    preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
-}
