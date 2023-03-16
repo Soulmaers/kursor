@@ -37,8 +37,8 @@ export async function loadParamsViewList(car) {
 setTimeout(conturTest, 3000, testov)
 function conturTest(testov) {
     console.log('один раз')
+    // dashView(message)
 
-    console.log('отрисовка')
     testov.forEach(elem => {
         dashView(elem[0].message)
         console.log(elem[0].message)

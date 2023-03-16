@@ -44,7 +44,7 @@ export function zapros() {
     };
     const remote1 = wialon.core.Remote.getInstance();
     remote1.remoteCall('core/search_items', prms,
-        function (code, result) {
+        async function (code, result) {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
@@ -52,10 +52,11 @@ export function zapros() {
             const arrCar = arr1[5];
             dann = arrCar
 
-            arrCar.forEach(el => {
-                loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями
+            const test = await Promise.all(arrCar.map(el => {
+                return loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями
             })
-
+            )
+            console.log(test)
             //  dann = arrCar
             speed(arrCar)
             return dann
@@ -65,6 +66,16 @@ export function zapros() {
     //console.log(allMassiv[0].length)
 }
 
+/*
+const example = async data => {
+
+    await Promise.all(exampleArr.map(item => {
+            return fetch запрос на каждый item
+        }
+    });
+
+    другой fetch запрос
+};*/
 
 
 window.addEventListener('load', () => { /* Страница загружена, включая все ресурсы */
