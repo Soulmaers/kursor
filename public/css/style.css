@@ -229,6 +229,19 @@ td {
   display: none;
 }
 
+.dash_board {
+  position: relative;
+}
+
+.allSens {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 42%;
+
+  font-size: 2rem;
+
+}
 
 .header {
   display: flex;
@@ -2696,13 +2709,7 @@ input[type="number"]:focus {
   background-size: cover;
 }
 
-.alarmFire {
-  width: 8px;
-  height: 8px;
-  background-image: url(../image/down3.png);
-  background-size: cover;
-  font-size: 0.7rem;
-}
+
 
 .itemOut {
   display: none;
