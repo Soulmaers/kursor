@@ -66,6 +66,11 @@ export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
     argGreen.textContent = angleDeg + '°'
     const strela = document.getElementById('krans')
     const ctx = strela.getContext("2d");
+
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.beginPath();
+
+
     ctx.width = 180
     ctx.heigth = 180
     length = 150

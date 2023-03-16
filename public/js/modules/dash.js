@@ -37,7 +37,7 @@ export async function getDash() {
     })
     //  console.log(dataArr, paramsArr)
     // return (dataArr, paramsArr)
-    setTimeout(dashAllSort, 1000, dataArr, paramsArr)
+    setTimeout(dashAllSort, 3000, dataArr, paramsArr)
     // dashAllSort(dataArr, paramsArr)
 }
 
