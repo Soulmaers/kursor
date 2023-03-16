@@ -3,10 +3,12 @@ export function kranParams() {
     const active = document.querySelector('.color')
     const act = active.children[0].textContent
     if (act && act === "КранГаличанин Р858ОР178") {
-
+        const contKran = document.querySelector('.contKran')
+        contKran.style.display = 'flex'
 
     }
     console.log('икон')
+
     const flags = 1 + 1024
     const prms = {
         "spec": {
@@ -44,19 +46,10 @@ function loadKran(arrCar) {
                 const str = (it.lmsg.p.user_2u_1).toFixed(0);
                 if (str !== strela[strela.length - 1]) {
                     strela.push(str)
-
+                    drawMyLine(strela[strela.length - 1], strela[strela.length - 2])
                 }
 
-                console.log(strela)
-                // if (strela.length >= 2) {
-                //    console.log(strela.length)
 
-
-                drawMyLine(strela[strela.length - 1], strela[strela.length - 2])
-                //   }
-                //   else {
-                //     return
-                //  }
 
             }
         }
@@ -65,8 +58,7 @@ function loadKran(arrCar) {
 
 export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
     console.log(angleDeg, angleDeg2)
-    const contKran = document.querySelector('.contKran')
-    contKran.style.display = 'flex'
+
     const argRed = document.querySelector('.argRed')
     const argGreen = document.querySelector('.argGreen')
     angleDeg2 ? argRed.textContent = angleDeg2 + '°' : null
