@@ -86,7 +86,7 @@ function viewAlarmStorage(name, stor) {
             alarmFire.innerHTML = '&#128293'
             el.style.position = 'relative'
             alarmFire.style.position = 'absolute'
-            alarmFire.style.right = '9px';
+            alarmFire.style.right = '4px';
             alarmFire.style.top = 0;
             console.log(el)
             const prevElem = prevAll(el)
