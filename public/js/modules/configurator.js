@@ -11,7 +11,8 @@ export function select() {
     const wrapContaint = document.querySelector('.wrapper_containt')
     const cont = document.createElement('div')
     cont.classList.add('container')
-    wrapContaint.appendChild(cont);
+    wrapContaint.insertBefore(cont, wrapContaint.children[2]);
+
     const container = document.querySelector('.container')
     linkSelect.forEach(el => {
         el.addEventListener('click', () => {

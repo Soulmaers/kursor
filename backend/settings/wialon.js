@@ -33,7 +33,7 @@ function init(user) {
             //  console.log('обновление')
             // setInterval(getMainInfo, 5000);
             createTable();
-            setInterval(createTable, 30000);
+            setInterval(createTable, 60000);
             //  saprosGeo()
         })
 }
@@ -140,17 +140,10 @@ function getMainInfo(name, res) {
             })
         })
 }
-
-
-
-
 const convert = (ob) => {
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
     return Array.from(uniq).map(e => JSON.parse(e));
 }
-
-
-
 
 function zaprosSpisokb(name) {
     const massItog = [];

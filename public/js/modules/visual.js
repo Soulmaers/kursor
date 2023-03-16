@@ -7,15 +7,13 @@ import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from '
 import { alarmFind } from './alarmStorage.js'
 import { modalOs } from './modalOs.js'
 import { reqProtectorBase } from './protector.js'
+import { kranParams } from './strelaKran.js'
 
 let start;
 let time;
-//let timeParams;
-export async function visual(el) {
-
-    // console.log(el)
+let icon;
+export function visual(el) {
     clearInterval(time)
-    // clearInterval(timeParams)
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const wrapperRight = document.querySelector('.wrapper_right')
@@ -23,10 +21,7 @@ export async function visual(el) {
     const titleCar = document.querySelector('.title_two')
     const btnsens = document.querySelectorAll('.btnsens')
     const main = document.querySelector('.main')
-    // const section = document.querySelector('.section')
     alarmClear();
-    //detalisation.style.display = 'none'
-    //  section.style.display = 'none'
     wrapperUp.style.display = 'block'
     wrapperRight.style.display = 'flex'
     wrapperLeft.style.display = 'block'
@@ -41,26 +36,31 @@ export async function visual(el) {
     speedGraf.style.display = 'block'
     el.classList.add('color')
     //  console.log(el)
-    await viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
+    viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
     titleCar.textContent = el.textContent
-    await loadParamsView()
+    loadParamsView()
     //  setInterval(loadParamsView, 5000)
     console.log(el)
-    iconParams()
-    setInterval(iconParams, 6000)
+
+
     alarmFind(el)
     //setInterval(alarmFind, 6000, el)
 
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
+    if (!icon || icon !== el) {
+        icon = el;
+        iconParams()
+        icon = setInterval(iconParams, 6000) //отрисовываем карту osm
+
+    }
+    kranParams()
+    setInterval(kranParams, 6000)
     if (!start || start !== el) {
         start = el;
         geoloc()
         time = setInterval(geoloc, 120000) //отрисовываем карту osm
-
-
-        //  geoloc();
     }
 }
 
@@ -91,7 +91,8 @@ export function visualNone(e) {
     const oneName = document.querySelector('.oneName')
 
 
-
+    const contKran = document.querySelector('.contKran')
+    contKran.style.display = 'none'
 
 
     plus.style.display = 'block'

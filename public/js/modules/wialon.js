@@ -1,5 +1,5 @@
 import { chrt1 } from './canvas.js'
-import { zapros } from './menu.js';
+import { drawMyLine } from './strelaKran.js';
 import { geoPosition } from './requests.js'
 //запрос на wialon за данными по скорости
 export function graf(t1, t2, int, id) {
@@ -124,6 +124,7 @@ export function geoloc() {
 }
 
 export function iconParams() {
+    // console.log('икон')
     const flags = 1 + 1024
     const prms = {
         "spec": {
@@ -162,9 +163,12 @@ function addZero(digits_length, source) {
 function loadAkb(arrCar) {
     const active = document.querySelector('.color')
     const act = active.children[0].textContent
+
+
     let akb;
     let probeg;
     let oil;
+
     arrCar.forEach(it => {
         if (it.nm === act) {
             akb = (it.lmsg.p.pwr_ext).toFixed(1);
@@ -186,6 +190,7 @@ function loadAkb(arrCar) {
                 oilElem.textContent = oil + 'л'
                 //  console.log(odometr)
             }
+
             //  console.log(akb)
             const akbElem = document.querySelector('.akb_value')
             akbElem.textContent = akb + 'V'

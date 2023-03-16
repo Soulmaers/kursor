@@ -12,7 +12,7 @@ if(isLoaded === true){
 }*/
 const testov = [];
 export async function loadParamsViewList(car) {
-    console.log(1)
+    //console.log(1)
     const params = {
         method: "POST",
         headers: {
@@ -36,13 +36,13 @@ export async function loadParamsViewList(car) {
 
 //setTimeout(conturTest, 3000, testov)
 export function conturTest(testov) {
-    console.log('один раз')
+    // console.log('один раз')
     // dashView(message)\
     const tt = new Date()
-    console.log(testov, tt)
+    // console.log(testov, tt)
     testov.forEach(elem => {
         dashView(elem[0].message)
-        console.log(elem[0].message)
+        //   console.log(elem[0].message)
         const nameCar = elem[0].message.replace(/\s+/g, '')
         const listArr = document.querySelector('.list_arr2')
         const listItemCar = document.createElement('div')
@@ -60,7 +60,7 @@ export function conturTest(testov) {
         listTrail.classList.add('list_trail2')
         listItemCar.appendChild(listTrail)
         const modelUniq = convert(elem[0].result)
-        console.log(modelUniq)
+        // console.log(modelUniq)
         modelUniq.forEach(os => {
             const osi = document.createElement('div')
             osi.classList.add('osi_list')
@@ -111,7 +111,7 @@ export function conturTest(testov) {
 
 let count = 0;
 function zaprosSpisok() {
-    console.log('список')
+    //  console.log('список')
     const list = document.querySelectorAll('.listItem')
     list.forEach(async el => {
         const car = el.children[0].textContent

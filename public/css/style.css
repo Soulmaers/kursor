@@ -224,6 +224,55 @@ td {
   border: 1px solid #666;
 }
 
+.contKran {
+  width: 220px;
+  border: 1px solid gray;
+  display: none;
+  flex-direction: column;
+  position: relative;
+  margin-top: 10px;
+}
+
+.kran {
+  align-self: flex-end;
+}
+
+.objCar {
+  display: flex;
+  width: 180px;
+  height: 70px;
+
+  background-image: url(../image/kran.png);
+  background-size: cover;
+}
+
+.argRed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 20px;
+  border: 2px dashed red;
+  position: absolute;
+  right: 25%;
+  top: 5%;
+  font-size: 1rem;
+}
+
+.argGreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 20px;
+  border: 2px solid green;
+  position: absolute;
+  right: 5%;
+  top: 5%;
+  font-size: 1rem;
+}
+
+
 
 .burger {
   display: none;
