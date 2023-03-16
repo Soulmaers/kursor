@@ -195,30 +195,6 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .username,
 td {
   border: 1px solid #666;
@@ -231,10 +207,14 @@ td {
   flex-direction: column;
   position: relative;
   margin-top: 10px;
+  background-color: lightgray;
 }
 
 .kran {
   align-self: flex-end;
+  background-image: url(../image/m.png);
+  background-size: cover;
+
 }
 
 .objCar {
@@ -2353,6 +2333,9 @@ input[type="number"]:focus {
 
 }
 
+
+
+
 .icon_kluch {
   background-image: url(../image/308.png);
   background-size: cover;
@@ -2561,7 +2544,7 @@ input[type="number"]:focus {
   z-index: 2;
   background-color: #fff;
   position: absolute;
-  top: 149px;
+  top: 35px;
   left: 25px;
 }
 
