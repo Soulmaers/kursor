@@ -67,3 +67,12 @@ export function zapros() {
 
 
 
+window.addEventListener('load', () => { /* Страница загружена, включая все ресурсы */
+    setTimeout(load, 3200)
+
+})
+
+function load() {
+    const preloader = document.querySelector('.preloader') /* находим блок Preloader */
+    preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
+}
