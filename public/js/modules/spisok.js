@@ -34,77 +34,80 @@ export async function loadParamsViewList(car) {
     return [model, models, data]
 }
 
-setTimeout(conturTest, 3000, testov)
+setTimeout(conturTest, 1000, testov)
 function conturTest(testov) {
     console.log('один раз')
     // dashView(message)
-    testov.forEach(elem => {
-        dashView(elem[0].message)
-        console.log(elem[0].message)
-        const nameCar = elem[0].message.replace(/\s+/g, '')
-        const listArr = document.querySelector('.list_arr2')
-        const listItemCar = document.createElement('div')
-        listItemCar.classList.add('listItem')
-        listItemCar.classList.add(`${nameCar}`)
-        listArr.appendChild(listItemCar)
-        const listName = document.createElement('div')
-        listName.classList.add('list_name2')
-        listItemCar.appendChild(listName)
-        listName.textContent = elem[0].message
-        const listProfil = document.createElement('div')
-        listProfil.classList.add('list_profil2')
-        listItemCar.appendChild(listProfil)
-        const listTrail = document.createElement('div')
-        listTrail.classList.add('list_trail2')
-        listItemCar.appendChild(listTrail)
-        const modelUniq = convert(elem[0].result)
-        console.log(modelUniq)
-        modelUniq.forEach(os => {
-            const osi = document.createElement('div')
-            osi.classList.add('osi_list')
-            os.trailer === 'Прицеп' ? listTrail.appendChild(osi) : listProfil.appendChild(osi)
-            os.tyres === 2 ? osi.innerHTML = twoTyres : osi.innerHTML = forTyres
-        })
-        const listItem = document.querySelector(`.${nameCar}`)
-        const shina = listItem.querySelectorAll('.tiresProfil');
-        const modelUniqValues = convert(elem[1].result)
-        const r = [];
-        let integer;
-        modelUniqValues.forEach(el => {
-            r.push(el.tyresdiv)
-        })
-        const uniq = convert(r)
-        uniq.forEach((el, index) => {
-            shina[index].setAttribute('id', el);
-        })
-        elem[1].result.forEach((el) => {
-            modelUniqValues.forEach((item) => {
-                if (el.name == item.pressure) {
-                    shina.forEach(e => {
-                        if (e.id == item.tyresdiv) {
-                            if (nameCar == 'PressurePro933') {
-                                integer = parseFloat((el.value * 0.069).toFixed(1))
-                                e.style.background = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
-                            }
-                            else {
-                                integer = el.value
-                                if ((nameCar == 'КранГаличанинР858ОР178')) {
-                                    e.style.background = objColor[generDav(integer)]
+    if (testov.length > 0) {
+
+        testov.forEach(elem => {
+            dashView(elem[0].message)
+            console.log(elem[0].message)
+            const nameCar = elem[0].message.replace(/\s+/g, '')
+            const listArr = document.querySelector('.list_arr2')
+            const listItemCar = document.createElement('div')
+            listItemCar.classList.add('listItem')
+            listItemCar.classList.add(`${nameCar}`)
+            listArr.appendChild(listItemCar)
+            const listName = document.createElement('div')
+            listName.classList.add('list_name2')
+            listItemCar.appendChild(listName)
+            listName.textContent = elem[0].message
+            const listProfil = document.createElement('div')
+            listProfil.classList.add('list_profil2')
+            listItemCar.appendChild(listProfil)
+            const listTrail = document.createElement('div')
+            listTrail.classList.add('list_trail2')
+            listItemCar.appendChild(listTrail)
+            const modelUniq = convert(elem[0].result)
+            console.log(modelUniq)
+            modelUniq.forEach(os => {
+                const osi = document.createElement('div')
+                osi.classList.add('osi_list')
+                os.trailer === 'Прицеп' ? listTrail.appendChild(osi) : listProfil.appendChild(osi)
+                os.tyres === 2 ? osi.innerHTML = twoTyres : osi.innerHTML = forTyres
+            })
+            const listItem = document.querySelector(`.${nameCar}`)
+            const shina = listItem.querySelectorAll('.tiresProfil');
+            const modelUniqValues = convert(elem[1].result)
+            const r = [];
+            let integer;
+            modelUniqValues.forEach(el => {
+                r.push(el.tyresdiv)
+            })
+            const uniq = convert(r)
+            uniq.forEach((el, index) => {
+                shina[index].setAttribute('id', el);
+            })
+            elem[1].result.forEach((el) => {
+                modelUniqValues.forEach((item) => {
+                    if (el.name == item.pressure) {
+                        shina.forEach(e => {
+                            if (e.id == item.tyresdiv) {
+                                if (nameCar == 'PressurePro933') {
+                                    integer = parseFloat((el.value * 0.069).toFixed(1))
+                                    e.style.background = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
                                 }
                                 else {
-                                    e.style.background = objColor[generFront(integer)]
+                                    integer = el.value
+                                    if ((nameCar == 'КранГаличанинР858ОР178')) {
+                                        e.style.background = objColor[generDav(integer)]
+                                    }
+                                    else {
+                                        e.style.background = objColor[generFront(integer)]
+                                    }
                                 }
                             }
-                        }
-                    })
-                }
+                        })
+                    }
+                })
             })
+
+
         })
+        navigator();
+    }
 
-
-    })
-
-    navigator();
 }
 
 
