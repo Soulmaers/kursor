@@ -35,7 +35,7 @@ export async function getDash() {
         const data = await dat.json();
         dataArr.push(data)
     })
-    console.log(dataArr, paramsArr)
+    //  console.log(dataArr, paramsArr)
     // return (dataArr, paramsArr)
     setTimeout(dashAllSort, 1000, dataArr, paramsArr)
     // dashAllSort(dataArr, paramsArr)
@@ -44,8 +44,8 @@ export async function getDash() {
 
 
 export function dashAllSort(dataArr, paramsArr) {
-    console.log(dataArr.length)
-    console.log(paramsArr)
+    //  console.log(dataArr.length)
+    // console.log(paramsArr)
     const all = []
     const paramsNewArr = [];
     dataArr.forEach(e => {
@@ -57,11 +57,11 @@ export function dashAllSort(dataArr, paramsArr) {
     paramsArr.forEach(e => {
         paramsNewArr.push(convert(e.values))
     })
-    console.log(paramsNewArr)
+    // console.log(paramsNewArr)
     const arrSmall = [];
     dataArr.forEach((el, index) => {
         el.values.forEach(e => {
-            console.log(e.name)
+            //  console.log(e.name)
             paramsNewArr[index].forEach(it => {
 
 
@@ -70,16 +70,16 @@ export function dashAllSort(dataArr, paramsArr) {
                         if (item.name === el.message) {
                             e.value >= 100 ? item.params.push((e.value * 0.069).toFixed(1)) : item.params.push(e.value)
                             e.value >= 100 ? arrSmall.push((e.value * 0.069).toFixed(1)) : arrSmall.push(e.value)
-                            console.log(arrSmall)
+                            //    console.log(arrSmall)
                         }
                     })
 
                 }
                 if (e.name === it.temp) {
-                    console.log('совпадение')
+                    //  console.log('совпадение')
                     all.forEach(elem => {
-                        console.log(e.name)
-                        console.log(el.message)
+                        // console.log(e.name)
+                        // console.log(el.message)
                         if (elem.name === el.message) {
                             if (e.value == -50 || e.value == -51 || e.value == -128) {
                                 elem.params.push(e.value)
@@ -102,7 +102,7 @@ export function dashAllSort(dataArr, paramsArr) {
                 const ide = document.getElementById('Все')
                 ide.checked = false;
                 enabledSettings = Array.from(checkboxes).filter(i => i.checked).map(i => i.value)
-                console.log(enabledSettings)
+                //     console.log(enabledSettings)
                 enabledSettings.forEach(el => {
                     all.forEach(it => {
                         if (el == it.name) {
@@ -112,7 +112,7 @@ export function dashAllSort(dataArr, paramsArr) {
                         }
                     })
                 })
-                console.log('мас условие')
+                //   console.log('мас условие')
                 dashDav(mas)
                 mas.length = 0;
             }
@@ -121,9 +121,9 @@ export function dashAllSort(dataArr, paramsArr) {
                 checkboxes.forEach(el => {
                     el.checked = false
                 })
-                console.log('ап')
+                //   console.log('ап')
                 ide.checked = true;
-                console.log('все условие')
+                //   console.log('все условие')
                 dashDav(arrSmall)
             }
         })
@@ -134,12 +134,15 @@ export function dashAllSort(dataArr, paramsArr) {
         console.log('все низ')
         dashDav(arrSmall)
     }
-    console.log(all)
+    //   console.log(all)
 }
 
 
 function dashDav(arr) {
     console.log(arr)
+
+    const allSens = document.querySelector('.allSens')
+    allSens.textContent = arr.length
     let countRed = 0;
     let countYellow = 0;
     let countGreen = 0;
@@ -219,6 +222,7 @@ function dashDav(arr) {
                         }
                     }
                 },
+
                 datalabels: {
                     color: '#423737',
                     textAlign: 'center',
