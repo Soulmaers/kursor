@@ -46,16 +46,16 @@ export function saveTyres(arr) {
 
 const configs = document.querySelector('.configs')
 const configClear = document.querySelector('.configClear')
-
-configs.addEventListener('click', () => {
-    const controll = document.querySelector('.controll')
-    controll.style.display = 'flex'
-})
-configClear.addEventListener('click', () => {
-    const controll = document.querySelector('.controll')
-    controll.style.display = 'none'
-})
-
+if (configs) {
+    configs.addEventListener('click', () => {
+        const controll = document.querySelector('.controll')
+        controll.style.display = 'flex'
+    })
+    configClear.addEventListener('click', () => {
+        const controll = document.querySelector('.controll')
+        controll.style.display = 'none'
+    })
+}
 
 
 //очистка модели из базы и удаление отрисовки

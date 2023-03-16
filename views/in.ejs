@@ -35,13 +35,10 @@
             <div class="menu_burger"></div>
             <!--<div class="menu_burger"></div>-->
         </div>
-        <div class="control_panel">
-            <a class="auth">Настройка прав доступа</a>
-            <a class="configs">Конфигуратор</a>
+        <% if (role!=='Пользователь' ) { %><%-include('admin') %>
+                <% } %>
 
-        </div>
-
-        <%-include('profile') %>
+                    <%-include('profile') %>
     </header>
     <div class="comeback">
         <div class="iconStrela"></div>
@@ -109,8 +106,8 @@
                 <div class="config">
                     <div class="container_left">
                         <div class="controll">
-                            <% if (role!=='Пользователь' ) { %><%-include('control') %>
-                                    <% } %>
+                            <%-include('control') %>
+
                         </div>
                         <div class="wrap_alarm">
                             <!--   <span class="dav_max">ВНИМАНИЕ! Критически высокое давление!</span>
