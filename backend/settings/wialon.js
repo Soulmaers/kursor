@@ -226,9 +226,8 @@ function proverka(arr) {
             //  if (err) //console.log(err);
             //  console.log(results)
             if (results == undefined) {
-
                 if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
-                    console.log('таблица нет, аларм есть. потеря связи с датчиком')
+                    console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
                     const data = createDate()
                     alarm = 'Потеря связи с датчиком'
                     alarmBase(data, el, alarm)
@@ -250,7 +249,6 @@ function proverka(arr) {
                         return
                     }
                     else {
-
                         console.log(el + ' ' + 'таблицы нет, аларма нет' + ' ' + time)
                         return
                     }
@@ -258,7 +256,6 @@ function proverka(arr) {
                 }
             }
             else if (results !== undefined) {
-
                 if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
                     //  console.log('таблица есть, аларм есть, потеря связи с датчиком')
                     console.log(results[results.length - 1].alarm)
@@ -362,7 +359,7 @@ function alarmBase(data, tyres, alarm) {
                             temp, alarm) VALUES?`;
         connection.query(sqls, [value], function (err, results) {
             if (err) console.log(err);
-            console.log("Данные добавлены");
+            console.log("Данные добавлены" + value);
 
         });
     }

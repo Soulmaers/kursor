@@ -79,20 +79,39 @@ export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
     const angle = angleDeg * Math.PI / 180;
     const angleUnnext = angleDeg2 * Math.PI / 180;
 
-    ctx.beginPath();
-    ctx.lineWidth = "3";
-    ctx.strokeStyle = 'green';
-    ctx.moveTo(0, 180);
-    ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
-    ctx.stroke();
+    if (angleDeg2 === undefined) {
+        console.log('ап1')
+        ctx.beginPath();
+        ctx.lineWidth = "3";
+        ctx.strokeStyle = 'green';
+        ctx.moveTo(0, 180);
+        ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
+        ctx.stroke();
+        // return
 
-    ctx.beginPath();
-    ctx.lineWidth = "3";
-    ctx.setLineDash([5, 3]);
-    ctx.strokeStyle = 'red';
-    ctx.moveTo(0, 180);
-    ctx.lineTo(0 + Math.cos(angleUnnext) * length, 180 - (0 + Math.sin(angleUnnext) * length));
-    ctx.stroke();
+    }
+    else {
+        console.log('ап2')
+        ctx.beginPath();
+        ctx.lineWidth = "3";
+        ctx.strokeStyle = 'green';
+        ctx.moveTo(0, 180);
+        ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
+        ctx.stroke();
+
+
+        ctx.beginPath();
+        ctx.lineWidth = "3";
+        ctx.setLineDash([5, 3]);
+        ctx.strokeStyle = 'red';
+        ctx.moveTo(0, 180);
+        ctx.lineTo(0 + Math.cos(angleUnnext) * length, 180 - (0 + Math.sin(angleUnnext) * length));
+        ctx.stroke();
+
+    }
+
+
+
 
 }
 

@@ -200,6 +200,8 @@ td {
   border: 1px solid #666;
 }
 
+
+
 .contKran {
   width: 220px;
   border: 1px solid gray;
@@ -234,7 +236,7 @@ td {
   height: 20px;
   border: 2px dashed red;
   position: absolute;
-  right: 25%;
+  left: 1.5%;
   top: 5%;
   font-size: 1rem;
 }
@@ -247,8 +249,8 @@ td {
   height: 20px;
   border: 2px solid green;
   position: absolute;
-  right: 5%;
-  top: 5%;
+  left: 1.5%;
+  top: 20%;
   font-size: 1rem;
 }
 

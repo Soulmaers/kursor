@@ -49,9 +49,12 @@ function viewAlarmStorage(name, stor) {
             const toSearch = "Норма";
             if (count == 1) {
                 tr.classList.add('views')
+                //  return
             }
             if (it.alarm == toSearch) {
                 tr.classList.add('norma')
+                //   return
+
             }
             for (var key in it) {
                 const td = document.createElement('p')
@@ -63,32 +66,40 @@ function viewAlarmStorage(name, stor) {
             for (let i = 0; i < t.length; i++) {
                 if (t[i].children[5].textContent == 'Норма' && t[i + 1] !== undefined) {
                     t[i + 1].classList.add('views')
+                    // return
+
                 }
                 if (t[i].nextSibling !== null) {
                     if (t[i].classList.contains('views') && !t[i].nextSibling.classList.contains('views') && !t[i].nextSibling.classList.contains('norma')) {
                         t[i].classList.add('best')
+                        // return
+
                     }
                 }
             }
         })
     })
     const t = document.querySelectorAll('.tr')
-    //console.log(t)
     t.forEach(el => {
         if (el.nextSibling !== null && !el.classList.contains('norma') && el.children[2].textContent !== el.nextSibling.children[2].textContent
             && !el.classList.contains('oneName') || !el.classList.contains('norma')
             && !el.nextSibling) {
-            el.classList.add('alarmOpen')
-            el.style.border = '1px solid black'
-            const alarmFire = document.createElement('div')
-            alarmFire.classList.add('alarmFire')
-            el.appendChild(alarmFire)
-            alarmFire.innerHTML = '&#128293'
-            el.style.position = 'relative'
-            alarmFire.style.position = 'absolute'
-            alarmFire.style.right = '4px';
-            alarmFire.style.top = 0;
-            console.log(el)
+            if (el.previousSibling.children[2].textContent !== el.children[2].textContent) {
+                el.classList.add('alarmOpen')
+                el.style.border = '1px solid black'
+                const alarmFire = document.createElement('div')
+                alarmFire.classList.add('alarmFire')
+                el.appendChild(alarmFire)
+                alarmFire.innerHTML = '&#128293'
+                el.style.position = 'relative'
+                alarmFire.style.position = 'absolute'
+                alarmFire.style.right = '4px';
+                alarmFire.style.top = 0;
+                alarmFire.style.fontSize = '10px';
+                console.log(el)
+                //  return
+            }
+
             const prevElem = prevAll(el)
             let count = 0;
             console.log(prevElem)
@@ -99,6 +110,15 @@ function viewAlarmStorage(name, stor) {
                     count++
                     if (count == 1) {
                         e.classList.add('alarmOpen')
+                        const alarmFire = document.createElement('div')
+                        alarmFire.classList.add('alarmFire')
+                        e.appendChild(alarmFire)
+                        alarmFire.innerHTML = '&#128293'
+                        e.style.position = 'relative'
+                        alarmFire.style.position = 'absolute'
+                        alarmFire.style.right = '4px';
+                        alarmFire.style.top = 0;
+                        alarmFire.style.fontSize = '10px';
                         console.log(e)
                     }
                 }
