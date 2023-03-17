@@ -74,7 +74,7 @@ module.exports.datawialonGeo = (req, res) => {
         res.json({ geoX, geoY })
     }
     catch (e) {
-        console.log(e)
+        //  console.log(e)
     }
 }
 

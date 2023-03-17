@@ -14,7 +14,7 @@ app.use(express.json());
 const session = wialon().session;
 let kluch;
 function init(user) {
-    console.log(user)
+    // console.log(user)
     // console.log(typeof user)
     if (user !== 'TDRMX') {
         console.log('старт1')
@@ -42,7 +42,7 @@ function init(user) {
 
 function createTable() {
 
-    console.log('go')
+    //  console.log('go')
     session.request('core/search_items', prms)
         .catch(function (err) {
             console.log(err);
@@ -54,7 +54,7 @@ function createTable() {
                 nameCar.push(el.nm.replace(/\s+/g, ''))
                 const nameTable = el.nm.replace(/\s+/g, '')
                 const sensor = Object.entries(el.lmsg.p)
-                console.log(sensor.length)
+                //   console.log(sensor.length)
                 createNameTable(nameTable)
                 postParametrs(nameTable, sensor)
 
@@ -213,80 +213,82 @@ function createDate() {
 
 //let count = 0;
 function proverka(arr) {
+    let time = new Date()
     // console.log(arr)
     arr.forEach(el => {
-        // console.log(el[4])
+        //  console.log(el)
         let alarm;
         const name = 'alarm' + el[0] + el[1]
         //   console.log(name)
         // const tableModel = 'alarm' + name
         const sqls1 = `SELECT data, time, senspressure, bar, temp, alarm  FROM ${name} WHERE 1`
         connection.query(sqls1, function (err, results) {
-            if (err) console.log(err);
-            console.log(results)
+            //  if (err) //console.log(err);
+            //  console.log(results)
             if (results == undefined) {
                 if (el[2] < 6) {
-                    console.log('таблица нет, аларм есть')
+                    console.log(el + ' ' + 'таблица нет, аларм есть' + ' ' + time)
                     const data = createDate()
                     alarm = 'Критически низкое давление'
                     alarmBase(data, el, alarm)
-                    return
+                    //  return
                 }
                 if (el[2] > 10) {
-                    console.log('таблица нет, аларм есть')
+                    console.log(el + ' ' + 'таблица нет, аларм есть' + ' ' + time)
                     const data = createDate()
                     alarm = 'Критически высокое давление'
                     alarmBase(data, el, alarm)
-                    return
+                    //  return
                 }
                 else {
-                    console.log('таблицы нет, аларма нет')
-                    return
+
+                    console.log(el + ' ' + 'таблицы нет, аларма нет' + ' ' + time)
+                    //return
                 }
             }
-            else {
+            else if (results !== undefined) {
                 if (el[2] < 6) {
-                    console.log('таблица есть, аларм есть')
+                    // console.log(el + ' ' + 'таблица есть, аларм есть' + ' ' + time)
                     console.log(results[results.length - 1].bar)
                     console.log(el)
                     if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                        console.log('повторные данные')
-                        return
+                        console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
+                        //  return
                     } else {
-                        console.log('таблица есть, изменение аларма')
+                        console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
                         const data = createDate()
                         alarm = 'Критически низкое давление'
                         alarmBase(data, el, alarm)
-                        return
+                        //    return
                     }
                 }
                 if (el[2] > 10) {
-                    console.log('таблица есть, аларм есть')
+                    // console.log(el + ' ' + 'таблица есть, аларм есть' + ' ' + time)
                     console.log(results[results.length - 1].bar)
-                    console.log(el)
+                    //   console.log(el)
                     if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                        console.log('повторные данные')
-                        return
+                        console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
+                        //   return
                     } else {
-                        console.log('таблица есть, изменение аларма')
+                        console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
                         const data = createDate()
                         alarm = 'Критически высокое давление'
                         alarmBase(data, el, alarm)
-                        return
+                        // return
                     }
                 }
                 else if (el[2] >= 6 || el[2] <= 10) {
-                    console.log('таблица есть, аларма нет')
+                    //   console.log(el + ' ' + 'таблица есть, аларма нет' + ' ' + time)
                     //   console.log()
                     if (results[results.length - 1].alarm === 'Норма') {
-                        console.log('повторные данные')
-                        return
+                        console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
+                        // return
                     } else {
-                        console.log('таблица есть, изменение аларма')
+                        console.log(el + ' ' + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
                         const data = createDate()
                         alarm = 'Норма'
                         alarmBase(data, el, alarm)
-                        return
+                        //return
                     }
                 }
             }

@@ -449,16 +449,16 @@ module.exports.alarmStorage = (req, res) => {
 
 
 module.exports.alarmFind = (req, res) => {
-    console.log('работаем?')
+    //   console.log('работаем?')
     const tableModel = req.body.activeName
     // const tableModel = 'alarm' + name
     const sqls1 = `SELECT data, time, senspressure, bar, temp, alarm  FROM ${tableModel} WHERE 1`
     connection.query(sqls1, function (err, results) {
-        if (err) console.log(err);
-        console.log(results)
-        if (results == undefined) {
-            res.json([])
-        }
+        if (err) //console.log(err);
+            // console.log(results)
+            if (results == undefined) {
+                res.json([])
+            }
         res.json(results)
 
 
