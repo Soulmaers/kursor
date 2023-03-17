@@ -25,8 +25,10 @@ module.exports.sing = async function (req, res) {
         }
         else {
             const row = JSON.parse(JSON.stringify(rows))
+            console.log(row)
             row.map(rw => {
                 if (req.body.password == rw.password) {
+                    console.log(rw.name)
                     const token = jwt.sign({
                         userId: rw.id,
                         user: rw.name
@@ -52,6 +54,7 @@ module.exports.sing = async function (req, res) {
 }
 
 module.exports.action = function (req, res) {
+    console.log('юзер')
     console.log(req.user)
     if (req.user) {
         const login = req.user[0].name

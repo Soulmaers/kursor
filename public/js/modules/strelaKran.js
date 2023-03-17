@@ -42,10 +42,12 @@ function loadKran(arrCar) {
 
     arrCar.forEach(it => {
         if (it.nm === act) {
+            console.log(it.lmsg.p.user_2u_1)
             if (it.lmsg.p.user_2u_1) {
                 const str = (it.lmsg.p.user_2u_1).toFixed(0);
                 if (str !== strela[strela.length - 1]) {
                     strela.push(str)
+                    console.log(strela)
                     drawMyLine(strela[strela.length - 1], strela[strela.length - 2])
                 }
 
@@ -68,7 +70,7 @@ export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
     const ctx = strela.getContext("2d");
 
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    ctx.beginPath();
+    // ctx.beginPath();
 
 
     ctx.width = 180

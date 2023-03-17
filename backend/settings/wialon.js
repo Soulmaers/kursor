@@ -14,9 +14,10 @@ app.use(express.json());
 const session = wialon().session;
 let kluch;
 function init(user) {
+    console.log(user)
     // console.log(typeof user)
     if (user !== 'TDRMX') {
-        // console.log('старт1')
+        console.log('старт1')
         kluch = '0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178'
     }
     if (user === 'TDRMX') {
@@ -76,12 +77,12 @@ function createNameTable(name) {
 }
 
 function postParametrs(name, param) {
-    console.log('go2')
+    // console.log('go2')
     const selectBase = `SELECT id FROM ${name} WHERE 1`
     connection.query(selectBase, function (err, results) {
         if (err) console.log(err);
         if (results.length < 1) {
-            console.log('создаем')
+            //  console.log('создаем')
             const sql = `INSERT INTO ${name}(name,value) VALUES?`;
             connection.query(sql, [param], function (err, results) {
                 if (err) console.log(err);
@@ -89,7 +90,7 @@ function postParametrs(name, param) {
             //   connection.end();
         }
         else if (results.length > 0) {
-            console.log('старт')
+            //  console.log('старт')
             let count = 0;
             //  console.log(param)
             param.forEach(el => {
@@ -110,7 +111,7 @@ function postParametrs(name, param) {
 function getMainInfo(name, res) {
     // let geoX;
     // let geoY;
-    console.log('запуск')
+    // console.log('запуск')
     const flags = 1 + 1026
     const prms = {
         "spec": {
@@ -134,7 +135,7 @@ function getMainInfo(name, res) {
                 if (el.nm === name) {
                     const geoX = el.pos.x
                     const geoY = el.pos.y
-                    console.log(geoX, geoY)
+                    //  console.log(geoX, geoY)
                     res.json({ geoX, geoY })
                 }
             })
@@ -212,63 +213,38 @@ function createDate() {
 
 //let count = 0;
 function proverka(arr) {
-    console.log(arr)
+    // console.log(arr)
     arr.forEach(el => {
-        console.log(el[4])
+        // console.log(el[4])
         let alarm;
         const name = 'alarm' + el[0] + el[1]
-        console.log(name)
+        //   console.log(name)
         // const tableModel = 'alarm' + name
         const sqls1 = `SELECT data, time, senspressure, bar, temp, alarm  FROM ${name} WHERE 1`
         connection.query(sqls1, function (err, results) {
             if (err) console.log(err);
+            console.log(results)
             if (results == undefined) {
-
-                /*
-                if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
-                    console.log('таблица нет, аларм есть')
-                    const data = createDate()
-                    alarm = 'Потеря связи с датчиком'
-                    alarmBase(data, el, alarm)
-                }*/
-                //  else {
                 if (el[2] < 6) {
                     console.log('таблица нет, аларм есть')
                     const data = createDate()
                     alarm = 'Критически низкое давление'
                     alarmBase(data, el, alarm)
+                    return
                 }
                 if (el[2] > 10) {
                     console.log('таблица нет, аларм есть')
                     const data = createDate()
                     alarm = 'Критически высокое давление'
                     alarmBase(data, el, alarm)
+                    return
                 }
                 else {
                     console.log('таблицы нет, аларма нет')
                     return
                 }
-
-                //     }
-
             }
             else {
-                /*
-                if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
-                    console.log('таблица есть, аларм есть')
-                    console.log(results[results.length - 1].temp)
-                    console.log(el)
-                    if (results[results.length - 1].temp == el[3]) {
-                        console.log('повторные данные')
-                        return
-                    } else {
-                        console.log('таблица есть, изменение аларма')
-                        const data = createDate()
-                        alarm = 'Потеря связи с датчиком'
-                        alarmBase(data, el, alarm)
-                    }
-                }
-                else {*/
                 if (el[2] < 6) {
                     console.log('таблица есть, аларм есть')
                     console.log(results[results.length - 1].bar)
@@ -281,6 +257,7 @@ function proverka(arr) {
                         const data = createDate()
                         alarm = 'Критически низкое давление'
                         alarmBase(data, el, alarm)
+                        return
                     }
                 }
                 if (el[2] > 10) {
@@ -295,6 +272,7 @@ function proverka(arr) {
                         const data = createDate()
                         alarm = 'Критически высокое давление'
                         alarmBase(data, el, alarm)
+                        return
                     }
                 }
                 else if (el[2] >= 6 || el[2] <= 10) {
@@ -308,19 +286,13 @@ function proverka(arr) {
                         const data = createDate()
                         alarm = 'Норма'
                         alarmBase(data, el, alarm)
+                        return
                     }
                 }
-
-                // }
-
             }
             //  res.json(results);
         });
-
-
-
     })
-
 }
 
 

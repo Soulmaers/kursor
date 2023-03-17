@@ -91,9 +91,11 @@ function viewAlarmStorage(name, stor) {
             console.log(el)
             const prevElem = prevAll(el)
             let count = 0;
-            //    console.log(prevElem)
-            prevElem.forEach(e => {
-                if (e.children[2].textContent == el.children[2].textContent && e.classList.contains('best')) {
+            console.log(prevElem)
+            const y = prevElem.reverse();
+            y.forEach(e => {
+                // console.log(prevElem[0])
+                if (e.children[2].textContent === el.children[2].textContent && e.classList.contains('best')) {
                     count++
                     if (count == 1) {
                         e.classList.add('alarmOpen')
