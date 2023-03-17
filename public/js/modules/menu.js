@@ -57,7 +57,7 @@ export function zapros() {
             })
             )
             const tt = new Date()
-            console.log(test, tt)
+            //  console.log(test, tt)
             conturTest(test)
             //  dann = arrCar
             speed(arrCar)

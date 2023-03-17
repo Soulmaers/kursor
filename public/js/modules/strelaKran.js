@@ -7,7 +7,7 @@ export function kranParams() {
         contKran.style.display = 'flex'
 
     }
-    console.log('икон')
+    //   console.log('икон')
 
     const flags = 1 + 1024
     const prms = {
@@ -43,17 +43,22 @@ function loadKran(arrCar) {
     arrCar.forEach(it => {
         if (it.nm === act) {
             console.log(it.lmsg.p.user_2u_1)
-            if (it.lmsg.p.user_2u_1) {
-                const str = (it.lmsg.p.user_2u_1).toFixed(0);
-                if (str !== strela[strela.length - 1]) {
-                    strela.push(str)
-                    console.log(strela)
-                    drawMyLine(strela[strela.length - 1], strela[strela.length - 2])
-                }
-
-
-
+            //  if (it.lmsg.p.user_2u_1) {
+            const str = it.lmsg.p.user_2u_1
+            if (str && str !== 0) {
+                (str).toFixed(0)
             }
+            else
+                str
+
+            if (str !== strela[strela.length - 1]) {
+                strela.push(str)
+                console.log(strela)
+                drawMyLine(strela[strela.length - 1], strela[strela.length - 2])
+            }
+
+
+            // }
         }
     })
 }
@@ -64,14 +69,13 @@ export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
     const argRed = document.querySelector('.argRed')
     const argGreen = document.querySelector('.argGreen')
     angleDeg2 ? argRed.textContent = angleDeg2 + '°' : null
+    angleDeg !== 0 ? argGreen.textContent = angleDeg + '°' : null
 
-    argGreen.textContent = angleDeg + '°'
     const strela = document.getElementById('krans')
     const ctx = strela.getContext("2d");
 
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    // ctx.beginPath();
 
+    // console.log(ctx.canvas.height)
 
     ctx.width = 180
     ctx.heigth = 180
@@ -79,21 +83,44 @@ export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
     const angle = angleDeg * Math.PI / 180;
     const angleUnnext = angleDeg2 * Math.PI / 180;
 
-    if (angleDeg2 === undefined) {
-        console.log('ап1')
+
+    if (angleDeg == 0) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        //   ctx.beginPath();
+        //   console.log('ап1')
         ctx.beginPath();
-        ctx.lineWidth = "3";
-        ctx.strokeStyle = 'green';
+        ctx.setLineDash([5, 0]);
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = 'black';
         ctx.moveTo(0, 180);
         ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
         ctx.stroke();
-        // return
+        return
 
     }
-    else {
-        console.log('ап2')
+
+
+    if (angleDeg2 === undefined) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        //   ctx.beginPath();
+        //   console.log('ап1')
         ctx.beginPath();
-        ctx.lineWidth = "3";
+        ctx.setLineDash([5, 0]);
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = 'green';
+        ctx.moveTo(0, 180);
+        ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
+        ctx.stroke();
+        return
+
+    }
+    if (angleDeg, angleDeg2) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        //   console.log('ап2')
+        ctx.beginPath();
+        ctx.setLineDash([5, 0]);
+        ctx.lineWidth = 5;
         ctx.strokeStyle = 'green';
         ctx.moveTo(0, 180);
         ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
@@ -101,13 +128,13 @@ export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
 
 
         ctx.beginPath();
-        ctx.lineWidth = "3";
-        ctx.setLineDash([5, 3]);
+        ctx.lineWidth = 5;
         ctx.strokeStyle = 'red';
+        ctx.setLineDash([5, 3]);
         ctx.moveTo(0, 180);
         ctx.lineTo(0 + Math.cos(angleUnnext) * length, 180 - (0 + Math.sin(angleUnnext) * length));
         ctx.stroke();
-
+        return
     }
 
 
@@ -115,3 +142,4 @@ export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
 
 }
 
+//drawMyLine(45, 80)

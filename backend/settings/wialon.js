@@ -130,15 +130,19 @@ function getMainInfo(name, res) {
             console.log(err);
         })
         .then(function (data) {
-            const allCar = Object.values(data);
-            allCar[5].forEach(el => {
-                if (el.nm === name) {
-                    const geoX = el.pos.x
-                    const geoY = el.pos.y
-                    //  console.log(geoX, geoY)
-                    res.json({ geoX, geoY })
-                }
-            })
+            if (data) {
+                const allCar = Object.values(data);
+                allCar[5].forEach(el => {
+                    if (el.nm === name) {
+                        const geoX = el.pos.x
+                        const geoY = el.pos.y
+                        //  console.log(geoX, geoY)
+                        res.json({ geoX, geoY })
+                    }
+                })
+
+            }
+
         })
 }
 const convert = (ob) => {

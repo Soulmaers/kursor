@@ -457,7 +457,7 @@ function styleShina(arg) {
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
     const centerOs = document.querySelectorAll('.centerOs')
-    console.log(tyresD)
+    //  console.log(tyresD)
     tyresD.forEach(e => {
         e.style.width = '30px'
     })

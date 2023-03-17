@@ -13,7 +13,7 @@ export function viewMenuParams() {
     const btnsens = document.querySelectorAll('.btnsens')
     const wrapperButton = document.querySelector('.wrapper_button')
     const wrapperMap = document.querySelector('.wrapper_left')
-    console.log(wrapperMap)
+    // console.log(wrapperMap)
     const obo = document.querySelector('.obo')
     const tiresLink = document.querySelectorAll('.tires_link')
     const techInfo = document.querySelector('.techInfo')
@@ -25,7 +25,7 @@ export function viewMenuParams() {
                 wrapperMap.style.display = 'block'
                 return
             }
-            console.log('нажал')
+            //  console.log('нажал')
             kolesos.push(e)
             speedGraf.style.display = 'none';
             sensor(btnsens, titleSens, obo)
@@ -49,13 +49,13 @@ export function viewMenuParams() {
 }
 
 export async function loadParamsView() {
-    console.log('условия изменены')
+    // console.log('условия изменены')
     clearInterval(viewPokasateli)
     const titleCar = document.querySelector('.title_two')
     const btnShina = document.querySelector('.btn_icon')
     const listItem = document.querySelectorAll('.link_menu')[0]
     // console.log(listItem)
-    console.log('запуск')
+    //   console.log('запуск')
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
@@ -88,7 +88,7 @@ export async function loadParamsView() {
 
                     osi[el.osi - 1].style.display = 'flex';
                     centerOs[el.osi - 1].style.display = 'flex';
-                    console.log(centerOs[el.osi - 1])
+                    //  console.log(centerOs[el.osi - 1])
                     el.trailer == 'Прицеп' ?
                         pricep(centerOs[el.osi - 1])
                         :
@@ -191,7 +191,7 @@ function koleso(kol, btnsens) {
             arrSpreed.forEach(el => {
                 if (el === ':') {
                     value = arrSpreed.splice(arrSpreed.indexOf(el) + 1, arrSpreed.length - 1).join('')
-                    console.log(value)
+                    //console.log(value)
                 }
             })
             if (btnsens[0].classList.contains('actBTN')) {
@@ -229,7 +229,7 @@ function koleso(kol, btnsens) {
                     kol[kol.length - 1].children[1].style.background = objColor[generT(value)];
                 }
                 paramTemp.push(el)
-                console.log(paramPress, paramTemp)
+                //  console.log(paramPress, paramTemp)
                 valid(paramPress, paramTemp)
             }
             kol[kol.length - 1].children[2].textContent = 'p:' + prmsD[prmsD.length - 1] + '\nt:' + prmsT[prmsT.length - 1]
@@ -265,6 +265,6 @@ function valid(paramPress, paramTemp) {
     massbd.push(kolId, value, value2)
     massivion.push(mass)
     massivionbd.push(massbd)
-    console.log(massivionbd)
+    // console.log(massivionbd)
     saveTyres(massivionbd)
 }

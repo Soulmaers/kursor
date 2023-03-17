@@ -29,6 +29,7 @@ export async function alarmFind(name) {
         const storList = await stor.json();
         // console.log(storList)
         storValue.push(storList)
+
     })
     setTimeout(viewAlarmStorage, 1000, activePost, storValue)
 }
@@ -37,6 +38,16 @@ export async function alarmFind(name) {
 function viewAlarmStorage(name, stor) {
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
+    console.log(stor)
+    // console.log(stor[2])
+    /* stor.forEach(e => {
+         e.sort(function (a, b) {
+             console.log('фн')
+             return parseFloat(b.time) - parseFloat(a.time);
+         });
+     })*/
+
+    console.log(stor)
     stor.forEach(el => {
         let count = 0;
         el.forEach(it => {
@@ -96,13 +107,13 @@ function viewAlarmStorage(name, stor) {
                 alarmFire.style.right = '4px';
                 alarmFire.style.top = 0;
                 alarmFire.style.fontSize = '10px';
-                console.log(el)
+                // console.log(el)
                 //  return
             }
 
             const prevElem = prevAll(el)
             let count = 0;
-            console.log(prevElem)
+            // console.log(prevElem)
             const y = prevElem.reverse();
             y.forEach(e => {
                 // console.log(prevElem[0])
@@ -119,7 +130,7 @@ function viewAlarmStorage(name, stor) {
                         alarmFire.style.right = '4px';
                         alarmFire.style.top = 0;
                         alarmFire.style.fontSize = '10px';
-                        console.log(e)
+                        //  console.log(e)
                     }
                 }
             })
@@ -187,7 +198,7 @@ function viewAlarmStorage(name, stor) {
             itemOut.style.display = 'flex'
 
             const redHidden = document.querySelectorAll('.red')
-            console.log(redHidden)
+            //    console.log(redHidden)
             redHidden.forEach(el => {
                 Array.from(el.children).forEach(it => {
                     it.style.fontSize = '11px'
