@@ -45,20 +45,17 @@ function loadKran(arrCar) {
             console.log(it.lmsg.p.user_2u_1)
             //  if (it.lmsg.p.user_2u_1) {
             const str = it.lmsg.p.user_2u_1
-            if (str && str !== 0) {
-                (str).toFixed(0)
+            if (str) {
+
+                if (str && str !== strela[strela.length - 1]) {
+                    strela.push(str)
+                    console.log(strela)
+                    drawMyLine(strela[strela.length - 1], strela[strela.length - 2])
+                }
+
+
+                // }
             }
-            else
-                str
-
-            if (str !== strela[strela.length - 1]) {
-                strela.push(str)
-                console.log(strela)
-                drawMyLine(strela[strela.length - 1], strela[strela.length - 2])
-            }
-
-
-            // }
         }
     })
 }
@@ -69,7 +66,7 @@ export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
     const argRed = document.querySelector('.argRed')
     const argGreen = document.querySelector('.argGreen')
     angleDeg2 ? argRed.textContent = angleDeg2 + '°' : null
-    angleDeg !== 0 ? argGreen.textContent = angleDeg + '°' : null
+    angleDeg ? argGreen.textContent = angleDeg + '°' : null
 
     const strela = document.getElementById('krans')
     const ctx = strela.getContext("2d");
@@ -83,61 +80,23 @@ export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
     const angle = angleDeg * Math.PI / 180;
     const angleUnnext = angleDeg2 * Math.PI / 180;
 
-
-    if (angleDeg == 0) {
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        //   ctx.beginPath();
-        //   console.log('ап1')
-        ctx.beginPath();
-        ctx.setLineDash([5, 0]);
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = 'black';
-        ctx.moveTo(0, 180);
-        ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
-        ctx.stroke();
-        return
-
-    }
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.beginPath();
+    ctx.setLineDash([5, 0]);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'green';
+    ctx.moveTo(0, 180);
+    ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
+    ctx.stroke();
 
 
-    if (angleDeg2 === undefined) {
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        //   ctx.beginPath();
-        //   console.log('ап1')
-        ctx.beginPath();
-        ctx.setLineDash([5, 0]);
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = 'green';
-        ctx.moveTo(0, 180);
-        ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
-        ctx.stroke();
-        return
-
-    }
-    if (angleDeg, angleDeg2) {
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-        //   console.log('ап2')
-        ctx.beginPath();
-        ctx.setLineDash([5, 0]);
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = 'green';
-        ctx.moveTo(0, 180);
-        ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
-        ctx.stroke();
-
-
-        ctx.beginPath();
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = 'red';
-        ctx.setLineDash([5, 3]);
-        ctx.moveTo(0, 180);
-        ctx.lineTo(0 + Math.cos(angleUnnext) * length, 180 - (0 + Math.sin(angleUnnext) * length));
-        ctx.stroke();
-        return
-    }
-
-
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'red';
+    ctx.setLineDash([5, 3]);
+    ctx.moveTo(0, 180);
+    ctx.lineTo(0 + Math.cos(angleUnnext) * length, 180 - (0 + Math.sin(angleUnnext) * length));
+    ctx.stroke();
 
 
 }

@@ -38,7 +38,7 @@ export async function alarmFind(name) {
 function viewAlarmStorage(name, stor) {
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
-    console.log(stor)
+    // console.log(...stor[2])
     // console.log(stor[2])
     /* stor.forEach(e => {
          e.sort(function (a, b) {
@@ -91,11 +91,12 @@ function viewAlarmStorage(name, stor) {
         })
     })
     const t = document.querySelectorAll('.tr')
+    console.log(t)
     t.forEach(el => {
         if (el.nextSibling !== null && !el.classList.contains('norma') && el.children[2].textContent !== el.nextSibling.children[2].textContent
             && !el.classList.contains('oneName') || !el.classList.contains('norma')
             && !el.nextSibling) {
-            if (el.previousSibling.children[2].textContent !== el.children[2].textContent) {
+            if (el.previousSibling.children[2].textContent !== el.children[2].textContent || el.previousSibling.classList.contains('norma')) {
                 el.classList.add('alarmOpen')
                 el.style.border = '1px solid black'
                 const alarmFire = document.createElement('div')
@@ -108,16 +109,16 @@ function viewAlarmStorage(name, stor) {
                 alarmFire.style.top = 0;
                 alarmFire.style.fontSize = '10px';
                 // console.log(el)
-                //  return
+                return
             }
 
             const prevElem = prevAll(el)
             let count = 0;
-            // console.log(prevElem)
+            console.log(prevElem)
             const y = prevElem.reverse();
             y.forEach(e => {
                 // console.log(prevElem[0])
-                if (e.children[2].textContent === el.children[2].textContent && e.classList.contains('best')) {
+                if (e.children[2].textContent === el.children[2].textContent && e.classList.contains('best') && !e.classList.contains('norma')) {
                     count++
                     if (count == 1) {
                         e.classList.add('alarmOpen')
@@ -137,7 +138,7 @@ function viewAlarmStorage(name, stor) {
             function prevAll(el) {
                 const prevElements = []
                 let prevElement = el.parentNode.firstElementChild
-
+                console.log(el)
                 while (prevElement !== el) {
                     prevElements.push(prevElement)
                     prevElement = prevElement.nextElementSibling
