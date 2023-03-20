@@ -42,14 +42,14 @@ function loadKran(arrCar) {
 
     arrCar.forEach(it => {
         if (it.nm === act) {
-            console.log(it.lmsg.p.user_2u_1)
+            //  console.log(it.lmsg.p.user_2u_1)
             //  if (it.lmsg.p.user_2u_1) {
             const str = it.lmsg.p.user_2u_1
             if (str) {
 
                 if (str && str !== strela[strela.length - 1]) {
                     strela.push(str)
-                    console.log(strela)
+                    // console.log(strela)
                     drawMyLine(strela[strela.length - 1], strela[strela.length - 2])
                 }
 
@@ -61,7 +61,7 @@ function loadKran(arrCar) {
 }
 
 export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
-    console.log(angleDeg, angleDeg2)
+    // console.log(angleDeg, angleDeg2)
 
     const argRed = document.querySelector('.argRed')
     const argGreen = document.querySelector('.argGreen')

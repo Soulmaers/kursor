@@ -209,8 +209,9 @@ function createDate() {
     let time = new Date();
     const hh = String(time.getHours()).padStart(2, '0');
     const min = String(time.getMinutes() + 1).padStart(2, '0'); //January is 0!
-    time = hh + '.' + min
-    return [today, time]
+    time = hh + ':' + min
+    const todays = today + ' ' + time
+    return [todays]
     // console.log(today)
 }
 
@@ -225,7 +226,7 @@ function proverka(arr) {
         const name = 'alarm' + el[0] + el[1]
         //   console.log(name)
         // const tableModel = 'alarm' + name
-        const sqls1 = `SELECT data, time, senspressure, bar, temp, alarm  FROM ${name} WHERE 1`
+        const sqls1 = `SELECT data, senspressure, bar, temp, alarm  FROM ${name} WHERE 1`
         connection.query(sqls1, function (err, results) {
             //  if (err) //console.log(err);
             //  console.log(results)
@@ -331,18 +332,19 @@ function proverka(arr) {
 }
 
 function alarmBase(data, tyres, alarm) {
-    console.log(tyres)
+    console.log(data)
+
     const dannie = data.concat(tyres)
+    console.log(dannie)
     const name = dannie[2]
     dannie.push(alarm)
     console.log(dannie)
     const value = [dannie];
-    const tableModel = 'alarm' + dannie[2] + dannie[3]
+    const tableModel = 'alarm' + dannie[1] + dannie[2]
     try {
         const sql = `create table if not exists ${tableModel}(
             id int(255) primary key auto_increment,
             data varchar(255),
-            time varchar(255),
             name varchar(255),
             senspressure varchar(255),
             bar varchar(255),
@@ -359,7 +361,7 @@ function alarmBase(data, tyres, alarm) {
                 console.log("Таблица alarm создана")
             };
         })
-        const sqls = `INSERT INTO  ${tableModel} (data, time, name, senspressure, bar,
+        const sqls = `INSERT INTO  ${tableModel} (data, name, senspressure, bar,
                             temp, alarm) VALUES?`;
         connection.query(sqls, [value], function (err, results) {
             if (err) console.log(err);

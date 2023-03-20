@@ -23,8 +23,7 @@ export const text = `<div class=" osi">
 
 export const tr = `<h3 class="tr oneName">
                                                     <p class="td">Дата</p>
-                                                    <p class="td">Время</p>
-                                                    <p class="td">Колесо</p>
+                                                      <p class="td">Колесо</p>
                                                     <p class="td">P, бар</p>
                                                     <p class="td">t,°C</p>
                                                     <p class="td">Уведомления</p>
