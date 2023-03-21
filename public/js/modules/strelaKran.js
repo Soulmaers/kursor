@@ -41,8 +41,8 @@ function loadKran(arrCar) {
     const act = active.children[0].textContent
 
     arrCar.forEach(it => {
-        if (it.nm === act) {
-            //  console.log(it.lmsg.p.user_2u_1)
+        if (it.nm === act && act == 'КранГаличанин Р858ОР178') {
+            console.log(it.lmsg.p.user_2u_1)
             //  if (it.lmsg.p.user_2u_1) {
             const str = it.lmsg.p.user_2u_1
             if (str) {
@@ -50,19 +50,18 @@ function loadKran(arrCar) {
                 if (str && str !== strela[strela.length - 1]) {
                     strela.push(str)
                     // console.log(strela)
-                    drawMyLine(strela[strela.length - 1], strela[strela.length - 2])
+                    drawMyLine(strela[strela.length - 1], strela[strela.length - 2], true)
                 }
-
-
-                // }
+            }
+            if (!str) {
+                drawMyLine(null, null, false)
             }
         }
     })
 }
 
-export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
-    // console.log(angleDeg, angleDeg2)
-
+export function drawMyLine(angleDeg, angleDeg2, boolean) {//Угол в градусах
+    console.log(angleDeg, angleDeg2, boolean)
     const argRed = document.querySelector('.argRed')
     const argGreen = document.querySelector('.argGreen')
     angleDeg2 ? argRed.textContent = angleDeg2 + '°' : null
@@ -71,32 +70,47 @@ export function drawMyLine(angleDeg, angleDeg2) {//Угол в градусах
     const strela = document.getElementById('krans')
     const ctx = strela.getContext("2d");
 
-
-    // console.log(ctx.canvas.height)
-
     ctx.width = 180
     ctx.heigth = 180
     length = 150
     const angle = angleDeg * Math.PI / 180;
     const angleUnnext = angleDeg2 * Math.PI / 180;
 
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    ctx.beginPath();
-    ctx.setLineDash([5, 0]);
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = 'green';
-    ctx.moveTo(0, 180);
-    ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
-    ctx.stroke();
+    if (boolean === false) {
+        console.log('черное')
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.beginPath();
+        ctx.setLineDash([5, 0]);
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = 'black';
+        ctx.moveTo(0, 180);
+        ctx.lineTo(150, 180)
+        ctx.stroke();
+    }
+    else {
+        console.log('зеленое')
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.beginPath();
+        ctx.setLineDash([5, 0]);
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = 'green';
+        ctx.moveTo(0, 180);
+        ctx.lineTo(0 + Math.cos(angle) * length, 180 - (0 + Math.sin(angle) * length));
+        ctx.stroke();
 
 
-    ctx.beginPath();
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = 'red';
-    ctx.setLineDash([5, 3]);
-    ctx.moveTo(0, 180);
-    ctx.lineTo(0 + Math.cos(angleUnnext) * length, 180 - (0 + Math.sin(angleUnnext) * length));
-    ctx.stroke();
+        ctx.beginPath();
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = 'red';
+        ctx.setLineDash([5, 3]);
+        ctx.moveTo(0, 180);
+        ctx.lineTo(0 + Math.cos(angleUnnext) * length, 180 - (0 + Math.sin(angleUnnext) * length));
+        ctx.stroke();
+
+    }
+
+
+
 
 
 }

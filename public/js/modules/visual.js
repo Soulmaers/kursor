@@ -232,11 +232,13 @@ export function viewConfigurator(arg, params) {
             if (e.id == item.tyresdiv) {
                 if (!par.includes(item.pressure)) {
                     // console.log('не тру')
+                    //  return
                     e.children[0].textContent = 'off'
                     e.children[0].style.color = '#000'
                 }
                 if (!par.includes(item.temp)) {
                     //  console.log('не тру')
+                    //   return
                     e.children[1].textContent = 'off'
                 }
                 else {

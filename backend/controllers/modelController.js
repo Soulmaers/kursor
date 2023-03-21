@@ -1,7 +1,8 @@
 const response = require('../../response')
 //const wialon = require('wialon');
-//const getMainInfo = require('../settings/config')
+const { speed } = require('../settings/wialon.js')
 const connection = require('../settings/db')
+
 
 
 module.exports.deleteView = (req, res) => {
@@ -464,4 +465,18 @@ module.exports.alarmFind = (req, res) => {
 
 
     })
+}
+
+
+module.exports.speedData = async (req, res) => {
+    console.log(req.body)
+    try {
+        speed(req.body.t1, req.body.t2, req.body.int, req.body.id, res)
+        //   console.log('скорость')
+        //  console.log(arrSpeed, arrIterTimeDateT)
+        //  res.json({ arrSpeed, arrIterTimeDateT })
+    }
+    catch (e) {
+        //  console.log(e)
+    }
 }

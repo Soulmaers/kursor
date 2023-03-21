@@ -48,3 +48,4 @@ router.post('/api/listTyres', controllerModel.listTyres)
 
 //router.post('/api/alarmStorage', controllerModel.alarmStorage)
 router.post('/api/alarmFind', controllerModel.alarmFind)
+router.post('/api/speedData', controllerModel.speedData)

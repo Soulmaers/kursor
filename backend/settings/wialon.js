@@ -40,6 +40,60 @@ function init(user) {
 }
 //init()
 
+
+
+function speed(t1, t2, int, id, res) {
+    console.log(t1, t2, int, id)
+    const prms2 = {
+        "itemId": id,   //25343786,
+
+        "timeFrom": t1,//t1,//timeFrom,//1657205816,
+        "timeTo": t2,//t2,//nowDate,//2757209816,
+        "flags": 1,
+        "flagsMask": 65281,
+        "loadCount": 161000//82710
+    }
+
+    session.request('messages/load_interval', prms2)
+
+        .then(function (data) {
+            const arr2 = Object.values(data);
+            const arrIterTime = [];
+            const arrIterTimeDate = [];
+            arr2[1].forEach(el => {
+                arrIterTime.push(el.t);
+            })
+            arrIterTime.forEach(item => {
+                const dateObj = new Date(item * 1000);
+                const utcString = dateObj.toString();
+                const arrTimeDate = utcString.slice(8, 24);
+                arrIterTimeDate.push(arrTimeDate);
+            })
+            let t = 0;
+            const arrIterTimeDateT = arrIterTimeDate.filter(e => (++t) % int === 0);
+            //  console.log(arrIterTimeDateT)
+            const arrSpee = [];
+            arr2[1].forEach(el => {
+                arrSpee.push(el.pos.s)
+            })
+            let s = 0;
+            const arrSpeed = arrSpee.filter(e => (++s) % int === 0)
+            //  arraySpeed.push(arrSpeed, arrIterTimeDateT)
+            //  return [arrSpeed, 
+            //   chrt1(arrSpeed, arrIterTimeDateT); //передача данных в канвас для отображения
+
+            res.json({ arrSpeed, arrIterTimeDateT })
+
+        })
+
+
+
+}
+
+
+
+
+
 function createTable() {
 
     //  console.log('go')
@@ -63,6 +117,11 @@ function createTable() {
             zaprosSpisokb(nameCar)
         })
 }
+
+
+
+
+
 
 function createNameTable(name) {
     const sql = `create table if not exists ${name}(
@@ -228,7 +287,6 @@ function proverka(arr) {
         // const tableModel = 'alarm' + name
         const sqls1 = `SELECT data, senspressure, bar, temp, alarm  FROM ${name} WHERE 1`
         connection.query(sqls1, function (err, results) {
-            //  if (err) //console.log(err);
             //  console.log(results)
             if (results == undefined) {
                 if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
@@ -381,6 +439,7 @@ module.exports = {
     getMainInfo,
     createTable,
     init,
+    speed
 
 }
 

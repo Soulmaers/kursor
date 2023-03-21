@@ -69,9 +69,10 @@ module.exports.datawialonGeo = (req, res) => {
         //   console.log(getMainInfo(req.body.active))
         //   setInterval(getMainInfo, 3000, req.body.active);
         console.log('запрос')
-        //console.log(geoX, geoY)
+        console.log(geoX, geoY)
         // console.log(geoY, geoX)
         res.json({ geoX, geoY })
+        console.log(res.json({ geoX, geoY }))
     }
     catch (e) {
         //  console.log(e)

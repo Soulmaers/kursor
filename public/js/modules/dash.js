@@ -43,6 +43,7 @@ async function waitArr(el) {
 export function dashAllSort(test) {
     const arrSmall = [];
     const all = []
+    console.log(test)
     test.forEach(item => {
 
         const paramsNewArr = [];
@@ -51,6 +52,7 @@ export function dashAllSort(test) {
         arr.params = [];
         all.push(arr)
         paramsNewArr.push(convert(item[0].values))
+        console.log(paramsNewArr)
         item[1].values.forEach((e) => {
             paramsNewArr[0].forEach(it => {
                 if (e.name == it.pressure) {
@@ -74,6 +76,7 @@ export function dashAllSort(test) {
             })
         })
 
+
     })
     const checkboxes = document.querySelectorAll('.input');
     let enabledSettings = []
@@ -93,6 +96,8 @@ export function dashAllSort(test) {
                         }
                     })
                 })
+                //console.log(mas)
+
                 dashDav(mas)
                 mas.length = 0;
             }
@@ -102,6 +107,7 @@ export function dashAllSort(test) {
                     el.checked = false
                 })
                 ide.checked = true;
+                //  console.log(arrSmall)
                 dashDav(arrSmall)
             }
         })
@@ -109,7 +115,7 @@ export function dashAllSort(test) {
 
     const ide = document.getElementById('Все')
     if (ide.checked) {
-        console.log('все низ')
+        //  console.log(arrSmall)
         dashDav(arrSmall)
     }
 
@@ -147,7 +153,6 @@ function dashDav(arr) {
     let arrD;
     let arrDC;
     if (countGray == 0) {
-
         arrD = [resultRed, resultYellow, resultGreen];
         arrDC = [countRed, countYellow, countGreen];
     }
@@ -155,12 +160,8 @@ function dashDav(arr) {
         arrD = [resultRed, resultYellow, resultGreen, resultGray];
         arrDC = [countRed, countYellow, countGreen, countGray];
     }
-
     newBoard(arrD, arrDC, length)
 }
-
-
-
 
 function newBoard(ArrD, ArrDC, length) {
     const mass = [];
@@ -171,9 +172,8 @@ function newBoard(ArrD, ArrDC, length) {
         newBoad.remove();
     }
 
-
-    const height = 300,
-        width = 300,
+    const height = 500,
+        width = 500,
         margin = 30,
         data = [
             { browser: 'Критически', rate: ArrD[0], value: ArrDC[0] },
@@ -188,9 +188,6 @@ function newBoard(ArrD, ArrDC, length) {
     }
 
 
-
-
-
     const colorScale = d3.scale.ordinal()
         .domain(['Критически', 'Повышенное/Пониженное', 'Норма', 'Потеря датчика'])
         .range(['red', 'yellow', 'green', 'gray']);
@@ -200,7 +197,7 @@ function newBoard(ArrD, ArrDC, length) {
     // создаем элемент арки с радиусом
     const arc = d3.svg.arc()
         .outerRadius(radius)
-        .innerRadius(50);
+        .innerRadius(85);
 
     const pie = d3.layout.pie()
         .sort(null)
@@ -226,7 +223,7 @@ function newBoard(ArrD, ArrDC, length) {
             return "translate(" + arc.centroid(d) + ")";
         })
         .style("text-anchor", "middle")
-        .style('font-size', '0.7rem')
+        .style('font-size', '1rem')
         .text(function (d) {
             return d.data.rate + "%"
         });
@@ -240,7 +237,7 @@ function newBoard(ArrD, ArrDC, length) {
             return "translate(" + m + ")";
         })
         .style("text-anchor", "middle")
-        .style('font-size', '0.7rem')
+        .style('font-size', '1rem')
         .text(function (d) {
 
             return `(${d.data.value})`
@@ -273,7 +270,7 @@ function newBoard(ArrD, ArrDC, length) {
         .attr("y", 9)
         .attr("dy", ".35em")
         .style("text-anchor", "end")
-        .style('font-size', '0.7rem')
+        .style('font-size', '1rem')
         .text(function (d) { return d.data.browser; });
 
     var g1 = svg.append("g")
@@ -284,7 +281,7 @@ function newBoard(ArrD, ArrDC, length) {
     g1.append("circle")
         .attr("cx", 0)
         .attr("cy", 0)
-        .attr("r", 50)
+        .attr("r", 85)
         .style('fill', 'white')
         .style('stroke', 'black')
     g1.append("text")
