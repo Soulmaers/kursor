@@ -5,6 +5,7 @@ import { loadParamsViewList, conturTest } from './spisok.js'
 import { loadParamsView } from './paramsTyresView.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 
+
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
 export function init(kluch) {
@@ -67,7 +68,5 @@ export function zapros() {
 
     //console.log(allMassiv[0].length)
 }
-
-
 
 

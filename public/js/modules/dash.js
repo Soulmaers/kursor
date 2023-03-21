@@ -4,8 +4,6 @@ import { convert } from './visual.js'
 
 export function dashView(nameCar) {
     const box = document.querySelector('.check_box')
-    //  console.log(nameCar)
-    //  console.log(check)
     const activePost = nameCar.replace(/\s+/g, '')
     const list = document.createElement('p')
     list.classList.add('listTitle')
@@ -15,83 +13,67 @@ export function dashView(nameCar) {
 
 }
 
-
 export async function getDash() {
-    const dataArr = [];
-    const paramsArr = [];
-    dann.forEach(async el => {
-        const activePost = el.nm.replace(/\s+/g, '')
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ activePost }))
-        }
-        const tyr = await fetch('api/tyresView', param)
-        const params = await tyr.json();
-        paramsArr.push(params)
-        const dat = await fetch('api/wialon', param)
-        const data = await dat.json();
-        dataArr.push(data)
+    const result = await Promise.all(dann.map(async el => {
+        return waitArr(el.nm)
     })
-    //  console.log(dataArr, paramsArr)
-    // return (dataArr, paramsArr)
-    setTimeout(dashAllSort, 3000, dataArr, paramsArr)
-    // dashAllSort(dataArr, paramsArr)
+    )
+    dashAllSort(result)
+}
+
+async function waitArr(el) {
+    const activePost = el.replace(/\s+/g, '')
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost }))
+    }
+    const tyr = await fetch('api/tyresView', param)
+    const params = await tyr.json();
+    //  paramsArr.push(params)
+    const dat = await fetch('api/wialon', param)
+    const data = await dat.json();
+    // dataArr.push(data)
+    return [params, data]
 }
 
 
-
-export function dashAllSort(dataArr, paramsArr) {
-    //  console.log(dataArr.length)
-    // console.log(paramsArr)
+export function dashAllSort(test) {
+    const arrSmall = [];
     const all = []
-    const paramsNewArr = [];
-    dataArr.forEach(e => {
+    test.forEach(item => {
+
+        const paramsNewArr = [];
         const arr = new Object();
-        arr.name = e.message;
+        arr.name = item[1].message;
         arr.params = [];
         all.push(arr)
-    })
-    paramsArr.forEach(e => {
-        paramsNewArr.push(convert(e.values))
-    })
-    // console.log(paramsNewArr)
-    const arrSmall = [];
-    dataArr.forEach((el, index) => {
-        el.values.forEach(e => {
-            //  console.log(e.name)
-            paramsNewArr[index].forEach(it => {
-
-
+        paramsNewArr.push(convert(item[0].values))
+        item[1].values.forEach((e) => {
+            paramsNewArr[0].forEach(it => {
                 if (e.name == it.pressure) {
-                    all.forEach(item => {
-                        if (item.name === el.message) {
-                            e.value >= 100 ? item.params.push((e.value * 0.069).toFixed(1)) : item.params.push(e.value)
+                    all.forEach(items => {
+                        if (items.name === item[1].message) {
+                            e.value >= 100 ? items.params.push((e.value * 0.069).toFixed(1)) : items.params.push(e.value)
                             e.value >= 100 ? arrSmall.push((e.value * 0.069).toFixed(1)) : arrSmall.push(e.value)
-                            //    console.log(arrSmall)
                         }
                     })
-
                 }
                 if (e.name === it.temp) {
-                    //  console.log('совпадение')
                     all.forEach(elem => {
-                        // console.log(e.name)
-                        // console.log(el.message)
-                        if (elem.name === el.message) {
+                        if (elem.name === item[1].message) {
                             if (e.value == -50 || e.value == -51 || e.value == -128) {
                                 elem.params.push(e.value)
                                 arrSmall.push(e.value)
                             }
-
-                            // console.log(arrSmall)
                         }
                     })
                 }
             })
         })
+
     })
     const checkboxes = document.querySelectorAll('.input');
     let enabledSettings = []
@@ -102,7 +84,6 @@ export function dashAllSort(dataArr, paramsArr) {
                 const ide = document.getElementById('Все')
                 ide.checked = false;
                 enabledSettings = Array.from(checkboxes).filter(i => i.checked).map(i => i.value)
-                //     console.log(enabledSettings)
                 enabledSettings.forEach(el => {
                     all.forEach(it => {
                         if (el == it.name) {
@@ -112,7 +93,6 @@ export function dashAllSort(dataArr, paramsArr) {
                         }
                     })
                 })
-                //   console.log('мас условие')
                 dashDav(mas)
                 mas.length = 0;
             }
@@ -121,9 +101,7 @@ export function dashAllSort(dataArr, paramsArr) {
                 checkboxes.forEach(el => {
                     el.checked = false
                 })
-                //   console.log('ап')
                 ide.checked = true;
-                //   console.log('все условие')
                 dashDav(arrSmall)
             }
         })
@@ -134,15 +112,16 @@ export function dashAllSort(dataArr, paramsArr) {
         console.log('все низ')
         dashDav(arrSmall)
     }
-    //   console.log(all)
+
 }
 
 
 function dashDav(arr) {
-    console.log(arr)
 
-    const allSens = document.querySelector('.allSens')
-    allSens.textContent = arr.length
+    // const y = [-51, -50]
+    // y.push(...arr)
+    //console.log(y)
+    const length = arr.length
     let countRed = 0;
     let countYellow = 0;
     let countGreen = 0;
@@ -177,81 +156,145 @@ function dashDav(arr) {
         arrDC = [countRed, countYellow, countGreen, countGray];
     }
 
-    const newBoad = document.getElementById('myChart')
+    newBoard(arrD, arrDC, length)
+}
+
+
+
+
+function newBoard(ArrD, ArrDC, length) {
+    const mass = [];
+    mass.push(length)
+    console.log(ArrD)
+    const newBoad = document.querySelector('.axis')
     if (newBoad) {
         newBoad.remove();
     }
 
-    const dashBoard = document.querySelector('.dash_board')
-    const board = document.createElement('canvas')
-    board.setAttribute('id', 'myChart')
-    dashBoard.appendChild(board)
 
-    Chart.register(ChartDataLabels);
+    const height = 300,
+        width = 300,
+        margin = 30,
+        data = [
+            { browser: 'Критически', rate: ArrD[0], value: ArrDC[0] },
+            { browser: 'Повышенное/Пониженное', rate: ArrD[1], value: ArrDC[1] },
+            { browser: 'Норма', rate: ArrD[2], value: ArrDC[2] },
+            { browser: 'Потеря датчика' }
+        ];
 
-    let count = 0;
-    const ctx = document.getElementById('myChart')
-    const chart = new Chart(ctx, {
-
-        type: 'doughnut',
-        data: {
-            labels: [
-                'Критически',
-                'Повышенное/Пониженное',
-                'Норма',
-                'Потеря датчика'
-            ],
-            datasets: [{
-                label: 'Дашбоард',
-                data: arrD,
-                backgroundColor: [
-                    '#e03636',
-                    '#9ba805',
-                    '#3eb051',
-                    '#808080'
-                ],
-                hoverOffset: 4
-            }]
-        },
-        options: {
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 10
-                        }
-                    }
-                },
-
-                datalabels: {
-                    color: '#423737',
-                    textAlign: 'center',
-                    font: {
-                        size: 16,
-                        lineHeight: 1.6
-                    },
-                    formatter: function (value) {
-                        console.log(arrDC)
-                        if (count >= arrDC.length) {
-                            count = 0;
-                        }
-                        count++
-                        console.log(count)
-                        return value + '%' + '\n' + `(${arrDC[count - 1]})`;
-                    }
-                }
-            }
-        }
-    });
-    const upRender = () => {
-        chart.data.datasets[0].data = arrD;
-        // chart2.data.datasets[0].data = arrT;
-        chart.update();
-        //  chart2.update();
+    if (ArrD.length > 3) {
+        data[3].rate = ArrD[3],
+            data[3].value = ArrDC[3]
     }
 
-    setInterval(upRender, 1500);
 
+
+
+
+    const colorScale = d3.scale.ordinal()
+        .domain(['Критически', 'Повышенное/Пониженное', 'Норма', 'Потеря датчика'])
+        .range(['red', 'yellow', 'green', 'gray']);
+    // задаем радиус
+    const radius = Math.min(width - 2 * margin, height - 2 * margin) / 2.5;
+
+    // создаем элемент арки с радиусом
+    const arc = d3.svg.arc()
+        .outerRadius(radius)
+        .innerRadius(50);
+
+    const pie = d3.layout.pie()
+        .sort(null)
+        .value(function (d) { return d.rate; });
+    const svg = d3.select(".dash_card").append("svg")
+        .attr("class", "axis")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform",
+            "translate(" + (width / 2) + "," + (height / 2) + ")");
+
+    const g = svg.selectAll(".arc")
+        .data(pie(data))
+        .enter().append("g")
+        .attr("class", "arc");
+
+    g.append("path")
+        .attr("d", arc)
+        .style("fill", function (d) { return colorScale(d.data.browser); });
+    g.append("text")
+        .attr("transform", function (d) {
+            return "translate(" + arc.centroid(d) + ")";
+        })
+        .style("text-anchor", "middle")
+        .style('font-size', '0.7rem')
+        .text(function (d) {
+            return d.data.rate + "%"
+        });
+    g.append("text")
+        .attr("transform", function (d) {
+            const val = arc.centroid(d)
+            const ar1 = val[0]
+            const ar2 = val[1] + 15
+            const m = [];
+            m.push(ar1, ar2)
+            return "translate(" + m + ")";
+        })
+        .style("text-anchor", "middle")
+        .style('font-size', '0.7rem')
+        .text(function (d) {
+
+            return `(${d.data.value})`
+        });
+
+
+    const legendTable = d3.select("svg").append("g")
+        .attr("transform", "translate(0, 10)")
+        .attr("class", "legendTable");
+
+    var legend = legendTable.selectAll(".legend")
+        .data(pie(data))
+        .enter().append("g")
+        .attr("class", "legend")
+        .style('margin', '5px 0')
+        .attr("transform", function (d, i) {
+            return "translate(0, " + i * 12 + ")";
+        });
+
+    console.log(legend)
+    legend.append("rect")
+        .attr("x", width - 10)
+        .attr("y", 4)
+        .attr("width", 10)
+        .attr("height", 10)
+        .style("fill", function (d) { return colorScale(d.data.browser); });
+
+    legend.append("text")
+        .attr("x", width - 34)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .style('font-size', '0.7rem')
+        .text(function (d) { return d.data.browser; });
+
+    var g1 = svg.append("g")
+        .attr("transform", function (d, i) {
+            return "translate(0,0)";
+        });
+
+    g1.append("circle")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", 50)
+        .style('fill', 'white')
+        .style('stroke', 'black')
+    g1.append("text")
+        .data(mass)
+        .attr("x", 0)
+        .attr("y", 5)
+        .style('font-size', '1.5rem')
+        .style("text-anchor", "middle")
+        .text(function (d) { return d });
 }
+
 
 

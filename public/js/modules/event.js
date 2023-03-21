@@ -27,7 +27,7 @@ btnDash.addEventListener('click', () => {
     sections.style.display = 'none'
     main.style.display = 'none'
     getDash()
-    setInterval(getDash, 6000)
+    setInterval(getDash, 10000)
 
 });
 
