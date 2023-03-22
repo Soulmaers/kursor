@@ -109,112 +109,122 @@
         </section>
 
         <main class="main">
-
-            <div class="wrapper_right">
-                <div class="config">
-                    <div class="container_left">
-                        <div class="controll">
-                            <%-include('control') %>
-
-                        </div>
-                        <div class="wrap_alarm">
-                            <!--   <span class="dav_max">ВНИМАНИЕ! Критически высокое давление!</span>
-                                        <span class="dav_min">ВНИМАНИЕ! Критически низкое давление!</span>
-                                   
-                                       <span class="info">Уведомление отправлено ответственному на <span
-                                                class="mail">zavgar@cursor-gps.ru</span> </span>-->
-                            <div class="mainAlarm">Уведомления</div>
-                            <div class="plus"></div>
-                            <div class="minus"></div>
-                            <div class="border"><span class="ogon">&#128293</span></div>
-
-                        </div>
+            <div class="centerBlock">
+                <div class="headerMain">
+                    <div class="wrap_alarm">
+                        <!--   <span class="dav_max">ВНИМАНИЕ! Критически высокое давление!</span>
+                                <span class="dav_min">ВНИМАНИЕ! Критически низкое давление!</span>
+                           
+                               <span class="info">Уведомление отправлено ответственному на <span
+                                        class="mail">zavgar@cursor-gps.ru</span> </span>-->
+                        <div class="mainAlarm">Уведомления</div>
+                        <div class="plus"></div>
+                        <div class="minus"></div>
+                        <div class="border"><span class="ogon">&#128293</span></div>
                         <div class="alarmStorage">
-
                             <div class="tbody">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="headerTitle">
+                        <div class="plug">Заглушка</div>
+                    </div>
+                    <div class="headerTitle">
+                        <div class="plug">Заглушка</div>
+                    </div>
+                    <div class="headerTitle">
+                        <div class="plug">Заглушка</div>
+                    </div>
+                </div>
+                <div class="wrapper_right">
+                    <div class="config">
+                        <div class="container_left">
+                            <div class="controll">
+                                <%-include('control') %>
 
                             </div>
 
+
                         </div>
 
-                    </div>
+                        <div class="wrapper_containt">
+                            <div class="header_car">
+                                <div class="alarm"></div>
+                                <h2 class="title_two"></h2>
+                            </div>
 
-                    <div class="wrapper_containt">
-                        <div class="header_car">
+
+                            <div class="side">
+                                <div class="itemSide">L</div>
+                                <div class="itemSide">R</div>
+                            </div>
                             <div class="alarm"></div>
                             <h2 class="title_two"></h2>
-                        </div>
-
-
-                        <div class="side">
-                            <div class="itemSide">L</div>
-                            <div class="itemSide">R</div>
-                        </div>
-                        <div class="alarm"></div>
-                        <h2 class="title_two"></h2>
-                        <div class="modalCenterOs">
-                            <div class="modalTitle">
-                                <span class="modalNameOs">Ось : </span>
-                                <span class="modalNumberOs"></span>
+                            <div class="modalCenterOs">
+                                <div class="modalTitle">
+                                    <span class="modalNameOs">Ось : </span>
+                                    <span class="modalNumberOs"></span>
+                                </div>
+                                <ul class="modalList">
+                                    <li class="modalItem">
+                                        <p class="modalText" id="knd">Критически низкое давление, БАР</p><input
+                                            class="modalInput " step="0.1" type="number" placeholder="-">
+                                    </li>
+                                    <li class="modalItem">
+                                        <p class="modalText" id="kvd">Критически высокое давление, БАР</p><input
+                                            class="modalInput" step="0.1" type="number" placeholder="-">
+                                    </li>
+                                    <li class="modalItem">
+                                        <p class="modalText" id="dnn">Давление ниже нормы, БАР</p><input
+                                            class="modalInput " step="0.1" type="number" placeholder="-">
+                                    </li>
+                                    <li class="modalItem">
+                                        <p class="modalText" id="dvn">Давление выше нормы, БАР</p><input
+                                            class="modalInput " step="0.1" type="number" placeholder="-">
+                                    </li>
+                                    <li class="modalItem">
+                                        <p class="modalText" id="dnmin">Давление в норме min, БАР</p><input
+                                            class="modalInput " step="0.1" type="number" placeholder="-">
+                                    </li>
+                                    <li class="modalItem">
+                                        <p class="modalText" id="dnmax">Давление в норме max, БАР</p><input
+                                            class="modalInput " step="0.1" type="number" placeholder="-">
+                                    </li>
+                                </ul>
+                                <button class="btnModal">Сохранить</button>
+                                <span class="modalClear">&#10006</span>
                             </div>
-                            <ul class="modalList">
-                                <li class="modalItem">
-                                    <p class="modalText" id="knd">Критически низкое давление, БАР</p><input
-                                        class="modalInput " step="0.1" type="number" placeholder="-">
-                                </li>
-                                <li class="modalItem">
-                                    <p class="modalText" id="kvd">Критически высокое давление, БАР</p><input
-                                        class="modalInput" step="0.1" type="number" placeholder="-">
-                                </li>
-                                <li class="modalItem">
-                                    <p class="modalText" id="dnn">Давление ниже нормы, БАР</p><input class="modalInput "
-                                        step="0.1" type="number" placeholder="-">
-                                </li>
-                                <li class="modalItem">
-                                    <p class="modalText" id="dvn">Давление выше нормы, БАР</p><input class="modalInput "
-                                        step="0.1" type="number" placeholder="-">
-                                </li>
-                                <li class="modalItem">
-                                    <p class="modalText" id="dnmin">Давление в норме min, БАР</p><input
-                                        class="modalInput " step="0.1" type="number" placeholder="-">
-                                </li>
-                                <li class="modalItem">
-                                    <p class="modalText" id="dnmax">Давление в норме max, БАР</p><input
-                                        class="modalInput " step="0.1" type="number" placeholder="-">
-                                </li>
-                            </ul>
-                            <button class="btnModal">Сохранить</button>
-                            <span class="modalClear">&#10006</span>
-                        </div>
-                        <div class="contKran">
-                            <div class="kran">
-                                <canvas id="krans" width="180" height="180"></canvas>
-                            </div>
-                            <div class="objCar">
-                                <div class="argRed"></div>
-                                <div class="argGreen"></div>
+                            <div class="contKran">
+                                <div class="kran">
+                                    <canvas id="krans" width="180" height="180"></canvas>
+                                </div>
+                                <div class="objCar">
+                                    <div class="argRed"></div>
+                                    <div class="argGreen"></div>
+                                </div>
+
                             </div>
 
+                        </div>
+                        <div class="moduleConfig">
+                            <div class="dropdownOs">
+                                <button class="dropbtnOs">Ось</button>
+                                <ul class="dropdown-contentOs">
+                                    <li class="linkSelectOs">Тягач</li>
+                                    <li class="linkSelectOs">Прицеп</li>
+                                </ul>
+                            </div>
+                            <div class="dropdownTires">
+                                <button class="dropbtnTires">Кол-во колёс</button>
+                                <ul class="dropdown-contentTires">
+                                    <li class="linkSelectTires">2</li>
+                                    <li class="linkSelectTires">4</li>
+                                </ul>
+                            </div>
                         </div>
 
                     </div>
-                    <div class="moduleConfig">
-                        <div class="dropdownOs">
-                            <button class="dropbtnOs">Ось</button>
-                            <ul class="dropdown-contentOs">
-                                <li class="linkSelectOs">Тягач</li>
-                                <li class="linkSelectOs">Прицеп</li>
-                            </ul>
-                        </div>
-                        <div class="dropdownTires">
-                            <button class="dropbtnTires">Кол-во колёс</button>
-                            <ul class="dropdown-contentTires">
-                                <li class="linkSelectTires">2</li>
-                                <li class="linkSelectTires">4</li>
-                            </ul>
-                        </div>
-                    </div>
-
                 </div>
             </div>
             <secion class="icon">
@@ -393,6 +403,8 @@
     </div>
 
     <script src="http://d3js.org/d3.v3.min.js"> </script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <script src="https://hst-api.wialon.com/wsdk/script/wialon.js"></script>

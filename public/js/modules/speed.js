@@ -1,7 +1,7 @@
 import { graf } from './graf.js'
 
 export function speed(arrCar) {
-    console.log('даff')
+    console.log(arrCar)
     const speedGraf = document.querySelector('.speedGraf')
     speedGraf.style.display = 'block'
     const btnForm = document.querySelectorAll('.btm_form')
@@ -30,10 +30,11 @@ export function speed(arrCar) {
 }
 
 function dataInput(arrCar) {
+    console.log('датаинпут')
     arrCar.forEach(it => {
         const active = document.querySelector('.color')
         const act = active.children[0].textContent
-        if (it.nm === act.textContent) {
+        if (it.nm === act) {
             const inputDate = document.querySelectorAll('.input_date')
             const selectSpeed = document.querySelector('.select_speed')
             selectSpeed.value = 0;
@@ -45,7 +46,7 @@ function dataInput(arrCar) {
             let timeFrom = Math.floor(t01.setHours(t01.getHours()) / 1000)
             let t02 = new Date(arrDate[1])
             let nowDate = Math.floor(t02.setHours(t02.getHours()) / 1000)
-            graf(timeFrom, nowDate, 30, it.id) //параметров для запроса на wialon данных скорости и времени
+            graf(timeFrom, nowDate, 1, it.id) //параметров для запроса на wialon данных скорости и времени
         }
     })
 }
@@ -68,17 +69,17 @@ function dataSelect(arrCar) {
                 case '1': {
                     let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 24) / 1000);
                     console.log(timeFrom)
-                    graf(timeFrom, nowDate, 30, it.id)
+                    graf(timeFrom, nowDate, 1, it.id)
                 }
                     break;
                 case '2': {
                     let timeFrom = Math.round(nDate.setDate(nDate.getDate() - 7) / 1000);
-                    graf(timeFrom, nowDate, 100, it.id)
+                    graf(timeFrom, nowDate, 1, it.id)
                 }
                     break;
                 case '3': {
                     let timeFrom = Math.round(nDate.setMonth(nDate.getMonth() - 1) / 1000);
-                    graf(timeFrom, nowDate, 300, it.id)
+                    graf(timeFrom, nowDate, 1, it.id)
                 }
                     break;
             }

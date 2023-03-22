@@ -93,7 +93,10 @@ export function visualNone(e) {
 
     const contKran = document.querySelector('.contKran')
     contKran.style.display = 'none'
-
+    const newBoad = document.querySelector('.speed')
+    if (newBoad) {
+        newBoad.remove();
+    }
 
     plus.style.display = 'block'
     minus.style.display = 'none'

@@ -133,18 +133,24 @@ function dashDav(arr) {
     let countGreen = 0;
     let countGray = 0;
     arr.forEach((el) => {
-        if (el >= 8 && el <= 9) {
-            countGreen++
-        }
-        if (el >= 7.5 && el < 8 || el > 9 && el <= 13) {
-            countYellow++
-        }
-        if (el > -100 && el < 7.5 || el > 13) {
-            countRed++
-        }
-        if (el <= -50) {
+        if (el <= '-50') {
             countGray++
+            console.log('серый')
         }
+        else {
+            console.log('другие')
+            if (el >= 8 && el <= 9) {
+                countGreen++
+            }
+            if (el >= 7.5 && el < 8 || el > 9 && el <= 13) {
+                countYellow++
+            }
+            if (el > -100 && el < 7.5 || el > 13) {
+                countRed++
+            }
+        }
+
+
     })
     const resultRed = Math.round(countRed / arr.length * 100);
     const resultYellow = Math.round(countYellow / arr.length * 100);

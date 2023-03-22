@@ -393,7 +393,7 @@ div.spoyler {
   display: flex;
   width: 100%;
   margin-top: 1%;
-
+  margin: 0 5px;
 
 }
 
@@ -646,6 +646,17 @@ div.spoyler {
   box-sizing: border-box;
   text-align: center;
   position: relative;
+}
+
+.headerTitle {
+  width: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 15px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .btnsens {
@@ -1612,7 +1623,16 @@ input[type="date"] {
   margin-top: 20px;
 }
 
+.headerMain {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
 
+.centerBlock {
+  display: flex;
+  flex-direction: column;
+}
 
 .form_speed {
   display: flex;
@@ -1971,6 +1991,7 @@ div.wrapper {
   display: flex;
   border: 1px solid lightgray;
   padding-right: 70px;
+  width: 100%
 }
 
 .list_att {
@@ -2580,13 +2601,13 @@ input[type="number"]:focus {
 
 .alarmStorage {
   display: none;
-  width: 650px;
+  width: 675px;
   border: 1px solid gray;
   z-index: 2;
   background-color: #fff;
   position: absolute;
   top: 35px;
-  left: 25px;
+  left: 0px;
 }
 
 
@@ -2647,7 +2668,8 @@ input[type="number"]:focus {
 
 
 
-.mainAlarm {
+.mainAlarm,
+.plug {
   width: 164px;
   border: 1px solid gray;
   box-sizing: border-box;
@@ -2900,6 +2922,8 @@ input[type="number"]:focus {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+
+
   }
 
 

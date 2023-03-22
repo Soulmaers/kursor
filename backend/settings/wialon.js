@@ -60,15 +60,19 @@ function speed(t1, t2, int, id, res) {
             const arr2 = Object.values(data);
             const arrIterTime = [];
             const arrIterTimeDate = [];
+            const arrIterTimeDateU = [];
             arr2[1].forEach(el => {
                 arrIterTime.push(el.t);
             })
             arrIterTime.forEach(item => {
                 const dateObj = new Date(item * 1000);
-                const utcString = dateObj.toString();
+                arrIterTimeDateU.push(dateObj);
+                const utcString = dateObj.toUTCString();
+
                 const arrTimeDate = utcString.slice(8, 24);
                 arrIterTimeDate.push(arrTimeDate);
             })
+
             let t = 0;
             const arrIterTimeDateT = arrIterTimeDate.filter(e => (++t) % int === 0);
             //  console.log(arrIterTimeDateT)
@@ -82,7 +86,7 @@ function speed(t1, t2, int, id, res) {
             //  return [arrSpeed, 
             //   chrt1(arrSpeed, arrIterTimeDateT); //передача данных в канвас для отображения
 
-            res.json({ arrSpeed, arrIterTimeDateT })
+            res.json({ arrSpeed, arrIterTimeDateT, arrIterTimeDateU })
 
         })
 

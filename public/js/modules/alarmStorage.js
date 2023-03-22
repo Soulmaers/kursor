@@ -110,7 +110,7 @@ function viewAlarmStorage(name, stor) {
             && !el.nextSibling) {
             if (el.previousSibling.children[1].textContent !== el.children[1].textContent || el.previousSibling.classList.contains('norma')) {
                 el.classList.add('alarmOpen')
-                el.style.border = '1px solid black'
+                //el.style.border = '1px solid black'
                 const alarmFire = document.createElement('div')
                 alarmFire.classList.add('alarmFire')
                 el.appendChild(alarmFire)
