@@ -26,7 +26,7 @@ export function visual(el) {
     wrapperRight.style.display = 'flex'
     wrapperLeft.style.display = 'block'
     const widthWind = document.querySelector('body').offsetWidth;
-    if (widthWind <= 640) {
+    if (widthWind <= 860) {
         main.style.display = 'none'
     }
     else {

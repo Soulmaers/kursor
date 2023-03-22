@@ -10,12 +10,25 @@ import { visual, visualNone } from './visual.js'
 
 const iconStrela = document.querySelector('.iconStrela')
 iconStrela.addEventListener('click', () => {
-    const sections = document.querySelector('.sections')
-    sections.style.display = 'flex'
-    const comeback = document.querySelector('.comeback')
-    comeback.style.display = 'none'
-    const main = document.querySelector('.main')
-    main.style.display = 'none'
+    const widthWind = document.querySelector('body').offsetWidth;
+    console.log(widthWind)
+    if (widthWind <= 860) {
+        const sections = document.querySelector('.sections')
+        sections.style.display = 'flex'
+        const comeback = document.querySelector('.comeback')
+        comeback.style.display = 'none'
+        const main = document.querySelector('.main')
+        main.style.display = 'none'
+    }
+    else {
+        const sections = document.querySelector('.sections')
+        sections.style.display = 'flex'
+        const comeback = document.querySelector('.comeback')
+        comeback.style.display = 'none'
+        const main = document.querySelector('.main')
+        main.style.display = 'flex'
+    }
+
 })
 
 const btnDash = document.querySelector('.dash')
@@ -48,11 +61,11 @@ const configs = document.querySelector('.configs')
 const configClear = document.querySelector('.configClear')
 if (configs) {
     configs.addEventListener('click', () => {
-        const controll = document.querySelector('.controll')
+        const controll = document.querySelector('.container_left')
         controll.style.display = 'flex'
     })
     configClear.addEventListener('click', () => {
-        const controll = document.querySelector('.controll')
+        const controll = document.querySelector('.container_left')
         controll.style.display = 'none'
     })
 }

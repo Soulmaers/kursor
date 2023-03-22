@@ -1207,7 +1207,7 @@ input[type="date"] {
 .container_left {
   width: 220px;
   box-sizing: border-box;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   position: relative;
@@ -1497,7 +1497,7 @@ input[type="date"] {
 .controll {
   width: 200px;
   min-height: 200px;
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -2819,7 +2819,7 @@ input[type="number"]:focus {
   background-size: cover;
 }
 
-@media (max-width: 680px) {
+@media (max-width: 860px) {
 
 
 
@@ -3207,4 +3207,77 @@ input[type="number"]:focus {
     font-weight: 700;
     color: #000;
   }
+}
+
+@media (min-width: 861px) and (max-width: 1200px) {
+
+  .sections {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1%;
+    border: 1px solid lightgray;
+  }
+
+  .main {
+    width: 55%;
+    display: flex;
+    border: 1px solid lightgray;
+  }
+
+  .centerBlock {
+    display: flex;
+    flex-direction: column;
+    width: 72%;
+  }
+
+  .icon {
+    width: 110px;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid gray;
+  }
+
+  .config {
+    padding: 0;
+    justify-content: center;
+  }
+
+  .wrapper_left {
+    width: 1px;
+  }
+
+  .wrapper_containt {
+    width: 100%
+  }
+
+  .container {
+    width: 330px;
+    align-items: center;
+  }
+
+  .headerMain {
+    justify-content: center;
+  }
+
+  .list_profil2,
+  .list_trail2 {
+    width: 35%
+  }
+
+  .list_name2 {
+    width: 170px;
+  }
+
+  .list_arr2 {
+    width: 100%
+  }
+
+
+
+  .listItem {
+    width: 100%
+  }
+
 }

@@ -30,7 +30,7 @@ export function navigator() {
             visual(el)
             const widthWind = document.querySelector('body').offsetWidth;
             console.log(widthWind)
-            if (widthWind <= 640) {
+            if (widthWind <= 1200) {
                 console.log('ап')
                 const comeback = document.querySelector('.comeback')
                 comeback.style.display = 'flex'
@@ -44,6 +44,7 @@ export function navigator() {
                 titleName.textContent = nameCar.children[0].textContent
 
             }
+
             else {
                 console.log('пап')
 

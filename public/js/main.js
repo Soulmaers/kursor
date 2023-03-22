@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     /*ПОЛУЧАЕТ ТЕКУЩУЮ ШИРИНУ ЭКРАНА*/
     var widthWind = document.querySelector('body').offsetWidth;
     console.log(widthWind)
-    if (widthWind <= 640) {
+    if (widthWind <= 860) {
         console.log('ап')
         const main = document.querySelector('.main')
         main.style.display = 'none'

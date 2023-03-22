@@ -193,6 +193,7 @@ function viewAlarmStorage(name, stor) {
             if (it.classList.contains('norma') == false
                 && it.children[2].textContent == el.children[2].textContent && countts < 1)
                 it.classList.add('spoyler');
+            console.log(it)
             if (it.classList.contains('spoyler')) {
                 wrapSpoyler.appendChild(it)
             }
