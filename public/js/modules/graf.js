@@ -11,6 +11,9 @@ export function graf(t1, t2, int, id) {
         body: JSON.stringify({ t1, t2, int, id })
     })
         .then((res) => res.json())
-        .then((res) =>
-            chrt1(res.arrSpeed, res.arrIterTimeDateT)); //передача данных в канвас для отображения)
+        .then((res) => {
+            console.log(res)
+            chrt1(res.arrSpeed, res.arrIterTimeDateT)
+
+        }); //передача данных в канвас для отображения)
 }
