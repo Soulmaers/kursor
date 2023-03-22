@@ -1,13 +1,8 @@
 import { objColors, gener } from './content.js'
 
 //отрисовка графика скорости
+/*
 export function chrt1(arr, time, timeU) {
-    console.log(arr, time)
-    console.log(typeof arr)
-
-    const aa = ["a", "b", "c"];
-    const bb = ["1", "2", "3"];
-
     const data = arr.map(function (i, ind) {
         return {
             speed: i,
@@ -15,7 +10,6 @@ export function chrt1(arr, time, timeU) {
 
         }
     })
-    console.log(data);
 
     alternativa(data)
     const config = {
@@ -84,19 +78,20 @@ export function chrt1(arr, time, timeU) {
     }
 
 }
+*/
 
 
-
-function alternativa(obj) {
+export function alternativa(obj) {
     const newBoad = document.querySelector('.speed')
     if (newBoad) {
         newBoad.remove();
     }
-    var margin = { top: 3, right: 10, bottom: 30, left: 25 },
+    var margin = { top: 30, right: 10, bottom: 30, left: 25 },
         width = 350 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
 
-    var svg = d3.select(".speedGraf")
+
+    var svg = d3.select(".grafik1")
         .append("svg")
         .attr('class', 'speed')
         .attr("width", width + margin.left + margin.right)
@@ -104,7 +99,12 @@ function alternativa(obj) {
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
-
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", width - 100)
+        .attr("y", height - 150)
+        .text("Скорость (км/ч)")
+        .style('font-family', 'Roboto')
 
     const format = d3.time.format("%Y-%m-%dT%H:%M:%S.000Z");
     const min = d3.min(obj, function (d) {

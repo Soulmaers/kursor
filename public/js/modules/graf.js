@@ -1,4 +1,4 @@
-import { chrt1 } from './canvas.js'
+import { alternativa } from './canvas.js'
 
 //запрос на wialon за данными по скорости
 export function graf(t1, t2, int, id) {
@@ -13,7 +13,15 @@ export function graf(t1, t2, int, id) {
         .then((res) => res.json())
         .then((res) => {
             console.log(res)
-            chrt1(res.arrSpeed, res.arrIterTimeDateT, res.arrIterTimeDateU)
+            const data = res.arrSpeed.map(function (i, ind) {
+                return {
+                    speed: i,
+                    time: res.arrIterTimeDateU[ind]
 
-        }); //передача данных в канвас для отображения)
+                }
+            })
+            alternativa(data)
+
+
+        });
 }

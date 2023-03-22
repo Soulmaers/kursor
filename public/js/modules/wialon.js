@@ -1,4 +1,4 @@
-import { chrt1 } from './canvas.js'
+//import { chrt1 } from './canvas.js'
 import { drawMyLine } from './strelaKran.js';
 import { geoPosition } from './requests.js'
 //запрос на wialon за данными по скорости
