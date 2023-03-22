@@ -90,7 +90,10 @@ export function alternativa(obj) {
         width = 350 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
 
-
+    console.log(obj)
+    let str = "12345.00";
+    str = str.slice(0, -4);
+    console.log(str);
     var svg = d3.select(".grafik1")
         .append("svg")
         .attr('class', 'speed')
@@ -106,19 +109,21 @@ export function alternativa(obj) {
         .text("Скорость (км/ч)")
         .style('font-family', 'Roboto')
 
-    const format = d3.time.format("%Y-%m-%dT%H:%M:%S.000Z");
+    const format = d3.time.format("%Y-%m-%dT%H:%M");
     const min = d3.min(obj, function (d) {
-        return format.parse(d.time)
+        return format.parse(d.time.slice(0, -8))
     })
     const max = d3.max(obj, function (d) {
-        return format.parse(d.time)
+        return format.parse(d.time.slice(0, -8))
     })
     console.log(min)
     console.log(max)
     const dataset = obj.map(e => {
-        return { time: format.parse(e.time), speed: e.speed }
+        const obn = e.time.slice(0, -8)
+        console.log(obn)
+        return { time: format.parse(obn), speed: e.speed }
     })
-
+    console.log(dataset)
 
 
     var x = d3.scaleTime()
