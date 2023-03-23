@@ -3452,7 +3452,7 @@ input[type="number"]:focus {
   .centerBlock {
     display: flex;
     flex-direction: column;
-    width: 335px;
+    width: 40%;
   }
 
   .headerMain {
