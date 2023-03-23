@@ -70,14 +70,14 @@ if (widthWind <= 860) {
     console.log('ап')
     const main = document.querySelector('.main')
     main.style.display = 'none'
-    return
+    // return
 
 }
 if (widthWind > 860 && widthWind <= 1200) {
     console.log('медиум')
     const wLeft = document.querySelector('.wrapper_left')
     wLeft.style.display = 'none'
-    return
+    //  return
 }
 const wLeft = document.querySelector('.wrapper_left')
 wLeft.style.display = 'block'
