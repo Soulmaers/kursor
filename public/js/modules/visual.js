@@ -25,6 +25,7 @@ export function visual(el) {
     wrapperUp.style.display = 'block'
     wrapperRight.style.display = 'flex'
     // wrapperLeft.style.display = 'block'
+    /*
     const widthWind = document.querySelector('body').offsetWidth;
     if (widthWind <= 860) {
         main.style.display = 'none'
@@ -32,7 +33,7 @@ export function visual(el) {
 
     else {
         main.style.display = 'flex'
-    }
+    }*/
     //main.style.display = 'flex'
     speedGraf.style.display = 'block'
     el.classList.add('color')

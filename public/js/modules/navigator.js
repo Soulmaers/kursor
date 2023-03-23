@@ -35,7 +35,21 @@ export function navigator() {
             visual(el)
             const widthWind = document.querySelector('body').offsetWidth;
             console.log(widthWind)
-            if (widthWind <= 1200) {
+            if (widthWind <= 860) {
+                const cblock = document.querySelector('.centerBlock')
+                cblock.style.width = 100 + '%'
+                const comeback = document.querySelector('.comeback')
+                comeback.style.display = 'flex'
+                const main = document.querySelector('.main')
+                main.style.display = 'flex'
+                const wrapperLeft = document.querySelector('.wrapper_left')
+                wrapperLeft.style.display = 'block'
+                const nameCar = document.querySelector('.color')
+                console.log(nameCar)
+                const titleName = document.querySelector('.titleName')
+                titleName.textContent = nameCar.children[0].textContent
+            }
+            if (widthWind >= 861 && widthWind <= 1200) {
                 console.log('ап')
                 const comeback = document.querySelector('.comeback')
                 comeback.style.display = 'flex'

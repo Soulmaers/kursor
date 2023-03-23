@@ -64,22 +64,37 @@ const Obj = {
 
 //
 /*ПОЛУЧАЕТ ТЕКУЩУЮ ШИРИНУ ЭКРАНА*/
+//function point() {
+
+/*
 var widthWind = document.querySelector('body').offsetWidth;
 console.log(widthWind)
 if (widthWind <= 860) {
     console.log('ап')
     const main = document.querySelector('.main')
     main.style.display = 'none'
-    return
+    // return
 
 }
 if (widthWind > 860 && widthWind <= 1200) {
     console.log('медиум')
     const wLeft = document.querySelector('.wrapper_left')
     wLeft.style.display = 'none'
-    return
+    const main = document.querySelector('.main')
+    main.style.display = 'flex'
+    // return
 }
-const wLeft = document.querySelector('.wrapper_left')
-wLeft.style.display = 'block'
-console.log('пап')
+else {
+    const wLeft = document.querySelector('.wrapper_left')
+    wLeft.style.display = 'block'
+    console.log('пап')
+
+
+}*/
+
+
+
+
+
+//setInterval(point, 300)
 //});

@@ -18,7 +18,22 @@ iconStrela.addEventListener('click', () => {
         const comeback = document.querySelector('.comeback')
         comeback.style.display = 'none'
         const main = document.querySelector('.main')
-        main.style.display = 'none'
+        main.style.display = 'flex' ? main.style.display = 'none' : null
+        return
+    }
+    if (widthWind > 860 && widthWind <= 1200) {
+        console.log('медиум')
+        const comeback = document.querySelector('.comeback')
+        comeback.style.display = 'none'
+        const wLeft = document.querySelector('.wrapper_left')
+        wLeft.style.display = 'none'
+        const main = document.querySelector('.main')
+        main.style.display = 'flex'
+        const sections = document.querySelector('.sections')
+        sections.style.display = 'flex'
+        const cblock = document.querySelector('.centerBlock')
+        cblock.style.width = 70 + '%'
+        return
     }
     else {
         const sections = document.querySelector('.sections')
@@ -27,8 +42,11 @@ iconStrela.addEventListener('click', () => {
         comeback.style.display = 'none'
         const main = document.querySelector('.main')
         main.style.display = 'flex'
+        main.style.display = 55 + '%'
         const wLeft = document.querySelector('.wrapper_left')
-        wLeft.style.display = 'none'
+        wLeft.style.display = 'block'
+        const cblock = document.querySelector('.centerBlock')
+        cblock.style.width = 70 + '%'
     }
 
 })
