@@ -27,6 +27,8 @@ iconStrela.addEventListener('click', () => {
         comeback.style.display = 'none'
         const main = document.querySelector('.main')
         main.style.display = 'flex'
+        const wLeft = document.querySelector('.wrapper_left')
+        wLeft.style.display = 'none'
     }
 
 })

@@ -8,6 +8,11 @@ export function navigator() {
 
     nav[0].classList.add('color')
     visual(nav[0])
+    var widthWind = document.querySelector('body').offsetWidth;
+    if (widthWind <= 1200) {
+        const wrapperLeft = document.querySelector('.wrapper_left')
+        wrapperLeft.style.display = 'none'
+    }
 
     nav.forEach(el => {
         el.addEventListener('click', route)
@@ -38,15 +43,23 @@ export function navigator() {
                 sections.style.display = 'none'
                 const main = document.querySelector('.main')
                 main.style.display = 'flex'
+                main.style.width = 100 + '%'
+                main.style.justifyContent = 'center'
+                const cblock = document.querySelector('.centerBlock')
+                cblock.style.width = 40 + '%'
                 const nameCar = document.querySelector('.color')
                 console.log(nameCar)
                 const titleName = document.querySelector('.titleName')
                 titleName.textContent = nameCar.children[0].textContent
+                const wrapperLeft = document.querySelector('.wrapper_left')
+                wrapperLeft.style.display = 'block'
 
             }
 
             else {
                 console.log('пап')
+
+
 
             }
 

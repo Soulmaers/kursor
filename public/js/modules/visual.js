@@ -17,18 +17,19 @@ export function visual(el) {
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const wrapperRight = document.querySelector('.wrapper_right')
-    const wrapperLeft = document.querySelector('.wrapper_left')
+    // const wrapperLeft = document.querySelector('.wrapper_left')
     const titleCar = document.querySelector('.title_two')
     const btnsens = document.querySelectorAll('.btnsens')
     const main = document.querySelector('.main')
     alarmClear();
     wrapperUp.style.display = 'block'
     wrapperRight.style.display = 'flex'
-    wrapperLeft.style.display = 'block'
+    // wrapperLeft.style.display = 'block'
     const widthWind = document.querySelector('body').offsetWidth;
     if (widthWind <= 860) {
         main.style.display = 'none'
     }
+
     else {
         main.style.display = 'flex'
     }

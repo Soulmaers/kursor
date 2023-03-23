@@ -3223,13 +3223,16 @@ input[type="number"]:focus {
     width: 55%;
     display: flex;
     border: 1px solid lightgray;
+    justify-content: space-between;
   }
 
   .centerBlock {
     display: flex;
     flex-direction: column;
-    width: 72%;
+    width: 450px;
   }
+
+
 
   .icon {
     width: 110px;
@@ -3237,6 +3240,7 @@ input[type="number"]:focus {
     display: flex;
     flex-direction: column;
     border: 1px solid gray;
+    margin-right: 10px;
   }
 
   .config {
@@ -3245,7 +3249,8 @@ input[type="number"]:focus {
   }
 
   .wrapper_left {
-    width: 1px;
+    display: none;
+
   }
 
   .wrapper_containt {
@@ -3278,6 +3283,77 @@ input[type="number"]:focus {
 
   .listItem {
     width: 100%
+  }
+
+  .wrap_alarm {
+    width: 37%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid gray;
+    padding: 2px 2px;
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+  }
+
+  .centerBlock {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+  }
+
+  .headerMain {
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .mainAlarm {
+    font-size: 0.7rem;
+    width: 100%;
+    padding: 5px 0;
+  }
+
+  .plus {
+    width: 15px;
+    height: 15px;
+  }
+
+  .minus {
+    width: 13px;
+    height: 13px;
+  }
+
+  .ogon {
+
+    top: 6px;
+    right: 5px;
+  }
+
+  .headerTitle {
+    width: 21%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid gray;
+    padding: 2px 3px;
+    box-sizing: border-box;
+    text-align: center;
+
+  }
+
+  .plug {
+    width: 100%;
+    border: 1px solid gray;
+    box-sizing: border-box;
+    background-color: lightgray;
+    padding: 5px 0px;
+    font-size: 0.7rem;
+    font-family: Roboto;
+    font-weight: 700;
+    color: #000;
   }
 
 }
