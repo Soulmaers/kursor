@@ -91,9 +91,7 @@ export function alternativa(obj) {
         height = 200 - margin.top - margin.bottom;
 
     console.log(obj)
-    let str = "12345.00";
-    str = str.slice(0, -4);
-    console.log(str);
+
     var svg = d3.select(".grafik1")
         .append("svg")
         .attr('class', 'speed')
@@ -162,13 +160,14 @@ export function alternativa(obj) {
     line.append("path")
         .datum(dataset)
         .attr("class", "line")  // I add the class line to be able to modify this line later on.
-        .attr("fill", "none")
+        .attr("fill", "steelblue")
         .attr("stroke", "steelblue")
         .attr("stroke-width", 1.5)
         .attr("d", d3.line()
             .x(function (d) { return x(d.time) })
             .y(function (d) { return y(d.speed) })
         )
+
 
     // Add the brushing
     line
@@ -205,6 +204,8 @@ export function alternativa(obj) {
                 .x(function (d) { return x(d.time) })
                 .y(function (d) { return y(d.speed) })
             )
+
+
     }
 
     // If user double click, reinitialize the chart
@@ -218,6 +219,7 @@ export function alternativa(obj) {
                 .x(function (d) { return x(d.time) })
                 .y(function (d) { return y(d.speed) })
             )
+
     });
 
 

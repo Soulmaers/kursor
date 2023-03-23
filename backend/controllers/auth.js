@@ -13,6 +13,50 @@ module.exports.page = async function (req, res) {
     res.render('form.ejs', { message: '' });
 }
 
+
+
+module.exports.signup = async function (req, res) {
+
+    console.log(req.body)
+    db.query("SELECT `id`, `name`, `password` FROM `users` WHERE `name`='" + req.body.login + "'", (error, rows, field) => {
+        if (error) {
+            response.status(404, res)
+
+        } else if (typeof rows !== 'undefined' && rows.length > 0) {
+            // сonsole.log(rows)
+            const row = JSON.parse(JSON.stringify(rows))
+            console.log(row)
+            row.map(rw => {
+                response.status(404, rw.name, { message: `Пользователь с таким Логином- ${rw.name} уже есть` }, res)
+                //res.json({ status: 404, result: rw.name, message: `Пользователь с таким Логином- ${rw.name} уже есть` })
+                return true
+            })
+        }
+        else {
+
+            const name = req.body.login
+            const password = req.body.pass;
+            const role = req.body.role;
+
+            //const salt = bcrypt.genSaltSync(15)
+            // const password = bcrypt.hashSync(req.body.password, salt)
+            const sql = "INSERT INTO `users`(`name`,`password`,`role`)  VALUES('" + name + "','" + password + "','" + role + "')"
+            db.query(sql, (error, result) => {
+                if (error) {
+                    response.status(400, error, res)
+                }
+                else {
+                    response.status(200, result, { message: `Пользователь зарегистрирован` }, res)
+                }
+            })
+        }
+
+    })
+}
+
+
+
+
 module.exports.sing = async function (req, res) {
     db.query("SELECT `id`, `name`, `password` FROM `users` WHERE `name`='" + req.body.username + "'", (error, rows, fields) => {
         if (error) {

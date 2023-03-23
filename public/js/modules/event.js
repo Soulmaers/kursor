@@ -74,6 +74,37 @@ export function saveTyres(arr) {
 
 }
 
+const btnSignup = document.querySelector('.btn-warning')
+btnSignup.addEventListener('click', async () => {
+    const formControl = document.querySelectorAll('.form-control')
+    const select = document.getElementById('select')
+    const login = formControl[0].value
+    const pass = formControl[1].value
+    const role = select.value
+
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ login, pass, role }))
+    }
+
+    const result = await fetch('/signup', params)
+    const response = await result.json()
+    console.log(response)
+    const messaga = document.querySelector('.message')
+
+    if (response.status == 200) {
+        messaga.textContent = 'Пользователь добавлен!'
+        messaga.style.color = 'green'
+    }
+    else {
+        messaga.textContent = response.message.message
+        messaga.style.color = 'red'
+    }
+})
+
 
 
 
@@ -90,6 +121,19 @@ if (configs) {
     })
 }
 
+
+const auth = document.querySelector('.auth')
+const authClear = document.querySelector('.authClear')
+if (auth) {
+    auth.addEventListener('click', () => {
+        const account = document.querySelector('.account')
+        account.style.display = 'flex'
+    })
+    authClear.addEventListener('click', () => {
+        const account = document.querySelector('.account')
+        account.style.display = 'none'
+    })
+}
 
 //очистка модели из базы и удаление отрисовки
 export function btnDel() {

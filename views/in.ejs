@@ -320,20 +320,6 @@
                                         <ul class="obo">
                                         </ul>
 
-                                        <!--  <div class="progressBar3">
-                                                <p class="mm12">12mm</p>
-                                                <p class="mm6">6mm</p>
-                                                <p class="mm0">0mm</p>
-                                                <div class="contBar3">
-                                                    <canvas id="drawLine22" width="116" height="60"></canvas>
-                                                </div>
-                                                <div class="contBar3">
-                                                    <canvas id="drawLine33" width="116" height="60"></canvas>
-                                                </div>
-                                                <div class="contBar3">
-                                                    <canvas id="drawLine44" width="116" height="60"></canvas>
-                                                </div>
-                                            </div>-->
             </div>
             <div class="wrapper_left">
                 <div class="detalisation">
@@ -395,16 +381,37 @@
 
 
         </main>
+        <div class="account">
+            <div class="accountControl">
+                <h3 class="titleAccount">Настройка прав доступа</h3>
+                <div class="low_modal">
+                    <div class="singUpForm">
+                        <h4 class="titleForm">Форма регистрации</h4>
+                        <div class="sigup">
+                            <%-include('signup') %>
+                        </div>
+                    </div>
+                    <div class="listAccount">
+                        <h4 class="titleForm">Список пользователей</h4>
+                        <div class="listAccountReal"></div>
+                    </div>
 
-    </div>
 
-    <script src="http://d3js.org/d3.v3.min.js"> </script>
-    <script src="https://d3js.org/d3.v4.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-    <script src="https://hst-api.wialon.com/wsdk/script/wialon.js"></script>
-    <script type="module" src="js/main.js"></script>
+                    <span class="authClear">&#10006</span>
+                </div>
+                <p class="message"></p>
+            </div>
+
+        </div>
+
+        <script src="http://d3js.org/d3.v3.min.js"> </script>
+        <script src="https://d3js.org/d3.v4.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+        <script src="https://hst-api.wialon.com/wsdk/script/wialon.js"></script>
+        <script type="module" src="js/main.js"></script>
 
 </body>
 

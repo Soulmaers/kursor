@@ -42,7 +42,7 @@ function loadKran(arrCar) {
 
     arrCar.forEach(it => {
         if (it.nm === act && act == 'КранГаличанин Р858ОР178') {
-            console.log(it.lmsg.p.user_2u_1)
+            //   console.log(it.lmsg.p.user_2u_1)
             //  if (it.lmsg.p.user_2u_1) {
             const str = it.lmsg.p.user_2u_1
             if (str) {

@@ -103,6 +103,7 @@ function viewAlarmStorage(name, stor) {
         })
     })
     const t = document.querySelectorAll('.tr')
+    console.log(t)
 
     t.forEach(el => {
         if (el.nextSibling !== null && !el.classList.contains('norma') && el.children[1].textContent !== el.nextSibling.children[1].textContent
@@ -120,13 +121,15 @@ function viewAlarmStorage(name, stor) {
                 alarmFire.style.right = '4px';
                 alarmFire.style.top = 0;
                 alarmFire.style.fontSize = '10px';
-                // console.log(el)
-                return
+
+
+
+                //  return
             }
 
             const prevElem = prevAll(el)
             let count = 0;
-            // console.log(prevElem)
+            console.log(prevElem)
             const y = prevElem.reverse();
             y.forEach(e => {
                 // console.log(prevElem[0])
@@ -150,7 +153,7 @@ function viewAlarmStorage(name, stor) {
             function prevAll(el) {
                 const prevElements = []
                 let prevElement = el.parentNode.firstElementChild
-                //   console.log(el)
+                console.log(el)
                 while (prevElement !== el) {
                     prevElements.push(prevElement)
                     prevElement = prevElement.nextElementSibling
@@ -189,14 +192,15 @@ function viewAlarmStorage(name, stor) {
         next.forEach(function (it) {
             if (it.classList.contains('norma') !== false) {
                 countts++
+                console.log(it)
+                // return
             }
             if (it.classList.contains('norma') == false
                 && it.children[2].textContent == el.children[2].textContent && countts < 1)
                 it.classList.add('spoyler');
+            wrapSpoyler.appendChild(it)
             console.log(it)
-            if (it.classList.contains('spoyler')) {
-                wrapSpoyler.appendChild(it)
-            }
+            // return
             //  
         });
 
