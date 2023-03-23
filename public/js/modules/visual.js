@@ -420,12 +420,12 @@ export async function viewOs() {
     }
     viewMenuParams()
     modalOs();
-    const btnShina = document.querySelector('.btn_icon')
-    btnShina.classList.contains('active') ? styleShinaActive(btnShina) : styleShina(btnShina)
+    const btnShina = document.querySelectorAll('.plug')
+    btnShina[0].classList.contains('active') ? styleShinaActive(btnShina[0]) : styleShina(btnShina[0])
 }
 function styleShinaActive(arg) {
     reqProtectorBase()
-    arg.textContent = 'Давление\nТемпература'
+    arg.textContent = 'Давл.\nТемп.'
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
     const centerOs = document.querySelectorAll('.centerOs')
@@ -434,6 +434,8 @@ function styleShinaActive(arg) {
     const place = document.querySelectorAll('.place')
     const main = document.querySelector('.main')
     main.style.display = 'flex'
+
+    arg.style.fontSize = '0.65rem'
     // console.log(tyresD)
     osi.forEach(e => {
         e.style.width = '330px'

@@ -52,7 +52,7 @@ export async function loadParamsView() {
     // console.log('условия изменены')
     clearInterval(viewPokasateli)
     const titleCar = document.querySelector('.title_two')
-    const btnShina = document.querySelector('.btn_icon')
+    const btnShina = document.querySelectorAll('.plug')
     const listItem = document.querySelectorAll('.link_menu')[0]
     // console.log(listItem)
     //   console.log('запуск')
@@ -94,7 +94,7 @@ export async function loadParamsView() {
                         :
                         centerOs[el.osi - 1].children[0].style.background = "#3333FF"
                     if (el.tyres == 2) {
-                        btnShina.classList.contains('active') ? centerOs[el.osi - 1].children[0].style.width = '200px' :
+                        btnShina[0].classList.contains('active') ? centerOs[el.osi - 1].children[0].style.width = '200px' :
                             centerOs[el.osi - 1].children[0].style.width = '150px'
                         centerOs[el.osi - 1].previousElementSibling.children[0].style.display = 'flex';
                         centerOs[el.osi - 1].nextElementSibling.children[1].style.display = 'flex';
@@ -122,8 +122,8 @@ export async function loadParamsView() {
 
 export function viewPokasateli() {
     // console.log('запускВиджет')
-    const btnShina = document.querySelector('.btn_icon')
-    if (btnShina.classList.contains('active') === true) {
+    const btnShina = document.querySelectorAll('.plug')
+    if (btnShina[0].classList.contains('active') === true) {
         return
     }
 

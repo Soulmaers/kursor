@@ -6,9 +6,7 @@ body {
   margin: 0 auto;
 }
 
-html {
-  background-color: lightgray;
-}
+
 
 
 
@@ -2680,17 +2678,18 @@ input[type="number"]:focus {
   box-sizing: border-box;
   background-color: lightgray;
   padding: 5px 15px;
-  font-size: 1rem;
+  font-size: 0.7rem;
   font-family: Roboto;
   font-weight: 700;
   color: #000;
+  cursor: pointer;
 
 }
 
 
 .plus {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   background-image: url(../image/icon_max.png);
   background-size: cover;
   position: absolute;
@@ -2701,8 +2700,8 @@ input[type="number"]:focus {
 
 .minus {
   display: none;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   background-image: url(../image/icon_min.png);
   background-size: cover;
   position: absolute;
@@ -2713,10 +2712,10 @@ input[type="number"]:focus {
 
 .ogon {
 
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   position: absolute;
-  top: 6px;
+  top: 4px;
   right: 8px;
 }
 
@@ -2819,6 +2818,10 @@ input[type="number"]:focus {
   cursor: pointer;
   background-image: url(../image/up3.png);
   background-size: cover;
+}
+
+.state_tyres {
+  font-size: 0.7rem;
 }
 
 @media (max-width: 860px) {
@@ -3187,7 +3190,7 @@ input[type="number"]:focus {
 
 
   .headerTitle {
-    width: 21%;
+    width: 18%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3204,10 +3207,21 @@ input[type="number"]:focus {
     box-sizing: border-box;
     background-color: lightgray;
     padding: 5px 0px;
-    font-size: 0.8rem;
+    font-size: 0.65rem;
     font-family: Roboto;
+
     font-weight: 700;
     color: #000;
+    cursor: pointer;
+  }
+
+
+  .state_tyres {
+    font-size: 0.65rem;
+  }
+
+  .state {
+    width: 27%
   }
 }
 
@@ -3335,7 +3349,7 @@ input[type="number"]:focus {
   }
 
   .headerTitle {
-    width: 21%;
+    width: 18%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3352,12 +3366,21 @@ input[type="number"]:focus {
     box-sizing: border-box;
     background-color: lightgray;
     padding: 5px 0px;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-family: Roboto;
     font-weight: 700;
     color: #000;
+    cursor: pointer;
   }
 
+
+  .state_tyres {
+    font-size: 0.65rem;
+  }
+
+  .state {
+    width: 27%
+  }
 }
 
 @media (min-width: 1201px) {
@@ -3462,7 +3485,7 @@ input[type="number"]:focus {
   }
 
   .headerTitle {
-    width: 21%;
+    width: 18%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3479,13 +3502,22 @@ input[type="number"]:focus {
     box-sizing: border-box;
     background-color: lightgray;
     padding: 5px 0px;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-family: Roboto;
     font-weight: 700;
     color: #000;
+    cursor: pointer;
   }
 
   .iconStrela {
     display: none;
+  }
+
+  .state_tyres {
+    font-size: 0.65rem;
+  }
+
+  .state {
+    width: 27%
   }
 }

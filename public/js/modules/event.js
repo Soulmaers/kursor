@@ -145,9 +145,9 @@ if (dropdown) {
 
 
 
-const btnShina = document.querySelector('.btn_icon')
-btnShina.addEventListener('click', () => {
-    btnShina.classList.toggle('active')
+const btnShina = document.querySelectorAll('.plug')
+btnShina[0].addEventListener('click', () => {
+    btnShina[0].classList.toggle('active')
     const e = document.querySelector('.color')
 
     console.log(e)
