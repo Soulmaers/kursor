@@ -62,24 +62,24 @@ const Obj = {
 }
 
 
-document.addEventListener("DOMContentLoaded", function (event) {
-    /*ПОЛУЧАЕТ ТЕКУЩУЮ ШИРИНУ ЭКРАНА*/
-    var widthWind = document.querySelector('body').offsetWidth;
-    console.log(widthWind)
-    if (widthWind <= 860) {
-        console.log('ап')
-        const main = document.querySelector('.main')
-        main.style.display = 'none'
-        return
+//
+/*ПОЛУЧАЕТ ТЕКУЩУЮ ШИРИНУ ЭКРАНА*/
+var widthWind = document.querySelector('body').offsetWidth;
+console.log(widthWind)
+if (widthWind <= 860) {
+    console.log('ап')
+    const main = document.querySelector('.main')
+    main.style.display = 'none'
+    return
 
-    }
-    if (widthWind > 860 && widthWind <= 1200) {
-        console.log('медиум')
-        const wLeft = document.querySelector('.wrapper_left')
-        wLeft.style.display = 'none'
-        return
-    }
+}
+if (widthWind > 860 && widthWind <= 1200) {
+    console.log('медиум')
     const wLeft = document.querySelector('.wrapper_left')
-    wLeft.style.display = 'block'
-    console.log('пап')
-});
+    wLeft.style.display = 'none'
+    return
+}
+const wLeft = document.querySelector('.wrapper_left')
+wLeft.style.display = 'block'
+console.log('пап')
+//});
