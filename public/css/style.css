@@ -25,7 +25,8 @@ body {
 
 .btnWrap {
   background-color: #fff;
-  width: 104%;
+  width: 160px;
+  margin: 0 auto;
   flex-direction: column;
   align-items: center;
   border: 1px solid gray;
@@ -33,6 +34,11 @@ body {
   box-sizing: border-box;
   text-align: center;
   cursor: pointer;
+}
+
+.btn-warning:hover {
+  border: 1px solid black;
+  background-color: #fff;
 }
 
 .btn-warning {
@@ -76,15 +82,101 @@ body {
 
 }
 
+.users {
+  margin: 5px 2px;
+  display: flex;
+  width: 95%;
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border: 2px solid lightgreen;
+  background-color: rgb(207, 228, 207);
+  border-radius: 5px;
+  padding: 5px 0;
+}
+
+.usersTitle {
+  margin: 5px 2px;
+  display: flex;
+  width: 95%;
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 0.9rem;
+  background-color: #fff;
+}
+
+.login {
+  width: 60px;
+  display: flex;
+  margin-left: 5px;
+  align-items: center;
+}
+
+.loginTitle {
+  width: 60px;
+  margin-left: 5px
+}
+
+
+.roleTitle {
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.crud {
+  width: 40px;
+  margin: 0 2px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.icon1,
+.icon2 {
+  width: 15px;
+  height: 15px;
+
+  cursor: pointer;
+}
+
+.icon1 {
+  background-image: url(../image/red.png);
+  background-size: cover;
+}
+
+.icon2 {
+  background-image: url(../image/del.png);
+  background-size: cover;
+
+}
+
+.role {
+  width: 120px;
+  display: flex;
+  align-items: center;
+}
+
 .sigup {
   text-align: center;
-  width: 70%;
+  width: 98%;
+  background-color: #fff;
+  min-height: 245px;
+  padding-top: 5px;
 }
 
 .form-control {
-  width: 100%;
+  width: 156px;
   margin: 10px 0;
+  border: 2px solid lightgreen;
+  background-color: rgb(207, 228, 207);
+  border-radius: 5px;
+  min-height: 24px;
 }
+
+
 
 .message {
   display: flex;
@@ -99,8 +191,13 @@ body {
   height: 32px;
   margin: 10px 0;
   font-size: 0.75rem;
-
+  border: 2px solid lightgreen;
+  background-color: rgb(207, 228, 207);
+  border-radius: 5px;
+  min-height: 24px;
 }
+
+
 
 .singUpForm {
   width: 50%;
@@ -123,16 +220,18 @@ body {
 .listAccountReal {
   width: 100%;
   min-height: 250px;
-  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
 }
 
-.authClear {
 
+.authClear {
   cursor: pointer;
   position: absolute;
   top: 10px;
   right: 10px;
-
 }
 
 /* Стили для основного блока Preloader */

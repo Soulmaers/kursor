@@ -7,7 +7,19 @@ const { init } = require('../settings/wialon.js')
 const express = require('express')
 const app = express();
 
-
+module.exports.users = (req, res) => {
+    console.log('запрос пришел')
+    try {
+        const selectBase = `SELECT name, role FROM users WHERE 1`
+        db.query(selectBase, function (err, results) {
+            console.log(results)
+            res.json({ status: 200, result: results })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 
 module.exports.page = async function (req, res) {
     res.render('form.ejs', { message: '' });
@@ -27,7 +39,7 @@ module.exports.signup = async function (req, res) {
             const row = JSON.parse(JSON.stringify(rows))
             console.log(row)
             row.map(rw => {
-                response.status(404, rw.name, { message: `Пользователь с таким Логином- ${rw.name} уже есть` }, res)
+                response.status(404, rw.name, { message: `Пользователь с таким Логином - ${rw.name} уже есть` }, res)
                 //res.json({ status: 404, result: rw.name, message: `Пользователь с таким Логином- ${rw.name} уже есть` })
                 return true
             })
@@ -38,9 +50,9 @@ module.exports.signup = async function (req, res) {
             const password = req.body.pass;
             const role = req.body.role;
 
-            //const salt = bcrypt.genSaltSync(15)
-            // const password = bcrypt.hashSync(req.body.password, salt)
-            const sql = "INSERT INTO `users`(`name`,`password`,`role`)  VALUES('" + name + "','" + password + "','" + role + "')"
+            const salt = bcrypt.genSaltSync(15)
+            const pass = bcrypt.hashSync(password, salt)
+            const sql = "INSERT INTO `users`(`name`,`password`,`role`)  VALUES('" + name + "','" + pass + "','" + role + "')"
             db.query(sql, (error, result) => {
                 if (error) {
                     response.status(400, error, res)
@@ -71,7 +83,8 @@ module.exports.sing = async function (req, res) {
             const row = JSON.parse(JSON.stringify(rows))
             console.log(row)
             row.map(rw => {
-                if (req.body.password == rw.password) {
+                const resulty = bcrypt.compareSync(req.body.password, rw.password)
+                if (resulty) {
                     console.log(rw.name)
                     const token = jwt.sign({
                         userId: rw.id,

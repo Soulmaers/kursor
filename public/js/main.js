@@ -29,6 +29,7 @@ if (login !== 'TDRMX') {
         init(kluch);
         btnDel();
         radCecked();
+
     }
 }
 if (login === 'TDRMX') {

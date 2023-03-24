@@ -94,7 +94,10 @@ btnSignup.addEventListener('click', async () => {
     const response = await result.json()
     console.log(response)
     const messaga = document.querySelector('.message')
+    var options = document.querySelectorAll('opt');
+    //for (var i = 0, l = options.length; i < l; i++) {
 
+    // }
     if (response.status == 200) {
         messaga.textContent = 'Пользователь добавлен!'
         messaga.style.color = 'green'
@@ -103,6 +106,11 @@ btnSignup.addEventListener('click', async () => {
         messaga.textContent = response.message.message
         messaga.style.color = 'red'
     }
+    select.firstElementChild.selected = true;
+    formControl.forEach(e => {
+        e.value = ''
+    })
+
 })
 
 
@@ -126,6 +134,9 @@ const auth = document.querySelector('.auth')
 const authClear = document.querySelector('.authClear')
 if (auth) {
     auth.addEventListener('click', () => {
+
+        getUsers()
+
         const account = document.querySelector('.account')
         account.style.display = 'flex'
     })
@@ -135,6 +146,47 @@ if (auth) {
     })
 }
 
+async function getUsers() {
+    const items = document.querySelectorAll('.users')
+    if (items) {
+        items.forEach(el => {
+            el.remove()
+        })
+    }
+    const params = {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    const data = await fetch('/users', params)
+    console.log(data)
+    const users = await data.json()
+    console.log(users.result)
+    const listAccountReal = document.querySelector('.listAccountReal')
+    users.result.forEach(e => {
+        const item = document.createElement('li')
+        item.classList.add('users')
+        listAccountReal.appendChild(item)
+        const log = document.createElement('span')
+        log.classList.add('login')
+        log.textContent = e.name
+        const role = document.createElement('span')
+        role.classList.add('role')
+        const crud = document.createElement('span')
+        crud.classList.add('crud')
+        role.textContent = e.role
+        const icon1 = document.createElement('span')
+        icon1.classList.add('icon1')
+        const icon2 = document.createElement('icon2')
+        icon2.classList.add('icon2')
+        item.appendChild(log)
+        item.appendChild(role)
+        item.appendChild(crud)
+        crud.appendChild(icon1)
+        crud.appendChild(icon2)
+    })
+}
 //очистка модели из базы и удаление отрисовки
 export function btnDel() {
     const btnClear = document.querySelector('.btn_clear')

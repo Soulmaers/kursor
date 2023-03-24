@@ -23,6 +23,8 @@ router.get('/action', isToken, passport.authenticate('jwt', { session: false }),
 router.post('/signup', controller.signup)
 
 
+router.get('/users', controller.users)
+
 router.post('/api/wialon', controllerWialon.datawialon)
 router.post('/api/wialonAll', controllerWialon.datawialonAll)
 
