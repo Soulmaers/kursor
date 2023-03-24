@@ -1,38 +1,11 @@
 import { postTyres, reqDelete, paramsDelete, reqTech, viewTech, loadParamsViewShina } from './requests.js'
 import { alarmClear, viewOs } from './visual.js'
-import { data, formUpdate } from './content.js'
+import { data } from './content.js'
 import { getDash } from './dash.js'
 import { visual, visualNone } from './visual.js'
-import { getUsers } from './admin.js'
 
 
 
-const auth = document.querySelector('.auth')
-const authClear = document.querySelector('.authClear')
-if (auth) {
-    auth.addEventListener('click', () => {
-        getUsers()
-        const account = document.querySelector('.account')
-        account.style.display = 'flex'
-    })
-    authClear.addEventListener('click', () => {
-        const account = document.querySelector('.account')
-        account.style.display = 'none'
-    })
-}
-
-const configs = document.querySelector('.configs')
-const configClear = document.querySelector('.configClear')
-if (configs) {
-    configs.addEventListener('click', () => {
-        const controll = document.querySelector('.container_left')
-        controll.style.display = 'flex'
-    })
-    configClear.addEventListener('click', () => {
-        const controll = document.querySelector('.container_left')
-        controll.style.display = 'none'
-    })
-}
 
 
 const iconStrela = document.querySelector('.iconStrela')
@@ -101,6 +74,21 @@ export function saveTyres(arr) {
 
 }
 
+
+
+
+const configs = document.querySelector('.configs')
+const configClear = document.querySelector('.configClear')
+if (configs) {
+    configs.addEventListener('click', () => {
+        const controll = document.querySelector('.container_left')
+        controll.style.display = 'flex'
+    })
+    configClear.addEventListener('click', () => {
+        const controll = document.querySelector('.container_left')
+        controll.style.display = 'none'
+    })
+}
 
 
 //очистка модели из базы и удаление отрисовки
@@ -316,7 +304,3 @@ class DropDownList {
     }
 }
 new DropDownList({ element: document.querySelector(`#input`), btn: document.querySelector('.buh'), data });
-
-
-
-

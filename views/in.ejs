@@ -126,11 +126,9 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="headerTitle state">
                         <div class="plug state_tyres">Состояние шин</div>
                     </div>
-
                     <div class="headerTitle">
                         <div class="plug">Заглушка</div>
                     </div>
@@ -143,19 +141,13 @@
                         <div class="container_left">
                             <div class="controll">
                                 <%-include('control') %>
-
                             </div>
-
-
                         </div>
-
                         <div class="wrapper_containt">
                             <div class="header_car">
                                 <div class="alarm"></div>
                                 <h2 class="title_two"></h2>
                             </div>
-
-
                             <div class="side">
                                 <div class="itemSide">L</div>
                                 <div class="itemSide">R</div>
@@ -204,9 +196,7 @@
                                     <div class="argRed"></div>
                                     <div class="argGreen"></div>
                                 </div>
-
                             </div>
-
                         </div>
                         <div class="moduleConfig">
                             <div class="dropdownOs">
@@ -224,12 +214,10 @@
                                 </ul>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
             <secion class="icon">
-
                 <div class="icon_item icon_akb">
                     <p class="title_text akb_value"></p>
                 </div>
@@ -263,11 +251,7 @@
                                             <% if (role!=='Пользователь' ) { %><%-include('radioModule') %>
                                                     <% } %>
                                         </div>
-
-
-
                                         <div class="protector">
-
                                             <div class="title_prot">График замера протектора</div>
                                             <div class="progressBar2">
                                                 <p class="mm12">12mm</p>
@@ -282,44 +266,47 @@
                                                 <div class="contBar2">
                                                     <canvas id="drawLine4" height="60"></canvas>
                                                 </div>
-
                                             </div>
                                             <div class="headerMM">
-
                                                 <div class="titleMM N1">
                                                     <div class="number"></div>
                                                     <p class="text"></p>
-
                                                 </div>
-
                                                 <div class="titleMM N2">
                                                     <div class="number"></div>
                                                     <p class="text"></p>
                                                 </div>
-
                                                 <div class="titleMM N3">
                                                     <div class="number"></div>
                                                     <p class="text"></p>
                                                 </div>
-
                                                 <div class="titleMM N4">
                                                     <div class="number"></div>
                                                     <p class="text"></p>
                                                 </div>
                                             </div>
-
                                         </div>
-
-
                                         <div class="wrapper_button">
-
                                             <button class="btnsens">Давление</button>
                                             <button class="btnsens">Температура</button>
                                         </div>
                                         <div class="title_sens">Параметры:</div>
                                         <ul class="obo">
                                         </ul>
-
+                                        <!--  <div class="progressBar3">
+                                                <p class="mm12">12mm</p>
+                                                <p class="mm6">6mm</p>
+                                                <p class="mm0">0mm</p>
+                                                <div class="contBar3">
+                                                    <canvas id="drawLine22" width="116" height="60"></canvas>
+                                                </div>
+                                                <div class="contBar3">
+                                                    <canvas id="drawLine33" width="116" height="60"></canvas>
+                                                </div>
+                                                <div class="contBar3">
+                                                    <canvas id="drawLine44" width="116" height="60"></canvas>
+                                                </div>
+                                            </div>-->
             </div>
             <div class="wrapper_left">
                 <div class="detalisation">
@@ -348,7 +335,6 @@
                     </div>
                 </div>
                 <div class="wrapper_up">
-
                 </div>
                 <div class="speedGraf">
                     <div class="form_speed">
@@ -372,51 +358,17 @@
                         </div>
                     </div>
                     <div class="grafik1">
-
                     </div>
                 </div>
-
             </div>
-
-
-
         </main>
-        <div class="account">
-            <div class="accountControl">
-                <h3 class="titleAccount">Настройка прав доступа</h3>
-                <div class="low_modal">
-                    <div class="singUpForm">
-                        <h4 class="titleForm">Форма регистрации</h4>
-                        <div class="sigup">
-                            <%-include('signup') %>
-                        </div>
-                    </div>
-                    <div class="listAccount">
-                        <h4 class="titleForm">Список пользователей</h4>
-                        <div class="listAccountReal">
-                            <li class="usersTitle"><span class="loginTitle">Логин</span><span class="roleTitle">Права
-                                </span> </li>
-
-                        </div>
-                    </div>
-
-
-
-                    <span class="authClear">&#10006</span>
-                </div>
-                <p class="message"></p>
-            </div>
-
-        </div>
-
-        <script src="http://d3js.org/d3.v3.min.js"> </script>
-        <script src="https://d3js.org/d3.v4.js"></script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-        <script src="https://hst-api.wialon.com/wsdk/script/wialon.js"></script>
-        <script type="module" src="js/main.js"></script>
-
+    </div>
+    <script src="http://d3js.org/d3.v3.min.js"> </script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="https://hst-api.wialon.com/wsdk/script/wialon.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 
 </html>

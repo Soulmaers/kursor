@@ -20,13 +20,6 @@ router.get('/logout', controller.logout)
 
 router.get('/action', isToken, passport.authenticate('jwt', { session: false }), controller.action)
 
-router.post('/signup', controller.signup)
-
-
-router.get('/users', controller.users)
-router.post('/delete/:id', controller.delete)
-router.post('/update/:id', controller.update)
-
 
 
 router.post('/api/wialon', controllerWialon.datawialon)
