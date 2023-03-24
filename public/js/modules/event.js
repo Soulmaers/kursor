@@ -1,11 +1,38 @@
 import { postTyres, reqDelete, paramsDelete, reqTech, viewTech, loadParamsViewShina } from './requests.js'
 import { alarmClear, viewOs } from './visual.js'
-import { data } from './content.js'
+import { data, formUpdate } from './content.js'
 import { getDash } from './dash.js'
 import { visual, visualNone } from './visual.js'
+import { getUsers } from './admin.js'
 
 
 
+const auth = document.querySelector('.auth')
+const authClear = document.querySelector('.authClear')
+if (auth) {
+    auth.addEventListener('click', () => {
+        getUsers()
+        const account = document.querySelector('.account')
+        account.style.display = 'flex'
+    })
+    authClear.addEventListener('click', () => {
+        const account = document.querySelector('.account')
+        account.style.display = 'none'
+    })
+}
+
+const configs = document.querySelector('.configs')
+const configClear = document.querySelector('.configClear')
+if (configs) {
+    configs.addEventListener('click', () => {
+        const controll = document.querySelector('.container_left')
+        controll.style.display = 'flex'
+    })
+    configClear.addEventListener('click', () => {
+        const controll = document.querySelector('.container_left')
+        controll.style.display = 'none'
+    })
+}
 
 
 const iconStrela = document.querySelector('.iconStrela')
@@ -74,126 +101,8 @@ export function saveTyres(arr) {
 
 }
 
-const btnSignup = document.querySelector('.btn-warning')
-btnSignup.addEventListener('click', account)
 
 
-async function account() {
-
-    const formControl = document.querySelectorAll('.form-control')
-    const select = document.getElementById('select')
-    const login = formControl[0].value
-    const pass = formControl[1].value
-    const role = select.value
-
-    const params = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ login, pass, role }))
-    }
-
-    const result = await fetch('/signup', params)
-    const response = await result.json()
-    console.log(response)
-    const messaga = document.querySelector('.message')
-    var options = document.querySelectorAll('opt');
-
-    if (response.status == 200) {
-        messaga.textContent = 'Пользователь добавлен!'
-        messaga.style.color = 'green'
-    }
-    else {
-        messaga.textContent = response.message.message
-        messaga.style.color = 'red'
-    }
-    select.firstElementChild.selected = true;
-    formControl.forEach(e => {
-        e.value = ''
-    })
-    getUsers()
-}
-
-
-
-
-
-
-
-
-const configs = document.querySelector('.configs')
-const configClear = document.querySelector('.configClear')
-if (configs) {
-    configs.addEventListener('click', () => {
-        const controll = document.querySelector('.container_left')
-        controll.style.display = 'flex'
-    })
-    configClear.addEventListener('click', () => {
-        const controll = document.querySelector('.container_left')
-        controll.style.display = 'none'
-    })
-}
-
-
-const auth = document.querySelector('.auth')
-const authClear = document.querySelector('.authClear')
-if (auth) {
-    auth.addEventListener('click', () => {
-
-        getUsers()
-
-        const account = document.querySelector('.account')
-        account.style.display = 'flex'
-    })
-    authClear.addEventListener('click', () => {
-        const account = document.querySelector('.account')
-        account.style.display = 'none'
-    })
-}
-
-async function getUsers() {
-
-    const items = document.querySelectorAll('.users')
-    if (items) {
-        items.forEach(el => {
-            el.remove()
-        })
-    }
-    const params = {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }
-    const data = await fetch('/users', params)
-    console.log(data)
-    const users = await data.json()
-    console.log(users.result)
-    const listAccountReal = document.querySelector('.listAccountReal')
-    users.result.forEach(e => {
-        const item = document.createElement('li')
-        item.classList.add('users')
-        listAccountReal.appendChild(item)
-        const log = document.createElement('span')
-        log.classList.add('login')
-        log.textContent = e.name
-        const role = document.createElement('span')
-        role.classList.add('role')
-        const crud = document.createElement('span')
-        crud.classList.add('crud')
-        role.textContent = e.role
-        const icon1 = document.createElement('span')
-        icon1.classList.add('icon1')
-        const icon2 = document.createElement('icon2')
-        icon2.classList.add('icon2')
-        item.appendChild(log)
-        item.appendChild(role)
-        item.appendChild(crud)
-        crud.appendChild(icon1)
-        crud.appendChild(icon2)
-    })
-}
 //очистка модели из базы и удаление отрисовки
 export function btnDel() {
     const btnClear = document.querySelector('.btn_clear')

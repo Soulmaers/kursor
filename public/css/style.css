@@ -41,7 +41,8 @@ body {
   background-color: #fff;
 }
 
-.btn-warning {
+.btn-warning,
+.btn-up {
   height: 32px;
   width: 98%;
   border: 1px solid gray;
@@ -219,11 +220,12 @@ body {
 
 .listAccountReal {
   width: 100%;
-  min-height: 250px;
+  max-height: 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #fff;
+  overflow-y: auto;
 }
 
 

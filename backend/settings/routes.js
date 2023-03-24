@@ -24,6 +24,10 @@ router.post('/signup', controller.signup)
 
 
 router.get('/users', controller.users)
+router.post('/delete/:id', controller.delete)
+router.post('/update/:id', controller.update)
+
+
 
 router.post('/api/wialon', controllerWialon.datawialon)
 router.post('/api/wialonAll', controllerWialon.datawialonAll)

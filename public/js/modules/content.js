@@ -4,6 +4,25 @@
 
 
 
+export const formUpdate = `<div class="form-group">
+<label>Логин</label>
+<input type="text" class="form-control" name="username">
+</div>
+<div class="form-group">
+<label>Пароль</label>
+<input type="password" class="form-control" name="password">
+</div>
+<div class="form-group">
+<label>Права доступа</label>
+<select class="sel" id="select">
+    <option class="opt" selected disabled>Укажите права доступа</option>
+    <option class="opt" value="Пользователь" name="role">Пользователь</option>
+    <option class="opt" value="Администратор" name="role">Администратор</option>
+</select>
+</div>
+<div class="btnWrap">
+<button class="btn-warning btn-lg">Добавить</button>
+</div>`
 
 export const text = `<div class=" osi">
         <div class="tires_spark">
