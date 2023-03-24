@@ -89,9 +89,9 @@ module.exports.signup = async function (req, res) {
             const role = req.body.role;
             const idx = req.body.idx;
             console.log(idx, name, password, role)
-            //  const salt = bcrypt.genSaltSync(15)
-            //  const pass = bcrypt.hashSync(password, salt)
-            const sql = "INSERT INTO `users`(`idx`, `name`,`password`,`role`)  VALUES('" + idx + "','" + name + "','" + password + "','" + role + "')"
+            const salt = bcrypt.genSaltSync(15)
+            const pass = bcrypt.hashSync(password, salt)
+            const sql = "INSERT INTO `users`(`idx`, `name`,`password`,`role`)  VALUES('" + idx + "','" + name + "','" + pass + "','" + role + "')"
             db.query(sql, (error, result) => {
                 if (error) {
                     console.log('не ок')
@@ -105,44 +105,6 @@ module.exports.signup = async function (req, res) {
 
     })
 }
-//'" + idx + "',
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports.page = async function (req, res) {
     res.render('form.ejs', { message: '' });
@@ -156,7 +118,7 @@ module.exports.sing = async function (req, res) {
         else if (rows.length <= 0) {
             res.render('form.ejs', { message: 'Пользователь не найден!' })
 
-            //  response.status(404, { message: `Пользователь с именем - ${req.body.username} не найден` }, '', res)
+
         }
         else {
             const row = JSON.parse(JSON.stringify(rows))
@@ -164,12 +126,12 @@ module.exports.sing = async function (req, res) {
             row.map(rw => {
                 const resulty = bcrypt.compareSync(req.body.password, rw.password)
                 //req.body.password== rw.password
-                if (req.body.password == rw.password) {
+                if (resulty) {
                     console.log(rw.name)
                     const token = jwt.sign({
                         userId: rw.id,
                         user: rw.name
-                    }, 'jwt-key', { expiresIn: '30d' })
+                    }, 'jwt-key', { expiresIn: '300d' })
                     //res.json(`Bearer ${token}`)
                     res.cookie('AuthToken', `${token}`)
                     console.log(res.cookie)
