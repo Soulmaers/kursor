@@ -75,7 +75,11 @@ export function saveTyres(arr) {
 }
 
 const btnSignup = document.querySelector('.btn-warning')
-btnSignup.addEventListener('click', async () => {
+btnSignup.addEventListener('click', account)
+
+
+async function account() {
+
     const formControl = document.querySelectorAll('.form-control')
     const select = document.getElementById('select')
     const login = formControl[0].value
@@ -95,9 +99,7 @@ btnSignup.addEventListener('click', async () => {
     console.log(response)
     const messaga = document.querySelector('.message')
     var options = document.querySelectorAll('opt');
-    //for (var i = 0, l = options.length; i < l; i++) {
 
-    // }
     if (response.status == 200) {
         messaga.textContent = 'Пользователь добавлен!'
         messaga.style.color = 'green'
@@ -110,8 +112,11 @@ btnSignup.addEventListener('click', async () => {
     formControl.forEach(e => {
         e.value = ''
     })
+}
 
-})
+
+
+
 
 
 
