@@ -112,6 +112,7 @@ async function account() {
     formControl.forEach(e => {
         e.value = ''
     })
+    getUsers()
 }
 
 
@@ -152,6 +153,7 @@ if (auth) {
 }
 
 async function getUsers() {
+
     const items = document.querySelectorAll('.users')
     if (items) {
         items.forEach(el => {
