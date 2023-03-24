@@ -3,9 +3,23 @@ import { alarmClear, viewOs } from './visual.js'
 import { data } from './content.js'
 import { getDash } from './dash.js'
 import { visual, visualNone } from './visual.js'
+import { getUsers } from './admin.js'
 
 
 
+const auth = document.querySelector('.auth')
+const authClear = document.querySelector('.authClear')
+if (auth) {
+    auth.addEventListener('click', () => {
+        getUsers()
+        const account = document.querySelector('.account')
+        account.style.display = 'flex'
+    })
+    authClear.addEventListener('click', () => {
+        const account = document.querySelector('.account')
+        account.style.display = 'none'
+    })
+}
 
 
 const iconStrela = document.querySelector('.iconStrela')
