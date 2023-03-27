@@ -78,6 +78,17 @@ btnDash.addEventListener('click', () => {
 
 });
 
+const monitor = document.querySelector('.monitor')
+monitor.addEventListener('click', () => {
+    const dash = document.querySelector('.wrapper_right_dash')
+    const sections = document.querySelector('.sections')
+    const main = document.querySelector('.main')
+    dash.style.display = 'none'
+    sections.style.display = 'flex'
+    main.style.display = 'flex'
+})
+
+
 
 export function saveTyres(arr) {
     const btnSave = document.querySelector('.btn_save')
