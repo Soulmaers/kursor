@@ -731,7 +731,8 @@ div.spoyler {
   z-index: 1;
 }
 
-.oil_value {
+.oil_value,
+.starter_value {
 
   color: yellow;
   font-size: 0.7rem;
@@ -2653,7 +2654,11 @@ input[type="number"]:focus {
 
 }
 
-
+.icon_starter {
+  background-image: url(../image/708.png);
+  background-size: cover;
+  height: 95px;
+}
 
 
 .icon_kluch {
@@ -3699,12 +3704,10 @@ input[type="number"]:focus {
     margin: 0;
   }
 
-  .centerBlock {
-    width: 40%;
-  }
+
 
   .wrap_alarm {
-    width: 37%;
+    width: 25%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3718,7 +3721,7 @@ input[type="number"]:focus {
   .centerBlock {
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 50%;
   }
 
   .headerMain {
@@ -3745,13 +3748,13 @@ input[type="number"]:focus {
   }
 
   .ogon {
-
+    font-size: 0.65rem;
     top: 6px;
     right: 5px;
   }
 
   .headerTitle {
-    width: 18%;
+    width: 25%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3784,6 +3787,12 @@ input[type="number"]:focus {
   }
 
   .state {
-    width: 27%
+    width: 25%
+  }
+
+  .icon_starter {
+    background-image: url(../image/708.png);
+    background-size: cover;
+    height: 95px;
   }
 }
