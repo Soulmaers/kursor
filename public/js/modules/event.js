@@ -92,17 +92,22 @@ monitor.addEventListener('click', () => {
     const model = document.querySelector('.wrapper_containt')
     const grafics = document.querySelector('.grafics')
     const visualGrafics = document.querySelector('.visualGrafics')
+    const wrapList = document.querySelector('.wrapList')
+    const techInfo = document.querySelector('.techInfo')
     console.log(wLeft)
     wRight.style.display = 'flex';
     wLeft.style.display = 'block';
     icon.style.display = 'flex';
     grafics.style.display = 'none';
+    techInfo.style.display = 'none';
     visualGrafics.style.display = 'none';
     main.style.flexDirection = 'row'
     model.style.zoom = '1'
     model.style.marginLeft = '25%'
     model.style.MozTransform = "scale(1)"
     wRight.appendChild(model);
+    wrapList.style.overflowY = 'none';
+    wrapList.style.height = 'none';
 })
 
 
