@@ -12,6 +12,7 @@ export async function alarmFind(name) {
     }
     const tyres = await fetch('api/tyresView', par)
     const tyresmassiv = await tyres.json();
+
     const sorTyres = convert(tyresmassiv.values)
     console.log(sorTyres)
     const storValue = [];
