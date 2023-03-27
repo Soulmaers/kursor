@@ -189,18 +189,25 @@ function viewAlarmStorage(name, stor) {
         const next = nextAll(el)
         let countts = 0;
         console.log(next)
-        next.forEach(function (it) {
+        next.forEach(it => {
             if (it.classList.contains('norma') !== false) {
                 countts++
                 console.log(it)
                 // return
             }
             if (it.classList.contains('norma') == false
-                && it.children[2].textContent == el.children[2].textContent && countts < 1)
+                && it.children[1].textContent == el.children[1].textContent && countts < 1) {
                 it.classList.add('spoyler');
-            wrapSpoyler.appendChild(it)
-            console.log(it)
-            // return
+
+                wrapSpoyler.appendChild(it)
+                console.log('спойлер')
+                console.log(it)
+                //return
+
+
+
+            }
+
             //  
         });
 
@@ -254,6 +261,7 @@ function viewAlarmStorage(name, stor) {
 
 
 }
+
 
 function nextAll(elem) {
     var next = false;
