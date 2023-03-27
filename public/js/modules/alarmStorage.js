@@ -35,15 +35,10 @@ export async function alarmFind(name) {
 }
 
 
-
-
-
-
-
 function viewAlarmStorage(name, stor) {
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
-    console.log(stor)
+    //  console.log(stor)
     /*
         const globalMass = [];
         stor.forEach(e => {
@@ -103,7 +98,7 @@ function viewAlarmStorage(name, stor) {
         })
     })
     const t = document.querySelectorAll('.tr')
-    console.log(t)
+    // console.log(t)
 
     t.forEach(el => {
         if (el.nextSibling !== null && !el.classList.contains('norma') && el.children[1].textContent !== el.nextSibling.children[1].textContent
@@ -129,7 +124,7 @@ function viewAlarmStorage(name, stor) {
 
             const prevElem = prevAll(el)
             let count = 0;
-            console.log(prevElem)
+            // console.log(prevElem)
             const y = prevElem.reverse();
             y.forEach(e => {
                 // console.log(prevElem[0])
@@ -153,7 +148,7 @@ function viewAlarmStorage(name, stor) {
             function prevAll(el) {
                 const prevElements = []
                 let prevElement = el.parentNode.firstElementChild
-                console.log(el)
+                //   console.log(el)
                 while (prevElement !== el) {
                     prevElements.push(prevElement)
                     prevElement = prevElement.nextElementSibling
@@ -188,11 +183,11 @@ function viewAlarmStorage(name, stor) {
         el.appendChild(wrapSpoyler)
         const next = nextAll(el)
         let countts = 0;
-        console.log(next)
+        //  console.log(next)
         next.forEach(it => {
             if (it.classList.contains('norma') !== false) {
                 countts++
-                console.log(it)
+                //  console.log(it)
                 // return
             }
             if (it.classList.contains('norma') == false
@@ -200,8 +195,8 @@ function viewAlarmStorage(name, stor) {
                 it.classList.add('spoyler');
 
                 wrapSpoyler.appendChild(it)
-                console.log('спойлер')
-                console.log(it)
+                // console.log('спойлер')
+                // console.log(it)
                 //return
 
 

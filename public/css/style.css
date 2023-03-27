@@ -1147,20 +1147,31 @@ input[type="date"] {
 }
 
 .dropbtnOs {
-  background-color: gray;
-  padding: 6px 8px;
-  font-size: 12px;
-  border: none;
-  color: #fff;
-  min-width: 88px;
+  height: 32px;
+  width: 54px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 0;
+  font-size: 0.8rem;
+  font-family: Roboto;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
 }
 
 .dropbtnTires {
-  background-color: gray;
-  padding: 6px 8px;
-  font-size: 12px;
-  border: none;
-  color: #fff;
+  height: 32px;
+  width: 84px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 0;
+  font-size: 0.8rem;
+  font-family: Roboto;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -1182,11 +1193,26 @@ input[type="date"] {
 
 .dropdownOs {
   position: relative;
-
+  width: 60px;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 2px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
 }
+
+
 
 .dropdownTires {
   position: relative;
+  width: 90px;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 2px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
 
 }
 
@@ -1293,7 +1319,8 @@ input[type="date"] {
 }
 
 .dropdownTires:hover .dropbtnTires {
-  background-color: gray;
+  background: #fff;
+  color: #000
 }
 
 
@@ -1310,6 +1337,7 @@ input[type="date"] {
   display: none;
   justify-content: space-around;
   margin: 10px 0;
+  width: 170px;
 }
 
 .wrapper_containt {
@@ -1723,7 +1751,7 @@ input[type="date"] {
 
 .controll {
   width: 200px;
-  min-height: 200px;
+  min-height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: center;
