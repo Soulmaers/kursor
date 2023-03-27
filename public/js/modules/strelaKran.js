@@ -44,6 +44,11 @@ function loadKran(arrCar) {
         if (it.nm === act && act == 'КранГаличанин Р858ОР178') {
             //   console.log(it.lmsg.p.user_2u_1)
             //  if (it.lmsg.p.user_2u_1) {
+
+            const starterValue = document.querySelector('.starter_value')
+            it.lmsg.p.pwr_ext.toFixed(1) >= 26.5 ? starterValue.textContent = 'Включено' : starterValue.textContent = 'Выключено';
+
+
             const str = it.lmsg.p.user_2u_1
             if (str) {
 
