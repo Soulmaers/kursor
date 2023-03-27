@@ -281,7 +281,8 @@ const min = arr => arr.reduce((x, y) => Math.min(x, y));
 
 export function protekGrafTwo(y1, y2, arr) {
     let number = min(arr)
-
+    const mmMax = document.querySelector('.mm12')
+    console.log(mmMax.value)
     const c2 = document.getElementById("drawLine2");
     c2.width = 348
     c2.heigth = 60
@@ -424,7 +425,8 @@ export function protekGrafThree(y1, y2, y3, arr) {
 
 
 export function protekGrafFour(y1, y2, y3, y4, arr) {
-
+    const mmMax = document.querySelector('.mm12')
+    console.log(mmMax.value)
     let number = min(arr)
 
     const c2 = document.getElementById("drawLine2");

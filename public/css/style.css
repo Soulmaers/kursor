@@ -926,7 +926,7 @@ div.spoyler {
 }
 
 .techInfo {
-  width: 374px;
+  width: 384px;
   box-sizing: border-box;
   display: none;
   margin: 0 10px;
@@ -1352,6 +1352,33 @@ input[type="date"] {
 
 }
 
+.visualGrafics {
+  display: none;
+  justify-content: space-around;
+  padding: 10px;
+
+}
+
+.legend {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.titleLegend {
+  margin: 0;
+  font-family: Roboto;
+}
+
+.itemsLegend {
+  list-style-type: none;
+  width: 100%;
+  height: 15px;
+  margin: 5px 0;
+  background-color: lightgray;
+}
 
 .check {
   width: 100%;
@@ -2425,27 +2452,24 @@ div.wrapper {
 .mm12 {
   position: absolute;
   top: 0;
-  left: 0;
+  left: -2px;
   font-size: 0.5rem;
   font-weight: bold;
   color: #000;
   margin: 0;
+  width: 25px;
+  border: none;
+  background: none;
+
+  padding-left: 5px;
 }
 
-.mm6 {
-  position: absolute;
-  top: 40%;
-  left: 0;
-  font-size: 0.5rem;
-  font-weight: bold;
-  color: #000;
-  margin: 0;
-}
+
 
 .mm0 {
   position: absolute;
   top: 80%;
-  left: 0;
+  left: 5px;
   font-size: 0.5rem;
   font-weight: bold;
   color: #000;
@@ -2526,7 +2550,7 @@ input[type="number"]:focus {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  width: 370px;
+  width: 380px;
   height: 60px;
   border: 1px solid #000;
   background-image: url(../image/003.png);
@@ -3794,5 +3818,14 @@ input[type="number"]:focus {
     background-image: url(../image/708.png);
     background-size: cover;
     height: 95px;
+  }
+
+  .grafics {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 800px;
+    background-color: lightgray;
   }
 }

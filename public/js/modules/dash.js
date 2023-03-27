@@ -87,6 +87,7 @@ export function dashAllSort(test) {
                 const ide = document.getElementById('Все')
                 ide.checked = false;
                 enabledSettings = Array.from(checkboxes).filter(i => i.checked).map(i => i.value)
+                console.log(this.id)
                 enabledSettings.forEach(el => {
                     all.forEach(it => {
                         if (el == it.name) {
@@ -141,13 +142,13 @@ function dashDav(arr) {
         }
         else {
             console.log('другие')
-            if (el >= 8 && el <= 9) {
+            if (el >= 6 && el <= 10) {
                 countGreen++
             }
-            if (el >= 7.5 && el < 8 || el > 9 && el <= 13) {
-                countYellow++
-            }
-            if (el > -100 && el < 7.5 || el > 13) {
+            //if (el >= 7.5 && el < 8 || el > 9 && el <= 13) {
+            //     countYellow++
+            //   }
+            else {
                 countRed++
             }
         }
@@ -200,7 +201,7 @@ function newBoard(ArrD, ArrDC, length) {
 
     const colorScale = d3.scale.ordinal()
         .domain(['Критически', 'Повышенное/Пониженное', 'Норма', 'Потеря датчика'])
-        .range(['red', 'yellow', 'green', 'gray']);
+        .range(['#FF0000', '#FFFF00', '#009933', 'gray']);
     // задаем радиус
     const radius = Math.min(width - 2 * margin, height - 2 * margin) / 2.5;
 

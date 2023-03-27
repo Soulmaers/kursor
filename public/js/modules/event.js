@@ -86,6 +86,21 @@ monitor.addEventListener('click', () => {
     dash.style.display = 'none'
     sections.style.display = 'flex'
     main.style.display = 'flex'
+    const wRight = document.querySelector('.wrapper_right')
+    const wLeft = document.querySelector('.wrapper_left')
+    const icon = document.querySelector('.icon')
+    const model = document.querySelector('.wrapper_containt')
+    const grafics = document.querySelector('.grafics')
+    const visualGrafics = document.querySelector('.visualGrafics')
+    console.log(wLeft)
+    wRight.style.display = 'flex';
+    wLeft.style.display = 'block';
+    icon.style.display = 'flex';
+    grafics.style.display = 'none';
+    visualGrafics.style.display = 'none';
+    main.style.flexDirection = 'row'
+    model.style.zoom = '1'
+    wRight.appendChild(model);
 })
 
 
@@ -225,22 +240,45 @@ detaly.addEventListener('click', () => {
 const buttonTth = document.querySelector('.buttonTth')
 buttonTth.addEventListener('click', () => {
     const techText = document.querySelectorAll('.tech')
+    const inputMM = document.querySelector('.mm12')
     console.log(techText)
     const arrNameCol = [];
     techText.forEach(el => {
         arrNameCol.push(el.id)
     })
+
     const tyresActive = document.querySelector('.tiresActiv')
     console.log(tyresActive.id)
-
+    console.log(arrNameCol)
     reqTech(arrNameCol, tyresActive.id);
     viewTech(tyresActive.id);
 })
 
 
 
+const plug = document.querySelectorAll('.plug')
 
-
+plug[1].addEventListener('click', () => {
+    const wRight = document.querySelector('.wrapper_right')
+    const wLeft = document.querySelector('.wrapper_left')
+    const icon = document.querySelector('.icon')
+    const model = document.querySelector('.wrapper_containt')
+    const visualGrafics = document.querySelector('.visualGrafics')
+    const grafics = document.querySelector('.grafics')
+    const main = document.querySelector('.main')
+    console.log(wLeft)
+    model.style.zoom = '0.65'
+    wRight.style.display = 'none';
+    wLeft.style.display = 'none';
+    icon.style.display = 'none';
+    grafics.style.display = 'flex';
+    visualGrafics.style.display = 'flex';
+    main.style.flexDirection = 'column'
+    visualGrafics.style.marginTop = '40%'
+    model.style.width = '50%'
+    visualGrafics.style.border = '1px solid gray'
+    visualGrafics.prepend(model);
+})
 
 
 

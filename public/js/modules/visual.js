@@ -16,14 +16,14 @@ export function visual(el) {
     clearInterval(time)
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
-    const wrapperRight = document.querySelector('.wrapper_right')
+    const wrapperCont = document.querySelector('.wrapper_containt')
     // const wrapperLeft = document.querySelector('.wrapper_left')
     const titleCar = document.querySelector('.title_two')
     const btnsens = document.querySelectorAll('.btnsens')
     const main = document.querySelector('.main')
     alarmClear();
     wrapperUp.style.display = 'block'
-    wrapperRight.style.display = 'flex'
+    wrapperCont.style.display = 'flex'
     // wrapperLeft.style.display = 'block'
     /*
     const widthWind = document.querySelector('body').offsetWidth;
@@ -109,7 +109,7 @@ export function visualNone(e) {
 
 
     wrapperUp.style.display = 'none'
-    wrapperRight.style.display = 'none'
+    //  wrapperRight.style.display = 'none'
     speedGraf.style.display = 'none'
 
 
