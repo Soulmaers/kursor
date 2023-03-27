@@ -2859,7 +2859,7 @@ input[type="number"]:focus {
 
 .alarmStorage {
   display: none;
-  width: 675px;
+
   border: 1px solid gray;
   z-index: 2000;
   background-color: #fff;
@@ -2902,25 +2902,29 @@ input[type="number"]:focus {
   font-weight: 700;
   font-size: 0.8rem;
   padding: 0 5px;
-  width: 20%;
+  width: 120px;
   color: gray;
   border-bottom: 1px solid lightgray
 }
 
 .td:nth-child(2n) {
-  width: 15%;
+  width: 100px;
 }
 
 .td:nth-child(4n) {
-  width: 4%;
+  width: 40px;
 }
 
 .td:nth-child(5n) {
-  width: 255px;
+  width: 210px;
+}
+
+.td:nth-child(6n) {
+  width: 145px;
 }
 
 .td:nth-child(3n) {
-  width: 7%;
+  width: 50px;
 }
 
 

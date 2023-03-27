@@ -114,14 +114,14 @@ export function alternativa(obj) {
     const max = d3.max(obj, function (d) {
         return format.parse(d.time.slice(0, -8))
     })
-    console.log(min)
-    console.log(max)
+    // console.log(min)
+    // console.log(max)
     const dataset = obj.map(e => {
         const obn = e.time.slice(0, -8)
-        console.log(obn)
+        //  console.log(obn)
         return { time: format.parse(obn), speed: e.speed }
     })
-    console.log(dataset)
+    // console.log(dataset)
 
 
     var x = d3.scaleTime()
