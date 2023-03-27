@@ -100,6 +100,8 @@ monitor.addEventListener('click', () => {
     visualGrafics.style.display = 'none';
     main.style.flexDirection = 'row'
     model.style.zoom = '1'
+    model.style.marginLeft = '25%'
+    model.style.MozTransform = "scale(1)"
     wRight.appendChild(model);
 })
 
@@ -259,6 +261,7 @@ buttonTth.addEventListener('click', () => {
 const plug = document.querySelectorAll('.plug')
 
 plug[1].addEventListener('click', () => {
+    console.log('нажал')
     const wRight = document.querySelector('.wrapper_right')
     const wLeft = document.querySelector('.wrapper_left')
     const icon = document.querySelector('.icon')
@@ -266,16 +269,27 @@ plug[1].addEventListener('click', () => {
     const visualGrafics = document.querySelector('.visualGrafics')
     const grafics = document.querySelector('.grafics')
     const main = document.querySelector('.main')
-    console.log(wLeft)
+    const sections = document.querySelector('.sections')
+    const wrapList = document.querySelector('.wrapList')
+    const techInfo = document.querySelector('.techInfo')
+
+    wrapList.style.overflowY = 'scroll';
+    wrapList.style.height = '300px';
     model.style.zoom = '0.65'
+    model.style.MozTransformOrigin = "top"
+    model.style.MozTransform = "scale(0.65)"
+    //model.style.marginBottom = "-60px"
     wRight.style.display = 'none';
+    techInfo.style.display = 'none';
     wLeft.style.display = 'none';
     icon.style.display = 'none';
     grafics.style.display = 'flex';
     visualGrafics.style.display = 'flex';
     main.style.flexDirection = 'column'
-    visualGrafics.style.marginTop = '40%'
+    // visualGrafics.style.marginTop = '40%'
     model.style.width = '50%'
+    model.style.marginLeft = '0'
+    sections.style.width = '40%'
     visualGrafics.style.border = '1px solid gray'
     visualGrafics.prepend(model);
 })

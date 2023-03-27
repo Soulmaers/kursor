@@ -21,9 +21,11 @@ export function visual(el) {
     const titleCar = document.querySelector('.title_two')
     const btnsens = document.querySelectorAll('.btnsens')
     const main = document.querySelector('.main')
+
     alarmClear();
     wrapperUp.style.display = 'block'
     wrapperCont.style.display = 'flex'
+
     // wrapperLeft.style.display = 'block'
     /*
     const widthWind = document.querySelector('body').offsetWidth;

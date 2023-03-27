@@ -9,6 +9,8 @@ export function radCecked() {
 }
 
 export function tech() {
+    const grafics = document.querySelector('.grafics')
+    grafics.style.display = 'none';
     const modalCenterOs = document.querySelector('.modalCenterOs')
     modalCenterOs.style.display = 'none';
     const formValue = document.querySelectorAll('.formValue')

@@ -3680,6 +3680,15 @@ input[type="number"]:focus {
 
 @media (min-width: 1201px) {
 
+  .grafics {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 800px;
+    background-color: lightgray;
+  }
+
   .sections {
     width: 30%
   }
@@ -3818,17 +3827,7 @@ input[type="number"]:focus {
     background-image: url(../image/708.png);
     background-size: cover;
     height: 95px;
-<<<<<<< HEAD
   }
 
-  .grafics {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 800px;
-    background-color: lightgray;
-=======
->>>>>>> 59bd423b3e334abf8b94ee69bcf8ebceb2d3dd2b
-  }
+
 }
