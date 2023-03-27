@@ -36,7 +36,6 @@ export function kranParams() {
 }
 
 const strela = [];
-
 function loadKran(arrCar) {
     const active = document.querySelector('.color')
     const act = active.children[0].textContent
