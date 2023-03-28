@@ -17,11 +17,26 @@ export function visual(el) {
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const wrapperCont = document.querySelector('.wrapper_containt')
-    // const wrapperLeft = document.querySelector('.wrapper_left')
+    const wrapperLeft = document.querySelector('.wrapper_left')
     const titleCar = document.querySelector('.title_two')
     const btnsens = document.querySelectorAll('.btnsens')
     const main = document.querySelector('.main')
-
+    const plug = document.querySelectorAll('.plug')
+    const tiresLink = document.querySelectorAll('.tires_link')
+    const grafics = document.querySelector('.grafics')
+    tiresLink.forEach(e => {
+        if (e.classList.contains('tiresActiv')) {
+            grafics.style.display = 'flex'
+        }
+    })
+    if (plug[1].classList.contains('activGraf')) {
+        console.log('лефт')
+        wrapperLeft.style.display = 'none'
+        grafics.style.display = 'flex'
+    }
+    else {
+        wrapperLeft.style.display = 'block'
+    }
     alarmClear();
     wrapperUp.style.display = 'block'
     wrapperCont.style.display = 'flex'
@@ -435,9 +450,10 @@ function styleShinaActive(arg) {
     const osi = document.querySelectorAll('.osi')
     const place = document.querySelectorAll('.place')
     const main = document.querySelector('.main')
-    const wLeft = document.querySelector('.wrapper_left')
+    const grafics = document.querySelector('.grafics')
+    // grafics.style.display = 'flex'
     main.style.display = 'flex'
-    wLeft.style.display = 'block'
+
     arg.style.fontSize = '0.65rem'
     // console.log(tyresD)
     osi.forEach(e => {
@@ -469,8 +485,8 @@ function styleShina(arg) {
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
     const centerOs = document.querySelectorAll('.centerOs')
-    const wLeft = document.querySelector('.wrapper_left')
-    wLeft.style.display = 'block'
+    const grafics = document.querySelector('.grafics')
+    //  grafics.style.display = 'flex'
     tyresD.forEach(e => {
         e.style.width = '30px'
     })

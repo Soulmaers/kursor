@@ -17,12 +17,19 @@ export function viewMenuParams() {
     const obo = document.querySelector('.obo')
     const tiresLink = document.querySelectorAll('.tires_link')
     const techInfo = document.querySelector('.techInfo')
+    const grafics = document.querySelector('.grafics')
+    const plug = document.querySelectorAll('.plug')
     tiresLink.forEach(e => {
         e.addEventListener('click', () => {
             if (e.classList.contains('tiresActiv')) {
                 e.classList.remove('tiresActiv')
                 techInfo.style.display = 'none'
                 wrapperMap.style.display = 'block'
+                if (plug[1].classList.contains('activGraf')) {
+                    grafics.style.display = 'flex';
+                    wrapperMap.style.display = 'none'
+                }
+
                 return
             }
             //  console.log('нажал')
@@ -42,6 +49,8 @@ export function viewMenuParams() {
             techInfo.style.display = 'block'
             speedGraf.style.display = 'block';
             wrapperMap.style.display = 'none'
+            grafics.style.display = 'none';
+
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
         })
     })

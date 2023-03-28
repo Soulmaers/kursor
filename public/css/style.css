@@ -2804,7 +2804,7 @@ input[type="number"]:focus {
   position: relative;
   position: absolute;
   top: 40px;
-  right: -193px;
+  right: -150px;
   z-index: 2;
 }
 

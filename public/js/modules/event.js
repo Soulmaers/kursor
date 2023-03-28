@@ -94,6 +94,8 @@ monitor.addEventListener('click', () => {
     const visualGrafics = document.querySelector('.visualGrafics')
     const wrapList = document.querySelector('.wrapList')
     const techInfo = document.querySelector('.techInfo')
+    const plug = document.querySelectorAll('.plug')
+    plug[1].classList.remove('activGraf')
     console.log(wLeft)
     wRight.style.display = 'flex';
     wLeft.style.display = 'block';
@@ -103,7 +105,8 @@ monitor.addEventListener('click', () => {
     visualGrafics.style.display = 'none';
     main.style.flexDirection = 'row'
     model.style.zoom = '1'
-    model.style.marginLeft = '25%'
+    model.style.width = '100%'
+    model.style.maxHeight = "none"
     model.style.MozTransform = "scale(1)"
     wRight.appendChild(model);
     wrapList.style.overflowY = 'none';
@@ -200,8 +203,8 @@ btnShina[0].addEventListener('click', () => {
     console.log(e)
     visualNone(e);
     visual(e)
-    const main = document.querySelector('.main')
-    main.style.display = 'flex'
+    // const main = document.querySelector('.main')
+    // main.style.display = 'flex'
     //  viewOs();
     // loadParamsView()
 })
@@ -277,13 +280,13 @@ plug[1].addEventListener('click', () => {
     const sections = document.querySelector('.sections')
     const wrapList = document.querySelector('.wrapList')
     const techInfo = document.querySelector('.techInfo')
-
+    plug[1].classList.add('activGraf')
     wrapList.style.overflowY = 'scroll';
     wrapList.style.height = '300px';
     model.style.zoom = '0.65'
     model.style.MozTransformOrigin = "top"
     model.style.MozTransform = "scale(0.65)"
-    //model.style.marginBottom = "-60px"
+    model.style.maxHeight = "200px"
     wRight.style.display = 'none';
     techInfo.style.display = 'none';
     wLeft.style.display = 'none';
