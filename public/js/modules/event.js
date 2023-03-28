@@ -4,6 +4,7 @@ import { data } from './content.js'
 import { getDash } from './dash.js'
 import { visual, visualNone } from './visual.js'
 import { getUsers } from './admin.js'
+import { geoloc } from './wialon.js'
 
 
 
@@ -80,6 +81,7 @@ btnDash.addEventListener('click', () => {
 
 const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', () => {
+    geoloc()
     const dash = document.querySelector('.wrapper_right_dash')
     const sections = document.querySelector('.sections')
     const main = document.querySelector('.main')

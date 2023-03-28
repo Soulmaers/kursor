@@ -38,7 +38,7 @@ export function visual(el) {
         wrapperLeft.style.display = 'block'
     }
     alarmClear();
-    wrapperUp.style.display = 'block'
+    wrapperUp.style.display = 'flex'
     wrapperCont.style.display = 'flex'
 
     // wrapperLeft.style.display = 'block'
