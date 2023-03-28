@@ -223,7 +223,6 @@ burger.addEventListener('click', () => {
         burger.classList.remove('burgerActive')
         return
     }
-
     adminka.style.display = 'none'
     control.style.display = 'flex'
     control.style.width = 30 + '%'
@@ -288,7 +287,7 @@ plug[1].addEventListener('click', () => {
     model.style.zoom = '0.65'
     model.style.MozTransformOrigin = "top"
     model.style.MozTransform = "scale(0.65)"
-    model.style.maxHeight = "200px"
+    model.style.maxHeight = "550px"
     wRight.style.display = 'none';
     techInfo.style.display = 'none';
     wLeft.style.display = 'none';
@@ -300,7 +299,7 @@ plug[1].addEventListener('click', () => {
     model.style.width = '50%'
     model.style.marginLeft = '0'
     sections.style.width = '40%'
-    visualGrafics.style.border = '1px solid gray'
+
     visualGrafics.prepend(model);
 })
 
