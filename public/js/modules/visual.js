@@ -274,7 +274,14 @@ export function viewConfigurator(arg, params) {
                                 done = parseFloat(el.value)
                             }
                             alerts.push(done)
-                            e.children[0].textContent = done + '\nБар'
+                            e.children[0].style.position = 'relative'
+                            e.children[0].innerHTML = `${done}\n<span class="ppp">Bar</span>`
+                            const ppp = document.querySelectorAll('.ppp')
+                            ppp.forEach(el => {
+                                el.style.position = 'absolute'
+                                el.style.bottom = 0
+                            })
+
                             e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                             if (activePost == 'КранГаличанинР858ОР178') {
                                 signal = objColor[generDav(done)]
@@ -297,7 +304,7 @@ export function viewConfigurator(arg, params) {
                                         e.children[1].textContent = el.value
                                     }
                                     if (el.value >= -51 && el.value < 36) {
-                                        e.children[1].textContent = el.value + '°'
+                                        e.children[1].textContent = el.value + '°C'
 
                                         e.children[1].style.background = objColor[generT(el.value)];
                                     }
@@ -452,30 +459,18 @@ function styleShinaActive(arg) {
     const main = document.querySelector('.main')
     const grafics = document.querySelector('.grafics')
 
-
-    //  activT.style.background = 'gray';
     main.style.display = 'flex'
-
     arg.style.fontSize = '0.65rem'
-    // console.log(tyresD)
-    osi.forEach(e => {
-        e.style.width = '310px'
-    })
+
     tyresD.forEach(e => {
-        e.style.width = '48px'
-        //e.style.alignItems = 'flex-start'
         e.style.background = 'black';
         e.style.borderBottom = 'none'
     })
     tyresT.forEach(e => {
-        e.style.width = '48px'
         e.style.background = 'black';
         e.style.borderTop = 'none'
         e.style.fontSize = '0.8rem'
         e.style.justifyContent = 'flex-start'
-    })
-    centerOs.forEach(e => {
-        e.style.width = '310px'
     })
 
     place.forEach(e => {
@@ -484,47 +479,19 @@ function styleShinaActive(arg) {
 }
 function styleShina(arg) {
     arg.textContent = 'Состояние шин'
-    const tyresD = document.querySelectorAll('.tiresD')
-    const tyresT = document.querySelectorAll('.tiresT')
-    const centerOs = document.querySelectorAll('.centerOs')
-    const grafics = document.querySelector('.grafics')
-    const osi = document.querySelectorAll('.osi')
-    //  grafics.style.display = 'flex'
-    tyresD.forEach(e => {
-        e.style.width = '48px'
-    })
-    tyresT.forEach(e => {
-        e.style.width = '48px'
-    })
-    centerOs.forEach(e => {
-        e.style.width = '310px'
-    })
-    osi.forEach(e => {
-        e.style.width = '310px'
-    })
 }
-
 //обработка массива для скрытия осей и других элементов
 export const divClear = (arr) => {
-
     if (arr.length > 0) {
-        /*
-        arr.forEach(e => {
-            e.style.display = 'none';
-        })*/
         arr.forEach(it => {
             it.remove();
         })
     }
     else {
-        //  arr.style.display = 'none';
         arr.remove();
     }
 }
-
 export const pricep = (elem) => {
-    // console.log('отработка прицеп')
-    // console.log(elem)
     const cont = document.querySelector('.cont')
     cont.append(elem.parentNode)
     cont.style.marginTop = '72px'
@@ -532,7 +499,6 @@ export const pricep = (elem) => {
     elem.children[0].style.background = "#00FFFF"
     elem.classList.add('pricep')
 }
-
 
 export const convert = (ob) => {
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
