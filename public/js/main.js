@@ -81,13 +81,7 @@ if (widthWind > 860 && widthWind <= 1200) {
     console.log('медиум')
     const wLeft = document.querySelector('.wrapper_left')
     wLeft.style.display = 'none'
-<<<<<<< HEAD
     //  return
-=======
-    const main = document.querySelector('.main')
-    main.style.display = 'flex'
-    // return
->>>>>>> 9cf9a4a95913b5e50f38e0bdd3377b1dbeeea7aa
 }
 else {
     const wLeft = document.querySelector('.wrapper_left')
