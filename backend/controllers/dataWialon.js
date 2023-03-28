@@ -13,7 +13,6 @@ const connection = require('../settings/db')
 
 module.exports.datawialon = (req, res) => {
 
-
     try {
         const selectBase = `SELECT name, value FROM ${req.body.activePost} WHERE 1`
         connection.query(selectBase, function (err, results) {
@@ -21,6 +20,7 @@ module.exports.datawialon = (req, res) => {
             // console.log(results)
             response.status(200, results, req.body.activePost, res)
         })
+
     }
     catch (e) {
         console.log(e)

@@ -435,8 +435,9 @@ function styleShinaActive(arg) {
     const osi = document.querySelectorAll('.osi')
     const place = document.querySelectorAll('.place')
     const main = document.querySelector('.main')
+    const wLeft = document.querySelector('.wrapper_left')
     main.style.display = 'flex'
-
+    wLeft.style.display = 'block'
     arg.style.fontSize = '0.65rem'
     // console.log(tyresD)
     osi.forEach(e => {
@@ -468,7 +469,8 @@ function styleShina(arg) {
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
     const centerOs = document.querySelectorAll('.centerOs')
-    //  console.log(tyresD)
+    const wLeft = document.querySelector('.wrapper_left')
+    wLeft.style.display = 'block'
     tyresD.forEach(e => {
         e.style.width = '30px'
     })
