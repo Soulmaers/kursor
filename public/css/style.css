@@ -910,7 +910,7 @@ div.spoyler {
 .tiresActiv {
   border: 1px solid #000;
   border-radius: 5px;
-  background-color: #000;
+  background-color: gray;
 }
 
 
@@ -1694,7 +1694,7 @@ input[type="date"] {
 
 .osi {
   width: 215px;
-  height: 88px;
+
   display: flex;
   justify-content: space-between;
   cursor: pointer;
@@ -1734,6 +1734,7 @@ input[type="date"] {
 }
 
 .tires {
+  margin: 0 0.5px;
   display: none;
   flex-direction: column;
   justify-content: center;
@@ -1757,8 +1758,8 @@ input[type="date"] {
 }
 
 .tiresD {
-  width: 30px;
-  height: 40px;
+  width: 45px;
+  height: 50px;
   border: 2px solid #000;
   border-radius: 30% 30% 0 0;
   color: #000;
@@ -1814,8 +1815,8 @@ input[type="date"] {
 
 
 .tiresT {
-  width: 30px;
-  height: 40px;
+  width: 45px;
+  height: 50px;
   border: 2px solid #000;
   border-radius: 0 0 30% 30%;
   color: #000;

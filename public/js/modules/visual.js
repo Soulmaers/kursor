@@ -451,29 +451,31 @@ function styleShinaActive(arg) {
     const place = document.querySelectorAll('.place')
     const main = document.querySelector('.main')
     const grafics = document.querySelector('.grafics')
-    // grafics.style.display = 'flex'
+
+
+    //  activT.style.background = 'gray';
     main.style.display = 'flex'
 
     arg.style.fontSize = '0.65rem'
     // console.log(tyresD)
     osi.forEach(e => {
-        e.style.width = '330px'
+        e.style.width = '310px'
     })
     tyresD.forEach(e => {
-        e.style.width = '60px'
+        e.style.width = '48px'
         //e.style.alignItems = 'flex-start'
         e.style.background = 'black';
         e.style.borderBottom = 'none'
     })
     tyresT.forEach(e => {
-        e.style.width = '60px'
+        e.style.width = '48px'
         e.style.background = 'black';
         e.style.borderTop = 'none'
         e.style.fontSize = '0.8rem'
         e.style.justifyContent = 'flex-start'
     })
     centerOs.forEach(e => {
-        e.style.width = '300px'
+        e.style.width = '310px'
     })
 
     place.forEach(e => {
@@ -486,15 +488,19 @@ function styleShina(arg) {
     const tyresT = document.querySelectorAll('.tiresT')
     const centerOs = document.querySelectorAll('.centerOs')
     const grafics = document.querySelector('.grafics')
+    const osi = document.querySelectorAll('.osi')
     //  grafics.style.display = 'flex'
     tyresD.forEach(e => {
-        e.style.width = '30px'
+        e.style.width = '48px'
     })
     tyresT.forEach(e => {
-        e.style.width = '30px'
+        e.style.width = '48px'
     })
     centerOs.forEach(e => {
-        e.style.width = '150px'
+        e.style.width = '310px'
+    })
+    osi.forEach(e => {
+        e.style.width = '310px'
     })
 }
 

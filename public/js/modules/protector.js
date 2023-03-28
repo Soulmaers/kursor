@@ -121,7 +121,7 @@ function viewPicture(arr, id, elem) {
     if (arr.length === 0) {
         conts.forEach(e => {
             e.style.display = 'block'
-            e.style.width = '20px'
+            e.style.width = '16px'
         })
         protekGrafFreeAll(arr, id, elem)
     }
@@ -130,7 +130,7 @@ function viewPicture(arr, id, elem) {
         y2 = ((200 - arrAll[1]) / 10).toFixed(0)
 
         conts[0].style.display = 'block'
-        conts[0].style.width = '60px'
+        conts[0].style.width = '48px'
         protekGrafTwoAll(y1, y2, arr, id, elem)
     }
     if (arrAll.length == 3) {
@@ -141,15 +141,15 @@ function viewPicture(arr, id, elem) {
 
         conts[0].style.display = 'block'
         conts[1].style.display = 'block'
-        conts[0].style.width = '30px'
-        conts[1].style.width = '30px'
+        conts[0].style.width = '24px'
+        conts[1].style.width = '24px'
         console.log(conts)
         protekGrafThreeAll(y1, y2, y3, arr, id, elem)
     }
     if (arrAll.length === 4) {
         conts.forEach(e => {
             e.style.display = 'block'
-            e.style.width = '20px'
+            e.style.width = '16px'
         })
         console.log(conts)
         y1 = ((120 - arrAll[0]) / 6).toFixed(0)
@@ -182,7 +182,7 @@ export function protekGrafTwoAll(y1, y2, arr, id, elem) {
     elem.children[1].style.color = objColors[gener(number)];
     console.log(id)
     const c2 = document.getElementById(`${id}p`);
-    c2.width = 60
+    c2.width = 48
     c2.heigth = 20
     const ctx2 = c2.getContext("2d");
     ctx2.beginPath();
@@ -190,8 +190,8 @@ export function protekGrafTwoAll(y1, y2, arr, id, elem) {
     ctx2.strokeStyle = "#000";
     ctx2.moveTo(0, 20);
     ctx2.lineTo(0, y1);
-    ctx2.lineTo(60, y2);
-    ctx2.lineTo(60, 20);
+    ctx2.lineTo(48, y2);
+    ctx2.lineTo(48, 20);
     ctx2.lineTo(0, 20);
     ctx2.fillStyle = objColors[gener(number)];
     ctx2.fill();
@@ -201,8 +201,8 @@ export function protekGrafTwoAll(y1, y2, arr, id, elem) {
     ctx2.lineWidth = "1";
     ctx2.strokeStyle = "#000";
     ctx2.moveTo(0, 18);
-    ctx2.lineTo(0.86, 18);
-    ctx2.lineTo(1.72, 0);
+    ctx2.lineTo(0.688, 18);
+    ctx2.lineTo(1.376, 0);
     ctx2.lineTo(0, 0);
     ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx2.fill();
@@ -212,10 +212,10 @@ export function protekGrafTwoAll(y1, y2, arr, id, elem) {
     ctx2.lineWidth = "1";
     ctx2.strokeStyle = "#000";
 
-    ctx2.moveTo(28.7, 0);
-    ctx2.lineTo(28.7 + 0.86, 18);
-    ctx2.lineTo(28.7 + 1.72, 18);
-    ctx2.lineTo(28.7 + 2.58, 0);
+    ctx2.moveTo(22.96, 0);
+    ctx2.lineTo(22.96 + 0.688, 18);
+    ctx2.lineTo(22.96 + 1.376, 18);
+    ctx2.lineTo(22.96 + 2.064, 0);
     //  ctx2.lineTo(0, 0);
     ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx2.fill();
@@ -224,10 +224,10 @@ export function protekGrafTwoAll(y1, y2, arr, id, elem) {
     ctx2.beginPath();
     ctx2.lineWidth = "1";
     ctx2.strokeStyle = "#000";
-    ctx2.moveTo(60, 36);
-    ctx2.lineTo(60 - 0.86, 18);
-    ctx2.lineTo(60 - 1.72, 0);
-    ctx2.lineTo(60, 0);
+    ctx2.moveTo(48, 36);
+    ctx2.lineTo(48 - 0.688, 18);
+    ctx2.lineTo(48 - 1.376, 0);
+    ctx2.lineTo(48, 0);
     ctx2.fillStyle = "rgba(14, 12, 11, 1);";
     ctx2.fill();
     //  ctx2.stroke();
@@ -255,15 +255,15 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
     const c2 = document.getElementById(`${id}p`);
     console.log(c2)
     const ctx2 = c2.getContext("2d");
-    c2.width = 30
+    c2.width = 24
     c2.heigth = 20
     ctx2.beginPath();
     ctx2.lineWidth = "1";
     ctx2.strokeStyle = "#000";
     ctx2.moveTo(0, 20);
     ctx2.lineTo(0, y1);
-    ctx2.lineTo(30, y2);
-    ctx2.lineTo(30, 20);
+    ctx2.lineTo(24, y2);
+    ctx2.lineTo(24, 20);
     ctx2.lineTo(0, 20);
     ctx2.fillStyle = objColors[gener(number)];
     ctx2.fill();
@@ -274,8 +274,8 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
     ctx2.strokeStyle = "#000";
     ctx2.moveTo(0, 0);
     ctx2.lineTo(0, 18);
-    ctx2.lineTo(0.86, 18);
-    ctx2.lineTo(1.72, 0);
+    ctx2.lineTo(0.688, 18);
+    ctx2.lineTo(1.376, 0);
     ctx2.lineTo(0, 0);
     ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx2.fill();
@@ -284,24 +284,24 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
     ctx2.beginPath();
     //ctx2.lineWidth = "1";
     //ctx2.strokeStyle = "#000";
-    ctx2.moveTo(30, 18);
-    ctx2.lineTo(30 - 0.86, 18);
-    ctx2.lineTo(30 - 1.72, 0);
-    ctx2.lineTo(30, 0);
+    ctx2.moveTo(24, 18);
+    ctx2.lineTo(24 - 0.688, 18);
+    ctx2.lineTo(24 - 1.376, 0);
+    ctx2.lineTo(24, 0);
     ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx2.fill();
     //  ctx2.stroke();
 
     const c3 = document.getElementById(`${id}v`);
-    c3.width = 30
+    c3.width = 24
     c3.heigth = 20
     const ctx3 = c3.getContext("2d");
     ctx3.beginPath();
     ctx3.lineWidth = "1";
     ctx3.strokeStyle = "#000";
     ctx3.moveTo(0, y2);
-    ctx3.lineTo(30, y3);
-    ctx3.lineTo(30, 20);
+    ctx3.lineTo(24, y3);
+    ctx3.lineTo(24, 20);
     ctx3.lineTo(0, 20);
     ctx3.fillStyle = objColors[gener(number)];
     ctx3.fill();
@@ -312,8 +312,8 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
     ctx3.strokeStyle = "#000";
     ctx3.moveTo(0, 0);
     ctx3.lineTo(0, 18);
-    ctx3.lineTo(0.86, 18);
-    ctx3.lineTo(1.72, 0);
+    ctx3.lineTo(0.688, 18);
+    ctx3.lineTo(1.376, 0);
     ctx3.lineTo(0, 0);
     //ctx2.lineTo(0, 60);
     ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
@@ -323,10 +323,10 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
     ctx3.beginPath();
     ctx3.lineWidth = "1";
     ctx3.strokeStyle = "#000";
-    ctx3.moveTo(30, 18);
-    ctx3.lineTo(29, 18);
-    ctx3.lineTo(28, 0);
-    ctx3.lineTo(30, 0);
+    ctx3.moveTo(24, 18);
+    ctx3.lineTo(23.2, 18);
+    ctx3.lineTo(22.4, 0);
+    ctx3.lineTo(24, 0);
     //ctx2.lineTo(0, 60);
     ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx3.fill();
@@ -352,15 +352,15 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     const c2 = document.getElementById(`${id}p`);
     //  console.log(c2)
     const ctx2 = c2.getContext("2d");
-    c2.width = 20
+    c2.width = 16
     c2.heigth = 20
     ctx2.beginPath();
     // ctx2.lineWidth = "1";
     // ctx2.strokeStyle = "#000";
     ctx2.moveTo(0, 20);
     ctx2.lineTo(0, y1);
-    ctx2.lineTo(20, y2);
-    ctx2.lineTo(20, 20);
+    ctx2.lineTo(16, y2);
+    ctx2.lineTo(16, 20);
     ctx2.lineTo(0, 20);
     ctx2.fillStyle = objColors[gener(number)];
     ctx2.fill();
@@ -371,8 +371,8 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     ctx2.strokeStyle = "#000";
     ctx2.moveTo(0, 0);
     ctx2.lineTo(0, 18);
-    ctx2.lineTo(0.86, 18);
-    ctx2.lineTo(1.72, 0);
+    ctx2.lineTo(0.688, 18);
+    ctx2.lineTo(1.376, 0);
     ctx2.lineTo(0, 0);
     ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx2.fill();
@@ -381,24 +381,24 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     ctx2.beginPath();
     ctx2.lineWidth = "1";
     ctx2.strokeStyle = "#000";
-    ctx2.moveTo(20, 18);
-    ctx2.lineTo(20 - 0.86, 18);
-    ctx2.lineTo(20 - 1.72, 0);
-    ctx2.lineTo(20, 0);
+    ctx2.moveTo(16, 18);
+    ctx2.lineTo(16 - 0.688, 18);
+    ctx2.lineTo(16 - 1.376, 0);
+    ctx2.lineTo(16, 0);
     ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx2.fill();
     //  ctx2.stroke();
 
     const c3 = document.getElementById(`${id}v`);
     const ctx3 = c3.getContext("2d");
-    c3.width = 20
+    c3.width = 16
     c3.heigth = 20
     ctx3.beginPath();
     //  ctx3.lineWidth = "1";
     // ctx3.strokeStyle = "#000";
     ctx3.moveTo(0, y2);
-    ctx3.lineTo(20, y3);
-    ctx3.lineTo(20, 20);
+    ctx3.lineTo(16, y3);
+    ctx3.lineTo(16, 20);
     ctx3.lineTo(0, 20);
     ctx3.fillStyle = objColors[gener(number)];
     ctx3.fill();
@@ -409,8 +409,8 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     ctx3.strokeStyle = "#000";
     ctx3.moveTo(0, 0);
     ctx3.lineTo(0, 18);
-    ctx3.lineTo(0.86, 18);
-    ctx3.lineTo(1.72, 0);
+    ctx3.lineTo(0.688, 18);
+    ctx3.lineTo(1.376, 0);
     ctx3.lineTo(0, 0);
     //ctx2.lineTo(0, 60);
     ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
@@ -420,10 +420,10 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     ctx3.beginPath();
     ctx3.lineWidth = "1";
     ctx3.strokeStyle = "#000";
-    ctx3.moveTo(20, 18);
-    ctx3.lineTo(19, 18);
-    ctx3.lineTo(18, 0);
-    ctx3.lineTo(20, 0);
+    ctx3.moveTo(16, 18);
+    ctx3.lineTo(15.2, 18);
+    ctx3.lineTo(14.4, 0);
+    ctx3.lineTo(16, 0);
     //ctx2.lineTo(0, 60);
     ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx3.fill();
@@ -431,14 +431,14 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
 
     const c4 = document.getElementById(`${id}t`);
     const ctx4 = c4.getContext("2d");
-    c4.width = 20
+    c4.width = 16
     c4.heigth = 20
     ctx4.beginPath();
     //  ctx4.lineWidth = "1";
     //  ctx4.strokeStyle = "#000";
     ctx4.moveTo(0, y3);
-    ctx4.lineTo(20, y4);
-    ctx4.lineTo(20, 20);
+    ctx4.lineTo(16, y4);
+    ctx4.lineTo(16, 20);
     ctx4.lineTo(0, 20);
     ctx4.fillStyle = objColors[gener(number)];
     ctx4.fill();
@@ -449,8 +449,8 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     ctx4.strokeStyle = "#000";
     ctx4.moveTo(0, 0);
     ctx4.lineTo(0, 18);
-    ctx4.lineTo(0.86, 18);
-    ctx4.lineTo(1.72, 0);
+    ctx4.lineTo(0.688, 18);
+    ctx4.lineTo(1.376, 0);
     ctx4.lineTo(0, 0);
     //ctx2.lineTo(0, 60);
     ctx4.fillStyle = 'rgba(14, 12, 11, 1)';
@@ -460,10 +460,10 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     ctx4.beginPath();
     ctx4.lineWidth = "1";
     ctx4.strokeStyle = "#000";
-    ctx4.moveTo(20, 18);
-    ctx4.lineTo(19, 18);
-    ctx4.lineTo(18, 0);
-    ctx4.lineTo(20, 0);
+    ctx4.moveTo(16, 18);
+    ctx4.lineTo(15.2, 18);
+    ctx4.lineTo(14.4, 0);
+    ctx4.lineTo(16, 0);
     //ctx2.lineTo(0, 60);
     ctx4.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx4.fill();
@@ -477,15 +477,15 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
 export function protekGrafFreeAll(arr, id, elem) {
     const c2 = document.getElementById(`${id}p`);
     const ctx2 = c2.getContext("2d");
-    c2.width = 20
+    c2.width = 16
     c2.heigth = 20
     ctx2.beginPath();
     // ctx2.lineWidth = "1";
     // ctx2.strokeStyle = "#000";
     ctx2.moveTo(0, 20);
     ctx2.lineTo(0, 0);
-    ctx2.lineTo(20, 0);
-    ctx2.lineTo(20, 20);
+    ctx2.lineTo(16, 0);
+    ctx2.lineTo(16, 20);
     ctx2.lineTo(0, 20);
     ctx2.fillStyle = "green";
     ctx2.fill();
@@ -496,8 +496,8 @@ export function protekGrafFreeAll(arr, id, elem) {
     ctx2.strokeStyle = "#000";
     ctx2.moveTo(0, 0);
     ctx2.lineTo(0, 18);
-    ctx2.lineTo(0.86, 18);
-    ctx2.lineTo(1.72, 0);
+    ctx2.lineTo(0.688, 18);
+    ctx2.lineTo(1.376, 0);
     ctx2.lineTo(0, 0);
     ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx2.fill();
@@ -506,24 +506,24 @@ export function protekGrafFreeAll(arr, id, elem) {
     ctx2.beginPath();
     ctx2.lineWidth = "1";
     ctx2.strokeStyle = "#000";
-    ctx2.moveTo(20, 18);
-    ctx2.lineTo(20 - 0.86, 18);
-    ctx2.lineTo(20 - 1.72, 0);
-    ctx2.lineTo(20, 0);
+    ctx2.moveTo(16, 18);
+    ctx2.lineTo(16 - 0.688, 18);
+    ctx2.lineTo(16 - 1.376, 0);
+    ctx2.lineTo(16, 0);
     ctx2.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx2.fill();
     //  ctx2.stroke();
 
     const c3 = document.getElementById(`${id}v`);
     const ctx3 = c3.getContext("2d");
-    c3.width = 20
+    c3.width = 16
     c3.heigth = 20
     ctx3.beginPath();
     //  ctx3.lineWidth = "1";
     // ctx3.strokeStyle = "#000";
     ctx3.moveTo(0, 0);
-    ctx3.lineTo(20, 0);
-    ctx3.lineTo(20, 20);
+    ctx3.lineTo(16, 0);
+    ctx3.lineTo(16, 20);
     ctx3.lineTo(0, 20);
     ctx3.fillStyle = "green";
     ctx3.fill();
@@ -534,8 +534,8 @@ export function protekGrafFreeAll(arr, id, elem) {
     ctx3.strokeStyle = "#000";
     ctx3.moveTo(0, 0);
     ctx3.lineTo(0, 18);
-    ctx3.lineTo(0.86, 18);
-    ctx3.lineTo(1.72, 0);
+    ctx3.lineTo(0.688, 18);
+    ctx3.lineTo(1.376, 0);
     ctx3.lineTo(0, 0);
     //ctx2.lineTo(0, 60);
     ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
@@ -545,10 +545,10 @@ export function protekGrafFreeAll(arr, id, elem) {
     ctx3.beginPath();
     ctx3.lineWidth = "1";
     ctx3.strokeStyle = "#000";
-    ctx3.moveTo(20, 18);
-    ctx3.lineTo(19, 18);
-    ctx3.lineTo(18, 0);
-    ctx3.lineTo(20, 0);
+    ctx3.moveTo(16, 18);
+    ctx3.lineTo(15.2, 18);
+    ctx3.lineTo(14.4, 0);
+    ctx3.lineTo(16, 0);
     //ctx2.lineTo(0, 60);
     ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx3.fill();
@@ -556,14 +556,14 @@ export function protekGrafFreeAll(arr, id, elem) {
 
     const c4 = document.getElementById(`${id}t`);
     const ctx4 = c4.getContext("2d");
-    c4.width = 20
+    c4.width = 16
     c4.heigth = 20
     ctx4.beginPath();
     //  ctx4.lineWidth = "1";
     //  ctx4.strokeStyle = "#000";
     ctx4.moveTo(0, 0);
-    ctx4.lineTo(20, 0);
-    ctx4.lineTo(20, 20);
+    ctx4.lineTo(16, 0);
+    ctx4.lineTo(16, 20);
     ctx4.lineTo(0, 20);
     ctx4.fillStyle = 'green'
     ctx4.fill();
@@ -574,8 +574,8 @@ export function protekGrafFreeAll(arr, id, elem) {
     ctx4.strokeStyle = "#000";
     ctx4.moveTo(0, 0);
     ctx4.lineTo(0, 18);
-    ctx4.lineTo(0.86, 18);
-    ctx4.lineTo(1.72, 0);
+    ctx4.lineTo(0.688, 18);
+    ctx4.lineTo(1.376, 0);
     ctx4.lineTo(0, 0);
     //ctx2.lineTo(0, 60);
     ctx4.fillStyle = 'rgba(14, 12, 11, 1)';
@@ -585,10 +585,10 @@ export function protekGrafFreeAll(arr, id, elem) {
     ctx4.beginPath();
     ctx4.lineWidth = "1";
     ctx4.strokeStyle = "#000";
-    ctx4.moveTo(20, 18);
-    ctx4.lineTo(19, 18);
-    ctx4.lineTo(18, 0);
-    ctx4.lineTo(20, 0);
+    ctx4.moveTo(16, 18);
+    ctx4.lineTo(15.2, 18);
+    ctx4.lineTo(14.4, 0);
+    ctx4.lineTo(16, 0);
     //ctx2.lineTo(0, 60);
     ctx4.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx4.fill();

@@ -51,6 +51,8 @@ export function viewMenuParams() {
             wrapperMap.style.display = 'none'
             grafics.style.display = 'none';
 
+
+
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
         })
     })
@@ -103,15 +105,15 @@ export async function loadParamsView() {
                         :
                         centerOs[el.osi - 1].children[0].style.background = "#3333FF"
                     if (el.tyres == 2) {
-                        btnShina[0].classList.contains('active') ? centerOs[el.osi - 1].children[0].style.width = '200px' :
-                            centerOs[el.osi - 1].children[0].style.width = '150px'
+                        btnShina[0].classList.contains('active') ? centerOs[el.osi - 1].children[0].style.width = '210px' :
+                            centerOs[el.osi - 1].children[0].style.width = '210px'
                         centerOs[el.osi - 1].previousElementSibling.children[0].style.display = 'flex';
                         centerOs[el.osi - 1].nextElementSibling.children[1].style.display = 'flex';
                         centerOs[el.osi - 1].previousElementSibling.children[1].style.display = 'none';
                         centerOs[el.osi - 1].nextElementSibling.children[0].style.display = 'none';
                     }
                     else {
-                        centerOs[el.osi - 1].children[0].style.width = '74px'
+                        centerOs[el.osi - 1].children[0].style.width = '110px'
                         centerOs[el.osi - 1].previousElementSibling.children[0].style.display = 'flex';
                         centerOs[el.osi - 1].previousElementSibling.children[1].style.display = 'flex';
                         centerOs[el.osi - 1].nextElementSibling.children[0].style.display = 'flex';
