@@ -26,6 +26,7 @@ export async function reqProtectorBase() {
     })
 
     const dannie = await res.json();
+    console.log(dannie)
     if (dannie.values.length == 0) {
         fnCanvas([])
     }
@@ -37,23 +38,31 @@ export async function reqProtectorBase() {
 
 
 function fnCanvas(arg) {
-    // console.log('апг')
+    const wrapCanvas = document.querySelectorAll('.wrapCanvas')
+    const dan = document.querySelectorAll('.dan')
+    if (wrapCanvas) {
+        wrapCanvas.forEach(el => {
+            el.remove()
+        })
+    }
+    if (dan) {
+        dan.forEach(el => {
+            el.remove()
+        })
+    }
     const tiresLink = document.querySelectorAll('.tires_link')
-    //   console.log(tiresLink)
     arg.forEach(el => {
         const massProtector = [];
         const protec = [];
         tiresLink.forEach(it => {
-            // console.log(it.id)
-            // console.log(el)
             if (el.idTyres == it.id) {
-                console.log(it)
                 massProtector.push(el.N1, el.N2, el.N3, el.N4)
                 massProtector.forEach(el => {
                     if (el !== '') {
                         protec.push(el)
                     }
                 })
+                const mm = el.maxMM * 10
                 const wrap = document.createElement('div')
                 wrap.classList.add('wrapCanvas')
                 it.children[0].appendChild(wrap)
@@ -78,33 +87,17 @@ function fnCanvas(arg) {
                 bar.appendChild(canvas)
                 bar2.appendChild(canvas2)
                 bar3.appendChild(canvas3)
-                //  console.log(massProtector)
-                // canvas.setAttribute('width', bodySize.width * 0.8);
                 canvas.setAttribute('height', 20);
                 canvas2.setAttribute('height', 20);
                 canvas3.setAttribute('height', 20);
-                // canvas.setAttribute('border-radius', '30% 0 0 0');
-                // canvas.style.height = '40px'
-                // canvas2.style.height = '40px'
-                //  canvas3.style.height = '40px'
-                //  canvas.style.width = '20px'
-                //  canvas2.style.width = '20px'
-                //  canvas3.style.width = '20px'
-                viewPicture(protec, it.id, it);
+                viewPicture(protec, it.id, it, mm);
             }
-
-
         })
-
-
     });
-
 }
 
-
-function viewPicture(arr, id, elem) {
+function viewPicture(arr, id, elem, mm) {
     const conts = document.querySelectorAll(`.contBar${id}`)
-    console.log(arr)
     conts.forEach(el => {
         el.style.display = 'none'
     })
@@ -116,58 +109,87 @@ function viewPicture(arr, id, elem) {
     let y2;
     let y3;
     let y4;
-
-    console.log(arrAll)
     if (arr.length === 0) {
         conts.forEach(e => {
             e.style.display = 'block'
             e.style.width = '16px'
         })
-        protekGrafFreeAll(arr, id, elem)
+        protekGrafFreeAll(arr, id, elem, mm)
     }
     if (arrAll.length == 2) {
-        y1 = ((200 - arrAll[0]) / 10).toFixed(0)
-        y2 = ((200 - arrAll[1]) / 10).toFixed(0)
-
+        if (mm <= 120) {
+            y1 = ((mm - arrAll[0]) / 6).toFixed(0)
+            y2 = ((mm - arrAll[1]) / 6).toFixed(0)
+        }
+        if (mm > 120 && mm <= 180) {
+            y1 = ((mm - arrAll[0]) / 9).toFixed(0)
+            y2 = ((mm - arrAll[1]) / 9).toFixed(0)
+        }
+        if (mm > 180) {
+            y1 = ((mm - arrAll[0]) / 12).toFixed(0)
+            y2 = ((mm - arrAll[1]) / 12).toFixed(0)
+        }
         conts[0].style.display = 'block'
         conts[0].style.width = '48px'
-        protekGrafTwoAll(y1, y2, arr, id, elem)
+        protekGrafTwoAll(y1, y2, arr, id, elem, mm)
     }
     if (arrAll.length == 3) {
-        console.log('условия 3')
-        y1 = ((120 - arrAll[0]) / 6).toFixed(0)
-        y2 = ((120 - arrAll[1]) / 6).toFixed(0)
-        y3 = ((120 - arrAll[2]) / 6).toFixed(0)
-
+        if (mm <= 120) {
+            y1 = ((mm - arrAll[0]) / 6).toFixed(0)
+            y2 = ((mm - arrAll[1]) / 6).toFixed(0)
+            y3 = ((mm - arrAll[2]) / 6).toFixed(0)
+        }
+        if (mm > 120 && mm <= 180) {
+            y1 = ((mm - arrAll[0]) / 9).toFixed(0)
+            y2 = ((mm - arrAll[1]) / 9).toFixed(0)
+            y3 = ((mm - arrAll[2]) / 9).toFixed(0)
+        }
+        if (mm > 180) {
+            y1 = ((mm - arrAll[0]) / 12).toFixed(0)
+            y2 = ((mm - arrAll[1]) / 12).toFixed(0)
+            y3 = ((mm - arrAll[2]) / 12).toFixed(0)
+        }
         conts[0].style.display = 'block'
         conts[1].style.display = 'block'
         conts[0].style.width = '24px'
         conts[1].style.width = '24px'
-        console.log(conts)
-        protekGrafThreeAll(y1, y2, y3, arr, id, elem)
+
+        protekGrafThreeAll(y1, y2, y3, arr, id, elem, mm)
     }
     if (arrAll.length === 4) {
         conts.forEach(e => {
             e.style.display = 'block'
             e.style.width = '16px'
         })
-        console.log(conts)
-        y1 = ((120 - arrAll[0]) / 6).toFixed(0)
-        y2 = ((120 - arrAll[1]) / 6).toFixed(0)
-        y3 = ((120 - arrAll[2]) / 6).toFixed(0)
-        y4 = ((120 - arrAll[3]) / 6).toFixed(0)
-        protekGrafFourAll(y1, y2, y3, y4, arr, id, elem)
+        if (mm <= 120) {
+            y1 = ((mm - arrAll[0]) / 6).toFixed(0)
+            y2 = ((mm - arrAll[1]) / 6).toFixed(0)
+            y3 = ((mm - arrAll[2]) / 6).toFixed(0)
+            y4 = ((mm - arrAll[3]) / 6).toFixed(0)
+        }
+        if (mm > 120 && mm <= 180) {
+            y1 = ((mm - arrAll[0]) / 9).toFixed(0)
+            y2 = ((mm - arrAll[1]) / 9).toFixed(0)
+            y3 = ((mm - arrAll[2]) / 9).toFixed(0)
+            y4 = ((mm - arrAll[3]) / 9).toFixed(0)
+        }
+        if (mm > 180) {
+            y1 = ((mm - arrAll[0]) / 12).toFixed(0)
+            y2 = ((mm - arrAll[1]) / 12).toFixed(0)
+            y3 = ((mm - arrAll[2]) / 12).toFixed(0)
+            y4 = ((mm - arrAll[3]) / 12).toFixed(0)
+        }
+        protekGrafFourAll(y1, y2, y3, y4, arr, id, elem, mm)
     }
 
 
 }
 
-
-
-
 const min = arr => arr.reduce((x, y) => Math.min(x, y));
 
-export function protekGrafTwoAll(y1, y2, arr, id, elem) {
+export function protekGrafTwoAll(y1, y2, arr, id, elem, mm) {
+    const mmAction = mm / 10
+
     console.log(y1, y2, arr, id, elem)
     let number = min(arr)
     const dan = document.createElement('div')
@@ -177,9 +199,9 @@ export function protekGrafTwoAll(y1, y2, arr, id, elem) {
     elem.children[1].appendChild(dan)
     elem.children[1].appendChild(dan1)
     dan.textContent = number + 'мм'
-    dan1.textContent = (number / 18 * 100).toFixed(0) + '%'
-    //elem.children[1].textContent = number / 10 * 100 + '%';
-    elem.children[1].style.color = objColors[gener(number)];
+    dan1.textContent = (number / mmAction * 100).toFixed() + '%'
+    const percent = (number / mmAction * 100).toFixed(0)
+    elem.children[1].style.color = objColors[gener(percent)];
     console.log(id)
     const c2 = document.getElementById(`${id}p`);
     c2.width = 48
@@ -193,7 +215,7 @@ export function protekGrafTwoAll(y1, y2, arr, id, elem) {
     ctx2.lineTo(48, y2);
     ctx2.lineTo(48, 20);
     ctx2.lineTo(0, 20);
-    ctx2.fillStyle = objColors[gener(number)];
+    ctx2.fillStyle = objColors[gener(percent)];
     ctx2.fill();
     //  ctx2.stroke();
 
@@ -236,10 +258,10 @@ export function protekGrafTwoAll(y1, y2, arr, id, elem) {
 
 
 
-export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
+export function protekGrafThreeAll(y1, y2, y3, arr, id, elem, mm) {
     console.log(y1, y2, y3)
     let number = min(arr)
-
+    const mmAction = mm / 10
     const dan = document.createElement('div')
     const dan1 = document.createElement('div')
     dan.classList.add('dan')
@@ -247,9 +269,9 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
     elem.children[1].appendChild(dan)
     elem.children[1].appendChild(dan1)
     dan.textContent = number + 'мм'
-    dan1.textContent = (number / 10 * 100).toFixed(0) + '%'
-    //elem.children[1].textContent = number / 10 * 100 + '%';
-    elem.children[1].style.color = objColors[gener(number)];
+    dan1.textContent = (number / mmAction * 100).toFixed(0) + '%'
+    const percent = (number / mmAction * 100).toFixed(0)
+    elem.children[1].style.color = objColors[gener(percent)];
     console.log(id)
     console.log('работаем')
     const c2 = document.getElementById(`${id}p`);
@@ -265,7 +287,7 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
     ctx2.lineTo(24, y2);
     ctx2.lineTo(24, 20);
     ctx2.lineTo(0, 20);
-    ctx2.fillStyle = objColors[gener(number)];
+    ctx2.fillStyle = objColors[gener(percent)];
     ctx2.fill();
     //  ctx2.stroke();
 
@@ -303,7 +325,7 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
     ctx3.lineTo(24, y3);
     ctx3.lineTo(24, 20);
     ctx3.lineTo(0, 20);
-    ctx3.fillStyle = objColors[gener(number)];
+    ctx3.fillStyle = objColors[gener(percent)];
     ctx3.fill();
     // ctx3.stroke();
 
@@ -336,8 +358,9 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id, elem) {
 }
 
 
-export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
-    console.log(elem)
+export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem, mm) {
+    const mmAction = mm / 10
+    console.log(mmAction)
     let number = min(arr)
     const dan = document.createElement('div')
     const dan1 = document.createElement('div')
@@ -346,9 +369,10 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     elem.children[1].appendChild(dan)
     elem.children[1].appendChild(dan1)
     dan.textContent = number + 'мм'
-    dan1.textContent = (number / 10 * 100).toFixed(0) + '%'
+    dan1.textContent = (number / mmAction * 100).toFixed(0) + '%'
+    const percent = (number / mmAction * 100).toFixed(0)
     //elem.children[1].textContent = number / 10 * 100 + '%';
-    elem.children[1].style.color = objColors[gener(number)];
+    elem.children[1].style.color = objColors[gener(percent)];
     const c2 = document.getElementById(`${id}p`);
     //  console.log(c2)
     const ctx2 = c2.getContext("2d");
@@ -362,7 +386,7 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     ctx2.lineTo(16, y2);
     ctx2.lineTo(16, 20);
     ctx2.lineTo(0, 20);
-    ctx2.fillStyle = objColors[gener(number)];
+    ctx2.fillStyle = objColors[gener(percent)];
     ctx2.fill();
     // ctx2.stroke();
 
@@ -400,7 +424,7 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     ctx3.lineTo(16, y3);
     ctx3.lineTo(16, 20);
     ctx3.lineTo(0, 20);
-    ctx3.fillStyle = objColors[gener(number)];
+    ctx3.fillStyle = objColors[gener(percent)];
     ctx3.fill();
     // ctx3.stroke();
 
@@ -440,7 +464,7 @@ export function protekGrafFourAll(y1, y2, y3, y4, arr, id, elem) {
     ctx4.lineTo(16, y4);
     ctx4.lineTo(16, 20);
     ctx4.lineTo(0, 20);
-    ctx4.fillStyle = objColors[gener(number)];
+    ctx4.fillStyle = objColors[gener(percent)];
     ctx4.fill();
     //  ctx4.stroke();
 

@@ -1,7 +1,6 @@
 import { graf } from './graf.js'
 
 export function speed(arrCar) {
-    console.log(arrCar)
     const speedGraf = document.querySelector('.speedGraf')
     speedGraf.style.display = 'block'
     const btnForm = document.querySelectorAll('.btm_form')
@@ -30,7 +29,6 @@ export function speed(arrCar) {
 }
 
 function dataInput(arrCar) {
-    console.log('датаинпут')
     arrCar.forEach(it => {
         const active = document.querySelector('.color')
         const act = active.children[0].textContent
@@ -52,15 +50,10 @@ function dataInput(arrCar) {
 }
 
 function dataSelect(arrCar) {
-    console.log('go')
     arrCar.forEach(it => {
         const active = document.querySelector('.color')
-        console.log(active)
         const act = active.children[0].textContent
-        console.log(active)
-        console.log(act)
         if (it.nm === act) {
-            console.log('!')
             //  speed(it.id)//условия для запроса графика скорости
             let nowDate = Math.round(new Date().getTime() / 1000)
             let nDate = new Date();
@@ -68,7 +61,6 @@ function dataSelect(arrCar) {
             switch (selectSpeed.value) {
                 case '1': {
                     let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 24) / 1000);
-                    console.log(timeFrom)
                     graf(timeFrom, nowDate, 1, it.id)
                 }
                     break;

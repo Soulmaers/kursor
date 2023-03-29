@@ -202,7 +202,7 @@ export async function reqModalBar(arr, id) {
 
 }
 
-export function reqTech(arr, id) {
+export async function reqTech(arr, id) {
     console.log('запуск')
     let activePost;
     const active = document.querySelectorAll('.color')
@@ -217,23 +217,24 @@ export function reqTech(arr, id) {
     }
     const arrValue = [];
     const formValue = document.querySelectorAll('.formValue')
+    const inputMM = document.querySelector('.maxMMM')
     // console.log(JSON.stringify({ id, arr, arrValue, activePost }))
     arrValue.push(id)
-
     formValue.forEach(el => {
         arrValue.push(el.value)
     })
-
-    console.log(arrValue)
-    fetch('api/tech', {
+    const place = inputMM.placeholder
+    !inputMM.value ? arrValue.push(place) : arrValue.push(inputMM.value)
+    const complete = await fetch('api/tech', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ id, arr, arrValue, activePost }),
     })
-        .then((res) => res.json())
-        .then(res => console.log(res))
+    const result = await complete.json()
+    return console.log(result)
+
 
 }
 
@@ -277,6 +278,7 @@ export async function viewBar(id) {
 }
 
 export function viewTech(id) {
+    console.log('вьютэч')
     console.log(id)
     let activePost;
     const active = document.querySelectorAll('.color')
@@ -315,6 +317,7 @@ export function viewTech(id) {
             const text = document.querySelectorAll('.text')
             const titleMM = document.querySelectorAll('.titleMM')
             const rad = document.querySelectorAll('[name=radio]')
+            const inputMM = document.querySelector('.maxMMM')
             console.log(titleMM)
             if (res.values.length === 0) {
                 number.forEach(e => {
@@ -339,7 +342,7 @@ export function viewTech(id) {
                     text[1].textContent = res.values[0].N2 + 'мм',
                     text[2].textContent = res.values[0].N3 + 'мм',
                     text[3].textContent = res.values[0].N4 + 'мм';
-
+                inputMM.value = res.values[0].maxMM;
                 const protector = [];
                 protector.push(res.values[0].N1, res.values[0].N2, res.values[0].N3, res.values[0].N4)
                 const protectorClear = [];
@@ -357,22 +360,22 @@ export function viewTech(id) {
                     }
                 })
                 const reverseprotectorClear = protectorClearRigth.reverse();
-
+                const maxStoc = res.values[0].maxMM
                 rad.forEach(el => {
                     el.addEventListener('change', () => {
-                        el.id === '1' ? (viewDinamic(protectorClear),
+                        el.id === '1' ? (viewDinamic(protectorClear, maxStoc),
                             text[0].textContent = res.values[0].N1 + 'мм',
                             text[1].textContent = res.values[0].N2 + 'мм',
                             text[2].textContent = res.values[0].N3 + 'мм',
                             text[3].textContent = res.values[0].N4 + 'мм') :
-                            (viewDinamic(reverseprotectorClear),
+                            (viewDinamic(reverseprotectorClear, maxStoc),
                                 text[3].textContent = res.values[0].N1 + 'мм',
                                 text[2].textContent = res.values[0].N2 + 'мм',
                                 text[1].textContent = res.values[0].N3 + 'мм',
                                 text[0].textContent = res.values[0].N4 + 'мм')
                     })
                 })
-                viewDinamic(protectorClear)
+                viewDinamic(protectorClear, maxStoc)
 
                 const nval = (Object.entries(res.values[0]))
                 const massVal = nval.shift()

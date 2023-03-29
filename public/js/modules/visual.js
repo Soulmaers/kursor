@@ -509,9 +509,9 @@ export const convert = (ob) => {
 
 
 
-export function viewDinamic(arr) {
+export function viewDinamic(arr, maxProtector) {
     const conts = document.querySelectorAll('.contBar2')
-    //  console.log(arr)
+
     conts.forEach(el => {
         el.style.display = 'none'
     })
@@ -521,7 +521,8 @@ export function viewDinamic(arr) {
     arr.forEach(el => {
         arrAll.push(el * 10)
     })
-
+    const mm = parseFloat(maxProtector * 10)
+    console.log(mm)
     let y1;
     let y2;
     let y3;
@@ -534,22 +535,44 @@ export function viewDinamic(arr) {
         protekGrafFree()
     }
     if (arrAll.length == 2) {
-        y1 = (120 - arrAll[0]) / 2
-        y2 = (120 - arrAll[1]) / 2
+        if (mm <= 120) {
+            y1 = (mm - arrAll[0]) / 2
+            y2 = (mm - arrAll[1]) / 2
+        }
+        if (mm > 120 && mm <= 180) {
+            y1 = (mm - arrAll[0]) / 3
+            y2 = (mm - arrAll[1]) / 3
+        }
+        if (mm > 180) {
+            y1 = (mm - arrAll[0]) / 4
+            y2 = (mm - arrAll[1]) / 4
+        }
         conts[0].style.display = 'block'
         conts[0].style.width = '348px'
-        protekGrafTwo(y1, y2, arr)
+        protekGrafTwo(y1, y2, arr, mm)
     }
     if (arrAll.length == 3) {
-        y1 = (120 - arrAll[0]) / 2
-        y2 = (120 - arrAll[1]) / 2
-        y3 = (120 - arrAll[2]) / 2
+        if (mm <= 120) {
+            y1 = (mm - arrAll[0]) / 2
+            y2 = (mm - arrAll[1]) / 2
+            y3 = (mm - arrAll[2]) / 2
+        }
+        if (mm > 120 && mm <= 180) {
+            y1 = (mm - arrAll[0]) / 3
+            y2 = (mm - arrAll[1]) / 3
+            y3 = (mm - arrAll[2]) / 3
+        }
+        if (mm > 180) {
+            y1 = (mm - arrAll[0]) / 4
+            y2 = (mm - arrAll[1]) / 4
+            y3 = (mm - arrAll[2]) / 4
+        }
 
         conts[0].style.display = 'block'
         conts[1].style.display = 'block'
         conts[0].style.width = '174px'
         conts[1].style.width = '174px'
-        protekGrafThree(y1, y2, y3, arr)
+        protekGrafThree(y1, y2, y3, arr, mm)
     }
     if (arrAll.length === 4) {
         conts.forEach(e => {
@@ -557,11 +580,25 @@ export function viewDinamic(arr) {
             e.style.width = '116px'
         })
         console.log(conts)
-        y1 = (120 - arrAll[0]) / 2
-        y2 = (120 - arrAll[1]) / 2
-        y3 = (120 - arrAll[2]) / 2
-        y4 = (120 - arrAll[3]) / 2
-        protekGrafFour(y1, y2, y3, y4, arr)
+        if (mm <= 120) {
+            y1 = (mm - arrAll[0]) / 2
+            y2 = (mm - arrAll[1]) / 2
+            y3 = (mm - arrAll[2]) / 2
+            y4 = (mm - arrAll[3]) / 2
+        }
+        if (mm > 120 && mm <= 180) {
+            y1 = (mm - arrAll[0]) / 3
+            y2 = (mm - arrAll[1]) / 3
+            y3 = (mm - arrAll[2]) / 3
+            y4 = (mm - arrAll[3]) / 2
+        }
+        if (mm > 180) {
+            y1 = (mm - arrAll[0]) / 4
+            y2 = (mm - arrAll[1]) / 4
+            y3 = (mm - arrAll[2]) / 4
+            y4 = (mm - arrAll[3]) / 2
+        }
+        protekGrafFour(y1, y2, y3, y4, arr, mm)
     }
 }
 

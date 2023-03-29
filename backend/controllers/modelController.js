@@ -40,9 +40,10 @@ module.exports.paramsDeleteView = (req, res) => {
 
 }
 
-module.exports.tech = (req, res) => {
+module.exports.tech = async (req, res) => {
     //   console.log(req.body.activePost)
     //  console.log(req.body.arr[1])
+    console.log(req.body.arr)
     console.log(req.body.arrValue)
     const value = [req.body.arrValue];
     console.log(value)
@@ -64,8 +65,8 @@ module.exports.tech = (req, res) => {
             ${req.body.arr[8]} varchar(255),
             ${req.body.arr[9]} varchar(255),
             ${req.body.arr[10]} varchar(255),
-            ${req.body.arr[11]}  varchar(255)
-                             
+            ${req.body.arr[11]}  varchar(255),
+            ${req.body.arr[12]}  varchar(255)
             )`
         connection.query(sql, function (err, results) {
             if (err) console.log(err);
@@ -78,7 +79,7 @@ module.exports.tech = (req, res) => {
             if (results.length === 0) {
                 console.log('запусккк')
                 const sql = `INSERT INTO  ${tableModel}( idTyres, ${req.body.arr[0]},${req.body.arr[1]},${req.body.arr[2]},${req.body.arr[3]},
-                        ${req.body.arr[4]},${req.body.arr[5]},${req.body.arr[6]},${req.body.arr[7]},${req.body.arr[8]},${req.body.arr[9]},${req.body.arr[10]},${req.body.arr[11]}) VALUES?`;
+                        ${req.body.arr[4]},${req.body.arr[5]},${req.body.arr[6]},${req.body.arr[7]},${req.body.arr[8]},${req.body.arr[9]},${req.body.arr[10]},${req.body.arr[11]},${req.body.arr[12]}) VALUES?`;
                 connection.query(sql, [value], function (err, results) {
                     if (err) console.log(err);
                 });
@@ -92,22 +93,24 @@ module.exports.tech = (req, res) => {
                 if (!mas.includes(parseInt(value[0][0]))) {
                     console.log('запусккк2')
                     const sql = `INSERT INTO  ${tableModel}( idTyres, ${req.body.arr[0]},${req.body.arr[1]},${req.body.arr[2]},${req.body.arr[3]},
-                                ${req.body.arr[4]},${req.body.arr[5]},${req.body.arr[6]},${req.body.arr[7]},${req.body.arr[8]}, ${req.body.arr[9]},${req.body.arr[10]},${req.body.arr[11]}) VALUES?`;
+                                ${req.body.arr[4]},${req.body.arr[5]},${req.body.arr[6]},${req.body.arr[7]},${req.body.arr[8]}, ${req.body.arr[9]},
+                                ${req.body.arr[10]},${req.body.arr[11]},${req.body.arr[12]}) VALUES?`;
                     connection.query(sql, [value], function (err, results) {
                         if (err) console.log(err);
                     });
                 }
                 if (mas.includes(parseInt(value[0][0]))) {
                     console.log('запусккк3')
-                    console.log(req.body.arr[11])
-                    console.log(value[0][12])
+                    console.log(req.body.arr[12])
+                    console.log(value)
                     const sql = `UPDATE ${tableModel} SET idTyres='${value[0][0]}', ${req.body.arr[0]}='${value[0][1]}', 
                     ${req.body.arr[1]}='${value[0][2]}',${req.body.arr[2]}='${value[0][3]}',
                         ${req.body.arr[3]}='${value[0][4]}',${req.body.arr[4]}='${value[0][5]}',${req.body.arr[5]}='${value[0][6]}',${req.body.arr[6]}='${value[0][7]}',
                         ${req.body.arr[7]}='${value[0][8]}', ${req.body.arr[8]}='${value[0][9]}', ${req.body.arr[9]}='${value[0][10]}',
-                        ${req.body.arr[10]}='${value[0][11]}', ${req.body.arr[11]}='${value[0][12]}'WHERE idTyres=${count}`;
+                        ${req.body.arr[10]}='${value[0][11]}', ${req.body.arr[11]}='${value[0][12]}', ${req.body.arr[12]}='${value[0][13]}'WHERE idTyres=${count}`;
                     connection.query(sql, [value], function (err, results) {
                         if (err) console.log(err);
+                        res.json(results + 'готово')
                     });
                 }
             }
@@ -209,12 +212,6 @@ module.exports.model = (req, res) => {
             if (err) console.log(err);
             else console.log("Таблица модели создана");
         })
-
-
-
-
-
-
         const postModel = `INSERT INTO ${tableModel}(osi, trailer, tyres) VALUES?`
         connection.query(postModel, [req.body.model], function (err, results) {
             if (err) console.log(err);
@@ -292,7 +289,7 @@ module.exports.techView = (req, res) => {
     const count = req.body.id
     console.log(count)
     try {
-        const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, N1, N2,N3, N4, protectorDate FROM ${tableModelView} WHERE  idTyres=${count}`
+        const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, N1, N2,N3, N4, protectorDate, maxMM FROM ${tableModelView} WHERE  idTyres=${count}`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             console.log(results)
@@ -309,7 +306,7 @@ module.exports.techViewAll = (req, res) => {
     console.log('работаем')
 
     try {
-        const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, N1, N2,N3, N4, protectorDate FROM ${tableModelView} WHERE 1`
+        const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, N1, N2,N3, N4, protectorDate, maxMM FROM ${tableModelView} WHERE 1`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             console.log(results)

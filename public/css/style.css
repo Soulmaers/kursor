@@ -2450,8 +2450,22 @@ div.wrapper {
 
 
 
-.mm,
-.mm12 {
+.mm {
+  position: absolute;
+  top: 0;
+  left: -2px;
+  font-size: 0.5rem;
+  font-weight: bold;
+  color: #000;
+  margin: 0;
+  width: 25px;
+  border: none;
+  background: none;
+
+  padding-left: 5px;
+}
+
+.maxMMM {
   position: absolute;
   top: 0;
   left: -2px;
@@ -2467,7 +2481,6 @@ div.wrapper {
 }
 
 
-
 .mm0 {
   position: absolute;
   top: 80%;
@@ -2478,6 +2491,15 @@ div.wrapper {
   margin: 0;
 }
 
+.mmtext {
+  position: absolute;
+  top: 1px;
+  left: 15px;
+  font-size: 0.5rem;
+  font-weight: bold;
+  color: #000;
+  margin: 0;
+}
 
 .headerMM {
   margin-top: 5px;

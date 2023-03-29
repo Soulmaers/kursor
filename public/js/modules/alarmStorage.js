@@ -12,14 +12,11 @@ export async function alarmFind(name) {
     }
     const tyres = await fetch('api/tyresView', par)
     const tyresmassiv = await tyres.json();
-
     const sorTyres = convert(tyresmassiv.values)
-    console.log(sorTyres)
     const storValue = [];
     sorTyres.forEach(async e => {
         e.pressure
         const activeName = 'alarm' + activePost + e.pressure
-        // console.log(activeName)
         const stor = await fetch('api/alarmFind', {
             method: "POST",
             headers: {
@@ -28,31 +25,15 @@ export async function alarmFind(name) {
             body: JSON.stringify({ activeName })
         })
         const storList = await stor.json();
-        // console.log(storList)
         storValue.push(storList)
 
     })
     setTimeout(viewAlarmStorage, 1000, activePost, storValue)
 }
 
-
 function viewAlarmStorage(name, stor) {
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
-    //  console.log(stor)
-    /*
-        const globalMass = [];
-        stor.forEach(e => {
-            globalMass.push(...e)
-        })
-        console.log(globalMass)
-    
-        globalMass.sort(function (a, b) {
-            //  console.log('фн')
-            return parseFloat(b.data) - parseFloat(a.data);
-        });
-        console.log(globalMass)
-    */
     stor.forEach(el => {
         let count = 0;
         el.forEach(it => {
@@ -62,18 +43,12 @@ function viewAlarmStorage(name, stor) {
             tr.classList.add('trnone')
             tr.classList.add(`${name}`)
             tbody.appendChild(tr)
-            // const wrapSort = document.createElement('div')
-            //  wrapSort.classList.add('wrapSort')
-            //  tr.appendChild(wrapSort)
             const toSearch = "Норма";
             if (count == 1) {
                 tr.classList.add('views')
-                //  return
             }
             if (it.alarm == toSearch) {
                 tr.classList.add('norma')
-                //   return
-
             }
             for (var key in it) {
                 const td = document.createElement('p')
@@ -85,36 +60,26 @@ function viewAlarmStorage(name, stor) {
             for (let i = 0; i < t.length; i++) {
                 if (t[i].children[4].textContent == 'Норма' && t[i + 1] !== undefined) {
                     t[i + 1].classList.add('views')
-                    // return
-
                 }
                 if (t[i].nextSibling !== null) {
                     if (t[i].classList.contains('views') && !t[i].nextSibling.classList.contains('views') && !t[i].nextSibling.classList.contains('norma')) {
                         t[i].classList.add('best')
-                        // return
-
                     }
                 }
             }
         })
     })
     const t = document.querySelectorAll('.tr')
-
-    // console.log(t)
-    // const views = document.querySelectorAll('.views')
-
     t.forEach(el => {
         const dop = document.createElement('p')
         dop.classList.add('td')
         el.appendChild(dop);
         dop.style.width = '120px'
-
         if (el.nextSibling !== null && !el.classList.contains('norma') && el.children[1].textContent !== el.nextSibling.children[1].textContent
             && !el.classList.contains('oneName') || !el.classList.contains('norma')
             && !el.nextSibling) {
             if (el.previousSibling.children[1].textContent !== el.children[1].textContent || el.previousSibling.classList.contains('norma')) {
                 el.classList.add('alarmOpen')
-                //el.style.border = '1px solid black'
                 const alarmFire = document.createElement('div')
                 alarmFire.classList.add('alarmFire')
                 el.appendChild(alarmFire)
@@ -124,18 +89,11 @@ function viewAlarmStorage(name, stor) {
                 alarmFire.style.right = '4px';
                 alarmFire.style.top = 0;
                 alarmFire.style.fontSize = '10px';
-
-
-
-                //  return
             }
-
             const prevElem = prevAll(el)
             let count = 0;
-            // console.log(prevElem)
             const y = prevElem.reverse();
             y.forEach(e => {
-                // console.log(prevElem[0])
                 if (e.children[1].textContent === el.children[1].textContent && e.classList.contains('best') && !e.classList.contains('norma')) {
                     count++
                     if (count == 1) {
@@ -149,24 +107,19 @@ function viewAlarmStorage(name, stor) {
                         alarmFire.style.right = '4px';
                         alarmFire.style.top = 0;
                         alarmFire.style.fontSize = '10px';
-                        //  console.log(e)
                     }
                 }
             })
             function prevAll(el) {
                 const prevElements = []
                 let prevElement = el.parentNode.firstElementChild
-                //   console.log(el)
                 while (prevElement !== el) {
                     prevElements.push(prevElement)
                     prevElement = prevElement.nextElementSibling
                 }
-
                 return prevElements
             }
-
         }
-
     })
 
     t[0].children[5].textContent = 'Время аларма'
@@ -194,27 +147,15 @@ function viewAlarmStorage(name, stor) {
         el.appendChild(wrapSpoyler)
         const next = nextAll(el)
         let countts = 0;
-        //  console.log(next)
         next.forEach(it => {
             if (it.classList.contains('norma') !== false) {
                 countts++
-                //  console.log(it)
-                // return
             }
             if (it.classList.contains('norma') == false
                 && it.children[1].textContent == el.children[1].textContent && countts < 1) {
                 it.classList.add('spoyler');
-
                 wrapSpoyler.appendChild(it)
-                // console.log('спойлер')
-                // console.log(it)
-                //return
-
-
-
             }
-
-            //  
         });
 
         el.addEventListener('click', () => {
@@ -241,7 +182,7 @@ function viewAlarmStorage(name, stor) {
         })
     })
 
-    console.log(best)
+
     /*
         t.forEach(el => {
             if (!el.classList.contains('best') && !el.classList.contains('alarmOpen') && !el.classList.contains('oneName') && !el.classList.contains('spoyler')) {
@@ -285,7 +226,7 @@ function viewAlarmStorage(name, stor) {
                 const hourss = (hours < 10) ? "" + hours : hours;
                 const minutess = (minutes < 10) ? "" + minutes : minutes;
                 const interval = days + 'd' + ' ' + hourss + "h" + ' ' + + minutess + "m"
-                console.log(days + '(d)' + ' ' + hourss + "(h)" + ' ' + + minutess + "(m)");
+                //   console.log(days + '(d)' + ' ' + hourss + "(h)" + ' ' + + minutess + "(m)");
                 el.children[5].textContent = interval
             }
             else if (el.classList.contains('best') && el.nextSibling.classList.contains('norma') && el.nextSibling.children[1].textContent == el.children[1].textContent) {

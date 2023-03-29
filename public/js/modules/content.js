@@ -127,19 +127,19 @@ export const objColor = {
 
 export function gener(el) {
     let generatedValue;
-    if (el === 20) {
+    if (el === 100) {
         generatedValue = 5;
     }
-    if (el >= 16 && el < 20) {
+    if (el >= 80 && el < 100) {
         generatedValue = 4;
     }
-    if (el >= 12 && el < 16) {
+    if (el >= 60 && el < 80) {
         generatedValue = 3;
     }
-    if (el >= 6 && el < 12) {
+    if (el >= 40 && el < 60) {
         generatedValue = 2;
     }
-    if (el < 6) {
+    if (el < 40) {
         generatedValue = 1;
     }
     return generatedValue;

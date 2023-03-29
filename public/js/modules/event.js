@@ -5,6 +5,7 @@ import { getDash } from './dash.js'
 import { visual, visualNone } from './visual.js'
 import { getUsers } from './admin.js'
 import { geoloc } from './wialon.js'
+import { reqProtectorBase } from './protector.js'
 
 
 
@@ -259,20 +260,20 @@ detaly.addEventListener('click', () => {
 
 
 const buttonTth = document.querySelector('.buttonTth')
-buttonTth.addEventListener('click', () => {
+buttonTth.addEventListener('click', async () => {
     const techText = document.querySelectorAll('.tech')
-    const inputMM = document.querySelector('.mm12')
+    const inputMM = document.querySelector('.maxMMM')
     console.log(techText)
     const arrNameCol = [];
     techText.forEach(el => {
         arrNameCol.push(el.id)
     })
-
+    arrNameCol.push('maxMM')
     const tyresActive = document.querySelector('.tiresActiv')
-    console.log(tyresActive.id)
-    console.log(arrNameCol)
-    reqTech(arrNameCol, tyresActive.id);
-    viewTech(tyresActive.id);
+    await reqTech(arrNameCol, tyresActive.id)
+    reqProtectorBase()
+    viewTech(tyresActive.id)
+
 })
 
 

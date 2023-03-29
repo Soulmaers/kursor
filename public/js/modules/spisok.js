@@ -12,7 +12,6 @@ if(isLoaded === true){
 }*/
 const testov = [];
 export async function loadParamsViewList(car) {
-    //console.log(1)
     const params = {
         method: "POST",
         headers: {
@@ -38,7 +37,6 @@ export function conturTest(testov) {
     const preloader = document.querySelector('.preloader') /* находим блок Preloader */
     preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
     const tt = new Date()
-    console.log(testov)
     testov.forEach(elem => {
         dashView(elem[0].message)
         const nameCar = elem[0].message.replace(/\s+/g, '')
@@ -58,8 +56,6 @@ export function conturTest(testov) {
         listTrail.classList.add('list_trail2')
         listItemCar.appendChild(listTrail)
         const modelUniq = convert(elem[0].result)
-        console.log(modelUniq)
-
         modelUniq.forEach(os => {
             const osi = document.createElement('div')
             osi.classList.add('osi_list')
@@ -79,8 +75,6 @@ export function conturTest(testov) {
             r.push(el.tyresdiv)
         })
         const uniq = convert(r)
-        console.log(uniq)
-        console.log(shina)
         uniq.forEach((el, index) => {
             shina[index].setAttribute('id', el);
         })
@@ -96,7 +90,6 @@ export function conturTest(testov) {
                             }
                             else {
                                 integer = el.value
-                                //  console.log(e.children[0].style.fill = 'green')
                                 if ((nameCar == 'КранГаличанинР858ОР178')) {
                                     e.children[0].style.fill = objColor[generDav(integer)]
                                 }
@@ -229,7 +222,6 @@ function fnPricep(arr, nameCar) {
 
 let count = 0;
 function zaprosSpisok() {
-    //  console.log('список')
     const list = document.querySelectorAll('.listItem')
     list.forEach(async el => {
         const car = el.children[0].textContent

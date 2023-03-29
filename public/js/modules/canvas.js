@@ -222,67 +222,15 @@ export function alternativa(obj) {
 
     });
 
-
-
-
-    /*
-    var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-        width = 350 - margin.left - margin.right,
-        height = 200 - margin.top - margin.bottom;
-
-    var svg = d3.select(".speedGraf")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
-
-    const format = d3.time.format("%Y-%m-%dT%H:%M:%S.000Z");
-    const min = d3.min(obj, function (d) {
-        return format.parse(d.time)
-    })
-    const max = d3.max(obj, function (d) {
-        return format.parse(d.time)
-    })
-    const dataset = obj.map(e => {
-        return { time: format.parse(e.time), speed: e.speed }
-    })
-
-    var x = d3.scaleTime()
-        .domain([min, max])
-        .range([0, width]);
-    svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x));
-
-    // Add Y axis
-    var y = d3.scaleLinear()
-        .domain([0, d3.max(dataset, function (d) { return +d.speed; })])
-        .range([height, 0]);
-    svg.append("g")
-        .call(d3.axisLeft(y));
-
-    // Add the line
-    svg.append("path")
-        .datum(dataset)
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr("d", d3.line()
-            .x(function (d) { return x(d.time) })
-            .y(function (d) { return y(d.speed) })
-        )*/
 }
-
-
-
 const min = arr => arr.reduce((x, y) => Math.min(x, y));
 
-export function protekGrafTwo(y1, y2, arr) {
+export function protekGrafTwo(y1, y2, arr, mm) {
     let number = min(arr)
-    const mmMax = document.querySelector('.mm12')
-    console.log(mmMax.value)
+    // const mmMax = document.querySelector('.mm12')
+    //  console.log(mmMax.value)
+    const mmAction = mm / 10
+    const percent = (number / mmAction * 100).toFixed(0)
     const c2 = document.getElementById("drawLine2");
     c2.width = 348
     c2.heigth = 60
@@ -295,7 +243,7 @@ export function protekGrafTwo(y1, y2, arr) {
     ctx2.lineTo(348, y2);
     ctx2.lineTo(348, 60);
     ctx2.lineTo(0, 60);
-    ctx2.fillStyle = objColors[gener(number)];
+    ctx2.fillStyle = objColors[gener(percent)];
     ctx2.fill();
     //  ctx2.stroke();
 
@@ -338,9 +286,10 @@ export function protekGrafTwo(y1, y2, arr) {
 
 
 
-export function protekGrafThree(y1, y2, y3, arr) {
+export function protekGrafThree(y1, y2, y3, arr, mm) {
     let number = min(arr)
-
+    const mmAction = mm / 10
+    const percent = (number / mmAction * 100).toFixed(0)
     const c2 = document.getElementById("drawLine2");
     const ctx2 = c2.getContext("2d");
     c2.width = 174
@@ -353,7 +302,7 @@ export function protekGrafThree(y1, y2, y3, arr) {
     ctx2.lineTo(174, y2);
     ctx2.lineTo(174, 60);
     ctx2.lineTo(0, 60);
-    ctx2.fillStyle = objColors[gener(number)];
+    ctx2.fillStyle = objColors[gener(percent)];
     ctx2.fill();
     //  ctx2.stroke();
 
@@ -391,7 +340,7 @@ export function protekGrafThree(y1, y2, y3, arr) {
     ctx3.lineTo(174, y3);
     ctx3.lineTo(174, 60);
     ctx3.lineTo(0, 60);
-    ctx3.fillStyle = objColors[gener(number)];
+    ctx3.fillStyle = objColors[gener(percent)];
     ctx3.fill();
     // ctx3.stroke();
 
@@ -424,11 +373,12 @@ export function protekGrafThree(y1, y2, y3, arr) {
 }
 
 
-export function protekGrafFour(y1, y2, y3, y4, arr) {
-    const mmMax = document.querySelector('.mm12')
-    console.log(mmMax.value)
+export function protekGrafFour(y1, y2, y3, y4, arr, mm) {
+    //   const mmMax = document.querySelector('.mm12')
+    //  console.log(mmMax.value)
     let number = min(arr)
-
+    const mmAction = mm / 10
+    const percent = (number / mmAction * 100).toFixed(0)
     const c2 = document.getElementById("drawLine2");
     const ctx2 = c2.getContext("2d");
     c2.width = 116
@@ -441,7 +391,7 @@ export function protekGrafFour(y1, y2, y3, y4, arr) {
     ctx2.lineTo(116, y2);
     ctx2.lineTo(116, 60);
     ctx2.lineTo(0, 60);
-    ctx2.fillStyle = objColors[gener(number)];
+    ctx2.fillStyle = objColors[gener(percent)];
     ctx2.fill();
     // ctx2.stroke();
 
@@ -479,7 +429,7 @@ export function protekGrafFour(y1, y2, y3, y4, arr) {
     ctx3.lineTo(116, y3);
     ctx3.lineTo(116, 60);
     ctx3.lineTo(0, 60);
-    ctx3.fillStyle = objColors[gener(number)];
+    ctx3.fillStyle = objColors[gener(percent)];
     ctx3.fill();
     // ctx3.stroke();
 
@@ -519,7 +469,7 @@ export function protekGrafFour(y1, y2, y3, y4, arr) {
     ctx4.lineTo(116, y4);
     ctx4.lineTo(116, 60);
     ctx4.lineTo(0, 60);
-    ctx4.fillStyle = objColors[gener(number)];
+    ctx4.fillStyle = objColors[gener(percent)];
     ctx4.fill();
     //  ctx4.stroke();
 

@@ -16,7 +16,7 @@ export function tech() {
     const formValue = document.querySelectorAll('.formValue')
     const job = document.querySelectorAll('.job')
     console.log(formValue)
-   
+
 
     formValue.forEach(i => {
         i.value = ''
