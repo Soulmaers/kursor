@@ -3836,10 +3836,7 @@ input[type="number"]:focus {
     border: 1px solid #000
   }
 
-  .wrap_alarm :hover {
-    background-color: #fff;
-    border: 1px solid #000
-  }
+
 
   .icon_starter {
     background-image: url(../image/708.png);
