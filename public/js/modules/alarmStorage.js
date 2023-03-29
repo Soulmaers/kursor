@@ -244,6 +244,7 @@ function viewAlarmStorage(name, stor) {
                 const day = Math.floor((res / (1000 * 60 * 60 * 24)) % 24);
                 const days = (day < 1) ? "" + day : day;
                 const hourss = (hours < 10) ? "" + hours : hours;
+                const minutess = (minutes < 10) ? "" + minutes : minutes;
                 const interval = days + 'd' + ' ' + hourss + "h" + ' ' + + minutess + "m"
                 console.log(days + '(d)' + ' ' + hourss + "(h)" + ' ' + + minutess + "(m)");
                 el.children[5].textContent = interval
@@ -259,20 +260,25 @@ function viewAlarmStorage(name, stor) {
         }
     })
     const vieList = document.querySelectorAll('.views')
+    function fntinesort(elem) {
+        const dt = [...elem]
+        const allmassive = [];
+        allmassive.push(dt[6], dt[7], dt[8], dt[9], '-', dt[3], dt[4], '-', dt[0], dt[1], 'T', dt[11], dt[12], dt[13], dt[14], dt[15], ':', '0', '0', 'Z')
+        const itog = Date.parse(allmassive.join(''))
+        return itog
+
+    }
     const arr = [];
     vieList.forEach(el => {
         arr.push(el)
     })
-
     arr.sort(function (a, b) {
-        return parseFloat(b.children[0].textContent) - parseFloat(a.children[0].textContent)
+        return parseFloat(fntinesort(b.children[0].textContent)) - parseFloat(fntinesort(a.children[0].textContent))
     });
-
     arr.forEach(it => {
         tbody.appendChild(it)
     })
-
-
+    console.log(arr)
 }
 
 

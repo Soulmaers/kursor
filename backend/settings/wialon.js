@@ -264,7 +264,18 @@ function zaprosSpisokb(name) {
 
 
 function createDate() {
-
+    let today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+    today = dd + '.' + mm + '.' + yyyy;
+    let time = new Date();
+    const hh = String(time.getHours()).padStart(2, '0');
+    const min = String(time.getMinutes() + 1).padStart(2, '0'); //January is 0!
+    time = hh + ':' + min
+    const todays = today + ' ' + time
+    return [todays]
+    /*
     let today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() < 10 ? '0' + today.getMonth() : today.getMonth();
@@ -276,7 +287,7 @@ function createDate() {
     time = hour + ':' + minutes
     const todays = today + ' ' + time
     return [todays]
-    // console.log(today)
+    // console.log(today)*/
 }
 
 
