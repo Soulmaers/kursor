@@ -3715,6 +3715,16 @@ input[type="number"]:focus {
   .state {
     width: 27%
   }
+
+  .grafics {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 800px;
+    background-color: lightgray;
+
+  }
 }
 
 @media (min-width: 1201px) {

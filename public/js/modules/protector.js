@@ -38,6 +38,7 @@ export async function reqProtectorBase() {
 
 
 function fnCanvas(arg) {
+    console.log('работаем 2')
     const wrapCanvas = document.querySelectorAll('.wrapCanvas')
     const dan = document.querySelectorAll('.dan')
     if (wrapCanvas) {

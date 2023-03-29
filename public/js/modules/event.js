@@ -81,7 +81,10 @@ btnDash.addEventListener('click', () => {
 });
 
 const monitor = document.querySelector('.monitor')
-monitor.addEventListener('click', () => {
+monitor.addEventListener('click', mainblock)
+
+
+function mainblock() {
     geoloc()
     const dash = document.querySelector('.wrapper_right_dash')
     const sections = document.querySelector('.sections')
@@ -99,7 +102,7 @@ monitor.addEventListener('click', () => {
     const techInfo = document.querySelector('.techInfo')
     const plug = document.querySelectorAll('.plug')
     const config = document.querySelector('.config')
-    plug[1].classList.remove('activGraf')
+    plug[2].classList.remove('activGraf')
     console.log(wLeft)
     wRight.style.display = 'flex';
     wLeft.style.display = 'block';
@@ -116,7 +119,11 @@ monitor.addEventListener('click', () => {
     wRight.appendChild(model);
     wrapList.style.overflowY = 'none';
     wrapList.style.height = 'none';
-})
+}
+
+
+
+
 
 
 
@@ -208,19 +215,29 @@ if (dropdown) {
 
 
 
-const btnShina = document.querySelectorAll('.plug')
-btnShina[0].addEventListener('click', () => {
-    btnShina[0].classList.toggle('active')
-    const e = document.querySelector('.color')
+const btnShina = document.querySelectorAll('.modals')
+btnShina.forEach(el => {
 
-    console.log(e)
-    visualNone(e);
-    visual(e)
-    // const main = document.querySelector('.main')
-    // main.style.display = 'flex'
-    //  viewOs();
-    // loadParamsView()
+    el.addEventListener('click', () => {
+        if (el.classList.contains('active')) {
+            el.classList.remove('active')
+            return
+        }
+        btnShina.forEach(el => {
+            el.classList.remove('active')
+        })
+        el.classList.add('active')
+        const e = document.querySelector('.color')
+        console.log(e)
+        visualNone(e);
+        visual(e)
+        const activGraf = document.querySelectorAll('.activGraf')
+        if (activGraf) {
+            mainblock()
+        }
+    })
 })
+
 
 
 
@@ -280,7 +297,7 @@ buttonTth.addEventListener('click', async () => {
 
 const plug = document.querySelectorAll('.plug')
 
-plug[1].addEventListener('click', () => {
+plug[2].addEventListener('click', () => {
     console.log('нажал')
     const wRight = document.querySelector('.wrapper_right')
     const wLeft = document.querySelector('.wrapper_left')
@@ -292,7 +309,7 @@ plug[1].addEventListener('click', () => {
     const sections = document.querySelector('.sections')
     const wrapList = document.querySelector('.wrapList')
     const techInfo = document.querySelector('.techInfo')
-    plug[1].classList.add('activGraf')
+    plug[2].classList.add('activGraf')
     wrapList.style.overflowY = 'scroll';
     wrapList.style.height = '300px';
     model.style.zoom = '0.65'

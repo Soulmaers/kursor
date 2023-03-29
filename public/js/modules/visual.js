@@ -29,7 +29,7 @@ export function visual(el) {
             grafics.style.display = 'flex'
         }
     })
-    if (plug[1].classList.contains('activGraf')) {
+    if (plug[2].classList.contains('activGraf')) {
         console.log('лефт')
         wrapperLeft.style.display = 'none'
         grafics.style.display = 'flex'
@@ -40,30 +40,13 @@ export function visual(el) {
     alarmClear();
     wrapperUp.style.display = 'flex'
     wrapperCont.style.display = 'flex'
-
-    // wrapperLeft.style.display = 'block'
-    /*
-    const widthWind = document.querySelector('body').offsetWidth;
-    if (widthWind <= 860) {
-        main.style.display = 'none'
-    }
-
-    else {
-        main.style.display = 'flex'
-    }*/
-    //main.style.display = 'flex'
     speedGraf.style.display = 'block'
     el.classList.add('color')
-    //  console.log(el)
     viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
     titleCar.textContent = el.textContent
     loadParamsView()
-    //  setInterval(loadParamsView, 5000)
-    console.log(el)
-
-
     alarmFind(el)
-    //setInterval(alarmFind, 6000, el)
+
 
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
@@ -116,22 +99,13 @@ export function visualNone(e) {
     if (newBoad) {
         newBoad.remove();
     }
-
     plus.style.display = 'block'
     minus.style.display = 'none'
     alarmStorage.style.display = 'none'
-
     techInfo.style.display = 'none'
     modalCenterOs.style.display = 'none'
-
-
     wrapperUp.style.display = 'none'
-    //  wrapperRight.style.display = 'none'
     speedGraf.style.display = 'none'
-
-
-
-
     obo.style.display = 'none'
     wrapperButton.style.display = 'none'
     titleSens.style.display = 'none'
@@ -444,12 +418,15 @@ export async function viewOs() {
     }
     viewMenuParams()
     modalOs();
-    const btnShina = document.querySelectorAll('.plug')
-    btnShina[0].classList.contains('active') ? styleShinaActive(btnShina[0]) : styleShina(btnShina[0])
+    const btnShina = document.querySelectorAll('.modals')
+    if (btnShina[1].classList.contains('active')) {
+        styleShinaActive(btnShina[1])
+    }
+
 }
 function styleShinaActive(arg) {
     reqProtectorBase()
-    arg.textContent = 'Давл.\nТемп.'
+    //  arg.textContent = 'Давл.\nТемп.'
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
     const centerOs = document.querySelectorAll('.centerOs')
@@ -477,9 +454,7 @@ function styleShinaActive(arg) {
         e.style.display = 'none';
     })
 }
-function styleShina(arg) {
-    arg.textContent = 'Состояние шин'
-}
+
 //обработка массива для скрытия осей и других элементов
 export const divClear = (arr) => {
     if (arr.length > 0) {
