@@ -58,15 +58,13 @@ export function zapros() {
             })
             )
             const tt = new Date()
-            //  console.log(test, tt)
+
             conturTest(test)
-            //  dann = arrCar
+
             speed(arrCar)
             return dann
         });
-    // navigator()
 
-    //console.log(allMassiv[0].length)
 }
 
 

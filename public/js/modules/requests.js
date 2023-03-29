@@ -1,5 +1,5 @@
 
-import { divClear, viewDinamic } from './visual.js'
+import { divClear, viewDinamic, viewOs } from './visual.js'
 
 export function postModel(model) {
     const active = document.querySelectorAll('.color')
@@ -49,6 +49,7 @@ export const reqDelete = (name) => {
     divClear(osi)
     divClear(tires)
     divClear(centerOs)
+    viewOs()
 }
 
 

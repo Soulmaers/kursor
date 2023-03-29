@@ -1681,7 +1681,7 @@ input[type="date"] {
   justify-content: center;
   align-items: center;
   width: 204px;
-  height: 88px;
+
   cursor: pointer;
 
 }
@@ -2604,9 +2604,10 @@ input[type="number"]:focus {
 .list_arr2 {
   display: flex;
   flex-direction: column;
-  width: 470px;
+  width: 100%;
   border: 1px solid rgb(51, 51, 51);
 }
+
 
 
 .list_name2 {
@@ -2619,6 +2620,8 @@ input[type="number"]:focus {
   box-sizing: border-box;
 }
 
+
+
 .list_profil2 {
   border: 1px solid rgb(51, 51, 51);
   font-size: 1rem;
@@ -2629,6 +2632,8 @@ input[type="number"]:focus {
   box-sizing: border-box;
   flex-wrap: wrap;
 }
+
+
 
 .list_trail2 {
   box-sizing: border-box;
@@ -2641,6 +2646,8 @@ input[type="number"]:focus {
   padding-left: 5px;
 
 }
+
+
 
 .listItem {
   cursor: pointer;
@@ -3116,7 +3123,9 @@ input[type="number"]:focus {
 
 @media (max-width: 860px) {
 
-
+  .wrapList {
+    width: 100%
+  }
 
   .wrapperFull {
     display: flex;
@@ -3324,7 +3333,8 @@ input[type="number"]:focus {
   }
 
   .listItem {
-    width: 100%
+    width: 100%;
+
   }
 
   .list_item1 {
@@ -3519,6 +3529,10 @@ input[type="number"]:focus {
     left: 0;
     top: 0
   }
+
+  .listItem {
+    height: 32px;
+  }
 }
 
 @media (min-width: 861px) and (max-width: 1200px) {
@@ -3595,7 +3609,8 @@ input[type="number"]:focus {
 
 
   .listItem {
-    width: 100%
+    width: 100%;
+    height: 32px;
   }
 
   .wrap_alarm {
@@ -3716,7 +3731,8 @@ input[type="number"]:focus {
 
 
   .listItem {
-    width: 100%
+    width: 100%;
+    height: 37px;
   }
 
   .headerMain {
@@ -3836,10 +3852,7 @@ input[type="number"]:focus {
     border: 1px solid #000
   }
 
-  .wrap_alarm :hover {
-    background-color: #fff;
-    border: 1px solid #000
-  }
+
 
   .icon_starter {
     background-image: url(../image/708.png);

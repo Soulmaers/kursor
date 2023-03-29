@@ -116,12 +116,12 @@ function os(arr) {
             arr[arr.length - 1].nextElementSibling.children[0].style.display = 'none';
             arr[arr.length - 1].nextElementSibling.children[1].style.display = 'none';
             if (e.textContent == 2) {
-                arr[arr.length - 1].children[0].style.width = '150px'
+                arr[arr.length - 1].children[0].style.width = '204px'
                 arr[arr.length - 1].previousElementSibling.children[0].style.display = 'flex';
                 arr[arr.length - 1].nextElementSibling.children[1].style.display = 'flex';
             }
             if (e.textContent == 4) {
-                arr[arr.length - 1].children[0].style.width = '74px'
+                arr[arr.length - 1].children[0].style.width = '98px'
                 arr[arr.length - 1].previousElementSibling.children[0].style.display = 'flex';
                 arr[arr.length - 1].previousElementSibling.children[1].style.display = 'flex';
                 arr[arr.length - 1].nextElementSibling.children[0].style.display = 'flex';

@@ -97,12 +97,14 @@ monitor.addEventListener('click', () => {
     const wrapList = document.querySelector('.wrapList')
     const techInfo = document.querySelector('.techInfo')
     const plug = document.querySelectorAll('.plug')
+    const config = document.querySelector('.config')
     plug[1].classList.remove('activGraf')
     console.log(wLeft)
     wRight.style.display = 'flex';
     wLeft.style.display = 'block';
     icon.style.display = 'flex';
     grafics.style.display = 'none';
+    config.style.display = 'none';
     techInfo.style.display = 'none';
     visualGrafics.style.display = 'none';
     main.style.flexDirection = 'row'
@@ -118,8 +120,10 @@ monitor.addEventListener('click', () => {
 
 
 export function saveTyres(arr) {
+    const modCnf = document.querySelector('.moduleConfig')
     const btnSave = document.querySelector('.btn_save')
     btnSave.addEventListener('click', () => {
+        modCnf.style.display = 'none';
         postTyres(arr);
         arr.length = 0;
     })
@@ -134,17 +138,22 @@ const configClear = document.querySelector('.configClear')
 if (configs) {
     configs.addEventListener('click', () => {
         const controll = document.querySelector('.container_left')
+        const config = document.querySelector('.config')
         controll.style.display = 'flex'
+        config.style.display = 'flex'
     })
     configClear.addEventListener('click', () => {
         const controll = document.querySelector('.container_left')
+        // const config = document.querySelector('.config')
         controll.style.display = 'none'
+        //  config.style.display = 'none'
     })
 }
 
 
 //очистка модели из базы и удаление отрисовки
 export function btnDel() {
+    const modCnf = document.querySelector('.moduleConfig')
     const btnClear = document.querySelector('.btn_clear')
     const clear = document.querySelector('.clear')
     const wrapPod = document.querySelector('.wrap_pod')
@@ -163,6 +172,7 @@ export function btnDel() {
     })
     yes.addEventListener('click', () => {
         wrapPod.style.display = 'none';
+        modCnf.style.display = 'none';
         clear.style.display = 'block';
         const active = document.querySelectorAll('.color')
         console.log(active)
