@@ -219,10 +219,7 @@ const btnShina = document.querySelectorAll('.modals')
 btnShina.forEach(el => {
 
     el.addEventListener('click', () => {
-        if (el.classList.contains('active')) {
-            el.classList.remove('active')
-            return
-        }
+
         btnShina.forEach(el => {
             el.classList.remove('active')
         })
