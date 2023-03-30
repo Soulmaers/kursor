@@ -51,6 +51,6 @@ router.post('/api/paramsDelete', controllerModel.paramsDeleteView)
 router.post('/api/listModel', controllerModel.listModel)
 router.post('/api/listTyres', controllerModel.listTyres)
 
-//router.post('/api/alarmStorage', controllerModel.alarmStorage)
+router.post('/api/savePr', controllerModel.savePr)
 router.post('/api/alarmFind', controllerModel.alarmFind)
 router.post('/api/speedData', controllerModel.speedData)

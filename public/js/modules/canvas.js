@@ -160,7 +160,7 @@ export function alternativa(obj) {
     line.append("path")
         .datum(dataset)
         .attr("class", "line")  // I add the class line to be able to modify this line later on.
-        .attr("fill", "steelblue")
+        .attr("fill", "white")
         .attr("stroke", "steelblue")
         .attr("stroke-width", 1.5)
         .attr("d", d3.line()

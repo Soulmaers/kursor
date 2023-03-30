@@ -225,6 +225,7 @@ export async function reqTech(arr, id) {
     })
     const place = inputMM.placeholder
     !inputMM.value ? arrValue.push(place) : arrValue.push(inputMM.value)
+    console.log(id, arr, arrValue, activePost)
     const complete = await fetch('api/tech', {
         method: "POST",
         headers: {
@@ -363,6 +364,7 @@ export function viewTech(id) {
                 const maxStoc = res.values[0].maxMM
                 rad.forEach(el => {
                     el.addEventListener('change', () => {
+
                         el.id === '1' ? (viewDinamic(protectorClear, maxStoc),
                             text[0].textContent = res.values[0].N1 + 'мм',
                             text[1].textContent = res.values[0].N2 + 'мм',

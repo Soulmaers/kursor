@@ -1,11 +1,12 @@
 import { postTyres, reqDelete, paramsDelete, reqTech, viewTech, loadParamsViewShina } from './requests.js'
 import { alarmClear, viewOs } from './visual.js'
-import { data } from './content.js'
+import { data, dataIdTyres } from './content.js'
 import { getDash } from './dash.js'
 import { visual, visualNone } from './visual.js'
 import { getUsers } from './admin.js'
 import { geoloc } from './wialon.js'
 import { reqProtectorBase } from './protector.js'
+import { saveBase } from './saveBaseProtector.js'
 
 
 
@@ -258,34 +259,46 @@ burger.addEventListener('click', () => {
 
 })
 
-/*
-const detaly = document.querySelector('.detaly')
-detaly.addEventListener('click', () => {
-    const wrapperUp = document.querySelector('.wrapper_up')
-    const speedGraf = document.querySelector('.speedGraf')
-    const wrapperRight = document.querySelector('.wrapper_right')
-    wrapperUp.style.display = 'none'
-    wrapperRight.style.display = 'none'
-    speedGraf.style.display = 'none'
-    const detalisation = document.querySelector('.detalisation')
-    detalisation.style.display = 'flex'
-})*/
-
-
 
 const buttonTth = document.querySelector('.buttonTth')
 buttonTth.addEventListener('click', async () => {
     const techText = document.querySelectorAll('.tech')
+    const formValue = document.querySelectorAll('.formValue')
+    const identificator = document.querySelector('.formValueId').value
+    const tyresActive = document.querySelector('.tiresActiv')
     const inputMM = document.querySelector('.maxMMM')
-    console.log(techText)
+    const osId = tyresActive.closest('.osi').children[1].id
+    let nameOs;
+    tyresActive.closest('.osi').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
+    //  console.log(nameOs)
     const arrNameCol = [];
+    const arrNameColId = [];
     techText.forEach(el => {
         arrNameCol.push(el.id)
     })
     arrNameCol.push('maxMM')
-    const tyresActive = document.querySelector('.tiresActiv')
+
+    const pr = Array.from(formValue).slice(7, 12)
+
+
+
+
+    arrNameColId.push(nameOs)
+    arrNameColId.push(osId)
+    arrNameColId.push(identificator)
+    arrNameColId.push(tyresActive.id)
+    pr.forEach(e => {
+        arrNameColId.push(e.value)
+    })
+    !inputMM.value ? arrNameColId.push(inputMM.placeholder) : arrNameColId.push(inputMM.value)
+    arrNameColId.splice(0, 0, arrNameColId.splice(8, 1)[0]);
+    saveBase(arrNameColId)
     await reqTech(arrNameCol, tyresActive.id)
-    reqProtectorBase()
+    const btnShina = document.querySelectorAll('.modals')
+    if (btnShina[1].classList.contains('active')) {
+        reqProtectorBase()
+    }
+
     viewTech(tyresActive.id)
 
 })
@@ -415,3 +428,85 @@ class DropDownList {
     }
 }
 new DropDownList({ element: document.querySelector(`#input`), btn: document.querySelector('.buh'), data });
+
+
+
+
+
+
+class DropDownList2 {
+    constructor({ element, dataIdTyres, btn }) {
+        this.element = element;
+        this.dataIdTyres = dataIdTyres;
+        this.btn = btn;
+        this.listElement = null;
+        this._onElementInput = this._onElementInput.bind(this);
+        this._onElementKursor = this._onElementKursor.bind(this);
+        this._onItemListClick = this._onItemListClick.bind(this);
+        this._onDocumentKeyDown = this._onDocumentKeyDown.bind(this);
+        this.bind();
+    }
+    _onDocumentKeyDown({ keyCode }) {
+        console.log(keyCode);
+    }
+    _onElementInput({ target }) {
+        this.removeList();
+
+        if (!target.value) {
+            return
+        }
+        this.createList(this.dataIdTyres.filter(it => it.toLowerCase().indexOf(target.value.toLowerCase()) !== -1));
+        this.appendList();
+    }
+    _onElementKursor() {
+        this.removeList();
+        this.createList(this.dataIdTyres);
+        this.appendList();
+    }
+    _onItemListClick({ target }) {
+        console.log('удаление')
+        this.element.value = target.textContent;
+        this.removeList();
+    }
+    createList(dataIdTyres) {
+        console.log(dataIdTyres)
+        this.listElement = document.createElement(`ul`);
+        this.listElement.className = `drop-down__list`;
+        this.listElement.innerHTML = dataIdTyres.map(it => `<li tabindex="0" class="drop-down__item">${it}</li>`).join(``);
+
+        [...this.listElement.querySelectorAll(`.drop-down__item`)].forEach(it => {
+            it.addEventListener(`click`, this._onItemListClick);
+        });
+        document.addEventListener(`keydown`, this._onDocumentKeyDown);
+    }
+    appendList() {
+        const { left, width, bottom } = this.element.getBoundingClientRect();
+        console.log(left, width, bottom)
+
+        this.listElement.style.width = width + `px`;
+        // this.listElement.style.height = height + `px`;
+        this.listElement.style.left = window.scrollX + left + `px`;
+        this.listElement.style.top = window.scrollY + bottom + `px`;
+        this.listElement.style.display = 'block'
+        document.body.appendChild(this.listElement);
+    }
+
+    removeList() {
+        if (this.listElement) {
+            this.listElement.remove();
+            this.listElement = null;
+        }
+        // document.removeEventListener(`keydown`, this._onDocumentKeyDown);
+    }
+    bind() {
+        this.element.addEventListener(`input2`, this._onElementInput);
+        this.btn.addEventListener(`click`, this._onElementKursor);
+        document.addEventListener('click', (e) => {
+            if (e.target !== this.btn) {
+                this.removeList()
+            }
+
+        })
+    }
+}
+new DropDownList2({ element: document.querySelector(`#input2`), btn: document.querySelector('.buh2'), dataIdTyres });

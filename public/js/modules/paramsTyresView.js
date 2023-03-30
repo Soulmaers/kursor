@@ -104,6 +104,7 @@ export async function loadParamsView() {
                         pricep(centerOs[el.osi - 1])
                         :
                         centerOs[el.osi - 1].children[0].style.background = "#3333FF"
+
                     if (el.tyres == 2) {
                         btnShina[1].classList.contains('active') ? centerOs[el.osi - 1].children[0].style.width = '204px' :
                             centerOs[el.osi - 1].children[0].style.width = '204px'

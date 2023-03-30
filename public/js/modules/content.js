@@ -155,3 +155,4 @@ export const objColors = {
 }
 
 export const data = ["BFGoodrich", "Bridgestone", "Continental", "Cordiant", "Dunlop", "Nokian Tyres", "Gislaved", "Goodyear", "Hankook", "Kumho", "Michelin"];
+export const dataIdTyres = ['01id', '02id', '03id', '04id'];

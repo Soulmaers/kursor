@@ -721,7 +721,8 @@ div.spoyler {
   margin-top: 10px;
 }
 
-.formValue {
+.formValue,
+.formValueId {
   width: 100%
 }
 
@@ -1091,7 +1092,15 @@ input[type="date"] {
   height: 20px;
 }
 
-.titleTth {
+.techInputId {
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  height: 20px;
+}
+
+.titleTth,
+.titleTthId {
   font-size: 1rem;
   font-family: Roboto;
   margin: 0;

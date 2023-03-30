@@ -40,6 +40,18 @@ module.exports.paramsDeleteView = (req, res) => {
 
 }
 
+module.exports.savePr = async (req, res) => {
+    const value = [req.body.arr]
+
+    const sql = `INSERT INTO  listTyres( date, nameCar, typeOs, numberOs, identificator, idTyres, pr1, pr2, pr3, pr4 ,prMax) VALUES?`;
+    connection.query(sql, [value], function (err, results) {
+        if (err) console.log(err);
+        res.json('Данные добавлены')
+    });
+}
+
+
+
 module.exports.tech = async (req, res) => {
     //   console.log(req.body.activePost)
     //  console.log(req.body.arr[1])
