@@ -278,7 +278,6 @@ function viewAlarmStorage(name, stor) {
     arr.forEach(it => {
         tbody.appendChild(it)
     })
-    console.log(arr)
 }
 
 

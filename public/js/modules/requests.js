@@ -279,7 +279,10 @@ export async function viewBar(id) {
 }
 
 export function viewTech(id) {
-    console.log('вьютэч')
+    const rad = document.querySelectorAll('[name=radio]')
+    // rad[0].checked = true
+
+    console.log('вьютэч' + new Date())
     console.log(id)
     let activePost;
     const active = document.querySelectorAll('.color')
@@ -302,7 +305,7 @@ export function viewTech(id) {
     })
         .then((res) => res.json())
         .then(res => {
-            console.log(res.values)
+            //  console.log(res.values)
 
 
 
@@ -312,12 +315,13 @@ export function viewTech(id) {
                     keys.push(key);
                 }
             }
-            console.log(keys)
+
+
 
             const number = document.querySelectorAll('.number')
             const text = document.querySelectorAll('.text')
             const titleMM = document.querySelectorAll('.titleMM')
-            const rad = document.querySelectorAll('[name=radio]')
+
             const inputMM = document.querySelector('.maxMMM')
             console.log(titleMM)
             if (res.values.length === 0) {
@@ -334,7 +338,7 @@ export function viewTech(id) {
                 })
                 viewDinamic([])
             }
-            else if (res.values.length > 0) {
+            else {
                 number[0].textContent = keys[8]
                 number[1].textContent = keys[9]
                 number[2].textContent = keys[10]
@@ -364,27 +368,17 @@ export function viewTech(id) {
                 const maxStoc = res.values[0].maxMM
                 rad.forEach(el => {
                     el.addEventListener('change', () => {
-
-                        el.id === '1' ? (viewDinamic(protectorClear, maxStoc),
-                            text[0].textContent = res.values[0].N1 + 'мм',
-                            text[1].textContent = res.values[0].N2 + 'мм',
-                            text[2].textContent = res.values[0].N3 + 'мм',
-                            text[3].textContent = res.values[0].N4 + 'мм') :
-                            (viewDinamic(reverseprotectorClear, maxStoc),
-                                text[3].textContent = res.values[0].N1 + 'мм',
-                                text[2].textContent = res.values[0].N2 + 'мм',
-                                text[1].textContent = res.values[0].N3 + 'мм',
-                                text[0].textContent = res.values[0].N4 + 'мм')
+                        el.id === '1' ? viewDinamic(protectorClear, maxStoc) : viewDinamic(reverseprotectorClear, maxStoc)
                     })
                 })
                 viewDinamic(protectorClear, maxStoc)
-
                 const nval = (Object.entries(res.values[0]))
                 const massVal = nval.shift()
                 const formValue = document.querySelectorAll('.formValue')
                 formValue.forEach((el, index) => {
                     el.value = nval[index][1]
                 })
+
             }
             const inputPSI = document.querySelector('.jobDav')
             const inputBar = document.querySelector('.bar')
@@ -396,7 +390,6 @@ export function viewTech(id) {
 
 
 }
-
 
 export function loadParamsViewShina() {
     const titleCar = document.querySelector('.title_two')

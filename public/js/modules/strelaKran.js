@@ -66,7 +66,7 @@ function loadKran(arrCar) {
 }
 
 export function drawMyLine(angleDeg, angleDeg2, boolean) {//Угол в градусах
-    console.log(angleDeg, angleDeg2, boolean)
+    //  console.log(angleDeg, angleDeg2, boolean)
     const argRed = document.querySelector('.argRed')
     const argGreen = document.querySelector('.argGreen')
     angleDeg2 ? argRed.textContent = angleDeg2 + '°' : null
@@ -82,7 +82,7 @@ export function drawMyLine(angleDeg, angleDeg2, boolean) {//Угол в град
     const angleUnnext = angleDeg2 * Math.PI / 180;
 
     if (boolean === false) {
-        console.log('черное')
+        // console.log('черное')
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.beginPath();
         ctx.setLineDash([5, 0]);
@@ -93,7 +93,7 @@ export function drawMyLine(angleDeg, angleDeg2, boolean) {//Угол в град
         ctx.stroke();
     }
     else {
-        console.log('зеленое')
+        // console.log('зеленое')
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.beginPath();
         ctx.setLineDash([5, 0]);

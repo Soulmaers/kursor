@@ -259,6 +259,21 @@ burger.addEventListener('click', () => {
 
 })
 
+const rad = document.querySelectorAll('[name=radio]')
+rad.forEach(el => {
+    el.addEventListener('change', () => {
+        const headerMM = document.querySelector('.headerMM')
+        let children = headerMM.children;
+        let newOrder = [3, 2, 1, 0];
+        for (let i = 0; i < newOrder.length; i++) {
+            for (let j = 0; j < newOrder.length; j++) {
+                if (i == newOrder[j]) {
+                    headerMM.appendChild(children[j]);
+                }
+            }
+        }
+    })
+})
 
 const buttonTth = document.querySelector('.buttonTth')
 buttonTth.addEventListener('click', async () => {
@@ -270,19 +285,13 @@ buttonTth.addEventListener('click', async () => {
     const osId = tyresActive.closest('.osi').children[1].id
     let nameOs;
     tyresActive.closest('.osi').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
-    //  console.log(nameOs)
     const arrNameCol = [];
     const arrNameColId = [];
     techText.forEach(el => {
         arrNameCol.push(el.id)
     })
     arrNameCol.push('maxMM')
-
     const pr = Array.from(formValue).slice(7, 12)
-
-
-
-
     arrNameColId.push(nameOs)
     arrNameColId.push(osId)
     arrNameColId.push(identificator)
@@ -298,7 +307,6 @@ buttonTth.addEventListener('click', async () => {
     if (btnShina[1].classList.contains('active')) {
         reqProtectorBase()
     }
-
     viewTech(tyresActive.id)
 
 })

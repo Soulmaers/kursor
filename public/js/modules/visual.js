@@ -492,12 +492,12 @@ export function viewDinamic(arr, maxProtector) {
     })
 
     const arrAll = [];
-    console.log(arr)
+
     arr.forEach(el => {
         arrAll.push(el * 10)
     })
     const mm = parseFloat(maxProtector * 10)
-    console.log(mm)
+
     let y1;
     let y2;
     let y3;
@@ -554,7 +554,7 @@ export function viewDinamic(arr, maxProtector) {
             e.style.display = 'block'
             e.style.width = '116px'
         })
-        console.log(conts)
+
         if (mm <= 120) {
             y1 = (mm - arrAll[0]) / 2
             y2 = (mm - arrAll[1]) / 2

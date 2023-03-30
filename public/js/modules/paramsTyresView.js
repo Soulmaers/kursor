@@ -51,8 +51,11 @@ export function viewMenuParams() {
             wrapperMap.style.display = 'none'
             grafics.style.display = 'none';
 
-
-
+            /*
+                        const rad = document.querySelectorAll('[name=radio]')
+                        rad.forEach(e => {
+                            e.checked = false
+                        })*/
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
         })
     })
