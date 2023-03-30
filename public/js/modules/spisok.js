@@ -163,6 +163,19 @@ function fnTagach(arr, nameCar) {
         .attr("r", 4)
         .style('fill', 'black')
         .style('stroke', 'gray')
+
+
+    const g2 = svg.append("g")
+        .attr("transform", function (d, i) {
+            return "translate(0,0)";
+        });
+
+    g2.append("circle")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", 0.5)
+        .style('fill', 'white')
+    // .style('stroke', 'gray')
 }
 
 function fnPricep(arr, nameCar) {
@@ -218,6 +231,17 @@ function fnPricep(arr, nameCar) {
         .style('fill', 'black')
         .style('stroke', 'gray')
 
+    const g2 = svg.append("g")
+        .attr("transform", function (d, i) {
+            return "translate(0,0)";
+        });
+
+    g2.append("circle")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", 0.5)
+        .style('fill', 'white')
+    // .style('stroke', 'gray')
 }
 
 let count = 0;
