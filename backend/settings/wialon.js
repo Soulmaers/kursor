@@ -264,21 +264,10 @@ function zaprosSpisokb(name) {
 
 
 function createDate() {
-    let today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const yyyy = today.getFullYear();
-    today = dd + '.' + mm + '.' + yyyy;
-    let time = new Date();
-    const hh = String(time.getHours()).padStart(2, '0');
-    const min = String(time.getMinutes() + 1).padStart(2, '0'); //January is 0!
-    time = hh + ':' + min
-    const todays = today + ' ' + time
-    return [todays]
-    /*
+
     let today = new Date();
     const year = today.getFullYear();
-    const month = today.getMonth() < 10 ? '0' + today.getMonth() : today.getMonth();
+    const month = today.getMonth() < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
     const day = today.getDate() < 10 ? '0' + today.getDate() : today.getDate();
     today = day + '.' + month + '.' + year;
     let time = new Date();
@@ -286,8 +275,9 @@ function createDate() {
     const minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
     time = hour + ':' + minutes
     const todays = today + ' ' + time
+    console.log(today)
     return [todays]
-    // console.log(today)*/
+
 }
 
 
@@ -462,7 +452,7 @@ function createDateTest() {
 
     let today = new Date();
     const year = today.getFullYear();
-    const month = today.getMonth() < 10 ? '0' + today.getMonth() : today.getMonth();
+    const month = today.getMonth() < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
     const day = today.getDate() < 10 ? '0' + today.getDate() : today.getDate();
     today = day + '.' + month + '.' + year;
     let time = new Date();
