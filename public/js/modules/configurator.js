@@ -75,11 +75,13 @@ const lostOs = [];
 function modul() {
     const centerOs = document.querySelectorAll('.centerOs')
     const moduleConfig = document.querySelector('.moduleConfig')
+    const saveId = document.querySelector('.saveId')
     centerOs.forEach(el => {
         el.addEventListener('click', () => {
             centerOs.forEach(el => el.classList.remove('os'));
             el.classList.add('os')
             moduleConfig.style.display = 'flex'
+            saveId.style.marginBottom = '30px'
             lostOs.push(el)
         })
     })
@@ -111,6 +113,7 @@ function os(arr) {
         e.addEventListener('click', () => {
             const arrayTyres = []
             arrayTyres.push(e)
+            console.log(arrayTyres)
             arr[arr.length - 1].previousElementSibling.children[0].style.display = 'none';
             arr[arr.length - 1].previousElementSibling.children[1].style.display = 'none';
             arr[arr.length - 1].nextElementSibling.children[0].style.display = 'none';

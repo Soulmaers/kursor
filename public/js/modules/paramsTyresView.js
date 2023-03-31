@@ -1,17 +1,18 @@
 
-import { view, sensor, viewConfigurator, pricep } from './visual.js'
+import { view, viewConfigurator, pricep } from './visual.js'
 import { saveTyres } from './event.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 import { liCreate } from './visual.js'
 import { tech } from './tech.js'
 
 
-const kolesos = [];
+
 export function viewMenuParams() {
+    const kolesos = [];
     const speedGraf = document.querySelector('.speedGraf')
     const titleSens = document.querySelector('.title_sens')
     const btnsens = document.querySelectorAll('.btnsens')
-    const wrapperButton = document.querySelector('.wrapper_button')
+    const sensors = document.querySelector('.sensors')
     const wrapperMap = document.querySelector('.wrapper_left')
     // console.log(wrapperMap)
     const obo = document.querySelector('.obo')
@@ -35,16 +36,16 @@ export function viewMenuParams() {
             //  console.log('нажал')
             kolesos.push(e)
             speedGraf.style.display = 'none';
-            sensor(btnsens, titleSens, obo)
+            //sensor(btnsens, titleSens, obo)
             tiresLink.forEach(e => {
                 obo.style.display = 'none'
                 titleSens.style.display = 'none'
-                wrapperButton.style.display = 'none'
+                sensors.style.display = 'none'
                 const msg = document.querySelectorAll('.msg')
                 msg.forEach(el => el.classList.remove('act'))
                 e.classList.remove('tiresActiv')
             });
-            wrapperButton.style.display = 'flex';
+            sensors.style.display = 'flex';
             e.classList.add('tiresActiv')
             techInfo.style.display = 'block'
             speedGraf.style.display = 'block';
@@ -56,6 +57,8 @@ export function viewMenuParams() {
                         rad.forEach(e => {
                             e.checked = false
                         })*/
+            const idbaseTyres = document.querySelector('.idbaseTyres')
+            idbaseTyres.textContent = ''
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
         })
     })
@@ -245,7 +248,7 @@ function koleso(kol, btnsens) {
                 }
                 paramTemp.push(el)
                 //  console.log(paramPress, paramTemp)
-                valid(paramPress, paramTemp)
+                valid(paramPress, paramTemp, kol)
             }
             kol[kol.length - 1].children[2].textContent = 'p:' + prmsD[prmsD.length - 1] + '\nt:' + prmsT[prmsT.length - 1]
         })
@@ -255,7 +258,7 @@ function koleso(kol, btnsens) {
 
 const massivion = [];
 export const massivionbd = [];
-function valid(paramPress, paramTemp) {
+function valid(paramPress, paramTemp, kolesos) {
     const kol = kolesos[kolesos.length - 1];
     const kolId = kolesos[kolesos.length - 1].id;
     const dav = paramPress[paramPress.length - 1]

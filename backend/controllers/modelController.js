@@ -42,8 +42,15 @@ module.exports.paramsDeleteView = (req, res) => {
 
 module.exports.savePr = async (req, res) => {
     const value = [req.body.arr]
-
-    const sql = `INSERT INTO  listTyres( date, nameCar, typeOs, numberOs, identificator, idTyres, pr1, pr2, pr3, pr4 ,prMax) VALUES?`;
+    console.log(value)
+    const sql = `INSERT INTO  tyresBase( identificator, nameCar, typeOs, numberOs, idTyres, marka,
+        model,
+        psi,
+        changeBar,
+        probegNow,
+        dateInstall,
+        probegPass,
+        dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`;
     connection.query(sql, [value], function (err, results) {
         if (err) console.log(err);
         res.json('Данные добавлены')
@@ -294,14 +301,61 @@ module.exports.tyres = (req, res) => {
     }
 }
 
+
+module.exports.generate = (req, res) => {
+    const id = req.body.newId
+    const arr = [req.body.arrNameColId]
+    console.log(arr)
+
+    try {
+        const selectBase = `SELECT identificator FROM tyresBase WHERE  identificator='${id}'`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            console.log(results)
+            if (results.length > 0) {
+                console.log(results)
+                res.json({ boolean: false, message: 'Такой ID есть' })
+            }
+            else {
+                console.log(id)
+                const sql = `INSERT INTO  tyresBase (dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka, model, psi,changeBar,
+                    probegNow, dateInstall, probegPass, dateZamer, N1, N2, N3, N4, maxMM) VALUES?`;
+                connection.query(sql, [arr], function (err, results) {
+                    if (err) console.log(err);
+                    res.json({ boolean: true, result: id, message: `ID ${id}  добавлен в базу` })
+                });
+            }
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
+
+
 module.exports.techView = (req, res) => {
     //  console.log(req.body.activePost)
-    const tableModelView = 'tech' + req.body.activePost
+    const nameCar = req.body.activePost
     console.log('работаем')
     const count = req.body.id
     console.log(count)
     try {
-        const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, N1, N2,N3, N4, protectorDate, maxMM FROM ${tableModelView} WHERE  idTyres=${count}`
+        const selectBase = `SELECT marka,
+        model,
+        identificator,
+        psi,
+        changeBar,
+        probegNow,
+        dateInstall,
+        probegPass,
+        dateZamer,
+        N1,
+        N2,
+        N3,
+        N4,
+        maxMM FROM tyresBase WHERE nameCar='${nameCar}' AND idTyres='${count}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             console.log(results)

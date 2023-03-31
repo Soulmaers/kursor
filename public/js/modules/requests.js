@@ -277,7 +277,6 @@ export async function viewBar(id) {
     }
 
 }
-
 export function viewTech(id) {
     const rad = document.querySelectorAll('[name=radio]')
     rad[0].checked = true
@@ -302,20 +301,22 @@ export function viewTech(id) {
     })
         .then((res) => res.json())
         .then(res => {
-            console.log(res.values)
-
+            console.log(res.values[res.values.length - 1])
+            const result = res.values[res.values.length - 1]
+            console.log(result)
             const keys = [];
-            if (res.values) {
-                for (let key in res.values[0]) {
+            if (result) {
+                for (let key in result) {
                     keys.push(key);
                 }
             }
+            console.log(keys)
             const number = document.querySelectorAll('.number')
             const text = document.querySelectorAll('.text')
             const titleMM = document.querySelectorAll('.titleMM')
             const inputMM = document.querySelector('.maxMMM')
             console.log(titleMM)
-            if (res.values.length === 0) {
+            if (!result || result.length === 0) {
                 number.forEach(e => {
                     e.textContent = ''
                 })
@@ -330,17 +331,18 @@ export function viewTech(id) {
                 viewDinamic([])
             }
             else {
-                number[0].textContent = keys[8]
-                number[1].textContent = keys[9]
-                number[2].textContent = keys[10]
-                number[3].textContent = keys[11]
-                text[0].textContent = res.values[0].N1 + 'мм',
-                    text[1].textContent = res.values[0].N2 + 'мм',
-                    text[2].textContent = res.values[0].N3 + 'мм',
-                    text[3].textContent = res.values[0].N4 + 'мм';
-                inputMM.value = res.values[0].maxMM;
+                console.log(result)
+                number[0].textContent = keys[9]
+                number[1].textContent = keys[10]
+                number[2].textContent = keys[11]
+                number[3].textContent = keys[12]
+                text[0].textContent = result.N1 + 'мм',
+                    text[1].textContent = result.N2 + 'мм',
+                    text[2].textContent = result.N3 + 'мм',
+                    text[3].textContent = result.N4 + 'мм';
+                inputMM.value = result.maxMM;
                 const protector = [];
-                protector.push(res.values[0].N1, res.values[0].N2, res.values[0].N3, res.values[0].N4)
+                protector.push(result.N1, result.N2, result.N3, result.N4)
                 const protectorClear = [];
                 const protectorClearRigth = [];
                 titleMM.forEach(el => {
@@ -356,16 +358,26 @@ export function viewTech(id) {
                     }
                 })
                 const reverseprotectorClear = protectorClearRigth.reverse();
-                const maxStoc = res.values[0].maxMM
+                const maxStoc = result.maxMM
                 rad.forEach(el => {
                     el.addEventListener('change', () => {
                         el.id === '1' ? viewDinamic(protectorClear, maxStoc) : viewDinamic(reverseprotectorClear, maxStoc)
                     })
                 })
                 viewDinamic(protectorClear, maxStoc)
-                const nval = (Object.entries(res.values[0]))
-                const massVal = nval.shift()
+                const nval = (Object.entries(result))
+
+                const massVal = nval.pop()
+                // console.log(massVal)
+                const dd = nval.splice(8, 1)
+                nval.push(dd[0])
+                const id = nval.splice(2, 1)
+                // console.log(id)
+                const idbaseTyres = document.querySelector('.idbaseTyres')
+                idbaseTyres.textContent = id[0][1]
                 const formValue = document.querySelectorAll('.formValue')
+                //  console.log(formValue)
+                //  console.log(nval)
                 formValue.forEach((el, index) => {
                     el.value = nval[index][1]
                 })

@@ -1,43 +1,71 @@
-<div class="save">
-    <button class="btn_save">Сохранить конфигуратор</button>
-</div>
-<div class="clear">
-    <button class="btn_clear">Очистить модель</button>
-</div>
-<div class="comfirm">
-    <div class="wrap_pod">
-        <div class="pod">Вы уверены?</div>
-        <button class="yes">Да</button>
-        <button class="no">Нет</button>
+<div class="mainConfig">
+    <div class="save">
+        <button class="btn_save">Сохранить конфигуратор</button>
+    </div>
+    <div class="clear">
+        <button class="btn_clear">Очистить модель</button>
+    </div>
+    <div class="comfirm">
+        <div class="wrap_pod">
+            <div class="pod">Вы уверены?</div>
+            <button class="yes">Да</button>
+            <button class="no">Нет</button>
+        </div>
+    </div>
+    <span class="configClear">&#10006</span>
+    <div class="dropdown">
+        <button class="dropbtn">Кол-во осей</button>
+        <ul class="dropdown-content">
+            <li class="linkSelect">1</li>
+            <li class="linkSelect">2</li>
+            <li class="linkSelect">3</li>
+            <li class="linkSelect">4</li>
+            <li class="linkSelect">5</li>
+            <li class="linkSelect">6</li>
+            <li class="linkSelect">7</li>
+            <li class="linkSelect">8</li>
+        </ul>
     </div>
 </div>
-<span class="configClear">&#10006</span>
-<div class="dropdown">
-    <button class="dropbtn">Кол-во осей</button>
-    <ul class="dropdown-content">
-        <li class="linkSelect">1</li>
-        <li class="linkSelect">2</li>
-        <li class="linkSelect">3</li>
-        <li class="linkSelect">4</li>
-        <li class="linkSelect">5</li>
-        <li class="linkSelect">6</li>
-        <li class="linkSelect">7</li>
-        <li class="linkSelect">8</li>
+<div class="rightBlock">
+    <div class="moduleConfig">
+        <div class="dropdownOs">
+            <button class="dropbtnOs">Ось</button>
+            <ul class="dropdown-contentOs">
+                <li class="linkSelectOs">Тягач</li>
+                <li class="linkSelectOs">Прицеп</li>
+            </ul>
+        </div>
+        <div class="dropdownTires">
+            <button class="dropbtnTires">Кол-во колёс</button>
+            <ul class="dropdown-contentTires">
+                <li class="linkSelectTires">2</li>
+                <li class="linkSelectTires">4</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="saveId">
+        <div class="generateId">
+            <button class="btn_generate">Сгенерировать ID</button>
+        </div>
+        <div class="listId">
+            <button class="btn_base">База колес</button>
+            <div class="findTyresId"> <input class="findValueId" id="inputId"> <button class="buhId">&#8595</button>
+            </div>
+        </div>
+    </div>
+    <p class="messageId"></p>
+
+
+
+</div>
+<div class="sensors">
+    <div class="wrapper_button">
+        <button class="btnsens">Давление</button>
+        <button class="btnsens">Температура</button>
+    </div>
+    <div class="title_sens">Параметры:</div>
+    <ul class="obo">
     </ul>
-</div>
-<div class="moduleConfig">
-    <div class="dropdownOs">
-        <button class="dropbtnOs">Ось</button>
-        <ul class="dropdown-contentOs">
-            <li class="linkSelectOs">Тягач</li>
-            <li class="linkSelectOs">Прицеп</li>
-        </ul>
-    </div>
-    <div class="dropdownTires">
-        <button class="dropbtnTires">Кол-во колёс</button>
-        <ul class="dropdown-contentTires">
-            <li class="linkSelectTires">2</li>
-            <li class="linkSelectTires">4</li>
-        </ul>
-    </div>
 </div>

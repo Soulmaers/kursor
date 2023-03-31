@@ -24,6 +24,7 @@ export function visual(el) {
     const plug = document.querySelectorAll('.plug')
     const tiresLink = document.querySelectorAll('.tires_link')
     const grafics = document.querySelector('.grafics')
+
     tiresLink.forEach(e => {
         if (e.classList.contains('tiresActiv')) {
             grafics.style.display = 'flex'
@@ -66,10 +67,6 @@ export function visual(el) {
     }
 }
 
-
-
-
-
 export function visualNone(e) {
     const probegElem = document.querySelector('.probeg_value')
     probegElem.textContent = ''
@@ -79,20 +76,12 @@ export function visualNone(e) {
     toElem.textContent = ''
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
-    const wrapperRight = document.querySelector('.wrapper_right')
-    const obo = document.querySelector('.obo')
-    const titleSens = document.querySelector('.title_sens')
-    const moduleConfig = document.querySelector('.moduleConfig')
-    const wrapperButton = document.querySelector('.wrapper_button')
     const container = document.querySelector('.container')
     const techInfo = document.querySelector('.techInfo')
     const modalCenterOs = document.querySelector('.modalCenterOs')
     const plus = document.querySelector('.plus')
     const minus = document.querySelector('.minus')
     const alarmStorage = document.querySelector('.alarmStorage')
-    const oneName = document.querySelector('.oneName')
-
-
     const contKran = document.querySelector('.contKran')
     contKran.style.display = 'none'
     const newBoad = document.querySelector('.speed')
@@ -106,24 +95,15 @@ export function visualNone(e) {
     modalCenterOs.style.display = 'none'
     wrapperUp.style.display = 'none'
     speedGraf.style.display = 'none'
-    obo.style.display = 'none'
-    wrapperButton.style.display = 'none'
-    titleSens.style.display = 'none'
-    moduleConfig.style.display = 'none'
+
     e.classList.remove('color')
     if (container.children.length > 0) {
-        console.log('удаление')
-        //  console.log(container.children)
         const containerArr = Array.from(container.children)
         containerArr.forEach(it => {
-            //    console.log('удаление цикл')
             it.remove();
         })
-
-
         const tr = document.querySelectorAll('tr')
         tr.forEach(it => {
-            //    console.log('удаление цикл')
             it.remove();
         })
     }
@@ -172,20 +152,8 @@ for (let i = 0; i <= count; i++) {
 
 
 
-//отрисовываем список под параметры
-export function sensor(btnsens, titleSens, obo) {
-    btnsens.forEach(e =>
-        e.addEventListener('click', () => {
-            btnsens.forEach(el => {
-                obo.style.display = 'none';
-                titleSens.style.display = 'none';
-                el.classList.remove('actBTN')
-            })
-            e.classList.add('actBTN')
-            obo.style.display = 'flex';
-            titleSens.style.display = 'block';
-        }))
-}
+
+
 
 export function view(arg) {
 

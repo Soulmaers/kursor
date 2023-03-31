@@ -187,6 +187,16 @@ body {
   font-weight: bold;
 }
 
+.messageId {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Roboto;
+  font-weight: bold;
+  position: absolute;
+  bottom: 40%
+}
+
 .sel {
   width: 160px;
   height: 32px;
@@ -687,7 +697,7 @@ div.spoyler {
 }
 
 .obo {
-  display: none;
+  display: flex;
   overflow-y: auto;
   flex-wrap: wrap;
   height: 400px;
@@ -711,7 +721,7 @@ div.spoyler {
 }
 
 .title_sens {
-  display: none;
+  display: flex;
   font-size: 15px;
   font-weight: 600;
   margin: 0px 5px;
@@ -790,7 +800,8 @@ div.spoyler {
   color: gray
 }
 
-.buh {
+.buh,
+.buhId {
   width: 24px;
   height: 20px;
   display: flex;
@@ -850,7 +861,7 @@ div.spoyler {
 
 .wrapper_button {
   margin-top: 30px;
-  display: none;
+  display: flex;
   justify-content: space-around;
 }
 
@@ -920,7 +931,6 @@ div.spoyler {
   flex-wrap: wrap;
   box-sizing: border-box;
 
-  min-height: 600px;
 
 
 
@@ -1092,6 +1102,25 @@ input[type="date"] {
   height: 20px;
 }
 
+.findTyresId {
+  margin-top: 2px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid lightgray;
+  font-family: Roboto;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.findValueId {
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  height: 20px;
+  width: 100%;
+}
+
 .techInputId {
   border: none;
   text-align: center;
@@ -1158,7 +1187,7 @@ input[type="date"] {
 
 .dropbtnOs {
   height: 32px;
-  width: 54px;
+  width: 84px;
   border: 1px solid gray;
   box-sizing: border-box;
   background-color: lightgray;
@@ -1203,7 +1232,8 @@ input[type="date"] {
 
 .dropdownOs {
   position: relative;
-  width: 60px;
+  width: 90px;
+  height: 38px;
   align-items: center;
   border: 1px solid gray;
   padding: 2px 2px;
@@ -1217,14 +1247,17 @@ input[type="date"] {
 .dropdownTires {
   position: relative;
   width: 90px;
+  height: 38px;
   align-items: center;
   border: 1px solid gray;
   padding: 2px 2px;
   box-sizing: border-box;
   text-align: center;
   cursor: pointer;
-
+  margin-left: 10px;
 }
+
+
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
@@ -1243,7 +1276,7 @@ input[type="date"] {
   display: none;
   position: absolute;
   background-color: #f1f1f1;
-  min-width: 80px;
+  min-width: 82px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 2;
   padding: 0;
@@ -1256,7 +1289,7 @@ input[type="date"] {
   display: none;
   position: absolute;
   background-color: #f1f1f1;
-  min-width: 88px;
+  min-width: 82px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 3;
   padding: 0;
@@ -1343,12 +1376,7 @@ input[type="date"] {
 }
 
 
-.moduleConfig {
-  display: none;
-  justify-content: space-around;
-  margin: 10px 0;
-  width: 170px;
-}
+
 
 .wrapper_containt {
   width: 280px;
@@ -1503,7 +1531,7 @@ input[type="date"] {
   flex-direction: column;
   align-items: center;
   position: absolute;
-  left: 15%
+  left: 10%
 }
 
 
@@ -1565,9 +1593,77 @@ input[type="date"] {
   background: #fff;
 }
 
+.saveId {
+  display: flex;
+
+}
+
+.rightBlock {
+  margin-top: 30px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+
+.generateId {
+  width: 160px;
+  height: 38px;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 0;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn_generate {
+  height: 32px;
+  width: 154px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 0;
+  font-size: 0.8rem;
+  font-family: Roboto;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
+}
+
+
+.btn_base {
+  height: 32px;
+  width: 88px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 0;
+  font-size: 0.8rem;
+  font-family: Roboto;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
+}
+
+.listId {
+  width: 94px;
+  height: 38px;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 0;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
 .save {
   width: 170px;
-
   flex-direction: column;
   align-items: center;
   border: 1px solid gray;
@@ -1789,16 +1885,40 @@ input[type="date"] {
 }
 
 .controll {
-  width: 200px;
-  min-height: 250px;
+  width: 500px;
+
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-wrap: wrap;
   background: #fff;
   border: 1px solid gray;
-  position: relative;
   z-index: 10;
+  position: relative;
+  border: 1px solid lightgray;
+
+
+}
+
+.sensors {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.mainConfig {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px 0;
+
+
+}
+
+.moduleConfig {
+
+  width: 50%;
+  display: none;
 }
 
 .configClear {

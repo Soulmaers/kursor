@@ -6,8 +6,7 @@ import { visual, visualNone } from './visual.js'
 import { getUsers } from './admin.js'
 import { geoloc } from './wialon.js'
 import { reqProtectorBase } from './protector.js'
-import { saveBase } from './saveBaseProtector.js'
-
+import { reqBaseId, saveDouble } from './saveBaseId.js'
 
 
 const auth = document.querySelector('.auth')
@@ -139,8 +138,8 @@ export function saveTyres(arr) {
 
 }
 
-
-
+const btnGenerate = document.querySelector('.btn_generate')
+btnGenerate.addEventListener('click', reqBaseId)
 
 const configs = document.querySelector('.configs')
 const configClear = document.querySelector('.configClear')
@@ -148,14 +147,24 @@ if (configs) {
     configs.addEventListener('click', () => {
         const controll = document.querySelector('.container_left')
         const config = document.querySelector('.config')
+        const clear = document.querySelector('.clear')
+        const comfirm = document.querySelector('.comfirm')
+        const sensors = document.querySelector('.sensors')
         controll.style.display = 'flex'
         config.style.display = 'flex'
+        clear.style.display = 'flex'
+        comfirm.style.display = 'block';
+        sensors.style.display = 'none';
     })
     configClear.addEventListener('click', () => {
         const controll = document.querySelector('.container_left')
-        // const config = document.querySelector('.config')
+        const sensors = document.querySelector('.sensors')
+        const moduleConfig = document.querySelector('.moduleConfig')
+        const wPod = document.querySelector('.wrap_pod')
         controll.style.display = 'none'
-        //  config.style.display = 'none'
+        sensors.style.display = 'none';
+        moduleConfig.style.display = 'none';
+        wPod.style.display = 'none';
     })
 }
 
@@ -279,7 +288,7 @@ const buttonTth = document.querySelector('.buttonTth')
 buttonTth.addEventListener('click', async () => {
     const techText = document.querySelectorAll('.tech')
     const formValue = document.querySelectorAll('.formValue')
-    const identificator = document.querySelector('.formValueId').value
+    const identificator = document.querySelector('.idbaseTyres').textContent
     const tyresActive = document.querySelector('.tiresActiv')
     const inputMM = document.querySelector('.maxMMM')
     const osId = tyresActive.closest('.osi').children[1].id
@@ -290,19 +299,29 @@ buttonTth.addEventListener('click', async () => {
     techText.forEach(el => {
         arrNameCol.push(el.id)
     })
-    arrNameCol.push('maxMM')
-    const pr = Array.from(formValue).slice(7, 12)
+    const active = document.querySelector('.color')
+    const activePost = active.textContent.replace(/\s+/g, '')
+
+    tyresActive.closest('.osi').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
+    const pr = Array.from(formValue)
+    console.log(pr)
+    //  arrNameColId.push(createDate(new Date))
+    const idbaseTyres = document.querySelector('.idbaseTyres')
+    arrNameColId.push(idbaseTyres.textContent)
+    arrNameColId.push(activePost)
     arrNameColId.push(nameOs)
     arrNameColId.push(osId)
-    arrNameColId.push(identificator)
     arrNameColId.push(tyresActive.id)
     pr.forEach(e => {
         arrNameColId.push(e.value)
     })
+
+
     !inputMM.value ? arrNameColId.push(inputMM.placeholder) : arrNameColId.push(inputMM.value)
-    arrNameColId.splice(0, 0, arrNameColId.splice(8, 1)[0]);
-    saveBase(arrNameColId)
+    arrNameColId.splice(12, 0, arrNameColId.splice(16, 1)[0]);
+    console.log(arrNameColId)
     await reqTech(arrNameCol, tyresActive.id)
+    await saveDouble(arrNameColId)
     const btnShina = document.querySelectorAll('.modals')
     if (btnShina[1].classList.contains('active')) {
         reqProtectorBase()
@@ -353,7 +372,28 @@ plug[2].addEventListener('click', () => {
 
 
 
-
+//отрисовываем список под параметры
+const btnsens = document.querySelectorAll('.btnsens')
+const titleSens = document.querySelector('.title_sens')
+const obo = document.querySelector('.obo')
+btnsens.forEach(e => {
+    e.addEventListener('click', () => {
+        if (e.classList.contains('actBTN')) {
+            e.classList.remove('actBTN')
+            obo.style.display = 'none';
+            titleSens.style.display = 'none';
+            return
+        }
+        btnsens.forEach(el => {
+            obo.style.display = 'none';
+            titleSens.style.display = 'none';
+            el.classList.remove('actBTN')
+        })
+        e.classList.add('actBTN')
+        obo.style.display = 'flex';
+        titleSens.style.display = 'block';
+    })
+})
 
 
 
@@ -441,7 +481,7 @@ new DropDownList({ element: document.querySelector(`#input`), btn: document.quer
 
 
 
-
+/*
 class DropDownList2 {
     constructor({ element, dataIdTyres, btn }) {
         this.element = element;
@@ -518,3 +558,4 @@ class DropDownList2 {
     }
 }
 new DropDownList2({ element: document.querySelector(`#input2`), btn: document.querySelector('.buh2'), dataIdTyres });
+*/

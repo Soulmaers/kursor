@@ -54,3 +54,6 @@ router.post('/api/listTyres', controllerModel.listTyres)
 router.post('/api/savePr', controllerModel.savePr)
 router.post('/api/alarmFind', controllerModel.alarmFind)
 router.post('/api/speedData', controllerModel.speedData)
+router.post('/api/generate', controllerModel.generate)
+
+
