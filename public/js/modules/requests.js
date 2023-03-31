@@ -280,8 +280,7 @@ export async function viewBar(id) {
 
 export function viewTech(id) {
     const rad = document.querySelectorAll('[name=radio]')
-    // rad[0].checked = true
-
+    rad[0].checked = true
     console.log('вьютэч' + new Date())
     console.log(id)
     let activePost;
@@ -290,12 +289,10 @@ export function viewTech(id) {
         const listItem = document.querySelectorAll('.link_menu')[0]
         console.log(listItem.textContent)
         activePost = listItem.textContent.replace(/\s+/g, '')
-
     }
     else {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
-
     fetch('api/techView', {
         method: "POST",
         headers: {
@@ -305,9 +302,7 @@ export function viewTech(id) {
     })
         .then((res) => res.json())
         .then(res => {
-            //  console.log(res.values)
-
-
+            console.log(res.values)
 
             const keys = [];
             if (res.values) {
@@ -315,13 +310,9 @@ export function viewTech(id) {
                     keys.push(key);
                 }
             }
-
-
-
             const number = document.querySelectorAll('.number')
             const text = document.querySelectorAll('.text')
             const titleMM = document.querySelectorAll('.titleMM')
-
             const inputMM = document.querySelector('.maxMMM')
             console.log(titleMM)
             if (res.values.length === 0) {
@@ -387,8 +378,6 @@ export function viewTech(id) {
             probeg[2].textContent = probeg[1].value - probeg[0].value
         }
         )
-
-
 }
 
 export function loadParamsViewShina() {

@@ -232,6 +232,7 @@ export function protekGrafTwo(y1, y2, arr, mm) {
     const mmAction = mm / 10
     const percent = (number / mmAction * 100).toFixed(0)
     const c2 = document.getElementById("drawLine2");
+    console.log(y1, y2, arr, mm)
     c2.width = 348
     c2.heigth = 60
     const ctx2 = c2.getContext("2d");
@@ -292,6 +293,7 @@ export function protekGrafThree(y1, y2, y3, arr, mm) {
     const percent = (number / mmAction * 100).toFixed(0)
     const c2 = document.getElementById("drawLine2");
     const ctx2 = c2.getContext("2d");
+    console.log(y1, y2, y3, arr, mm)
     c2.width = 174
     c2.heigth = 60
     ctx2.beginPath();
@@ -376,11 +378,13 @@ export function protekGrafThree(y1, y2, y3, arr, mm) {
 export function protekGrafFour(y1, y2, y3, y4, arr, mm) {
     //   const mmMax = document.querySelector('.mm12')
     //  console.log(mmMax.value)
+
     let number = min(arr)
     const mmAction = mm / 10
     const percent = (number / mmAction * 100).toFixed(0)
     const c2 = document.getElementById("drawLine2");
     const ctx2 = c2.getContext("2d");
+    console.log(y1, y2, y3, y4, arr, mm)
     c2.width = 116
     c2.heigth = 60
     ctx2.beginPath();

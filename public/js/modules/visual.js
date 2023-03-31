@@ -562,10 +562,11 @@ export function viewDinamic(arr, maxProtector) {
             y4 = (mm - arrAll[3]) / 2
         }
         if (mm > 120 && mm <= 180) {
+
             y1 = (mm - arrAll[0]) / 3
             y2 = (mm - arrAll[1]) / 3
             y3 = (mm - arrAll[2]) / 3
-            y4 = (mm - arrAll[3]) / 2
+            y4 = (mm - arrAll[3]) / 3
         }
         if (mm > 180) {
             y1 = (mm - arrAll[0]) / 4
