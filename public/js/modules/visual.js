@@ -540,7 +540,7 @@ export function viewDinamic(arr, maxProtector) {
             y1 = (mm - arrAll[0]) / 4
             y2 = (mm - arrAll[1]) / 4
             y3 = (mm - arrAll[2]) / 4
-            y4 = (mm - arrAll[3]) / 2
+            y4 = (mm - arrAll[3]) / 4
         }
         protekGrafFour(y1, y2, y3, y4, arr, mm)
     }

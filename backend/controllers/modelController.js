@@ -41,20 +41,41 @@ module.exports.paramsDeleteView = (req, res) => {
 }
 
 module.exports.savePr = async (req, res) => {
-    const value = [req.body.arr]
+    // const value = [req.body.arr]
+    // console.log(req.body.arr.dataAdd)
+    const value = [Object.values(req.body.arr)]
     console.log(value)
-    const sql = `INSERT INTO  tyresBase( identificator, nameCar, typeOs, numberOs, idTyres, marka,
-        model,
-        psi,
-        changeBar,
-        probegNow,
-        dateInstall,
-        probegPass,
-        dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`;
-    connection.query(sql, [value], function (err, results) {
-        if (err) console.log(err);
-        res.json('Данные добавлены')
-    });
+    if (req.body.arr.dataAdd) {
+        const sql = `INSERT INTO  tyresBase(dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka,
+            model,
+            psi,
+            changeBar,
+            probegNow,
+            dateInstall,
+            probegPass,
+            dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`;
+        connection.query(sql, [value], function (err, results) {
+            if (err) console.log(err);
+            res.json('Данные добавлены')
+        });
+    }
+    else {
+        const sql = `INSERT INTO  tyresBase(identificator, nameCar, typeOs, numberOs, idTyres, marka,
+            model,
+            psi,
+            changeBar,
+            probegNow,
+            dateInstall,
+            probegPass,
+            dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`;
+        connection.query(sql, [value], function (err, results) {
+            if (err) console.log(err);
+            res.json('Данные добавлены')
+        });
+    }
+
+
+
 }
 
 
@@ -332,8 +353,44 @@ module.exports.generate = (req, res) => {
     }
 }
 
+module.exports.rotate = (req, res) => {
+    const data1 = req.body.allArray1
+    const data2 = req.body.allArray2
+    const nameCar = req.body.activePost
+    const id1 = req.body.relArr[0]
+    const id2 = req.body.relArr[1]
+    console.log(id1, id2)
+    try {
+        const selectBase = `SELECT * FROM tyresBase WHERE identificator IN('${id1}', '${id2}')`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            console.log(results)
+            res.json({ status: 200, result: results })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+// const selectBase = `SELECT * FROM tyresBase WHERE nameCar='${nameCar}' AND idTyres IN (${data1[0]},${data2[0]}) AND numberOs IN (${data1[1]},${data2[1]}) AND typeOs IN ('${data1[2]}','${data2[2]}')`
 
 
+
+
+module.exports.findId = (req, res) => {
+    try {
+        const selectBase = `SELECT identificator FROM tyresBase WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            console.log(results)
+            res.json({ status: 200, result: results })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 
 module.exports.techView = (req, res) => {
     //  console.log(req.body.activePost)

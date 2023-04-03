@@ -945,6 +945,18 @@ div.spoyler {
   background-color: gray;
 }
 
+.rotates {
+  border: 1px solid gray;
+  border-radius: 5px;
+  background-color: #000;
+}
+
+.rotateDiv {
+  margin-top: 10px;
+  border: 1px solid gray;
+  padding: 5px 10px;
+  cursor: pointer;
+}
 
 .wrapper_right {
   display: flex;

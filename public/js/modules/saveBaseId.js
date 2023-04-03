@@ -1,6 +1,8 @@
 import { viewTech } from './requests.js'
+import { convert } from './visual.js'
 
-function createDate() {
+
+export function createDate() {
 
     let today = new Date();
     const year = today.getFullYear();
@@ -67,6 +69,7 @@ export async function reqBaseId() {
         idbaseTyres.textContent = response.result
     }
     setTimeout(() => messaga.textContent = '', 2000)
+
     console.log(tiresActiv)
     viewTech(tiresActiv)
 }
@@ -84,5 +87,29 @@ export async function saveDouble(arr) {
         body: JSON.stringify({ arr }),
     })
     const result = await complete.json()
+    const tiresActiv = document.querySelector('.tiresActiv').id
+    console.log(tiresActiv)
+    viewTech(tiresActiv)
+
     return console.log(result)
+}
+
+
+export async function findId() {
+    const complete = await fetch('api/findId', {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+        }
+        //  body: JSON.stringify({ arr }),
+    })
+    const result = await complete.json()
+    console.log(result.result)
+
+    const uniq = convert(result.result)
+
+    uniq.forEach(el => {
+        console.log(el.identificator)
+    })
+    return uniq
 }

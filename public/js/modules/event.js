@@ -6,7 +6,9 @@ import { visual, visualNone } from './visual.js'
 import { getUsers } from './admin.js'
 import { geoloc } from './wialon.js'
 import { reqProtectorBase } from './protector.js'
-import { reqBaseId, saveDouble } from './saveBaseId.js'
+import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
+import { rotate, zbor } from './rotate.js'
+
 
 
 const auth = document.querySelector('.auth')
@@ -22,6 +24,17 @@ if (auth) {
         account.style.display = 'none'
     })
 }
+
+
+const rotateDiv = document.querySelector('.rotateDiv')
+rotateDiv.addEventListener('click', () => {
+    const rotates = document.querySelectorAll('.rotates')
+    console.log(rotates)
+    zbor(rotates);
+    rotates.forEach(e => {
+        e.classList.remove('rotates')
+    })
+})
 
 
 const iconStrela = document.querySelector('.iconStrela')
@@ -127,6 +140,8 @@ function mainblock() {
 
 
 
+
+
 export function saveTyres(arr) {
     const modCnf = document.querySelector('.moduleConfig')
     const btnSave = document.querySelector('.btn_save')
@@ -142,7 +157,7 @@ const btnGenerate = document.querySelector('.btn_generate')
 btnGenerate.addEventListener('click', reqBaseId)
 
 const btnBase = document.querySelector('.btn_base')
-btnBase.addEventListener('click', () => {
+btnBase.addEventListener('click', async () => {
     const findTyresId = document.querySelector('.findTyresId')
     if (findTyresId.classList.contains('activeFind')) {
         findTyresId.classList.remove('activeFind')
@@ -151,6 +166,13 @@ btnBase.addEventListener('click', () => {
     }
     findTyresId.classList.add('activeFind')
     findTyresId.style.display = 'flex'
+    const uniq = await findId()
+    console.log(uniq)
+    const uniqArr = [];
+    uniq.forEach(el => {
+        uniqArr.push(el.identificator)
+    })
+    listId(uniqArr)
 })
 
 
@@ -164,21 +186,39 @@ if (configs) {
         const clear = document.querySelector('.clear')
         const comfirm = document.querySelector('.comfirm')
         const sensors = document.querySelector('.sensors')
+        const tiresActiv = document.querySelector('.tiresActiv')
         controll.style.display = 'flex'
         config.style.display = 'flex'
         clear.style.display = 'flex'
         comfirm.style.display = 'block';
         sensors.style.display = 'none';
+        configs.classList.add('conf')
+        rotate()
+
     })
     configClear.addEventListener('click', () => {
+        const configs = document.querySelector('.configs')
+        const findTyresId = document.querySelector('.findTyresId')
+        const findValueId = document.querySelector('.findValueId')
         const controll = document.querySelector('.container_left')
         const sensors = document.querySelector('.sensors')
         const moduleConfig = document.querySelector('.moduleConfig')
+        const rotates = document.querySelectorAll('.rotates')
+        rotates.forEach(e => {
+            e.classList.remove('rotates')
+        })
         const wPod = document.querySelector('.wrap_pod')
+        if (findTyresId.classList.contains('activeFind')) {
+            findTyresId.classList.remove('activeFind')
+            findTyresId.style.display = 'none'
+        }
+        findValueId.value = ''
         controll.style.display = 'none'
         sensors.style.display = 'none';
         moduleConfig.style.display = 'none';
         wPod.style.display = 'none';
+        console.log(configs)
+        configs.classList.remove('conf')
     })
 }
 
@@ -430,6 +470,7 @@ class DropDownList {
         console.log(keyCode);
     }
     _onElementInput({ target }) {
+        console.log(target.value)
         this.removeList();
 
         if (!target.value) {
@@ -495,81 +536,85 @@ new DropDownList({ element: document.querySelector(`#input`), btn: document.quer
 
 
 
-/*
-class DropDownList2 {
-    constructor({ element, dataIdTyres, btn }) {
-        this.element = element;
-        this.dataIdTyres = dataIdTyres;
-        this.btn = btn;
-        this.listElement = null;
-        this._onElementInput = this._onElementInput.bind(this);
-        this._onElementKursor = this._onElementKursor.bind(this);
-        this._onItemListClick = this._onItemListClick.bind(this);
-        this._onDocumentKeyDown = this._onDocumentKeyDown.bind(this);
-        this.bind();
-    }
-    _onDocumentKeyDown({ keyCode }) {
-        console.log(keyCode);
-    }
-    _onElementInput({ target }) {
-        this.removeList();
-
-        if (!target.value) {
-            return
-        }
-        this.createList(this.dataIdTyres.filter(it => it.toLowerCase().indexOf(target.value.toLowerCase()) !== -1));
-        this.appendList();
-    }
-    _onElementKursor() {
-        this.removeList();
-        this.createList(this.dataIdTyres);
-        this.appendList();
-    }
-    _onItemListClick({ target }) {
-        console.log('удаление')
-        this.element.value = target.textContent;
-        this.removeList();
-    }
-    createList(dataIdTyres) {
-        console.log(dataIdTyres)
-        this.listElement = document.createElement(`ul`);
-        this.listElement.className = `drop-down__list`;
-        this.listElement.innerHTML = dataIdTyres.map(it => `<li tabindex="0" class="drop-down__item">${it}</li>`).join(``);
-
-        [...this.listElement.querySelectorAll(`.drop-down__item`)].forEach(it => {
-            it.addEventListener(`click`, this._onItemListClick);
-        });
-        document.addEventListener(`keydown`, this._onDocumentKeyDown);
-    }
-    appendList() {
-        const { left, width, bottom } = this.element.getBoundingClientRect();
-        console.log(left, width, bottom)
-
-        this.listElement.style.width = width + `px`;
-        // this.listElement.style.height = height + `px`;
-        this.listElement.style.left = window.scrollX + left + `px`;
-        this.listElement.style.top = window.scrollY + bottom + `px`;
-        this.listElement.style.display = 'block'
-        document.body.appendChild(this.listElement);
-    }
-
-    removeList() {
-        if (this.listElement) {
-            this.listElement.remove();
+function listId(uniq) {
+    class DropDownList2 {
+        constructor({ element, uniq, btn }) {
+            this.element = element;
+            this.uniq = uniq;
+            this.btn = btn;
             this.listElement = null;
+            this._onElementInput = this._onElementInput.bind(this);
+            this._onElementKursor = this._onElementKursor.bind(this);
+            this._onItemListClick = this._onItemListClick.bind(this);
+            this._onDocumentKeyDown = this._onDocumentKeyDown.bind(this);
+            this.bind();
         }
-        // document.removeEventListener(`keydown`, this._onDocumentKeyDown);
-    }
-    bind() {
-        this.element.addEventListener(`input2`, this._onElementInput);
-        this.btn.addEventListener(`click`, this._onElementKursor);
-        document.addEventListener('click', (e) => {
-            if (e.target !== this.btn) {
-                this.removeList()
-            }
+        _onDocumentKeyDown({ keyCode }) {
+            console.log(keyCode);
+        }
+        _onElementInput({ target }) {
+            console.log(target.value)
+            this.removeList();
 
-        })
+            if (!target.value) {
+                return
+            }
+            this.createList(this.uniq.filter(it => it.toLowerCase().indexOf(target.value.toLowerCase()) !== -1));
+            this.appendList();
+        }
+        _onElementKursor() {
+            this.removeList();
+            this.createList(this.uniq);
+            this.appendList();
+        }
+        _onItemListClick({ target }) {
+            console.log('удаление')
+            this.element.value = target.textContent;
+            this.removeList();
+        }
+        createList(uniq) {
+            console.log(uniq)
+            this.listElement = document.createElement(`ul`);
+            this.listElement.className = `drop-down__list`;
+            this.listElement.innerHTML = uniq.map(it => `<li tabindex="0" class="drop-down__item">${it}</li>`).join(``);
+
+
+            [...this.listElement.querySelectorAll(`.drop-down__item`)].forEach(it => {
+                it.addEventListener(`click`, this._onItemListClick);
+            });
+            //   console.log(this.listElement)
+            document.addEventListener(`keydown`, this._onDocumentKeyDown);
+        }
+        appendList() {
+            const { left, width, bottom } = this.element.getBoundingClientRect();
+            console.log(left, width, bottom)
+
+            this.listElement.style.width = width + `px`;
+            // this.listElement.style.height = height + `px`;
+            this.listElement.style.left = window.scrollX + left + `px`;
+            this.listElement.style.top = window.scrollY + bottom + `px`;
+            this.listElement.style.display = 'block'
+            this.listElement.style.zIndex = '1000'
+            document.body.appendChild(this.listElement);
+        }
+
+        removeList() {
+            if (this.listElement) {
+                this.listElement.remove();
+                this.listElement = null;
+            }
+            // document.removeEventListener(`keydown`, this._onDocumentKeyDown);
+        }
+        bind() {
+            this.element.addEventListener(`input`, this._onElementInput);
+            this.btn.addEventListener(`click`, this._onElementKursor);
+            document.addEventListener('click', (e) => {
+                if (e.target !== this.btn) {
+                    this.removeList()
+                }
+
+            })
+        }
     }
+    new DropDownList2({ element: document.querySelector(`#inputId`), btn: document.querySelector('.buhId'), uniq });
 }
-new DropDownList2({ element: document.querySelector(`#inputId`), btn: document.querySelector('.buhId'), dataIdTyres });
-*/

@@ -355,7 +355,9 @@ export function viewTech(id) {
                 nval.push(dd[0])
                 const id = nval.splice(2, 1)
                 const idbaseTyres = document.querySelector('.idbaseTyres')
-                idbaseTyres.textContent = id[0][1]
+                idbaseTyres.innerHTML = id[0][1]
+                const tiresActiv = document.querySelector('.tiresActiv')
+                tiresActiv.setAttribute('rel', id[0][1])
                 const formValue = document.querySelectorAll('.formValue')
                 formValue.forEach((el, index) => {
                     el.value = nval[index][1]

@@ -4,9 +4,9 @@ import { saveTyres } from './event.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 import { liCreate } from './visual.js'
 import { tech } from './tech.js'
+//import { rotate } from './rotate.js'
 
-
-
+export const arrayTyres = [];
 export function viewMenuParams() {
     const kolesos = [];
     const speedGraf = document.querySelector('.speedGraf')
@@ -20,6 +20,7 @@ export function viewMenuParams() {
     const techInfo = document.querySelector('.techInfo')
     const grafics = document.querySelector('.grafics')
     const plug = document.querySelectorAll('.plug')
+    const arrayTyres = [];
     tiresLink.forEach(e => {
         e.addEventListener('click', () => {
             if (e.classList.contains('tiresActiv')) {
@@ -59,6 +60,8 @@ export function viewMenuParams() {
                         })*/
             const idbaseTyres = document.querySelector('.idbaseTyres')
             idbaseTyres.textContent = ''
+
+
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
         })
     })
