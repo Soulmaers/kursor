@@ -179,6 +179,26 @@ body {
 
 
 
+.btn_save:hover {
+  background-color: #fff;
+}
+
+.btn_clear:hover {
+  background-color: #fff;
+}
+
+.dropbtn:hover {
+  background-color: #fff;
+}
+
+.btn_generate:hover {
+  background-color: #fff;
+}
+
+.btn_base:hover {
+  background-color: #fff;
+}
+
 .message {
   display: flex;
   justify-content: center;

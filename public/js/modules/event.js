@@ -141,6 +141,20 @@ export function saveTyres(arr) {
 const btnGenerate = document.querySelector('.btn_generate')
 btnGenerate.addEventListener('click', reqBaseId)
 
+const btnBase = document.querySelector('.btn_base')
+btnBase.addEventListener('click', () => {
+    const findTyresId = document.querySelector('.findTyresId')
+    if (findTyresId.classList.contains('activeFind')) {
+        findTyresId.classList.remove('activeFind')
+        findTyresId.style.display = 'none'
+        return
+    }
+    findTyresId.classList.add('activeFind')
+    findTyresId.style.display = 'flex'
+})
+
+
+
 const configs = document.querySelector('.configs')
 const configClear = document.querySelector('.configClear')
 if (configs) {
@@ -557,5 +571,5 @@ class DropDownList2 {
         })
     }
 }
-new DropDownList2({ element: document.querySelector(`#input2`), btn: document.querySelector('.buh2'), dataIdTyres });
+new DropDownList2({ element: document.querySelector(`#inputId`), btn: document.querySelector('.buhId'), dataIdTyres });
 */

@@ -1,3 +1,4 @@
+import { viewTech } from './requests.js'
 
 function createDate() {
 
@@ -15,6 +16,7 @@ function createDate() {
 export async function reqBaseId() {
     const tiresActiv = document.querySelector('.tiresActiv').id
     console.log(tiresActiv)
+
     const newId = (Math.random() * 10000).toFixed(0) + 'id'
     console.log(newId)
     const active = document.querySelector('.color')
@@ -33,11 +35,15 @@ export async function reqBaseId() {
     arrNameColId.push(activePost)
     arrNameColId.push(nameOs)
     arrNameColId.push(osId)
-    arrNameColId.push(tyresActive.id)
+    arrNameColId.push(tiresActiv)
     pr.forEach(e => {
         arrNameColId.push(e.value)
     })
     !inputMM.value ? arrNameColId.push(inputMM.placeholder) : arrNameColId.push(inputMM.value)
+
+    const dd = arrNameColId.splice(17, 1)
+    arrNameColId.splice(13, 0, dd[0])
+
     const param = {
         method: "POST",
         headers: {
@@ -61,7 +67,8 @@ export async function reqBaseId() {
         idbaseTyres.textContent = response.result
     }
     setTimeout(() => messaga.textContent = '', 2000)
-
+    console.log(tiresActiv)
+    viewTech(tiresActiv)
 }
 
 

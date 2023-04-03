@@ -45,7 +45,6 @@ export const reqDelete = (name) => {
     })
         .then((res) => res.json())
         .then((res) => console.log(res))
-    console.log(osi)
     divClear(osi)
     divClear(tires)
     divClear(centerOs)
@@ -185,11 +184,6 @@ export async function reqModalBar(arr, id) {
     modalInput.forEach(el => {
         arrValue.push(el.value)
     })
-    console.log(id)
-    console.log(arr)
-    console.log(arrValue)
-    console.log(activePost)
-
     const bar = await fetch('api/modalBar', {
         method: "POST",
         headers: {
@@ -225,7 +219,6 @@ export async function reqTech(arr, id) {
     })
     const place = inputMM.placeholder
     !inputMM.value ? arrValue.push(place) : arrValue.push(inputMM.value)
-    console.log(id, arr, arrValue, activePost)
     const complete = await fetch('api/tech', {
         method: "POST",
         headers: {
@@ -235,8 +228,6 @@ export async function reqTech(arr, id) {
     })
     const result = await complete.json()
     return console.log(result)
-
-
 }
 
 
@@ -280,8 +271,6 @@ export async function viewBar(id) {
 export function viewTech(id) {
     const rad = document.querySelectorAll('[name=radio]')
     rad[0].checked = true
-    console.log('вьютэч' + new Date())
-    console.log(id)
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
@@ -301,21 +290,17 @@ export function viewTech(id) {
     })
         .then((res) => res.json())
         .then(res => {
-            console.log(res.values[res.values.length - 1])
             const result = res.values[res.values.length - 1]
-            console.log(result)
             const keys = [];
             if (result) {
                 for (let key in result) {
                     keys.push(key);
                 }
             }
-            console.log(keys)
             const number = document.querySelectorAll('.number')
             const text = document.querySelectorAll('.text')
             const titleMM = document.querySelectorAll('.titleMM')
             const inputMM = document.querySelector('.maxMMM')
-            console.log(titleMM)
             if (!result || result.length === 0) {
                 number.forEach(e => {
                     e.textContent = ''
@@ -331,7 +316,6 @@ export function viewTech(id) {
                 viewDinamic([])
             }
             else {
-                console.log(result)
                 number[0].textContent = keys[9]
                 number[1].textContent = keys[10]
                 number[2].textContent = keys[11]
@@ -366,22 +350,16 @@ export function viewTech(id) {
                 })
                 viewDinamic(protectorClear, maxStoc)
                 const nval = (Object.entries(result))
-
                 const massVal = nval.pop()
-                // console.log(massVal)
                 const dd = nval.splice(8, 1)
                 nval.push(dd[0])
                 const id = nval.splice(2, 1)
-                // console.log(id)
                 const idbaseTyres = document.querySelector('.idbaseTyres')
                 idbaseTyres.textContent = id[0][1]
                 const formValue = document.querySelectorAll('.formValue')
-                //  console.log(formValue)
-                //  console.log(nval)
                 formValue.forEach((el, index) => {
                     el.value = nval[index][1]
                 })
-
             }
             const inputPSI = document.querySelector('.jobDav')
             const inputBar = document.querySelector('.bar')
@@ -399,7 +377,6 @@ export function loadParamsViewShina() {
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.listItem')[0]
-
         activePost = listItem.textContent.replace(/\s+/g, '')
         titleCar.textContent = listItem.textContent
     }
@@ -416,12 +393,10 @@ export function loadParamsViewShina() {
         .then((res) => res.json())
         .then((res) => {
             const model = res
-
             const osi = document.querySelectorAll('.osi')
             const centerOs = document.querySelectorAll('.centerOs')
             if (model.values.length > 0) {
                 model.values.forEach(el => {
-
                     osi[el.osi - 1].style.display = 'flex';
                     centerOs[el.osi - 1].style.display = 'flex';
                     el.trailer == 'Прицеп' ?
@@ -445,7 +420,6 @@ export function loadParamsViewShina() {
             else {
                 console.log('база пустая')
             }
-
         })
 }
 
