@@ -1566,6 +1566,18 @@ input[type="date"] {
   left: 10%
 }
 
+.rotateDiv {
+  width: 170px;
+  margin: 1px 0;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 0;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+
+}
 
 .clear {
   width: 170px;
@@ -1729,6 +1741,23 @@ input[type="date"] {
   font-weight: 700;
   color: #000;
   cursor: pointer;
+}
+
+.btn_rotate {
+  width: 164px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 15px;
+  font-size: 0.9rem;
+  font-family: Roboto;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
+}
+
+.btn_rotate:hover {
+  background-color: #fff;
 }
 
 .btn_save {
