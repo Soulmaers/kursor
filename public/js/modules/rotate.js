@@ -17,7 +17,7 @@ export function rotate() {
             arrayTyres.forEach(el => {
                 el.classList.remove('rotates')
             })
-            if (arrayTyres.length > 1 && configs.classList.contains('conf')) {
+            if (arrayTyres.length > 0 && configs.classList.contains('conf')) {
                 arrayTyres[arrayTyres.length - 1].classList.add('rotates')
                 arrayTyres[arrayTyres.length - 2].classList.add('rotates')
                 console.log(arrayTyres)
