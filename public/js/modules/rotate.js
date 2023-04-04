@@ -32,10 +32,14 @@ export function rotate() {
 export function zbor(rotates) {
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
+    const messaga = document.querySelector('.messageId')
     const relArr = [];
+    rotates.length < 2 ? (messaga.textContent = 'Выберите второе колесо!', messaga.style.color = 'red', setTimeout(() => messaga.textContent = '', 3000)) : null
     rotates.forEach(el => {
         relArr.push(el.rel)
+        el.rel === '' ? (messaga.textContent = 'Нет колеса для ротации!', messaga.style.color = 'red', setTimeout(() => messaga.textContent = '', 3000)) : null
     })
+
     console.log(relArr)
     const allArray1 = [];
     const allArray2 = [];

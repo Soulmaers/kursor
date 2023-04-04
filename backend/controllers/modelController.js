@@ -291,6 +291,7 @@ module.exports.tyres = (req, res) => {
                 })
             }
             if (results.length > 0) {
+                console.log(req.body.tyres[0][0])
                 let count = req.body.tyres[0][0];
                 console.log(req.body.tyres[0][0])
                 console.log(results[0].tyresdiv)
@@ -485,9 +486,13 @@ module.exports.modelView = (req, res) => {
     try {
         const selectBase = `SELECT osi, trailer,tyres FROM ${tableModelView} WHERE 1`
         connection.query(selectBase, function (err, results) {
-            if (err) console.log(err);
-            //console.log(results)
-            response.status(200, results, '', res)
+            if (results === undefined) {
+                response.status(200, results, '', res)
+            }
+            else {
+                response.status(200, results, '', res)
+            }
+
         })
     }
     catch (e) {
@@ -503,9 +508,14 @@ module.exports.tyresView = (req, res) => {
     try {
         const selectBase = `SELECT tyresdiv, pressure,temp FROM ${tableTyresView} WHERE 1`
         connection.query(selectBase, function (err, results) {
-            if (err) console.log(err);
+            if (results === undefined) {
+                response.status(200, results, req.body.activePost, res)
+            }
+            else {
+                response.status(200, results, req.body.activePost, res)
+            }
             //console.log(results)
-            response.status(200, results, req.body.activePost, res)
+
         })
     }
     catch (e) {
@@ -539,9 +549,16 @@ module.exports.listTyres = (req, res) => {
     try {
         const selectBase = `SELECT tyresdiv, pressure,temp FROM ${nameCar} WHERE 1`
         connection.query(selectBase, function (err, results) {
-            if (err) console.log(err);
-            //   console.log(results)
-            res.json({ status: 200, result: results, message: req.body.car })
+            //     if (err) console.log(err);
+            if (results === undefined) {
+                res.json({ status: 200, result: results, message: req.body.car })
+            }
+            else {
+                console.log(results)
+                res.json({ status: 200, result: results, message: req.body.car })
+
+            }
+
         })
     }
     catch (e) {

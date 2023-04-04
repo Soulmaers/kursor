@@ -12,26 +12,30 @@ export async function alarmFind(name) {
     }
     const tyres = await fetch('api/tyresView', par)
     const tyresmassiv = await tyres.json();
-    const sorTyres = convert(tyresmassiv.values)
-    const storValue = [];
-    sorTyres.forEach(async e => {
-        e.pressure
-        const activeName = 'alarm' + activePost + e.pressure
-        const stor = await fetch('api/alarmFind', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ activeName })
-        })
-        const storList = await stor.json();
-        storValue.push(storList)
+    if (tyresmassiv.values) {
+        console.log(tyresmassiv.values)
+        const sorTyres = convert(tyresmassiv.values)
+        const storValue = [];
+        sorTyres.forEach(async e => {
+            e.pressure
+            const activeName = 'alarm' + activePost + e.pressure
+            const stor = await fetch('api/alarmFind', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ activeName })
+            })
+            const storList = await stor.json();
+            storValue.push(storList)
 
-    })
-    setTimeout(viewAlarmStorage, 1000, activePost, storValue)
+        })
+        setTimeout(viewAlarmStorage, 1000, activePost, storValue)
+    }
 }
 
 function viewAlarmStorage(name, stor) {
+    console.log('работает прога')
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
     stor.forEach(el => {

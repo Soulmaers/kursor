@@ -1,7 +1,7 @@
 import { text } from './content.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
-//import { findTyresInstall } from './saveBaseId.js'
+import { findTyresInstall } from './saveBaseId.js'
 import { geoloc, iconParams } from './wialon.js'
 import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
 import { alarmFind } from './alarmStorage.js'
@@ -70,46 +70,6 @@ export function visual(el) {
 
 
 
-export async function findTyresInstall() {
-    const active = document.querySelector('.color')
-    const activePost = active.textContent.replace(/\s+/g, '')
-    const tyres = document.querySelectorAll('.tires_link')
-    const tyresId = [];
-    tyres.forEach(el => {
-        tyresId.push(el.id)
-    })
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ activePost, tyresId }))
-    }
-
-
-    const par = await fetch('api/listTyresId', param)
-    const params = await par.json()
-    console.log(params)
-
-    const result = Object.values(params.result.reduce(
-        (acc, val) => {
-            acc[val.idTyres] = Object.assign(acc[val.idTyres] ?? {}, val);
-            return acc;
-        },
-        {}
-    ));
-    console.log(result)
-    const tiresLink = document.querySelectorAll('.tires_link')
-    tiresLink.forEach(el => {
-        result.forEach(item => {
-            if (el.id === item.idTyres) {
-                el.children[0].style.border = '2px solid #000'
-                el.children[1].style.border = '2px solid #000'
-            }
-        })
-    })
-}
-
 export function visualNone(e) {
     const probegElem = document.querySelector('.probeg_value')
     probegElem.textContent = ''
@@ -145,13 +105,12 @@ export function visualNone(e) {
         containerArr.forEach(it => {
             it.remove();
         })
-        const tr = document.querySelectorAll('tr')
+        const tr = document.querySelectorAll('.tr')
         tr.forEach(it => {
             it.remove();
         })
     }
 }
-
 
 //стираем выбранные значения графика скорости
 export function clearGraf() {
@@ -213,112 +172,114 @@ export function viewConfigurator(arg, params) {
     // const massItog = [];
 
     // console.log(arg)
-    //  console.log(params)
-    const parametrs = convert(params)
-    const alerts = [];
-    const tiresLink = document.querySelectorAll('.tires_link')
-    let activePost;
-    const active = document.querySelectorAll('.color')
-    const alarm = document.querySelector('.alarm')
-    const alarmCheck = document.querySelector('.alarmCheck')
-    if (active[0] == undefined) {
-        const listItem = document.querySelectorAll('.listItem')[0]
-        activePost = listItem.textContent.replace(/\s+/g, '')
-    }
-    else {
-        activePost = active[0].textContent.replace(/\s+/g, '')
-    }
-    const par = [];
-    arg.forEach(el => {
-        par.push(el.name)
-    })
-    parametrs.forEach(item => {
-        let signal;
-        let done;
-        tiresLink.forEach(e => {
-            if (e.id == item.tyresdiv) {
-                if (!par.includes(item.pressure)) {
-                    // console.log('не тру')
-                    //  return
-                    e.children[0].textContent = 'off'
-                    e.children[0].style.color = '#000'
-                }
-                if (!par.includes(item.temp)) {
-                    //  console.log('не тру')
-                    //   return
-                    e.children[1].textContent = 'off'
-                }
-                else {
-                    arg.forEach((el) => {
-                        if (el.name === item.pressure) {
-
-                            if (activePost === 'PressurePro933') {
-                                done = parseFloat((el.value * 0.069).toFixed(1))
-                            }
-                            else {
-                                done = parseFloat(el.value)
-                            }
-                            alerts.push(done)
-                            e.children[0].style.position = 'relative'
-                            e.children[0].innerHTML = `${done}\n<span class="ppp">Bar</span>`
-                            const ppp = document.querySelectorAll('.ppp')
-                            ppp.forEach(el => {
-                                el.style.position = 'absolute'
-                                el.style.bottom = 0
-                            })
-
-                            e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
-                            if (activePost == 'КранГаличанинР858ОР178') {
-                                signal = objColor[generDav(done)]
-
-                            }
-                            else {
-                                signal = objColor[generFront(done)]
-
-                            }
-                            e.children[0].style.background = signal;
-
-                        }
-                        if (el.name === item.temp) {
-                            //  massTemp.push(item.temp, el.value)
-                            //  console.log(el.name)
-                            tiresLink.forEach(e => {
-                                if (e.id == item.tyresdiv) {
-                                    if (el.value === '-128' || el.value === '-50') {
-                                        el.value = 'err'
-                                        e.children[1].textContent = el.value
-                                    }
-                                    if (el.value >= -51 && el.value < 36) {
-                                        e.children[1].textContent = el.value + '°C'
-
-                                        e.children[1].style.background = objColor[generT(el.value)];
-                                    }
-                                }
-                            })
-                        }
-                    })
-                }
-            }
-
-        })
-        if (activePost == 'КранГаличанинР858ОР178') {
-            if (alerts.some(element => element < 6) == true) {
-                alarmMin();
-            }
-            if (alerts.some(element => element > 9.9) == true) {
-                alarmMax();
-            }
+    console.log(params)
+    if (params) {
+        const parametrs = convert(params)
+        const alerts = [];
+        const tiresLink = document.querySelectorAll('.tires_link')
+        let activePost;
+        const active = document.querySelectorAll('.color')
+        const alarm = document.querySelector('.alarm')
+        const alarmCheck = document.querySelector('.alarmCheck')
+        if (active[0] == undefined) {
+            const listItem = document.querySelectorAll('.listItem')[0]
+            activePost = listItem.textContent.replace(/\s+/g, '')
         }
         else {
-
-            if (alerts.some(element => element > 10) == true) {
-                alarmMax();
-            }
-            if (alerts.some(element => element < 8) == true) {
-                alarmMin();
-            }
+            activePost = active[0].textContent.replace(/\s+/g, '')
         }
-    })
+        const par = [];
+        arg.forEach(el => {
+            par.push(el.name)
+        })
+        parametrs.forEach(item => {
+            let signal;
+            let done;
+            tiresLink.forEach(e => {
+                if (e.id == item.tyresdiv) {
+                    if (!par.includes(item.pressure)) {
+                        // console.log('не тру')
+                        //  return
+                        e.children[0].textContent = 'off'
+                        e.children[0].style.color = '#000'
+                    }
+                    if (!par.includes(item.temp)) {
+                        //  console.log('не тру')
+                        //   return
+                        e.children[1].textContent = 'off'
+                    }
+                    else {
+                        arg.forEach((el) => {
+                            if (el.name === item.pressure) {
+
+                                if (activePost === 'PressurePro933') {
+                                    done = parseFloat((el.value * 0.069).toFixed(1))
+                                }
+                                else {
+                                    done = parseFloat(el.value)
+                                }
+                                alerts.push(done)
+                                e.children[0].style.position = 'relative'
+                                e.children[0].innerHTML = `${done}\n<span class="ppp">Bar</span>`
+                                const ppp = document.querySelectorAll('.ppp')
+                                ppp.forEach(el => {
+                                    el.style.position = 'absolute'
+                                    el.style.bottom = 0
+                                })
+
+                                e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
+                                if (activePost == 'КранГаличанинР858ОР178') {
+                                    signal = objColor[generDav(done)]
+
+                                }
+                                else {
+                                    signal = objColor[generFront(done)]
+
+                                }
+                                e.children[0].style.background = signal;
+
+                            }
+                            if (el.name === item.temp) {
+                                //  massTemp.push(item.temp, el.value)
+                                //  console.log(el.name)
+                                tiresLink.forEach(e => {
+                                    if (e.id == item.tyresdiv) {
+                                        if (el.value === '-128' || el.value === '-50') {
+                                            el.value = 'err'
+                                            e.children[1].textContent = el.value
+                                        }
+                                        if (el.value >= -51 && el.value < 36) {
+                                            e.children[1].textContent = el.value + '°C'
+
+                                            e.children[1].style.background = objColor[generT(el.value)];
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    }
+                }
+
+            })
+            if (activePost == 'КранГаличанинР858ОР178') {
+                if (alerts.some(element => element < 6) == true) {
+                    alarmMin();
+                }
+                if (alerts.some(element => element > 9.9) == true) {
+                    alarmMax();
+                }
+            }
+            else {
+
+                if (alerts.some(element => element > 10) == true) {
+                    alarmMax();
+                }
+                if (alerts.some(element => element < 8) == true) {
+                    alarmMin();
+                }
+            }
+        })
+    }
 }
 /*
 function alertCreate() {

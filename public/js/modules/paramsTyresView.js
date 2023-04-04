@@ -101,7 +101,7 @@ export async function loadParamsView() {
             console.log(model)
             const osi = document.querySelectorAll('.osi')
             const centerOs = document.querySelectorAll('.centerOs')
-            if (model.values.length > 0) {
+            if (model.values && model.values.length > 0) {
                 //   console.log('база целая')
                 //  console.log(model.values)
                 model.values.forEach(el => {

@@ -140,15 +140,17 @@ function createNameTable(name) {
 }
 
 function postParametrs(name, param) {
-    // console.log('go2')
+    //console.log(name)
+    // console.log(param)
     const selectBase = `SELECT id FROM ${name} WHERE 1`
     connection.query(selectBase, function (err, results) {
         if (err) console.log(err);
         if (results.length < 1) {
-            //  console.log('создаем')
+            console.log('создаем')
             const sql = `INSERT INTO ${name}(name,value) VALUES?`;
             connection.query(sql, [param], function (err, results) {
                 if (err) console.log(err);
+                console.log(results)
             });
             //   connection.end();
         }
@@ -215,43 +217,50 @@ const convert = (ob) => {
 
 function zaprosSpisokb(name) {
     const massItog = [];
+    console.log(name)
     name.forEach(itey => {
         const nameCar = 'tyres' + itey
         try {
             const selectBase = `SELECT tyresdiv, pressure,temp FROM ${nameCar} WHERE 1`
             connection.query(selectBase, function (err, results) {
-                if (err) console.log(err);
-                const params = results
-                const modelUniqValues = convert(params)
-                try {
-                    const selectBase = `SELECT name, value FROM ${itey} WHERE 1`
-                    connection.query(selectBase, function (err, results) {
-                        if (err) console.log(err);
-                        const data = results
-                        let integer;
-                        data.forEach((el) => {
-                            modelUniqValues.forEach((item) => {
-                                //   console.log(item.pressure)
-                                if (el.name == item.pressure) {
+                if (results === undefined) {
+                    console.log('нет таблицы')
+                }
+                else {
 
-                                    if (itey == 'PressurePro933') {
-                                        integer = parseFloat((el.value * 0.069).toFixed(1))
-                                    }
-                                    else {
-                                        integer = el.value
-                                    }
-                                    data.forEach((it) => {
-                                        if (it.name === item.temp) {
-                                            massItog.push([itey, item.pressure, parseFloat(integer), parseFloat(it.value)])
+                    const params = results
+                    const modelUniqValues = convert(params)
+                    try {
+                        const selectBase = `SELECT name, value FROM ${itey} WHERE 1`
+                        connection.query(selectBase, function (err, results) {
+                            if (err) console.log(err);
+                            const data = results
+                            let integer;
+                            data.forEach((el) => {
+                                modelUniqValues.forEach((item) => {
+                                    //   console.log(item.pressure)
+                                    if (el.name == item.pressure) {
+
+                                        if (itey == 'PressurePro933') {
+                                            integer = parseFloat((el.value * 0.069).toFixed(1))
                                         }
-                                    })
-                                }
+                                        else {
+                                            integer = el.value
+                                        }
+                                        data.forEach((it) => {
+                                            if (it.name === item.temp) {
+                                                massItog.push([itey, item.pressure, parseFloat(integer), parseFloat(it.value)])
+                                            }
+                                        })
+                                    }
+                                })
                             })
                         })
-                    })
-                }
-                catch (e) {
-                    console.log(e)
+                    }
+
+                    catch (e) {
+                        console.log(e)
+                    }
                 }
             })
         }

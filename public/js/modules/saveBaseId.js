@@ -73,7 +73,7 @@ export async function reqBaseId() {
         const idbaseTyres = document.querySelector('.idbaseTyres')
         idbaseTyres.textContent = response.result
     }
-    setTimeout(() => messaga.textContent = '', 2000)
+    setTimeout(() => messaga.textContent = '', 3000)
 
     console.log(tiresActiv)
     viewTech(tiresActiv)
@@ -95,7 +95,10 @@ export async function saveDouble(arr) {
     const tiresActiv = document.querySelector('.tiresActiv').id
     console.log(tiresActiv)
     viewTech(tiresActiv)
-
+    const messaga = document.querySelector('.messageId')
+    messaga.textContent = 'Ротация колес выполнена'
+    messaga.style.color = 'green'
+    setTimeout(() => messaga.textContent = '', 3000)
     return console.log(result)
 }
 
@@ -121,3 +124,44 @@ export async function findId() {
 
 
 
+
+
+export async function findTyresInstall() {
+    const active = document.querySelector('.color')
+    const activePost = active.textContent.replace(/\s+/g, '')
+    const tyres = document.querySelectorAll('.tires_link')
+    const tyresId = [];
+    tyres.forEach(el => {
+        tyresId.push(el.id)
+    })
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost, tyresId }))
+    }
+
+
+    const par = await fetch('api/listTyresId', param)
+    const params = await par.json()
+    console.log(params)
+
+    const result = Object.values(params.result.reduce(
+        (acc, val) => {
+            acc[val.idTyres] = Object.assign(acc[val.idTyres] ?? {}, val);
+            return acc;
+        },
+        {}
+    ));
+    console.log(result)
+    const tiresLink = document.querySelectorAll('.tires_link')
+    tiresLink.forEach(el => {
+        result.forEach(item => {
+            if (el.id === item.idTyres) {
+                el.children[0].style.border = '2px solid #000'
+                el.children[1].style.border = '2px solid #000'
+            }
+        })
+    })
+}

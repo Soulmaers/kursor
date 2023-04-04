@@ -61,53 +61,59 @@ export function conturTest(testov) {
         const listTrail = document.createElement('div')
         listTrail.classList.add('list_trail2')
         listItemCar.appendChild(listTrail)
-        const modelUniq = convert(elem[0].result)
-        modelUniq.forEach(os => {
-            const osi = document.createElement('div')
-            osi.classList.add('osi_list')
-            if (os.trailer !== 'Прицеп' && os.tyres === 2 || os.trailer !== 'Прицеп' && os.tyres === 4) {
-                fnTagach(os, nameCar)
-            }
-            if (os.trailer === 'Прицеп' && os.tyres === 2 || os.trailer == 'Прицеп' && os.tyres === 4) {
-                fnPricep(os, nameCar)
-            }
-        })
+        if (elem[0].result) {
+            const modelUniq = convert(elem[0].result)
+            modelUniq.forEach(os => {
+                const osi = document.createElement('div')
+                osi.classList.add('osi_list')
+                if (os.trailer !== 'Прицеп' && os.tyres === 2 || os.trailer !== 'Прицеп' && os.tyres === 4) {
+                    fnTagach(os, nameCar)
+                }
+                if (os.trailer === 'Прицеп' && os.tyres === 2 || os.trailer == 'Прицеп' && os.tyres === 4) {
+                    fnPricep(os, nameCar)
+                }
+            })
+        }
+
         const listItem = document.querySelector(`.${nameCar}`)
         const shina = listItem.querySelectorAll('.arc');
         const r = [];
         let integer;
-        const modelUniqValues = convert(elem[1].result)
-        modelUniqValues.forEach(el => {
-            r.push(el.tyresdiv)
-        })
-        const uniq = convert(r)
-        uniq.forEach((el, index) => {
-            shina[index].setAttribute('id', el);
-        })
+        if (elem[1].result) {
+            const modelUniqValues = convert(elem[1].result)
+            modelUniqValues.forEach(el => {
+                r.push(el.tyresdiv)
+            })
+            const uniq = convert(r)
+            uniq.forEach((el, index) => {
+                shina[index].setAttribute('id', el);
+            })
 
-        elem[2].result.forEach((el) => {
-            modelUniqValues.forEach((item) => {
-                if (el.name == item.pressure) {
-                    shina.forEach(e => {
-                        if (e.id == item.tyresdiv) {
-                            if (nameCar == 'PressurePro933') {
-                                integer = parseFloat((el.value * 0.069).toFixed(1))
-                                e.children[0].style.fill = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
-                            }
-                            else {
-                                integer = el.value
-                                if ((nameCar == 'КранГаличанинР858ОР178')) {
-                                    e.children[0].style.fill = objColor[generDav(integer)]
+
+            elem[2].result.forEach((el) => {
+                modelUniqValues.forEach((item) => {
+                    if (el.name == item.pressure) {
+                        shina.forEach(e => {
+                            if (e.id == item.tyresdiv) {
+                                if (nameCar == 'PressurePro933') {
+                                    integer = parseFloat((el.value * 0.069).toFixed(1))
+                                    e.children[0].style.fill = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
                                 }
                                 else {
-                                    e.children[0].style.fill = objColor[generFront(integer)]
+                                    integer = el.value
+                                    if ((nameCar == 'КранГаличанинР858ОР178')) {
+                                        e.children[0].style.fill = objColor[generDav(integer)]
+                                    }
+                                    else {
+                                        e.children[0].style.fill = objColor[generFront(integer)]
+                                    }
                                 }
                             }
-                        }
-                    })
-                }
+                        })
+                    }
+                })
             })
-        })
+        }
 
     })
     navigator();
@@ -285,52 +291,53 @@ export function zaprosSpisok() {
 setInterval(zaprosSpisok, 60000)
 
 function viewListKoleso(arg, params, nameCar) {
-
-    console.log(nameCar)
+    console.log(params)
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
-    const modelUniqValues = convert(params.result)
-    const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
-    const r = [];
-    let integer;
+    if (params.result) {
+        const modelUniqValues = convert(params.result)
+        const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
+        const r = [];
+        let integer;
 
 
 
-    modelUniqValues.forEach(el => {
-        r.push(el.tyresdiv)
-    })
-    const uniq = convert(r)
-    uniq.forEach((el, index) => {
-        shina[index].setAttribute('id', el);
-    })
-    arg.result.forEach((el) => {
-        modelUniqValues.forEach((item) => {
-            if (el.name == item.pressure) {
-                shina.forEach(e => {
-                    if (e.id == item.tyresdiv) {
-                        if (activePost == 'PressurePro933') {
-                            integer = parseFloat((el.value * 0.069).toFixed(1))
-                            e.children[0].style.fill = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
-                        }
-                        else {
-                            integer = el.value
-                            if ((activePost == 'КранГаличанинР858ОР178')) {
-                                e.children[0].style.fill = objColor[generDav(integer)]
+        modelUniqValues.forEach(el => {
+            r.push(el.tyresdiv)
+        })
+        const uniq = convert(r)
+        uniq.forEach((el, index) => {
+            shina[index].setAttribute('id', el);
+        })
+        arg.result.forEach((el) => {
+            modelUniqValues.forEach((item) => {
+                if (el.name == item.pressure) {
+                    shina.forEach(e => {
+                        if (e.id == item.tyresdiv) {
+                            if (activePost == 'PressurePro933') {
+                                integer = parseFloat((el.value * 0.069).toFixed(1))
+                                e.children[0].style.fill = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
                             }
                             else {
-                                e.children[0].style.fill = objColor[generFront(integer)]
+                                integer = el.value
+                                if ((activePost == 'КранГаличанинР858ОР178')) {
+                                    e.children[0].style.fill = objColor[generDav(integer)]
+                                }
+                                else {
+                                    e.children[0].style.fill = objColor[generFront(integer)]
+                                }
                             }
+                            arg.result.forEach((it) => {
+                                if (it.name === item.temp) {
+                                    massItog.push([activePost, e, item.pressure, integer, parseFloat(it.value)])
+                                }
+                            })
                         }
-                        arg.result.forEach((it) => {
-                            if (it.name === item.temp) {
-                                massItog.push([activePost, e, item.pressure, integer, parseFloat(it.value)])
-                            }
-                        })
-                    }
-                })
-            }
+                    })
+                }
+            })
         })
-    })
+    }
 }
 
 
