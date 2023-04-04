@@ -1991,74 +1991,62 @@ input[type="date"] {
 }
 
 
+.card_strate {
+  width: 110px;
+  height: 110px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.strate_value {
+  position: absolute;
+  top: 63%;
+  left: 36%;
+  width: 30px;
+  height: 10px;
+  background-color: #FFF;
+  border: 1px solid gray;
+  text-align: center;
+  padding: 2px;
+  font-size: 0.6rem;
+  border-radius: 5px;
+}
 
 #wrapper {
-  display: none;
   position: relative;
-  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 #meter {
+
   width: 100%;
   height: 100%;
-  background-image: url(../image/speed.png);
+  background-image: url(../image/speed2.png);
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
-.circle {
-  fill: none;
-}
 
-.outline,
-#mask {
-  stroke: #F1F1F1;
-  stroke-width: 65;
-}
-
-.range {
-  stroke-width: 60;
-}
-
-#slider,
-#lbl {
-  position: absolute;
-}
-
-#slider {
-  cursor: pointer;
-  left: 0;
-  margin: auto;
-  right: 0;
-  top: 95%;
-  width: 94%;
-}
-
-#lbl {
-  background-color: #4B4C51;
-  border-radius: 2px;
-  color: white;
-  font-family: 'courier new';
-  font-size: 15pt;
-  font-weight: bold;
-  padding: 4px 4px 2px 4px;
-  right: -48px;
-  top: 57%;
-}
 
 #meter_needle {
-  height: 30%;
-  left: 8.5%;
+  width: 10px;
+  height: 25%;
+  left: 9%;
   margin: auto;
   position: absolute;
   right: 0;
-  top: 18%;
+  top: 25%;
   transform-origin: bottom center;
-  transform: rotate(245deg);
+  transform: rotate(180deg);
   background-image: url(../image/svg-meter-gauge-needle.svg);
   background-repeat: no-repeat;
   background-position: center;
+  background-size: contain;
 }
 
 
