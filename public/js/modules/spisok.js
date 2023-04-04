@@ -37,6 +37,12 @@ export function conturTest(testov) {
     const preloader = document.querySelector('.preloader') /* находим блок Preloader */
     preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
     const tt = new Date()
+    const listItem = document.querySelectorAll('.listItem')
+    if (listItem) {
+        listItem.forEach(e => {
+            e.remove();
+        })
+    }
     testov.forEach(elem => {
         dashView(elem[0].message)
         const nameCar = elem[0].message.replace(/\s+/g, '')
@@ -245,7 +251,7 @@ function fnPricep(arr, nameCar) {
 }
 
 let count = 0;
-function zaprosSpisok() {
+export function zaprosSpisok() {
     const list = document.querySelectorAll('.listItem')
     list.forEach(async el => {
         const car = el.children[0].textContent
@@ -279,12 +285,17 @@ function zaprosSpisok() {
 setInterval(zaprosSpisok, 60000)
 
 function viewListKoleso(arg, params, nameCar) {
+
+    console.log(nameCar)
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
     const modelUniqValues = convert(params.result)
     const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
     const r = [];
     let integer;
+
+
+
     modelUniqValues.forEach(el => {
         r.push(el.tyresdiv)
     })

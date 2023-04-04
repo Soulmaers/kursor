@@ -1,5 +1,6 @@
 
 import { divClear, viewDinamic, viewOs } from './visual.js'
+import { zapros } from './menu.js'
 
 export function postModel(model) {
     const active = document.querySelectorAll('.color')
@@ -12,7 +13,17 @@ export function postModel(model) {
         },
         body: JSON.stringify({ model, activePost }),
     })
-        .then((res) => res.json())
+        .then((res) =>
+            res.json())
+
+    const messaga = document.querySelector('.messageId')
+    messaga.textContent = 'Модель добавлена'
+    messaga.style.color = 'green'
+    setTimeout(() => messaga.textContent = '', 2000)
+    zapros()
+
+
+
 }
 
 
@@ -28,6 +39,10 @@ export function postTyres(tyres) {
     })
         .then((res) => res.json())
         .then(res => console.log(res))
+    const messaga = document.querySelector('.messageId')
+    messaga.textContent = 'Датчики добавлены'
+    messaga.style.color = 'green'
+    setTimeout(() => messaga.textContent = '', 2000)
 }
 
 
@@ -49,6 +64,12 @@ export const reqDelete = (name) => {
     divClear(tires)
     divClear(centerOs)
     viewOs()
+
+    const messaga = document.querySelector('.messageId')
+    messaga.textContent = 'Модель удалена'
+    messaga.style.color = 'green'
+    setTimeout(() => messaga.textContent = '', 2000)
+    zapros()
 }
 
 

@@ -343,7 +343,7 @@ module.exports.generate = (req, res) => {
                     probegNow, dateInstall, probegPass, dateZamer, N1, N2, N3, N4, maxMM) VALUES?`;
                 connection.query(sql, [arr], function (err, results) {
                     if (err) console.log(err);
-                    res.json({ boolean: true, result: id, message: `ID ${id}  добавлен в базу` })
+                    res.json({ boolean: true, result: id, message: `Колесо установлено` })
                 });
             }
         })
@@ -352,6 +352,23 @@ module.exports.generate = (req, res) => {
         console.log(e)
     }
 }
+module.exports.listTyresId = (req, res) => {
+    const nameCar = req.body.activePost
+    try {
+        const selectBase = `SELECT * FROM tyresBase WHERE nameCar='${nameCar}'`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            console.log(results)
+            res.json({ status: 200, result: results })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+
+
 
 module.exports.rotate = (req, res) => {
     const data1 = req.body.allArray1

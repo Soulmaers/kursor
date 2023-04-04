@@ -1,7 +1,7 @@
 import { text } from './content.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
-
+//import { findTyresInstall } from './saveBaseId.js'
 import { geoloc, iconParams } from './wialon.js'
 import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
 import { alarmFind } from './alarmStorage.js'
@@ -13,6 +13,7 @@ let start;
 let time;
 let icon;
 export function visual(el) {
+    const tiresLink = document.querySelectorAll('.tires_link')
     clearInterval(time)
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
@@ -22,7 +23,7 @@ export function visual(el) {
     const btnsens = document.querySelectorAll('.btnsens')
     const main = document.querySelector('.main')
     const plug = document.querySelectorAll('.plug')
-    const tiresLink = document.querySelectorAll('.tires_link')
+
     const grafics = document.querySelector('.grafics')
 
     tiresLink.forEach(e => {
@@ -47,7 +48,7 @@ export function visual(el) {
     titleCar.textContent = el.textContent
     loadParamsView()
     alarmFind(el)
-
+    findTyresInstall()
 
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
@@ -65,6 +66,48 @@ export function visual(el) {
         geoloc()
         time = setInterval(geoloc, 120000) //отрисовываем карту osm
     }
+}
+
+
+
+export async function findTyresInstall() {
+    const active = document.querySelector('.color')
+    const activePost = active.textContent.replace(/\s+/g, '')
+    const tyres = document.querySelectorAll('.tires_link')
+    const tyresId = [];
+    tyres.forEach(el => {
+        tyresId.push(el.id)
+    })
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost, tyresId }))
+    }
+
+
+    const par = await fetch('api/listTyresId', param)
+    const params = await par.json()
+    console.log(params)
+
+    const result = Object.values(params.result.reduce(
+        (acc, val) => {
+            acc[val.idTyres] = Object.assign(acc[val.idTyres] ?? {}, val);
+            return acc;
+        },
+        {}
+    ));
+    console.log(result)
+    const tiresLink = document.querySelectorAll('.tires_link')
+    tiresLink.forEach(el => {
+        result.forEach(item => {
+            if (el.id === item.idTyres) {
+                el.children[0].style.border = '2px solid #000'
+                el.children[1].style.border = '2px solid #000'
+            }
+        })
+    })
 }
 
 export function visualNone(e) {
@@ -337,54 +380,57 @@ export async function viewOs() {
             console.log('удаление цикл')
             it.remove();
         })
+
     }
-    else {
-        const count = 8;
-        for (let i = 0; i < count; i++) {
-            container.innerHTML += `${text}`
-        }
-        const osi = document.querySelectorAll('.osi')
-        let index = 0;
-        osi.forEach(el => {
-            index++
-            const centerOsDiv = document.createElement('div');
-            centerOsDiv.classList.add('centerOs')
-            const vnut = document.createElement('vnut')
-            vnut.classList.add('vnut')
-            centerOsDiv.appendChild(vnut)
-            el.children[0].insertAdjacentElement('afterEnd', centerOsDiv);
-            centerOsDiv.setAttribute("id", `${index}`);
-        })
-        const tires = document.querySelectorAll('.tires')
-        let indexTires = 0;
-        tires.forEach(el => {
-            indexTires++
-            const link = document.createElement('a');
-            link.classList.add('tires_link')
-            link.setAttribute("id", `${indexTires}`);
-            link.href = "#";
-            el.appendChild(link);
-            const tiresD = document.createElement('div');
-            tiresD.classList.add('tiresD')
-
-
-
-            const tiresT = document.createElement('div');
-            tiresT.classList.add('tiresT')
-            const place = document.createElement('div');
-            place.classList.add('place')
-            link.appendChild(tiresD);
-            link.appendChild(tiresT);
-            link.appendChild(place);
-        })
-        osi.forEach(el => {
-            el.style.display = 'none'
-        })
-        const cont2 = document.createElement('div');
-        cont2.classList.add('cont')
-        container.appendChild(cont2)
+    //  else {
+    const count = 8;
+    for (let i = 0; i < count; i++) {
+        container.innerHTML += `${text}`
     }
+    const osi = document.querySelectorAll('.osi')
+    console.log(osi)
+    let index = 0;
+    osi.forEach(el => {
+        index++
+        const centerOsDiv = document.createElement('div');
+        centerOsDiv.classList.add('centerOs')
+        const vnut = document.createElement('vnut')
+        vnut.classList.add('vnut')
+        centerOsDiv.appendChild(vnut)
+        el.children[0].insertAdjacentElement('afterEnd', centerOsDiv);
+        centerOsDiv.setAttribute("id", `${index}`);
+    })
+    const tires = document.querySelectorAll('.tires')
+    let indexTires = 0;
+    tires.forEach(el => {
+        indexTires++
+        const link = document.createElement('a');
+        link.classList.add('tires_link')
+        link.setAttribute("id", `${indexTires}`);
+        link.href = "#";
+        el.appendChild(link);
+        const tiresD = document.createElement('div');
+        tiresD.classList.add('tiresD')
+
+
+
+        const tiresT = document.createElement('div');
+        tiresT.classList.add('tiresT')
+        const place = document.createElement('div');
+        place.classList.add('place')
+        link.appendChild(tiresD);
+        link.appendChild(tiresT);
+        link.appendChild(place);
+    })
+    osi.forEach(el => {
+        el.style.display = 'none'
+    })
+    const cont2 = document.createElement('div');
+    cont2.classList.add('cont')
+    container.appendChild(cont2)
+    //  }
     viewMenuParams()
+
     modalOs();
     const btnShina = document.querySelectorAll('.modals')
     if (btnShina[1].classList.contains('active')) {

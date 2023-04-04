@@ -65,6 +65,11 @@ export async function reqBaseId() {
     if (response.boolean === true) {
         messaga.textContent = response.message
         messaga.style.color = 'green'
+
+        const tiresActiv = document.querySelector('.tiresActiv')
+
+        tiresActiv.children[0].style.border = '2px solid #000'
+        tiresActiv.children[1].style.border = '2px solid #000'
         const idbaseTyres = document.querySelector('.idbaseTyres')
         idbaseTyres.textContent = response.result
     }
@@ -113,3 +118,6 @@ export async function findId() {
     })
     return uniq
 }
+
+
+

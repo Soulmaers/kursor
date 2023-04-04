@@ -57,6 +57,6 @@ router.post('/api/speedData', controllerModel.speedData)
 router.post('/api/generate', controllerModel.generate)
 router.get('/api/findId', controllerModel.findId)
 router.post('/api/rotate', controllerModel.rotate)
-
+router.post('/api/listTyresId', controllerModel.listTyresId)
 
 

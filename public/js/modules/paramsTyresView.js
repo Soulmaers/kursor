@@ -69,7 +69,7 @@ export function viewMenuParams() {
 }
 
 export async function loadParamsView() {
-    // console.log('условия изменены')
+    console.log('грузим модель')
     clearInterval(viewPokasateli)
     const titleCar = document.querySelector('.title_two')
     const btnShina = document.querySelectorAll('.modals')
@@ -98,14 +98,13 @@ export async function loadParamsView() {
         .then((res) => res.json())
         .then((res) => {
             const model = res
-            // console.log(model)
+            console.log(model)
             const osi = document.querySelectorAll('.osi')
             const centerOs = document.querySelectorAll('.centerOs')
             if (model.values.length > 0) {
                 //   console.log('база целая')
                 //  console.log(model.values)
                 model.values.forEach(el => {
-
                     osi[el.osi - 1].style.display = 'flex';
                     centerOs[el.osi - 1].style.display = 'flex';
                     //  console.log(centerOs[el.osi - 1])
