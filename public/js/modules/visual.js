@@ -12,9 +12,11 @@ import { kranParams } from './strelaKran.js'
 let start;
 let time;
 let icon;
+let timeIcon;
 export function visual(el) {
     const tiresLink = document.querySelectorAll('.tires_link')
     clearInterval(time)
+    clearInterval(timeIcon)
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const wrapperCont = document.querySelector('.wrapper_containt')
@@ -56,7 +58,7 @@ export function visual(el) {
     if (!icon || icon !== el) {
         icon = el;
         iconParams()
-        icon = setInterval(iconParams, 6000) //отрисовываем карту osm
+        timeIcon = setInterval(iconParams, 10000) //отрисовываем карту osm
 
     }
     kranParams()
@@ -72,6 +74,8 @@ export function visual(el) {
 
 export function visualNone(e) {
     const probegElem = document.querySelector('.probeg_value')
+    const starterValue = document.querySelector('.starter_value')
+    starterValue.textContent = ''
     probegElem.textContent = ''
     const oilElem = document.querySelector('.oil_value')
     oilElem.textContent = ''
@@ -149,13 +153,6 @@ for (let i = 0; i <= count; i++) {
     li.className = "msg";
     obo.append(li);
 }*/
-
-
-
-
-
-
-
 
 export function view(arg) {
 
