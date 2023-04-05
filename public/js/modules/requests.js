@@ -312,6 +312,7 @@ export function viewTech(id) {
         .then((res) => res.json())
         .then(res => {
             const result = res.values[res.values.length - 1]
+            console.log(result)
             const keys = [];
             if (result) {
                 for (let key in result) {
@@ -321,7 +322,7 @@ export function viewTech(id) {
             const number = document.querySelectorAll('.number')
             const text = document.querySelectorAll('.text')
             const titleMM = document.querySelectorAll('.titleMM')
-            const inputMM = document.querySelector('.maxMMM')
+            const inputMM = document.querySelector('.mmtext')
             if (!result || result.length === 0) {
                 number.forEach(e => {
                     e.textContent = ''
@@ -345,7 +346,8 @@ export function viewTech(id) {
                     text[1].textContent = result.N2 + 'мм',
                     text[2].textContent = result.N3 + 'мм',
                     text[3].textContent = result.N4 + 'мм';
-                inputMM.value = result.maxMM;
+                inputMM.innerHTML = result.maxMM + 'mm';
+                console.log(inputMM.innerHTML)
                 const protector = [];
                 protector.push(result.N1, result.N2, result.N3, result.N4)
                 const protectorClear = [];
@@ -371,15 +373,18 @@ export function viewTech(id) {
                 })
                 viewDinamic(protectorClear, maxStoc)
                 const nval = (Object.entries(result))
-                const massVal = nval.pop()
+                //  const massVal = nval.pop()
                 const dd = nval.splice(8, 1)
-                nval.push(dd[0])
+                // console.log(dd)
+                nval.splice(12, 0, dd[0])
                 const id = nval.splice(2, 1)
+                console.log(nval)
                 const idbaseTyres = document.querySelector('.idbaseTyres')
                 idbaseTyres.innerHTML = id[0][1]
                 const tiresActiv = document.querySelector('.tiresActiv')
                 tiresActiv.setAttribute('rel', id[0][1])
                 const formValue = document.querySelectorAll('.formValue')
+                console.log(formValue)
                 formValue.forEach((el, index) => {
                     el.value = nval[index][1]
                 })

@@ -291,7 +291,6 @@ export function zaprosSpisok() {
 setInterval(zaprosSpisok, 60000)
 
 function viewListKoleso(arg, params, nameCar) {
-    console.log(params)
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
     if (params.result) {
@@ -299,9 +298,6 @@ function viewListKoleso(arg, params, nameCar) {
         const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
         const r = [];
         let integer;
-
-
-
         modelUniqValues.forEach(el => {
             r.push(el.tyresdiv)
         })

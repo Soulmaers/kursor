@@ -31,6 +31,7 @@ export async function reqBaseId() {
     tyresActive.closest('.osi').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
     const arrNameColId = [];
     const pr = Array.from(formValue)
+    const maxMM = pr.pop()
     console.log(pr)
     arrNameColId.push(createDate(new Date))
     arrNameColId.push(newId)
@@ -41,7 +42,7 @@ export async function reqBaseId() {
     pr.forEach(e => {
         arrNameColId.push(e.value)
     })
-    !inputMM.value ? arrNameColId.push(inputMM.placeholder) : arrNameColId.push(inputMM.value)
+    !maxMM.value ? arrNameColId.push(maxMM.placeholder) : arrNameColId.push(maxMM.value)
 
     const dd = arrNameColId.splice(17, 1)
     arrNameColId.splice(13, 0, dd[0])

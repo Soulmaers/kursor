@@ -282,9 +282,7 @@ if (dropdown) {
 
 const btnShina = document.querySelectorAll('.modals')
 btnShina.forEach(el => {
-
     el.addEventListener('click', () => {
-
         btnShina.forEach(el => {
             el.classList.remove('active')
         })
@@ -359,6 +357,8 @@ buttonTth.addEventListener('click', async () => {
 
     tyresActive.closest('.osi').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
     const pr = Array.from(formValue)
+    const maxMM = pr.pop()
+    console.log(maxMM)
     console.log(pr)
     //  arrNameColId.push(createDate(new Date))
     const idbaseTyres = document.querySelector('.idbaseTyres')
@@ -370,13 +370,16 @@ buttonTth.addEventListener('click', async () => {
     pr.forEach(e => {
         arrNameColId.push(e.value)
     })
-
-
-    !inputMM.value ? arrNameColId.push(inputMM.placeholder) : arrNameColId.push(inputMM.value)
+    !maxMM.value ? arrNameColId.push(maxMM.placeholder) : arrNameColId.push(maxMM.value)
     arrNameColId.splice(12, 0, arrNameColId.splice(16, 1)[0]);
     console.log(arrNameColId)
-    await reqTech(arrNameCol, tyresActive.id)
-    await saveDouble(arrNameColId)
+    console.log(idbaseTyres.textContent === '')
+    if (idbaseTyres.textContent !== '') {
+        await reqTech(arrNameCol, tyresActive.id)
+        await saveDouble(arrNameColId)
+    }
+
+
     const btnShina = document.querySelectorAll('.modals')
     if (btnShina[1].classList.contains('active')) {
         reqProtectorBase()
