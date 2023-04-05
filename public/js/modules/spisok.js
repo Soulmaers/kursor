@@ -63,6 +63,7 @@ export function conturTest(testov) {
         listItemCar.appendChild(listTrail)
         if (elem[0].result) {
             const modelUniq = convert(elem[0].result)
+            console.log(modelUniq)
             modelUniq.forEach(os => {
                 const osi = document.createElement('div')
                 osi.classList.add('osi_list')
@@ -275,7 +276,7 @@ export function zaprosSpisok() {
 
         const dat = await fetch('api/wialonAll', param)
         const data = await dat.json()
-
+        console.log()
         viewListKoleso(data, params, el)
     })
     count++

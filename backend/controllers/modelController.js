@@ -40,6 +40,30 @@ module.exports.paramsDeleteView = (req, res) => {
 
 }
 
+
+module.exports.updateModel = (req, res) => {
+    console.log(req.body.activePost)
+    const os = req.body.os;
+    const numberOs = req.body.centerOsActiv;
+    const tableTyres = 'model' + req.body.activePost
+    try {
+        const postModel = `UPDATE ${tableTyres} SET trailer='${os}' WHERE osi=${numberOs}`
+        connection.query(postModel, function (err, results) {
+            if (err) {
+                console.log(err)
+                res.json({ message: 'успех' })
+            };
+            //console.log(results)
+            res.json({ message: 'успех', result: numberOs })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+
+
 module.exports.savePr = async (req, res) => {
     // const value = [req.body.arr]
     // console.log(req.body.arr.dataAdd)

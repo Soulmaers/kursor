@@ -1,7 +1,8 @@
 import { text } from './content.js'
-import { viewMenuParams } from './paramsTyresView.js'
+import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
 import { postModel } from './requests.js'
-import { pricep } from './visual.js'
+import { pricep, viewOs } from './visual.js'
+import { zapros } from './menu.js'
 
 
 //viewMenuParams()
@@ -157,5 +158,43 @@ function validation(arrayTrailer, arrayTyres) {
     })
 }
 
+
+
+export async function changeBase(os, centerOsActiv, activePost) {
+    console.log(os, centerOsActiv, activePost)
+
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ os, centerOsActiv, activePost }))
+    }
+    const res = await fetch('/api/updateModel', param)
+    const response = await res.json()
+    console.log(response)
+    if (response.message = 'Успех') {
+
+        loadParamsView()
+        const controll = document.querySelector('.container_left')
+        controll.style.display = 'none'
+        const modalCenterOs = document.querySelector('.modalCenterOs')
+        modalCenterOs.style.display = 'none'
+        const moduleConfig = document.querySelector('.moduleConfig')
+        moduleConfig.style.display = 'none';
+        /* const centerOs = document.querySelectorAll('.centerOs')
+         centerOs.forEach(el => {
+             //  console.log(el.id == response.result)
+             if (el.id == response.result) {
+                 console.log('да работа')
+                 console.log(response.result)
+                 console.log(el)
+                 el.classList.add('centerOsActiv')
+             }
+         })*/
+
+    }
+
+}
 
 

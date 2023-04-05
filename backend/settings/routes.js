@@ -58,5 +58,8 @@ router.post('/api/generate', controllerModel.generate)
 router.get('/api/findId', controllerModel.findId)
 router.post('/api/rotate', controllerModel.rotate)
 router.post('/api/listTyresId', controllerModel.listTyresId)
+router.post('/api/updateModel', controllerModel.updateModel)
+
+
 
 

@@ -8,6 +8,8 @@ import { geoloc } from './wialon.js'
 import { reqProtectorBase } from './protector.js'
 import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
+import { changeBase } from './configurator.js'
+import { zapros } from './menu.js'
 
 
 
@@ -198,6 +200,7 @@ if (configs) {
 
     })
     configClear.addEventListener('click', () => {
+        //  zapros()
         const configs = document.querySelector('.configs')
         const findTyresId = document.querySelector('.findTyresId')
         const findValueId = document.querySelector('.findValueId')
@@ -336,6 +339,32 @@ rad.forEach(el => {
         }
     })
 })
+
+
+const modalNameOs = document.querySelector('.modalNameOs')
+modalNameOs.addEventListener('click', () => {
+    const moduleConfig = document.querySelector('.moduleConfig')
+    moduleConfig.style.display = 'flex';
+    modalNameOs.classList.add('changeOs')
+    const linkSelectOs = document.querySelectorAll('.linkSelectOs')
+    linkSelectOs.forEach(el => {
+        el.addEventListener('click', () => {
+            const centerOsActiv = document.querySelector('.centerOsActiv').id
+            console.log(centerOsActiv)
+            const active = document.querySelector('.color')
+            const activePost = active.textContent.replace(/\s+/g, '')
+            const os = el.textContent
+            viewOs();
+            changeBase(os, centerOsActiv, activePost)
+        })
+    })
+})
+
+
+
+
+
+
 
 const buttonTth = document.querySelector('.buttonTth')
 buttonTth.addEventListener('click', async () => {
