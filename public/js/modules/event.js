@@ -168,11 +168,12 @@ btnBase.addEventListener('click', async () => {
     findTyresId.style.display = 'flex'
     const uniq = await findId()
     console.log(uniq)
-    const uniqArr = [];
+    const data = [];
     uniq.forEach(el => {
-        uniqArr.push(el.identificator)
+        data.push(el.identificator)
     })
-    listId(uniqArr)
+    new DropDownList({ element: document.querySelector(`#inputId`), btn: document.querySelector('.buhId'), data });
+
 })
 
 
@@ -509,6 +510,7 @@ class DropDownList {
         this.listElement.style.left = window.scrollX + left + `px`;
         this.listElement.style.top = window.scrollY + bottom + `px`;
         this.listElement.style.display = 'block'
+        this.listElement.style.zIndex = '1000'
         document.body.appendChild(this.listElement);
     }
 
@@ -532,89 +534,3 @@ class DropDownList {
 }
 new DropDownList({ element: document.querySelector(`#input`), btn: document.querySelector('.buh'), data });
 
-
-
-
-
-function listId(uniq) {
-    class DropDownList2 {
-        constructor({ element, uniq, btn }) {
-            this.element = element;
-            this.uniq = uniq;
-            this.btn = btn;
-            this.listElement = null;
-            this._onElementInput = this._onElementInput.bind(this);
-            this._onElementKursor = this._onElementKursor.bind(this);
-            this._onItemListClick = this._onItemListClick.bind(this);
-            this._onDocumentKeyDown = this._onDocumentKeyDown.bind(this);
-            this.bind();
-        }
-        _onDocumentKeyDown({ keyCode }) {
-            console.log(keyCode);
-        }
-        _onElementInput({ target }) {
-            console.log(target.value)
-            this.removeList();
-
-            if (!target.value) {
-                return
-            }
-            this.createList(this.uniq.filter(it => it.toLowerCase().indexOf(target.value.toLowerCase()) !== -1));
-            this.appendList();
-        }
-        _onElementKursor() {
-            this.removeList();
-            this.createList(this.uniq);
-            this.appendList();
-        }
-        _onItemListClick({ target }) {
-            console.log('удаление')
-            this.element.value = target.textContent;
-            this.removeList();
-        }
-        createList(uniq) {
-            console.log(uniq)
-            this.listElement = document.createElement(`ul`);
-            this.listElement.className = `drop-down__list`;
-            this.listElement.innerHTML = uniq.map(it => `<li tabindex="0" class="drop-down__item">${it}</li>`).join(``);
-
-
-            [...this.listElement.querySelectorAll(`.drop-down__item`)].forEach(it => {
-                it.addEventListener(`click`, this._onItemListClick);
-            });
-            //   console.log(this.listElement)
-            document.addEventListener(`keydown`, this._onDocumentKeyDown);
-        }
-        appendList() {
-            const { left, width, bottom } = this.element.getBoundingClientRect();
-            console.log(left, width, bottom)
-
-            this.listElement.style.width = width + `px`;
-            // this.listElement.style.height = height + `px`;
-            this.listElement.style.left = window.scrollX + left + `px`;
-            this.listElement.style.top = window.scrollY + bottom + `px`;
-            this.listElement.style.display = 'block'
-            this.listElement.style.zIndex = '1000'
-            document.body.appendChild(this.listElement);
-        }
-
-        removeList() {
-            if (this.listElement) {
-                this.listElement.remove();
-                this.listElement = null;
-            }
-            // document.removeEventListener(`keydown`, this._onDocumentKeyDown);
-        }
-        bind() {
-            this.element.addEventListener(`input`, this._onElementInput);
-            this.btn.addEventListener(`click`, this._onElementKursor);
-            document.addEventListener('click', (e) => {
-                if (e.target !== this.btn) {
-                    this.removeList()
-                }
-
-            })
-        }
-    }
-    new DropDownList2({ element: document.querySelector(`#inputId`), btn: document.querySelector('.buhId'), uniq });
-}

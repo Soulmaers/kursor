@@ -1,5 +1,5 @@
 //import { chrt1 } from './canvas.js'
-import { drawMyLine } from './strelaKran.js';
+import { iconSpeed } from './speed.js';
 import { geoPosition } from './requests.js'
 //запрос на wialon за данными по скорости
 export function graf(t1, t2, int, id) {
@@ -194,7 +194,7 @@ function loadAkb(arrCar) {
             speed = (it.pos.s).toFixed(0);
             console.log(speed)
             const strateValue = document.querySelector('.strate_value')
-            strateValue.textContent = speed
+            strateValue.textContent = speed + ' ' + 'км/ч'
             iconSpeed(speed)
             const akbElem = document.querySelector('.akb_value')
             akbElem.textContent = akb + 'V'
@@ -207,29 +207,3 @@ function loadAkb(arrCar) {
 
 }
 
-function iconSpeed(speed) {
-
-
-    var r = 55;
-    var circles = document.querySelectorAll('.circle');
-    var total_circles = circles.length;
-    for (var i = 0; i < total_circles; i++) {
-        circles[i].setAttribute('r', r);
-    }
-    /* set meter's wrapper dimension */
-    var meter_dimension = (r * 2);
-    var wrapper = document.querySelector('#wrapper');
-    wrapper.style.width = meter_dimension + 'px';
-    wrapper.style.height = meter_dimension + 'px';
-    /* add strokes to circles  */
-    var cf = 2 * Math.PI * r;
-    var semi_cf = cf / 2;
-    var semi_cf_1by3 = semi_cf / 3;
-    var semi_cf_2by3 = semi_cf_1by3 * 2;
-
-    var meter_needle = document.querySelector('#meter_needle');
-    //var strateValue = document.querySelector('.strate_value');
-    console.log(speed)
-    const val = (speed * 100) / 180
-    meter_needle.style.transform = 'rotate(' + (238 + ((val * 180) / 100)) + 'deg)';
-}
