@@ -3129,7 +3129,12 @@ input[type="number"]:focus {
 .icon_item {
   width: 110px;
   height: 75px;
+  cursor: pointer;
 
+}
+
+.acto {
+  border: 1px solid yellow
 }
 
 .icon_item:nth-child(n+2) {
@@ -3567,6 +3572,7 @@ input[type="number"]:focus {
   .icon_item {
     width: 100%;
     height: 38px;
+    cursor: pointer;
   }
 
   .wrap_state {

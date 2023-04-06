@@ -35,30 +35,31 @@ export function iconParamsz() {
             probegValue.textContent = odometr + 'км'
             console.log(probegValue.textContent)
             const coef = changeParams.value
-            postIconParams(activePost, param, coef)
+            const id = document.querySelector('.acto').children[0].id
+            //  console.log(id)
+            postIconParams(activePost, param, coef, id)
         })
     })
 }
 
-async function postIconParams(activePost, param, coef) {
+async function postIconParams(activePost, param, coef, id) {
+    console.log(id)
     const params = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost, param, coef }))
+        body: (JSON.stringify({ activePost, param, coef, id }))
     }
     const par = await fetch('api/icon', params)
     const paramssy = await par.json()
     console.log('параметр сохранен')
     iconFind(activePost)
 }
-export async function iconFind(activePost) {
-    console.log(activePost)
-    console.log('ищем')
-    const probegValue = document.querySelector('.probeg_value')
-    const changeParams = document.querySelector('.changeParams')
 
+
+export async function iconFind(activePost) {
+    const card = document.querySelectorAll('.cardClick')
     const params = {
         method: "POST",
         headers: {
@@ -70,17 +71,33 @@ export async function iconFind(activePost) {
     const arg = await argy.json()
     const parFind = await fetch('api/iconFind', params)
     const paramssyFind = await parFind.json()
-
-    const val = paramssyFind.result[paramssyFind.result.length - 1].params
-
-    console.log(val)
-    console.log(arg)
+    const itog = convert(paramssyFind.result)
     arg.values.forEach(el => {
-        if (el.name === val) {
-            const odometr = addZero(8, (el.value * paramssyFind.result[paramssyFind.result.length - 1].coef).toFixed(0))
-            probegValue.textContent = odometr + 'км'
-        }
+        itog.forEach(it => {
+            if (el.name === it.params) {
+                card.forEach(elem => {
+                    if (elem.children[0].id === it.icons) {
+                        console.log(elem.children[1])
+                        const odometr = addZero(8, (el.value * it.coef).toFixed(0))
+                        elem.children[1].textContent = odometr + otmet(it.icons)
+                    }
+
+                })
+            }
+        })
     })
     // 
 }
 
+
+function otmet(arg) {
+    if (arg === 'icon_speed')
+        return 'км'
+    if (arg === 'icon_oil')
+        return 'л'
+
+}
+export const convert = (ob) => {
+    const uniq = new Set(ob.map(e => JSON.stringify(e)));
+    return Array.from(uniq).map(e => JSON.parse(e));
+}

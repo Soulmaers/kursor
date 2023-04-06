@@ -7,7 +7,7 @@ export function postModel(model) {
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
     console.log(activePost)
-    reqDelete(activePost)
+    //  reqDelete(activePost)
     fetch('api/model', {
         method: "POST",
         headers: {

@@ -198,8 +198,8 @@ function loadAkb(arrCar) {
             iconSpeed(speed)
             const akbElem = document.querySelector('.akb_value')
             akbElem.textContent = akb + 'V'
-            const akbElems = document.querySelector('.akb_values')
-            akbElems.textContent = akb + 'V'
+            //    const akbElems = document.querySelector('.akb_values')
+            //    akbElems.textContent = akb + 'V'
 
         }
     })

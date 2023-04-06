@@ -185,6 +185,10 @@ const configs = document.querySelector('.configs')
 const configClear = document.querySelector('.configClear')
 if (configs) {
     configs.addEventListener('click', () => {
+        const card = document.querySelectorAll('.cardClick')
+        card.forEach(el => {
+            el.classList.remove('acto')
+        })
         const controll = document.querySelector('.container_left')
         const config = document.querySelector('.config')
         const clear = document.querySelector('.clear')
@@ -532,30 +536,38 @@ plug[2].addEventListener('click', () => {
     visualGrafics.prepend(model);
 })
 
-const iconSpeed = document.querySelector('.icon_speed')
-iconSpeed.addEventListener('click', () => {
-    iconParamsz()
+const card = document.querySelectorAll('.cardClick')
+card.forEach(elem => {
+    const changeParams = document.querySelector('.changeParams')
     const sensors = document.querySelector('.sensors')
     const btnsens = document.querySelectorAll('.btnsens')
     const wButton = document.querySelector('.wrapper_button')
     const titleSens = document.querySelector('.title_sens')
     const obo = document.querySelector('.obo')
-    if (iconSpeed.classList.contains('act')) {
-        iconSpeed.classList.remove('act')
-        //  sensors.style.display = 'none'
-        btnsens[0].style.display = 'flex'
-        btnsens[1].style.display = 'flex'
-        btnsens[2].style.display = 'none'
-        return
-    }
-    iconSpeed.classList.add('act')
-    sensors.style.display = 'flex'
-    // wButton.style.justifyContent = 'flex-start'
-    btnsens[0].style.display = 'none'
-    btnsens[1].style.display = 'none'
-    btnsens[2].style.display = 'flex'
-    obo.style.display = 'none'
-    titleSens.style.display = 'none'
+    elem.addEventListener('click', () => {
+        if (elem.classList.contains('acto')) {
+            elem.classList.remove('acto')
+            sensors.style.display = 'none'
+            //    btnsens[0].style.display = 'flex'
+            //   btnsens[1].style.display = 'flex'
+            btnsens[2].style.display = 'none'
+            return
+        }
+        card.forEach(el => {
+            el.classList.remove('acto')
+        })
+        changeParams.value = '1';
+        console.log('икон')
+        iconParamsz()
+        elem.classList.add('acto')
+        sensors.style.display = 'flex'
+        // wButton.style.justifyContent = 'flex-start'
+        btnsens[0].style.display = 'none'
+        btnsens[1].style.display = 'none'
+        btnsens[2].style.display = 'flex'
+        obo.style.display = 'none'
+        titleSens.style.display = 'none'
+    })
 })
 
 /*

@@ -96,6 +96,10 @@ export function visualNone(e) {
     const alarmStorage = document.querySelector('.alarmStorage')
     const contKran = document.querySelector('.contKran')
     contKran.style.display = 'none'
+    const card = document.querySelectorAll('.cardClick')
+    card.forEach(el => {
+        el.classList.remove('acto')
+    })
     const newBoad = document.querySelector('.speed')
     if (newBoad) {
         newBoad.remove();
@@ -170,6 +174,14 @@ export function view(arg) {
     })
 
 }
+
+
+export const convert = (ob) => {
+    const uniq = new Set(ob.map(e => JSON.stringify(e)));
+    return Array.from(uniq).map(e => JSON.parse(e));
+}
+
+
 export function viewConfigurator(arg, params) {
     // const massItog = [];
 
@@ -450,10 +462,6 @@ export const pricep = (elem) => {
     elem.classList.add('pricep')
 }
 
-export const convert = (ob) => {
-    const uniq = new Set(ob.map(e => JSON.stringify(e)));
-    return Array.from(uniq).map(e => JSON.parse(e));
-}
 
 
 
