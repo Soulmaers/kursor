@@ -48,6 +48,8 @@ export function viewMenuParams() {
             });
             sensors.style.display = 'flex';
             e.classList.add('tiresActiv')
+            btnsens[0].style.display = 'flex'
+            btnsens[1].style.display = 'flex'
             techInfo.style.display = 'block'
             speedGraf.style.display = 'block';
             wrapperMap.style.display = 'none'

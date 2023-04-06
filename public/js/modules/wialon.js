@@ -177,7 +177,7 @@ function loadAkb(arrCar) {
                 probeg = (it.lmsg.p.mileage).toFixed(0);
                 const odometr = addZero(8, probeg)
                 const probegElem = document.querySelector('.probeg_value')
-                probegElem.textContent = odometr + 'км'
+                //    probegElem.textContent = odometr + 'км'
                 const toElem = document.querySelector('.to_value')
 
                 const to = addZero(5, (10000 - probeg))

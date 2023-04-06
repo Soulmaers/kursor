@@ -8,6 +8,7 @@ import { alarmFind } from './alarmStorage.js'
 import { modalOs } from './modalOs.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
+import { iconFind } from './configIcons.js'
 
 let start;
 let time;
@@ -51,6 +52,10 @@ export function visual(el) {
     loadParamsView()
     alarmFind(el)
     findTyresInstall()
+
+    // const active = document.querySelector('.color')
+    const activePost = el.textContent.replace(/\s+/g, '')
+    iconFind(activePost)
 
     btnsens.forEach(el => {
         el.classList.remove('actBTN')

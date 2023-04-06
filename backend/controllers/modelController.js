@@ -259,7 +259,39 @@ module.exports.modalBar = (req, res) => {
 }
 
 
+module.exports.icon = (req, res) => {
+    console.log(req.body.activePost)
+    console.log(req.body.param)
+    const value = [[req.body.activePost, req.body.param]]
+    // const tableModel = 'model' + req.body.activePost
+    console.log(value)
+    try {
+        const postModel = `INSERT INTO icon(nameCar, params, coef) VALUES('${req.body.activePost}','${req.body.param}','${req.body.coef}')`
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+            console.log(results)
+            response.status(200, results, '', res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 
+module.exports.iconFind = (req, res) => {
+    console.log(req.body.activePost)
+    try {
+        const postModel = `SELECT params, coef FROM icon WHERE nameCar='${req.body.activePost}'`
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+            console.log(results)
+            res.json({ status: 200, result: results, name: req.body.activePost })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 
 module.exports.model = (req, res) => {
     //  console.log(req.body.activePost)

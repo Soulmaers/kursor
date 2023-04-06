@@ -10,6 +10,7 @@ import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
 import { zapros } from './menu.js'
+import { iconParamsz } from './configIcons.js'
 
 
 
@@ -531,8 +532,47 @@ plug[2].addEventListener('click', () => {
     visualGrafics.prepend(model);
 })
 
+const iconSpeed = document.querySelector('.icon_speed')
+iconSpeed.addEventListener('click', () => {
+    iconParamsz()
+    const sensors = document.querySelector('.sensors')
+    const btnsens = document.querySelectorAll('.btnsens')
+    const wButton = document.querySelector('.wrapper_button')
+    const titleSens = document.querySelector('.title_sens')
+    const obo = document.querySelector('.obo')
+    if (iconSpeed.classList.contains('act')) {
+        iconSpeed.classList.remove('act')
+        //  sensors.style.display = 'none'
+        btnsens[0].style.display = 'flex'
+        btnsens[1].style.display = 'flex'
+        btnsens[2].style.display = 'none'
+        return
+    }
+    iconSpeed.classList.add('act')
+    sensors.style.display = 'flex'
+    // wButton.style.justifyContent = 'flex-start'
+    btnsens[0].style.display = 'none'
+    btnsens[1].style.display = 'none'
+    btnsens[2].style.display = 'flex'
+    obo.style.display = 'none'
+    titleSens.style.display = 'none'
+})
 
-
+/*
+const wbIcon = document.querySelector('.wrapper_button_icon')
+wbIcon.addEventListener('click', () => {
+    const titleSIcon = document.querySelector('.title_sensIcon')
+    const obo = document.querySelector('.obo')
+    if (titleSIcon.classList.contains('act')) {
+        titleSIcon.classList.remove('act')
+        obo.style.display = 'none';
+        titleSIcon.style.display = 'none'
+        return
+    }
+    titleSIcon.classList.add('act')
+    titleSIcon.style.display = 'flex'
+    obo.style.display = 'flex';
+})*/
 
 
 //отрисовываем список под параметры
