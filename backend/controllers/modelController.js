@@ -262,12 +262,29 @@ module.exports.modalBar = (req, res) => {
 module.exports.icon = (req, res) => {
 
     try {
-        const postModel = `INSERT INTO icon(nameCar, params, coef, icons) VALUES('${req.body.activePost}','${req.body.param}','${req.body.coef}','${req.body.id}')`
-        connection.query(postModel, function (err, results) {
+        const selectBase = `SELECT icons FROM icon WHERE nameCar='${req.body.activePost}' AND icons='${req.body.id}'`
+        connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
-            console.log(results)
-            response.status(200, results, '', res)
+            if (results.length === 0) {
+                const postModel = `INSERT INTO icon(nameCar, params, coef, icons) VALUES('${req.body.activePost}','${req.body.param}','${req.body.coef}','${req.body.id}')`
+                connection.query(postModel, function (err, results) {
+                    if (err) console.log(err);
+                    console.log(results)
+                    response.status(200, results, '', res)
+                })
+            }
+            else {
+                const sql = `UPDATE icon SET nameCar='${req.body.activePost}', params='${req.body.param}', coef='${req.body.coef}', icons='${req.body.id}'WHERE nameCar='${req.body.activePost}' AND icons='${req.body.id}'`;
+                connection.query(sql, function (err, results) {
+                    if (err) console.log(err);
+                    else response.status(200, results, '', res)
+                });
+
+            }
         })
+
+
+
     }
     catch (e) {
         console.log(e)

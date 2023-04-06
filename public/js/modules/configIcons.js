@@ -59,6 +59,7 @@ async function postIconParams(activePost, param, coef, id) {
 
 
 export async function iconFind(activePost) {
+    const changeParams = document.querySelector('.changeParams')
     const card = document.querySelectorAll('.cardClick')
     const params = {
         method: "POST",
@@ -71,24 +72,29 @@ export async function iconFind(activePost) {
     const arg = await argy.json()
     const parFind = await fetch('api/iconFind', params)
     const paramssyFind = await parFind.json()
-    const itog = convert(paramssyFind.result)
+
     arg.values.forEach(el => {
-        itog.forEach(it => {
+        paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
                 card.forEach(elem => {
                     if (elem.children[0].id === it.icons) {
+                        console.log(elem.children[0])
                         console.log(elem.children[1])
+                        console.log(elem)
                         const odometr = addZero(8, (el.value * it.coef).toFixed(0))
                         elem.children[1].textContent = odometr + otmet(it.icons)
+                        elem.addEventListener('click', () => {
+                            console.log(changeParams)
+                            changeParams.value = it.coef
+                        })
                     }
-
                 })
             }
         })
     })
-    // 
-}
 
+
+}
 
 function otmet(arg) {
     if (arg === 'icon_speed')
