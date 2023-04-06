@@ -7,14 +7,36 @@ body {
 }
 
 
+.messagee {
+  font-size: 1.4rem;
+  font-weight: bold;
+  font-family: Roboto;
+}
 
+.da,
+.net {
+  font-size: 1.2rem;
+  font-family: Roboto;
+  border: 1px solid gray;
+  margin: 0 10px;
+  padding: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
 
+.da:hover {
+  background-color: #fff;
+}
+
+.net:hover {
+  background-color: #fff;
+}
 
 .account {
   display: none;
   background-color: #FFF;
-  width: 450px;
-  height: 450px;
+  width: 650px;
+  height: 500px;
   border: 1px solid gray;
   position: absolute;
   padding: 5px;
@@ -57,10 +79,16 @@ body {
 
 }
 
+.clearConfirm {
+  display: none;
+  align-items: center;
+}
+
 .form-group {
   font-family: Roboto;
   font-size: 0.9rem;
   font-weight: 700;
+  width: 205px;
 }
 
 .accountControl {
@@ -107,14 +135,14 @@ body {
 }
 
 .login {
-  width: 60px;
+  width: 120px;
   display: flex;
   margin-left: 5px;
   align-items: center;
 }
 
 .loginTitle {
-  width: 60px;
+  width: 120px;
   margin-left: 5px
 }
 
@@ -166,6 +194,9 @@ body {
   background-color: #fff;
   min-height: 245px;
   padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .form-control {

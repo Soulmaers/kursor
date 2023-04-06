@@ -92,8 +92,6 @@ export async function iconFind(activePost) {
             }
         })
     })
-
-
 }
 
 function otmet(arg) {

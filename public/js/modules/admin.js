@@ -77,6 +77,8 @@ async function account() {
 
 export async function getUsers() {
     const items = document.querySelectorAll('.users')
+    console.log(new Date())
+    console.log(items)
     if (items) {
         items.forEach(el => {
             el.remove()
@@ -91,6 +93,7 @@ export async function getUsers() {
     const data = await fetch('/users', params)
     console.log(data)
     const users = await data.json()
+
     console.log(users.result)
     const listAccountReal = document.querySelector('.listAccountReal')
     users.result.forEach(e => {
@@ -225,28 +228,49 @@ function updateFn() {
 
 
 
+
 function deleteFn() {
+    console.log('удалем работа')
+    const confirm = document.querySelector('.clearConfirm')
     const deletUser = document.querySelectorAll('.icon2')
+    const noDeleteUser = document.querySelector('.net')
+    const deleteUser = document.querySelector('.da')
     deletUser.forEach(el => {
         el.addEventListener('click', async () => {
-            console.log('клик')
-            const idx = el.id
-            console.log(idx)
-            const params = {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ idx }),
-            }
-            const data = await fetch('/delete/:id', params)
-            const result = await data.json()
-            const messaga = document.querySelector('.message')
-            messaga.textContent = result.message
-            messaga.style.color = 'green'
-            setTimeout(() => messaga.textContent = '', 2000)
-            getUsers()
+            confirm.style.display = 'flex'
+
+            noDeleteUser.addEventListener('click', () => {
+                confirm.style.display = 'none';
+                //  getUsers()
+            })
+            deleteUser.addEventListener('click', async () => {
+                console.log('клик')
+                const idx = el.id
+                console.log(idx)
+                const params = {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ idx }),
+                }
+                const data = await fetch('/delete/:id', params)
+                const result = await data.json()
+                confirm.style.display = 'none';
+                const messaga = document.querySelector('.message')
+                messaga.textContent = result.message
+                messaga.style.color = 'green'
+                setTimeout(() => messaga.textContent = '', 2000)
+                const items = document.querySelectorAll('.users')
+                console.log(items)
+
+                getUsers()
+            })
+
+
         })
+
+
     })
     const formControl = document.querySelectorAll('.form-control')
     const select = document.getElementById('select')
