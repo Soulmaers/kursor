@@ -3108,6 +3108,7 @@ input[type="number"]:focus {
 .icon_speed {
   background-image: url(../image/3091.png);
   background-size: cover;
+  cursor: pointer;
 }
 
 .icon_oil {
@@ -3201,7 +3202,7 @@ input[type="number"]:focus {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-
+  cursor: pointer;
 }
 
 .probeg_value {
