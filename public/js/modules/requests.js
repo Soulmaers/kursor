@@ -3,9 +3,11 @@ import { divClear, viewDinamic, viewOs } from './visual.js'
 import { zapros } from './menu.js'
 
 export function postModel(model) {
+
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
     console.log(activePost)
+    reqDelete(activePost)
     fetch('api/model', {
         method: "POST",
         headers: {
@@ -20,7 +22,7 @@ export function postModel(model) {
     messaga.textContent = 'Модель добавлена'
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 2000)
-    zapros()
+    //   zapros()
 
 
 

@@ -152,6 +152,7 @@ function validation(arrayTrailer, arrayTyres) {
     console.log(massiv)
     const btnSave = document.querySelector('.btn_save')
     btnSave.addEventListener('click', () => {
+        console.log(massiv)
         postModel(massiv) //передаем модель и отправляем запрос на сервер в базу
         massiv.length = 0;
 

@@ -69,7 +69,7 @@ export function viewMenuParams() {
 }
 
 export async function loadParamsView() {
-    console.log('грузим модель')
+
     clearInterval(viewPokasateli)
     const titleCar = document.querySelector('.title_two')
     const btnShina = document.querySelectorAll('.modals')
@@ -98,7 +98,7 @@ export async function loadParamsView() {
         .then((res) => res.json())
         .then((res) => {
             const model = res
-            console.log(model)
+
             const osi = document.querySelectorAll('.osi')
             const centerOs = document.querySelectorAll('.centerOs')
             if (model.values && model.values.length > 0) {
@@ -249,7 +249,9 @@ function koleso(kol, btnsens) {
                     kol[kol.length - 1].children[1].style.background = objColor[generT(value)];
                 }
                 paramTemp.push(el)
-                //  console.log(paramPress, paramTemp)
+                //const numberOs = kol[kol.length - 1].closest('.osi').children[1].id
+                //  let typeOs;
+                //  kol[kol.length - 1].closest('.osi').children[1].classList.contains('pricep') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
                 valid(paramPress, paramTemp, kol)
             }
             kol[kol.length - 1].children[2].textContent = 'p:' + prmsD[prmsD.length - 1] + '\nt:' + prmsT[prmsT.length - 1]
@@ -285,6 +287,6 @@ function valid(paramPress, paramTemp, kolesos) {
     massbd.push(kolId, value, value2)
     massivion.push(mass)
     massivionbd.push(massbd)
-    // console.log(massivionbd)
+    console.log(massivionbd)
     saveTyres(massivionbd)
 }

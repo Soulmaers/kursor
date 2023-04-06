@@ -1,4 +1,4 @@
-import { postTyres, reqDelete, paramsDelete, reqTech, viewTech, loadParamsViewShina } from './requests.js'
+import { postModel, postTyres, reqDelete, paramsDelete, reqTech, viewTech, loadParamsViewShina } from './requests.js'
 import { alarmClear, viewOs } from './visual.js'
 import { data, dataIdTyres } from './content.js'
 import { getDash } from './dash.js'
@@ -343,26 +343,102 @@ rad.forEach(el => {
 
 const modalNameOs = document.querySelector('.modalNameOs')
 modalNameOs.addEventListener('click', () => {
+    const tiresLink = document.querySelectorAll('.tires_link')
+
     const moduleConfig = document.querySelector('.moduleConfig')
     moduleConfig.style.display = 'flex';
     modalNameOs.classList.add('changeOs')
     const linkSelectOs = document.querySelectorAll('.linkSelectOs')
+    console.log(tiresLink)
     linkSelectOs.forEach(el => {
         el.addEventListener('click', () => {
+            if (el.textContent === 'Прицеп') {
+                const centerOsActiv = document.querySelector('.centerOsActiv').closest('.osi')
+                centerOsActiv.children[1].children[0].style.background = "#00FFFF"
+                centerOsActiv.children[1].classList.add('pricep')
+                const cont = document.querySelector('.cont')
+                cont.prepend(centerOsActiv)
+            }
+            if (el.textContent === 'Тягач') {
+                const centerOsActiv = document.querySelector('.centerOsActiv').closest('.osi')
+                centerOsActiv.children[1].children[0].style.background = '#3333ff'
+                centerOsActiv.children[1].classList.remove('pricep')
+                const container = document.querySelector('.container')
+                container.prepend(centerOsActiv)
+            }
             const centerOsActiv = document.querySelector('.centerOsActiv').id
             console.log(centerOsActiv)
             const active = document.querySelector('.color')
             const activePost = active.textContent.replace(/\s+/g, '')
             const os = el.textContent
-            viewOs();
-            changeBase(os, centerOsActiv, activePost)
+            const tiresLink = document.querySelectorAll('.tires_link')
+            console.log(tiresLink)
+
+            const massModel = [];
+            const tyresModel = [];
+            const osi = document.querySelectorAll('.osi')
+            osi.forEach(el => {
+                el.style.display === 'flex' ? massModel.push(fnsort(el)) : null
+            })
+
+            /*
+            const tyres = document.querySelectorAll('.tires')
+            console.log(tyres)
+            tyres.forEach(el => {
+                el.style.display === 'flex' ? tyresModel.push(fnsortTyres(el)) : null
+            })*/
+
+            console.log(massModel)
+            console.log(tyresModel)
+            const itogTyresArray = []
+            tyresModel.forEach(el => {
+                var index = el.indexOf(undefined);
+                if (index === -1) {
+                    itogTyresArray.push(el)
+                }
+            })
+            console.log(itogTyresArray)
+            //     const btnSave = document.querySelector('.btn_save')
+            // btnSave.addEventListener('click', () => {
+            //  viewOs();
+            postModel(massModel)
+            // postTyres(itogTyresArray)
+            //   })
+            // changeBase(os, centerOsActiv, activePost)
+
         })
     })
 })
 
+function fnsort(el) {
+    const numberOs = el.children[1].id
+    let typeOs;
+    el.children[1].classList.contains('pricep') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
+    const tyres = el.querySelectorAll('.tires')
+    let count = 0;
+    tyres.forEach(elem => {
+        elem.style.display == 'flex' ? count++ : null
+    })
+    return [numberOs, typeOs, count]
+}
+
+function fnsortTyres(el) {
+    console.log('действуем')
+    //console.log(el.children[0].children[0].attributes.rel.value)
+    const tyresdiv = el.children[0].id
+    let pressure;
+    let temp;
+    if (el.children[0].children[2].textContent !== '') {
+        pressure = el.children[0].children[0].attributes.rel.value
+        temp = el.children[0].children[1].attributes.rel.value
+    }
 
 
-
+    const numberOs = el.closest('.osi').children[1].id
+    let typeOs;
+    el.closest('.osi').children[1].classList.contains('pricep') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
+    return [tyresdiv, pressure, temp, numberOs, typeOs]
+}
 
 
 

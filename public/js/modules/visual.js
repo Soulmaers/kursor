@@ -169,7 +169,7 @@ export function viewConfigurator(arg, params) {
     // const massItog = [];
 
     // console.log(arg)
-    console.log(params)
+
     if (params) {
         const parametrs = convert(params)
         const alerts = [];
@@ -218,6 +218,7 @@ export function viewConfigurator(arg, params) {
                                 alerts.push(done)
                                 e.children[0].style.position = 'relative'
                                 e.children[0].innerHTML = `${done}\n<span class="ppp">Bar</span>`
+                                e.children[0].setAttribute('rel', `${item.pressure}`)
                                 const ppp = document.querySelectorAll('.ppp')
                                 ppp.forEach(el => {
                                     el.style.position = 'absolute'
@@ -247,7 +248,7 @@ export function viewConfigurator(arg, params) {
                                         }
                                         if (el.value >= -51 && el.value < 36) {
                                             e.children[1].textContent = el.value + '°C'
-
+                                            e.children[1].setAttribute('rel', `${item.temp}`)
                                             e.children[1].style.background = objColor[generT(el.value)];
                                         }
                                     }
@@ -346,7 +347,7 @@ export async function viewOs() {
         container.innerHTML += `${text}`
     }
     const osi = document.querySelectorAll('.osi')
-    console.log(osi)
+
     let index = 0;
     osi.forEach(el => {
         index++
@@ -369,9 +370,6 @@ export async function viewOs() {
         el.appendChild(link);
         const tiresD = document.createElement('div');
         tiresD.classList.add('tiresD')
-
-
-
         const tiresT = document.createElement('div');
         tiresT.classList.add('tiresT')
         const place = document.createElement('div');
@@ -442,7 +440,7 @@ export const pricep = (elem) => {
     const cont = document.querySelector('.cont')
     cont.append(elem.parentNode)
     cont.style.marginTop = '72px'
-    console.log(elem.children[0])
+    // console.log(elem.children[0])
     elem.children[0].style.background = "#00FFFF"
     elem.classList.add('pricep')
 }

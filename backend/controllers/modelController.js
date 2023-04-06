@@ -298,6 +298,7 @@ module.exports.tyres = (req, res) => {
             tyresdiv varchar(255) not null,
             pressure varchar(255) not null,
             temp varchar(255)  not null
+        
           )`;
         connection.query(sql, function (err, results) {
             if (err) console.log(err);
@@ -315,6 +316,7 @@ module.exports.tyres = (req, res) => {
                 })
             }
             if (results.length > 0) {
+                console.log('ЭТА СТОРОНА')
                 console.log(req.body.tyres[0][0])
                 let count = req.body.tyres[0][0];
                 console.log(req.body.tyres[0][0])
@@ -571,7 +573,7 @@ module.exports.listTyres = (req, res) => {
     //console.log(req.body)
     const nameCar = 'tyres' + req.body.car.replace(/\s+/g, '')
     try {
-        const selectBase = `SELECT tyresdiv, pressure,temp FROM ${nameCar} WHERE 1`
+        const selectBase = `SELECT tyresdiv, pressure, temp FROM ${nameCar} WHERE 1`
         connection.query(selectBase, function (err, results) {
             //     if (err) console.log(err);
             if (results === undefined) {

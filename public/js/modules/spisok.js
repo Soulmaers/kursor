@@ -63,7 +63,7 @@ export function conturTest(testov) {
         listItemCar.appendChild(listTrail)
         if (elem[0].result) {
             const modelUniq = convert(elem[0].result)
-            console.log(modelUniq)
+            // console.log(modelUniq)
             modelUniq.forEach(os => {
                 const osi = document.createElement('div')
                 osi.classList.add('osi_list')
@@ -82,13 +82,18 @@ export function conturTest(testov) {
         let integer;
         if (elem[1].result) {
             const modelUniqValues = convert(elem[1].result)
+
             modelUniqValues.forEach(el => {
                 r.push(el.tyresdiv)
             })
             const uniq = convert(r)
-            uniq.forEach((el, index) => {
-                shina[index].setAttribute('id', el);
-            })
+
+            if (shina) {
+                uniq.forEach((el, index) => {
+                    shina[index].setAttribute('id', el);
+                })
+            }
+
 
 
             elem[2].result.forEach((el) => {
@@ -226,7 +231,8 @@ function fnPricep(arr, nameCar) {
     const g = svg.selectAll(".arc")
         .data(pie(obj))
         .enter().append("g")
-        .attr("class", "arc");
+        .attr("class", "arc")
+    //   .attr("class", "pricep");
 
     g.append("path")
         .attr("d", arc)
@@ -276,7 +282,8 @@ export function zaprosSpisok() {
 
         const dat = await fetch('api/wialonAll', param)
         const data = await dat.json()
-        console.log()
+
+
         viewListKoleso(data, params, el)
     })
     count++
@@ -299,10 +306,12 @@ function viewListKoleso(arg, params, nameCar) {
         const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
         const r = [];
         let integer;
+
         modelUniqValues.forEach(el => {
             r.push(el.tyresdiv)
         })
         const uniq = convert(r)
+
         uniq.forEach((el, index) => {
             shina[index].setAttribute('id', el);
         })
