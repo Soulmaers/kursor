@@ -220,8 +220,8 @@ function koleso(kol, btnsens) {
                         prmsD.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                     }
                 })
-                if (active[0].textContent == 'PressurePro 933') {
-                    value = (value * 0.069).toFixed(1)
+                if (active[0].textContent == 'А 652 УА 198') {
+                    value = (value / 10).toFixed(1)
                 }
                 else {
                     value

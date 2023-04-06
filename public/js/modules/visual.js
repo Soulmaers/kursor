@@ -209,8 +209,8 @@ export function viewConfigurator(arg, params) {
                         arg.forEach((el) => {
                             if (el.name === item.pressure) {
 
-                                if (activePost === 'PressurePro933') {
-                                    done = parseFloat((el.value * 0.069).toFixed(1))
+                                if (activePost === 'А652УА198') {
+                                    done = parseFloat((el.value / 10).toFixed(1))
                                 }
                                 else {
                                     done = parseFloat(el.value)
