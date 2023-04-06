@@ -101,9 +101,9 @@ export function conturTest(testov) {
                     if (el.name == item.pressure) {
                         shina.forEach(e => {
                             if (e.id == item.tyresdiv) {
-                                if (nameCar == 'PressurePro933') {
-                                    integer = parseFloat((el.value * 0.069).toFixed(1))
-                                    e.children[0].style.fill = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
+                                if (nameCar == 'А652УА198') {
+                                    integer = parseFloat((el.value / 10).toFixed(1))
+                                    e.children[0].style.fill = objColor[generFront(parseFloat((el.value / 10).toFixed(1)))]
                                 }
                                 else {
                                     integer = el.value
@@ -320,9 +320,9 @@ function viewListKoleso(arg, params, nameCar) {
                 if (el.name == item.pressure) {
                     shina.forEach(e => {
                         if (e.id == item.tyresdiv) {
-                            if (activePost == 'PressurePro933') {
-                                integer = parseFloat((el.value * 0.069).toFixed(1))
-                                e.children[0].style.fill = objColor[generFront(parseFloat((el.value * 0.069).toFixed(1)))]
+                            if (activePost == 'А652УА198') {
+                                integer = parseFloat((el.value / 10).toFixed(1))
+                                e.children[0].style.fill = objColor[generFront(parseFloat((el.value / 10).toFixed(1)))]
                             }
                             else {
                                 integer = el.value
