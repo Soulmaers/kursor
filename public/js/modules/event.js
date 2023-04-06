@@ -11,6 +11,7 @@ import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
 import { zapros } from './menu.js'
 import { iconParamsz } from './configIcons.js'
+import { deleteFn } from './admin.js'
 
 
 
@@ -18,6 +19,7 @@ const auth = document.querySelector('.auth')
 const authClear = document.querySelector('.authClear')
 if (auth) {
     auth.addEventListener('click', () => {
+        console.log('вход')
         getUsers()
         const account = document.querySelector('.account')
         account.style.display = 'flex'

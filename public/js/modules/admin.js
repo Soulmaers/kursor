@@ -68,22 +68,12 @@ async function account() {
             e.value = ''
         })
         getUsers()
-
-
-
     }
 }
 
 
 export async function getUsers() {
-    const items = document.querySelectorAll('.users')
-    console.log(new Date())
-    console.log(items)
-    if (items) {
-        items.forEach(el => {
-            el.remove()
-        })
-    }
+    console.log('гетзерс')
     const params = {
         method: "GET",
         headers: {
@@ -93,8 +83,15 @@ export async function getUsers() {
     const data = await fetch('/users', params)
     console.log(data)
     const users = await data.json()
-
     console.log(users.result)
+    const items = document.querySelectorAll('.users')
+    console.log(new Date())
+    console.log(items)
+    if (items) {
+        items.forEach(el => {
+            el.remove()
+        })
+    }
     const listAccountReal = document.querySelector('.listAccountReal')
     users.result.forEach(e => {
         const item = document.createElement('li')
@@ -120,16 +117,49 @@ export async function getUsers() {
         crud.appendChild(icon1)
         crud.appendChild(icon2)
     })
-    deleteFn();
+    const confirm = document.querySelector('.clearConfirm')
+    const deletUser = document.querySelectorAll('.icon2')
+    const noDeleteUser = document.querySelector('.net')
+    const deleteUser = document.querySelector('.da')
+    deletUser.forEach(el => {
+        console.log(el)
+        el.addEventListener('click', () => {
+            deletUser.forEach(el => {
+                el.classList.remove('btna')
+            })
+            el.classList.add('btna')
+            confirm.style.display = 'flex'
+        })
+    })
+    noDeleteUser.addEventListener('click', () => {
+        deletUser.forEach(el => {
+            if (el.classList.contains('btna')) {
+                el.classList.remove('btna')
+                confirm.style.display = 'none';
+            }
+        })
+    })
+    deleteUser.addEventListener('click', () => {
+        deletUser.forEach(el => {
+            if (el.classList.contains('btna')) {
+                console.log(el)
+                confirm.style.display = 'none';
+                deleteFn(el.id);
+            }
+        })
+    })
+    console.log(new Date())
+    console.log(items)
     updateFn()
 }
+
 
 function updateFn() {
     const deletUser = document.querySelectorAll('.icon1')
     const sigup = document.querySelectorAll('.sigup')
     console.log(deletUser)
     deletUser.forEach(el => {
-        console.log(el)
+        //console.log(el)
         el.addEventListener('click', async () => {
             console.log('клик')
             const login = el.closest('.users').children[0].textContent
@@ -150,8 +180,6 @@ function updateFn() {
             <div class="btnWrap">
             <button class="btn-up btn-lg">Сохранить</button>
             </div>`
-
-
             const btnUp = document.querySelector('.btn-up')
             const select = document.getElementById('select')
             const formControl = document.querySelectorAll('.form-control')
@@ -229,54 +257,26 @@ function updateFn() {
 
 
 
-function deleteFn() {
-    console.log('удалем работа')
-    const confirm = document.querySelector('.clearConfirm')
-    const deletUser = document.querySelectorAll('.icon2')
-    const noDeleteUser = document.querySelector('.net')
-    const deleteUser = document.querySelector('.da')
-    deletUser.forEach(el => {
-        el.addEventListener('click', async () => {
-            confirm.style.display = 'flex'
-
-            noDeleteUser.addEventListener('click', () => {
-                confirm.style.display = 'none';
-                //  getUsers()
-            })
-            deleteUser.addEventListener('click', async () => {
-                console.log('клик')
-                const idx = el.id
-                console.log(idx)
-                const params = {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ idx }),
-                }
-                const data = await fetch('/delete/:id', params)
-                const result = await data.json()
-                confirm.style.display = 'none';
-                const messaga = document.querySelector('.message')
-                messaga.textContent = result.message
-                messaga.style.color = 'green'
-                setTimeout(() => messaga.textContent = '', 2000)
-                const items = document.querySelectorAll('.users')
-                console.log(items)
-
-                getUsers()
-            })
-
-
-        })
-
-
-    })
+export async function deleteFn(id) {
+    const idx = id
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ idx }),
+    }
+    const data = await fetch('/delete/:id', params)
+    const result = await data.json()
+    const messaga = document.querySelector('.message')
+    messaga.textContent = result.message
+    messaga.style.color = 'green'
+    setTimeout(() => messaga.textContent = '', 2000)
     const formControl = document.querySelectorAll('.form-control')
     const select = document.getElementById('select')
     select.firstElementChild.selected = true;
     formControl.forEach(e => {
         e.value = ''
     })
-
+    getUsers()
 }
