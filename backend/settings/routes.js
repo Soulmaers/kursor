@@ -60,6 +60,7 @@ router.post('/api/rotate', controllerModel.rotate)
 router.post('/api/listTyresId', controllerModel.listTyresId)
 router.post('/api/updateModel', controllerModel.updateModel)
 router.post('/api/icon', controllerModel.icon)
+router.post('/api/iconWindows', controllerModel.iconWindows)
 router.post('/api/iconFind', controllerModel.iconFind)
-
+router.post('/api/iconFindWindows', controllerModel.iconFindWindows)
 

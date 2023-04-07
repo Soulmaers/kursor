@@ -8,7 +8,7 @@ import { alarmFind } from './alarmStorage.js'
 import { modalOs } from './modalOs.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
-import { iconFind } from './configIcons.js'
+import { iconFind, iconFindWindows } from './configIcons.js'
 
 let start;
 let time;
@@ -56,7 +56,7 @@ export function visual(el) {
     // const active = document.querySelector('.color')
     const activePost = el.textContent.replace(/\s+/g, '')
     iconFind(activePost)
-
+    iconFindWindows(activePost)
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
@@ -99,6 +99,12 @@ export function visualNone(e) {
     const card = document.querySelectorAll('.cardClick')
     card.forEach(el => {
         el.classList.remove('acto')
+    })
+    const valueStatic = document.querySelectorAll('.valueStatic')
+    valueStatic.forEach(el => {
+        el.textContent=''
+        el.previousElementSibling.value=''
+        el.classList.remove('actoStatic')
     })
     const newBoad = document.querySelector('.speed')
     if (newBoad) {

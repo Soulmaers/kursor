@@ -10,7 +10,7 @@ import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
 import { zapros } from './menu.js'
-import { iconParamsz } from './configIcons.js'
+import { iconParamsz,iconParamszWindows } from './configIcons.js'
 import { deleteFn } from './admin.js'
 
 
@@ -581,6 +581,7 @@ valueStatic.forEach(elem => {
     const wButton = document.querySelector('.wrapper_button')
     const titleSens = document.querySelector('.title_sens')
     const obo = document.querySelector('.obo')
+    const role = document.querySelectorAll('.log')[0].textContent
     elem.addEventListener('click', () => {
         if (elem.classList.contains('actoStatic')) {
             elem.classList.remove('actoStatic')
@@ -595,8 +596,9 @@ valueStatic.forEach(elem => {
         })
         changeParams.value = '1';
         console.log('икон')
-        iconParamsz()
-        elem.classList.add('actoStatic')
+        role!=='Пользователь'?   elem.classList.add('actoStatic'):null
+      
+        iconParamszWindows()
         sensors.style.display = 'flex'
         // wButton.style.justifyContent = 'flex-start'
         btnsens[0].style.display = 'none'

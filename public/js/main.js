@@ -17,7 +17,7 @@ const modal = document.querySelectorAll('.modal')
 const radioModule = document.querySelector('.radioModule')
 const radioVal = document.querySelector('.radioVal')
 const nameStatic = document.querySelectorAll('.nameStatic')
-
+const valueStatic = document.querySelectorAll('.nameStatic')
 
 console.log(role.length)
 console.log(login)
@@ -44,11 +44,10 @@ if (login === 'TDRMX') {
 role === 'Пользователь'? dis(nameStatic):null
 
 function dis(one){
-    console.log('работаем!')
    one.forEach(el => {
     el.disabled=true
    });
-
+ 
 }
 //запуск функции атворизации на wialon--> запрос параметров созданых объектов--> отрисовка меню
 

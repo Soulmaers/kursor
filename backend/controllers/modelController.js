@@ -283,7 +283,35 @@ module.exports.icon = (req, res) => {
             }
         })
 
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 
+module.exports.iconWindows = (req, res) => {
+
+    try {
+        const selectBase = `SELECT id FROM allStatic  WHERE nameCar='${req.body.activePost}' AND idv='${req.body.id}'`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            if (results.length === 0) {
+                const postModel = `INSERT INTO allStatic(nameCar, params, coef, nameInput, idv) VALUES('${req.body.activePost}','${req.body.param}','${req.body.coef}','${req.body.nameInput}','${req.body.id}')`
+                connection.query(postModel, function (err, results) {
+                    if (err) console.log(err);
+                    console.log(results)
+                    response.status(200, results, '', res)
+                })
+            }
+            else {
+                const sql = `UPDATE allStatic SET nameCar='${req.body.activePost}', params='${req.body.param}', coef='${req.body.coef}', nameInput='${req.body.nameInput}', idv='${req.body.id}' WHERE nameCar='${req.body.activePost}' AND idv='${req.body.id}'`;
+                connection.query(sql, function (err, results) {
+                    if (err) console.log(err);
+                    else response.status(200, results, '', res)
+                });
+
+            }
+        })
 
     }
     catch (e) {
@@ -291,10 +319,26 @@ module.exports.icon = (req, res) => {
     }
 }
 
+
 module.exports.iconFind = (req, res) => {
     console.log(req.body.activePost)
     try {
         const postModel = `SELECT params, coef, icons FROM icon WHERE nameCar='${req.body.activePost}'`
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+            console.log(results)
+            res.json({ status: 200, result: results, name: req.body.activePost })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+module.exports.iconFindWindows = (req, res) => {
+    console.log(req.body.activePost)
+    try {
+        const postModel = `SELECT params, coef, nameInput, idv FROM allStatic WHERE nameCar='${req.body.activePost}'`
         connection.query(postModel, function (err, results) {
             if (err) console.log(err);
             console.log(results)

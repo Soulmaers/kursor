@@ -914,6 +914,11 @@ div.spoyler {
 .nameStatic {
   width: 200px;
   padding: 1px 5px;
+  display: flex;
+  align-items: center;
+  font-family: Roboto;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 .valueStatic {
@@ -923,7 +928,11 @@ div.spoyler {
   height: 30px;
   margin:0;
   box-sizing: border-box;
-  
+  display: flex;
+  align-items: center;
+  font-family: Roboto;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 .actoStatic{

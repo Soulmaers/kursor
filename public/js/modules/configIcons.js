@@ -105,3 +105,97 @@ export const convert = (ob) => {
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
     return Array.from(uniq).map(e => JSON.parse(e));
 }
+
+
+
+export function iconParamszWindows(){
+    console.log('работаем')
+    const active = document.querySelector('.color')
+    const activePost = active.textContent.replace(/\s+/g, '')
+    const changeParams = document.querySelector('.changeParams')
+    const actoStatic = document.querySelector('.actoStatic')
+    const msg = document.querySelectorAll('.msg')
+    console.log(actoStatic)
+    msg.forEach(el => {
+        el.addEventListener('click', () => {
+            const arrSpreed = [...el.textContent]
+            let value;
+            let param;
+            arrSpreed.forEach(el => {
+                if (el === ':') {
+                    value = (arrSpreed.splice(arrSpreed.indexOf(el) + 1, arrSpreed.length - 1).join('') * changeParams.value).toFixed(2)
+                    console.log(value)
+                }
+            })
+            arrSpreed.forEach(el => {
+                if (el === ':') {
+                    param = arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join('')
+                }
+            })
+          //  console.log(param)
+          //  const odometr = addZero(8, value)
+           // probegValue.textContent = odometr + 'км'
+            console.log(actoStatic)
+            const coef = changeParams.value
+            actoStatic.textContent=value
+          const nameInput=  document.querySelector('.actoStatic').previousElementSibling.value
+            const id = document.querySelector('.actoStatic').id
+            
+              console.log(id)
+            postIconParamsWindow(activePost, param, coef, nameInput,id)
+        })
+    })
+
+}
+
+async function postIconParamsWindow(activePost, param, coef, nameInput,id) {
+    console.log(id)
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost, param, coef, nameInput,id }))
+    }
+    const par = await fetch('api/iconWindows', params)
+    const paramssy = await par.json()
+    console.log('параметр сохранен')
+    iconFindWindows(activePost)
+}
+
+
+
+
+export async function iconFindWindows(activePost) {
+    const changeParams = document.querySelector('.changeParams')
+    const valueStatic = document.querySelectorAll('.valueStatic')
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost }))
+    }
+    const argy = await fetch('api/wialon', params)
+    const arg = await argy.json()
+    const parFind = await fetch('api/iconFindWindows', params)
+    const paramssyFind = await parFind.json()
+
+    arg.values.forEach(el => {
+        paramssyFind.result.forEach(it => {
+            if (el.name === it.params) {
+                valueStatic.forEach(elem => {
+                    if (elem.id === it.idv) {
+                         elem.textContent=(el.value*it.coef).toFixed(2)
+                        elem.previousElementSibling.value= it.nameInput
+                        elem.addEventListener('click', () => {
+                            console.log(changeParams)
+                            changeParams.value = it.coef
+                        })
+                    }
+                })
+            }
+        })
+    })
+}
+
