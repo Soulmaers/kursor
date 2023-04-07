@@ -894,7 +894,7 @@ div.spoyler {
   display: block;
   opacity: 0;
   color: gray;
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   text-align: left;
   padding-top: 2px;
   padding-left: 5px;
@@ -902,10 +902,10 @@ div.spoyler {
   -webkit-transition: opacity 2200ms;
   transition: opacity 2200ms;
   position: absolute;
-  height: 34px;
-  width: 45px;
+  height: 40px;
+  width: 110px;
   top: 2%;
-
+  z-index: 5;
   background-color: #fff;
   visibility: visible;
   border-radius: 5px;
