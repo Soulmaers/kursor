@@ -17,7 +17,7 @@ body {
   font-weight: bold;
   font-family: Roboto;
   font-size: 0.9rem;
-  width: 60%;
+
 }
 
 .da,
@@ -114,6 +114,7 @@ body {
   width: 98%;
   display: none;
   align-items: center;
+  justify-content: space-around;
   padding: 0 5px;
 }
 
@@ -205,7 +206,10 @@ body {
   cursor: pointer;
 }
 
-
+.delIcon {
+  margin-left: 15px;
+  display: none;
+}
 
 
 .icon1 {
@@ -938,7 +942,7 @@ div.spoyler {
 .itemStatic {
   width: 100%;
   display: flex;
-  justify-content: space-around;
+
   align-items: center;
   margin: 5px 0;
 }
@@ -971,6 +975,7 @@ div.spoyler {
   font-family: Roboto;
   font-size: 1rem;
   font-weight: bold;
+  margin-left: 30px;
 }
 
 .actoStatic {

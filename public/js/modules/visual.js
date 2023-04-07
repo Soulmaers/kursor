@@ -8,13 +8,13 @@ import { alarmFind } from './alarmStorage.js'
 import { modalOs } from './modalOs.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
-import { iconFind, iconFindWindows } from './configIcons.js'
+import { iconFind, iconFindWindows, refactor } from './configIcons.js'
 
 let start;
 let time;
 let icon;
 let timeIcon;
-export function visual(el) {
+export async function visual(el) {
     const tiresLink = document.querySelectorAll('.tires_link')
     clearInterval(time)
     clearInterval(timeIcon)
@@ -28,7 +28,11 @@ export function visual(el) {
     const plug = document.querySelectorAll('.plug')
 
     const grafics = document.querySelector('.grafics')
-
+    const delIcon = document.querySelectorAll('.delIcon')
+    delIcon.forEach(el => {
+        el.classList.remove('del')
+        el.style.display = 'none'
+    })
     tiresLink.forEach(e => {
         if (e.classList.contains('tiresActiv')) {
             grafics.style.display = 'flex'
@@ -56,7 +60,8 @@ export function visual(el) {
     // const active = document.querySelector('.color')
     const activePost = el.textContent.replace(/\s+/g, '')
     iconFind(activePost)
-    iconFindWindows(activePost)
+    await iconFindWindows(activePost)
+
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
@@ -94,8 +99,8 @@ export function visualNone(e) {
     const plus = document.querySelector('.plus')
     const minus = document.querySelector('.minus')
     const alarmStorage = document.querySelector('.alarmStorage')
-    const clearConfirmWin= document.querySelector('.clearConfirmWin')
-clearConfirmWin.style.display='none'
+    const clearConfirmWin = document.querySelector('.clearConfirmWin')
+    clearConfirmWin.style.display = 'none'
     const contKran = document.querySelector('.contKran')
     contKran.style.display = 'none'
     const card = document.querySelectorAll('.cardClick')
@@ -104,14 +109,11 @@ clearConfirmWin.style.display='none'
     })
     const valueStatic = document.querySelectorAll('.valueStatic')
     valueStatic.forEach(el => {
-        el.textContent=''
-        el.previousElementSibling.value=''
+        el.textContent = ''
+        el.previousElementSibling.value = ''
         el.classList.remove('actoStatic')
     })
-    const  delIcon = document.querySelectorAll('.delIcon')
-    delIcon.forEach(el => {
-        el.classList.remove('del')
-                })
+
     const newBoad = document.querySelector('.speed')
     if (newBoad) {
         newBoad.remove();

@@ -609,6 +609,10 @@ valueStatic.forEach(elem => {
     })
 })
 
+
+
+
+
 const delIcon = document.querySelectorAll('.delIcon')
 delIcon.forEach(el => {
     el.addEventListener('click', () => {
@@ -629,6 +633,8 @@ delIcon.forEach(el => {
             el.previousElementSibling.textContent = ''
             el.closest('.itemStatic').children[0].value = ''
             clearConfirmWin.style.display = 'none'
+            el.style.display = 'none'
+
             deleteWinParams(id)
         })
 
