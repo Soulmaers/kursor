@@ -63,7 +63,6 @@ export function select() {
                 link.appendChild(place);
 
             })
-
             modul() //запоминаем последнюю выбранную ось
         })
     })

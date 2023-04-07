@@ -114,7 +114,7 @@ export function iconSpeed(speed) {
 
     var meter_needle = document.querySelector('#meter_needle');
     //var strateValue = document.querySelector('.strate_value');
-    console.log(speed)
+    //console.log(speed)
     const val = (speed * 100) / 180
     meter_needle.style.transform = 'rotate(' + (238 + ((val * 180) / 100)) + 'deg)';
 }

@@ -192,7 +192,7 @@ function loadAkb(arrCar) {
                 //  console.log(odometr)
             }
             speed = (it.pos.s).toFixed(0);
-            console.log(speed)
+        //    console.log(speed)
             const strateValue = document.querySelector('.strate_value')
             strateValue.textContent = speed + ' ' + 'км/ч'
             iconSpeed(speed)

@@ -8,7 +8,7 @@ function addZero(digits_length, source) {
 }
 
 export function iconParamsz() {
-    console.log('работаем')
+   // console.log('работаем')
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
     const changeParams = document.querySelector('.changeParams')
@@ -22,7 +22,7 @@ export function iconParamsz() {
             arrSpreed.forEach(el => {
                 if (el === ':') {
                     value = (arrSpreed.splice(arrSpreed.indexOf(el) + 1, arrSpreed.length - 1).join('') * changeParams.value).toFixed(0)
-                    console.log(value)
+                  //  console.log(value)
                 }
             })
             arrSpreed.forEach(el => {
@@ -30,10 +30,10 @@ export function iconParamsz() {
                     param = arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join('')
                 }
             })
-            console.log(param)
+         //   console.log(param)
             const odometr = addZero(8, value)
             probegValue.textContent = odometr + 'км'
-            console.log(probegValue.textContent)
+         //   console.log(probegValue.textContent)
             const coef = changeParams.value
             const id = document.querySelector('.acto').children[0].id
             //  console.log(id)
@@ -43,7 +43,7 @@ export function iconParamsz() {
 }
 
 async function postIconParams(activePost, param, coef, id) {
-    console.log(id)
+   // console.log(id)
     const params = {
         method: "POST",
         headers: {
@@ -53,7 +53,12 @@ async function postIconParams(activePost, param, coef, id) {
     }
     const par = await fetch('api/icon', params)
     const paramssy = await par.json()
-    console.log('параметр сохранен')
+    const messaga = document.querySelector('.messageId')
+    messaga.textContent = 'Параметр сохранен'
+    console.log(messaga.textContent)
+    messaga.style.color = 'green'
+    setTimeout(() => messaga.textContent = '', 3000)
+   // console.log('параметр сохранен')
     iconFind(activePost)
 }
 
@@ -124,7 +129,7 @@ export function iconParamszWindows(){
             arrSpreed.forEach(el => {
                 if (el === ':') {
                     value = (arrSpreed.splice(arrSpreed.indexOf(el) + 1, arrSpreed.length - 1).join('') * changeParams.value).toFixed(2)
-                    console.log(value)
+                   // console.log(value)
                 }
             })
             arrSpreed.forEach(el => {
@@ -135,13 +140,13 @@ export function iconParamszWindows(){
           //  console.log(param)
           //  const odometr = addZero(8, value)
            // probegValue.textContent = odometr + 'км'
-            console.log(actoStatic)
+           // console.log(actoStatic)
             const coef = changeParams.value
             actoStatic.textContent=value
           const nameInput=  document.querySelector('.actoStatic').previousElementSibling.value
             const id = document.querySelector('.actoStatic').id
             
-              console.log(id)
+           //   console.log(id)
             postIconParamsWindow(activePost, param, coef, nameInput,id)
         })
     })
@@ -149,7 +154,7 @@ export function iconParamszWindows(){
 }
 
 async function postIconParamsWindow(activePost, param, coef, nameInput,id) {
-    console.log(id)
+    //console.log(id)
     const params = {
         method: "POST",
         headers: {
@@ -159,7 +164,11 @@ async function postIconParamsWindow(activePost, param, coef, nameInput,id) {
     }
     const par = await fetch('api/iconWindows', params)
     const paramssy = await par.json()
-    console.log('параметр сохранен')
+    const messaga = document.querySelector('.messageId')
+    messaga.textContent = 'Параметр сохранен'
+    console.log(messaga.textContent)
+    messaga.style.color = 'green'
+    setTimeout(() => messaga.textContent = '', 3000)
     iconFindWindows(activePost)
 }
 
@@ -189,7 +198,7 @@ export async function iconFindWindows(activePost) {
                          elem.textContent=(el.value*it.coef).toFixed(2)
                         elem.previousElementSibling.value= it.nameInput
                         elem.addEventListener('click', () => {
-                            console.log(changeParams)
+                           // console.log(changeParams)
                             changeParams.value = it.coef
                         })
                     }
