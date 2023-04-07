@@ -41,13 +41,17 @@ if (login === 'TDRMX') {
     init(kluch);
 }
 
-role === 'Пользователь'? dis(nameStatic):null
+role === 'Пользователь' ? dis(nameStatic) : null
 
-function dis(one){
-   one.forEach(el => {
-    el.disabled=true
-   });
- 
+function dis(one) {
+    const delIcon = document.querySelectorAll('.delIcon')
+    delIcon.forEach(e => {
+        e.style.display = 'none';
+    })
+    one.forEach(el => {
+        el.disabled = true
+    });
+
 }
 //запуск функции атворизации на wialon--> запрос параметров созданых объектов--> отрисовка меню
 

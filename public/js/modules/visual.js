@@ -94,6 +94,8 @@ export function visualNone(e) {
     const plus = document.querySelector('.plus')
     const minus = document.querySelector('.minus')
     const alarmStorage = document.querySelector('.alarmStorage')
+    const clearConfirmWin= document.querySelector('.clearConfirmWin')
+clearConfirmWin.style.display='none'
     const contKran = document.querySelector('.contKran')
     contKran.style.display = 'none'
     const card = document.querySelectorAll('.cardClick')
@@ -106,6 +108,10 @@ export function visualNone(e) {
         el.previousElementSibling.value=''
         el.classList.remove('actoStatic')
     })
+    const  delIcon = document.querySelectorAll('.delIcon')
+    delIcon.forEach(el => {
+        el.classList.remove('del')
+                })
     const newBoad = document.querySelector('.speed')
     if (newBoad) {
         newBoad.remove();

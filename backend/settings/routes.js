@@ -63,4 +63,5 @@ router.post('/api/icon', controllerModel.icon)
 router.post('/api/iconWindows', controllerModel.iconWindows)
 router.post('/api/iconFind', controllerModel.iconFind)
 router.post('/api/iconFindWindows', controllerModel.iconFindWindows)
+router.post('/api/deleteSatic', controllerModel.deleteStatic)
 

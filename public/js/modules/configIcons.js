@@ -208,3 +208,18 @@ export async function iconFindWindows(activePost) {
     })
 }
 
+
+export async function deleteWinParams(id){
+    const active = document.querySelector('.color')
+    const activePost = active.textContent.replace(/\s+/g, '')
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost, id }))
+    }
+    const argy = await fetch('api/deleteSatic', params)
+    const arg = await argy.json()
+    iconFindWindows(activePost)
+}

@@ -10,7 +10,7 @@ import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
 import { zapros } from './menu.js'
-import { iconParamsz,iconParamszWindows } from './configIcons.js'
+import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.js'
 import { deleteFn } from './admin.js'
 
 
@@ -596,8 +596,8 @@ valueStatic.forEach(elem => {
         })
         changeParams.value = '1';
         console.log('икон')
-        role!=='Пользователь'?   elem.classList.add('actoStatic'):null
-      
+        role !== 'Пользователь' ? elem.classList.add('actoStatic') : null
+
         iconParamszWindows()
         sensors.style.display = 'flex'
         // wButton.style.justifyContent = 'flex-start'
@@ -609,6 +609,32 @@ valueStatic.forEach(elem => {
     })
 })
 
+const delIcon = document.querySelectorAll('.delIcon')
+delIcon.forEach(el => {
+    el.addEventListener('click', () => {
+        delIcon.forEach(el => {
+            el.classList.remove('del')
+        })
+        el.classList.add('del')
+
+        const clearConfirmWin = document.querySelector('.clearConfirmWin')
+        clearConfirmWin.style.display = 'flex'
+        const y = document.querySelector('.y')
+        const n = document.querySelector('.n')
+        n.addEventListener('click', () => {
+            clearConfirmWin.style.display = 'none'
+        })
+        y.addEventListener('click', () => {
+            const id = el.previousElementSibling.id
+            el.previousElementSibling.textContent = ''
+            el.closest('.itemStatic').children[0].value = ''
+            clearConfirmWin.style.display = 'none'
+            deleteWinParams(id)
+        })
+
+    })
+
+});
 
 /*
 const wbIcon = document.querySelector('.wrapper_button_icon')

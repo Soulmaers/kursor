@@ -12,10 +12,27 @@ body {
   font-weight: bold;
   font-family: Roboto;
 }
-
+.messageeWin{
+  font-weight: bold;
+  font-family: Roboto;
+  font-size: 0.9rem;
+  width: 60%;
+}
 .da,
-.net {
+.net
+{
   font-size: 1.2rem;
+  font-family: Roboto;
+  border: 1px solid gray;
+  margin: 0 3px;
+  padding: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.y,
+.n {
+  font-size: 0.9rem;
   font-family: Roboto;
   border: 1px solid gray;
   margin: 0 10px;
@@ -23,11 +40,15 @@ body {
   cursor: pointer;
   font-weight: bold;
 }
-
 .da:hover {
   background-color: #fff;
 }
-
+.y:hover{
+  border:2px solid #000
+}
+.n:hover{
+  border:2px solid #000
+}
 .net:hover {
   background-color: #fff;
 }
@@ -84,6 +105,12 @@ body {
   align-items: center;
 }
 
+.clearConfirmWin{
+  width: 98%;
+  display: none;
+  align-items: center;
+  padding:0 5px;
+}
 .form-group {
   font-family: Roboto;
   font-size: 0.9rem;
@@ -164,22 +191,25 @@ body {
 }
 
 .icon1,
-.icon2 {
+.icon2,
+.delIcon {
   width: 15px;
   height: 15px;
 
   cursor: pointer;
 }
 
+
+
+
 .icon1 {
   background-image: url(../image/red.png);
   background-size: cover;
 }
 
-.icon2 {
+.icon2, .delIcon {
   background-image: url(../image/del.png);
   background-size: cover;
-
 }
 
 .role {
@@ -902,6 +932,7 @@ div.spoyler {
   width: 100%;
   display: flex;
   justify-content: space-around;
+  align-items: center;
   margin: 5px 0;
 }
 

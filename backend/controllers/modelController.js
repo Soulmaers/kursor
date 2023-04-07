@@ -5,6 +5,22 @@ const connection = require('../settings/db')
 
 
 
+module.exports.deleteStatic = (req, res) => {
+  
+    try {
+        const postModel = `DELETE FROM allStatic WHERE idv IN ('${req.body.id}') AND nameCar IN('${req.body.activePost}')`
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+        else
+            response.status(200, results, '', res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
 module.exports.deleteView = (req, res) => {
     console.log(req.body.name)
     const tableModel = 'model' + req.body.name
