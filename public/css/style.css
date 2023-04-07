@@ -889,6 +889,47 @@ div.spoyler {
 
 
 
+.windowStatistic {
+  width: 98%;
+  border: 1px solid gray
+}
+
+.titleStatic {
+  text-align: center;
+}
+
+.itemStatic {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin: 5px 0;
+}
+
+.listSatic {
+  width: 100%;
+  padding: 2px;
+}
+
+
+.nameStatic {
+  width: 200px;
+  padding: 1px 5px;
+}
+
+.valueStatic {
+  width: 60px;
+  padding: 1px 5px;
+  border:1px solid gray;
+  height: 30px;
+  margin:0;
+  box-sizing: border-box;
+  
+}
+
+.actoStatic{
+  border:2px solid green;
+  background-color: lightcyan;
+}
 
 .place {
   display: block;

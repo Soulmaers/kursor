@@ -572,6 +572,42 @@ card.forEach(elem => {
     })
 })
 
+
+const valueStatic = document.querySelectorAll('.valueStatic')
+valueStatic.forEach(elem => {
+    const changeParams = document.querySelector('.changeParams')
+    const sensors = document.querySelector('.sensors')
+    const btnsens = document.querySelectorAll('.btnsens')
+    const wButton = document.querySelector('.wrapper_button')
+    const titleSens = document.querySelector('.title_sens')
+    const obo = document.querySelector('.obo')
+    elem.addEventListener('click', () => {
+        if (elem.classList.contains('actoStatic')) {
+            elem.classList.remove('actoStatic')
+            sensors.style.display = 'none'
+            //    btnsens[0].style.display = 'flex'
+            //   btnsens[1].style.display = 'flex'
+            btnsens[2].style.display = 'none'
+            return
+        }
+        valueStatic.forEach(el => {
+            el.classList.remove('actoStatic')
+        })
+        changeParams.value = '1';
+        console.log('икон')
+        iconParamsz()
+        elem.classList.add('actoStatic')
+        sensors.style.display = 'flex'
+        // wButton.style.justifyContent = 'flex-start'
+        btnsens[0].style.display = 'none'
+        btnsens[1].style.display = 'none'
+        btnsens[2].style.display = 'flex'
+        obo.style.display = 'none'
+        titleSens.style.display = 'none'
+    })
+})
+
+
 /*
 const wbIcon = document.querySelector('.wrapper_button_icon')
 wbIcon.addEventListener('click', () => {
@@ -696,3 +732,21 @@ class DropDownList {
 }
 new DropDownList({ element: document.querySelector(`#input`), btn: document.querySelector('.buh'), data });
 
+
+
+/*
+const valueStatic = document.querySelectorAll('.valueStatic')
+valueStatic.forEach(e => {
+    e.addEventListener('input', func)
+})
+function func() {
+    if (this.value.indexOf(".") != '-1') {
+        this.value = this.value.substring(0, this.value.indexOf(".") + 3);
+
+    }
+}*/
+
+/*
+valueStatic.forEach(el => {
+   
+})*/

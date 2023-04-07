@@ -16,10 +16,10 @@ const dropdown = document.querySelector('.dropdown')
 const modal = document.querySelectorAll('.modal')
 const radioModule = document.querySelector('.radioModule')
 const radioVal = document.querySelector('.radioVal')
+const nameStatic = document.querySelectorAll('.nameStatic')
 
 
-
-
+console.log(role.length)
 console.log(login)
 
 if (login !== 'TDRMX') {
@@ -41,6 +41,15 @@ if (login === 'TDRMX') {
     init(kluch);
 }
 
+role === 'Пользователь'? dis(nameStatic):null
+
+function dis(one){
+    console.log('работаем!')
+   one.forEach(el => {
+    el.disabled=true
+   });
+
+}
 //запуск функции атворизации на wialon--> запрос параметров созданых объектов--> отрисовка меню
 
 
