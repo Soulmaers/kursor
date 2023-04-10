@@ -68,8 +68,8 @@ module.exports.updateModel = (req, res) => {
             connection.query(selectBase, function (err, results) {
                 if (err) {
                     console.log(err)
-                    res.json({ message: 'успех' })
                 };
+                res.json({ message: 'успех' })
                 if (results.length === 0) {
                     const selectBases = `INSERT INTO  ${tableModel} (osi, trailer, tyres) VALUES?`
                     connection.query(selectBases, [el], function (err, results) {
@@ -100,7 +100,6 @@ module.exports.updateModel = (req, res) => {
     res.json({ message: 'успех' })
 
 }
-
 
 module.exports.savePr = async (req, res) => {
     // const value = [req.body.arr]
@@ -135,23 +134,13 @@ module.exports.savePr = async (req, res) => {
             res.json('Данные добавлены')
         });
     }
-
-
-
 }
 
 
-
 module.exports.tech = async (req, res) => {
-    //   console.log(req.body.activePost)
-    //  console.log(req.body.arr[1])
-    // console.log(req.body.arr)
-    //  console.log(req.body.arrValue)
     const value = [req.body.arrValue];
-    // console.log(value)
-    // value.push()
+
     const tableModel = 'tech' + req.body.activePost
-    //  console.log(tableModel)
     try {
         const sql = `create table if not exists ${tableModel}(
             id int(255) primary key auto_increment,

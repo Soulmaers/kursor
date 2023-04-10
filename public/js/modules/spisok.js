@@ -87,6 +87,8 @@ export function conturTest(testov) {
             })
             const uniq = convert(r)
             console.log(shina)
+            console.log(modelUniqValues)
+
             if (shina) {
                 uniq.forEach((el, index) => {
                     shina[index].setAttribute('id', el);
@@ -127,6 +129,7 @@ export function conturTest(testov) {
 }
 
 function fnTagach(arr, nameCar) {
+    console.log(arr)
     const listItem = document.querySelector(`.${nameCar}`)
     // задаем радиус
     const obj = [];
@@ -137,7 +140,8 @@ function fnTagach(arr, nameCar) {
         ob.tyres = count
         ob.rate = 100 / arr.tyres
         obj.push(ob)
-    }
+    } console.log(obj)
+
     const svg = d3.select(listItem).select(".list_profil2").append("svg")
         .attr("class", "axis2")
         .attr("width", 25)
@@ -162,7 +166,9 @@ function fnTagach(arr, nameCar) {
     const g = svg.selectAll(".arc")
         .data(pie(obj))
         .enter().append("g")
-        .attr("class", "arc");
+        .attr("class", "arc")
+    // .attr("id", idi)
+
 
     g.append("path")
         .attr("d", arc)

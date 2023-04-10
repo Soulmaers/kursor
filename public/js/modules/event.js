@@ -140,13 +140,6 @@ function mainblock() {
 }
 
 
-
-
-
-
-
-
-
 export function saveTyres(arr) {
     const modCnf = document.querySelector('.moduleConfig')
     const btnSave = document.querySelector('.btn_save')
@@ -423,7 +416,7 @@ modalNameOs.addEventListener('click', () => {
                 }
             })
             console.log(itogTyresArray)
-            changeBase(massModel, activePost, itogTyresArray)
+            //    changeBase(massModel, activePost, itogTyresArray)
 
         })
     })

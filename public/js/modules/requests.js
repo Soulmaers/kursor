@@ -35,7 +35,7 @@ export function postTyres(tyres) {
     const activePost = active[0].textContent.replace(/\s+/g, '')
     const name = active[0].textContent.replace(/\s+/g, '')
     console.log(name)
-    paramsDelete(name)
+    // paramsDelete(name)
     fetch('api/tyres', {
         method: "POST",
         headers: {
@@ -75,7 +75,7 @@ export const reqDelete = (name) => {
     messaga.textContent = 'Модель удалена'
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 2000)
-    zapros()
+    //zapros()
 }
 
 
