@@ -31,6 +31,10 @@ if (login !== 'TDRMX') {
         radCecked();
 
     }
+    else {
+        init(kluch);
+    }
+
 }
 if (login === 'TDRMX') {
     console.log('старт22')
