@@ -207,7 +207,7 @@ body {
 }
 
 .delIcon {
-  margin-left: 15px;
+  margin-left: 10px;
   display: none;
 }
 
@@ -994,7 +994,6 @@ div.spoyler {
 
 .nameStatic {
 
-  padding: 1px 5px;
   display: flex;
   align-items: center;
   font-family: Roboto;
