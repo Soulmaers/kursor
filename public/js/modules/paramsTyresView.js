@@ -172,7 +172,7 @@ export function viewPokasateli() {
         .then((res) => res.json())
         .then((res) => {
             const params = res
-            //   console.log(params)
+
             fetch('api/wialon', {
                 method: "POST",
                 headers: {
@@ -183,7 +183,7 @@ export function viewPokasateli() {
                 .then((res) => res.json())
                 .then((res) => {
                     const data = res
-                    // console.log(data)
+
                     data.values.sort((prev, next) => {
                         if (prev.name < next.name) return -1;
                         if (prev.name < next.name) return 1;

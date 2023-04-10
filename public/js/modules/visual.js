@@ -197,9 +197,6 @@ export const convert = (ob) => {
 
 
 export function viewConfigurator(arg, params) {
-    // const massItog = [];
-
-    // console.log(arg)
 
     if (params) {
         const parametrs = convert(params)
@@ -224,16 +221,15 @@ export function viewConfigurator(arg, params) {
             let signal;
             let done;
             tiresLink.forEach(e => {
+
                 if (e.id == item.tyresdiv) {
+                    console.log(e)
+                    console.log(item)
                     if (!par.includes(item.pressure)) {
-                        // console.log('не тру')
-                        //  return
                         e.children[0].textContent = 'off'
                         e.children[0].style.color = '#000'
                     }
                     if (!par.includes(item.temp)) {
-                        //  console.log('не тру')
-                        //   return
                         e.children[1].textContent = 'off'
                     }
                     else {
@@ -259,20 +255,16 @@ export function viewConfigurator(arg, params) {
                                 e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                                 if (activePost == 'КранГаличанинР858ОР178') {
                                     signal = objColor[generDav(done)]
-
                                 }
                                 else {
                                     signal = objColor[generFront(done)]
-
                                 }
                                 e.children[0].style.background = signal;
-
                             }
                             if (el.name === item.temp) {
-                                //  massTemp.push(item.temp, el.value)
-                                //  console.log(el.name)
                                 tiresLink.forEach(e => {
                                     if (e.id == item.tyresdiv) {
+
                                         if (el.value === '-128' || el.value === '-50') {
                                             el.value = 'err'
                                             e.children[1].textContent = el.value

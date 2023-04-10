@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
+//import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
 
 
 const btnSignup = document.querySelector('.btn-warning')
@@ -6,7 +6,7 @@ btnSignup.addEventListener('click', account)
 
 
 async function account() {
-    const idx = uuidv4();
+    const idx = (Math.random() * 10000).toFixed(0) + 'id'
 
     const formControl = document.querySelectorAll('.form-control')
     const select = document.getElementById('select')

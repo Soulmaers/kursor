@@ -55,7 +55,6 @@ async function postIconParams(activePost, param, coef, id) {
     const paramssy = await par.json()
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Параметр сохранен'
-    console.log(messaga.textContent)
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 3000)
     // console.log('параметр сохранен')
@@ -83,13 +82,9 @@ export async function iconFind(activePost) {
             if (el.name === it.params) {
                 card.forEach(elem => {
                     if (elem.children[0].id === it.icons) {
-                        console.log(elem.children[0])
-                        console.log(elem.children[1])
-                        console.log(elem)
                         const odometr = addZero(8, (el.value * it.coef).toFixed(0))
                         elem.children[1].textContent = odometr + otmet(it.icons)
                         elem.addEventListener('click', () => {
-                            console.log(changeParams)
                             changeParams.value = it.coef
                         })
                     }
@@ -114,13 +109,11 @@ export const convert = (ob) => {
 
 
 export function iconParamszWindows() {
-    console.log('работаем')
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
     const changeParams = document.querySelector('.changeParams')
     const actoStatic = document.querySelector('.actoStatic')
     const msg = document.querySelectorAll('.msg')
-    console.log(actoStatic)
     msg.forEach(el => {
         el.addEventListener('click', () => {
             const arrSpreed = [...el.textContent]
@@ -137,16 +130,10 @@ export function iconParamszWindows() {
                     param = arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join('')
                 }
             })
-            //  console.log(param)
-            //  const odometr = addZero(8, value)
-            // probegValue.textContent = odometr + 'км'
-            // console.log(actoStatic)
             const coef = changeParams.value
             actoStatic.textContent = value
             const nameInput = document.querySelector('.actoStatic').previousElementSibling.value
             const id = document.querySelector('.actoStatic').id
-
-            //   console.log(id)
             postIconParamsWindow(activePost, param, coef, nameInput, id)
         })
     })
@@ -154,7 +141,6 @@ export function iconParamszWindows() {
 }
 
 async function postIconParamsWindow(activePost, param, coef, nameInput, id) {
-    //console.log(id)
     const params = {
         method: "POST",
         headers: {
@@ -171,8 +157,6 @@ async function postIconParamsWindow(activePost, param, coef, nameInput, id) {
     setTimeout(() => messaga.textContent = '', 3000)
     iconFindWindows(activePost)
 }
-
-
 
 
 export async function iconFindWindows(activePost) {
@@ -198,7 +182,6 @@ export async function iconFindWindows(activePost) {
                         elem.textContent = (el.value * it.coef).toFixed(2)
                         elem.previousElementSibling.value = it.nameInput
                         elem.addEventListener('click', () => {
-                            // console.log(changeParams)
                             changeParams.value = it.coef
                         })
                     }
@@ -222,29 +205,20 @@ export async function deleteWinParams(id) {
     }
     const argy = await fetch('api/deleteSatic', params)
     const arg = await argy.json()
-
     iconFindWindows(activePost)
 }
 
 
 export function refactor() {
-    console.log('проверка')
+
     const nameStatic = document.querySelectorAll('.nameStatic')
     nameStatic.forEach(e => {
-        console.log(e.value)
         if (e.value === '') {
             console.log('пустая')
-
-
         }
         else {
-            console.log('не пустая')
-            console.log(e.closest('.itemStatic').children[2])
             e.closest('.itemStatic').children[2].style.display = 'block'
-            //  console.log(e.closest('.itemStatic').children[2].style.background = 'white')
         }
-
-        // e.value === '' ? (console.log(e.value), e.closest('.itemStatic').children[2].style.display = 'none') : null
     })
 
 }

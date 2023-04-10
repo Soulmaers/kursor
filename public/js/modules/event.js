@@ -384,19 +384,28 @@ modalNameOs.addEventListener('click', () => {
             const massModel = [];
             const tyresModel = [];
             const osi = document.querySelectorAll('.osi')
+            // let indexOs = 0;
             osi.forEach(el => {
+                //      el.children[1].removeAttribute('id')
+                //   indexOs++
+                //   el.children[1].setAttribute("id", `${indexOs}`);
                 el.style.display === 'flex' ? massModel.push(fnsort(el)) : null
             })
 
-            /*
+
             const tyres = document.querySelectorAll('.tires')
-            console.log(tyres)
+            //  console.log(tyres)
+            let indexId = 0;
             tyres.forEach(el => {
+                // el.children[0].removeAttribute('id')
+                //   indexId++
+                //  el.children[0].setAttribute("id", `${indexId}`);
+                //  console.log(el.children[0].id)
                 el.style.display === 'flex' ? tyresModel.push(fnsortTyres(el)) : null
-            })*/
+            })
 
             console.log(massModel)
-            console.log(tyresModel)
+
             const itogTyresArray = []
             tyresModel.forEach(el => {
                 var index = el.indexOf(undefined);
@@ -405,13 +414,7 @@ modalNameOs.addEventListener('click', () => {
                 }
             })
             console.log(itogTyresArray)
-            //     const btnSave = document.querySelector('.btn_save')
-            // btnSave.addEventListener('click', () => {
-            //  viewOs();
-            postModel(massModel)
-            // postTyres(itogTyresArray)
-            //   })
-            // changeBase(os, centerOsActiv, activePost)
+            changeBase(massModel, activePost, itogTyresArray)
 
         })
     })
@@ -430,8 +433,6 @@ function fnsort(el) {
 }
 
 function fnsortTyres(el) {
-    console.log('действуем')
-    //console.log(el.children[0].children[0].attributes.rel.value)
     const tyresdiv = el.children[0].id
     let pressure;
     let temp;
@@ -439,12 +440,10 @@ function fnsortTyres(el) {
         pressure = el.children[0].children[0].attributes.rel.value
         temp = el.children[0].children[1].attributes.rel.value
     }
-
-
-    const numberOs = el.closest('.osi').children[1].id
-    let typeOs;
-    el.closest('.osi').children[1].classList.contains('pricep') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
-    return [tyresdiv, pressure, temp, numberOs, typeOs]
+    // const numberOs = el.closest('.osi').children[1].id
+    // let typeOs;
+    //  el.closest('.osi').children[1].classList.contains('pricep') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
+    return [tyresdiv, pressure, temp]
 }
 
 
@@ -470,8 +469,7 @@ buttonTth.addEventListener('click', async () => {
     tyresActive.closest('.osi').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
     const pr = Array.from(formValue)
     const maxMM = pr.pop()
-    console.log(maxMM)
-    console.log(pr)
+
     //  arrNameColId.push(createDate(new Date))
     const idbaseTyres = document.querySelector('.idbaseTyres')
     arrNameColId.push(idbaseTyres.textContent)
@@ -484,8 +482,6 @@ buttonTth.addEventListener('click', async () => {
     })
     !maxMM.value ? arrNameColId.push(maxMM.placeholder) : arrNameColId.push(maxMM.value)
     arrNameColId.splice(12, 0, arrNameColId.splice(16, 1)[0]);
-    console.log(arrNameColId)
-    console.log(idbaseTyres.textContent === '')
     if (idbaseTyres.textContent !== '') {
         await reqTech(arrNameCol, tyresActive.id)
         await saveDouble(arrNameColId)

@@ -30,8 +30,12 @@ export function postModel(model) {
 
 
 export function postTyres(tyres) {
+    console.log('колеса')
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
+    const name = active[0].textContent.replace(/\s+/g, '')
+    console.log(name)
+    paramsDelete(name)
     fetch('api/tyres', {
         method: "POST",
         headers: {
