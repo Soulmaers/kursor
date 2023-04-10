@@ -45,6 +45,7 @@ if (login === 'TDRMX') {
     init(kluch);
 }
 
+
 role === 'Пользователь' ? dis(nameStatic) : null
 
 function dis(one) {
