@@ -4,7 +4,8 @@ const express = require('express');
 const connection = require('./db')
 const { allParams, geo } = require('./sort')
 
-const { prms, prms2 } = require('./params')
+const { prms, prms2 } = require('./params');
+//const { update } = require('../controllers/auth');
 const app = express();
 app.use(express.json());
 
@@ -151,11 +152,12 @@ function postParametrs(name, param) {
             connection.query(sql, [param], function (err, results) {
                 if (err) console.log(err);
                 console.log(results)
+                const timeUpdate = createDate()
             });
             //   connection.end();
         }
         else if (results.length > 0) {
-            //  console.log('старт')
+            console.log('старт')
             let count = 0;
             //  console.log(param)
             param.forEach(el => {
@@ -163,10 +165,15 @@ function postParametrs(name, param) {
                 const sql = `UPDATE ${name} SET name='${el[0]}', value='${el[1]}' WHERE id=${count}`;
                 connection.query(sql, function (err, results) {
                     if (err) console.log(err);
+
+
                 });
                 //  console.log('готово')
                 //  connection.end();
+
             })
+            const timeUpdate = createDate()
+
         }
     });
 }
@@ -447,6 +454,7 @@ module.exports = {
     createTable,
     init,
     speed
+
 
 }
 

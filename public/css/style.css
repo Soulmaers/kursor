@@ -1828,7 +1828,7 @@ input[type="date"] {
   flex-direction: column;
   align-items: center;
   position: absolute;
-  left: 10%
+  left: -32%
 }
 
 .rotateDiv {

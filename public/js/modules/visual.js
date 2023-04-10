@@ -188,19 +188,7 @@ export function view(arg) {
     arg.forEach((el, index) => {
         msg[index].textContent = `${el.name}:${el.value}`
     })
-    const updateTime = document.querySelector('.update_time')
 
-    let today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
-    const day = today.getDate() < 10 ? '0' + today.getDate() : today.getDate();
-    today = day + '.' + month + '.' + year;
-    let time = new Date();
-    const hour = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
-    const minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
-    time = hour + ':' + minutes
-    const todays = today + ' ' + time
-    updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
 
 
