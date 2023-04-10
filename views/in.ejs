@@ -281,8 +281,13 @@
                                     <% } %>
                                         <div class="radioVal">
                                             <div class="wrarbtn"><button class="buttonTth">Сохранить</button></div>
-                                            <% if (role!=='Пользователь' ) { %><%-include('radioModule') %>
-                                                    <% } %>
+                                            <div class="radioModule">
+                                                <p>Сторона колеса</p>
+                                                <p><input class="radio" name="radio" type="radio" id='1' value="left"
+                                                        checked> Левое</p>
+                                                <p><input class="radio" name="radio" type="radio" id="rigth"
+                                                        value="rigth"> Правое</p>
+                                            </div>
                                         </div>
                                         <div class="protector">
                                             <div class="title_prot">График замера протектора</div>

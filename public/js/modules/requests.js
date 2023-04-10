@@ -297,6 +297,7 @@ export async function viewBar(id) {
 }
 export function viewTech(id) {
     const rad = document.querySelectorAll('[name=radio]')
+    console.log(rad)
     rad[0].checked = true
     let activePost;
     const active = document.querySelectorAll('.color')

@@ -3,7 +3,7 @@ import { init } from './modules/menu.js'
 import { btnDel } from './modules/event.js'
 import { liCreate } from './modules/visual.js'
 import { select } from './modules/configurator.js'
-import { radCecked } from './modules/tech.js'
+//import { radCecked } from './modules/tech.js'
 
 
 
@@ -28,11 +28,12 @@ if (login !== 'TDRMX') {
     if (role !== 'Пользователь') {
         init(kluch);
         btnDel();
-        radCecked();
+        // radCecked();
 
     }
     else {
         init(kluch);
+        // radCecked();
     }
 
 }
@@ -43,6 +44,8 @@ if (login === 'TDRMX') {
     radioVal.style.justifyContent = 'start'
     kluch = '7d21706dbf99ed8dd9257b8b1fcc5ab3FDEAE2E1E11A17F978AC054411BB0A0CBD9051B3'
     init(kluch);
+
+    radioVal.style.display = 'none'
 }
 
 
