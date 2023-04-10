@@ -212,7 +212,7 @@ body {
 }
 
 .toChange {
-  width: 100px;
+  width: 90px;
   height: 60px;
   border: 1px solid gray;
   background-color: #fff;
@@ -222,7 +222,7 @@ body {
   align-items: center;
   position: absolute;
   top: 210px;
-
+  left: 5px;
   padding: 5px;
 
 }
@@ -993,7 +993,7 @@ div.spoyler {
 
 
 .nameStatic {
-  width: 200px;
+
   padding: 1px 5px;
   display: flex;
   align-items: center;
