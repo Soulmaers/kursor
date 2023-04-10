@@ -59,7 +59,22 @@ export function zapros() {
             )
             const tt = new Date()
             console.log(test)
-            conturTest(test)
+            const role = document.querySelectorAll('.log')[0].textContent
+            const login = document.querySelectorAll('.log')[1].textContent
+            if (login === 'Курсор') {
+                const kursor = [];
+                test.forEach(el => {
+                    //   console.log(el[0])
+                    if (el[0].message === 'А 652 УА 198' || el[0].message === 'КранГаличанин Р858ОР178' || el[0].message === 'Бочка')
+                        kursor.push(el)
+                })
+                console.log(kursor)
+                conturTest(kursor)
+            }
+            else {
+                conturTest(test)
+            }
+
 
             speed(arrCar)
             return dann
