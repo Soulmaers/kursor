@@ -176,7 +176,7 @@ export function loadAkb(arrCar) {
         if (it.nm === act) {
             akb = (it.lmsg.p.pwr_ext).toFixed(1);
             if (it.lmsg.p.mileage) {
-                probeg = (it.lmsg.p.mileage).toFixed(0);
+                probeg = parseFloat((it.lmsg.p.mileage).toFixed(0));
                 const odometr = addZero(8, probeg)
 
                 toView(toChange, probeg)
@@ -221,12 +221,13 @@ export async function toView(toChange, probeg) {
     const responseV = await resV.json()
     console.log(responseV)
     if (responseV.result.length !== 0) {
-        toChange = responseV.result[0].value
+        toChange = parseFloat(responseV.result[0].value)
         const toElem = document.querySelector('.to_value')
         const toChangeTO = document.querySelector('.toValChange')
-        console.log(toChange)
+        console.log(toChange + probeg)
         console.log(probeg)
-        const to = addZero(5, (toChange - probeg))
+        //  const to = addZero(5, ((toChange + probeg)) - probeg)
+        const to = parseFloat((toChange + probeg) - probeg)
         console.log(to)
         toElem.textContent = to + 'км'
         //  console.log(toChange.value)

@@ -213,7 +213,7 @@ body {
 
 .toChange {
   width: 90px;
-  height: 60px;
+  height: 130px;
   border: 1px solid gray;
   background-color: #fff;
   display: none;
@@ -221,14 +221,14 @@ body {
   justify-content: space-around;
   align-items: center;
   position: absolute;
-  top: 210px;
+  top: 198px;
   left: 5px;
   padding: 5px;
 
 }
 
 .toValChange {
-  margin-top: 5px;
+  margin: 2px 0;
   width: 80px;
 }
 
@@ -244,10 +244,58 @@ body {
   border: 1px solid gray;
   padding: 2px 3px;
   font-family: Roboto;
+  font-size: 0.8rem;
+  width: 80px;
+  text-align: center;
+  cursor: pointer;
 }
 
+.UpTo {
+  display: none;
+  justify-content: space-around;
+  border: 1px solid gray;
+  width: 100%;
+  margin: 5px 0;
+  padding: 2px;
+}
+
+.up {
+  width: 30%;
+  border: 1px solid gray;
+  cursor: pointer;
+}
+
+.noUp {
+  width: 70%;
+  border: 1px solid gray;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.up:hover {
+  border: 2px solid #000;
+}
+
+.noUp:hover {
+  border: 2px solid #000;
+}
 
 .btnTO:hover {
+  border: 2px solid #000;
+}
+
+.btnTOUpdate {
+  border: 1px solid gray;
+  padding: 2px 3px;
+  font-family: Roboto;
+  font-size: 0.8rem;
+  width: 80px;
+  margin-top: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btnTOUpdate:hover {
   border: 2px solid #000;
 }
 

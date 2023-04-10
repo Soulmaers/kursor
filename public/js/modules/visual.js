@@ -83,6 +83,8 @@ export async function visual(el) {
 
 
 export function visualNone(e) {
+    const toChange = document.querySelector('.toChange')
+    toChange.style.display = 'none'
     const probegElem = document.querySelector('.probeg_value')
     const starterValue = document.querySelector('.starter_value')
     starterValue.textContent = ''

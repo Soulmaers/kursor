@@ -10,34 +10,61 @@ function addZero(digits_length, source) {
 
 
 export function fnToChange() {
-
     const to = document.querySelector('.icon_kluch')
     const toChanges = document.querySelector('.toChange')
     const toValChange = document.querySelector('.toValChange')
     const btnTO = document.querySelector('.btnTO')
+    const btnTOUpdate = document.querySelector('.btnTOUpdate')
     if (to.classList.contains('actChange')) {
         to.classList.remove('actToChange')
         toChanges.style.display = 'none';
     }
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
+    const UpTo = document.querySelector('.UpTo')
+    const up = document.querySelector('.up')
+    const noUp = document.querySelector('.noUp')
     to.classList.add('actToChange')
     toChanges.style.display = 'flex';
+
+    btnTOUpdate.addEventListener('click', () => {
+        UpTo.style.display = 'flex'
+        up.addEventListener('click', () => {
+            console.log('да?1')
+            iconParams()
+            UpTo.style.display = 'none'
+            toChanges.style.display = 'none';
+        })
+        noUp.addEventListener('click', async () => {
+            UpTo.style.display = 'none'
+        })
+
+    })
+
     btnTO.addEventListener('click', async () => {
-        toChanges.style.display = 'none';
-        const valueTO = toValChange.value
-        let toChange = toValChange.value
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ activePost, valueTO }))
-        }
-        const res = await fetch('/api/to', param)
-        const response = await res.json()
-        console.log(response)
-        iconParams()
+        UpTo.style.display = 'flex'
+        up.addEventListener('click', async () => {
+            toChanges.style.display = 'none';
+            const valueTO = toValChange.value
+            let toChange = toValChange.value
+            const param = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: (JSON.stringify({ activePost, valueTO }))
+            }
+            const res = await fetch('/api/to', param)
+            const response = await res.json()
+            console.log(response)
+            UpTo.style.display = 'none'
+            console.log('да?2')
+            iconParams()
+        })
+        noUp.addEventListener('click', async () => {
+            UpTo.style.display = 'none'
+        })
+
     })
 
 }
