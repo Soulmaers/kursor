@@ -82,12 +82,11 @@ export function conturTest(testov) {
         let integer;
         if (elem[1].result) {
             const modelUniqValues = convert(elem[1].result)
-
             modelUniqValues.forEach(el => {
                 r.push(el.tyresdiv)
             })
             const uniq = convert(r)
-
+            console.log(shina)
             if (shina) {
                 uniq.forEach((el, index) => {
                     shina[index].setAttribute('id', el);

@@ -10,7 +10,7 @@ import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
 import { zapros } from './menu.js'
-import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.js'
+import { iconParamsz, iconParamszWindows, deleteWinParams, fnToChange } from './configIcons.js'
 import { deleteFn } from './admin.js'
 
 
@@ -345,6 +345,15 @@ rad.forEach(el => {
             }
         }
     })
+})
+
+const to = document.querySelector('.icon_kluch')
+to.addEventListener('click', fnToChange)
+
+const x = document.querySelector('.x')
+x.addEventListener('click', () => {
+    const toChange = document.querySelector('.toChange')
+    toChange.style.display = 'none'
 })
 
 

@@ -223,8 +223,8 @@ export function viewConfigurator(arg, params) {
             tiresLink.forEach(e => {
 
                 if (e.id == item.tyresdiv) {
-                    console.log(e)
-                    console.log(item)
+                    //console.log(e)
+                    // console.log(item)
                     if (!par.includes(item.pressure)) {
                         e.children[0].textContent = 'off'
                         e.children[0].style.color = '#000'

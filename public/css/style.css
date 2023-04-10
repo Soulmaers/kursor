@@ -211,6 +211,45 @@ body {
   display: none;
 }
 
+.toChange {
+  width: 100px;
+  height: 60px;
+  border: 1px solid gray;
+  background-color: #fff;
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  top: 210px;
+
+  padding: 5px;
+
+}
+
+.toValChange {
+  margin-top: 5px;
+  width: 80px;
+}
+
+.x {
+  font-size: 0.6rem;
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  cursor: pointer;
+}
+
+.btnTO {
+  border: 1px solid gray;
+  padding: 2px 3px;
+  font-family: Roboto;
+}
+
+
+.btnTO:hover {
+  border: 2px solid #000;
+}
 
 .icon1 {
   background-image: url(../image/red.png);
@@ -961,6 +1000,8 @@ div.spoyler {
   font-family: Roboto;
   font-size: 1rem;
   font-weight: bold;
+  margin-left: 10px;
+  height: 26px;
 }
 
 .valueStatic {
@@ -3193,6 +3234,7 @@ input[type="number"]:focus {
   display: flex;
   flex-direction: column;
   border: 1px solid gray;
+  position: relative
 }
 
 

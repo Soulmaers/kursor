@@ -371,10 +371,62 @@ module.exports.iconFind = (req, res) => {
     }
 }
 
+module.exports.to = (req, res) => {
+    console.log(req.body.activePost)
+    console.log(req.body.valueTO)
+    try {
+        const selectBase = `SELECT id FROM toChange  WHERE nameCar='${req.body.activePost}'`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            console.log(results)
+            if (results.length === 0) {
+                console.log('0да')
+                const postModel = `INSERT INTO toChange(nameCar, value) VALUES('${req.body.activePost}', '${req.body.valueTO}')`
+                connection.query(postModel, function (err, results) {
+                    if (err) console.log(err);
+                    //   console.log(results)
+                    else res.json({ message: 'запись есть' })
+                })
+            }
+            else {
+                console.log('обновляем')
+                const sql = `UPDATE toChange SET nameCar='${req.body.activePost}',  value='${req.body.valueTO}' WHERE nameCar='${req.body.activePost}'`;
+                connection.query(sql, function (err, results) {
+                    if (err) console.log(err);
+                    else res.json({ message: 'запись обновлена' })
+                });
+
+            }
+        })
+
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
+
 module.exports.iconFindWindows = (req, res) => {
     // console.log(req.body.activePost)
     try {
         const postModel = `SELECT params, coef, nameInput, idv FROM allStatic WHERE nameCar='${req.body.activePost}'`
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+            //  console.log(results)
+            res.json({ status: 200, result: results, name: req.body.activePost })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
+module.exports.toView = (req, res) => {
+    // console.log(req.body.activePost)
+    try {
+        const postModel = `SELECT nameCar, value FROM toChange WHERE nameCar='${req.body.activePost}'`
         connection.query(postModel, function (err, results) {
             if (err) console.log(err);
             //  console.log(results)

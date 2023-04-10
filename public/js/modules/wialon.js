@@ -160,7 +160,8 @@ function addZero(digits_length, source) {
         text = '0' + text;
     return text;
 }
-function loadAkb(arrCar) {
+
+export function loadAkb(arrCar) {
     const active = document.querySelector('.color')
     const act = active.children[0].textContent
 
@@ -171,18 +172,15 @@ function loadAkb(arrCar) {
     let speed;
 
     arrCar.forEach(it => {
+        let toChange = 10000;
         if (it.nm === act) {
             akb = (it.lmsg.p.pwr_ext).toFixed(1);
             if (it.lmsg.p.mileage) {
                 probeg = (it.lmsg.p.mileage).toFixed(0);
                 const odometr = addZero(8, probeg)
-                const probegElem = document.querySelector('.probeg_value')
-                //    probegElem.textContent = odometr + 'км'
-                const toElem = document.querySelector('.to_value')
 
-                const to = addZero(5, (10000 - probeg))
-                toElem.textContent = to + 'км'
-                //  console.log(odometr)
+                toView(toChange, probeg)
+
             }
             if (it.lmsg.p.rs485fuel_level6) {
                 oil = (it.lmsg.p.rs485fuel_level6 * 0.0589).toFixed(0);
@@ -192,7 +190,7 @@ function loadAkb(arrCar) {
                 //  console.log(odometr)
             }
             speed = (it.pos.s).toFixed(0);
-        //    console.log(speed)
+            //    console.log(speed)
             const strateValue = document.querySelector('.strate_value')
             strateValue.textContent = speed + ' ' + 'км/ч'
             iconSpeed(speed)
@@ -204,6 +202,37 @@ function loadAkb(arrCar) {
         }
     })
     //  console.log(val)
+
+}
+
+export async function toView(toChange, probeg) {
+    const active = document.querySelector('.color')
+    const activePost = active.textContent.replace(/\s+/g, '')
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost }))
+    }
+
+
+    const resV = await fetch('/api/toView', params)
+    const responseV = await resV.json()
+    console.log(responseV)
+    if (responseV.result.length !== 0) {
+        toChange = responseV.result[0].value
+        const toElem = document.querySelector('.to_value')
+        const toChangeTO = document.querySelector('.toValChange')
+        console.log(toChange)
+        console.log(probeg)
+        const to = addZero(5, (toChange - probeg))
+        console.log(to)
+        toElem.textContent = to + 'км'
+        //  console.log(toChange.value)
+        toChangeTO.value = toChange
+
+    }
 
 }
 

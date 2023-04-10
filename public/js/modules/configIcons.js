@@ -1,4 +1,4 @@
-
+import { iconParams } from './wialon.js'
 
 function addZero(digits_length, source) {
     let text = source + '';
@@ -7,6 +7,40 @@ function addZero(digits_length, source) {
     return text;
 }
 
+
+
+export function fnToChange() {
+
+    const to = document.querySelector('.icon_kluch')
+    const toChanges = document.querySelector('.toChange')
+    const toValChange = document.querySelector('.toValChange')
+    const btnTO = document.querySelector('.btnTO')
+    if (to.classList.contains('actChange')) {
+        to.classList.remove('actToChange')
+        toChanges.style.display = 'none';
+    }
+    const active = document.querySelector('.color')
+    const activePost = active.textContent.replace(/\s+/g, '')
+    to.classList.add('actToChange')
+    toChanges.style.display = 'flex';
+    btnTO.addEventListener('click', async () => {
+        toChanges.style.display = 'none';
+        const valueTO = toValChange.value
+        let toChange = toValChange.value
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ activePost, valueTO }))
+        }
+        const res = await fetch('/api/to', param)
+        const response = await res.json()
+        console.log(response)
+        iconParams()
+    })
+
+}
 export function iconParamsz() {
     // console.log('работаем')
     const active = document.querySelector('.color')
