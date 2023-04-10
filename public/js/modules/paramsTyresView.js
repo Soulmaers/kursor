@@ -139,7 +139,7 @@ export async function loadParamsView() {
         })
 
     viewPokasateli()
-    setInterval(viewPokasateli, 12000)
+    setInterval(viewPokasateli, 300000)
 }
 
 export function viewPokasateli() {

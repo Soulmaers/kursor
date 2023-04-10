@@ -34,7 +34,7 @@ function init(user) {
             //  console.log('обновление')
             // setInterval(getMainInfo, 5000);
             createTable();
-            setInterval(createTable, 60000);
+            setInterval(createTable, 300000);
             //  saprosGeo()
         })
 }
