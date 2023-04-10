@@ -227,6 +227,19 @@ body {
 
 }
 
+.main {
+  position: relative;
+}
+
+.update_time {
+  position: absolute;
+  font-size: 0.8rem;
+  left: 10px;
+  top: 40px;
+  max-width: 160px;
+  min-height: 50px
+}
+
 .toValChange {
   margin: 2px 0;
   width: 80px;

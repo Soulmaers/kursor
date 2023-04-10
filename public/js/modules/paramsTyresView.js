@@ -188,6 +188,7 @@ export function viewPokasateli() {
                         if (prev.name < next.name) return -1;
                         if (prev.name < next.name) return 1;
                     })
+
                     view(data.values)
                     //   console.log(data.values, params.values)
                     viewConfigurator(data.values, params.values)
