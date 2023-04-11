@@ -17,10 +17,10 @@ export function createDate() {
 
 export async function reqBaseId() {
     const tiresActiv = document.querySelector('.tiresActiv').id
-    console.log(tiresActiv)
+
 
     const newId = (Math.random() * 10000).toFixed(0) + 'id'
-    console.log(newId)
+
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
     const formValue = document.querySelectorAll('.formValue')
@@ -32,7 +32,7 @@ export async function reqBaseId() {
     const arrNameColId = [];
     const pr = Array.from(formValue)
     const maxMM = pr.pop()
-    console.log(pr)
+
     arrNameColId.push(createDate(new Date))
     arrNameColId.push(newId)
     arrNameColId.push(activePost)
@@ -56,27 +56,20 @@ export async function reqBaseId() {
     }
     const res = await fetch('/api/generate', param)
     const response = await res.json()
-    console.log(response)
-
     const messaga = document.querySelector('.messageId')
-
     if (response.boolean === false) {
         reqBaseId()
     }
     if (response.boolean === true) {
         messaga.textContent = response.message
         messaga.style.color = 'green'
-
         const tiresActiv = document.querySelector('.tiresActiv')
-
         tiresActiv.children[0].style.border = '2px solid #000'
         tiresActiv.children[1].style.border = '2px solid #000'
         const idbaseTyres = document.querySelector('.idbaseTyres')
         idbaseTyres.textContent = response.result
     }
     setTimeout(() => messaga.textContent = '', 3000)
-
-    console.log(tiresActiv)
     viewTech(tiresActiv)
 }
 
@@ -84,7 +77,6 @@ export async function reqBaseId() {
 
 
 export async function saveDouble(arr) {
-    console.log(arr)
     const complete = await fetch('api/savePr', {
         method: "POST",
         headers: {
@@ -94,7 +86,6 @@ export async function saveDouble(arr) {
     })
     const result = await complete.json()
     const tiresActiv = document.querySelector('.tiresActiv').id
-    console.log(tiresActiv)
     viewTech(tiresActiv)
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Ротация колес выполнена'

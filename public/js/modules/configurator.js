@@ -3,6 +3,7 @@ import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
 import { postModel, postTyres, paramsDelete } from './requests.js'
 import { pricep, viewOs } from './visual.js'
 import { zapros } from './menu.js'
+import { fnsort } from './event.js'
 
 
 //viewMenuParams()
@@ -28,11 +29,11 @@ export function select() {
             const count = el.textContent;
             for (let i = 0; i < count; i++) {
                 container.innerHTML += `${text}`
-
             }
             const osi = document.querySelectorAll('.osi')
             let index = 0;
             osi.forEach(el => {
+                el.style.display = 'flex'
                 index++
                 const centerOsDiv = document.createElement('div');
                 centerOsDiv.classList.add('centerOs')
@@ -131,37 +132,15 @@ function os(arr) {
                 arr[arr.length - 1].nextElementSibling.children[1].style.display = 'flex';
             }
 
-            validation(arrayTrailer, arrayTyres)
+            //   validation(arrayTrailer, arrayTyres)
 
         }))
-    viewMenuParams() //запускаем функцию отображения кнопок под параметры+сохраняем в массив последнее выбранное колесо+ скрываем див с графиком скорости
+    viewMenuParams()
+    //запускаем функцию отображения кнопок под параметры+сохраняем в массив последнее выбранное колесо+ скрываем див с графиком скорости
+
 }
 
-
-
-
-export const massiv = []
-function validation(arrayTrailer, arrayTyres) {
-    const osy = lostOs[lostOs.length - 1].id;
-    const trailer = arrayTrailer.length ? arrayTrailer[arrayTrailer.length - 1].textContent : 'Тягач'
-    const tyres = arrayTyres[arrayTyres.length - 1].textContent
-    const mass = [];
-    mass.push(osy, trailer, tyres)
-    massiv.push(mass)
-    console.log(massiv)
-    const btnSave = document.querySelector('.btn_save')
-    btnSave.addEventListener('click', () => {
-        console.log(massiv)
-        postModel(massiv) //передаем модель и отправляем запрос на сервер в базу
-        massiv.length = 0;
-
-    })
-}
-
-
-
-export async function changeBase(massModel, activePost, tyres) {
-    console.log(massModel, activePost, tyres)
+export async function changeBase(massModel, activePost) {
     const param = {
         method: "POST",
         headers: {
@@ -174,19 +153,14 @@ export async function changeBase(massModel, activePost, tyres) {
     console.log(res)
     const response = await res.json()
     console.log(response)
-    postTyres(tyres)
-    // paramsDelete()
-    //  if (response.message = 'Успех') {
-
-    // loadParamsView()
     const controll = document.querySelector('.container_left')
     controll.style.display = 'none'
     const modalCenterOs = document.querySelector('.modalCenterOs')
     modalCenterOs.style.display = 'none'
     const moduleConfig = document.querySelector('.moduleConfig')
     moduleConfig.style.display = 'none';
-    // }
-
+    // loadParamsView();
+    zapros();
 }
 
 

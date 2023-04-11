@@ -51,12 +51,12 @@ export async function visual(el) {
     wrapperCont.style.display = 'flex'
     speedGraf.style.display = 'block'
     el.classList.add('color')
-    viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
+    //  viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
     titleCar.textContent = el.textContent
     loadParamsView()
     alarmFind(el)
     findTyresInstall()
-
+    liCreate()
     // const active = document.querySelector('.color')
     const activePost = el.textContent.replace(/\s+/g, '')
     iconFind(activePost)
@@ -180,7 +180,8 @@ for (let i = 0; i <= count; i++) {
 }*/
 
 export function view(arg) {
-
+    console.log('вью')
+    console.log(arg)
     //liCreate(arg)
     const msg = document.querySelectorAll('.msg')
     //console.log(msg)
@@ -353,11 +354,11 @@ export function alarmClear() {
 
 
 
-export async function viewOs() {
+export async function viewOs(counts) {
     console.log('рисуем оси')
     const container = document.querySelector('.container')
     if (container.children.length > 0) {
-        // console.log('удаление')
+        console.log('удаление!!!')
         //  console.log(container.children)
         const containerArr = Array.from(container.children)
         containerArr.forEach(it => {
@@ -367,7 +368,7 @@ export async function viewOs() {
 
     }
     //  else {
-    const count = 8;
+    const count = counts;
     for (let i = 0; i < count; i++) {
         container.innerHTML += `${text}`
     }
@@ -385,8 +386,10 @@ export async function viewOs() {
         centerOsDiv.setAttribute("id", `${index}`);
     })
     const tires = document.querySelectorAll('.tires')
+    console.log(tires)
     let indexTires = 0;
     tires.forEach(el => {
+        el.style.display = 'none'
         indexTires++
         const link = document.createElement('a');
         link.classList.add('tires_link')
@@ -403,21 +406,21 @@ export async function viewOs() {
         link.appendChild(tiresT);
         link.appendChild(place);
     })
+    /*
     osi.forEach(el => {
         el.style.display = 'none'
-    })
+    })*/
     const cont2 = document.createElement('div');
     cont2.classList.add('cont')
     container.appendChild(cont2)
     //  }
-    viewMenuParams()
 
-    modalOs();
     const btnShina = document.querySelectorAll('.modals')
     if (btnShina[1].classList.contains('active')) {
         styleShinaActive(btnShina[1])
     }
-
+    viewMenuParams()
+    modalOs();
 }
 function styleShinaActive(arg) {
     reqProtectorBase()

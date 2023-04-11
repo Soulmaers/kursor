@@ -2,7 +2,7 @@
 import { navigator } from './navigator.js'
 import { speed } from './speed.js'
 import { loadParamsViewList, conturTest } from './spisok.js'
-import { loadParamsView } from './paramsTyresView.js'
+
 import { objColor, generT, generFront, generDav } from './content.js'
 
 
@@ -17,6 +17,7 @@ export function init(kluch) {
             }
 
             zapros() //делаем запрос на wialon получаем объекты
+
             console.log('после')
         });
 };

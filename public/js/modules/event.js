@@ -15,6 +15,8 @@ import { deleteFn } from './admin.js'
 
 
 
+
+
 const auth = document.querySelector('.auth')
 const authClear = document.querySelector('.authClear')
 if (auth) {
@@ -352,13 +354,10 @@ x.addEventListener('click', () => {
 
 const modalNameOs = document.querySelector('.modalNameOs')
 modalNameOs.addEventListener('click', () => {
-    const tiresLink = document.querySelectorAll('.tires_link')
-
     const moduleConfig = document.querySelector('.moduleConfig')
     moduleConfig.style.display = 'flex';
     modalNameOs.classList.add('changeOs')
     const linkSelectOs = document.querySelectorAll('.linkSelectOs')
-    console.log(tiresLink)
     linkSelectOs.forEach(el => {
         el.addEventListener('click', () => {
             if (el.textContent === 'Прицеп') {
@@ -375,55 +374,25 @@ modalNameOs.addEventListener('click', () => {
                 const container = document.querySelector('.container')
                 container.prepend(centerOsActiv)
             }
-            const centerOsActiv = document.querySelector('.centerOsActiv').id
-            console.log(centerOsActiv)
-            const active = document.querySelector('.color')
-            const activePost = active.textContent.replace(/\s+/g, '')
-            const os = el.textContent
-            const tiresLink = document.querySelectorAll('.tires_link')
-            console.log(tiresLink)
-
-            const massModel = [];
-            const tyresModel = [];
-            const osi = document.querySelectorAll('.osi')
-            // let indexOs = 0;
-            osi.forEach(el => {
-                //      el.children[1].removeAttribute('id')
-                //   indexOs++
-                //   el.children[1].setAttribute("id", `${indexOs}`);
-                el.style.display === 'flex' ? massModel.push(fnsort(el)) : null
-            })
-
-
-            const tyres = document.querySelectorAll('.tires')
-            //  console.log(tyres)
-            let indexId = 0;
-            tyres.forEach(el => {
-                // el.children[0].removeAttribute('id')
-                //   indexId++
-                //  el.children[0].setAttribute("id", `${indexId}`);
-                //  console.log(el.children[0].id)
-                el.style.display === 'flex' ? tyresModel.push(fnsortTyres(el)) : null
-            })
-
-            console.log(massModel)
-
-            const itogTyresArray = []
-            tyresModel.forEach(el => {
-                var index = el.indexOf(undefined);
-                if (index === -1) {
-                    itogTyresArray.push(el)
-                }
-            })
-            console.log(itogTyresArray)
-            //    changeBase(massModel, activePost, itogTyresArray)
-
         })
     })
 })
 
-function fnsort(el) {
-    const numberOs = el.children[1].id
+const btnSave = document.querySelector('.btn_save')
+btnSave.addEventListener('click', () => {
+    const massModel = [];
+    const active = document.querySelector('.color')
+    const activePost = active.textContent.replace(/\s+/g, '')
+    const osi = document.querySelectorAll('.osi')
+    osi.forEach(el => {
+        massModel.push(fnsort(el))
+    })
+    changeBase(massModel, activePost)
+})
+
+export function fnsort(el) {
+    console.log('сбор')
+    const numberOs = parseFloat(el.children[1].id)
     let typeOs;
     el.children[1].classList.contains('pricep') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
     const tyres = el.querySelectorAll('.tires')
@@ -432,20 +401,6 @@ function fnsort(el) {
         elem.style.display == 'flex' ? count++ : null
     })
     return [numberOs, typeOs, count]
-}
-
-function fnsortTyres(el) {
-    const tyresdiv = el.children[0].id
-    let pressure;
-    let temp;
-    if (el.children[0].children[2].textContent !== '') {
-        pressure = el.children[0].children[0].attributes.rel.value
-        temp = el.children[0].children[1].attributes.rel.value
-    }
-    // const numberOs = el.closest('.osi').children[1].id
-    // let typeOs;
-    //  el.closest('.osi').children[1].classList.contains('pricep') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
-    return [tyresdiv, pressure, temp]
 }
 
 

@@ -2,9 +2,9 @@
 import { view, viewConfigurator, pricep } from './visual.js'
 import { saveTyres } from './event.js'
 import { objColor, generT, generFront, generDav } from './content.js'
-import { liCreate } from './visual.js'
+import { liCreate, viewOs } from './visual.js'
 import { tech } from './tech.js'
-//import { rotate } from './rotate.js'
+import { modalOs } from './modalOs.js'
 
 export const arrayTyres = [];
 export function viewMenuParams() {
@@ -54,16 +54,8 @@ export function viewMenuParams() {
             speedGraf.style.display = 'block';
             wrapperMap.style.display = 'none'
             grafics.style.display = 'none';
-
-            /*
-                        const rad = document.querySelectorAll('[name=radio]')
-                        rad.forEach(e => {
-                            e.checked = false
-                        })*/
             const idbaseTyres = document.querySelector('.idbaseTyres')
             idbaseTyres.textContent = ''
-
-
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
         })
     })
@@ -71,6 +63,7 @@ export function viewMenuParams() {
 }
 
 export async function loadParamsView() {
+    // viewOs()
 
     clearInterval(viewPokasateli)
     const titleCar = document.querySelector('.title_two')
@@ -101,20 +94,20 @@ export async function loadParamsView() {
         .then((res) => {
             const model = res
 
-            const osi = document.querySelectorAll('.osi')
-            const centerOs = document.querySelectorAll('.centerOs')
+
             if (model.values && model.values.length > 0) {
                 //   console.log('база целая')
-                //  console.log(model.values)
+                console.log(model.values)
+                viewOs(model.values.length)
+
+                const osi = document.querySelectorAll('.osi')
+                const centerOs = document.querySelectorAll('.centerOs')
                 model.values.forEach(el => {
-                    osi[el.osi - 1].style.display = 'flex';
-                    centerOs[el.osi - 1].style.display = 'flex';
-                    //  console.log(centerOs[el.osi - 1])
                     el.trailer == 'Прицеп' ?
                         pricep(centerOs[el.osi - 1])
                         :
                         centerOs[el.osi - 1].children[0].style.background = "#3333FF"
-
+                    console.log(el.tyres)
                     if (el.tyres == 2) {
                         btnShina[1].classList.contains('active') ? centerOs[el.osi - 1].children[0].style.width = '204px' :
                             centerOs[el.osi - 1].children[0].style.width = '204px'
@@ -123,7 +116,7 @@ export async function loadParamsView() {
                         centerOs[el.osi - 1].previousElementSibling.children[1].style.display = 'none';
                         centerOs[el.osi - 1].nextElementSibling.children[0].style.display = 'none';
                     }
-                    else {
+                    else if (el.tyres == 4) {
                         centerOs[el.osi - 1].children[0].style.width = '98px'
                         centerOs[el.osi - 1].previousElementSibling.children[0].style.display = 'flex';
                         centerOs[el.osi - 1].previousElementSibling.children[1].style.display = 'flex';
@@ -135,7 +128,6 @@ export async function loadParamsView() {
             else {
                 console.log('база пустая')
             }
-
         })
 
     viewPokasateli()

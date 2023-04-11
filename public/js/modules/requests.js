@@ -2,18 +2,19 @@
 import { divClear, viewDinamic, viewOs } from './visual.js'
 import { zapros } from './menu.js'
 
-export function postModel(model) {
-
+export function postModel(massModel) {
+    console.log('работаем модель')
+    console.log(massModel)
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
     console.log(activePost)
     //  reqDelete(activePost)
-    fetch('api/model', {
+    fetch('api/updateModel', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ model, activePost }),
+        body: JSON.stringify({ massModel, activePost }),
     })
         .then((res) =>
             res.json())

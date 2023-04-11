@@ -63,7 +63,6 @@ export function conturTest(testov) {
         listItemCar.appendChild(listTrail)
         if (elem[0].result) {
             const modelUniq = convert(elem[0].result)
-            // console.log(modelUniq)
             modelUniq.forEach(os => {
                 const osi = document.createElement('div')
                 osi.classList.add('osi_list')
@@ -75,8 +74,11 @@ export function conturTest(testov) {
                 }
             })
         }
-
         const listItem = document.querySelector(`.${nameCar}`)
+        const numOs = listItem.querySelectorAll('.gOs');
+        numOs.forEach(el => {
+            setId(el)
+        })
         const shina = listItem.querySelectorAll('.arc');
         const r = [];
         let integer;
@@ -85,18 +87,7 @@ export function conturTest(testov) {
             modelUniqValues.forEach(el => {
                 r.push(el.tyresdiv)
             })
-            const uniq = convert(r)
-            console.log(shina)
-            console.log(modelUniqValues)
-
-            if (shina) {
-                uniq.forEach((el, index) => {
-                    shina[index].setAttribute('id', el);
-                })
-            }
-
-
-
+            //    const uniq = convert(r)
             elem[2].result.forEach((el) => {
                 modelUniqValues.forEach((item) => {
                     if (el.name == item.pressure) {
@@ -128,27 +119,28 @@ export function conturTest(testov) {
 
 }
 
+
+
 function fnTagach(arr, nameCar) {
-    console.log(arr)
     const listItem = document.querySelector(`.${nameCar}`)
-    // задаем радиус
     const obj = [];
-    let count = 0
+    let counts = 0
     for (let i = 0; i < arr.tyres; i++) {
-        count++
+        counts++
         const ob = {}
-        ob.tyres = count
+        ob.tyres = counts
         ob.rate = 100 / arr.tyres
         obj.push(ob)
-    } console.log(obj)
+    }
 
     const svg = d3.select(listItem).select(".list_profil2").append("svg")
         .attr("class", "axis2")
         .attr("width", 25)
         .attr("height", 25)
         .style('margin', '0 0.5px')
-        // .style('border', '1px solid black')
         .append("g")
+        .attr('class', 'gOs')
+        .attr('id', arr.osi)
         .attr("transform",
             "translate(" + (12.5) + "," + (12.5) + ")");
     // задаем радиус
@@ -165,10 +157,9 @@ function fnTagach(arr, nameCar) {
         .value(function (d) { return d.rate; });
     const g = svg.selectAll(".arc")
         .data(pie(obj))
-        .enter().append("g")
+        .enter()
+        .append("g")
         .attr("class", "arc")
-    // .attr("id", idi)
-
 
     g.append("path")
         .attr("d", arc)
@@ -198,18 +189,17 @@ function fnTagach(arr, nameCar) {
         .attr("cy", 0)
         .attr("r", 0.5)
         .style('fill', 'white')
-    // .style('stroke', 'gray')
 }
 
 function fnPricep(arr, nameCar) {
     const listItem = document.querySelector(`.${nameCar}`)
     // задаем радиус
     const obj = [];
-    let count = 0
+    let counts = 0
     for (let i = 0; i < arr.tyres; i++) {
-        count++
+        counts++
         const ob = {}
-        ob.tyres = count
+        ob.tyres = counts
         ob.rate = 100 / arr.tyres
         obj.push(ob)
     }
@@ -219,6 +209,8 @@ function fnPricep(arr, nameCar) {
         .attr("height", 25)
         .style('margin', '0 0.5px')
         .append("g")
+        .attr('class', 'gOs')
+        .attr('id', arr.osi)
         .attr("transform",
             "translate(" + (12.5) + "," + (12.5) + ")");
     // задаем радиус
@@ -237,7 +229,6 @@ function fnPricep(arr, nameCar) {
         .data(pie(obj))
         .enter().append("g")
         .attr("class", "arc")
-    //   .attr("class", "pricep");
 
     g.append("path")
         .attr("d", arc)
@@ -265,10 +256,9 @@ function fnPricep(arr, nameCar) {
         .attr("cy", 0)
         .attr("r", 0.5)
         .style('fill', 'white')
-    // .style('stroke', 'gray')
 }
 
-let count = 0;
+let countt = 0;
 export function zaprosSpisok() {
     const list = document.querySelectorAll('.listItem')
     list.forEach(async el => {
@@ -280,19 +270,14 @@ export function zaprosSpisok() {
             },
             body: (JSON.stringify({ car }))
         }
-
-
         const par = await fetch('api/listTyres', param)
         const params = await par.json()
-
         const dat = await fetch('api/wialonAll', param)
         const data = await dat.json()
-
-
         viewListKoleso(data, params, el)
     })
-    count++
-    if (count === 1) {
+    countt++
+    if (countt === 1) {
         setTimeout(load, 500)
         function load() {
             const preloader = document.querySelector('.preloader') /* находим блок Preloader */
@@ -325,15 +310,11 @@ function viewListKoleso(arg, params, nameCar) {
         const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
         const r = [];
         let integer;
-
         modelUniqValues.forEach(el => {
             r.push(el.tyresdiv)
         })
         const uniq = convert(r)
 
-        uniq.forEach((el, index) => {
-            shina[index].setAttribute('id', el);
-        })
         arg.result.forEach((el) => {
             modelUniqValues.forEach((item) => {
                 if (el.name == item.pressure) {
@@ -365,3 +346,87 @@ function viewListKoleso(arg, params, nameCar) {
     }
 }
 
+
+
+function setId(el) {
+    let num = 0;
+    Array.from(el.children).forEach(e => {
+        if (e.classList.contains('arc')) {
+            num++
+        }
+    })
+    if (el.id == 1) {
+        let k = 0;
+        num === 2 ? (el.children[0].setAttribute('id', 1), el.children[1].setAttribute('id', 4)) :
+            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
+                k++
+                e.setAttribute('id', k)
+            })
+            )
+    }
+    if (el.id == 2) {
+        let k = 4;
+        num === 2 ? (el.children[0].setAttribute('id', 5), el.children[1].setAttribute('id', 8)) :
+            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
+                k++
+                e.setAttribute('id', k)
+            })
+            )
+    }
+    if (el.id == 3) {
+        let k = 8;
+        num === 2 ? (el.children[0].setAttribute('id', 9), el.children[1].setAttribute('id', 12)) :
+            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
+                k++
+                e.setAttribute('id', k)
+            })
+            )
+    }
+    if (el.id == 4) {
+        let k = 12;
+        num === 2 ? (el.children[0].setAttribute('id', 13), el.children[1].setAttribute('id', 16)) :
+            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
+                k++
+                e.setAttribute('id', k)
+            })
+            )
+    }
+    if (el.id == 5) {
+        let k = 16;
+        num === 2 ? (el.children[0].setAttribute('id', 17), el.children[1].setAttribute('id', 20)) :
+            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
+                k++
+                e.setAttribute('id', k)
+            })
+            )
+    }
+    if (el.id == 6) {
+        let k = 20;
+        num === 2 ? (el.children[0].setAttribute('id', 21), el.children[1].setAttribute('id', 24)) :
+            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
+                k++
+                e.setAttribute('id', k)
+            })
+            )
+    }
+    if (el.id == 7) {
+        let k = 24;
+        num === 2 ? (el.children[0].setAttribute('id', 25), el.children[1].setAttribute('id', 28)) :
+            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
+                k++
+                e.setAttribute('id', k)
+            })
+            )
+    }
+    if (el.id == 8) {
+        let k = 28;
+        num === 2 ? (el.children[0].setAttribute('id', 29), el.children[1].setAttribute('id', 32)) :
+            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
+                k++
+                e.setAttribute('id', k)
+            })
+            )
+    }
+
+
+}

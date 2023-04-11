@@ -59,7 +59,7 @@ module.exports.paramsDeleteView = (req, res) => {
 
 module.exports.updateModel = (req, res) => {
     console.log('обновляем')
-    console.log(req.body.massModel)
+    //  console.log(req.body.massModel)
     const massiv = req.body.massModel
     const tableModel = 'model' + req.body.activePost
     massiv.forEach(el => {
@@ -69,13 +69,14 @@ module.exports.updateModel = (req, res) => {
                 if (err) {
                     console.log(err)
                 };
-                res.json({ message: 'успех' })
+
                 if (results.length === 0) {
-                    const selectBases = `INSERT INTO  ${tableModel} (osi, trailer, tyres) VALUES?`
-                    connection.query(selectBases, [el], function (err, results) {
+                    console.log(el)
+                    const selectBase = `INSERT INTO ${tableModel}(osi, trailer, tyres) VALUES?`
+                    connection.query(selectBase, [[el]], function (err, results) {
                         if (err) {
                             console.log(err)
-                            //   res.json({ message: 'успех' })
+
                         };
                     })
                 }
@@ -85,7 +86,7 @@ module.exports.updateModel = (req, res) => {
                         if (err) {
                             console.log(err)
                         }
-                        // response.status(200, results, '', res)
+
                     })
                 }
             })
@@ -428,7 +429,7 @@ module.exports.toView = (req, res) => {
 }
 
 module.exports.model = (req, res) => {
-    //  console.log(req.body.activePost)
+    console.log(req.body.model)
     const tableModel = 'model' + req.body.activePost
     // console.log(tableModel)
     try {
