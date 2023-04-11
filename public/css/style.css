@@ -67,7 +67,7 @@ body {
   position: absolute;
   padding: 5px;
   font-family: Roboto;
-
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5)
 }
 
 
@@ -136,13 +136,138 @@ body {
   align-items: center;
 }
 
+.profilUser {
+  width: 100%;
+  background-color: lightgray;
+  position: relative;
+  border: 1px solid black;
+  display: none;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+}
+
+.centerWrapper {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  border: 1px solid gray
+}
+
+.loginUser {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid gray;
+  width: 30%
+}
+
+.roleUser {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  width: 30%;
+  justify-content: center;
+}
+
+.titleLogin,
+.titleRole,
+.titleObject {
+  font-family: Roboto;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.listTitle {
+  width: 100%;
+}
+
+.listTitles {
+  width: 100%;
+  margin: 5px;
+}
+
+.btnClick {
+  display: flex;
+}
+
+.okey,
+.close {
+  padding: 5px 5px;
+  border: 1px solid #000;
+  margin: 2px;
+  font-family: Roboto;
+  font-weight: bold;
+  cursor: pointer;
+
+}
+
+.okey:hover {
+  background-color: #fff;
+}
+
+.close:hover {
+  background-color: #fff;
+}
+
+
+.btnClick {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
 
 .low_modal {
   width: 100%;
   display: flex;
 
+}
 
+.clearConfirmCheckModal {
+  padding: 10px;
+  height: 80px;
+  border: 1px solid gray;
+  background-color: #fff;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
+.messageeCheck {
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: Roboto;
+
+}
+
+.dad,
+.nent {
+  display: flex;
+  justify-content: center;
+  width: 80px;
+  padding: 5px;
+  border: 1px solid gray;
+  font-weight: bold;
+  font-family: Roboto;
+  cursor: pointer;
+  margin: 2px;
+}
+
+.dad:hover {
+  border: 2px solid #000
+}
+
+.nent:hover {
+  border: 2px solid #000
 }
 
 .users {
@@ -156,6 +281,7 @@ body {
   background-color: rgb(207, 228, 207);
   border-radius: 5px;
   padding: 5px 0;
+  cursor: pointer;
 }
 
 .usersTitle {
@@ -180,6 +306,15 @@ body {
   margin-left: 5px
 }
 
+
+
+.objectUser {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  justify-content: center;
+}
 
 .roleTitle {
   width: 120px;
@@ -1720,6 +1855,8 @@ input[type="date"] {
   margin: 0 auto;
 }
 
+
+
 .lft729 {
   width: 30px;
   height: 40px;
@@ -1740,6 +1877,24 @@ input[type="date"] {
   font-family: Roboto;
   padding: 5px 10px;
 
+}
+
+
+.check_boxs {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border: 2px solid lightgray;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: Roboto;
+  padding: 5px 10px;
+}
+
+.listObject {
+  display: flex;
+  flex-direction: column;
 }
 
 .header_table {
@@ -2195,7 +2350,6 @@ input[type="date"] {
   border: 2px solid lightgray;
   border-radius: 30% 30% 0 0;
   color: #000;
-  background-color: #FFF;
   display: flex;
 
   justify-content: center;
@@ -2212,7 +2366,7 @@ input[type="date"] {
 
 .controll {
   width: 500px;
-
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-wrap: wrap;
   background: #fff;

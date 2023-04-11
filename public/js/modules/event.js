@@ -11,10 +11,18 @@ import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
 import { zapros } from './menu.js'
 import { iconParamsz, iconParamszWindows, deleteWinParams, fnToChange } from './configIcons.js'
-import { deleteFn } from './admin.js'
+import { profil } from './admin.js'
 
 
 
+const users = document.querySelectorAll('.users')
+users.forEach(el => {
+    el.addEventListener('click', () => {
+        el.classList.add('activUser')
+        console.log(el)
+        profil(el.children[0].textContent, el.children[1].textContent)
+    })
+})
 
 
 const auth = document.querySelector('.auth')

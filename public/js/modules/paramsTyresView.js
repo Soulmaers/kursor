@@ -63,14 +63,10 @@ export function viewMenuParams() {
 }
 
 export async function loadParamsView() {
-    // viewOs()
-
     clearInterval(viewPokasateli)
     const titleCar = document.querySelector('.title_two')
     const btnShina = document.querySelectorAll('.modals')
     const listItem = document.querySelectorAll('.link_menu')[0]
-    // console.log(listItem)
-    //   console.log('запуск')
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
@@ -82,7 +78,6 @@ export async function loadParamsView() {
     else {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
-
     fetch('api/modelView', {
         method: "POST",
         headers: {
@@ -93,13 +88,9 @@ export async function loadParamsView() {
         .then((res) => res.json())
         .then((res) => {
             const model = res
-
-
             if (model.values && model.values.length > 0) {
-                //   console.log('база целая')
                 console.log(model.values)
                 viewOs(model.values.length)
-
                 const osi = document.querySelectorAll('.osi')
                 const centerOs = document.querySelectorAll('.centerOs')
                 model.values.forEach(el => {
@@ -182,7 +173,7 @@ export function viewPokasateli() {
                     })
 
                     view(data.values)
-                    //   console.log(data.values, params.values)
+                    console.log(data.values)
                     viewConfigurator(data.values, params.values)
                 })
         })

@@ -96,6 +96,7 @@ export async function getUsers() {
     users.result.forEach(e => {
         const item = document.createElement('li')
         item.classList.add('users')
+
         listAccountReal.appendChild(item)
         const log = document.createElement('span')
         log.classList.add('login')
@@ -279,4 +280,43 @@ export async function deleteFn(id) {
         e.value = ''
     })
     getUsers()
+}
+
+
+
+
+
+
+
+export function checkCreate(nameCar) {
+    const box = document.querySelector('.check_boxs')
+    const activePost = nameCar.replace(/\s+/g, '')
+    const list = document.createElement('p')
+    list.classList.add('listTitles')
+    list.innerHTML = `<input class="checkIn" type="checkbox" rel=${activePost}
+    value=${activePost} id=${activePost}Check>${activePost}`
+    box.appendChild(list)
+
+}
+
+
+const close = document.querySelector('.close')
+close.addEventListener('click', () => {
+    const profilUser = document.querySelector('.profilUser')
+    profilUser.style.display = 'none'
+})
+
+
+
+export function profil(name, role) {
+    const profilUser = document.querySelector('.profilUser')
+    profilUser.style.display = 'flex'
+    const accountControll = document.querySelector('.accountControll')
+    accountControll.style.display = 'flex'
+    const nameUser = document.querySelector('.nameUser')
+    const userRole = document.querySelector('.userRole')
+    nameUser.textContent = name
+    userRole.textContent = role
+
+
 }

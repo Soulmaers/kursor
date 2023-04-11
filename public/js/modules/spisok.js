@@ -3,7 +3,7 @@ import { dashView } from './dash.js'
 import { navigator } from './navigator.js'
 import { twoTyres, forTyres } from './content.js'
 import { objColor, generFront, generDav } from './content.js'
-//import { proverka, restFn } from './alarmStorage.js'
+import { checkCreate } from './admin.js'
 /*
 let isLoaded = false
 
@@ -45,6 +45,8 @@ export function conturTest(testov) {
     }
     testov.forEach(elem => {
         dashView(elem[0].message)
+
+        checkCreate(elem[0].message)
         const nameCar = elem[0].message.replace(/\s+/g, '')
         const listArr = document.querySelector('.list_arr2')
         const listItemCar = document.createElement('div')
