@@ -138,7 +138,8 @@ function mainblock() {
     model.style.maxHeight = "none"
     model.style.MozTransform = "scale(1)"
     wRight.appendChild(model);
-    wrapList.style.overflowY = 'none';
+    //wrapList.style.overflow = 'auto';
+    wrapList.style.overflowY = 'visible';
     wrapList.style.height = 'none';
 }
 
@@ -471,7 +472,7 @@ plug[2].addEventListener('click', () => {
     const wrapList = document.querySelector('.wrapList')
     const techInfo = document.querySelector('.techInfo')
     plug[2].classList.add('activGraf')
-    wrapList.style.overflowY = 'scroll';
+    wrapList.style.overflowY = 'auto';
     wrapList.style.height = '300px';
     model.style.zoom = '0.65'
     model.style.MozTransformOrigin = "top"
