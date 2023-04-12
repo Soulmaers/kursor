@@ -90,18 +90,26 @@ export function conturTest(testov) {
                 r.push(el.tyresdiv)
             })
             //    const uniq = convert(r)
+            // console.log(elem[2])
             elem[2].result.forEach((el) => {
                 modelUniqValues.forEach((item) => {
                     if (el.name == item.pressure) {
                         shina.forEach(e => {
                             if (e.id == item.tyresdiv) {
+                                if (el.status === 'false') {
+                                    console.log('статус1')
+                                    e.children[0].style.fill = 'gray'
+                                    return
+                                }
                                 if (nameCar == 'А652УА198') {
                                     integer = parseFloat((el.value / 10).toFixed(1))
+
                                     e.children[0].style.fill = objColor[generFront(parseFloat((el.value / 10).toFixed(1)))]
                                 }
                                 else {
                                     integer = el.value
                                     if ((nameCar == 'КранГаличанинР858ОР178')) {
+
                                         e.children[0].style.fill = objColor[generDav(integer)]
                                     }
                                     else {
@@ -322,6 +330,12 @@ function viewListKoleso(arg, params, nameCar) {
                 if (el.name == item.pressure) {
                     shina.forEach(e => {
                         if (e.id == item.tyresdiv) {
+                            if (el.status === 'false') {
+                                console.log('статус1')
+                                e.children[0].style.fill = 'gray'
+                                return
+                            }
+
                             if (activePost == 'А652УА198') {
                                 integer = parseFloat((el.value / 10).toFixed(1))
                                 e.children[0].style.fill = objColor[generFront(parseFloat((el.value / 10).toFixed(1)))]
