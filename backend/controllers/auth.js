@@ -44,6 +44,15 @@ module.exports.delete = (req, res) => {
     catch (e) {
         console.log(e)
     }
+    try {
+        const selectBase = `DELETE FROM userObjects WHERE login = '${req.body.log}'`;
+        pool.query(selectBase, function (err, results) {
+
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
 
 

@@ -95,8 +95,6 @@ module.exports.updateModel = (req, res) => {
             console.log(e)
         }
 
-
-
     })
     res.json({ message: 'успех' })
 
@@ -297,6 +295,65 @@ module.exports.modalBar = (req, res) => {
 
 }
 
+module.exports.checkObject = (req, res) => {
+    const login = req.body.login
+    const role = req.body.role
+    const objects = req.body.objects
+    try {
+        const selectBase = `SELECT id FROM userObjects WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            if (results.length === 0) {
+                console.log('ноль')
+                objects.forEach(el => {
+                    const postModel = `INSERT INTO userObjects(login, role, object) VALUES('${login}','${role}','${el}')`
+                    connection.query(postModel, function (err, results) {
+                        if (err) console.log(err);
+                    })
+                })
+            }
+            else {
+                console.log('не ноль')
+                const postModel = `DELETE FROM  userObjects WHERE login='${login}'`
+                connection.query(postModel, function (err, results) {
+                    if (err) console.log(err);
+                    objects.forEach(el => {
+                        const postModel = `INSERT INTO userObjects(login, role, object) VALUES('${login}','${role}','${el}')`
+                        connection.query(postModel, function (err, results) {
+                            if (err) console.log(err);
+
+                        })
+                    })
+                })
+            }
+            res.json({ message: 'Объекты добавлены' })
+        })
+
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
+
+
+
+module.exports.viewCheckObject = (req, res) => {
+    const login = req.body.name
+
+    try {
+        const selectBase = `SELECT Object FROM userObjects WHERE login='${login}'`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            res.json({ result: results })
+        })
+
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 
 module.exports.icon = (req, res) => {
 

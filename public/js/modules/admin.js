@@ -13,7 +13,8 @@ async function account() {
     const login = formControl[0].value
     const pass = formControl[1].value
     const role = select.value
-    console.log(login, pass, role)
+
+    // console.log(login, pass, role)
     if (!login) {
         const messaga = document.querySelector('.message')
         messaga.textContent = 'Не указан логин!'
@@ -29,8 +30,8 @@ async function account() {
         return
     }
     if (role === 'Укажите права доступа') {
-        console.log('условия')
-        console.log('Не выбраны права доступа!')
+        // console.log('условия')
+        //  console.log('Не выбраны права доступа!')
         const messaga = document.querySelector('.message')
         messaga.textContent = 'Не выбраны права доступа!'
         messaga.style.color = 'red'
@@ -49,7 +50,7 @@ async function account() {
 
         const result = await fetch('/signup', params)
         const response = await result.json()
-        console.log(response)
+        //  console.log(response)
         const messaga = document.querySelector('.message')
         var options = document.querySelectorAll('opt');
 
@@ -73,7 +74,7 @@ async function account() {
 
 
 export async function getUsers() {
-    console.log('гетзерс')
+    //console.log('гетзерс')
     const params = {
         method: "GET",
         headers: {
@@ -81,12 +82,12 @@ export async function getUsers() {
         }
     }
     const data = await fetch('/users', params)
-    console.log(data)
+    //console.log(data)
     const users = await data.json()
-    console.log(users.result)
+    // console.log(users.result)
     const items = document.querySelectorAll('.users')
-    console.log(new Date())
-    console.log(items)
+    // console.log(new Date())
+    //console.log(items)
     if (items) {
         items.forEach(el => {
             el.remove()
@@ -123,7 +124,7 @@ export async function getUsers() {
     const noDeleteUser = document.querySelector('.net')
     const deleteUser = document.querySelector('.da')
     deletUser.forEach(el => {
-        console.log(el)
+        //  console.log(el)
         el.addEventListener('click', () => {
             deletUser.forEach(el => {
                 el.classList.remove('btna')
@@ -145,21 +146,23 @@ export async function getUsers() {
             if (el.classList.contains('btna')) {
                 console.log(el)
                 confirm.style.display = 'none';
-                deleteFn(el.id);
+                const log = el.classList.closest('.users').children[0].textContent
+                console.log(log)
+                deleteFn(el.id, log);
             }
         })
     })
-    console.log(new Date())
-    console.log(items)
+    // console.log(new Date())
+    // console.log(items)
     updateFn()
 
-    const userss = document.querySelectorAll('.users')
-    console.log(userss)
-    Array.from(userss).forEach(el => {
+    const logins = document.querySelectorAll('.login')
+    // console.log(userss)
+    Array.from(logins).forEach(el => {
         el.addEventListener('click', () => {
             el.classList.add('activUser')
-            console.log(el)
-            profil(el.children[0].textContent, el.children[1].textContent)
+            // console.log(el)
+            profil(el.textContent, el.nextElementSibling.textContent)
         })
     })
 }
@@ -182,14 +185,14 @@ nent.addEventListener('click', () => {
 function updateFn() {
     const deletUser = document.querySelectorAll('.icon1')
     const sigup = document.querySelectorAll('.sigup')
-    console.log(deletUser)
+    //  console.log(deletUser)
     deletUser.forEach(el => {
         //console.log(el)
         el.addEventListener('click', async () => {
-            console.log('клик')
+            //   console.log('клик')
             const login = el.closest('.users').children[0].textContent
-            console.log(el.closest('.users').children[0].textContent);
-            console.log(sigup)
+            // console.log(el.closest('.users').children[0].textContent);
+            // console.log(sigup)
             sigup[0].innerHTML = `<div class="form-group">
             <label>Логин</label>
             <input type="text" class="form-control" value=${login} name="username">
@@ -241,8 +244,8 @@ function updateFn() {
                 }
 
                 if (role === 'Укажите права доступа') {
-                    console.log('условия')
-                    console.log('Не выбраны права доступа!')
+                    // console.log('условия')
+                    // console.log('Не выбраны права доступа!')
                     const messaga = document.querySelector('.message')
                     messaga.textContent = 'Не выбраны права доступа!'
                     messaga.style.color = 'red'
@@ -258,7 +261,7 @@ function updateFn() {
                         body: JSON.stringify({ idx, log, role })
                     }
                     const data = await fetch('/update/:id', params)
-                    console.log(data)
+                    //console.log(data)
                     const result = await data.json()
                     const messaga = document.querySelector('.message')
                     messaga.textContent = result.message
@@ -279,17 +282,14 @@ function updateFn() {
     })
 }
 
-
-
-
-export async function deleteFn(id) {
+export async function deleteFn(id, log) {
     const idx = id
     const params = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ idx }),
+        body: JSON.stringify({ idx, log }),
     }
     const data = await fetch('/delete/:id', params)
     const result = await data.json()
@@ -306,22 +306,91 @@ export async function deleteFn(id) {
     getUsers()
 }
 
-
-
-
-
-
-
 export function checkCreate(nameCar) {
-    const box = document.querySelector('.check_boxs')
-    const activePost = nameCar.replace(/\s+/g, '')
-    const list = document.createElement('p')
-    list.classList.add('listTitles')
-    list.innerHTML = `<input class="checkIn" type="checkbox" rel=${activePost}
-    value=${activePost} id=${activePost}Check>${activePost}`
-    box.appendChild(list)
+    console.log(nameCar)
+    const ide = document.getElementById('all')
+    nameCar.forEach(elem => {
+        console.log(elem)
+        const box = document.querySelector('.check_boxs')
+        const activePost = elem.replace(/\s+/g, '')
+        const list = document.createElement('p')
+        list.classList.add('listTitles')
+        list.innerHTML = `<input class="checkIn" type="checkbox" 
+    value=${activePost} rel=${activePost} id=${activePost}O>${activePost}`
+        box.appendChild(list)
+
+    })
+    const checkboxes = document.querySelectorAll('.checkIn');
+    let enabledSettings = []
+    if (ide.checked === true) {
+        checkboxes.forEach(el => {
+            el.checked === false ? enabledSettings.push(el.value) : null
+        })
+    }
+    console.log(checkboxes)
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            if (this.id !== "all") {
+                console.log(this.id)
+
+                ide.checked = false;
+                enabledSettings = Array.from(checkboxes).filter(i => i.checked).map(i => i.value)
+                console.log(enabledSettings)
+
+            }
+            if (this.id == "all") {
+                enabledSettings.length = 0;
+                const ide = document.getElementById('all')
+                checkboxes.forEach(el => {
+                    el.checked = false
+                    ide.checked = true;
+                    if (el.checked !== true) {
+                        enabledSettings.push(el.value)
+                    }
+                })
+                //    enabledSettings = Array.from(checkboxes.map(el => el.value))
+                console.log(enabledSettings)
+                ide.checked = true;
+            }
+        })
+    });
+    const dad = document.querySelector('.dad');
+
+    dad.addEventListener('click', () => {
+        const clearConfirm = document.querySelector('.clearConfirmCheckModal')
+        clearConfirm.style.display = 'none'
+        const userRole = document.querySelector('.userRole');
+        const nameUser = document.querySelector('.nameUser');
+        const login = nameUser.textContent
+        const role = userRole.textContent
+
+        fnReqObject(login, role, enabledSettings);
+    })
+}
+
+async function fnReqObject(login, role, objects) {
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ login, role, objects }))
+    }
+    const res = await fetch('/api/checkObject', param)
+    const response = await res.json()
+    console.log(response.message)
+    const messaga = document.querySelector('.messagech')
+    messaga.textContent = response.message
+    console.log(messaga.textContent)
+    messaga.style.color = 'green'
+    setTimeout(() => messaga.textContent = '', 2000)
 
 }
+
+
+
+
+
 
 
 const close = document.querySelector('.close')
@@ -344,5 +413,44 @@ export function profil(name, role) {
     nameUser.textContent = name
     userRole.textContent = role
 
+    fnViewcheck(name);
+
 
 }
+
+async function fnViewcheck(name) {
+    const ide = document.getElementById('all')
+    const checkboxes = document.querySelectorAll('.checkIn');
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ name }))
+    }
+    const res = await fetch('/api/viewCheckObject', param)
+    const response = await res.json()
+    console.log(response)
+    if (response.result.length === 0) {
+        checkboxes.forEach(el => {
+            el.checked = false
+            ide.checked = true
+        })
+    }
+    else {
+        checkboxes.forEach(el => {
+            el.checked = false
+            // ide.checked = true
+            console.log(el.value)
+            response.result.forEach(item => {
+                if (el.value === item.Object) {
+                    ide.checked = false
+                    el.checked = true;
+                }
+            })
+        })
+    }
+
+}
+
+

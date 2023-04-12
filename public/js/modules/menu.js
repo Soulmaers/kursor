@@ -2,7 +2,7 @@
 import { navigator } from './navigator.js'
 import { speed } from './speed.js'
 import { loadParamsViewList, conturTest } from './spisok.js'
-
+import { checkCreate } from './admin.js'
 import { objColor, generT, generFront, generDav } from './content.js'
 
 
@@ -30,6 +30,35 @@ export let dann;
 
 
 export function zapros() {
+
+
+
+    const flagss = 1 + 4096//4096
+    const prmss = {
+        "spec": {
+            "itemsType": "avl_unit",
+            "propName": "sys_name",
+            "propValueMask": "*",
+            "sortType": "sys_name"
+        },
+        "force": 1,
+        "flags": flagss,
+        "from": 0,
+        "to": 0
+    };
+    const remote1s = wialon.core.Remote.getInstance();
+    remote1s.remoteCall('core/search_items', prmss,
+        async function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+
+
+        });
+
+
+
 
     const flags = 1 + 1024//4096
     const prms = {
@@ -59,31 +88,39 @@ export function zapros() {
             })
             )
             const tt = new Date()
-            console.log(test)
+
             const role = document.querySelectorAll('.log')[0].textContent
             const login = document.querySelectorAll('.log')[1].textContent
-            if (login === 'Курсор') {
-                const kursor = [];
-                test.forEach(el => {
-                    //   console.log(el[0])
-                    if (el[0].message === 'А 652 УА 198' || el[0].message === 'КранГаличанин Р858ОР178' || el[0].message === 'Бочка')
-                        kursor.push(el)
-                })
-                console.log(kursor)
-                conturTest(kursor)
-            }
-            else {
-                conturTest(test)
-            }
-
-
+            const massObjectCar = await dostupObject(login)
+            const orig = [];
+            test.forEach(item => {
+                if (massObjectCar.includes(item[0].message.replace(/\s+/g, ''))) {
+                    orig.push(item)
+                }
+            })
+            console.log(orig)
+            const nameCarCheck = test.map(elem => elem[0].message)
+            console.log(nameCarCheck)
+            checkCreate(nameCarCheck)
+            conturTest(orig)
             speed(arrCar)
             return dann
         });
 
-
-
-
 }
 
 
+async function dostupObject(name) {
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ name }))
+    }
+    const res = await fetch('/api/viewCheckObject', param)
+    const response = await res.json()
+
+    const nameCarCheck = response.result.map(elem => elem.Object)
+    return nameCarCheck
+}

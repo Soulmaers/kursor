@@ -514,7 +514,8 @@ body {
   background-color: #fff;
 }
 
-.message {
+.message,
+.messagech {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -529,7 +530,8 @@ body {
   font-family: Roboto;
   font-weight: bold;
   position: absolute;
-  bottom: 40%
+  bottom: 40%;
+
 }
 
 .sel {

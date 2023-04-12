@@ -66,3 +66,6 @@ router.post('/api/iconFindWindows', controllerModel.iconFindWindows)
 router.post('/api/deleteSatic', controllerModel.deleteStatic)
 router.post('/api/to', controllerModel.to)
 router.post('/api/toView', controllerModel.toView)
+router.post('/api/checkObject', controllerModel.checkObject)
+router.post('/api/viewCheckObject', controllerModel.viewCheckObject)
+

@@ -187,7 +187,7 @@ export function loadAkb(arrCar) {
 
                 const oilElem = document.querySelector('.oil_value')
                 oilElem.textContent = oil + 'л'
-                //  console.log(odometr)
+
             }
             speed = (it.pos.s).toFixed(0);
             //    console.log(speed)
