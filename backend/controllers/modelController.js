@@ -108,7 +108,8 @@ module.exports.savePr = async (req, res) => {
     const value = [Object.values(req.body.arr)]
     // console.log(value)
     if (req.body.arr.dataAdd) {
-        const sql = `INSERT INTO  tyresBase(dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka,
+        try {
+            const sql = `INSERT INTO  tyresBase(dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka,
             model,
             psi,
             changeBar,
@@ -116,13 +117,18 @@ module.exports.savePr = async (req, res) => {
             dateInstall,
             probegPass,
             dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`;
-        connection.query(sql, [value], function (err, results) {
-            if (err) console.log(err);
-            res.json('Данные добавлены')
-        });
+            connection.query(sql, [value], function (err, results) {
+                if (err) console.log(err);
+                res.json('Данные добавлены')
+            });
+        }
+        catch (e) {
+            console.log(e)
+        }
     }
     else {
-        const sql = `INSERT INTO  tyresBase(identificator, nameCar, typeOs, numberOs, idTyres, marka,
+        try {
+            const sql = `INSERT INTO  tyresBase(identificator, nameCar, typeOs, numberOs, idTyres, marka,
             model,
             psi,
             changeBar,
@@ -130,10 +136,14 @@ module.exports.savePr = async (req, res) => {
             dateInstall,
             probegPass,
             dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`;
-        connection.query(sql, [value], function (err, results) {
-            if (err) console.log(err);
-            res.json('Данные добавлены')
-        });
+            connection.query(sql, [value], function (err, results) {
+                if (err) console.log(err);
+                res.json('Данные добавлены')
+            });
+        }
+        catch (e) {
+            console.log(e)
+        }
     }
 }
 
@@ -216,10 +226,12 @@ module.exports.tech = async (req, res) => {
 
 module.exports.modalBar = (req, res) => {
     const value = [req.body.arrValue];
-
+    console.log('запись')
+    console.log(req.body.arrValue)
     // value.push()
     const tableModel = 'bar' + req.body.activePost
     //  console.log(tableModel)
+
     try {
         const sql = `create table if not exists ${tableModel}(
             id int(255) primary key auto_increment,
@@ -282,6 +294,7 @@ module.exports.modalBar = (req, res) => {
     catch (e) {
         console.log(e)
     }
+
 }
 
 
@@ -766,18 +779,23 @@ module.exports.alarmFind = (req, res) => {
     //   console.log('работаем?')
     const tableModel = req.body.activeName
     // const tableModel = 'alarm' + name
-    const sqls1 = `SELECT data, senspressure, bar, temp, alarm  FROM ${tableModel} WHERE 1`
-    connection.query(sqls1, function (err, results) {
-        if (err) //console.log(err);
-            // console.log(results)
-            if (results == undefined) {
-                res.json([])
-            }
-        res.json(results)
+    try {
 
 
 
-    })
+        const sqls1 = `SELECT data, senspressure, bar, temp, alarm  FROM ${tableModel} WHERE 1`
+        connection.query(sqls1, function (err, results) {
+            if (err) //console.log(err);
+                // console.log(results)
+                if (results == undefined) {
+                    res.json([])
+                }
+            res.json(results)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
 
 

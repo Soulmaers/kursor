@@ -220,6 +220,7 @@ export function viewConfigurator(arg, params) {
         arg.forEach(el => {
             par.push(el.name)
         })
+        //  console.log(arg)
         parametrs.forEach(item => {
             let signal;
             let done;
@@ -238,7 +239,7 @@ export function viewConfigurator(arg, params) {
                     else {
                         arg.forEach((el) => {
                             if (el.name === item.pressure) {
-
+                                console.log(el.status)
                                 if (activePost === 'А652УА198') {
                                     done = parseFloat((el.value / 10).toFixed(1))
                                 }
@@ -254,13 +255,17 @@ export function viewConfigurator(arg, params) {
                                     el.style.position = 'absolute'
                                     el.style.bottom = 0
                                 })
-
                                 e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                                 if (activePost == 'КранГаличанинР858ОР178') {
                                     signal = objColor[generDav(done)]
                                 }
                                 else {
                                     signal = objColor[generFront(done)]
+                                }
+                                if (el.status === 'false') {
+                                    //   console.log('ап2')
+                                    e.children[0].style.background = 'lightgray';
+                                    return
                                 }
                                 e.children[0].style.background = signal;
                             }
@@ -275,6 +280,11 @@ export function viewConfigurator(arg, params) {
                                         if (el.value >= -51 && el.value < 36) {
                                             e.children[1].textContent = el.value + '°C'
                                             e.children[1].setAttribute('rel', `${item.temp}`)
+                                            if (el.status === 'false') {
+                                                //  console.log('22')
+                                                e.children[1].style.background = 'lightgray';
+                                                return
+                                            }
                                             e.children[1].style.background = objColor[generT(el.value)];
                                         }
                                     }

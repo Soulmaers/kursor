@@ -35,7 +35,7 @@ function init(user) {
             //  console.log('обновление')
             // setInterval(getMainInfo, 5000);
             createTable();
-            setInterval(createTable, 100000);
+            setInterval(createTable, 300000);
             //  saprosGeo()
         })
 }
@@ -129,57 +129,98 @@ function createTable() {
 
 
 function createNameTable(name) {
-    const sql = `create table if not exists ${name}(
+    try {
+        const sql = `create table if not exists ${name}(
          id int(255) primary key auto_increment,
          name varchar(255) not null,
          value varchar(255) not null,
          status varchar(255)
 
        )`;
-    connection.query(sql, function (err, results) {
-        if (err) console.log(err);
-        // else console.log("Таблица создана");
-    })
+        connection.query(sql, function (err, results) {
+            if (err) console.log(err);
+            // else console.log("Таблица создана");
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
 
 function postParametrs(name, param) {
     //console.log(name)
     // console.log(param)
-    const selectBase = `SELECT id FROM ${name} WHERE 1`
-    connection.query(selectBase, function (err, results) {
-        if (err) console.log(err);
-        if (results.length < 1) {
-            console.log('создаем')
-            const sql = `INSERT INTO ${name}(name,value) VALUES?`;
-            connection.query(sql, [param], function (err, results) {
-                if (err) console.log(err);
-                console.log(results)
-                const timeUpdate = createDate()
-            });
-            //   connection.end();
-        }
-        else if (results.length > 0) {
-            console.log('старт')
-            let count = 0;
-            //  console.log(param)
-            param.forEach(el => {
-                count++
-                const sql = `UPDATE ${name} SET name='${el[0]}', value='${el[1]}', status='true' WHERE name='${el[0]}'`;
-                connection.query(sql, function (err, results) {
+    try {
+        const selectBase = `SELECT name FROM ${name} WHERE 1`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            if (results.length < 1) {
+                //  console.log('создаем')
+                const sql = `INSERT INTO ${name}(name,value) VALUES?`;
+                connection.query(sql, [param], function (err, results) {
                     if (err) console.log(err);
-                    else {
-                        //   console.log(el[0] + ' ' + 'данные обновлены')
-                    }
-
+                    // console.log(results)
+                    //  const timeUpdate = createDate()
                 });
-                //  console.log('готово')
-                //  connection.end();
+                //   connection.end();
+            }
+            else if (results.length > 0) {
+                //   console.log('старт')
+                let count = 0;
+                // console.log(results[0].name)
+                const mas = []
+                results.forEach(el => {
+                    mas.push(el.name)
+                });
+                //  console.log(mas)
+                const paramName = [];
+                param.forEach(el => {
+                    paramName.push(el[0])
+                })
+                //   console.log(paramName)
+                param.forEach(el => {
 
-            })
-            const timeUpdate = createDate()
-
-        }
-    });
+                    if (mas.includes(el[0])) {
+                        // console.log('апдейт')
+                        const sql = `UPDATE ${name} SET name='${el[0]}', value='${el[1]}', status='true' WHERE name='${el[0]}'`;
+                        connection.query(sql, function (err, results) {
+                            if (err) console.log(err);
+                            else {
+                                //   console.log(el[0] + ' ' + 'данные обновлены')
+                            }
+                        });
+                        return
+                    }
+                    if (!mas.includes(el[0])) {
+                        // console.log('запись новых')
+                        const sql = `INSERT INTO ${name} SET name='${el[0]}', value='${el[1]}', status='new'`;
+                        connection.query(sql, function (err, results) {
+                            if (err) console.log(err);
+                            else {
+                                //   console.log(el[0] + ' ' + 'данные обновлены')
+                            }
+                        });
+                        return
+                    }
+                })
+                mas.forEach(el => {
+                    if (!paramName.includes(el)) {
+                        //  console.log('апдейт на фолс')
+                        const sql = `UPDATE ${name} SET  status='false' WHERE name='${el}'`;
+                        connection.query(sql, function (err, results) {
+                            if (err) console.log(err);
+                            else {
+                                //   console.log(el[0] + ' ' + 'данные обновлены')
+                            }
+                        });
+                    }
+                })
+            }
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
 
 

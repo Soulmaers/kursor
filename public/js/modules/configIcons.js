@@ -56,7 +56,7 @@ export function fnToChange() {
             }
             const res = await fetch('/api/to', param)
             const response = await res.json()
-            console.log(response)
+            //   console.log(response)
             UpTo.style.display = 'none'
             console.log('да?2')
             iconParams()

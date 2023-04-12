@@ -14,7 +14,7 @@ const connection = require('../settings/db')
 module.exports.datawialon = (req, res) => {
 
     try {
-        const selectBase = `SELECT name, value FROM ${req.body.activePost} WHERE 1`
+        const selectBase = `SELECT name, value, status FROM ${req.body.activePost} WHERE 1`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             // console.log(results)
@@ -25,12 +25,13 @@ module.exports.datawialon = (req, res) => {
     catch (e) {
         console.log(e)
     }
+
 }
 module.exports.datawialonAll = (req, res) => {
     const nameCar = req.body.car.replace(/\s+/g, '')
     //console.log(req.body.activePost)
     try {
-        const selectBase = `SELECT name, value FROM ${nameCar} WHERE 1`
+        const selectBase = `SELECT name, value, status FROM ${nameCar} WHERE 1`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             // console.log(results)
@@ -68,11 +69,7 @@ module.exports.datawialonGeo = (req, res) => {
         getMainInfo(req.body.active, res)
         //   console.log(getMainInfo(req.body.active))
         //   setInterval(getMainInfo, 3000, req.body.active);
-        console.log('запрос')
-        console.log(geoX, geoY)
-        // console.log(geoY, geoX)
-        res.json({ geoX, geoY })
-        console.log(res.json({ geoX, geoY }))
+
     }
     catch (e) {
         //  console.log(e)

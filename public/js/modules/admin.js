@@ -152,7 +152,31 @@ export async function getUsers() {
     console.log(new Date())
     console.log(items)
     updateFn()
+
+    const userss = document.querySelectorAll('.users')
+    console.log(userss)
+    Array.from(userss).forEach(el => {
+        el.addEventListener('click', () => {
+            el.classList.add('activUser')
+            console.log(el)
+            profil(el.children[0].textContent, el.children[1].textContent)
+        })
+    })
 }
+
+const okey = document.querySelector('.okey')
+okey.addEventListener('click', () => {
+    const clearConfirm = document.querySelector('.clearConfirmCheckModal')
+    clearConfirm.style.display = 'flex'
+
+})
+
+const nent = document.querySelector('.nent')
+nent.addEventListener('click', () => {
+    const clearConfirm = document.querySelector('.clearConfirmCheckModal')
+    clearConfirm.style.display = 'none'
+
+})
 
 
 function updateFn() {
@@ -304,6 +328,8 @@ const close = document.querySelector('.close')
 close.addEventListener('click', () => {
     const profilUser = document.querySelector('.profilUser')
     profilUser.style.display = 'none'
+    const accountControll = document.querySelector('.accountControl')
+    accountControll.style.display = 'flex'
 })
 
 
@@ -311,8 +337,8 @@ close.addEventListener('click', () => {
 export function profil(name, role) {
     const profilUser = document.querySelector('.profilUser')
     profilUser.style.display = 'flex'
-    const accountControll = document.querySelector('.accountControll')
-    accountControll.style.display = 'flex'
+    const accountControll = document.querySelector('.accountControl')
+    accountControll.style.display = 'none'
     const nameUser = document.querySelector('.nameUser')
     const userRole = document.querySelector('.userRole')
     nameUser.textContent = name
