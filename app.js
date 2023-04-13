@@ -6,7 +6,7 @@ const routes = require('./backend/settings/routes')
 
 //const isToken = require('./middleware/auth.js')
 const app = express();
-
+require('events').EventEmitter.prototype._maxListeners = 0;
 
 var morgan = require('morgan');
 

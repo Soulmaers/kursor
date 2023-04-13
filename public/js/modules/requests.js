@@ -207,6 +207,7 @@ export async function reqModalBar(arr, id) {
     const arrValue = [];
     const modalInput = document.querySelectorAll('.modalInput')
     // console.log(JSON.stringify({ id, arr, arrValue, activePost }))
+    arrValue.push(activePost)
     arrValue.push(id)
 
     modalInput.forEach(el => {
@@ -217,7 +218,7 @@ export async function reqModalBar(arr, id) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, arr, arrValue, activePost }),
+        body: JSON.stringify({ id, arr, arrValue, }),
     })
     const result = await bar.json();
     console.log(result)
@@ -292,7 +293,10 @@ export async function viewBar(id) {
         }
         const nval = (Object.entries(barValue.values[0]))
         nval.shift()
+        nval.shift()
+        nval.shift()
         const modalInput = document.querySelectorAll('.modalInput')
+        console.log(nval)
         modalInput.forEach((el, index) => {
             el.value = nval[index][1]
         })

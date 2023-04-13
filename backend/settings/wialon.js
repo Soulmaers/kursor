@@ -29,7 +29,7 @@ function init(user) {
     // console.log('init')
     session.start({ token: kluch })
         .catch(function (err) {
-            console.log(err);
+            console.log(err + 'ошибка1');
         })
         .then(function (data) {
             //  console.log('обновление')
@@ -138,7 +138,7 @@ function createNameTable(name) {
 
        )`;
         connection.query(sql, function (err, results) {
-            if (err) console.log(err);
+            if (err) console.log(err + 'ошибка2');
             // else console.log("Таблица создана");
         })
     }
@@ -158,7 +158,7 @@ function postParametrs(name, param) {
                 //  console.log('создаем')
                 const sql = `INSERT INTO ${name}(name,value) VALUES?`;
                 connection.query(sql, [param], function (err, results) {
-                    if (err) console.log(err);
+                    if (err) console.log(err + 'ошибка3');
                     // console.log(results)
                     //  const timeUpdate = createDate()
                 });
@@ -184,7 +184,7 @@ function postParametrs(name, param) {
                         // console.log('апдейт')
                         const sql = `UPDATE ${name} SET name='${el[0]}', value='${el[1]}', status='true' WHERE name='${el[0]}'`;
                         connection.query(sql, function (err, results) {
-                            if (err) console.log(err);
+                            if (err) console.log(err + 'ошибка4');
                             else {
                                 //   console.log(el[0] + ' ' + 'данные обновлены')
                             }
@@ -195,7 +195,7 @@ function postParametrs(name, param) {
                         // console.log('запись новых')
                         const sql = `INSERT INTO ${name} SET name='${el[0]}', value='${el[1]}', status='new'`;
                         connection.query(sql, function (err, results) {
-                            if (err) console.log(err);
+                            if (err) console.log(err + 'ошибка5');
                             else {
                                 //   console.log(el[0] + ' ' + 'данные обновлены')
                             }
@@ -208,7 +208,7 @@ function postParametrs(name, param) {
                         //  console.log('апдейт на фолс')
                         const sql = `UPDATE ${name} SET  status='false' WHERE name='${el}'`;
                         connection.query(sql, function (err, results) {
-                            if (err) console.log(err);
+                            if (err) console.log(err + 'ошибка6');
                             else {
                                 //   console.log(el[0] + ' ' + 'данные обновлены')
                             }
@@ -275,17 +275,17 @@ function zaprosSpisokb(name) {
         try {
             const selectBase = `SELECT tyresdiv, pressure,temp FROM ${nameCar} WHERE 1`
             connection.query(selectBase, function (err, results) {
+                if (err) console.log(err + 'ошибка8');
                 if (results === undefined) {
                     console.log('нет таблицы')
                 }
                 else {
-
                     const params = results
                     const modelUniqValues = convert(params)
                     try {
                         const selectBase = `SELECT name, value FROM ${itey} WHERE 1`
                         connection.query(selectBase, function (err, results) {
-                            if (err) console.log(err);
+                            if (err) console.log(err + 'ошибка9');
                             const data = results
                             let integer;
                             data.forEach((el) => {
@@ -350,6 +350,7 @@ function proverka(arr) {
         const name = 'alarm' + el[0] + el[1]
         const sqls1 = `SELECT data, senspressure, bar, temp, alarm  FROM ${name} WHERE 1`
         connection.query(sqls1, function (err, results) {
+            if (err) console.log(err + 'ошибка10');
             if (results == undefined) {
                 if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
                     //  console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
@@ -471,7 +472,7 @@ function alarmBase(data, tyres, alarm) {
             alarm varchar(255) not null        
             )`
         connection.query(sql, function (err, results) {
-            if (err) console.log('ошибка');
+            if (err) if (err) console.log(err + 'ошибка');
 
             else {
 

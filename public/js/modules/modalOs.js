@@ -20,7 +20,6 @@ export function modalOs() {
             centerOs.forEach(e => {
                 e.classList.remove('centerOsActiv')
             });
-
             e.classList.add('centerOsActiv')
             modalCenterOs.style.display = 'block'
             const modalInput = document.querySelectorAll('.modalInput')
@@ -30,8 +29,6 @@ export function modalOs() {
             const centerOsActiv = document.querySelector('.centerOsActiv')
             const modalNumberOs = document.querySelector('.modalNumberOs')
             const modalTitle = document.querySelector('.modalTitle')
-
-
             if (e.classList.contains('pricep')) {
                 modalNumberOs.textContent = centerOsActiv.id + '-' + 'Прицеп'
             }
@@ -41,7 +38,6 @@ export function modalOs() {
             modalTitle.style.display = 'flex'
             viewBar(centerOsActiv.id);
         })
-
     })
     modalClear.addEventListener('click', () => {
         modalCenterOs.style.display = 'none'
@@ -50,11 +46,9 @@ export function modalOs() {
 }
 
 
-function modalBar() {
+async function modalBar() {
     const centerOsActiv = document.querySelector('.centerOsActiv')
     console.log(centerOsActiv.id)
-
-
     const modalText = document.querySelectorAll('.modalText')
     console.log(modalText)
     const arrNameCol = [];
@@ -63,7 +57,7 @@ function modalBar() {
     })
 
 
-    reqModalBar(arrNameCol, centerOsActiv.id);
+    await reqModalBar(arrNameCol, centerOsActiv.id);
     viewBar(centerOsActiv.id);
 }
 
