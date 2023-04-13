@@ -274,8 +274,16 @@ export function viewConfigurator(arg, params) {
                                     if (e.id == item.tyresdiv) {
 
                                         if (el.value === '-128' || el.value === '-50') {
+
                                             el.value = 'err'
                                             e.children[1].textContent = el.value
+                                            if (el.status === 'false') {
+                                                //  console.log('22')
+                                                e.children[1].style.background = 'lightgray';
+                                                //  return
+                                            }
+
+
                                         }
                                         if (el.value >= -51 && el.value < 36) {
                                             e.children[1].textContent = el.value + '°C'
