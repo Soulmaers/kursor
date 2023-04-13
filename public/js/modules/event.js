@@ -1,6 +1,6 @@
-import { postModel, postTyres, reqDelete, paramsDelete, reqTech, viewTech, loadParamsViewShina } from './requests.js'
-import { alarmClear, viewOs } from './visual.js'
-import { data, dataIdTyres } from './content.js'
+import { postTyres, reqDelete, paramsDelete, viewTech } from './requests.js'
+import { alarmClear } from './visual.js'
+import { data } from './content.js'
 import { getDash } from './dash.js'
 import { visual, visualNone } from './visual.js'
 import { getUsers } from './admin.js'
@@ -9,9 +9,8 @@ import { reqProtectorBase } from './protector.js'
 import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
-import { zapros } from './menu.js'
 import { iconParamsz, iconParamszWindows, deleteWinParams, fnToChange } from './configIcons.js'
-import { profil } from './admin.js'
+
 
 
 
@@ -442,7 +441,7 @@ buttonTth.addEventListener('click', async () => {
     !maxMM.value ? arrNameColId.push(maxMM.placeholder) : arrNameColId.push(maxMM.value)
     arrNameColId.splice(12, 0, arrNameColId.splice(16, 1)[0]);
     if (idbaseTyres.textContent !== '') {
-        await reqTech(arrNameCol, tyresActive.id)
+        // await reqTech(arrNameColId, tyresActive.id)
         await saveDouble(arrNameColId)
     }
 

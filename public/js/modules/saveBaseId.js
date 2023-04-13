@@ -17,10 +17,22 @@ export function createDate() {
 
 export async function reqBaseId() {
     const tiresActiv = document.querySelector('.tiresActiv').id
-
-
-    const newId = (Math.random() * 10000).toFixed(0) + 'id'
-
+    let newId = await findId()
+    let ide;
+    newId === undefined ? ide = 1 + 'id' : ide = increment(newId);
+    function increment(newId) {
+        let sortt = [...newId.identificator]
+        console.log(sortt)
+        sortt.forEach(el => {
+            if (el === 'i') {
+                sortt.splice(sortt.indexOf(el), 2).join('')
+            }
+        })
+        const value = Number(sortt.join('')) + 1
+        return value + 'id'
+    }
+    // const newId = (Math.random() * 10000).toFixed(0) + 'id'
+    console.log(ide)
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
     const formValue = document.querySelectorAll('.formValue')
@@ -34,7 +46,7 @@ export async function reqBaseId() {
     const maxMM = pr.pop()
 
     arrNameColId.push(createDate(new Date))
-    arrNameColId.push(newId)
+    arrNameColId.push(ide)
     arrNameColId.push(activePost)
     arrNameColId.push(nameOs)
     arrNameColId.push(osId)
@@ -107,11 +119,15 @@ export async function findId() {
     console.log(result.result)
 
     const uniq = convert(result.result)
-
+    // uniq.sort()
+    uniq.sort(function (a, b) {
+        return parseFloat(a.identificator) - parseFloat(b.identificator);
+    });
+    console.log(uniq[uniq.length - 1])
     uniq.forEach(el => {
         console.log(el.identificator)
     })
-    return uniq
+    return uniq[uniq.length - 1]
 }
 
 

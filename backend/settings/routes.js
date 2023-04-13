@@ -32,7 +32,7 @@ router.post('/api/wialonAll', controllerWialon.datawialonAll)
 
 router.post('/api/datawialonGeo', controllerWialon.datawialonGeo)
 
-router.post('/api/tech', controllerModel.tech)
+//router.post('/api/tech', controllerModel.tech)
 router.post('/api/modalBar', controllerModel.modalBar)
 
 

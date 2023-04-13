@@ -26,19 +26,26 @@ export async function reqProtectorBase() {
     })
 
     const dannie = await res.json();
-    console.log(dannie)
     if (dannie.values.length == 0) {
         fnCanvas([])
     }
     else {
-        fnCanvas(dannie.values)
+        const result = Object.values(dannie.values.reduce(
+            (acc, val) => {
+                acc[val.identificator] = Object.assign(acc[val.identificator] ?? {}, val);
+                return acc;
+            },
+            {}
+        ));
+        fnCanvas(result)
     }
-    console.log(dannie.values)
+
 }
 
 
 function fnCanvas(arg) {
     console.log('работаем 2')
+    console.log(arg)
     const wrapCanvas = document.querySelectorAll('.wrapCanvas')
     const dan = document.querySelectorAll('.dan')
     if (wrapCanvas) {
@@ -63,6 +70,7 @@ function fnCanvas(arg) {
                         protec.push(el)
                     }
                 })
+                console.log(protec)
                 const mm = el.maxMM * 10
                 const wrap = document.createElement('div')
                 wrap.classList.add('wrapCanvas')
@@ -191,7 +199,7 @@ const min = arr => arr.reduce((x, y) => Math.min(x, y));
 export function protekGrafTwoAll(y1, y2, arr, id, elem, mm) {
     const mmAction = mm / 10
 
-    console.log(y1, y2, arr, id, elem)
+    console.log(y1, y2, arr, id, elem, mm)
     let number = min(arr)
     const dan = document.createElement('div')
     const dan1 = document.createElement('div')

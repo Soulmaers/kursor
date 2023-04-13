@@ -145,7 +145,7 @@ module.exports.savePr = async (req, res) => {
     }
 }
 
-
+/*
 module.exports.tech = async (req, res) => {
     const value = [req.body.arrValue];
 
@@ -220,7 +220,7 @@ module.exports.tech = async (req, res) => {
         console.log(e)
     }
 }
-
+*/
 
 module.exports.modalBar = (req, res) => {
     const value = [req.body.arrValue];
@@ -710,7 +710,7 @@ module.exports.techViewAll = (req, res) => {
     //console.log('работаем')
 
     try {
-        const selectBase = `SELECT idTyres, marka, modelT, psi, changeBar, probegNow, montaj, probegPass, N1, N2,N3, N4, protectorDate, maxMM FROM ${tableModelView} WHERE 1`
+        const selectBase = `SELECT * FROM tyresBase WHERE nameCar='${req.body.activePost}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             //  console.log(results)
