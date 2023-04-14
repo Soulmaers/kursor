@@ -10,8 +10,8 @@ const app = express();
 
 
 module.exports.update = (req, res) => {
-    console.log('запрос на обновление')
-    console.log(req.body.idx)
+    // console.log('запрос на обновление')
+    // console.log(req.body.idx)
     const id = req.body.idx
     const login = req.body.log
     const roleNew = req.body.role
@@ -31,8 +31,8 @@ module.exports.update = (req, res) => {
 
 
 module.exports.delete = (req, res) => {
-    console.log('запрос на удаление')
-    console.log(req.body.idx)
+    // console.log('запрос на удаление')
+    // console.log(req.body.idx)
     // const id = req.body.idx
     try {
         const selectBase = `DELETE FROM users WHERE idx = '${req.body.idx}'`;
@@ -131,7 +131,7 @@ module.exports.sing = async function (req, res) {
         }
         else {
             const row = JSON.parse(JSON.stringify(rows))
-            console.log(row)
+            //  console.log(row)
             row.map(rw => {
                 const resulty = bcrypt.compareSync(req.body.password, rw.password)
                 //req.body.password== rw.password
@@ -143,7 +143,7 @@ module.exports.sing = async function (req, res) {
                     }, 'jwt-key', { expiresIn: '300d' })
                     //res.json(`Bearer ${token}`)
                     res.cookie('AuthToken', `${token}`)
-                    console.log(res.cookie)
+                    // console.log(res.cookie)
                     res.cookie('name', `${rw.name}`)
                     res.redirect('/action');
 
@@ -162,8 +162,8 @@ module.exports.sing = async function (req, res) {
 }
 
 module.exports.action = function (req, res) {
-    console.log('юзер')
-    console.log(req.user)
+    // console.log('юзер')
+    // console.log(req.user)
     if (req.user) {
         const login = req.user[0].name
         const role = req.user[0].role

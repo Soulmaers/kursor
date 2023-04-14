@@ -12,7 +12,7 @@ module.exports = function isToken(req, res, next) {
             return res.render('form.ejs', { message: 'Срок жизни токена истек' })
         } else {
             console.log('2')
-            console.log(authorizedData)
+            // console.log(authorizedData)
 
             next();
         }

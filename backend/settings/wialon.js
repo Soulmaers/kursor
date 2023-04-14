@@ -109,11 +109,13 @@ function createTable() {
         .then(function (data) {
             const nameCar = [];
             const allCar = Object.entries(data);
+            //  console.log(allCar[5][1])
             allCar[5][1].forEach(el => {
                 nameCar.push(el.nm.replace(/\s+/g, ''))
                 const nameTable = el.nm.replace(/\s+/g, '')
+                //    console.log('fg' + el.nm.replace(/\s+/g, ''))
                 const sensor = Object.entries(el.lmsg.p)
-                //   console.log(nameTable)
+                //    console.log(nameTable)
                 //     createNameTable(nameTable)
                 postParametrs(nameTable, sensor)
 
@@ -149,9 +151,10 @@ function createNameTable(name) {
 
 function postParametrs(name, param) {
     console.log('машины')
-    console.log(name)
+    console.log('fg' + name)
     param.forEach(el => {
         el.unshift(name)
+        el.push('new')
     })
     console.log(param)
     try {
@@ -160,63 +163,50 @@ function postParametrs(name, param) {
             if (err) console.log(err);
             console.log(results)
             if (results.length === 0) {
-                //  console.log('создаем')
-                const sql = `INSERT INTO params(nameCar, name,value) VALUES?`;
+                console.log('создаем')
+                const sql = `INSERT INTO params(nameCar, name, value, status) VALUES?`;
                 connection.query(sql, [param], function (err, results) {
-                    if (err) console.log(err + 'ошибка3');
-                    // console.log(results)
-                    //  const timeUpdate = createDate()
+                    if (err) console.log(err);
+
                 });
-                //   connection.end();
+
             }
             else if (results.length > 0) {
-                //   console.log('старт')
-                let count = 0;
-                // console.log(results[0].name)
+                console.log('больше 0')
                 const mas = []
                 results.forEach(el => {
                     mas.push(el.name)
                 });
-                //  console.log(mas)
                 const paramName = [];
                 param.forEach(el => {
-                    paramName.push(el[0])
+                    paramName.push(el[1])
                 })
-                //   console.log(paramName)
-                param.forEach(el => {
 
-                    if (mas.includes(el[0])) {
-                        // console.log('апдейт')
-                        const sql = `UPDATE params SET nameCar='${name}',name='${el[0]}', value='${el[1]}', status='true' WHERE nameCar='${name}' AND name='${el[0]}'`;
+                param.forEach(el => {
+                    if (mas.includes(el[1])) {
+
+                        const sql = `UPDATE params SET nameCar='${name}',name='${el[1]}', value='${el[2]}', status='true' WHERE nameCar='${name}' AND name='${el[1]}'`;
                         connection.query(sql, function (err, results) {
-                            if (err) console.log(err + 'ошибка4');
-                            else {
-                                //   console.log(el[0] + ' ' + 'данные обновлены')
-                            }
+                            if (err) console.log(err);
                         });
                         return
                     }
                     if (!mas.includes(el[0])) {
-                        // console.log('запись новых')
-                        const sql = `INSERT INTO params SET nameCar='${name}',name='${el[0]}', value='${el[1]}', status='new'`;
+
+                        const sql = `INSERT INTO params SET nameCar='${name}',name='${el[1]}', value='${el[2]}', status='new'`;
                         connection.query(sql, function (err, results) {
-                            if (err) console.log(err + 'ошибка5');
-                            else {
-                                //   console.log(el[0] + ' ' + 'данные обновлены')
-                            }
+                            if (err) console.log(err);
+
                         });
                         return
                     }
                 })
                 mas.forEach(el => {
                     if (!paramName.includes(el)) {
-                        //  console.log('апдейт на фолс')
-                        const sql = `UPDATE params SET  status='false' WHERE nameCar='${name}'AND name='${el}'`;
+                        const sql = `UPDATE params SET  status='false' WHERE nameCar='${name}' AND name='${el}'`;
                         connection.query(sql, function (err, results) {
-                            if (err) console.log(err + 'ошибка6');
-                            else {
-                                //   console.log(el[0] + ' ' + 'данные обновлены')
-                            }
+                            if (err) console.log(err);
+
                         });
                     }
                 })
@@ -274,7 +264,7 @@ const convert = (ob) => {
 
 function zaprosSpisokb(name) {
     const massItog = [];
-    console.log(name)
+    // console.log(name)
     name.forEach(itey => {
         const nameCar = itey
         try {
@@ -288,7 +278,7 @@ function zaprosSpisokb(name) {
                     const params = results
                     const modelUniqValues = convert(params)
                     try {
-                        const selectBase = `SELECT name, value FROM ${itey} WHERE 1`
+                        const selectBase = `SELECT name, value FROM params WHERE nameCar='${nameCar}'`
                         connection.query(selectBase, function (err, results) {
                             if (err) console.log(err + 'ошибка9');
                             const data = results
@@ -297,8 +287,8 @@ function zaprosSpisokb(name) {
                                 modelUniqValues.forEach((item) => {
                                     //   console.log(item.pressure)
                                     if (el.name == item.pressure) {
-
-                                        if (itey === 'А652УА198') {
+                                        if (nameCar === 'А652УА198') {
+                                            //  console.log(el.value)
                                             integer = parseFloat((el.value / 10).toFixed(1))
                                         }
                                         else {
@@ -460,13 +450,9 @@ function proverka(arr) {
 }
 
 function alarmBase(data, tyres, alarm) {
-    //  console.log(data)
-
     const dannie = data.concat(tyres)
-    // console.log(dannie)
     const name = dannie[2]
     dannie.push(alarm)
-    // console.log(dannie)
     const value = [dannie];
     const tableModel = 'alarm' + dannie[1] + dannie[2]
     try {
@@ -475,8 +461,6 @@ function alarmBase(data, tyres, alarm) {
                             temp, alarm) VALUES?`;
         connection.query(sqls, [value], function (err, results) {
             if (err) console.log(err);
-            console.log("Данные добавлены" + value);
-
         });
     }
     catch (e) {

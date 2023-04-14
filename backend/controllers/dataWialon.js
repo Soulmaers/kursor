@@ -12,9 +12,10 @@ const connection = require('../settings/db')
 
 
 module.exports.datawialon = (req, res) => {
-
+    // console.log('h1')
+    const nameCar = req.body.activePost
     try {
-        const selectBase = `SELECT name, value, status FROM ${req.body.activePost} WHERE 1`
+        const selectBase = `SELECT name, value, status FROM params WHERE nameCar='${nameCar}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             // console.log(results)
@@ -28,10 +29,11 @@ module.exports.datawialon = (req, res) => {
 
 }
 module.exports.datawialonAll = (req, res) => {
+    //  console.log('h')
     const nameCar = req.body.car.replace(/\s+/g, '')
     //console.log(req.body.activePost)
     try {
-        const selectBase = `SELECT name, value, status FROM ${nameCar} WHERE 1`
+        const selectBase = `SELECT name, value, status FROM params WHERE nameCar='${nameCar}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             // console.log(results)
