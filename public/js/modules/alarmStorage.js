@@ -26,7 +26,6 @@ export async function alarmFind(name) {
                 body: JSON.stringify({ activePost, tyresP })
             })
             const storList = await stor.json();
-            console.log(storList)
             storValue.push(storList)
 
         })
@@ -35,7 +34,6 @@ export async function alarmFind(name) {
 }
 
 function viewAlarmStorage(name, stor) {
-    console.log('работает прога')
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
     stor.forEach(el => {

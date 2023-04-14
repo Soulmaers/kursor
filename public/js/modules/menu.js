@@ -87,7 +87,6 @@ export function zapros() {
             })
             )
             const tt = new Date()
-
             const role = document.querySelectorAll('.log')[0].textContent
             const login = document.querySelectorAll('.log')[1].textContent
             const massObjectCar = await dostupObject(login)
@@ -97,9 +96,7 @@ export function zapros() {
                     orig.push(item)
                 }
             })
-            console.log(orig)
             const nameCarCheck = test.map(elem => elem[0].message)
-            console.log(nameCarCheck)
             checkCreate(nameCarCheck)
             conturTest(orig)
             speed(arrCar)
@@ -119,7 +116,6 @@ async function dostupObject(name) {
     }
     const res = await fetch('/api/viewCheckObject', param)
     const response = await res.json()
-
     const nameCarCheck = response.result.map(elem => elem.Object)
     return nameCarCheck
 }

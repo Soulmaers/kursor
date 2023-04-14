@@ -94,22 +94,31 @@ function os(arr) {
     const container = document.querySelector('.container')
     cont2.classList.add('cont')
     container.appendChild(cont2)
-
     const arrayTrailer = [];
-    //const arrPricep = [];
     const linkSelectOs = document.querySelectorAll('.linkSelectOs')
     const linkSelectTires = document.querySelectorAll('.linkSelectTires')
-
     linkSelectOs.forEach(e =>
         e.addEventListener('click', () => {
             arrayTrailer.push(e)
-
             e.textContent == 'Прицеп' ?
                 pricep(arr[arr.length - 1])
                 :
                 arr[arr.length - 1].children[0].style.background = '#3333ff'
-        }))
 
+
+            const centerOs = document.querySelectorAll('.centerOs')
+            const gosNumber = document.querySelector('.gosNumber')
+
+            centerOs.forEach(el => {
+
+                if (el.classList.contains('pricep')) {
+                    console.log(el)
+                    gosNumber.style.display = 'flex'
+                    return
+                }
+                gosNumber.style.display = 'none'
+            })
+        }))
     linkSelectTires.forEach(e =>
         e.addEventListener('click', () => {
             const arrayTyres = []
@@ -132,17 +141,14 @@ function os(arr) {
                 arr[arr.length - 1].nextElementSibling.children[1].style.display = 'flex';
             }
 
-            //   validation(arrayTrailer, arrayTyres)
-
         }))
     viewMenuParams()
     //запускаем функцию отображения кнопок под параметры+сохраняем в массив последнее выбранное колесо+ скрываем див с графиком скорости
-    const gos = document.createElement('input')
-    gos.classList.add('gosNumber')
-    gos.setAttribute('placeholder', 'гос. номер прицепа')
-    container.appendChild(gos)
+
 
 }
+
+
 
 export async function changeBase(massModel, activePost) {
     const gosp = (document.querySelector('.gosNumber')).value

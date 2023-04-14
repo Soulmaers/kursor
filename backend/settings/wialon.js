@@ -15,28 +15,20 @@ app.use(express.json());
 const session = wialon().session;
 let kluch;
 function init(user) {
-    // console.log(user)
-    // console.log(typeof user)
     if (user !== 'TDRMX') {
-        //    console.log('старт1')
         kluch = '0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178'
     }
     if (user === 'TDRMX') {
-        // console.log('старт2')
         kluch = '7d21706dbf99ed8dd9257b8b1fcc5ab3FDEAE2E1E11A17F978AC054411BB0A0CBD9051B3'
     }
-    // console.log(user)
-    // console.log('init')
     session.start({ token: kluch })
         .catch(function (err) {
             console.log(err);
         })
         .then(function (data) {
-            //  console.log('обновление')
-            // setInterval(getMainInfo, 5000);
             createTable();
             setInterval(createTable, 300000);
-            //  saprosGeo()
+
         })
 }
 //init()
@@ -44,7 +36,6 @@ function init(user) {
 
 
 function speed(t1, t2, int, id, res) {
-    //   console.log(t1, t2, int, id)
     const prms2 = {
         "itemId": id,   //25343786,
 
@@ -56,7 +47,6 @@ function speed(t1, t2, int, id, res) {
     }
 
     session.request('messages/load_interval', prms2)
-
         .then(function (data) {
             const arr2 = Object.values(data);
             const arrIterTime = [];
@@ -76,23 +66,14 @@ function speed(t1, t2, int, id, res) {
 
             let t = 0;
             const arrIterTimeDateT = arrIterTimeDate.filter(e => (++t) % int === 0);
-            //  console.log(arrIterTimeDateT)
             const arrSpee = [];
             arr2[1].forEach(el => {
                 arrSpee.push(el.pos.s)
             })
             let s = 0;
             const arrSpeed = arrSpee.filter(e => (++s) % int === 0)
-            //  arraySpeed.push(arrSpeed, arrIterTimeDateT)
-            //  return [arrSpeed, 
-            //   chrt1(arrSpeed, arrIterTimeDateT); //передача данных в канвас для отображения
-
             res.json({ arrSpeed, arrIterTimeDateT, arrIterTimeDateU })
-
         })
-
-
-
 }
 
 
@@ -100,8 +81,6 @@ function speed(t1, t2, int, id, res) {
 
 
 function createTable() {
-
-    //  console.log('go')
     session.request('core/search_items', prms)
         .catch(function (err) {
             console.log(err);
@@ -109,67 +88,30 @@ function createTable() {
         .then(function (data) {
             const nameCar = [];
             const allCar = Object.entries(data);
-            //  console.log(allCar[5][1])
             allCar[5][1].forEach(el => {
                 nameCar.push(el.nm.replace(/\s+/g, ''))
                 const nameTable = el.nm.replace(/\s+/g, '')
-                //    console.log('fg' + el.nm.replace(/\s+/g, ''))
                 const sensor = Object.entries(el.lmsg.p)
-                //    console.log(nameTable)
-                //     createNameTable(nameTable)
                 postParametrs(nameTable, sensor)
-
-
             })
             zaprosSpisokb(nameCar)
         })
 }
 
-
-
-
-
-
-function createNameTable(name) {
-    try {
-        const sql = `create table if not exists ${name}(
-         id int(255) primary key auto_increment,
-         name varchar(255) not null,
-         value varchar(255) not null,
-         status varchar(255)
-
-       )`;
-        connection.query(sql, function (err, results) {
-            if (err) console.log(err + 'ошибка2');
-            // else console.log("Таблица создана");
-        })
-    }
-    catch (e) {
-        console.log(e)
-    }
-}
-
 function postParametrs(name, param) {
-    console.log('машины')
-    console.log('fg' + name)
     param.forEach(el => {
         el.unshift(name)
         el.push('new')
     })
-    console.log(param)
     try {
         const selectBase = `SELECT name FROM params WHERE nameCar='${name}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
-            console.log(results)
             if (results.length === 0) {
-                console.log('создаем')
                 const sql = `INSERT INTO params(nameCar, name, value, status) VALUES?`;
                 connection.query(sql, [param], function (err, results) {
                     if (err) console.log(err);
-
                 });
-
             }
             else if (results.length > 0) {
                 console.log('больше 0')
@@ -184,7 +126,6 @@ function postParametrs(name, param) {
 
                 param.forEach(el => {
                     if (mas.includes(el[1])) {
-
                         const sql = `UPDATE params SET nameCar='${name}',name='${el[1]}', value='${el[2]}', status='true' WHERE nameCar='${name}' AND name='${el[1]}'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err);
@@ -192,11 +133,9 @@ function postParametrs(name, param) {
                         return
                     }
                     if (!mas.includes(el[0])) {
-
                         const sql = `INSERT INTO params SET nameCar='${name}',name='${el[1]}', value='${el[2]}', status='new'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err);
-
                         });
                         return
                     }
@@ -206,7 +145,6 @@ function postParametrs(name, param) {
                         const sql = `UPDATE params SET  status='false' WHERE nameCar='${name}' AND name='${el}'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err);
-
                         });
                     }
                 })
@@ -221,9 +159,6 @@ function postParametrs(name, param) {
 
 
 function getMainInfo(name, res) {
-    // let geoX;
-    // let geoY;
-    // console.log('запуск')
     const flags = 1 + 1026
     const prms = {
         "spec": {
@@ -248,7 +183,6 @@ function getMainInfo(name, res) {
                     if (el.nm === name) {
                         const geoX = el.pos.x
                         const geoY = el.pos.y
-                        //  console.log(geoX, geoY)
                         res.json({ geoX, geoY })
                     }
                 })
@@ -264,13 +198,12 @@ const convert = (ob) => {
 
 function zaprosSpisokb(name) {
     const massItog = [];
-    // console.log(name)
     name.forEach(itey => {
         const nameCar = itey
         try {
             const selectBase = `SELECT tyresdiv, pressure,temp FROM tyres WHERE nameCar='${nameCar}'`
             connection.query(selectBase, function (err, results) {
-                if (err) console.log(err + 'ошибка8');
+                if (err) console.log(err);
                 if (results === undefined) {
                     console.log('нет таблицы')
                 }
@@ -280,15 +213,13 @@ function zaprosSpisokb(name) {
                     try {
                         const selectBase = `SELECT name, value FROM params WHERE nameCar='${nameCar}'`
                         connection.query(selectBase, function (err, results) {
-                            if (err) console.log(err + 'ошибка9');
+                            if (err) console.log(err);
                             const data = results
                             let integer;
                             data.forEach((el) => {
                                 modelUniqValues.forEach((item) => {
-                                    //   console.log(item.pressure)
                                     if (el.name == item.pressure) {
                                         if (nameCar === 'А652УА198') {
-                                            //  console.log(el.value)
                                             integer = parseFloat((el.value / 10).toFixed(1))
                                         }
                                         else {
@@ -320,7 +251,6 @@ function zaprosSpisokb(name) {
 
 
 function createDate() {
-
     let today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
@@ -331,7 +261,6 @@ function createDate() {
     const minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
     time = hour + ':' + minutes
     const todays = today + ' ' + time
-    console.log(today)
     return [todays]
 
 }

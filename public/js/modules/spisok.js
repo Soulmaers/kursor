@@ -26,7 +26,7 @@ export async function loadParamsViewList(car) {
     const models = await tyr.json()
     const dat = await fetch('api/wialonAll', params)
     const data = await dat.json()
-    console.log(model)
+
     testov.push([model, models, data])
     return [model, models, data]
 }
@@ -44,7 +44,7 @@ export function conturTest(testov) {
             e.remove();
         })
     }
-    console.log(testov)
+
     testov.forEach(elem => {
         dashView(elem[0].message)
         const nameCar = elem[0].message.replace(/\s+/g, '')
@@ -65,13 +65,11 @@ export function conturTest(testov) {
         listItemCar.appendChild(listTrail)
         if (elem[0].result) {
             const modelUniq = convert(elem[0].result)
-            console.log(modelUniq)
+
             modelUniq.forEach(os => {
                 const osi = document.createElement('div')
                 osi.classList.add('osi_list')
-
                 if (os.trailer !== 'Прицеп' && os.tyres === '2' || os.trailer !== 'Прицеп' && os.tyres === '4') {
-                    console.log(os)
                     fnTagach(os, nameCar)
                 }
                 if (os.trailer === 'Прицеп' && os.tyres === '2' || os.trailer == 'Прицеп' && os.tyres === '4') {
@@ -98,7 +96,7 @@ export function conturTest(testov) {
                         shina.forEach(e => {
                             if (e.id == item.tyresdiv) {
                                 if (el.status === 'false') {
-                                    console.log('статус1')
+
                                     e.children[0].style.fill = 'gray'
                                     return
                                 }
@@ -133,7 +131,6 @@ export function conturTest(testov) {
 
 
 function fnTagach(arr, nameCar) {
-    console.log(arr, nameCar)
     const listItem = document.querySelector(`.${nameCar}`)
     const obj = [];
     let counts = 0
@@ -308,14 +305,12 @@ export function zaprosSpisok() {
     const minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
     time = hour + ':' + minutes
     const todays = today + ' ' + time
-    console.log('время')
     updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
 
 setInterval(zaprosSpisok, 300000)
 
 function viewListKoleso(arg, params, nameCar) {
-    console.log(params)
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
     if (params.result) {
@@ -326,15 +321,13 @@ function viewListKoleso(arg, params, nameCar) {
         modelUniqValues.forEach(el => {
             r.push(el.tyresdiv)
         })
-        const uniq = convert(r)
-
         arg.result.forEach((el) => {
             modelUniqValues.forEach((item) => {
                 if (el.name == item.pressure) {
                     shina.forEach(e => {
                         if (e.id == item.tyresdiv) {
                             if (el.status === 'false') {
-                                console.log('статус1')
+
                                 e.children[0].style.fill = 'gray'
                                 return
                             }

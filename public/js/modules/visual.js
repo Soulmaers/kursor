@@ -39,7 +39,6 @@ export async function visual(el) {
         }
     })
     if (plug[2].classList.contains('activGraf')) {
-        console.log('лефт')
         wrapperLeft.style.display = 'none'
         grafics.style.display = 'flex'
     }
@@ -61,7 +60,6 @@ export async function visual(el) {
     const activePost = el.textContent.replace(/\s+/g, '')
     iconFind(activePost)
     await iconFindWindows(activePost)
-
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
@@ -69,7 +67,6 @@ export async function visual(el) {
         icon = el;
         iconParams()
         timeIcon = setInterval(iconParams, 300000) //отрисовываем карту osm
-
     }
     kranParams()
     setInterval(kranParams, 300000)
@@ -79,7 +76,6 @@ export async function visual(el) {
         time = setInterval(geoloc, 300000) //отрисовываем карту osm
     }
 }
-
 
 
 export function visualNone(e) {
@@ -127,7 +123,6 @@ export function visualNone(e) {
     modalCenterOs.style.display = 'none'
     wrapperUp.style.display = 'none'
     speedGraf.style.display = 'none'
-
     e.classList.remove('color')
     if (container.children.length > 0) {
         const containerArr = Array.from(container.children)
@@ -164,34 +159,14 @@ export function liCreate() {
     }
 }
 
-/*
-const obo = document.querySelector('.obo')
-if (obo.children.length !== 0) {
-    const list = Array.from(obo.children)
-    list.forEach(el => {
-        el.remove();
-    })
-}
-const count = arg.length
-for (let i = 0; i <= count; i++) {
-    let li = document.createElement('li');
-    li.className = "msg";
-    obo.append(li);
-}*/
 
 export function view(arg) {
-    console.log('вью')
-    console.log(arg)
-    //liCreate(arg)
     const msg = document.querySelectorAll('.msg')
-    //console.log(msg)
-    // console.log(arg)
     arg.forEach((el, index) => {
         msg[index].textContent = `${el.name}:${el.value}`
     })
 
 }
-
 
 export const convert = (ob) => {
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
@@ -200,15 +175,12 @@ export const convert = (ob) => {
 
 
 export function viewConfigurator(arg, params) {
-
     if (params) {
         const parametrs = convert(params)
         const alerts = [];
         const tiresLink = document.querySelectorAll('.tires_link')
         let activePost;
         const active = document.querySelectorAll('.color')
-        const alarm = document.querySelector('.alarm')
-        const alarmCheck = document.querySelector('.alarmCheck')
         if (active[0] == undefined) {
             const listItem = document.querySelectorAll('.listItem')[0]
             activePost = listItem.textContent.replace(/\s+/g, '')
@@ -220,15 +192,11 @@ export function viewConfigurator(arg, params) {
         arg.forEach(el => {
             par.push(el.name)
         })
-        //  console.log(arg)
         parametrs.forEach(item => {
             let signal;
             let done;
             tiresLink.forEach(e => {
-
                 if (e.id == item.tyresdiv) {
-                    //console.log(e)
-                    // console.log(item)
                     if (!par.includes(item.pressure)) {
                         e.children[0].textContent = 'off'
                         e.children[0].style.color = '#000'
@@ -239,7 +207,6 @@ export function viewConfigurator(arg, params) {
                     else {
                         arg.forEach((el) => {
                             if (el.name === item.pressure) {
-                                console.log(el.status)
                                 if (activePost === 'А652УА198') {
                                     done = parseFloat((el.value / 10).toFixed(1))
                                 }
@@ -263,7 +230,6 @@ export function viewConfigurator(arg, params) {
                                     signal = objColor[generFront(done)]
                                 }
                                 if (el.status === 'false') {
-                                    //   console.log('ап2')
                                     e.children[0].style.background = 'lightgray';
                                     return
                                 }
@@ -272,22 +238,17 @@ export function viewConfigurator(arg, params) {
                             if (el.name === item.temp) {
                                 tiresLink.forEach(e => {
                                     if (e.id == item.tyresdiv) {
-
                                         if (el.value === '-128' || el.value === '-50') {
-
                                             el.value = 'err'
                                             e.children[1].textContent = el.value
                                             if (el.status === 'false') {
-                                                //  console.log('22')
                                                 e.children[1].style.background = 'lightgray';
-                                                //  return
                                             }
                                         }
                                         if (el.value >= -51 && el.value < 36) {
                                             e.children[1].textContent = el.value + '°C'
                                             e.children[1].setAttribute('rel', `${item.temp}`)
                                             if (el.status === 'false') {
-                                                //  console.log('22')
                                                 e.children[1].style.background = 'lightgray';
                                                 return
                                             }
@@ -321,17 +282,6 @@ export function viewConfigurator(arg, params) {
         })
     }
 }
-/*
-function alertCreate() {
-    let div = document.createElement('div');
-    div.className = "alarm";
-    const headerCar = document.querySelector('.header_car')
-    headerCar.prepend(div);
-}
-//alertCreate()
-
-*/
-
 function alarmMin() {
     const div = document.querySelector('.alarm')
     div.style.display = 'block'
@@ -346,20 +296,11 @@ function alarmMax() {
     ogon.style.display = 'block'
 }
 
-
-
 export function alarmClear() {
     const div = document.querySelector('.alarm')
     div.style.display = 'none'
-
     const ogon = document.querySelector('.ogon')
     ogon.style.display = 'none'
-    //  const alarmMinn = document.querySelector('.dav_min')
-    //const info = document.querySelector('.info')
-    // alarmMinn.style.display = 'none'
-    // info.style.display = 'none'
-    //  const alarmMaxx = document.querySelector('.dav_max')
-    // alarmMaxx.style.display = 'none'
     const alarmCheck = document.querySelectorAll('.alarmCheck')
     alarmCheck.forEach(e => {
         e.style.borderTopLeftRadius = 'none'
@@ -371,14 +312,10 @@ export function alarmClear() {
 
 
 export async function viewOs(counts) {
-    console.log('рисуем оси')
     const container = document.querySelector('.container')
     if (container.children.length > 0) {
-        console.log('удаление!!!')
-        //  console.log(container.children)
         const containerArr = Array.from(container.children)
         containerArr.forEach(it => {
-            console.log('удаление цикл')
             it.remove();
         })
 
@@ -402,7 +339,6 @@ export async function viewOs(counts) {
         centerOsDiv.setAttribute("id", `${index}`);
     })
     const tires = document.querySelectorAll('.tires')
-    console.log(tires)
     let indexTires = 0;
     tires.forEach(el => {
         el.style.display = 'none'
@@ -422,10 +358,7 @@ export async function viewOs(counts) {
         link.appendChild(tiresT);
         link.appendChild(place);
     })
-    /*
-    osi.forEach(el => {
-        el.style.display = 'none'
-    })*/
+
     const cont2 = document.createElement('div');
     cont2.classList.add('cont')
     container.appendChild(cont2)
@@ -440,19 +373,12 @@ export async function viewOs(counts) {
 }
 function styleShinaActive(arg) {
     reqProtectorBase()
-    //  arg.textContent = 'Давл.\nТемп.'
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
-    const centerOs = document.querySelectorAll('.centerOs')
-    const vnut = document.querySelectorAll('.vnut')
-    const osi = document.querySelectorAll('.osi')
     const place = document.querySelectorAll('.place')
     const main = document.querySelector('.main')
-    const grafics = document.querySelector('.grafics')
-
     main.style.display = 'flex'
     arg.style.fontSize = '0.65rem'
-
     tyresD.forEach(e => {
         e.style.background = 'black';
         e.style.borderBottom = 'none'
@@ -463,7 +389,6 @@ function styleShinaActive(arg) {
         e.style.fontSize = '0.8rem'
         e.style.justifyContent = 'flex-start'
     })
-
     place.forEach(e => {
         e.style.display = 'none';
     })
@@ -484,15 +409,12 @@ export const pricep = (elem) => {
     const cont = document.querySelector('.cont')
     cont.append(elem.parentNode)
     cont.style.marginTop = '72px'
-    // console.log(elem.children[0])
     elem.children[0].style.background = "#00FFFF"
     elem.classList.add('pricep')
+
+
+
 }
-
-
-
-
-
 
 export function viewDinamic(arr, maxProtector) {
     const conts = document.querySelectorAll('.contBar2')
@@ -588,59 +510,3 @@ export function viewDinamic(arr, maxProtector) {
     }
 }
 
-
-
-
-
-/*
-var c = document.getElementById("drawLine");
-var ctx = c.getContext("2d");
-
-ctx.beginPath();
-ctx.lineWidth = "1";
-ctx.strokeStyle = "#000";
-ctx.moveTo(0, 60);
-ctx.lineTo(0, y1);
-ctx.lineTo(346, y2);
-ctx.lineTo(346, 60);
-ctx.lineTo(173, 60);
-
-ctx.lineTo(0, 60);
-ctx.fillStyle = "rgba(204,85,0, 0.5)";
-ctx.fill();
-ctx.stroke();
-
-ctx.beginPath();
-ctx.lineWidth = "1";
-ctx.strokeStyle = "#000";
-ctx.moveTo(0, 0);
-ctx.lineTo(0, 50);
-ctx.lineTo(4, 50);
-ctx.lineTo(9, 0);
-ctx.fillStyle = "rgba(255,255,255, 1)";
-ctx.fill();
-ctx.stroke();
-
-ctx.beginPath();
-ctx.lineWidth = "1";
-ctx.strokeStyle = "#000";
-ctx.moveTo(346, 0);
-ctx.lineTo(346, 50);
-ctx.lineTo(342, 50);
-ctx.lineTo(337, 0);
-ctx.fillStyle = "rgba(255,255,255, 1)";
-ctx.fill();
-ctx.stroke();
-
-
-ctx.beginPath();
-ctx.lineWidth = "1";
-ctx.strokeStyle = "#000";
-ctx.moveTo(164, 0);
-ctx.lineTo(169, 50);
-ctx.lineTo(176, 50);
-ctx.lineTo(181, 0);
-ctx.fillStyle = "rgba(255,255,255, 1)";
-ctx.fill();
-ctx.stroke();
-*/

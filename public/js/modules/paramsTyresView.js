@@ -72,7 +72,6 @@ export async function loadParamsView() {
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.listItem')[0]
-        //    console.log(listItem.textContent)
         activePost = listItem.textContent.replace(/\s+/g, '')
         titleCar.textContent = listItem.textContent
     }
@@ -90,7 +89,6 @@ export async function loadParamsView() {
         .then((res) => {
             const model = res
             if (model.values && model.values.length > 0) {
-                console.log(model.values)
                 viewOs(model.values.length)
                 const osi = document.querySelectorAll('.osi')
                 const centerOs = document.querySelectorAll('.centerOs')
@@ -99,7 +97,6 @@ export async function loadParamsView() {
                         pricep(centerOs[el.osi - 1])
                         :
                         centerOs[el.osi - 1].children[0].style.background = "#3333FF"
-                    console.log(el.tyres)
                     if (el.tyres == 2) {
                         btnShina[1].classList.contains('active') ? centerOs[el.osi - 1].children[0].style.width = '204px' :
                             centerOs[el.osi - 1].children[0].style.width = '204px'
@@ -115,11 +112,15 @@ export async function loadParamsView() {
                         centerOs[el.osi - 1].nextElementSibling.children[0].style.display = 'flex';
                         centerOs[el.osi - 1].nextElementSibling.children[1].style.display = 'flex';
                     }
+
                 })
-                const gos = document.createElement('input')
-                gos.classList.add('gosNumber')
-                gos.value = model.values[0].gosp
-                container.appendChild(gos)
+                const gos = document.querySelector('.gosNumber')
+                if (model.values.find(e => e.trailer === 'Прицеп')) {
+                    gos.value = model.values[0].gosp
+                    gos.style.display = 'flex'
+                    return
+                }
+                gos.style.display = 'none'
             }
             else {
                 console.log('база пустая')
@@ -130,6 +131,8 @@ export async function loadParamsView() {
     viewPokasateli()
     setInterval(viewPokasateli, 300000)
 }
+
+
 
 export function viewPokasateli() {
     // console.log('запускВиджет')
@@ -179,7 +182,6 @@ export function viewPokasateli() {
                     })
 
                     view(data.values)
-                    console.log(params.values)
                     viewConfigurator(data.values, params.values)
                 })
         })

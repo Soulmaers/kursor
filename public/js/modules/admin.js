@@ -307,10 +307,8 @@ export async function deleteFn(id, log) {
 }
 
 export function checkCreate(nameCar) {
-    console.log(nameCar)
     const ide = document.getElementById('all')
     nameCar.forEach(elem => {
-        console.log(elem)
         const box = document.querySelector('.check_boxs')
         const activePost = elem.replace(/\s+/g, '')
         const list = document.createElement('p')
@@ -327,15 +325,13 @@ export function checkCreate(nameCar) {
             el.checked === false ? enabledSettings.push(el.value) : null
         })
     }
-    console.log(checkboxes)
+
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function () {
             if (this.id !== "all") {
-                console.log(this.id)
-
                 ide.checked = false;
                 enabledSettings = Array.from(checkboxes).filter(i => i.checked).map(i => i.value)
-                console.log(enabledSettings)
+
 
             }
             if (this.id == "all") {
@@ -348,8 +344,6 @@ export function checkCreate(nameCar) {
                         enabledSettings.push(el.value)
                     }
                 })
-                //    enabledSettings = Array.from(checkboxes.map(el => el.value))
-                console.log(enabledSettings)
                 ide.checked = true;
             }
         })
@@ -378,10 +372,8 @@ async function fnReqObject(login, role, objects) {
     }
     const res = await fetch('/api/checkObject', param)
     const response = await res.json()
-    console.log(response.message)
     const messaga = document.querySelector('.messagech')
     messaga.textContent = response.message
-    console.log(messaga.textContent)
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 2000)
 
