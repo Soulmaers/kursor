@@ -344,16 +344,19 @@ function createDate() {
 
 
 function proverka(arr) {
+    //  console.log(arr)
     let time = new Date()
     arr.forEach(el => {
+
         let alarm;
         const name = 'alarm' + el[0] + el[1]
-        const sqls1 = `SELECT data, senspressure, bar, temp, alarm  FROM ${name} WHERE 1`
+        const sqls1 = `SELECT * FROM alarms WHERE name='${el[0]}' AND senspressure='${el[1]}'`
         connection.query(sqls1, function (err, results) {
-            if (err) console.log(err + 'ошибка10');
-            if (results == undefined) {
+            //  console.log(results)
+            if (err) console.log(err);
+            if (results.length === 0) {
                 if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
-                    //  console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
+                    //    console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
                     const data = createDate()
                     alarm = 'Потеря связи с датчиком'
                     alarmBase(data, el, alarm)
@@ -381,16 +384,16 @@ function proverka(arr) {
 
                 }
             }
-            else if (results !== undefined) {
+            else if (results.length !== 0) {
                 if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
 
                     //   console.log(results[results.length - 1].alarm)
                     //  console.log(el)
                     if (results[results.length - 1].alarm == 'Потеря связи с датчиком') {
-                        //     console.log('таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
+                        //   console.log('таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
                         return
                     } else {
-                        //    console.log('таблица есть, изменение аларма,потеря связи с датчиком ')
+                        //   console.log('таблица есть, изменение аларма,потеря связи с датчиком ')
                         const data = createDate()
                         alarm = 'Потеря связи с датчиком'
                         alarmBase(data, el, alarm)
@@ -404,10 +407,10 @@ function proverka(arr) {
                         //  console.log(Number(results[results.length - 1].bar))
                         //  console.log(el)
                         if (Number(results[results.length - 1].bar == el[2]) && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                            //    console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
+                            //   console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
                             //  return
                         } else {
-                            //   console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
+                            //    console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
                             const data = createDate()
                             alarm = 'Критически низкое давление'
                             alarmBase(data, el, alarm)
@@ -420,7 +423,7 @@ function proverka(arr) {
                         // console.log(results[results.length - 1].bar)
 
                         if (Number(results[results.length - 1].bar == el[2]) && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                            //  console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
+                            //   console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
                             //   return
                         } else {
                             //  console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
@@ -432,12 +435,12 @@ function proverka(arr) {
                         return
                     }
                     else if (el[2] >= 6 || el[2] <= 10) {
-
+                        console.log(el)
                         if (results[results.length - 1].alarm === 'Норма') {
                             //   console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
                             // return
                         } else {
-                            //   console.log(el + ' ' + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
+                            //  console.log(el + ' ' + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
                             const data = createDate()
                             alarm = 'Норма'
                             alarmBase(data, el, alarm)
@@ -462,24 +465,8 @@ function alarmBase(data, tyres, alarm) {
     const value = [dannie];
     const tableModel = 'alarm' + dannie[1] + dannie[2]
     try {
-        const sql = `create table if not exists ${tableModel}(
-            id int(255) primary key auto_increment,
-            data varchar(255),
-            name varchar(255),
-            senspressure varchar(255),
-            bar varchar(255),
-            temp varchar(255),
-            alarm varchar(255) not null        
-            )`
-        connection.query(sql, function (err, results) {
-            if (err) if (err) console.log(err + 'ошибка');
 
-            else {
-
-                console.log("Таблица alarm создана")
-            };
-        })
-        const sqls = `INSERT INTO  ${tableModel} (data, name, senspressure, bar,
+        const sqls = `INSERT INTO alarms (data, name, senspressure, bar,
                             temp, alarm) VALUES?`;
         connection.query(sqls, [value], function (err, results) {
             if (err) console.log(err);

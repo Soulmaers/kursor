@@ -67,6 +67,7 @@ export async function loadParamsView() {
     const titleCar = document.querySelector('.title_two')
     const btnShina = document.querySelectorAll('.modals')
     const listItem = document.querySelectorAll('.link_menu')[0]
+    const container = document.querySelector('.container')
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
@@ -115,10 +116,15 @@ export async function loadParamsView() {
                         centerOs[el.osi - 1].nextElementSibling.children[1].style.display = 'flex';
                     }
                 })
+                const gos = document.createElement('input')
+                gos.classList.add('gosNumber')
+                gos.value = model.values[0].gosp
+                container.appendChild(gos)
             }
             else {
                 console.log('база пустая')
             }
+
         })
 
     viewPokasateli()

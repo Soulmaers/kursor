@@ -1166,11 +1166,16 @@ div.spoyler {
   align-items: center;
 }
 
-
+.gosNumber {
+  margin-top: 40px;
+  padding: 5px;
+  text-align: center;
+}
 
 
 .tires_link {
   position: relative;
+
 }
 
 

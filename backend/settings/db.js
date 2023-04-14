@@ -14,12 +14,19 @@ var pool = mysql.createPool({
     database: process.env.DB_NAME
 });*/
 connection.connect((error) => {
-    if (error) {
-        return console.log('Ошибка подключения к базе')
+    try {
+        if (error) {
+            return console.log('Ошибка подключения к базе')
+        }
+        else {
+            return console.log('Подключение к БД выполнено')
+        }
+
     }
-    else {
-        return console.log('Подключение к БД выполнено')
+    catch (e) {
+        console.log(e)
     }
+
 })
 
 module.exports = connection

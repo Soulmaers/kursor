@@ -5,6 +5,7 @@ import { zapros } from './menu.js'
 export function postModel(massModel) {
     console.log('работаем модель')
     console.log(massModel)
+
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
     console.log(activePost)
@@ -14,7 +15,7 @@ export function postModel(massModel) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ massModel, activePost }),
+        body: JSON.stringify({ massModel, activePost, gosp }),
     })
         .then((res) =>
             res.json())

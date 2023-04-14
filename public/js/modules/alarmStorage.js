@@ -16,16 +16,17 @@ export async function alarmFind(name) {
         const sorTyres = convert(tyresmassiv.values)
         const storValue = [];
         sorTyres.forEach(async e => {
-            e.pressure
+            const tyresP = e.pressure
             const activeName = 'alarm' + activePost + e.pressure
             const stor = await fetch('api/alarmFind', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ activeName })
+                body: JSON.stringify({ activePost, tyresP })
             })
             const storList = await stor.json();
+            console.log(storList)
             storValue.push(storList)
 
         })

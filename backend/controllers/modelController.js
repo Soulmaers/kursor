@@ -61,8 +61,10 @@ module.exports.updateModel = (req, res) => {
     console.log('обновляем')
     //  console.log(req.body.massModel)
     const massiv = req.body.massModel
+    console.log(req.body.gosp)
     const tableModel = 'model' + req.body.activePost
     massiv.forEach(el => {
+        el.push(req.body.gosp)
         try {
             const selectBase = `SELECT osi FROM ${tableModel} WHERE osi=${el[0]}`
             connection.query(selectBase, function (err, results) {
@@ -72,7 +74,7 @@ module.exports.updateModel = (req, res) => {
 
                 if (results.length === 0) {
                     console.log(el)
-                    const selectBase = `INSERT INTO ${tableModel}(osi, trailer, tyres) VALUES?`
+                    const selectBase = `INSERT INTO ${tableModel}(osi, trailer, tyres, gosp) VALUES?`
                     connection.query(selectBase, [[el]], function (err, results) {
                         if (err) {
                             console.log(err)
@@ -81,7 +83,7 @@ module.exports.updateModel = (req, res) => {
                     })
                 }
                 if (results.length > 0) {
-                    const postModel = `UPDATE ${tableModel} SET osi='${el[0]}', trailer='${el[1]}', tyres='${el[2]}' WHERE osi='${el[0]}'`
+                    const postModel = `UPDATE ${tableModel} SET osi='${el[0]}', trailer='${el[1]}', tyres='${el[2]}',gosp='${req.body.gosp}' WHERE osi='${el[0]}'`
                     connection.query(postModel, function (err, results) {
                         if (err) {
                             console.log(err)
@@ -416,13 +418,14 @@ module.exports.model = (req, res) => {
             id int(255) primary key auto_increment,
             osi int(255) not null,
             trailer varchar(255) not null,
-            tyres int(255) not null
+            tyres int(255) not nullб
+            gosp varchar(255) not null
           )`;
         connection.query(sql, function (err, results) {
             if (err) console.log(err);
             else console.log("Таблица модели создана");
         })
-        const postModel = `INSERT INTO ${tableModel}(osi, trailer, tyres) VALUES?`
+        const postModel = `INSERT INTO ${tableModel}(osi, trailer, tyres, gosp) VALUES?`
         connection.query(postModel, [req.body.model], function (err, results) {
             if (err) console.log(err + 'ошибка39')
             //console.log(results)
@@ -639,7 +642,7 @@ module.exports.modelView = (req, res) => {
     //  console.log(req.body.activePost)
     const tableModelView = 'model' + req.body.activePost
     try {
-        const selectBase = `SELECT osi, trailer,tyres FROM ${tableModelView} WHERE 1`
+        const selectBase = `SELECT osi, trailer,tyres,gosp FROM ${tableModelView} WHERE 1`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err + 'ошибка25')
             if (results === undefined) {
@@ -725,15 +728,19 @@ module.exports.listTyres = (req, res) => {
 }
 
 module.exports.alarmFind = (req, res) => {
-    const tableModel = req.body.activeName
+    const nameCar = req.body.activePost
+    const tyresp = req.body.tyresP
     try {
-        const sqls1 = `SELECT data, senspressure, bar, temp, alarm  FROM ${tableModel} WHERE 1`
+        const sqls1 = `SELECT data, senspressure, bar, temp, alarm  FROM alarms WHERE name='${nameCar}' AND senspressure='${tyresp}'`
         connection.query(sqls1, function (err, results) {
             if (err) console.log(err + 'ошибка23')
-            if (results == undefined) {
+            if (results.length === 0) {
                 res.json([])
             }
-            res.json(results)
+            else {
+                res.json(results)
+            }
+
         })
     }
     catch (e) {

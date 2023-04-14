@@ -35,19 +35,18 @@ export function zapros() {
 
     const flagss = 1 + 4096//4096
     const prmss = {
-        "spec": {
-            "itemsType": "avl_unit",
-            "propName": "sys_name",
-            "propValueMask": "*",
-            "sortType": "sys_name"
-        },
-        "force": 1,
-        "flags": flagss,
-        "from": 0,
-        "to": 0
-    };
+        "spec": [{
+            "type": 'id',
+            "data": 26702383,//26702383,//26702371,
+            "flags": 1048576,                 //    1048576
+            "mode": 0
+        }
+        ]
+    }
+
+
     const remote1s = wialon.core.Remote.getInstance();
-    remote1s.remoteCall('core/search_items', prmss,
+    remote1s.remoteCall('core/update_data_flags', prmss,
         async function (code, result) {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));

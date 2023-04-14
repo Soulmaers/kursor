@@ -137,16 +137,22 @@ function os(arr) {
         }))
     viewMenuParams()
     //запускаем функцию отображения кнопок под параметры+сохраняем в массив последнее выбранное колесо+ скрываем див с графиком скорости
+    const gos = document.createElement('input')
+    gos.classList.add('gosNumber')
+    gos.setAttribute('placeholder', 'гос. номер прицепа')
+    container.appendChild(gos)
 
 }
 
 export async function changeBase(massModel, activePost) {
+    const gosp = (document.querySelector('.gosNumber')).value
+    console.log(document.querySelector('.gosNumber'))
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ massModel, activePost }))
+        body: (JSON.stringify({ massModel, activePost, gosp }))
     }
     console.log('запускаем пост')
     const res = await fetch('/api/updateModel', param)
