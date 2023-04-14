@@ -282,8 +282,6 @@ export function viewConfigurator(arg, params) {
                                                 e.children[1].style.background = 'lightgray';
                                                 //  return
                                             }
-
-
                                         }
                                         if (el.value >= -51 && el.value < 36) {
                                             e.children[1].textContent = el.value + '°C'

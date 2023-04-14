@@ -179,7 +179,7 @@ export function viewPokasateli() {
                     })
 
                     view(data.values)
-                    console.log(data.values)
+                    console.log(params.values)
                     viewConfigurator(data.values, params.values)
                 })
         })

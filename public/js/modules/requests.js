@@ -37,7 +37,6 @@ export function postTyres(tyres) {
     const activePost = active[0].textContent.replace(/\s+/g, '')
     const name = active[0].textContent.replace(/\s+/g, '')
     console.log(name)
-    // paramsDelete(name)
     fetch('api/tyres', {
         method: "POST",
         headers: {
@@ -225,44 +224,7 @@ export async function reqModalBar(arr, id) {
     console.log(result)
 
 }
-/*
-export async function reqTech(arr, id) {
-    console.log(arr)
-    let activePost;
-    const active = document.querySelectorAll('.color')
-    if (active[0] == undefined) {
-        const listItem = document.querySelectorAll('.link_menu')[0]
-        //  console.log(listItem.textContent)
-        activePost = listItem.textContent.replace(/\s+/g, '')
 
-    }
-    else {
-        activePost = active[0].textContent.replace(/\s+/g, '')
-    }
-    const arrValue = [];
-    const formValue = document.querySelectorAll('.formValue')
-    //  console.log(formValue)
-    const inputMM = document.querySelector('.maxMMM')
-    // console.log(JSON.stringify({ id, arr, arrValue, activePost }))
-    arrValue.push(id)
-    formValue.forEach(el => {
-        arrValue.push(el.value)
-    })
-    const place = inputMM.placeholder
-    !inputMM.value ? arrValue.push(place) : arrValue.push(inputMM.value)
-    // console.log(arrValue)
-    // console.log(id, arr, arrValue, activePost)
-    const complete = await fetch('api/tech', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id, arr, activePost }),
-    })
-    const result = await complete.json()
-    return console.log(result)
-}
-*/
 
 export async function viewBar(id) {
     console.log(id)

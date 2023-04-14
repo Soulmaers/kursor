@@ -36,7 +36,7 @@ router.post('/api/datawialonGeo', controllerWialon.datawialonGeo)
 router.post('/api/modalBar', controllerModel.modalBar)
 
 
-router.post('/api/model', controllerModel.model)
+//router.post('/api/model', controllerModel.model)
 router.post('/api/tyres', controllerModel.tyres)
 router.post('/api/techView', controllerModel.techView)
 router.post('/api/techViewAll', controllerModel.techViewAll)
