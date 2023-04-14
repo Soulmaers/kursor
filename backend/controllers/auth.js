@@ -167,7 +167,7 @@ module.exports.action = function (req, res) {
     if (req.user) {
         const login = req.user[0].name
         const role = req.user[0].role
-        console.log(login)
+        //  console.log(login)
         res.render('in.ejs', {
             user: login,
             role: role

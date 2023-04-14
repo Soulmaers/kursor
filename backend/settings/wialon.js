@@ -18,7 +18,7 @@ function init(user) {
     // console.log(user)
     // console.log(typeof user)
     if (user !== 'TDRMX') {
-        console.log('старт1')
+        //    console.log('старт1')
         kluch = '0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178'
     }
     if (user === 'TDRMX') {
@@ -29,7 +29,7 @@ function init(user) {
     // console.log('init')
     session.start({ token: kluch })
         .catch(function (err) {
-            console.log(err + 'ошибка1');
+            console.log(err);
         })
         .then(function (data) {
             //  console.log('обновление')
@@ -44,7 +44,7 @@ function init(user) {
 
 
 function speed(t1, t2, int, id, res) {
-    console.log(t1, t2, int, id)
+    //   console.log(t1, t2, int, id)
     const prms2 = {
         "itemId": id,   //25343786,
 
@@ -113,8 +113,8 @@ function createTable() {
                 nameCar.push(el.nm.replace(/\s+/g, ''))
                 const nameTable = el.nm.replace(/\s+/g, '')
                 const sensor = Object.entries(el.lmsg.p)
-                //   console.log(sensor.length)
-                createNameTable(nameTable)
+                //   console.log(nameTable)
+                //     createNameTable(nameTable)
                 postParametrs(nameTable, sensor)
 
 
@@ -148,15 +148,20 @@ function createNameTable(name) {
 }
 
 function postParametrs(name, param) {
-    //console.log(name)
-    // console.log(param)
+    console.log('машины')
+    console.log(name)
+    param.forEach(el => {
+        el.unshift(name)
+    })
+    console.log(param)
     try {
-        const selectBase = `SELECT name FROM ${name} WHERE 1`
+        const selectBase = `SELECT name FROM params WHERE nameCar='${name}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
-            if (results.length < 1) {
+            console.log(results)
+            if (results.length === 0) {
                 //  console.log('создаем')
-                const sql = `INSERT INTO ${name}(name,value) VALUES?`;
+                const sql = `INSERT INTO params(nameCar, name,value) VALUES?`;
                 connection.query(sql, [param], function (err, results) {
                     if (err) console.log(err + 'ошибка3');
                     // console.log(results)
@@ -182,7 +187,7 @@ function postParametrs(name, param) {
 
                     if (mas.includes(el[0])) {
                         // console.log('апдейт')
-                        const sql = `UPDATE ${name} SET name='${el[0]}', value='${el[1]}', status='true' WHERE name='${el[0]}'`;
+                        const sql = `UPDATE params SET nameCar='${name}',name='${el[0]}', value='${el[1]}', status='true' WHERE nameCar='${name}' AND name='${el[0]}'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err + 'ошибка4');
                             else {
@@ -193,7 +198,7 @@ function postParametrs(name, param) {
                     }
                     if (!mas.includes(el[0])) {
                         // console.log('запись новых')
-                        const sql = `INSERT INTO ${name} SET name='${el[0]}', value='${el[1]}', status='new'`;
+                        const sql = `INSERT INTO params SET nameCar='${name}',name='${el[0]}', value='${el[1]}', status='new'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err + 'ошибка5');
                             else {
@@ -206,7 +211,7 @@ function postParametrs(name, param) {
                 mas.forEach(el => {
                     if (!paramName.includes(el)) {
                         //  console.log('апдейт на фолс')
-                        const sql = `UPDATE ${name} SET  status='false' WHERE name='${el}'`;
+                        const sql = `UPDATE params SET  status='false' WHERE nameCar='${name}'AND name='${el}'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err + 'ошибка6');
                             else {
@@ -271,9 +276,9 @@ function zaprosSpisokb(name) {
     const massItog = [];
     console.log(name)
     name.forEach(itey => {
-        const nameCar = 'tyres' + itey
+        const nameCar = itey
         try {
-            const selectBase = `SELECT tyresdiv, pressure,temp FROM ${nameCar} WHERE 1`
+            const selectBase = `SELECT tyresdiv, pressure,temp FROM tyres WHERE nameCar='${nameCar}'`
             connection.query(selectBase, function (err, results) {
                 if (err) console.log(err + 'ошибка8');
                 if (results === undefined) {
