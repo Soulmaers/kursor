@@ -140,36 +140,17 @@ export function zapros() {
             const arr1 = Object.values(result);
             const arrCar = arr1[5];
             dann = arrCar
-
             const test = await Promise.all(arrCar.map(el => {
                 return loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями
             })
             )
-            const tt = new Date()
-            const role = document.querySelectorAll('.log')[0].textContent
-            const login = document.querySelectorAll('.log')[1].textContent
-            const massObjectCar = await dostupObject(login)
-            const orig = [];
-            console.log(test)
-            test.forEach(item => {
-                if (massObjectCar.includes(item[0].message.replace(/\s+/g, ''))) {
-                    orig.push(item)
-                }
-            })
             const nameCarCheck = test.map(elem => elem[0].message)
             checkCreate(nameCarCheck)
-            console.log(orig)
-            //  conturTest(orig)
             speed(arrCar)
             return dann
         });
 
 }
-
-
-
-
-
 
 async function dostupObject(name) {
     const param = {
