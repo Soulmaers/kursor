@@ -209,8 +209,8 @@ function viewAlarmStorage(name, stor) {
             }
         })*/
     t.forEach(el => {
-        if (!el.classList.contains('alarmOpen') && !el.classList.contains('oneName') && !el.classList.contains('spoyler')) {
-
+        if (el.nextSibling !== null && !el.classList.contains('alarmOpen') && !el.classList.contains('oneName') && !el.classList.contains('spoyler')) {
+            //  console.log(el)
             if (el.nextSibling.classList.contains('norma') && el.nextSibling.children[1].textContent == el.children[1].textContent) {
                 const dt = [...el.nextSibling.children[0].textContent]
                 const allmassiv = [];
@@ -256,6 +256,7 @@ function viewAlarmStorage(name, stor) {
 
     const arrName = tbody.querySelectorAll(`.${name}`)
     arrName.forEach(e => {
+        //  console.log(e.children[2])
         e.children[2].style.background = 'yellow';
         if (e.children[3].textContent == '-51' || e.children[3].textContent == '-50') {
             e.children[3].style.background = 'yellow';

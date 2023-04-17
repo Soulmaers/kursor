@@ -1,9 +1,8 @@
 
-import { navigator } from './navigator.js'
 import { speed } from './speed.js'
 import { loadParamsViewList, conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
-import { objColor, generT, generFront, generDav } from './content.js'
+
 
 
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
@@ -30,34 +29,85 @@ export let dann;
 
 
 export function zapros() {
-
-
-
-    const flagss = 1 + 4096//4096
-    const prmss = {
-        "spec": [{
-            "type": 'id',
-            "data": 26702383,//26702383,//26702371,
-            "flags": 1048576,                 //    1048576
-            "mode": 0
-        }
-        ]
-    }
-
-
-    const remote1s = wialon.core.Remote.getInstance();
-    remote1s.remoteCall('core/update_data_flags', prmss,
+    const flagsT = 1 + 1024// + 1024//4096
+    const prmsT = {
+        "spec": {
+            "itemsType": "avl_unit_group",
+            "propName": "sys_name",
+            "propValueMask": "*",
+            "sortType": "sys_name"
+        },
+        "force": 1,
+        "flags": flagsT,
+        "from": 0,
+        "to": 0xffffffff
+    };
+    const remoteT = wialon.core.Remote.getInstance();
+    remoteT.remoteCall('core/search_items', prmsT,
         async function (code, result) {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
-            console.log(result)
-
-
+            await result
+            const aLLmassObject = [];
+            let Allcountr = 0;
+            result.items.forEach(elem => {
+                Allcountr++
+                const nameGroup = elem.nm
+                const nameObject = elem.u
+                console.log(nameGroup)
+                const massObject = [];
+                let countr = 0;
+                nameObject.forEach(el => {
+                    const prms2 = {
+                        "id": el,
+                        "flags": 1025
+                    };
+                    const remote3 = wialon.core.Remote.getInstance();
+                    remote3.remoteCall('core/search_item', prms2,
+                        async function (code, result) {
+                            if (code) {
+                                console.log(wialon.core.Errors.getErrorText(code));
+                            }
+                            const arr3 = await result
+                            const objects = arr3.item.nm
+                            massObject.push(await loadParamsViewList(objects))
+                            countr++
+                            if (countr === nameObject.length) {
+                                massObject.forEach(e => {
+                                    e.group = nameGroup
+                                })
+                                aLLmassObject.push(massObject)
+                            }
+                            if (aLLmassObject.length === Allcountr) {
+                                conturTest(aLLmassObject)
+                            }
+                        })
+                })
+            })
         });
 
-
-
+    /*
+    const flagss = 1 + 4096//4096
+    const prmss = {
+    "spec": [{
+        "type": 'id',
+        "data": 26702383,//26702383,//26702371,
+        "flags": 1048576,                 //    1048576
+        "mode": 0
+    }
+    ]
+    }
+    const remote1s = wialon.core.Remote.getInstance();
+    remote1s.remoteCall('core/update_data_flags', prmss,
+    async function (code, result) {
+        if (code) {
+            console.log(wialon.core.Errors.getErrorText(code));
+        }
+        console.log(result)
+     
+     
+    });*/
 
     const flags = 1 + 1024//4096
     const prms = {
@@ -78,6 +128,7 @@ export function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
+            console.log(result)
             const arr1 = Object.values(result);
             const arrCar = arr1[5];
             dann = arrCar
@@ -98,12 +149,17 @@ export function zapros() {
             })
             const nameCarCheck = test.map(elem => elem[0].message)
             checkCreate(nameCarCheck)
-            conturTest(orig)
+            console.log(orig)
+            //  conturTest(orig)
             speed(arrCar)
             return dann
         });
 
 }
+
+
+
+
 
 
 async function dostupObject(name) {

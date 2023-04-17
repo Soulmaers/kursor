@@ -47,7 +47,8 @@ export function graf(t1, t2, int, id) {
 }
 
 export function geoloc() {
-    console.log('запуск карты')
+
+
     let nowDate = Math.round(new Date().getTime() / 1000)
     let nDate = new Date();
     let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
@@ -219,16 +220,15 @@ export async function toView(toChange, probeg) {
 
     const resV = await fetch('/api/toView', params)
     const responseV = await resV.json()
-    console.log(responseV)
+
     if (responseV.result.length !== 0) {
         toChange = parseFloat(responseV.result[0].value)
         const toElem = document.querySelector('.to_value')
         const toChangeTO = document.querySelector('.toValChange')
-        console.log(toChange + probeg)
-        console.log(probeg)
+
         //  const to = addZero(5, ((toChange + probeg)) - probeg)
         const to = parseFloat((toChange + probeg) - probeg)
-        console.log(to)
+
         toElem.textContent = to + 'км'
         //  console.log(toChange.value)
         toChangeTO.value = toChange

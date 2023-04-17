@@ -13,7 +13,7 @@ export function navigator() {
         const wrapperLeft = document.querySelector('.wrapper_left')
         wrapperLeft.style.display = 'none'
     }
-
+    console.log(document.querySelectorAll('.listItem'))
     nav.forEach(el => {
         el.addEventListener('click', route)
         function route() {

@@ -1180,7 +1180,17 @@ div.spoyler {
 
 }
 
+.titleModal {
+  padding: 5px 40px;
+  font-size: 1rem;
+  font-family: Roboto;
+  font-weight: bold;
+  position: relative;
+}
 
+.hiddenModal {
+  display: none;
+}
 
 .windowStatistic {
   width: 98%;
@@ -3805,6 +3815,29 @@ input[type="number"]:focus {
 }
 
 .minus {
+  display: none;
+  width: 16px;
+  height: 16px;
+  background-image: url(../image/icon_min.png);
+  background-size: cover;
+  position: absolute;
+  top: 7px;
+  left: 5px;
+  cursor: pointer;
+}
+
+.plusS {
+  width: 18px;
+  height: 18px;
+  background-image: url(../image/icon_max.png);
+  background-size: cover;
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  cursor: pointer;
+}
+
+.minusS {
   display: none;
   width: 16px;
   height: 16px;
