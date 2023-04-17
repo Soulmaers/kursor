@@ -71,7 +71,13 @@ export function zapros() {
                             }
                             const arr3 = await result
                             const objects = arr3.item.nm
-                            massObject.push(await loadParamsViewList(objects))
+                            const prob = await loadParamsViewList(objects)
+                            const role = document.querySelectorAll('.log')[0].textContent
+                            const login = document.querySelectorAll('.log')[1].textContent
+                            const massObjectCar = await dostupObject(login)
+                            if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
+                                massObject.push(await loadParamsViewList(objects))
+                            }
                             countr++
                             if (countr === nameObject.length) {
                                 massObject.forEach(e => {
@@ -80,13 +86,15 @@ export function zapros() {
                                 aLLmassObject.push(massObject)
                             }
                             if (aLLmassObject.length === Allcountr) {
+                                console.log(aLLmassObject)
                                 conturTest(aLLmassObject)
+                                // const nameCarCheck = test.map(elem => elem[0].message)
+                                // checkCreate(nameCarCheck)
                             }
                         })
                 })
-            })
-        });
-
+            });
+        })
     /*
     const flagss = 1 + 4096//4096
     const prmss = {
@@ -142,6 +150,7 @@ export function zapros() {
             const login = document.querySelectorAll('.log')[1].textContent
             const massObjectCar = await dostupObject(login)
             const orig = [];
+            console.log(test)
             test.forEach(item => {
                 if (massObjectCar.includes(item[0].message.replace(/\s+/g, ''))) {
                     orig.push(item)

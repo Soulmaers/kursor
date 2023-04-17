@@ -146,7 +146,8 @@ export async function getUsers() {
             if (el.classList.contains('btna')) {
                 console.log(el)
                 confirm.style.display = 'none';
-                const log = el.classList.closest('.users').children[0].textContent
+                console.log(el.closest('.users').children[0].textContent)
+                const log = el.closest('.users').children[0].textContent
                 console.log(log)
                 deleteFn(el.id, log);
             }

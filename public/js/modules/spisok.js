@@ -44,107 +44,111 @@ export function conturTest(testov) {
             e.remove();
         })
     }
+    console.log(testov)
     testov.forEach(el => {
+        if (el.length !== 0) {
+            console.log(el)
+            const wrapList = document.querySelector('.wrapList')
+            const group = document.createElement('div')
+            group.classList.add('groups')
+            group.classList.add(`${el[0].group}`)
+            group.style.display = 'flex',
+                group.style.flexDirection = 'column'
+            group.style.width = 100 + '%',
+                group.style.border = '1px solid gray'
+            wrapList.appendChild(group)
+            const titleModal = document.createElement('div')
+            titleModal.classList.add('titleModal')
+            titleModal.textContent = `${el[0].group}` + ' ' + '(' + `${el.length}` + ')'
+            group.appendChild(titleModal)
+            const minusS = document.createElement('div')
+            minusS.classList.add('minusS')
+            const plusS = document.createElement('div')
+            plusS.classList.add('plusS')
+            titleModal.appendChild(plusS)
+            titleModal.appendChild(minusS)
+            const hiddenModal = document.createElement('div')
+            hiddenModal.classList.add('hiddenModal')
+            group.classList.add(`${el[0].group}`)
+            group.appendChild(hiddenModal)
+            const listArr = document.querySelector(`.${el[0].group}`)
 
-        const wrapList = document.querySelector('.wrapList')
-        const group = document.createElement('div')
-        group.classList.add('groups')
-        group.classList.add(`${el[0].group}`)
-        group.style.display = 'flex',
-            group.style.flexDirection = 'column'
-        group.style.width = 100 + '%',
-            group.style.border = '1px solid gray'
-        wrapList.appendChild(group)
-        const titleModal = document.createElement('div')
-        titleModal.classList.add('titleModal')
-        titleModal.textContent = `${el[0].group}` + ' ' + '(' + `${el.length}` + ')'
-        group.appendChild(titleModal)
-        const minusS = document.createElement('div')
-        minusS.classList.add('minusS')
-        const plusS = document.createElement('div')
-        plusS.classList.add('plusS')
-        titleModal.appendChild(plusS)
-        titleModal.appendChild(minusS)
-        const hiddenModal = document.createElement('div')
-        hiddenModal.classList.add('hiddenModal')
-        group.classList.add(`${el[0].group}`)
-        group.appendChild(hiddenModal)
-        const listArr = document.querySelector(`.${el[0].group}`)
-
-        el.forEach(elem => {
-            const nameCar = elem[0].message.replace(/\s+/g, '')
-            dashView(nameCar)
-            const listItemCar = document.createElement('div')
-            listItemCar.classList.add('listItem')
-            listItemCar.classList.add(`${nameCar}`)
-            listArr.children[1].appendChild(listItemCar)
-            const listName = document.createElement('div')
-            listName.classList.add('list_name2')
-            listItemCar.appendChild(listName)
-            listName.textContent = elem[0].message
-            const listProfil = document.createElement('div')
-            listProfil.classList.add('list_profil2')
-            listItemCar.appendChild(listProfil)
-            const listTrail = document.createElement('div')
-            listTrail.classList.add('list_trail2')
-            listItemCar.appendChild(listTrail)
-            if (elem[0].result) {
-                const modelUniq = convert(elem[0].result)
-                modelUniq.forEach(os => {
-                    const osi = document.createElement('div')
-                    osi.classList.add('osi_list')
-                    if (os.trailer !== 'Прицеп' && os.tyres === '2' || os.trailer !== 'Прицеп' && os.tyres === '4') {
-                        fnTagach(os, nameCar)
-                    }
-                    if (os.trailer === 'Прицеп' && os.tyres === '2' || os.trailer == 'Прицеп' && os.tyres === '4') {
-                        fnPricep(os, nameCar)
-                    }
-                })
-            }
-            const listItem = document.querySelector(`.${nameCar}`)
-            const numOs = listItem.querySelectorAll('.gOs');
-            numOs.forEach(el => {
-                setId(el)
-            })
-            const shina = listItem.querySelectorAll('.arc');
-            const r = [];
-            let integer;
-            if (elem[1].result) {
-                const modelUniqValues = convert(elem[1].result)
-                modelUniqValues.forEach(el => {
-                    r.push(el.tyresdiv)
-                })
-                elem[2].result.forEach((el) => {
-                    modelUniqValues.forEach((item) => {
-                        if (el.name == item.pressure) {
-                            shina.forEach(e => {
-                                if (e.id == item.tyresdiv) {
-                                    if (el.status === 'false') {
-                                        e.children[0].style.fill = 'gray'
-                                        return
-                                    }
-                                    if (nameCar == 'А652УА198') {
-                                        integer = parseFloat((el.value / 10).toFixed(1))
-
-                                        e.children[0].style.fill = objColor[generFront(parseFloat((el.value / 10).toFixed(1)))]
-                                    }
-                                    else {
-                                        integer = el.value
-                                        if ((nameCar == 'КранГаличанинР858ОР178')) {
-
-                                            e.children[0].style.fill = objColor[generDav(integer)]
-                                        }
-                                        else {
-                                            e.children[0].style.fill = objColor[generFront(integer)]
-                                        }
-                                    }
-                                }
-                            })
+            el.forEach(elem => {
+                const nameCar = elem[0].message.replace(/\s+/g, '')
+                dashView(nameCar)
+                const listItemCar = document.createElement('div')
+                listItemCar.classList.add('listItem')
+                listItemCar.classList.add(`${nameCar}`)
+                listArr.children[1].appendChild(listItemCar)
+                const listName = document.createElement('div')
+                listName.classList.add('list_name2')
+                listItemCar.appendChild(listName)
+                listName.textContent = elem[0].message
+                const listProfil = document.createElement('div')
+                listProfil.classList.add('list_profil2')
+                listItemCar.appendChild(listProfil)
+                const listTrail = document.createElement('div')
+                listTrail.classList.add('list_trail2')
+                listItemCar.appendChild(listTrail)
+                if (elem[0].result) {
+                    const modelUniq = convert(elem[0].result)
+                    modelUniq.forEach(os => {
+                        const osi = document.createElement('div')
+                        osi.classList.add('osi_list')
+                        if (os.trailer !== 'Прицеп' && os.tyres === '2' || os.trailer !== 'Прицеп' && os.tyres === '4') {
+                            fnTagach(os, nameCar)
+                        }
+                        if (os.trailer === 'Прицеп' && os.tyres === '2' || os.trailer == 'Прицеп' && os.tyres === '4') {
+                            fnPricep(os, nameCar)
                         }
                     })
+                }
+                const listItem = document.querySelector(`.${nameCar}`)
+                const numOs = listItem.querySelectorAll('.gOs');
+                numOs.forEach(el => {
+                    setId(el)
                 })
-            }
-        })
+                const shina = listItem.querySelectorAll('.arc');
+                const r = [];
+                let integer;
+                if (elem[1].result) {
+                    const modelUniqValues = convert(elem[1].result)
+                    modelUniqValues.forEach(el => {
+                        r.push(el.tyresdiv)
+                    })
+                    elem[2].result.forEach((el) => {
+                        modelUniqValues.forEach((item) => {
+                            if (el.name == item.pressure) {
+                                shina.forEach(e => {
+                                    if (e.id == item.tyresdiv) {
+                                        if (el.status === 'false') {
+                                            e.children[0].style.fill = 'gray'
+                                            return
+                                        }
+                                        if (nameCar == 'А652УА198') {
+                                            integer = parseFloat((el.value / 10).toFixed(1))
+
+                                            e.children[0].style.fill = objColor[generFront(parseFloat((el.value / 10).toFixed(1)))]
+                                        }
+                                        else {
+                                            integer = el.value
+                                            if ((nameCar == 'КранГаличанинР858ОР178')) {
+
+                                                e.children[0].style.fill = objColor[generDav(integer)]
+                                            }
+                                            else {
+                                                e.children[0].style.fill = objColor[generFront(integer)]
+                                            }
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    })
+                }
+            })
+
+        }
     })
 
     navigator();
