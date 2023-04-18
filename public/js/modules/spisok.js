@@ -55,8 +55,7 @@ export function conturTest(testov) {
             group.style.display = 'flex',
                 group.style.flexDirection = 'column'
             group.style.width = 100 + '%',
-                group.style.border = '1px solid gray'
-            wrapList.appendChild(group)
+                wrapList.appendChild(group)
             const titleModal = document.createElement('div')
             titleModal.classList.add('titleModal')
             titleModal.textContent = `${el[0].group}` + ' ' + '(' + `${el.length}` + ')'
