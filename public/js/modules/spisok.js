@@ -152,10 +152,20 @@ export function conturTest(testov) {
                         })
                     })
                 }
+
             })
 
         }
     })
+
+    const group = document.querySelectorAll('.groups')
+    console.log(group)
+    group.forEach(el => {
+        console.log(el.children[1].children)
+        Array.from(el.children[1].children).sort();
+    })
+
+
 
     navigator();
     hiddenWindows()
