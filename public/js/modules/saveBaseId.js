@@ -79,7 +79,7 @@ export async function reqBaseId() {
         tiresActiv.children[0].style.border = '2px solid #000'
         tiresActiv.children[0].style.borderRadius = '30% 30% 0 0'
         tiresActiv.children[1].style.border = '2px solid #000'
-        tiresActiv.children[0].style.borderRadius = '0 0 30% 30%'
+        tiresActiv.children[1].style.borderRadius = '0 0 30% 30%'
         const idbaseTyres = document.querySelector('.idbaseTyres')
         idbaseTyres.textContent = response.result
     }
@@ -169,8 +169,11 @@ export async function findTyresInstall() {
     tiresLink.forEach(el => {
         result.forEach(item => {
             if (el.id === item.idTyres) {
-                el.children[0].style.border = '2px solid #000'
-                el.children[1].style.border = '2px solid #000'
+                el.style.border = '2px solid #000'
+                //  el.children[0].style.border = '2px solid #000'
+                //  el.children[1].style.border = '2px solid #000'
+                // el.children[0].style.borderRadius = '30% 30% 0 0'
+                // el.children[1].style.borderRadius = '0 0 30% 30%'
             }
         })
     })

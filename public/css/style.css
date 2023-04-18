@@ -1394,7 +1394,7 @@ div.spoyler {
 }
 
 .rotates {
-  border: 1px solid gray;
+  border: 2px solid blue;
   border-radius: 5px;
   background-color: blue;
 }
@@ -3408,7 +3408,7 @@ input[type="number"]:focus {
 
 .wrapCanvas {
   display: flex;
-  border: 1px solid #000;
+
 }
 
 .sections {

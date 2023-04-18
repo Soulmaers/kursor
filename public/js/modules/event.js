@@ -19,6 +19,8 @@ import { iconParamsz, iconParamszWindows, deleteWinParams, fnToChange } from './
 
 const auth = document.querySelector('.auth')
 const authClear = document.querySelector('.authClear')
+
+
 if (auth) {
     auth.addEventListener('click', () => {
         console.log('вход')

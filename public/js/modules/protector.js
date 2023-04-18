@@ -81,9 +81,9 @@ function fnCanvas(arg) {
                 bar2.classList.add(`contBar${it.id}`)
                 const bar3 = document.createElement('div')
                 bar3.classList.add(`contBar${it.id}`)
-                bar.style.background = 'black'
-                bar2.style.background = 'black'
-                bar3.style.background = 'black'
+                //bar.style.background = 'black'
+                // bar2.style.background = 'black'
+                // bar3.style.background = 'black'
                 wrap.appendChild(bar)
                 wrap.appendChild(bar2)
                 wrap.appendChild(bar3)
