@@ -1182,7 +1182,11 @@ div.spoyler {
 
 .tires_link {
   position: relative;
-
+  background-image: url(../image/0000.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 15px;
 }
 
 .titleModal {
@@ -1384,9 +1388,9 @@ div.spoyler {
 }
 
 .tiresActiv {
-  border: 1px solid #000;
-  border-radius: 5px;
-  background-color: gray;
+  border: 2px solid gray;
+  border-radius: 10px;
+  background-color: lightgray;
 }
 
 .rotates {
@@ -2384,11 +2388,7 @@ input[type="date"] {
 .tiresD {
   width: 48px;
   height: 50px;
-  border: 2px solid lightgray;
-  border-radius: 30% 30% 0 0;
-  color: #000;
   display: flex;
-  background-color: #FFF;
   justify-content: center;
   align-items: center;
   font-size: 0.9rem;
@@ -2618,10 +2618,6 @@ input[type=range]:focus::-ms-fill-upper {
 .tiresT {
   width: 48px;
   height: 50px;
-  border: 2px solid lightgray;
-  border-radius: 0 0 30% 30%;
-  color: #000;
-  background-color: #FFF;
   display: flex;
   flex-direction: column;
   justify-content: center;

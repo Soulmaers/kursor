@@ -215,6 +215,8 @@ export function viewConfigurator(arg, params) {
                                 }
                                 alerts.push(done)
                                 e.children[0].style.position = 'relative'
+                                e.children[0].style.border = 'none'
+                                e.children[0].style.borderRadius = '30% 30% 0 0'
                                 e.children[0].innerHTML = `${done}\n<span class="ppp">Bar</span>`
                                 e.children[0].setAttribute('rel', `${item.pressure}`)
                                 const ppp = document.querySelectorAll('.ppp')
@@ -231,28 +233,40 @@ export function viewConfigurator(arg, params) {
                                 }
                                 if (el.status === 'false') {
                                     e.children[0].style.background = 'lightgray';
+                                    e.children[0].style.color = '#000'
                                     return
                                 }
-                                e.children[0].style.background = signal;
+                                e.children[0].style.color = signal;
                             }
                             if (el.name === item.temp) {
                                 tiresLink.forEach(e => {
                                     if (e.id == item.tyresdiv) {
                                         if (el.value === '-128' || el.value === '-50') {
                                             el.value = 'err'
+                                            e.children[1].style.color = 'red'
                                             e.children[1].textContent = el.value
+                                            e.children[1].style.border = 'none'
+                                            e.children[1].style.borderRadius = '0 0 30% 30%'
                                             if (el.status === 'false') {
                                                 e.children[1].style.background = 'lightgray';
+                                                e.children[0].style.color = '#000'
+                                                e.children[1].style.border = 'none'
+                                                e.children[1].style.borderRadius = '0 0 30% 30%'
+
                                             }
                                         }
                                         if (el.value >= -51 && el.value < 36) {
+                                            e.children[1].style.border = 'none'
                                             e.children[1].textContent = el.value + '°C'
                                             e.children[1].setAttribute('rel', `${item.temp}`)
                                             if (el.status === 'false') {
                                                 e.children[1].style.background = 'lightgray';
+                                                e.children[1].style.border = 'none'
+                                                e.children[1].style.borderRadius = '0 0 30% 30%'
+                                                e.children[1].style.color = '#000'
                                                 return
                                             }
-                                            e.children[1].style.background = objColor[generT(el.value)];
+                                            e.children[1].style.color = objColor[generT(el.value)];
                                         }
                                     }
                                 })
@@ -380,11 +394,12 @@ function styleShinaActive(arg) {
     main.style.display = 'flex'
     arg.style.fontSize = '0.65rem'
     tyresD.forEach(e => {
-        e.style.background = 'black';
-        e.style.borderBottom = 'none'
+        //  e.style.background = 'black';
+        //  e.style.borderBottom = 'none'
+        e.style.Border = 'none'
     })
     tyresT.forEach(e => {
-        e.style.background = 'black';
+        //  e.style.background = 'black';
         e.style.borderTop = 'none'
         e.style.fontSize = '0.8rem'
         e.style.justifyContent = 'flex-start'

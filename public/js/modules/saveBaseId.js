@@ -77,7 +77,9 @@ export async function reqBaseId() {
         messaga.style.color = 'green'
         const tiresActiv = document.querySelector('.tiresActiv')
         tiresActiv.children[0].style.border = '2px solid #000'
+        tiresActiv.children[0].style.borderRadius = '30% 30% 0 0'
         tiresActiv.children[1].style.border = '2px solid #000'
+        tiresActiv.children[0].style.borderRadius = '0 0 30% 30%'
         const idbaseTyres = document.querySelector('.idbaseTyres')
         idbaseTyres.textContent = response.result
     }

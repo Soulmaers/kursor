@@ -225,7 +225,7 @@ function koleso(kol, btnsens) {
                 valJob.length > 10 ?
                     kol[kol.length - 1].children[0].textContent = '-' :
                     kol[kol.length - 1].children[0].textContent = valJob + '\nБар'
-                kol[kol.length - 1].children[0].style.background = objColor[generFront(valJob)];
+                kol[kol.length - 1].children[0].style.color = objColor[generFront(valJob)];
                 paramPress.push(el)
             }
             if (btnsens[1].classList.contains('actBTN')) {
@@ -240,7 +240,7 @@ function koleso(kol, btnsens) {
                 }
                 else {
                     kol[kol.length - 1].children[1].textContent = value + '°'
-                    kol[kol.length - 1].children[1].style.background = objColor[generT(value)];
+                    kol[kol.length - 1].children[1].style.color = objColor[generT(value)];
                 }
                 paramTemp.push(el)
                 //const numberOs = kol[kol.length - 1].closest('.osi').children[1].id

@@ -120,7 +120,7 @@ export function generT(el) {
 export const objColor = {
     1: '#FF0000',
     2: '#FFFF00',
-    3: '#009933',
+    3: '#4af72f',//#009933',
     5: '#fff'
 }
 

@@ -1,12 +1,5 @@
 import { viewTech } from './requests.js'
 
-
-/*
-export function radCecked() {
-    const rad = document.querySelectorAll('[name=radio]')
-    //  rad[0].checked === true;
-}*/
-
 export function tech() {
     const grafics = document.querySelector('.grafics')
     grafics.style.display = 'none';
