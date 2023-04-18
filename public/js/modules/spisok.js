@@ -2,7 +2,7 @@ import { convert, visual } from './visual.js'
 import { dashView } from './dash.js'
 import { navigator } from './navigator.js'
 import { objColor, generFront, generDav } from './content.js'
-
+import { sortAll } from './sort.js'
 /*
 let isLoaded = false
 
@@ -60,6 +60,12 @@ export function conturTest(testov) {
             titleModal.classList.add('titleModal')
             titleModal.textContent = `${el[0].group}` + ' ' + '(' + `${el.length}` + ')'
             group.appendChild(titleModal)
+            const filterV = document.createElement('div')
+            filterV.classList.add('filterV')
+            titleModal.appendChild(filterV)
+            const filterVN = document.createElement('div')
+            filterVN.classList.add('filterVN')
+            titleModal.appendChild(filterVN)
             const minusS = document.createElement('div')
             minusS.classList.add('minusS')
             const plusS = document.createElement('div')
@@ -78,6 +84,7 @@ export function conturTest(testov) {
                 const listItemCar = document.createElement('div')
                 listItemCar.classList.add('listItem')
                 listItemCar.classList.add(`${nameCar}`)
+                listItemCar.setAttribute('rel', `${nameCar}`)
                 listArr.children[1].appendChild(listItemCar)
                 const listName = document.createElement('div')
                 listName.classList.add('list_name2')
@@ -152,6 +159,7 @@ export function conturTest(testov) {
 
     navigator();
     hiddenWindows()
+    sortAll()
     zaprosSpisok()
 
 }

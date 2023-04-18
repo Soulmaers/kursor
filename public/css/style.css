@@ -3078,7 +3078,7 @@ div.wrapper {
 }
 
 .list_item1 {
-  width: 150px;
+  width: 40%;
   display: flex;
   justify-content: center;
 
@@ -3087,7 +3087,7 @@ div.wrapper {
 }
 
 .list_item2 {
-  width: 150px;
+  width: 30%;
   display: flex;
   justify-content: center;
 
@@ -3096,7 +3096,7 @@ div.wrapper {
 }
 
 .list_item3 {
-  width: 150px;
+  width: 30%;
   display: flex;
   justify-content: center;
 
@@ -3837,6 +3837,31 @@ input[type="number"]:focus {
   top: 6px;
   left: 5px;
   cursor: pointer;
+}
+
+.filterV {
+  width: 16px;
+  height: 16px;
+  background-image: url(../image/sortV.png);
+  background-size: cover;
+  position: absolute;
+  top: 8px;
+  left: 130px;
+  cursor: pointer;
+  display: none;
+}
+
+.filterVN {
+  width: 16px;
+  height: 16px;
+  background-image: url(../image/sortVN.png);
+  background-size: cover;
+  position: absolute;
+  top: 8px;
+  left: 130px;
+  cursor: pointer;
+
+
 }
 
 .minusS {
