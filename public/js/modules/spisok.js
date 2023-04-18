@@ -482,6 +482,31 @@ function setId(el) {
 }
 
 function hiddenWindows() {
+    const groups = document.querySelectorAll('.groups')
+    groups.forEach(it => {
+        var items = it.children[1].childNodes;
+        console.log(items)
+        var itemsArr = [];
+        for (var i in items) {
+            if (items[i].nodeType == 1) { // get rid of the whitespace text nodes
+                itemsArr.push(items[i]);
+            }
+        }
+        console.log(itemsArr)
+        itemsArr.sort(function (a, b) {
+            return a.innerHTML == b.innerHTML
+                ? 0
+                : (a.innerHTML > b.innerHTML ? 1 : -1);
+        });
+
+        for (i = 0; i < itemsArr.length; ++i) {
+            it.children[1].appendChild(itemsArr[i]);
+        }
+
+
+    })
+
+
     const plusS = document.querySelectorAll('.plusS')
     const minusS = document.querySelectorAll('.minusS')
     // const hiddenModal = document.querySelector('.hiddenModal')
@@ -491,35 +516,6 @@ function hiddenWindows() {
             el.nextElementSibling.style.display = 'block'
             el.closest('.groups').children[1].style.display = 'block'
             console.log(el.closest('.groups').children[1])
-
-
-
-
-
-            //   var list = document.getElementById('mylist');
-
-            var items = el.closest('.groups').children[1].childNodes;
-            console.log(items)
-            var itemsArr = [];
-            for (var i in items) {
-                if (items[i].nodeType == 1) { // get rid of the whitespace text nodes
-                    itemsArr.push(items[i]);
-                }
-            }
-            console.log(itemsArr)
-            itemsArr.sort(function (a, b) {
-                return a.innerHTML == b.innerHTML
-                    ? 0
-                    : (a.innerHTML > b.innerHTML ? 1 : -1);
-            });
-
-            for (i = 0; i < itemsArr.length; ++i) {
-                el.closest('.groups').children[1].appendChild(itemsArr[i]);
-            }
-
-
-
-
 
         })
     })
