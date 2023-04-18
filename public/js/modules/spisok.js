@@ -158,17 +158,8 @@ export function conturTest(testov) {
         }
     })
 
-    const group = document.querySelectorAll('.groups')
-    console.log(group)
-    group.forEach(el => {
-        console.log(el.children[1].children)
-        Array.from(el.children[1].children).sort();
-    })
-
-
-
-    navigator();
     hiddenWindows()
+    navigator();
     sortAll()
     zaprosSpisok()
 
@@ -499,6 +490,37 @@ function hiddenWindows() {
             el.style.display = 'none'
             el.nextElementSibling.style.display = 'block'
             el.closest('.groups').children[1].style.display = 'block'
+            console.log(el.closest('.groups').children[1])
+
+
+
+
+
+            //   var list = document.getElementById('mylist');
+
+            var items = el.closest('.groups').children[1].childNodes;
+            console.log(items)
+            var itemsArr = [];
+            for (var i in items) {
+                if (items[i].nodeType == 1) { // get rid of the whitespace text nodes
+                    itemsArr.push(items[i]);
+                }
+            }
+            console.log(itemsArr)
+            itemsArr.sort(function (a, b) {
+                return a.innerHTML == b.innerHTML
+                    ? 0
+                    : (a.innerHTML > b.innerHTML ? 1 : -1);
+            });
+
+            for (i = 0; i < itemsArr.length; ++i) {
+                el.closest('.groups').children[1].appendChild(itemsArr[i]);
+            }
+
+
+
+
+
         })
     })
     minusS.forEach(el => {

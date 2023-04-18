@@ -11,13 +11,6 @@ export function sortAll() {
             Array.from(el.parentNode.nextElementSibling.children).forEach(el => {
                 arr.push(el)
             })
-            console.log(Array.from(el.parentNode.nextElementSibling.children))
-            Array.from(el.parentNode.nextElementSibling.children).sort()
-            arr.sort(function (a, b) {
-                console.log(b.children[0].textContent.replace(/\s+/g, ''))
-                console.log(a.children[0].textContent.replace(/\s+/g, ''))
-                return `${b.children[0].textContent.replace(/\s+/g, '')}` - `${a.children[0].textContent.replace(/\s+/g, '')}`
-            });
             arr.forEach(it => {
                 el.parentNode.nextElementSibling.prepend(it)
             })
@@ -33,12 +26,6 @@ export function sortAll() {
             Array.from(el.parentNode.nextElementSibling.children).forEach(el => {
                 arr.push(el)
             })
-            console.log(Array.from(el.parentNode.nextElementSibling.children))
-            Array.from(el.parentNode.nextElementSibling.children).sort()
-            arr.sort(function (a, b) {
-
-                return `${a.children[0].textContent.replace(/\s+/g, '')}` - `${b.children[0].textContent.replace(/\s+/g, '')}`
-            });
             arr.forEach(it => {
                 el.parentNode.nextElementSibling.prepend(it)
             })
