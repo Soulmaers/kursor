@@ -1192,7 +1192,17 @@ div.spoyler {
   font-weight: bold;
   position: relative;
   background-color: #f5f5f5;
-  border-bottom: 1px solid #f0eded
+  border-bottom: 1px solid #f0eded;
+  display: flex;
+  align-items: center;
+}
+
+.pAll {
+  margin: 0;
+  position: absolute;
+  top: 5px;
+  left: 2px;
+  display: none
 }
 
 .hiddenModal {
@@ -3427,12 +3437,17 @@ input[type="number"]:focus {
   width: 40%;
   display: flex;
   align-items: center;
-  padding-left: 5px;
-  box-sizing: border-box;
   margin-left: 30px;
+  box-sizing: border-box;
+
 }
 
 
+.listTitlesCheck {
+  margin: 0;
+  position: absolute;
+  left: 2px;
+}
 
 .list_profil2 {
   font-size: 1rem;
@@ -3464,7 +3479,8 @@ input[type="number"]:focus {
   box-sizing: border-box;
   width: 470px;
   display: flex;
-  border-bottom: 1px solid #f0eded
+  border-bottom: 1px solid #f0eded;
+  position: relative;
 }
 
 .listItem:hover {
@@ -3845,7 +3861,7 @@ input[type="number"]:focus {
   background-image: url(../image/sortV.png);
   background-size: cover;
   position: absolute;
-  top: 8px;
+  top: 7px;
   left: 130px;
   cursor: pointer;
   display: none;
@@ -3857,7 +3873,7 @@ input[type="number"]:focus {
   background-image: url(../image/sortVN.png);
   background-size: cover;
   position: absolute;
-  top: 8px;
+  top: 7px;
   left: 130px;
   cursor: pointer;
 
@@ -4583,6 +4599,7 @@ input[type="number"]:focus {
   .listItem {
     width: 100%;
     padding: 3px 0;
+    position: relative;
   }
 
   .headerMain {

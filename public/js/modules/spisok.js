@@ -72,6 +72,12 @@ export function conturTest(testov) {
             plusS.classList.add('plusS')
             titleModal.appendChild(plusS)
             titleModal.appendChild(minusS)
+            const pAll = document.createElement('p')
+            pAll.classList.add('pAll')
+            pAll.innerHTML = `<input class="checkInListaLL" type="checkbox" rel="${el[0].group}" value="${el[0].group}" id="${el[0].group}"
+                    >Все`
+            titleModal.prepend(pAll)
+
             const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModal')
             group.classList.add(`${el[0].group}`)
@@ -86,10 +92,22 @@ export function conturTest(testov) {
                 listItemCar.classList.add(`${nameCar}`)
                 listItemCar.setAttribute('rel', `${nameCar}`)
                 listArr.children[1].appendChild(listItemCar)
+
+
+
+
                 const listName = document.createElement('div')
                 listName.classList.add('list_name2')
                 listItemCar.appendChild(listName)
                 listName.textContent = elem[0].message
+
+                const listCheck = document.createElement('p')
+                listCheck.classList.add('listTitlesCheck')
+                listCheck.innerHTML = `<input class="checkInList" type="checkbox" 
+    value=${nameCar} rel=${nameCar} id=${nameCar}OO checked>`
+                listName.prepend(listCheck)
+
+
                 const listProfil = document.createElement('div')
                 listProfil.classList.add('list_profil2')
                 listItemCar.appendChild(listProfil)
@@ -109,7 +127,7 @@ export function conturTest(testov) {
                         }
                     })
                 }
-                const listItem = document.querySelector(`.${nameCar}`)
+                const listItem = document.querySelector(`.${nameCar} `)
                 const numOs = listItem.querySelectorAll('.gOs');
                 numOs.forEach(el => {
                     setId(el)
@@ -165,11 +183,8 @@ export function conturTest(testov) {
 
 }
 
-
-
-
 function fnTagach(arr, nameCar) {
-    const listItem = document.querySelector(`.${nameCar}`)
+    const listItem = document.querySelector(`.${nameCar} `)
     const obj = [];
     let counts = 0
     for (let i = 0; i < arr.tyres; i++) {
@@ -239,7 +254,7 @@ function fnTagach(arr, nameCar) {
 }
 
 function fnPricep(arr, nameCar) {
-    const listItem = document.querySelector(`.${nameCar}`)
+    const listItem = document.querySelector(`.${nameCar} `)
     // задаем радиус
     const obj = [];
     let counts = 0
@@ -485,14 +500,12 @@ function hiddenWindows() {
     const groups = document.querySelectorAll('.groups')
     groups.forEach(it => {
         var items = it.children[1].childNodes;
-        console.log(items)
         var itemsArr = [];
         for (var i in items) {
             if (items[i].nodeType == 1) { // get rid of the whitespace text nodes
                 itemsArr.push(items[i]);
             }
         }
-        console.log(itemsArr)
         itemsArr.sort(function (a, b) {
             return a.innerHTML == b.innerHTML
                 ? 0
@@ -502,20 +515,56 @@ function hiddenWindows() {
         for (i = 0; i < itemsArr.length; ++i) {
             it.children[1].appendChild(itemsArr[i]);
         }
-
-
     })
-
-
     const plusS = document.querySelectorAll('.plusS')
     const minusS = document.querySelectorAll('.minusS')
-    // const hiddenModal = document.querySelector('.hiddenModal')
     plusS.forEach(el => {
         el.addEventListener('click', () => {
             el.style.display = 'none'
             el.nextElementSibling.style.display = 'block'
             el.closest('.groups').children[1].style.display = 'block'
             console.log(el.closest('.groups').children[1])
+            console.log(el.closest('.groups').children[0].children[0])
+            el.closest('.groups').children[0].style.padding = '5px 80px'
+            el.closest('.groups').children[0].children[0].style.display = 'block'
+            el.closest('.groups').children[0].children[4].style.left = '60px'
+            el.closest('.groups').children[0].children[1].style.left = '170px'
+            el.closest('.groups').children[0].children[2].style.left = '170px'
+            const ide = el.closest('.groups').children[0].children[0].children[0]
+            const ideValue = el.closest('.groups').children[0].children[0].children[0].id
+            console.log(el.closest('.groups').children[0].children[0].children[0])
+
+            const checkboxes = document.querySelectorAll('.checkInList');
+            let enabledSettings = []
+            if (ide.checked === true) {
+                checkboxes.forEach(el => {
+                    el.checked === false ? enabledSettings.push(el) : null
+                })
+            }
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    if (this.id !== ideValue) {
+                        checkbox.closest('.listItem').style.display = 'none'
+                    }
+                })
+            });
+            ide.addEventListener('change', () => {
+                if (ide.checked) {
+                    Array.from(ide.closest('.groups').children[1].children).forEach(it => {
+                        it.style.display = 'none'
+                    })
+                }
+                else if (!ide.checked) {
+                    Array.from(ide.closest('.groups').children[1].children).forEach(it => {
+                        it.style.display = 'flex'
+                    })
+                    checkboxes.forEach(e => {
+                        e.checked = true
+                    })
+                }
+
+
+            })
 
         })
     })
@@ -524,6 +573,11 @@ function hiddenWindows() {
             el.style.display = 'none'
             el.previousElementSibling.style.display = 'block'
             el.closest('.groups').children[1].style.display = 'none'
+            el.closest('.groups').children[0].style.padding = '5px 40px'
+            el.closest('.groups').children[0].children[0].style.display = 'none'
+            el.closest('.groups').children[0].children[4].style.left = '5px'
+            el.closest('.groups').children[0].children[1].style.left = '130px'
+            el.closest('.groups').children[0].children[2].style.left = '130px'
         })
     })
 }

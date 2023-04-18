@@ -275,7 +275,7 @@ function viewAlarmStorage(name, stor) {
     vieList.forEach(el => {
         arr.push(el)
     })
-    console.log(arr)
+
     arr.sort(function (a, b) {
         return parseFloat(fntinesort(b.children[0].textContent)) - parseFloat(fntinesort(a.children[0].textContent))
     });
