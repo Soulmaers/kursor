@@ -80,13 +80,11 @@ export function conturTest(testov) {
             pAll.innerHTML = `<input class="checkInListaLL" type="checkbox" rel="${el[0].group}" value="${el[0].group}" id="${el[0].group}"
                     >Все`
             titleModal.prepend(pAll)
-
             const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModal')
             group.classList.add(`${el[0].group}`)
             group.appendChild(hiddenModal)
             const listArr = document.querySelector(`.${el[0].group}`)
-
             el.forEach(elem => {
                 const nameCar = elem[0].message.replace(/\s+/g, '')
                 dashView(nameCar)
@@ -95,10 +93,6 @@ export function conturTest(testov) {
                 listItemCar.classList.add(`${nameCar}`)
                 listItemCar.setAttribute('rel', `${nameCar}`)
                 listArr.children[1].appendChild(listItemCar)
-
-
-
-
                 const listName = document.createElement('div')
                 listName.classList.add('list_name2')
                 listItemCar.appendChild(listName)
@@ -155,7 +149,7 @@ export function conturTest(testov) {
                                         if (nameCar == 'А652УА198') {
                                             integer = parseFloat((el.value / 10).toFixed(1))
 
-                                            e.children[0].style.fill = objColor[generFront(parseFloat((el.value / 10).toFixed(1)))]
+                                            e.children[0].style.fill = objColorFront[generFront(parseFloat((el.value / 10).toFixed(1)))]
                                         }
                                         else {
                                             integer = el.value
@@ -390,7 +384,7 @@ function viewListKoleso(arg, params, nameCar) {
 
                             if (activePost == 'А652УА198') {
                                 integer = parseFloat((el.value / 10).toFixed(1))
-                                e.children[0].style.fill = objColor[generFront(parseFloat((el.value / 10).toFixed(1)))]
+                                e.children[0].style.fill = objColorFront[generFront(parseFloat((el.value / 10).toFixed(1)))]
                             }
                             else {
                                 integer = el.value

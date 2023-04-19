@@ -359,7 +359,7 @@ function proverka(arr) {
                         return
                     }
                     else if (el[2] >= 6 || el[2] <= 10) {
-                        console.log(el)
+                        // console.log(el)
                         if (results[results.length - 1].alarm === 'Норма') {
                             //   console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
                             // return
