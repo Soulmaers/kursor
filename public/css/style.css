@@ -2,9 +2,9 @@ body {
   background-color: #fff;
   color: #333;
   font-family: Arial;
-  margin: 0 2%;
-
-  border: 1px solid gray
+  margin: 0 auto;
+  border: 1px solid gray;
+  max-width: 1600px
 }
 
 .logotip {
@@ -876,10 +876,11 @@ div.spoyler {
 .header {
   display: flex;
   align-items: center;
-  width: 100%;
   background-color: rgba(6, 28, 71, 1);
-  margin: 0 auto;
-  justify-content: space-between;
+}
+
+.checkInList {
+  background-color: gray;
 }
 
 .menu {
@@ -1187,6 +1188,7 @@ div.spoyler {
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 15px;
+  box-sizing: border-box;
 }
 
 .titleModal {
@@ -1296,7 +1298,7 @@ div.spoyler {
   min-height: 600px;
   box-sizing: border-box;
   border: 1px solid lightgray;
-  margin: 0 auto;
+
 }
 
 .wrapper_up {
@@ -2307,14 +2309,14 @@ input[type="date"] {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 204px;
+  width: 212px;
 
   cursor: pointer;
 
 }
 
 .vnut {
-  width: 204px;
+  width: 212px;
   height: 11px;
   background-color: gray;
 
@@ -4244,14 +4246,7 @@ input[type="number"]:focus {
     width: 20%;
   }
 
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    width: 100%;
 
-    background-color: rgba(6, 28, 71, 1);
-  }
 
   .list_menu_left {
     padding: 0 5px;

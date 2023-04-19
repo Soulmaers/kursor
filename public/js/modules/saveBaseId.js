@@ -170,8 +170,9 @@ export async function findTyresInstall() {
         result.forEach(item => {
             if (el.id === item.idTyres) {
                 el.style.border = '2px solid #000'
-                //  el.children[0].style.border = '2px solid #000'
-                //  el.children[1].style.border = '2px solid #000'
+
+                el.children[0].style.width = '44px'
+                el.children[1].style.width = '44px'
                 // el.children[0].style.borderRadius = '30% 30% 0 0'
                 // el.children[1].style.borderRadius = '0 0 30% 30%'
             }

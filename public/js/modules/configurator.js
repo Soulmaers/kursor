@@ -103,7 +103,7 @@ function os(arr) {
             e.textContent == 'Прицеп' ?
                 pricep(arr[arr.length - 1])
                 :
-                arr[arr.length - 1].children[0].style.background = '#3333ff'
+                arr[arr.length - 1].children[0].style.background = '#000'//#3333ff'
 
 
             const centerOs = document.querySelectorAll('.centerOs')

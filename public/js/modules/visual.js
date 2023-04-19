@@ -424,7 +424,7 @@ export const pricep = (elem) => {
     const cont = document.querySelector('.cont')
     cont.append(elem.parentNode)
     cont.style.marginTop = '72px'
-    elem.children[0].style.background = "#00FFFF"
+    elem.children[0].style.background = '#000'// "#00FFFF"
     elem.classList.add('pricep')
 
 
