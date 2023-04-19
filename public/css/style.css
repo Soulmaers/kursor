@@ -3336,6 +3336,19 @@ input[type="number"]:focus {
   outline: none;
 }
 
+input[type="text"]::-webkit-outer-spin-button,
+input[type="text"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  outline: none;
+}
+
+input[type='text'],
+input[type="text"]:hover,
+input[type="text"]:focus {
+  appearance: none;
+  -moz-appearance: textfield;
+  outline: none;
+}
 
 .params {
   display: flex;
@@ -3639,10 +3652,13 @@ input[type="number"]:focus {
 
 }
 
+.inputs {
+  display: flex;
+  width: 25%
+}
 
 .modalCenterOs {
   display: none;
-  width: 270px;
   background-color: lightgray;
   border: 1px solid gray;
   position: relative;
@@ -3650,19 +3666,45 @@ input[type="number"]:focus {
   top: 40px;
   right: -150px;
   z-index: 2000;
+  width: 400px
 }
 
 .modalList {
-  padding: 15px 0 5px 5px;
-  margin: 0;
+  padding: 20px 15px 5px 10px;
   list-style-type: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.modalInput,
+.modalInputProcent {
+  border: none;
+  background: none;
+  margin: 2px 1px;
+  min-width: 50px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 400;
+  font-size: 0.9rem;
+  padding: 0;
+
 }
 
 .modalInput {
-  border: none;
-  background: none;
-  margin: 2px 0;
-  max-width: 40px;
+  border-bottom: 1px solid gray;
+}
+
+.titlestroke {
+  display: flex;
+  align-items: center;
+  margin-left: 215px;
+  margin-top: 2px;
+}
+
+.spanStroke {
+  margin: 0 15px;
 }
 
 .modalItem {
@@ -3677,6 +3719,7 @@ input[type="number"]:focus {
 .modalText {
   color: #000;
   margin: 2px 0;
+  width: 75%
 }
 
 .btnModal {
@@ -3684,7 +3727,7 @@ input[type="number"]:focus {
   border: none;
   color: #000;
   background: none;
-
+  margin-bottom: 5px;
 }
 
 .btnModal:active {
@@ -3706,6 +3749,7 @@ input[type="number"]:focus {
   position: absolute;
   top: 0;
   left: 5px;
+  margin-top: 5px
 }
 
 .modalNameOs {

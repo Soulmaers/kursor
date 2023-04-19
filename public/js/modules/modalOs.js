@@ -36,7 +36,13 @@ export function modalOs() {
                 modalNumberOs.textContent = centerOsActiv.id + '-' + 'Тягач'
             }
             modalTitle.style.display = 'flex'
-            viewBar(centerOsActiv.id);
+            // viewBar(centerOsActiv.id);
+
+            const norma = document.querySelector('.normal')
+            console.log(norma)
+            norma.addEventListener('input', () => {
+                fncalc(norma.value)
+            })
         })
     })
     modalClear.addEventListener('click', () => {
@@ -45,6 +51,22 @@ export function modalOs() {
     btnModal.addEventListener('click', modalBar)
 }
 
+
+function fncalc(val) {
+
+    const inpfinal = document.querySelectorAll('.inpfinal')
+    const divfinal = document.querySelectorAll('.divfinal')
+    console.log(inpfinal)
+    console.log(divfinal)
+
+    inpfinal.forEach((el, index) => {
+
+        divfinal[index].textContent = Number((val / 100 * el.placeholder).toFixed(1))
+
+    })
+    // console.log(val * 95 %)
+    console.log(val)
+}
 
 async function modalBar() {
     const centerOsActiv = document.querySelector('.centerOsActiv')
@@ -58,6 +80,6 @@ async function modalBar() {
 
 
     await reqModalBar(arrNameCol, centerOsActiv.id);
-    viewBar(centerOsActiv.id);
+    // viewBar(centerOsActiv.id);
 }
 

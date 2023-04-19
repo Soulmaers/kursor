@@ -177,31 +177,60 @@
                                 <div class="modalTitle">
                                     <span class="modalNameOs">Ось : </span>
                                     <span class="modalNumberOs"></span>
+                                    <div class="titlestroke">
+                                        <div class="spanStroke">Bar</div>
+                                        <div class="spanStroke">%</div>
+                                    </div>
                                 </div>
                                 <ul class="modalList">
                                     <li class="modalItem">
-                                        <p class="modalText" id="knd">Критически низкое давление, БАР</p><input
-                                            class="modalInput " step="0.1" type="number" placeholder="-">
+                                        <p class="modalText" id="norma">Норма, БАР</p>
+                                        <div class="inputs">
+                                            <input class="modalInput normal" step="0.1" type="text" placeholder="">
+                                            <div class="modalInputProcent">100</div>
+                                        </div>
                                     </li>
                                     <li class="modalItem">
-                                        <p class="modalText" id="kvd">Критически высокое давление, БАР</p><input
-                                            class="modalInput" step="0.1" type="number" placeholder="-">
+                                        <p class="modalText" id="dnmin">Давление в норме min, БАР</p>
+                                        <div class="inputs">
+                                            <div class="modalInputProcent divfinal">!</div>
+                                            <input class="modalInput inpfinal" type="text" placeholder="95">
+                                        </div>
                                     </li>
                                     <li class="modalItem">
-                                        <p class="modalText" id="dnn">Давление ниже нормы, БАР</p><input
-                                            class="modalInput " step="0.1" type="number" placeholder="-">
+                                        <p class="modalText" id="dnmax">Давление в норме max, БАР</p>
+                                        <div class="inputs">
+                                            <div class="modalInputProcent divfinal">!</div>
+                                            <input class="modalInput inpfinal" type="text" placeholder="105">
+                                        </div>
                                     </li>
                                     <li class="modalItem">
-                                        <p class="modalText" id="dvn">Давление выше нормы, БАР</p><input
-                                            class="modalInput " step="0.1" type="number" placeholder="-">
+                                        <p class="modalText" id="dnn">Давление ниже нормы, БАР</p>
+                                        <div class="inputs">
+                                            <div class="modalInputProcent divfinal">!</div>
+                                            <input class="modalInput inpfinal" type="text" placeholder="94.9">
+                                        </div>
                                     </li>
                                     <li class="modalItem">
-                                        <p class="modalText" id="dnmin">Давление в норме min, БАР</p><input
-                                            class="modalInput " step="0.1" type="number" placeholder="-">
+                                        <p class="modalText" id="dvn">Давление выше нормы, БАР</p>
+                                        <div class="inputs">
+                                            <div class="modalInputProcent divfinal">!</div>
+                                            <input class="modalInput inpfinal" type="text" placeholder="105.1">
+                                        </div>
                                     </li>
                                     <li class="modalItem">
-                                        <p class="modalText" id="dnmax">Давление в норме max, БАР</p><input
-                                            class="modalInput " step="0.1" type="number" placeholder="-">
+                                        <p class="modalText" id="knd">Критически низкое давление, БАР</p>
+                                        <div class="inputs">
+                                            <div class="modalInputProcent divfinal">!</div>
+                                            <input class="modalInput inpfinal" type="text" placeholder="79.9">
+                                        </div>
+                                    </li>
+                                    <li class="modalItem">
+                                        <p class="modalText" id="kvd">Критически высокое давление, БАР</p>
+                                        <div class="inputs">
+                                            <div class="modalInputProcent divfinal">!</div>
+                                            <input class="modalInput inpfinal" type="text" placeholder="120.1">
+                                        </div>
                                     </li>
                                 </ul>
                                 <button class="btnModal">Сохранить</button>
