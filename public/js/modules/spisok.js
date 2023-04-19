@@ -1,7 +1,7 @@
 import { convert, visual } from './visual.js'
 import { dashView } from './dash.js'
 import { navigator } from './navigator.js'
-import { objColor, generFront, generDav } from './content.js'
+import { objColor, generFront, objColorFront, generDavKran, generDav } from './content.js'
 import { sortAll } from './sort.js'
 /*
 let isLoaded = false
@@ -161,10 +161,10 @@ export function conturTest(testov) {
                                             integer = el.value
                                             if ((nameCar == 'КранГаличанинР858ОР178')) {
 
-                                                e.children[0].style.fill = objColor[generFront(integer)]
+                                                e.children[0].style.fill = objColorFront[generDavKran(integer)]
                                             }
                                             else {
-                                                e.children[0].style.fill = objColor[generFront(integer)]
+                                                e.children[0].style.fill = objColorFront[generFront(integer)]
                                             }
                                         }
                                     }
@@ -395,10 +395,10 @@ function viewListKoleso(arg, params, nameCar) {
                             else {
                                 integer = el.value
                                 if ((activePost == 'КранГаличанинР858ОР178')) {
-                                    e.children[0].style.fill = objColor[generFront(integer)]
+                                    e.children[0].style.fill = objColorFront[generDavKran(integer)]
                                 }
                                 else {
-                                    e.children[0].style.fill = objColor[generFront(integer)]
+                                    e.children[0].style.fill = objColorFront[generFront(integer)]
                                 }
                             }
                             arg.result.forEach((it) => {
