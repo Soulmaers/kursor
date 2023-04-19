@@ -92,7 +92,18 @@ export function generDav(el, arrBar) {
     return generatedValue;
 };
 
-
+export function generDavKran(el) {
+    let generatedValue;
+    if (el >= 6 && el <= 10) {
+        generatedValue = 3;
+        //  console.log('al')
+        //  div.style.display = 'none';
+    }
+    else {
+        generatedValue = 1;
+    }
+    return generatedValue;
+};
 
 
 export function generFront(el) {
@@ -130,7 +141,12 @@ export const objColor = {
     3: '#4af72f',//#009933',
     5: '#fff'
 }
-
+export const objColorFront = {
+    1: '#FF0000',
+    2: '#FFFF00',
+    3: '#009933',//#009933',
+    5: '#fff'
+}
 
 export function gener(el) {
     let generatedValue;
