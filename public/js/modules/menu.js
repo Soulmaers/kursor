@@ -29,6 +29,7 @@ export let dann;
 
 
 export function zapros() {
+    console.log('работаем запрос')
     const flagsT = 1 + 1024// + 1024//4096
     const prmsT = {
         "spec": {

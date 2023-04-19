@@ -70,18 +70,25 @@ export const forTyres = `
     <div class="imgDivTires"><img class="img" src="./image/kol.png"></div>
 </div>`
 
-export function generDav(el) {
-    //  modulAlarm();
+export function generDav(el, arrBar) {
+    console.log(arrBar)
+
+    console.log(el)
     let generatedValue;
-    if (el >= 10) {
-        generatedValue = 1;
-    }
-    if (el <= 5.9) {
-        generatedValue = 1;
-    }
-    else if (el < 10 && el > 5.9) {
+
+    if (el >= Number(arrBar.dnmin) && el <= Number(arrBar.dnmax)) {
+        console.log('1')
         generatedValue = 3;
     }
+    if (el > Number(arrBar.knd) && el <= Number(arrBar.dnn) || el > Number(arrBar.dvn) && el <= Number(arrBar.kvd)) {
+        console.log('2')
+        generatedValue = 2;
+    }
+    if (el <= Number(arrBar.knd) || el >= Number(arrBar.kvd)) {
+        console.log('3')
+        generatedValue = 1;
+    }
+    console.log(generatedValue)
     return generatedValue;
 };
 

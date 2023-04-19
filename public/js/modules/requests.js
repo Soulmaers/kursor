@@ -33,6 +33,7 @@ export function postModel(massModel) {
 
 export function postTyres(tyres) {
     console.log('колеса')
+    console.log(tyres)
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
     const name = active[0].textContent.replace(/\s+/g, '')
@@ -205,14 +206,17 @@ export async function reqModalBar(arr, id) {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
     const arrValue = [];
-    const modalInput = document.querySelectorAll('.modalInput')
+    const divFinal = document.querySelectorAll('.divfinal')
+    const normal = document.querySelector('.normal')
     // console.log(JSON.stringify({ id, arr, arrValue, activePost }))
     arrValue.push(activePost)
     arrValue.push(id)
-
-    modalInput.forEach(el => {
-        arrValue.push(el.value)
+    arrValue.push(normal.value)
+    divFinal.forEach(el => {
+        arrValue.push(el.textContent)
+        console.log(el.textContent)
     })
+    console.log(arrValue)
     const bar = await fetch('api/modalBar', {
         method: "POST",
         headers: {
@@ -258,14 +262,24 @@ export async function viewBar(id) {
         nval.shift()
         nval.shift()
         nval.shift()
-        const modalInput = document.querySelectorAll('.modalInput')
+        const divfinal = document.querySelectorAll('.divfinal')
+        const inpfinal = document.querySelectorAll('.inpfinal')
+        const normal = document.querySelector('.normal')
         console.log(nval)
-        modalInput.forEach((el, index) => {
-            el.value = nval[index][1]
+        normal.value = nval[0][1]
+        nval.shift()
+        divfinal.forEach((el, index) => {
+            console.log(nval[index][1])
+            el.textContent = nval[index][1]
+            inpfinal[index].value = ((parseFloat(el.textContent * 100) / normal.value)).toFixed(1)
         })
+
     }
 
 }
+
+
+
 export function viewTech(id) {
     const rad = document.querySelectorAll('[name=radio]')
     console.log(rad)

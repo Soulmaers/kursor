@@ -34,7 +34,12 @@ export async function loadParamsViewList(car) {
 
 
 export function conturTest(testov) {
-
+    const groups = document.querySelectorAll('.groups')
+    if (groups) {
+        groups.forEach(e => {
+            e.remove()
+        })
+    }
     const preloader = document.querySelector('.preloader') /* находим блок Preloader */
     preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
     const tt = new Date()
@@ -44,10 +49,8 @@ export function conturTest(testov) {
             e.remove();
         })
     }
-    console.log(testov)
     testov.forEach(el => {
         if (el.length !== 0) {
-            console.log(el)
             const wrapList = document.querySelector('.wrapList')
             const group = document.createElement('div')
             group.classList.add('groups')
@@ -158,7 +161,7 @@ export function conturTest(testov) {
                                             integer = el.value
                                             if ((nameCar == 'КранГаличанинР858ОР178')) {
 
-                                                e.children[0].style.fill = objColor[generDav(integer)]
+                                                e.children[0].style.fill = objColor[generFront(integer)]
                                             }
                                             else {
                                                 e.children[0].style.fill = objColor[generFront(integer)]
@@ -392,7 +395,7 @@ function viewListKoleso(arg, params, nameCar) {
                             else {
                                 integer = el.value
                                 if ((activePost == 'КранГаличанинР858ОР178')) {
-                                    e.children[0].style.fill = objColor[generDav(integer)]
+                                    e.children[0].style.fill = objColor[generFront(integer)]
                                 }
                                 else {
                                     e.children[0].style.fill = objColor[generFront(integer)]
@@ -523,8 +526,6 @@ function hiddenWindows() {
             el.style.display = 'none'
             el.nextElementSibling.style.display = 'block'
             el.closest('.groups').children[1].style.display = 'block'
-            console.log(el.closest('.groups').children[1])
-            console.log(el.closest('.groups').children[0].children[0])
             el.closest('.groups').children[0].style.padding = '5px 80px'
             el.closest('.groups').children[0].children[0].style.display = 'block'
             el.closest('.groups').children[0].children[4].style.left = '60px'
@@ -532,7 +533,6 @@ function hiddenWindows() {
             el.closest('.groups').children[0].children[2].style.left = '170px'
             const ide = el.closest('.groups').children[0].children[0].children[0]
             const ideValue = el.closest('.groups').children[0].children[0].children[0].id
-            console.log(el.closest('.groups').children[0].children[0].children[0])
 
             const checkboxes = document.querySelectorAll('.checkInList');
             let enabledSettings = []

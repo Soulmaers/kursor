@@ -174,9 +174,11 @@ export const convert = (ob) => {
 }
 
 
-export function viewConfigurator(arg, params) {
+export function viewConfigurator(arg, params, osi) {
+    console.log(osi)
     if (params) {
         const parametrs = convert(params)
+        console.log(parametrs)
         const alerts = [];
         const tiresLink = document.querySelectorAll('.tires_link')
         let activePost;
@@ -197,82 +199,82 @@ export function viewConfigurator(arg, params) {
             let done;
             tiresLink.forEach(e => {
                 if (e.id == item.tyresdiv) {
-                    if (!par.includes(item.pressure)) {
-                        e.children[0].textContent = 'off'
-                        e.children[0].style.color = '#000'
-                    }
-                    if (!par.includes(item.temp)) {
-                        e.children[1].textContent = 'off'
-                    }
-                    else {
-                        arg.forEach((el) => {
-                            if (el.name === item.pressure) {
-                                if (activePost === 'А652УА198') {
-                                    done = parseFloat((el.value / 10).toFixed(1))
-                                }
-                                else {
-                                    done = parseFloat(el.value)
-                                }
-                                alerts.push(done)
-                                e.children[0].style.position = 'relative'
-                                e.children[0].style.border = 'none'
-                                e.children[0].style.borderRadius = '30% 30% 0 0'
-                                e.children[0].innerHTML = `${done}\n<span class="ppp">Bar</span>`
-                                e.children[0].setAttribute('rel', `${item.pressure}`)
-                                const ppp = document.querySelectorAll('.ppp')
-                                ppp.forEach(el => {
-                                    el.style.position = 'absolute'
-                                    el.style.bottom = 0
-                                })
-                                e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
-                                if (activePost == 'КранГаличанинР858ОР178') {
-                                    signal = objColor[generDav(done)]
-                                }
-                                else {
-                                    signal = objColor[generFront(done)]
-                                }
-                                if (el.status === 'false') {
-                                    e.children[0].style.background = 'lightgray';
-                                    e.children[0].style.color = '#000'
-                                    return
-                                }
-                                e.children[0].style.color = signal;
+                    arg.forEach((el) => {
+                        if (el.name === item.pressure) {
+                            if (activePost === 'А652УА198') {
+                                done = parseFloat((el.value / 10).toFixed(1))
                             }
-                            if (el.name === item.temp) {
-                                tiresLink.forEach(e => {
-                                    if (e.id == item.tyresdiv) {
-                                        if (el.value === '-128' || el.value === '-50') {
-                                            el.value = 'err'
-                                            e.children[1].style.color = 'red'
-                                            e.children[1].textContent = el.value
-                                            e.children[1].style.border = 'none'
-                                            e.children[1].style.borderRadius = '0 0 30% 30%'
-                                            if (el.status === 'false') {
-                                                e.children[1].style.background = 'lightgray';
-                                                e.children[0].style.color = '#000'
-                                                e.children[1].style.border = 'none'
-                                                e.children[1].style.borderRadius = '0 0 30% 30%'
-
-                                            }
-                                        }
-                                        if (el.value >= -51 && el.value < 36) {
-                                            e.children[1].style.border = 'none'
-                                            e.children[1].textContent = el.value + '°C'
-                                            e.children[1].setAttribute('rel', `${item.temp}`)
-                                            if (el.status === 'false') {
-                                                e.children[1].style.background = 'lightgray';
-                                                e.children[1].style.border = 'none'
-                                                e.children[1].style.borderRadius = '0 0 30% 30%'
-                                                e.children[1].style.color = '#000'
-                                                return
-                                            }
-                                            e.children[1].style.color = objColor[generT(el.value)];
-                                        }
+                            else {
+                                done = parseFloat(el.value)
+                            }
+                            alerts.push(done)
+                            e.children[0].style.position = 'relative'
+                            e.children[0].style.border = 'none'
+                            e.children[0].style.borderRadius = '30% 30% 0 0'
+                            e.children[0].innerHTML = `${done}\n<span class="ppp">Bar</span>`
+                            e.children[0].setAttribute('rel', `${item.pressure}`)
+                            const ppp = document.querySelectorAll('.ppp')
+                            ppp.forEach(el => {
+                                el.style.position = 'absolute'
+                                el.style.bottom = 0
+                            })
+                            e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
+                            if (activePost === 'КранГаличанинР858ОР178') {
+                                // console.log(osi.idOs)
+                                osi.forEach(element => {
+                                    if (element.idOs == item.osNumber) {
+                                        //    console.log(element.idOs)
+                                        //  console.log(Object.entries(element))
+                                        signal = objColor[generDav(done, element)]
                                     }
                                 })
+
+                                //  signal = objColor[generDav(done)]
                             }
-                        })
-                    }
+                            else {
+                                signal = objColor[generFront(done)]
+                            }
+                            if (el.status === 'false') {
+                                e.children[0].style.background = 'lightgray';
+                                e.children[0].style.color = '#000'
+                                return
+                            }
+                            e.children[0].style.color = signal;
+                        }
+                        if (el.name === item.temp) {
+                            tiresLink.forEach(e => {
+                                if (e.id == item.tyresdiv) {
+                                    if (el.value === '-128' || el.value === '-50') {
+                                        el.value = 'err'
+                                        e.children[1].style.color = 'red'
+                                        e.children[1].textContent = el.value
+                                        e.children[1].style.border = 'none'
+                                        e.children[1].style.borderRadius = '0 0 30% 30%'
+                                        if (el.status === 'false') {
+                                            e.children[1].style.background = 'lightgray';
+                                            e.children[0].style.color = '#000'
+                                            e.children[1].style.border = 'none'
+                                            e.children[1].style.borderRadius = '0 0 30% 30%'
+
+                                        }
+                                    }
+                                    if (el.value >= -51 && el.value < 36) {
+                                        e.children[1].style.border = 'none'
+                                        e.children[1].textContent = el.value + '°C'
+                                        e.children[1].setAttribute('rel', `${item.temp}`)
+                                        if (el.status === 'false') {
+                                            e.children[1].style.background = 'lightgray';
+                                            e.children[1].style.border = 'none'
+                                            e.children[1].style.borderRadius = '0 0 30% 30%'
+                                            e.children[1].style.color = '#000'
+                                            return
+                                        }
+                                        e.children[1].style.color = objColor[generT(el.value)];
+                                    }
+                                }
+                            })
+                        }
+                    })
                 }
 
             })

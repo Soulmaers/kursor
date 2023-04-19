@@ -308,7 +308,6 @@ export async function deleteFn(id, log) {
 }
 
 export function checkCreate(nameCar) {
-    console.log(nameCar)
     const ide = document.getElementById('all')
     nameCar.forEach(elem => {
         const box = document.querySelector('.check_boxs')

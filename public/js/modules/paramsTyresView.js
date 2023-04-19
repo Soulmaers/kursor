@@ -134,18 +134,13 @@ export async function loadParamsView() {
 
 
 
-export function viewPokasateli() {
-    // console.log('запускВиджет')
+export async function viewPokasateli() {
     const btnShina = document.querySelectorAll('.modals')
     if (btnShina[1].classList.contains('active') === true) {
         return
     }
-
     let activePost;
     const active = document.querySelectorAll('.color')
-    /* if (active[0].textContent == 'Кран 858') {
-         active[0].textContent = 'КранГаличанин Р858ОР178'
-     }*/
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.listItem')[0]
         activePost = listItem.textContent.replace(/\s+/g, '')
@@ -153,42 +148,30 @@ export function viewPokasateli() {
     else {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
-
-    fetch('api/tyresView', {
+    const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
         body: (JSON.stringify({ activePost }))
+    }
+    const paramsss = await fetch('api/tyresView', param)
+    const params = await paramsss.json()
+    const datas = await fetch('api/wialon', param)
+    const data = await datas.json()
+    const os = await fetch('api/barView', param)
+    const osi = await os.json()
+
+    data.values.sort((prev, next) => {
+        if (prev.name < next.name) return -1;
+        if (prev.name < next.name) return 1;
     })
-        .then((res) => res.json())
-        .then((res) => {
-            const params = res
-
-            fetch('api/wialon', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: (JSON.stringify({ activePost }))
-            })
-                .then((res) => res.json())
-                .then((res) => {
-                    const data = res
-
-                    data.values.sort((prev, next) => {
-                        if (prev.name < next.name) return -1;
-                        if (prev.name < next.name) return 1;
-                    })
-
-                    view(data.values)
-                    viewConfigurator(data.values, params.values)
-                })
-        })
-
-    //   btnShina.classList.contains('active') === true ?  : viewPokasateli(), setInterval(viewPokasateli, 6000);
-
+    view(data.values)
+    viewConfigurator(data.values, params.values, osi.values)
 }
+
+
+
 function koleso(kol, btnsens) {
     const active = document.querySelectorAll('.color')
     liCreate()
@@ -257,10 +240,12 @@ function koleso(kol, btnsens) {
 const massivion = [];
 export const massivionbd = [];
 function valid(paramPress, paramTemp, kolesos) {
+    console.log(kolesos[kolesos.length - 1].closest('.osi').children[1].id)
     const kol = kolesos[kolesos.length - 1];
     const kolId = kolesos[kolesos.length - 1].id;
     const dav = paramPress[paramPress.length - 1]
     const temp = paramTemp[paramTemp.length - 1]
+    const osId = kolesos[kolesos.length - 1].closest('.osi').children[1].id
     const arrSpreed1 = [...dav.textContent]
     let value;
     arrSpreed1.forEach(el => {
@@ -278,7 +263,7 @@ function valid(paramPress, paramTemp, kolesos) {
     const mass = [];
     mass.push(kol, dav, temp)
     const massbd = [];
-    massbd.push(kolId, value, value2)
+    massbd.push(kolId, value, value2, osId)
     massivion.push(mass)
     massivionbd.push(massbd)
     console.log(massivionbd)

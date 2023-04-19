@@ -7,9 +7,6 @@ export function modalOs() {
     const modalClear = document.querySelector('.modalClear')
     const btnModal = document.querySelector('.btnModal')
     const centerOs = document.querySelectorAll('.centerOs')
-
-
-
     centerOs.forEach(e => {
         e.addEventListener('click', () => {
             if (e.classList.contains('centerOsActiv')) {
@@ -36,7 +33,15 @@ export function modalOs() {
                 modalNumberOs.textContent = centerOsActiv.id + '-' + 'Тягач'
             }
             modalTitle.style.display = 'flex'
-            // viewBar(centerOsActiv.id);
+            const divfinal = document.querySelectorAll('.divfinal')
+            const inpfinal = document.querySelectorAll('.inpfinal')
+            divfinal.forEach(e => {
+                e.textContent = ''
+            })
+            inpfinal.forEach(e => {
+                e.value = ''
+            })
+            viewBar(centerOsActiv.id);
 
             const norma = document.querySelector('.normal')
             console.log(norma)
@@ -53,20 +58,29 @@ export function modalOs() {
 
 
 function fncalc(val) {
-
     const inpfinal = document.querySelectorAll('.inpfinal')
     const divfinal = document.querySelectorAll('.divfinal')
-    console.log(inpfinal)
-    console.log(divfinal)
-
+    let values;
     inpfinal.forEach((el, index) => {
-
-        divfinal[index].textContent = Number((val / 100 * el.placeholder).toFixed(1))
-
+        !el.value ? values = el.placeholder : values = el.value
+        divfinal[index].textContent = ((String(val / 100 * values)).substr(0, 5))
+        const res = val / 100 * values
+        console.log(res)
     })
-    // console.log(val * 95 %)
-    console.log(val)
 }
+//Math.trunc(nPos * 100) / 100;
+
+const norma = document.querySelector('.normal')
+const inpfinal = document.querySelectorAll('.inpfinal')
+inpfinal.forEach(it => {
+    it.addEventListener('input', () => {
+        if (norma.value) {
+            it.previousElementSibling.textContent = ((String(norma.value / 100 * it.value)).substr(0, 5))
+            console.log(it.previousElementSibling.textContent)
+        }
+    })
+})
+
 
 async function modalBar() {
     const centerOsActiv = document.querySelector('.centerOsActiv')
@@ -78,8 +92,8 @@ async function modalBar() {
         arrNameCol.push(el.id)
     })
 
-
+    console.log(arrNameCol)
     await reqModalBar(arrNameCol, centerOsActiv.id);
-    // viewBar(centerOsActiv.id);
+    viewBar(centerOsActiv.id);
 }
 
