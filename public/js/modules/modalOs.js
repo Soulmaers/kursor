@@ -7,6 +7,7 @@ export function modalOs() {
     const modalCenterOs = document.querySelector('.modalCenterOs')
     const modalClear = document.querySelector('.modalClear')
     const btnModal = document.querySelector('.btnModal')
+    const btnModalClear = document.querySelector('.btnModalClear')
     const centerOs = document.querySelectorAll('.centerOs')
     centerOs.forEach(e => {
         e.addEventListener('click', () => {
@@ -55,9 +56,15 @@ export function modalOs() {
         modalCenterOs.style.display = 'none'
     })
     btnModal.addEventListener('click', modalBar)
+    btnModalClear.addEventListener('click', clearBar)
 }
 
-
+function clearBar() {
+    const inpfinal = document.querySelectorAll('.inpfinal')
+    inpfinal.forEach(e => {
+        e.value = e.placeholder
+    })
+}
 function fncalc(val) {
     const inpfinal = document.querySelectorAll('.inpfinal')
     const divfinal = document.querySelectorAll('.divfinal')
