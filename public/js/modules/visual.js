@@ -222,7 +222,7 @@ export function viewConfigurator(arg, params, osi) {
                                 el.style.position = 'absolute'
                                 el.style.bottom = 0
                             })
-                            e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
+                            //  e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                             osi.forEach(element => {
                                 if (element.idOs == item.osNumber) {
                                     signal = objColor[generDav(done, element)]
@@ -361,11 +361,11 @@ export async function viewOs(counts) {
         tiresD.classList.add('tiresD')
         const tiresT = document.createElement('div');
         tiresT.classList.add('tiresT')
-        const place = document.createElement('div');
-        place.classList.add('place')
+        // const place = document.createElement('div');
+        //  place.classList.add('place')
         link.appendChild(tiresD);
         link.appendChild(tiresT);
-        link.appendChild(place);
+        // link.appendChild(place);
     })
 
     const cont2 = document.createElement('div');
