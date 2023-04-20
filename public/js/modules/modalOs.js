@@ -1,5 +1,6 @@
 
 import { reqModalBar, viewBar } from './requests.js'
+import { loadParamsView } from './paramsTyresView.js'
 
 
 export function modalOs() {
@@ -83,6 +84,8 @@ inpfinal.forEach(it => {
 
 
 async function modalBar() {
+    const modalCenterOs = document.querySelector('.modalCenterOs')
+    modalCenterOs.style.display = 'none'
     const centerOsActiv = document.querySelector('.centerOsActiv')
     console.log(centerOsActiv.id)
     const modalText = document.querySelectorAll('.modalText')
@@ -94,6 +97,7 @@ async function modalBar() {
 
     console.log(arrNameCol)
     await reqModalBar(arrNameCol, centerOsActiv.id);
+    await loadParamsView()
     viewBar(centerOsActiv.id);
 }
 
