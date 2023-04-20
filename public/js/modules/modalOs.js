@@ -60,9 +60,12 @@ export function modalOs() {
 }
 
 function clearBar() {
+    const norma = document.querySelector('.normal')
     const inpfinal = document.querySelectorAll('.inpfinal')
-    inpfinal.forEach(e => {
+    const divfinal = document.querySelectorAll('.divfinal')
+    inpfinal.forEach((e, index) => {
         e.value = e.placeholder
+        divfinal[index].textContent = ((String(norma.value / 100 * e.placeholder)).substr(0, 5))
     })
 }
 function fncalc(val) {
