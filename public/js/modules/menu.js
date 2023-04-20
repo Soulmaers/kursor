@@ -29,6 +29,10 @@ export let dann;
 
 
 export function zapros() {
+    const tiresActiv = document.querySelector('.tiresActiv')
+    if (tiresActiv) {
+        tiresActiv.remove()
+    }
     console.log('работаем запрос')
     const flagsT = 1 + 1024// + 1024//4096
     const prmsT = {

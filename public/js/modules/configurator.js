@@ -151,6 +151,7 @@ function os(arr) {
 
 
 export async function changeBase(massModel, activePost) {
+    console.log('работаем колесо')
     const gosp = (document.querySelector('.gosNumber')).value
     console.log(document.querySelector('.gosNumber'))
     const param = {

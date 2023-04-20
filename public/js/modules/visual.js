@@ -33,8 +33,11 @@ export async function visual(el) {
         el.classList.remove('del')
         el.style.display = 'none'
     })
+
     tiresLink.forEach(e => {
         if (e.classList.contains('tiresActiv')) {
+            console.log(e)
+            console.log('Frnbdyjt rjktcj!!!!!!!!!!!!!!!!!!!!!')
             grafics.style.display = 'flex'
         }
     })
@@ -219,6 +222,7 @@ export function viewConfigurator(arg, params, osi) {
                                 el.style.bottom = 0
                             })
                             e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
+                            /*
                             if (activePost === 'КранГаличанинР858ОР178') {
                                 // console.log(osi.idOs)
                                 osi.forEach(element => {
@@ -233,7 +237,14 @@ export function viewConfigurator(arg, params, osi) {
                             }
                             else {
                                 signal = objColor[generFront(done)]
-                            }
+                            }*/
+                            osi.forEach(element => {
+                                if (element.idOs == item.osNumber) {
+                                    //    console.log(element.idOs)
+                                    //  console.log(Object.entries(element))
+                                    signal = objColor[generDav(done, element)]
+                                }
+                            })
                             if (el.status === 'false') {
                                 e.children[0].style.background = 'lightgray';
                                 e.children[0].style.color = '#000'
