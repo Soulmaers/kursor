@@ -3655,26 +3655,47 @@ input[type="text"]:focus {
 
 .inputs {
   display: flex;
-  width: 25%
+  width: 35%;
 }
 
 .modalCenterOs {
   display: none;
-  background-color: lightgray;
+  background-color: #fff;
   border: 1px solid gray;
-  position: relative;
   position: absolute;
   top: 40px;
   right: -150px;
   z-index: 2000;
-  width: 400px
+  width: 400px;
+  font-family: Roboto;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5)
+}
+
+
+.lowBTN {
+  display: flex;
+}
+
+.divModalBTN,
+.divModalClearBTN {
+  background-color: #fff;
+  width: 110px;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 0;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+  margin: 5px 2px
 }
 
 .modalList {
-  padding: 20px 15px 5px 10px;
   list-style-type: none;
   width: 100%;
   box-sizing: border-box;
+  margin: 0;
+  padding: 10px 0;
 }
 
 .modalInput,
@@ -3682,7 +3703,7 @@ input[type="text"]:focus {
   border: none;
   background: none;
   margin: 2px 1px;
-  min-width: 50px;
+  width: 50px;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -3693,6 +3714,10 @@ input[type="text"]:focus {
 
 }
 
+.titlePropOs {
+  width: 30%
+}
+
 .modalInput {
   border-bottom: 1px solid gray;
 }
@@ -3700,41 +3725,58 @@ input[type="text"]:focus {
 .titlestroke {
   display: flex;
   align-items: center;
-  margin-left: 205px;
   margin-top: 2px;
 }
 
 .spanStroke {
   margin: 0 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: Roboto;
 }
 
 .modalItem {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-family: Roboto;
   color: #000;
+  padding: 0 15px;
+}
+
+.modalItem:hover {
+  background-color: lightgray;
 }
 
 .modalText {
   color: #000;
   margin: 2px 0;
-  width: 75%
+  width: 65%;
 }
 
 .btnModal,
 .btnModalClear {
-  cursor: pointer;
-  border: none;
+  height: 32px;
+  width: 98%;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 0;
+  font-size: 0.8rem;
+  font-family: Roboto;
+  font-weight: 700;
   color: #000;
-  background: none;
-  margin-bottom: 5px;
+  cursor: pointer;
 }
 
-.btnModal:active {
-  color: #fff;
+.btnModal:hover {
+  border: 1px solid black;
+  background-color: #fff;
+}
 
+.btnModalClear:hover {
+  border: 1px solid black;
+  background-color: #fff;
 }
 
 .modalClear {
@@ -3745,18 +3787,19 @@ input[type="text"]:focus {
 }
 
 .modalTitle {
-  display: none;
+  display: flex;
+  justify-content: space-around;
   cursor: pointer;
-  position: absolute;
   top: 0;
   left: 5px;
-  margin-top: 5px
+  margin-top: 5px;
+  padding: 2px 5px;
 }
 
 .modalNameOs {
   color: #000;
   margin: 2px 0;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-family: Roboto;
   font-weight: bold;
 }
@@ -3764,7 +3807,7 @@ input[type="text"]:focus {
 .modalNumberOs {
   color: #000;
   margin: 2px 0;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-family: Roboto;
   font-weight: bold;
 }

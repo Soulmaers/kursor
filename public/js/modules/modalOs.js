@@ -27,14 +27,14 @@ export function modalOs() {
             })
             const centerOsActiv = document.querySelector('.centerOsActiv')
             const modalNumberOs = document.querySelector('.modalNumberOs')
-            const modalTitle = document.querySelector('.modalTitle')
+            // const modalTitle = document.querySelector('.modalTitle')
             if (e.classList.contains('pricep')) {
                 modalNumberOs.textContent = centerOsActiv.id + '-' + 'Прицеп'
             }
             else {
                 modalNumberOs.textContent = centerOsActiv.id + '-' + 'Тягач'
             }
-            modalTitle.style.display = 'flex'
+            //  modalTitle.style.display = 'flex'
             const divfinal = document.querySelectorAll('.divfinal')
             const inpfinal = document.querySelectorAll('.inpfinal')
             divfinal.forEach(e => {
