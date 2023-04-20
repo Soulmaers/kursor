@@ -77,6 +77,7 @@ export function zapros() {
                             const arr3 = await result
                             const objects = arr3.item.nm
                             const prob = await loadParamsViewList(objects)
+                            console.log(prob)
                             const role = document.querySelectorAll('.log')[0].textContent
                             const login = document.querySelectorAll('.log')[1].textContent
                             const massObjectCar = await dostupObject(login)

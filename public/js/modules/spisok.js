@@ -18,22 +18,23 @@ export async function loadParamsViewList(car) {
         },
         body: (JSON.stringify({ car }))
     }
-
     const mod = await fetch('api/listModel', params)
     const model = await mod.json()
     const tyr = await fetch('api/listTyres', params)
     const models = await tyr.json()
     const dat = await fetch('api/wialonAll', params)
     const data = await dat.json()
-
-    testov.push([model, models, data])
-    return [model, models, data]
+    const osis = await fetch('api/barViewAll', params)
+    const osi = await osis.json()
+    testov.push([model, models, data, osi])
+    return [model, models, data, osi]
 }
 
 
 
 
 export function conturTest(testov) {
+    console.log(testov)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         groups.forEach(e => {
@@ -97,14 +98,11 @@ export function conturTest(testov) {
                 listName.classList.add('list_name2')
                 listItemCar.appendChild(listName)
                 listName.textContent = elem[0].message
-
                 const listCheck = document.createElement('p')
                 listCheck.classList.add('listTitlesCheck')
                 listCheck.innerHTML = `<input class="checkInList" type="checkbox" 
     value=${nameCar} rel=${nameCar} id=${nameCar}OO checked>`
                 listName.prepend(listCheck)
-
-
                 const listProfil = document.createElement('div')
                 listProfil.classList.add('list_profil2')
                 listItemCar.appendChild(listProfil)
@@ -148,31 +146,24 @@ export function conturTest(testov) {
                                         }
                                         if (nameCar == 'А652УА198') {
                                             integer = parseFloat((el.value / 10).toFixed(1))
-
-                                            e.children[0].style.fill = objColorFront[generFront(parseFloat((el.value / 10).toFixed(1)))]
                                         }
                                         else {
                                             integer = el.value
-                                            if ((nameCar == 'КранГаличанинР858ОР178')) {
-
-                                                e.children[0].style.fill = objColorFront[generDavKran(integer)]
-                                            }
-                                            else {
-                                                e.children[0].style.fill = objColorFront[generFront(integer)]
-                                            }
                                         }
+                                        elem[3].result.forEach(it => {
+                                            if (it.idOs == item.osNumber) {
+                                                e.children[0].style.fill = objColorFront[generDav(integer, it)]
+                                            }
+                                        })
                                     }
                                 })
                             }
                         })
                     })
                 }
-
             })
-
         }
     })
-
     hiddenWindows()
     navigator();
     sortAll()
@@ -331,9 +322,12 @@ export function zaprosSpisok() {
         }
         const par = await fetch('api/listTyres', param)
         const params = await par.json()
+        console.log(params)
         const dat = await fetch('api/wialonAll', param)
         const data = await dat.json()
-        viewListKoleso(data, params, el)
+        const osis = await fetch('api/barViewAll', param)
+        const osi = await osis.json()
+        viewListKoleso(data, params, osi, el)
     })
     countt++
     if (countt === 1) {
@@ -360,7 +354,7 @@ export function zaprosSpisok() {
 
 setInterval(zaprosSpisok, 300000)
 
-function viewListKoleso(arg, params, nameCar) {
+function viewListKoleso(arg, params, osi, nameCar) {
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
     if (params.result) {
@@ -377,27 +371,23 @@ function viewListKoleso(arg, params, nameCar) {
                     shina.forEach(e => {
                         if (e.id == item.tyresdiv) {
                             if (el.status === 'false') {
-
                                 e.children[0].style.fill = 'gray'
                                 return
                             }
-
                             if (activePost == 'А652УА198') {
                                 integer = parseFloat((el.value / 10).toFixed(1))
-                                e.children[0].style.fill = objColorFront[generFront(parseFloat((el.value / 10).toFixed(1)))]
                             }
                             else {
                                 integer = el.value
-                                if ((activePost == 'КранГаличанинР858ОР178')) {
-                                    e.children[0].style.fill = objColorFront[generDavKran(integer)]
-                                }
-                                else {
-                                    e.children[0].style.fill = objColorFront[generFront(integer)]
-                                }
                             }
                             arg.result.forEach((it) => {
                                 if (it.name === item.temp) {
                                     massItog.push([activePost, e, item.pressure, integer, parseFloat(it.value)])
+                                }
+                            })
+                            osi.result.forEach(it => {
+                                if (it.idOs === item.osNumber) {
+                                    e.children[0].style.fill = objColorFront[generDav(integer, it)]
                                 }
                             })
                         }

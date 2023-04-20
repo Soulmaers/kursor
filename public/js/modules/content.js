@@ -71,11 +71,10 @@ export const forTyres = `
 </div>`
 
 export function generDav(el, arrBar) {
-    console.log(arrBar)
+    console.log(el, arrBar)
 
-    console.log(el)
+
     let generatedValue;
-
     if (el >= Number(arrBar.dnmin) && el <= Number(arrBar.dnmax)) {
         console.log('1')
         generatedValue = 3;

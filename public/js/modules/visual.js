@@ -201,6 +201,7 @@ export function viewConfigurator(arg, params, osi) {
             let signal;
             let done;
             tiresLink.forEach(e => {
+
                 if (e.id == item.tyresdiv) {
                     arg.forEach((el) => {
                         if (el.name === item.pressure) {
@@ -222,26 +223,8 @@ export function viewConfigurator(arg, params, osi) {
                                 el.style.bottom = 0
                             })
                             e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
-                            /*
-                            if (activePost === 'КранГаличанинР858ОР178') {
-                                // console.log(osi.idOs)
-                                osi.forEach(element => {
-                                    if (element.idOs == item.osNumber) {
-                                        //    console.log(element.idOs)
-                                        //  console.log(Object.entries(element))
-                                        signal = objColor[generDav(done, element)]
-                                    }
-                                })
-
-                                //  signal = objColor[generDav(done)]
-                            }
-                            else {
-                                signal = objColor[generFront(done)]
-                            }*/
                             osi.forEach(element => {
                                 if (element.idOs == item.osNumber) {
-                                    //    console.log(element.idOs)
-                                    //  console.log(Object.entries(element))
                                     signal = objColor[generDav(done, element)]
                                 }
                             })
@@ -287,7 +270,6 @@ export function viewConfigurator(arg, params, osi) {
                         }
                     })
                 }
-
             })
             if (activePost == 'КранГаличанинР858ОР178') {
                 if (alerts.some(element => element < 6) == true) {

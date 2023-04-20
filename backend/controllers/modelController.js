@@ -223,6 +223,21 @@ module.exports.barView = (req, res) => {
 }
 
 
+module.exports.barViewAll = (req, res) => {
+    const nameCar = req.body.car.replace(/\s+/g, '')
+    try {
+        const selectBase = `SELECT * FROM ifBar WHERE nameCar='${nameCar}'`
+        connection.query(selectBase, function (err, results) {
+            if (err) console.log(err)
+            //  console.log(results)
+            res.json({ status: 200, result: results, message: req.body.car })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
 module.exports.checkObject = (req, res) => {
     const login = req.body.login
     const role = req.body.role
@@ -680,7 +695,7 @@ module.exports.listTyres = (req, res) => {
     //console.log(req.body)
     const nameCar = req.body.car.replace(/\s+/g, '')
     try {
-        const selectBase = `SELECT tyresdiv, pressure, temp FROM tyres WHERE nameCar='${nameCar}'`
+        const selectBase = `SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE nameCar='${nameCar}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err)
             if (results === undefined) {
