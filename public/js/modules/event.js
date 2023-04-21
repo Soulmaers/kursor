@@ -1,4 +1,4 @@
-import { postTyres, reqDelete, paramsDelete, viewTech } from './requests.js'
+import { postTyres, reqDelete, paramsDelete, barDelete, viewTech } from './requests.js'
 import { alarmClear } from './visual.js'
 import { data } from './content.js'
 import { getDash } from './dash.js'
@@ -262,6 +262,7 @@ export function btnDel() {
         alarmClear()
         reqDelete(activePost);
         paramsDelete(activePost);
+        barDelete(activePost);
     })
 
 }

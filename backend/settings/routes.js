@@ -49,6 +49,9 @@ router.post('/api/tyresView', controllerModel.tyresView)
 
 router.post('/api/delete', controllerModel.deleteView)
 router.post('/api/paramsDelete', controllerModel.paramsDeleteView)
+router.post('/api/barDelete', controllerModel.barDelete)
+
+
 
 router.post('/api/listModel', controllerModel.listModel)
 router.post('/api/listTyres', controllerModel.listTyres)

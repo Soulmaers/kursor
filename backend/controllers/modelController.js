@@ -56,6 +56,23 @@ module.exports.paramsDeleteView = (req, res) => {
 
 }
 
+module.exports.barDelete = (req, res) => {
+    console.log(req.body.name)
+    console.log('удаляем!!!!')
+    const nameCar = req.body.name
+    try {
+        const postModel = `DELETE FROM ifBar WHERE nameCar='${nameCar}'`
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            response.status(200, results, '', res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
 
 module.exports.updateModel = (req, res) => {
     console.log('обновляем')

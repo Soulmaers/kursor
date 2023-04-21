@@ -183,31 +183,6 @@ function viewAlarmStorage(name, stor) {
             })
         })
     })
-
-
-    /*
-        t.forEach(el => {
-            if (!el.classList.contains('best') && !el.classList.contains('alarmOpen') && !el.classList.contains('oneName') && !el.classList.contains('spoyler')) {
-                if (el.nextSibling.classList.contains('norma') && el.nextSibling.children[1].textContent == el.children[1].textContent) {
-                    const dt = [...el.nextSibling.children[0].textContent]
-                    const allmassiv = [];
-                    allmassiv.push(dt[6], dt[7], dt[8], dt[9], '-', dt[3], dt[4], '-', dt[0], dt[1], 'T', dt[11], dt[12], dt[13], dt[14], dt[15], ':', '0', '0', 'Z')
-                    const itog = Date.parse(allmassiv.join(''))
-                    const dt2 = [...el.children[0].textContent]
-                    const allmassiv2 = [];
-                    allmassiv2.push(dt2[6], dt2[7], dt2[8], dt2[9], '-', dt2[3], dt2[4], '-', dt2[0], dt2[1], 'T', dt2[11], dt2[12], dt2[13], dt2[14], dt2[15], ':', '0', '0', 'Z')
-                    const itog2 = Date.parse(allmassiv2.join(''))
-                    const res = (itog - itog2)
-                    const minutes = Math.floor((res / (1000 * 60)) % 60)
-                    const hours = Math.floor((res / (1000 * 60 * 60)) % 24);
-                    const day = Math.floor((res / (1000 * 60 * 60 * 24)) % 24);
-                    const days = (day < 1) ? "" + day : day;
-                    const hourss = (hours < 10) ? "" + hours : hours;
-                    const minutess = (minutes < 10) ? "" + minutes : minutes;
-                    //  console.log(days + '(d)' + ' ' + hourss + "(h)" + ' ' + + minutess + "(m)");
-                }
-            }
-        })*/
     t.forEach(el => {
         if (el.nextSibling !== null && !el.classList.contains('alarmOpen') && !el.classList.contains('oneName') && !el.classList.contains('spoyler')) {
             //  console.log(el)
@@ -282,9 +257,18 @@ function viewAlarmStorage(name, stor) {
     arr.forEach(it => {
         tbody.appendChild(it)
     })
+    alarmFire()
 }
 
-
+function alarmFire() {
+    const alarmStorage = document.querySelectorAll('.alarmFire')
+    const ogon = document.querySelector('.ogon')
+    alarmStorage ? ogon.style.display = 'block' : ogon.style.display = 'none'
+    //  alarmStorage.children
+    // const child = alarmStorage.children[0]
+    console.log(alarmStorage)
+    //  console.log(child.children.querySelectorAll('.alarmOpen'))
+}
 function nextAll(elem) {
     var next = false;
     //  console.log(elem.parentNode.children)

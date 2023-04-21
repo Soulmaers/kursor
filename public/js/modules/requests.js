@@ -81,6 +81,20 @@ export const reqDelete = (name) => {
 }
 
 
+export const barDelete = async (name) => {
+    const modalCenterOs = document.querySelector('.modalCenterOs')
+    modalCenterOs.style.display = 'none'
+    const complete = await fetch('api/barDelete', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name }),
+    })
+    const result = await complete.json()
+
+}
+
 export const paramsDelete = (name) => {
     fetch('api/paramsDelete', {
         method: "POST",

@@ -201,7 +201,6 @@ export function viewConfigurator(arg, params, osi) {
             let signal;
             let done;
             tiresLink.forEach(e => {
-
                 if (e.id == item.tyresdiv) {
                     arg.forEach((el) => {
                         if (el.name === item.pressure) {
@@ -271,39 +270,11 @@ export function viewConfigurator(arg, params, osi) {
                     })
                 }
             })
-            if (activePost == 'КранГаличанинР858ОР178') {
-                if (alerts.some(element => element < 6) == true) {
-                    alarmMin();
-                }
-                if (alerts.some(element => element > 9.9) == true) {
-                    alarmMax();
-                }
-            }
-            else {
-
-                if (alerts.some(element => element > 10) == true) {
-                    alarmMax();
-                }
-                if (alerts.some(element => element < 8) == true) {
-                    alarmMin();
-                }
-            }
         })
     }
-}
-function alarmMin() {
-    const div = document.querySelector('.alarm')
-    div.style.display = 'block'
-    const ogon = document.querySelector('.ogon')
-    ogon.style.display = 'block'
 
 }
-function alarmMax() {
-    const div = document.querySelector('.alarm')
-    div.style.display = 'block'
-    const ogon = document.querySelector('.ogon')
-    ogon.style.display = 'block'
-}
+
 
 export function alarmClear() {
     const div = document.querySelector('.alarm')
