@@ -89,8 +89,6 @@ function fncalc(val) {
         console.log(res)
     })
 }
-//Math.trunc(nPos * 100) / 100;
-
 const norma = document.querySelector('.normal')
 const inpfinal = document.querySelectorAll('.inpfinal')
 inpfinal.forEach(it => {

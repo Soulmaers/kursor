@@ -211,7 +211,7 @@ function zaprosSpisokb(name) {
                 else {
                     const params = results
                     const modelUniqValues = convert(params)
-                    console.log(modelUniqValues)
+                    //   console.log(modelUniqValues)
                     try {
                         const selectBase = `SELECT name, value FROM params WHERE nameCar='${nameCar}'`
                         connection.query(selectBase, function (err, results) {
@@ -225,7 +225,7 @@ function zaprosSpisokb(name) {
                                     if (err) console.log(err)
                                     //  console.log(results)
                                     const osi = results
-                                    console.log(osi)
+                                    //   console.log(osi)
                                     data.forEach((el) => {
                                         modelUniqValues.forEach((item) => {
                                             if (el.name == item.pressure) {
@@ -288,6 +288,8 @@ function proverka(arr) {
     //  console.log(arr[0][4].id)
     let time = new Date()
     arr.forEach(el => {
+        //   console.log(el[4])
+        //  console.log(Number(el[4].knd))
         let alarm;
         const name = 'alarm' + el[0] + el[1]
         const sqls1 = `SELECT * FROM alarms WHERE name='${el[0]}' AND senspressure='${el[1]}'`
@@ -303,14 +305,16 @@ function proverka(arr) {
                     return
                 }
                 else {
-                    if (el[2] < 6) {
-                        //   console.log(el + ' ' + 'таблица нет, аларм есть' + ' ' + time)
+                    if (el[2] <= Number(el[4].knd)) {
+                        console.log(el[2])
+                        console.log(Number(el[4].knd))
+                        console.log(el + ' ' + 'таблица нет, аларм есть' + ' ' + time)
                         const data = createDate()
                         alarm = 'Критически низкое давление'
                         alarmBase(data, el, alarm)
                         return
                     }
-                    if (el[2] > 10) {
+                    if (el[2] >= Number(el[4].kvd)) {
                         //   console.log(el + ' ' + 'таблица нет, аларм есть' + ' ' + time)
                         const data = createDate()
                         alarm = 'Критически высокое давление'
@@ -341,7 +345,7 @@ function proverka(arr) {
                     return
                 }
                 else {
-                    if (el[2] < 6) {
+                    if (el[2] <= Number(el[4].knd)) {
                         //  console.log(el[2])
 
                         //  console.log(Number(results[results.length - 1].bar))
@@ -358,7 +362,7 @@ function proverka(arr) {
                         }
                         return
                     }
-                    if (el[2] > 10) {
+                    if (el[2] >= Number(el[4].kvd)) {
 
                         // console.log(results[results.length - 1].bar)
 
@@ -398,6 +402,9 @@ function alarmBase(data, tyres, alarm) {
     const dannie = data.concat(tyres)
     const name = dannie[2]
     dannie.push(alarm)
+    console.log(dannie)
+    dannie.splice(5, 1)
+    // console.log(dannie)
     const value = [dannie];
     const tableModel = 'alarm' + dannie[1] + dannie[2]
     try {
