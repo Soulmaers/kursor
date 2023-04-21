@@ -70,23 +70,23 @@ export const forTyres = `
 </div>`
 
 export function generDav(el, arrBar) {
-    console.log(el, arrBar)
+    //  console.log(el, arrBar)
 
 
     let generatedValue;
     if (el >= Number(arrBar.dnmin) && el <= Number(arrBar.dnmax)) {
-        console.log('1')
+        //  console.log('1')
         generatedValue = 3;
     }
     if (el > Number(arrBar.knd) && el <= Number(arrBar.dnn) || el > Number(arrBar.dvn) && el <= Number(arrBar.kvd)) {
-        console.log('2')
+        // console.log('2')
         generatedValue = 2;
     }
     if (el <= Number(arrBar.knd) || el >= Number(arrBar.kvd)) {
-        console.log('3')
+        //  console.log('3')
         generatedValue = 1;
     }
-    console.log(generatedValue)
+    //  console.log(generatedValue)
     return generatedValue;
 };
 

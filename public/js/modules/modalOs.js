@@ -27,14 +27,12 @@ export function modalOs() {
             })
             const centerOsActiv = document.querySelector('.centerOsActiv')
             const modalNumberOs = document.querySelector('.modalNumberOs')
-            // const modalTitle = document.querySelector('.modalTitle')
             if (e.classList.contains('pricep')) {
                 modalNumberOs.textContent = centerOsActiv.id + '-' + 'Прицеп'
             }
             else {
                 modalNumberOs.textContent = centerOsActiv.id + '-' + 'Тягач'
             }
-            //  modalTitle.style.display = 'flex'
             const divfinal = document.querySelectorAll('.divfinal')
             const inpfinal = document.querySelectorAll('.inpfinal')
             divfinal.forEach(e => {
@@ -44,7 +42,6 @@ export function modalOs() {
                 e.value = ''
             })
             viewBar(centerOsActiv.id);
-
             const norma = document.querySelector('.normal')
             console.log(norma)
             norma.addEventListener('input', () => {
@@ -55,9 +52,22 @@ export function modalOs() {
     modalClear.addEventListener('click', () => {
         modalCenterOs.style.display = 'none'
     })
-    btnModal.addEventListener('click', modalBar)
+    btnModal.addEventListener('click', () => {
+        const normal = document.querySelector('.normal')
+        normal.value === '' ? messfn() : modalBar()
+    })
+
     btnModalClear.addEventListener('click', clearBar)
 }
+
+function messfn() {
+    const mess = document.querySelector('.mess')
+    mess.style.display = 'flex'
+    setTimeout(() => mess.style.display = 'none', 3000)
+}
+
+
+
 
 function clearBar() {
     const norma = document.querySelector('.normal')

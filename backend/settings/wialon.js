@@ -198,10 +198,11 @@ const convert = (ob) => {
 
 function zaprosSpisokb(name) {
     const massItog = [];
+    console.log(name)
     name.forEach(itey => {
         const nameCar = itey
         try {
-            const selectBase = `SELECT tyresdiv, pressure,temp FROM tyres WHERE nameCar='${nameCar}'`
+            const selectBase = `SELECT tyresdiv, pressure,temp, osNumber FROM tyres WHERE nameCar='${nameCar}'`
             connection.query(selectBase, function (err, results) {
                 if (err) console.log(err);
                 if (results === undefined) {
@@ -210,29 +211,48 @@ function zaprosSpisokb(name) {
                 else {
                     const params = results
                     const modelUniqValues = convert(params)
+                    console.log(modelUniqValues)
                     try {
                         const selectBase = `SELECT name, value FROM params WHERE nameCar='${nameCar}'`
                         connection.query(selectBase, function (err, results) {
                             if (err) console.log(err);
                             const data = results
                             let integer;
-                            data.forEach((el) => {
-                                modelUniqValues.forEach((item) => {
-                                    if (el.name == item.pressure) {
-                                        if (nameCar === 'А652УА198') {
-                                            integer = parseFloat((el.value / 10).toFixed(1))
-                                        }
-                                        else {
-                                            integer = el.value
-                                        }
-                                        data.forEach((it) => {
-                                            if (it.name === item.temp) {
-                                                massItog.push([itey, item.pressure, parseFloat(integer), parseFloat(it.value)])
+                            let osiBar;
+                            try {
+                                const selectBase = `SELECT * FROM ifBar WHERE nameCar='${nameCar}'`
+                                connection.query(selectBase, function (err, results) {
+                                    if (err) console.log(err)
+                                    //  console.log(results)
+                                    const osi = results
+                                    console.log(osi)
+                                    data.forEach((el) => {
+                                        modelUniqValues.forEach((item) => {
+                                            if (el.name == item.pressure) {
+                                                if (nameCar === 'А652УА198') {
+                                                    integer = parseFloat((el.value / 10).toFixed(1))
+                                                }
+                                                else {
+                                                    integer = el.value
+                                                }
+                                                osi.forEach(el => {
+                                                    if (el.idOs === item.osNumber) {
+                                                        osiBar = el
+                                                    }
+                                                })
+                                                data.forEach((it) => {
+                                                    if (it.name === item.temp) {
+                                                        massItog.push([itey, item.pressure, parseFloat(integer), parseFloat(it.value), osiBar])
+                                                    }
+                                                })
                                             }
                                         })
-                                    }
+                                    })
                                 })
-                            })
+                            }
+                            catch (e) {
+                                console.log(e)
+                            }
                         })
                     }
 
@@ -264,14 +284,10 @@ function createDate() {
     return [todays]
 
 }
-
-
-
 function proverka(arr) {
-    //  console.log(arr)
+    //  console.log(arr[0][4].id)
     let time = new Date()
     arr.forEach(el => {
-
         let alarm;
         const name = 'alarm' + el[0] + el[1]
         const sqls1 = `SELECT * FROM alarms WHERE name='${el[0]}' AND senspressure='${el[1]}'`

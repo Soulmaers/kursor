@@ -322,7 +322,6 @@ export function zaprosSpisok() {
         }
         const par = await fetch('api/listTyres', param)
         const params = await par.json()
-        console.log(params)
         const dat = await fetch('api/wialonAll', param)
         const data = await dat.json()
         const osis = await fetch('api/barViewAll', param)
@@ -338,7 +337,6 @@ export function zaprosSpisok() {
         }
     }
     const updateTime = document.querySelector('.update_time')
-
     let today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
