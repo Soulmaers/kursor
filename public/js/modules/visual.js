@@ -69,14 +69,14 @@ export async function visual(el) {
     if (!icon || icon !== el) {
         icon = el;
         iconParams()
-        timeIcon = setInterval(iconParams, 300000) //отрисовываем карту osm
+        timeIcon = setInterval(iconParams, 180000) //отрисовываем карту osm
     }
     kranParams()
-    setInterval(kranParams, 300000)
+    setInterval(kranParams, 180000)
     if (!start || start !== el) {
         start = el;
         geoloc()
-        time = setInterval(geoloc, 300000) //отрисовываем карту osm
+        time = setInterval(geoloc, 180000) //отрисовываем карту osm
     }
 }
 

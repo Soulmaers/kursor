@@ -27,7 +27,7 @@ function init(user) {
         })
         .then(function (data) {
             createTable();
-            setInterval(createTable, 300000);
+            setInterval(createTable, 180000);
 
         })
 }
@@ -159,6 +159,7 @@ function postParametrs(name, param) {
 
 
 function getMainInfo(name, res) {
+    console.log('частота запросов')
     const flags = 1 + 1026
     const prms = {
         "spec": {

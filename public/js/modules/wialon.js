@@ -47,13 +47,9 @@ export function graf(t1, t2, int, id) {
 }
 
 export function geoloc() {
-
-
     let nowDate = Math.round(new Date().getTime() / 1000)
     let nDate = new Date();
     let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
-    //  console.log(timeFrom)
-
 
     const flags = 1 + 1024
     const prms = {
