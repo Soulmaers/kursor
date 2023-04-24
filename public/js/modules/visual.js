@@ -9,7 +9,7 @@ import { modalOs } from './modalOs.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
 import { iconFind, iconFindWindows, refactor } from './configIcons.js'
-import { grafikPoly } from './staticObject.js'
+import { grafikPoly, tarirView } from './staticObject.js'
 
 let start;
 let time;
@@ -83,7 +83,8 @@ export async function visual(el) {
     const active = document.querySelector('.color')
     if (active.textContent === 'Бочка') {
         console.log(active.textContent)
-        grafikPoly()
+        //  grafikPoly()
+        tarirView();
     }
     else {
         const tarir = document.querySelector('.tarir')

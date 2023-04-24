@@ -2,8 +2,8 @@
 import { zamer } from './content.js'
 
 const createList = document.querySelector('.createList')
-
 createList.addEventListener('input', createListFn)
+
 
 function createListFn() {
     const tablePokasateli = document.querySelector('.tablePokasateli')
@@ -27,6 +27,34 @@ function createListFn() {
 
     }
 }
+
+
+function createListFnview(e) {
+    const tablePokasateli = document.querySelector('.tablePokasateli')
+    const zamer = document.querySelectorAll('.zamer')
+    if (zamer) {
+        zamer.forEach(e => {
+            e.remove()
+        })
+    }
+    const createList = document.querySelector('.createList')
+    createList.value = e.length
+    let count = e.length;
+    let countId = 0;
+    for (let i = 0; i < count; i++) {
+        countId++
+        tablePokasateli.innerHTML += `<div class="zamer">
+                        <h3 class="titleZamer" id="zamer${countId}">Замер${countId}</h3>
+                        <div class="wrapTarir"><input class="dut" placeholder="ДУТ"><input class="litr" placeholder="литры"></div>
+                    </div>`
+    }
+    const wrapTarir = document.querySelectorAll('.wrapTarir')
+    e.forEach((el, index) => {
+        wrapTarir[index].children[0].value = el.DUT
+        wrapTarir[index].children[1].value = el.litrs
+    })
+}
+
 
 const plu = document.querySelector('.plu')
 plu.addEventListener('click', () => {
@@ -68,13 +96,128 @@ bochka.addEventListener('click', () => {
     // console.log('бочка клик')
 })
 
+export function createDate() {
+
+    let today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
+    const day = today.getDate() < 10 ? '0' + today.getDate() : today.getDate();
+    today = day + '.' + month + '.' + year;
+
+    return today
+
+}
 
 
-const y = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 395, 400]
-const x = [90, 222, 444, 666, 777, 901, 1060, 1190, 1322, 1500, 2006, 3100, 4010, 4094]
-const approximated = approximateValue(3047, x, y, 6);
+const buttOnTarir = document.querySelector('.buttOnTarir')
+buttOnTarir.addEventListener('click', async () => {
+    const AllarrayTarir = [];
 
-console.log(approximated * 0.9987);
+    const active = document.querySelector('.color')
+    const activePost = active.textContent.replace(/\s+/g, '')
+    const titleZamer = document.querySelectorAll('.titleZamer')
+    Array.from(titleZamer).forEach(el => {
+        const arrayTarir = [];
+        const datas = createDate(new Date())
+        arrayTarir.push(datas)
+        arrayTarir.push(activePost)
+        arrayTarir.push(el.id)
+        arrayTarir.push(el.nextElementSibling.children[0].value)
+        arrayTarir.push(el.nextElementSibling.children[1].value)
+        AllarrayTarir.push(arrayTarir)
+    })
+    console.log(AllarrayTarir)
+
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ AllarrayTarir }))
+    }
+    const res = await fetch('/api/tarirSave', param)
+    const response = await res.json()
+
+
+    tarirView();
+})
+
+
+
+export async function tarirView() {
+
+    const active = document.querySelector('.color')
+    const activePost = active.textContent.replace(/\s+/g, '')
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost }))
+    }
+    const res = await fetch('/api/tarirView', param)
+    const response = await res.json()
+    console.log(response.result.length)
+    createListFnview(response.result)
+    const x = [];
+    const y = [];
+    const points = []
+    response.result.forEach(el => {
+        const point = []
+        x.push(el.DUT)
+        y.push(el.litrs)
+        point.push(el.DUT)
+        point.push(el.litrs)
+        points.push(point)
+    })
+
+    const flags = 1 + 1024
+    const prms = {
+        "spec": {
+            "itemsType": "avl_unit",
+            "propName": "sys_name",
+            "propValueMask": "*",
+            "sortType": "sys_name"
+        },
+        "force": 1,
+        "flags": flags,
+        "from": 0,
+        "to": 0
+    };
+
+    const remote1 = wialon.core.Remote.getInstance();
+    remote1.remoteCall('core/search_items', prms,
+        async function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            const arr1 = Object.values(result);
+            const arrCar = arr1[5];
+            arrCar.forEach(it => {
+                const active = document.querySelector('.color')
+                const act = active.children[0].textContent
+                if (it.nm === act) {
+                    if (it.lmsg.p.rs485fuel_level1) {
+                        const val = it.lmsg.p.rs485fuel_level1;
+                        console.log(val)
+                        const approximated = approximateValue(val, x, y, 6);
+                        const znak = approximated[0] * 0.9987
+                        console.log(approximated[0] * 0.9987)
+                        grafGradient(y, znak)
+                        grafikPoly(points, 6, approximated[1])
+                    }
+                }
+
+            })
+        })
+
+
+
+    //  const approximated = approximateValue(1782, x, y, 6);
+    // console.log()
+
+    //  console.log(approximated[0] * 0.9987);
+}
 
 function polynomialApproximation(x, y, degree) {
     const n = x.length;
@@ -137,13 +280,12 @@ function evaluatePolynomial(x, a) {
             y[i] = y[i] * xi + a[j];
         }
     }
-
     return y;
 }
 function approximateValue(value, x, y, degree) {
     const coeffs = polynomialApproximation(x, y, degree);
     const approximated = evaluatePolynomial([value], coeffs)[0];
-    return approximated;
+    return [approximated, coeffs]
 }
 
 
@@ -151,14 +293,17 @@ function approximateValue(value, x, y, degree) {
 
 
 
-export function grafikPoly() {
+export function grafikPoly(points, degree, coeffs) {
+    console.log(points)
+    console.log(degree)
+    console.log(coeffs)
     console.log('рисуем')
     const tarir = document.querySelector('.tarir')
     tarir.style.display = 'block'
     const polyEval = (x, coeffs) => coeffs.reduce((acc, coeff, i) => acc + coeff * x ** i, 0);
-    const points = [[90, 10], [222, 20], [444, 30], [666, 40], [777, 50], [901, 60], [1060, 70], [1190, 80], [1322, 90], [1500, 100], [2006, 200], [3100, 300], [4010, 395], [4094, 400]]
-    const degree = 6;
-    const coeffs = polynomialApproximation(x, y, degree);
+    // const points = [[90, 10], [222, 20], [444, 30], [666, 40], [777, 50], [901, 60], [1060, 70], [1190, 80], [1322, 90], [1500, 100], [2006, 200], [3100, 300], [4010, 395], [4094, 400]]
+    //   const degree = 6;
+    // const coeffs = polynomialApproximation(x, y, degree);
 
     const margin = { top: 20, right: 20, bottom: 50, left: 40 };
     const width = 400 - margin.left - margin.right;
@@ -181,7 +326,8 @@ export function grafikPoly() {
 
     const xScale = d3.scaleLinear()
         .range([0, width])
-        .domain(d3.extent(points, d => d[0]));
+        .domain(d3.extent(points, d => d[0]))
+
 
     const yScale = d3.scaleLinear()
         .range([height, 0])
@@ -198,9 +344,10 @@ export function grafikPoly() {
 
     const resolution = 100;
     const step = (xScale.domain()[1] - xScale.domain()[0]) / resolution;
+    console.log(step)
     const polyData = d3.range(xScale.domain()[0], xScale.domain()[1], step)
         .map(x => [x, polyEval(x, coeffs)]);
-
+    console.log(polyData)
     const line = d3.line()
         .x(d => xScale(d[0]))
         .y(d => yScale(d[1]));
@@ -232,3 +379,18 @@ export function grafikPoly() {
         .attr("fill", "black")
 
 }
+
+
+
+function grafGradient(y, znak) {
+    console.log(y)
+    console.log(znak)
+    const foto = document.querySelector('.foto')
+    const shkala = document.createElement('div')
+    shkala.classList.add('.shkala')
+    shkala.textContent = znak.toFixed(2) + 'л.'
+    foto.appendChild(shkala)
+
+
+}
+

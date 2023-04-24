@@ -74,6 +74,40 @@ module.exports.barDelete = (req, res) => {
 
 }
 
+
+
+module.exports.tarirSave = (req, res) => {
+    const arr = req.body.AllarrayTarir
+    try {
+        const postModel = `INSERT INTO tarir(date, nameCar, zamer, DUT,litrs) VALUES?`
+        connection.query(postModel, [arr], function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            response.status(200, results, '', res)
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+
+module.exports.tarirView = (req, res) => {
+    try {
+        const postModel = `SELECT * FROM tarir WHERE nameCar='${req.body.activePost}'`
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+            //console.log(results)
+            res.json({ result: results })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+
+
 module.exports.updateModel = (req, res) => {
     console.log('обновляем')
     //  console.log(req.body.massModel)

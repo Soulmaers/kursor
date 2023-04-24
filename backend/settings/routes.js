@@ -74,3 +74,6 @@ router.post('/api/toView', controllerModel.toView)
 router.post('/api/checkObject', controllerModel.checkObject)
 router.post('/api/viewCheckObject', controllerModel.viewCheckObject)
 
+
+router.post('/api/tarirSave', controllerModel.tarirSave)
+router.post('/api/tarirView', controllerModel.tarirView)
