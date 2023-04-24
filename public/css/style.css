@@ -2344,6 +2344,7 @@ input[type="date"] {
   height: 200px;
   background-image: url(../image/017.jpg);
   background-size: cover;
+  cursor: pointer;
 }
 
 .shkala {
@@ -2352,6 +2353,75 @@ input[type="date"] {
   background-image: url(../image/020.png);
   background-size: contain;
   background-repeat: no-repeat;
+}
+
+
+.zamer {
+  display: flex;
+  justify-content: space-around;
+  padding: 2px 5px;
+  align-items: center;
+  width: 46%
+}
+
+.tablePokasateli {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.btnLow {
+  margin: 10px 10px;
+  background-color: #fff;
+  width: 160px;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  padding: 2px 2px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+}
+
+.buttOnTarir {
+  width: 97%;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  background-color: lightgray;
+  padding: 5px 5px;
+  font-size: 0.8rem;
+  font-family: Roboto;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.buttOnTarir:hover {
+  background-color: #fff;
+}
+
+
+.tableTarir {
+  width: 370px;
+  display: none;
+  flex-direction: column;
+  border: 1px solid gray;
+}
+
+.titleZamer {
+  font-size: 0.7rem;
+  margin: 0;
+}
+
+.dut,
+.litr {
+  width: 40px;
+  margin: 0 3px;
+}
+
+.wrapTarir {
+  display: flex;
 }
 
 .mess {
@@ -3705,6 +3775,8 @@ input[type="text"]:focus {
   display: flex;
   align-items: center;
 }
+
+
 
 .divModalBTN,
 .divModalClearBTN {

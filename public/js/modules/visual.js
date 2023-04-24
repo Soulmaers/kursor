@@ -34,7 +34,8 @@ export async function visual(el) {
         el.classList.remove('del')
         el.style.display = 'none'
     })
-
+    const tableTarir = document.querySelector('.tableTarir')
+    tableTarir.style.display = 'none'
     tiresLink.forEach(e => {
         if (e.classList.contains('tiresActiv')) {
             console.log(e)

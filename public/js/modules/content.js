@@ -40,6 +40,12 @@ export const text = `<div class=" osi">
     </div>`
 
 
+
+export const zamer = `  <div class="zamer">
+                        <h3 class="titleZamer" id="zamer">Замер</h3>
+                        <div class="wrapTarir"><input class="dut" placeholder="ДУТ"><input class="litr" placeholder="литры"></div>
+                    </div>`
+
 export const tr = `<h3 class="tr oneName">
                                                     <p class="td">Дата</p>
                                                <p class="td">Колесо</p>

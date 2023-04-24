@@ -1,10 +1,42 @@
 
+import { zamer } from './content.js'
+
+
+let count = 50;
+let countId = 0;
+function createList() {
+    const tablePokasateli = document.querySelector('.tablePokasateli')
+    for (let i = 0; i < count; i++) {
+        countId++
+        console.log('работает?')
+        tablePokasateli.innerHTML += `<div class="zamer">
+                        <h3 class="titleZamer" id="zamer${countId}">Замер${countId}</h3>
+                        <div class="wrapTarir"><input class="dut" placeholder="ДУТ"><input class="litr" placeholder="литры"></div>
+                    </div>`
+        // count--
+        console.log(countId)
+    }
+}
+
+
+createList()
+
+
+
+const bochka = document.querySelector('.bochka')
+bochka.addEventListener('click', () => {
+    const tableTarir = document.querySelector('.tableTarir')
+    tableTarir.style.display = 'flex'
+    const wrapper_left = document.querySelector('.wrapper_left')
+    wrapper_left.style.display = 'none'
+    console.log('бочка клик')
+})
 
 
 
 const y = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 395, 400]
 const x = [90, 222, 444, 666, 777, 901, 1060, 1190, 1322, 1500, 2006, 3100, 4010, 4094]
-const approximated = approximateValue(4094, x, y, 6);
+const approximated = approximateValue(3047, x, y, 6);
 
 console.log(approximated * 0.9987);
 
@@ -96,8 +128,15 @@ export function grafikPoly() {
     const width = 400 - margin.left - margin.right;
     const height = 200 - margin.top - margin.bottom;
 
+    const chartTarirer = document.querySelector('.chartTarir')
+    if (chartTarirer) {
+        chartTarirer.remove()
+    }
+    const chartTarir = document.createElement('div')
+    chartTarir.classList.add('chartTarir')
+    tarir.appendChild(chartTarir)
 
-    const svg = d3.select("#chart")
+    const svg = d3.select(".chartTarir")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -138,6 +177,15 @@ export function grafikPoly() {
         .attr("stroke", "steelblue")
         .attr("stroke-width", 2)
 
+
+    svg.append("path")
+        .datum(points)
+        .attr("fill", "none")
+        .attr("stroke", "red")
+        .attr("stroke-width", 2)
+        .attr("d", line);
+
+
     svg.selectAll("circle")
         .data(points)
         .enter()
@@ -145,10 +193,6 @@ export function grafikPoly() {
         .attr("cx", d => xScale(d[0]))
         .attr("cy", d => yScale(d[1]))
         .attr("r", 2)
-        .attr("fill", "red")
-
-
-
-
+        .attr("fill", "black")
 
 }
