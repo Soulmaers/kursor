@@ -5,6 +5,13 @@ const createList = document.querySelector('.createList')
 createList.addEventListener('input', createListFn)
 
 
+const authClearTarir = document.querySelector('.authClearTarir ')
+authClearTarir.addEventListener('click', () => {
+    const tableTarir = document.querySelector('.tableTarir')
+    tableTarir.style.display = 'none'
+    const wrapLeft = document.querySelector('.wrapper_left')
+    wrapLeft.style.display = 'block'
+})
 function createListFn() {
     const tablePokasateli = document.querySelector('.tablePokasateli')
     const zamer = document.querySelectorAll('.zamer')
@@ -294,10 +301,10 @@ function approximateValue(value, x, y, degree) {
 
 
 export function grafikPoly(points, degree, coeffs) {
-    console.log(points)
-    console.log(degree)
-    console.log(coeffs)
-    console.log('рисуем')
+    // console.log(points)
+    // console.log(degree)
+    // console.log(coeffs)
+    // console.log('рисуем')
     const tarir = document.querySelector('.tarir')
     tarir.style.display = 'block'
     const polyEval = (x, coeffs) => coeffs.reduce((acc, coeff, i) => acc + coeff * x ** i, 0);
@@ -382,8 +389,9 @@ export function grafikPoly(points, degree, coeffs) {
 
 
 
-function grafGradient(y, znak) {
-    console.log(y)
+function grafGradient(arr, znak) {
+
+    console.log(arr)
     console.log(znak)
     const foto = document.querySelector('.foto')
     const shkalas = document.querySelector('.shkala')
@@ -396,6 +404,77 @@ function grafGradient(y, znak) {
     shkala.textContent = znak.toFixed(2) + 'л.'
     foto.appendChild(shkala)
 
+
+
+    // set the dimensions and margins of the graph
+    // var margin = { top: 10, right: 30, bottom: 30, left: 40 },
+    const width = 150;
+    const height = 200;
+    console.log(width)
+    console.log(height)
+    // append the svg object to the body of the page
+    var svg = d3.select(".test")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform",
+            "translate(" + 40 + "," + 10 + ")");
+
+    // create dummy data
+    var data = [12, 19, 11, 13, 12, 22, 13, 4, 15, 16, 18, 19, 20, 12, 11, 9]
+
+    // Compute summary statistics used for the box:
+    var data_sorted = arr.sort(d3.ascending)
+    var q1 = d3.quantile(data_sorted, .25)
+    var median = d3.quantile(data_sorted, .5)
+    var q3 = d3.quantile(data_sorted, .75)
+    var interQuantileRange = q3 - q1
+    var min = q1 - 1.5 * interQuantileRange
+    var max = q1 + 1.5 * interQuantileRange
+
+    // Show the Y scale
+    var y = d3.scaleLinear()
+        .domain([0, arr[arr.length - 1]])
+        .range([height, 0]);
+    svg.call(d3.axisLeft(y))
+    // console.log(y)
+    // a few features for the box
+    var center = 100
+    var widths = 100
+
+    /*  // Show the main vertical line
+      svg
+          .append("line")
+          .attr("x1", center)
+          .attr("x2", center)
+          .attr("y1", y(min))
+          .attr("y2", y(max))
+          .attr("stroke", "black")
+  */
+    // Show the box
+    svg
+        .append("rect")
+        .attr("x", 10)
+        .attr("y", y(q3))
+        .attr("height", widths)
+        .attr("width", widths)
+        .attr("stroke", "black")
+        .style("fill", "green")
+
+    /*
+// show median, min and max horizontal lines
+svg
+    .selectAll("toto")
+    .data([min, median, max])
+    .enter()
+    .append("line")
+    .attr("x1", center - width / 2)
+    .attr("x2", center + width / 2)
+    .attr("y1", function (d) { return (y(d)) })
+    .attr("y2", function (d) { return (y(d)) })
+    .attr("stroke", "black")
+*/
 
 }
 

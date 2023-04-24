@@ -2377,6 +2377,13 @@ input[type="date"] {
   justify-content: space-around;
 }
 
+.authClearTarir {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  cursor: pointer;
+}
+
 .bochka {
   width: 250px;
   height: 200px;
@@ -2446,6 +2453,7 @@ input[type="date"] {
   display: none;
   flex-direction: column;
   border: 1px solid gray;
+  position: relative;
 }
 
 .titleZamer {
