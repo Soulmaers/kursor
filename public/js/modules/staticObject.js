@@ -1,35 +1,71 @@
 
 import { zamer } from './content.js'
 
+const createList = document.querySelector('.createList')
 
-let count = 50;
-let countId = 0;
-function createList() {
+createList.addEventListener('input', createListFn)
+
+function createListFn() {
     const tablePokasateli = document.querySelector('.tablePokasateli')
+    const zamer = document.querySelectorAll('.zamer')
+    if (zamer) {
+        zamer.forEach(e => {
+            e.remove()
+        })
+    }
+    const createList = document.querySelector('.createList')
+    let count = createList.value;
+    let countId = 0;
+
     for (let i = 0; i < count; i++) {
         countId++
-        console.log('работает?')
+        // console.log('работает?')
         tablePokasateli.innerHTML += `<div class="zamer">
                         <h3 class="titleZamer" id="zamer${countId}">Замер${countId}</h3>
                         <div class="wrapTarir"><input class="dut" placeholder="ДУТ"><input class="litr" placeholder="литры"></div>
                     </div>`
-        // count--
-        console.log(countId)
+
     }
 }
 
+const plu = document.querySelector('.plu')
+plu.addEventListener('click', () => {
+    const createList = document.querySelector('.createList')
+    let val;
+    createList.value !== '' ? val = createList.value : val = createList.placeholder
+    val++
+    console.log(val)
+    createList.value = val
+    createListFn()
+})
+const mi = document.querySelector('.mi')
+mi.addEventListener('click', () => {
+    const createList = document.querySelector('.createList')
+    let val;
 
-createList()
-
+    if (createList.value !== '' && createList.value > 0) {
+        console.log(createList.value)
+        val = createList.value
+        val--
+    }
+    else {
+        val = 0
+    }
+    createList.value = val
+    createListFn()
+})
 
 
 const bochka = document.querySelector('.bochka')
 bochka.addEventListener('click', () => {
+    const active = document.querySelector('.color')
+    const nameCar = document.querySelector('.name_car')
+    nameCar.textContent = active.textContent
     const tableTarir = document.querySelector('.tableTarir')
     tableTarir.style.display = 'flex'
     const wrapper_left = document.querySelector('.wrapper_left')
     wrapper_left.style.display = 'none'
-    console.log('бочка клик')
+    // console.log('бочка клик')
 })
 
 

@@ -107,27 +107,27 @@ export function zapros() {
                 })
             });
         })
-    /*
+
     const flagss = 1 + 4096//4096
     const prmss = {
-    "spec": [{
-        "type": 'id',
-        "data": 26702383,//26702383,//26702371,
-        "flags": 1048576,                 //    1048576
-        "mode": 0
-    }
-    ]
+        "spec": [{
+            "type": 'id',
+            "data": 26702386,//26702383,//26702371,
+            "flags": 8388608,//1048576,                 //    1048576-шт 8388608-анималс
+            "mode": 0
+        }
+        ]
     }
     const remote1s = wialon.core.Remote.getInstance();
     remote1s.remoteCall('core/update_data_flags', prmss,
-    async function (code, result) {
-        if (code) {
-            console.log(wialon.core.Errors.getErrorText(code));
-        }
-        console.log(result)
-     
-     
-    });*/
+        async function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+
+
+        });
 
     const flags = 1 + 1024//4096
     const prms = {

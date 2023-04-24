@@ -1325,6 +1325,25 @@ div.spoyler {
   background-size: cover;
 }
 
+.plu {
+  margin-top: 5px;
+  width: 15px;
+  height: 15px;
+  background-image: url(../image/plu.png);
+  background-size: cover;
+  cursor: pointer;
+}
+
+.mi {
+  margin-top: 5px;
+  margin-left: 5px;
+  width: 13px;
+  height: 13px;
+  background-image: url(../image/min.png);
+  background-size: cover;
+  cursor: pointer;
+}
+
 .wrap_alarm {
 
   width: 170px;
@@ -1434,11 +1453,30 @@ div.spoyler {
 .techTitle {
   font-size: 1.3rem;
   text-align: center;
+  margin-bottom: 5px;
 }
 
 .techInfo_list {
   list-style: none;
   margin: 0;
+}
+
+.selescCraeteList {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  height: 32px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  width: 95px;
+  justify-content: center;
+}
+
+.createList {
+  margin-left: 5px;
+  border: none;
+  border-bottom: 1px solid gray;
+  max-width: 20px;
 }
 
 .techForm {
@@ -2412,6 +2450,14 @@ input[type="date"] {
 .titleZamer {
   font-size: 0.7rem;
   margin: 0;
+}
+
+
+.name_car {
+  font-size: 1rem;
+  text-align: center;
+  font-weight: bold;
+  margin: 5px 0;
 }
 
 .dut,
@@ -4501,7 +4547,7 @@ input[type="text"]:focus {
 
   .techTitle {
     font-size: 1rem;
-
+    margin-bottom: 5px;
   }
 
   .wrapper_button {

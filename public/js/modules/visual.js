@@ -85,6 +85,20 @@ export async function visual(el) {
         console.log(active.textContent)
         grafikPoly()
     }
+    else {
+        const tarir = document.querySelector('.tarir')
+        tarir.style.display = 'none'
+
+    }
+    const zamer = document.querySelectorAll('.zamer')
+    const createList = document.querySelector('.createList')
+    createList.value = ''
+    if (zamer) {
+        zamer.forEach(e => {
+            e.remove()
+        })
+    }
+
 }
 
 
