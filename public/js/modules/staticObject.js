@@ -386,8 +386,13 @@ function grafGradient(y, znak) {
     console.log(y)
     console.log(znak)
     const foto = document.querySelector('.foto')
+    const shkalas = document.querySelector('.shkala')
+    console.log(shkalas)
+    if (shkalas) {
+        shkalas.remove()
+    }
     const shkala = document.createElement('div')
-    shkala.classList.add('.shkala')
+    shkala.classList.add('shkala')
     shkala.textContent = znak.toFixed(2) + 'л.'
     foto.appendChild(shkala)
 

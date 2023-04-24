@@ -2388,9 +2388,10 @@ input[type="date"] {
 .shkala {
   width: 100px;
   height: 200px;
-  background-image: url(../image/020.png);
-  background-size: contain;
-  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 
 

@@ -85,6 +85,7 @@ export async function visual(el) {
         console.log(active.textContent)
         //  grafikPoly()
         tarirView();
+        setInterval(tarirView, 180000)
     }
     else {
         const tarir = document.querySelector('.tarir')
