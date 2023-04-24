@@ -144,8 +144,6 @@ buttOnTarir.addEventListener('click', async () => {
     }
     const res = await fetch('/api/tarirSave', param)
     const response = await res.json()
-
-
     tarirView();
 })
 
@@ -401,80 +399,71 @@ function grafGradient(arr, znak) {
     }
     const shkala = document.createElement('div')
     shkala.classList.add('shkala')
-    shkala.textContent = znak.toFixed(2) + 'л.'
+    // shkala.textContent = znak.toFixed(2) + 'л.'
+    const value = [znak.toFixed(2)]
     foto.appendChild(shkala)
 
 
+    // Установка размера холста
+    var width = 150;
+    var height = 200;
 
-    // set the dimensions and margins of the graph
-    // var margin = { top: 10, right: 30, bottom: 30, left: 40 },
-    const width = 150;
-    const height = 200;
-    console.log(width)
-    console.log(height)
-    // append the svg object to the body of the page
-    var svg = d3.select(".test")
+    // Создание холста
+    var svg = d3.select(".shkala")
         .append("svg")
         .attr("width", width)
-        .attr("height", height)
-        .append("g")
-        .attr("transform",
-            "translate(" + 40 + "," + 10 + ")");
+        .attr("height", height);
 
-    // create dummy data
-    var data = [12, 19, 11, 13, 12, 22, 13, 4, 15, 16, 18, 19, 20, 12, 11, 9]
+    // Данные для диаграммы
+    // var data = [4526];
 
-    // Compute summary statistics used for the box:
-    var data_sorted = arr.sort(d3.ascending)
-    var q1 = d3.quantile(data_sorted, .25)
-    var median = d3.quantile(data_sorted, .5)
-    var q3 = d3.quantile(data_sorted, .75)
-    var interQuantileRange = q3 - q1
-    var min = q1 - 1.5 * interQuantileRange
-    var max = q1 + 1.5 * interQuantileRange
+    // Создание шкалы для оси y
+    var yScale = d3.scaleLinear()
+        .domain([0, d3.max(arr)])
+        .range([height - 40, 10]);
 
-    // Show the Y scale
-    var y = d3.scaleLinear()
-        .domain([0, arr[arr.length - 1]])
-        .range([height, 0]);
-    svg.call(d3.axisLeft(y))
-    // console.log(y)
-    // a few features for the box
-    var center = 100
-    var widths = 100
-
-    /*  // Show the main vertical line
-      svg
-          .append("line")
-          .attr("x1", center)
-          .attr("x2", center)
-          .attr("y1", y(min))
-          .attr("y2", y(max))
-          .attr("stroke", "black")
-  */
-    // Show the box
-    svg
+    // Создание столбиков
+    svg.selectAll("rect")
+        .data(value)
+        .enter()
         .append("rect")
-        .attr("x", 10)
-        .attr("y", y(q3))
-        .attr("height", widths)
-        .attr("width", widths)
-        .attr("stroke", "black")
-        .style("fill", "green")
+        .attr("x", function (d, i) {
+            return 50 + i * 60;
+        })
+        .attr("y", function (d) {
+            return yScale(d);
+        })
+        .attr("width", 50)
+        .attr("height", function (d) {
+            return height - yScale(d) - 40;
+        })
+        .attr("fill", "steelblue")
+        .attr('stroke', 'black')
 
-    /*
-// show median, min and max horizontal lines
-svg
-    .selectAll("toto")
-    .data([min, median, max])
-    .enter()
-    .append("line")
-    .attr("x1", center - width / 2)
-    .attr("x2", center + width / 2)
-    .attr("y1", function (d) { return (y(d)) })
-    .attr("y2", function (d) { return (y(d)) })
-    .attr("stroke", "black")
-*/
+    // Создание групп для подписей значений данных
+    var valueLabels = svg.selectAll("g")
+        .data(value)
+        .enter()
+        .append("g")
+        .attr("transform", function (d, i) {
+            return "translate(" + (75 + i * 60) + "," + (yScale(d) - 10) + ")";
+        });
 
+    // Добавление подписей значений данных
+    valueLabels.append("text")
+        .text(function (d) {
+            return d;
+        })
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("fill", "black")
+        .attr("text-anchor", "middle")
+
+
+    // Создание оси y
+    var yAxis = d3.axisLeft(yScale);
+    svg.append("g")
+        .attr("transform", "translate(50, 0)")
+        .call(yAxis);
 }
 
