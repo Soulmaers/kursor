@@ -2329,6 +2329,31 @@ input[type="date"] {
   cursor: pointer;
 }
 
+.tarir {
+  display: none;
+}
+
+.foto {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.bochka {
+  width: 250px;
+  height: 200px;
+  background-image: url(../image/017.jpg);
+  background-size: cover;
+}
+
+.shkala {
+  width: 100px;
+  height: 200px;
+  background-image: url(../image/020.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
 .mess {
   display: none;
   color: red;
