@@ -150,8 +150,8 @@ buttOnTarirDisk.addEventListener('click', async () => {
         }
         const res = await fetch('/api/tarirSave', param)
         const response = await res.json()
+        console.log()
         tarirView();
-
         buttOnTarir.style.display = 'none'
     })
 

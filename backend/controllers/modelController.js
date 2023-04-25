@@ -78,18 +78,39 @@ module.exports.barDelete = (req, res) => {
 
 module.exports.tarirSave = (req, res) => {
     const arr = req.body.AllarrayTarir
+    console.log(arr[0][1])
     try {
-        const postModel = `INSERT INTO tarir(date, nameCar, zamer, DUT,litrs) VALUES?`
-        connection.query(postModel, [arr], function (err, results) {
-            if (err) console.log(err);
-            //console.log(results)
-            response.status(200, results, '', res)
+
+        const selectBase = `SELECT nameCar FROM tarir WHERE nameCar='${arr[0][1]}'`
+        connection.query(selectBase, function (err, results) {
+            if (err) {
+                console.log(err)
+            }
+            console.log(results)
+            if (results.length === 0) {
+                console.log('1')
+                const postModel = `INSERT INTO tarir(date, nameCar, zamer, DUT,litrs) VALUES?`
+                connection.query(postModel, [arr], function (err, results) {
+                    if (err) console.log(err);
+                    //console.log(results)
+                    response.status(200, results, '', res)
+                })
+            }
+            if (results.length > 0) {
+                console.log('2')
+                const postModel = `UPDATE tarir SET  date='${arr[0][0]}', nameCar='${arr[0][1]}', zamer='${arr[0][2]}', DUT='${arr[0][3]}',litrs='${arr[0][4]}' WHERE nameCar='${arr[0][1]}' AND zamer='${arr[0][2]}'`
+                connection.query(postModel, function (err, results) {
+                    if (err) {
+                        console.log(err)
+                    }
+                    response.status(200, results, '', res)
+                })
+            }
         })
     }
     catch (e) {
         console.log(e)
     }
-
 }
 
 module.exports.tarirView = (req, res) => {
