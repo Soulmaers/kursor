@@ -162,6 +162,14 @@ buttOnTarirDisk.addEventListener('click', async () => {
 export async function tarirView() {
 
     const active = document.querySelector('.color')
+    console.log(active.textContent)
+    if (active.textContent !== 'Бочка') {
+        const tarir = document.querySelector('.tarir')
+        tarir.style.display = 'none'
+        console.log(active.textContent + 'не едем дальше')
+        return
+    }
+    console.log(active.textContent + 'едем дальше')
     const activePost = active.textContent.replace(/\s+/g, '')
     const param = {
         method: "POST",
@@ -309,7 +317,7 @@ function approximateValue(value, x, y, degree) {
 
 
 export function grafikPoly(points, degree, coeffs) {
-    console.log(points)
+    //console.log(points)
     // console.log(degree)
     // console.log(coeffs)
     // console.log('рисуем')
@@ -359,10 +367,10 @@ export function grafikPoly(points, degree, coeffs) {
 
     const resolution = 100;
     const step = (xScale.domain()[1] - xScale.domain()[0]) / resolution;
-    console.log(step)
+    //console.log(step)
     const polyData = d3.range(xScale.domain()[0], xScale.domain()[1], step)
         .map(x => [x, polyEval(x, coeffs)]);
-    console.log(polyData)
+    // console.log(polyData)
     const line = d3.line()
         .x(d => xScale(d[0]))
         .y(d => yScale(d[1]));

@@ -10,6 +10,7 @@ import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
 import { iconFind, iconFindWindows, refactor } from './configIcons.js'
 import { grafikPoly, tarirView } from './staticObject.js'
+//import { iconParamsz } from './icons.js'
 
 let start;
 let time;
@@ -38,8 +39,6 @@ export async function visual(el) {
     tableTarir.style.display = 'none'
     tiresLink.forEach(e => {
         if (e.classList.contains('tiresActiv')) {
-            console.log(e)
-            console.log('Frnbdyjt rjktcj!!!!!!!!!!!!!!!!!!!!!')
             grafics.style.display = 'flex'
         }
     })
@@ -71,6 +70,7 @@ export async function visual(el) {
     if (!icon || icon !== el) {
         icon = el;
         iconParams()
+        //  iconParamsz()
         timeIcon = setInterval(iconParams, 180000) //отрисовываем карту osm
     }
     kranParams()
@@ -80,18 +80,16 @@ export async function visual(el) {
         geoloc()
         time = setInterval(geoloc, 180000) //отрисовываем карту osm
     }
-    const active = document.querySelector('.color')
-    if (active.textContent === 'Бочка') {
-        console.log(active.textContent)
-        //  grafikPoly()
-        tarirView();
-        setInterval(tarirView, 180000)
-    }
-    else {
-        const tarir = document.querySelector('.tarir')
-        tarir.style.display = 'none'
 
-    }
+
+    tarirView();
+    setInterval(tarirView, 180000)
+
+    const tarir = document.querySelector('.tarir')
+    tarir.style.display = 'none'
+
+
+
     const zamer = document.querySelectorAll('.zamer')
     const createList = document.querySelector('.createList')
     createList.value = ''
@@ -105,16 +103,18 @@ export async function visual(el) {
 
 
 export function visualNone(e) {
+    const tarir = document.querySelector('.tarir')
+    tarir.style.display = 'none'
+    /*
     const toChange = document.querySelector('.toChange')
-    toChange.style.display = 'none'
-    const probegElem = document.querySelector('.probeg_value')
-    const starterValue = document.querySelector('.starter_value')
+    toChange.style.display = 'none'*/
+    const probegElem = document.querySelector('.odom_value')
+    const starterValue = document.querySelector('.akb_value1')
+    const ohlValue = document.querySelector('.ohl_value')
     starterValue.textContent = ''
     probegElem.textContent = ''
-    const oilElem = document.querySelector('.oil_value')
-    oilElem.textContent = ''
-    const toElem = document.querySelector('.to_value')
-    toElem.textContent = ''
+    ohlValue.textContent = ''
+
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const container = document.querySelector('.container')

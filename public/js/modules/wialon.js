@@ -163,7 +163,7 @@ export function loadAkb(arrCar) {
     const act = active.children[0].textContent
 
 
-    let akb;
+    // let akb;
     let probeg;
     let oil;
     let speed;
@@ -171,35 +171,22 @@ export function loadAkb(arrCar) {
     arrCar.forEach(it => {
         let toChange = 10000;
         if (it.nm === act) {
-            akb = (it.lmsg.p.pwr_ext).toFixed(1);
+            //    akb = (it.lmsg.p.pwr_ext).toFixed(1);
             if (it.lmsg.p.mileage) {
                 probeg = parseFloat((it.lmsg.p.mileage).toFixed(0));
                 const odometr = addZero(8, probeg)
-
-                toView(toChange, probeg)
-
+                //  toView(toChange, probeg)
             }
-            if (it.lmsg.p.rs485fuel_level6) {
-                oil = (it.lmsg.p.rs485fuel_level6 * 0.0589).toFixed(0);
-
-                const oilElem = document.querySelector('.oil_value')
-                oilElem.textContent = oil + 'л'
-
+            console.log(it.pos.s)
+            if (it.pos.s || it.pos.s === 0) {
+                console.log(it.pos.s)
+                speed = (it.pos.s).toFixed(0);
             }
-            speed = (it.pos.s).toFixed(0);
-            //    console.log(speed)
-            const strateValue = document.querySelector('.strate_value')
+            const strateValue = document.querySelector('.speed_value')
             strateValue.textContent = speed + ' ' + 'км/ч'
-            iconSpeed(speed)
-            const akbElem = document.querySelector('.akb_value')
-            akbElem.textContent = akb + 'V'
-            //    const akbElems = document.querySelector('.akb_values')
-            //    akbElems.textContent = akb + 'V'
-
+            // iconSpeed(speed)
         }
     })
-    //  console.log(val)
-
 }
 
 export async function toView(toChange, probeg) {

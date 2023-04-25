@@ -4,7 +4,8 @@ body {
   font-family: Arial;
   margin: 0 auto;
   border: 1px solid gray;
-  max-width: 1600px
+  max-width: 1600px;
+  box-sizing: border-box;
 }
 
 .logotip {
@@ -379,6 +380,7 @@ body {
 }
 
 .update_time {
+  display: none;
   position: absolute;
   font-size: 0.8rem;
   left: 10px;
@@ -1429,7 +1431,6 @@ div.spoyler {
 
 .wrapper_right {
   display: flex;
-  flex-wrap: wrap;
   box-sizing: border-box;
 
 
@@ -2427,6 +2428,146 @@ input[type="date"] {
   cursor: pointer;
 }
 
+/*новые иконки*/
+.left_icons,
+.rigth_icons {
+  width: 100px;
+  /*  height: 600px;*/
+  /* border: 1px solid gray*/
+}
+
+.icon_card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 100px;
+  border: 2px solid darkblue;
+  margin: 2px 0;
+  border-radius: 15px;
+}
+
+.card_img {
+  width: 60%;
+  height: 60%;
+  /* border: 1px solid gray;*/
+}
+
+.card_value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  width: 90%;
+  /* border: 1px solid gray;*/
+  font-size: 1.2rem;
+  font-family: Roboto;
+  font-weight: bold;
+}
+
+
+
+
+
+
+
+
+.toil_value,
+.to_value1,
+.ohl_value,
+.oil_value1,
+.ign_value,
+.akb_value1,
+.speed_value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  width: 90%;
+  /* border: 1px solid gray;*/
+  font-size: 1.2rem;
+  font-family: Roboto;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.odom_value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  width: 95%;
+  /* border: 1px solid gray;*/
+  font-size: 1rem;
+  font-family: Roboto;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.speed_card {
+  background-image: url(../image/cardS.png);
+  background-size: cover;
+  cursor: pointer;
+}
+
+.akb_card {
+  background-image: url(../image/cardV.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.ign_card {
+  background-image: url(../image/cardZ.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.oil_card {
+  background-image: url(../image/cardO.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.ohl_card,
+.toil_card {
+  background-image: url(../image/cardOhl.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.odom_card {
+  background-image: url(../image/cardP.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.to_card {
+  background-image: url(../image/cardTO.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+
+.pl {
+  background-color: lightgray;
+  /* background-image: url(../image/min.png);
+  background-size: cover;
+  cursor: pointer;*/
+}
+
 .shkala {
   width: 100px;
   height: 200px;
@@ -2894,7 +3035,8 @@ input[type=range]:focus::-ms-fill-upper {
 .centerBlock {
   display: flex;
   flex-direction: column;
-  width: 40%
+  /* width: 40%;*/
+  margin: 0 10px;
 }
 
 
@@ -3254,9 +3396,9 @@ div.wrapper {
 
 .config {
   display: flex;
-  border: 1px solid lightgray;
+  /*border: 1px solid lightgray;*/
   padding-right: 70px;
-  width: 100%
+  /* width: 100%*/
 }
 
 .list_att {
@@ -3749,7 +3891,7 @@ input[type="text"]:focus {
 }
 
 .acto {
-  border: 1px solid yellow
+  border: 2px solid green
 }
 
 .icon_item:nth-child(n+2) {

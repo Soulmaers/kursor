@@ -73,7 +73,7 @@ export function iconParamsz() {
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
     const changeParams = document.querySelector('.changeParams')
-    const probegValue = document.querySelector('.probeg_value')
+    const odomValue = document.querySelector('.odom_value')
     const msg = document.querySelectorAll('.msg')
     msg.forEach(el => {
         el.addEventListener('click', () => {
@@ -93,8 +93,8 @@ export function iconParamsz() {
             })
             //   console.log(param)
             const odometr = addZero(8, value)
-            probegValue.textContent = odometr + 'км'
-            //   console.log(probegValue.textContent)
+            odomValue.textContent = odometr + 'км'
+
             const coef = changeParams.value
             const id = document.querySelector('.acto').children[0].id
             //  console.log(id)
@@ -104,7 +104,6 @@ export function iconParamsz() {
 }
 
 async function postIconParams(activePost, param, coef, id) {
-    // console.log(id)
     const params = {
         method: "POST",
         headers: {
@@ -125,7 +124,7 @@ async function postIconParams(activePost, param, coef, id) {
 
 export async function iconFind(activePost) {
     const changeParams = document.querySelector('.changeParams')
-    const card = document.querySelectorAll('.cardClick')
+    const card = document.querySelectorAll('.icon_card')
     const params = {
         method: "POST",
         headers: {
@@ -143,25 +142,35 @@ export async function iconFind(activePost) {
             if (el.name === it.params) {
                 card.forEach(elem => {
                     if (elem.children[0].id === it.icons) {
-                        const odometr = addZero(8, (el.value * it.coef).toFixed(0))
-                        elem.children[1].textContent = odometr + otmet(it.icons)
+                        if (it.icons === 'odom-card') {
+                            const val = addZero(8, (el.value * it.coef).toFixed(0))
+                            elem.children[1].textContent = val + 'км'
+                        }
+                        if (it.icons === 'oil-card') {
+                            const val = (el.value * it.coef).toFixed(0)
+                            elem.children[1].textContent = val + 'л.'
+                        }
+                        if (it.icons === 'akb-card') {
+                            const val = (el.value * it.coef).toFixed(1)
+                            elem.children[1].textContent = val + 'V'
+                        }
+                        if (it.icons === 'ohl-card') {
+                            const val = (el.value * it.coef).toFixed(0)
+                            elem.children[1].textContent = val + '° C'
+                        }
+
                         elem.addEventListener('click', () => {
                             changeParams.value = it.coef
                         })
                     }
+
                 })
             }
         })
     })
 }
 
-function otmet(arg) {
-    if (arg === 'icon_speed')
-        return 'км'
-    if (arg === 'icon_oil')
-        return 'л'
 
-}
 export const convert = (ob) => {
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
     return Array.from(uniq).map(e => JSON.parse(e));

@@ -346,6 +346,7 @@ rad.forEach(el => {
     })
 })
 
+/*
 const to = document.querySelector('.icon_kluch')
 to.addEventListener('click', fnToChange)
 
@@ -353,7 +354,7 @@ const x = document.querySelector('.x')
 x.addEventListener('click', () => {
     const toChange = document.querySelector('.toChange')
     toChange.style.display = 'none'
-})
+})*/
 
 
 const modalNameOs = document.querySelector('.modalNameOs')
@@ -495,7 +496,7 @@ plug[2].addEventListener('click', () => {
     visualGrafics.prepend(model);
 })
 
-const card = document.querySelectorAll('.cardClick')
+const card = document.querySelectorAll('.icon_card')
 card.forEach(elem => {
     const changeParams = document.querySelector('.changeParams')
     const sensors = document.querySelector('.sensors')
