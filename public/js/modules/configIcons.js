@@ -146,10 +146,11 @@ export async function iconFind(activePost) {
                             const val = addZero(8, (el.value * it.coef).toFixed(0))
                             elem.children[1].textContent = val + 'км'
                         }
+                        /*
                         if (it.icons === 'oil-card') {
                             const val = (el.value * it.coef).toFixed(0)
                             elem.children[1].textContent = val + 'л.'
-                        }
+                        }*/
                         if (it.icons === 'akb-card') {
                             const val = (el.value * it.coef).toFixed(1)
                             elem.children[1].textContent = val + 'V'

@@ -103,6 +103,23 @@ bochka.addEventListener('click', () => {
     // console.log('бочка клик')
 })
 
+const oilCard = document.querySelector('.oil_card')
+oilCard.addEventListener('click', () => {
+    const active = document.querySelector('.color')
+    const nameCar = document.querySelector('.name_car')
+    const techInfo = document.querySelector('.techInfo')
+    techInfo.style.display = 'none'
+    nameCar.textContent = active.textContent
+    const tableTarir = document.querySelector('.tableTarir')
+    tableTarir.style.display = 'flex'
+    const wrapper_left = document.querySelector('.wrapper_left')
+    wrapper_left.style.display = 'none'
+    tarirView();
+})
+
+
+
+
 export function createDate() {
 
     let today = new Date();
@@ -160,16 +177,9 @@ buttOnTarirDisk.addEventListener('click', async () => {
 
 
 export async function tarirView() {
-
     const active = document.querySelector('.color')
     console.log(active.textContent)
-    if (active.textContent !== 'Бочка') {
-        const tarir = document.querySelector('.tarir')
-        tarir.style.display = 'none'
-        console.log(active.textContent + 'не едем дальше')
-        return
-    }
-    console.log(active.textContent + 'едем дальше')
+
     const activePost = active.textContent.replace(/\s+/g, '')
     const param = {
         method: "POST",
@@ -194,45 +204,47 @@ export async function tarirView() {
         points.push(point)
     })
 
-    const flags = 1 + 1024
-    const prms = {
-        "spec": {
-            "itemsType": "avl_unit",
-            "propName": "sys_name",
-            "propValueMask": "*",
-            "sortType": "sys_name"
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
         },
-        "force": 1,
-        "flags": flags,
-        "from": 0,
-        "to": 0
-    };
+        body: (JSON.stringify({ activePost }))
+    }
+    const argy = await fetch('api/wialon', params)
+    const arg = await argy.json()
+    const parFind = await fetch('api/iconFind', params)
+    const paramssyFind = await parFind.json()
 
-    const remote1 = wialon.core.Remote.getInstance();
-    remote1.remoteCall('core/search_items', prms,
-        async function (code, result) {
-            if (code) {
-                console.log(wialon.core.Errors.getErrorText(code));
-            }
-            const arr1 = Object.values(result);
-            const arrCar = arr1[5];
-            arrCar.forEach(it => {
-                const active = document.querySelector('.color')
-                const act = active.children[0].textContent
-                if (it.nm === act) {
-                    if (it.lmsg.p.rs485fuel_level1) {
-                        const val = it.lmsg.p.rs485fuel_level1;
-                        console.log(val)
-                        const approximated = approximateValue(val, x, y, 6);
-                        const znak = approximated[0] * 0.9987
-                        console.log(approximated[0] * 0.9987)
-                        grafGradient(y, znak)
-                        grafikPoly(points, 6, approximated[1])
+    console.log(paramssyFind)
+    arg.values.forEach(el => {
+        paramssyFind.result.forEach(it => {
+            if (el.name === it.params) {
+                if (it.icons === 'oil-card') {
+                    const val = el.value
+                    console.log(val)
+                    console.log(x, y)
+                    let degree;
+                    if (x.length < 3) {
+                        degree = 1
                     }
+                    if (x.length >= 3) {
+                        degree = 6
+                    }
+                    console.log(x, y)
+                    const approximated = approximateValue(val, x, y, degree);
+                    const znak = (approximated[0] * 0.9987).toFixed(0)
+                    console.log(znak)
+                    const oilValue = document.querySelector('.oil_value1')
+                    oilValue.textContent = znak + 'л.'
+                    grafGradient(y, znak)
+                    grafikPoly(points, 6, approximated[1])
                 }
 
-            })
+            }
         })
+
+    })
 
 
 
@@ -322,14 +334,14 @@ export function grafikPoly(points, degree, coeffs) {
     // console.log(coeffs)
     // console.log('рисуем')
     const tarir = document.querySelector('.tarir')
-    tarir.style.display = 'block'
+    //tarir.style.display = 'block'
     const polyEval = (x, coeffs) => coeffs.reduce((acc, coeff, i) => acc + coeff * x ** i, 0);
     // const points = [[90, 10], [222, 20], [444, 30], [666, 40], [777, 50], [901, 60], [1060, 70], [1190, 80], [1322, 90], [1500, 100], [2006, 200], [3100, 300], [4010, 395], [4094, 400]]
     //   const degree = 6;
     // const coeffs = polynomialApproximation(x, y, degree);
 
     const margin = { top: 20, right: 20, bottom: 50, left: 40 };
-    const width = 400 - margin.left - margin.right;
+    const width = 350 - margin.left - margin.right;
     const height = 200 - margin.top - margin.bottom;
 
     const chartTarirer = document.querySelector('.chartTarir')
@@ -418,7 +430,7 @@ function grafGradient(arr, znak) {
     const shkala = document.createElement('div')
     shkala.classList.add('shkala')
     // shkala.textContent = znak.toFixed(2) + 'л.'
-    const value = [znak.toFixed(0)]
+    const value = [znak]
     foto.appendChild(shkala)
 
 

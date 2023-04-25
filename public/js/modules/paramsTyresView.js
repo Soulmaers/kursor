@@ -20,13 +20,18 @@ export function viewMenuParams() {
     const techInfo = document.querySelector('.techInfo')
     const grafics = document.querySelector('.grafics')
     const plug = document.querySelectorAll('.plug')
+    const tableTarir = document.querySelector('.tableTarir')
+    const idbaseTyres = document.querySelector('.idbaseTyres')
+    idbaseTyres.textContent = ''
     const arrayTyres = [];
     tiresLink.forEach(e => {
         e.addEventListener('click', () => {
             if (e.classList.contains('tiresActiv')) {
                 e.classList.remove('tiresActiv')
                 techInfo.style.display = 'none'
+                tableTarir.style.display = 'none'
                 wrapperMap.style.display = 'block'
+
                 if (plug[1].classList.contains('activGraf')) {
                     grafics.style.display = 'flex';
                     wrapperMap.style.display = 'none'
@@ -42,6 +47,7 @@ export function viewMenuParams() {
                 obo.style.display = 'none'
                 titleSens.style.display = 'none'
                 sensors.style.display = 'none'
+                tableTarir.style.display = 'none'
                 const msg = document.querySelectorAll('.msg')
                 msg.forEach(el => el.classList.remove('act'))
                 e.classList.remove('tiresActiv')
@@ -54,6 +60,7 @@ export function viewMenuParams() {
             speedGraf.style.display = 'block';
             wrapperMap.style.display = 'none'
             grafics.style.display = 'none';
+            tableTarir.style.display = 'none'
             const idbaseTyres = document.querySelector('.idbaseTyres')
             idbaseTyres.textContent = ''
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.

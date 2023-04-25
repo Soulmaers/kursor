@@ -17,6 +17,15 @@ let time;
 let icon;
 let timeIcon;
 export async function visual(el) {
+    const tarir = document.querySelector('.tarir')
+    console.log(el.textContent)
+    if (el.textContent === 'Бочка') {
+        tarir.style.display = 'block'
+        console.log('бочка' + el.textContent)
+    }
+
+    // tarir.style.display = 'none'
+
     const tiresLink = document.querySelectorAll('.tires_link')
     clearInterval(time)
     clearInterval(timeIcon)
@@ -28,7 +37,6 @@ export async function visual(el) {
     const btnsens = document.querySelectorAll('.btnsens')
     const main = document.querySelector('.main')
     const plug = document.querySelectorAll('.plug')
-
     const grafics = document.querySelector('.grafics')
     const delIcon = document.querySelectorAll('.delIcon')
     delIcon.forEach(el => {
@@ -71,22 +79,21 @@ export async function visual(el) {
         icon = el;
         iconParams()
         //  iconParamsz()
-        timeIcon = setInterval(iconParams, 180000) //отрисовываем карту osm
+        timeIcon = setInterval(iconParams, 300000) //отрисовываем карту osm
     }
     kranParams()
-    setInterval(kranParams, 180000)
+    setInterval(kranParams, 300000)
     if (!start || start !== el) {
         start = el;
         geoloc()
-        time = setInterval(geoloc, 180000) //отрисовываем карту osm
+        time = setInterval(geoloc, 300000) //отрисовываем карту osm
     }
 
 
     tarirView();
-    setInterval(tarirView, 180000)
+    setInterval(tarirView, 300000)
 
-    const tarir = document.querySelector('.tarir')
-    tarir.style.display = 'none'
+
 
 
 
@@ -111,10 +118,11 @@ export function visualNone(e) {
     const probegElem = document.querySelector('.odom_value')
     const starterValue = document.querySelector('.akb_value1')
     const ohlValue = document.querySelector('.ohl_value')
+    const oilValue = document.querySelector('.oil_value1')
     starterValue.textContent = ''
     probegElem.textContent = ''
     ohlValue.textContent = ''
-
+    oilValue.textContent = ''
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const container = document.querySelector('.container')

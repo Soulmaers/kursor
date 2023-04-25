@@ -98,7 +98,7 @@ export function zapros() {
                                 aLLmassObject.push(massObject)
                             }
                             if (aLLmassObject.length === Allcountr) {
-                                console.log(aLLmassObject)
+                                console.log(aLLmassObject.reverse())
                                 conturTest(aLLmassObject)
                                 // const nameCarCheck = test.map(elem => elem[0].message)
                                 // checkCreate(nameCarCheck)
