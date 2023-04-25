@@ -178,9 +178,8 @@ buttOnTarirDisk.addEventListener('click', async () => {
 
 export async function tarirView() {
     const active = document.querySelector('.color')
-    console.log(active.textContent)
-
     const activePost = active.textContent.replace(/\s+/g, '')
+
     const param = {
         method: "POST",
         headers: {
@@ -237,6 +236,8 @@ export async function tarirView() {
                     console.log(znak)
                     const oilValue = document.querySelector('.oil_value1')
                     oilValue.textContent = znak + 'л.'
+                    //  progressBar(y[y.length - 1], znak)
+
                     grafGradient(y, znak)
                     grafikPoly(points, 6, approximated[1])
                 }
@@ -246,14 +247,15 @@ export async function tarirView() {
 
     })
 
-
-
-    //  const approximated = approximateValue(1782, x, y, 6);
-    // console.log()
-
-    //  console.log(approximated[0] * 0.9987);
 }
 
+
+function progressBar(all, val) {
+    const progressBar = document.querySelector('.progressBar')
+    const value = val * 100 / all
+    progressBar.textContent = val
+    progressBar.style.width = value + '%'
+}
 function polynomialApproximation(x, y, degree) {
     const n = x.length;
     const m = degree + 1;

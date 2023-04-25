@@ -3,6 +3,7 @@ import { dashView } from './dash.js'
 import { navigator } from './navigator.js'
 import { objColor, generFront, objColorFront, generDavKran, generDav } from './content.js'
 import { sortAll } from './sort.js'
+//import { tarirView } from './staticObject.js'
 /*
 let isLoaded = false
 
@@ -109,6 +110,22 @@ export function conturTest(testov) {
                 const listTrail = document.createElement('div')
                 listTrail.classList.add('list_trail2')
                 listItemCar.appendChild(listTrail)
+                console.log(nameCar)
+                /*
+                if (nameCar === 'Бочка') {
+                    console.log(listProfil)
+                    listProfil.style.width = 60 + '%'
+                    listTrail.remove()
+                    const progress = document.createElement('div')
+                    progress.classList.add('progress')
+                    listProfil.appendChild(progress)
+                    const progressBar = document.createElement('div')
+                    progressBar.classList.add('progressBar')
+                    progress.appendChild(progressBar)
+
+                    // const oilValue = document.querySelector('.oil_value')
+                    //  console.log(oilValue)
+                }*/
                 if (elem[0].result) {
                     const modelUniq = convert(elem[0].result)
                     modelUniq.forEach(os => {

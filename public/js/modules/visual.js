@@ -89,7 +89,6 @@ export async function visual(el) {
         time = setInterval(geoloc, 300000) //отрисовываем карту osm
     }
 
-
     tarirView();
     setInterval(tarirView, 300000)
 
