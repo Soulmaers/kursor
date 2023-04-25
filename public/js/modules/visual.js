@@ -18,8 +18,9 @@ let icon;
 let timeIcon;
 export async function visual(el) {
     const tarir = document.querySelector('.tarir')
-    console.log(el.textContent)
-    if (el.textContent === 'Бочка') {
+    console.log(el.children[0].textContent)
+    if (el.children[0].textContent === 'Бочка') {
+        console.log(el.textContent)
         tarir.style.display = 'block'
         console.log('бочка' + el.textContent)
     }
@@ -63,7 +64,7 @@ export async function visual(el) {
     speedGraf.style.display = 'block'
     el.classList.add('color')
     //  viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
-    titleCar.textContent = el.textContent
+    titleCar.textContent = el.children[0].textContent
     loadParamsView()
     alarmFind(el)
     findTyresInstall()

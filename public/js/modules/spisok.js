@@ -3,7 +3,7 @@ import { dashView } from './dash.js'
 import { navigator } from './navigator.js'
 import { objColor, generFront, objColorFront, generDavKran, generDav } from './content.js'
 import { sortAll } from './sort.js'
-//import { tarirView } from './staticObject.js'
+import { approximateValue } from './staticObject.js'
 /*
 let isLoaded = false
 
@@ -111,7 +111,7 @@ export function conturTest(testov) {
                 listTrail.classList.add('list_trail2')
                 listItemCar.appendChild(listTrail)
                 console.log(nameCar)
-                /*
+
                 if (nameCar === 'Бочка') {
                     console.log(listProfil)
                     listProfil.style.width = 60 + '%'
@@ -121,11 +121,13 @@ export function conturTest(testov) {
                     listProfil.appendChild(progress)
                     const progressBar = document.createElement('div')
                     progressBar.classList.add('progressBar')
-                    progress.appendChild(progressBar)
+                    progress.prepend(progressBar)
 
+                    console.log(document.querySelector('.progress'))
+                    fnStaticObjectOil(nameCar)
                     // const oilValue = document.querySelector('.oil_value')
                     //  console.log(oilValue)
-                }*/
+                }
                 if (elem[0].result) {
                     const modelUniq = convert(elem[0].result)
                     modelUniq.forEach(os => {
@@ -187,6 +189,84 @@ export function conturTest(testov) {
     zaprosSpisok()
 
 }
+
+
+async function fnStaticObjectOil(nameCar) {
+    //  const active = document.querySelector('.color')
+    const activePost = nameCar
+
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost }))
+    }
+    const res = await fetch('/api/tarirView', param)
+    const response = await res.json()
+    console.log(response.result.length)
+    // createListFnview(response.result)
+    const x = [];
+    const y = [];
+    const points = []
+    response.result.forEach(el => {
+        const point = []
+        x.push(Number(el.DUT))
+        y.push(Number(el.litrs))
+        point.push(Number(el.DUT))
+        point.push(Number(el.litrs))
+        points.push(point)
+    })
+
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost }))
+    }
+    const argy = await fetch('api/wialon', params)
+    const arg = await argy.json()
+    const parFind = await fetch('api/iconFind', params)
+    const paramssyFind = await parFind.json()
+
+    console.log(paramssyFind)
+    arg.values.forEach(el => {
+        paramssyFind.result.forEach(it => {
+            if (el.name === it.params) {
+                if (it.icons === 'oil-card') {
+                    const val = el.value
+                    console.log(val)
+                    console.log(x, y)
+                    let degree;
+                    if (x.length < 3) {
+                        degree = 1
+                    }
+                    if (x.length >= 3) {
+                        degree = 6
+                    }
+                    console.log(x, y)
+                    const approximated = approximateValue(val, x, y, degree);
+                    const znak = (approximated[0] * 0.9987).toFixed(0)
+                    console.log(znak)
+                    console.log(y[y.length - 1])
+
+                    const progress = document.querySelector('.progress')
+                    const progressBar = document.querySelector('.progressBar')
+                    const value = znak * 100 / y[y.length - 1]
+                    console.log(value)
+                    progressBar.textContent = znak + ' ' + 'л.'
+                    progressBar.style.width = value + '%'
+
+                }
+            }
+        })
+    })
+
+}
+
+
+
 
 function fnTagach(arr, nameCar) {
     const listItem = document.querySelector(`.${nameCar} `)

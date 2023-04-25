@@ -178,7 +178,7 @@ buttOnTarirDisk.addEventListener('click', async () => {
 
 export async function tarirView() {
     const active = document.querySelector('.color')
-    const activePost = active.textContent.replace(/\s+/g, '')
+    const activePost = active.children[0].textContent.replace(/\s+/g, '')
 
     const param = {
         method: "POST",
@@ -250,12 +250,7 @@ export async function tarirView() {
 }
 
 
-function progressBar(all, val) {
-    const progressBar = document.querySelector('.progressBar')
-    const value = val * 100 / all
-    progressBar.textContent = val
-    progressBar.style.width = value + '%'
-}
+
 function polynomialApproximation(x, y, degree) {
     const n = x.length;
     const m = degree + 1;
@@ -319,7 +314,7 @@ function evaluatePolynomial(x, a) {
     }
     return y;
 }
-function approximateValue(value, x, y, degree) {
+export function approximateValue(value, x, y, degree) {
     const coeffs = polynomialApproximation(x, y, degree);
     const approximated = evaluatePolynomial([value], coeffs)[0];
     return [approximated, coeffs]
