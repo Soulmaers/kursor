@@ -159,7 +159,10 @@ export async function iconFind(activePost) {
                             const val = (el.value * it.coef).toFixed(0)
                             elem.children[1].textContent = val + '° C'
                         }
-
+                        if (it.icons === 'toil-card') {
+                            const val = (el.value * it.coef).toFixed(0)
+                            elem.children[1].textContent = val + '° C'
+                        }
                         elem.addEventListener('click', () => {
                             changeParams.value = it.coef
                         })
