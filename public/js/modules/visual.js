@@ -107,8 +107,6 @@ export async function visual(el) {
     }
 
 }
-
-
 export function visualNone(e) {
     const tarir = document.querySelector('.tarir')
     tarir.style.display = 'none'
@@ -120,11 +118,13 @@ export function visualNone(e) {
     const ohlValue = document.querySelector('.ohl_value')
     const oilValue = document.querySelector('.oil_value1')
     const toil_value = document.querySelector('.toil_value')
+    const ign_value = document.querySelector('.ign_value')
     toil_value.textContent = ''
     starterValue.textContent = ''
     probegElem.textContent = ''
     ohlValue.textContent = ''
     oilValue.textContent = ''
+    ign_value.textContent = ''
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const container = document.querySelector('.container')
