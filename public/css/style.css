@@ -2392,6 +2392,41 @@ input[type="date"] {
   cursor: pointer;
 }
 
+.buttOnTarirDisk {
+  width: 30px;
+  height: 30px;
+  background-image: url(../image/disk.svg);
+  background-size: cover;
+  cursor: pointer;
+}
+
+.gal {
+  width: 15px;
+  height: 15px;
+  background-image: url(../image/gal.svg);
+  background-size: cover;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.gal:hover {
+  width: 18px;
+  height: 18px;
+}
+
+.otm:hover {
+  width: 18px;
+  height: 18px;
+}
+
+.otm {
+  width: 15px;
+  height: 15px;
+  background-image: url(../image/otm.svg);
+  background-size: cover;
+  cursor: pointer;
+}
+
 .shkala {
   width: 100px;
   height: 200px;
@@ -2417,30 +2452,19 @@ input[type="date"] {
 
 
 .btnLow {
+  display: flex;
   margin: 10px 10px;
-  background-color: #fff;
-  width: 160px;
-  flex-direction: column;
   align-items: center;
-  border: 1px solid gray;
-  padding: 2px 2px;
-  box-sizing: border-box;
-  text-align: center;
-  cursor: pointer;
 }
 
 .buttOnTarir {
-  width: 97%;
-  border: 1px solid gray;
+  display: none;
   box-sizing: border-box;
-  background-color: lightgray;
   padding: 5px 5px;
   font-size: 0.8rem;
   font-family: Roboto;
   font-weight: 700;
   color: #000;
-  cursor: pointer;
-  margin: 0 auto;
 }
 
 .buttOnTarir:hover {

@@ -116,35 +116,45 @@ export function createDate() {
 }
 
 
-const buttOnTarir = document.querySelector('.buttOnTarir')
-buttOnTarir.addEventListener('click', async () => {
-    const AllarrayTarir = [];
-
-    const active = document.querySelector('.color')
-    const activePost = active.textContent.replace(/\s+/g, '')
-    const titleZamer = document.querySelectorAll('.titleZamer')
-    Array.from(titleZamer).forEach(el => {
-        const arrayTarir = [];
-        const datas = createDate(new Date())
-        arrayTarir.push(datas)
-        arrayTarir.push(activePost)
-        arrayTarir.push(el.id)
-        arrayTarir.push(el.nextElementSibling.children[0].value)
-        arrayTarir.push(el.nextElementSibling.children[1].value)
-        AllarrayTarir.push(arrayTarir)
+const buttOnTarirDisk = document.querySelector('.buttOnTarirDisk')
+buttOnTarirDisk.addEventListener('click', async () => {
+    const buttOnTarir = document.querySelector('.buttOnTarir')
+    buttOnTarir.style.display = 'flex'
+    const otm = document.querySelector('.otm')
+    const gal = document.querySelector('.gal')
+    otm.addEventListener('click', () => {
+        buttOnTarir.style.display = 'none'
     })
-    console.log(AllarrayTarir)
+    gal.addEventListener('click', async () => {
+        const AllarrayTarir = [];
+        const active = document.querySelector('.color')
+        const activePost = active.textContent.replace(/\s+/g, '')
+        const titleZamer = document.querySelectorAll('.titleZamer')
+        Array.from(titleZamer).forEach(el => {
+            const arrayTarir = [];
+            const datas = createDate(new Date())
+            arrayTarir.push(datas)
+            arrayTarir.push(activePost)
+            arrayTarir.push(el.id)
+            arrayTarir.push(el.nextElementSibling.children[0].value)
+            arrayTarir.push(el.nextElementSibling.children[1].value)
+            AllarrayTarir.push(arrayTarir)
+        })
+        console.log(AllarrayTarir)
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ AllarrayTarir }))
+        }
+        const res = await fetch('/api/tarirSave', param)
+        const response = await res.json()
+        tarirView();
 
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ AllarrayTarir }))
-    }
-    const res = await fetch('/api/tarirSave', param)
-    const response = await res.json()
-    tarirView();
+        buttOnTarir.style.display = 'none'
+    })
+
 })
 
 
