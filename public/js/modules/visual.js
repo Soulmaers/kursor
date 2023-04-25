@@ -119,6 +119,8 @@ export function visualNone(e) {
     const starterValue = document.querySelector('.akb_value1')
     const ohlValue = document.querySelector('.ohl_value')
     const oilValue = document.querySelector('.oil_value1')
+    const toil_value = document.querySelector('.toil_value')
+    toil_value.textContent = ''
     starterValue.textContent = ''
     probegElem.textContent = ''
     ohlValue.textContent = ''
