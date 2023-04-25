@@ -169,10 +169,10 @@ export async function tarirView() {
     const points = []
     response.result.forEach(el => {
         const point = []
-        x.push(el.DUT)
-        y.push(el.litrs)
-        point.push(el.DUT)
-        point.push(el.litrs)
+        x.push(Number(el.DUT))
+        y.push(Number(el.litrs))
+        point.push(Number(el.DUT))
+        point.push(Number(el.litrs))
         points.push(point)
     })
 
@@ -299,7 +299,7 @@ function approximateValue(value, x, y, degree) {
 
 
 export function grafikPoly(points, degree, coeffs) {
-    // console.log(points)
+    console.log(points)
     // console.log(degree)
     // console.log(coeffs)
     // console.log('рисуем')
@@ -400,7 +400,7 @@ function grafGradient(arr, znak) {
     const shkala = document.createElement('div')
     shkala.classList.add('shkala')
     // shkala.textContent = znak.toFixed(2) + 'л.'
-    const value = [znak.toFixed(2)]
+    const value = [znak.toFixed(0)]
     foto.appendChild(shkala)
 
 
@@ -420,7 +420,8 @@ function grafGradient(arr, znak) {
     // Создание шкалы для оси y
     var yScale = d3.scaleLinear()
         .domain([0, d3.max(arr)])
-        .range([height - 40, 10]);
+        .range([height - 10, 10]);
+
 
     // Создание столбиков
     svg.selectAll("rect")
@@ -428,14 +429,14 @@ function grafGradient(arr, znak) {
         .enter()
         .append("rect")
         .attr("x", function (d, i) {
-            return 50 + i * 60;
+            return 52 + i * 60;
         })
         .attr("y", function (d) {
             return yScale(d);
         })
         .attr("width", 50)
         .attr("height", function (d) {
-            return height - yScale(d) - 40;
+            return height - yScale(d) - 10;
         })
         .attr("fill", "steelblue")
         .attr('stroke', 'black')
@@ -452,7 +453,7 @@ function grafGradient(arr, znak) {
     // Добавление подписей значений данных
     valueLabels.append("text")
         .text(function (d) {
-            return d;
+            return d + 'л.';
         })
         .attr("font-size", "12px")
         .attr("font-family", "sans-serif")
