@@ -87,6 +87,7 @@ export async function loadParamsView() {
     })
         .then((res) => res.json())
         .then((res) => {
+            const gos = document.querySelector('.gosNumber')
             const model = res
             if (model.values && model.values.length > 0) {
                 viewOs(model.values.length)
@@ -114,7 +115,8 @@ export async function loadParamsView() {
                     }
 
                 })
-                const gos = document.querySelector('.gosNumber')
+
+                console.log(model.values)
                 if (model.values.find(e => e.trailer === 'Прицеп')) {
                     gos.value = model.values[0].gosp
                     gos.style.display = 'flex'
@@ -124,6 +126,7 @@ export async function loadParamsView() {
             }
             else {
                 console.log('база пустая')
+                gos.style.display = 'none'
             }
 
         })
