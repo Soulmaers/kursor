@@ -70,7 +70,7 @@ export async function visual(el) {
     findTyresInstall()
     liCreate()
     // const active = document.querySelector('.color')
-    const activePost = el.textContent.replace(/\s+/g, '')
+    const activePost = el.children[0].textContent.replace(/\s+/g, '')
     iconFind(activePost)
     await iconFindWindows(activePost)
     btnsens.forEach(el => {
@@ -197,6 +197,7 @@ export function liCreate() {
 
 
 export function view(arg) {
+    console.log(arg)
     const msg = document.querySelectorAll('.msg')
     arg.forEach((el, index) => {
         msg[index].textContent = `${el.name}:${el.value}`
