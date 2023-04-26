@@ -116,7 +116,7 @@ function mainblock() {
     main.style.display = 'flex'
     const wRight = document.querySelector('.wrapper_right')
     const wLeft = document.querySelector('.wrapper_left')
-    const icon = document.querySelector('.icon')
+    //const icon = document.querySelector('.icon')
     const model = document.querySelector('.wrapper_containt')
     const grafics = document.querySelector('.grafics')
     const visualGrafics = document.querySelector('.visualGrafics')
@@ -124,13 +124,14 @@ function mainblock() {
     const techInfo = document.querySelector('.techInfo')
     const plug = document.querySelectorAll('.plug')
     const config = document.querySelector('.config')
+    const rigthIcons = document.querySelector('.rigth_icons')
     plug[2].classList.remove('activGraf')
     console.log(wLeft)
     wRight.style.display = 'flex';
     wLeft.style.display = 'block';
-    icon.style.display = 'flex';
+    // icon.style.display = 'flex';
     grafics.style.display = 'none';
-    config.style.display = 'none';
+    config.style.display = 'flex';
     techInfo.style.display = 'none';
     visualGrafics.style.display = 'none';
     main.style.flexDirection = 'row'
@@ -138,7 +139,9 @@ function mainblock() {
     model.style.width = '100%'
     model.style.maxHeight = "none"
     model.style.MozTransform = "scale(1)"
-    wRight.appendChild(model);
+    config.appendChild(model);
+    // wRight.appendChild(rigthIcons);
+
     //wrapList.style.overflow = 'auto';
     wrapList.style.overflowY = 'visible';
     wrapList.style.height = 'none';
@@ -466,7 +469,7 @@ plug[2].addEventListener('click', () => {
     console.log('нажал')
     const wRight = document.querySelector('.wrapper_right')
     const wLeft = document.querySelector('.wrapper_left')
-    const icon = document.querySelector('.icon')
+    //  const icon = document.querySelector('.icon')
     const model = document.querySelector('.wrapper_containt')
     const visualGrafics = document.querySelector('.visualGrafics')
     const grafics = document.querySelector('.grafics')
@@ -484,7 +487,7 @@ plug[2].addEventListener('click', () => {
     wRight.style.display = 'none';
     techInfo.style.display = 'none';
     wLeft.style.display = 'none';
-    icon.style.display = 'none';
+    //icon.style.display = 'none';
     grafics.style.display = 'flex';
     visualGrafics.style.display = 'flex';
     main.style.flexDirection = 'column'
