@@ -11,7 +11,7 @@ if(isLoaded === true){
     navigator();
 }*/
 const testov = [];
-export async function loadParamsViewList(car) {
+export async function loadParamsViewList(car, el) {
     const params = {
         method: "POST",
         headers: {
@@ -28,14 +28,14 @@ export async function loadParamsViewList(car) {
     const osis = await fetch('api/barViewAll', params)
     const osi = await osis.json()
     testov.push([model, models, data, osi])
-    return [model, models, data, osi]
+    return [model, models, data, osi, el]
 }
 
 
 
 
 export function conturTest(testov) {
-    console.log(testov)
+    //  console.log(testov)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         groups.forEach(e => {
@@ -88,12 +88,14 @@ export function conturTest(testov) {
             group.appendChild(hiddenModal)
             const listArr = document.querySelector(`.${el[0].group}`)
             el.forEach(elem => {
+
                 const nameCar = elem[0].message.replace(/\s+/g, '')
                 dashView(nameCar)
                 const listItemCar = document.createElement('div')
                 listItemCar.classList.add('listItem')
                 listItemCar.classList.add(`${nameCar}`)
                 listItemCar.setAttribute('rel', `${nameCar}`)
+                listItemCar.setAttribute('id', `${elem[4]}`)
                 listArr.children[1].appendChild(listItemCar)
                 const listName = document.createElement('div')
                 listName.classList.add('list_name2')
@@ -110,10 +112,10 @@ export function conturTest(testov) {
                 const listTrail = document.createElement('div')
                 listTrail.classList.add('list_trail2')
                 listItemCar.appendChild(listTrail)
-                console.log(nameCar)
+                //  console.log(nameCar)
 
                 if (nameCar === 'Бочка') {
-                    console.log(listProfil)
+                    // console.log(listProfil)
                     listProfil.style.width = 60 + '%'
                     listTrail.remove()
                     const progress = document.createElement('div')
@@ -123,7 +125,7 @@ export function conturTest(testov) {
                     progressBar.classList.add('progressBar')
                     progress.prepend(progressBar)
 
-                    console.log(document.querySelector('.progress'))
+                    //  console.log(document.querySelector('.progress'))
                     fnStaticObjectOil(nameCar)
                     // const oilValue = document.querySelector('.oil_value')
                     //  console.log(oilValue)
@@ -204,7 +206,7 @@ async function fnStaticObjectOil(nameCar) {
     }
     const res = await fetch('/api/tarirView', param)
     const response = await res.json()
-    console.log(response.result.length)
+    // console.log(response.result.length)
     // createListFnview(response.result)
     const x = [];
     const y = [];
@@ -230,14 +232,14 @@ async function fnStaticObjectOil(nameCar) {
     const parFind = await fetch('api/iconFind', params)
     const paramssyFind = await parFind.json()
 
-    console.log(paramssyFind)
+    // console.log(paramssyFind)
     arg.values.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
                 if (it.icons === 'oil-card') {
                     const val = el.value
-                    console.log(val)
-                    console.log(x, y)
+                    //  console.log(val)
+                    //  console.log(x, y)
                     let degree;
                     if (x.length < 3) {
                         degree = 1
@@ -245,16 +247,16 @@ async function fnStaticObjectOil(nameCar) {
                     if (x.length >= 3) {
                         degree = 6
                     }
-                    console.log(x, y)
+                    // console.log(x, y)
                     const approximated = approximateValue(val, x, y, degree);
                     const znak = (approximated[0] * 0.9987).toFixed(0)
-                    console.log(znak)
-                    console.log(y[y.length - 1])
+                    // console.log(znak)
+                    // console.log(y[y.length - 1])
 
                     const progress = document.querySelector('.progress')
                     const progressBar = document.querySelector('.progressBar')
                     const value = znak * 100 / y[y.length - 1]
-                    console.log(value)
+                    // console.log(value)
                     progressBar.textContent = znak + ' ' + 'л.'
                     progressBar.style.width = value + '%'
 

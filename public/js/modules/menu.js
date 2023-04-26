@@ -78,27 +78,30 @@ export function zapros() {
                                 console.log(wialon.core.Errors.getErrorText(code));
                             }
                             const arr3 = await result
-                            console.log(arr3)
+                            // console.log(arr3)
                             if (!arr3.item.nm) {
                                 return
                             }
                             const objects = arr3.item.nm
-                            const prob = await loadParamsViewList(objects)
+                            const prob = await loadParamsViewList(objects, el)
+                            //  console.log(prob)
                             const role = document.querySelectorAll('.log')[0].textContent
                             const login = document.querySelectorAll('.log')[1].textContent
                             const massObjectCar = await dostupObject(login)
                             if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
-                                massObject.push(await loadParamsViewList(objects))
+                                massObject.push(prob)
                             }
+                            //   console.log(massObject)
                             countr++
                             if (countr === nameObject.length) {
                                 massObject.forEach(e => {
                                     e.group = nameGroup
+                                    //  e.id = el
                                 })
                                 aLLmassObject.push(massObject)
                             }
                             if (aLLmassObject.length === Allcountr) {
-                                console.log(aLLmassObject.reverse())
+                                aLLmassObject.reverse()
                                 conturTest(aLLmassObject)
                                 // const nameCarCheck = test.map(elem => elem[0].message)
                                 // checkCreate(nameCarCheck)
@@ -108,7 +111,7 @@ export function zapros() {
             });
         })
 
-    const flagss = 1 + 4096//4096
+
     const prmss = {
         "spec": [{
             "type": 'id',

@@ -146,11 +146,6 @@ export async function iconFind(activePost) {
                             const val = addZero(8, (el.value * it.coef).toFixed(0))
                             elem.children[1].textContent = val + 'км'
                         }
-                        /*
-                        if (it.icons === 'oil-card') {
-                            const val = (el.value * it.coef).toFixed(0)
-                            elem.children[1].textContent = val + 'л.'
-                        }*/
                         if (it.icons === 'akb-card') {
                             const val = (el.value * it.coef).toFixed(1)
                             elem.children[1].textContent = val + 'V'
@@ -284,7 +279,6 @@ export async function deleteWinParams(id) {
 
 
 export function refactor() {
-
     const nameStatic = document.querySelectorAll('.nameStatic')
     nameStatic.forEach(e => {
         if (e.value === '') {
@@ -295,4 +289,38 @@ export function refactor() {
         }
     })
 
+}
+
+
+
+export function inStatus() {
+    const active = document.querySelector('.color')
+    console.log(active.id)
+    const prmss = {
+        "spec": [{
+            "type": 'id',
+            "data": active.id,//26702383,//26702371,
+            "flags": 1048576,//1048576,                 //    1048576-шт 8388608-анималс
+            "mode": 0
+        }
+        ]
+    }
+    const remote1s = wialon.core.Remote.getInstance();
+    remote1s.remoteCall('core/update_data_flags', prmss,
+        function (code, result) {
+            console.log('запрос на виалон')
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+            const val = result
+            if (val[0]) {
+                const check = val[0].d.prms.in.v
+                console.log(check)
+                const starterValue = document.querySelector('.ign_value')
+                check !== 0 ? starterValue.textContent = 'ВКЛ' : starterValue.textContent = 'ВЫКЛ';
+            }
+
+        });
+    //  setInterval(inStatus, 2000, id)
 }

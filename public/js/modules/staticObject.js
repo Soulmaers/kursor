@@ -69,7 +69,7 @@ plu.addEventListener('click', () => {
     let val;
     createList.value !== '' ? val = createList.value : val = createList.placeholder
     val++
-    console.log(val)
+    // console.log(val)
     createList.value = val
     createListFn()
 })
@@ -79,7 +79,7 @@ mi.addEventListener('click', () => {
     let val;
 
     if (createList.value !== '' && createList.value > 0) {
-        console.log(createList.value)
+        //  console.log(createList.value)
         val = createList.value
         val--
     }
@@ -157,7 +157,7 @@ buttOnTarirDisk.addEventListener('click', async () => {
             arrayTarir.push(el.nextElementSibling.children[1].value)
             AllarrayTarir.push(arrayTarir)
         })
-        console.log(AllarrayTarir)
+        //  console.log(AllarrayTarir)
         const param = {
             method: "POST",
             headers: {
@@ -167,7 +167,7 @@ buttOnTarirDisk.addEventListener('click', async () => {
         }
         const res = await fetch('/api/tarirSave', param)
         const response = await res.json()
-        console.log()
+        //   console.log()
         tarirView();
         buttOnTarir.style.display = 'none'
     })
@@ -189,7 +189,7 @@ export async function tarirView() {
     }
     const res = await fetch('/api/tarirView', param)
     const response = await res.json()
-    console.log(response.result.length)
+    //console.log(response.result.length)
     createListFnview(response.result)
     const x = [];
     const y = [];
@@ -215,14 +215,14 @@ export async function tarirView() {
     const parFind = await fetch('api/iconFind', params)
     const paramssyFind = await parFind.json()
 
-    console.log(paramssyFind)
+    //console.log(paramssyFind)
     arg.values.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
                 if (it.icons === 'oil-card') {
                     const val = el.value
-                    console.log(val)
-                    console.log(x, y)
+                    // console.log(val)
+                    // console.log(x, y)
                     let degree;
                     if (x.length < 3) {
                         degree = 1
@@ -230,10 +230,10 @@ export async function tarirView() {
                     if (x.length >= 3) {
                         degree = 6
                     }
-                    console.log(x, y)
+                    //   console.log(x, y)
                     const approximated = approximateValue(val, x, y, degree);
                     const znak = (approximated[0] * 0.9987).toFixed(0)
-                    console.log(znak)
+                    //  console.log(znak)
                     const oilValue = document.querySelector('.oil_value1')
                     oilValue.textContent = znak + 'л.'
                     //  progressBar(y[y.length - 1], znak)
@@ -415,12 +415,11 @@ export function grafikPoly(points, degree, coeffs) {
 
 
 function grafGradient(arr, znak) {
-
-    console.log(arr)
-    console.log(znak)
+    //console.log(arr)
+    // console.log(znak)
     const foto = document.querySelector('.foto')
     const shkalas = document.querySelector('.shkala')
-    console.log(shkalas)
+    // console.log(shkalas)
     if (shkalas) {
         shkalas.remove()
     }

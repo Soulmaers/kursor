@@ -22,6 +22,7 @@ export function navigator() {
 
             nav.forEach(e => {
                 const msg = document.querySelectorAll('.msg')
+
                 msg.forEach(it => {
                     console.log('удаляемм')
                     it.remove();

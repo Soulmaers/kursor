@@ -8,7 +8,7 @@ import { alarmFind } from './alarmStorage.js'
 import { modalOs } from './modalOs.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
-import { iconFind, iconFindWindows, refactor } from './configIcons.js'
+import { iconFind, iconFindWindows, refactor, inStatus } from './configIcons.js'
 import { grafikPoly, tarirView } from './staticObject.js'
 //import { iconParamsz } from './icons.js'
 
@@ -17,6 +17,7 @@ let time;
 let icon;
 let timeIcon;
 export async function visual(el) {
+
     const tarir = document.querySelector('.tarir')
     console.log(el.children[0].textContent)
     if (el.children[0].textContent === 'Бочка') {
@@ -92,7 +93,7 @@ export async function visual(el) {
 
     tarirView();
     setInterval(tarirView, 300000)
-
+    inStatus()
 
 
 
@@ -197,7 +198,7 @@ export function liCreate() {
 
 
 export function view(arg) {
-    console.log(arg)
+    // console.log(arg)
     const msg = document.querySelectorAll('.msg')
     arg.forEach((el, index) => {
         msg[index].textContent = `${el.name}:${el.value}`
@@ -212,10 +213,10 @@ export const convert = (ob) => {
 
 
 export function viewConfigurator(arg, params, osi) {
-    console.log(osi)
+    //   console.log(osi)
     if (params) {
         const parametrs = convert(params)
-        console.log(parametrs)
+        //  console.log(parametrs)
         const alerts = [];
         const tiresLink = document.querySelectorAll('.tires_link')
         let activePost;
