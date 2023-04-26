@@ -2550,7 +2550,11 @@ input[type="date"] {
   font-size: 1rem;
   font-family: Roboto;
   font-weight: bold;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+}
+
+.km {
+  margin-bottom: 5px;
 }
 
 .speed_card {
