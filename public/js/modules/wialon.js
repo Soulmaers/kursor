@@ -199,11 +199,8 @@ export async function toView(toChange, probeg) {
         },
         body: (JSON.stringify({ activePost }))
     }
-
-
     const resV = await fetch('/api/toView', params)
     const responseV = await resV.json()
-
     if (responseV.result.length !== 0) {
         toChange = parseFloat(responseV.result[0].value)
         const toElem = document.querySelector('.to_value')
