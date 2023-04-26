@@ -2436,6 +2436,22 @@ input[type="date"] {
   /* border: 1px solid gray*/
 }
 
+.ignTest_card {
+  margin-bottom: 20px;
+}
+
+.ignTest_card_vykl {
+  background-image: url(../image/vykl.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ignTest_card_vkl {
+  background-image: url(../image/vkl.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .icon_card {
   display: flex;
   flex-direction: column;
@@ -2448,9 +2464,22 @@ input[type="date"] {
   border-radius: 15px;
 }
 
+.desc {
+  margin-top: 5px;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.pl {
+  border: 2px solid red
+}
+
 .card_img {
   width: 60%;
   height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   /* border: 1px solid gray;*/
 }
 
@@ -2492,6 +2521,11 @@ input[type="date"] {
   margin-bottom: 10px;
 }
 
+.ignTest {
+  margin-top: 15px;
+  font-size: 0.8rem;
+}
+
 .odom_value {
   display: flex;
   justify-content: center;
@@ -2527,6 +2561,8 @@ input[type="date"] {
   cursor: pointer;
 }
 
+
+
 .oil_card {
   background-image: url(../image/cardO.png);
   background-size: contain;
@@ -2561,12 +2597,7 @@ input[type="date"] {
 }
 
 
-.pl {
-  background-color: lightgray;
-  /* background-image: url(../image/min.png);
-  background-size: cover;
-  cursor: pointer;*/
-}
+
 
 .shkala {
   width: 100px;

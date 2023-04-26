@@ -164,6 +164,10 @@ export async function iconFind(activePost) {
                                 const val = el.value
                                 elem.children[1].textContent = val + '° C'
                                 val > 0 ? elem.children[1].textContent = 'ВКЛ' : elem.children[1].textContent = 'ВЫКЛ';
+                                const ignTest = document.querySelector('.ignTest_card')
+
+                                val > 0 ? (ignTest.classList.remove('ignTest_card_vykl'), ignTest.classList.add('ignTest_card_vkl')) : (ignTest.classList.remove('ignTest_card_vkl'), ignTest.classList.add('ignTest_card_vykl'))
+
                             }
 
                         }
