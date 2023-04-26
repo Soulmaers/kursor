@@ -2595,7 +2595,7 @@ input[type="date"] {
 }
 
 .odom_card {
-  background-image: url(../image/cardP.png);
+  background-image: url(../image/cardPTEST.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
