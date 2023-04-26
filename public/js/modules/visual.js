@@ -10,7 +10,7 @@ import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
 import { iconFind, iconFindWindows, refactor } from './configIcons.js'
 import { grafikPoly, tarirView } from './staticObject.js'
-//import { iconParamsz } from './icons.js'
+import { tooltip } from './cursorTooltip.js'
 
 let start;
 let time;
@@ -94,7 +94,7 @@ export async function visual(el) {
     tarirView();
     setInterval(tarirView, 300000)
     //inStatus()
-
+    tooltip()
 
 
 
