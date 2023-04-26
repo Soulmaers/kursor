@@ -71,9 +71,10 @@ export function fnToChange() {
 export function iconParamsz() {
     // console.log('работаем')
     const active = document.querySelector('.color')
-    const activePost = active.textContent.replace(/\s+/g, '')
+    const activePost = active.children[0].textContent.replace(/\s+/g, '')
+    console.log(activePost)
     const changeParams = document.querySelector('.changeParams')
-    const odomValue = document.querySelector('.odom_value')
+    //const odomValue = document.querySelector('.odom_value')
     const msg = document.querySelectorAll('.msg')
     msg.forEach(el => {
         el.addEventListener('click', () => {
@@ -92,8 +93,8 @@ export function iconParamsz() {
                 }
             })
             //   console.log(param)
-            const odometr = addZero(8, value)
-            odomValue.textContent = odometr + 'км'
+            //   const odometr = addZero(8, value)
+            //  odomValue.textContent = odometr + 'км'
 
             const coef = changeParams.value
             const id = document.querySelector('.acto').children[0].id
@@ -158,6 +159,14 @@ export async function iconFind(activePost) {
                             const val = (el.value * it.coef).toFixed(0)
                             elem.children[1].textContent = val + '° C'
                         }
+                        if (it.icons === 'ign-card') {
+                            if (activePost !== 'КранГаличанинР858ОР178') {
+                                const val = el.value
+                                elem.children[1].textContent = val + '° C'
+                                val > 0 ? elem.children[1].textContent = 'ВКЛ' : elem.children[1].textContent = 'ВЫКЛ';
+                            }
+
+                        }
                         elem.addEventListener('click', () => {
                             changeParams.value = it.coef
                         })
@@ -179,7 +188,7 @@ export const convert = (ob) => {
 
 export function iconParamszWindows() {
     const active = document.querySelector('.color')
-    const activePost = active.textContent.replace(/\s+/g, '')
+    const activePost = active.children[0].textContent.replace(/\s+/g, '')
     const changeParams = document.querySelector('.changeParams')
     const actoStatic = document.querySelector('.actoStatic')
     const msg = document.querySelectorAll('.msg')
@@ -292,7 +301,7 @@ export function refactor() {
 }
 
 
-
+/*
 export function inStatus() {
     const active = document.querySelector('.color')
     console.log(active.id)
@@ -314,13 +323,13 @@ export function inStatus() {
             }
             console.log(result)
             const val = result
-            if (val[0]) {
-                const check = val[0].d.prms.in.v
-                console.log(check)
-                const starterValue = document.querySelector('.ign_value')
-                check !== 0 ? starterValue.textContent = 'ВКЛ' : starterValue.textContent = 'ВЫКЛ';
-            }
+            // if (val[0]) {
+            const check = val[0].d.prms.in.v
+            console.log(check)
+            const starterValue = document.querySelector('.ign_value')
+            check !== 0 ? starterValue.textContent = 'ВКЛ' : starterValue.textContent = 'ВЫКЛ';
+            //   }
 
         });
     //  setInterval(inStatus, 2000, id)
-}
+}*/

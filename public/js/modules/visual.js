@@ -8,7 +8,7 @@ import { alarmFind } from './alarmStorage.js'
 import { modalOs } from './modalOs.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
-import { iconFind, iconFindWindows, refactor, inStatus } from './configIcons.js'
+import { iconFind, iconFindWindows, refactor } from './configIcons.js'
 import { grafikPoly, tarirView } from './staticObject.js'
 //import { iconParamsz } from './icons.js'
 
@@ -93,7 +93,7 @@ export async function visual(el) {
 
     tarirView();
     setInterval(tarirView, 300000)
-    inStatus()
+    //inStatus()
 
 
 

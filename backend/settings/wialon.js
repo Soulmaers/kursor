@@ -92,9 +92,34 @@ function createTable() {
                 nameCar.push(el.nm.replace(/\s+/g, ''))
                 const nameTable = el.nm.replace(/\s+/g, '')
                 const sensor = Object.entries(el.lmsg.p)
-                postParametrs(nameTable, sensor)
+                // console.log(sensor)
+
+                // console.log(el.id)
+                const prmss = {
+                    "spec": [{
+                        "type": 'id',
+                        "data": el.id,//26702383,//26702371,
+                        "flags": 1048576,//1048576,                 //    1048576-шт 8388608-анималс
+                        "mode": 0
+                    }
+                    ]
+                }
+                session.request('core/update_data_flags', prmss)
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+                    .then(function (data) {
+                        const o = data[0].d.prms.in
+                        console.log(o)
+                        if (o) {
+                            sensor.push(['in', data[0].d.prms.in.v])
+                            //  console.log(sensor)
+                            //  console.log(data[0].d.prms.in.v)
+                            postParametrs(nameTable, sensor)
+                        }
+                    })
+                zaprosSpisokb(nameCar)
             })
-            zaprosSpisokb(nameCar)
         })
 }
 
@@ -108,6 +133,7 @@ function postParametrs(name, param) {
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             if (results.length === 0) {
+
                 const sql = `INSERT INTO params(nameCar, name, value, status) VALUES?`;
                 connection.query(sql, [param], function (err, results) {
                     if (err) console.log(err);
