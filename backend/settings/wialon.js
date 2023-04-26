@@ -92,34 +92,10 @@ function createTable() {
                 nameCar.push(el.nm.replace(/\s+/g, ''))
                 const nameTable = el.nm.replace(/\s+/g, '')
                 const sensor = Object.entries(el.lmsg.p)
-                // console.log(sensor)
+                postParametrs(nameTable, sensor)
 
-                // console.log(el.id)
-                const prmss = {
-                    "spec": [{
-                        "type": 'id',
-                        "data": el.id,//26702383,//26702371,
-                        "flags": 1048576,//1048576,                 //    1048576-шт 8388608-анималс
-                        "mode": 0
-                    }
-                    ]
-                }
-                session.request('core/update_data_flags', prmss)
-                    .catch(function (err) {
-                        console.log(err);
-                    })
-                    .then(function (data) {
-                        const o = data[0].d.prms.in
-                        console.log(o)
-                        if (o) {
-                            sensor.push(['in', data[0].d.prms.in.v])
-                            //  console.log(sensor)
-                            //  console.log(data[0].d.prms.in.v)
-                            postParametrs(nameTable, sensor)
-                        }
-                    })
-                zaprosSpisokb(nameCar)
             })
+            zaprosSpisokb(nameCar)
         })
 }
 
