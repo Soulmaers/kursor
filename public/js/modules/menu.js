@@ -77,6 +77,7 @@ export function zapros() {
                             if (code) {
                                 console.log(wialon.core.Errors.getErrorText(code));
                             }
+                            console.log(result)
                             const arr3 = await result
                             // console.log(arr3)
                             if (!arr3.item.nm) {
@@ -84,14 +85,14 @@ export function zapros() {
                             }
                             const objects = arr3.item.nm
                             const prob = await loadParamsViewList(objects, el)
-                            //  console.log(prob)
+                            console.log(prob)
                             const role = document.querySelectorAll('.log')[0].textContent
                             const login = document.querySelectorAll('.log')[1].textContent
                             const massObjectCar = await dostupObject(login)
                             if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
                                 massObject.push(prob)
                             }
-                            //   console.log(massObject)
+                            console.log(massObject)
                             countr++
                             if (countr === nameObject.length) {
                                 massObject.forEach(e => {
@@ -102,6 +103,7 @@ export function zapros() {
                             }
                             if (aLLmassObject.length === Allcountr) {
                                 aLLmassObject.reverse()
+                                console.log(aLLmassObject)
                                 conturTest(aLLmassObject)
                                 // const nameCarCheck = test.map(elem => elem[0].message)
                                 // checkCreate(nameCarCheck)

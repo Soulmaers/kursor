@@ -189,7 +189,7 @@ export async function tarirView() {
     }
     const res = await fetch('/api/tarirView', param)
     const response = await res.json()
-    //console.log(response.result.length)
+    console.log(response.result.length)
     createListFnview(response.result)
     const x = [];
     const y = [];

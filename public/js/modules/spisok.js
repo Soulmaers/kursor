@@ -114,7 +114,7 @@ export function conturTest(testov) {
                 listItemCar.appendChild(listTrail)
                 //  console.log(nameCar)
 
-                if (nameCar === 'Бочка') {
+                if (nameCar === 'ЦистернаДТ') {
                     // console.log(listProfil)
                     listProfil.style.width = 60 + '%'
                     listTrail.remove()

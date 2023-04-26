@@ -20,7 +20,7 @@ export async function visual(el) {
 
     const tarir = document.querySelector('.tarir')
     console.log(el.children[0].textContent)
-    if (el.children[0].textContent === 'Бочка') {
+    if (el.children[0].textContent === 'Цистерна ДТ') {
         console.log(el.textContent)
         tarir.style.display = 'block'
         console.log('бочка' + el.textContent)
