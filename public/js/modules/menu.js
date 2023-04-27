@@ -19,7 +19,7 @@ export function init(kluch) {
 
             zapros() //делаем запрос на wialon получаем объекты
             // setInterval(ggg, 3000)
-            console.log('после')
+            //  console.log('после')
         });
 };
 
@@ -35,7 +35,7 @@ export function zapros() {
     if (tiresActiv) {
         tiresActiv.remove()
     }
-    console.log('работаем запрос')
+    //  console.log('работаем запрос')
     const flagsT = 1 + 1024// + 1024//4096
     const prmsT = {
         "spec": {
@@ -55,7 +55,7 @@ export function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
-            console.log(result)
+            //  console.log(result)
             await result
             const aLLmassObject = [];
             let Allcountr = 0;
@@ -63,11 +63,11 @@ export function zapros() {
                 Allcountr++
                 const nameGroup = elem.nm
                 const nameObject = elem.u
-                console.log(nameGroup)
+                //    console.log(nameGroup)
                 const massObject = [];
                 let countr = 0;
                 nameObject.forEach(el => {
-                    console.log(el)
+                    //   console.log(el)
                     const prms2 = {
                         "id": el,
                         "flags": 1025
@@ -78,7 +78,7 @@ export function zapros() {
                             if (code) {
                                 console.log(wialon.core.Errors.getErrorText(code));
                             }
-                            console.log(result)
+                            //  console.log(result)
                             const arr3 = await result
                             // console.log(arr3)
                             if (!arr3.item.nm) {
@@ -86,14 +86,14 @@ export function zapros() {
                             }
                             const objects = arr3.item.nm
                             const prob = await loadParamsViewList(objects, el)
-                            console.log(prob)
+                            // console.log(prob)
                             const role = document.querySelectorAll('.log')[0].textContent
                             const login = document.querySelectorAll('.log')[1].textContent
                             const massObjectCar = await dostupObject(login)
                             if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
                                 massObject.push(prob)
                             }
-                            console.log(massObject)
+                            //   console.log(massObject)
                             countr++
                             if (countr === nameObject.length) {
                                 massObject.forEach(e => {
@@ -104,7 +104,7 @@ export function zapros() {
                             }
                             if (aLLmassObject.length === Allcountr) {
                                 aLLmassObject.reverse()
-                                console.log(aLLmassObject)
+                                //   console.log(aLLmassObject)
                                 conturTest(aLLmassObject)
                                 // const nameCarCheck = test.map(elem => elem[0].message)
                                 // checkCreate(nameCarCheck)
@@ -130,7 +130,7 @@ export function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
-            console.log(result)
+            //  console.log(result)
 
 
         });
@@ -154,7 +154,7 @@ export function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
-            console.log(result)
+            // console.log(result)
             const arr1 = Object.values(result);
             const arrCar = arr1[5];
             dann = arrCar
@@ -215,7 +215,7 @@ export async function ggg(id) {
                 if (code) {
                     console.log(wialon.core.Errors.getErrorText(code));
                 }
-                console.log(result)
+
                 const nameSens = Object.entries(result.item.sens)
                 const arrNameSens = [];
 
@@ -239,14 +239,14 @@ export async function ggg(id) {
                             Object.entries(result).forEach(e => {
                                 valueSens.push(e[1])
                             })
-                            console.log(valueSens)
-                            console.log(arrNameSens)
+                            // console.log(valueSens)
+                            // console.log(arrNameSens)
                             const allArr = [];
                             arrNameSens.forEach((e, index) => {
                                 allArr.push([...e, valueSens[index]])
 
                             })
-                            console.log(allArr)
+                            //  console.log(allArr)
                             allArr.forEach(it => {
                                 allobj[it[1]] = it[0]
                             })

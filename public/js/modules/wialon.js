@@ -185,30 +185,33 @@ export function iconParams() {
                         console.log(wialon.core.Errors.getErrorText(code));
                     }
                     if (result) {
+                        console.log(result)
                         const valueSens = [];
                         Object.entries(result).forEach(e => {
                             valueSens.push(e[1])
                         })
-                        console.log(valueSens)
-                        console.log(arrNameSens)
+                        //  console.log(valueSens)
+                        //  console.log(arrNameSens)
                         const allArr = [];
                         arrNameSens.forEach((e, index) => {
                             allArr.push([...e, valueSens[index]])
 
                         })
-                        console.log(allArr)
+                        //    console.log(allArr)
 
                         allArr.forEach(it => {
                             if (it.includes('Зажигание')) {
                                 const ignValue = document.querySelector('.ign_value')
-                                ignValue.textContent = 'ВКЛ'
+                                it[2] === 1 ? ignValue.textContent = 'ВКЛ' : ignValue.textContent = 'ВЫКЛ'
+                                console.log('первое')
                                 console.log(it[2])
                                 return
                             }
-                            else {
-                                const ignValue = document.querySelector('.ign_value')
-                                ignValue.textContent = 'ВЫКЛ'
-                            }
+                            /*
+                                                        console.log('второе')
+                                                        const ignValue = document.querySelector('.ign_value')
+                                                        ignValue.textContent = '---'
+                            */
 
                         })
                     }

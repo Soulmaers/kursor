@@ -39,9 +39,9 @@ async function viewAlarmStorage(name, stor) {
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
     const active = document.querySelector('.color')
-    console.log(active)
+    //  console.log(active)
     const allobj = await ggg(active.id)
-    console.log(allobj)
+    // console.log(allobj)
     stor.forEach(el => {
         let count = 0;
         el.forEach(it => {
