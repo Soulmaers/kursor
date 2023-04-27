@@ -173,6 +173,7 @@ export function iconParams() {
                 arrNameSens.push([el[1].n, el[1].p])
                 //  arrNameSens.push(el[1].p)
             })
+            console.log(arrNameSens)
             const prms = {
                 "unitId":
                     active[0].id,
@@ -198,14 +199,19 @@ export function iconParams() {
 
                         })
                         //    console.log(allArr)
-
+                        let count = 0;
                         allArr.forEach(it => {
                             if (it.includes('Зажигание')) {
+                                count++
                                 const ignValue = document.querySelector('.ign_value')
                                 it[2] === 1 ? ignValue.textContent = 'ВКЛ' : ignValue.textContent = 'ВЫКЛ'
                                 console.log('первое')
                                 console.log(it[2])
                                 return
+                            }
+                            if (count === 0) {
+                                const ignValue = document.querySelector('.ign_value')
+                                ignValue.textContent = '------'
                             }
                             /*
                                                         console.log('второе')
