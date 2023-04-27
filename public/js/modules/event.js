@@ -301,7 +301,7 @@ btnShina.forEach(el => {
         el.classList.add('active')
         const e = document.querySelector('.color')
         console.log(e)
-        visualNone(e);
+        // visualNone(e);
         visual(e)
         const activGraf = document.querySelectorAll('.activGraf')
         if (activGraf) {

@@ -18,7 +18,7 @@ export function init(kluch) {
             }
 
             zapros() //делаем запрос на wialon получаем объекты
-            // setInterval(ggg, 3000)
+            //  setInterval(zapros, 3000)
             //  console.log('после')
         });
 };
@@ -246,12 +246,12 @@ export async function ggg(id) {
                                 allArr.push([...e, valueSens[index]])
 
                             })
-                            //  console.log(allArr)
+                            console.log(allArr)
                             allArr.forEach(it => {
                                 allobj[it[1]] = it[0]
                             })
                         }
-
+                        // console.log(allobj)
                         resolve(allobj)
                     });
             })

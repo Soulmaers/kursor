@@ -204,6 +204,8 @@ export function iconParams() {
                         const tsi = await fnWialon(active[0].id)
                         console.log(tsi)
                         let count = 0;
+                        let oborot = 0;
+
                         allArr.forEach(it => {
                             if (it.includes('Зажигание')) {
                                 count++
@@ -215,14 +217,24 @@ export function iconParams() {
                                 if (it[2] === 1 && tsi >= 26.5) {
                                     tsiValue.textContent = 'ВКЛ'
                                 }
-                                else {
+                                else {/*
                                     const tyres = document.querySelectorAll('.tires_link')
                                     tyres.forEach(e => {
                                         e.style.background = 'gray'
-                                    })
+                                    })*/
                                     tsiValue.textContent = 'ВЫКЛ'
                                 }
                                 return
+                            }
+                            if (it.includes('Обороты двигателя')) {
+                                if (it[2] === -348201.3876) {
+                                    const oborotValue = document.querySelector('.oborot_value')
+                                    oborotValue.textContent = '------'
+                                }
+                                else {
+                                    const oborotValue = document.querySelector('.oborot_value')
+                                    oborotValue.textContent = it[2].toFixed(0)
+                                }
                             }
                             if (count === 0) {
                                 const ignValue = document.querySelector('.ign_value')

@@ -127,13 +127,14 @@ export function visualNone(e) {
     const oilValue = document.querySelector('.oil_value1')
     const toil_value = document.querySelector('.toil_value')
     const ign_value = document.querySelector('.ign_value')
-
+    const oborotValue = document.querySelector('.oborot_value')
     toil_value.textContent = ''
     starterValue.textContent = ''
     probegElem.textContent = ''
     ohlValue.textContent = ''
     oilValue.textContent = ''
     ign_value.textContent = ''
+    oborotValue.textContent = ''
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const container = document.querySelector('.container')
@@ -416,7 +417,6 @@ function styleShinaActive(arg) {
     reqProtectorBase()
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
-    const place = document.querySelectorAll('.place')
     const main = document.querySelector('.main')
     main.style.display = 'flex'
     arg.style.fontSize = '0.65rem'
@@ -430,9 +430,6 @@ function styleShinaActive(arg) {
         e.style.borderTop = 'none'
         e.style.fontSize = '0.8rem'
         e.style.justifyContent = 'flex-start'
-    })
-    place.forEach(e => {
-        e.style.display = 'none';
     })
 }
 
