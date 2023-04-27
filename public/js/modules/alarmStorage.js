@@ -1,5 +1,7 @@
 import { tr } from './content.js'
 import { convert } from './visual.js'
+import { ggg } from './menu.js'
+
 
 export async function alarmFind(name) {
     const activePost = name.children[0].textContent.replace(/\s+/g, '')
@@ -33,12 +35,21 @@ export async function alarmFind(name) {
     }
 }
 
-function viewAlarmStorage(name, stor) {
+async function viewAlarmStorage(name, stor) {
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
+    const active = document.querySelector('.color')
+    console.log(active)
+    const allobj = await ggg(active.id)
+    console.log(allobj)
     stor.forEach(el => {
         let count = 0;
         el.forEach(it => {
+            console.log(it)
+            if (!allobj.hasOwnProperty(it.senspressure)) {
+                return
+            }
+            it.senspressure = allobj[it.senspressure]
             count++
             const tr = document.createElement('div')
             tr.classList.add('tr')

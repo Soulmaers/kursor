@@ -4276,7 +4276,7 @@ input[type="text"]:focus {
 }
 
 .td:nth-child(2n) {
-  width: 100px;
+  width: 200px;
 }
 
 .td:nth-child(4n) {
