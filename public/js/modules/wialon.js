@@ -216,6 +216,10 @@ export function iconParams() {
                                     tsiValue.textContent = 'ВКЛ'
                                 }
                                 else {
+                                    const tyres = document.querySelectorAll('.tires_link')
+                                    tyres.forEach(e => {
+                                        e.style.background = 'gray'
+                                    })
                                     tsiValue.textContent = 'ВЫКЛ'
                                 }
                                 return

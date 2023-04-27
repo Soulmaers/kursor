@@ -290,8 +290,7 @@ export function refactor() {
 }
 
 
-/*
-export function inStatus() {
+ function inStatus() {
     const active = document.querySelector('.color')
     console.log(active.id)
     const prmss = {
@@ -321,4 +320,4 @@ export function inStatus() {
 
         });
     //  setInterval(inStatus, 2000, id)
-}*/
+}
