@@ -122,6 +122,7 @@ export function geoloc() {
 
 export function iconParams() {
     // console.log('икон')
+    const active = document.querySelectorAll('.color')
     const flags = 1 + 1024
     const prms = {
         "spec": {
@@ -149,6 +150,72 @@ export function iconParams() {
             //check = arr1[5][2].lmsg.p.pwr_ext;
             loadAkb(arrCar);
         });
+
+
+    const flagss = 4096
+    const prmss = {
+        'id': active[0].id,
+        'flags': flagss
+    }
+
+
+    const remote11 = wialon.core.Remote.getInstance();
+    remote11.remoteCall('core/search_item', prmss,
+        async function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+            const nameSens = Object.entries(result.item.sens)
+            const arrNameSens = [];
+
+            nameSens.forEach(el => {
+                arrNameSens.push([el[1].n, el[1].p])
+                //  arrNameSens.push(el[1].p)
+            })
+            const prms = {
+                "unitId":
+                    active[0].id,
+                "sensors": []
+            }
+            const remote1 = wialon.core.Remote.getInstance();
+            remote1.remoteCall('unit/calc_last_message', prms,
+                async function (code, result) {
+                    if (code) {
+                        console.log(wialon.core.Errors.getErrorText(code));
+                    }
+                    if (result) {
+                        const valueSens = [];
+                        Object.entries(result).forEach(e => {
+                            valueSens.push(e[1])
+                        })
+                        console.log(valueSens)
+                        console.log(arrNameSens)
+                        const allArr = [];
+                        arrNameSens.forEach((e, index) => {
+                            allArr.push([...e, valueSens[index]])
+
+                        })
+                        console.log(allArr)
+
+                        allArr.forEach(it => {
+                            if (it.includes('Зажигание')) {
+                                const ignValue = document.querySelector('.ign_value')
+                                ignValue.textContent = 'ВКЛ'
+                                console.log(it[2])
+                                return
+                            }
+                            else {
+                                const ignValue = document.querySelector('.ign_value')
+                                ignValue.textContent = 'ВЫКЛ'
+                            }
+
+                        })
+                    }
+                    //  console.log(allobj)
+
+                });
+        })
 }
 
 function addZero(digits_length, source) {

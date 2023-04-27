@@ -127,6 +127,7 @@ export function visualNone(e) {
     const oilValue = document.querySelector('.oil_value1')
     const toil_value = document.querySelector('.toil_value')
     const ign_value = document.querySelector('.ign_value')
+
     toil_value.textContent = ''
     starterValue.textContent = ''
     probegElem.textContent = ''

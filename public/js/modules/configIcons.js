@@ -137,7 +137,6 @@ export async function iconFind(activePost) {
     const arg = await argy.json()
     const parFind = await fetch('api/iconFind', params)
     const paramssyFind = await parFind.json()
-
     arg.values.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
@@ -145,43 +144,23 @@ export async function iconFind(activePost) {
                     if (elem.id === it.icons) {
                         console.log(elem.children)
                         elem.children[0].textContent = (el.value * it.coef).toFixed(1) // + 'км'
-
-
                         if (it.icons === 'odom-card') {
                             const val = addZero(8, (el.value * it.coef).toFixed(0))
                             elem.children[0].textContent = val// + 'км'
                         }
-
-                        /*
-                        if (it.icons === 'akb-card') {
-                            const val = (el.value * it.coef).toFixed(1)
-                            elem.children[1].textContent = val + 'V'
-                        }
-                        if (it.icons === 'ohl-card') {
-                            const val = (el.value * it.coef).toFixed(0)
-                            elem.children[1].textContent = val + '° C'
-                        }
-                        if (it.icons === 'toil-card') {
-                            const val = (el.value * it.coef).toFixed(0)
-                            elem.children[1].textContent = val + '° C'
-                        }*/
                         if (it.icons === 'ign-card') {
                             if (activePost !== 'КранГаличанинР858ОР178') {
                                 const val = el.value
                                 elem.children[0].textContent = val + '° C'
                                 val > 0 ? elem.children[0].textContent = 'ВКЛ' : elem.children[0].textContent = 'ВЫКЛ';
                                 const ignTest = document.querySelector('.ignTest_card')
-
                                 val > 0 ? (ignTest.classList.remove('ignTest_card_vykl'), ignTest.classList.add('ignTest_card_vkl')) : (ignTest.classList.remove('ignTest_card_vkl'), ignTest.classList.add('ignTest_card_vykl'))
-
                             }
-
                         }
                         elem.addEventListener('click', () => {
                             changeParams.value = it.coef
                         })
                     }
-
                 })
             }
         })
