@@ -11,7 +11,7 @@ import { kranParams } from './strelaKran.js'
 import { iconFind, iconFindWindows, refactor } from './configIcons.js'
 import { grafikPoly, tarirView } from './staticObject.js'
 import { tooltip } from './cursorTooltip.js'
-import { allobj } from './menu.js'
+import { ggg } from './menu.js'
 
 import { Tooltip } from '../class/Tooltip.js'
 
@@ -100,6 +100,7 @@ export async function visual(el) {
     tarirView();
     setInterval(tarirView, 300000)
     //inStatus()
+
     tooltip()
 
 
@@ -179,6 +180,9 @@ export function visualNone(e) {
     }
 }
 
+
+
+
 //стираем выбранные значения графика скорости
 export function clearGraf() {
     const selectSpeed = document.querySelector('.select_speed')
@@ -218,7 +222,10 @@ export const convert = (ob) => {
 }
 
 
-export function viewConfigurator(arg, params, osi) {
+export async function viewConfigurator(arg, params, osi) {
+    const active = document.querySelectorAll('.color')
+    const allobj = await ggg(active[0].id)
+    console.log(allobj)
     //   console.log(osi)
     if (params) {
         const parametrs = convert(params)
@@ -226,7 +233,7 @@ export function viewConfigurator(arg, params, osi) {
         const alerts = [];
         const tiresLink = document.querySelectorAll('.tires_link')
         let activePost;
-        const active = document.querySelectorAll('.color')
+
         if (active[0] == undefined) {
             const listItem = document.querySelectorAll('.listItem')[0]
             activePost = listItem.textContent.replace(/\s+/g, '')
@@ -262,11 +269,12 @@ export function viewConfigurator(arg, params, osi) {
                                 el.style.position = 'absolute'
                                 el.style.bottom = 0
                             })
-                            console.log(allobj)
+
                             console.log(item.pressure)
                             console.log(allobj[item.pressure])
-                            new Tooltip(e, allobj[item.pressure]);
-                            //  e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
+                            new Tooltip(e, [allobj[item.pressure], allobj[item.temp]]);
+
+                            //   e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                             osi.forEach(element => {
                                 if (element.idOs == item.osNumber) {
                                     signal = objColor[generDav(done, element)]

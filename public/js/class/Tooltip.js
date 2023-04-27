@@ -13,8 +13,11 @@ export class Tooltip {
     }
 
     handleMouseEnter() {
+        console.log(this.message.length)
         this.tooltip = document.createElement("div");
-        this.tooltip.textContent = this.message;
+        //   this.tooltip.innerHTML = this.message;
+        // console.log(this.tooltip.innerHTML)
+        // this.tooltip.style.heigth = "80px";
         this.tooltip.style.position = "absolute";
         this.tooltip.style.top = "0";
         this.tooltip.style.left = "0";
@@ -22,6 +25,12 @@ export class Tooltip {
         this.tooltip.style.color = "black";
         this.tooltip.style.padding = "5px";
         document.body.appendChild(this.tooltip);
+        this.message.forEach(el => {
+            this.tooltipLow = document.createElement("div");
+            this.tooltip.appendChild(this.tooltipLow);
+            this.tooltipLow.textContent = el
+        });
+
     }
 
     handleMouseLeave() {
