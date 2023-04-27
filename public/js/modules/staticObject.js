@@ -230,13 +230,11 @@ export async function tarirView() {
                     if (x.length >= 3) {
                         degree = 6
                     }
-                    //   console.log(x, y)
+
                     const approximated = approximateValue(val, x, y, degree);
                     const znak = (approximated[0] * 0.9987).toFixed(0)
-                    //  console.log(znak)
                     const oilValue = document.querySelector('.oil_value1')
-                    oilValue.textContent = znak + 'л.'
-                    //  progressBar(y[y.length - 1], znak)
+                    oilValue.textContent = znak
 
                     grafGradient(y, znak)
                     grafikPoly(points, 6, approximated[1])

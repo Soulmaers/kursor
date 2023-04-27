@@ -45,7 +45,7 @@ async function viewAlarmStorage(name, stor) {
     stor.forEach(el => {
         let count = 0;
         el.forEach(it => {
-            console.log(it)
+            //   console.log(it)
             if (!allobj.hasOwnProperty(it.senspressure)) {
                 return
             }
