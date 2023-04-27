@@ -11,6 +11,12 @@ import { kranParams } from './strelaKran.js'
 import { iconFind, iconFindWindows, refactor } from './configIcons.js'
 import { grafikPoly, tarirView } from './staticObject.js'
 import { tooltip } from './cursorTooltip.js'
+import { allobj } from './menu.js'
+
+import { Tooltip } from '../class/Tooltip.js'
+
+
+
 
 let start;
 let time;
@@ -256,6 +262,10 @@ export function viewConfigurator(arg, params, osi) {
                                 el.style.position = 'absolute'
                                 el.style.bottom = 0
                             })
+                            console.log(allobj)
+                            console.log(item.pressure)
+                            console.log(allobj[item.pressure])
+                            new Tooltip(e, allobj[item.pressure]);
                             //  e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                             osi.forEach(element => {
                                 if (element.idOs == item.osNumber) {

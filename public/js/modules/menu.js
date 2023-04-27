@@ -5,6 +5,8 @@ import { checkCreate } from './admin.js'
 
 
 
+export const allobj = {};
+
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
 export function init(kluch) {
@@ -16,7 +18,8 @@ export function init(kluch) {
             }
 
             zapros() //делаем запрос на wialon получаем объекты
-
+            ggg()
+            // setInterval(ggg, 3000)
             console.log('после')
         });
 };
@@ -70,7 +73,6 @@ export function zapros() {
                         "id": el,
                         "flags": 1025
                     };
-
                     const remote3 = wialon.core.Remote.getInstance();
                     remote3.remoteCall('core/search_item', prms2,
                         async function (code, result) {
@@ -116,8 +118,8 @@ export function zapros() {
 
     const prmss = {
         "spec": [{
-            "type": 'id',
-            "data": 26702386,//26702383,//26702371,
+            "type": 'type',
+            "data": 'avl_unit', //26702383,//26702371,
             "flags": 1048576,//1048576,                 //    1048576-шт 8388608-анималс
             "mode": 0
         }
@@ -168,6 +170,60 @@ export function zapros() {
         });
 
 }
+
+
+function ggg() {
+    const flagss = 4096
+    const prmss = {
+        'id': 26702371,
+        'flags': flagss
+    }
+    const remote11 = wialon.core.Remote.getInstance();
+    remote11.remoteCall('core/search_item', prmss,
+        async function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+            const nameSens = Object.entries(result.item.sens)
+            const arrNameSens = [];
+
+            nameSens.forEach(el => {
+                arrNameSens.push([el[1].n, el[1].p])
+                //  arrNameSens.push(el[1].p)
+            })
+            const prms = {
+                "unitId":
+                    26702371,
+                "sensors": []
+            }
+            const remote1 = wialon.core.Remote.getInstance();
+            remote1.remoteCall('unit/calc_last_message', prms,
+                async function (code, result) {
+                    if (code) {
+                        console.log(wialon.core.Errors.getErrorText(code));
+                    }
+
+                    const valueSens = [];
+                    Object.entries(result).forEach(e => {
+                        valueSens.push(e[1])
+                    })
+                    console.log(valueSens)
+                    console.log(arrNameSens)
+                    const allArr = [];
+                    arrNameSens.forEach((e, index) => {
+                        allArr.push([...e, valueSens[index]])
+
+                    })
+                    console.log(allArr)
+                    allArr.forEach(it => {
+                        allobj[it[1]] = it[0]
+                    })
+                    console.log(allobj)
+                });
+        })
+}
+
 
 async function dostupObject(name) {
     const param = {
