@@ -199,19 +199,32 @@ export function iconParams() {
 
                         })
                         //    console.log(allArr)
+
+
+                        const tsi = await fnWialon(active[0].id)
+                        console.log(tsi)
                         let count = 0;
                         allArr.forEach(it => {
                             if (it.includes('Зажигание')) {
                                 count++
                                 const ignValue = document.querySelector('.ign_value')
+                                const tsiValue = document.querySelector('.tsi_value')
                                 it[2] === 1 ? ignValue.textContent = 'ВКЛ' : ignValue.textContent = 'ВЫКЛ'
                                 console.log('первое')
                                 console.log(it[2])
+                                if (it[2] === 1 && tsi >= 26.5) {
+                                    tsiValue.textContent = 'ВКЛ'
+                                }
+                                else {
+                                    tsiValue.textContent = 'ВЫКЛ'
+                                }
                                 return
                             }
                             if (count === 0) {
                                 const ignValue = document.querySelector('.ign_value')
+                                const tsiValue = document.querySelector('.tsi_value')
                                 ignValue.textContent = '------'
+                                tsiValue.textContent = '------'
                             }
                             /*
                                                         console.log('второе')
@@ -226,6 +239,42 @@ export function iconParams() {
                 });
         })
 }
+
+
+async function fnWialon(id) {
+    const params = {
+        "id": id,
+        "flags": 1025
+    }
+    return new Promise(function (resolve, reject) {
+        const remote1 = wialon.core.Remote.getInstance();
+        remote1.remoteCall('core/search_item', params,
+            async function (code, result) {
+                if (code) {
+                    console.log(wialon.core.Errors.getErrorText(code));
+                }
+                if (result) {
+                    console.log(result.item.lmsg.p.pwr_ext.toFixed(1))
+                    const res = result.item.lmsg.p.pwr_ext.toFixed(1)
+                    resolve(res)
+
+                }
+            })
+    })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function addZero(digits_length, source) {
     let text = source + '';

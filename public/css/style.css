@@ -2525,7 +2525,9 @@ input[type="date"] {
 .oil_value1,
 .ign_value,
 .akb_value1,
-.speed_value {
+.speed_value,
+.moto_value,
+.tsi_value {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2535,7 +2537,7 @@ input[type="date"] {
   font-size: 1.3rem;
   font-family: Roboto;
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 25px;
 }
 
 .ignTest {
@@ -2553,7 +2555,7 @@ input[type="date"] {
   font-size: 1rem;
   font-family: Roboto;
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 25px;
 }
 
 .km {
