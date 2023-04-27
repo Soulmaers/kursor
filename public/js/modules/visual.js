@@ -223,6 +223,7 @@ export const convert = (ob) => {
 
 
 export async function viewConfigurator(arg, params, osi) {
+    const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelectorAll('.color')
     const allobj = await ggg(active[0].id)
     console.log(allobj)
@@ -270,9 +271,13 @@ export async function viewConfigurator(arg, params, osi) {
                                 el.style.bottom = 0
                             })
 
-                            console.log(item.pressure)
-                            console.log(allobj[item.pressure])
-                            new Tooltip(e, [allobj[item.pressure], allobj[item.temp]]);
+                            if (role === 'Администратор') {
+                                new Tooltip(e, [allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')']);
+                            }
+                            else {
+                                new Tooltip(e, [allobj[item.pressure], allobj[item.temp]]);
+                            }
+
 
                             //   e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                             osi.forEach(element => {

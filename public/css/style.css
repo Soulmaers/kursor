@@ -2438,6 +2438,9 @@ input[type="date"] {
 
 .ignTest_card {
   margin-bottom: 20px;
+  background-image: url(../image/vykl.png);
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .ignTest_card_vykl {
