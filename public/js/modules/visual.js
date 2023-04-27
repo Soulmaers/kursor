@@ -396,7 +396,9 @@ export async function viewOs(counts) {
         link.appendChild(tiresT);
         // link.appendChild(place);
     })
-
+    const cont1 = document.createElement('div');
+    cont1.classList.add('cont1')
+    container.appendChild(cont1)
     const cont2 = document.createElement('div');
     cont2.classList.add('cont')
     container.appendChild(cont2)
@@ -448,6 +450,9 @@ export const pricep = (elem) => {
     const cont = document.querySelector('.cont')
     cont.append(elem.parentNode)
     cont.style.marginTop = '72px'
+    cont.style.border = '2px solid darkblue'
+    cont.style.padding = '5px'
+
     elem.children[0].style.background = '#000'// "#00FFFF"
     elem.classList.add('pricep')
 

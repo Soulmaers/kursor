@@ -103,8 +103,10 @@ export async function loadParamsView() {
                 model.values.forEach(el => {
                     el.trailer == 'Прицеп' ?
                         pricep(centerOs[el.osi - 1])
-                        :
-                        centerOs[el.osi - 1].children[0].style.background = '#000'
+                        : noPricep(centerOs[el.osi - 1])
+
+
+
                     if (el.tyres == 2) {
                         btnShina[1].classList.contains('active') ? centerOs[el.osi - 1].children[0].style.width = '212px' :
                             centerOs[el.osi - 1].children[0].style.width = '212px'
@@ -142,7 +144,14 @@ export async function loadParamsView() {
     setInterval(viewPokasateli, 300000)
 }
 
+function noPricep(elem) {
+    const cont1 = document.querySelector('.cont1')
+    cont1.append(elem.parentNode)
+    cont1.style.border = '2px solid darkblue',
+        cont1.style.padding = '5px',
+        elem.children[0].style.background = '#000'
 
+}
 
 export async function viewPokasateli() {
     const btnShina = document.querySelectorAll('.modals')
