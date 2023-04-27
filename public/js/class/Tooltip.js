@@ -24,6 +24,7 @@ export class Tooltip {
         this.tooltip.style.backgroundColor = "white";
         this.tooltip.style.color = "black";
         this.tooltip.style.padding = "5px";
+        this.tooltip.style.zIndex = 99999
         document.body.appendChild(this.tooltip);
         this.message.forEach(el => {
             this.tooltipLow = document.createElement("div");
