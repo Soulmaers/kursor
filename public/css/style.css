@@ -2633,7 +2633,13 @@ input[type="date"] {
   cursor: pointer;
 }
 
-
+.vv {
+  background-image: url(../image/v.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
 
 
 .shkala {
