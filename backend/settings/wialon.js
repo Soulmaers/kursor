@@ -374,9 +374,7 @@ function proverka(arr) {
                             return
                         }
                         if (el[2] >= Number(el[4].kvd)) {
-
                             // console.log(results[results.length - 1].bar)
-
                             if (Number(results[results.length - 1].bar == el[2]) && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
                                 //   console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
                                 //   return
@@ -389,7 +387,7 @@ function proverka(arr) {
                             }
                             return
                         }
-                        else if (el[2] >= 6 || el[2] <= 10) {
+                        else if (el[2] > Number(el[4].knd) || el[2] < Number(el[4].kvd)) {
                             // console.log(el)
                             if (results[results.length - 1].alarm === 'Норма') {
                                 //   console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
@@ -453,11 +451,11 @@ function mail(value, mess) {
     if (value[0][5] !== 'Норма') {
         value[0][5] !== 'Потеря связи с датчиком' ? val = value[0][3] + ' ' + 'Бар' : val = ''
         message = `Сообщение: Опасность! Требуется немедленная остановка.\nВремя: ${value[0][0]}\nМашина:  ${value[0][1]}\nСобытие: ${value[0][5]}\nПараметр: ${val}\nКолесо:  ${tyres}`
-        console.log(message)
+        console.log(message + 'не норма')
     }
     else {
         message = `Сообщение: Показатели в норме.\nВремя: ${value[0][0]}\nМашина:  ${value[0][1]}\nСобытие: ${value[0][5]}\nПараметр: ${value[0][3]}\nКолесо:  ${tyres}`
-        console.log(message)
+        console.log(message + 'норма')
     }
 
 
@@ -492,6 +490,7 @@ function mail(value, mess) {
         }
 
     })
+    /*
     var options = {
         method: 'POST',
         url: 'https://api.ultramsg.com/instance45156/messages/chat',
@@ -501,7 +500,7 @@ function mail(value, mess) {
             "to": 89627295770,
             "body": message
         }
-    };
+    };*/
 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
