@@ -12,12 +12,12 @@ export class Tooltip {
         this.element.addEventListener("mousemove", this.handleMouseMove);
     }
 
+
+
+
+
     handleMouseEnter() {
-        console.log(this.message.length)
         this.tooltip = document.createElement("div");
-        //   this.tooltip.innerHTML = this.message;
-        // console.log(this.tooltip.innerHTML)
-        // this.tooltip.style.heigth = "80px";
         this.tooltip.classList.add('tool')
         this.tooltip.style.position = "absolute";
         this.tooltip.style.top = "0";
@@ -34,22 +34,28 @@ export class Tooltip {
             this.tooltipLow.textContent = el
         });
 
-    }
 
+    }
     handleMouseLeave() {
         if (this.tooltip) {
             document.body.removeChild(this.tooltip);
             this.tooltip = null;
         }
     }
-
     handleMouseMove(event) {
         if (this.tooltip) {
             this.tooltip.style.top = event.pageY + 20 + "px";
             this.tooltip.style.left = event.pageX + 20 + "px";
         }
     }
+    setMessage(message) {
+        this.message = message;
+        if (this.tooltip) {
+            this.tooltip.textContent = message;
+        }
+    }
 }
+
 
 /*
 // Example usage

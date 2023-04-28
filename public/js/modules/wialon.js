@@ -217,11 +217,7 @@ export function iconParams() {
                                 if (it[2] === 1 && tsi >= 26.5) {
                                     tsiValue.textContent = 'ВКЛ'
                                 }
-                                else {/*
-                                    const tyres = document.querySelectorAll('.tires_link')
-                                    tyres.forEach(e => {
-                                        e.style.background = 'gray'
-                                    })*/
+                                else {
                                     tsiValue.textContent = 'ВЫКЛ'
                                 }
                                 return
@@ -248,15 +244,9 @@ export function iconParams() {
                                 const oborotValue = document.querySelector('.oborot_value')
                                 oborotValue.textContent = '------'
                             }
-                            /*
-                                                        console.log('второе')
-                                                        const ignValue = document.querySelector('.ign_value')
-                                                        ignValue.textContent = '---'
-                            */
 
                         })
                     }
-                    //  console.log(allobj)
 
                 });
         })
@@ -330,7 +320,7 @@ export function loadAkb(arrCar) {
                 speed = (it.pos.s).toFixed(0);
             }
             const strateValue = document.querySelector('.speed_value')
-            strateValue.textContent = speed + ' ' + 'км/ч'
+            strateValue.textContent = speed
             // iconSpeed(speed)
         }
     })

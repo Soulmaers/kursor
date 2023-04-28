@@ -29,7 +29,7 @@ function init(user) {
         })
         .then(function (data) {
             createTable();
-            setInterval(createTable, 180000);
+            setInterval(createTable, 30000);
 
         })
 }
@@ -292,6 +292,7 @@ function createDate() {
 
 }
 function proverka(arr) {
+    console.log('проверка')
     // console.log(arr)
     let time = new Date()
     arr.forEach(el => {
@@ -413,28 +414,17 @@ function proverka(arr) {
 
 async function alarmBase(data, tyres, alarm) {
     console.log('данные по алармам')
-
     const dannie = data.concat(tyres)
-
-    const name = dannie[2]
-    // console.log(dannie)
     const id = dannie[6]
     dannie.splice(5, 2)
-
     dannie.push(alarm)
-
-    //  dannie.splice(6, 1)
-    // console.log(dannie)
-    // console.log(id)
     const value = [dannie];
     console.log(value)
-    const tableModel = 'alarm' + dannie[1] + dannie[2]
 
     mail(value, await ggg(id))
 
 
     try {
-
         const sqls = `INSERT INTO alarms (data, name, senspressure, bar,
                             temp, alarm) VALUES?`;
         connection.query(sqls, [value], function (err, results) {
@@ -455,12 +445,22 @@ async function alarmBase(data, tyres, alarm) {
 
 
 function mail(value, mess) {
+    console.log(value)
     console.log('ватсап')
     const tyres = mess[value[0][2]]
     let val;
-    value[0][5] !== 'Потеря связи с датчиком' ? val = value[0][3] + ' ' + 'Бар' : val = ''
-    const message = `Сообщение: Опасность! Требуется немедленная остановка.\nВремя: ${value[0][0]}\nМашина:  ${value[0][1]}\nСобытие: ${value[0][5]}\nПараметр: ${val}\nКолесо:  ${tyres}`
-    console.log(message)
+    let message;
+    if (value[0][5] !== 'Норма') {
+        value[0][5] !== 'Потеря связи с датчиком' ? val = value[0][3] + ' ' + 'Бар' : val = ''
+        message = `Сообщение: Опасность! Требуется немедленная остановка.\nВремя: ${value[0][0]}\nМашина:  ${value[0][1]}\nСобытие: ${value[0][5]}\nПараметр: ${val}\nКолесо:  ${tyres}`
+        console.log(message)
+    }
+    else {
+        message = `Сообщение: Показатели в норме.\nВремя: ${value[0][0]}\nМашина:  ${value[0][1]}\nСобытие: ${value[0][5]}\nПараметр: ${value[0][3]}\nКолесо:  ${tyres}`
+        console.log(message)
+    }
+
+
 
     let smtpTransport;
     try {
@@ -479,7 +479,7 @@ function mail(value, mess) {
 
     let mailOptions = {
         from: 'certiss@yandex.ru', // sender address
-        to: 'soulmaers@gmail.com', // list of receivers
+        to: 'soulmaers@gmail.com, denandmax@mail.ru, m.trofimov@cursor-gps.ru', // list of receivers
         subject: 'Аларм', // Subject line
         text: message // plain text body
     };
@@ -492,6 +492,8 @@ function mail(value, mess) {
         }
 
     })
+
+
 
     var options = {
         method: 'POST',
@@ -509,7 +511,22 @@ function mail(value, mess) {
 
         console.log(body);
     });
+    var option = {
+        method: 'POST',
+        url: 'https://api.ultramsg.com/instance45156/messages/chat',
+        headers: { 'content-type': ' application/x-www-form-urlencoded' },
+        form: {
+            "token": "0cnqlft2roemo3j4",
+            "to": 89062565462,
+            "body": message
+        }
+    };
+    request(option, function (error, response, body) {
+        if (error) throw new Error(error);
+        console.log(body);
+    });
 }
+
 
 
 

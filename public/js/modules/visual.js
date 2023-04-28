@@ -266,21 +266,13 @@ export async function viewConfigurator(arg, params, osi) {
                                 el.style.position = 'absolute'
                                 el.style.bottom = 0
                             })
-                            const tool = document.querySelector('.tool')
-                            if (tool) {
-                                tool.remove()
-                            }
+
                             if (role === 'Администратор') {
-                                // Tooltip.handleMouseLeave([allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')'])
                                 new Tooltip(e, [allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')']);
                             }
                             else {
-                                // Tooltip.handleMouseLeave([allobj[item.pressure], allobj[item.temp]])
                                 new Tooltip(e, [allobj[item.pressure], allobj[item.temp]]);
                             }
-
-
-                            //   e.children[2].textContent = 'p:' + item.pressure + '\nt:' + item.temp
                             osi.forEach(element => {
                                 if (element.idOs == item.osNumber) {
                                     signal = objColor[generDav(done, element)]
