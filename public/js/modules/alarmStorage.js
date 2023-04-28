@@ -3,8 +3,10 @@ import { convert } from './visual.js'
 import { ggg } from './menu.js'
 
 
-export async function alarmFind(name) {
-    const activePost = name.children[0].textContent.replace(/\s+/g, '')
+export async function alarmFind() {
+    const active = document.querySelector('.color')
+    const activePost = active.children[0].textContent.replace(/\s+/g, '')
+    //   const activePost = name.children[0].textContent.replace(/\s+/g, '')
     const par = {
         method: "POST",
         headers: {
@@ -32,10 +34,12 @@ export async function alarmFind(name) {
 
         })
         setTimeout(viewAlarmStorage, 1000, activePost, storValue)
+
     }
 }
 
 async function viewAlarmStorage(name, stor) {
+    console.log('алармфайнд')
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
     const active = document.querySelector('.color')
@@ -234,7 +238,7 @@ async function viewAlarmStorage(name, stor) {
                 const hourss = (hours < 10) ? "" + hours : hours;
                 const minutess = (minutes < 10) ? "" + minutes : minutes;
                 const interval = days + 'd' + ' ' + hourss + "h" + ' ' + + minutess + "m"
-                console.log(days + '(d)' + ' ' + hourss + "(h)" + ' ' + + minutess + "(m)");
+                // console.log(days + '(d)' + ' ' + hourss + "(h)" + ' ' + + minutess + "(m)");
                 el.children[5].textContent = interval
             }
         }
@@ -277,7 +281,7 @@ function alarmFire() {
     alarmStorage ? ogon.style.display = 'block' : ogon.style.display = 'none'
     //  alarmStorage.children
     // const child = alarmStorage.children[0]
-    console.log(alarmStorage)
+    // console.log(alarmStorage)
     //  console.log(child.children.querySelectorAll('.alarmOpen'))
 }
 function nextAll(elem) {

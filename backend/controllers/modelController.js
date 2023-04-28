@@ -78,7 +78,7 @@ module.exports.barDelete = (req, res) => {
 
 module.exports.tarirSave = (req, res) => {
     const arr = req.body.AllarrayTarir
-    console.log(arr[0][1])
+    //  console.log(arr[0][1])
     try {
 
         const selectBase = `SELECT nameCar FROM tarir WHERE nameCar='${arr[0][1]}'`
@@ -86,9 +86,9 @@ module.exports.tarirSave = (req, res) => {
             if (err) {
                 console.log(err)
             }
-            console.log(results)
+            //console.log(results)
             if (results.length === 0) {
-                console.log('1')
+                //   console.log('1')
                 const postModel = `INSERT INTO tarir(date, nameCar, zamer, DUT,litrs) VALUES?`
                 connection.query(postModel, [arr], function (err, results) {
                     if (err) console.log(err);
@@ -97,7 +97,7 @@ module.exports.tarirSave = (req, res) => {
                 })
             }
             if (results.length > 0) {
-                console.log('2')
+                // console.log('2')
                 const postModel = `UPDATE tarir SET  date='${arr[0][0]}', nameCar='${arr[0][1]}', zamer='${arr[0][2]}', DUT='${arr[0][3]}',litrs='${arr[0][4]}' WHERE nameCar='${arr[0][1]}' AND zamer='${arr[0][2]}'`
                 connection.query(postModel, function (err, results) {
                     if (err) {
@@ -130,16 +130,16 @@ module.exports.tarirView = (req, res) => {
 
 
 module.exports.updateModel = (req, res) => {
-    console.log('обновляем')
+    //  console.log('обновляем')
     //  console.log(req.body.massModel)
     const massiv = req.body.massModel
     const nameCar = req.body.activePost
-    console.log(req.body.gosp)
+    //  console.log(req.body.gosp)
     const tableModel = 'model' + req.body.activePost
     massiv.forEach(el => {
         el.push(req.body.gosp)
         el.unshift(nameCar)
-        console.log(el)
+        //  console.log(el)
         try {
             const selectBase = `SELECT osi FROM model WHERE nameCar='${el[0]}' AND osi='${el[1]}'`
             connection.query(selectBase, function (err, results) {
@@ -148,7 +148,7 @@ module.exports.updateModel = (req, res) => {
                 };
 
                 if (results.length === 0) {
-                    console.log(el + '   ' + '2')
+                    //    console.log(el + '   ' + '2')
                     const selectBase = `INSERT INTO model(nameCar, osi, trailer, tyres, gosp) VALUES?`
                     connection.query(selectBase, [[el]], function (err, results) {
                         if (err) {
@@ -158,7 +158,7 @@ module.exports.updateModel = (req, res) => {
                     })
                 }
                 if (results.length > 0) {
-                    console.log(el + '   ' + '3')
+                    //  console.log(el + '   ' + '3')
                     const postModel = `UPDATE model SET nameCar='${el[0]}', osi='${el[1]}', trailer='${el[2]}', tyres='${el[3]}',gosp='${req.body.gosp}' WHERE nameCar='${el[0]}' AND osi='${el[1]}'`
                     connection.query(postModel, function (err, results) {
                         if (err) {
@@ -226,15 +226,15 @@ module.exports.savePr = async (req, res) => {
 
 module.exports.modalBar = (req, res) => {
     const value = [req.body.arrValue];
-    console.log(value)
+    //  console.log(value)
 
     try {
         const selectBase = `SELECT nameCar, idOs FROM ifBar WHERE nameCar='${value[0][0]}' AND idOs='${value[0][1]}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
-            console.log(results)
+            //    console.log(results)
             if (results.length === 0) {
-                console.log('запусккк')
+                //  console.log('запусккк')
                 const sql = `INSERT INTO  ifBar(nameCar, idOs, norma, dnmin, dnmax, dnn, dvn, knd, kvd) VALUES?`;
                 connection.query(sql, [value], function (err, results) {
                     if (err) console.log(err);
@@ -242,7 +242,7 @@ module.exports.modalBar = (req, res) => {
                 });
             }
             if (results.length > 0) {
-                console.log('БОЛЬШЕ 0')
+                //   console.log('БОЛЬШЕ 0')
                 const sql = `UPDATE ifBar SET nameCar='${value[0][0]}', idOs='${value[0][1]}', norma='${value[0][2]}', dnmin='${value[0][3]}', 
                     dnmax='${value[0][4]}',dnn='${value[0][5]}', dvn='${value[0][6]}', knd='${value[0][7]}', kvd='${value[0][8]}' WHERE nameCar='${value[0][0]}' AND idOs='${value[0][1]}'`;
                 connection.query(sql, [value], function (err, results) {
@@ -319,7 +319,7 @@ module.exports.checkObject = (req, res) => {
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             if (results.length === 0) {
-                console.log('ноль')
+                //   console.log('ноль')
                 objects.forEach(el => {
                     const postModel = `INSERT INTO userObjects(login, role, object) VALUES('${login}','${role}','${el}')`
                     connection.query(postModel, function (err, results) {
@@ -328,7 +328,7 @@ module.exports.checkObject = (req, res) => {
                 })
             }
             else {
-                console.log('не ноль')
+                //   console.log('не ноль')
                 const postModel = `DELETE FROM  userObjects WHERE login='${login}'`
                 connection.query(postModel, function (err, results) {
                     if (err) console.log(err);
@@ -387,7 +387,7 @@ module.exports.icon = (req, res) => {
             else {
                 const sql = `UPDATE icon SET nameCar='${req.body.activePost}', params='${req.body.param}', coef='${req.body.coef}', icons='${req.body.id}'WHERE nameCar='${req.body.activePost}' AND icons='${req.body.id}'`;
                 connection.query(sql, function (err, results) {
-                    if (err) console.log(err + 'ошибка49')
+                    if (err) console.log(err)
                     else response.status(200, results, '', res)
                 });
 
@@ -405,11 +405,11 @@ module.exports.iconWindows = (req, res) => {
     try {
         const selectBase = `SELECT id FROM allStatic  WHERE nameCar='${req.body.activePost}' AND idv='${req.body.id}'`
         connection.query(selectBase, function (err, results) {
-            if (err) console.log(err + 'ошибка48')
+            if (err) console.log(err)
             if (results.length === 0) {
                 const postModel = `INSERT INTO allStatic(nameCar, params, coef, nameInput, idv) VALUES('${req.body.activePost}','${req.body.param}','${req.body.coef}','${req.body.nameInput}','${req.body.id}')`
                 connection.query(postModel, function (err, results) {
-                    if (err) console.log(err + 'ошибка47')
+                    if (err) console.log(err)
                     //   console.log(results)
                     response.status(200, results, '', res)
                 })
@@ -417,7 +417,7 @@ module.exports.iconWindows = (req, res) => {
             else {
                 const sql = `UPDATE allStatic SET nameCar='${req.body.activePost}', params='${req.body.param}', coef='${req.body.coef}', nameInput='${req.body.nameInput}', idv='${req.body.id}' WHERE nameCar='${req.body.activePost}' AND idv='${req.body.id}'`;
                 connection.query(sql, function (err, results) {
-                    if (err) console.log(err + 'ошибка46')
+                    if (err) console.log(err)
                     else response.status(200, results, '', res)
                 });
 
@@ -436,7 +436,7 @@ module.exports.iconFind = (req, res) => {
     try {
         const postModel = `SELECT params, coef, icons FROM icon WHERE nameCar='${req.body.activePost}'`
         connection.query(postModel, function (err, results) {
-            if (err) console.log(err + 'ошибка45')
+            if (err) console.log(err)
             //   console.log(results)
             res.json({ status: 200, result: results, name: req.body.activePost })
         })
@@ -447,15 +447,15 @@ module.exports.iconFind = (req, res) => {
 }
 
 module.exports.to = (req, res) => {
-    console.log(req.body.activePost)
-    console.log(req.body.valueTO)
+    // console.log(req.body.activePost)
+    // console.log(req.body.valueTO)
     try {
         const selectBase = `SELECT id FROM toChange  WHERE nameCar='${req.body.activePost}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err)
-            console.log(results)
+            //   console.log(results)
             if (results.length === 0) {
-                console.log('0да')
+                //  console.log('0да')
                 const postModel = `INSERT INTO toChange(nameCar, value) VALUES('${req.body.activePost}', '${req.body.valueTO}')`
                 connection.query(postModel, function (err, results) {
                     if (err) console.log(err)
@@ -464,7 +464,7 @@ module.exports.to = (req, res) => {
                 })
             }
             else {
-                console.log('обновляем')
+                //   console.log('обновляем')
                 const sql = `UPDATE toChange SET nameCar='${req.body.activePost}',  value='${req.body.valueTO}' WHERE nameCar='${req.body.activePost}'`;
                 connection.query(sql, function (err, results) {
                     if (err) console.log(err)
@@ -487,7 +487,7 @@ module.exports.iconFindWindows = (req, res) => {
     try {
         const postModel = `SELECT params, coef, nameInput, idv FROM allStatic WHERE nameCar='${req.body.activePost}'`
         connection.query(postModel, function (err, results) {
-            if (err) console.log(err + 'ошибка41')
+            if (err) console.log(err)
             //  console.log(results)
             res.json({ status: 200, result: results, name: req.body.activePost })
         })
@@ -503,7 +503,7 @@ module.exports.toView = (req, res) => {
     try {
         const postModel = `SELECT nameCar, value FROM toChange WHERE nameCar='${req.body.activePost}'`
         connection.query(postModel, function (err, results) {
-            if (err) console.log(err + 'ошибка40')
+            if (err) console.log(err)
             //  console.log(results)
             res.json({ status: 200, result: results, name: req.body.activePost })
         })
@@ -519,7 +519,7 @@ module.exports.tyres = (req, res) => {
     const tyres = req.body.tyres
     tyres.forEach(el => {
         el.unshift(nameCar)
-        console.log(el)
+        // console.log(el)
         try {
             const selectBase = `SELECT tyresdiv FROM tyres WHERE nameCar='${el[0]}' AND tyresdiv='${el[1]}'`
             connection.query(selectBase, function (err, results) {
@@ -528,7 +528,7 @@ module.exports.tyres = (req, res) => {
                 };
 
                 if (results.length === 0) {
-                    console.log(el + '   ' + '2')
+                    //      console.log(el + '   ' + '2')
                     const selectBase = `INSERT INTO tyres(nameCar, tyresdiv, pressure,temp, osNumber) VALUES?`
                     connection.query(selectBase, [[el]], function (err, results) {
                         if (err) {
@@ -538,7 +538,7 @@ module.exports.tyres = (req, res) => {
                     })
                 }
                 if (results.length > 0) {
-                    console.log(el + '   ' + '3')
+                    //  console.log(el + '   ' + '3')
                     const postModel = `UPDATE tyres SET nameCar='${el[0]}', tyresdiv='${el[1]}', pressure='${el[2]}', temp='${el[3]}', osNumber='${el[4]}' WHERE nameCar='${el[0]}' AND tyresdiv='${el[1]}'`
                     connection.query(postModel, function (err, results) {
                         if (err) {
@@ -577,7 +577,7 @@ module.exports.generate = (req, res) => {
                 const sql = `INSERT INTO  tyresBase (dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka, model, psi,changeBar,
                     probegNow, dateInstall, probegPass, dateZamer, N1, N2, N3, N4, maxMM) VALUES?`;
                 connection.query(sql, [arr], function (err, results) {
-                    if (err) console.log(err + 'ошибка32')
+                    if (err) console.log(err)
                     res.json({ boolean: true, result: id, message: `Колесо установлено` })
                 });
             }
@@ -592,7 +592,7 @@ module.exports.listTyresId = (req, res) => {
     try {
         const selectBase = `SELECT * FROM tyresBase WHERE nameCar='${nameCar}'`
         connection.query(selectBase, function (err, results) {
-            if (err) console.log(err + 'ошибка31')
+            if (err) console.log(err)
             //  console.log(results)
             res.json({ status: 200, result: results })
         })
@@ -615,7 +615,7 @@ module.exports.rotate = (req, res) => {
     try {
         const selectBase = `SELECT * FROM tyresBase WHERE identificator IN('${id1}', '${id2}')`
         connection.query(selectBase, function (err, results) {
-            if (err) console.log(err + 'ошибка30')
+            if (err) console.log(err)
             //    console.log(results)
             res.json({ status: 200, result: results })
         })
@@ -634,7 +634,7 @@ module.exports.findId = (req, res) => {
     try {
         const selectBase = `SELECT identificator FROM tyresBase WHERE 1`
         connection.query(selectBase, function (err, results) {
-            if (err) console.log(err + 'ошибка29')
+            if (err) console.log(err)
             //  console.log(results)
             res.json({ status: 200, result: results })
         })
@@ -666,7 +666,7 @@ module.exports.techView = (req, res) => {
         N4,
         maxMM FROM tyresBase WHERE nameCar='${nameCar}' AND idTyres='${count}'`
         connection.query(selectBase, function (err, results) {
-            if (err) console.log(err + 'ошибка28')
+            if (err) console.log(err)
             //  console.log(results)
             response.status(200, results, '', res)
         })
@@ -698,12 +698,12 @@ module.exports.techViewAll = (req, res) => {
 
 
 module.exports.modelView = (req, res) => {
-    console.log(req.body.activePost)
+    //console.log(req.body.activePost)
     const nameCar = req.body.activePost
     try {
         const selectBase = `SELECT nameCar, osi, trailer,tyres,gosp FROM model WHERE nameCar='${nameCar}'`
         connection.query(selectBase, function (err, results) {
-            if (err) console.log(err + 'ошибка25')
+            if (err) console.log(err)
             if (results === undefined) {
                 response.status(200, results, '', res)
             }
@@ -792,7 +792,7 @@ module.exports.alarmFind = (req, res) => {
     try {
         const sqls1 = `SELECT data, senspressure, bar, temp, alarm  FROM alarms WHERE name='${nameCar}' AND senspressure='${tyresp}'`
         connection.query(sqls1, function (err, results) {
-            if (err) console.log(err + 'ошибка23')
+            if (err) console.log(err)
             if (results.length === 0) {
                 res.json([])
             }
@@ -809,7 +809,7 @@ module.exports.alarmFind = (req, res) => {
 
 
 module.exports.speedData = async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     try {
         speed(req.body.t1, req.body.t2, req.body.int, req.body.id, res)
     }

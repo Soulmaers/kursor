@@ -23,17 +23,10 @@ let time;
 let icon;
 let timeIcon;
 export async function visual(el) {
-
     const tarir = document.querySelector('.tarir')
-    console.log(el.children[0].textContent)
     if (el.children[0].textContent === 'Цистерна ДТ') {
-        console.log(el.textContent)
         tarir.style.display = 'block'
-        console.log('бочка' + el.textContent)
     }
-
-    // tarir.style.display = 'none'
-
     const tiresLink = document.querySelectorAll('.tires_link')
     clearInterval(time)
     clearInterval(timeIcon)
@@ -73,7 +66,7 @@ export async function visual(el) {
     //  viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
     titleCar.textContent = el.children[0].textContent
     loadParamsView()
-    alarmFind(el)
+
     findTyresInstall()
     liCreate()
     // const active = document.querySelector('.color')
@@ -96,11 +89,12 @@ export async function visual(el) {
         geoloc()
         time = setInterval(geoloc, 300000) //отрисовываем карту osm
     }
+    alarmFind()
+    setInterval(alarmFind, 60000) //отрисовываем карту osm
+
 
     tarirView();
     setInterval(tarirView, 300000)
-    //inStatus()
-
     tooltip()
 
 
