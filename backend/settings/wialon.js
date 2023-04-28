@@ -411,23 +411,23 @@ function proverka(arr) {
 
 }
 
-function alarmBase(data, tyres, alarm) {
+async function alarmBase(data, tyres, alarm) {
     console.log('данные по алармам')
 
     const dannie = data.concat(tyres)
 
     const name = dannie[2]
-    console.log(dannie)
+    // console.log(dannie)
     const id = dannie[6]
-    dannie.splice(5, 1)
+    dannie.splice(5, 2)
 
     dannie.push(alarm)
 
-    dannie.splice(5, 1)
-    console.log(dannie)
-    console.log(id)
+    //  dannie.splice(6, 1)
+    // console.log(dannie)
+    // console.log(id)
     const value = [dannie];
-
+    console.log(value)
     const tableModel = 'alarm' + dannie[1] + dannie[2]
     try {
 
@@ -441,11 +441,31 @@ function alarmBase(data, tyres, alarm) {
         console.log(e)
     }
 
+    mail(value, await ggg(id))
+
 }
 
 
 
-function mail(value) {
+function mail(value, mess) {
+
+    const tyres = mess[value[0][2]]
+    let val;
+    value[0][5] !== 'Потеря связи с датчиком' ? val = value[0][3] + ' ' + 'Бар' : val = ''
+    //const message = value[0][0] + ' ' + value[0][1] + ' ' + 'Опасность!' + ' ' + value[0][5] + ' ' + val + ' ' + tyres + ' ' + 'Требуется немедленная остановка.'
+    /*  const message = {
+          mess: 'Сообщение: Опасность! Требуется немедленная остановка.',
+          time: 'Время' + value[0][0],
+          car: 'Машина' + value[0][1],
+          event: 'Событие' + value[0][5],
+          param: 'Параметр' + val,
+          tyres: 'Колесо' + tyres
+          //'Hello,\n\nThis is a test message.\n\nRegards,\nJohn'
+      }*/
+    const message = `Сообщение: Опасность! Требуется немедленная остановка.\nВремя: ${value[0][0]}\nМашина:  ${value[0][1]}\nСобытие: ${value[0][5]}\nПараметр: ${val}\nКолесо:  ${tyres}`
+    console.log(message)
+
+
     let smtpTransport;
     try {
         smtpTransport = nodemailer.createTransport({
@@ -465,55 +485,81 @@ function mail(value) {
         from: 'certiss@yandex.ru', // sender address
         to: 'soulmaers@gmail.com', // list of receivers
         subject: 'Аларм', // Subject line
-        text: 'колесо 1', // plain text body
-
+        text: message // plain text body
     };
-
     smtpTransport.sendMail(mailOptions, (error, info) => {
         if (error) {
             // return console.log(error);
             return console.log(error);
         } else {
-            console.log('ура');
-
+            console.log('отправлено')
         }
-        // res.render('feed-ok', { msg: 'В ближайшее время мы с Вами свяжемся и ответим на все вопросы' });
-        ///   res.redirect('http://baedeker.club')
-
-
-
-
-        /*
-            // создаем объект transporter с параметрами SMTP сервера
-            let transporter = nodemailer.createTransport({
-                host: 'smtp.yandex.ru',
-                port: 465,
-                secure: true, // используем SSL
-                auth: {
-                    user: 'certiss@ya.ru', // адрес электронной почты отправителя
-                    pass: 'Alexsi33' // пароль электронной почты отправителя
-                }
-            });
-        
-            // объект с параметрами отправки письма
-            let mailOptions = {
-                from: 'certiss@ya.ru', // адрес электронной почты отправителя
-                to: 'soulaers@gmail.com', // адрес электронной почты получателя
-                subject: 'Аларм', // тема письма
-                text: 'Test email body' // текст письма
-            };
-        
-            // отправляем письмо
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                }
-            });*/
 
     })
 }
+
+
+
+async function ggg(id) {
+    const allobj = {};
+    const flagss = 4096
+    const prmss = {
+        'id': id,
+        'flags': flagss
+    }
+    return new Promise(function (resolve, reject) {
+        session.request('core/search_item', prmss)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                //  console.log(data)
+                const nameSens = Object.entries(data.item.sens)
+                const arrNameSens = [];
+
+                nameSens.forEach(el => {
+                    arrNameSens.push([el[1].n, el[1].p])
+                    //  arrNameSens.push(el[1].p)
+                })
+                const prms = {
+                    "unitId":
+                        id,
+                    "sensors": []
+                }
+
+                session.request('unit/calc_last_message', prms)
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+                    .then(function (data) {
+                        if (data) {
+                            const valueSens = [];
+                            Object.entries(data).forEach(e => {
+                                valueSens.push(e[1])
+                            })
+                            // console.log(valueSens)
+                            // console.log(arrNameSens)
+                            const allArr = [];
+                            arrNameSens.forEach((e, index) => {
+                                allArr.push([...e, valueSens[index]])
+
+                            })
+                            //  console.log(allArr)
+                            allArr.forEach(it => {
+                                allobj[it[1]] = it[0]
+                            })
+                        }
+                        // console.log(allobj)
+                        resolve(allobj)
+                    });
+            })
+    })
+}
+
+
+
+
+
 //mail()
 //const y = c
 module.exports = {
