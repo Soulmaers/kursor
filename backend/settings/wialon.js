@@ -465,12 +465,12 @@ function mail(value, mess) {
     let smtpTransport;
     try {
         smtpTransport = nodemailer.createTransport({
-            host: 'smtp.yandex.ru',
+            host: 'smtp.mail.ru',
             port: 465,
             secure: true, // true for 465, false for other ports 587
             auth: {
-                user: "certiss@yandex.ru",
-                pass: process.env.MAIL_PASS
+                user: "develop@cursor-gps.ru",
+                pass: process.env.MAIL_PASS  //NphLycnf9gqPysYJt3jf
             }
         });
     } catch (e) {
@@ -478,8 +478,8 @@ function mail(value, mess) {
     }
 
     let mailOptions = {
-        from: 'certiss@yandex.ru', // sender address
-        to: 'soulmaers@gmail.com, denandmax@mail.ru, m.trofimov@cursor-gps.ru', // list of receivers
+        from: 'develop@cursor-gps.ru', // sender address
+        to: 'soulmaers@gmail.com, m.trofimov@cursor-gps.ru', // list of receivers
         subject: 'Аларм', // Subject line
         text: message // plain text body
     };
@@ -492,9 +492,6 @@ function mail(value, mess) {
         }
 
     })
-
-
-
     var options = {
         method: 'POST',
         url: 'https://api.ultramsg.com/instance45156/messages/chat',
@@ -530,33 +527,6 @@ function mail(value, mess) {
 
 
 
-
-
-
-/*
-const axios = require('axios');
-const options = {
-    method: 'POST',
-    url: 'https://mywhin.p.rapidapi.com/wspout',
-    headers: {
-        'content-type': 'application/json',
-        'X-RapidAPI-Key': '68f0188dd8mshd61e79d3943b2bep100ca4jsnf691b406dbee',
-        'X-RapidAPI-Host': 'mywhin.p.rapidapi.com'
-    },
-    data: {
-        number: '89627295770',
-        msg: {
-            text: 'Hello world!'
-        }
-    }
-};
-
-try {
-    const response = axios.request(options);
-    console.log(response.data);
-} catch (error) {
-    console.error(error);
-}*/
 
 async function ggg(id) {
     const allobj = {};
