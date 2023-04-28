@@ -413,12 +413,19 @@ function proverka(arr) {
 
 function alarmBase(data, tyres, alarm) {
     console.log('данные по алармам')
+
     const dannie = data.concat(tyres)
+
     const name = dannie[2]
-    dannie.push(alarm)
     console.log(dannie)
+    const id = dannie[6]
     dannie.splice(5, 1)
-    // console.log(dannie)
+
+    dannie.push(alarm)
+
+    dannie.splice(5, 1)
+    console.log(dannie)
+    console.log(id)
     const value = [dannie];
 
     const tableModel = 'alarm' + dannie[1] + dannie[2]
