@@ -4,7 +4,7 @@ const express = require('express');
 const connection = require('./db')
 const { allParams, geo } = require('./sort')
 const nodemailer = require('nodemailer');
-
+var request = require("request");
 
 const { prms, prms2 } = require('./params');
 //const { update } = require('../controllers/auth');
@@ -440,31 +440,23 @@ async function alarmBase(data, tyres, alarm) {
     catch (e) {
         console.log(e)
     }
-
+    // if (alarm !== 'Норма') {
+    //  console.log('не норма')
     mail(value, await ggg(id))
+    //   }
+
 
 }
 
 
 
 function mail(value, mess) {
-
+    console.log('ватсап')
     const tyres = mess[value[0][2]]
     let val;
     value[0][5] !== 'Потеря связи с датчиком' ? val = value[0][3] + ' ' + 'Бар' : val = ''
-    //const message = value[0][0] + ' ' + value[0][1] + ' ' + 'Опасность!' + ' ' + value[0][5] + ' ' + val + ' ' + tyres + ' ' + 'Требуется немедленная остановка.'
-    /*  const message = {
-          mess: 'Сообщение: Опасность! Требуется немедленная остановка.',
-          time: 'Время' + value[0][0],
-          car: 'Машина' + value[0][1],
-          event: 'Событие' + value[0][5],
-          param: 'Параметр' + val,
-          tyres: 'Колесо' + tyres
-          //'Hello,\n\nThis is a test message.\n\nRegards,\nJohn'
-      }*/
     const message = `Сообщение: Опасность! Требуется немедленная остановка.\nВремя: ${value[0][0]}\nМашина:  ${value[0][1]}\nСобытие: ${value[0][5]}\nПараметр: ${val}\nКолесо:  ${tyres}`
     console.log(message)
-
 
     let smtpTransport;
     try {
@@ -496,9 +488,54 @@ function mail(value, mess) {
         }
 
     })
+
+    var options = {
+        method: 'POST',
+        url: 'https://api.ultramsg.com/instance45156/messages/chat',
+        headers: { 'content-type': ' application/x-www-form-urlencoded' },
+        form: {
+            "token": "0cnqlft2roemo3j4",
+            "to": 89627295770,
+            "body": message
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        console.log(body);
+    });
 }
 
 
+
+
+
+
+/*
+const axios = require('axios');
+const options = {
+    method: 'POST',
+    url: 'https://mywhin.p.rapidapi.com/wspout',
+    headers: {
+        'content-type': 'application/json',
+        'X-RapidAPI-Key': '68f0188dd8mshd61e79d3943b2bep100ca4jsnf691b406dbee',
+        'X-RapidAPI-Host': 'mywhin.p.rapidapi.com'
+    },
+    data: {
+        number: '89627295770',
+        msg: {
+            text: 'Hello world!'
+        }
+    }
+};
+
+try {
+    const response = axios.request(options);
+    console.log(response.data);
+} catch (error) {
+    console.error(error);
+}*/
 
 async function ggg(id) {
     const allobj = {};

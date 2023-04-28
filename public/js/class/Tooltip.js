@@ -18,6 +18,7 @@ export class Tooltip {
         //   this.tooltip.innerHTML = this.message;
         // console.log(this.tooltip.innerHTML)
         // this.tooltip.style.heigth = "80px";
+        this.tooltip.classList.add('tool')
         this.tooltip.style.position = "absolute";
         this.tooltip.style.top = "0";
         this.tooltip.style.left = "0";
@@ -26,6 +27,7 @@ export class Tooltip {
         this.tooltip.style.padding = "5px";
         this.tooltip.style.zIndex = 99999
         document.body.appendChild(this.tooltip);
+        console.log(this.tooltip)
         this.message.forEach(el => {
             this.tooltipLow = document.createElement("div");
             this.tooltip.appendChild(this.tooltipLow);

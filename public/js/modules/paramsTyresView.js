@@ -141,7 +141,7 @@ export async function loadParamsView() {
         })
 
     viewPokasateli()
-    setInterval(viewPokasateli, 300000)
+    setInterval(viewPokasateli, 180000)
 }
 
 function noPricep(elem) {

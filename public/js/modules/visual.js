@@ -272,11 +272,16 @@ export async function viewConfigurator(arg, params, osi) {
                                 el.style.position = 'absolute'
                                 el.style.bottom = 0
                             })
-
+                            const tool = document.querySelector('.tool')
+                            if (tool) {
+                                tool.remove()
+                            }
                             if (role === 'Администратор') {
+                                // Tooltip.handleMouseLeave([allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')'])
                                 new Tooltip(e, [allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')']);
                             }
                             else {
+                                // Tooltip.handleMouseLeave([allobj[item.pressure], allobj[item.temp]])
                                 new Tooltip(e, [allobj[item.pressure], allobj[item.temp]]);
                             }
 
