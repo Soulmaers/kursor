@@ -308,7 +308,7 @@ function proverka(arr) {
                 if (err) console.log(err);
                 if (results.length === 0) {
                     if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
-                        //    console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
+                        console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
                         const data = createDate()
                         alarm = 'Потеря связи с датчиком'
                         alarmBase(data, el, alarm)
