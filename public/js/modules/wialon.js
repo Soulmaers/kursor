@@ -227,6 +227,7 @@ export function iconParams() {
                                 return
                             }
                             if (it.includes('Обороты двигателя')) {
+                                oborot++
                                 if (it[2] === -348201.3876) {
                                     const oborotValue = document.querySelector('.oborot_value')
                                     oborotValue.textContent = '------'
@@ -235,12 +236,17 @@ export function iconParams() {
                                     const oborotValue = document.querySelector('.oborot_value')
                                     oborotValue.textContent = it[2].toFixed(0)
                                 }
+                                return
                             }
                             if (count === 0) {
                                 const ignValue = document.querySelector('.ign_value')
                                 const tsiValue = document.querySelector('.tsi_value')
                                 ignValue.textContent = '------'
                                 tsiValue.textContent = '------'
+                            }
+                            if (oborot === 0) {
+                                const oborotValue = document.querySelector('.oborot_value')
+                                oborotValue.textContent = '------'
                             }
                             /*
                                                         console.log('второе')

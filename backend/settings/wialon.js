@@ -3,6 +3,8 @@ const wialon = require('wialon');
 const express = require('express');
 const connection = require('./db')
 const { allParams, geo } = require('./sort')
+const nodemailer = require('nodemailer');
+
 
 const { prms, prms2 } = require('./params');
 //const { update } = require('../controllers/auth');
@@ -89,12 +91,14 @@ function createTable() {
             const nameCar = [];
             const allCar = Object.entries(data);
             allCar[5][1].forEach(el => {
-                nameCar.push(el.nm.replace(/\s+/g, ''))
+                nameCar.push([el.nm.replace(/\s+/g, ''), el.id])
                 const nameTable = el.nm.replace(/\s+/g, '')
                 const sensor = Object.entries(el.lmsg.p)
+                //  console.log(el.id)
                 postParametrs(nameTable, sensor)
 
             })
+
             zaprosSpisokb(nameCar)
         })
 }
@@ -116,7 +120,7 @@ function postParametrs(name, param) {
                 });
             }
             else if (results.length > 0) {
-                console.log('больше 0')
+                //   console.log('больше 0')
                 const mas = []
                 results.forEach(el => {
                     mas.push(el.name)
@@ -161,7 +165,7 @@ function postParametrs(name, param) {
 
 
 function getMainInfo(name, res) {
-    console.log('частота запросов')
+    console.log('частота запросов' + new Date())
     const flags = 1 + 1026
     const prms = {
         "spec": {
@@ -201,9 +205,9 @@ const convert = (ob) => {
 
 function zaprosSpisokb(name) {
     const massItog = [];
-    console.log(name)
+    // console.log(name)
     name.forEach(itey => {
-        const nameCar = itey
+        const nameCar = itey[0]
         try {
             const selectBase = `SELECT tyresdiv, pressure,temp, osNumber FROM tyres WHERE nameCar='${nameCar}'`
             connection.query(selectBase, function (err, results) {
@@ -245,7 +249,7 @@ function zaprosSpisokb(name) {
                                                 })
                                                 data.forEach((it) => {
                                                     if (it.name === item.temp) {
-                                                        massItog.push([itey, item.pressure, parseFloat(integer), parseFloat(it.value), osiBar])
+                                                        massItog.push([itey[0], item.pressure, parseFloat(integer), parseFloat(it.value), osiBar, itey[1]])
                                                     }
                                                 })
                                             }
@@ -288,7 +292,7 @@ function createDate() {
 
 }
 function proverka(arr) {
-
+    // console.log(arr)
     let time = new Date()
     arr.forEach(el => {
         if (el[4] === undefined) {
@@ -408,6 +412,7 @@ function proverka(arr) {
 }
 
 function alarmBase(data, tyres, alarm) {
+    console.log('данные по алармам')
     const dannie = data.concat(tyres)
     const name = dannie[2]
     dannie.push(alarm)
@@ -415,6 +420,7 @@ function alarmBase(data, tyres, alarm) {
     dannie.splice(5, 1)
     // console.log(dannie)
     const value = [dannie];
+
     const tableModel = 'alarm' + dannie[1] + dannie[2]
     try {
 
@@ -431,6 +437,77 @@ function alarmBase(data, tyres, alarm) {
 }
 
 
+
+function mail(value) {
+    let smtpTransport;
+    try {
+        smtpTransport = nodemailer.createTransport({
+            host: 'smtp.yandex.ru',
+            port: 465,
+            secure: true, // true for 465, false for other ports 587
+            auth: {
+                user: "certiss@yandex.ru",
+                pass: "Alexsi33"
+            }
+        });
+    } catch (e) {
+        return console.log('Error: ' + e.name + ":" + e.message);
+    }
+
+    let mailOptions = {
+        from: 'certiss@yandex.ru', // sender address
+        to: 'soulmaers@gmail.com', // list of receivers
+        subject: 'Аларм', // Subject line
+        text: 'колесо 1', // plain text body
+
+    };
+
+    smtpTransport.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            // return console.log(error);
+            return console.log(error);
+        } else {
+            console.log('ура');
+
+        }
+        // res.render('feed-ok', { msg: 'В ближайшее время мы с Вами свяжемся и ответим на все вопросы' });
+        ///   res.redirect('http://baedeker.club')
+
+
+
+
+        /*
+            // создаем объект transporter с параметрами SMTP сервера
+            let transporter = nodemailer.createTransport({
+                host: 'smtp.yandex.ru',
+                port: 465,
+                secure: true, // используем SSL
+                auth: {
+                    user: 'certiss@ya.ru', // адрес электронной почты отправителя
+                    pass: 'Alexsi33' // пароль электронной почты отправителя
+                }
+            });
+        
+            // объект с параметрами отправки письма
+            let mailOptions = {
+                from: 'certiss@ya.ru', // адрес электронной почты отправителя
+                to: 'soulaers@gmail.com', // адрес электронной почты получателя
+                subject: 'Аларм', // тема письма
+                text: 'Test email body' // текст письма
+            };
+        
+            // отправляем письмо
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });*/
+
+    })
+}
+//mail()
 //const y = c
 module.exports = {
     getMainInfo,

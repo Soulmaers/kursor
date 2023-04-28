@@ -39,7 +39,7 @@ const strela = [];
 function loadKran(arrCar) {
     const active = document.querySelector('.color')
     const act = active.children[0].textContent
-
+    console.log('экран стрела')
     arrCar.forEach(it => {
         if (it.nm === act && act == 'КранГаличанин Р858ОР178') {
             //   console.log(it.lmsg.p.user_2u_1)
@@ -66,7 +66,7 @@ function loadKran(arrCar) {
 }
 
 export function drawMyLine(angleDeg, angleDeg2, boolean) {//Угол в градусах
-    //  console.log(angleDeg, angleDeg2, boolean)
+    console.log(angleDeg, angleDeg2, boolean)
     const argRed = document.querySelector('.argRed')
     const argGreen = document.querySelector('.argGreen')
     angleDeg2 ? argRed.textContent = angleDeg2 + '°' : null
