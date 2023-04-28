@@ -474,7 +474,7 @@ function mail(value, mess) {
             secure: true, // true for 465, false for other ports 587
             auth: {
                 user: "certiss@yandex.ru",
-                pass: "Alexsi33"
+                pass: process.env.MAIL_PASS
             }
         });
     } catch (e) {

@@ -87,7 +87,7 @@ export async function visual(el) {
         icon = el;
         iconParams()
         //  iconParamsz()
-        timeIcon = setInterval(iconParams, 300000) //отрисовываем карту osm
+        timeIcon = setInterval(iconParams, 60000)
     }
     kranParams()
     setInterval(kranParams, 300000)
