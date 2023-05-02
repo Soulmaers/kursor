@@ -97,7 +97,7 @@ export function iconParamsz() {
             //  odomValue.textContent = odometr + 'км'
 
             const coef = changeParams.value
-            const id = document.querySelector('.acto').children[0].id
+            const id = document.querySelector('.acto').id
             //  console.log(id)
             postIconParams(activePost, param, coef, id)
         })
@@ -290,7 +290,7 @@ export function refactor() {
 }
 
 
- function inStatus() {
+function inStatus() {
     const active = document.querySelector('.color')
     console.log(active.id)
     const prmss = {

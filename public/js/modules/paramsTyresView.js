@@ -254,7 +254,7 @@ function koleso(kol, btnsens) {
                 //  kol[kol.length - 1].closest('.osi').children[1].classList.contains('pricep') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
                 valid(paramPress, paramTemp, kol)
             }
-            kol[kol.length - 1].children[2].textContent = 'p:' + prmsD[prmsD.length - 1] + '\nt:' + prmsT[prmsT.length - 1]
+            // kol[kol.length - 1].children[2].textContent = 'p:' + prmsD[prmsD.length - 1] + '\nt:' + prmsT[prmsT.length - 1]
         })
     })
 }
