@@ -22,6 +22,8 @@ let start;
 let time;
 let icon;
 let timeIcon;
+let find;
+let findTime;
 export async function visual(el) {
     const tarir = document.querySelector('.tarir')
     if (el.children[0].textContent === 'Цистерна ДТ') {
@@ -89,9 +91,13 @@ export async function visual(el) {
         geoloc()
         time = setInterval(geoloc, 300000) //отрисовываем карту osm
     }
-    alarmFind()
-    setInterval(alarmFind, 60000) //отрисовываем карту osm
 
+    setInterval(alarmFind, 60000) //отрисовываем карту osm
+    if (!find || find !== el) {
+        find = el;
+        alarmFind()
+        findTime = setInterval(alarmFind, 60000)
+    }
 
     tarirView();
     setInterval(tarirView, 300000)
