@@ -230,19 +230,9 @@ export async function tarirView() {
                     if (x.length >= 3) {
                         degree = 6
                     }
-
                     const approximated = approximateValue(val, x, y, degree);
-
-
-
-
-
                     const znak = (approximated[0] * 0.9987).toFixed(0)
-
                     const value = znak * 100 / y[y.length - 1]
-                    console.log(value)
-
-
                     const oilValue = document.querySelector('.oil_value1')
                     oilValue.textContent = znak
                     let color = 'steelblue';
@@ -252,20 +242,13 @@ export async function tarirView() {
                     if (value < 20) {
                         color = 'red'
                     }
-
-
                     grafGradient(y, znak, color)
                     grafikPoly(points, 6, approximated[1])
                 }
-
             }
         })
-
     })
-
 }
-
-
 
 function polynomialApproximation(x, y, degree) {
     const n = x.length;
@@ -336,27 +319,12 @@ export function approximateValue(value, x, y, degree) {
     return [approximated, coeffs]
 }
 
-
-
-
-
-
 export function grafikPoly(points, degree, coeffs) {
-    //console.log(points)
-    // console.log(degree)
-    // console.log(coeffs)
-    // console.log('рисуем')
     const tarir = document.querySelector('.tarir')
-    //tarir.style.display = 'block'
     const polyEval = (x, coeffs) => coeffs.reduce((acc, coeff, i) => acc + coeff * x ** i, 0);
-    // const points = [[90, 10], [222, 20], [444, 30], [666, 40], [777, 50], [901, 60], [1060, 70], [1190, 80], [1322, 90], [1500, 100], [2006, 200], [3100, 300], [4010, 395], [4094, 400]]
-    //   const degree = 6;
-    // const coeffs = polynomialApproximation(x, y, degree);
-
     const margin = { top: 20, right: 20, bottom: 50, left: 40 };
     const width = 350 - margin.left - margin.right;
     const height = 200 - margin.top - margin.bottom;
-
     const chartTarirer = document.querySelector('.chartTarir')
     if (chartTarirer) {
         chartTarirer.remove()
@@ -364,7 +332,6 @@ export function grafikPoly(points, degree, coeffs) {
     const chartTarir = document.createElement('div')
     chartTarir.classList.add('chartTarir')
     tarir.appendChild(chartTarir)
-
     const svg = d3.select(".chartTarir")
         .append("svg")
         .attr("width", width + margin.left + margin.right)

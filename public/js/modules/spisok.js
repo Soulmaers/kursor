@@ -5,6 +5,7 @@ import { objColor, generFront, objColorFront, generDavKran, generDav } from './c
 import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
 import { alarmFind } from './alarmStorage.js'
+import { iconParams } from './wialon.js'
 /*
 let isLoaded = false
 
@@ -191,6 +192,7 @@ export function conturTest(testov) {
     sortAll()
     zaprosSpisok()
     alarmFind()
+    iconParams()
 
 
 }

@@ -20,10 +20,8 @@ import { Tooltip } from '../class/Tooltip.js'
 
 let start;
 let time;
-let icon;
 let timeIcon;
-let find;
-let findTime;
+
 export async function visual(el) {
     const tarir = document.querySelector('.tarir')
     if (el.children[0].textContent === 'Цистерна ДТ') {
@@ -78,12 +76,6 @@ export async function visual(el) {
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
-    if (!icon || icon !== el) {
-        icon = el;
-        iconParams()
-        //  iconParamsz()
-        timeIcon = setInterval(iconParams, 60000)
-    }
     kranParams()
     setInterval(kranParams, 300000)
     if (!start || start !== el) {
@@ -91,18 +83,8 @@ export async function visual(el) {
         geoloc()
         time = setInterval(geoloc, 300000) //отрисовываем карту osm
     }
-
-    //  setInterval(alarmFind, 60000) //отрисовываем карту osm
-    /* if (!find || find !== el) {
-         find = el;
-         const tr = document.querySelectorAll('.tr')
-         tr.forEach(it => {
-             it.remove();
-         })
-         alarmFind()
-         findTime = setInterval(alarmFind, 60000)
-     }*/
     alarmFind()
+    iconParams()
     tarirView();
     setInterval(tarirView, 300000)
     tooltip()

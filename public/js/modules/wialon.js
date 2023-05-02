@@ -34,7 +34,6 @@ export function graf(t1, t2, int, id) {
             })
             let t = 0;
             const arrIterTimeDateT = arrIterTimeDate.filter(e => (++t) % int === 0);
-            // console.log(arrIterTimeDateT)
             const arrSpee = [];
             arr2[1].forEach(el => {
                 arrSpee.push(el.pos.s)
@@ -118,6 +117,7 @@ export function geoloc() {
                 }
             });
         })
+
 }
 
 export function iconParams() {
@@ -145,112 +145,141 @@ export function iconParams() {
             }
             const arr1 = Object.values(result);
             const arrCar = arr1[5];
-            //    console.log(arr1[5])
-
-            //check = arr1[5][2].lmsg.p.pwr_ext;
             loadAkb(arrCar);
-        });
-
-
-    const flagss = 4096
-    const prmss = {
-        'id': active[0].id,
-        'flags': flagss
-    }
-
-
-    const remote11 = wialon.core.Remote.getInstance();
-    remote11.remoteCall('core/search_item', prmss,
-        async function (code, result) {
-            if (code) {
-                console.log(wialon.core.Errors.getErrorText(code));
+            const flagss = 4096
+            const prmss = {
+                'id': active[0].id,
+                'flags': flagss
             }
-            //   console.log(result)
-            const nameSens = Object.entries(result.item.sens)
-            const arrNameSens = [];
-
-            nameSens.forEach(el => {
-                arrNameSens.push([el[1].n, el[1].p])
-                //  arrNameSens.push(el[1].p)
-            })
-            // console.log(arrNameSens)
-            const prms = {
-                "unitId":
-                    active[0].id,
-                "sensors": []
-            }
-            const remote1 = wialon.core.Remote.getInstance();
-            remote1.remoteCall('unit/calc_last_message', prms,
+            const remote11 = wialon.core.Remote.getInstance();
+            remote11.remoteCall('core/search_item', prmss,
                 async function (code, result) {
                     if (code) {
                         console.log(wialon.core.Errors.getErrorText(code));
                     }
-                    if (result) {
-                        // console.log(result)
-                        const valueSens = [];
-                        Object.entries(result).forEach(e => {
-                            valueSens.push(e[1])
-                        })
-                        //  console.log(valueSens)
-                        //  console.log(arrNameSens)
-                        const allArr = [];
-                        arrNameSens.forEach((e, index) => {
-                            allArr.push([...e, valueSens[index]])
+                    //   console.log(result)
+                    const nameSens = Object.entries(result.item.sens)
+                    const arrNameSens = [];
 
-                        })
-                        //    console.log(allArr)
-
-
-                        const tsi = await fnWialon(active[0].id)
-                        //   console.log(tsi)
-                        let count = 0;
-                        let oborot = 0;
-
-                        allArr.forEach(it => {
-                            if (it.includes('Зажигание')) {
-                                count++
-                                const ignValue = document.querySelector('.ign_value')
-                                const tsiValue = document.querySelector('.tsi_value')
-                                it[2] === 1 ? ignValue.textContent = 'ВКЛ' : ignValue.textContent = 'ВЫКЛ'
-                                //  console.log('первое')
-                                //  console.log(it[2])
-                                if (it[2] === 1 && tsi >= 26.5) {
-                                    tsiValue.textContent = 'ВКЛ'
-                                }
-                                else {
-                                    tsiValue.textContent = 'ВЫКЛ'
-                                }
-                                return
-                            }
-                            if (it.includes('Обороты двигателя')) {
-                                oborot++
-                                if (it[2] === -348201.3876) {
-                                    const oborotValue = document.querySelector('.oborot_value')
-                                    oborotValue.textContent = '------'
-                                }
-                                else {
-                                    const oborotValue = document.querySelector('.oborot_value')
-                                    oborotValue.textContent = it[2].toFixed(0)
-                                }
-                                return
-                            }
-                            if (count === 0) {
-                                const ignValue = document.querySelector('.ign_value')
-                                const tsiValue = document.querySelector('.tsi_value')
-                                ignValue.textContent = '------'
-                                tsiValue.textContent = '------'
-                            }
-                            if (oborot === 0) {
-                                const oborotValue = document.querySelector('.oborot_value')
-                                oborotValue.textContent = '------'
-                            }
-
-                        })
+                    nameSens.forEach(el => {
+                        arrNameSens.push([el[1].n, el[1].p])
+                        //  arrNameSens.push(el[1].p)
+                    })
+                    // console.log(arrNameSens)
+                    const prms = {
+                        "unitId":
+                            active[0].id,
+                        "sensors": []
                     }
+                    const remote1 = wialon.core.Remote.getInstance();
+                    remote1.remoteCall('unit/calc_last_message', prms,
+                        async function (code, result) {
+                            if (code) {
+                                console.log(wialon.core.Errors.getErrorText(code));
+                            }
+                            if (result) {
+                                // console.log(result)
+                                const valueSens = [];
+                                Object.entries(result).forEach(e => {
+                                    valueSens.push(e[1])
+                                })
+                                const allArr = [];
+                                arrNameSens.forEach((e, index) => {
+                                    allArr.push([...e, valueSens[index]])
 
-                });
-        })
+                                })
+                                console.log(allArr)
+
+                                console.log(arrCar)
+                                let power;
+                                arrCar.forEach(item => {
+                                    if (item.id === Number(active[0].id)) {
+                                        //  console.log(item.lmsg.p.pwr_ext)
+                                        power = item.lmsg.p.pwr_ext.toFixed(1)
+                                    }
+                                })
+                                //  const tsi = await fnWialon(active[0].id)
+                                console.log(power)
+                                //  console.log(tsi)
+                                let count = 0;
+                                let oborot = 0;
+
+                                allArr.forEach(it => {
+                                    if (it.includes('Зажигание')) {
+                                        count++
+                                        const ignValue = document.querySelector('.ign_value')
+                                        const tsiValue = document.querySelector('.tsi_value')
+                                        it[2] === 1 ? ignValue.textContent = 'ВКЛ' : ignValue.textContent = 'ВЫКЛ'
+                                        //  console.log('первое')
+                                        //  console.log(it[2])
+
+                                        if (it[2] === 1 && power >= 26.5) {
+                                            tsiValue.textContent = 'ВКЛ'
+                                        }
+                                        else {
+                                            tsiValue.textContent = 'ВЫКЛ'
+                                        }
+                                        return
+                                    }
+                                    if (it.includes('Обороты двигателя')) {
+                                        oborot++
+                                        if (it[2] === -348201.3876) {
+                                            const oborotValue = document.querySelector('.oborot_value')
+                                            oborotValue.textContent = '------'
+                                        }
+                                        else {
+                                            const oborotValue = document.querySelector('.oborot_value')
+                                            oborotValue.textContent = it[2].toFixed(0)
+                                        }
+                                        return
+                                    }
+                                    if (count === 0) {
+                                        const ignValue = document.querySelector('.ign_value')
+                                        const tsiValue = document.querySelector('.tsi_value')
+                                        ignValue.textContent = '------'
+                                        tsiValue.textContent = '------'
+                                    }
+                                    if (oborot === 0) {
+                                        const oborotValue = document.querySelector('.oborot_value')
+                                        oborotValue.textContent = '------'
+                                    }
+
+                                })
+                            }
+
+                        });
+                })
+        });
 }
+setInterval(iconParams, 60000)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 async function fnWialon(id) {
@@ -266,7 +295,7 @@ async function fnWialon(id) {
                     console.log(wialon.core.Errors.getErrorText(code));
                 }
                 if (result) {
-                    console.log(result.item.lmsg.p.pwr_ext.toFixed(1))
+                    //    console.log(result.item.lmsg.p.pwr_ext.toFixed(1))
                     const res = result.item.lmsg.p.pwr_ext.toFixed(1)
                     resolve(res)
 

@@ -170,37 +170,6 @@ export function zapros() {
 
 }
 
-
-/*
-function getData(callback) {
-const xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function() {
-if (this.readyState === 4 && this.status === 200) {
-callback(JSON.parse(this.responseText));
-}
-};
-xhr.open("GET", "/data", true);
-xhr.send();
-}
-
-getData(function(allobj) {
-console.log(allobj);
-});
-```
-
-Пример с обещанием:
-
-```
-function getData() {
-return new Promise(function(resolve, reject) {
-const xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function() {
-if (this.readyState === 4 && this.status === 200) {
-resolve(JSON.parse(this.responseText));
-}
-};*/
-
-
 export async function ggg(id) {
     const allobj = {};
     const flagss = 4096
