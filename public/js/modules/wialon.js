@@ -165,7 +165,7 @@ export function iconParams() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
-            console.log(result)
+            //   console.log(result)
             const nameSens = Object.entries(result.item.sens)
             const arrNameSens = [];
 
@@ -173,7 +173,7 @@ export function iconParams() {
                 arrNameSens.push([el[1].n, el[1].p])
                 //  arrNameSens.push(el[1].p)
             })
-            console.log(arrNameSens)
+            // console.log(arrNameSens)
             const prms = {
                 "unitId":
                     active[0].id,
@@ -186,7 +186,7 @@ export function iconParams() {
                         console.log(wialon.core.Errors.getErrorText(code));
                     }
                     if (result) {
-                        console.log(result)
+                        // console.log(result)
                         const valueSens = [];
                         Object.entries(result).forEach(e => {
                             valueSens.push(e[1])
@@ -202,7 +202,7 @@ export function iconParams() {
 
 
                         const tsi = await fnWialon(active[0].id)
-                        console.log(tsi)
+                        //   console.log(tsi)
                         let count = 0;
                         let oborot = 0;
 
@@ -212,8 +212,8 @@ export function iconParams() {
                                 const ignValue = document.querySelector('.ign_value')
                                 const tsiValue = document.querySelector('.tsi_value')
                                 it[2] === 1 ? ignValue.textContent = 'ВКЛ' : ignValue.textContent = 'ВЫКЛ'
-                                console.log('первое')
-                                console.log(it[2])
+                                //  console.log('первое')
+                                //  console.log(it[2])
                                 if (it[2] === 1 && tsi >= 26.5) {
                                     tsiValue.textContent = 'ВКЛ'
                                 }

@@ -246,7 +246,7 @@ export async function ggg(id) {
                                 allArr.push([...e, valueSens[index]])
 
                             })
-                            console.log(allArr)
+                            //  console.log(allArr)
                             allArr.forEach(it => {
                                 allobj[it[1]] = it[0]
                             })
