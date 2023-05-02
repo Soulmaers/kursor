@@ -232,11 +232,29 @@ export async function tarirView() {
                     }
 
                     const approximated = approximateValue(val, x, y, degree);
+
+
+
+
+
                     const znak = (approximated[0] * 0.9987).toFixed(0)
+
+                    const value = znak * 100 / y[y.length - 1]
+                    console.log(value)
+
+
                     const oilValue = document.querySelector('.oil_value1')
                     oilValue.textContent = znak
+                    let color = 'steelblue';
+                    if (value > 30 && value < 70) {
+                        color = 'yellow'
+                    }
+                    if (value < 20) {
+                        color = 'red'
+                    }
 
-                    grafGradient(y, znak)
+
+                    grafGradient(y, znak, color)
                     grafikPoly(points, 6, approximated[1])
                 }
 
@@ -412,7 +430,7 @@ export function grafikPoly(points, degree, coeffs) {
 
 
 
-function grafGradient(arr, znak) {
+function grafGradient(arr, znak, color) {
     //console.log(arr)
     // console.log(znak)
     const foto = document.querySelector('.foto')
@@ -462,7 +480,7 @@ function grafGradient(arr, znak) {
         .attr("height", function (d) {
             return height - yScale(d) - 10;
         })
-        .attr("fill", "steelblue")
+        .attr("fill", color)
         .attr('stroke', 'black')
 
     // Создание групп для подписей значений данных

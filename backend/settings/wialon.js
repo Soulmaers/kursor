@@ -390,7 +390,7 @@ function proverka(arr) {
                         else if (el[2] > Number(el[4].knd) || el[2] < Number(el[4].kvd)) {
                             // console.log(el)
                             if (results[results.length - 1].alarm === 'Норма') {
-                                console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
+                                // console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
                                 return
                             } else {
                                 console.log(el + ' ' + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)

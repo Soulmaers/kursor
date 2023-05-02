@@ -259,6 +259,15 @@ async function fnStaticObjectOil(nameCar) {
                     // console.log(value)
                     progressBar.textContent = znak + ' ' + 'л.'
                     progressBar.style.width = value + '%'
+                    if (value > 30 && value < 70) {
+                        progressBar.style.background = 'yellow'
+                    }
+                    if (value < 20) {
+                        progressBar.style.background = 'red'
+                        progressBar.style.fontSize = '0.8rem'
+                        progressBar.style.color = 'black'
+                    }
+                    console.log(progressBar)
 
                 }
             }
