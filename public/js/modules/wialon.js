@@ -279,7 +279,7 @@ export function iconParams() {
                                         // console.log(message)
 
                                         const t = new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
-                                        t.handleMouseLeave()
+                                        t.setMessage([tsi_card.getAttribute('rel'), message])
 
                                         console.log(t)
                                         return

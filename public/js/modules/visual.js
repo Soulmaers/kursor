@@ -261,10 +261,12 @@ export async function viewConfigurator(arg, params, osi) {
                             })
 
                             if (role === 'Администратор') {
-                                new Tooltip(e, [allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')']);
+                                const t = new Tooltip(e, [allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')']);
+                                t.setMessage([allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')'])
                             }
                             else {
-                                new Tooltip(e, [allobj[item.pressure], allobj[item.temp]]);
+                                const t = new Tooltip(e, [allobj[item.pressure], allobj[item.temp]]);
+                                t.setMessage([allobj[item.pressure], allobj[item.temp]])
                             }
                             osi.forEach(element => {
                                 if (element.idOs == item.osNumber) {
