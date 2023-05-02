@@ -220,7 +220,7 @@ export function iconParams() {
                                         else {
                                             statusTSI = 'ВЫКЛ'
                                         }
-                                        tsiValue.textContent = statusTSI
+
                                         const idw = active[0].id
                                         const activePost = active[0].children[0].textContent.replace(/\s+/g, '')
                                         console.log(activePost)
@@ -247,14 +247,11 @@ export function iconParams() {
                                         }
                                         const vals = await fetch('/api/viewStatus', parama)
                                         const val = await vals.json()
-                                        //   console.log(val)
                                         console.log(val.result[0].status)
                                         console.log(val.result[0].time)
                                         const startDate = val.result[0].time
                                         const techdate = new Date();
-                                        const nowDate = Math.floor(currentDate.getTime() / 1000);
-                                        //  const timeStor = nowDate - val.result[0].time
-                                        // console.log(timeStor)
+                                        const nowDate = Math.floor(techdate.getTime() / 1000);
                                         const timeStor = getHoursDiff(startDate, nowDate)
                                         function getHoursDiff(startDate, nowDate) {
                                             var diff = nowDate - startDate;
@@ -263,7 +260,6 @@ export function iconParams() {
                                             const minutes = Math.floor(diff / 60)
                                             return [[day, 'д.'], [hours, 'ч.'], [minutes, 'мин.']]
                                         }
-                                        console.log(timeStor)
                                         const massmess = []
                                         let message;
                                         timeStor.forEach(el => {
@@ -273,17 +269,13 @@ export function iconParams() {
 
                                             }
                                         })
+                                        let statName;
+                                        val.result[0].status === 'ВКЛ' ? statName = 'Включен' : statName = 'Выключен'
+                                        tsiValue.textContent = val.result[0].status
                                         massmess.forEach(it => {
                                             console.log(...massmess)
-                                            message = `Двигатель ${val.result[0].status} ${it[0]} ${it[1]} `
-
+                                            message = `Двигатель ${statName} ${it[0]} ${it[1]} `
                                         })
-
-
-                                        // timeStor[0] += 'days'
-                                        //  timeStor[1] += 'hours'
-                                        //  timeStor[2] += 'minutes'
-                                        console.log(message)
                                         const tsi_card = document.querySelector('.tsi_card')
                                         new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
 
