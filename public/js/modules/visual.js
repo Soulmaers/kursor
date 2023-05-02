@@ -92,9 +92,13 @@ export async function visual(el) {
         time = setInterval(geoloc, 300000) //отрисовываем карту osm
     }
 
-    setInterval(alarmFind, 60000) //отрисовываем карту osm
+    //  setInterval(alarmFind, 60000) //отрисовываем карту osm
     if (!find || find !== el) {
         find = el;
+        const tr = document.querySelectorAll('.tr')
+        tr.forEach(it => {
+            it.remove();
+        })
         alarmFind()
         findTime = setInterval(alarmFind, 60000)
     }

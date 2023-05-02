@@ -4,10 +4,7 @@ import { ggg } from './menu.js'
 
 
 export async function alarmFind() {
-    const tr = document.querySelectorAll('.tr')
-    tr.forEach(it => {
-        it.remove();
-    })
+
     const active = document.querySelector('.color')
     const activePost = active.children[0].textContent.replace(/\s+/g, '')
     //   const activePost = name.children[0].textContent.replace(/\s+/g, '')
@@ -44,9 +41,11 @@ export async function alarmFind() {
 
 async function viewAlarmStorage(name, stor) {
     console.log('алармфайнд')
+
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
     const active = document.querySelector('.color')
+
     //  console.log(active)
     const allobj = await ggg(active.id)
     // console.log(allobj)
