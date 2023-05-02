@@ -10,28 +10,41 @@ export class Tooltip {
         this.element.addEventListener("mouseenter", this.handleMouseEnter);
         this.element.addEventListener("mouseleave", this.handleMouseLeave);
         this.element.addEventListener("mousemove", this.handleMouseMove);
-        this.isHovered = false; // добавляем флаг hovering
+        // this.isHovered = false; // добавляем флаг hovering
+        // this.old = old
     }
 
     handleMouseEnter() {
-        if (!this.isHovered) { // проверяем флаг hovering
-            this.isHovered = true;
-            this.tooltip = document.createElement("div");
-            this.tooltip.classList.add('tool')
-            this.tooltip.style.position = "absolute";
-            this.tooltip.style.top = "0";
-            this.tooltip.style.left = "0";
-            this.tooltip.style.backgroundColor = "white";
-            this.tooltip.style.color = "black";
-            this.tooltip.style.padding = "5px";
-            this.tooltip.style.zIndex = 99999;
-            document.body.appendChild(this.tooltip);
-            this.message.forEach(el => {
-                this.tooltipLow = document.createElement("div");
-                this.tooltip.appendChild(this.tooltipLow);
-                this.tooltipLow.textContent = el
-            });
+        const tool = document.querySelectorAll('.tool')
+        console.log(tool)
+        if (tool) {
+            tool.forEach(e => {
+                e.remove()
+            })
         }
+        /*  if (this.tooltipLow) {
+              document.body.removeChild(this.tooltipLow);
+              console.log('удалили тулти!!!!')
+              this.tooltip = null;
+          }*/
+        // if (!this.isHovered) { // проверяем флаг hovering
+        //   this.isHovered = true;
+        this.tooltip = document.createElement("div");
+        this.tooltip.classList.add('tool')
+        this.tooltip.style.position = "absolute";
+        this.tooltip.style.top = "0";
+        this.tooltip.style.left = "0";
+        this.tooltip.style.backgroundColor = "white";
+        this.tooltip.style.color = "black";
+        this.tooltip.style.padding = "5px";
+        this.tooltip.style.zIndex = 99999;
+        document.body.appendChild(this.tooltip);
+        this.message.forEach(el => {
+            this.tooltipLow = document.createElement("div");
+            this.tooltip.appendChild(this.tooltipLow);
+            this.tooltipLow.textContent = el
+        });
+        // }
     }
 
     handleMouseLeave() {
@@ -40,7 +53,7 @@ export class Tooltip {
             console.log('удалили тултип')
             this.tooltip = null;
         }
-        this.isHovered = false; // меняем флаг hovering при уходе курсора
+        // this.isHovered = false; // меняем флаг hovering при уходе курсора
     }
     handleMouseMove(event) {
         if (this.tooltip) {

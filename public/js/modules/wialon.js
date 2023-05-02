@@ -279,9 +279,9 @@ export function iconParams() {
                                         // console.log(message)
 
                                         const t = new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
-                                        t.setMessage([tsi_card.getAttribute('rel'), message])
+                                        // t.setMessage([tsi_card.getAttribute('rel'), message])
 
-                                        console.log(t)
+                                        //  console.log(t.setMessage([tsi_card.getAttribute('rel'), message]))
                                         return
                                     }
                                     if (it.includes('Обороты двигателя')) {
