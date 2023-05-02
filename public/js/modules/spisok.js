@@ -125,8 +125,10 @@ export function conturTest(testov) {
                     listProfil.appendChild(progress)
                     const progressBar = document.createElement('div')
                     progressBar.classList.add('progressBar')
-                    progress.prepend(progressBar)
-
+                    progress.appendChild(progressBar)
+                    const progressBarText = document.createElement('div')
+                    progressBarText.classList.add('progressBarText')
+                    progress.appendChild(progressBarText)
                     //  console.log(document.querySelector('.progress'))
                     fnStaticObjectOil(nameCar)
                     // const oilValue = document.querySelector('.oil_value')
@@ -189,6 +191,7 @@ export function conturTest(testov) {
     })
     hiddenWindows()
     navigator();
+
     sortAll()
     zaprosSpisok()
     alarmFind()
@@ -257,13 +260,18 @@ async function fnStaticObjectOil(nameCar) {
                     const znak = (approximated[0] * 0.9987).toFixed(0)
                     // console.log(znak)
                     // console.log(y[y.length - 1])
-
                     const progress = document.querySelector('.progress')
+                    const progressBarText = document.querySelector('.progressBarText')
                     const progressBar = document.querySelector('.progressBar')
+                    console.log(progressBar)
                     const value = znak * 100 / y[y.length - 1]
                     // console.log(value)
-                    progressBar.textContent = znak + ' ' + 'л.'
+
+                    // progressBar.textContent = znak + ' ' + 'л.'
+                    progressBarText.textContent = znak + ' ' + 'л.'
+                    //  
                     progressBar.style.width = value + '%'
+                    //progress.textContent = znak + ' ' + 'л.'
                     if (value > 30 && value < 70) {
                         progressBar.style.background = 'yellow'
                     }
