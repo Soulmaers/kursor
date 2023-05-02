@@ -94,6 +94,9 @@ const norma = document.querySelector('.normal')
 const inpfinal = document.querySelectorAll('.inpfinal')
 inpfinal.forEach(it => {
     it.addEventListener('input', () => {
+        let values = it.value;
+        const valuess = values.replace(/,/g, '.'); // заменяем все запятые на точки
+        it.value = valuess;
         if (norma.value) {
             console.log(norma.value / 100 * it.value)
             it.previousElementSibling.textContent = ((String(norma.value / 100 * it.value)).substr(0, 5))
