@@ -114,6 +114,7 @@ export function visualNone(e) {
     const toil_value = document.querySelector('.toil_value')
     const ign_value = document.querySelector('.ign_value')
     const oborotValue = document.querySelector('.oborot_value')
+
     toil_value.textContent = ''
     starterValue.textContent = ''
     probegElem.textContent = ''

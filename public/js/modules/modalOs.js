@@ -79,6 +79,7 @@ function clearBar() {
     })
 }
 function fncalc(val) {
+    console.log(val)
     const inpfinal = document.querySelectorAll('.inpfinal')
     const divfinal = document.querySelectorAll('.divfinal')
     let values;
@@ -94,6 +95,7 @@ const inpfinal = document.querySelectorAll('.inpfinal')
 inpfinal.forEach(it => {
     it.addEventListener('input', () => {
         if (norma.value) {
+            console.log(norma.value / 100 * it.value)
             it.previousElementSibling.textContent = ((String(norma.value / 100 * it.value)).substr(0, 5))
             console.log(it.previousElementSibling.textContent)
         }
@@ -115,7 +117,7 @@ async function modalBar() {
 
     console.log(arrNameCol)
     await reqModalBar(arrNameCol, centerOsActiv.id);
-    await loadParamsView()
+    //  await loadParamsView()
     viewBar(centerOsActiv.id);
 }
 

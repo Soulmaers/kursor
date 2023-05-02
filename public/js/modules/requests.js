@@ -285,7 +285,7 @@ export async function viewBar(id) {
         divfinal.forEach((el, index) => {
             console.log(nval[index][1])
             el.textContent = nval[index][1]
-            inpfinal[index].value = ((parseFloat(el.textContent * 100) / normal.value)).toFixed(1)
+            inpfinal[index].value = ((parseFloat(el.textContent * 100) / normal.value)).toFixed(2)
         })
 
     }

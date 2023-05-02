@@ -189,9 +189,9 @@ export function iconParams() {
                                     allArr.push([...e, valueSens[index]])
 
                                 })
-                                console.log(allArr)
+                                //  console.log(allArr)
 
-                                console.log(arrCar)
+                                //  console.log(arrCar)
                                 let power;
                                 arrCar.forEach(item => {
                                     if (item.id === Number(active[0].id)) {
@@ -200,11 +200,11 @@ export function iconParams() {
                                     }
                                 })
                                 //  const tsi = await fnWialon(active[0].id)
-                                console.log(power)
+                                //  console.log(power)
 
                                 let count = 0;
                                 let oborot = 0;
-
+                                const tsi_card = document.querySelector('.tsi_card')
                                 allArr.forEach(async it => {
                                     if (it.includes('Зажигание')) {
                                         count++
@@ -223,7 +223,7 @@ export function iconParams() {
 
                                         const idw = active[0].id
                                         const activePost = active[0].children[0].textContent.replace(/\s+/g, '')
-                                        console.log(activePost)
+                                        //    console.log(activePost)
                                         const currentDate = new Date();
                                         const todays = Math.floor(currentDate.getTime() / 1000);
                                         //   console.log(unixTimestamp);
@@ -237,7 +237,7 @@ export function iconParams() {
                                         }
                                         const res = await fetch('/api/saveStatus', param)
                                         const response = await res.json()
-                                        console.log(response)
+                                        //  console.log(response)
                                         const parama = {
                                             method: "POST",
                                             headers: {
@@ -247,38 +247,41 @@ export function iconParams() {
                                         }
                                         const vals = await fetch('/api/viewStatus', parama)
                                         const val = await vals.json()
-                                        console.log(val.result[0].status)
-                                        console.log(val.result[0].time)
+                                        //   console.log(val.result[0].status)
+                                        //  console.log(val.result[0].time)
                                         const startDate = val.result[0].time
                                         const techdate = new Date();
                                         const nowDate = Math.floor(techdate.getTime() / 1000);
                                         const timeStor = getHoursDiff(startDate, nowDate)
                                         function getHoursDiff(startDate, nowDate) {
                                             var diff = nowDate - startDate;
-                                            const day = Math.floor(diff / (60 * 60 * 24))
-                                            const hours = Math.floor(diff / (60 * 60))
+                                            let dayS;
+                                            let hourS;
                                             const minutes = Math.floor(diff / 60)
-                                            return [[day, 'д.'], [hours, 'ч.'], [minutes, 'мин.']]
-                                        }
-                                        const massmess = []
-                                        let message;
-                                        timeStor.forEach(el => {
-                                            if (el[0] !== 0) {
-                                                console.log(el)
-                                                massmess.push(el)
+                                            const hours = Math.floor(minutes / 60);
+                                            const days = Math.floor(hours / 24);
+                                            const day = days % 60;
+                                            const hour = hours % 60;
+                                            const minut = minutes % 60;
+                                            day === 0 ? dayS = '' : dayS = days + 'д.'
+                                            hour === 0 ? hourS = '' : hourS = hours + 'ч.'
+                                            console.log(`${dayS} ${hourS} ${minut} мин.`);
+                                            const mess = `${dayS} ${hourS} ${minut} мин.`
 
-                                            }
-                                        })
+                                            return mess;
+
+                                        }
+                                        //  console.log(timeStor)
                                         let statName;
                                         val.result[0].status === 'ВКЛ' ? statName = 'Включен' : statName = 'Выключен'
                                         tsiValue.textContent = val.result[0].status
-                                        massmess.forEach(it => {
-                                            console.log(...massmess)
-                                            message = `Двигатель ${statName} ${it[0]} ${it[1]} `
-                                        })
-                                        const tsi_card = document.querySelector('.tsi_card')
-                                        new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
+                                        const message = `Двигатель ${statName} ${timeStor}`
+                                        // console.log(message)
 
+                                        const t = new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
+                                        t.handleMouseLeave()
+
+                                        console.log(t)
                                         return
                                     }
                                     if (it.includes('Обороты двигателя')) {
@@ -298,6 +301,7 @@ export function iconParams() {
                                         const tsiValue = document.querySelector('.tsi_value')
                                         ignValue.textContent = '------'
                                         tsiValue.textContent = '------'
+                                        //  new Tooltip(tsi_card, [tsi_card.getAttribute('rel')]);
                                     }
                                     if (oborot === 0) {
                                         const oborotValue = document.querySelector('.oborot_value')

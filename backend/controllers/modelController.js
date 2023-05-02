@@ -166,7 +166,7 @@ module.exports.saveStatus = (req, res) => {
             }
             else {
                 if (results[0].status !== req.body.statusTSI) {
-                    const postModel = `UPDATE statusObj SET idw='${req.body.idw}', nameCar='${req.body.activePost}', trailer='${el[2]}', time='${req.body.todays}',status='${req.body.statusTSI}' WHERE idw='${req.body.idw}'`
+                    const postModel = `UPDATE statusObj SET time='${req.body.todays}',status='${req.body.statusTSI}' WHERE idw='${req.body.idw}'`
                     connection.query(postModel, function (err, results) {
                         if (err) {
                             console.log(err)
