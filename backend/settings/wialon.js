@@ -454,7 +454,7 @@ function mail(value, mess) {
         console.log(message + 'не норма')
     }
     else {
-        message = `Сообщение: Показатели в норме.\nВремя: ${value[0][0]}\nМашина:  ${value[0][1]}\nСобытие: ${value[0][5]}\nПараметр: ${value[0][3]}\nКолесо:  ${tyres}`
+        message = `Сообщение: Показатели в норме.\nВремя: ${value[0][0]}\nМашина:  ${value[0][1]}\nСобытие: ${value[0][5]}\nПараметр: ${value[0][3]}Бар\nКолесо:  ${tyres}`
         console.log(message + 'норма')
     }
 
