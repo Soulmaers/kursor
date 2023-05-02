@@ -1,6 +1,7 @@
 //import { chrt1 } from './canvas.js'
 import { iconSpeed } from './speed.js';
 import { geoPosition } from './requests.js'
+import { Tooltip } from '../class/Tooltip.js'
 //запрос на wialon за данными по скорости
 export function graf(t1, t2, int, id) {
     //console.log(t1, t2, int, id)
@@ -200,25 +201,92 @@ export function iconParams() {
                                 })
                                 //  const tsi = await fnWialon(active[0].id)
                                 console.log(power)
-                                //  console.log(tsi)
+
                                 let count = 0;
                                 let oborot = 0;
 
-                                allArr.forEach(it => {
+                                allArr.forEach(async it => {
                                     if (it.includes('Зажигание')) {
                                         count++
+                                        let status;
+                                        let statusTSI;
                                         const ignValue = document.querySelector('.ign_value')
                                         const tsiValue = document.querySelector('.tsi_value')
-                                        it[2] === 1 ? ignValue.textContent = 'ВКЛ' : ignValue.textContent = 'ВЫКЛ'
-                                        //  console.log('первое')
-                                        //  console.log(it[2])
-
+                                        it[2] === 1 ? status = 'ВКЛ' : status = 'ВЫКЛ'
+                                        ignValue.textContent = status
                                         if (it[2] === 1 && power >= 26.5) {
-                                            tsiValue.textContent = 'ВКЛ'
+                                            statusTSI = 'ВКЛ'
                                         }
                                         else {
-                                            tsiValue.textContent = 'ВЫКЛ'
+                                            statusTSI = 'ВЫКЛ'
                                         }
+                                        tsiValue.textContent = statusTSI
+                                        const idw = active[0].id
+                                        const activePost = active[0].children[0].textContent.replace(/\s+/g, '')
+                                        console.log(activePost)
+                                        const currentDate = new Date();
+                                        const todays = Math.floor(currentDate.getTime() / 1000);
+                                        //   console.log(unixTimestamp);
+                                        //  console.log(todays)
+                                        const param = {
+                                            method: "POST",
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: (JSON.stringify({ activePost, idw, todays, statusTSI }))
+                                        }
+                                        const res = await fetch('/api/saveStatus', param)
+                                        const response = await res.json()
+                                        console.log(response)
+                                        const parama = {
+                                            method: "POST",
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: (JSON.stringify({ idw }))
+                                        }
+                                        const vals = await fetch('/api/viewStatus', parama)
+                                        const val = await vals.json()
+                                        //   console.log(val)
+                                        console.log(val.result[0].status)
+                                        console.log(val.result[0].time)
+                                        const startDate = val.result[0].time
+                                        const techdate = new Date();
+                                        const nowDate = Math.floor(currentDate.getTime() / 1000);
+                                        //  const timeStor = nowDate - val.result[0].time
+                                        // console.log(timeStor)
+                                        const timeStor = getHoursDiff(startDate, nowDate)
+                                        function getHoursDiff(startDate, nowDate) {
+                                            var diff = nowDate - startDate;
+                                            const day = Math.floor(diff / (60 * 60 * 24))
+                                            const hours = Math.floor(diff / (60 * 60))
+                                            const minutes = Math.floor(diff / 60)
+                                            return [[day, 'д.'], [hours, 'ч.'], [minutes, 'мин.']]
+                                        }
+                                        console.log(timeStor)
+                                        const massmess = []
+                                        let message;
+                                        timeStor.forEach(el => {
+                                            if (el[0] !== 0) {
+                                                console.log(el)
+                                                massmess.push(el)
+
+                                            }
+                                        })
+                                        massmess.forEach(it => {
+                                            console.log(...massmess)
+                                            message = `Двигатель ${val.result[0].status} ${it[0]} ${it[1]} `
+
+                                        })
+
+
+                                        // timeStor[0] += 'days'
+                                        //  timeStor[1] += 'hours'
+                                        //  timeStor[2] += 'minutes'
+                                        console.log(message)
+                                        const tsi_card = document.querySelector('.tsi_card')
+                                        new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
+
                                         return
                                     }
                                     if (it.includes('Обороты двигателя')) {
@@ -252,7 +320,6 @@ export function iconParams() {
         });
 }
 setInterval(iconParams, 60000)
-
 
 
 

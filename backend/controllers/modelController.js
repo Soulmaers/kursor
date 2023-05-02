@@ -127,7 +127,66 @@ module.exports.tarirView = (req, res) => {
     }
 
 }
+module.exports.viewStatus = (req, res) => {
+    console.log('запрос работа')
+    try {
+        const postModel = `SELECT * FROM statusObj WHERE idw='${req.body.idw}'`
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+            console.log(results)
+            res.json({ result: results })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
 
+}
+
+module.exports.saveStatus = (req, res) => {
+    console.log(req.body.idw, req.body.activePost, req.body.todays, req.body.statusTSI)
+    console.log('2 раза?')
+    const mass = [req.body.idw, req.body.activePost, req.body.todays, req.body.statusTSI]
+    try {
+        const postModel = `SELECT * FROM statusObj WHERE idw='${req.body.idw}'`
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+            //  console.log(results[0].status)
+            if (results.length === 0) {
+                console.log('оно?')
+                const selectBase = `INSERT INTO statusObj(idw, nameCar, time, status) VALUES?`
+                connection.query(selectBase, [[mass]], function (err, results) {
+                    if (err) {
+                        console.log(err)
+
+                    };
+
+                })
+                //  res.json({ message: 'выполнена запись' })
+            }
+            else {
+                if (results[0].status !== req.body.statusTSI) {
+                    const postModel = `UPDATE statusObj SET idw='${req.body.idw}', nameCar='${req.body.activePost}', trailer='${el[2]}', time='${req.body.todays}',status='${req.body.statusTSI}' WHERE idw='${req.body.idw}'`
+                    connection.query(postModel, function (err, results) {
+                        if (err) {
+                            console.log(err)
+                        }
+                        //  res.json({ message: 'выполнено обновление' })
+                    })
+
+                }
+
+            }
+
+        })
+
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+    res.json({ message: 'выполнено' })
+}
 
 module.exports.updateModel = (req, res) => {
     //  console.log('обновляем')
