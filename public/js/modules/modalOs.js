@@ -119,5 +119,6 @@ async function modalBar() {
     await reqModalBar(arrNameCol, centerOsActiv.id);
     //  await loadParamsView()
     viewBar(centerOsActiv.id);
+    centerOsActiv.classList.remove('centerOsActiv')
 }
 
