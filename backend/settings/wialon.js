@@ -500,13 +500,13 @@ function mail(value, mess) {
             "to": 89627295770,
             "body": message
         }
-    };*/
+    };
 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         console.log(body);
-    });
+    });*/
     var option = {
         method: 'POST',
         url: 'https://api.ultramsg.com/instance45156/messages/chat',
