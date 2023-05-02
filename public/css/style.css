@@ -2354,6 +2354,10 @@ input[type="date"] {
 
 }
 
+.progress {
+  position: relative;
+}
+
 .vnut {
   width: 212px;
   height: 11px;
@@ -4014,6 +4018,15 @@ input[type="text"]:focus {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.progressBarText {
+  height: 30px;
+  position: absolute;
+  top: 20%;
+  left: 35%;
+  font-weight: bold;
+  font-size: 1rem;
 }
 
 
