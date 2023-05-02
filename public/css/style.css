@@ -2362,7 +2362,7 @@ input[type="date"] {
 }
 
 .osi {
-  width: 310px;
+  width: 312px;
   display: flex;
   justify-content: space-between;
   cursor: pointer;
@@ -2785,7 +2785,8 @@ input[type="date"] {
 }
 
 .tires {
-  margin: 0 0.5px;
+  /* margin: 0 0.5px;*/
+  border: 1px solid #fff;
   display: none;
   flex-direction: column;
   justify-content: center;

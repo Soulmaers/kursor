@@ -290,6 +290,11 @@ export async function viewConfigurator(arg, params, osi) {
                                 return
                             }
                             e.children[0].style.color = signal;
+                            if (signal === '#FF0000') {
+                                e.parentElement.style.border = `1px solid ${signal}`;
+                                e.parentElement.style.borderRadius = '15px'
+                            }
+
                         }
                         if (el.name === item.temp) {
                             tiresLink.forEach(e => {
