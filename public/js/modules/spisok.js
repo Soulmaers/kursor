@@ -4,6 +4,7 @@ import { navigator } from './navigator.js'
 import { objColor, generFront, objColorFront, generDavKran, generDav } from './content.js'
 import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
+import { alarmFind } from './alarmStorage.js'
 /*
 let isLoaded = false
 
@@ -189,6 +190,8 @@ export function conturTest(testov) {
     navigator();
     sortAll()
     zaprosSpisok()
+    alarmFind()
+
 
 }
 

@@ -453,10 +453,11 @@ function mail(value, mess) {
         message = `Сообщение: Опасность! Требуется немедленная остановка.\nВремя: ${value[0][0]}\nМашина:  ${value[0][1]}\nСобытие: ${value[0][5]}\nПараметр: ${val}\nКолесо:  ${tyres}`
         console.log(message + 'не норма')
     }
+    /*
     else {
         message = `Сообщение: Показатели в норме.\nВремя: ${value[0][0]}\nМашина:  ${value[0][1]}\nСобытие: ${value[0][5]}\nПараметр: ${value[0][3]}Бар\nКолесо:  ${tyres}`
         console.log(message + 'норма')
-    }
+    }*/
 
 
 

@@ -93,16 +93,16 @@ export async function visual(el) {
     }
 
     //  setInterval(alarmFind, 60000) //отрисовываем карту osm
-    if (!find || find !== el) {
-        find = el;
-        const tr = document.querySelectorAll('.tr')
-        tr.forEach(it => {
-            it.remove();
-        })
-        alarmFind()
-        findTime = setInterval(alarmFind, 60000)
-    }
-
+    /* if (!find || find !== el) {
+         find = el;
+         const tr = document.querySelectorAll('.tr')
+         tr.forEach(it => {
+             it.remove();
+         })
+         alarmFind()
+         findTime = setInterval(alarmFind, 60000)
+     }*/
+    alarmFind()
     tarirView();
     setInterval(tarirView, 300000)
     tooltip()

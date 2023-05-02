@@ -4,6 +4,13 @@ import { ggg } from './menu.js'
 
 
 export async function alarmFind() {
+    console.log('алармфайнед быстрее')
+    const tr = document.querySelectorAll('.tr')
+    if (tr) {
+        tr.forEach(it => {
+            it.remove();
+        })
+    }
 
     const active = document.querySelector('.color')
     const activePost = active.children[0].textContent.replace(/\s+/g, '')
@@ -37,7 +44,9 @@ export async function alarmFind() {
         setTimeout(viewAlarmStorage, 1000, activePost, storValue)
 
     }
+
 }
+setInterval(alarmFind, 60000)
 
 async function viewAlarmStorage(name, stor) {
     console.log('алармфайнд')
