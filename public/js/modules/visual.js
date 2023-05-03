@@ -114,6 +114,7 @@ export function visualNone(e) {
     headerCar.style.flexDirection = 'column'
     const statusObj = document.querySelector('.status_obj')
     statusObj.textContent = ''
+    statusObj.style.color = 'gray'
     /*
     const toChange = document.querySelector('.toChange')
     toChange.style.display = 'none'*/

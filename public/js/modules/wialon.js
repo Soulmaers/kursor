@@ -230,9 +230,9 @@ export function iconParams() {
                                             statusTSI = 'ВЫКЛ'
                                         }
                                         const statusObj = document.querySelector('.status_obj')
-
+                                        let mess;
                                         if (sats <= 4 || statusTSI === 'ВЫКЛ') {
-                                            let mess;
+
                                             if (sats <= 4 && statusTSI === 'ВКЛ') {
                                                 mess = 'Не установлена связь со спутниками'
                                             }
@@ -250,8 +250,9 @@ export function iconParams() {
                                         else if (sats > 3 || statusTSI === 'ВКЛ') {
                                             console.log('он')
                                             statusObj.textContent = 'Online'
-                                            statusObj.style.color = 'green'
-
+                                            statusObj.style.color = '#15a32d'
+                                            mess = `Установлена связь с ${sats} спутниками`
+                                            new Tooltip(statusObj, [mess]);
                                         }
 
 

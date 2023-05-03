@@ -2383,7 +2383,8 @@ input[type="date"] {
   font-family: Roboto;
   font-weight: bold;
   font-size: 1rem;
-  color: gray
+  color: gray;
+  cursor: pointer
 }
 
 .foto {
