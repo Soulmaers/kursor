@@ -10,7 +10,7 @@ import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
 import { iconParamsz, iconParamszWindows, deleteWinParams, fnToChange } from './configIcons.js'
-
+import { grafikStartPress } from './grafiks.js'
 
 
 
@@ -497,6 +497,7 @@ plug[2].addEventListener('click', () => {
     sections.style.width = '40%'
 
     visualGrafics.prepend(model);
+    grafikStartPress()
 })
 
 const card = document.querySelectorAll('.icon_card')

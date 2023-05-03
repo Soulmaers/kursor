@@ -2074,6 +2074,11 @@ input[type="date"] {
 
 .grafik1 {
   display: none;
+
+}
+
+.infoGraf {
+  border: 1px solid black;
 }
 
 .container_left {
