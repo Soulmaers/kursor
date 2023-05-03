@@ -127,6 +127,13 @@ export async function loadParamsView() {
 
                 console.log(model.values)
                 if (model.values.find(e => e.trailer === 'Прицеп')) {
+                    const cont = document.querySelector('.cont')
+                    console.log(cont.lastElementChild.children[1])
+                    cont.lastElementChild.children[1].appendChild(gos)
+                    cont.lastElementChild.children[1].style.position = 'relative'
+                    gos.style.position = 'absolute'
+                    gos.style.left = '15px'
+                    gos.style.top = '25px'
                     gos.value = model.values[0].gosp
                     gos.style.display = 'flex'
                     return

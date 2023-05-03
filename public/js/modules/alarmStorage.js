@@ -5,6 +5,7 @@ import { ggg } from './menu.js'
 
 export async function alarmFind() {
     console.log('алармфайнед быстрее')
+
     const tr = document.querySelectorAll('.tr')
     if (tr) {
         tr.forEach(it => {

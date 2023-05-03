@@ -194,8 +194,8 @@ export function conturTest(testov) {
 
     sortAll()
     zaprosSpisok()
-    alarmFind()
-    iconParams()
+    //  alarmFind()
+    //  iconParams()
 
 
 }

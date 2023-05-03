@@ -104,6 +104,9 @@ export async function visual(el) {
 export function visualNone(e) {
     const tarir = document.querySelector('.tarir')
     tarir.style.display = 'none'
+    const gosNumber = document.querySelector('.gosNumber')
+    const wrapC = document.querySelector('.wrapper_containt')
+    wrapC.appendChild(gosNumber)
     /*
     const toChange = document.querySelector('.toChange')
     toChange.style.display = 'none'*/
@@ -215,7 +218,7 @@ export async function viewConfigurator(arg, params, osi) {
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelectorAll('.color')
     const allobj = await ggg(active[0].id)
-    console.log(allobj)
+    // console.log(allobj)
     //   console.log(osi)
     if (params) {
         const parametrs = convert(params)
