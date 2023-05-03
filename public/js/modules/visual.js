@@ -65,6 +65,7 @@ export async function visual(el) {
     el.classList.add('color')
     //  viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
     titleCar.textContent = el.children[0].textContent
+    console.log(titleCar.textContent)
     loadParamsView()
 
     findTyresInstall()
@@ -102,16 +103,19 @@ export async function visual(el) {
 
 }
 export function visualNone(e) {
-    const tarir = document.querySelector('.tarir')
-    tarir.style.display = 'none'
-    const gosNumber = document.querySelector('.gosNumber')
-    const wrapC = document.querySelector('.wrapper_containt')
-    wrapC.appendChild(gosNumber)
     const title_two = document.querySelector('.title_two')
     const headerCar = document.querySelector('.header_car')
     headerCar.appendChild(title_two)
     title_two.style.position = 'static'
     headerCar.style.flexDirection = 'column'
+
+
+    const tarir = document.querySelector('.tarir')
+    tarir.style.display = 'none'
+    const gosNumber = document.querySelector('.gosNumber')
+    const wrapC = document.querySelector('.wrapper_containt')
+    wrapC.appendChild(gosNumber)
+
     const statusObj = document.querySelector('.status_obj')
     statusObj.textContent = ''
     statusObj.style.color = 'gray'
@@ -339,8 +343,8 @@ export async function viewConfigurator(arg, params, osi) {
 
 
 export function alarmClear() {
-    const div = document.querySelector('.alarm')
-    div.style.display = 'none'
+    // const div = document.querySelector('.alarm')
+    //  div.style.display = 'none'
     const ogon = document.querySelector('.ogon')
     ogon.style.display = 'none'
     const alarmCheck = document.querySelectorAll('.alarmCheck')

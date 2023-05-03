@@ -158,7 +158,7 @@ export function iconParams() {
                     if (code) {
                         console.log(wialon.core.Errors.getErrorText(code));
                     }
-                    console.log(result)
+                    //    console.log(result)
                     const nameSens = Object.entries(result.item.sens)
                     const arrNameSens = [];
 
@@ -179,7 +179,7 @@ export function iconParams() {
                                 console.log(wialon.core.Errors.getErrorText(code));
                             }
                             if (result) {
-                                console.log(result)
+                                // console.log(result)
                                 const valueSens = [];
                                 Object.entries(result).forEach(e => {
                                     valueSens.push(e[1])
@@ -195,7 +195,7 @@ export function iconParams() {
                                 let power;
                                 let sats;
                                 arrCar.forEach(item => {
-                                    console.log(item)
+                                    //  console.log(item)
                                     if (item.id === Number(active[0].id)) {
                                         //  console.log(item.lmsg.p.pwr_ext)
                                         if (item.lmsg) {
@@ -222,7 +222,7 @@ export function iconParams() {
                                         const tsiValue = document.querySelector('.tsi_value')
                                         it[2] === 1 ? status = 'ВКЛ' : status = 'ВЫКЛ'
                                         //   ignValue.textContent = status
-                                        console.log(sats)
+                                        //  console.log(sats)
                                         if (it[2] === 1 && power >= 26.5) {
                                             statusTSI = 'ВКЛ'
                                         }
@@ -242,13 +242,13 @@ export function iconParams() {
                                             else if (sats <= 4 && statusTSI === 'ВЫКЛ') {
                                                 mess = 'Двигатель выключен, Не установлена связь со спутниками'
                                             }
-                                            console.log('офф')
+                                            //   console.log('офф')
                                             statusObj.textContent = 'Offline'
                                             new Tooltip(statusObj, [mess]);
 
                                         }
                                         else if (sats > 3 || statusTSI === 'ВКЛ') {
-                                            console.log('он')
+                                            //  console.log('он')
                                             statusObj.textContent = 'Online'
                                             statusObj.style.color = '#15a32d'
                                             mess = `Установлена связь с ${sats} спутниками`
@@ -262,7 +262,7 @@ export function iconParams() {
                                         const currentDate = new Date();
                                         const todays = Math.floor(currentDate.getTime() / 1000);
                                         //   console.log(unixTimestamp);
-                                        console.log(status)
+                                        //   console.log(status)
                                         const param = {
                                             method: "POST",
                                             headers: {
