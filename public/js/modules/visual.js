@@ -106,11 +106,14 @@ export function visualNone(e) {
     tarir.style.display = 'none'
     const gosNumber = document.querySelector('.gosNumber')
     const wrapC = document.querySelector('.wrapper_containt')
-    console.log(gosNumber)
     wrapC.appendChild(gosNumber)
     const title_two = document.querySelector('.title_two')
     const headerCar = document.querySelector('.header_car')
-    headerCar.prepend(title_two)
+    headerCar.appendChild(title_two)
+    title_two.style.position = 'static'
+    headerCar.style.flexDirection = 'column'
+    const statusObj = document.querySelector('.status_obj')
+    statusObj.textContent = ''
     /*
     const toChange = document.querySelector('.toChange')
     toChange.style.display = 'none'*/

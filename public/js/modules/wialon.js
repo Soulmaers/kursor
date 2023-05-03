@@ -193,11 +193,14 @@ export function iconParams() {
 
                                 //  console.log(arrCar)
                                 let power;
+                                let sats;
                                 arrCar.forEach(item => {
+                                    console.log(item)
                                     if (item.id === Number(active[0].id)) {
                                         //  console.log(item.lmsg.p.pwr_ext)
                                         if (item.lmsg) {
                                             power = item.lmsg.p.pwr_ext.toFixed(1)
+                                            sats = item.lmsg.p.sats
                                         }
 
                                     }
@@ -210,6 +213,7 @@ export function iconParams() {
                                 const tsi_card = document.querySelector('.tsi_card')
                                 const ign_card = document.querySelector('.ign_card')
                                 allArr.forEach(async it => {
+                                    // console.log(it)
                                     if (it.includes('Зажигание')) {
                                         count++
                                         let status;
@@ -218,12 +222,38 @@ export function iconParams() {
                                         const tsiValue = document.querySelector('.tsi_value')
                                         it[2] === 1 ? status = 'ВКЛ' : status = 'ВЫКЛ'
                                         //   ignValue.textContent = status
+                                        console.log(sats)
                                         if (it[2] === 1 && power >= 26.5) {
                                             statusTSI = 'ВКЛ'
                                         }
                                         else {
                                             statusTSI = 'ВЫКЛ'
                                         }
+                                        const statusObj = document.querySelector('.status_obj')
+
+                                        if (sats <= 4 || statusTSI === 'ВЫКЛ') {
+                                            let mess;
+                                            if (sats <= 4 && statusTSI === 'ВКЛ') {
+                                                mess = 'Не установлена связь со спутниками'
+                                            }
+                                            else if (sats > 4 && statusTSI === 'ВЫКЛ') {
+                                                mess = 'Двигатель выключен'
+                                            }
+                                            else if (sats <= 4 && statusTSI === 'ВЫКЛ') {
+                                                mess = 'Двигатель выключен, Не установлена связь со спутниками'
+                                            }
+                                            console.log('офф')
+                                            statusObj.textContent = 'Offline'
+                                            new Tooltip(statusObj, [mess]);
+
+                                        }
+                                        else if (sats > 3 || statusTSI === 'ВКЛ') {
+                                            console.log('он')
+                                            statusObj.textContent = 'Online'
+                                            statusObj.style.color = 'green'
+
+                                        }
+
 
                                         const idw = active[0].id
                                         const activePost = active[0].children[0].textContent.replace(/\s+/g, '')
@@ -251,8 +281,6 @@ export function iconParams() {
                                         }
                                         const vals = await fetch('/api/viewStatus', parama)
                                         const val = await vals.json()
-                                        //   console.log(val.result[0].status)
-                                        //  console.log(val.result[0].time)
                                         const startDate = val.result[0].time
                                         const startDateIng = val.result[0].timeIng
                                         const techdate = new Date();

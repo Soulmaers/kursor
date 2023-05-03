@@ -2374,6 +2374,18 @@ input[type="date"] {
   display: none;
 }
 
+.title_status {
+  display: flex;
+  align-items: center;
+}
+
+.status_obj {
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 1rem;
+  color: gray
+}
+
 .foto {
   display: flex;
   align-items: center;
