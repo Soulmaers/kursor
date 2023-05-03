@@ -158,7 +158,7 @@ export function iconParams() {
                     if (code) {
                         console.log(wialon.core.Errors.getErrorText(code));
                     }
-                    //    console.log(result)
+                    console.log(result)
                     const nameSens = Object.entries(result.item.sens)
                     const arrNameSens = [];
 
@@ -179,7 +179,7 @@ export function iconParams() {
                                 console.log(wialon.core.Errors.getErrorText(code));
                             }
                             if (result) {
-                                // console.log(result)
+                                console.log(result)
                                 const valueSens = [];
                                 Object.entries(result).forEach(e => {
                                     valueSens.push(e[1])
@@ -189,9 +189,8 @@ export function iconParams() {
                                     allArr.push([...e, valueSens[index]])
 
                                 })
-                                //  console.log(allArr)
-
-                                //  console.log(arrCar)
+                                console.log(allArr)
+                                // console.log(arrCar)
                                 let power;
                                 let sats;
                                 arrCar.forEach(item => {
