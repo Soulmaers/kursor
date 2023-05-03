@@ -144,55 +144,58 @@ module.exports.viewStatus = (req, res) => {
 }
 
 module.exports.saveStatus = (req, res) => {
+
     console.log(req.body)
     console.log(req.body.idw, req.body.activePost, req.body.todays, req.body.statusTSI, req.body.status)
-    console.log('2 раза?')
-    const mass = [req.body.idw, req.body.activePost, req.body.todays, req.body.statusTSI, req.body.todays, req.body.status]
-    try {
-        const postModel = `SELECT * FROM statusObj WHERE idw='${req.body.idw}'`
-        connection.query(postModel, function (err, results) {
-            if (err) console.log(err);
-            //  console.log(results[0].status)
-            if (results.length === 0) {
-                console.log('оно?')
-                const selectBase = `INSERT INTO statusObj(idw, nameCar, time, status, timeIng, statusIng) VALUES?`
-                connection.query(selectBase, [[mass]], function (err, results) {
-                    if (err) {
-                        console.log(err)
-
-                    };
-
-                })
-                //  res.json({ message: 'выполнена запись' })
-            }
-            else {
-                if (results[0].status !== req.body.statusTSI) {
-                    const postModel = `UPDATE statusObj SET time='${req.body.todays}',status='${req.body.statusTSI}' WHERE idw='${req.body.idw}'`
-                    connection.query(postModel, function (err, results) {
+    if (req.body.status !== undefined) {
+        const mass = [req.body.idw, req.body.activePost, req.body.todays, req.body.statusTSI, req.body.todays, req.body.status]
+        try {
+            const postModel = `SELECT * FROM statusObj WHERE idw='${req.body.idw}'`
+            connection.query(postModel, function (err, results) {
+                if (err) console.log(err);
+                //  console.log(results[0].status)
+                if (results.length === 0) {
+                    console.log('оно?')
+                    const selectBase = `INSERT INTO statusObj(idw, nameCar, time, status, timeIng, statusIng) VALUES?`
+                    connection.query(selectBase, [[mass]], function (err, results) {
                         if (err) {
                             console.log(err)
-                        }
-                        //  res.json({ message: 'выполнено обновление' })
+
+                        };
+
                     })
+                    //  res.json({ message: 'выполнена запись' })
                 }
-                if (results[0].statusIng !== req.body.status) {
-                    const postModel = `UPDATE statusObj SET timeIng='${req.body.todays}',statusIng='${req.body.status}' WHERE idw='${req.body.idw}'`
-                    connection.query(postModel, function (err, results) {
-                        if (err) {
-                            console.log(err)
-                        }
-                        //  res.json({ message: 'выполнено обновление' })
-                    })
+                else {
+                    if (results[0].status !== req.body.statusTSI) {
+                        const postModel = `UPDATE statusObj SET time='${req.body.todays}',status='${req.body.statusTSI}' WHERE idw='${req.body.idw}'`
+                        connection.query(postModel, function (err, results) {
+                            if (err) {
+                                console.log(err)
+                            }
+                            //  res.json({ message: 'выполнено обновление' })
+                        })
+                    }
+                    if (results[0].statusIng !== req.body.status) {
+                        const postModel = `UPDATE statusObj SET timeIng='${req.body.todays}',statusIng='${req.body.status}' WHERE idw='${req.body.idw}'`
+                        connection.query(postModel, function (err, results) {
+                            if (err) {
+                                console.log(err)
+                            }
+                            //  res.json({ message: 'выполнено обновление' })
+                        })
+                    }
+
                 }
 
-            }
+            })
 
-        })
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
 
-    }
-    catch (e) {
-        console.log(e)
-    }
 
     res.json({ message: 'выполнено' })
 }
