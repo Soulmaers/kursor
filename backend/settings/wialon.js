@@ -94,7 +94,7 @@ function createTable() {
             allCar[5][1].forEach(el => {
                 nameCar.push([el.nm.replace(/\s+/g, ''), el.id])
                 const nameTable = el.nm.replace(/\s+/g, '')
-                console.log(el)
+                //console.log(el)
                 if (el.lmsg) {
                     const sensor = Object.entries(el.lmsg.p)
                     //  console.log(el.id)

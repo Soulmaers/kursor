@@ -117,9 +117,9 @@ export function zapros() {
 
     const prmss = {
         "spec": [{
-            "type": 'type',
-            "data": 'avl_unit', //26702383,//26702371,
-            "flags": 1048576,//1048576,                 //    1048576-шт 8388608-анималс
+            "type": 'id',
+            "data": 26702371,//'avl_unit', //26702383,//26702371,
+            "flags": 8388608,//1048576,//1048576,                 //    1048576-шт 8388608-анималс
             "mode": 0
         }
         ]
@@ -130,7 +130,7 @@ export function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
-            //  console.log(result)
+            console.log(result)
 
 
         });

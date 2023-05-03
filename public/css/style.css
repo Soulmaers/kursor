@@ -1912,11 +1912,29 @@ input[type="date"] {
 }
 
 .legend {
-  width: 50%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0;
+  padding: 0;
+}
+
+.interval {
+  width: 100%;
+  margin-top: 20px
+}
+
+.interval1 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 5px;
+  border: 1px solid gray;
+}
+
+.btn_int {
+  margin: 5px auto;
 }
 
 .titleLegend {
@@ -2385,6 +2403,35 @@ input[type="date"] {
   font-size: 1rem;
   color: gray;
   cursor: pointer
+}
+
+.nav_graf {
+  display: flex;
+  justify-content: space-around;
+  width: 90%;
+  margin-top: 20px;
+}
+
+.blockRigth {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.menu_graf {
+  cursor: pointer;
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: Roboto;
+}
+
+.menu_graf:hover {
+  background-color: #fff;
 }
 
 .foto {
@@ -3177,7 +3224,23 @@ input[type=range]:focus::-ms-fill-upper {
 
 .select_speed {
 
-  width: 200px;
+  width: 140px;
+  padding: 3px 8px;
+}
+
+.input_interval {
+  margin-top: 5px;
+  width: 140px;
+  padding: 3px 8px;
+}
+
+input[type="date_int"] {
+  font-weight: 100;
+  font-family: Roboto;
+}
+
+.select_interval {
+  width: 115px;
   padding: 3px 8px;
 }
 
@@ -5120,8 +5183,6 @@ input[type="text"]:focus {
 
   .grafics {
     display: none;
-    justify-content: center;
-    align-items: center;
     width: 100%;
     height: 800px;
     background-color: lightgray;
@@ -5133,7 +5194,7 @@ input[type="text"]:focus {
 
   .grafics {
     display: none;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     width: 100%;
     height: 800px;
