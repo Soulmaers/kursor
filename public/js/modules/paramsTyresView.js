@@ -124,7 +124,13 @@ export async function loadParamsView() {
                     }
 
                 })
-
+                const cont1 = document.querySelector('.cont1')
+                const title_two = document.querySelector('.title_two')
+                console.log(cont1.firstElementChild.children[1])
+                cont1.firstElementChild.children[1].prepend(title_two)
+                cont1.firstElementChild.children[1].style.position = 'relative'
+                title_two.style.position = 'absolute'
+                title_two.style.top = '10px'
                 console.log(model.values)
                 if (model.values.find(e => e.trailer === 'Прицеп')) {
                     const cont = document.querySelector('.cont')
