@@ -142,10 +142,10 @@ export function conturTest(testov) {
                         const osi = document.createElement('div')
                         osi.classList.add('osi_list')
                         if (os.trailer !== 'Прицеп' && os.tyres === '2' || os.trailer !== 'Прицеп' && os.tyres === '4') {
-                            fnTagach(os, nameCar)
+                            fnTagach(os, elem[4])
                         }
                         if (os.trailer === 'Прицеп' && os.tyres === '2' || os.trailer == 'Прицеп' && os.tyres === '4') {
-                            fnPricep(os, nameCar)
+                            fnPricep(os, elem[4])
                         }
                     })
                 }
@@ -297,8 +297,8 @@ async function fnStaticObjectOil(nameCar) {
 
 
 
-function fnTagach(arr, nameCar) {
-    const listItem = document.querySelector(`.${nameCar} `)
+function fnTagach(arr, nameCarId) {
+    const listItem = document.getElementById(`${nameCarId}`)
     const obj = [];
     let counts = 0
     for (let i = 0; i < arr.tyres; i++) {
@@ -367,8 +367,8 @@ function fnTagach(arr, nameCar) {
         .style('fill', 'white')
 }
 
-function fnPricep(arr, nameCar) {
-    const listItem = document.querySelector(`.${nameCar} `)
+function fnPricep(arr, nameCarId) {
+    const listItem = document.getElementById(`${nameCarId}`)
     // задаем радиус
     const obj = [];
     let counts = 0
@@ -479,11 +479,13 @@ export function zaprosSpisok() {
 setInterval(zaprosSpisok, 300000)
 
 function viewListKoleso(arg, params, osi, nameCar) {
+
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
     if (params.result) {
         const modelUniqValues = convert(params.result)
         const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
+        console.log(activePost)
         const r = [];
         let integer;
         modelUniqValues.forEach(el => {
