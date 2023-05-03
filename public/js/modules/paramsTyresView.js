@@ -132,7 +132,6 @@ export async function loadParamsView() {
                     cont.lastElementChild.children[1].appendChild(gos)
                     cont.lastElementChild.children[1].style.position = 'relative'
                     gos.style.position = 'absolute'
-                    gos.style.left = '15px'
                     gos.style.top = '25px'
                     gos.value = model.values[0].gosp
                     gos.style.display = 'flex'

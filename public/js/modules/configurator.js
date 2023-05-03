@@ -118,7 +118,6 @@ function os(arr) {
                     cont.lastElementChild.children[1].appendChild(gosNumber)
                     cont.lastElementChild.children[1].style.position = 'relative'
                     gosNumber.style.position = 'absolute'
-                    gosNumber.style.left = '15px'
                     gosNumber.style.top = '25px'
                     gosNumber.style.display = 'flex'
                     return
