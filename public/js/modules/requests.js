@@ -133,7 +133,7 @@ export const geoPosition = (geo) => {
     const wrap = document.querySelector('.wrapper_up')
     const maps = document.createElement('div')
     maps.setAttribute('id', 'map')
-    maps.style.width = '336px';
+    maps.style.width = '100%';
     maps.style.height = '300px',
         wrap.appendChild(maps)
 

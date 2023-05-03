@@ -89,6 +89,7 @@ function createTable() {
         })
         .then(function (data) {
             const nameCar = [];
+            console.log(data)
             const allCar = Object.entries(data);
             allCar[5][1].forEach(el => {
                 nameCar.push([el.nm.replace(/\s+/g, ''), el.id])
