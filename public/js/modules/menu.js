@@ -78,9 +78,9 @@ export function zapros() {
                             if (code) {
                                 console.log(wialon.core.Errors.getErrorText(code));
                             }
-                            //  console.log(result)
+                            console.log(result)
                             const arr3 = await result
-                            // console.log(arr3)
+                            console.log(arr3)
                             if (!arr3.item.nm) {
                                 return
                             }

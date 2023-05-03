@@ -100,6 +100,10 @@ async function viewAlarmStorage(name, stor) {
         })
     })
     const t = document.querySelectorAll('.tr')
+    console.log(t.length)
+    if (t.length === 1) {
+        return
+    }
     t.forEach(el => {
         const dop = document.createElement('p')
         dop.classList.add('td')

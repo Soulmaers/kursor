@@ -94,9 +94,13 @@ function createTable() {
             allCar[5][1].forEach(el => {
                 nameCar.push([el.nm.replace(/\s+/g, ''), el.id])
                 const nameTable = el.nm.replace(/\s+/g, '')
-                const sensor = Object.entries(el.lmsg.p)
-                //  console.log(el.id)
-                postParametrs(nameTable, sensor)
+                console.log(el)
+                if (el.lmsg) {
+                    const sensor = Object.entries(el.lmsg.p)
+                    //  console.log(el.id)
+                    postParametrs(nameTable, sensor)
+                }
+
 
             })
 
@@ -189,9 +193,12 @@ function getMainInfo(name, res) {
                 const allCar = Object.values(data);
                 allCar[5].forEach(el => {
                     if (el.nm === name) {
-                        const geoX = el.pos.x
-                        const geoY = el.pos.y
-                        res.json({ geoX, geoY })
+                        if (el.pos) {
+                            const geoX = el.pos.x
+                            const geoY = el.pos.y
+                            res.json({ geoX, geoY })
+                        }
+
                     }
                 })
 

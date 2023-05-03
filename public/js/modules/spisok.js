@@ -37,7 +37,7 @@ export async function loadParamsViewList(car, el) {
 
 
 export function conturTest(testov) {
-    //  console.log(testov)
+    console.log(testov)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         groups.forEach(e => {
@@ -54,6 +54,7 @@ export function conturTest(testov) {
         })
     }
     testov.forEach(el => {
+        console.log(el)
         if (el.length !== 0) {
             const wrapList = document.querySelector('.wrapList')
             const group = document.createElement('div')
@@ -90,13 +91,14 @@ export function conturTest(testov) {
             group.appendChild(hiddenModal)
             const listArr = document.querySelector(`.${el[0].group}`)
             el.forEach(elem => {
-
+                console.log(elem)
                 const nameCar = elem[0].message.replace(/\s+/g, '')
+                console.log(nameCar)
                 dashView(nameCar)
                 const listItemCar = document.createElement('div')
                 listItemCar.classList.add('listItem')
-                listItemCar.classList.add(`${nameCar}`)
-                listItemCar.setAttribute('rel', `${nameCar}`)
+                listItemCar.classList.add(`${elem[4]}`)
+                listItemCar.setAttribute('rel', `${elem[4]}`)
                 listItemCar.setAttribute('id', `${elem[4]}`)
                 listArr.children[1].appendChild(listItemCar)
                 const listName = document.createElement('div')
@@ -147,7 +149,10 @@ export function conturTest(testov) {
                         }
                     })
                 }
-                const listItem = document.querySelector(`.${nameCar} `)
+                // const listItem = document.querySelector(`[rel = ${nameCar}]`)
+                //  const listItem = document.querySelector(`.${elem[4]} `)
+                const listItem = document.getElementById(`${elem[4]}`)
+                console.log(listItem)
                 const numOs = listItem.querySelectorAll('.gOs');
                 numOs.forEach(el => {
                     setId(el)

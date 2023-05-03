@@ -196,7 +196,10 @@ export function iconParams() {
                                 arrCar.forEach(item => {
                                     if (item.id === Number(active[0].id)) {
                                         //  console.log(item.lmsg.p.pwr_ext)
-                                        power = item.lmsg.p.pwr_ext.toFixed(1)
+                                        if (item.lmsg) {
+                                            power = item.lmsg.p.pwr_ext.toFixed(1)
+                                        }
+
                                     }
                                 })
                                 //  const tsi = await fnWialon(active[0].id)
@@ -403,19 +406,21 @@ export function loadAkb(arrCar) {
         let toChange = 10000;
         if (it.nm === act) {
             //    akb = (it.lmsg.p.pwr_ext).toFixed(1);
-            if (it.lmsg.p.mileage) {
-                probeg = parseFloat((it.lmsg.p.mileage).toFixed(0));
-                const odometr = addZero(8, probeg)
-                //  toView(toChange, probeg)
-            }
-            console.log(it.pos.s)
-            if (it.pos.s || it.pos.s === 0) {
+            if (it.lmsg) {
+                if (it.lmsg.p.mileage) {
+                    probeg = parseFloat((it.lmsg.p.mileage).toFixed(0));
+                    const odometr = addZero(8, probeg)
+                    //  toView(toChange, probeg)
+                }
                 console.log(it.pos.s)
-                speed = (it.pos.s).toFixed(0);
+                if (it.pos.s || it.pos.s === 0) {
+                    console.log(it.pos.s)
+                    speed = (it.pos.s).toFixed(0);
+                }
+                const strateValue = document.querySelector('.speed_value')
+                strateValue.textContent = speed
+                // iconSpeed(speed)
             }
-            const strateValue = document.querySelector('.speed_value')
-            strateValue.textContent = speed
-            // iconSpeed(speed)
         }
     })
 }
