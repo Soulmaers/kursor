@@ -279,8 +279,8 @@ export function iconParams() {
                                         val.result[0].statusIng === 'ВКЛ' ? statNameIng = 'Включено' : statNameIng = 'Выключено'
                                         tsiValue.textContent = val.result[0].status
                                         ignValue.textContent = val.result[0].statusIng
-                                        const message = `Двигатель ${statName} ${timeStor}`
-                                        const messageIng = `Зажигание ${statNameIng} ${timeStorIng}`
+                                        const message = `${statName} ${timeStor}`
+                                        const messageIng = `${statNameIng} ${timeStorIng}`
                                         //  const ignValue = document.querySelector('.ign_value')
                                         new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
                                         new Tooltip(ign_card, [ign_card.getAttribute('rel'), messageIng]);

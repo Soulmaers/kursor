@@ -45,8 +45,8 @@ function loadKran(arrCar) {
             //   console.log(it.lmsg.p.user_2u_1)
             //  if (it.lmsg.p.user_2u_1) {
 
-            const starterValue = document.querySelector('.ign_value')
-            it.lmsg.p.pwr_ext.toFixed(1) >= 26.5 ? starterValue.textContent = 'ВКЛ' : starterValue.textContent = 'ВЫКЛ';
+            //   const starterValue = document.querySelector('.ign_value')
+            //  it.lmsg.p.pwr_ext.toFixed(1) >= 26.5 ? starterValue.textContent = 'ВКЛ' : starterValue.textContent = 'ВЫКЛ';
 
 
             const str = it.lmsg.p.user_2u_1
