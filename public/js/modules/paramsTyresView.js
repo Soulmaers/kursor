@@ -77,6 +77,7 @@ export async function loadParamsView() {
     const container = document.querySelector('.container')
     let activePost;
     const active = document.querySelectorAll('.color')
+    console.log(active[0].children[0].textContent)
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.listItem')[0]
         activePost = listItem.textContent.replace(/\s+/g, '')
@@ -129,6 +130,9 @@ export async function loadParamsView() {
                 console.log(cont1.firstElementChild.children[1])
                 cont1.firstElementChild.children[1].prepend(title_two)
                 cont1.firstElementChild.children[1].style.position = 'relative'
+                console.log('запуск!!')
+                console.log(title_two)
+                title_two.textContent = active[0].children[0].textContent
                 title_two.style.position = 'absolute'
                 title_two.style.top = '10px'
                 console.log(model.values)
