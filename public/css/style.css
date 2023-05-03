@@ -2349,9 +2349,6 @@ input[type="date"] {
   justify-content: center;
   align-items: center;
   width: 212px;
-
-  cursor: pointer;
-
 }
 
 .progress {
@@ -2362,6 +2359,7 @@ input[type="date"] {
   width: 212px;
   height: 11px;
   background-color: gray;
+  cursor: pointer;
 
 }
 
@@ -2369,7 +2367,7 @@ input[type="date"] {
   width: 312px;
   display: flex;
   justify-content: space-between;
-  cursor: pointer;
+  /* cursor: pointer;*/
 }
 
 .tarir {

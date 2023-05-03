@@ -8,18 +8,19 @@ export function modalOs() {
     const modalClear = document.querySelector('.modalClear')
     const btnModal = document.querySelector('.btnModal')
     const btnModalClear = document.querySelector('.btnModalClear')
-    const centerOs = document.querySelectorAll('.centerOs')
-    centerOs.forEach(e => {
+    const vnut = document.querySelectorAll('.vnut')
+    console.log(vnut)
+    vnut.forEach(e => {
         e.addEventListener('click', () => {
-            if (e.classList.contains('centerOsActiv')) {
-                e.classList.remove('centerOsActiv')
+            if (e.parentElement.classList.contains('centerOsActiv')) {
+                e.parentElement.classList.remove('centerOsActiv')
                 modalCenterOs.style.display = 'none'
                 return
             }
-            centerOs.forEach(e => {
-                e.classList.remove('centerOsActiv')
+            vnut.forEach(e => {
+                e.parentElement.classList.remove('centerOsActiv')
             });
-            e.classList.add('centerOsActiv')
+            e.parentElement.classList.add('centerOsActiv')
             modalCenterOs.style.display = 'block'
             const modalInput = document.querySelectorAll('.modalInput')
             modalInput.forEach(i => {
@@ -27,7 +28,7 @@ export function modalOs() {
             })
             const centerOsActiv = document.querySelector('.centerOsActiv')
             const modalNumberOs = document.querySelector('.modalNumberOs')
-            if (e.classList.contains('pricep')) {
+            if (e.parentElement.classList.contains('pricep')) {
                 modalNumberOs.textContent = centerOsActiv.id + '-' + 'Прицеп'
             }
             else {
