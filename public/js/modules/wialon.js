@@ -205,6 +205,7 @@ export function iconParams() {
                                 let count = 0;
                                 let oborot = 0;
                                 const tsi_card = document.querySelector('.tsi_card')
+                                const ign_card = document.querySelector('.ign_card')
                                 allArr.forEach(async it => {
                                     if (it.includes('Зажигание')) {
                                         count++
@@ -213,7 +214,7 @@ export function iconParams() {
                                         const ignValue = document.querySelector('.ign_value')
                                         const tsiValue = document.querySelector('.tsi_value')
                                         it[2] === 1 ? status = 'ВКЛ' : status = 'ВЫКЛ'
-                                        ignValue.textContent = status
+                                        //   ignValue.textContent = status
                                         if (it[2] === 1 && power >= 26.5) {
                                             statusTSI = 'ВКЛ'
                                         }
@@ -227,13 +228,13 @@ export function iconParams() {
                                         const currentDate = new Date();
                                         const todays = Math.floor(currentDate.getTime() / 1000);
                                         //   console.log(unixTimestamp);
-                                        //  console.log(todays)
+                                        console.log(status)
                                         const param = {
                                             method: "POST",
                                             headers: {
                                                 'Content-Type': 'application/json',
                                             },
-                                            body: (JSON.stringify({ activePost, idw, todays, statusTSI }))
+                                            body: (JSON.stringify({ activePost, idw, todays, statusTSI, todays, status }))
                                         }
                                         const res = await fetch('/api/saveStatus', param)
                                         const response = await res.json()
@@ -250,9 +251,11 @@ export function iconParams() {
                                         //   console.log(val.result[0].status)
                                         //  console.log(val.result[0].time)
                                         const startDate = val.result[0].time
+                                        const startDateIng = val.result[0].timeIng
                                         const techdate = new Date();
                                         const nowDate = Math.floor(techdate.getTime() / 1000);
                                         const timeStor = getHoursDiff(startDate, nowDate)
+                                        const timeStorIng = getHoursDiff(startDateIng, nowDate)
                                         function getHoursDiff(startDate, nowDate) {
                                             var diff = nowDate - startDate;
                                             let dayS;
@@ -267,21 +270,20 @@ export function iconParams() {
                                             hour === 0 ? hourS = '' : hourS = hours + 'ч.'
                                             console.log(`${dayS} ${hourS} ${minut} мин.`);
                                             const mess = `${dayS} ${hourS} ${minut} мин.`
-
                                             return mess;
 
                                         }
-                                        //  console.log(timeStor)
                                         let statName;
+                                        let statNameIng;
                                         val.result[0].status === 'ВКЛ' ? statName = 'Включен' : statName = 'Выключен'
+                                        val.result[0].statusIng === 'ВКЛ' ? statNameIng = 'Включено' : statNameIng = 'Выключено'
                                         tsiValue.textContent = val.result[0].status
+                                        ignValue.textContent = val.result[0].statusIng
                                         const message = `Двигатель ${statName} ${timeStor}`
-                                        // console.log(message)
-
-                                        const t = new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
-                                        // t.setMessage([tsi_card.getAttribute('rel'), message])
-
-                                        //  console.log(t.setMessage([tsi_card.getAttribute('rel'), message]))
+                                        const messageIng = `Зажигание ${statNameIng} ${timeStorIng}`
+                                        //  const ignValue = document.querySelector('.ign_value')
+                                        new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
+                                        new Tooltip(ign_card, [ign_card.getAttribute('rel'), messageIng]);
                                         return
                                     }
                                     if (it.includes('Обороты двигателя')) {

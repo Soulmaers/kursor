@@ -22,13 +22,6 @@ export class Tooltip {
                 e.remove()
             })
         }
-        /*  if (this.tooltipLow) {
-              document.body.removeChild(this.tooltipLow);
-              console.log('удалили тулти!!!!')
-              this.tooltip = null;
-          }*/
-        // if (!this.isHovered) { // проверяем флаг hovering
-        //   this.isHovered = true;
         this.tooltip = document.createElement("div");
         this.tooltip.classList.add('tool')
         this.tooltip.style.position = "absolute";
