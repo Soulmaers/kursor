@@ -113,6 +113,13 @@ function os(arr) {
 
                 if (el.classList.contains('pricep')) {
                     console.log(el)
+                    const cont = document.querySelector('.cont')
+                    console.log(cont.lastElementChild.children[1])
+                    cont.lastElementChild.children[1].appendChild(gosNumber)
+                    cont.lastElementChild.children[1].style.position = 'relative'
+                    gosNumber.style.position = 'absolute'
+                    gosNumber.style.left = '15px'
+                    gosNumber.style.top = '25px'
                     gosNumber.style.display = 'flex'
                     return
                 }

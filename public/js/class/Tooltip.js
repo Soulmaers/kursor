@@ -41,11 +41,16 @@ export class Tooltip {
     }
 
     handleMouseLeave() {
-        if (this.tooltip) {
-            document.body.removeChild(this.tooltip);
-            console.log('удалили тултип')
+        const tool = document.querySelectorAll('.tool')
+        console.log(tool)
+        if (tool) {
+            tool.forEach(e => {
+                e.remove()
+            })
             this.tooltip = null;
         }
+
+
         // this.isHovered = false; // меняем флаг hovering при уходе курсора
     }
     handleMouseMove(event) {
