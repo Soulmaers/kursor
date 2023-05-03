@@ -128,12 +128,12 @@ module.exports.tarirView = (req, res) => {
 
 }
 module.exports.viewStatus = (req, res) => {
-    console.log('запрос работа')
+    //  console.log('запрос работа')
     try {
         const postModel = `SELECT * FROM statusObj WHERE idw='${req.body.idw}'`
         connection.query(postModel, function (err, results) {
             if (err) console.log(err);
-            console.log(results)
+            //  console.log(results)
             res.json({ result: results })
         })
     }
@@ -145,8 +145,8 @@ module.exports.viewStatus = (req, res) => {
 
 module.exports.saveStatus = (req, res) => {
 
-    console.log(req.body)
-    console.log(req.body.idw, req.body.activePost, req.body.todays, req.body.statusTSI, req.body.status)
+    // console.log(req.body)
+    //  console.log(req.body.idw, req.body.activePost, req.body.todays, req.body.statusTSI, req.body.status)
     if (req.body.status !== undefined) {
         const mass = [req.body.idw, req.body.activePost, req.body.todays, req.body.statusTSI, req.body.todays, req.body.status]
         try {
@@ -155,7 +155,7 @@ module.exports.saveStatus = (req, res) => {
                 if (err) console.log(err);
                 //  console.log(results[0].status)
                 if (results.length === 0) {
-                    console.log('оно?')
+                    //  console.log('оно?')
                     const selectBase = `INSERT INTO statusObj(idw, nameCar, time, status, timeIng, statusIng) VALUES?`
                     connection.query(selectBase, [[mass]], function (err, results) {
                         if (err) {

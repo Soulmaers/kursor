@@ -9,7 +9,6 @@ export function modalOs() {
     const btnModal = document.querySelector('.btnModal')
     const btnModalClear = document.querySelector('.btnModalClear')
     const vnut = document.querySelectorAll('.vnut')
-    console.log(vnut)
     vnut.forEach(e => {
         e.addEventListener('click', () => {
             if (e.parentElement.classList.contains('centerOsActiv')) {

@@ -77,7 +77,7 @@ export async function loadParamsView() {
     const container = document.querySelector('.container')
     let activePost;
     const active = document.querySelectorAll('.color')
-    console.log(active[0].children[0].textContent)
+    // console.log(active[0].children[0].textContent)
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.listItem')[0]
         activePost = listItem.textContent.replace(/\s+/g, '')
@@ -127,18 +127,18 @@ export async function loadParamsView() {
                 })
                 const cont1 = document.querySelector('.cont1')
                 const title_two = document.querySelector('.title_two')
-                console.log(cont1.firstElementChild.children[1])
+                //  console.log(cont1.firstElementChild.children[1])
                 cont1.firstElementChild.children[1].prepend(title_two)
                 cont1.firstElementChild.children[1].style.position = 'relative'
-                console.log('запуск!!')
-                console.log(title_two)
+                //  console.log('запуск!!')
+                // console.log(title_two)
                 title_two.textContent = active[0].children[0].textContent
                 title_two.style.position = 'absolute'
                 title_two.style.top = '10px'
-                console.log(model.values)
+                //  console.log(model.values)
                 if (model.values.find(e => e.trailer === 'Прицеп')) {
                     const cont = document.querySelector('.cont')
-                    console.log(cont.lastElementChild.children[1])
+                    //  console.log(cont.lastElementChild.children[1])
                     cont.lastElementChild.children[1].appendChild(gos)
                     cont.lastElementChild.children[1].style.position = 'relative'
                     gos.style.position = 'absolute'
@@ -150,7 +150,7 @@ export async function loadParamsView() {
                 gos.style.display = 'none'
             }
             else {
-                console.log('база пустая')
+                ///console.log('база пустая')
                 gos.style.display = 'none'
             }
 

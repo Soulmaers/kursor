@@ -28,8 +28,10 @@ export async function alarmFind() {
     if (tyresmassiv.values) {
         const sorTyres = convert(tyresmassiv.values)
         const storValue = [];
+        // console.log(sorTyres)
         sorTyres.forEach(async e => {
             const tyresP = e.pressure
+            //  console.log
             const activeName = 'alarm' + activePost + e.pressure
             const stor = await fetch('api/alarmFind', {
                 method: "POST",
@@ -40,7 +42,7 @@ export async function alarmFind() {
             })
             const storList = await stor.json();
             storValue.push(storList)
-
+            //  console.log(storValue)
         })
         setTimeout(viewAlarmStorage, 1000, activePost, storValue)
 
@@ -62,7 +64,6 @@ async function viewAlarmStorage(name, stor) {
     stor.forEach(el => {
         let count = 0;
         el.forEach(it => {
-            //   console.log(it)
             if (!allobj.hasOwnProperty(it.senspressure)) {
                 return
             }
@@ -100,7 +101,7 @@ async function viewAlarmStorage(name, stor) {
         })
     })
     const t = document.querySelectorAll('.tr')
-    console.log(t.length)
+    console.log(t)
     if (t.length === 1) {
         return
     }

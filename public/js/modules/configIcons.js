@@ -142,7 +142,6 @@ export async function iconFind(activePost) {
             if (el.name === it.params) {
                 card.forEach(elem => {
                     if (elem.id === it.icons) {
-                        console.log(elem.children)
                         elem.children[0].textContent = (el.value * it.coef).toFixed(1) // + 'км'
                         if (it.icons === 'odom-card') {
                             const val = addZero(8, (el.value * it.coef).toFixed(0))

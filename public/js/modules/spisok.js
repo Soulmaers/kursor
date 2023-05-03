@@ -37,7 +37,7 @@ export async function loadParamsViewList(car, el) {
 
 
 export function conturTest(testov) {
-    console.log(testov)
+    //console.log(testov)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         groups.forEach(e => {
@@ -54,7 +54,7 @@ export function conturTest(testov) {
         })
     }
     testov.forEach(el => {
-        console.log(el)
+        // console.log(el)
         if (el.length !== 0) {
             const wrapList = document.querySelector('.wrapList')
             const group = document.createElement('div')
@@ -91,9 +91,9 @@ export function conturTest(testov) {
             group.appendChild(hiddenModal)
             const listArr = document.querySelector(`.${el[0].group}`)
             el.forEach(elem => {
-                console.log(elem)
+                //   console.log(elem)
                 const nameCar = elem[0].message.replace(/\s+/g, '')
-                console.log(nameCar)
+                //  console.log(nameCar)
                 dashView(nameCar)
                 const listItemCar = document.createElement('div')
                 listItemCar.classList.add('listItem')
@@ -152,7 +152,7 @@ export function conturTest(testov) {
                 // const listItem = document.querySelector(`[rel = ${nameCar}]`)
                 //  const listItem = document.querySelector(`.${elem[4]} `)
                 const listItem = document.getElementById(`${elem[4]}`)
-                console.log(listItem)
+                // console.log(listItem)
                 const numOs = listItem.querySelectorAll('.gOs');
                 numOs.forEach(el => {
                     setId(el)
@@ -260,23 +260,15 @@ async function fnStaticObjectOil(nameCar) {
                     if (x.length >= 3) {
                         degree = 6
                     }
-                    // console.log(x, y)
                     const approximated = approximateValue(val, x, y, degree);
                     const znak = (approximated[0] * 0.9987).toFixed(0)
-                    // console.log(znak)
-                    // console.log(y[y.length - 1])
                     const progress = document.querySelector('.progress')
                     const progressBarText = document.querySelector('.progressBarText')
                     const progressBar = document.querySelector('.progressBar')
-                    console.log(progressBar)
-                    const value = znak * 100 / y[y.length - 1]
-                    // console.log(value)
 
-                    // progressBar.textContent = znak + ' ' + 'л.'
+                    const value = znak * 100 / y[y.length - 1]
                     progressBarText.textContent = znak + ' ' + 'л.'
-                    //  
                     progressBar.style.width = value + '%'
-                    //progress.textContent = znak + ' ' + 'л.'
                     if (value > 30 && value < 70) {
                         progressBar.style.background = 'yellow'
                     }
@@ -285,7 +277,7 @@ async function fnStaticObjectOil(nameCar) {
                         progressBar.style.fontSize = '0.8rem'
                         progressBar.style.color = 'black'
                     }
-                    console.log(progressBar)
+
 
                 }
             }
@@ -485,7 +477,7 @@ function viewListKoleso(arg, params, osi, nameCar) {
     if (params.result) {
         const modelUniqValues = convert(params.result)
         const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
-        console.log(activePost)
+        //  console.log(activePost)
         const r = [];
         let integer;
         modelUniqValues.forEach(el => {

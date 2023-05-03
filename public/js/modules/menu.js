@@ -135,6 +135,24 @@ export function zapros() {
 
         });
 
+
+    const prms2 = {
+        "itemId": 26702389,
+        "timeFrom": 1683132906,
+        "timeTo": 1683137906,
+        "flags": 1,
+        "flagsMask": 65281,
+        "loadCount": 8271
+    }
+    const global = [];
+    const remote2 = wialon.core.Remote.getInstance();
+    remote2.remoteCall('messages/load_interval', prms2,
+        function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+        })
     const flags = 1 + 1024//4096
     const prms = {
         "spec": {

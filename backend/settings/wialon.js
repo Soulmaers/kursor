@@ -50,6 +50,7 @@ function speed(t1, t2, int, id, res) {
 
     session.request('messages/load_interval', prms2)
         .then(function (data) {
+            console.log(data)
             const arr2 = Object.values(data);
             const arrIterTime = [];
             const arrIterTimeDate = [];
@@ -304,6 +305,7 @@ function proverka(arr) {
     // console.log(arr)
     let time = new Date()
     arr.forEach(el => {
+        // console.log(typeof el[2])
         if (el[4] === undefined) {
             return
         }
@@ -353,7 +355,7 @@ function proverka(arr) {
                         //   console.log(results[results.length - 1].alarm)
                         //  console.log(el)
                         if (results[results.length - 1].alarm == 'Потеря связи с датчиком') {
-                            //   console.log('таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
+                            console.log('таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
                             return
                         } else {
                             console.log('таблица есть, изменение аларма,потеря связи с датчиком ')
@@ -384,7 +386,7 @@ function proverka(arr) {
                         if (el[2] >= Number(el[4].kvd)) {
                             // console.log(results[results.length - 1].bar)
                             if (Number(results[results.length - 1].bar == el[2]) && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                                //   console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
+                                console.log(el + ' ' + process.env.PORT + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
                                 return
                             } else {
                                 console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
@@ -398,10 +400,10 @@ function proverka(arr) {
                         else if (el[2] > Number(el[4].knd) || el[2] < Number(el[4].kvd)) {
                             // console.log(el)
                             if (results[results.length - 1].alarm === 'Норма') {
-                                // console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
+                                console.log(el + ' ' + process.env.PORT + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
                                 return
                             } else {
-                                console.log(el + ' ' + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
+                                console.log(el + ' ' + process.env.PORT + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
                                 const data = createDate()
                                 alarm = 'Норма'
                                 alarmBase(data, el, alarm)
@@ -516,6 +518,7 @@ function mail(value, mess) {
 
         console.log(body);
     });*/
+
     var option = {
         method: 'POST',
         url: 'https://api.ultramsg.com/instance45156/messages/chat',
