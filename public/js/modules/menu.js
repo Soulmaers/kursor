@@ -78,9 +78,9 @@ export function zapros() {
                             if (code) {
                                 console.log(wialon.core.Errors.getErrorText(code));
                             }
-                            console.log(result)
+                            //  console.log(result)
                             const arr3 = await result
-                            console.log(arr3)
+                            //   console.log(arr3)
                             if (!arr3.item.nm) {
                                 return
                             }
@@ -130,29 +130,12 @@ export function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
-            console.log(result)
+            //  console.log(result)
 
 
         });
 
 
-    const prms2 = {
-        "itemId": 26702389,
-        "timeFrom": 1683132906,
-        "timeTo": 1683137906,
-        "flags": 1,
-        "flagsMask": 65281,
-        "loadCount": 8271
-    }
-    const global = [];
-    const remote2 = wialon.core.Remote.getInstance();
-    remote2.remoteCall('messages/load_interval', prms2,
-        function (code, result) {
-            if (code) {
-                console.log(wialon.core.Errors.getErrorText(code));
-            }
-            console.log(result)
-        })
     const flags = 1 + 1024//4096
     const prms = {
         "spec": {
@@ -202,7 +185,7 @@ export async function ggg(id) {
                 if (code) {
                     console.log(wialon.core.Errors.getErrorText(code));
                 }
-
+                //   console.log(result)
                 const nameSens = Object.entries(result.item.sens)
                 const arrNameSens = [];
 
@@ -222,6 +205,7 @@ export async function ggg(id) {
                             console.log(wialon.core.Errors.getErrorText(code));
                         }
                         if (result) {
+                            //   console.log(result)
                             const valueSens = [];
                             Object.entries(result).forEach(e => {
                                 valueSens.push(e[1])
@@ -259,3 +243,5 @@ async function dostupObject(name) {
     const nameCarCheck = response.result.map(elem => elem.Object)
     return nameCarCheck
 }
+
+

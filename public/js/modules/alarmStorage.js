@@ -101,7 +101,7 @@ async function viewAlarmStorage(name, stor) {
         })
     })
     const t = document.querySelectorAll('.tr')
-    console.log(t)
+    //console.log(t)
     if (t.length === 1) {
         return
     }

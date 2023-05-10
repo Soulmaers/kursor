@@ -315,12 +315,12 @@ function fnTagach(arr, nameCarId) {
     const radius = 5;
     const rr = (Math.PI / 180);
     // создаем элемент арки с радиусом
-    const arc = d3.svg.arc()
+    const arc = d3.arc()
         .outerRadius(radius)
         .innerRadius(12)
         .startAngle(function (d) { return d.startAngle + Math.PI })
         .endAngle(function (d) { return d.endAngle + Math.PI });
-    const pie = d3.layout.pie()
+    const pie = d3.pie()
         .sort(null)
         .value(function (d) { return d.rate; });
     const g = svg.selectAll(".arc")
@@ -384,13 +384,13 @@ function fnPricep(arr, nameCarId) {
     // задаем радиус
     const radius = 5;
     // создаем элемент арки с радиусом
-    const arc = d3.svg.arc()
+    const arc = d3.arc()
         .outerRadius(radius)
         .innerRadius(12)
         .startAngle(function (d) { return d.startAngle + Math.PI })
         .endAngle(function (d) { return d.endAngle + Math.PI });
 
-    const pie = d3.layout.pie()
+    const pie = d3.pie()
         .sort(null)
         .value(function (d) { return d.rate; });
     const g = svg.selectAll(".arc")

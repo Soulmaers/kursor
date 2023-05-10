@@ -12,7 +12,7 @@ import { iconFind, iconFindWindows, refactor } from './configIcons.js'
 import { grafikPoly, tarirView } from './staticObject.js'
 import { tooltip } from './cursorTooltip.js'
 import { ggg } from './menu.js'
-
+import { datas } from './grafiks.js'
 import { Tooltip } from '../class/Tooltip.js'
 
 
@@ -89,8 +89,20 @@ export async function visual(el) {
     tarirView();
     setInterval(tarirView, 300000)
     tooltip()
+    /*
+        const grafOld = document.querySelector('.infoGraf')
+        if (grafOld) {
+            grafOld.remove()
+        }*/
+    const grafOld = document.querySelector('.infoGraf')
+    if (grafOld) {
+        grafOld.remove()
+    }
+    const menuGraf = document.querySelector('.activMenuGraf')
 
-
+    if (menuGraf && menuGraf.textContent === 'Давление') {
+        setTimeout(datas, 300)
+    }
 
     const zamer = document.querySelectorAll('.zamer')
     const createList = document.querySelector('.createList')

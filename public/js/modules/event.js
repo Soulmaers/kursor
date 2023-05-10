@@ -10,7 +10,7 @@ import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
 import { iconParamsz, iconParamszWindows, deleteWinParams, fnToChange } from './configIcons.js'
-import { grafikStartPress } from './grafiks.js'
+import { datas } from './grafiks.js'
 
 
 
@@ -497,8 +497,38 @@ plug[2].addEventListener('click', () => {
     sections.style.width = '40%'
 
     visualGrafics.prepend(model);
-    grafikStartPress()
+
+    const menuGraf = document.querySelectorAll('.menu_graf')
+    menuGraf[0].classList.add('activMenuGraf')
+    datas()
+    //  podMenu()
+
 })
+
+
+//function podMenu() {
+const menuGraf = document.querySelectorAll('.menu_graf')
+menuGraf.forEach(el => {
+    el.addEventListener('click', () => {
+        menuGraf.forEach(e => {
+            e.classList.remove('activMenuGraf')
+        })
+        el.classList.add('activMenuGraf')
+        if (el.textContent === 'Давление') {
+            datas()
+
+        }
+        else {
+            const grafOld = document.querySelector('.infoGraf')
+            if (grafOld) {
+                grafOld.remove()
+            }
+        }
+    })
+})
+
+//}
+
 
 const card = document.querySelectorAll('.icon_card')
 card.forEach(elem => {

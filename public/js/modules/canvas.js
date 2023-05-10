@@ -121,7 +121,7 @@ export function alternativa(obj) {
         //  console.log(obn)
         return { time: format.parse(obn), speed: e.speed }
     })
-    // console.log(dataset)
+    console.log(dataset)
 
 
     var x = d3.scaleTime()
