@@ -438,6 +438,7 @@ export async function oil() {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
   // задаем x-шкалу
   const x = d3.scaleTime()
     .domain(d3.extent(data, (d) => new Date(d.time)))
@@ -470,7 +471,8 @@ export async function oil() {
   // добавляем ось x
   svg.append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x))
+    .call(d3.axisBottom(x)
+      .tickFormat(d3.timeFormat('%H:%M')));
   //  .tickFormat(d3.timeFormat('%H:%M')); // формат даты 
   // добавляем первую ось y
   svg.append("g")
