@@ -301,12 +301,6 @@ function grafikStartPress(times, datar) {
     }];
     console.log(selectedData)
     const selectedTime = timeConvert(selectedData[0].date)
-    console.log(0)
-    console.log(width)
-    console.log(0)
-    console.log(height)
-    console.log(mouseX)
-    console.log(mouseY)
     if (mouseX >= 0 && mouseX <= width
       && mouseY >= 0 && mouseY <= height) {
       console.log('подсказка')
@@ -341,22 +335,66 @@ function timeConvert(d) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export async function oil() {
   console.log('график топлива')
+
+
+
+  const active = document.querySelector('.color').id
+  console.log(active)
+
+  const global = await fnTime(active)
+  const sensArr = await fnPar(active)
+  const nameArr = await fnParMessage(active)
+  console.log(global)
+  console.log(sensArr)
+  console.log(nameArr)
+  const gl = global.map(it => {
+    return new Date(it)
+  })
+
+  console.log(gl)
+  const allArrNew = [];
+  nameArr.forEach((item) => {
+    allArrNew.push({ sens: item[0], params: item[1], value: [] })
+  })
+  sensArr.forEach(el => {
+    for (let i = 0; i < allArrNew.length; i++) {
+      //    console.log(Object.values(el)[i])
+      allArrNew[i].value.push(Object.values(el)[i])
+
+    }
+  })
+  // console.log(allArrNew)
+
+
+  const finishArrayData = []
+  console.log(allArrNew)
+  allArrNew.forEach(e => {
+    if (e.sens.startsWith('Бортовое') || e.sens.startsWith('Топливо')) {
+      //    console.log(e);
+      finishArrayData.push(e)
+    }
+  })
+  const object = {}
+  finishArrayData.forEach(el => {
+    object.time = gl
+    object.left = finishArrayData[0].value
+    object.right = finishArrayData[1].value
+  })
+
+  console.log(global)
+
+  const data = object.time.map((t, i) => ({
+    time: t,
+    left: Number(Number(object.left[i]).toFixed(0)),
+    right: Number(Number(object.right[i]).toFixed(0))
+  }))
+
+  // console.log(typeof data[0].oil)
+
+  console.log(data)
+
 
 
   const grafOld = document.querySelector('.infoGraf')
@@ -367,19 +405,31 @@ export async function oil() {
   const grafics = document.querySelector('.grafics')
   graf.classList.add('infoGraf')
   grafics.appendChild(graf)
+  /*
+    const data = [
+      { time: new Date('2021-09-01T00:00:00.000Z'), left: 10, right: 20 },
+      { time: new Date('2021-09-02T00:00:00'), left: 15, right: 25 },
+      { time: new Date('2021-09-03T00:00:00'), left: 20, right: 30 },
+      { time: new Date('2021-09-04T00:00:00'), left: 25, right: 35 },
+      { time: new Date('2021-09-05T00:00:00'), left: 30, right: 40 },
+      { time: new Date('2021-09-06T00:00:00'), left: 25, right: 35 },
+      { time: new Date('2021-09-07T00:00:00'), left: 20, right: 30 },
+      { time: new Date('2021-09-08T00:00:00'), left: 15, right: 25 },
+      { time: new Date('2021-09-09T00:00:00'), left: 10, right: 20 }
+    ];*/
 
-
-  const data = [
-    { time: new Date('2021-09-01T00:00:00'), left: 18, right: 20 },
-    { time: new Date('2021-09-02T14:00:00'), left: 15, right: 25 },
-    { time: new Date('2021-09-03T06:18:00'), left: 20, right: 40 },
-    { time: new Date('2021-09-04T00:00:00'), left: 25, right: 38 },
-    { time: new Date('2021-09-05T00:00:00'), left: 30, right: 42 },
-    { time: new Date('2021-09-06T00:00:00'), left: 25, right: 31 },
-    { time: new Date('2021-09-07T20:10:00'), left: 20, right: 30 },
-    { time: new Date('2021-09-08T00:00:00'), left: 15, right: 25 },
-    { time: new Date('2021-09-09T00:00:00'), left: 10, right: 20 }
-  ];
+  /*
+    const data = [
+      { time: new Date('2021-09-01T00:00:00.000Z'), left: 62, right: 25 },
+      { time: new Date('2021-09-02T00:00:00'), left: 61, right: 24 },
+      { time: new Date('2021-09-03T00:00:00'), left: 60, right: 25 },
+      { time: new Date('2021-09-04T00:00:00'), left: 59, right: 24 },
+      { time: new Date('2021-09-05T00:00:00'), left: 58, right: 25 },
+      { time: new Date('2021-09-06T00:00:00'), left: 57, right: 24 },
+      { time: new Date('2021-09-07T00:00:00'), left: 56, right: 25 },
+      { time: new Date('2021-09-08T00:00:00'), left: 55, right: 24 },
+      { time: new Date('2021-09-09T00:00:00'), left: 54, right: 25 },
+    ];*/
   // устанавливаем размеры контейнера
   const margin = { top: 20, right: 60, bottom: 30, left: 60 },
     width = 800 - margin.left - margin.right,
@@ -394,7 +444,7 @@ export async function oil() {
 
   // задаем x-шкалу
   const x = d3.scaleTime()
-    .domain(d3.extent(data, (d) => d.time))
+    .domain(d3.extent(data, (d) => new Date(d.time)))
     .range([0, width]);
 
   // задаем y-шкалу для первой оси y
@@ -421,6 +471,7 @@ export async function oil() {
     .attr("transform", "translate(" + width + ", 0)")
     .call(d3.axisRight(y2));
 
+  //console.log("attribute d: " + d3.select("path").attr("d"));
   // добавляем линии для первой оси y
   svg.append("path")
     .datum(data)
@@ -528,9 +579,6 @@ export async function oil() {
   pat.on("mousemove", function (d) {
     // Определяем координаты курсора в отношении svg
     const [xPosition, yPosition] = d3.mouse(this);
-    // const xPosition = event.clientX - left;
-    //const yPosition = event.clientY - top;
-
     // Определяем ближайшую точку на графике
     const bisect = d3.bisector(d => d.time).right;
     const x0 = x.invert(xPosition);
