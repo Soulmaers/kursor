@@ -2,8 +2,8 @@
 
 
 export async function datas() {
-  const menuGraf = document.querySelectorAll('.menu_graf')
-  menuGraf[0].classList.add('activMenuGraf')
+  //const menuGraf = document.querySelectorAll('.menu_graf')
+  // menuGraf[0].classList.add('activMenuGraf')
 
 
   const active = document.querySelector('.color').id
@@ -237,15 +237,17 @@ function grafikStartPress(times, datar) {
     .enter()
     .append('g')
     .attr('class', 'series-group')
-    .attr('transform', (d, i) => `translate(0, ${yAxisName(d.sens)})`);
+    .attr('transform', (d, i) => `translate(0, ${yAxisName(d.sens)})`)
+    .on('mouseover', mouseover)
+    .on('mousemove', mousemove)
+    .on('mouseout', mouseout);
+
   seriesGroup.append('path')
     .attr('class', 'area')
     .attr('d', d => area(d.value))
     .attr('fill', 'steelblue').attr('stroke', 'black')
     .attr('stroke-width', '1px')
-    .on('mouseover', mouseover)
-    .on('mousemove', mousemove)
-    .on('mouseout', mouseout);
+
 
   // добавляем контур для каждой области графика
   seriesGroup.append('path')
@@ -256,7 +258,12 @@ function grafikStartPress(times, datar) {
     .attr('stroke-width', '1px')
 
   seriesGroup.append('text').attr('class', 'series-name')
-    .attr('x', -10).attr('y', height / 2).style('text-anchor', 'end').style('font-size', '14px').text(d => d.sens);
+    .attr('x', -10)
+    .attr('y', height / 2)
+    .style('text-anchor', 'end')
+    .style('font-size', '14px')
+    .text(d => d.sens);
+
   const xAxisTicks = svg.append('g')
     .attr('transform', `translate(0, ${height * global.series.length})`)
     .call(xAxis);
@@ -282,10 +289,11 @@ function grafikStartPress(times, datar) {
   }
 
   function mousemove(d) {
-    const x = xScale.invert(d3.mouse(this)[0]);
-    const i = bisect(global.dates, x, 1);
-    console.log(x)
-    console.log(i)
+    // const x = xScale.invert(d3.mouse(this)[0]);
+    const [mouseX, mouseY] = d3.mouse(this);
+    const xValue = xScale.invert(mouseX);
+    const i = bisect(global.dates, xValue, 1);
+
     const selectedData = [{
       sens: d.sens,
       value: d.value[i],
@@ -293,12 +301,23 @@ function grafikStartPress(times, datar) {
     }];
     console.log(selectedData)
     const selectedTime = timeConvert(selectedData[0].date)
-    tooltip.selectAll('.tooltipText') // выбираем текст внутри tooltip
-      .html(`"Колесо": ${selectedData[0].sens}\n"Время": ${selectedTime}\n"Значение": ${selectedData[0].value}'Бар'`);
-
-    tooltip.style('display', 'block') // показываем подсказку
-    // .style('left', (d3.event.pageX + 10) + "px")
-    // .style('top', (d3.event.pageY - 28) + "px");
+    console.log(0)
+    console.log(width)
+    console.log(0)
+    console.log(height)
+    console.log(mouseX)
+    console.log(mouseY)
+    if (mouseX >= 0 && mouseX <= width
+      && mouseY >= 0 && mouseY <= height) {
+      console.log('подсказка')
+      tooltip.selectAll('.tooltipText') // выбираем текст внутри tooltip
+        .html(`"Колесо": ${selectedData[0].sens}\n"Время": ${selectedTime}\n"Значение": ${selectedData[0].value}'Бар'`);
+      tooltip.style('display', 'block') // показываем подсказку
+      return
+    }
+    else {
+      console.log('ничего')
+    }
   }
   function mouseout() {
     tooltip.style('display', 'none');
@@ -308,8 +327,228 @@ function grafikStartPress(times, datar) {
 
 function timeConvert(d) {
   const date = new Date(d);
+  const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+    "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+  const month = monthNames[date.getMonth()];
+  const day = date.getDate();
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  const timeString = hours + ":" + (minutes < 10 ? "0" : "") + minutes;
-  return timeString
+  const timeString = `${month} ${day}, ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+  return timeString;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export async function oil() {
+  console.log('график топлива')
+
+
+  const grafOld = document.querySelector('.infoGraf')
+  if (grafOld) {
+    grafOld.remove()
+  }
+  const graf = document.createElement('div')
+  const grafics = document.querySelector('.grafics')
+  graf.classList.add('infoGraf')
+  grafics.appendChild(graf)
+
+
+  const data = [
+    { time: new Date('2021-09-01T00:00:00'), left: 18, right: 20 },
+    { time: new Date('2021-09-02T14:00:00'), left: 15, right: 25 },
+    { time: new Date('2021-09-03T06:18:00'), left: 20, right: 40 },
+    { time: new Date('2021-09-04T00:00:00'), left: 25, right: 38 },
+    { time: new Date('2021-09-05T00:00:00'), left: 30, right: 42 },
+    { time: new Date('2021-09-06T00:00:00'), left: 25, right: 31 },
+    { time: new Date('2021-09-07T20:10:00'), left: 20, right: 30 },
+    { time: new Date('2021-09-08T00:00:00'), left: 15, right: 25 },
+    { time: new Date('2021-09-09T00:00:00'), left: 10, right: 20 }
+  ];
+  // устанавливаем размеры контейнера
+  const margin = { top: 20, right: 30, bottom: 30, left: 40 },
+    width = 800 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+  // создаем svg контейнер
+  const svg = d3.select(".infoGraf").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // задаем x-шкалу
+  const x = d3.scaleTime()
+    .domain(d3.extent(data, (d) => d.time))
+    .range([0, width]);
+
+  // задаем y-шкалу для первой оси y
+  const y1 = d3.scaleLinear()
+    .domain(d3.extent(data, (d) => d.left))
+    .range([height, 0]);
+
+  // задаем y-шкалу для второй оси y
+  const y2 = d3.scaleLinear()
+    .domain(d3.extent(data, (d) => d.right))
+    .range([height, 0]);
+
+  // добавляем ось x
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  // добавляем первую ось y
+  svg.append("g")
+    .call(d3.axisLeft(y1));
+
+  // добавляем вторую ось y
+  svg.append("g")
+    .attr("transform", "translate(" + width + ", 0)")
+    .call(d3.axisRight(y2));
+
+  // добавляем линии для первой оси y
+  svg.append("path")
+    .datum(data)
+    .attr("fill", "none")
+    .attr("stroke", "blue")
+    .attr("stroke-width", 1.5)
+    .attr("d", d3.line()
+      .x((d) => x(d.time))
+      .y((d) => y1(d.left))
+    );
+
+  // добавляем линии для второй оси y
+  svg.append("path")
+    .datum(data)
+    .attr("fill", "none")
+    .attr("stroke", "orange")
+    .attr("stroke-width", 1.5)
+    .attr("d", d3.line()
+      .x((d) => x(d.time))
+      .y((d) => y2(d.right))
+    );
+
+
+  // добавляем области для первой кривой
+  svg.append("path")
+    .datum(data)
+    .attr("fill", "blue")
+    .attr("fill-opacity", 0.3)
+    .attr("stroke", "black")
+    .attr("stroke-width", 1)
+    .attr("d", d3.area()
+      .x(d => x(d.time))
+      .y0(height)
+      .y1(d => y1(d.left))
+    );
+
+  // добавляем области для второй кривой
+  svg.append("path")
+    .datum(data)
+    .attr("fill", "#32a885")
+    .attr("fill-opacity", 0.3)
+    .attr("stroke", "black")
+    .attr("stroke-width", 1)
+    .attr("d", d3.area()
+      .x(d => x(d.time))
+      .y0(height)
+      .y1(d => y2(d.right))
+    );
+  // добавляем подпись первой кривой
+  svg.append("circle")
+    .attr("r", 6)
+    .attr("cx", width - 200)
+    .attr("cy", y1(data[data.length - 1].left) - 340)
+    .attr("fill", "blue")
+    .attr('stroke', 'black')
+
+  svg.append("text")
+    .attr("x", width - 114)
+    .attr("y", y1(data[data.length - 1].left) - 334)
+    .style("text-anchor", "end")
+    .text("Топливо")
+    .attr("fill", "black");
+
+  // добавляем подпись второй кривой
+  svg.append("circle")
+    .attr("r", 6)
+    .attr("cx", width - 200)
+    .attr("cy", y2(data[data.length - 1].right) - 320)
+    .attr("fill", "#32a885")
+    .attr('stroke', 'black')
+
+  svg.append("text")
+    .attr("x", width - 40)
+    .attr("y", y2(data[data.length - 1].right) - 314)
+    .style("text-anchor", "end")
+    .text("Бортовое питание")
+    .attr("fill", "black");
+
+  const tooltip = d3.select(".infoGraf").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+
+  svg.on("mousemove", function (d) {
+    // Определяем координаты курсора в отношении svg
+    const [xPosition, yPosition] = d3.mouse(this);
+    // const xPosition = event.clientX - left;
+    //const yPosition = event.clientY - top;
+
+    // Определяем ближайшую точку на графике
+    const bisect = d3.bisector(d => d.time).right;
+    const x0 = x.invert(xPosition);
+    const i = bisect(data, x0, 1);
+    const d0 = data[i - 1];
+    const d1 = data[i];
+    d = x0 - d0.time > d1.time - x0 ? d1 : d0;
+
+
+    // Обновить текст в тултипе
+    if (d) {
+      tooltip.select(".tooltip-text").text(`Дата: ${d.date}, значение: ${d.value}`);
+    }
+
+    // Позиционировать тултип относительно координат мыши
+    const tooltipWidth = tooltip.node().getBoundingClientRect().width;
+    tooltip.style("left", `${xPosition - tooltipWidth / 2}px`);
+    tooltip.style("top", `${yPosition - 50}px`);
+
+    // Показать тултип, если он скрыт
+    tooltip.style("display", "block");
+
+    const selectedTime = timeConvert(d.time)
+    // Отображаем подсказку с координатами и значениями по оси y
+    tooltip.transition()
+      .duration(200)
+      .style("opacity", 0.9);
+    tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${d.left}<br/>Бортовое питание: ${d.right}`)
+      .style("top", `${yPosition}px`)
+      .style("left", `${xPosition}px`);
+  })
+
+    // Добавляем обработчик события mouseout, чтобы скрыть подсказку
+    .on("mouseout", function (event, d) {
+      tooltip.transition()
+        .duration(500)
+        .style("opacity", 0);
+    });
+
+
+}
+

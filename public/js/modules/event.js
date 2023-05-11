@@ -10,7 +10,7 @@ import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
 import { iconParamsz, iconParamszWindows, deleteWinParams, fnToChange } from './configIcons.js'
-import { datas } from './grafiks.js'
+import { datas, oil } from './grafiks.js'
 
 
 
@@ -516,7 +516,12 @@ menuGraf.forEach(el => {
         el.classList.add('activMenuGraf')
         if (el.textContent === 'Давление') {
             datas()
+            return
 
+        }
+        if (el.textContent === 'Топливо') {
+            oil()
+            return
         }
         else {
             const grafOld = document.querySelector('.infoGraf')
