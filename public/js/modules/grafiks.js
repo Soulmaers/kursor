@@ -381,7 +381,7 @@ export async function oil() {
     { time: new Date('2021-09-09T00:00:00'), left: 10, right: 20 }
   ];
   // устанавливаем размеры контейнера
-  const margin = { top: 20, right: 30, bottom: 30, left: 40 },
+  const margin = { top: 20, right: 60, bottom: 30, left: 60 },
     width = 800 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
@@ -432,6 +432,8 @@ export async function oil() {
       .y((d) => y1(d.left))
     );
 
+
+
   // добавляем линии для второй оси y
   svg.append("path")
     .datum(data)
@@ -443,11 +445,28 @@ export async function oil() {
       .y((d) => y2(d.right))
     );
 
+  svg.append("text")
+    .attr("x", -110)
+    .attr("y", -25)
+    .attr("transform", "rotate(-90)")
+    .attr("text-anchor", "end")
+    .text("Объем, л");
+
+
+  svg.append("text")
+    .attr("x", -100)
+    .attr("y", 720)
+    .attr("transform", "rotate(-90)")
+    .attr("text-anchor", "end")
+    .text("Напряжение, В");
+
+
 
   // добавляем области для первой кривой
   svg.append("path")
     .datum(data)
     .attr("fill", "blue")
+    .attr("class", "pat")
     .attr("fill-opacity", 0.3)
     .attr("stroke", "black")
     .attr("stroke-width", 1)
@@ -460,6 +479,7 @@ export async function oil() {
   // добавляем области для второй кривой
   svg.append("path")
     .datum(data)
+    .attr("class", "pat")
     .attr("fill", "#32a885")
     .attr("fill-opacity", 0.3)
     .attr("stroke", "black")
@@ -503,8 +523,9 @@ export async function oil() {
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-
-  svg.on("mousemove", function (d) {
+  const pat = svg.selectAll('.pat')
+  console.log(pat)
+  pat.on("mousemove", function (d) {
     // Определяем координаты курсора в отношении svg
     const [xPosition, yPosition] = d3.mouse(this);
     // const xPosition = event.clientX - left;
