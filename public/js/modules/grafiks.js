@@ -372,15 +372,34 @@ export async function oil() {
   console.log(allArrNew)
   allArrNew.forEach(e => {
     if (e.sens.startsWith('Бортовое') || e.sens.startsWith('Топливо')) {
-      //    console.log(e);
+      //  console.log(e);
       finishArrayData.push(e)
     }
   })
+
+  const newData = finishArrayData.map(el => {
+    return {
+      ...el,
+      value: el.value.map(it => {
+        if (it === -348201.3876) {
+          return 0
+        } else {
+          return it
+        }
+      })
+    };
+  });
+
   const object = {}
-  finishArrayData.forEach(el => {
+  newData.forEach(el => {
     object.time = gl
-    object.left = finishArrayData[0].value
-    object.right = finishArrayData[1].value
+    if (el.sens.startsWith('Топливо')) {
+      object.left = el.value
+    }
+    else {
+      object.right = el.value
+    }
+
   })
 
   console.log(global)
