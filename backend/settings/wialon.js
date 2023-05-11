@@ -50,7 +50,7 @@ function speed(t1, t2, int, id, res) {
 
     session.request('messages/load_interval', prms2)
         .then(function (data) {
-            console.log(data)
+            //  console.log(data)
             const arr2 = Object.values(data);
             const arrIterTime = [];
             const arrIterTimeDate = [];
@@ -62,7 +62,7 @@ function speed(t1, t2, int, id, res) {
                 const dateObj = new Date(item * 1000);
                 arrIterTimeDateU.push(dateObj);
                 const utcString = dateObj.toUTCString();
-
+                //  console.log(utcString)
                 const arrTimeDate = utcString.slice(8, 24);
                 arrIterTimeDate.push(arrTimeDate);
             })

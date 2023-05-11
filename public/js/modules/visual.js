@@ -12,7 +12,7 @@ import { iconFind, iconFindWindows, refactor } from './configIcons.js'
 import { grafikPoly, tarirView } from './staticObject.js'
 import { tooltip } from './cursorTooltip.js'
 import { ggg } from './menu.js'
-import { datas } from './grafiks.js'
+import { datas, oil } from './grafiks.js'
 import { Tooltip } from '../class/Tooltip.js'
 
 
@@ -101,7 +101,10 @@ export async function visual(el) {
     const menuGraf = document.querySelector('.activMenuGraf')
 
     if (menuGraf && menuGraf.textContent === 'Давление') {
-        setTimeout(datas, 500)
+        setTimeout(datas, 1000)
+    }
+    if (menuGraf && menuGraf.textContent === 'Топливо') {
+        setTimeout(oil, 500)
     }
 
     const zamer = document.querySelectorAll('.zamer')

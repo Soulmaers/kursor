@@ -520,7 +520,7 @@ menuGraf.forEach(el => {
 
         }
         if (el.textContent === 'Топливо') {
-            setTimeout(oil, 1000)
+            oil()
             return
         }
         else {

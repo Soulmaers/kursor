@@ -224,7 +224,7 @@ function grafikStartPress(times, datar) {
     .range([0, width])
     .domain(d3.extent(global.dates, d => new Date(d)));
 
-
+  console.log(global.dates)
   const area = d3.area().curve(d3.curveBasis).x((d, i) => xScale(new Date(global.dates[i]))).y0(height).y1(d => yAxisValue(d));
   const line = d3.line().curve(d3.curveBasis).x((d, i) => xScale(new Date(global.dates[i]))).y(d => yAxisValue(d));
   const xAxis = d3.axisBottom(xScale)
@@ -376,22 +376,22 @@ export async function oil() {
       finishArrayData.push(e)
     }
   })
-
-  const newData = finishArrayData.map(el => {
-    return {
-      ...el,
-      value: el.value.map(it => {
-        if (it === -348201.3876) {
-          return 0
-        } else {
-          return it
-        }
-      })
-    };
-  });
+  /*
+    const newData = finishArrayData.map(el => {
+      return {
+        ...el,
+        value: el.value.map(it => {
+          if (it === -348201.3876) {
+            return 0
+          } else {
+            return it
+          }
+        })
+      };
+    });*/
 
   const object = {}
-  newData.forEach(el => {
+  finishArrayData.forEach(el => {
     object.time = gl
     if (el.sens.startsWith('Топливо')) {
       object.left = el.value
@@ -441,7 +441,8 @@ export async function oil() {
   // задаем x-шкалу
   const x = d3.scaleTime()
     .domain(d3.extent(data, (d) => new Date(d.time)))
-    .range([0, width]);
+    .range([0, width])
+  //   .tickFormat(d3.timeFormat('%H:%M')); // формат даты 
 
   // задаем y-шкалу для первой оси y
   const y1 = d3.scaleLinear()
@@ -469,8 +470,8 @@ export async function oil() {
   // добавляем ось x
   svg.append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x));
-
+    .call(d3.axisBottom(x))
+  //  .tickFormat(d3.timeFormat('%H:%M')); // формат даты 
   // добавляем первую ось y
   svg.append("g")
     .call(d3.axisLeft(y1));
@@ -604,8 +605,9 @@ export async function oil() {
 
     // Позиционировать тултип относительно координат мыши
     const tooltipWidth = tooltip.node().getBoundingClientRect().width;
-    tooltip.style("left", `${xPosition - tooltipWidth / 2}px`);
-    tooltip.style("top", `${yPosition - 50}px`);
+    console.log
+    tooltip.style("left", `${xPosition + 100}px`);
+    tooltip.style("top", `${yPosition + 100}px`);
 
     // Показать тултип, если он скрыт
     tooltip.style("display", "block");
@@ -616,8 +618,8 @@ export async function oil() {
       .duration(200)
       .style("opacity", 0.9);
     tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${d.oil}<br/>Бортовое питание: ${d.pwr}`)
-      .style("top", `${yPosition}px`)
-      .style("left", `${xPosition}px`);
+    // .style("top", `${yPosition + 50}px`)
+    // .style("left", `${xPosition + 50}px`);
   })
 
     // Добавляем обработчик события mouseout, чтобы скрыть подсказку
