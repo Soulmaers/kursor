@@ -387,8 +387,8 @@ export async function oil() {
 
   const data = object.time.map((t, i) => ({
     time: t,
-    left: Number(Number(object.left[i]).toFixed(0)),
-    right: Number(Number(object.right[i]).toFixed(0))
+    oil: Number(Number(object.left[i]).toFixed(0)),
+    pwr: Number(Number(object.right[i]).toFixed(0))
   }))
 
   // console.log(typeof data[0].oil)
@@ -405,35 +405,12 @@ export async function oil() {
   const grafics = document.querySelector('.grafics')
   graf.classList.add('infoGraf')
   grafics.appendChild(graf)
-  /*
-    const data = [
-      { time: new Date('2021-09-01T00:00:00.000Z'), left: 10, right: 20 },
-      { time: new Date('2021-09-02T00:00:00'), left: 15, right: 25 },
-      { time: new Date('2021-09-03T00:00:00'), left: 20, right: 30 },
-      { time: new Date('2021-09-04T00:00:00'), left: 25, right: 35 },
-      { time: new Date('2021-09-05T00:00:00'), left: 30, right: 40 },
-      { time: new Date('2021-09-06T00:00:00'), left: 25, right: 35 },
-      { time: new Date('2021-09-07T00:00:00'), left: 20, right: 30 },
-      { time: new Date('2021-09-08T00:00:00'), left: 15, right: 25 },
-      { time: new Date('2021-09-09T00:00:00'), left: 10, right: 20 }
-    ];*/
 
-  /*
-    const data = [
-      { time: new Date('2021-09-01T00:00:00.000Z'), left: 62, right: 25 },
-      { time: new Date('2021-09-02T00:00:00'), left: 61, right: 24 },
-      { time: new Date('2021-09-03T00:00:00'), left: 60, right: 25 },
-      { time: new Date('2021-09-04T00:00:00'), left: 59, right: 24 },
-      { time: new Date('2021-09-05T00:00:00'), left: 58, right: 25 },
-      { time: new Date('2021-09-06T00:00:00'), left: 57, right: 24 },
-      { time: new Date('2021-09-07T00:00:00'), left: 56, right: 25 },
-      { time: new Date('2021-09-08T00:00:00'), left: 55, right: 24 },
-      { time: new Date('2021-09-09T00:00:00'), left: 54, right: 25 },
-    ];*/
+
   // устанавливаем размеры контейнера
-  const margin = { top: 20, right: 60, bottom: 30, left: 60 },
+  const margin = { top: 100, right: 60, bottom: 30, left: 60 },
     width = 800 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    height = 600 - margin.top - margin.bottom;
 
   // создаем svg контейнер
   const svg = d3.select(".infoGraf").append("svg")
@@ -449,13 +426,26 @@ export async function oil() {
 
   // задаем y-шкалу для первой оси y
   const y1 = d3.scaleLinear()
-    .domain(d3.extent(data, (d) => d.left))
+    .domain(d3.extent(data, (d) => d.oil))
     .range([height, 0]);
 
   // задаем y-шкалу для второй оси y
   const y2 = d3.scaleLinear()
-    .domain(d3.extent(data, (d) => d.right))
+    .domain(d3.extent(data, (d) => d.pwr))
     .range([height, 0]);
+
+
+  // добавляем текстовый элемент
+  svg.append("text")
+    // позиционируем по центру в верхней части графика
+    .attr("x", 350)
+    .attr("y", -50)
+    .style("font-size", "22px")
+    // выравнивание по центру
+    .attr("text-anchor", "middle")
+    // добавляем текст
+    .text("График Топливо/Бортовое питание");
+
 
   // добавляем ось x
   svg.append("g")
@@ -480,7 +470,7 @@ export async function oil() {
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
       .x((d) => x(d.time))
-      .y((d) => y1(d.left))
+      .y((d) => y1(d.oil))
     );
 
 
@@ -489,16 +479,16 @@ export async function oil() {
   svg.append("path")
     .datum(data)
     .attr("fill", "none")
-    .attr("stroke", "orange")
+    .attr("stroke", "black")
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
       .x((d) => x(d.time))
-      .y((d) => y2(d.right))
+      .y((d) => y2(d.pwr))
     );
 
   svg.append("text")
-    .attr("x", -110)
-    .attr("y", -25)
+    .attr("x", -130)
+    .attr("y", -35)
     .attr("transform", "rotate(-90)")
     .attr("text-anchor", "end")
     .text("Объем, л");
@@ -506,7 +496,7 @@ export async function oil() {
 
   svg.append("text")
     .attr("x", -100)
-    .attr("y", 720)
+    .attr("y", 730)
     .attr("transform", "rotate(-90)")
     .attr("text-anchor", "end")
     .text("Напряжение, В");
@@ -524,7 +514,7 @@ export async function oil() {
     .attr("d", d3.area()
       .x(d => x(d.time))
       .y0(height)
-      .y1(d => y1(d.left))
+      .y1(d => y1(d.oil))
     );
 
   // добавляем области для второй кривой
@@ -538,19 +528,19 @@ export async function oil() {
     .attr("d", d3.area()
       .x(d => x(d.time))
       .y0(height)
-      .y1(d => y2(d.right))
+      .y1(d => y2(d.pwr))
     );
   // добавляем подпись первой кривой
   svg.append("circle")
     .attr("r", 6)
-    .attr("cx", width - 200)
-    .attr("cy", y1(data[data.length - 1].left) - 340)
+    .attr("cx", 200)
+    .attr("cy", -30)
     .attr("fill", "blue")
     .attr('stroke', 'black')
 
   svg.append("text")
-    .attr("x", width - 114)
-    .attr("y", y1(data[data.length - 1].left) - 334)
+    .attr("x", 270)
+    .attr("y", -25)
     .style("text-anchor", "end")
     .text("Топливо")
     .attr("fill", "black");
@@ -558,14 +548,14 @@ export async function oil() {
   // добавляем подпись второй кривой
   svg.append("circle")
     .attr("r", 6)
-    .attr("cx", width - 200)
-    .attr("cy", y2(data[data.length - 1].right) - 320)
+    .attr("cx", 300)
+    .attr("cy", -30)
     .attr("fill", "#32a885")
     .attr('stroke', 'black')
 
   svg.append("text")
-    .attr("x", width - 40)
-    .attr("y", y2(data[data.length - 1].right) - 314)
+    .attr("x", 445)
+    .attr("y", -25)
     .style("text-anchor", "end")
     .text("Бортовое питание")
     .attr("fill", "black");
@@ -606,7 +596,7 @@ export async function oil() {
     tooltip.transition()
       .duration(200)
       .style("opacity", 0.9);
-    tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${d.left}<br/>Бортовое питание: ${d.right}`)
+    tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${d.oil}<br/>Бортовое питание: ${d.pwr}`)
       .style("top", `${yPosition}px`)
       .style("left", `${xPosition}px`);
   })

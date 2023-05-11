@@ -101,7 +101,7 @@ export async function visual(el) {
     const menuGraf = document.querySelector('.activMenuGraf')
 
     if (menuGraf && menuGraf.textContent === 'Давление') {
-        setTimeout(datas, 300)
+        setTimeout(datas, 500)
     }
 
     const zamer = document.querySelectorAll('.zamer')
