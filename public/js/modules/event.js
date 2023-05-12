@@ -11,7 +11,7 @@ import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
 import { iconParamsz, iconParamszWindows, deleteWinParams, fnToChange } from './configIcons.js'
 import { datas, oil } from './grafiks.js'
-
+import { dataInput, dataSelect } from './speed.js'
 
 
 
@@ -498,9 +498,8 @@ plug[2].addEventListener('click', () => {
 
     visualGrafics.prepend(model);
 
-    const menuGraf = document.querySelectorAll('.menu_graf')
-    menuGraf[0].classList.add('activMenuGraf')
-    datas()
+
+    //  datas()
     //  podMenu()
 
 })
@@ -515,12 +514,26 @@ menuGraf.forEach(el => {
         })
         el.classList.add('activMenuGraf')
         if (el.textContent === 'Давление') {
-            datas()
+            const inputDate = document.querySelectorAll('.input_date')
+            console.log(inputDate)
+            if (inputDate[0].value !== '' && inputDate[1].value !== '') {
+                dataInput() //фунции выбора интервала графика скорости
+            }
+            if (inputDate[0].value == '' && inputDate[1].value == '') {
+                dataSelect() //фунции выбора интервала графика скорости
+            }
             return
 
         }
         if (el.textContent === 'Топливо') {
-            oil()
+            const inputDate = document.querySelectorAll('.input_date')
+            console.log(inputDate)
+            if (inputDate[0].value !== '' && inputDate[1].value !== '') {
+                dataInput() //фунции выбора интервала графика скорости
+            }
+            if (inputDate[0].value == '' && inputDate[1].value == '') {
+                dataSelect() //фунции выбора интервала графика скорости
+            }
             return
         }
         else {

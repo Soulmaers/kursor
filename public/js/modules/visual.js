@@ -14,6 +14,7 @@ import { tooltip } from './cursorTooltip.js'
 import { ggg } from './menu.js'
 import { datas, oil } from './grafiks.js'
 import { Tooltip } from '../class/Tooltip.js'
+import { graftest } from './graf.js'
 
 
 
@@ -98,14 +99,17 @@ export async function visual(el) {
     if (grafOld) {
         grafOld.remove()
     }
+
+    setTimeout(graftest, 500)
+    /*
     const menuGraf = document.querySelector('.activMenuGraf')
 
     if (menuGraf && menuGraf.textContent === 'Давление') {
-        setTimeout(datas, 1000)
+        setTimeout(datas, 500)
     }
     if (menuGraf && menuGraf.textContent === 'Топливо') {
         setTimeout(oil, 500)
-    }
+    }*/
 
     const zamer = document.querySelectorAll('.zamer')
     const createList = document.querySelector('.createList')
@@ -206,11 +210,9 @@ export function visualNone(e) {
 export function clearGraf() {
     const selectSpeed = document.querySelector('.select_speed')
     const inputDate = document.querySelectorAll('.input_date')
-    const grafView = document.querySelector('.grafik1')
     selectSpeed.value = 0;
     inputDate.forEach(e => {
         e.value = ''
-        grafView.style.display = 'none'
     })
 }
 

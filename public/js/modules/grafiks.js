@@ -1,15 +1,15 @@
 
 
 
-export async function datas() {
+export async function datas(t1, t2) {
   //const menuGraf = document.querySelectorAll('.menu_graf')
   // menuGraf[0].classList.add('activMenuGraf')
 
 
-  const active = document.querySelector('.color').id
+  const active = Number(document.querySelector('.color').id)
   console.log(active)
 
-  const global = await fnTime(active)
+  const global = await fnTime(t1, t2)
   const sensArr = await fnPar(active)
   const nameArr = await fnParMessage(active)
   console.log(global)
@@ -35,7 +35,7 @@ export async function datas() {
       finishArrayData.push(e)
     }
   })
-  console.log(global, finishArrayData)
+  //console.log(global, finishArrayData)
   grafikStartPress(global, finishArrayData)
 }
 
@@ -43,28 +43,33 @@ export async function datas() {
 
 
 
-async function fnTime(active) {
-  // текущая дата
-  const currentDate = new Date();
-  // Unix-время текущей даты
-  const currentUnixTime = Math.floor(currentDate.getTime() / 1000);
+async function fnTime(t1, t2) {
+  const active = Number(document.querySelector('.color').id)
+  console.log(t1, t2)
+  let timeOld;
+  let timeNow;
+  if (t1 === undefined && t2 === undefined) {
+    const currentDate = new Date();
+    timeNow = Math.floor(currentDate.getTime() / 1000);
 
-  // текущая дата минус 24 часа
-  const yesterdayDate = new Date();
-  yesterdayDate.setHours(yesterdayDate.getHours() - 24);
-  // Unix-время даты "вчера"
-  const yesterdayUnixTime = Math.floor(yesterdayDate.getTime() / 1000);
+    const yesterdayDate = new Date();
+    yesterdayDate.setHours(yesterdayDate.getHours() - 24);
+    timeOld = Math.floor(yesterdayDate.getTime() / 1000);
+  }
+  else {
+    timeOld = t1
+    timeNow = t2
+  }
+  console.log(timeOld, timeNow, active)
 
-  console.log(currentUnixTime);
-  console.log(yesterdayUnixTime);
   return new Promise(function (resolve, reject) {
     const prms2 = {
       "itemId": active,
-      "timeFrom": yesterdayUnixTime,
-      "timeTo": currentUnixTime,
+      "timeFrom": timeOld,
+      "timeTo": timeNow,
       "flags": 1,
-      "flagsMask": 65281,
-      "loadCount": 8271
+      "flagsMask": 1,
+      "loadCount": 60000
     }
 
     const remote2 = wialon.core.Remote.getInstance();
@@ -98,7 +103,7 @@ async function fnPar(active) {
     const prms3 = {
       "source": "",
       "indexFrom": 0,
-      "indexTo": 8271,
+      "indexTo": 60000,
       "unitId": active,
       "sensorId": 0
     };
@@ -110,7 +115,7 @@ async function fnPar(active) {
         }
 
         const sensArr = result;
-        console.log(sensArr)
+        //  console.log(sensArr)
         resolve(sensArr)
         //  console.log(sensArr)
       })
@@ -167,7 +172,7 @@ function grafikStartPress(times, datar) {
     dates: times,
     series: newData
   }
-  console.log(global)
+  // console.log(global)
   /*
     const newOnjData = datar.reduce((result, item) => {
       for (let i = 0; i < item.value.length; i++) {
@@ -194,7 +199,8 @@ function grafikStartPress(times, datar) {
     .range([0, height * global.series.length])
     .padding(1)
     .domain(global.series.map(({ sens }) => sens));
-
+  //const y = ({ value }) => d3.max(value)
+  //console.log(d3.max(global.series, ({ value }) => d3.max(value)))
   const yAxisValue = d3.scaleLinear()
     .range([height, 0])
     .domain([0, d3.max(global.series, ({ value }) => d3.max(value))])
@@ -219,12 +225,12 @@ function grafikStartPress(times, datar) {
     .text("График давления");
 
 
-
+  // console.log(d3.extent(global.dates, d => new Date(d)))
   const xScale = d3.scaleTime()
     .range([0, width])
     .domain(d3.extent(global.dates, d => new Date(d)));
 
-  console.log(global.dates)
+  //console.log(global.dates)
   const area = d3.area().curve(d3.curveBasis).x((d, i) => xScale(new Date(global.dates[i]))).y0(height).y1(d => yAxisValue(d));
   const line = d3.line().curve(d3.curveBasis).x((d, i) => xScale(new Date(global.dates[i]))).y(d => yAxisValue(d));
   const xAxis = d3.axisBottom(xScale)
@@ -299,7 +305,7 @@ function grafikStartPress(times, datar) {
       value: d.value[i],
       date: global.dates[i]
     }];
-    console.log(selectedData)
+    // console.log(selectedData)
     const selectedTime = timeConvert(selectedData[0].date)
     if (mouseX >= 0 && mouseX <= width
       && mouseY >= 0 && mouseY <= height) {
@@ -335,7 +341,7 @@ function timeConvert(d) {
 
 
 
-export async function oil() {
+export async function oil(t1, t2) {
   console.log('график топлива')
 
 
@@ -343,17 +349,17 @@ export async function oil() {
   const active = document.querySelector('.color').id
   console.log(active)
 
-  const global = await fnTime(active)
+  const global = await fnTime(t1, t2)
   const sensArr = await fnPar(active)
   const nameArr = await fnParMessage(active)
-  console.log(global)
-  console.log(sensArr)
-  console.log(nameArr)
+  // console.log(global)
+  // console.log(sensArr)
+  // console.log(nameArr)
   const gl = global.map(it => {
     return new Date(it)
   })
 
-  console.log(gl)
+  //console.log(gl)
   const allArrNew = [];
   nameArr.forEach((item) => {
     allArrNew.push({ sens: item[0], params: item[1], value: [] })
@@ -369,7 +375,7 @@ export async function oil() {
 
 
   const finishArrayData = []
-  console.log(allArrNew)
+  //console.log(allArrNew)
   allArrNew.forEach(e => {
     if (e.sens.startsWith('Бортовое') || e.sens.startsWith('Топливо')) {
       //  console.log(e);
@@ -402,7 +408,7 @@ export async function oil() {
 
   })
 
-  console.log(global)
+  // console.log(global)
 
   const data = object.time.map((t, i) => ({
     time: t,
@@ -412,7 +418,7 @@ export async function oil() {
 
   // console.log(typeof data[0].oil)
 
-  console.log(data)
+  // console.log(data)
 
 
 

@@ -5,8 +5,10 @@ import { alarmFind } from './alarmStorage.js';
 
 export function navigator() {
     const nav = document.querySelectorAll('.listItem')
-
     nav[0].classList.add('color')
+    const menuGraf = document.querySelectorAll('.menu_graf')
+    menuGraf[0].classList.add('activMenuGraf')
+
     visual(nav[0])
     var widthWind = document.querySelector('body').offsetWidth;
     if (widthWind <= 1200) {

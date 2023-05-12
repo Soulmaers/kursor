@@ -295,14 +295,12 @@ export function iconParams() {
                                             const hours = Math.floor(minutes / 60);
                                             const days = Math.floor(hours / 24);
                                             const day = days % 60;
-                                            const hour = hours % 60;
+                                            const hour = hours % 24;
                                             const minut = minutes % 60;
-                                            day === 0 ? dayS = '' : dayS = days + 'д.'
-                                            hour === 0 ? hourS = '' : hourS = hours + 'ч.'
-                                            //   console.log(`${dayS} ${hourS} ${minut} мин.`);
-                                            const mess = `${dayS} ${hourS} ${minut} мин.`
+                                            day === 0 ? dayS = '' : dayS = days + 'д ';
+                                            hour === 0 ? hourS = '' : hourS = hour + 'ч ';
+                                            const mess = `${dayS} ${hourS} ${minut} мин`
                                             return mess;
-
                                         }
                                         let statName;
                                         let statNameIng;
