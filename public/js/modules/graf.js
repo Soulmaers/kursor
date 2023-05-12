@@ -9,9 +9,17 @@ const selectSpeed = document.querySelector('.select_speed')
 btnForm.forEach(el =>
     el.addEventListener('click', () => {
         if (el.textContent === 'Выполнить' && inputDate[0].value !== '' && inputDate[1].value !== '') {
+            const grafOld = document.querySelector('.infoGraf')
+            if (grafOld) {
+                grafOld.remove()
+            }
             dataInput() //фунции выбора интервала графика скорости
         }
         if (el.textContent === 'Выполнить' && inputDate[0].value == '' && inputDate[1].value == '') {
+            const grafOld = document.querySelector('.infoGraf')
+            if (grafOld) {
+                grafOld.remove()
+            }
             dataSelect() //фунции выбора интервала графика скорости
         }
         if (el.textContent === 'Очистить') {
