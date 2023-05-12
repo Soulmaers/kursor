@@ -274,10 +274,7 @@ function grafikStartPress(times, datar) {
     tooltip.style('display', 'none');
   }
 
-
-
 }
-
 
 function timeConvert(d) {
   const date = new Date(d);
@@ -290,9 +287,6 @@ function timeConvert(d) {
   const timeString = `${month} ${day}, ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
   return timeString;
 }
-
-
-
 
 
 export async function oil(t1, t2) {
@@ -344,7 +338,6 @@ export async function oil(t1, t2) {
     else {
       object.right = el.value
     }
-
   })
 
   const data = object.time.map((t, i) => ({
@@ -419,10 +412,10 @@ export async function oil(t1, t2) {
     .attr("transform", "translate(" + width + ", 0)")
     .call(d3.axisRight(y2));
 
-  //console.log("attribute d: " + d3.select("path").attr("d"));
   // добавляем линии для первой оси y
   svg.append("path")
     .datum(data)
+    .attr("class", "line1")
     .attr("fill", "none")
     .attr("stroke", "blue")
     .attr("stroke-width", 1.5)
@@ -434,12 +427,45 @@ export async function oil(t1, t2) {
   // добавляем линии для второй оси y
   svg.append("path")
     .datum(data)
+    .attr("class", "line2")
     .attr("fill", "none")
     .attr("stroke", "black")
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
       .x((d) => x(d.time))
       .y((d) => y2(d.pwr))
+    );
+
+  ;
+
+  // добавляем области для первой кривой
+  svg.append("path")
+    .datum(data)
+    .attr("fill", "blue")
+    .attr("class", "pat")
+    .attr("class", "area1")
+    .attr("fill-opacity", 0.3)
+    .attr("stroke", "black")
+    .attr("stroke-width", 1)
+    .attr("d", d3.area()
+      .x(d => x(d.time))
+      .y0(height)
+      .y1(d => y1(d.oil))
+    );
+
+  // добавляем области для второй кривой
+  svg.append("path")
+    .datum(data)
+    .attr("class", "pat")
+    .attr("class", "area2")
+    .attr("fill", "#32a885")
+    .attr("fill-opacity", 0.3)
+    .attr("stroke", "black")
+    .attr("stroke-width", 1)
+    .attr("d", d3.area()
+      .x(d => x(d.time))
+      .y0(height)
+      .y1(d => y2(d.pwr))
     );
 
   svg.append("text")
@@ -454,35 +480,9 @@ export async function oil(t1, t2) {
     .attr("y", 730)
     .attr("transform", "rotate(-90)")
     .attr("text-anchor", "end")
-    .text("Напряжение, В");
+    .text("Напряжение, В")
 
-  // добавляем области для первой кривой
-  svg.append("path")
-    .datum(data)
-    .attr("fill", "blue")
-    .attr("class", "pat")
-    .attr("fill-opacity", 0.3)
-    .attr("stroke", "black")
-    .attr("stroke-width", 1)
-    .attr("d", d3.area()
-      .x(d => x(d.time))
-      .y0(height)
-      .y1(d => y1(d.oil))
-    );
 
-  // добавляем области для второй кривой
-  svg.append("path")
-    .datum(data)
-    .attr("class", "pat")
-    .attr("fill", "#32a885")
-    .attr("fill-opacity", 0.3)
-    .attr("stroke", "black")
-    .attr("stroke-width", 1)
-    .attr("d", d3.area()
-      .x(d => x(d.time))
-      .y0(height)
-      .y1(d => y2(d.pwr))
-    );
   // добавляем подпись первой кривой
   svg.append("circle")
     .attr("r", 6)
@@ -513,13 +513,173 @@ export async function oil(t1, t2) {
     .text("Бортовое питание")
     .attr("fill", "black");
 
+
+
+  // Add brushing
+  var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
+    .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+    .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
+  // Add the brushing
+  svg
+    .append("g")
+    .attr("class", "brush")
+    .call(brush);
+
+  // A function that set idleTimeOut to null
+  var idleTimeout
+  function idled() { idleTimeout = null; }
+  function updateChart() {
+    // What are the selected boundaries?
+    const extent = d3.event.selection
+
+    // If no selection or selection is too small, back to initial coordinate. Otherwise, update X axis domain
+    if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) { // проверяем, что расстояние между границами больше 1 минуты
+      if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+      x.domain([4, 8])
+    } else {
+      x.domain([x.invert(extent[0]), x.invert(extent[1])])
+      svg.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+    }
+
+    // Update axis and line position
+    svg.select("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x)
+        .tickFormat(d3.timeFormat('%H:%M')))
+      .transition().duration(1000).call(d3.axisBottom(x))
+
+
+    console.log(data)
+    svg.select('.line1')
+      .datum(data)
+      .transition()
+      .duration(1000)
+      .attr("fill", "none")
+      .attr("stroke", "blue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x((d) => x(d.time))
+        .y((d) => y1(d.oil))
+      );
+
+    svg.select('.line2')
+      .datum(data)
+      .transition()
+      .duration(1000)
+      .attr("fill", "none")
+      .attr("stroke", "blue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x((d) => x(d.time))
+        .y((d) => y2(d.pwr))
+      )
+
+    svg.select(".area1")
+      .datum(data)
+      .transition()
+      .duration(1000)
+      .attr("fill", "blue")
+      .attr("class", "pat")
+      .attr("class", "area1")
+      .attr("fill-opacity", 0.3)
+      .attr("stroke", "black")
+      .attr("stroke-width", 1)
+      .attr("d", d3.area()
+        .x(d => x(d.time))
+        .y0(height)
+        .y1(d => y1(d.oil))
+      );
+
+    svg.select(".area2")
+      .datum(data)
+      .transition()
+      .duration(1000)
+      .attr("class", "pat")
+      .attr("class", "area2")
+      .attr("fill", "#32a885")
+      .attr("fill-opacity", 0.3)
+      .attr("stroke", "black")
+      .attr("stroke-width", 1)
+      .attr("d", d3.area()
+        .x(d => x(d.time))
+        .y0(height)
+        .y1(d => y2(d.pwr))
+      );
+  }
+
+
+  // If user double click, reinitialize the chart
+  svg.on("dblclick", function () {
+    x.domain(d3.extent(data, (d) => new Date(d.time)))
+    svg.select("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x)
+        .tickFormat(d3.timeFormat('%H:%M')))
+      .transition().call(d3.axisBottom(x))
+    svg.select('.line1')
+      .datum(data)
+      .transition()
+      //  .duration(1000)
+      .attr("fill", "none")
+      .attr("stroke", "blue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x((d) => x(d.time))
+        .y((d) => y1(d.oil))
+      );
+
+    svg.select('.line2')
+      .datum(data)
+      .transition()
+      // .duration(1000)
+      .attr("fill", "none")
+      .attr("stroke", "blue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x((d) => x(d.time))
+        .y((d) => y2(d.pwr))
+      )
+
+    svg.select(".area1")
+      .datum(data)
+      .transition()
+      // .duration(1000)
+      .attr("fill", "blue")
+      .attr("class", "pat")
+      .attr("class", "area1")
+      .attr("fill-opacity", 0.3)
+      .attr("stroke", "black")
+      .attr("stroke-width", 1)
+      .attr("d", d3.area()
+        .x(d => x(d.time))
+        .y0(height)
+        .y1(d => y1(d.oil))
+      );
+
+    svg.select(".area2")
+      .datum(data)
+      .transition()
+      //  .duration(1000)
+      .attr("class", "pat")
+      .attr("class", "area2")
+      .attr("fill", "#32a885")
+      .attr("fill-opacity", 0.3)
+      .attr("stroke", "black")
+      .attr("stroke-width", 1)
+      .attr("d", d3.area()
+        .x(d => x(d.time))
+        .y0(height)
+        .y1(d => y2(d.pwr))
+      );
+  });
+
   const tooltip = d3.select(".infoGraf").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-  const pat = svg.selectAll('.pat')
-  console.log(pat)
-  pat.on("mousemove", function (d) {
+  //const pat = svg.selectAll('.pat')
+  // console.log(pat)
+  svg.on("mousemove", function (d) {
     // Определяем координаты курсора в отношении svg
     const [xPosition, yPosition] = d3.mouse(this);
     // Определяем ближайшую точку на графике
@@ -560,59 +720,6 @@ export async function oil(t1, t2) {
         .style("opacity", 0);
     });
 
-
-
-  // Add brushing
-  var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-    .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-    .on("end", updateChart)
-
-  // A function that set idleTimeOut to null
-  var idleTimeout
-  function idled() { idleTimeout = null; }
-
-  // A function that update the chart for given boundaries
-  function updateChart() {
-
-    // What are the selected boundaries?
-    const extent = d3.event.selection
-
-    // If no selection, back to initial coordinate. Otherwise, update X axis domain
-    if (!extent) {
-      if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-      x.domain([4, 8])
-    } else {
-      x.domain([x.invert(extent[0]), x.invert(extent[1])])
-      line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
-    }
-
-    // Update axis and line position
-    xAxis.transition().duration(1000).call(d3.axisBottom(x))
-    line
-      .select('.line')
-      .transition()
-      .duration(1000)
-      .attr("d", d3.line()
-        .x(function (d) { return x(d.time) })
-        .y(function (d) { return y1(d.oil) })
-        .y(function (d) { return y2(d.pwr) })
-      )
-  }
-
-  // If user double click, reinitialize the chart
-  svg.on("dblclick", function () {
-    x.domain(d3.extent(obj, (d) => new Date(d.time)))
-    xAxis.transition().call(d3.axisBottom(x))
-    line
-      .select('.line')
-      .transition()
-      .attr("d", d3.line()
-        .x(function (d) { return x(d.time) })
-        .y(function (d) { return y1(d.oil) })
-        .y(function (d) { return y2(d.pwr) })
-      )
-
-  });
 
 
 }
@@ -696,10 +803,6 @@ export async function speed(t1, t2) {
     .attr("x", 0)
     .attr("y", 0);
 
-  // Add brushing
-  var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-    .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-    .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
 
   // Create the line variable: where both the line and the brush take place
   var line = svg.append('g')
@@ -716,8 +819,10 @@ export async function speed(t1, t2) {
       .x(function (d) { return x(d.time) })
       .y(function (d) { return y(d.val) })
     )
-
-
+  // Add brushing
+  var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
+    .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+    .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
   // Add the brushing
   line
     .append("g")
