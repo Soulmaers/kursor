@@ -1,5 +1,4 @@
-//import { chrt1 } from './canvas.js'
-import { iconSpeed } from './speed.js';
+
 import { geoPosition } from './requests.js'
 import { Tooltip } from '../class/Tooltip.js'
 //запрос на wialon за данными по скорости

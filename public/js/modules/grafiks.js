@@ -2,9 +2,6 @@
 
 
 export async function datas(t1, t2) {
-  //const menuGraf = document.querySelectorAll('.menu_graf')
-  // menuGraf[0].classList.add('activMenuGraf')
-
 
   const active = Number(document.querySelector('.color').id)
   console.log(active)
@@ -12,31 +9,23 @@ export async function datas(t1, t2) {
   const global = await fnTime(t1, t2)
   const sensArr = await fnPar(active)
   const nameArr = await fnParMessage(active)
-  console.log(global)
-  console.log(sensArr)
-  console.log(nameArr)
-
   const allArrNew = [];
   nameArr.forEach((item) => {
     allArrNew.push({ sens: item[0], params: item[1], value: [] })
   })
   sensArr.forEach(el => {
     for (let i = 0; i < allArrNew.length; i++) {
-      //    console.log(Object.values(el)[i])
       allArrNew[i].value.push(Object.values(el)[i])
 
     }
   })
-  // console.log(allArrNew)
   const finishArrayData = []
   allArrNew.forEach(e => {
     if (e.params.startsWith('tpms_p')) {
-      //    console.log(e);
       finishArrayData.push(e)
     }
   })
-  //console.log(global, finishArrayData)
-  grafikStartPress(global, finishArrayData)
+  grafikStartPress(global[0], finishArrayData)
 }
 
 
@@ -51,7 +40,6 @@ async function fnTime(t1, t2) {
   if (t1 === undefined && t2 === undefined) {
     const currentDate = new Date();
     timeNow = Math.floor(currentDate.getTime() / 1000);
-
     const yesterdayDate = new Date();
     yesterdayDate.setHours(yesterdayDate.getHours() - 24);
     timeOld = Math.floor(yesterdayDate.getTime() / 1000);
@@ -71,29 +59,22 @@ async function fnTime(t1, t2) {
       "flagsMask": 1,
       "loadCount": 60000
     }
-
     const remote2 = wialon.core.Remote.getInstance();
     remote2.remoteCall('messages/load_interval', prms2,
       async function (code, result) {
         if (code) {
           console.log(wialon.core.Errors.getErrorText(code));
         }
-        console.log(result)
-
         const global = [];
-        const press = []
+        const speed = []
         result.messages.forEach(el => {
           const timestamp = el.t;
           const date = new Date(timestamp * 1000);
           const isoString = date.toISOString();
-          // console.log(isoString); // "2023-05-03T08:41:57.000Z"
           global.push(isoString)
-          press.push(el.p.tpms_pressure_1)
-          //  console.log(global)
-          resolve(global)
+          speed.push(el.pos.s)
+          resolve([global, speed])
         })
-
-
       })
   })
 }
@@ -115,9 +96,7 @@ async function fnPar(active) {
         }
 
         const sensArr = result;
-        //  console.log(sensArr)
         resolve(sensArr)
-        //  console.log(sensArr)
       })
   })
 }
@@ -128,7 +107,6 @@ async function fnParMessage(active) {
       'id': active,
       'flags': 4096
     }
-
     const remote11 = wialon.core.Remote.getInstance();
     remote11.remoteCall('core/search_item', prmss,
       async function (code, result) {
@@ -145,7 +123,6 @@ async function fnParMessage(active) {
 }
 
 function grafikStartPress(times, datar) {
-
   const grafOld = document.querySelector('.infoGraf')
   if (grafOld) {
     grafOld.remove()
@@ -172,24 +149,6 @@ function grafikStartPress(times, datar) {
     dates: times,
     series: newData
   }
-  // console.log(global)
-  /*
-    const newOnjData = datar.reduce((result, item) => {
-      for (let i = 0; i < item.value.length; i++) {
-        result[i] = result[i] || {};
-        result[i][item.sens] = item.value[i];
-      }
-      return result;
-    }, []);
-  
-    newOnjData.forEach((el, index) => {
-      el.time = times[index].time
-  
-    })
-    console.log(newOnjData)
-  */
-
-
 
   const margin = { top: 50, right: 50, bottom: 50, left: 240 };
   const width = 800 - margin.left - margin.right;
@@ -212,7 +171,6 @@ function grafikStartPress(times, datar) {
     .append('g')
     .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-
   // добавляем текстовый элемент
   svg.append("text")
     // позиционируем по центру в верхней части графика
@@ -224,7 +182,6 @@ function grafikStartPress(times, datar) {
     // добавляем текст
     .text("График давления");
 
-
   // console.log(d3.extent(global.dates, d => new Date(d)))
   const xScale = d3.scaleTime()
     .range([0, width])
@@ -235,8 +192,6 @@ function grafikStartPress(times, datar) {
   const line = d3.line().curve(d3.curveBasis).x((d, i) => xScale(new Date(global.dates[i]))).y(d => yAxisValue(d));
   const xAxis = d3.axisBottom(xScale)
     .tickFormat(d3.timeFormat('%H:%M')); // формат даты 
-
-
 
   const seriesGroup = svg.selectAll('.series-group')
     .data(global.series)
@@ -253,7 +208,6 @@ function grafikStartPress(times, datar) {
     .attr('d', d => area(d.value))
     .attr('fill', 'steelblue').attr('stroke', 'black')
     .attr('stroke-width', '1px')
-
 
   // добавляем контур для каждой области графика
   seriesGroup.append('path')
@@ -277,8 +231,6 @@ function grafikStartPress(times, datar) {
   xAxisTicks.selectAll('line').attr('y2', 5).attr('stroke', 'steelblue');
   xAxisTicks.selectAll('text').style('text-anchor', 'middle').style('font-size', '12px').attr('dy', '1em').attr('transform', 'rotate(0) translate(-10,20)');
 
-
-
   const bisect = d3.bisector(d => new Date(d)).left;
   const tooltip = svg.append('g')
     .attr('class', 'tooltipGraf')
@@ -295,7 +247,6 @@ function grafikStartPress(times, datar) {
   }
 
   function mousemove(d) {
-    // const x = xScale.invert(d3.mouse(this)[0]);
     const [mouseX, mouseY] = d3.mouse(this);
     const xValue = xScale.invert(mouseX);
     const i = bisect(global.dates, xValue, 1);
@@ -344,8 +295,6 @@ function timeConvert(d) {
 export async function oil(t1, t2) {
   console.log('график топлива')
 
-
-
   const active = document.querySelector('.color').id
   console.log(active)
 
@@ -355,7 +304,7 @@ export async function oil(t1, t2) {
   // console.log(global)
   // console.log(sensArr)
   // console.log(nameArr)
-  const gl = global.map(it => {
+  const gl = global[0].map(it => {
     return new Date(it)
   })
 
@@ -382,19 +331,6 @@ export async function oil(t1, t2) {
       finishArrayData.push(e)
     }
   })
-  /*
-    const newData = finishArrayData.map(el => {
-      return {
-        ...el,
-        value: el.value.map(it => {
-          if (it === -348201.3876) {
-            return 0
-          } else {
-            return it
-          }
-        })
-      };
-    });*/
 
   const object = {}
   finishArrayData.forEach(el => {
@@ -408,19 +344,11 @@ export async function oil(t1, t2) {
 
   })
 
-  // console.log(global)
-
   const data = object.time.map((t, i) => ({
     time: t,
     oil: Number(Number(object.left[i]).toFixed(0)),
     pwr: Number(Number(object.right[i]).toFixed(0))
   }))
-
-  // console.log(typeof data[0].oil)
-
-  // console.log(data)
-
-
 
   const grafOld = document.querySelector('.infoGraf')
   if (grafOld) {
@@ -430,7 +358,6 @@ export async function oil(t1, t2) {
   const grafics = document.querySelector('.grafics')
   graf.classList.add('infoGraf')
   grafics.appendChild(graf)
-
 
   // устанавливаем размеры контейнера
   const margin = { top: 100, right: 60, bottom: 30, left: 60 },
@@ -501,8 +428,6 @@ export async function oil(t1, t2) {
       .y((d) => y1(d.oil))
     );
 
-
-
   // добавляем линии для второй оси y
   svg.append("path")
     .datum(data)
@@ -521,15 +446,12 @@ export async function oil(t1, t2) {
     .attr("text-anchor", "end")
     .text("Объем, л");
 
-
   svg.append("text")
     .attr("x", -100)
     .attr("y", 730)
     .attr("transform", "rotate(-90)")
     .attr("text-anchor", "end")
     .text("Напряжение, В");
-
-
 
   // добавляем области для первой кривой
   svg.append("path")
@@ -605,7 +527,6 @@ export async function oil(t1, t2) {
     const d1 = data[i];
     d = x0 - d0.time > d1.time - x0 ? d1 : d0;
 
-
     // Обновить текст в тултипе
     if (d) {
       tooltip.select(".tooltip-text").text(`Дата: ${d.date}, значение: ${d.value}`);
@@ -629,14 +550,211 @@ export async function oil(t1, t2) {
     // .style("top", `${yPosition + 50}px`)
     // .style("left", `${xPosition + 50}px`);
   })
-
     // Добавляем обработчик события mouseout, чтобы скрыть подсказку
     .on("mouseout", function (event, d) {
       tooltip.transition()
         .duration(500)
         .style("opacity", 0);
     });
-
-
 }
 
+
+
+export async function speed(t1, t2) {
+  console.log('график скорости')
+
+  const global = await fnTime(t1, t2)
+  const gl = global[0].map(it => {
+    return new Date(it)
+  })
+  const obj = gl.map((it, index) => ({
+    time: it,
+    val: global[1][index]
+  }))
+
+  const grafOld = document.querySelector('.infoGraf')
+  if (grafOld) {
+    grafOld.remove()
+  }
+  const graf = document.createElement('div')
+  const grafics = document.querySelector('.grafics')
+  graf.classList.add('infoGraf')
+  grafics.appendChild(graf)
+  const margin = { top: 100, right: 60, bottom: 30, left: 60 },
+    width = 800 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+
+  var svg = d3.select(".infoGraf")
+    .append("svg")
+    .attr('class', 'speed')
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+      "translate(" + margin.left + "," + margin.top + ")");
+  // добавляем текстовый элемент
+  svg.append("text")
+    // позиционируем по центру в верхней части графика
+    .attr("x", 350)
+    .attr("y", -50)
+    .style("font-size", "22px")
+    // выравнивание по центру
+    .attr("text-anchor", "middle")
+    // добавляем текст
+    .text("График скорости");
+
+  svg.append("text")
+    .attr("x", -130)
+    .attr("y", -35)
+    .attr("transform", "rotate(-90)")
+    .attr("text-anchor", "end")
+    .text("Скорость, км/ч");
+
+
+  var x = d3.scaleTime()
+    .domain(d3.extent(obj, (d) => new Date(d.time)))
+    .range([0, width]);
+  const xAxis = svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x)
+      .tickFormat(d3.timeFormat('%H:%M')));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, d3.max(obj, function (d) { return +d.val; })])
+    .range([height, 0]);
+  const yAxis = svg.append("g")
+    .call(d3.axisLeft(y));
+
+  // Add a clipPath: everything out of this area won't be drawn.
+  var clip = svg.append("defs").append("svg:clipPath")
+    .attr("id", "clip")
+    .append("svg:rect")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("x", 0)
+    .attr("y", 0);
+
+  // Add brushing
+  var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
+    .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+    .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
+
+  // Create the line variable: where both the line and the brush take place
+  var line = svg.append('g')
+    .attr("clip-path", "url(#clip)")
+
+  // Add the line
+  line.append("path")
+    .datum(obj)
+    .attr("class", "line")  // I add the class line to be able to modify this line later on.
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-width", 1.5)
+    .attr("d", d3.line()
+      .x(function (d) { return x(d.time) })
+      .y(function (d) { return y(d.val) })
+    )
+
+
+  // Add the brushing
+  line
+    .append("g")
+    .attr("class", "brush")
+    .call(brush);
+
+  // A function that set idleTimeOut to null
+  var idleTimeout
+  function idled() { idleTimeout = null; }
+
+  // A function that update the chart for given boundaries
+  function updateChart() {
+
+    // What are the selected boundaries?
+    const extent = d3.event.selection
+
+    // If no selection, back to initial coordinate. Otherwise, update X axis domain
+    if (!extent) {
+      if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+      x.domain([4, 8])
+    } else {
+      x.domain([x.invert(extent[0]), x.invert(extent[1])])
+      line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+    }
+
+    // Update axis and line position
+    xAxis.transition().duration(1000).call(d3.axisBottom(x))
+    line
+      .select('.line')
+      .transition()
+      .duration(1000)
+      .attr("d", d3.line()
+        .x(function (d) { return x(d.time) })
+        .y(function (d) { return y(d.val) })
+      )
+  }
+
+  // If user double click, reinitialize the chart
+  svg.on("dblclick", function () {
+    x.domain(d3.extent(obj, (d) => new Date(d.time)))
+    xAxis.transition().call(d3.axisBottom(x))
+    line
+      .select('.line')
+      .transition()
+      .attr("d", d3.line()
+        .x(function (d) { return x(d.time) })
+        .y(function (d) { return y(d.val) })
+      )
+
+  });
+
+
+
+  const tooltip = d3.select(".infoGraf").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+  const pat = svg.select('.line')
+  console.log(pat)
+  svg.on("mousemove", function (d) {
+    // Определяем координаты курсора в отношении svg
+    const [xPosition, yPosition] = d3.mouse(this);
+    // Определяем ближайшую точку на графике
+    const bisect = d3.bisector(d => d.time).right;
+    const x0 = x.invert(xPosition);
+    const i = bisect(obj, x0, 1);
+    const d0 = obj[i - 1];
+    const d1 = obj[i];
+    d = x0 - d0.time > d1.time - x0 ? d1 : d0;
+    /*
+        // Обновить текст в тултипе
+        if (d) {
+          tooltip.select(".tooltip-text").text(`Дата: ${d.date}, значение: ${d.value}`);
+        }*/
+
+    // Позиционировать тултип относительно координат мыши
+    const tooltipWidth = tooltip.node().getBoundingClientRect().width;
+    console.log
+    tooltip.style("left", `${xPosition + 100}px`);
+    tooltip.style("top", `${yPosition + 100}px`);
+
+    // Показать тултип, если он скрыт
+    tooltip.style("display", "block");
+
+    const selectedTime = timeConvert(d.time)
+    // Отображаем подсказку с координатами и значениями по оси y
+    tooltip.transition()
+      .duration(200)
+      .style("opacity", 0.9);
+    tooltip.html(`Время: ${(selectedTime)}<br/>Скорость: ${d.val} км/ч`)
+    // .style("top", `${yPosition + 50}px`)
+    // .style("left", `${xPosition + 50}px`);
+  })
+    // Добавляем обработчик события mouseout, чтобы скрыть подсказку
+    .on("mouseout", function (event, d) {
+      tooltip.transition()
+        .duration(500)
+        .style("opacity", 0);
+    });
+} 

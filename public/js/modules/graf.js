@@ -1,27 +1,75 @@
-import { alternativa } from './canvas.js'
-import { datas, oil } from './grafiks.js'
-//запрос на wialon за данными по скорости
-export function graf(t1, t2, int, id) {
-    console.log(t1, t2, int, id)
-    fetch('api/speedData', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ t1, t2, int, id })
-    })
-        .then((res) => res.json())
-        .then((res) => {
-            console.log(res)
-            const data = res.arrSpeed.map(function (i, ind) {
-                return {
-                    speed: i,
-                    time: res.arrIterTimeDateU[ind]
 
-                }
+import { datas, oil, speed } from './grafiks.js'
+
+
+
+const btnForm = document.querySelectorAll('.btm_form')
+const inputDate = document.querySelectorAll('.input_date')
+const selectSpeed = document.querySelector('.select_speed')
+btnForm.forEach(el =>
+    el.addEventListener('click', () => {
+        if (el.textContent === 'Выполнить' && inputDate[0].value !== '' && inputDate[1].value !== '') {
+            dataInput() //фунции выбора интервала графика скорости
+        }
+        if (el.textContent === 'Выполнить' && inputDate[0].value == '' && inputDate[1].value == '') {
+            dataSelect() //фунции выбора интервала графика скорости
+        }
+        if (el.textContent === 'Очистить') {
+            selectSpeed.value = 0;
+            inputDate.forEach(e => {
+                e.value = ''
             })
-            alternativa(data)
-        });
+        }
+    })
+)
+
+
+export function dataInput() {
+    const active = document.querySelector('.color')
+    const inputDate = document.querySelectorAll('.input_date')
+    const selectSpeed = document.querySelector('.select_speed')
+    selectSpeed.value = 0;
+    const arrDate = [];
+    console.log(active.id)
+    inputDate.forEach(e => {
+        arrDate.push(e.value)
+    })
+    let t01 = new Date(arrDate[0])
+    let timeFrom = Math.floor(t01.setHours(t01.getHours()) / 1000)
+    let t02 = new Date(arrDate[1])
+    let nowDate = Math.floor(t02.setHours(t02.getHours()) / 1000)
+    graftest(timeFrom, nowDate)
+}
+
+export function dataSelect() {
+    let nowDate = Math.round(new Date().getTime() / 1000)
+    let nDate = new Date();
+    const selectSpeed = document.querySelector('.select_speed')
+    let timeFrom;
+    console.log(selectSpeed.value)
+    switch (selectSpeed.value) {
+        case '0': {
+            timeFrom = Math.round(nDate.setHours(nDate.getHours() - 24) / 1000);
+            graftest(timeFrom, nowDate)
+        }
+            break;
+        case '1': {
+            timeFrom = Math.round(nDate.setHours(nDate.getHours() - 24) / 1000);
+            graftest(timeFrom, nowDate)
+        }
+            break;
+        case '2': {
+            timeFrom = Math.round(nDate.setDate(nDate.getDate() - 7) / 1000);
+            graftest(timeFrom, nowDate)
+        }
+            break;
+        case '3': {
+            timeFrom = Math.round(nDate.setMonth(nDate.getMonth() - 1) / 1000);
+            graftest(timeFrom, nowDate)
+        }
+            break;
+    }
+
 }
 
 
@@ -33,4 +81,21 @@ export function graftest(t1, t2) {
     if (activeMenuGraf.textContent === 'Топливо') {
         oil(t1, t2)
     }
+    if (activeMenuGraf.textContent === 'Скорость') {
+        speed(t1, t2)
+    }
 }
+
+
+
+
+function checked() {
+    const selectSpeed = document.querySelector('.select_speed');
+    const inputDate = document.querySelectorAll('.input_date')
+    selectSpeed.addEventListener('click', () => {
+        inputDate.forEach(e => {
+            e.value = ''
+        })
+    })
+}
+checked()  //сбрасывает установленные значения интервала графика скорости

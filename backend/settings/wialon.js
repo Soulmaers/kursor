@@ -75,6 +75,7 @@ function speed(t1, t2, int, id, res) {
             })
             let s = 0;
             const arrSpeed = arrSpee.filter(e => (++s) % int === 0)
+
             res.json({ arrSpeed, arrIterTimeDateT, arrIterTimeDateU })
         })
 }

@@ -1,5 +1,5 @@
 
-import { speed } from './speed.js'
+
 import { loadParamsViewList, conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
 
@@ -165,7 +165,6 @@ export function zapros() {
             )
             const nameCarCheck = test.map(elem => elem[0].message)
             checkCreate(nameCarCheck)
-            speed(arrCar)
             return dann
         });
 

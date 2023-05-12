@@ -10,8 +10,7 @@ import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
 import { changeBase } from './configurator.js'
 import { iconParamsz, iconParamszWindows, deleteWinParams, fnToChange } from './configIcons.js'
-import { datas, oil } from './grafiks.js'
-import { dataInput, dataSelect } from './speed.js'
+import { dataInput, dataSelect } from './graf.js'
 
 
 
@@ -495,13 +494,7 @@ plug[2].addEventListener('click', () => {
     model.style.width = '50%'
     model.style.marginLeft = '0'
     sections.style.width = '40%'
-
     visualGrafics.prepend(model);
-
-
-    //  datas()
-    //  podMenu()
-
 })
 
 
@@ -509,38 +502,20 @@ plug[2].addEventListener('click', () => {
 const menuGraf = document.querySelectorAll('.menu_graf')
 menuGraf.forEach(el => {
     el.addEventListener('click', () => {
+        const grafOld = document.querySelector('.infoGraf')
+        if (grafOld) {
+            grafOld.remove()
+        }
         menuGraf.forEach(e => {
             e.classList.remove('activMenuGraf')
         })
         el.classList.add('activMenuGraf')
-        if (el.textContent === 'Давление') {
-            const inputDate = document.querySelectorAll('.input_date')
-            console.log(inputDate)
-            if (inputDate[0].value !== '' && inputDate[1].value !== '') {
-                dataInput() //фунции выбора интервала графика скорости
-            }
-            if (inputDate[0].value == '' && inputDate[1].value == '') {
-                dataSelect() //фунции выбора интервала графика скорости
-            }
-            return
-
+        const inputDate = document.querySelectorAll('.input_date')
+        if (inputDate[0].value !== '' && inputDate[1].value !== '') {
+            dataInput() //фунции выбора интервала графика скорости
         }
-        if (el.textContent === 'Топливо') {
-            const inputDate = document.querySelectorAll('.input_date')
-            console.log(inputDate)
-            if (inputDate[0].value !== '' && inputDate[1].value !== '') {
-                dataInput() //фунции выбора интервала графика скорости
-            }
-            if (inputDate[0].value == '' && inputDate[1].value == '') {
-                dataSelect() //фунции выбора интервала графика скорости
-            }
-            return
-        }
-        else {
-            const grafOld = document.querySelector('.infoGraf')
-            if (grafOld) {
-                grafOld.remove()
-            }
+        if (inputDate[0].value == '' && inputDate[1].value == '') {
+            dataSelect() //фунции выбора интервала графика скорости
         }
     })
 })

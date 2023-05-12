@@ -90,26 +90,13 @@ export async function visual(el) {
     tarirView();
     setInterval(tarirView, 300000)
     tooltip()
-    /*
-        const grafOld = document.querySelector('.infoGraf')
-        if (grafOld) {
-            grafOld.remove()
-        }*/
     const grafOld = document.querySelector('.infoGraf')
     if (grafOld) {
         grafOld.remove()
     }
 
     setTimeout(graftest, 500)
-    /*
-    const menuGraf = document.querySelector('.activMenuGraf')
 
-    if (menuGraf && menuGraf.textContent === 'Давление') {
-        setTimeout(datas, 500)
-    }
-    if (menuGraf && menuGraf.textContent === 'Топливо') {
-        setTimeout(oil, 500)
-    }*/
 
     const zamer = document.querySelectorAll('.zamer')
     const createList = document.querySelector('.createList')
