@@ -385,6 +385,26 @@ export async function oil(t1, t2) {
     .range([height, 0]);
 
 
+  const yAxis1 = d3.axisLeft(y1)
+  const yAxis2 = d3.axisLeft(y2)
+  const xAxis = d3.axisBottom(x)
+
+  const line1 = d3.line()
+    .x((d) => x(d.time))
+    .y((d) => y1(d.oil))
+  const line2 = d3.line()
+    .x((d) => x(d.time))
+    .y((d) => y2(d.pwr))
+  const area1 = d3.area()
+    .x(d => x(d.time))
+    .y0(height)
+    .y1(d => y1(d.oil))
+  const area2 = d3.area()
+    .x(d => x(d.time))
+    .y0(height)
+    .y1(d => y2(d.pwr))
+
+
   // добавляем текстовый элемент
   svg.append("text")
     // позиционируем по центру в верхней части графика
@@ -396,50 +416,58 @@ export async function oil(t1, t2) {
     // добавляем текст
     .text("График Топливо/Бортовое питание");
 
-
   // добавляем ось x
   svg.append("g")
+    .attr("class", "osx")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x)
+    .call(xAxis
       .tickFormat(d3.timeFormat('%H:%M')));
   //  .tickFormat(d3.timeFormat('%H:%M')); // формат даты 
   // добавляем первую ось y
   svg.append("g")
-    .call(d3.axisLeft(y1));
+    .attr("class", "os1y")
+    .call(yAxis1);
 
   // добавляем вторую ось y
   svg.append("g")
+    .attr("class", "os2y")
     .attr("transform", "translate(" + width + ", 0)")
-    .call(d3.axisRight(y2));
+    .call(yAxis2);
+
+
+  var clip = svg.append("defs").append("svg:clipPath")
+    .attr("id", "clip")
+    .append("svg:rect")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("x", 0)
+    .attr("y", 0);
+
+  var chartGroup = svg.append("g")
+    .attr("class", "chart-group")
+    .attr("clip-path", "url(#clip)");
+
 
   // добавляем линии для первой оси y
-  svg.append("path")
+  chartGroup.append("path")
     .datum(data)
     .attr("class", "line1")
     .attr("fill", "none")
     .attr("stroke", "blue")
     .attr("stroke-width", 1.5)
-    .attr("d", d3.line()
-      .x((d) => x(d.time))
-      .y((d) => y1(d.oil))
-    );
+    .attr("d", line1);
 
   // добавляем линии для второй оси y
-  svg.append("path")
+  chartGroup.append("path")
     .datum(data)
     .attr("class", "line2")
     .attr("fill", "none")
     .attr("stroke", "black")
     .attr("stroke-width", 1.5)
-    .attr("d", d3.line()
-      .x((d) => x(d.time))
-      .y((d) => y2(d.pwr))
-    );
-
-  ;
+    .attr("d", line2);
 
   // добавляем области для первой кривой
-  svg.append("path")
+  chartGroup.append("path")
     .datum(data)
     .attr("fill", "blue")
     .attr("class", "pat")
@@ -447,14 +475,10 @@ export async function oil(t1, t2) {
     .attr("fill-opacity", 0.3)
     .attr("stroke", "black")
     .attr("stroke-width", 1)
-    .attr("d", d3.area()
-      .x(d => x(d.time))
-      .y0(height)
-      .y1(d => y1(d.oil))
-    );
+    .attr("d", area1);
 
   // добавляем области для второй кривой
-  svg.append("path")
+  chartGroup.append("path")
     .datum(data)
     .attr("class", "pat")
     .attr("class", "area2")
@@ -462,11 +486,7 @@ export async function oil(t1, t2) {
     .attr("fill-opacity", 0.3)
     .attr("stroke", "black")
     .attr("stroke-width", 1)
-    .attr("d", d3.area()
-      .x(d => x(d.time))
-      .y0(height)
-      .y1(d => y2(d.pwr))
-    );
+    .attr("d", area2);
 
   svg.append("text")
     .attr("x", -130)
@@ -515,6 +535,7 @@ export async function oil(t1, t2) {
 
 
 
+
   // Add brushing
   var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
     .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
@@ -535,7 +556,7 @@ export async function oil(t1, t2) {
     // If no selection or selection is too small, back to initial coordinate. Otherwise, update X axis domain
     if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) { // проверяем, что расстояние между границами больше 1 минуты
       if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-      x.domain([4, 8])
+      //  x.domain([4, 8])
     } else {
       x.domain([x.invert(extent[0]), x.invert(extent[1])])
       svg.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
@@ -549,7 +570,6 @@ export async function oil(t1, t2) {
       .transition().duration(1000).call(d3.axisBottom(x))
 
 
-    console.log(data)
     svg.select('.line1')
       .datum(data)
       .transition()
@@ -557,10 +577,7 @@ export async function oil(t1, t2) {
       .attr("fill", "none")
       .attr("stroke", "blue")
       .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x((d) => x(d.time))
-        .y((d) => y1(d.oil))
-      );
+      .attr("d", line1);
 
     svg.select('.line2')
       .datum(data)
@@ -569,10 +586,7 @@ export async function oil(t1, t2) {
       .attr("fill", "none")
       .attr("stroke", "blue")
       .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x((d) => x(d.time))
-        .y((d) => y2(d.pwr))
-      )
+      .attr("d", line2)
 
     svg.select(".area1")
       .datum(data)
@@ -584,11 +598,7 @@ export async function oil(t1, t2) {
       .attr("fill-opacity", 0.3)
       .attr("stroke", "black")
       .attr("stroke-width", 1)
-      .attr("d", d3.area()
-        .x(d => x(d.time))
-        .y0(height)
-        .y1(d => y1(d.oil))
-      );
+      .attr("d", area1)
 
     svg.select(".area2")
       .datum(data)
@@ -600,11 +610,7 @@ export async function oil(t1, t2) {
       .attr("fill-opacity", 0.3)
       .attr("stroke", "black")
       .attr("stroke-width", 1)
-      .attr("d", d3.area()
-        .x(d => x(d.time))
-        .y0(height)
-        .y1(d => y2(d.pwr))
-      );
+      .attr("d", area2)
   }
 
 
@@ -623,10 +629,7 @@ export async function oil(t1, t2) {
       .attr("fill", "none")
       .attr("stroke", "blue")
       .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x((d) => x(d.time))
-        .y((d) => y1(d.oil))
-      );
+      .attr("d", line1)
 
     svg.select('.line2')
       .datum(data)
@@ -635,10 +638,7 @@ export async function oil(t1, t2) {
       .attr("fill", "none")
       .attr("stroke", "blue")
       .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x((d) => x(d.time))
-        .y((d) => y2(d.pwr))
-      )
+      .attr("d", line2)
 
     svg.select(".area1")
       .datum(data)
@@ -650,11 +650,7 @@ export async function oil(t1, t2) {
       .attr("fill-opacity", 0.3)
       .attr("stroke", "black")
       .attr("stroke-width", 1)
-      .attr("d", d3.area()
-        .x(d => x(d.time))
-        .y0(height)
-        .y1(d => y1(d.oil))
-      );
+      .attr("d", area1)
 
     svg.select(".area2")
       .datum(data)
@@ -666,11 +662,7 @@ export async function oil(t1, t2) {
       .attr("fill-opacity", 0.3)
       .attr("stroke", "black")
       .attr("stroke-width", 1)
-      .attr("d", d3.area()
-        .x(d => x(d.time))
-        .y0(height)
-        .y1(d => y2(d.pwr))
-      );
+      .attr("d", area2)
   });
 
   const tooltip = d3.select(".infoGraf").append("div")
