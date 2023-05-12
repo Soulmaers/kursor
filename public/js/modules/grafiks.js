@@ -273,6 +273,9 @@ function grafikStartPress(times, datar) {
   function mouseout() {
     tooltip.style('display', 'none');
   }
+
+
+
 }
 
 
@@ -556,6 +559,62 @@ export async function oil(t1, t2) {
         .duration(500)
         .style("opacity", 0);
     });
+
+
+
+  // Add brushing
+  var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
+    .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+    .on("end", updateChart)
+
+  // A function that set idleTimeOut to null
+  var idleTimeout
+  function idled() { idleTimeout = null; }
+
+  // A function that update the chart for given boundaries
+  function updateChart() {
+
+    // What are the selected boundaries?
+    const extent = d3.event.selection
+
+    // If no selection, back to initial coordinate. Otherwise, update X axis domain
+    if (!extent) {
+      if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+      x.domain([4, 8])
+    } else {
+      x.domain([x.invert(extent[0]), x.invert(extent[1])])
+      line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+    }
+
+    // Update axis and line position
+    xAxis.transition().duration(1000).call(d3.axisBottom(x))
+    line
+      .select('.line')
+      .transition()
+      .duration(1000)
+      .attr("d", d3.line()
+        .x(function (d) { return x(d.time) })
+        .y(function (d) { return y1(d.oil) })
+        .y(function (d) { return y2(d.pwr) })
+      )
+  }
+
+  // If user double click, reinitialize the chart
+  svg.on("dblclick", function () {
+    x.domain(d3.extent(obj, (d) => new Date(d.time)))
+    xAxis.transition().call(d3.axisBottom(x))
+    line
+      .select('.line')
+      .transition()
+      .attr("d", d3.line()
+        .x(function (d) { return x(d.time) })
+        .y(function (d) { return y1(d.oil) })
+        .y(function (d) { return y2(d.pwr) })
+      )
+
+  });
+
+
 }
 
 
@@ -614,7 +673,8 @@ export async function speed(t1, t2) {
 
   var x = d3.scaleTime()
     .domain(d3.extent(obj, (d) => new Date(d.time)))
-    .range([0, width]);
+    .range([0, width])
+
   const xAxis = svg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x)
@@ -667,15 +727,12 @@ export async function speed(t1, t2) {
   // A function that set idleTimeOut to null
   var idleTimeout
   function idled() { idleTimeout = null; }
-
-  // A function that update the chart for given boundaries
   function updateChart() {
-
     // What are the selected boundaries?
     const extent = d3.event.selection
 
-    // If no selection, back to initial coordinate. Otherwise, update X axis domain
-    if (!extent) {
+    // If no selection or selection is too small, back to initial coordinate. Otherwise, update X axis domain
+    if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) { // проверяем, что расстояние между границами больше 1 минуты
       if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
       x.domain([4, 8])
     } else {
