@@ -156,7 +156,7 @@ function grafikStartPress(times, datar) {
     series: newData
   }
   console.log(global)
-  const margin = { top: 50, right: 50, bottom: 50, left: 240 };
+  const margin = { top: 50, right: 50, bottom: 50, left: 220 };
   const width = 800 - margin.left - margin.right;
   const height = 150 - margin.top - margin.bottom;
 
@@ -310,7 +310,7 @@ function grafikStartPress(times, datar) {
       && mouseY >= 0 && mouseY <= height) {
       console.log('подсказка')
       tooltip.selectAll('.tooltipText') // выбираем текст внутри tooltip
-        .html(`Колесо: ${selectedData[0].sens}\nВремя: ${selectedTime}\nЗначение: ${selectedData[0].value} Бар, ${selectedData[0].tvalue} C°, Скорость:${selectedData[0].speed} `);
+        .html(`Колесо: ${selectedData[0].sens}\nВремя: ${selectedTime}\nЗначение: ${selectedData[0].value} Бар, ${selectedData[0].tvalue} C°, Скорость:${selectedData[0].speed} км/ч `);
       tooltip.style('display', 'block') // показываем подсказку
       return
     }

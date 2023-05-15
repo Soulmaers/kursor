@@ -232,10 +232,14 @@ export async function tarirView() {
                     }
                     console.log(val)
                     const approximated = approximateValue(val, x, y, degree);
-                    const znak = (approximated[0] * 0.9987).toFixed(0)
+                    const znak = Number((approximated[0] * 0.9987).toFixed(0))
                     const value = znak * 100 / y[y.length - 1]
-                    console.log(value)
+                    console.log(typeof znak)
                     const oilValue = document.querySelector('.oil_value1')
+                    if (znak < 0) {
+                        oilValue.textContent = '----'
+                        return
+                    }
                     oilValue.textContent = znak
                     let color = 'steelblue';
                     if (value > 30 && value < 70) {
