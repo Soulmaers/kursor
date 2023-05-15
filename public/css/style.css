@@ -2094,7 +2094,11 @@ input[type="date"] {
 .infoGraf {
   margin-top: 20px;
   border: 1px solid black;
+  padding-top: 30px;
 }
+
+
+
 
 .container_left {
   width: 220px;
