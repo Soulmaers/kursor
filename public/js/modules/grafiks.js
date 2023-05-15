@@ -2,17 +2,17 @@
 
 
 export async function datas(t1, t2) {
-
+  console.log('datas')
   const active = Number(document.querySelector('.color').id)
-  console.log(active)
-
   const global = await fnTime(t1, t2)
+  console.log(global)
   const sensArr = await fnPar(active)
   const nameArr = await fnParMessage(active)
   const allArrNew = [];
   nameArr.forEach((item) => {
     allArrNew.push({ sens: item[0], params: item[1], value: [] })
   })
+  console.log(sensArr)
   sensArr.forEach(el => {
     for (let i = 0; i < allArrNew.length; i++) {
       allArrNew[i].value.push(Object.values(el)[i])
@@ -20,17 +20,21 @@ export async function datas(t1, t2) {
     }
   })
   const finishArrayData = []
+  const finishArrayDataT = []
   allArrNew.forEach(e => {
     if (e.params.startsWith('tpms_p')) {
       finishArrayData.push(e)
     }
+    if (e.params.startsWith('tpms_t')) {
+      finishArrayDataT.push(e)
+    }
+  })
+  finishArrayData.forEach((el, index) => {
+    el.tvalue = finishArrayDataT[index].value
+    el.speed = global[1]
   })
   grafikStartPress(global[0], finishArrayData)
 }
-
-
-
-
 
 async function fnTime(t1, t2) {
   const active = Number(document.querySelector('.color').id)
@@ -65,6 +69,7 @@ async function fnTime(t1, t2) {
         if (code) {
           console.log(wialon.core.Errors.getErrorText(code));
         }
+        console.log(result)
         const global = [];
         const speed = []
         result.messages.forEach(el => {
@@ -80,6 +85,7 @@ async function fnTime(t1, t2) {
 }
 
 async function fnPar(active) {
+  console.log('fnpar')
   return new Promise(function (resolve, reject) {
     const prms3 = {
       "source": "",
@@ -149,7 +155,7 @@ function grafikStartPress(times, datar) {
     dates: times,
     series: newData
   }
-
+  console.log(global)
   const margin = { top: 50, right: 50, bottom: 50, left: 240 };
   const width = 800 - margin.left - margin.right;
   const height = 150 - margin.top - margin.bottom;
@@ -164,6 +170,27 @@ function grafikStartPress(times, datar) {
     .range([height, 0])
     .domain([0, d3.max(global.series, ({ value }) => d3.max(value))])
     .nice();
+
+  // console.log(d3.extent(global.dates, d => new Date(d)))
+  const xScale = d3.scaleTime()
+    .range([0, width])
+    .domain(d3.extent(global.dates, d => new Date(d)));
+
+  //console.log(global.dates)
+  const area = d3.area().
+    curve(d3.curveBasis)
+    .x((d, i) => xScale(new Date(global.dates[i])))
+    .y0(height)
+    .y1(d => yAxisValue(d));
+  const line = d3.line()
+    .curve(d3.curveBasis)
+    .x((d, i) => xScale(new Date(global.dates[i])))
+    .y(d => yAxisValue(d));
+
+  const xAxis = d3.axisBottom(xScale)
+    .tickFormat(d3.timeFormat('%H:%M')); // формат даты 
+
+
   const svg = d3.select('.infoGraf')
     .append('svg')
     .attr('width', width + margin.left + margin.right)
@@ -182,17 +209,6 @@ function grafikStartPress(times, datar) {
     // добавляем текст
     .text("График давления");
 
-  // console.log(d3.extent(global.dates, d => new Date(d)))
-  const xScale = d3.scaleTime()
-    .range([0, width])
-    .domain(d3.extent(global.dates, d => new Date(d)));
-
-  //console.log(global.dates)
-  const area = d3.area().curve(d3.curveBasis).x((d, i) => xScale(new Date(global.dates[i]))).y0(height).y1(d => yAxisValue(d));
-  const line = d3.line().curve(d3.curveBasis).x((d, i) => xScale(new Date(global.dates[i]))).y(d => yAxisValue(d));
-  const xAxis = d3.axisBottom(xScale)
-    .tickFormat(d3.timeFormat('%H:%M')); // формат даты 
-
   const seriesGroup = svg.selectAll('.series-group')
     .data(global.series)
     .enter()
@@ -206,7 +222,8 @@ function grafikStartPress(times, datar) {
   seriesGroup.append('path')
     .attr('class', 'area')
     .attr('d', d => area(d.value))
-    .attr('fill', 'steelblue').attr('stroke', 'black')
+    .attr('fill', 'steelblue')
+    .attr('stroke', 'black')
     .attr('stroke-width', '1px')
 
   // добавляем контур для каждой области графика
@@ -217,19 +234,48 @@ function grafikStartPress(times, datar) {
     .attr('stroke', 'black')
     .attr('stroke-width', '1px')
 
-  seriesGroup.append('text').attr('class', 'series-name')
+  seriesGroup.append('text')
+    .attr('class', 'series-name')
     .attr('x', -10)
     .attr('y', height / 2)
     .style('text-anchor', 'end')
     .style('font-size', '14px')
     .text(d => d.sens);
 
+
+
+  /*
+    const yAxis = d3.axisLeft(yAxisValue).ticks(5)
+    const yAxisTicks = seriesGroup.append('g')
+      .call(yAxis);
+    yAxisTicks.selectAll('line')
+      .attr('y2', 2)
+      .attr('stroke', 'steelblue');
+  
+  
+    yAxisTicks.selectAll('text')
+      .style('text-anchor', 'middle')
+      .style('font-size', '6px')
+      .attr('dy', '1em')
+      .attr('transform', 'rotate(-90) translate(-10,0)');
+  
+  */
+
+
   const xAxisTicks = svg.append('g')
     .attr('transform', `translate(0, ${height * global.series.length})`)
     .call(xAxis);
   xAxisTicks.select('.domain').remove();
-  xAxisTicks.selectAll('line').attr('y2', 5).attr('stroke', 'steelblue');
-  xAxisTicks.selectAll('text').style('text-anchor', 'middle').style('font-size', '12px').attr('dy', '1em').attr('transform', 'rotate(0) translate(-10,20)');
+
+  xAxisTicks.selectAll('line')
+    .attr('y2', 5)
+    .attr('stroke', 'steelblue');
+
+  xAxisTicks.selectAll('text')
+    .style('text-anchor', 'middle')
+    .style('font-size', '12px')
+    .attr('dy', '1em')
+    .attr('transform', 'rotate(0) translate(-10,20)');
 
   const bisect = d3.bisector(d => new Date(d)).left;
   const tooltip = svg.append('g')
@@ -254,15 +300,17 @@ function grafikStartPress(times, datar) {
     const selectedData = [{
       sens: d.sens,
       value: d.value[i],
-      date: global.dates[i]
+      tvalue: d.tvalue[i],
+      date: global.dates[i],
+      speed: d.speed[i]
     }];
-    // console.log(selectedData)
+    console.log(selectedData)
     const selectedTime = timeConvert(selectedData[0].date)
     if (mouseX >= 0 && mouseX <= width
       && mouseY >= 0 && mouseY <= height) {
       console.log('подсказка')
       tooltip.selectAll('.tooltipText') // выбираем текст внутри tooltip
-        .html(`"Колесо": ${selectedData[0].sens}\n"Время": ${selectedTime}\n"Значение": ${selectedData[0].value}'Бар'`);
+        .html(`Колесо: ${selectedData[0].sens}\nВремя: ${selectedTime}\nЗначение: ${selectedData[0].value} Бар, ${selectedData[0].tvalue} C°, Скорость:${selectedData[0].speed} `);
       tooltip.style('display', 'block') // показываем подсказку
       return
     }
@@ -911,4 +959,8 @@ export async function speed(t1, t2) {
         .duration(500)
         .style("opacity", 0);
     });
+
+
+
+
 } 
