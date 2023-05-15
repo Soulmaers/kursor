@@ -1,5 +1,5 @@
 import { postTyres, reqDelete, paramsDelete, barDelete, viewTech } from './requests.js'
-import { alarmClear } from './visual.js'
+import { alarmClear, clearGraf } from './visual.js'
 import { data } from './content.js'
 import { getDash } from './dash.js'
 import { visual, visualNone } from './visual.js'
@@ -495,6 +495,7 @@ plug[2].addEventListener('click', () => {
     model.style.marginLeft = '0'
     sections.style.width = '40%'
     visualGrafics.prepend(model);
+    clearGraf()
 })
 
 

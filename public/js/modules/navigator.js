@@ -1,4 +1,4 @@
-import { visual, visualNone, clearGraf, viewOs } from './visual.js'
+import { visual, visualNone, viewOs } from './visual.js'
 //import { massiv } from './configurator.js';
 import { massivionbd, loadParamsView } from './paramsTyresView.js';
 import { alarmFind } from './alarmStorage.js';
@@ -30,7 +30,7 @@ export function navigator() {
                     it.remove();
                 })
                 visualNone(e);  //скрываем для всех кнопок левый фрейм
-                clearGraf(); //очистка графика скорости при нажатии на кнопку другой машины
+                // clearGraf(); //очистка графика скорости при нажатии на кнопку другой машины
                 //   massiv.length = 0;
                 massivionbd.length = 0;
             })

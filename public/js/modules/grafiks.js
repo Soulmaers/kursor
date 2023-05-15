@@ -144,7 +144,7 @@ function grafikStartPress(times, datar) {
   const grafics = document.querySelector('.grafics')
   graf.classList.add('infoGraf')
   grafics.appendChild(graf)
-
+  console.log(datar)
   const newData = datar.map(el => {
     return {
       ...el,
@@ -172,12 +172,13 @@ function grafikStartPress(times, datar) {
   const gl = times.map(it => {
     return new Date(it)
   })
-  const dat2 = global.series.map(({ sens, value, tvalue }) => ({
+  const dat2 = global.series.map(({ sens, value, tvalue, speed }) => ({
     sens,
     val: value.map((val, i) => ({
       dates: gl[i],
       value: Number(val),
-      tvalue: Number(tvalue[i])
+      tvalue: Number(tvalue[i]),
+      speed: Number(speed[i])
     }))
   }));
   console.log(dat2)
@@ -191,9 +192,6 @@ function grafikStartPress(times, datar) {
     .enter()
     .append('div')
     .attr('class', 'chart');
-
-
-
 
   const margin = { top: 100, right: 60, bottom: 30, left: 260 },
     width = 800 - margin.left - margin.right,
@@ -583,7 +581,7 @@ charts1.append("text")
       tooltip.transition()
         .duration(200)
         .style("opacity", 0.9);
-      tooltip.html(`Время: ${(selectedTime)}<br/>Давление: ${d.value}<br/>Температура: ${d.tvalue}`)
+      tooltip.html(`Время: ${(selectedTime)}<br/>Давление: ${d.value}<br/>Температура: ${d.tvalue}<br/>Скорость: ${d.speed}`)
       // .style("top", `${yPosition + 50}px`)
       // .style("left", `${xPosition + 50}px`);
     })

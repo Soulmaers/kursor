@@ -14,7 +14,7 @@ import { tooltip } from './cursorTooltip.js'
 import { ggg } from './menu.js'
 import { datas, oil } from './grafiks.js'
 import { Tooltip } from '../class/Tooltip.js'
-import { graftest } from './graf.js'
+import { graftest, click } from './graf.js'
 
 
 
@@ -95,7 +95,7 @@ export async function visual(el) {
         grafOld.remove()
     }
 
-    setTimeout(graftest, 500)
+    setTimeout(click, 500)
 
 
     const zamer = document.querySelectorAll('.zamer')

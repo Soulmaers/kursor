@@ -30,7 +30,15 @@ btnForm.forEach(el =>
         }
     })
 )
-
+export function click() {
+    const inputDate = document.querySelectorAll('.input_date')
+    if (inputDate[0].value !== '' && inputDate[1].value !== '') {
+        dataInput() //фунции выбора интервала графика скорости
+    }
+    if (inputDate[0].value == '' && inputDate[1].value == '') {
+        dataSelect() //фунции выбора интервала графика скорости
+    }
+}
 
 export function dataInput() {
     const active = document.querySelector('.color')
