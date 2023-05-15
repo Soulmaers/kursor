@@ -811,7 +811,7 @@ div.spoyler {
 
 .kran {
   align-self: flex-end;
-  background-image: url(../image/m.png);
+  /* background-image: url(../image/m.png);*/
   background-size: cover;
 
 }

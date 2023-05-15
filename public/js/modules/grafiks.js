@@ -444,7 +444,8 @@ charts1.append("text")
       }
 
       // Update axis and line position
-      svg.select("g")
+      console.log(d3.select('.osx'))
+      d3.select('.osx')
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x)
           .tickFormat(d3.timeFormat('%H:%M')))
@@ -498,7 +499,7 @@ charts1.append("text")
     // If user double click, reinitialize the chart
     svg.on("dblclick", function () {
       x.domain(d3.extent(data.val, (d) => new Date(d.dates)))
-      svg.select("g")
+      d3.select('.osx')
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x)
           .tickFormat(d3.timeFormat('%H:%M')))
