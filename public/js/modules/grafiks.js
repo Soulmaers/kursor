@@ -833,13 +833,10 @@ export async function oil(t1, t2) {
 
   // добавляем текстовый элемент
   svg.append("text")
-    // позиционируем по центру в верхней части графика
     .attr("x", 350)
     .attr("y", -50)
     .style("font-size", "22px")
-    // выравнивание по центру
     .attr("text-anchor", "middle")
-    // добавляем текст
     .text("График Топливо/Бортовое питание");
 
   // добавляем ось x
@@ -858,7 +855,10 @@ export async function oil(t1, t2) {
   svg.append("g")
     .attr("class", "os2y")
     .attr("transform", "translate(" + width + ", 0)")
-    .call(yAxis2);
+    .call(yAxis2)
+    .selectAll(".tick text")
+    .attr("x", '15')
+    .style("text-anchor", "start")
 
 
   var clip = svg.append("defs").append("svg:clipPath")
@@ -1147,8 +1147,6 @@ export async function oil(t1, t2) {
 
 
   const legendOil = document.querySelectorAll('.legendOil')
-
-
   legendOil[0].addEventListener('click', () => {
     const os1y = d3.select('.os1y')
     const line1 = d3.select('.line1')
