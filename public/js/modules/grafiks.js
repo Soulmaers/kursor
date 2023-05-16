@@ -368,7 +368,7 @@ charts1.append("text")
       .attr("class", "line2")
       .attr("fill", "none")
       .attr("stroke", "blue")
-      .attr("stroke-width", 3)
+      .attr("stroke-width", 2)
       .attr("d", line2);
 
     // добавляем области для первой кривой
@@ -465,7 +465,7 @@ charts1.append("text")
         .duration(1000)
         .attr("fill", "none")
         .attr("stroke", "blue")
-        .attr("stroke-width", 3)
+        .attr("stroke-width", 2)
         .attr("d", line2)
 
       svg.select(".area1")
@@ -517,7 +517,7 @@ charts1.append("text")
         // .duration(1000)
         .attr("fill", "none")
         .attr("stroke", "blue")
-        .attr("stroke-width", 3)
+        .attr("stroke-width", 2)
         .attr("d", line2)
 
       svg.select(".area1")
