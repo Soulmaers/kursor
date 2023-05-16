@@ -285,7 +285,7 @@ function grafikStartPress(times, datar) {
 
       // добавляем подпись первой кривой
       svg.append("circle")
-        .attr('class', 'bar')
+        .attr('class', 'barGraf')
         .attr("r", 6)
         .attr("cx", 100)
         .attr("cy", -25)
@@ -302,7 +302,7 @@ function grafikStartPress(times, datar) {
 
       // добавляем подпись второй кривой
       svg.append("circle")
-        .attr('class', 'temp')
+        .attr('class', 'tempGraf')
         .attr("r", 6)
         .attr("cx", 220)
         .attr("cy", -25)
@@ -561,32 +561,38 @@ function grafikStartPress(times, datar) {
 
   });
 
-  /*
-    const legendBar = document.querySelectorAll('.legendBar')
-    legendBar[0].addEventListener('click', () => {
-      //  const os1y = d3.select('.os1y')
-      const line1 = d3.selectAll('.line1')
-      const area1 = d3.selectAll('.area1')
-      console.log(line1)
-      const legendBarCircle = d3.select('.bar')
-      legendBar[0].classList.toggle('noActive')
-      if (legendBar[0].classList.contains('noActive')) {
-        console.log('удаляем легенда топливо')
-        line1.each(function (d, i) {
-  
-        })
-        legendBarCircle.attr('fill', 'none')
-        line1.style("display", "none")
-        area1.style("display", "none")
-  
-        return
-      }
-      legendBarCircle.attr('fill', '#009933')
-      line1.style("display", "block")
-      area1.style("display", "block")
-  
-    })*/
 
+  const legendBar = document.querySelectorAll('.legendBar')
+  legendBar[0].addEventListener('click', () => {
+    const line1 = d3.selectAll('.line1')
+    const area1 = d3.selectAll('.area1')
+    const legendBarCircle = d3.select('.barGraf')
+    legendBar[0].classList.toggle('noActive')
+    if (legendBar[0].classList.contains('noActive')) {
+      legendBarCircle.attr('fill', 'none')
+      line1.style("display", "none")
+      area1.style("display", "none")
+      return
+    }
+    legendBarCircle.attr('fill', '#009933')
+    line1.style("display", "block")
+    area1.style("display", "block")
+  })
+  legendBar[1].addEventListener('click', () => {
+    const line2 = d3.selectAll('.line2')
+    const area2 = d3.selectAll('.area2')
+    const legendBarCircle = d3.select('.tempGraf')
+    legendBar[1].classList.toggle('noActive')
+    if (legendBar[1].classList.contains('noActive')) {
+      legendBarCircle.attr('fill', 'none')
+      line2.style("display", "none")
+      area2.style("display", "none")
+      return
+    }
+    legendBarCircle.attr('fill', 'blue')
+    line2.style("display", "block")
+    area2.style("display", "block")
+  })
   /*
   legendOil[1].addEventListener('click', () => {
     const os2y = d3.select('.os2y')
