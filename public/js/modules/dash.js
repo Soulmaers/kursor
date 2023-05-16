@@ -202,18 +202,18 @@ function newBoard(ArrD, ArrDC, length) {
     }
 
 
-    const colorScale = d3.scale.ordinal()
+    const colorScale = d3.scaleOrdinal()
         .domain(['Критически', 'Повышенное/Пониженное', 'Норма', 'Потеря датчика'])
         .range(['#FF0000', '#FFFF00', '#009933', 'gray']);
     // задаем радиус
     const radius = Math.min(width - 2 * margin, height - 2 * margin) / 2.5;
 
     // создаем элемент арки с радиусом
-    const arc = d3.svg.arc()
+    const arc = d3.arc()
         .outerRadius(radius)
         .innerRadius(85);
 
-    const pie = d3.layout.pie()
+    const pie = d3.pie()
         .sort(null)
         .value(function (d) { return d.rate; });
     const svg = d3.select(".dash_card").append("svg")
