@@ -78,10 +78,10 @@ module.exports.barDelete = (req, res) => {
 
 module.exports.tarirSave = (req, res) => {
     const arr = req.body.AllarrayTarir
-    //  console.log(arr[0][1])
+    console.log(arr)
     try {
 
-        const selectBase = `SELECT nameCar FROM tarir WHERE nameCar='${arr[0][1]}'`
+        const selectBase = `SELECT nameCar FROM tarir WHERE idx='${arr[0][1]}'`
         connection.query(selectBase, function (err, results) {
             if (err) {
                 console.log(err)
@@ -89,7 +89,7 @@ module.exports.tarirSave = (req, res) => {
             //console.log(results)
             if (results.length === 0) {
                 //   console.log('1')
-                const postModel = `INSERT INTO tarir(date, nameCar, zamer, DUT,litrs) VALUES?`
+                const postModel = `INSERT INTO tarir(date, idx,nameCar, zamer, DUT,litrs) VALUES?`
                 connection.query(postModel, [arr], function (err, results) {
                     if (err) console.log(err);
                     //console.log(results)
@@ -97,14 +97,21 @@ module.exports.tarirSave = (req, res) => {
                 })
             }
             if (results.length > 0) {
-                // console.log('2')
-                const postModel = `UPDATE tarir SET  date='${arr[0][0]}', nameCar='${arr[0][1]}', zamer='${arr[0][2]}', DUT='${arr[0][3]}',litrs='${arr[0][4]}' WHERE nameCar='${arr[0][1]}' AND zamer='${arr[0][2]}'`
-                connection.query(postModel, function (err, results) {
-                    if (err) {
-                        console.log(err)
-                    }
-                    response.status(200, results, '', res)
+                console.log('2')
+                console.log(arr[0][2])
+                arr.forEach(el => {
+                    console.log(el[0])
+                    const postModel = `UPDATE tarir SET  date='${el[0]}', idx='${el[1]}', nameCar='${el[2]}', zamer='${el[3]}', DUT='${el[4]}',litrs='${el[5]}'WHERE idx='${el[1]}' AND zamer='${el[3]}'`
+                    connection.query(postModel, function (err, results) {
+                        if (err) {
+                            console.log(err)
+                        }
+                        console.log(results)
+
+                    })
+                    //    response.status(200, results, '', res)
                 })
+
             }
         })
     }

@@ -2591,6 +2591,10 @@ input[type="date"] {
   cursor: pointer;
 }
 
+.legendBar {
+  cursor: pointer;
+}
+
 .card_img {
   width: 60%;
   height: 60%;

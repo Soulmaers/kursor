@@ -121,18 +121,13 @@ oilCard.addEventListener('click', () => {
 
 
 export function createDate() {
-
     let today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
     const day = today.getDate() < 10 ? '0' + today.getDate() : today.getDate();
     today = day + '.' + month + '.' + year;
-
     return today
-
 }
-
-
 const buttOnTarirDisk = document.querySelector('.buttOnTarirDisk')
 buttOnTarirDisk.addEventListener('click', async () => {
     const buttOnTarir = document.querySelector('.buttOnTarir')
@@ -144,20 +139,23 @@ buttOnTarirDisk.addEventListener('click', async () => {
     })
     gal.addEventListener('click', async () => {
         const AllarrayTarir = [];
-        const active = document.querySelector('.color')
+        const active = document.querySelector('.color').children[0]
+        const idx = document.querySelector('.color').id
+        console.log(active)
         const activePost = active.textContent.replace(/\s+/g, '')
         const titleZamer = document.querySelectorAll('.titleZamer')
         Array.from(titleZamer).forEach(el => {
             const arrayTarir = [];
             const datas = createDate(new Date())
             arrayTarir.push(datas)
+            arrayTarir.push(idx)
             arrayTarir.push(activePost)
             arrayTarir.push(el.id)
             arrayTarir.push(el.nextElementSibling.children[0].value)
             arrayTarir.push(el.nextElementSibling.children[1].value)
             AllarrayTarir.push(arrayTarir)
         })
-        //  console.log(AllarrayTarir)
+        console.log(AllarrayTarir)
         const param = {
             method: "POST",
             headers: {

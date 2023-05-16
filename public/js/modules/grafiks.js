@@ -282,8 +282,10 @@ function grafikStartPress(times, datar) {
         .text("Давление/Температура");
 
 
+
       // добавляем подпись первой кривой
       svg.append("circle")
+        .attr('class', 'bar')
         .attr("r", 6)
         .attr("cx", 100)
         .attr("cy", -25)
@@ -291,6 +293,7 @@ function grafikStartPress(times, datar) {
         .attr('stroke', 'black')
 
       svg.append("text")
+        .attr('class', 'legendBar')
         .attr("x", 180)
         .attr("y", -20)
         .style("text-anchor", "end")
@@ -299,6 +302,7 @@ function grafikStartPress(times, datar) {
 
       // добавляем подпись второй кривой
       svg.append("circle")
+        .attr('class', 'temp')
         .attr("r", 6)
         .attr("cx", 220)
         .attr("cy", -25)
@@ -306,6 +310,7 @@ function grafikStartPress(times, datar) {
         .attr('stroke', 'black')
 
       svg.append("text")
+        .attr('class', 'legendBar')
         .attr("x", 325)
         .attr("y", -20)
         .style("text-anchor", "end")
@@ -386,21 +391,6 @@ function grafikStartPress(times, datar) {
       .attr("transform", "rotate(0)")
       .attr("text-anchor", "middle")
       .text(`${d.sens}`);
-
-    /*
-  svg.append("text")
-    .attr("x", -130)
-    .attr("y", -35)
-    .attr("transform", "rotate(-90)")
-    .attr("text-anchor", "end")
-    .text("Объем, л");
-
-  svg.append("text")
-    .attr("x", -100)
-    .attr("y", 730)
-    .attr("transform", "rotate(-90)")
-    .attr("text-anchor", "end")
-    .text("Напряжение, В")*/
 
     // Add brushing
     var brush = d3.brushX()
@@ -570,6 +560,57 @@ function grafikStartPress(times, datar) {
 
 
   });
+
+  /*
+    const legendBar = document.querySelectorAll('.legendBar')
+    legendBar[0].addEventListener('click', () => {
+      //  const os1y = d3.select('.os1y')
+      const line1 = d3.selectAll('.line1')
+      const area1 = d3.selectAll('.area1')
+      console.log(line1)
+      const legendBarCircle = d3.select('.bar')
+      legendBar[0].classList.toggle('noActive')
+      if (legendBar[0].classList.contains('noActive')) {
+        console.log('удаляем легенда топливо')
+        line1.each(function (d, i) {
+  
+        })
+        legendBarCircle.attr('fill', 'none')
+        line1.style("display", "none")
+        area1.style("display", "none")
+  
+        return
+      }
+      legendBarCircle.attr('fill', '#009933')
+      line1.style("display", "block")
+      area1.style("display", "block")
+  
+    })*/
+
+  /*
+  legendOil[1].addEventListener('click', () => {
+    const os2y = d3.select('.os2y')
+    const line2 = d3.select('.line2')
+    const area2 = d3.select('.area2')
+    const napr = d3.select('.napr')
+    const legendVoltcircle = d3.select('.legendVoltcircle')
+    legendOil[1].classList.toggle('noActive')
+    if (legendOil[1].classList.contains('noActive')) {
+      console.log('удаляем легенда напряжение')
+      legendVoltcircle.attr('fill', 'none')
+      os2y.style("display", "none")
+      line2.style("display", "none")
+      area2.style("display", "none")
+      napr.style("display", "none")
+      return
+    }
+    legendVoltcircle.attr('fill', '#32a885')
+    os2y.style("display", "block")
+    line2.style("display", "block")
+    area2.style("display", "block")
+    napr.style("display", "block")
+  })
+*/
 
   /*
   const yAxisName = d3.scaleBand()
