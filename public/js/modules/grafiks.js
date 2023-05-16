@@ -1155,6 +1155,8 @@ export async function oil(t1, t2) {
     const area1 = d3.select('.area1')
     const obv = d3.select('.obv')
     const legendOilcircle = d3.select('.legendOilcircle')
+
+    legendOil[0].classList.toggle('noActive')
     if (legendOil[0].classList.contains('noActive')) {
       console.log('удаляем легенда топливо')
       legendOilcircle.attr('fill', 'none')
@@ -1162,7 +1164,6 @@ export async function oil(t1, t2) {
       line1.style("display", "none")
       area1.style("display", "none")
       obv.style("display", "none")
-      legendOil[0].classList.remove('noActive')
       return
     }
     legendOilcircle.attr('fill', 'blue')
@@ -1170,24 +1171,21 @@ export async function oil(t1, t2) {
     line1.style("display", "block")
     area1.style("display", "block")
     obv.style("display", "block")
-    legendOil[0].classList.add('noActive')
   })
-
-
   legendOil[1].addEventListener('click', () => {
     const os2y = d3.select('.os2y')
     const line2 = d3.select('.line2')
     const area2 = d3.select('.area2')
     const napr = d3.select('.napr')
     const legendVoltcircle = d3.select('.legendVoltcircle')
-    if (legendOil[1].classList.contains('noActivev')) {
+    legendOil[1].classList.toggle('noActive')
+    if (legendOil[1].classList.contains('noActive')) {
       console.log('удаляем легенда напряжение')
       legendVoltcircle.attr('fill', 'none')
       os2y.style("display", "none")
       line2.style("display", "none")
       area2.style("display", "none")
       napr.style("display", "none")
-      legendOil[1].classList.remove('noActivev')
       return
     }
     legendVoltcircle.attr('fill', '#32a885')
@@ -1195,7 +1193,6 @@ export async function oil(t1, t2) {
     line2.style("display", "block")
     area2.style("display", "block")
     napr.style("display", "block")
-    legendOil[1].classList.add('noActivev')
   })
 }
 
