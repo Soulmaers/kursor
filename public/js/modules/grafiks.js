@@ -21,8 +21,6 @@ export async function datas(t1, t2) {
   })
   const finishArrayData = []
   const finishArrayDataT = []
-
-
   allArrNew.forEach(e => {
     if (e.params.startsWith('tpms_p')) {
       finishArrayData.push(e)
@@ -35,7 +33,6 @@ export async function datas(t1, t2) {
     el.tvalue = finishArrayDataT[index].value
     el.speed = global[1]
   })
-
   grafikStartPress(global[0], finishArrayData)
 
 }
@@ -59,8 +56,6 @@ async function fnTime(t1, t2) {
     timeOld = t1
     timeNow = t2
   }
-  console.log(timeOld, timeNow, active)
-
   return new Promise(function (resolve, reject) {
     const prms2 = {
       "itemId": active,
@@ -107,7 +102,6 @@ async function fnPar(active) {
         if (code) {
           console.log(wialon.core.Errors.getErrorText(code));
         }
-
         const sensArr = result;
         resolve(sensArr)
       })
@@ -181,7 +175,6 @@ function grafikStartPress(times, datar) {
       speed: Number(speed[i])
     }))
   }));
-  console.log(dat2)
 
   // Выбираем div, в который мы хотим поместить графики
   const container = d3.select('.infoGraf');
@@ -197,43 +190,6 @@ function grafikStartPress(times, datar) {
     width = 800 - margin.left - margin.right,
     height = 45;
 
-
-
-
-
-  /*
-// добавляем подпись первой кривой
-charts1.append("circle")
-  .attr("r", 6)
-  .attr("cx", 200)
-  .attr("cy", 30)
-  .attr("fill", "blue")
-  .attr('stroke', 'black')
-
-charts1.append("text")
-  .attr("x", 270)
-  .attr("y", -25)
-  .style("text-anchor", "end")
-  .text("Давление")
-  .attr("fill", "black");
-
-// добавляем подпись второй кривой
-charts1.append("circle")
-  .attr("r", 6)
-  .attr("cx", 300)
-  .attr("cy", -30)
-  .attr("fill", "#32a885")
-  .attr('stroke', 'black')
-
-charts1.append("text")
-  .attr("x", 445)
-  .attr("y", -25)
-  .style("text-anchor", "end")
-  .text("Температура")
-  .attr("fill", "black");
-*/
-
-
   const count = charts.size()
   console.log(count)
   let he;
@@ -243,8 +199,6 @@ charts1.append("text")
     const data = d; // данные для этого графика
     console.log(data)
     const chartContainer = d3.select(this); // div, в котором будет находиться график
-
-
     if (i === 0) {
       he = height + 60
       pad = 60
@@ -326,6 +280,39 @@ charts1.append("text")
         .style("font-size", "22px")
         .attr("text-anchor", "middle")
         .text("Давление/Температура");
+
+
+      // добавляем подпись первой кривой
+      svg.append("circle")
+        .attr("r", 6)
+        .attr("cx", 100)
+        .attr("cy", -25)
+        .attr("fill", "#009933")
+        .attr('stroke', 'black')
+
+      svg.append("text")
+        .attr("x", 180)
+        .attr("y", -20)
+        .style("text-anchor", "end")
+        .text("Давление")
+        .attr("fill", "black");
+
+      // добавляем подпись второй кривой
+      svg.append("circle")
+        .attr("r", 6)
+        .attr("cx", 220)
+        .attr("cy", -25)
+        .attr("fill", "blue")
+        .attr('stroke', 'black')
+
+      svg.append("text")
+        .attr("x", 325)
+        .attr("y", -20)
+        .style("text-anchor", "end")
+        .text("Температура")
+        .attr("fill", "black");
+
+
     }
 
     // добавляем первую ось y
@@ -416,40 +403,29 @@ charts1.append("text")
     .text("Напряжение, В")*/
 
     // Add brushing
-    var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-      .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-      .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
-    // Add the brushing
+    var brush = d3.brushX()
+      .extent([[0, 0], [width, height]])
+      .on("end", updateChart)
     svg
       .append("g")
       .attr("class", "brush")
       .call(brush);
-
-    // A function that set idleTimeOut to null
     var idleTimeout
     function idled() { idleTimeout = null; }
     function updateChart() {
-      // What are the selected boundaries?
       const extent = d3.event.selection
-
-      // If no selection or selection is too small, back to initial coordinate. Otherwise, update X axis domain
-      if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) { // проверяем, что расстояние между границами больше 1 минуты
-        if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+      if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) {
+        if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
         //  x.domain([4, 8])
       } else {
         x.domain([x.invert(extent[0]), x.invert(extent[1])])
-        svg.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+        svg.select(".brush").call(brush.move, null)
       }
-
-      // Update axis and line position
-      console.log(d3.select('.osx'))
       d3.select('.osx')
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x)
           .tickFormat(d3.timeFormat('%H:%M')))
         .transition().duration(1000).call(d3.axisBottom(x))
-
-
       svg.select('.line1')
         .datum(data.val)
         .transition()
@@ -581,7 +557,7 @@ charts1.append("text")
       tooltip.transition()
         .duration(200)
         .style("opacity", 0.9);
-      tooltip.html(`Время: ${(selectedTime)}<br/>Давление: ${d.value}<br/>Температура: ${d.tvalue}<br/>Скорость: ${d.speed}`)
+      tooltip.html(`Время: ${(selectedTime)}<br/>Давление: ${d.value} Бар<br/>Температура: ${d.tvalue} С°<br/>Скорость: ${d.speed} км/ч`)
       // .style("top", `${yPosition + 50}px`)
       // .style("left", `${xPosition + 50}px`);
     })
@@ -1261,33 +1237,25 @@ export async function speed(t1, t2) {
       .x(function (d) { return x(d.time) })
       .y(function (d) { return y(d.val) })
     )
-  // Add brushing
-  var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-    .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-    .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
-  // Add the brushing
+
+  var brush = d3.brushX()
+    .extent([[0, 0], [width, height]])
+    .on("end", updateChart)
   line
     .append("g")
     .attr("class", "brush")
     .call(brush);
-
-  // A function that set idleTimeOut to null
   var idleTimeout
   function idled() { idleTimeout = null; }
   function updateChart() {
-    // What are the selected boundaries?
     const extent = d3.event.selection
-
-    // If no selection or selection is too small, back to initial coordinate. Otherwise, update X axis domain
-    if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) { // проверяем, что расстояние между границами больше 1 минуты
-      if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+    if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) {
+      if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
       x.domain([4, 8])
     } else {
       x.domain([x.invert(extent[0]), x.invert(extent[1])])
-      line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+      line.select(".brush").call(brush.move, null)
     }
-
-    // Update axis and line position
     xAxis.transition().duration(1000).call(d3.axisBottom(x))
     line
       .select('.line')
