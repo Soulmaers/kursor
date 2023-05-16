@@ -915,6 +915,7 @@ export async function oil(t1, t2) {
     .attr("d", area2);
 
   svg.append("text")
+    .attr("class", 'obv')
     .attr("x", -130)
     .attr("y", -35)
     .attr("transform", "rotate(-90)")
@@ -922,6 +923,7 @@ export async function oil(t1, t2) {
     .text("Объем, л");
 
   svg.append("text")
+    .attr("class", 'napr')
     .attr("x", -100)
     .attr("y", 730)
     .attr("transform", "rotate(-90)")
@@ -931,6 +933,7 @@ export async function oil(t1, t2) {
 
   // добавляем подпись первой кривой
   svg.append("circle")
+    .attr('class', 'legendOilcircle')
     .attr("r", 6)
     .attr("cx", 200)
     .attr("cy", -30)
@@ -938,6 +941,7 @@ export async function oil(t1, t2) {
     .attr('stroke', 'black')
 
   svg.append("text")
+    .attr('class', 'legendOil')
     .attr("x", 270)
     .attr("y", -25)
     .style("text-anchor", "end")
@@ -946,6 +950,7 @@ export async function oil(t1, t2) {
 
   // добавляем подпись второй кривой
   svg.append("circle")
+    .attr('class', 'legendVoltcircle')
     .attr("r", 6)
     .attr("cx", 300)
     .attr("cy", -30)
@@ -953,6 +958,7 @@ export async function oil(t1, t2) {
     .attr('stroke', 'black')
 
   svg.append("text")
+    .attr('class', 'legendOil')
     .attr("x", 445)
     .attr("y", -25)
     .style("text-anchor", "end")
@@ -1140,6 +1146,57 @@ export async function oil(t1, t2) {
 
 
 
+  const legendOil = document.querySelectorAll('.legendOil')
+
+
+  legendOil[0].addEventListener('click', () => {
+    const os1y = d3.select('.os1y')
+    const line1 = d3.select('.line1')
+    const area1 = d3.select('.area1')
+    const obv = d3.select('.obv')
+    const legendOilcircle = d3.select('.legendOilcircle')
+    if (legendOil[0].classList.contains('noActive')) {
+      console.log('удаляем легенда топливо')
+      legendOilcircle.attr('fill', 'none')
+      os1y.style("display", "none")
+      line1.style("display", "none")
+      area1.style("display", "none")
+      obv.style("display", "none")
+      legendOil[0].classList.remove('noActive')
+      return
+    }
+    legendOilcircle.attr('fill', 'blue')
+    os1y.style("display", "block")
+    line1.style("display", "block")
+    area1.style("display", "block")
+    obv.style("display", "block")
+    legendOil[0].classList.add('noActive')
+  })
+
+
+  legendOil[1].addEventListener('click', () => {
+    const os2y = d3.select('.os2y')
+    const line2 = d3.select('.line2')
+    const area2 = d3.select('.area2')
+    const napr = d3.select('.napr')
+    const legendVoltcircle = d3.select('.legendVoltcircle')
+    if (legendOil[1].classList.contains('noActivev')) {
+      console.log('удаляем легенда напряжение')
+      legendVoltcircle.attr('fill', 'none')
+      os2y.style("display", "none")
+      line2.style("display", "none")
+      area2.style("display", "none")
+      napr.style("display", "none")
+      legendOil[1].classList.remove('noActivev')
+      return
+    }
+    legendVoltcircle.attr('fill', '#32a885')
+    os2y.style("display", "block")
+    line2.style("display", "block")
+    area2.style("display", "block")
+    napr.style("display", "block")
+    legendOil[1].classList.add('noActivev')
+  })
 }
 
 

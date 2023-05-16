@@ -36,6 +36,7 @@ async function waitArr(el) {
     const dat = await fetch('api/wialon', param)
     const data = await dat.json();
     // dataArr.push(data)
+
     return [params, data]
 }
 
@@ -78,7 +79,7 @@ export function dashAllSort(test) {
             })
         }
 
-
+        console.log(all)
 
     })
     const checkboxes = document.querySelectorAll('.input');
@@ -100,7 +101,7 @@ export function dashAllSort(test) {
                         }
                     })
                 })
-                //console.log(mas)
+                console.log(mas)
 
                 dashDav(mas)
                 mas.length = 0;

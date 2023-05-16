@@ -2576,6 +2576,20 @@ input[type="date"] {
   border-radius: 5px;
 }
 
+.tooltips {
+  position: absolute;
+  display: none;
+  background-color: #fff;
+  border: 1px solid #000;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  border-radius: 5px;
+}
+
+
+.legendOil {
+  cursor: pointer;
+}
 
 .card_img {
   width: 60%;
