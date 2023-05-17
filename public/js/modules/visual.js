@@ -12,9 +12,8 @@ import { iconFind, iconFindWindows, refactor } from './configIcons.js'
 import { grafikPoly, tarirView } from './staticObject.js'
 import { tooltip } from './cursorTooltip.js'
 import { ggg } from './menu.js'
-import { datas, oil } from './grafiks.js'
 import { Tooltip } from '../class/Tooltip.js'
-import { graftest, click } from './graf.js'
+import { click } from './graf.js'
 
 
 

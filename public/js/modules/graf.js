@@ -1,6 +1,7 @@
 
-import { datas, oil, speed } from './grafiks.js'
-
+import { speed } from './charts/speed.js'
+import { oil } from './charts/oil.js'
+import { datas } from './charts/bar.js'
 
 
 const btnForm = document.querySelectorAll('.btm_form')
