@@ -194,16 +194,69 @@ function grafikStartPress(times, datar) {
   console.log(count)
   let he;
   let pad;
+
+  const tooltips = document.createElement('div')
+  tooltips.classList.add('tooltips')
+  const titleGraf = document.createElement('div')
+  tooltips.classList.add('tooltips')
+  titleGraf.classList.add('titleGraf')
+  const infoGraf = document.querySelector('.infoGraf')
+  infoGraf.prepend(titleGraf)
+
+  titleGraf.textContent = 'Давление/Температура'
+  infoGraf.appendChild(tooltips)
+  const tt1 = document.createElement('div')
+  const tt2 = document.createElement('div')
+  const tt3 = document.createElement('div')
+  const tt4 = document.createElement('div')
+  tooltips.appendChild(tt1)
+  tooltips.appendChild(tt2)
+  tooltips.appendChild(tt3)
+  tooltips.appendChild(tt4)
+
+  const svgLegend = d3.select('.titleGraf')
+  const svga = svgLegend.append('svg')
+    .attr("width", 300)
+    .attr('height', 40)
+    .append("g")
+    .attr("transform", "translate(" + -70 + "," + 40 + ")")
+  svga.append("circle")
+    .attr('class', 'barGraf')
+    .attr("r", 6)
+    .attr("cx", 100)
+    .attr("cy", -25)
+    .attr("fill", "#009933")
+    .attr('stroke', 'black')
+  svga.append("text")
+    .attr('class', 'legendBar')
+    .attr("x", 200)
+    .attr("y", -20)
+    .style("text-anchor", "end")
+    .text("Давление")
+    .attr("fill", "black");
+  // добавляем подпись второй кривой
+  svga.append("circle")
+    .attr('class', 'tempGraf')
+    .attr("r", 6)
+    .attr("cx", 220)
+    .attr("cy", -25)
+    .attr("fill", "blue")
+    .attr('stroke', 'black')
+  svga.append("text")
+    .attr('class', 'legendBar')
+    .attr("x", 345)
+    .attr("y", -20)
+    .style("text-anchor", "end")
+    .text("Температура")
+    .attr("fill", "black");
+  tooltips.style.display = 'none'
   // В каждом элементе создаем график
   charts.each(function (d, i) {
     const data = d; // данные для этого графика
     console.log(data)
     const chartContainer = d3.select(this); // div, в котором будет находиться график
-    if (i === 0) {
-      he = height + 60
-      pad = 60
-    }
-    else if (i === count - 1) {
+
+    if (i === count - 1) {
       he = height + 30
       pad = 0
     }
@@ -211,56 +264,43 @@ function grafikStartPress(times, datar) {
       he = height
       pad = 0
     }
-
     // создаем svg контейнер
     const svg = chartContainer.append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr('height', he)
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + pad + ")")
-
-
     // задаем x-шкалу
     const x = d3.scaleTime()
       .domain(d3.extent(data.val, (d) => new Date(d.dates)))
       .range([0, width])
-    // .tickFormat(d3.timeFormat('%H:%M')); // формат даты 
-
     // задаем y-шкалу для первой оси y
     const y1 = d3.scaleLinear()
       .domain(d3.extent(data.val, (d) => d.value))
       .range([height, 0]);
-
     // задаем y-шкалу для второй оси y
     const y2 = d3.scaleLinear()
       .domain(d3.extent(data.val, (d) => d.tvalue))
       .range([height, 0]);
-
     const yAxis1 = d3.axisLeft(y1)
     const yAxis2 = d3.axisLeft(y2)
     const xAxis = d3.axisBottom(x)
-
     const line1 = d3.line()
       .x((d) => x(d.dates))
       .y((d) => y1(d.value))
-
     const line2 = d3.line()
       .x((d) => x(d.dates))
       .y((d) => y2(d.tvalue))
-
     const area1 = d3.area()
       .x(d => x(d.dates))
       .y0(height)
       .y1(d => y1(d.value))
-
     const area2 = d3.area()
       .x(d => x(d.dates))
       .y0(height)
       .y1(d => y2(d.tvalue))
     // добавляем текстовый элемент
     const u = 0;
-
-
     if (i === count - 1) {
       console.log(i)
       // добавляем ось x
@@ -270,68 +310,16 @@ function grafikStartPress(times, datar) {
         .attr('height', 300)
         .call(xAxis
           .tickFormat(d3.timeFormat('%H:%M')));
-      //  .tickFormat(d3.timeFormat('%H:%M')); // формат даты
     }
-    if (i === 0) {
-      console.log(i)
-      svg.append("text")
-        .attr("x", 200)
-        .attr("y", -40)
-        .style("font-size", "22px")
-        .attr("text-anchor", "middle")
-        .text("Давление/Температура");
-
-
-
-      // добавляем подпись первой кривой
-      svg.append("circle")
-        .attr('class', 'barGraf')
-        .attr("r", 6)
-        .attr("cx", 100)
-        .attr("cy", -25)
-        .attr("fill", "#009933")
-        .attr('stroke', 'black')
-
-      svg.append("text")
-        .attr('class', 'legendBar')
-        .attr("x", 180)
-        .attr("y", -20)
-        .style("text-anchor", "end")
-        .text("Давление")
-        .attr("fill", "black");
-
-      // добавляем подпись второй кривой
-      svg.append("circle")
-        .attr('class', 'tempGraf')
-        .attr("r", 6)
-        .attr("cx", 220)
-        .attr("cy", -25)
-        .attr("fill", "blue")
-        .attr('stroke', 'black')
-
-      svg.append("text")
-        .attr('class', 'legendBar')
-        .attr("x", 325)
-        .attr("y", -20)
-        .style("text-anchor", "end")
-        .text("Температура")
-        .attr("fill", "black");
-
-
-    }
-
     // добавляем первую ось y
     svg.append("g")
       .attr("class", "os1y")
     // .call(yAxis1);
-
     // добавляем вторую ось y
     svg.append("g")
       .attr("class", "os2y")
       .attr("transform", "translate(" + width + ", 0)")
     // .call(yAxis2);
-
-
     var clip = svg.append("defs").append("svg:clipPath")
       .attr("id", "clip")
       .append("svg:rect")
@@ -339,12 +327,9 @@ function grafikStartPress(times, datar) {
       .attr("height", height)
       .attr("x", 0)
       .attr("y", 0);
-
     var chartGroup = svg.append("g")
       .attr("class", "chart-group")
       .attr("clip-path", "url(#clip)");
-
-
     // добавляем линии для первой оси y
     chartGroup.append("path")
       .datum(data.val)
@@ -353,7 +338,6 @@ function grafikStartPress(times, datar) {
       .attr("stroke", "black")
       .attr("stroke-width", 1.5)
       .attr("d", line1);
-
     // добавляем линии для второй оси y
     chartGroup.append("path")
       .datum(data.val)
@@ -362,7 +346,6 @@ function grafikStartPress(times, datar) {
       .attr("stroke", "blue")
       .attr("stroke-width", 2)
       .attr("d", line2);
-
     // добавляем области для первой кривой
     chartGroup.append("path")
       .datum(data.val)
@@ -373,7 +356,6 @@ function grafikStartPress(times, datar) {
       .attr("stroke", "black")
       .attr("stroke-width", 1)
       .attr("d", area1);
-
     // добавляем области для второй кривой
     chartGroup.append("path")
       .datum(data.val)
@@ -384,14 +366,12 @@ function grafikStartPress(times, datar) {
       .attr("stroke", "black")
       .attr("stroke-width", 1)
       .attr("d", area2);
-
     svg.append("text")
       .attr("x", -130)
       .attr("y", 30)
       .attr("transform", "rotate(0)")
       .attr("text-anchor", "middle")
       .text(`${d.sens}`);
-
     // Add brushing
     var brush = d3.brushX()
       .extent([[0, 0], [width, height]])
@@ -497,7 +477,6 @@ function grafikStartPress(times, datar) {
         .attr("stroke", "black")
         .attr("stroke-width", 1)
         .attr("d", area1)
-
       svg.select(".area2")
         .datum(data.val)
         .transition()
@@ -510,13 +489,6 @@ function grafikStartPress(times, datar) {
         .attr("stroke-width", 1)
         .attr("d", area2)
     });
-
-    const tooltip = d3.select(".infoGraf").append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
-
-    //const pat = svg.selectAll('.pat')
-    // console.log(pat)
     svg.on("mousemove", function (d) {
       // Определяем координаты курсора в отношении svg
       const [xPosition, yPosition] = d3.mouse(this);
@@ -527,43 +499,29 @@ function grafikStartPress(times, datar) {
       const d0 = data.val[i - 1];
       const d1 = data.val[i];
       d = x0 - d0.dates > d1.dates - x0 ? d1 : d0;
-
+      // Показать тултип, если он скрыт
+      tooltips.style.display = 'block'
+      const selectedTime = timeConvert(d.dates)
       // Обновить текст в тултипе
       if (d) {
-        tooltip.select(".tooltip-text").text(`Дата: ${d.date}, значение: ${d.value}`);
+        tt1.textContent = `Время: ${(selectedTime)}`
+        tt2.textContent = `Давление: ${d.value} Бар`
+        tt3.textContent = `Температура: ${d.tvalue} С°`
+        tt4.textContent = `Скорость: ${d.speed} км/ч`
       }
-
-      // Позиционировать тултип относительно координат мыши
-      const tooltipWidth = tooltip.node().getBoundingClientRect().width;
-      console.log
-      tooltip.style("left", `${xPosition + 100}px`);
-      tooltip.style("top", `${yPosition + 100}px`);
-
-      // Показать тултип, если он скрыт
-      tooltip.style("display", "block");
-
-      const selectedTime = timeConvert(d.dates)
-      // Отображаем подсказку с координатами и значениями по оси y
-      tooltip.transition()
-        .duration(200)
-        .style("opacity", 0.9);
-      tooltip.html(`Время: ${(selectedTime)}<br/>Давление: ${d.value} Бар<br/>Температура: ${d.tvalue} С°<br/>Скорость: ${d.speed} км/ч`)
-      // .style("top", `${yPosition + 50}px`)
-      // .style("left", `${xPosition + 50}px`);
+      tooltips.style.left = `${xPosition + 300}px`
+      tooltips.style.top = `${yPosition + 300}px`
     })
       // Добавляем обработчик события mouseout, чтобы скрыть подсказку
       .on("mouseout", function (event, d) {
-        tooltip.transition()
-          .duration(500)
-          .style("opacity", 0);
+        tooltips.style.display = 'none'
       });
 
 
   });
-
-
   const legendBar = document.querySelectorAll('.legendBar')
   legendBar[0].addEventListener('click', () => {
+    console.log('нажал давление')
     const line1 = d3.selectAll('.line1')
     const area1 = d3.selectAll('.area1')
     const legendBarCircle = d3.select('.barGraf')
@@ -593,159 +551,7 @@ function grafikStartPress(times, datar) {
     line2.style("display", "block")
     area2.style("display", "block")
   })
-  /*
-  legendOil[1].addEventListener('click', () => {
-    const os2y = d3.select('.os2y')
-    const line2 = d3.select('.line2')
-    const area2 = d3.select('.area2')
-    const napr = d3.select('.napr')
-    const legendVoltcircle = d3.select('.legendVoltcircle')
-    legendOil[1].classList.toggle('noActive')
-    if (legendOil[1].classList.contains('noActive')) {
-      console.log('удаляем легенда напряжение')
-      legendVoltcircle.attr('fill', 'none')
-      os2y.style("display", "none")
-      line2.style("display", "none")
-      area2.style("display", "none")
-      napr.style("display", "none")
-      return
-    }
-    legendVoltcircle.attr('fill', '#32a885')
-    os2y.style("display", "block")
-    line2.style("display", "block")
-    area2.style("display", "block")
-    napr.style("display", "block")
-  })
-*/
-
-  /*
-  const yAxisName = d3.scaleBand()
-    .range([0, height * global.series.length])
-    .padding(1)
-    .domain(global.series.map(({ sens }) => sens));
-  const minValue = d3.min(global.series, ({ value }) => d3.min(value));
-  const yAxisValue = d3.scaleLinear()
-    .range([height, 0])
-    .domain(minValue < 0 ? [minValue, d3.max(global.series, ({ value }) => d3.max(value))] : [0, d3.max(global.series, ({ value }) => d3.max(value))])
-    .nice();
-
-
-  const xScale = d3.scaleTime()
-    .range([0, width])
-    .domain(d3.extent(global.dates, d => new Date(d)));
-  const area = d3.area().
-    curve(d3.curveBasis)
-    .x((d, i) => xScale(new Date(global.dates[i])))
-    .y0(height)
-    .y1(d => yAxisValue(d));
-  const line = d3.line()
-    .curve(d3.curveBasis)
-    .x((d, i) => xScale(new Date(global.dates[i])))
-    .y(d => yAxisValue(d));
-  const xAxis = d3.axisBottom(xScale)
-    .tickFormat(d3.timeFormat('%H:%M')); // формат даты 
-  const svg = d3.select('.infoGraf')
-    .append('svg')
-    .attr('width', width + margin.left + margin.right)
-    .attr('height', margin.top + margin.bottom + height * global.series.length)
-    .append('g')
-    .attr('transform', `translate(${margin.left}, ${margin.top})`);
-  const seriesGroup = svg.selectAll('.series-group')
-    .data(global.series)
-    .enter()
-    .append('g')
-    .attr('class', 'series-group')
-    .attr('transform', (d, i) => `translate(0, ${yAxisName(d.sens)})`)
-    .on('mouseover', mouseover)
-    .on('mousemove', mousemove)
-    .on('mouseout', mouseout);
-  seriesGroup.append('path')
-    .attr('class', 'area')
-    .attr('d', d => area(d.value))
-    .attr('fill', 'steelblue')
-    .attr('stroke', 'black')
-    .attr('stroke-width', '1px')
-  seriesGroup.append('path')
-    .attr('class', 'line')
-    .attr('d', d => line(d.value))
-    .attr('fill', 'none')
-    .attr('stroke', 'black')
-    .attr('stroke-width', '1px')
-  seriesGroup.append('text')
-    .attr('class', 'series-name')
-    .attr('x', -10)
-    .attr('y', height / 2)
-    .style('text-anchor', 'end')
-    .style('font-size', '14px')
-    .text(d => d.sens);
-  const xAxisTicks = svg.append('g')
-    .attr('transform', `translate(0, ${height * global.series.length})`)
-    .call(xAxis);
-  xAxisTicks.select('.domain').remove();
-  xAxisTicks.selectAll('line')
-    .attr('y2', 5)
-    .attr('stroke', 'steelblue');
-  xAxisTicks.selectAll('text')
-    .style('text-anchor', 'middle')
-    .style('font-size', '12px')
-    .attr('dy', '1em')
-    .attr('transform', 'rotate(0) translate(-10,20)');
-  const bisect = d3.bisector(d => new Date(d)).left;
-  const tooltip = svg.append('g')
-    .attr('class', 'tooltipGraf')
-    .style('display', 'none');
-  tooltip.append('text') // добавляем текст для подсказки
-    .attr('class', 'tooltipText')
-    .attr('x', 15)
-    .attr('dy', '3em')
-    .style('font-size', '12px');
-
-
-  svg.append("text")
-    .attr("x", 200)
-    .attr("y", 0)
-    .style("font-size", "22px")
-    .attr("text-anchor", "middle")
-    .text("График давления");
-
-
-  function mouseover() {
-    tooltip.style('display', null);
-  }
-
-  function mousemove(d) {
-    const [mouseX, mouseY] = d3.mouse(this);
-    const xValue = xScale.invert(mouseX);
-    const i = bisect(global.dates, xValue, 1);
-
-    const selectedData = [{
-      sens: d.sens,
-      value: d.value[i],
-      tvalue: d.tvalue[i],
-      date: global.dates[i],
-      speed: d.speed[i]
-    }];
-    console.log(selectedData)
-    const selectedTime = timeConvert(selectedData[0].date)
-    if (mouseX >= 0 && mouseX <= width
-      && mouseY >= 0 && mouseY <= height) {
-      console.log('подсказка')
-      tooltip.selectAll('.tooltipText') // выбираем текст внутри tooltip
-        .html(`Колесо: ${selectedData[0].sens}\nВремя: ${selectedTime}\nЗначение: ${selectedData[0].value} Бар, ${selectedData[0].tvalue} C°, Скорость:${selectedData[0].speed} км/ч `);
-      tooltip.style('display', 'block') // показываем подсказку
-      return
-    }
-    else {
-      console.log('ничего')
-    }
-  }
-  function mouseout() {
-    tooltip.style('display', 'none');
-  }
-  */
-
 }
-
 function timeConvert(d) {
   const date = new Date(d);
   const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
@@ -758,25 +564,15 @@ function timeConvert(d) {
   return timeString;
 }
 
-
 export async function oil(t1, t2) {
-
   console.log('график топлива')
-
   const active = document.querySelector('.color').id
-  console.log(active)
-
   const global = await fnTime(t1, t2)
   const sensArr = await fnPar(active)
   const nameArr = await fnParMessage(active)
-  // console.log(global)
-  // console.log(sensArr)
-  // console.log(nameArr)
   const gl = global[0].map(it => {
     return new Date(it)
   })
-
-  //console.log(gl)
   const allArrNew = [];
   nameArr.forEach((item) => {
     allArrNew.push({ sens: item[0], params: item[1], value: [] })
@@ -788,18 +584,12 @@ export async function oil(t1, t2) {
 
     }
   })
-  // console.log(allArrNew)
-
-
   const finishArrayData = []
-  //console.log(allArrNew)
   allArrNew.forEach(e => {
     if (e.sens.startsWith('Бортовое') || e.sens.startsWith('Топливо')) {
-      //  console.log(e);
       finishArrayData.push(e)
     }
   })
-
   const object = {}
   finishArrayData.forEach(el => {
     object.time = gl
@@ -829,24 +619,67 @@ export async function oil(t1, t2) {
   grafics.appendChild(graf)
 
   // устанавливаем размеры контейнера
-  const margin = { top: 100, right: 60, bottom: 30, left: 60 },
+  const margin = { top: 10, right: 60, bottom: 30, left: 60 },
     width = 800 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
-
+    height = 500 - margin.top - margin.bottom;
   // создаем svg контейнер
   const svg = d3.select(".infoGraf").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  const titleGraf = document.createElement('div')
+  titleGraf.classList.add('titleGraf')
+  const infoGraf = document.querySelector('.infoGraf')
+  infoGraf.prepend(titleGraf)
+  titleGraf.textContent = 'Топливо/Бортовое питание'
+
+  const svgLegend = d3.select('.titleGraf')
+  const svga = svgLegend.append('svg')
+    .attr("width", 350)
+    .attr('height', 40)
+    .append("g")
+    .attr("transform", "translate(" + -180 + "," + 40 + ")")
+
+  // добавляем подпись первой кривой
+  svga.append("circle")
+    .attr('class', 'legendOilcircle')
+    .attr("r", 6)
+    .attr("cx", 200)
+    .attr("cy", -20)
+    .attr("fill", "blue")
+    .attr('stroke', 'black')
+
+  svga.append("text")
+    .attr('class', 'legendOil')
+    .attr("x", 290)
+    .attr("y", -15)
+    .style("text-anchor", "end")
+    .text("Топливо")
+    .attr("fill", "black");
+
+  // добавляем подпись второй кривой
+  svga.append("circle")
+    .attr('class', 'legendVoltcircle')
+    .attr("r", 6)
+    .attr("cx", 320)
+    .attr("cy", -20)
+    .attr("fill", "#32a885")
+    .attr('stroke', 'black')
+
+  svga.append("text")
+    .attr('class', 'legendOil')
+    .attr("x", 490)
+    .attr("y", -15)
+    .style("text-anchor", "end")
+    .text("Бортовое питание")
+    .attr("fill", "black");
 
 
   // задаем x-шкалу
   const x = d3.scaleTime()
     .domain(d3.extent(data, (d) => new Date(d.time)))
     .range([0, width])
-  //   .tickFormat(d3.timeFormat('%H:%M')); // формат даты 
-
   // задаем y-шкалу для первой оси y
   const y1 = d3.scaleLinear()
     .domain(d3.extent(data, (d) => d.oil))
@@ -876,28 +709,16 @@ export async function oil(t1, t2) {
     .x(d => x(d.time))
     .y0(height)
     .y1(d => y2(d.pwr))
-
-
-  // добавляем текстовый элемент
-  svg.append("text")
-    .attr("x", 350)
-    .attr("y", -50)
-    .style("font-size", "22px")
-    .attr("text-anchor", "middle")
-    .text("График Топливо/Бортовое питание");
-
   // добавляем ось x
   svg.append("g")
     .attr("class", "osx")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis
       .tickFormat(d3.timeFormat('%H:%M')));
-  //  .tickFormat(d3.timeFormat('%H:%M')); // формат даты 
   // добавляем первую ось y
   svg.append("g")
     .attr("class", "os1y")
     .call(yAxis1);
-
   // добавляем вторую ось y
   svg.append("g")
     .attr("class", "os2y")
@@ -906,8 +727,6 @@ export async function oil(t1, t2) {
     .selectAll(".tick text")
     .attr("x", '15')
     .style("text-anchor", "start")
-
-
   var clip = svg.append("defs").append("svg:clipPath")
     .attr("id", "clip")
     .append("svg:rect")
@@ -915,12 +734,9 @@ export async function oil(t1, t2) {
     .attr("height", height)
     .attr("x", 0)
     .attr("y", 0);
-
   var chartGroup = svg.append("g")
     .attr("class", "chart-group")
     .attr("clip-path", "url(#clip)");
-
-
   // добавляем линии для первой оси y
   chartGroup.append("path")
     .datum(data)
@@ -929,7 +745,6 @@ export async function oil(t1, t2) {
     .attr("stroke", "blue")
     .attr("stroke-width", 1.5)
     .attr("d", line1);
-
   // добавляем линии для второй оси y
   chartGroup.append("path")
     .datum(data)
@@ -938,7 +753,6 @@ export async function oil(t1, t2) {
     .attr("stroke", "black")
     .attr("stroke-width", 1.5)
     .attr("d", line2);
-
   // добавляем области для первой кривой
   chartGroup.append("path")
     .datum(data)
@@ -949,7 +763,6 @@ export async function oil(t1, t2) {
     .attr("stroke", "black")
     .attr("stroke-width", 1)
     .attr("d", area1);
-
   // добавляем области для второй кривой
   chartGroup.append("path")
     .datum(data)
@@ -960,7 +773,6 @@ export async function oil(t1, t2) {
     .attr("stroke", "black")
     .attr("stroke-width", 1)
     .attr("d", area2);
-
   svg.append("text")
     .attr("class", 'obv')
     .attr("x", -130)
@@ -968,7 +780,6 @@ export async function oil(t1, t2) {
     .attr("transform", "rotate(-90)")
     .attr("text-anchor", "end")
     .text("Объем, л");
-
   svg.append("text")
     .attr("class", 'napr')
     .attr("x", -100)
@@ -976,45 +787,6 @@ export async function oil(t1, t2) {
     .attr("transform", "rotate(-90)")
     .attr("text-anchor", "end")
     .text("Напряжение, В")
-
-
-  // добавляем подпись первой кривой
-  svg.append("circle")
-    .attr('class', 'legendOilcircle')
-    .attr("r", 6)
-    .attr("cx", 200)
-    .attr("cy", -30)
-    .attr("fill", "blue")
-    .attr('stroke', 'black')
-
-  svg.append("text")
-    .attr('class', 'legendOil')
-    .attr("x", 270)
-    .attr("y", -25)
-    .style("text-anchor", "end")
-    .text("Топливо")
-    .attr("fill", "black");
-
-  // добавляем подпись второй кривой
-  svg.append("circle")
-    .attr('class', 'legendVoltcircle')
-    .attr("r", 6)
-    .attr("cx", 300)
-    .attr("cy", -30)
-    .attr("fill", "#32a885")
-    .attr('stroke', 'black')
-
-  svg.append("text")
-    .attr('class', 'legendOil')
-    .attr("x", 445)
-    .attr("y", -25)
-    .style("text-anchor", "end")
-    .text("Бортовое питание")
-    .attr("fill", "black");
-
-
-
-
   // Add brushing
   var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
     .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
@@ -1024,14 +796,12 @@ export async function oil(t1, t2) {
     .append("g")
     .attr("class", "brush")
     .call(brush);
-
   // A function that set idleTimeOut to null
   var idleTimeout
   function idled() { idleTimeout = null; }
   function updateChart() {
     // What are the selected boundaries?
     const extent = d3.event.selection
-
     // If no selection or selection is too small, back to initial coordinate. Otherwise, update X axis domain
     if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) { // проверяем, что расстояние между границами больше 1 минуты
       if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
@@ -1040,15 +810,12 @@ export async function oil(t1, t2) {
       x.domain([x.invert(extent[0]), x.invert(extent[1])])
       svg.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
     }
-
     // Update axis and line position
     svg.select("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x)
         .tickFormat(d3.timeFormat('%H:%M')))
       .transition().duration(1000).call(d3.axisBottom(x))
-
-
     svg.select('.line1')
       .datum(data)
       .transition()
@@ -1104,7 +871,7 @@ export async function oil(t1, t2) {
     svg.select('.line1')
       .datum(data)
       .transition()
-      //  .duration(1000)
+      .duration(1000)
       .attr("fill", "none")
       .attr("stroke", "blue")
       .attr("stroke-width", 1.5)
@@ -1113,7 +880,7 @@ export async function oil(t1, t2) {
     svg.select('.line2')
       .datum(data)
       .transition()
-      // .duration(1000)
+      .duration(1000)
       .attr("fill", "none")
       .attr("stroke", "blue")
       .attr("stroke-width", 1.5)
@@ -1122,7 +889,7 @@ export async function oil(t1, t2) {
     svg.select(".area1")
       .datum(data)
       .transition()
-      // .duration(1000)
+      .duration(1000)
       .attr("fill", "blue")
       .attr("class", "pat")
       .attr("class", "area1")
@@ -1134,7 +901,7 @@ export async function oil(t1, t2) {
     svg.select(".area2")
       .datum(data)
       .transition()
-      //  .duration(1000)
+      .duration(1000)
       .attr("class", "pat")
       .attr("class", "area2")
       .attr("fill", "#32a885")
@@ -1144,12 +911,6 @@ export async function oil(t1, t2) {
       .attr("d", area2)
   });
 
-  const tooltip = d3.select(".infoGraf").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
-
-  //const pat = svg.selectAll('.pat')
-  // console.log(pat)
   svg.on("mousemove", function (d) {
     // Определяем координаты курсора в отношении svg
     const [xPosition, yPosition] = d3.mouse(this);
@@ -1161,40 +922,44 @@ export async function oil(t1, t2) {
     const d1 = data[i];
     d = x0 - d0.time > d1.time - x0 ? d1 : d0;
 
-    // Обновить текст в тултипе
-    if (d) {
-      tooltip.select(".tooltip-text").text(`Дата: ${d.date}, значение: ${d.value}`);
-    }
+    const tooltip = d3.select(".infoGraf").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+    svg.on("mousemove", function (d) {
+      // Определяем координаты курсора в отношении svg
+      const [xPosition, yPosition] = d3.mouse(this);
+      // Определяем ближайшую точку на графике
+      const bisect = d3.bisector(d => d.time).right;
+      const x0 = x.invert(xPosition);
+      const i = bisect(data, x0, 1);
+      const d0 = data[i - 1];
+      const d1 = data[i];
+      d = x0 - d0.time > d1.time - x0 ? d1 : d0;
 
-    // Позиционировать тултип относительно координат мыши
-    const tooltipWidth = tooltip.node().getBoundingClientRect().width;
-    console.log
-    tooltip.style("left", `${xPosition + 100}px`);
-    tooltip.style("top", `${yPosition + 100}px`);
-
-    // Показать тултип, если он скрыт
-    tooltip.style("display", "block");
-
-    const selectedTime = timeConvert(d.time)
-    // Отображаем подсказку с координатами и значениями по оси y
-    tooltip.transition()
-      .duration(200)
-      .style("opacity", 0.9);
-    tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${d.oil}<br/>Бортовое питание: ${d.pwr}`)
-    // .style("top", `${yPosition + 50}px`)
-    // .style("left", `${xPosition + 50}px`);
-  })
-    // Добавляем обработчик события mouseout, чтобы скрыть подсказку
-    .on("mouseout", function (event, d) {
+      tooltip.style("left", `${xPosition + 100}px`);
+      tooltip.style("top", `${yPosition + 100}px`);
+      // Показать тултип, если он скрыт
+      tooltip.style("display", "block");
+      const selectedTime = timeConvert(d.time)
+      // Отображаем подсказку с координатами и значениями по оси y
       tooltip.transition()
-        .duration(500)
-        .style("opacity", 0);
-    });
+        .duration(200)
+        .style("opacity", 0.9);
+      tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${d.oil}<br/>Бортовое питание: ${d.pwr}`)
+    })
+      // Добавляем обработчик события mouseout, чтобы скрыть подсказку
+      .on("mouseout", function (event, d) {
+        tooltip.transition()
+          .duration(500)
+          .style("opacity", 0);
+      });
 
-
+  })
 
   const legendOil = document.querySelectorAll('.legendOil')
+  console.log(legendOil[0])
   legendOil[0].addEventListener('click', () => {
+    console.log('нажал топливо')
     const os1y = d3.select('.os1y')
     const line1 = d3.select('.line1')
     const area1 = d3.select('.area1')
@@ -1240,7 +1005,6 @@ export async function oil(t1, t2) {
     napr.style("display", "block")
   })
 }
-
 
 
 export async function speed(t1, t2) {

@@ -471,21 +471,21 @@ function mail(value, mess) {
     }*/
 
 
-
-    let smtpTransport;
-    try {
-        smtpTransport = nodemailer.createTransport({
-            host: 'smtp.mail.ru',
-            port: 465,
-            secure: true, // true for 465, false for other ports 587
-            auth: {
-                user: "develop@cursor-gps.ru",
-                pass: process.env.MAIL_PASS  //NphLycnf9gqPysYJt3jf
-            }
-        });
-    } catch (e) {
-        return console.log('Error: ' + e.name + ":" + e.message);
-    }
+    /*
+        let smtpTransport;
+        try {
+            smtpTransport = nodemailer.createTransport({
+                host: 'smtp.mail.ru',
+                port: 465,
+                secure: true, // true for 465, false for other ports 587
+                auth: {
+                    user: "develop@cursor-gps.ru",
+                    pass: process.env.MAIL_PASS  //NphLycnf9gqPysYJt3jf
+                }
+            });
+        } catch (e) {
+            return console.log('Error: ' + e.name + ":" + e.message);
+        }*/
 
     let mailOptions = {
         from: 'develop@cursor-gps.ru', // sender address
