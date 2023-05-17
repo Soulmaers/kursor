@@ -80,6 +80,7 @@ export async function fnParMessage(active) {
         if (code) {
           console.log(wialon.core.Errors.getErrorText(code));
         }
+        console.log(result)
         const nameArr = [];
         Object.entries(result.item.sens).forEach(el => {
           nameArr.push([el[1].n, el[1].p])

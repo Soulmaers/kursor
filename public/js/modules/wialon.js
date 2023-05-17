@@ -188,8 +188,10 @@ export function iconParams() {
                                     allArr.push([...e, valueSens[index]])
 
                                 })
-                                //  console.log(allArr)
+                                //   console.log(arrNameSens)
+                                console.log(allArr)
                                 // console.log(arrCar)
+                                console.log(result)
                                 let power;
                                 let sats;
                                 arrCar.forEach(item => {
@@ -229,29 +231,55 @@ export function iconParams() {
                                         }
                                         const statusObj = document.querySelector('.status_obj')
                                         let mess;
-                                        if (sats <= 4 || statusTSI === 'ВЫКЛ') {
+                                        if (document.querySelector('.color').children[0].textContent.startsWith('Цист')) {
+                                            if (sats > 4 && it[2] === 1) {
+                                                statusObj.textContent = 'Online'
+                                                statusObj.style.color = '#15a32d'
+                                                mess = `Установлена связь с ${sats} спутниками`
+                                                new Tooltip(statusObj, [mess]);
+                                            }
+                                            else if (sats <= 4 || it[2] !== 1) {
+                                                if (sats <= 4 && it[2] === 1) {
+                                                    mess = 'Не установлена связь со спутниками'
+                                                }
+                                                else if (sats > 4 && it[2] !== 1) {
+                                                    mess = 'Зажигание выключено'
+                                                }
+                                                else if (sats <= 4 && it[2] !== 1) {
+                                                    mess = 'Зажигание выключено, Не установлена связь со спутниками'
+                                                }
+                                                statusObj.textContent = 'Offline'
+                                                new Tooltip(statusObj, [mess]);
+                                            }
+                                        }
+                                        else {
+                                            if (sats <= 4 || statusTSI === 'ВЫКЛ') {
+                                                if (sats <= 4 && statusTSI === 'ВКЛ') {
+                                                    mess = 'Не установлена связь со спутниками'
+                                                }
+                                                else if (sats > 4 && statusTSI === 'ВЫКЛ') {
+                                                    mess = 'Двигатель выключен'
+                                                }
+                                                else if (sats <= 4 && statusTSI === 'ВЫКЛ') {
+                                                    mess = 'Двигатель выключен, Не установлена связь со спутниками'
+                                                }
+                                                statusObj.textContent = 'Offline'
+                                                new Tooltip(statusObj, [mess]);
+                                            }
+                                            else if (sats > 3 || statusTSI === 'ВКЛ') {
+                                                //  console.log('он')
+                                                statusObj.textContent = 'Online'
+                                                statusObj.style.color = '#15a32d'
+                                                mess = `Установлена связь с ${sats} спутниками`
+                                                new Tooltip(statusObj, [mess]);
 
-                                            if (sats <= 4 && statusTSI === 'ВКЛ') {
-                                                mess = 'Не установлена связь со спутниками'
                                             }
-                                            else if (sats > 4 && statusTSI === 'ВЫКЛ') {
-                                                mess = 'Двигатель выключен'
-                                            }
-                                            else if (sats <= 4 && statusTSI === 'ВЫКЛ') {
-                                                mess = 'Двигатель выключен, Не установлена связь со спутниками'
-                                            }
-                                            //   console.log('офф')
-                                            statusObj.textContent = 'Offline'
-                                            new Tooltip(statusObj, [mess]);
+
+
+
 
                                         }
-                                        else if (sats > 3 || statusTSI === 'ВКЛ') {
-                                            //  console.log('он')
-                                            statusObj.textContent = 'Online'
-                                            statusObj.style.color = '#15a32d'
-                                            mess = `Установлена связь с ${sats} спутниками`
-                                            new Tooltip(statusObj, [mess]);
-                                        }
+
 
 
                                         const idw = active[0].id
