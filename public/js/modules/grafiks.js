@@ -669,7 +669,7 @@ export async function oil(t1, t2) {
 
   svga.append("text")
     .attr('class', 'legendOil')
-    .attr("x", 490)
+    .attr("x", 495)
     .attr("y", -15)
     .style("text-anchor", "end")
     .text("Бортовое питание")

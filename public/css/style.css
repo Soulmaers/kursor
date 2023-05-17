@@ -2602,10 +2602,12 @@ input[type="date"] {
 
 .legendOil {
   cursor: pointer;
+  font-size: 1rem;
 }
 
 .legendBar {
   cursor: pointer;
+  font-size: 1rem;
 }
 
 .card_img {
