@@ -281,7 +281,7 @@ function zaprosSpisokb(name) {
             console.log(e)
         }
     })
-    setTimeout(proverka, 1000, massItog)
+    //  setTimeout(proverka, 1000, massItog)
 }
 
 
