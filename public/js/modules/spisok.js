@@ -54,7 +54,6 @@ export function conturTest(testov) {
         })
     }
     testov.forEach(el => {
-        // console.log(el)
         if (el.length !== 0) {
             const wrapList = document.querySelector('.wrapList')
             const group = document.createElement('div')
@@ -196,7 +195,6 @@ export function conturTest(testov) {
     })
     hiddenWindows()
     navigator();
-
     sortAll()
     zaprosSpisok()
     //  alarmFind()

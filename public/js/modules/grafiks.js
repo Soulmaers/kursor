@@ -31,17 +31,29 @@ export async function fnTime(t1, t2) {
         if (code) {
           console.log(wialon.core.Errors.getErrorText(code));
         }
-        console.log(result)
-        const global = [];
-        const speed = []
-        result.messages.forEach(el => {
-          const timestamp = el.t;
-          const date = new Date(timestamp * 1000);
-          const isoString = date.toISOString();
-          global.push(isoString)
-          speed.push(el.pos.s)
-          resolve([global, speed])
-        })
+        const noGraf = document.querySelector('.noGraf')
+
+        console.log(result.count)
+        if (result.count === 0) {
+          const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+          preloaderGraf.style.opacity = 0;
+          noGraf.style.display = 'flex'
+        }
+        else {
+          noGraf.style.display = 'none'
+          const global = [];
+          const speed = []
+          result.messages.forEach(el => {
+            const timestamp = el.t;
+            const date = new Date(timestamp * 1000);
+            const isoString = date.toISOString();
+            global.push(isoString)
+            speed.push(el.pos.s)
+            resolve([global, speed])
+          })
+
+        }
+
       })
   })
 }

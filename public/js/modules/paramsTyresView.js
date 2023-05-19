@@ -131,7 +131,7 @@ export async function loadParamsView() {
                 cont1.firstElementChild.children[1].prepend(title_two)
                 cont1.firstElementChild.children[1].style.position = 'relative'
                 //  console.log('запуск!!')
-                // console.log(title_two)
+                console.log(title_two)
                 title_two.textContent = active[0].children[0].textContent
                 title_two.style.position = 'absolute'
                 title_two.style.top = '10px'

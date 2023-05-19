@@ -285,6 +285,13 @@ export async function datas(t1, t2) {
                 .append("g")
                 .attr("class", "brush")
                 .call(brush);
+
+            const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+            preloaderGraf.style.opacity = 0;
+            preloaderGraf.style.display = 'none'
+            //  preloaderGraf.classList.add('preloaderGraf_hidden') /* добавляем ему класс для скрытия */
+
+
             var idleTimeout
             function idled() { idleTimeout = null; }
             function updateChart() {

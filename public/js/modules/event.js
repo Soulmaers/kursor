@@ -513,9 +513,15 @@ menuGraf.forEach(el => {
         el.classList.add('activMenuGraf')
         const inputDate = document.querySelectorAll('.input_date')
         if (inputDate[0].value !== '' && inputDate[1].value !== '') {
+            const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+            preloaderGraf.style.opacity = 1;
+            preloaderGraf.style.display = 'flex'
             dataInput() //фунции выбора интервала графика скорости
         }
         if (inputDate[0].value == '' && inputDate[1].value == '') {
+            const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+            preloaderGraf.style.opacity = 1;
+            preloaderGraf.style.display = 'flex'
             dataSelect() //фунции выбора интервала графика скорости
         }
     })

@@ -93,7 +93,9 @@ export async function visual(el) {
     if (grafOld) {
         grafOld.remove()
     }
-
+    const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+    preloaderGraf.style.opacity = 1;
+    preloaderGraf.style.display = 'flex'
     setTimeout(click, 500)
 
 
@@ -270,7 +272,7 @@ export async function viewConfigurator(arg, params, osi) {
                             e.children[0].style.position = 'relative'
                             e.children[0].style.border = 'none'
                             e.children[0].style.borderRadius = '30% 30% 0 0'
-                            e.children[0].innerHTML = `${done}\n<span class="ppp">Bar</span>`
+                            e.children[0].innerHTML = `${done}\n<div class="ppp">Bar</div>`
                             e.children[0].setAttribute('rel', `${item.pressure}`)
                             const ppp = document.querySelectorAll('.ppp')
                             ppp.forEach(el => {

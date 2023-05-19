@@ -14,6 +14,10 @@ btnForm.forEach(el =>
             if (grafOld) {
                 grafOld.remove()
             }
+            const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+            preloaderGraf.style.opacity = 1;
+            preloaderGraf.style.display = 'flex'
+            // preloaderGraf.classList.remove('preloaderGraf_hidden') /* добавляем ему класс для скрытия */
             dataInput() //фунции выбора интервала графика скорости
         }
         if (el.textContent === 'Выполнить' && inputDate[0].value == '' && inputDate[1].value == '') {
@@ -21,6 +25,9 @@ btnForm.forEach(el =>
             if (grafOld) {
                 grafOld.remove()
             }
+            const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+            preloaderGraf.style.opacity = 1;
+            preloaderGraf.style.display = 'flex'
             dataSelect() //фунции выбора интервала графика скорости
         }
         if (el.textContent === 'Очистить') {
@@ -34,9 +41,15 @@ btnForm.forEach(el =>
 export function click() {
     const inputDate = document.querySelectorAll('.input_date')
     if (inputDate[0].value !== '' && inputDate[1].value !== '') {
+        const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+        preloaderGraf.style.opacity = 1;
+        preloaderGraf.style.display = 'flex'
         dataInput() //фунции выбора интервала графика скорости
     }
     if (inputDate[0].value == '' && inputDate[1].value == '') {
+        const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+        preloaderGraf.style.opacity = 1;
+        preloaderGraf.style.display = 'flex'
         dataSelect() //фунции выбора интервала графика скорости
     }
 }

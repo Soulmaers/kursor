@@ -96,6 +96,12 @@ export async function speed(t1, t2) {
             .y(function (d) { return y(d.val) })
         )
 
+    const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+    preloaderGraf.style.opacity = 0;
+    preloaderGraf.style.display = 'none'
+
+
+
     var brush = d3.brushX()
         .extent([[0, 0], [width, height]])
         .on("end", updateChart)
