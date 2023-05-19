@@ -112,7 +112,9 @@ export async function visual(el) {
 export function visualNone(e) {
     const title_two = document.querySelector('.title_two')
     const headerCar = document.querySelector('.header_car')
-    headerCar.appendChild(title_two)
+    if (title_two) {
+        headerCar.appendChild(title_two)
+    }
     title_two.style.position = 'static'
     headerCar.style.flexDirection = 'column'
 
