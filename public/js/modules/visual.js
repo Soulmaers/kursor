@@ -114,8 +114,9 @@ export function visualNone(e) {
     const headerCar = document.querySelector('.header_car')
     if (title_two) {
         headerCar.appendChild(title_two)
+        title_two.style.position = 'static'
+
     }
-    title_two.style.position = 'static'
     headerCar.style.flexDirection = 'column'
 
 
