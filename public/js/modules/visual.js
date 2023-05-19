@@ -112,19 +112,20 @@ export async function visual(el) {
 export function visualNone(e) {
     const title_two = document.querySelector('.title_two')
     const headerCar = document.querySelector('.header_car')
+    const gosNumber = document.querySelector('.gosNumber')
+    const wrapC = document.querySelector('.wrapper_containt')
     if (title_two) {
         headerCar.appendChild(title_two)
         title_two.style.position = 'static'
-
+        wrapC.appendChild(gosNumber)
     }
     headerCar.style.flexDirection = 'column'
 
 
     const tarir = document.querySelector('.tarir')
     tarir.style.display = 'none'
-    const gosNumber = document.querySelector('.gosNumber')
-    const wrapC = document.querySelector('.wrapper_containt')
-    wrapC.appendChild(gosNumber)
+
+
 
     const statusObj = document.querySelector('.status_obj')
     statusObj.textContent = ''
