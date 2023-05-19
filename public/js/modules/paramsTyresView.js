@@ -132,9 +132,12 @@ export async function loadParamsView() {
                 cont1.firstElementChild.children[1].style.position = 'relative'
                 //  console.log('запуск!!')
                 console.log(title_two)
-                title_two.textContent = active[0].children[0].textContent
-                title_two.style.position = 'absolute'
-                title_two.style.top = '10px'
+                if (title_two) {
+                    title_two.textContent = active[0].children[0].textContent
+                    title_two.style.position = 'absolute'
+                    title_two.style.top = '10px'
+                }
+
                 //  console.log(model.values)
                 if (model.values.find(e => e.trailer === 'Прицеп')) {
                     const cont = document.querySelector('.cont')
