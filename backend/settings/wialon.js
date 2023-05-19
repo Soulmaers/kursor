@@ -482,22 +482,22 @@ function mail(value, mess) {
         } catch (e) {
             return console.log('Error: ' + e.name + ":" + e.message);
         }*/
-
-    let mailOptions = {
-        from: 'develop@cursor-gps.ru', // sender address
-        to: 'soulmaers@gmail.com, m.trofimov@cursor-gps.ru', // list of receivers
-        subject: 'Аларм', // Subject line
-        text: message // plain text body
-    };
-    smtpTransport.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            // return console.log(error);
-            return console.log(error);
-        } else {
-            console.log('отправлено')
-        }
-
-    })
+    /*
+        let mailOptions = {
+            from: 'develop@cursor-gps.ru', // sender address
+            to: 'soulmaers@gmail.com, m.trofimov@cursor-gps.ru', // list of receivers
+            subject: 'Аларм', // Subject line
+            text: message // plain text body
+        };
+        smtpTransport.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                // return console.log(error);
+                return console.log(error);
+            } else {
+                console.log('отправлено')
+            }
+    
+        })*/
     /*
     var options = {
         method: 'POST',
