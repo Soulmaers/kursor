@@ -610,14 +610,14 @@ body {
   clear: both;
 }
 
-span {
+.v {
   float: left;
   height: 100px;
   line-height: 120px;
   width: 50px;
 }
 
-.loader>span {
+.loader>.v {
   border-left: 1px solid #444;
   border-right: 1px solid #222;
 }
