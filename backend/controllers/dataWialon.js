@@ -68,7 +68,8 @@ module.exports.datawialonGeo = (req, res) => {
     //  console.log(geoX, geoY)
     // createTable(req.body.active)
     try {
-        getMainInfo(req.body.active, res)
+        setTimeout(getMainInfo, 500, req.body.active, res)
+        // getMainInfo(req.body.active, res)
         //   console.log(getMainInfo(req.body.active))
         //   setInterval(getMainInfo, 3000, req.body.active);
 

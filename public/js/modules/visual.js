@@ -308,7 +308,7 @@ export async function viewConfigurator(arg, params, osi) {
                         if (el.name === item.temp) {
                             tiresLink.forEach(e => {
                                 if (e.id == item.tyresdiv) {
-                                    if (el.value === '-128' || el.value === '-50') {
+                                    if (el.value === '-128' || el.value === '-50' || el.value === '-51') {
                                         el.value = 'err'
                                         e.children[1].style.color = 'red'
                                         e.children[1].textContent = el.value

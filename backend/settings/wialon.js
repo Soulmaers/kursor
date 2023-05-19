@@ -169,8 +169,6 @@ function postParametrs(name, param) {
     }
 }
 
-
-
 function getMainInfo(name, res) {
     // console.log('частота запросов' + new Date())
     const flags = 1 + 1026
@@ -283,7 +281,7 @@ function zaprosSpisokb(name) {
             console.log(e)
         }
     })
-    setTimeout(proverka, 1000, massItog)
+    //  setTimeout(proverka, 1000, massItog)
 }
 
 
@@ -311,7 +309,6 @@ function proverka(arr) {
             return
         }
         else {
-
             let alarm;
             const name = 'alarm' + el[0] + el[1]
             const sqls1 = `SELECT * FROM alarms WHERE name='${el[0]}' AND senspressure='${el[1]}'`
@@ -347,7 +344,6 @@ function proverka(arr) {
                             //   console.log(el + ' ' + 'таблицы нет, аларма нет' + ' ' + time)
                             return
                         }
-
                     }
                 }
                 else if (results.length !== 0) {
@@ -387,7 +383,7 @@ function proverka(arr) {
                         if (el[2] >= Number(el[4].kvd)) {
                             // console.log(results[results.length - 1].bar)
                             if (Number(results[results.length - 1].bar == el[2]) && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                                console.log(el + ' ' + process.env.PORT + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
+                                console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
                                 return
                             } else {
                                 console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
@@ -401,10 +397,10 @@ function proverka(arr) {
                         else if (el[2] > Number(el[4].knd) || el[2] < Number(el[4].kvd)) {
                             // console.log(el)
                             if (results[results.length - 1].alarm === 'Норма') {
-                                console.log(el + ' ' + process.env.PORT + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
+                                console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
                                 return
                             } else {
-                                console.log(el + ' ' + process.env.PORT + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
+                                console.log(el + ' ' + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
                                 const data = createDate()
                                 alarm = 'Норма'
                                 alarmBase(data, el, alarm)

@@ -256,6 +256,7 @@ function koleso(kol, btnsens) {
                         prmsT.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                     }
                 })
+
                 if (value === '-128' || value === '-51' || value.length > 10) {
                     value = 'err'
                     kol[kol.length - 1].children[1].textContent = value
