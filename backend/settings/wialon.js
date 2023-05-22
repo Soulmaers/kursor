@@ -301,19 +301,15 @@ function createDate() {
 }
 function proverka(arr) {
     console.log('проверка')
-    // console.log(arr)
     let time = new Date()
     arr.forEach(el => {
-        // console.log(typeof el[2])
         if (el[4] === undefined) {
             return
         }
         else {
             let alarm;
-            //  const name = 'alarm' + el[0] + el[1]
             const sqls1 = `SELECT * FROM alarms WHERE name='${el[0]}' AND senspressure='${el[1]}'`
             connection.query(sqls1, function (err, results) {
-                //  console.log(results)
                 if (err) console.log(err);
                 if (results.length === 0) {
                     if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
@@ -324,11 +320,7 @@ function proverka(arr) {
                         return
                     }
                     else {
-                        // console.log(typeof el[2])
-                        //  console.log(typeof Number(el[4].knd))
                         if (el[2] <= Number(el[4].knd)) {
-                            //   console.log(el[2])
-                            //   console.log(Number(el[4].knd))
                             console.log(el + ' ' + 'таблица нет, аларм есть' + ' ' + time)
                             const data = createDate()
                             alarm = 'Критически низкое давление'
@@ -350,9 +342,6 @@ function proverka(arr) {
                 }
                 else if (results.length !== 0) {
                     if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
-
-                        //   console.log(results[results.length - 1].alarm)
-                        // console.log(results)
                         if (results[results.length - 1].alarm == 'Потеря связи с датчиком') {
                             console.log('таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
                             return
@@ -366,13 +355,10 @@ function proverka(arr) {
                     }
                     else {
                         if (el[2] <= Number(el[4].knd)) {
-                            //  console.log(el[2])
-
-                            //  console.log(Number(results[results.length - 1].bar))
-                            //  console.log(results)
-                            if (Number(results[results.length - 1].bar === el[2]) && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                                //   console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
-                                //  return
+                            if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
+                                console.log('равно')
+                                console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
+                                return
                             } else {
                                 console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
                                 const data = createDate()
@@ -384,7 +370,7 @@ function proverka(arr) {
                         }
                         if (el[2] >= Number(el[4].kvd)) {
                             // console.log(results[results.length - 1].bar)
-                            if (Number(results[results.length - 1].bar === el[2]) && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
+                            if (results[results.length - 1].bar === el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
                                 console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
                                 return
                             } else {
@@ -428,7 +414,7 @@ async function alarmBase(data, tyres, alarm) {
     dannie.splice(5, 2)
     dannie.push(alarm)
     const value = [dannie];
-    console.log(value)
+    // console.log(value)
 
     //mail(value, await ggg(id))
 
@@ -454,8 +440,8 @@ async function alarmBase(data, tyres, alarm) {
 
 
 function mail(value, mess) {
-    console.log(value)
-    console.log('ватсап')
+    // console.log(value)
+    // console.log('ватсап')
     const tyres = mess[value[0][2]]
     let val;
     let message;
