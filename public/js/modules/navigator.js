@@ -18,20 +18,13 @@ export function navigator() {
     nav.forEach(el => {
         el.addEventListener('click', route)
         function route() {
-
-            // console.log(el)
-            //   console.log('запускНавигатора')
-
             nav.forEach(e => {
-                const msg = document.querySelectorAll('.msg')
-
-                msg.forEach(it => {
-                    console.log('удаляемм')
-                    it.remove();
-                })
+                //  const msg = document.querySelectorAll('.msg')
+                //  msg.forEach(it => {
+                //     console.log('удаляемм')
+                //   it.remove();
+                //})
                 visualNone(e);  //скрываем для всех кнопок левый фрейм
-                // clearGraf(); //очистка графика скорости при нажатии на кнопку другой машины
-                //   massiv.length = 0;
                 massivionbd.length = 0;
             })
             visual(el)
@@ -69,21 +62,11 @@ export function navigator() {
                 titleName.textContent = nameCar.children[0].textContent
                 const wrapperLeft = document.querySelector('.wrapper_left')
                 wrapperLeft.style.display = 'block'
-
             }
-
             else {
                 console.log('пап')
-
-
-
             }
-
         }
-
     })
-
 }
 
-
-//setTimeout(navigator, 3000)
