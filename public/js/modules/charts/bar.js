@@ -196,10 +196,21 @@ export async function datas(t1, t2) {
             const line2 = d3.line()
                 .x((d) => x(d.dates))
                 .y((d) => y2(d.tvalue))
+
+            const oilThreshold = 9;
+
             const area1 = d3.area()
                 .x(d => x(d.dates))
                 .y0(height)
                 .y1(d => y1(d.value))
+                .curve(d3.curveStepAfter);
+
+            const area11 = d3.area()
+                .x(d => x(d.dates))
+                .y0(height)
+                .y1(d => d.value <= oilThreshold ? y1(d.value) : height)
+                .curve(d3.curveStepAfter);
+
             const area2 = d3.area()
                 .x(d => x(d.dates))
                 .y0(height)
@@ -255,12 +266,21 @@ export async function datas(t1, t2) {
             chartGroup.append("path")
                 .datum(data.val)
                 .attr("fill", "#009933")
-                .attr("class", "pat")
+                // .attr("class", "pat")
                 .attr("class", "area1")
-                .attr("fill-opacity", 1)
                 .attr("stroke", "black")
                 .attr("stroke-width", 1)
-                .attr("d", area1);
+                .attr("fill-opacity", 1)
+                .attr("d", area1)
+            chartGroup.append("path")
+                .datum(data.val)
+                .attr("class", "area11")
+                .attr("d", area11)
+                .attr("fill", "red")
+                .attr("fill-opacity", 1)
+                .attr("stroke", "black")
+
+
             // добавляем области для второй кривой
             chartGroup.append("path")
                 .datum(data.val)
@@ -333,10 +353,20 @@ export async function datas(t1, t2) {
                     .attr("fill", "#009933")
                     .attr("class", "pat")
                     .attr("class", "area1")
+                    .attr("d", area1)
                     .attr("fill-opacity", 1)
                     .attr("stroke", "black")
                     .attr("stroke-width", 1)
-                    .attr("d", area1)
+
+
+                svg.select(".area11")
+                    .datum(data.val)
+                    .attr("class", "area11")
+                    .attr("d", area11)
+                    .attr("fill", "red")
+                    .attr("fill-opacity", 1)
+                    .attr("stroke", "black")
+
 
                 svg.select(".area2")
                     .datum(data.val)
@@ -385,10 +415,22 @@ export async function datas(t1, t2) {
                     .attr("fill", "#009933")
                     .attr("class", "pat")
                     .attr("class", "area1")
+                    .attr("d", area1)
                     .attr("fill-opacity", 1)
                     .attr("stroke", "black")
                     .attr("stroke-width", 1)
-                    .attr("d", area1)
+
+
+
+                svg.select(".area11")
+                    .datum(data.val)
+                    .attr("class", "area11")
+                    .attr("d", area11)
+                    .attr("fill", "red")
+                    .attr("fill-opacity", 1)
+                    .attr("stroke", "black")
+
+
                 svg.select(".area2")
                     .datum(data.val)
                     .transition()

@@ -139,10 +139,30 @@ export async function oil(t1, t2) {
     const line2 = d3.line()
         .x((d) => x(d.time))
         .y((d) => y2(d.pwr))
+    /*  const area1 = d3.area()
+          .x(d => x(d.time))
+          .y0(height)
+          .y1(d => y1(d.oil))*/
+
+
+    const oilThreshold = 300;
+
     const area1 = d3.area()
         .x(d => x(d.time))
         .y0(height)
         .y1(d => y1(d.oil))
+        .curve(d3.curveStepAfter);
+
+    const area11 = d3.area()
+        .x(d => x(d.time))
+        .y0(height)
+        .y1(d => d.oil < oilThreshold ? y1(d.oil) : height)
+        .curve(d3.curveStepAfter);
+
+
+
+
+
     const area2 = d3.area()
         .x(d => x(d.time))
         .y0(height)
@@ -172,6 +192,8 @@ export async function oil(t1, t2) {
         .attr("height", height)
         .attr("x", 0)
         .attr("y", 0);
+
+
     var chartGroup = svg.append("g")
         .attr("class", "chart-group")
         .attr("clip-path", "url(#clip)");
@@ -180,7 +202,7 @@ export async function oil(t1, t2) {
         .datum(data)
         .attr("class", "line1")
         .attr("fill", "none")
-        .attr("stroke", "blue")
+        .attr("stroke", "black")
         .attr("stroke-width", 1.5)
         .attr("d", line1);
     // добавляем линии для второй оси y
@@ -192,22 +214,29 @@ export async function oil(t1, t2) {
         .attr("stroke-width", 1.5)
         .attr("d", line2);
     // добавляем области для первой кривой
+
     chartGroup.append("path")
         .datum(data)
-        .attr("fill", "blue")
-        .attr("class", "pat")
         .attr("class", "area1")
-        .attr("fill-opacity", 0.3)
+        .attr("d", area1)
+        .attr("fill", "blue")
+        .attr("fill-opacity", d => d.oil < oilThreshold ? 0 : 0.5)
         .attr("stroke", "black")
-        .attr("stroke-width", 1)
-        .attr("d", area1);
+        .attr("stroke-width", 1);
+
+    chartGroup.append("path")
+        .datum(data)
+        .attr("class", "area11")
+        .attr("d", area11)
+        .attr("fill", "red")
+        .attr("fill-opacity", 0.5)
     // добавляем области для второй кривой
     chartGroup.append("path")
         .datum(data)
         .attr("class", "pat")
         .attr("class", "area2")
         .attr("fill", "#32a885")
-        .attr("fill-opacity", 0.3)
+        .attr("fill-opacity", 0.8)
         .attr("stroke", "black")
         .attr("stroke-width", 1)
         .attr("d", area2);
@@ -225,6 +254,8 @@ export async function oil(t1, t2) {
         .attr("transform", "rotate(-90)")
         .attr("text-anchor", "end")
         .text("Напряжение, В")
+
+
     const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
     preloaderGraf.style.opacity = 0;
     preloaderGraf.style.display = 'none'
@@ -283,10 +314,18 @@ export async function oil(t1, t2) {
             .attr("fill", "blue")
             .attr("class", "pat")
             .attr("class", "area1")
-            .attr("fill-opacity", 0.3)
+            .attr("fill-opacity", d => d.oil < oilThreshold ? 0 : 0.5)
             .attr("stroke", "black")
             .attr("stroke-width", 1)
             .attr("d", area1)
+
+        svg.select(".area11")
+            .datum(data)
+            .transition()
+            .duration(1000)
+            .attr("d", area11)
+            .attr("fill", "red")
+            .attr("fill-opacity", 0.5)
 
         svg.select(".area2")
             .datum(data)
@@ -335,10 +374,18 @@ export async function oil(t1, t2) {
             .attr("fill", "blue")
             .attr("class", "pat")
             .attr("class", "area1")
-            .attr("fill-opacity", 0.3)
+            .attr("fill-opacity", d => d.oil < oilThreshold ? 0 : 0.5)
             .attr("stroke", "black")
             .attr("stroke-width", 1)
             .attr("d", area1)
+
+        svg.select(".area11")
+            .datum(data)
+            .transition()
+            .duration(1000)
+            .attr("d", area11)
+            .attr("fill", "red")
+            .attr("fill-opacity", 0.5)
 
         svg.select(".area2")
             .datum(data)
@@ -405,6 +452,7 @@ export async function oil(t1, t2) {
         const os1y = d3.select('.os1y')
         const line1 = d3.select('.line1')
         const area1 = d3.select('.area1')
+        const area11 = d3.select('.area11')
         const obv = d3.select('.obv')
         const legendOilcircle = d3.select('.legendOilcircle')
 
@@ -415,6 +463,7 @@ export async function oil(t1, t2) {
             os1y.style("display", "none")
             line1.style("display", "none")
             area1.style("display", "none")
+            area11.style("display", "none")
             obv.style("display", "none")
             return
         }
@@ -422,6 +471,7 @@ export async function oil(t1, t2) {
         os1y.style("display", "block")
         line1.style("display", "block")
         area1.style("display", "block")
+        area11.style("display", "block")
         obv.style("display", "block")
     })
     legendOil[1].addEventListener('click', () => {
