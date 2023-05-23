@@ -499,6 +499,8 @@ plug[2].addEventListener('click', () => {
 })
 
 
+
+
 //function podMenu() {
 const menuGraf = document.querySelectorAll('.menu_graf')
 menuGraf.forEach(el => {

@@ -7,6 +7,12 @@ import { datas } from './charts/bar.js'
 const btnForm = document.querySelectorAll('.btm_form')
 const inputDate = document.querySelectorAll('.input_date')
 const selectSpeed = document.querySelector('.select_speed')
+
+
+
+
+
+
 btnForm.forEach(el =>
     el.addEventListener('click', () => {
         if (el.textContent === 'Выполнить' && inputDate[0].value !== '' && inputDate[1].value !== '') {
@@ -17,6 +23,8 @@ btnForm.forEach(el =>
             const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
             preloaderGraf.style.opacity = 1;
             preloaderGraf.style.display = 'flex'
+            console.log('выполнить')
+
             // preloaderGraf.classList.remove('preloaderGraf_hidden') /* добавляем ему класс для скрытия */
             dataInput() //фунции выбора интервала графика скорости
         }
@@ -54,12 +62,16 @@ export function click() {
     }
 }
 
+
+
 export function dataInput() {
+
     const active = document.querySelector('.color')
     const inputDate = document.querySelectorAll('.input_date')
     const selectSpeed = document.querySelector('.select_speed')
     selectSpeed.value = 0;
     const arrDate = [];
+
     console.log(active.id)
     inputDate.forEach(e => {
         arrDate.push(e.value)

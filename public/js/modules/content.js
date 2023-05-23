@@ -132,9 +132,11 @@ export function generFront(el) {
 
 export function generT(el) {
     let generatedValue;
-    if (el >= -40 && el <= 35)
+    if (el >= -40 && el < 36)
         generatedValue = 5;
-
+    else {
+        generatedValue = 1;
+    }
 
     return generatedValue;
 };

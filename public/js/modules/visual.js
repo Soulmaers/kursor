@@ -64,8 +64,11 @@ export async function visual(el) {
     speedGraf.style.display = 'block'
     el.classList.add('color')
     //  viewOs(); //отрисовываем оси для вставки данных с базы по модели и колесам конфигуратора
-    titleCar.textContent = el.children[0].textContent
-    console.log(titleCar.textContent)
+    if (titleCar) {
+        titleCar.textContent = el.children[0].textContent
+        console.log(titleCar.textContent)
+    }
+
     loadParamsView()
 
     findTyresInstall()
@@ -110,29 +113,11 @@ export async function visual(el) {
 
 }
 export function visualNone(e) {
-    const title_two = document.querySelector('.title_two')
-    const headerCar = document.querySelector('.header_car')
-    const gosNumber = document.querySelector('.gosNumber')
-    const wrapC = document.querySelector('.wrapper_containt')
-    if (title_two) {
-        headerCar.appendChild(title_two)
-        title_two.style.position = 'static'
-        wrapC.appendChild(gosNumber)
-    }
-    headerCar.style.flexDirection = 'column'
-
-
     const tarir = document.querySelector('.tarir')
     tarir.style.display = 'none'
-
-
-
     const statusObj = document.querySelector('.status_obj')
     statusObj.textContent = ''
     statusObj.style.color = 'gray'
-    /*
-    const toChange = document.querySelector('.toChange')
-    toChange.style.display = 'none'*/
     const probegElem = document.querySelector('.odom_value')
     const starterValue = document.querySelector('.akb_value1')
     const ohlValue = document.querySelector('.ohl_value')
@@ -326,7 +311,7 @@ export async function viewConfigurator(arg, params, osi) {
 
                                         }
                                     }
-                                    if (el.value >= -51 && el.value < 36) {
+                                    if (el.value >= -51 && el.value <= 50) {
                                         e.children[1].style.border = 'none'
                                         e.children[1].textContent = el.value + '°C'
                                         e.children[1].setAttribute('rel', `${item.temp}`)

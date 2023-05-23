@@ -101,13 +101,11 @@ export async function loadParamsView() {
                 viewOs(model.values.length)
                 const osi = document.querySelectorAll('.osi')
                 const centerOs = document.querySelectorAll('.centerOs')
+                console.log('парамс')
                 model.values.forEach(el => {
                     el.trailer == 'Прицеп' ?
                         pricep(centerOs[el.osi - 1])
                         : noPricep(centerOs[el.osi - 1])
-
-
-
                     if (el.tyres == 2) {
                         btnShina[1].classList.contains('active') ? centerOs[el.osi - 1].children[0].style.width = '212px' :
                             centerOs[el.osi - 1].children[0].style.width = '212px'
@@ -126,37 +124,32 @@ export async function loadParamsView() {
 
                 })
                 const cont1 = document.querySelector('.cont1')
-                const title_two = document.querySelector('.title_two')
-                //  console.log(cont1.firstElementChild.children[1])
-                cont1.firstElementChild.children[1].prepend(title_two)
+                const oneOs = cont1.firstElementChild
+                console.log('конт')
+                console.log(oneOs)
+                const gosCar = document.createElement('input')
+                gosCar.classList.add('gosNumberCar')
+                gosCar.setAttribute('placeholder', 'гос. номер')
+                cont1.firstElementChild.children[1].prepend(gosCar)
                 cont1.firstElementChild.children[1].style.position = 'relative'
-                //  console.log('запуск!!')
-                console.log(title_two)
-                if (title_two) {
-                    title_two.textContent = active[0].children[0].textContent
-                    title_two.style.position = 'absolute'
-                    title_two.style.top = '10px'
-                }
 
-                //  console.log(model.values)
                 if (model.values.find(e => e.trailer === 'Прицеп')) {
                     const cont = document.querySelector('.cont')
-                    //  console.log(cont.lastElementChild.children[1])
+                    const gos = document.createElement('input')
+                    gos.classList.add('gosNumber')
+                    gos.setAttribute('placeholder', 'гос. номер прицепа')
+                    console.log(gos)
                     cont.lastElementChild.children[1].appendChild(gos)
                     cont.lastElementChild.children[1].style.position = 'relative'
-                    gos.style.position = 'absolute'
-                    gos.style.top = '25px'
                     gos.value = model.values[0].gosp
                     gos.style.display = 'flex'
                     return
                 }
-                gos.style.display = 'none'
-            }
-            else {
-                ///console.log('база пустая')
-                gos.style.display = 'none'
-            }
+                else {
+                    gos.style.display = 'none'
+                }
 
+            }
         })
 
     viewPokasateli()
@@ -169,6 +162,8 @@ function noPricep(elem) {
     cont1.style.border = '2px solid darkblue',
         cont1.style.padding = '5px',
         elem.children[0].style.background = '#000'
+
+
 
 }
 
@@ -246,7 +241,6 @@ function koleso(kol, btnsens) {
                     value
                 }
                 const valJob = value
-
                 valJob.length > 10 ?
                     kol[kol.length - 1].children[0].textContent = '-' :
                     kol[kol.length - 1].children[0].textContent = valJob + '\nБар'
@@ -259,7 +253,6 @@ function koleso(kol, btnsens) {
                         prmsT.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                     }
                 })
-
                 if (value === '-128' || value === '-51' || value.length > 10) {
                     value = 'err'
                     kol[kol.length - 1].children[1].textContent = value
@@ -269,12 +262,8 @@ function koleso(kol, btnsens) {
                     kol[kol.length - 1].children[1].style.color = objColor[generT(value)];
                 }
                 paramTemp.push(el)
-                //const numberOs = kol[kol.length - 1].closest('.osi').children[1].id
-                //  let typeOs;
-                //  kol[kol.length - 1].closest('.osi').children[1].classList.contains('pricep') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
                 valid(paramPress, paramTemp, kol)
             }
-            // kol[kol.length - 1].children[2].textContent = 'p:' + prmsD[prmsD.length - 1] + '\nt:' + prmsT[prmsT.length - 1]
         })
     })
 }

@@ -91,21 +91,15 @@ function createTable() {
         })
         .then(function (data) {
             const nameCar = [];
-            // console.log(data)
             const allCar = Object.entries(data);
             allCar[5][1].forEach(el => {
                 nameCar.push([el.nm.replace(/\s+/g, ''), el.id])
                 const nameTable = el.nm.replace(/\s+/g, '')
-                //console.log(el)
                 if (el.lmsg) {
                     const sensor = Object.entries(el.lmsg.p)
-                    //  console.log(el.id)
                     postParametrs(nameTable, sensor)
                 }
-
-
             })
-
             zaprosSpisokb(nameCar)
         })
 }
@@ -127,7 +121,6 @@ function postParametrs(name, param) {
                 });
             }
             else if (results.length > 0) {
-                //   console.log('больше 0')
                 const mas = []
                 results.forEach(el => {
                     mas.push(el.name)
@@ -226,7 +219,6 @@ function zaprosSpisokb(name) {
                 else {
                     const params = results
                     const modelUniqValues = convert(params)
-                    //   console.log(modelUniqValues)
                     try {
                         const selectBase = `SELECT name, value FROM params WHERE nameCar='${nameCar}'`
                         connection.query(selectBase, function (err, results) {
@@ -238,9 +230,7 @@ function zaprosSpisokb(name) {
                                 const selectBase = `SELECT * FROM ifBar WHERE nameCar='${nameCar}'`
                                 connection.query(selectBase, function (err, results) {
                                     if (err) console.log(err)
-                                    //  console.log(results)
                                     const osi = results
-                                    //   console.log(osi)
                                     data.forEach((el) => {
                                         modelUniqValues.forEach((item) => {
                                             if (el.name == item.pressure) {
@@ -270,7 +260,6 @@ function zaprosSpisokb(name) {
                             }
                         })
                     }
-
                     catch (e) {
                         console.log(e)
                     }
@@ -313,7 +302,7 @@ function proverka(arr) {
                 if (err) console.log(err);
                 if (results.length === 0) {
                     if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
-                        console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
+                        //   console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
                         const data = createDate()
                         alarm = 'Потеря связи с датчиком'
                         alarmBase(data, el, alarm)
@@ -321,14 +310,14 @@ function proverka(arr) {
                     }
                     else {
                         if (el[2] <= Number(el[4].knd)) {
-                            console.log(el + ' ' + 'таблица нет, аларм есть' + ' ' + time)
+                            //   console.log(el + ' ' + 'таблица нет, аларм есть' + ' ' + time)
                             const data = createDate()
                             alarm = 'Критически низкое давление'
                             alarmBase(data, el, alarm)
                             return
                         }
                         if (el[2] >= Number(el[4].kvd)) {
-                            console.log(el + ' ' + 'таблица нет, аларм есть' + ' ' + time)
+                            // console.log(el + ' ' + 'таблица нет, аларм есть' + ' ' + time)
                             const data = createDate()
                             alarm = 'Критически высокое давление'
                             alarmBase(data, el, alarm)
@@ -343,10 +332,10 @@ function proverka(arr) {
                 else if (results.length !== 0) {
                     if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
                         if (results[results.length - 1].alarm == 'Потеря связи с датчиком') {
-                            console.log('таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
+                            //  console.log('таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
                             return
                         } else {
-                            console.log('таблица есть, изменение аларма,потеря связи с датчиком ')
+                            //  console.log('таблица есть, изменение аларма,потеря связи с датчиком ')
                             const data = createDate()
                             alarm = 'Потеря связи с датчиком'
                             alarmBase(data, el, alarm)
@@ -356,11 +345,11 @@ function proverka(arr) {
                     else {
                         if (el[2] <= Number(el[4].knd)) {
                             if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                                console.log('равно')
-                                console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
+                                //   console.log('равно')
+                                //  console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
                                 return
                             } else {
-                                console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
+                                // console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
                                 const data = createDate()
                                 alarm = 'Критически низкое давление'
                                 alarmBase(data, el, alarm)
@@ -371,10 +360,10 @@ function proverka(arr) {
                         if (el[2] >= Number(el[4].kvd)) {
                             // console.log(results[results.length - 1].bar)
                             if (results[results.length - 1].bar === el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                                console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
+                                //  console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
                                 return
                             } else {
-                                console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
+                                //  console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
                                 const data = createDate()
                                 alarm = 'Критически высокое давление'
                                 alarmBase(data, el, alarm)
@@ -385,12 +374,12 @@ function proverka(arr) {
                         else if (el[2] > Number(el[4].knd) || el[2] < Number(el[4].kvd)) {
                             // console.log(el)
                             if (results[results.length - 1].alarm === 'Норма') {
-                                console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
-                                console.log('норма есть уже в базе')
+                                //   console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
+                                //  console.log('норма есть уже в базе')
                                 return
                             } else {
-                                console.log(el + ' ' + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
-                                console.log('добавляем норму')
+                                //console.log(el + ' ' + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
+                                //console.log('добавляем норму')
                                 const data = createDate()
                                 alarm = 'Норма'
                                 alarmBase(data, el, alarm)
@@ -403,8 +392,6 @@ function proverka(arr) {
             });
         }
     })
-
-
 }
 
 async function alarmBase(data, tyres, alarm) {
@@ -415,9 +402,7 @@ async function alarmBase(data, tyres, alarm) {
     dannie.push(alarm)
     const value = [dannie];
     // console.log(value)
-
     //mail(value, await ggg(id))
-
 
     try {
         const sqls = `INSERT INTO alarms (data, name, senspressure, bar,

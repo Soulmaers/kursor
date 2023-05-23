@@ -1303,8 +1303,19 @@ div.spoyler {
   padding: 5px;
   text-align: center;
   display: none;
+  position: absolute;
+  top: 25px;
 }
 
+.gosNumberCar {
+  margin-top: 10px;
+  margin-bottom: 40px;
+  padding: 5px;
+  text-align: center;
+  display: flex;
+  position: absolute;
+  bottom: 25px;
+}
 
 
 .tires_link {
@@ -2507,6 +2518,7 @@ input[type="date"] {
   margin: 10px 0;
   width: 240px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

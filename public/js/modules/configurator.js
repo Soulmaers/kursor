@@ -104,25 +104,28 @@ function os(arr) {
                 pricep(arr[arr.length - 1])
                 :
                 arr[arr.length - 1].children[0].style.background = '#000'//#3333ff'
-
-
+            arr[arr.length - 1].classList.add('tagach')
             const centerOs = document.querySelectorAll('.centerOs')
-            const gosNumber = document.querySelector('.gosNumber')
-
             centerOs.forEach(el => {
-
                 if (el.classList.contains('pricep')) {
                     console.log(el)
                     const cont = document.querySelector('.cont')
                     console.log(cont.lastElementChild.children[1])
+                    const gosNumber = document.createElement('input')
+                    gosNumber.classList.add('gosNumber')
+                    gosNumber.setAttribute('placeholder', 'гос. номер прицепа')
                     cont.lastElementChild.children[1].appendChild(gosNumber)
                     cont.lastElementChild.children[1].style.position = 'relative'
-                    gosNumber.style.position = 'absolute'
-                    gosNumber.style.top = '25px'
                     gosNumber.style.display = 'flex'
-                    return
                 }
-                gosNumber.style.display = 'none'
+                if (el.classList.contains('tagach')) {
+                    const gosNumberCar = document.createElement('input')
+                    gosNumberCar.classList.add('gosNumberCar')
+                    gosNumberCar.setAttribute('placeholder', 'гос. номер')
+                    container.firstElementChild.children[1].prepend(gosNumberCar)
+                    container.firstElementChild.children[1].style.position = 'relative'
+                }
+
             })
         }))
     linkSelectTires.forEach(e =>
@@ -158,7 +161,16 @@ function os(arr) {
 
 export async function changeBase(massModel, activePost) {
     console.log('работаем колесо')
-    const gosp = (document.querySelector('.gosNumber')).value
+    const go = document.querySelector('.gosNumber')
+    let gosp;
+    if (go) {
+        gosp = (document.querySelector('.gosNumber')).value
+    }
+    else {
+        gosp = ''
+    }
+
+
     console.log(document.querySelector('.gosNumber'))
     const param = {
         method: "POST",
