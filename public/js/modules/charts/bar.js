@@ -276,8 +276,8 @@ export async function datas(t1, t2) {
                 .datum(data.val)
                 .attr("class", "area11")
                 .attr("d", area11)
-                .attr("fill", "red")
-                .attr("fill-opacity", 1)
+                .attr("fill", "darkred")
+                .attr("fill-opacity", 0.9)
                 .attr("stroke", "black")
 
 
@@ -363,8 +363,8 @@ export async function datas(t1, t2) {
                     .datum(data.val)
                     .attr("class", "area11")
                     .attr("d", area11)
-                    .attr("fill", "red")
-                    .attr("fill-opacity", 1)
+                    .attr("fill", "darkred")
+                    .attr("fill-opacity", 0.9)
                     .attr("stroke", "black")
 
 
@@ -426,8 +426,8 @@ export async function datas(t1, t2) {
                     .datum(data.val)
                     .attr("class", "area11")
                     .attr("d", area11)
-                    .attr("fill", "red")
-                    .attr("fill-opacity", 1)
+                    .attr("fill", "darkred")
+                    .attr("fill-opacity", 0.9)
                     .attr("stroke", "black")
 
 
