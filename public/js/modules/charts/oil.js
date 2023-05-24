@@ -145,7 +145,7 @@ export async function oil(t1, t2) {
           .y1(d => y1(d.oil))*/
 
 
-    const oilThreshold = 300;
+    const oilThreshold = 400;
 
     const area1 = d3.area()
         .x(d => x(d.time))

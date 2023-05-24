@@ -347,7 +347,7 @@ function proverka(arr) {
                             if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
                                 //   console.log('равно')
                                 console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
-                                return
+                                //return
                             } else {
                                 console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
                                 const data = createDate()
@@ -361,7 +361,7 @@ function proverka(arr) {
                             // console.log(results[results.length - 1].bar)
                             if (results[results.length - 1].bar === el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
                                 console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
-                                return
+                                //return
                             } else {
                                 console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
                                 const data = createDate()

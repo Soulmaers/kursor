@@ -109,6 +109,12 @@ export async function datas(t1, t2) {
         infoGraf.prepend(titleGraf)
 
         titleGraf.textContent = 'Давление/Температура'
+        const checkGraf = document.createElement('div')
+        checkGraf.classList.add('checkGraf')
+        titleGraf.appendChild(checkGraf)
+        checkGraf.innerHTML = `<input class="inputPress" type="checkbox"
+  >Подсветка графика`
+
         infoGraf.appendChild(tooltips)
         const tt1 = document.createElement('div')
         const tt2 = document.createElement('div')
@@ -155,6 +161,40 @@ export async function datas(t1, t2) {
             .text("Температура")
             .attr("fill", "black");
         tooltips.style.display = 'none'
+
+
+        function lissan() {
+            d3.select(".inputPress")
+                .on("click", function () {
+                    const checked = d3.select(this).property("checked");
+                    d3.selectAll(".area1")
+                        .attr("fill", function (d) {
+                            if (checked) {
+                                return 'darkgreen'
+                            } else {
+                                return "#009933";
+                            }
+                        });
+                    d3.selectAll(".area11")
+                        .attr("fill", function (d) {
+                            if (checked) {
+                                return '#e8eb65'
+                            } else {
+                                return "#009933";
+                            }
+                        });
+                    d3.selectAll(".area12")
+                        .attr("fill", function (d) {
+                            if (checked) {
+                                return 'darkred'
+                            } else {
+                                return "#009933";
+                            }
+                        });
+                });
+
+        }
+        lissan()
         // В каждом элементе создаем график
         charts.each(function (d, i) {
             const data = d; // данные для этого графика
@@ -198,7 +238,7 @@ export async function datas(t1, t2) {
                 .y((d) => y2(d.tvalue))
 
             const oilThreshold = 9;
-
+            const maxVal = 10;
             const area1 = d3.area()
                 .x(d => x(d.dates))
                 .y0(height)
@@ -206,6 +246,12 @@ export async function datas(t1, t2) {
                 .curve(d3.curveStepAfter);
 
             const area11 = d3.area()
+                .x(d => x(d.dates))
+                .y0(height)
+                .y1(d => d.value > oilThreshold && d.value < maxVal ? y1(d.value) : height)
+                .curve(d3.curveStepAfter);
+
+            const area12 = d3.area()
                 .x(d => x(d.dates))
                 .y0(height)
                 .y1(d => d.value <= oilThreshold ? y1(d.value) : height)
@@ -263,24 +309,33 @@ export async function datas(t1, t2) {
                 .attr("stroke-width", 2)
                 .attr("d", line2);
             // добавляем области для первой кривой
+
+
             chartGroup.append("path")
                 .datum(data.val)
-                .attr("fill", "#009933")
-                // .attr("class", "pat")
+                .attr("d", area1)
+                .attr("fill", '#009933')
                 .attr("class", "area1")
                 .attr("stroke", "black")
                 .attr("stroke-width", 1)
                 .attr("fill-opacity", 1)
-                .attr("d", area1)
+
+            //#e8eb65
             chartGroup.append("path")
                 .datum(data.val)
                 .attr("class", "area11")
                 .attr("d", area11)
-                .attr("fill", "darkred")
+                .attr("fill", "#009933")
                 .attr("fill-opacity", 0.9)
-                .attr("stroke", "black")
+            //  .attr("stroke", "black")
 
-
+            chartGroup.append("path")
+                .datum(data.val)
+                .attr("class", "area12")
+                .attr("d", area12)
+                .attr("fill", "#009933")
+                .attr("fill-opacity", 0.9)
+            // .attr("stroke", "black")
             // добавляем области для второй кривой
             chartGroup.append("path")
                 .datum(data.val)
@@ -346,11 +401,19 @@ export async function datas(t1, t2) {
                     .attr("stroke-width", 2)
                     .attr("d", line2)
 
+
                 svg.select(".area1")
                     .datum(data.val)
                     .transition()
                     .duration(1000)
-                    .attr("fill", "#009933")
+                    .attr("fill", function (d) {
+                        if (d3.select(".inputPress").property("checked")) {
+                            return "darkgreen";
+
+                        } else {
+                            return "#009933";
+                        }
+                    })
                     .attr("class", "pat")
                     .attr("class", "area1")
                     .attr("d", area1)
@@ -361,11 +424,38 @@ export async function datas(t1, t2) {
 
                 svg.select(".area11")
                     .datum(data.val)
-                    .attr("class", "area11")
+                    .transition()
+                    .duration(1000)
+                    .attr("fill", function (d) {
+                        if (d3.select(".inputPress").property("checked")) {
+                            return "#e8eb65";
+
+                        } else {
+                            return "#009933";
+                        }
+                    })
                     .attr("d", area11)
-                    .attr("fill", "darkred")
                     .attr("fill-opacity", 0.9)
-                    .attr("stroke", "black")
+                // .attr("stroke", "black")
+
+                svg.select(".area12")
+                    .datum(data.val)
+                    .transition()
+                    .duration(1000)
+                    .attr("class", "area12")
+                    .attr("d", 2)
+                    .attr("fill", function (d) {
+                        if (d3.select(".inputPress").property("checked")) {
+                            return "darkred";
+
+                        } else {
+                            return "#009933";
+                        }
+                    })
+                    .attr("d", area12)
+                    .attr("fill-opacity", 0.9)
+                //.attr("stroke", "black")
+
 
 
                 svg.select(".area2")
@@ -408,11 +498,21 @@ export async function datas(t1, t2) {
                     .attr("stroke-width", 2)
                     .attr("d", line2)
 
+
+
+
                 svg.select(".area1")
                     .datum(data.val)
                     .transition()
-                    // .duration(1000)
-                    .attr("fill", "#009933")
+                    .duration(1000)
+                    .attr("fill", function (d) {
+                        if (d3.select(".inputPress").property("checked")) {
+                            return "darkgreen";
+
+                        } else {
+                            return "#009933";
+                        }
+                    })
                     .attr("class", "pat")
                     .attr("class", "area1")
                     .attr("d", area1)
@@ -421,14 +521,39 @@ export async function datas(t1, t2) {
                     .attr("stroke-width", 1)
 
 
-
                 svg.select(".area11")
                     .datum(data.val)
-                    .attr("class", "area11")
+                    .transition()
+                    .duration(1000)
+                    .attr("fill", function (d) {
+                        if (d3.select(".inputPress").property("checked")) {
+                            return "#e8eb65";
+
+                        } else {
+                            return "#009933";
+                        }
+                    })
                     .attr("d", area11)
-                    .attr("fill", "darkred")
                     .attr("fill-opacity", 0.9)
-                    .attr("stroke", "black")
+                //   .attr("stroke", "black")
+
+                svg.select(".area12")
+                    .datum(data.val)
+                    .transition()
+                    .duration(1000)
+                    .attr("class", "area12")
+                    .attr("d", 2)
+                    .attr("fill", function (d) {
+                        if (d3.select(".inputPress").property("checked")) {
+                            return "darkred";
+
+                        } else {
+                            return "#009933";
+                        }
+                    })
+                    .attr("d", area12)
+                    .attr("fill-opacity", 0.9)
+                //   .attr("stroke", "black")
 
 
                 svg.select(".area2")
@@ -478,17 +603,23 @@ export async function datas(t1, t2) {
             console.log('нажал давление')
             const line1 = d3.selectAll('.line1')
             const area1 = d3.selectAll('.area1')
+            const area11 = d3.selectAll('.area11')
+            const area12 = d3.selectAll('.area12')
             const legendBarCircle = d3.select('.barGraf')
             legendBar[0].classList.toggle('noActive')
             if (legendBar[0].classList.contains('noActive')) {
                 legendBarCircle.attr('fill', 'none')
                 line1.style("display", "none")
                 area1.style("display", "none")
+                area11.style("display", "none")
+                area12.style("display", "none")
                 return
             }
-            legendBarCircle.attr('fill', '#009933')
+            legendBarCircle.attr('fill', 'darkgreen')
             line1.style("display", "block")
             area1.style("display", "block")
+            area11.style("display", "block")
+            area12.style("display", "block")
         })
         legendBar[1].addEventListener('click', () => {
             const line2 = d3.selectAll('.line2')
