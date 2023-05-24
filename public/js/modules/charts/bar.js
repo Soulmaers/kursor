@@ -1,22 +1,60 @@
 import { fnTime, fnPar, fnParMessage } from '../grafiks.js'
 
 
+
+
+
+async function fn() {
+    const active = document.querySelectorAll('.color')
+    const activePost = active[0].children[0].textContent.replace(/\s+/g, '')
+    console.log(activePost)
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost }))
+    }
+    const paramsss = await fetch('api/tyresView', param)
+    const params = await paramsss.json()
+    const os = await fetch('api/barView', param)
+    const osi = await os.json()
+    return { osi, params }
+}
+
+
+
+
 export async function datas(t1, t2) {
+    const ossParams = await fn()
+
     console.log('datas')
     const active = Number(document.querySelector('.color').id)
     const global = await fnTime(t1, t2)
-    console.log(global)
+
     const sensArr = await fnPar(active)
     const nameArr = await fnParMessage(active)
     const allArrNew = [];
     nameArr.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
-    console.log(sensArr)
+
+    const osss = ossParams.osi.values
+    const par = ossParams.params.values
+    osss.forEach(it => {
+        delete it.id
+        delete it.nameCar
+    })
+    par.forEach(el => {
+        osss.forEach(e => {
+            if (el.osNumber === e.idOs) {
+                el.bar = e
+            }
+        })
+    })
     sensArr.forEach(el => {
         for (let i = 0; i < allArrNew.length; i++) {
             allArrNew[i].value.push(Object.values(el)[i])
-
         }
     })
     const finishArrayData = []
@@ -33,6 +71,14 @@ export async function datas(t1, t2) {
         el.tvalue = finishArrayDataT[index].value
         el.speed = global[1]
     })
+    finishArrayData.forEach(e => {
+        par.forEach(it => {
+            if (e.params === it.pressure) {
+                e.bar = it.bar
+            }
+        })
+    })
+
     grafikStartPress(global[0], finishArrayData)
     function grafikStartPress(times, datar) {
         const grafOld = document.querySelector('.infoGraf')
@@ -71,8 +117,9 @@ export async function datas(t1, t2) {
         const gl = times.map(it => {
             return new Date(it)
         })
-        const dat2 = global.series.map(({ sens, value, tvalue, speed }) => ({
+        const dat2 = global.series.map(({ bar, sens, value, tvalue, speed }) => ({
             sens,
+            bar,
             val: value.map((val, i) => ({
                 dates: gl[i],
                 value: Number(val),
@@ -80,7 +127,7 @@ export async function datas(t1, t2) {
                 speed: Number(speed[i])
             }))
         }));
-
+        console.log(dat2)
         // Выбираем div, в который мы хотим поместить графики
         const container = d3.select('.infoGraf');
 
@@ -162,43 +209,39 @@ export async function datas(t1, t2) {
             .attr("fill", "black");
         tooltips.style.display = 'none'
 
+        d3.select(".inputPress")
+            .on("click", function () {
+                const checked = d3.select(this).property("checked");
+                d3.selectAll(".area1")
+                    .attr("fill", function (d) {
+                        if (checked) {
+                            return 'darkgreen'
+                        } else {
+                            return "#009933";
+                        }
+                    });
+                d3.selectAll(".area11")
+                    .attr("fill", function (d) {
+                        if (checked) {
+                            return '#e8eb65'
+                        } else {
+                            return "#009933";
+                        }
+                    });
+                d3.selectAll(".area12")
+                    .attr("fill", function (d) {
+                        if (checked) {
+                            return 'darkred'
+                        } else {
+                            return "#009933";
+                        }
+                    });
+            });
 
-        function lissan() {
-            d3.select(".inputPress")
-                .on("click", function () {
-                    const checked = d3.select(this).property("checked");
-                    d3.selectAll(".area1")
-                        .attr("fill", function (d) {
-                            if (checked) {
-                                return 'darkgreen'
-                            } else {
-                                return "#009933";
-                            }
-                        });
-                    d3.selectAll(".area11")
-                        .attr("fill", function (d) {
-                            if (checked) {
-                                return '#e8eb65'
-                            } else {
-                                return "#009933";
-                            }
-                        });
-                    d3.selectAll(".area12")
-                        .attr("fill", function (d) {
-                            if (checked) {
-                                return 'darkred'
-                            } else {
-                                return "#009933";
-                            }
-                        });
-                });
-
-        }
-        lissan()
         // В каждом элементе создаем график
         charts.each(function (d, i) {
             const data = d; // данные для этого графика
-            console.log(data)
+
             const chartContainer = d3.select(this); // div, в котором будет находиться график
 
             if (i === count - 1) {
@@ -237,24 +280,30 @@ export async function datas(t1, t2) {
                 .x((d) => x(d.dates))
                 .y((d) => y2(d.tvalue))
 
-            const oilThreshold = 9;
-            const maxVal = 10;
+            // const oilThreshold = 9;
+            //  const maxVal = 10;
             const area1 = d3.area()
                 .x(d => x(d.dates))
                 .y0(height)
                 .y1(d => y1(d.value))
                 .curve(d3.curveStepAfter);
 
+
+            const knd = Number(d.bar.knd).toFixed(1)
+            const dvn = Number(d.bar.dvn).toFixed(1)
+            const dnn = Number(d.bar.dnn).toFixed(1)
+            const kvd = Number(d.bar.kvd).toFixed(1)
+
             const area11 = d3.area()
                 .x(d => x(d.dates))
                 .y0(height)
-                .y1(d => d.value > oilThreshold && d.value < maxVal ? y1(d.value) : height)
+                .y1(d => d.value > knd && d.value <= dnn || d.value > dvn && d.value <= kvd ? y1(d.value) : height)
                 .curve(d3.curveStepAfter);
 
             const area12 = d3.area()
                 .x(d => x(d.dates))
                 .y0(height)
-                .y1(d => d.value <= oilThreshold ? y1(d.value) : height)
+                .y1(d => d.value <= knd || d.value >= kvd ? y1(d.value) : height)
                 .curve(d3.curveStepAfter);
 
             const area2 = d3.area()

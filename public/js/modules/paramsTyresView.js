@@ -174,16 +174,7 @@ export async function viewPokasateli() {
     }
     let activePost;
     const active = document.querySelectorAll('.color')
-    //console.log(active)
-    /*
-    if (active[0] == undefined) {
-        const listItem = document.querySelectorAll('.listItem')[0]
-        activePost = listItem.textContent.replace(/\s+/g, '')
-    }
-    else { }*/
     activePost = active[0].children[0].textContent.replace(/\s+/g, '')
-    // console.log(activePost)
-
     const param = {
         method: "POST",
         headers: {
