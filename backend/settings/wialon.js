@@ -346,10 +346,10 @@ function proverka(arr) {
                         if (el[2] <= Number(el[4].knd)) {
                             if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
                                 //   console.log('равно')
-                                //  console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
+                                console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
                                 return
                             } else {
-                                // console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
+                                console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
                                 const data = createDate()
                                 alarm = 'Критически низкое давление'
                                 alarmBase(data, el, alarm)
@@ -360,10 +360,10 @@ function proverka(arr) {
                         if (el[2] >= Number(el[4].kvd)) {
                             // console.log(results[results.length - 1].bar)
                             if (results[results.length - 1].bar === el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                                //  console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
+                                console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
                                 return
                             } else {
-                                //  console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
+                                console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
                                 const data = createDate()
                                 alarm = 'Критически высокое давление'
                                 alarmBase(data, el, alarm)

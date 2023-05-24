@@ -247,13 +247,13 @@ export async function datas(t1, t2) {
                 .attr("class", "chart-group")
                 .attr("clip-path", "url(#clip)");
             // добавляем линии для первой оси y
-            chartGroup.append("path")
-                .datum(data.val)
-                .attr("class", "line1")
-                .attr("fill", "none")
-                .attr("stroke", "black")
-                .attr("stroke-width", 1.5)
-                .attr("d", line1);
+            /* chartGroup.append("path")
+                 .datum(data.val)
+                 .attr("class", "line1")
+                 .attr("fill", "none")
+                 .attr("stroke", "black")
+                 .attr("stroke-width", 1.5)
+                 .attr("d", line1);*/
             // добавляем линии для второй оси y
             chartGroup.append("path")
                 .datum(data.val)
@@ -328,14 +328,14 @@ export async function datas(t1, t2) {
                     .call(d3.axisBottom(x)
                         .tickFormat(d3.timeFormat('%H:%M')))
                     .transition().duration(1000).call(d3.axisBottom(x))
-                svg.select('.line1')
-                    .datum(data.val)
-                    .transition()
-                    .duration(1000)
-                    .attr("fill", "none")
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 1.5)
-                    .attr("d", line1);
+                /*  svg.select('.line1')
+                      .datum(data.val)
+                      .transition()
+                      .duration(1000)
+                      .attr("fill", "none")
+                      .attr("stroke", "black")
+                      .attr("stroke-width", 1.5)
+                      .attr("d", line1);*/
 
                 svg.select('.line2')
                     .datum(data.val)
@@ -390,14 +390,14 @@ export async function datas(t1, t2) {
                     .call(d3.axisBottom(x)
                         .tickFormat(d3.timeFormat('%H:%M')))
                     .transition().call(d3.axisBottom(x))
-                svg.select('.line1')
-                    .datum(data.val)
-                    .transition()
-                    //  .duration(1000)
-                    .attr("fill", "none")
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 1.5)
-                    .attr("d", line1)
+                /* svg.select('.line1')
+                     .datum(data.val)
+                     .transition()
+                     //  .duration(1000)
+                     .attr("fill", "none")
+                     .attr("stroke", "black")
+                     .attr("stroke-width", 1.5)
+                     .attr("d", line1)*/
 
                 svg.select('.line2')
                     .datum(data.val)
