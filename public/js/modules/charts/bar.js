@@ -273,12 +273,14 @@ export async function datas(t1, t2) {
             const yAxis1 = d3.axisLeft(y1)
             const yAxis2 = d3.axisLeft(y2)
             const xAxis = d3.axisBottom(x)
+
+            /*
             const line1 = d3.line()
                 .x((d) => x(d.dates))
                 .y((d) => y1(d.value))
             const line2 = d3.line()
                 .x((d) => x(d.dates))
-                .y((d) => y2(d.tvalue))
+                .y((d) => y2(d.tvalue))*/
 
             // const oilThreshold = 9;
             //  const maxVal = 10;
@@ -358,14 +360,15 @@ export async function datas(t1, t2) {
                 .attr("stroke", "red")
                 .attr("fill-opacity", 1)
 
-            // добавляем линии для второй оси y
-            chartGroup.append("path")
-                .datum(data.val)
-                .attr("class", "line2")
-                .attr("fill", "none")
-                .attr("stroke", "blue")
-                .attr("stroke-width", 1)
-                .attr("d", line2);
+            /*
+        // добавляем линии для второй оси y
+        chartGroup.append("path")
+            .datum(data.val)
+            .attr("class", "line2")
+            .attr("fill", "none")
+            .attr("stroke", "blue")
+            .attr("stroke-width", 1)
+            .attr("d", line2);*/
             // добавляем области для первой кривой
 
 
@@ -405,7 +408,7 @@ export async function datas(t1, t2) {
                 .attr("class", "pat")
                 .attr("class", "area2")
                 .attr("fill-opacity", 0.3)
-                .attr("stroke", "black")
+                .attr("stroke", "blue")
                 .attr("stroke-width", 1)
                 .attr("d", area2);
             svg.append("text")
@@ -452,15 +455,16 @@ export async function datas(t1, t2) {
                         .tickFormat(d3.timeFormat('%H:%M')))
                     .transition().duration(1000).call(d3.axisBottom(x))
 
-                svg.select('.line2')
-                    .datum(data.val)
-                    .transition()
-                    .duration(1000)
-                    .attr("fill", "none")
-                    .attr("stroke", "blue")
-                    .attr("stroke-width", 1)
-                    .attr("d", line2)
-
+                /*
+            svg.select('.line2')
+                .datum(data.val)
+                .transition()
+                .duration(1000)
+                .attr("fill", "none")
+                .attr("stroke", "blue")
+                .attr("stroke-width", 1)
+                .attr("d", line2)
+*/
                 svg.select(".area1")
                     .datum(data.val)
                     .transition()
@@ -531,7 +535,7 @@ export async function datas(t1, t2) {
                     .attr("class", "area2")
                     .attr("fill", "none")
                     .attr("fill-opacity", 0.3)
-                    .attr("stroke", "black")
+                    .attr("stroke", "blue")
                     .attr("stroke-width", 1)
                     .attr("d", area2)
             }
@@ -544,15 +548,16 @@ export async function datas(t1, t2) {
                         .tickFormat(d3.timeFormat('%H:%M')))
                     .transition().call(d3.axisBottom(x))
 
-                svg.select('.line2')
-                    .datum(data.val)
-                    .transition()
-                    // .duration(1000)
-                    .attr("fill", "none")
-                    .attr("stroke", "blue")
-                    .attr("stroke-width", 1)
-                    .attr("d", line2)
-
+                /*
+            svg.select('.line2')
+                .datum(data.val)
+                .transition()
+                // .duration(1000)
+                .attr("fill", "none")
+                .attr("stroke", "blue")
+                .attr("stroke-width", 1)
+                .attr("d", line2)
+*/
 
                 svg.select(".area3")
                     .datum(data.val)
@@ -625,7 +630,7 @@ export async function datas(t1, t2) {
                     .attr("class", "area2")
                     .attr("fill", "none")
                     .attr("fill-opacity", 0.3)
-                    .attr("stroke", "black")
+                    .attr("stroke", "blue")
                     .attr("stroke-width", 1)
                     .attr("d", area2)
             });
