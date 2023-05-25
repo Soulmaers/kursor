@@ -136,9 +136,11 @@ export async function oil(t1, t2) {
     const line1 = d3.line()
         .x((d) => x(d.time))
         .y((d) => y1(d.oil))
+        .curve(d3.curveStepAfter);
     const line2 = d3.line()
         .x((d) => x(d.time))
         .y((d) => y2(d.pwr))
+        .curve(d3.curveStepAfter);
     /*  const area1 = d3.area()
           .x(d => x(d.time))
           .y0(height)
