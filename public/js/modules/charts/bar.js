@@ -286,7 +286,7 @@ export async function datas(t1, t2) {
                 .x(d => x(d.dates))
                 .y0(height)
                 .y1(d => y1(d.value))
-                .curve(d3.curveStepAfter);
+                .curve(d3.curveStep);
 
             const knd = Number(d.bar.knd).toFixed(1)
             const dvn = Number(d.bar.dvn).toFixed(1)
@@ -297,24 +297,25 @@ export async function datas(t1, t2) {
                 .x(d => x(d.dates))
                 .y0(height)
                 .y1(d => d.value > knd && d.value <= dnn || d.value > dvn && d.value <= kvd ? y1(d.value) : height)
-                .curve(d3.curveStepAfter);
+                .curve(d3.curveStep);
 
             const area12 = d3.area()
                 .x(d => x(d.dates))
                 .y0(height)
                 .y1(d => d.value <= knd || d.value >= kvd ? y1(d.value) : height)
-                .curve(d3.curveStepAfter);
+                .curve(d3.curveStep);
 
             const area2 = d3.area()
                 .x(d => x(d.dates))
                 .y0(height)
                 .y1(d => y2(d.tvalue))
+                .curve(d3.curveStep);
             // добавляем текстовый элемент
 
             const area3 = d3.line()
                 .x(d => x(d.dates))
                 .y(d => d.value === -0.5 ? y1(0) : height + 10)
-
+                .curve(d3.curveStep);
             const u = 0;
 
             if (i === count - 1) {
@@ -363,7 +364,7 @@ export async function datas(t1, t2) {
                 .attr("class", "line2")
                 .attr("fill", "none")
                 .attr("stroke", "blue")
-                .attr("stroke-width", 2)
+                .attr("stroke-width", 1)
                 .attr("d", line2);
             // добавляем области для первой кривой
 
@@ -457,7 +458,7 @@ export async function datas(t1, t2) {
                     .duration(1000)
                     .attr("fill", "none")
                     .attr("stroke", "blue")
-                    .attr("stroke-width", 2)
+                    .attr("stroke-width", 1)
                     .attr("d", line2)
 
                 svg.select(".area1")
@@ -549,7 +550,7 @@ export async function datas(t1, t2) {
                     // .duration(1000)
                     .attr("fill", "none")
                     .attr("stroke", "blue")
-                    .attr("stroke-width", 2)
+                    .attr("stroke-width", 1)
                     .attr("d", line2)
 
 
