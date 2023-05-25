@@ -95,14 +95,14 @@ export async function datas(t1, t2) {
                 ...el,
                 value: el.value.map(it => {
                     if (it === -348201.3876) {
-                        return 0
+                        return -0.5
                     } else {
                         return it
                     }
                 }),
                 tvalue: el.tvalue.map(it => {
                     if (it === -348201.3876 || it === -128) {
-                        return 0
+                        return -0.5
                     } else {
                         return it
                     }
@@ -264,7 +264,7 @@ export async function datas(t1, t2) {
                 .range([0, width])
             // задаем y-шкалу для первой оси y
             const y1 = d3.scaleLinear()
-                .domain(d3.extent(data.val, (d) => d.value))
+                .domain([0, 15])//d3.extent(data.val, (d) => d.value))
                 .range([height, 0]);
             // задаем y-шкалу для второй оси y
             const y2 = d3.scaleLinear()
@@ -288,7 +288,6 @@ export async function datas(t1, t2) {
                 .y1(d => y1(d.value))
                 .curve(d3.curveStepAfter);
 
-
             const knd = Number(d.bar.knd).toFixed(1)
             const dvn = Number(d.bar.dvn).toFixed(1)
             const dnn = Number(d.bar.dnn).toFixed(1)
@@ -311,7 +310,13 @@ export async function datas(t1, t2) {
                 .y0(height)
                 .y1(d => y2(d.tvalue))
             // добавляем текстовый элемент
+
+            const area3 = d3.line()
+                .x(d => x(d.dates))
+                .y(d => d.value === -0.5 ? y1(0) : height + 10)
+
             const u = 0;
+
             if (i === count - 1) {
                 console.log(i)
                 // добавляем ось x
@@ -331,24 +336,27 @@ export async function datas(t1, t2) {
                 .attr("class", "os2y")
                 .attr("transform", "translate(" + width + ", 0)")
             // .call(yAxis2);
-            var clip = svg.append("defs").append("svg:clipPath")
+            const clip = svg.append("defs").append("svg:clipPath")
                 .attr("id", "clip")
                 .append("svg:rect")
                 .attr("width", width)
                 .attr("height", height)
                 .attr("x", 0)
                 .attr("y", 0);
-            var chartGroup = svg.append("g")
+            const chartGroup = svg.append("g")
                 .attr("class", "chart-group")
                 .attr("clip-path", "url(#clip)");
-            // добавляем линии для первой оси y
-            /* chartGroup.append("path")
-                 .datum(data.val)
-                 .attr("class", "line1")
-                 .attr("fill", "none")
-                 .attr("stroke", "black")
-                 .attr("stroke-width", 1.5)
-                 .attr("d", line1);*/
+
+
+
+            chartGroup.append("path")
+                .datum(data.val)
+                .attr("class", "area3")
+                .attr("d", area3)
+                .attr("stroke-width", 3)
+                .attr("stroke", "red")
+                .attr("fill-opacity", 1)
+
             // добавляем линии для второй оси y
             chartGroup.append("path")
                 .datum(data.val)
@@ -378,6 +386,7 @@ export async function datas(t1, t2) {
                 .attr("fill-opacity", 0.9)
             //  .attr("stroke", "black")
 
+
             chartGroup.append("path")
                 .datum(data.val)
                 .attr("class", "area12")
@@ -386,6 +395,9 @@ export async function datas(t1, t2) {
                 .attr("fill-opacity", 0.9)
             // .attr("stroke", "black")
             // добавляем области для второй кривой
+
+
+
             chartGroup.append("path")
                 .datum(data.val)
                 .attr("fill", "none")
@@ -401,6 +413,11 @@ export async function datas(t1, t2) {
                 .attr("transform", "rotate(0)")
                 .attr("text-anchor", "middle")
                 .text(`${d.sens}`);
+
+
+
+
+
             // Add brushing
             var brush = d3.brushX()
                 .extent([[0, 0], [width, height]])
@@ -415,10 +432,11 @@ export async function datas(t1, t2) {
             preloaderGraf.style.display = 'none'
             //  preloaderGraf.classList.add('preloaderGraf_hidden') /* добавляем ему класс для скрытия */
 
-
             var idleTimeout
             function idled() { idleTimeout = null; }
-            function updateChart() {
+
+            async function updateChart() {
+
                 const extent = d3.event.selection
                 if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) {
                     if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
@@ -432,14 +450,6 @@ export async function datas(t1, t2) {
                     .call(d3.axisBottom(x)
                         .tickFormat(d3.timeFormat('%H:%M')))
                     .transition().duration(1000).call(d3.axisBottom(x))
-                /*  svg.select('.line1')
-                      .datum(data.val)
-                      .transition()
-                      .duration(1000)
-                      .attr("fill", "none")
-                      .attr("stroke", "black")
-                      .attr("stroke-width", 1.5)
-                      .attr("d", line1);*/
 
                 svg.select('.line2')
                     .datum(data.val)
@@ -449,7 +459,6 @@ export async function datas(t1, t2) {
                     .attr("stroke", "blue")
                     .attr("stroke-width", 2)
                     .attr("d", line2)
-
 
                 svg.select(".area1")
                     .datum(data.val)
@@ -470,7 +479,6 @@ export async function datas(t1, t2) {
                     .attr("stroke", "black")
                     .attr("stroke-width", 1)
 
-
                 svg.select(".area11")
                     .datum(data.val)
                     .transition()
@@ -486,6 +494,16 @@ export async function datas(t1, t2) {
                     .attr("d", area11)
                     .attr("fill-opacity", 0.9)
                 // .attr("stroke", "black")
+
+
+                svg.select(".area3")
+                    .datum(data.val)
+                    .attr("class", "area3")
+                    .attr("d", area3)
+                    .attr("stroke-width", 3)
+                    .attr("stroke", "red")
+                    .attr("fill-opacity", 1)
+
 
                 svg.select(".area12")
                     .datum(data.val)
@@ -504,9 +522,6 @@ export async function datas(t1, t2) {
                     .attr("d", area12)
                     .attr("fill-opacity", 0.9)
                 //.attr("stroke", "black")
-
-
-
                 svg.select(".area2")
                     .datum(data.val)
                     .transition()
@@ -519,8 +534,6 @@ export async function datas(t1, t2) {
                     .attr("stroke-width", 1)
                     .attr("d", area2)
             }
-
-
             // If user double click, reinitialize the chart
             svg.on("dblclick", function () {
                 x.domain(d3.extent(data.val, (d) => new Date(d.dates)))
@@ -529,14 +542,6 @@ export async function datas(t1, t2) {
                     .call(d3.axisBottom(x)
                         .tickFormat(d3.timeFormat('%H:%M')))
                     .transition().call(d3.axisBottom(x))
-                /* svg.select('.line1')
-                     .datum(data.val)
-                     .transition()
-                     //  .duration(1000)
-                     .attr("fill", "none")
-                     .attr("stroke", "black")
-                     .attr("stroke-width", 1.5)
-                     .attr("d", line1)*/
 
                 svg.select('.line2')
                     .datum(data.val)
@@ -548,7 +553,13 @@ export async function datas(t1, t2) {
                     .attr("d", line2)
 
 
-
+                svg.select(".area3")
+                    .datum(data.val)
+                    .attr("class", "area3")
+                    .attr("d", area3)
+                    .attr("stroke-width", 3)
+                    .attr("stroke", "red")
+                    .attr("fill-opacity", 1)
 
                 svg.select(".area1")
                     .datum(data.val)

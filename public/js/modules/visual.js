@@ -99,7 +99,7 @@ export async function visual(el) {
     const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
     preloaderGraf.style.opacity = 1;
     preloaderGraf.style.display = 'flex'
-    setTimeout(click, 500)
+    setTimeout(click, 700)
 
 
     const zamer = document.querySelectorAll('.zamer')
