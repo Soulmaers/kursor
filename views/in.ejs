@@ -11,19 +11,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto:wght@300&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
     <link rel="stylesheet" href=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.css "
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="" />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.js'></script>
+
     <script src=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.js "
         integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
         crossorigin=""></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/calendar.css" />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 
 <body>
     <!-- Блок Preloader -->
-    <div class="preloader">
+    <div class=" preloader">
         <div class="sk-chase">
             <div class="sk-chase-dot"></div>
             <div class="sk-chase-dot"></div>
@@ -113,6 +116,7 @@
                         <li class="itemsLegend"></li>
                     </ul>
                     <div class="speedGraf">
+
                         <div class="form_speed">
                             <label>Интервал
                                 <select class="select_speed">
@@ -121,6 +125,9 @@
                                     <option class="option_int" value="2">За неделю</option>
                                     <option class="option_int" value="3">За месяц</option>
                                 </select>
+                            </label>
+                            <label>Календарь
+                                <input type="text" id="daterange" placeholder="Выберите диапазон дат">
                             </label>
                             <label>От
                                 <input class="input_date" type="date" value="" placeholder="выберите дату От">
@@ -568,12 +575,15 @@
     <!-- <script src="https://d3js.org/d3.v6.js"></script>-->
 
 
-    <script src="//cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
     <script src="https://d3js.org/d3.v4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <script src="https://hst-api.wialon.com/wsdk/script/wialon.js"></script>
     <script type="module" src="js/main.js"></script>
+
+
 </body>
 
 </html>

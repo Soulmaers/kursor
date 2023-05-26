@@ -3,10 +3,6 @@
 import { loadParamsViewList, conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
 
-
-
-
-
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
 export function init(kluch) {
@@ -229,6 +225,8 @@ export async function ggg(id) {
 }
 
 
+
+
 async function dostupObject(name) {
     const param = {
         method: "POST",
@@ -246,4 +244,24 @@ async function dostupObject(name) {
 
 
 
+//import Datepicker from './vanillajs-datepicker/js/Datepicker.js';
+/*
+const elem = document.getElementById('foo');
+const rangepicker = new DateRangePicker(elem, {
+    // ...Настройки
+});*/
 
+
+
+flatpickr("#daterange", {
+    mode: "range",
+    dateFormat: "d-m-Y",
+    locale: "ru",
+    static: true,
+    "locale": {
+        "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
+    }
+});
+
+//document.querySelector('.flatpickr-calendar').style.width = '200px'
+//document.querySelector('.  .flatpickr - weekdays ').style.width = '195px'

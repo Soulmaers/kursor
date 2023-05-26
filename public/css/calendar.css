@@ -1,0 +1,61 @@
+/* изменяем размер и расстояние календаря */
+.flatpickr-calendar {
+    font-size: 12px;
+    width: 230px;
+    height: 200px;
+    margin: 5px;
+    margin-left: -30px;
+}
+
+/* изменяем размер текста */
+.flatpickr-day,
+.flatpickr-month,
+.flatpickr-time {
+    font-size: 12px;
+}
+
+/* уменьшаем размер ячеек */
+.flatpickr-day {
+    width: 20px;
+    height: 20px;
+    line-height: 16px;
+}
+
+/* уменьшаем отступы и расстояние между ячейками */
+.flatpickr-dayContainer {
+    margin: 0;
+    padding: 0;
+}
+
+.dayContainer {
+    width: 230px;
+    min-width: 0;
+}
+
+/* уменьшаем расстояние между днями недели и датами */
+.flatpickr-days {
+    width: 230px
+}
+
+
+/* изменяем размер шрифта названия месяца */
+.flatpickr-current-month {
+    font-size: 12px;
+    /* замените 14px на нужный вам размер */
+}
+
+/* изменяем размер шрифта текущего года */
+.flatpickr-current-year {
+    font-size: 12px;
+    /* замените 14px на нужный вам размер */
+}
+
+/* уменьшаем расстояние между названиями дней недели */
+.flatpickr-weekdays {
+    padding: 5px 0;
+}
+
+
+#daterange {
+    text-align: center;
+}

@@ -73,8 +73,6 @@ liCreate()
 
 
 
-
-
 const Obj = {
     'PressurePro 933': 25343786,
     'TDRMX 339': 26421451,

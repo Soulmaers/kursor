@@ -120,7 +120,7 @@ export async function oil(t1, t2) {
         .range([0, width])
     // задаем y-шкалу для первой оси y
     const y1 = d3.scaleLinear()
-        .domain(d3.extent(data, (d) => d.oil))
+        .domain([0, d3.max(data, (d) => d.oil)])
         .range([height, 0]);
 
     // задаем y-шкалу для второй оси y
@@ -169,6 +169,7 @@ export async function oil(t1, t2) {
         .x(d => x(d.time))
         .y0(height)
         .y1(d => y2(d.pwr))
+        .curve(d3.curveStepAfter);
     // добавляем ось x
     svg.append("g")
         .attr("class", "osx")
