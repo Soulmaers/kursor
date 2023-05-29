@@ -3419,7 +3419,7 @@ input[type=range]:focus::-ms-fill-upper {
 .form_speed {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+
   margin: 5px;
   padding: 5px 15px;
   border: 1px solid gray
@@ -3433,9 +3433,13 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .select_speed {
-
+  margin: 5px 0;
   width: 140px;
   padding: 3px 8px;
+}
+
+.flatpickr-wrapper {
+  margin: 5px 0
 }
 
 .input_interval {

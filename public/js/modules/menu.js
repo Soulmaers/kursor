@@ -253,15 +253,9 @@ const rangepicker = new DateRangePicker(elem, {
 
 
 
-flatpickr("#daterange", {
-    mode: "range",
-    dateFormat: "d-m-Y",
-    locale: "ru",
-    static: true,
-    "locale": {
-        "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
-    }
-});
+
+
+
 
 //document.querySelector('.flatpickr-calendar').style.width = '200px'
 //document.querySelector('.  .flatpickr - weekdays ').style.width = '195px'

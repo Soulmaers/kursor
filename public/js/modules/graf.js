@@ -9,13 +9,35 @@ const inputDate = document.querySelectorAll('.input_date')
 const selectSpeed = document.querySelector('.select_speed')
 
 
+const times = []
 
 
+const fp = flatpickr("#daterange", {
+    mode: "range",
+    dateFormat: "d-m-Y",
+    locale: "ru",
+    static: true,
+    "locale": {
+        "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
+    },
+    onChange: function (selectedDates, dateStr, instance) {
+        //  console.log(selectedDates);
+        const formattedDates = selectedDates.map(date => {
+            const year = date.getFullYear();
+            const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
+            const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
 
+            return `${year}-${month}-${day}`;
+        });
+        times.push(formattedDates)
+    }
+});
+
+const dateInputValue = document.getElementById('daterange')
 
 btnForm.forEach(el =>
     el.addEventListener('click', () => {
-        if (el.textContent === 'Выполнить' && inputDate[0].value !== '' && inputDate[1].value !== '') {
+        if (el.textContent === 'Выполнить' && times.length !== 0) {
             const grafOld = document.querySelector('.infoGraf')
             if (grafOld) {
                 grafOld.remove()
@@ -28,7 +50,7 @@ btnForm.forEach(el =>
             // preloaderGraf.classList.remove('preloaderGraf_hidden') /* добавляем ему класс для скрытия */
             dataInput() //фунции выбора интервала графика скорости
         }
-        if (el.textContent === 'Выполнить' && inputDate[0].value == '' && inputDate[1].value == '') {
+        if (el.textContent === 'Выполнить' && times.length === 0) {
             const grafOld = document.querySelector('.infoGraf')
             if (grafOld) {
                 grafOld.remove()
@@ -40,21 +62,18 @@ btnForm.forEach(el =>
         }
         if (el.textContent === 'Очистить') {
             selectSpeed.value = 0;
-            inputDate.forEach(e => {
-                e.value = ''
-            })
+            dateInputValue.value = ''
         }
     })
 )
 export function click() {
-    const inputDate = document.querySelectorAll('.input_date')
-    if (inputDate[0].value !== '' && inputDate[1].value !== '') {
+    if (times.length !== 0) {
         const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
         preloaderGraf.style.opacity = 1;
         preloaderGraf.style.display = 'flex'
         dataInput() //фунции выбора интервала графика скорости
     }
-    if (inputDate[0].value == '' && inputDate[1].value == '') {
+    if (times.length === 0) {
         const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
         preloaderGraf.style.opacity = 1;
         preloaderGraf.style.display = 'flex'
@@ -65,22 +84,18 @@ export function click() {
 
 
 export function dataInput() {
-
+    const dateTime = times[times.length - 1]
+    console.log(dateTime)
     const active = document.querySelector('.color')
-    const inputDate = document.querySelectorAll('.input_date')
     const selectSpeed = document.querySelector('.select_speed')
     selectSpeed.value = 0;
-    const arrDate = [];
 
-    console.log(active.id)
-    inputDate.forEach(e => {
-        arrDate.push(e.value)
-    })
-    let t01 = new Date(arrDate[0])
+    let t01 = new Date(dateTime[0])
     let timeFrom = Math.floor(t01.setHours(t01.getHours()) / 1000)
-    let t02 = new Date(arrDate[1])
+    let t02 = new Date(dateTime[1])
     let nowDate = Math.floor(t02.setHours(t02.getHours()) / 1000)
     graftest(timeFrom, nowDate)
+    times.length = 0;
 }
 
 export function dataSelect() {
@@ -131,13 +146,16 @@ export function graftest(t1, t2) {
 
 
 
-function checked() {
-    const selectSpeed = document.querySelector('.select_speed');
-    const inputDate = document.querySelectorAll('.input_date')
-    selectSpeed.addEventListener('click', () => {
-        inputDate.forEach(e => {
-            e.value = ''
-        })
+//function checked() {
+
+//  const selectSpeed = document.querySelector('.select_speed');
+
+selectSpeed.addEventListener('click', () => {
+    dateInputValue.value = ''
+    console.log(dateInputValue)
+    inputDate.forEach(e => {
+        e.value = ''
     })
-}
-checked()  //сбрасывает установленные значения интервала графика скорости
+})
+//}
+//checked()  //сбрасывает установленные значения интервала графика скорости
