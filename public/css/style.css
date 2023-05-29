@@ -2741,6 +2741,7 @@ input[type="date"] {
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   border-radius: 5px;
+  font-size: 0.8rem;
 }
 
 
