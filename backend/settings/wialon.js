@@ -308,7 +308,7 @@ function proverka(arr) {
                 if (err) console.log(err);
                 if (results.length === 0) {
 
-                    if (el[3] == -50 && el[6] > 0 || el[3] == -51 && el[6] > 0 || el[3] == -128 && el[6] > 0) {
+                    if (el[2] === 0 && el[3] == -50 && el[6] > 0 || el[2] === 0 && el[3] == -51 && el[6] > 0 || el[2] === 0 && el[3] == -128 && el[6] > 0) {
                         console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
                         const data = createDate()
                         alarm = 'Потеря связи с датчиком'
@@ -336,7 +336,7 @@ function proverka(arr) {
 
                 }
                 else {
-                    if (el[3] == -50 && el[6] > 0 || el[3] == -51 && el[6] > 0 || el[3] == -128 && el[6] > 0) {
+                    if (el[2] === 0 && el[3] == -50 && el[6] > 0 || el[2] === 0 && el[3] == -51 && el[6] > 0 || el[2] === 0 && el[3] == -128 && el[6] > 0) {
                         if (results[results.length - 1].alarm == 'Потеря связи с датчиком') {
                             console.log(el + ' ' + 'таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
                             return
