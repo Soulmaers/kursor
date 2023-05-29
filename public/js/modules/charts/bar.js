@@ -7,7 +7,7 @@ import { fnTime, fnPar, fnParMessage } from '../grafiks.js'
 async function fn() {
     const active = document.querySelectorAll('.color')
     const activePost = active[0].children[0].textContent.replace(/\s+/g, '')
-    console.log(activePost)
+    // console.log(activePost)
     const param = {
         method: "POST",
         headers: {
@@ -28,7 +28,7 @@ async function fn() {
 export async function datas(t1, t2) {
     const ossParams = await fn()
 
-    console.log('datas')
+    // console.log('datas')
     const active = Number(document.querySelector('.color').id)
     const global = await fnTime(t1, t2)
 
@@ -75,10 +75,11 @@ export async function datas(t1, t2) {
         par.forEach(it => {
             if (e.params === it.pressure) {
                 e.bar = it.bar
+                e.position = Number(it.tyresdiv)
             }
         })
     })
-
+    console.log(par)
     grafikStartPress(global[0], finishArrayData)
     function grafikStartPress(times, datar) {
         const grafOld = document.querySelector('.infoGraf')
@@ -89,7 +90,7 @@ export async function datas(t1, t2) {
         const grafics = document.querySelector('.grafics')
         graf.classList.add('infoGraf')
         grafics.appendChild(graf)
-        console.log(datar)
+        //  console.log(datar)
         const newData = datar.map(el => {
             return {
                 ...el,
@@ -117,8 +118,9 @@ export async function datas(t1, t2) {
         const gl = times.map(it => {
             return new Date(it)
         })
-        const dat2 = global.series.map(({ bar, sens, value, tvalue, speed }) => ({
+        const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed }) => ({
             sens,
+            position,
             bar,
             val: value.map((val, i) => ({
                 dates: gl[i],
@@ -127,7 +129,29 @@ export async function datas(t1, t2) {
                 speed: Number(speed[i])
             }))
         }));
+
         console.log(dat2)
+
+        dat2.sort((a, b) => {
+            if (a.position > b.position) {
+                return 1;
+            }
+            if (a.position < b.position) {
+                return -1;
+            }
+            return 0;
+        });
+
+
+        // const arr = [{ value: 'uno' }, { value: 'dos' }, { value: 'tres' }, { value: 'odin' }, { value: 'five' }];
+        /*
+                const idx = dat2.findIndex(el => el.sens === 'Тягач Ведущая ось ПВнутр');
+                if (idx > 0) {
+                    dat2.splice(idx - 1, 0, dat2.splice(idx, 1)[0]);
+                }
+        
+        
+                console.log(idx)*/
         // Выбираем div, в который мы хотим поместить графики
         const container = d3.select('.infoGraf');
 
