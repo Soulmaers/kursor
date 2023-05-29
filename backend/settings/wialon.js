@@ -303,7 +303,7 @@ function proverka(arr) {
             connection.query(sqls1, function (err, results) {
                 if (err) console.log(err);
                 if (results.length === 0) {
-                    if (el[6] > 0 && el[3] == -50 || el[6] > 0 && el[3] == -51 || el[6] > 0 && el[3] == -128) {
+                    if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
                         console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
                         const data = createDate()
                         alarm = 'Потеря связи с датчиком'
@@ -311,15 +311,14 @@ function proverka(arr) {
                         return
                     }
                     else {
-                        console.log(el[3])
-                        if (el[2] <= Number(el[4].knd) && el[3] >= -50) {
+                        if (el[2] <= Number(el[4].knd)) {
                             console.log(el + ' ' + 'таблица нет, аларм есть/ Критически низкое давление' + ' ' + time)
                             const data = createDate()
                             alarm = 'Критически низкое давление'
                             alarmBase(data, el, alarm)
                             return
                         }
-                        if (el[2] >= Number(el[4].kvd) && el[3] >= -50) {
+                        if (el[2] >= Number(el[4].kvd)) {
                             console.log(el + ' ' + 'таблица нет, аларм есть/ Критически высокое давление' + ' ' + time)
                             const data = createDate()
                             alarm = 'Критически высокое давление'
@@ -333,7 +332,7 @@ function proverka(arr) {
                     }
                 }
                 else if (results.length !== 0) {
-                    if (el[6] > 0 && el[3] == -50 || el[6] > 0 && el[3] == -51 || el[6] > 0 && el[3] == -128) {
+                    if (el[3] == -50 || el[3] == -51 || el[3] == -128) {
                         if (results[results.length - 1].alarm == 'Потеря связи с датчиком') {
                             console.log(el + ' ' + 'таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
                             return
@@ -346,7 +345,7 @@ function proverka(arr) {
                         return
                     }
                     else {
-                        if (el[2] <= Number(el[4].knd) && el[3] >= -50) {
+                        if (el[2] <= Number(el[4].knd)) {
                             if (results[results.length - 1].bar == el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
                                 //   console.log('равно')
                                 console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
@@ -360,7 +359,7 @@ function proverka(arr) {
                             }
                             return
                         }
-                        if (el[2] >= Number(el[4].kvd) && el[3] >= -50) {
+                        if (el[2] >= Number(el[4].kvd)) {
                             // console.log(results[results.length - 1].bar)
                             if (results[results.length - 1].bar === el[2] && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
                                 console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные' + ' ' + time)
@@ -374,7 +373,7 @@ function proverka(arr) {
                             }
                             return
                         }
-                        else if (el[2] > Number(el[4].knd) && el[3] >= -50 || el[2] < Number(el[4].kvd) && el[3] >= -50) {
+                        else if (el[2] > Number(el[4].knd) || el[2] < Number(el[4].kvd)) {
                             // console.log(el)
                             if (results[results.length - 1].alarm === 'Норма') {
                                 console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
