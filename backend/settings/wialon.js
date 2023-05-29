@@ -29,7 +29,7 @@ function init(user) {
         })
         .then(function (data) {
             createTable();
-            setInterval(createTable, 90000);
+            setInterval(createTable, 60000);
 
         })
 }
