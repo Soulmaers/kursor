@@ -1,5 +1,5 @@
 import { fnTime, fnPar, fnParMessage } from '../grafiks.js'
-
+import { Tooltip } from '../../class/Tooltip.js'
 
 
 
@@ -154,23 +154,19 @@ export async function datas(t1, t2) {
                 console.log(idx)*/
         // Выбираем div, в который мы хотим поместить графики
         const container = d3.select('.infoGraf');
-
         // Связываем данные с контейнером
         const charts = container.selectAll('.charts')
             .data(dat2)
             .enter()
             .append('div')
             .attr('class', 'chart');
-
-        const margin = { top: 100, right: 60, bottom: 30, left: 260 },
-            width = 700 - margin.left - margin.right,
+        const margin = { top: 100, right: 100, bottom: 30, left: 30 },
+            width = 800 - margin.left - margin.right,
             height = 45;
-
         const count = charts.size()
         console.log(count)
         let he;
         let pad;
-
         const tooltips = document.createElement('div')
         tooltips.classList.add('tooltips')
         const titleGraf = document.createElement('div')
@@ -185,7 +181,6 @@ export async function datas(t1, t2) {
         titleGraf.appendChild(checkGraf)
         checkGraf.innerHTML = `<input class="inputPress" type="checkbox"
   >Подсветка графика`
-
         infoGraf.appendChild(tooltips)
         const tt1 = document.createElement('div')
         const tt2 = document.createElement('div')
@@ -261,12 +256,18 @@ export async function datas(t1, t2) {
                     });
             });
 
+        const char = document.querySelectorAll('.chart')
+        char.forEach(e => {
+            const div = document.createElement('div')
+            div.classList.add('im')
+            e.prepend(div)
+        })
+        char[char.length - 1].children[0].classList.add('last')
+        console.log(char)
         // В каждом элементе создаем график
         charts.each(function (d, i) {
             const data = d; // данные для этого графика
-
             const chartContainer = d3.select(this); // div, в котором будет находиться график
-
             if (i === count - 1) {
                 he = height + 30
                 pad = 0
@@ -279,6 +280,7 @@ export async function datas(t1, t2) {
             const svg = chartContainer.append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr('height', he)
+                .attr('rel', d.sens)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + pad + ")")
             // задаем x-шкалу
@@ -381,15 +383,7 @@ export async function datas(t1, t2) {
                 .attr("stroke", "red")
                 .attr("fill-opacity", 1)
 
-            /*
-        // добавляем линии для второй оси y
-        chartGroup.append("path")
-            .datum(data.val)
-            .attr("class", "line2")
-            .attr("fill", "none")
-            .attr("stroke", "blue")
-            .attr("stroke-width", 1)
-            .attr("d", line2);*/
+
             // добавляем области для первой кривой
             chartGroup.append("path")
                 .datum(data.val)
@@ -424,12 +418,12 @@ export async function datas(t1, t2) {
                 .attr("stroke", "blue")
                 .attr("stroke-width", 1)
                 .attr("d", area2);
-            svg.append("text")
-                .attr("x", -130)
-                .attr("y", 30)
-                .attr("transform", "rotate(0)")
-                .attr("text-anchor", "middle")
-                .text(`${d.sens}`);
+            /*  svg.append("text")
+                  .attr("x", -130)
+                  .attr("y", 30)
+                  .attr("transform", "rotate(0)")
+                  .attr("text-anchor", "middle")
+                  .text(`${d.sens}`);*/
             // Add brushing
             var brush = d3.brushX()
                 .extent([[0, 0], [width, height]])
@@ -538,18 +532,6 @@ export async function datas(t1, t2) {
                     .call(d3.axisBottom(x)
                         .tickFormat(d3.timeFormat('%H:%M')))
                     .transition().call(d3.axisBottom(x))
-
-                /*
-            svg.select('.line2')
-                .datum(data.val)
-                .transition()
-                // .duration(1000)
-                .attr("fill", "none")
-                .attr("stroke", "blue")
-                .attr("stroke-width", 1)
-                .attr("d", line2)
-*/
-
                 svg.select(".area3")
                     .datum(data.val)
                     .attr("class", "area3")
@@ -710,6 +692,11 @@ export async function datas(t1, t2) {
             area2.style("display", "block")
         })
     }
+    const im = document.querySelectorAll('.im');
+    // console.log(iconCard[7].getAttribute('rel'))
+    im.forEach(e => {
+        new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
+    })
 }
 
 function timeConvert(d) {
