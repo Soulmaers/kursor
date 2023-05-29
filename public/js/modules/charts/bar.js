@@ -171,7 +171,6 @@ export async function datas(t1, t2) {
         tooltips.appendChild(tt2)
         tooltips.appendChild(tt3)
         tooltips.appendChild(tt4)
-
         const svgLegend = d3.select('.titleGraf')
         const svga = svgLegend.append('svg')
             .attr("width", 300)
@@ -350,8 +349,6 @@ export async function datas(t1, t2) {
                 .attr("class", "chart-group")
                 .attr("clip-path", "url(#clip)");
 
-
-
             chartGroup.append("path")
                 .datum(data.val)
                 .attr("class", "area3")
@@ -370,8 +367,6 @@ export async function datas(t1, t2) {
             .attr("stroke-width", 1)
             .attr("d", line2);*/
             // добавляем области для первой кривой
-
-
             chartGroup.append("path")
                 .datum(data.val)
                 .attr("d", area1)
@@ -380,7 +375,6 @@ export async function datas(t1, t2) {
                 .attr("stroke", "black")
                 .attr("stroke-width", 1)
                 .attr("fill-opacity", 1)
-
             //#e8eb65
             chartGroup.append("path")
                 .datum(data.val)
@@ -389,8 +383,6 @@ export async function datas(t1, t2) {
                 .attr("fill", "#009933")
                 .attr("fill-opacity", 0.9)
             //  .attr("stroke", "black")
-
-
             chartGroup.append("path")
                 .datum(data.val)
                 .attr("class", "area12")
@@ -399,9 +391,6 @@ export async function datas(t1, t2) {
                 .attr("fill-opacity", 0.9)
             // .attr("stroke", "black")
             // добавляем области для второй кривой
-
-
-
             chartGroup.append("path")
                 .datum(data.val)
                 .attr("fill", "none")
@@ -417,11 +406,6 @@ export async function datas(t1, t2) {
                 .attr("transform", "rotate(0)")
                 .attr("text-anchor", "middle")
                 .text(`${d.sens}`);
-
-
-
-
-
             // Add brushing
             var brush = d3.brushX()
                 .extent([[0, 0], [width, height]])
@@ -430,21 +414,15 @@ export async function datas(t1, t2) {
                 .append("g")
                 .attr("class", "brush")
                 .call(brush);
-
             const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
             preloaderGraf.style.opacity = 0;
             preloaderGraf.style.display = 'none'
-            //  preloaderGraf.classList.add('preloaderGraf_hidden') /* добавляем ему класс для скрытия */
-
             var idleTimeout
             function idled() { idleTimeout = null; }
-
             async function updateChart() {
-
                 const extent = d3.event.selection
                 if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) {
                     if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
-                    //  x.domain([4, 8])
                 } else {
                     x.domain([x.invert(extent[0]), x.invert(extent[1])])
                     svg.select(".brush").call(brush.move, null)
@@ -454,17 +432,6 @@ export async function datas(t1, t2) {
                     .call(d3.axisBottom(x)
                         .tickFormat(d3.timeFormat('%H:%M')))
                     .transition().duration(1000).call(d3.axisBottom(x))
-
-                /*
-            svg.select('.line2')
-                .datum(data.val)
-                .transition()
-                .duration(1000)
-                .attr("fill", "none")
-                .attr("stroke", "blue")
-                .attr("stroke-width", 1)
-                .attr("d", line2)
-*/
                 svg.select(".area1")
                     .datum(data.val)
                     .transition()
@@ -650,8 +617,24 @@ export async function datas(t1, t2) {
                 // Обновить текст в тултипе
                 if (d) {
                     tt1.textContent = `Время: ${(selectedTime)}`
-                    tt2.textContent = `Давление: ${d.value} Бар`
-                    tt3.textContent = `Температура: ${d.tvalue} С°`
+                    if (d.value === -0.5 && d.speed > 0) {
+                        tt2.textContent = `Давление: Потеря связи с датчиком`
+                    }
+                    else if (d.value === -0.5 && d.speed === 0) {
+                        tt2.textContent = `Давление: Датчик не на связи`
+                    }
+                    else {
+                        tt2.textContent = `Давление: ${d.value} Бар`
+                    }
+                    if (d.tvalue === -0.5 && d.speed > 0) {
+                        tt3.textContent = `Температура: Потеря связи с датчиком`
+                    }
+                    else if (d.tvalue === -0.5 && d.speed === 0) {
+                        tt3.textContent = `Температура:  Датчик не на связи`
+                    }
+                    else {
+                        tt3.textContent = `Температура: ${d.tvalue} С°`
+                    }
                     tt4.textContent = `Скорость: ${d.speed} км/ч`
                 }
                 tooltips.style.left = `${xPosition + 300}px`
