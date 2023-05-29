@@ -147,20 +147,20 @@ export async function oil(t1, t2) {
           .y1(d => y1(d.oil))*/
 
 
-    const oilThreshold = 400;
+    //const oilThreshold = 400;
 
     const area1 = d3.area()
         .x(d => x(d.time))
         .y0(height)
         .y1(d => y1(d.oil))
         .curve(d3.curveStepAfter);
-
-    const area11 = d3.area()
-        .x(d => x(d.time))
-        .y0(height)
-        .y1(d => d.oil < oilThreshold ? y1(d.oil) : height)
-        .curve(d3.curveStepAfter);
-
+    /*
+        const area11 = d3.area()
+            .x(d => x(d.time))
+            .y0(height)
+            .y1(d => d.oil < oilThreshold ? y1(d.oil) : height)
+            .curve(d3.curveStepAfter);
+    */
 
 
 
@@ -223,16 +223,16 @@ export async function oil(t1, t2) {
         .attr("class", "area1")
         .attr("d", area1)
         .attr("fill", "blue")
-        .attr("fill-opacity", d => d.oil < oilThreshold ? 0 : 0.5)
+        .attr("fill-opacity", 0.5)
         .attr("stroke", "black")
         .attr("stroke-width", 1);
-
-    chartGroup.append("path")
-        .datum(data)
-        .attr("class", "area11")
-        .attr("d", area11)
-        .attr("fill", "red")
-        .attr("fill-opacity", 0.5)
+    /*
+        chartGroup.append("path")
+            .datum(data)
+            .attr("class", "area11")
+            .attr("d", area11)
+            .attr("fill", "red")
+            .attr("fill-opacity", 0.5)*/
     // добавляем области для второй кривой
     chartGroup.append("path")
         .datum(data)
@@ -321,15 +321,15 @@ export async function oil(t1, t2) {
             .attr("stroke", "black")
             .attr("stroke-width", 1)
             .attr("d", area1)
-
-        svg.select(".area11")
-            .datum(data)
-            .transition()
-            .duration(1000)
-            .attr("d", area11)
-            .attr("fill", "red")
-            .attr("fill-opacity", 0.5)
-
+        /*
+                svg.select(".area11")
+                    .datum(data)
+                    .transition()
+                    .duration(1000)
+                    .attr("d", area11)
+                    .attr("fill", "red")
+                    .attr("fill-opacity", 0.5)
+        */
         svg.select(".area2")
             .datum(data)
             .transition()
@@ -381,15 +381,15 @@ export async function oil(t1, t2) {
             .attr("stroke", "black")
             .attr("stroke-width", 1)
             .attr("d", area1)
-
-        svg.select(".area11")
-            .datum(data)
-            .transition()
-            .duration(1000)
-            .attr("d", area11)
-            .attr("fill", "red")
-            .attr("fill-opacity", 0.5)
-
+        /*
+                svg.select(".area11")
+                    .datum(data)
+                    .transition()
+                    .duration(1000)
+                    .attr("d", area11)
+                    .attr("fill", "red")
+                    .attr("fill-opacity", 0.5)
+        */
         svg.select(".area2")
             .datum(data)
             .transition()

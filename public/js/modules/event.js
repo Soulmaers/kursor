@@ -503,6 +503,9 @@ plug[2].addEventListener('click', () => {
 
 //function podMenu() {
 const menuGraf = document.querySelectorAll('.menu_graf')
+
+
+import { times } from './graf.js'
 menuGraf.forEach(el => {
     el.addEventListener('click', () => {
         const grafOld = document.querySelector('.infoGraf')
@@ -513,14 +516,14 @@ menuGraf.forEach(el => {
             e.classList.remove('activMenuGraf')
         })
         el.classList.add('activMenuGraf')
-        const inputDate = document.querySelectorAll('.input_date')
-        if (inputDate[0].value !== '' && inputDate[1].value !== '') {
+        const dateInputValue = document.getElementById('daterange')
+        if (times.length !== 0) {
             const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
             preloaderGraf.style.opacity = 1;
             preloaderGraf.style.display = 'flex'
             dataInput() //фунции выбора интервала графика скорости
         }
-        if (inputDate[0].value == '' && inputDate[1].value == '') {
+        if (times.length === 0) {
             const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
             preloaderGraf.style.opacity = 1;
             preloaderGraf.style.display = 'flex'

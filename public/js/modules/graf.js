@@ -9,7 +9,7 @@ const inputDate = document.querySelectorAll('.input_date')
 const selectSpeed = document.querySelector('.select_speed')
 
 
-const times = []
+export const times = []
 
 
 const fp = flatpickr("#daterange", {
@@ -95,7 +95,7 @@ export function dataInput() {
     let t02 = new Date(dateTime[1])
     let nowDate = Math.floor(t02.setHours(t02.getHours()) / 1000)
     graftest(timeFrom, nowDate)
-    times.length = 0;
+    //  times.length = 0;
 }
 
 export function dataSelect() {
@@ -152,10 +152,6 @@ export function graftest(t1, t2) {
 
 selectSpeed.addEventListener('click', () => {
     dateInputValue.value = ''
-    console.log(dateInputValue)
-    inputDate.forEach(e => {
-        e.value = ''
-    })
 })
 //}
 //checked()  //сбрасывает установленные значения интервала графика скорости
