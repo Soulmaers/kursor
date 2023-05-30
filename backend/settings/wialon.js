@@ -303,7 +303,7 @@ function proverka(arr) {
             connection.query(sqls1, function (err, results) {
                 if (err) console.log(err);
                 if (results.length === 0) {
-                    if (el[6] > 0 && el[3] <= -50) {
+                    if (el[6] > 5 && el[3] <= -50) {
                         //   console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
                         const data = createDate()
                         alarm = 'Потеря связи с датчиком'
@@ -332,7 +332,7 @@ function proverka(arr) {
                     }
                 }
                 else if (results.length !== 0) {
-                    if (el[6] > 0 && el[3] <= -50) {
+                    if (el[6] > 5 && el[3] <= -50) {
                         if (results[results.length - 1].alarm == 'Потеря связи с датчиком') {
                             //  console.log(el + ' ' + 'таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
                             return

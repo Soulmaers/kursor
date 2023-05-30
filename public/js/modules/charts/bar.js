@@ -341,7 +341,7 @@ export async function datas(t1, t2) {
 
             const area3 = d3.line()
                 .x(d => x(d.dates))
-                .y(d => d.value === -0.5 && d.speed !== 0 ? y1(0) : height + 10)
+                .y(d => d.value === -0.5 && d.speed > 5 || d.tvalue === -0.5 && d.speed > 5 ? y1(0) : height + 10)
                 .curve(d3.curveStep);
             const u = 0;
 
