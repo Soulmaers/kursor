@@ -2731,11 +2731,12 @@ input[type="date"] {
   border-radius: 5px;
 }
 
+
 .im {
   width: 30px;
   height: 30px;
   margin-left: 10px;
-  background-image: url(../image/im.png);
+  /* background-image: url(../image/im.png);*/
   background-size: contain;
   background-repeat: no-repeat;
 }
@@ -2752,16 +2753,7 @@ input[type="date"] {
 
 }
 
-.im1 {
-  width: 30px;
-  height: 40px;
 
-  position: absolute;
-  left: 100px;
-  top: 330px;
-  background-image: url(../image/im1.png);
-  background-repeat: no-repeat;
-}
 
 .tooltips {
   position: absolute;

@@ -299,16 +299,7 @@ export async function datas(t1, t2) {
             const yAxis2 = d3.axisLeft(y2)
             const xAxis = d3.axisBottom(x)
 
-            /*
-            const line1 = d3.line()
-                .x((d) => x(d.dates))
-                .y((d) => y1(d.value))
-            const line2 = d3.line()
-                .x((d) => x(d.dates))
-                .y((d) => y2(d.tvalue))*/
 
-            // const oilThreshold = 9;
-            //  const maxVal = 10;
             const area1 = d3.area()
                 .x(d => x(d.dates))
                 .y0(height)
@@ -692,12 +683,40 @@ export async function datas(t1, t2) {
             area2.style("display", "block")
         })
     }
+
+
+
+    const objIconsStor = {
+        'Тягач Рулевая ось Левое': "../../../image/01.png",
+        'Тягач Рулевая ось Правое': "../../../image/01.png",
+        'Тягач Ведущая ось ЛВнеш': "../../../image/01.png",
+        'Тягач Ведущая ось ЛВнутр': "../../../image/01.png",
+        'Тягач Ведущая ось ПВнутр': "../../../image/01.png",
+        'Тягач Ведущая ось ПВнеш': "../../../image/01.png",
+        'Прицеп 1 ось Л': "../../../image/02.png",
+        'Прицеп 1 ось П': "../../../image/02.png",
+        'Прицеп 2 ось Л': "../../../image/02.png",
+        'Прицеп 2 ось П': "../../../image/02.png",
+        'Прицеп 3 ось Л': "../../../image/02.png",
+        'Прицеп 3 ось П': "../../../image/02.png"
+    }
+
+    //   url(../image/708.png);
     const im = document.querySelectorAll('.im');
     // console.log(iconCard[7].getAttribute('rel'))
     im.forEach(e => {
+        const prop = e.nextElementSibling.getAttribute('rel')
+        if (objIconsStor.hasOwnProperty(prop)) {
+            e.style.backgroundImage = `url(${objIconsStor[prop]})`
+            // e.textContent = objIconsStor[prop]
+            console.log(objIconsStor[prop])
+        }
+        // console.log(e.nextElementSibling.getAttribute('rel'))
         new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
     })
+
 }
+
 
 function timeConvert(d) {
     const date = new Date(d);
