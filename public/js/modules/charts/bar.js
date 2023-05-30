@@ -102,7 +102,7 @@ export async function datas(t1, t2) {
                     }
                 }),
                 tvalue: el.tvalue.map(it => {
-                    if (it === -348201.3876 || it === -128) {
+                    if (it === -348201.3876 || it === -128 || it === -50 || it === -51) {
                         return -0.5
                     } else {
                         return it
@@ -160,7 +160,7 @@ export async function datas(t1, t2) {
             .enter()
             .append('div')
             .attr('class', 'chart');
-        const margin = { top: 100, right: 100, bottom: 30, left: 30 },
+        const margin = { top: 100, right: 10, bottom: 30, left: 30 },
             width = 800 - margin.left - margin.right,
             height = 45;
         const count = charts.size()
@@ -262,8 +262,9 @@ export async function datas(t1, t2) {
             div.classList.add('im')
             e.prepend(div)
         })
+
         char[char.length - 1].children[0].classList.add('last')
-        console.log(char)
+        console.log(char[0].children)
         // В каждом элементе создаем график
         charts.each(function (d, i) {
             const data = d; // данные для этого графика
@@ -283,6 +284,18 @@ export async function datas(t1, t2) {
                 .attr('rel', d.sens)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + pad + ")")
+            const tool = chartContainer.append('div')
+                .attr('class', 'tooltipsy')
+
+            if (i === count - 1) {
+                he = height + 30
+                pad = 0
+                tool
+                    .classed('last', true)
+
+            }
+
+
             // задаем x-шкалу
             const x = d3.scaleTime()
                 .domain(d3.extent(data.val, (d) => new Date(d.dates)))
@@ -298,7 +311,6 @@ export async function datas(t1, t2) {
             const yAxis1 = d3.axisLeft(y1)
             const yAxis2 = d3.axisLeft(y2)
             const xAxis = d3.axisBottom(x)
-
 
             const area1 = d3.area()
                 .x(d => x(d.dates))
@@ -598,6 +610,10 @@ export async function datas(t1, t2) {
                     .attr("stroke-width", 1)
                     .attr("d", area2)
             });
+
+
+            console.log(tool)
+            const tooly = tool.node()
             svg.on("mousemove", function (d) {
                 // Определяем координаты курсора в отношении svg
                 const [xPosition, yPosition] = d3.mouse(this);
@@ -611,28 +627,39 @@ export async function datas(t1, t2) {
                 // Показать тултип, если он скрыт
                 tooltips.style.display = 'block'
                 const selectedTime = timeConvert(d.dates)
+                tooly.style.opacity = 1
+
                 // Обновить текст в тултипе
                 if (d) {
+                    let dav;
+                    let temp;
                     tt1.textContent = `Время: ${(selectedTime)}`
                     if (d.value === -0.5 && d.speed > 0) {
                         tt2.textContent = `Давление: Потеря связи с датчиком`
+                        dav = '--'
                     }
                     else if (d.value === -0.5 && d.speed === 0) {
                         tt2.textContent = `Давление: Датчик не на связи`
+                        dav = '-'
                     }
                     else {
                         tt2.textContent = `Давление: ${d.value} Бар`
+                        dav = d.value
                     }
                     if (d.tvalue === -0.5 && d.speed > 0) {
                         tt3.textContent = `Температура: Потеря связи с датчиком`
+                        temp = '--'
                     }
                     else if (d.tvalue === -0.5 && d.speed === 0) {
                         tt3.textContent = `Температура:  Датчик не на связи`
+                        temp = '-'
                     }
                     else {
                         tt3.textContent = `Температура: ${d.tvalue} С°`
+                        temp = d.tvalue
                     }
                     tt4.textContent = `Скорость: ${d.speed} км/ч`
+                    tooly.textContent = `${dav} Бар/${temp} С°/${d.speed} км/ч`
                 }
                 tooltips.style.left = `${xPosition + 300}px`
                 tooltips.style.top = `${yPosition + 300}px`
@@ -640,6 +667,7 @@ export async function datas(t1, t2) {
                 // Добавляем обработчик события mouseout, чтобы скрыть подсказку
                 .on("mouseout", function (event, d) {
                     tooltips.style.display = 'none'
+                    tooly.style.opacity = 0
                 });
 
 
@@ -708,7 +736,6 @@ export async function datas(t1, t2) {
         const prop = e.nextElementSibling.getAttribute('rel')
         if (objIconsStor.hasOwnProperty(prop)) {
             e.style.backgroundImage = `url(${objIconsStor[prop]})`
-            // e.textContent = objIconsStor[prop]
             console.log(objIconsStor[prop])
         }
         // console.log(e.nextElementSibling.getAttribute('rel'))
