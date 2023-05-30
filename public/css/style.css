@@ -2238,7 +2238,7 @@ input[type="date"] {
   margin-top: 20px;
   border: 1px solid black;
   padding-top: 10px;
-  position: relative;
+
 }
 
 
@@ -2761,7 +2761,7 @@ input[type="date"] {
   opacity: 0;
   text-align: center;
   padding: 2px 2px;
-
+  position: absolute;
 }
 
 .tooltips {

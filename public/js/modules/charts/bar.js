@@ -284,18 +284,10 @@ export async function datas(t1, t2) {
                 .attr('rel', d.sens)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + pad + ")")
-            const tool = chartContainer.append('div')
-                .attr('class', 'tooltipsy')
-
             if (i === count - 1) {
                 he = height + 30
                 pad = 0
-                tool
-                    .classed('last', true)
-
             }
-
-
             // задаем x-шкалу
             const x = d3.scaleTime()
                 .domain(d3.extent(data.val, (d) => new Date(d.dates)))
@@ -421,12 +413,6 @@ export async function datas(t1, t2) {
                 .attr("stroke", "blue")
                 .attr("stroke-width", 1)
                 .attr("d", area2);
-            /*  svg.append("text")
-                  .attr("x", -130)
-                  .attr("y", 30)
-                  .attr("transform", "rotate(0)")
-                  .attr("text-anchor", "middle")
-                  .text(`${d.sens}`);*/
             // Add brushing
             var brush = d3.brushX()
                 .extent([[0, 0], [width, height]])
@@ -486,9 +472,6 @@ export async function datas(t1, t2) {
                     })
                     .attr("d", area11)
                     .attr("fill-opacity", 0.9)
-                // .attr("stroke", "black")
-
-
                 svg.select(".area3")
                     .datum(data.val)
                     .attr("class", "area3")
@@ -527,7 +510,6 @@ export async function datas(t1, t2) {
                     .attr("stroke-width", 1)
                     .attr("d", area2)
             }
-            // If user double click, reinitialize the chart
             svg.on("dblclick", function () {
                 x.domain(d3.extent(data.val, (d) => new Date(d.dates)))
                 d3.select('.osx')
@@ -542,7 +524,6 @@ export async function datas(t1, t2) {
                     .attr("stroke-width", 3)
                     .attr("stroke", "red")
                     .attr("fill-opacity", 1)
-
                 svg.select(".area1")
                     .datum(data.val)
                     .transition()
@@ -550,7 +531,6 @@ export async function datas(t1, t2) {
                     .attr("fill", function (d) {
                         if (d3.select(".inputPress").property("checked")) {
                             return "darkgreen";
-
                         } else {
                             return "#009933";
                         }
@@ -561,8 +541,6 @@ export async function datas(t1, t2) {
                     .attr("fill-opacity", 1)
                     .attr("stroke", "black")
                     .attr("stroke-width", 1)
-
-
                 svg.select(".area11")
                     .datum(data.val)
                     .transition()
@@ -577,8 +555,6 @@ export async function datas(t1, t2) {
                     })
                     .attr("d", area11)
                     .attr("fill-opacity", 0.9)
-                //   .attr("stroke", "black")
-
                 svg.select(".area12")
                     .datum(data.val)
                     .transition()
@@ -595,9 +571,6 @@ export async function datas(t1, t2) {
                     })
                     .attr("d", area12)
                     .attr("fill-opacity", 0.9)
-                //   .attr("stroke", "black")
-
-
                 svg.select(".area2")
                     .datum(data.val)
                     .transition()
@@ -610,10 +583,6 @@ export async function datas(t1, t2) {
                     .attr("stroke-width", 1)
                     .attr("d", area2)
             });
-
-
-            console.log(tool)
-            const tooly = tool.node()
             svg.on("mousemove", function (d) {
                 // Определяем координаты курсора в отношении svg
                 const [xPosition, yPosition] = d3.mouse(this);
@@ -627,7 +596,6 @@ export async function datas(t1, t2) {
                 // Показать тултип, если он скрыт
                 tooltips.style.display = 'block'
                 const selectedTime = timeConvert(d.dates)
-                tooly.style.opacity = 1
 
                 // Обновить текст в тултипе
                 if (d) {
@@ -659,10 +627,12 @@ export async function datas(t1, t2) {
                         temp = d.tvalue
                     }
                     tt4.textContent = `Скорость: ${d.speed} км/ч`
-                    tooly.textContent = `${dav} Бар/${temp} С°/${d.speed} км/ч`
                 }
-                tooltips.style.left = `${xPosition + 300}px`
-                tooltips.style.top = `${yPosition + 300}px`
+
+                tooltips.style.left = `${xPosition + 100}px`
+                tooltips.style.top = `${yPosition + 100}px`
+
+
             })
                 // Добавляем обработчик события mouseout, чтобы скрыть подсказку
                 .on("mouseout", function (event, d) {
