@@ -390,21 +390,17 @@ function proverka(arr) {
         }
     })
 }
-
 async function alarmBase(data, tyres, alarm) {
     console.log('данные по алармам')
-    console.log(tyres)
     const dannie = data.concat(tyres)
     const id = dannie[6]
-    dannie.splice(5, 2)
-    dannie.pop()
+    dannie.splice(5, 3)
     dannie.push(alarm)
+    dannie.unshift(id)
     const value = [dannie];
     console.log(value)
-    //mail(value, await ggg(id))
-
     try {
-        const sqls = `INSERT INTO alarms (data, name, senspressure, bar,
+        const sqls = `INSERT INTO alarms (idw, data, name, senspressure, bar,
                             temp, alarm) VALUES?`;
         connection.query(sqls, [value], function (err, results) {
             if (err) console.log(err);
@@ -413,12 +409,6 @@ async function alarmBase(data, tyres, alarm) {
     catch (e) {
         console.log(e)
     }
-    // if (alarm !== 'Норма') {
-    //  console.log('не норма')
-
-    //   }
-
-
 }
 
 
