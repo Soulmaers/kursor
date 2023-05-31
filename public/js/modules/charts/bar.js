@@ -699,14 +699,13 @@ export async function datas(t1, t2) {
 
 
         console.log(im1)
+        let num = 0;
         im1.forEach(e => {
-            const prop = e.nextElementSibling.getAttribute('rel')
-            if (objIconsStor.hasOwnProperty(prop)) {
-                e.style.backgroundImage = `url(${objIconsStor[prop]})`
-                console.log(objIconsStor[prop])
-            }
+            const tires = e.querySelectorAll('.tyresChart')
+            console.log(tires)
+            tires[num].style.background = 'black'
+            num++
             console.log(e)
-            console.log(e.nextElementSibling.getAttribute('rel'))
             new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
         })
     }
