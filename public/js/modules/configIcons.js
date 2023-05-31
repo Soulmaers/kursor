@@ -1,5 +1,4 @@
 import { iconParams } from './wialon.js'
-
 function addZero(digits_length, source) {
     let text = source + '';
     while (text.length < digits_length)
@@ -27,7 +26,6 @@ export function fnToChange() {
     btnTOUpdate.addEventListener('click', () => {
         UpTo.style.display = 'flex'
         up.addEventListener('click', () => {
-            console.log('да?1')
             iconParams()
             UpTo.style.display = 'none'
             toChanges.style.display = 'none';
@@ -35,7 +33,6 @@ export function fnToChange() {
         noUp.addEventListener('click', async () => {
             UpTo.style.display = 'none'
         })
-
     })
     btnTO.addEventListener('click', async () => {
         UpTo.style.display = 'flex'
@@ -148,11 +145,6 @@ export async function iconFind(activePost) {
     })
 }
 
-export const convert = (ob) => {
-    const uniq = new Set(ob.map(e => JSON.stringify(e)));
-    return Array.from(uniq).map(e => JSON.parse(e));
-}
-
 export function iconParamszWindows() {
     const active = document.querySelector('.color')
     const activePost = active.children[0].textContent.replace(/\s+/g, '')
@@ -232,7 +224,6 @@ export async function iconFindWindows(activePost) {
     })
     refactor()
 }
-
 export async function deleteWinParams(id) {
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')

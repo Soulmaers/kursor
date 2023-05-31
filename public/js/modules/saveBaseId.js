@@ -1,5 +1,5 @@
 import { viewTech } from './requests.js'
-import { convert } from './visual.js'
+import { convert } from './helpersFunc.js'
 
 export function createDate() {
     let today = new Date();

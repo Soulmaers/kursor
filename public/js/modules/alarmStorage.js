@@ -1,5 +1,5 @@
 import { tr } from './content.js'
-import { convert } from './visual.js'
+import { convert } from './helpersFunc.js'
 import { ggg } from './menu.js'
 
 export async function alarmFind() {

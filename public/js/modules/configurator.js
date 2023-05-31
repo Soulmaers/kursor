@@ -1,12 +1,9 @@
 import { text } from './content.js'
-import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
-import { postModel, postTyres, paramsDelete } from './requests.js'
-import { pricep, viewOs } from './visual.js'
+import { viewMenuParams } from './paramsTyresView.js'
+import { pricep } from './visual.js'
 import { zapros } from './menu.js'
-import { fnsort } from './event.js'
+import { removeArrElem } from './helpersFunc.js'
 
-
-//viewMenuParams()
 //конфигуратор оси
 export function select() {
     const linkSelect = document.querySelectorAll('.linkSelect');
@@ -14,16 +11,12 @@ export function select() {
     const cont = document.createElement('div')
     cont.classList.add('container')
     wrapContaint.insertBefore(cont, wrapContaint.children[2]);
-
     const container = document.querySelector('.container')
     linkSelect.forEach(el => {
         el.addEventListener('click', () => {
             linkSelect.forEach(e => {
                 if (cont.childNodes.length > 0) {
-                    console.log('удаление')
-                    cont.childNodes.forEach(it => {
-                        it.remove();
-                    })
+                    removeArrElem(cont.childNodes)
                 }
             })
             const count = el.textContent;
@@ -44,9 +37,7 @@ export function select() {
                 centerOsDiv.setAttribute("id", `${index}`);
             })
             const tires = document.querySelectorAll('.tires')
-            console.log(tires)
             let indexTires = 0;
-
             tires.forEach(el => {
                 indexTires++
                 const link = document.createElement('a');
@@ -62,13 +53,10 @@ export function select() {
                 link.appendChild(tiresD);
                 link.appendChild(tiresT);
                 link.appendChild(place);
-
             })
             modul() //запоминаем последнюю выбранную ось
         })
     })
-
-
 }
 select() //запуск конфигуратора оси
 
@@ -103,20 +91,24 @@ function os(arr) {
             e.textContent == 'Прицеп' ?
                 pricep(arr[arr.length - 1])
                 :
-                arr[arr.length - 1].children[0].style.background = '#000'//#3333ff'
-            arr[arr.length - 1].classList.add('tagach')
+                (arr[arr.length - 1].children[0].style.background = '#fff',//#3333ff'
+                    arr[arr.length - 1].classList.add('tagach'))
+
             const centerOs = document.querySelectorAll('.centerOs')
             centerOs.forEach(el => {
                 if (el.classList.contains('pricep')) {
-                    console.log(el)
                     const cont = document.querySelector('.cont')
                     console.log(cont.lastElementChild.children[1])
-                    const gosNumber = document.createElement('input')
-                    gosNumber.classList.add('gosNumber')
-                    gosNumber.setAttribute('placeholder', 'гос. номер прицепа')
-                    cont.lastElementChild.children[1].appendChild(gosNumber)
-                    cont.lastElementChild.children[1].style.position = 'relative'
-                    gosNumber.style.display = 'flex'
+                    const gosNumber = document.querySelector('.gosNumber')
+                    if (!gosNumber) {
+                        const gosNumber = document.createElement('input')
+                        gosNumber.classList.add('gosNumber')
+                        gosNumber.setAttribute('placeholder', 'гос. номер прицепа')
+                        cont.lastElementChild.children[1].appendChild(gosNumber)
+                        cont.lastElementChild.children[1].style.position = 'relative'
+                        gosNumber.style.display = 'flex'
+                    }
+
                 }
                 if (el.classList.contains('tagach')) {
                     const gosNumberCar = document.createElement('input')
@@ -125,14 +117,12 @@ function os(arr) {
                     container.firstElementChild.children[1].prepend(gosNumberCar)
                     container.firstElementChild.children[1].style.position = 'relative'
                 }
-
             })
         }))
     linkSelectTires.forEach(e =>
         e.addEventListener('click', () => {
             const arrayTyres = []
             arrayTyres.push(e)
-            console.log(arrayTyres)
             arr[arr.length - 1].previousElementSibling.children[0].style.display = 'none';
             arr[arr.length - 1].previousElementSibling.children[1].style.display = 'none';
             arr[arr.length - 1].nextElementSibling.children[0].style.display = 'none';
@@ -149,18 +139,11 @@ function os(arr) {
                 arr[arr.length - 1].nextElementSibling.children[0].style.display = 'flex';
                 arr[arr.length - 1].nextElementSibling.children[1].style.display = 'flex';
             }
-
         }))
     viewMenuParams()
-    //запускаем функцию отображения кнопок под параметры+сохраняем в массив последнее выбранное колесо+ скрываем див с графиком скорости
-
-
 }
 
-
-
 export async function changeBase(massModel, activePost) {
-    console.log('работаем колесо')
     const go = document.querySelector('.gosNumber')
     let gosp;
     if (go) {
@@ -169,9 +152,6 @@ export async function changeBase(massModel, activePost) {
     else {
         gosp = ''
     }
-
-
-    console.log(document.querySelector('.gosNumber'))
     const param = {
         method: "POST",
         headers: {
@@ -179,18 +159,14 @@ export async function changeBase(massModel, activePost) {
         },
         body: (JSON.stringify({ massModel, activePost, gosp }))
     }
-    console.log('запускаем пост')
     const res = await fetch('/api/updateModel', param)
-    console.log(res)
     const response = await res.json()
-    console.log(response)
     const controll = document.querySelector('.container_left')
     controll.style.display = 'none'
     const modalCenterOs = document.querySelector('.modalCenterOs')
     modalCenterOs.style.display = 'none'
     const moduleConfig = document.querySelector('.moduleConfig')
     moduleConfig.style.display = 'none';
-    // loadParamsView();
     zapros();
 }
 

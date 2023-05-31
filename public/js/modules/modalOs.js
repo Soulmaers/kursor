@@ -1,8 +1,6 @@
 
 import { reqModalBar, viewBar } from './requests.js'
-import { loadParamsView } from './paramsTyresView.js'
-
-
+import { clearElem } from './helpersFunc.js'
 export function modalOs() {
     const modalCenterOs = document.querySelector('.modalCenterOs')
     const modalClear = document.querySelector('.modalClear')
@@ -23,7 +21,7 @@ export function modalOs() {
             modalCenterOs.style.display = 'block'
             const modalInput = document.querySelectorAll('.modalInput')
             modalInput.forEach(i => {
-                i.value = ''
+                clearElem(i.value)
             })
             const centerOsActiv = document.querySelector('.centerOsActiv')
             const modalNumberOs = document.querySelector('.modalNumberOs')
@@ -36,14 +34,13 @@ export function modalOs() {
             const divfinal = document.querySelectorAll('.divfinal')
             const inpfinal = document.querySelectorAll('.inpfinal')
             divfinal.forEach(e => {
-                e.textContent = ''
+                clearElem(e.textContent)
             })
             inpfinal.forEach(e => {
-                e.value = ''
+                clearElem(e.value)
             })
             viewBar(centerOsActiv.id);
             const norma = document.querySelector('.normal')
-            console.log(norma)
             norma.addEventListener('input', () => {
                 fncalc(norma.value)
             })
@@ -56,18 +53,13 @@ export function modalOs() {
         const normal = document.querySelector('.normal')
         normal.value === '' ? messfn() : modalBar()
     })
-
     btnModalClear.addEventListener('click', clearBar)
 }
-
 function messfn() {
     const mess = document.querySelector('.mess')
     mess.style.display = 'flex'
     setTimeout(() => mess.style.display = 'none', 3000)
 }
-
-
-
 
 function clearBar() {
     const norma = document.querySelector('.normal')
@@ -105,22 +97,16 @@ inpfinal.forEach(it => {
     })
 })
 
-
 async function modalBar() {
     const modalCenterOs = document.querySelector('.modalCenterOs')
     modalCenterOs.style.display = 'none'
     const centerOsActiv = document.querySelector('.centerOsActiv')
-    console.log(centerOsActiv.id)
     const modalText = document.querySelectorAll('.modalText')
-    console.log(modalText)
     const arrNameCol = [];
     modalText.forEach(el => {
         arrNameCol.push(el.id)
     })
-
-    console.log(arrNameCol)
     await reqModalBar(arrNameCol, centerOsActiv.id);
-    //  await loadParamsView()
     viewBar(centerOsActiv.id);
     centerOsActiv.classList.remove('centerOsActiv')
 }

@@ -1,9 +1,4 @@
 
-//    <div class="centerOs" id="1"></div>
-
-
-
-
 export const formUpdate = `<div class="form-group">
 <label>Логин</label>
 <input type="text" class="form-control" name="username">
@@ -39,8 +34,6 @@ export const text = `<div class=" osi">
         </div>
     </div>`
 
-
-
 export const zamer = `  <div class="zamer">
                         <h3 class="titleZamer" id="zamer">Замер</h3>
                         <div class="wrapTarir"><input class="dut" placeholder="ДУТ"><input class="litr" placeholder="литры"></div>
@@ -53,7 +46,6 @@ export const tr = `<h3 class="tr oneName">
                                                     <p class="td">t,°C</p>
                                                     <p class="td">Уведомления</p>
                                                 </h3>`
-
 
 export const twoTyres = ` 
     <div class="frontSpare">
@@ -76,23 +68,16 @@ export const forTyres = `
 </div>`
 
 export function generDav(el, arrBar) {
-    //  console.log(el, arrBar)
-
-
     let generatedValue;
     if (el >= Number(arrBar.dnmin) && el <= Number(arrBar.dnmax)) {
-        //  console.log('1')
         generatedValue = 3;
     }
     if (el > Number(arrBar.knd) && el <= Number(arrBar.dnn) || el > Number(arrBar.dvn) && el <= Number(arrBar.kvd)) {
-        // console.log('2')
         generatedValue = 2;
     }
     if (el <= Number(arrBar.knd) || el >= Number(arrBar.kvd)) {
-        //  console.log('3')
         generatedValue = 1;
     }
-    //  console.log(generatedValue)
     return generatedValue;
 };
 
@@ -100,8 +85,6 @@ export function generDavKran(el) {
     let generatedValue;
     if (el >= 6 && el <= 10) {
         generatedValue = 3;
-        //  console.log('al')
-        //  div.style.display = 'none';
     }
     else {
         generatedValue = 1;
@@ -109,23 +92,16 @@ export function generDavKran(el) {
     return generatedValue;
 };
 
-
 export function generFront(el) {
     let generatedValue;
     if (el >= 8 && el <= 10) {
         generatedValue = 3;
-        //  console.log('al')
-        //  div.style.display = 'none';
     }
     if (el >= 7.5 && el < 8 || el > 10 && el <= 13) {
         generatedValue = 2;
-        //  console.log('al')
-        //  div.style.display = 'none';
     }
     if (el > -100 && el < 7.5 || el > 13) {
         generatedValue = 1;
-        // console.log('noal')
-        // alarm()
     }
     return generatedValue;
 };
@@ -137,10 +113,9 @@ export function generT(el) {
     else {
         generatedValue = 1;
     }
-
     return generatedValue;
 };
-//создаем объект где ключ-результат условия, а свойства - соответсующее условию значение
+
 export const objColor = {
     1: '#FF0000',
     2: '#FFFF00',
@@ -173,7 +148,6 @@ export function gener(el) {
     }
     return generatedValue;
 };
-
 
 export const objColors = {
     5: '#009933',//зеленый

@@ -13,7 +13,8 @@ import { tooltip } from './cursorTooltip.js'
 import { ggg } from './menu.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { click } from './graf.js'
-
+import { removeElem, clearElem } from './helpersFunc.js'
+import { convert } from './helpersFunc.js'
 let start;
 let time;
 let timeIcon;
@@ -84,7 +85,7 @@ export async function visual(el) {
     tooltip()
     const grafOld = document.querySelector('.infoGraf')
     if (grafOld) {
-        grafOld.remove()
+        removeElem(grafOld)
     }
     const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
     preloaderGraf.style.opacity = 1;
@@ -92,10 +93,10 @@ export async function visual(el) {
     setTimeout(click, 700)
     const zamer = document.querySelectorAll('.zamer')
     const createList = document.querySelector('.createList')
-    createList.value = ''
+    clearElem(createList.value)
     if (zamer) {
         zamer.forEach(e => {
-            e.remove()
+            removeElem(e)
         })
     }
 }
@@ -103,7 +104,7 @@ export function visualNone(e) {
     const tarir = document.querySelector('.tarir')
     tarir.style.display = 'none'
     const statusObj = document.querySelector('.status_obj')
-    statusObj.textContent = ''
+    clearElem(statusObj.textContent)
     statusObj.style.color = 'gray'
     const probegElem = document.querySelector('.odom_value')
     const starterValue = document.querySelector('.akb_value1')
@@ -112,13 +113,13 @@ export function visualNone(e) {
     const toil_value = document.querySelector('.toil_value')
     const ign_value = document.querySelector('.ign_value')
     const oborotValue = document.querySelector('.oborot_value')
-    toil_value.textContent = ''
-    starterValue.textContent = ''
-    probegElem.textContent = ''
-    ohlValue.textContent = ''
-    oilValue.textContent = ''
-    ign_value.textContent = ''
-    oborotValue.textContent = ''
+    clearElem(toil_value.textContent)
+    clearElem(starterValue.textContent)
+    clearElem(probegElem.textContent)
+    clearElem(ohlValue.textContent)
+    clearElem(oilValue.textContent)
+    clearElem(ign_value.textContent)
+    clearElem(oborotValue.textContent)
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const container = document.querySelector('.container')
@@ -137,13 +138,13 @@ export function visualNone(e) {
     })
     const valueStatic = document.querySelectorAll('.valueStatic')
     valueStatic.forEach(el => {
-        el.textContent = ''
-        el.previousElementSibling.value = ''
+        clearElem(el.textContent)
+        clearElem(el.previousElementSibling.value)
         el.classList.remove('actoStatic')
     })
     const newBoad = document.querySelector('.speed')
     if (newBoad) {
-        newBoad.remove();
+        removeElem(newBoad)
     }
     plus.style.display = 'block'
     minus.style.display = 'none'
@@ -156,22 +157,21 @@ export function visualNone(e) {
     if (container.children.length > 0) {
         const containerArr = Array.from(container.children)
         containerArr.forEach(it => {
-            it.remove();
+            removeElem(it)
         })
         const tr = document.querySelectorAll('.tr')
         tr.forEach(it => {
-            it.remove();
+            removeElem(it)
         })
     }
 }
-
 //стираем выбранные значения графика скорости
 export function clearGraf() {
     const selectSpeed = document.querySelector('.select_speed')
     const inputDate = document.querySelectorAll('.input_date')
     selectSpeed.value = 0;
     inputDate.forEach(e => {
-        e.value = ''
+        clearElem(e.value)
     })
 }
 
@@ -185,17 +185,11 @@ export function liCreate() {
         obo.append(li);
     }
 }
-
 export function view(arg) {
     const msg = document.querySelectorAll('.msg')
     arg.forEach((el, index) => {
         msg[index].textContent = `${el.name}:${el.value}`
     })
-}
-
-export const convert = (ob) => {
-    const uniq = new Set(ob.map(e => JSON.stringify(e)));
-    return Array.from(uniq).map(e => JSON.parse(e));
 }
 
 export async function viewConfigurator(arg, params, osi) {
@@ -311,13 +305,12 @@ export function alarmClear() {
         e.style.border = 'none'
     })
 }
-
 export async function viewOs(counts) {
     const container = document.querySelector('.container')
     if (container.children.length > 0) {
         const containerArr = Array.from(container.children)
         containerArr.forEach(it => {
-            it.remove();
+            removeElem(it)
         })
     }
     const count = counts;
@@ -386,11 +379,11 @@ function styleShinaActive(arg) {
 export const divClear = (arr) => {
     if (arr.length > 0) {
         arr.forEach(it => {
-            it.remove();
+            removeElem(it)
         })
     }
     else {
-        arr.remove();
+        removeElem(arr)
     }
 }
 export const pricep = (elem) => {
@@ -402,7 +395,6 @@ export const pricep = (elem) => {
     elem.children[0].style.background = '#000'// "#00FFFF"
     elem.classList.add('pricep')
 }
-
 export function viewDinamic(arr, maxProtector) {
     const conts = document.querySelectorAll('.contBar2')
     conts.forEach(el => {

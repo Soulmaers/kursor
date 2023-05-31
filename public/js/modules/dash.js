@@ -1,5 +1,5 @@
 import { dann } from './menu.js'
-import { convert } from './visual.js'
+import { convert } from './helpersFunc.js'
 
 
 export function dashView(nameCar) {

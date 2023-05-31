@@ -1,17 +1,10 @@
-import { convert, visual } from './visual.js'
+import { convert } from './helpersFunc.js'
 import { dashView } from './dash.js'
 import { navigator } from './navigator.js'
-import { objColor, generFront, objColorFront, generDavKran, generDav } from './content.js'
+import { objColorFront, generDav } from './content.js'
 import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
-import { alarmFind } from './alarmStorage.js'
-import { iconParams } from './wialon.js'
-/*
-let isLoaded = false
-
-if(isLoaded === true){
-    navigator();
-}*/
+import { removeElem, removeArrElem } from './helpersFunc.js'
 const testov = [];
 export async function loadParamsViewList(car, el) {
     const params = {
@@ -33,25 +26,16 @@ export async function loadParamsViewList(car, el) {
     return [model, models, data, osi, el]
 }
 
-
-
-
 export function conturTest(testov) {
-    //console.log(testov)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
-        groups.forEach(e => {
-            e.remove()
-        })
+        removeArrElem(groups)
     }
     const preloader = document.querySelector('.preloader') /* находим блок Preloader */
     preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
-    const tt = new Date()
     const listItem = document.querySelectorAll('.listItem')
     if (listItem) {
-        listItem.forEach(e => {
-            e.remove();
-        })
+        removeArrElem(listItem)
     }
     testov.forEach(el => {
         if (el.length !== 0) {
@@ -90,9 +74,7 @@ export function conturTest(testov) {
             group.appendChild(hiddenModal)
             const listArr = document.querySelector(`.${el[0].group}`)
             el.forEach(elem => {
-                //   console.log(elem)
                 const nameCar = elem[0].message.replace(/\s+/g, '')
-                //  console.log(nameCar)
                 dashView(nameCar)
                 const listItemCar = document.createElement('div')
                 listItemCar.classList.add('listItem')
@@ -115,12 +97,9 @@ export function conturTest(testov) {
                 const listTrail = document.createElement('div')
                 listTrail.classList.add('list_trail2')
                 listItemCar.appendChild(listTrail)
-                //  console.log(nameCar)
-
                 if (nameCar === 'ЦистернаДТ') {
-                    // console.log(listProfil)
                     listProfil.style.width = 60 + '%'
-                    listTrail.remove()
+                    removeElem(listTrail)
                     const progress = document.createElement('div')
                     progress.classList.add('progress')
                     listProfil.appendChild(progress)
@@ -130,10 +109,7 @@ export function conturTest(testov) {
                     const progressBarText = document.createElement('div')
                     progressBarText.classList.add('progressBarText')
                     progress.appendChild(progressBarText)
-                    //  console.log(document.querySelector('.progress'))
                     fnStaticObjectOil(nameCar)
-                    // const oilValue = document.querySelector('.oil_value')
-                    //  console.log(oilValue)
                 }
                 if (elem[0].result) {
                     const modelUniq = convert(elem[0].result)
@@ -148,10 +124,7 @@ export function conturTest(testov) {
                         }
                     })
                 }
-                // const listItem = document.querySelector(`[rel = ${nameCar}]`)
-                //  const listItem = document.querySelector(`.${elem[4]} `)
                 const listItem = document.getElementById(`${elem[4]}`)
-                // console.log(listItem)
                 const numOs = listItem.querySelectorAll('.gOs');
                 numOs.forEach(el => {
                     setId(el)
@@ -197,17 +170,10 @@ export function conturTest(testov) {
     navigator();
     sortAll()
     zaprosSpisok()
-    //  alarmFind()
-    //  iconParams()
-
-
 }
 
-
 async function fnStaticObjectOil(nameCar) {
-    //  const active = document.querySelector('.color')
     const activePost = nameCar
-
     const param = {
         method: "POST",
         headers: {
@@ -217,8 +183,6 @@ async function fnStaticObjectOil(nameCar) {
     }
     const res = await fetch('/api/tarirView', param)
     const response = await res.json()
-    // console.log(response.result.length)
-    // createListFnview(response.result)
     const x = [];
     const y = [];
     const points = []
@@ -230,7 +194,6 @@ async function fnStaticObjectOil(nameCar) {
         point.push(Number(el.litrs))
         points.push(point)
     })
-
     const params = {
         method: "POST",
         headers: {
@@ -242,15 +205,11 @@ async function fnStaticObjectOil(nameCar) {
     const arg = await argy.json()
     const parFind = await fetch('api/iconFind', params)
     const paramssyFind = await parFind.json()
-
-    // console.log(paramssyFind)
     arg.values.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
                 if (it.icons === 'oil-card') {
                     const val = el.value
-                    //  console.log(val)
-                    //  console.log(x, y)
                     let degree;
                     if (x.length < 3) {
                         degree = 1
@@ -260,10 +219,8 @@ async function fnStaticObjectOil(nameCar) {
                     }
                     const approximated = approximateValue(val, x, y, degree);
                     const znak = (approximated[0] * 0.9987).toFixed(0)
-                    const progress = document.querySelector('.progress')
                     const progressBarText = document.querySelector('.progressBarText')
                     const progressBar = document.querySelector('.progressBar')
-
                     const value = znak * 100 / y[y.length - 1]
                     progressBarText.textContent = znak + ' ' + 'л.'
                     progressBar.style.width = value + '%'
@@ -275,17 +232,11 @@ async function fnStaticObjectOil(nameCar) {
                         progressBar.style.fontSize = '0.8rem'
                         progressBar.style.color = 'black'
                     }
-
-
                 }
             }
         })
     })
-
 }
-
-
-
 
 function fnTagach(arr, nameCarId) {
     const listItem = document.getElementById(`${nameCarId}`)
@@ -298,7 +249,6 @@ function fnTagach(arr, nameCarId) {
         ob.rate = 100 / arr.tyres
         obj.push(ob)
     }
-
     const svg = d3.select(listItem).select(".list_profil2").append("svg")
         .attr("class", "axis2")
         .attr("width", 25)
@@ -326,37 +276,30 @@ function fnTagach(arr, nameCarId) {
         .enter()
         .append("g")
         .attr("class", "arc")
-
     g.append("path")
         .attr("d", arc)
         .style('fill', 'white')
         .style("stroke", 'black');
-
     const g1 = svg.append("g")
         .attr("transform", function (d, i) {
             return "translate(0,0)";
         });
-
     g1.append("circle")
         .attr("cx", 0)
         .attr("cy", 0)
         .attr("r", 4)
         .style('fill', 'black')
         .style('stroke', 'gray')
-
-
     const g2 = svg.append("g")
         .attr("transform", function (d, i) {
             return "translate(0,0)";
         });
-
     g2.append("circle")
         .attr("cx", 0)
         .attr("cy", 0)
         .attr("r", 0.5)
         .style('fill', 'white')
 }
-
 function fnPricep(arr, nameCarId) {
     const listItem = document.getElementById(`${nameCarId}`)
     // задаем радиус
@@ -387,7 +330,6 @@ function fnPricep(arr, nameCarId) {
         .innerRadius(12)
         .startAngle(function (d) { return d.startAngle + Math.PI })
         .endAngle(function (d) { return d.endAngle + Math.PI });
-
     const pie = d3.pie()
         .sort(null)
         .value(function (d) { return d.rate; });
@@ -395,7 +337,6 @@ function fnPricep(arr, nameCarId) {
         .data(pie(obj))
         .enter().append("g")
         .attr("class", "arc")
-
     g.append("path")
         .attr("d", arc)
         .style('fill', 'white')
@@ -404,26 +345,22 @@ function fnPricep(arr, nameCarId) {
         .attr("transform", function (d, i) {
             return "translate(0,0)";
         });
-
     g1.append("circle")
         .attr("cx", 0)
         .attr("cy", 0)
         .attr("r", 4)
         .style('fill', 'black')
         .style('stroke', 'gray')
-
     const g2 = svg.append("g")
         .attr("transform", function (d, i) {
             return "translate(0,0)";
         });
-
     g2.append("circle")
         .attr("cx", 0)
         .attr("cy", 0)
         .attr("r", 0.5)
         .style('fill', 'white')
 }
-
 let countt = 0;
 export function zaprosSpisok() {
     const list = document.querySelectorAll('.listItem')
@@ -465,17 +402,13 @@ export function zaprosSpisok() {
     const todays = today + ' ' + time
     updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
-
 setInterval(zaprosSpisok, 300000)
-
 function viewListKoleso(arg, params, osi, nameCar) {
-
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
     if (params.result) {
         const modelUniqValues = convert(params.result)
         const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
-        //  console.log(activePost)
         const r = [];
         let integer;
         modelUniqValues.forEach(el => {
@@ -513,9 +446,6 @@ function viewListKoleso(arg, params, osi, nameCar) {
         })
     }
 }
-
-
-
 function setId(el) {
     let num = 0;
     Array.from(el.children).forEach(e => {
@@ -595,8 +525,6 @@ function setId(el) {
             })
             )
     }
-
-
 }
 
 function hiddenWindows() {
@@ -614,7 +542,6 @@ function hiddenWindows() {
                 ? 0
                 : (a.innerHTML > b.innerHTML ? 1 : -1);
         });
-
         for (i = 0; i < itemsArr.length; ++i) {
             it.children[1].appendChild(itemsArr[i]);
         }
@@ -633,7 +560,6 @@ function hiddenWindows() {
             el.closest('.groups').children[0].children[2].style.left = '170px'
             const ide = el.closest('.groups').children[0].children[0].children[0]
             const ideValue = el.closest('.groups').children[0].children[0].children[0].id
-
             const checkboxes = document.querySelectorAll('.checkInList');
             let enabledSettings = []
             if (ide.checked === true) {
@@ -662,10 +588,7 @@ function hiddenWindows() {
                         e.checked = true
                     })
                 }
-
-
             })
-
         })
     })
     minusS.forEach(el => {
