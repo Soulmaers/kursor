@@ -2235,10 +2235,8 @@ input[type="date"] {
 
 
 .infoGraf {
-  margin-top: 20px;
+  margin-top: 10px;
   border: 1px solid black;
-  padding-top: 10px;
-
 }
 
 
@@ -2732,15 +2730,13 @@ input[type="date"] {
 }
 
 
-.im {
-  width: 30px;
-  height: 30px;
+.im1 {
+  width: 20px;
   margin-left: 10px;
-  /* background-image: url(../image/im.png);*/
-  background-size: contain;
-  background-repeat: no-repeat;
+  margin-bottom: 2px;
+  border: 1px solid black;
+  padding: 1px;
 }
-
 
 .chart {
   display: flex;
@@ -2776,6 +2772,29 @@ input[type="date"] {
   font-size: 0.8rem;
 }
 
+.osChart {
+  width: 20px;
+  height: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1px 0;
+}
+
+.centerChartOs {
+  width: 12px;
+  height: 1px;
+  background-color: black;
+
+}
+
+.tyresChart {
+  width: 4px;
+  height: 5px;
+  border: 1px solid black;
+  box-sizing: border-box;
+
+}
 
 .legendOil {
   cursor: pointer;

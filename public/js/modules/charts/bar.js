@@ -79,9 +79,12 @@ export async function datas(t1, t2) {
             }
         })
     })
-    console.log(par)
     grafikStartPress(global[0], finishArrayData)
-    function grafikStartPress(times, datar) {
+    async function grafikStartPress(times, datar) {
+
+
+        const model = await iconChart()
+        console.log(model)
         const grafOld = document.querySelector('.infoGraf')
         if (grafOld) {
             grafOld.remove()
@@ -141,17 +144,6 @@ export async function datas(t1, t2) {
             }
             return 0;
         });
-
-
-        // const arr = [{ value: 'uno' }, { value: 'dos' }, { value: 'tres' }, { value: 'odin' }, { value: 'five' }];
-        /*
-                const idx = dat2.findIndex(el => el.sens === 'Тягач Ведущая ось ПВнутр');
-                if (idx > 0) {
-                    dat2.splice(idx - 1, 0, dat2.splice(idx, 1)[0]);
-                }
-        
-        
-                console.log(idx)*/
         // Выбираем div, в который мы хотим поместить графики
         const container = d3.select('.infoGraf');
         // Связываем данные с контейнером
@@ -162,7 +154,7 @@ export async function datas(t1, t2) {
             .attr('class', 'chart');
         const margin = { top: 100, right: 10, bottom: 30, left: 30 },
             width = 800 - margin.left - margin.right,
-            height = 45;
+            height = 50;
         const count = charts.size()
         console.log(count)
         let he;
@@ -258,14 +250,19 @@ export async function datas(t1, t2) {
 
         const char = document.querySelectorAll('.chart')
         char.forEach(e => {
-            const div = document.createElement('div')
-            div.classList.add('im')
-            e.prepend(div)
-        })
+            const div1 = document.createElement('div')
+            div1.classList.add('im1')
+            e.prepend(div1)
 
+        })
+        console.log(char)
+        const im1 = document.querySelectorAll('.im1')
         char[char.length - 1].children[0].classList.add('last')
-        console.log(char[0].children)
+
         // В каждом элементе создаем график
+        const end = await vieModelChart(model, im1)
+        console.log(end)
+
         charts.each(function (d, i) {
             const data = d; // данные для этого графика
             const chartContainer = d3.select(this); // div, в котором будет находиться график
@@ -637,7 +634,7 @@ export async function datas(t1, t2) {
                 // Добавляем обработчик события mouseout, чтобы скрыть подсказку
                 .on("mouseout", function (event, d) {
                     tooltips.style.display = 'none'
-                    tooly.style.opacity = 0
+
                 });
 
 
@@ -680,37 +677,41 @@ export async function datas(t1, t2) {
             line2.style("display", "block")
             area2.style("display", "block")
         })
-    }
 
 
 
-    const objIconsStor = {
-        'Тягач Рулевая ось Левое': "../../../image/01.png",
-        'Тягач Рулевая ось Правое': "../../../image/01.png",
-        'Тягач Ведущая ось ЛВнеш': "../../../image/01.png",
-        'Тягач Ведущая ось ЛВнутр': "../../../image/01.png",
-        'Тягач Ведущая ось ПВнутр': "../../../image/01.png",
-        'Тягач Ведущая ось ПВнеш': "../../../image/01.png",
-        'Прицеп 1 ось Л': "../../../image/02.png",
-        'Прицеп 1 ось П': "../../../image/02.png",
-        'Прицеп 2 ось Л': "../../../image/02.png",
-        'Прицеп 2 ось П': "../../../image/02.png",
-        'Прицеп 3 ось Л': "../../../image/02.png",
-        'Прицеп 3 ось П': "../../../image/02.png"
-    }
 
-    //   url(../image/708.png);
-    const im = document.querySelectorAll('.im');
-    // console.log(iconCard[7].getAttribute('rel'))
-    im.forEach(e => {
-        const prop = e.nextElementSibling.getAttribute('rel')
-        if (objIconsStor.hasOwnProperty(prop)) {
-            e.style.backgroundImage = `url(${objIconsStor[prop]})`
-            console.log(objIconsStor[prop])
+        const objIconsStor = {
+            'Тягач Рулевая ось Левое': "../../../image/01.png",
+            'Тягач Рулевая ось Правое': "../../../image/01.png",
+            'Тягач Ведущая ось ЛВнеш': "../../../image/01.png",
+            'Тягач Ведущая ось ЛВнутр': "../../../image/01.png",
+            'Тягач Ведущая ось ПВнутр': "../../../image/01.png",
+            'Тягач Ведущая ось ПВнеш': "../../../image/01.png",
+            'Прицеп 1 ось Л': "../../../image/02.png",
+            'Прицеп 1 ось П': "../../../image/02.png",
+            'Прицеп 2 ось Л': "../../../image/02.png",
+            'Прицеп 2 ось П': "../../../image/02.png",
+            'Прицеп 3 ось Л': "../../../image/02.png",
+            'Прицеп 3 ось П': "../../../image/02.png"
         }
-        // console.log(e.nextElementSibling.getAttribute('rel'))
-        new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
-    })
+
+
+
+        console.log(im1)
+        im1.forEach(e => {
+            const prop = e.nextElementSibling.getAttribute('rel')
+            if (objIconsStor.hasOwnProperty(prop)) {
+                e.style.backgroundImage = `url(${objIconsStor[prop]})`
+                console.log(objIconsStor[prop])
+            }
+            console.log(e)
+            console.log(e.nextElementSibling.getAttribute('rel'))
+            new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
+        })
+    }
+
+
 
 }
 
@@ -725,4 +726,56 @@ function timeConvert(d) {
     const minutes = date.getMinutes();
     const timeString = `${month} ${day}, ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
     return timeString;
+}
+
+
+
+async function iconChart() {
+    const activePost = document.querySelector('.color').children[0].textContent.replace(/\s+/g, '')
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ activePost }))
+    }
+    const res = await fetch('/api/modelView', param)
+    const response = await res.json()
+    return response.values
+}
+
+
+
+async function vieModelChart(model, im1) {
+    console.log(model, im1)
+    im1.forEach(it => {
+        for (let i = 0; i < model.length; i++) {
+            const os = document.createElement('div')
+            os.classList.add('osChart')
+            it.appendChild(os)
+            const centerChartOs = document.createElement('div')
+            centerChartOs.classList.add('centerChartOs')
+            centerChartOs.setAttribute('rel', `${model[i].trailer}`)
+            os.appendChild(centerChartOs)
+            const tires = +model[i].tyres
+            if (tires === 2) {
+                for (let y = 0; y < tires; y++) {
+                    const tyresOutside = document.createElement('div')
+                    tyresOutside.classList.add('tyresChart')
+                    os.appendChild(tyresOutside)
+                }
+                os.insertBefore(os.children[1], os.children[0])
+            }
+            else {
+                for (let y = 0; y < tires; y++) {
+                    const tyresOutside = document.createElement('div')
+                    tyresOutside.classList.add('tyresChart')
+                    os.appendChild(tyresOutside)
+                }
+                os.insertBefore(os.children[1], os.children[0])
+                os.insertBefore(os.children[2], os.children[1])
+                os.children[2].style.width = '4px'
+            }
+        }
+    })
 }
