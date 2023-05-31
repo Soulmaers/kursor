@@ -79,12 +79,13 @@ export async function loadParamsView() {
     else {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
+    const idw = document.querySelector('.color').id
     fetch('api/modelView', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost }))
+        body: (JSON.stringify({ idw }))
     })
         .then((res) => res.json())
         .then((res) => {
@@ -159,12 +160,13 @@ export async function viewPokasateli() {
     let activePost;
     const active = document.querySelectorAll('.color')
     activePost = active[0].children[0].textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost }))
+        body: (JSON.stringify({ activePost, idw }))
     }
     const paramsss = await fetch('api/tyresView', param)
     const params = await paramsss.json()

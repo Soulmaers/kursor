@@ -4347,7 +4347,8 @@ input[type="text"]:focus {
 
 .progress {
   width: 100%;
-  border: 1px solid black
+  border: 1px solid black;
+  box-sizing: border-box;
 }
 
 .progressBar {

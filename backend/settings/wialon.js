@@ -94,7 +94,8 @@ function createTable() {
             const allCar = Object.entries(data);
             allCar[5][1].forEach(el => {
                 const speed = el.lmsg.pos.s
-                nameCar.push([el.nm.replace(/\s+/g, ''), el.id, speed])
+                const idw = el.id
+                nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed])
                 const nameTable = el.nm.replace(/\s+/g, '')
                 if (el.lmsg) {
                     const sensor = Object.entries(el.lmsg.p)
@@ -104,7 +105,6 @@ function createTable() {
             zaprosSpisokb(nameCar)
         })
 }
-
 function postParametrs(name, param) {
     param.forEach(el => {
         el.unshift(name)
@@ -115,7 +115,6 @@ function postParametrs(name, param) {
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             if (results.length === 0) {
-
                 const sql = `INSERT INTO params(nameCar, name, value, status) VALUES?`;
                 connection.query(sql, [param], function (err, results) {
                     if (err) console.log(err);
@@ -207,11 +206,10 @@ const convert = (ob) => {
 
 function zaprosSpisokb(name) {
     const massItog = [];
-    // console.log(name)
     name.forEach(itey => {
         const nameCar = itey[0]
         try {
-            const selectBase = `SELECT tyresdiv, pressure,temp, osNumber FROM tyres WHERE nameCar='${nameCar}'`
+            const selectBase = `SELECT tyresdiv, pressure,temp, osNumber FROM tyres WHERE idw='${itey[1]}'`
             connection.query(selectBase, function (err, results) {
                 if (err) console.log(err);
                 if (results === undefined) {
@@ -228,7 +226,7 @@ function zaprosSpisokb(name) {
                             let integer;
                             let osiBar;
                             try {
-                                const selectBase = `SELECT * FROM ifBar WHERE nameCar='${nameCar}'`
+                                const selectBase = `SELECT * FROM ifBar WHERE idw='${itey[1]}'`
                                 connection.query(selectBase, function (err, results) {
                                     if (err) console.log(err)
                                     const osi = results
@@ -291,9 +289,7 @@ function createDate() {
 }
 function proverka(arr) {
     console.log('проверка')
-    let time = new Date()
     arr.forEach(el => {
-        //    console.log(el[6])
         if (el[4] === undefined) {
             return
         }
@@ -397,13 +393,14 @@ function proverka(arr) {
 
 async function alarmBase(data, tyres, alarm) {
     console.log('данные по алармам')
+    console.log(tyres)
     const dannie = data.concat(tyres)
     const id = dannie[6]
     dannie.splice(5, 2)
     dannie.pop()
     dannie.push(alarm)
     const value = [dannie];
-    // console.log(value)
+    console.log(value)
     //mail(value, await ggg(id))
 
     try {

@@ -15,7 +15,6 @@ import { removeElem, clearElem } from './helpersFunc.js'
 
 const auth = document.querySelector('.auth')
 const authClear = document.querySelector('.authClear')
-
 if (auth) {
     auth.addEventListener('click', () => {
         getUsers()
@@ -219,10 +218,11 @@ export function btnDel() {
         clear.style.display = 'block';
         const active = document.querySelectorAll('.color')
         const activePost = active[0].textContent.replace(/\s+/g, '')
+        const idw = document.querySelector('.color').id
         alarmClear()
-        reqDelete(activePost);
-        paramsDelete(activePost);
-        barDelete(activePost);
+        reqDelete(idw);
+        paramsDelete(idw);
+        barDelete(idw);
     })
 }
 
@@ -319,12 +319,14 @@ const btnSave = document.querySelector('.btn_save')
 btnSave.addEventListener('click', () => {
     const massModel = [];
     const active = document.querySelector('.color')
+    const idw = document.querySelector('.color').id
     const activePost = active.textContent.replace(/\s+/g, '')
     const osi = document.querySelectorAll('.osi')
     osi.forEach(el => {
         massModel.push(fnsort(el))
     })
-    changeBase(massModel, activePost)
+
+    changeBase(massModel, activePost, idw)
 })
 export function fnsort(el) {
     const numberOs = parseFloat(el.children[1].id)

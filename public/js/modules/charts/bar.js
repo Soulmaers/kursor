@@ -4,13 +4,13 @@ import { Tooltip } from '../../class/Tooltip.js'
 async function fn() {
     const active = document.querySelectorAll('.color')
     const activePost = active[0].children[0].textContent.replace(/\s+/g, '')
-    // console.log(activePost)
+    const idw = document.querySelector('.color').id
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost }))
+        body: (JSON.stringify({ activePost, idw }))
     }
     const paramsss = await fetch('api/tyresView', param)
     const params = await paramsss.json()
@@ -638,15 +638,14 @@ function timeConvert(d) {
     const timeString = `${month} ${day}, ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
     return timeString;
 }
-
 async function iconChart() {
-    const activePost = document.querySelector('.color').children[0].textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost }))
+        body: (JSON.stringify({ idw }))
     }
     const res = await fetch('/api/modelView', param)
     const response = await res.json()

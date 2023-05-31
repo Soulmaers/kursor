@@ -143,7 +143,7 @@ function os(arr) {
     viewMenuParams()
 }
 
-export async function changeBase(massModel, activePost) {
+export async function changeBase(massModel, activePost, idw) {
     const go = document.querySelector('.gosNumber')
     let gosp;
     if (go) {
@@ -157,7 +157,7 @@ export async function changeBase(massModel, activePost) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ massModel, activePost, gosp }))
+        body: (JSON.stringify({ massModel, idw, activePost, gosp }))
     }
     const res = await fetch('/api/updateModel', param)
     const response = await res.json()

@@ -11,12 +11,13 @@ export async function alarmFind() {
     }
     const active = document.querySelector('.color')
     const activePost = active.children[0].textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     const par = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ activePost })
+        body: JSON.stringify({ idw })
     }
     const tyres = await fetch('api/tyresView', par)
     const tyresmassiv = await tyres.json();
@@ -25,13 +26,12 @@ export async function alarmFind() {
         const storValue = [];
         sorTyres.forEach(async e => {
             const tyresP = e.pressure
-            const activeName = 'alarm' + activePost + e.pressure
             const stor = await fetch('api/alarmFind', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ activePost, tyresP })
+                body: JSON.stringify({ idw, tyresP })
             })
             const storList = await stor.json();
             storValue.push(storList)

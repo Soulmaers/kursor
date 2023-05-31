@@ -4,12 +4,13 @@ import { divClear, viewDinamic, viewOs } from './visual.js'
 export function postModel(massModel) {
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     fetch('api/updateModel', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ massModel, activePost, gosp }),
+        body: JSON.stringify({ massModel, idw, activePost, gosp }),
     })
         .then((res) =>
             res.json())
@@ -23,12 +24,13 @@ export function postTyres(tyres) {
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
     const name = active[0].textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     fetch('api/tyres', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ tyres, activePost }),
+        body: JSON.stringify({ tyres, activePost, idw }),
     })
         .then((res) => res.json())
         .then(res => console.log(res))
@@ -38,7 +40,7 @@ export function postTyres(tyres) {
     setTimeout(() => messaga.textContent = '', 2000)
 }
 
-export const reqDelete = (name) => {
+export const reqDelete = (idw) => {
     const centerOs = document.querySelectorAll('.centerOs')
     const osi = document.querySelectorAll('.osi')
     const tires = document.querySelectorAll('.tires')
@@ -47,7 +49,7 @@ export const reqDelete = (name) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ idw }),
     })
         .then((res) => res.json())
         .then((res) => console.log(res))
@@ -60,7 +62,7 @@ export const reqDelete = (name) => {
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 2000)
 }
-export const barDelete = async (name) => {
+export const barDelete = async (idw) => {
     const modalCenterOs = document.querySelector('.modalCenterOs')
     modalCenterOs.style.display = 'none'
     const complete = await fetch('api/barDelete', {
@@ -68,17 +70,17 @@ export const barDelete = async (name) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ idw }),
     })
     const result = await complete.json()
 }
-export const paramsDelete = (name) => {
+export const paramsDelete = (idw) => {
     fetch('api/paramsDelete', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ idw }),
     })
         .then((res) => res.json())
         .then((res) => console.log(res))
@@ -158,7 +160,6 @@ export const geoPosition = (geo) => {
             iss.setLatLng(center, /*{ icon: greenIcon }*/).update();
         })
 }
-
 export async function reqModalBar(arr, id) {
     let activePost;
     const active = document.querySelectorAll('.color')
@@ -169,21 +170,24 @@ export async function reqModalBar(arr, id) {
     else {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
+    const idw = document.querySelector('.color').id
     const arrValue = [];
     const divFinal = document.querySelectorAll('.divfinal')
     const normal = document.querySelector('.normal')
+    arrValue.push(idw)
     arrValue.push(activePost)
     arrValue.push(id)
     arrValue.push(normal.value)
     divFinal.forEach(el => {
         arrValue.push(el.textContent)
     })
+
     const bar = await fetch('api/modalBar', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, arr, arrValue, }),
+        body: JSON.stringify({ id, arr, arrValue, idw }),
     })
     const result = await bar.json();
 }
@@ -197,12 +201,13 @@ export async function viewBar(id) {
     else {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
+    const idw = document.querySelector('.color').id
     const bar = await fetch('api/barView', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, activePost })
+        body: JSON.stringify({ id, activePost, idw })
     })
     const barValue = await bar.json();
     const keys = [];
@@ -211,6 +216,7 @@ export async function viewBar(id) {
             keys.push(key);
         }
         const nval = (Object.entries(barValue.values[0]))
+        nval.shift()
         nval.shift()
         nval.shift()
         nval.shift()
