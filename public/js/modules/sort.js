@@ -1,7 +1,5 @@
 
-
 export function sortAll() {
-    console.log('сортировка')
     const sortVN = document.querySelectorAll('.filterVN')
     sortVN.forEach(el => {
         el.addEventListener('click', () => {
@@ -16,7 +14,6 @@ export function sortAll() {
             })
         })
     })
-
     const sortV = document.querySelectorAll('.filterV')
     sortV.forEach(el => {
         el.addEventListener('click', () => {
@@ -31,7 +28,4 @@ export function sortAll() {
             })
         })
     })
-
-
-
 }

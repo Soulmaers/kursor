@@ -1,9 +1,7 @@
 
-import { zamer } from './content.js'
 
 const createList = document.querySelector('.createList')
 createList.addEventListener('input', createListFn)
-
 
 const authClearTarir = document.querySelector('.authClearTarir ')
 authClearTarir.addEventListener('click', () => {
@@ -23,18 +21,14 @@ function createListFn() {
     const createList = document.querySelector('.createList')
     let count = createList.value;
     let countId = 0;
-
     for (let i = 0; i < count; i++) {
         countId++
-        // console.log('работает?')
         tablePokasateli.innerHTML += `<div class="zamer">
                         <h3 class="titleZamer" id="zamer${countId}">Замер${countId}</h3>
                         <div class="wrapTarir"><input class="dut" placeholder="ДУТ"><input class="litr" placeholder="литры"></div>
                     </div>`
-
     }
 }
-
 
 function createListFnview(e) {
     const tablePokasateli = document.querySelector('.tablePokasateli')
@@ -62,14 +56,12 @@ function createListFnview(e) {
     })
 }
 
-
 const plu = document.querySelector('.plu')
 plu.addEventListener('click', () => {
     const createList = document.querySelector('.createList')
     let val;
     createList.value !== '' ? val = createList.value : val = createList.placeholder
     val++
-    // console.log(val)
     createList.value = val
     createListFn()
 })
@@ -77,9 +69,7 @@ const mi = document.querySelector('.mi')
 mi.addEventListener('click', () => {
     const createList = document.querySelector('.createList')
     let val;
-
     if (createList.value !== '' && createList.value > 0) {
-        //  console.log(createList.value)
         val = createList.value
         val--
     }
@@ -90,7 +80,6 @@ mi.addEventListener('click', () => {
     createListFn()
 })
 
-
 const bochka = document.querySelector('.bochka')
 bochka.addEventListener('click', () => {
     const active = document.querySelector('.color')
@@ -100,7 +89,6 @@ bochka.addEventListener('click', () => {
     tableTarir.style.display = 'flex'
     const wrapper_left = document.querySelector('.wrapper_left')
     wrapper_left.style.display = 'none'
-    // console.log('бочка клик')
 })
 
 const oilCard = document.querySelector('.oil_card')
@@ -116,9 +104,6 @@ oilCard.addEventListener('click', () => {
     wrapper_left.style.display = 'none'
     tarirView();
 })
-
-
-
 
 export function createDate() {
     let today = new Date();
@@ -165,19 +150,14 @@ buttOnTarirDisk.addEventListener('click', async () => {
         }
         const res = await fetch('/api/tarirSave', param)
         const response = await res.json()
-        //   console.log()
         tarirView();
         buttOnTarir.style.display = 'none'
     })
-
 })
-
-
 
 export async function tarirView() {
     const active = document.querySelector('.color')
     const activePost = active.children[0].textContent.replace(/\s+/g, '')
-
     const param = {
         method: "POST",
         headers: {
@@ -187,7 +167,6 @@ export async function tarirView() {
     }
     const res = await fetch('/api/tarirView', param)
     const response = await res.json()
-    console.log(response.result.length)
     createListFnview(response.result)
     const x = [];
     const y = [];
@@ -200,7 +179,6 @@ export async function tarirView() {
         point.push(Number(el.litrs))
         points.push(point)
     })
-
     const params = {
         method: "POST",
         headers: {
@@ -212,15 +190,11 @@ export async function tarirView() {
     const arg = await argy.json()
     const parFind = await fetch('api/iconFind', params)
     const paramssyFind = await parFind.json()
-
-    //console.log(paramssyFind)
     arg.values.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
                 if (it.icons === 'oil-card') {
                     const val = el.value
-                    // console.log(val)
-                    // console.log(x, y)
                     let degree;
                     if (x.length < 3) {
                         degree = 1
@@ -228,11 +202,9 @@ export async function tarirView() {
                     if (x.length >= 3) {
                         degree = 6
                     }
-                    console.log(val)
                     const approximated = approximateValue(val, x, y, degree);
                     const znak = Number((approximated[0] * 0.9987).toFixed(0))
                     const value = znak * 100 / y[y.length - 1]
-                    console.log(typeof znak)
                     const oilValue = document.querySelector('.oil_value1')
                     if (znak < 0) {
                         oilValue.textContent = '----'
@@ -260,7 +232,6 @@ function polynomialApproximation(x, y, degree) {
     let A = Array.from({ length: m }, () => new Array(m).fill(0));
     let B = new Array(m).fill(0);
     let a = new Array(m).fill(0);
-
     for (let i = 0; i < n; i++) {
         let xi = x[i];
         let yi = y[i];
@@ -277,7 +248,6 @@ function polynomialApproximation(x, y, degree) {
             }
         }
     }
-
     for (let j = 0; j < m; j++) {
         for (let k = j + 1; k < m; k++) {
             let coef = A[k][j] / A[j][j];
@@ -290,7 +260,6 @@ function polynomialApproximation(x, y, degree) {
             }
         }
     }
-
     for (let j = m - 1; j >= 0; j--) {
         let tmp = B[j];
         for (let k = j + 1; k < m; k++) {
@@ -302,13 +271,11 @@ function polynomialApproximation(x, y, degree) {
         }
         a[j] = tmp / val;
     }
-
     return a;
 }
 function evaluatePolynomial(x, a) {
     const n = a.length;
     const y = new Array(x.length).fill(0);
-
     for (let i = 0; i < x.length; i++) {
         let xi = x[i];
         for (let j = n - 1; j >= 0; j--) {
@@ -346,31 +313,21 @@ export function grafikPoly(points, degree, coeffs) {
     const xScale = d3.scaleLinear()
         .range([0, width])
         .domain(d3.extent(points, d => d[0]))
-
-
     const yScale = d3.scaleLinear()
         .range([height, 0])
         .domain([0, d3.max(points, d => d[1])]);
-
     svg.append("g")
         .attr("transform", "translate(0, " + `${height}` + ")")
         .call(d3.axisBottom(xScale));
-
     svg.append("g")
         .call(d3.axisLeft(yScale));
-
-
-
     const resolution = 100;
     const step = (xScale.domain()[1] - xScale.domain()[0]) / resolution;
-    //console.log(step)
     const polyData = d3.range(xScale.domain()[0], xScale.domain()[1], step)
         .map(x => [x, polyEval(x, coeffs)]);
-    // console.log(polyData)
     const line = d3.line()
         .x(d => xScale(d[0]))
         .y(d => yScale(d[1]));
-
     svg.append("path")
         .datum(polyData)
         .attr("class", "line")
@@ -378,16 +335,12 @@ export function grafikPoly(points, degree, coeffs) {
         .attr("fill", "none")
         .attr("stroke", "steelblue")
         .attr("stroke-width", 2)
-
-
     svg.append("path")
         .datum(points)
         .attr("fill", "none")
         .attr("stroke", "red")
         .attr("stroke-width", 2)
         .attr("d", line);
-
-
     svg.selectAll("circle")
         .data(points)
         .enter()
@@ -396,46 +349,31 @@ export function grafikPoly(points, degree, coeffs) {
         .attr("cy", d => yScale(d[1]))
         .attr("r", 2)
         .attr("fill", "black")
-
 }
 
-
-
 function grafGradient(arr, znak, color) {
-    //console.log(arr)
-    // console.log(znak)
     const foto = document.querySelector('.foto')
     const shkalas = document.querySelector('.shkala')
-    // console.log(shkalas)
     if (shkalas) {
         shkalas.remove()
     }
     const shkala = document.createElement('div')
     shkala.classList.add('shkala')
-    // shkala.textContent = znak.toFixed(2) + 'л.'
     const value = [znak]
     foto.appendChild(shkala)
 
-
-    // Установка размера холста
     var width = 150;
     var height = 200;
-
     // Создание холста
     var svg = d3.select(".shkala")
         .append("svg")
         .attr("width", width)
         .attr("height", height);
 
-    // Данные для диаграммы
-    // var data = [4526];
-
     // Создание шкалы для оси y
     var yScale = d3.scaleLinear()
         .domain([0, d3.max(arr)])
         .range([height - 10, 10]);
-
-
     // Создание столбиков
     svg.selectAll("rect")
         .data(value)
@@ -453,7 +391,6 @@ function grafGradient(arr, znak, color) {
         })
         .attr("fill", color)
         .attr('stroke', 'black')
-
     // Создание групп для подписей значений данных
     var valueLabels = svg.selectAll("g")
         .data(value)
@@ -462,7 +399,6 @@ function grafGradient(arr, znak, color) {
         .attr("transform", function (d, i) {
             return "translate(" + (75 + i * 60) + "," + (yScale(d) - 10) + ")";
         });
-
     // Добавление подписей значений данных
     valueLabels.append("text")
         .text(function (d) {
@@ -472,8 +408,6 @@ function grafGradient(arr, znak, color) {
         .attr("font-family", "sans-serif")
         .attr("fill", "black")
         .attr("text-anchor", "middle")
-
-
     // Создание оси y
     var yAxis = d3.axisLeft(yScale);
     svg.append("g")

@@ -1,20 +1,15 @@
 import { viewTech } from './requests.js'
 import { convert } from './visual.js'
 
-
 export function createDate() {
-
     let today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
     const day = today.getDate() < 10 ? '0' + today.getDate() : today.getDate();
     today = day + '.' + month + '.' + year;
-
     return today
 
 }
-
-
 export async function reqBaseId() {
     const tiresActiv = document.querySelector('.tiresActiv').id
     let newId = await findId()
@@ -31,8 +26,6 @@ export async function reqBaseId() {
         const value = Number(sortt.join('')) + 1
         return value + 'id'
     }
-    // const newId = (Math.random() * 10000).toFixed(0) + 'id'
-    console.log(ide)
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
     const formValue = document.querySelectorAll('.formValue')
@@ -44,7 +37,6 @@ export async function reqBaseId() {
     const arrNameColId = [];
     const pr = Array.from(formValue)
     const maxMM = pr.pop()
-
     arrNameColId.push(createDate(new Date))
     arrNameColId.push(ide)
     arrNameColId.push(activePost)
@@ -55,10 +47,8 @@ export async function reqBaseId() {
         arrNameColId.push(e.value)
     })
     !maxMM.value ? arrNameColId.push(maxMM.placeholder) : arrNameColId.push(maxMM.value)
-
     const dd = arrNameColId.splice(17, 1)
     arrNameColId.splice(13, 0, dd[0])
-
     const param = {
         method: "POST",
         headers: {
@@ -87,9 +77,6 @@ export async function reqBaseId() {
     viewTech(tiresActiv)
 }
 
-
-
-
 export async function saveDouble(arr) {
     const complete = await fetch('api/savePr', {
         method: "POST",
@@ -105,37 +92,22 @@ export async function saveDouble(arr) {
     messaga.textContent = 'Ротация колес выполнена'
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 3000)
-    return console.log(result)
+    return
 }
-
-
 export async function findId() {
     const complete = await fetch('api/findId', {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
         }
-        //  body: JSON.stringify({ arr }),
     })
     const result = await complete.json()
-    console.log(result.result)
-
     const uniq = convert(result.result)
-    // uniq.sort()
     uniq.sort(function (a, b) {
         return parseFloat(a.identificator) - parseFloat(b.identificator);
     });
-    console.log(uniq[uniq.length - 1])
-    uniq.forEach(el => {
-        console.log(el.identificator)
-    })
     return uniq[uniq.length - 1]
 }
-
-
-
-
-
 export async function findTyresInstall() {
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
@@ -151,12 +123,8 @@ export async function findTyresInstall() {
         },
         body: (JSON.stringify({ activePost, tyresId }))
     }
-
-
     const par = await fetch('api/listTyresId', param)
     const params = await par.json()
-    console.log(params)
-
     const result = Object.values(params.result.reduce(
         (acc, val) => {
             acc[val.idTyres] = Object.assign(acc[val.idTyres] ?? {}, val);
@@ -164,17 +132,13 @@ export async function findTyresInstall() {
         },
         {}
     ));
-    console.log(result)
     const tiresLink = document.querySelectorAll('.tires_link')
     tiresLink.forEach(el => {
         result.forEach(item => {
             if (el.id === item.idTyres) {
                 el.style.border = '2px solid #000'
-
                 el.children[0].style.width = '44px'
                 el.children[1].style.width = '44px'
-                // el.children[0].style.borderRadius = '30% 30% 0 0'
-                // el.children[1].style.borderRadius = '0 0 30% 30%'
             }
         })
     })

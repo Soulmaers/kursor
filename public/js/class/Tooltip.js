@@ -10,13 +10,9 @@ export class Tooltip {
         this.element.addEventListener("mouseenter", this.handleMouseEnter);
         this.element.addEventListener("mouseleave", this.handleMouseLeave);
         this.element.addEventListener("mousemove", this.handleMouseMove);
-        // this.isHovered = false; // добавляем флаг hovering
-        // this.old = old
     }
-
     handleMouseEnter() {
         const tool = document.querySelectorAll('.tool')
-        console.log(tool)
         if (tool) {
             tool.forEach(e => {
                 e.remove()
@@ -37,21 +33,15 @@ export class Tooltip {
             this.tooltip.appendChild(this.tooltipLow);
             this.tooltipLow.textContent = el
         });
-        // }
     }
-
     handleMouseLeave() {
         const tool = document.querySelectorAll('.tool')
-        console.log(tool)
         if (tool) {
             tool.forEach(e => {
                 e.remove()
             })
             this.tooltip = null;
         }
-
-
-        // this.isHovered = false; // меняем флаг hovering при уходе курсора
     }
     handleMouseMove(event) {
         if (this.tooltip) {
@@ -67,19 +57,3 @@ export class Tooltip {
     }
 }
 
-
-/*
-// Example usage
-const button = document.querySelector("button");
-const tooltip = new Tooltip(button, "Click me");
-*/
-
-
-
-/*
-// Example with dynamic message
-const input = document.querySelector("input");
-const dynamicTooltip = new Tooltip(input, "");
-input.addEventListener("input", () => {
-    dynamicTooltip.message = input.value;
-});*/

@@ -2,20 +2,15 @@ import { tr } from './content.js'
 import { convert } from './visual.js'
 import { ggg } from './menu.js'
 
-
 export async function alarmFind() {
-    console.log('алармфайнед быстрее')
-
     const tr = document.querySelectorAll('.tr')
     if (tr) {
         tr.forEach(it => {
             it.remove();
         })
     }
-
     const active = document.querySelector('.color')
     const activePost = active.children[0].textContent.replace(/\s+/g, '')
-    //   const activePost = name.children[0].textContent.replace(/\s+/g, '')
     const par = {
         method: "POST",
         headers: {
@@ -28,10 +23,8 @@ export async function alarmFind() {
     if (tyresmassiv.values) {
         const sorTyres = convert(tyresmassiv.values)
         const storValue = [];
-        // console.log(sorTyres)
         sorTyres.forEach(async e => {
             const tyresP = e.pressure
-            //  console.log
             const activeName = 'alarm' + activePost + e.pressure
             const stor = await fetch('api/alarmFind', {
                 method: "POST",
@@ -42,25 +35,17 @@ export async function alarmFind() {
             })
             const storList = await stor.json();
             storValue.push(storList)
-            //  console.log(storValue)
         })
         setTimeout(viewAlarmStorage, 1000, activePost, storValue)
-
     }
-
 }
 setInterval(alarmFind, 60000)
 
 async function viewAlarmStorage(name, stor) {
-    console.log('алармфайнд')
-
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
     const active = document.querySelector('.color')
-
-    //  console.log(active)
     const allobj = await ggg(active.id)
-    // console.log(allobj)
     stor.forEach(el => {
         let count = 0;
         el.forEach(it => {
@@ -101,7 +86,6 @@ async function viewAlarmStorage(name, stor) {
         })
     })
     const t = document.querySelectorAll('.tr')
-    //console.log(t)
     if (t.length === 1) {
         return
     }
@@ -156,10 +140,8 @@ async function viewAlarmStorage(name, stor) {
             }
         }
     })
-
     t[0].children[5].textContent = 'Время аларма'
     const best = document.querySelectorAll('.best')
-
     best.forEach(el => {
         const wrapItem = document.createElement('div')
         wrapItem.classList.add('wrapItem')
@@ -192,7 +174,6 @@ async function viewAlarmStorage(name, stor) {
                 wrapSpoyler.appendChild(it)
             }
         });
-
         el.addEventListener('click', () => {
             if (el.classList.contains('activeListtt')) {
                 itemIn.style.display = 'flex'
@@ -206,7 +187,6 @@ async function viewAlarmStorage(name, stor) {
             itemOut.style.display = 'flex'
             el.querySelector('.wrapSpoyler').style.display = 'flex'
             const redHidden = document.querySelectorAll('.spoyler')
-            //    console.log(redHidden)
             redHidden.forEach(el => {
                 Array.from(el.children).forEach(it => {
                     it.style.fontSize = '11px'
@@ -218,7 +198,6 @@ async function viewAlarmStorage(name, stor) {
     })
     t.forEach(el => {
         if (el.nextSibling !== null && !el.classList.contains('alarmOpen') && !el.classList.contains('oneName') && !el.classList.contains('spoyler')) {
-            //  console.log(el)
             if (el.nextSibling.classList.contains('norma') && el.nextSibling.children[1].textContent == el.children[1].textContent) {
                 const dt = [...el.nextSibling.children[0].textContent]
                 const allmassiv = [];
@@ -236,7 +215,6 @@ async function viewAlarmStorage(name, stor) {
                 const hourss = (hours < 10) ? "" + hours : hours;
                 const minutess = (minutes < 10) ? "" + minutes : minutes;
                 const interval = days + 'd' + ' ' + hourss + "h" + ' ' + + minutess + "m"
-                //   console.log(days + '(d)' + ' ' + hourss + "(h)" + ' ' + + minutess + "(m)");
                 el.children[5].textContent = interval
             }
             else if (el.classList.contains('best') && el.nextSibling.classList.contains('norma') && el.nextSibling.children[1].textContent == el.children[1].textContent) {
@@ -256,15 +234,12 @@ async function viewAlarmStorage(name, stor) {
                 const hourss = (hours < 10) ? "" + hours : hours;
                 const minutess = (minutes < 10) ? "" + minutes : minutes;
                 const interval = days + 'd' + ' ' + hourss + "h" + ' ' + + minutess + "m"
-                // console.log(days + '(d)' + ' ' + hourss + "(h)" + ' ' + + minutess + "(m)");
                 el.children[5].textContent = interval
             }
         }
     })
-
     const arrName = tbody.querySelectorAll(`.${name}`)
     arrName.forEach(e => {
-        //  console.log(e.children[2])
         e.children[2].style.background = 'yellow';
         if (e.children[3].textContent == '-51' || e.children[3].textContent == '-50') {
             e.children[3].style.background = 'yellow';
@@ -277,13 +252,11 @@ async function viewAlarmStorage(name, stor) {
         allmassive.push(dt[6], dt[7], dt[8], dt[9], '-', dt[3], dt[4], '-', dt[0], dt[1], 'T', dt[11], dt[12], dt[13], dt[14], dt[15], ':', '0', '0', 'Z')
         const itog = Date.parse(allmassive.join(''))
         return itog
-
     }
     const arr = [];
     vieList.forEach(el => {
         arr.push(el)
     })
-
     arr.sort(function (a, b) {
         return parseFloat(fntinesort(b.children[0].textContent)) - parseFloat(fntinesort(a.children[0].textContent))
     });
@@ -297,20 +270,14 @@ function alarmFire() {
     const alarmStorage = document.querySelectorAll('.alarmFire')
     const ogon = document.querySelector('.ogon')
     alarmStorage ? ogon.style.display = 'block' : ogon.style.display = 'none'
-    //  alarmStorage.children
-    // const child = alarmStorage.children[0]
-    // console.log(alarmStorage)
-    //  console.log(child.children.querySelectorAll('.alarmOpen'))
 }
 function nextAll(elem) {
     var next = false;
-    //  console.log(elem.parentNode.children)
     return [].filter.call(elem.parentNode.children, function (child) {
         if (child === elem) next = true;
         return next && child !== elem
     })
 };
-
 const plus = document.querySelector('.plus')
 const minus = document.querySelector('.minus')
 const alarmStorage = document.querySelector('.alarmStorage')
@@ -319,7 +286,6 @@ plus.addEventListener('click', () => {
     alarmStorage.style.display = 'block';
     plus.style.display = 'none';
     minus.style.display = 'block'
-
 })
 minus.addEventListener('click', () => {
     alarmStorage.style.display = 'none';

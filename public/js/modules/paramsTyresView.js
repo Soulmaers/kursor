@@ -1,10 +1,9 @@
 
 import { view, viewConfigurator, pricep } from './visual.js'
 import { saveTyres } from './event.js'
-import { objColor, generT, generFront, generDav } from './content.js'
+import { objColor, generT, generFront } from './content.js'
 import { liCreate, viewOs } from './visual.js'
 import { tech } from './tech.js'
-import { modalOs } from './modalOs.js'
 
 export const arrayTyres = [];
 export function viewMenuParams() {
@@ -14,7 +13,6 @@ export function viewMenuParams() {
     const btnsens = document.querySelectorAll('.btnsens')
     const sensors = document.querySelector('.sensors')
     const wrapperMap = document.querySelector('.wrapper_left')
-    // console.log(wrapperMap)
     const obo = document.querySelector('.obo')
     const tiresLink = document.querySelectorAll('.tires_link')
     const techInfo = document.querySelector('.techInfo')
@@ -31,18 +29,14 @@ export function viewMenuParams() {
                 techInfo.style.display = 'none'
                 tableTarir.style.display = 'none'
                 wrapperMap.style.display = 'block'
-
                 if (plug[1].classList.contains('activGraf')) {
                     grafics.style.display = 'flex';
                     wrapperMap.style.display = 'none'
                 }
-
                 return
             }
-            //  console.log('нажал')
             kolesos.push(e)
             speedGraf.style.display = 'none';
-            //sensor(btnsens, titleSens, obo)
             tiresLink.forEach(e => {
                 obo.style.display = 'none'
                 titleSens.style.display = 'none'
@@ -77,7 +71,6 @@ export async function loadParamsView() {
     const container = document.querySelector('.container')
     let activePost;
     const active = document.querySelectorAll('.color')
-    // console.log(active[0].children[0].textContent)
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.listItem')[0]
         activePost = listItem.textContent.replace(/\s+/g, '')
@@ -101,7 +94,6 @@ export async function loadParamsView() {
                 viewOs(model.values.length)
                 const osi = document.querySelectorAll('.osi')
                 const centerOs = document.querySelectorAll('.centerOs')
-                console.log('парамс')
                 model.values.forEach(el => {
                     el.trailer == 'Прицеп' ?
                         pricep(centerOs[el.osi - 1])
@@ -121,24 +113,19 @@ export async function loadParamsView() {
                         centerOs[el.osi - 1].nextElementSibling.children[0].style.display = 'flex';
                         centerOs[el.osi - 1].nextElementSibling.children[1].style.display = 'flex';
                     }
-
                 })
                 const cont1 = document.querySelector('.cont1')
                 const oneOs = cont1.firstElementChild
-                console.log('конт')
-                console.log(oneOs)
                 const gosCar = document.createElement('input')
                 gosCar.classList.add('gosNumberCar')
                 gosCar.setAttribute('placeholder', 'гос. номер')
                 cont1.firstElementChild.children[1].prepend(gosCar)
                 cont1.firstElementChild.children[1].style.position = 'relative'
-
                 if (model.values.find(e => e.trailer === 'Прицеп')) {
                     const cont = document.querySelector('.cont')
                     const gos = document.createElement('input')
                     gos.classList.add('gosNumber')
                     gos.setAttribute('placeholder', 'гос. номер прицепа')
-                    console.log(gos)
                     cont.lastElementChild.children[1].appendChild(gos)
                     cont.lastElementChild.children[1].style.position = 'relative'
                     gos.value = model.values[0].gosp
@@ -162,9 +149,6 @@ function noPricep(elem) {
     cont1.style.border = '2px solid darkblue',
         cont1.style.padding = '5px',
         elem.children[0].style.background = '#000'
-
-
-
 }
 
 export async function viewPokasateli() {
@@ -188,23 +172,18 @@ export async function viewPokasateli() {
     const data = await datas.json()
     const os = await fetch('api/barView', param)
     const osi = await os.json()
-
     data.values.sort((prev, next) => {
         if (prev.name < next.name) return -1;
         if (prev.name < next.name) return 1;
     })
-    // console.log(data.values)
     view(data.values)
     viewConfigurator(data.values, params.values, osi.values)
 }
-
-
 
 function koleso(kol, btnsens) {
     const active = document.querySelectorAll('.color')
     liCreate()
     const msg = document.querySelectorAll('.msg')
-    // console.log(msg)
     const paramPress = [];
     const paramTemp = [];
     let prmsD = [];
@@ -216,7 +195,6 @@ function koleso(kol, btnsens) {
             arrSpreed.forEach(el => {
                 if (el === ':') {
                     value = arrSpreed.splice(arrSpreed.indexOf(el) + 1, arrSpreed.length - 1).join('')
-                    //console.log(value)
                 }
             })
             if (btnsens[0].classList.contains('actBTN')) {
@@ -259,7 +237,6 @@ function koleso(kol, btnsens) {
     })
 }
 
-
 const massivion = [];
 export const massivionbd = [];
 function valid(paramPress, paramTemp, kolesos) {
@@ -289,6 +266,5 @@ function valid(paramPress, paramTemp, kolesos) {
     massbd.push(kolId, value, value2, osId)
     massivion.push(mass)
     massivionbd.push(massbd)
-    console.log(massivionbd)
     saveTyres(massivionbd)
 }

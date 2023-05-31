@@ -7,8 +7,6 @@ function addZero(digits_length, source) {
     return text;
 }
 
-
-
 export function fnToChange() {
     const to = document.querySelector('.icon_kluch')
     const toChanges = document.querySelector('.toChange')
@@ -26,7 +24,6 @@ export function fnToChange() {
     const noUp = document.querySelector('.noUp')
     to.classList.add('actToChange')
     toChanges.style.display = 'flex';
-
     btnTOUpdate.addEventListener('click', () => {
         UpTo.style.display = 'flex'
         up.addEventListener('click', () => {
@@ -40,7 +37,6 @@ export function fnToChange() {
         })
 
     })
-
     btnTO.addEventListener('click', async () => {
         UpTo.style.display = 'flex'
         up.addEventListener('click', async () => {
@@ -56,7 +52,6 @@ export function fnToChange() {
             }
             const res = await fetch('/api/to', param)
             const response = await res.json()
-            //   console.log(response)
             UpTo.style.display = 'none'
             console.log('да?2')
             iconParams()
@@ -64,17 +59,12 @@ export function fnToChange() {
         noUp.addEventListener('click', async () => {
             UpTo.style.display = 'none'
         })
-
     })
-
 }
 export function iconParamsz() {
-    // console.log('работаем')
     const active = document.querySelector('.color')
     const activePost = active.children[0].textContent.replace(/\s+/g, '')
-    console.log(activePost)
     const changeParams = document.querySelector('.changeParams')
-    //const odomValue = document.querySelector('.odom_value')
     const msg = document.querySelectorAll('.msg')
     msg.forEach(el => {
         el.addEventListener('click', () => {
@@ -84,7 +74,6 @@ export function iconParamsz() {
             arrSpreed.forEach(el => {
                 if (el === ':') {
                     value = (arrSpreed.splice(arrSpreed.indexOf(el) + 1, arrSpreed.length - 1).join('') * changeParams.value).toFixed(0)
-                    //  console.log(value)
                 }
             })
             arrSpreed.forEach(el => {
@@ -92,18 +81,12 @@ export function iconParamsz() {
                     param = arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join('')
                 }
             })
-            //   console.log(param)
-            //   const odometr = addZero(8, value)
-            //  odomValue.textContent = odometr + 'км'
-
             const coef = changeParams.value
             const id = document.querySelector('.acto').id
-            //  console.log(id)
             postIconParams(activePost, param, coef, id)
         })
     })
 }
-
 async function postIconParams(activePost, param, coef, id) {
     const params = {
         method: "POST",
@@ -118,10 +101,8 @@ async function postIconParams(activePost, param, coef, id) {
     messaga.textContent = 'Параметр сохранен'
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 3000)
-    // console.log('параметр сохранен')
     iconFind(activePost)
 }
-
 
 export async function iconFind(activePost) {
     const changeParams = document.querySelector('.changeParams')
@@ -137,14 +118,12 @@ export async function iconFind(activePost) {
     const arg = await argy.json()
     const parFind = await fetch('api/iconFind', params)
     const paramssyFind = await parFind.json()
-    console.log(arg)
     arg.values.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
                 card.forEach(elem => {
                     if (elem.id === it.icons) {
                         elem.children[0].textContent = (el.value * it.coef).toFixed(1) // + 'км'
-                        console.log(el.value, el.status)
                         el.status === 'false' ? elem.children[0].style.color = 'gray' : elem.children[0].style.color = 'black'
                         if (it.icons === 'odom-card') {
                             const val = addZero(8, (el.value * it.coef).toFixed(0))
@@ -169,13 +148,10 @@ export async function iconFind(activePost) {
     })
 }
 
-
 export const convert = (ob) => {
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
     return Array.from(uniq).map(e => JSON.parse(e));
 }
-
-
 
 export function iconParamszWindows() {
     const active = document.querySelector('.color')
@@ -191,7 +167,6 @@ export function iconParamszWindows() {
             arrSpreed.forEach(el => {
                 if (el === ':') {
                     value = (arrSpreed.splice(arrSpreed.indexOf(el) + 1, arrSpreed.length - 1).join('') * changeParams.value).toFixed(2)
-                    // console.log(value)
                 }
             })
             arrSpreed.forEach(el => {
@@ -221,12 +196,10 @@ async function postIconParamsWindow(activePost, param, coef, nameInput, id) {
     const paramssy = await par.json()
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Параметр сохранен'
-    console.log(messaga.textContent)
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 3000)
     iconFindWindows(activePost)
 }
-
 
 export async function iconFindWindows(activePost) {
     const changeParams = document.querySelector('.changeParams')
@@ -242,7 +215,6 @@ export async function iconFindWindows(activePost) {
     const arg = await argy.json()
     const parFind = await fetch('api/iconFindWindows', params)
     const paramssyFind = await parFind.json()
-
     arg.values.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
@@ -261,7 +233,6 @@ export async function iconFindWindows(activePost) {
     refactor()
 }
 
-
 export async function deleteWinParams(id) {
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
@@ -277,17 +248,14 @@ export async function deleteWinParams(id) {
     iconFindWindows(activePost)
 }
 
-
 export function refactor() {
     const nameStatic = document.querySelectorAll('.nameStatic')
     nameStatic.forEach(e => {
         if (e.value === '') {
-            console.log('пустая')
         }
         else {
             e.closest('.itemStatic').children[2].style.display = 'block'
         }
     })
-
 }
 

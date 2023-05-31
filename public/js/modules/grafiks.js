@@ -1,8 +1,6 @@
 
-
 export async function fnTime(t1, t2) {
   const active = Number(document.querySelector('.color').id)
-  console.log(t1, t2)
   let timeOld;
   let timeNow;
   if (t1 === undefined && t2 === undefined) {
@@ -32,8 +30,6 @@ export async function fnTime(t1, t2) {
           console.log(wialon.core.Errors.getErrorText(code));
         }
         const noGraf = document.querySelector('.noGraf')
-
-        console.log(result.count)
         if (result.count === 0) {
           const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
           preloaderGraf.style.opacity = 0;
@@ -51,15 +47,12 @@ export async function fnTime(t1, t2) {
             speed.push(el.pos.s)
             resolve([global, speed])
           })
-
         }
-
       })
   })
 }
 
 export async function fnPar(active) {
-  console.log('fnpar')
   return new Promise(function (resolve, reject) {
     const prms3 = {
       "source": "",
@@ -79,7 +72,6 @@ export async function fnPar(active) {
       })
   })
 }
-
 export async function fnParMessage(active) {
   return new Promise(function (resolve, reject) {
     const prmss = {
@@ -92,7 +84,6 @@ export async function fnParMessage(active) {
         if (code) {
           console.log(wialon.core.Errors.getErrorText(code));
         }
-        console.log(result)
         const nameArr = [];
         Object.entries(result.item.sens).forEach(el => {
           nameArr.push([el[1].n, el[1].p])
