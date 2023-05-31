@@ -30,7 +30,7 @@ const fp = flatpickr("#daterange", {
 const dateInputValue = document.getElementById('daterange')
 btnForm.forEach(el =>
     el.addEventListener('click', () => {
-        if (el.textContent === 'Выполнить' && times.length !== 0) {
+        if (el.textContent === 'Выполнить' && dateInputValue.value !== '') {
             const grafOld = document.querySelector('.infoGraf')
             if (grafOld) {
                 grafOld.remove()
@@ -40,7 +40,7 @@ btnForm.forEach(el =>
             preloaderGraf.style.display = 'flex'
             dataInput() //фунции выбора интервала графика скорости
         }
-        if (el.textContent === 'Выполнить' && times.length === 0) {
+        if (el.textContent === 'Выполнить' && dateInputValue.value === '') {
             const grafOld = document.querySelector('.infoGraf')
             if (grafOld) {
                 grafOld.remove()

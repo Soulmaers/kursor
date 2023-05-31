@@ -101,7 +101,6 @@ export function geoloc() {
             });
         })
 }
-
 export function iconParams() {
     const active = document.querySelectorAll('.color')
     const flags = 1 + 1024
