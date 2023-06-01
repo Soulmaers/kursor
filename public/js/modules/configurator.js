@@ -107,7 +107,7 @@ function os(arr) {
                         console.log(cont.firstElementChild.children[1])
                         const gosNumber = document.createElement('input')
                         gosNumber.classList.add('gosNumber')
-                        gosNumber.setAttribute('placeholder', 'гос. номер прицепа')
+                        gosNumber.setAttribute('placeholder', 'A 000 AA 00')
                         cont.lastElementChild.children[1].appendChild(gosNumber)
                         cont.lastElementChild.children[1].style.position = 'relative'
                         gosNumber.style.display = 'flex'
@@ -119,7 +119,7 @@ function os(arr) {
                     if (!gosNumberCar) {
                         const gosNumberCar = document.createElement('input')
                         gosNumberCar.classList.add('gosNumberCar')
-                        gosNumberCar.setAttribute('placeholder', 'гос. номер')
+                        gosNumberCar.setAttribute('placeholder', 'A 000 AA 00')
                         console.log(cont0)
                         cont0.children[0].children[1].prepend(gosNumberCar)
                         cont0.children[0].children[1].style.position = 'relative'

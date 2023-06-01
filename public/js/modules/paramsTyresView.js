@@ -120,7 +120,7 @@ export async function loadParamsView() {
                     const cont1 = document.querySelector('.cont1')
                     const gosCar = document.createElement('input')
                     gosCar.classList.add('gosNumberCar')
-                    gosCar.setAttribute('placeholder', 'гос. номер')
+                    gosCar.setAttribute('placeholder', 'A 000 AA 00')
                     cont1.firstElementChild.children[1].prepend(gosCar)
                     cont1.firstElementChild.children[1].style.position = 'relative'
                     model.values[0].frontGosp ? gosCar.value = model.values[0].frontGosp : null
@@ -129,7 +129,7 @@ export async function loadParamsView() {
                     const cont = document.querySelector('.cont')
                     const gos = document.createElement('input')
                     gos.classList.add('gosNumber')
-                    gos.setAttribute('placeholder', 'гос. номер прицепа')
+                    gos.setAttribute('placeholder', 'A 000 AA 00')
                     cont.lastElementChild.children[1].appendChild(gos)
                     cont.lastElementChild.children[1].style.position = 'relative'
                     model.values[0].gosp ? gos.value = model.values[0].gosp : null
