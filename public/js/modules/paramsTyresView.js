@@ -123,7 +123,7 @@ export async function loadParamsView() {
                     gosCar.setAttribute('placeholder', 'гос. номер')
                     cont1.firstElementChild.children[1].prepend(gosCar)
                     cont1.firstElementChild.children[1].style.position = 'relative'
-                    gosCar.value = model.values[0].frontGosp
+                    model.values[0].gosp ? gosCar.value = model.values[0].frontGosp : null
                 }
                 if (model.values.find(e => e.trailer === 'Прицеп')) {
                     const cont = document.querySelector('.cont')
@@ -132,7 +132,8 @@ export async function loadParamsView() {
                     gos.setAttribute('placeholder', 'гос. номер прицепа')
                     cont.lastElementChild.children[1].appendChild(gos)
                     cont.lastElementChild.children[1].style.position = 'relative'
-                    gos.value = model.values[0].gosp
+                    model.values[0].gosp ? gos.value = model.values[0].gosp : null
+
                 }
             }
         })
