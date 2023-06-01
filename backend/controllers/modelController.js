@@ -4,7 +4,7 @@ const connection = require('../settings/db')
 
 module.exports.deleteStatic = (req, res) => {
     try {
-        const postModel = `DELETE FROM allStatic WHERE idv IN ('${req.body.id}') AND nameCar IN('${req.body.activePost}')`
+        const postModel = `DELETE FROM allStatic WHERE idv IN ('${req.body.id}') AND idw IN('${req.body.idw}')`
         connection.query(postModel, function (err, results) {
             if (err) console.log(err);
             else
@@ -350,18 +350,18 @@ module.exports.viewCheckObject = (req, res) => {
 }
 module.exports.icon = (req, res) => {
     try {
-        const selectBase = `SELECT icons FROM icon WHERE nameCar='${req.body.activePost}' AND icons='${req.body.id}'`
+        const selectBase = `SELECT icons FROM icon WHERE idw='${req.body.idw}' AND icons='${req.body.id}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             if (results.length === 0) {
-                const postModel = `INSERT INTO icon(nameCar, params, coef, icons) VALUES('${req.body.activePost}','${req.body.param}','${req.body.coef}','${req.body.id}')`
+                const postModel = `INSERT INTO icon(idw, nameCar, params, coef, icons) VALUES('${req.body.idw}', '${req.body.activePost}','${req.body.param}','${req.body.coef}','${req.body.id}')`
                 connection.query(postModel, function (err, results) {
                     if (err) console.log(err + 'ошибка26')
                     response.status(200, results, '', res)
                 })
             }
             else {
-                const sql = `UPDATE icon SET nameCar='${req.body.activePost}', params='${req.body.param}', coef='${req.body.coef}', icons='${req.body.id}'WHERE nameCar='${req.body.activePost}' AND icons='${req.body.id}'`;
+                const sql = `UPDATE icon SET  idw='${req.body.idw}', nameCar='${req.body.activePost}', params='${req.body.param}', coef='${req.body.coef}', icons='${req.body.id}'WHERE  idw='${req.body.idw}' AND icons='${req.body.id}'`;
                 connection.query(sql, function (err, results) {
                     if (err) console.log(err)
                     else response.status(200, results, '', res)
@@ -375,18 +375,18 @@ module.exports.icon = (req, res) => {
 }
 module.exports.iconWindows = (req, res) => {
     try {
-        const selectBase = `SELECT id FROM allStatic  WHERE nameCar='${req.body.activePost}' AND idv='${req.body.id}'`
+        const selectBase = `SELECT id FROM allStatic  WHERE idw='${req.body.idw}' AND idv='${req.body.id}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err)
             if (results.length === 0) {
-                const postModel = `INSERT INTO allStatic(nameCar, params, coef, nameInput, idv) VALUES('${req.body.activePost}','${req.body.param}','${req.body.coef}','${req.body.nameInput}','${req.body.id}')`
+                const postModel = `INSERT INTO allStatic(idw, nameCar, params, coef, nameInput, idv) VALUES('${req.body.idw}', '${req.body.activePost}','${req.body.param}','${req.body.coef}','${req.body.nameInput}','${req.body.id}')`
                 connection.query(postModel, function (err, results) {
                     if (err) console.log(err)
                     response.status(200, results, '', res)
                 })
             }
             else {
-                const sql = `UPDATE allStatic SET nameCar='${req.body.activePost}', params='${req.body.param}', coef='${req.body.coef}', nameInput='${req.body.nameInput}', idv='${req.body.id}' WHERE nameCar='${req.body.activePost}' AND idv='${req.body.id}'`;
+                const sql = `UPDATE allStatic SET idw='${req.body.idw}', nameCar='${req.body.activePost}', params='${req.body.param}', coef='${req.body.coef}', nameInput='${req.body.nameInput}', idv='${req.body.id}' WHERE idw='${req.body.idw}'AND idv='${req.body.id}'`;
                 connection.query(sql, function (err, results) {
                     if (err) console.log(err)
                     else response.status(200, results, '', res)

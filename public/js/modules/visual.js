@@ -66,8 +66,9 @@ export async function visual(el) {
     findTyresInstall()
     liCreate()
     const activePost = el.children[0].textContent.replace(/\s+/g, '')
-    iconFind(activePost)
-    await iconFindWindows(activePost)
+    const idw = el.id
+    iconFind(idw)
+    iconFindWindows(idw)
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })

@@ -61,6 +61,7 @@ export function fnToChange() {
 export function iconParamsz() {
     const active = document.querySelector('.color')
     const activePost = active.children[0].textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     const changeParams = document.querySelector('.changeParams')
     const msg = document.querySelectorAll('.msg')
     msg.forEach(el => {
@@ -80,17 +81,17 @@ export function iconParamsz() {
             })
             const coef = changeParams.value
             const id = document.querySelector('.acto').id
-            postIconParams(activePost, param, coef, id)
+            postIconParams(activePost, param, coef, id, idw)
         })
     })
 }
-async function postIconParams(activePost, param, coef, id) {
+async function postIconParams(activePost, param, coef, id, idw) {
     const params = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost, param, coef, id }))
+        body: (JSON.stringify({ activePost, param, coef, id, idw }))
     }
     const par = await fetch('api/icon', params)
     const paramssy = await par.json()
@@ -98,10 +99,11 @@ async function postIconParams(activePost, param, coef, id) {
     messaga.textContent = 'Параметр сохранен'
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 3000)
-    iconFind(activePost)
+    iconFind(idw)
 }
 
-export async function iconFind(activePost) {
+export async function iconFind(idw) {
+    console.log(idw)
     const changeParams = document.querySelector('.changeParams')
     const card = document.querySelectorAll('.icon_card')
     const params = {
@@ -109,7 +111,7 @@ export async function iconFind(activePost) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost }))
+        body: (JSON.stringify({ idw }))
     }
     const argy = await fetch('api/wialon', params)
     const arg = await argy.json()
@@ -148,6 +150,7 @@ export async function iconFind(activePost) {
 export function iconParamszWindows() {
     const active = document.querySelector('.color')
     const activePost = active.children[0].textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     const changeParams = document.querySelector('.changeParams')
     const actoStatic = document.querySelector('.actoStatic')
     const msg = document.querySelectorAll('.msg')
@@ -170,19 +173,19 @@ export function iconParamszWindows() {
             actoStatic.textContent = value
             const nameInput = document.querySelector('.actoStatic').previousElementSibling.value
             const id = document.querySelector('.actoStatic').id
-            postIconParamsWindow(activePost, param, coef, nameInput, id)
+            postIconParamsWindow(activePost, param, coef, nameInput, id, idw)
         })
     })
 
 }
 
-async function postIconParamsWindow(activePost, param, coef, nameInput, id) {
+async function postIconParamsWindow(activePost, param, coef, nameInput, id, idw) {
     const params = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost, param, coef, nameInput, id }))
+        body: (JSON.stringify({ activePost, param, coef, nameInput, id, idw }))
     }
     const par = await fetch('api/iconWindows', params)
     const paramssy = await par.json()
@@ -190,10 +193,10 @@ async function postIconParamsWindow(activePost, param, coef, nameInput, id) {
     messaga.textContent = 'Параметр сохранен'
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 3000)
-    iconFindWindows(activePost)
+    iconFindWindows(idw)
 }
 
-export async function iconFindWindows(activePost) {
+export async function iconFindWindows(idw) {
     const changeParams = document.querySelector('.changeParams')
     const valueStatic = document.querySelectorAll('.valueStatic')
     const params = {
@@ -201,7 +204,7 @@ export async function iconFindWindows(activePost) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost }))
+        body: (JSON.stringify({ idw }))
     }
     const argy = await fetch('api/wialon', params)
     const arg = await argy.json()
@@ -227,6 +230,7 @@ export async function iconFindWindows(activePost) {
 export async function deleteWinParams(id) {
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     const params = {
         method: "POST",
         headers: {
@@ -236,7 +240,7 @@ export async function deleteWinParams(id) {
     }
     const argy = await fetch('api/deleteSatic', params)
     const arg = await argy.json()
-    iconFindWindows(activePost)
+    iconFindWindows(idw)
 }
 
 export function refactor() {
