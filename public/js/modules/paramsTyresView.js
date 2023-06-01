@@ -91,6 +91,7 @@ export async function loadParamsView() {
         .then((res) => {
             const gos = document.querySelector('.gosNumber')
             const model = res
+            console.log(res)
             if (model.values && model.values.length > 0) {
                 viewOs(model.values.length)
                 const osi = document.querySelectorAll('.osi')
@@ -115,13 +116,15 @@ export async function loadParamsView() {
                         centerOs[el.osi - 1].nextElementSibling.children[1].style.display = 'flex';
                     }
                 })
-                const cont1 = document.querySelector('.cont1')
-                const oneOs = cont1.firstElementChild
-                const gosCar = document.createElement('input')
-                gosCar.classList.add('gosNumberCar')
-                gosCar.setAttribute('placeholder', 'гос. номер')
-                cont1.firstElementChild.children[1].prepend(gosCar)
-                cont1.firstElementChild.children[1].style.position = 'relative'
+                if (model.values.find(e => e.trailer === 'Тягач')) {
+                    const cont1 = document.querySelector('.cont1')
+                    const gosCar = document.createElement('input')
+                    gosCar.classList.add('gosNumberCar')
+                    gosCar.setAttribute('placeholder', 'гос. номер')
+                    cont1.firstElementChild.children[1].prepend(gosCar)
+                    cont1.firstElementChild.children[1].style.position = 'relative'
+                    gosCar.value = model.values[0].frontGosp
+                }
                 if (model.values.find(e => e.trailer === 'Прицеп')) {
                     const cont = document.querySelector('.cont')
                     const gos = document.createElement('input')
@@ -130,13 +133,7 @@ export async function loadParamsView() {
                     cont.lastElementChild.children[1].appendChild(gos)
                     cont.lastElementChild.children[1].style.position = 'relative'
                     gos.value = model.values[0].gosp
-                    gos.style.display = 'flex'
-                    return
                 }
-                else {
-                    gos.style.display = 'none'
-                }
-
             }
         })
 
@@ -161,7 +158,6 @@ export async function viewPokasateli() {
     const active = document.querySelectorAll('.color')
     activePost = active[0].children[0].textContent.replace(/\s+/g, '')
     const idw = document.querySelector('.color').id
-    console.log(idw)
     const param = {
         method: "POST",
         headers: {
@@ -179,7 +175,6 @@ export async function viewPokasateli() {
         if (prev.name < next.name) return -1;
         if (prev.name < next.name) return 1;
     })
-    console.log(data.values)
     view(data.values)
     viewConfigurator(data.values, params.values, osi.values)
 }
@@ -244,7 +239,6 @@ function koleso(kol, btnsens) {
 const massivion = [];
 export const massivionbd = [];
 function valid(paramPress, paramTemp, kolesos) {
-    console.log(kolesos[kolesos.length - 1].closest('.osi').children[1].id)
     const kol = kolesos[kolesos.length - 1];
     const kolId = kolesos[kolesos.length - 1].id;
     const dav = paramPress[paramPress.length - 1]

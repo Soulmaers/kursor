@@ -326,7 +326,7 @@ btnSave.addEventListener('click', () => {
     osi.forEach(el => {
         massModel.push(fnsort(el))
     })
-
+    console.log(massModel, activePost, idw)
     changeBase(massModel, activePost, idw)
 })
 export function fnsort(el) {

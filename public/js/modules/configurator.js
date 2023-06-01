@@ -82,6 +82,10 @@ function os(arr) {
     const container = document.querySelector('.container')
     cont2.classList.add('cont')
     container.appendChild(cont2)
+    const cont0 = document.createElement('div');
+    cont0.classList.add('cont0')
+    container.prepend(cont0)
+
     const arrayTrailer = [];
     const linkSelectOs = document.querySelectorAll('.linkSelectOs')
     const linkSelectTires = document.querySelectorAll('.linkSelectTires')
@@ -91,16 +95,16 @@ function os(arr) {
             e.textContent == 'Прицеп' ?
                 pricep(arr[arr.length - 1])
                 :
-                (arr[arr.length - 1].children[0].style.background = '#fff',//#3333ff'
+                (cont0.append(arr[arr.length - 1].parentNode),
+                    arr[arr.length - 1].children[0].style.background = 'gray',//#3333ff'
                     arr[arr.length - 1].classList.add('tagach'))
-
             const centerOs = document.querySelectorAll('.centerOs')
             centerOs.forEach(el => {
                 if (el.classList.contains('pricep')) {
                     const cont = document.querySelector('.cont')
-                    console.log(cont.lastElementChild.children[1])
                     const gosNumber = document.querySelector('.gosNumber')
                     if (!gosNumber) {
+                        console.log(cont.firstElementChild.children[1])
                         const gosNumber = document.createElement('input')
                         gosNumber.classList.add('gosNumber')
                         gosNumber.setAttribute('placeholder', 'гос. номер прицепа')
@@ -108,14 +112,19 @@ function os(arr) {
                         cont.lastElementChild.children[1].style.position = 'relative'
                         gosNumber.style.display = 'flex'
                     }
-
                 }
                 if (el.classList.contains('tagach')) {
-                    const gosNumberCar = document.createElement('input')
-                    gosNumberCar.classList.add('gosNumberCar')
-                    gosNumberCar.setAttribute('placeholder', 'гос. номер')
-                    container.firstElementChild.children[1].prepend(gosNumberCar)
-                    container.firstElementChild.children[1].style.position = 'relative'
+                    const cont0 = document.querySelector('.cont0')
+                    const gosNumberCar = document.querySelector('.gosNumberCar')
+                    if (!gosNumberCar) {
+                        const gosNumberCar = document.createElement('input')
+                        gosNumberCar.classList.add('gosNumberCar')
+                        gosNumberCar.setAttribute('placeholder', 'гос. номер')
+                        console.log(cont0)
+                        cont0.children[0].children[1].prepend(gosNumberCar)
+                        cont0.children[0].children[1].style.position = 'relative'
+                    }
+
                 }
             })
         }))
@@ -143,21 +152,24 @@ function os(arr) {
     viewMenuParams()
 }
 
+
+
+
 export async function changeBase(massModel, activePost, idw) {
     const go = document.querySelector('.gosNumber')
+    const goCar = document.querySelector('.gosNumberCar')
+    console.log(goCar)
     let gosp;
-    if (go) {
-        gosp = (document.querySelector('.gosNumber')).value
-    }
-    else {
-        gosp = ''
-    }
+    let frontGosp;
+    go ? gosp = (document.querySelector('.gosNumber')).value : gosp = ''
+    goCar ? frontGosp = (document.querySelector('.gosNumberCar')).value : frontGosp = ''
+    console.log(gosp, frontGosp)
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ massModel, idw, activePost, gosp }))
+        body: (JSON.stringify({ massModel, idw, activePost, gosp, frontGosp }))
     }
     const res = await fetch('/api/updateModel', param)
     const response = await res.json()
