@@ -100,13 +100,6 @@ export async function visual(el) {
             removeElem(e)
         })
     }
-}
-export function visualNone(e) {
-    const tarir = document.querySelector('.tarir')
-    tarir.style.display = 'none'
-    const statusObj = document.querySelector('.status_obj')
-    clearElem(statusObj.textContent)
-    statusObj.style.color = 'gray'
     const probegElem = document.querySelector('.odom_value')
     const starterValue = document.querySelector('.akb_value1')
     const ohlValue = document.querySelector('.ohl_value')
@@ -114,13 +107,24 @@ export function visualNone(e) {
     const toil_value = document.querySelector('.toil_value')
     const ign_value = document.querySelector('.ign_value')
     const oborotValue = document.querySelector('.oborot_value')
-    clearElem(toil_value.textContent)
-    clearElem(starterValue.textContent)
-    clearElem(probegElem.textContent)
-    clearElem(ohlValue.textContent)
-    clearElem(oilValue.textContent)
-    clearElem(ign_value.textContent)
-    clearElem(oborotValue.textContent)
+    const motoValue = document.querySelector('.moto_value')
+    motoValue.textContent = ''
+    toil_value.textContent = ''
+    starterValue.textContent = ''
+    probegElem.textContent = ''
+    ohlValue.textContent = ''
+    oilValue.textContent = ''
+    ign_value.textContent = ''
+    oborotValue.textContent = ''
+}
+export function visualNone(e) {
+    const tarir = document.querySelector('.tarir')
+    tarir.style.display = 'none'
+    const statusObj = document.querySelector('.status_obj')
+    clearElem(statusObj.textContent)
+    statusObj.style.color = 'gray'
+
+
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
     const container = document.querySelector('.container')
