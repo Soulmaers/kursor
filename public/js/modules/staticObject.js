@@ -347,7 +347,6 @@ export function grafikPoly(points, degree, coeffs) {
 }
 
 function grafGradient(arr, znak, color) {
-    console.log(arr, znak, color)
     const foto = document.querySelector('.foto')
     const shkalas = document.querySelector('.shkala')
     if (shkalas) {

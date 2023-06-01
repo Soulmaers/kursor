@@ -1,6 +1,6 @@
 import { postTyres, reqDelete, paramsDelete, barDelete, viewTech } from './requests.js'
 import { data } from './content.js'
-import { getDash } from './dash.js'
+import { dashView, getDash } from './dash.js'
 import { alarmClear, clearGraf, visual, visualNone } from './visual.js'
 import { getUsers } from './admin.js'
 import { geoloc } from './wialon.js'
@@ -82,6 +82,7 @@ btnDash.addEventListener('click', () => {
     dash.style.display = 'flex'
     sections.style.display = 'none'
     main.style.display = 'none'
+    dashView()
     getDash()
     setInterval(getDash, 10000)
 });

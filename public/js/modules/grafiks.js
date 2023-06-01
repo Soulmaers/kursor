@@ -68,7 +68,6 @@ export async function fnPar(active) {
           console.log(wialon.core.Errors.getErrorText(code));
         }
         const sensArr = result;
-        console.log(sensArr)
         resolve(sensArr)
       })
   })
@@ -89,7 +88,6 @@ export async function fnParMessage(active) {
         Object.entries(result.item.sens).forEach(el => {
           nameArr.push([el[1].n, el[1].p])
         })
-        console.log(nameArr)
         resolve(nameArr)
       })
   })

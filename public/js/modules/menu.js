@@ -21,7 +21,7 @@ const wrapContaint = document.querySelector('.wrapper_containt')
 const cont = document.createElement('div')
 cont.classList.add('container2')
 wrapContaint.appendChild(cont);
-export let dann;
+
 
 export function zapros() {
     const tiresActiv = document.querySelector('.tiresActiv')
@@ -115,8 +115,6 @@ export function zapros() {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
         });
-
-
     const flags = 1 + 1024//4096
     const prms = {
         "spec": {
@@ -138,14 +136,12 @@ export function zapros() {
             }
             const arr1 = Object.values(result);
             const arrCar = arr1[5];
-            dann = arrCar
             const test = await Promise.all(arrCar.map(el => {
                 return loadParamsViewList(el.nm, el.id) //запрос в базу с массивом имен машин за готовыми моделями
             })
             )
             const nameCarCheck = test.map(elem => elem[0].message)
             checkCreate(nameCarCheck)
-            return dann
         });
 
 }
@@ -164,13 +160,10 @@ export async function ggg(id) {
                 if (code) {
                     console.log(wialon.core.Errors.getErrorText(code));
                 }
-                //   console.log(result)
                 const nameSens = Object.entries(result.item.sens)
                 const arrNameSens = [];
-
                 nameSens.forEach(el => {
                     arrNameSens.push([el[1].n, el[1].p])
-                    //  arrNameSens.push(el[1].p)
                 })
                 const prms = {
                     "unitId":
@@ -184,32 +177,24 @@ export async function ggg(id) {
                             console.log(wialon.core.Errors.getErrorText(code));
                         }
                         if (result) {
-                            //   console.log(result)
                             const valueSens = [];
                             Object.entries(result).forEach(e => {
                                 valueSens.push(e[1])
                             })
-                            // console.log(valueSens)
-                            // console.log(arrNameSens)
                             const allArr = [];
                             arrNameSens.forEach((e, index) => {
                                 allArr.push([...e, valueSens[index]])
 
                             })
-                            //  console.log(allArr)
                             allArr.forEach(it => {
                                 allobj[it[1]] = it[0]
                             })
                         }
-                        // console.log(allobj)
                         resolve(allobj)
                     });
             })
     })
 }
-
-
-
 
 async function dostupObject(name) {
     const param = {
@@ -224,22 +209,3 @@ async function dostupObject(name) {
     const nameCarCheck = response.result.map(elem => elem.Object)
     return nameCarCheck
 }
-
-
-
-
-//import Datepicker from './vanillajs-datepicker/js/Datepicker.js';
-/*
-const elem = document.getElementById('foo');
-const rangepicker = new DateRangePicker(elem, {
-    // ...Настройки
-});*/
-
-
-
-
-
-
-
-//document.querySelector('.flatpickr-calendar').style.width = '200px'
-//document.querySelector('.  .flatpickr - weekdays ').style.width = '195px'

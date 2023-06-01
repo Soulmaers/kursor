@@ -1,110 +1,121 @@
-import { dann } from './menu.js'
-import { convert } from './helpersFunc.js'
+import { generDav } from './content.js'
 
-
-export function dashView(nameCar) {
+export function dashView() {
+    const group = Array.from(document.querySelectorAll('.groups'))
+    const name = group.map(el => {
+        return Array.from(el.children[1].children).map(it => [it.children[0].textContent])
+    }).flat()
+    const ids = group.map(el => {
+        return Array.from(el.children[1].children).map(it => [it.id])
+    }).flat()
     const box = document.querySelector('.check_box')
-    const activePost = nameCar.replace(/\s+/g, '')
-    const list = document.createElement('p')
-    list.classList.add('listTitle')
-    list.innerHTML = `<input class="input" type="checkbox" rel=${activePost}
-    value=${activePost} id=${activePost}>${activePost}`
-    box.appendChild(list)
-
+    const listTitle = document.querySelector('.listTitle')
+    if (!listTitle) {
+        for (let i = 0; i < name.length; i++) {
+            const list = document.createElement('p')
+            list.classList.add('listTitle')
+            list.innerHTML = `<input class="input" type="checkbox" rel=${ids[i]}
+    value=${ids[i]} id=${ids[i]}>${name[i]}`
+            box.appendChild(list)
+        }
+    }
 }
 
 export async function getDash() {
-    const result = await Promise.all(dann.map(async el => {
-        return waitArr(el.nm)
+    const group = Array.from(document.querySelectorAll('.groups'))
+    const ids = group.map(el => {
+        return Array.from(el.children[1].children).map(it => it.id)
+    }).flat()
+    const result = await Promise.all(ids.map(async el => {
+        return waitArr(el)
     })
     )
     dashAllSort(result)
 }
 
 async function waitArr(el) {
-    const activePost = el.replace(/\s+/g, '')
+    const idw = el
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost }))
+        body: (JSON.stringify({ idw }))
     }
     const tyr = await fetch('api/tyresView', param)
     const params = await tyr.json();
-    //  paramsArr.push(params)
-    const dat = await fetch('api/wialon', param)
-    const data = await dat.json();
-    // dataArr.push(data)
+    const os = await fetch('api/barView', param)
+    const osi = await os.json()
+    const res = await reqSensDash(idw)
+    const osss = osi.values
+    const par = params.values
 
-    return [params, data]
+    osss.forEach(it => {
+        delete it.id
+        delete it.nameCar
+    })
+    par.forEach(el => {
+        osss.forEach(e => {
+            if (el.osNumber === e.idOs) {
+                el.bar = e
+            }
+        })
+    })
+    const itog = res.filter(el => {
+        return par.some(param => {
+            return param.pressure === el[1];
+        });
+    });
+    const finish = itog.filter(elem => {
+        return par.some(param => {
+            return elem[1] === param.pressure;
+        });
+    }).map(elem => {
+        const param = par.find(param => {
+            return elem[1] === param.pressure;
+        });
+        return elem.concat(param.bar);
+    });
+
+    const dashObject = {
+        id: idw,
+        params: finish
+    }
+    return dashObject
 }
 
-
 export function dashAllSort(test) {
-    const arrSmall = [];
-    const all = []
     console.log(test)
-    test.forEach(item => {
-
-        const paramsNewArr = [];
-        const arr = new Object();
-        arr.name = item[1].message;
-        arr.params = [];
-        all.push(arr)
-        if (item[0].values) {
-            paramsNewArr.push(convert(item[0].values))
-            console.log(paramsNewArr)
-            item[1].values.forEach((e) => {
-                paramsNewArr[0].forEach(it => {
-                    if (e.name == it.pressure) {
-                        all.forEach(items => {
-                            if (items.name === item[1].message) {
-                                e.value >= 100 ? items.params.push((e.value * 0.069).toFixed(1)) : items.params.push(e.value)
-                                e.value >= 100 ? arrSmall.push((e.value * 0.069).toFixed(1)) : arrSmall.push(e.value)
-                            }
-                        })
-                    }
-                    if (e.name === it.temp) {
-                        all.forEach(elem => {
-                            if (elem.name === item[1].message) {
-                                if (e.value == -50 || e.value == -51 || e.value == -128) {
-                                    elem.params.push(e.value)
-                                    arrSmall.push(e.value)
-                                }
-                            }
-                        })
-                    }
-                })
-            })
-        }
-
-        console.log(all)
-
-    })
+    const globalParams = test.map(el => {
+        return el.params.map(it => {
+            return [it[2], it[3]]
+        })
+    }).flat()
     const checkboxes = document.querySelectorAll('.input');
+    const ide = document.getElementById('Все')
     let enabledSettings = []
     checkboxes.forEach(function (checkbox) {
-        const mas = [];
         checkbox.addEventListener('change', function () {
+            const mas = [];
             if (this.id !== "Все") {
-                const ide = document.getElementById('Все')
                 ide.checked = false;
                 enabledSettings = Array.from(checkboxes).filter(i => i.checked).map(i => i.value)
-                console.log(this.id)
                 enabledSettings.forEach(el => {
-                    all.forEach(it => {
-                        if (el == it.name) {
+                    test.forEach(it => {
+                        if (el == it.id) {
                             it.params.forEach(e => {
-                                mas.push(e)
+                                mas.push([e[2], e[3]])
                             })
                         }
                     })
                 })
                 console.log(mas)
-
                 dashDav(mas)
-                mas.length = 0;
+                const allChecked = Array.from(checkboxes).every(c => !c.checked);
+                if (allChecked) {
+                    ide.checked = true;
+                    dashDav(globalParams)
+                }
             }
             if (this.id == "Все") {
                 const ide = document.getElementById('Все')
@@ -112,73 +123,46 @@ export function dashAllSort(test) {
                     el.checked = false
                 })
                 ide.checked = true;
-                //  console.log(arrSmall)
-                dashDav(arrSmall)
+                dashDav(globalParams)
             }
+
         })
     });
 
-    const ide = document.getElementById('Все')
     if (ide.checked) {
-        //  console.log(arrSmall)
-        dashDav(arrSmall)
+        dashDav(globalParams)
     }
-
 }
 
 
 function dashDav(arr) {
-
-    // const y = [-51, -50]
-    // y.push(...arr)
-    //console.log(y)
     console.log(arr)
-    console.log(arr.length)
     const length = arr.length
-    let countRed = 0;
-    let countYellow = 0;
-    let countGreen = 0;
-    let countGray = 0;
+    const color = {
+        1: [],
+        2: [],
+        3: [],
+        4: []
+    }
     arr.forEach((el) => {
-        if (el <= '-50') {
-            countGray++
-            console.log('серый')
+        if (el[0] === -348201.3876) {
+            color[4].push(el[0])
         }
         else {
-            console.log('другие')
-            if (el >= 6 && el <= 10) {
-                countGreen++
-            }
-            //if (el >= 7.5 && el < 8 || el > 9 && el <= 13) {
-            //     countYellow++
-            //   }
-            else {
-                countRed++
-            }
+            color[generDav(el[0], el[1])].push(el[0])
         }
-
-
     })
-    const resultRed = Math.round(countRed / arr.length * 100);
-    const resultYellow = Math.round(countYellow / arr.length * 100);
-    const resultGreen = Math.round(countGreen / arr.length * 100);
-    const resultGray = Math.round(countGray / arr.length * 100);
-    let arrD;
-    let arrDC;
-
-    if (countGray == 0) {
-        arrD = [resultRed, resultYellow, resultGreen];
-        arrDC = [countRed, countYellow, countGreen];
-    }
-    else {
-        arrD = [resultRed, resultYellow, resultGreen, resultGray];
-        arrDC = [countRed, countYellow, countGreen, countGray];
-    }
-    console.log(arrD)
+    const resultRed = Math.round(color[1].length / arr.length * 100);
+    const resultYellow = Math.round(color[2].length / arr.length * 100);
+    const resultGreen = Math.round(color[3].length / arr.length * 100);
+    const resultGray = Math.round(color[4].length / arr.length * 100);
+    const arrD = [[resultRed, 'Критически'], [resultYellow, 'Повышенное/Пониженное'], [resultGreen, 'Норма'], [resultGray, 'Потеря датчика']];
+    const arrDC = [color[1].length, color[2].length, color[3].length, color[4].length];
     newBoard(arrD, arrDC, length)
 }
 
 function newBoard(ArrD, ArrDC, length) {
+    console.log(ArrD, ArrDC, length)
     const mass = [];
     mass.push(length)
     console.log(ArrD)
@@ -186,22 +170,14 @@ function newBoard(ArrD, ArrDC, length) {
     if (newBoad) {
         newBoad.remove();
     }
+    const data = [];
+    for (let i = 0; i < ArrD.length; i++) {
+        data.push({ browser: ArrD[i][1], rate: ArrD[i][0], value: ArrDC[i] })
+    }
 
     const height = 500,
         width = 500,
-        margin = 30,
-        data = [
-            { browser: 'Критически', rate: ArrD[0], value: ArrDC[0] },
-            { browser: 'Повышенное/Пониженное', rate: ArrD[1], value: ArrDC[1] },
-            { browser: 'Норма', rate: ArrD[2], value: ArrDC[2] },
-            { browser: 'Потеря датчика' }
-        ];
-
-    if (ArrD.length > 3) {
-        data[3].rate = ArrD[3],
-            data[3].value = ArrDC[3]
-    }
-
+        margin = 30
 
     const colorScale = d3.scaleOrdinal()
         .domain(['Критически', 'Повышенное/Пониженное', 'Норма', 'Потеря датчика'])
@@ -321,14 +297,52 @@ function newBoard(ArrD, ArrDC, length) {
         .text(function (d) { return d });
 }
 
+async function reqSensDash(id) {
+    const flagss = 4096
+    const prmss = {
+        'id': id,
+        'flags': flagss
+    }
+    return new Promise(function (resolve, reject) {
+        const remote11 = wialon.core.Remote.getInstance();
+        remote11.remoteCall('core/search_item', prmss,
+            async function (code, result) {
+                if (code) {
+                    console.log(wialon.core.Errors.getErrorText(code));
+                }
+                const nameSens = Object.entries(result.item.sens)
+                const arrNameSens = [];
+                nameSens.forEach(el => {
+                    arrNameSens.push([el[1].n, el[1].p])
+                })
+                const prms = {
+                    "unitId":
+                        id,
+                    "sensors": []
+                }
+                const remote1 = wialon.core.Remote.getInstance();
+                remote1.remoteCall('unit/calc_last_message', prms,
+                    async function (code, result) {
+                        if (code) {
+                            console.log(wialon.core.Errors.getErrorText(code));
+                        }
+                        if (result) {
+                            const valueSens = [];
+                            Object.entries(result).forEach(e => {
+                                valueSens.push(e[1])
+                            })
+                            const allArr = [];
+                            arrNameSens.forEach((e, index) => {
+                                allArr.push([...e, valueSens[index]])
 
+                            })
+                            resolve(allArr)
+                        }
 
-/* set radius for all circles */
-
-
-
-
-
+                    });
+            })
+    })
+}
 
 
 

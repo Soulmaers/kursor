@@ -6,8 +6,8 @@ import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
 import { removeElem, removeArrElem } from './helpersFunc.js'
 const testov = [];
+
 export async function loadParamsViewList(car, el) {
-    console.log(el)
     const params = {
         method: "POST",
         headers: {
@@ -38,7 +38,6 @@ export function conturTest(testov) {
         removeArrElem(listItem)
     }
     testov.forEach(el => {
-        console.log(el)
         if (el.length !== 0) {
             const wrapList = document.querySelector('.wrapList')
             const group = document.createElement('div')
@@ -76,7 +75,7 @@ export function conturTest(testov) {
             const listArr = document.querySelector(`.${el[0].group}`)
             el.forEach(elem => {
                 const nameCar = elem[0].message.replace(/\s+/g, '')
-                dashView(nameCar)
+                //   dashView(nameCar)
                 const listItemCar = document.createElement('div')
                 listItemCar.classList.add('listItem')
                 listItemCar.classList.add(`${elem[4]}`)
