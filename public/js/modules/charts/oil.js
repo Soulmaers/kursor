@@ -141,29 +141,12 @@ export async function oil(t1, t2) {
         .x((d) => x(d.time))
         .y((d) => y2(d.pwr))
         .curve(d3.curveStepAfter);
-    /*  const area1 = d3.area()
-          .x(d => x(d.time))
-          .y0(height)
-          .y1(d => y1(d.oil))*/
-
-
-    //const oilThreshold = 400;
 
     const area1 = d3.area()
         .x(d => x(d.time))
         .y0(height)
         .y1(d => y1(d.oil))
         .curve(d3.curveStepAfter);
-    /*
-        const area11 = d3.area()
-            .x(d => x(d.time))
-            .y0(height)
-            .y1(d => d.oil < oilThreshold ? y1(d.oil) : height)
-            .curve(d3.curveStepAfter);
-    */
-
-
-
 
     const area2 = d3.area()
         .x(d => x(d.time))
@@ -226,13 +209,7 @@ export async function oil(t1, t2) {
         .attr("fill-opacity", 0.5)
         .attr("stroke", "black")
         .attr("stroke-width", 1);
-    /*
-        chartGroup.append("path")
-            .datum(data)
-            .attr("class", "area11")
-            .attr("d", area11)
-            .attr("fill", "red")
-            .attr("fill-opacity", 0.5)*/
+
     // добавляем области для второй кривой
     chartGroup.append("path")
         .datum(data)
@@ -321,15 +298,7 @@ export async function oil(t1, t2) {
             .attr("stroke", "black")
             .attr("stroke-width", 1)
             .attr("d", area1)
-        /*
-                svg.select(".area11")
-                    .datum(data)
-                    .transition()
-                    .duration(1000)
-                    .attr("d", area11)
-                    .attr("fill", "red")
-                    .attr("fill-opacity", 0.5)
-        */
+
         svg.select(".area2")
             .datum(data)
             .transition()
@@ -342,7 +311,6 @@ export async function oil(t1, t2) {
             .attr("stroke-width", 1)
             .attr("d", area2)
     }
-
 
     // If user double click, reinitialize the chart
     svg.on("dblclick", function () {
@@ -381,15 +349,6 @@ export async function oil(t1, t2) {
             .attr("stroke", "black")
             .attr("stroke-width", 1)
             .attr("d", area1)
-        /*
-                svg.select(".area11")
-                    .datum(data)
-                    .transition()
-                    .duration(1000)
-                    .attr("d", area11)
-                    .attr("fill", "red")
-                    .attr("fill-opacity", 0.5)
-        */
         svg.select(".area2")
             .datum(data)
             .transition()
@@ -434,10 +393,12 @@ export async function oil(t1, t2) {
             tooltip.style("display", "block");
             const selectedTime = timeConvert(d.time)
             // Отображаем подсказку с координатами и значениями по оси y
+            let oilTool;
+            d.oil === 0 ? oilTool = 'Нет данных' : oilTool = d.oil
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 0.9);
-            tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${d.oil}<br/>Бортовое питание: ${d.pwr}`)
+            tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${oilTool}<br/>Бортовое питание: ${d.pwr}`)
         })
             // Добавляем обработчик события mouseout, чтобы скрыть подсказку
             .on("mouseout", function (event, d) {
