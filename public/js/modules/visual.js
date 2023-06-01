@@ -262,10 +262,7 @@ export async function viewConfigurator(arg, params, osi) {
                                 e.parentElement.style.border = `1px solid ${signal}`;
                                 e.parentElement.style.borderRadius = '15px'
                             }
-                            else {
-                                e.parentElement.style.border = 'none';
-                                e.parentElement.style.borderRadius = 'none'
-                            }
+
                         }
                         if (el.name === item.temp) {
                             tiresLink.forEach(e => {

@@ -114,6 +114,7 @@ export function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
+            console.log(result)
         });
     const flags = 1 + 1024//4096
     const prms = {
