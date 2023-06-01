@@ -123,7 +123,7 @@ export async function loadParamsView() {
                     gosCar.setAttribute('placeholder', 'гос. номер')
                     cont1.firstElementChild.children[1].prepend(gosCar)
                     cont1.firstElementChild.children[1].style.position = 'relative'
-                    model.values[0].gosp ? gosCar.value = model.values[0].frontGosp : null
+                    model.values[0].frontGosp ? gosCar.value = model.values[0].frontGosp : null
                 }
                 if (model.values.find(e => e.trailer === 'Прицеп')) {
                     const cont = document.querySelector('.cont')
