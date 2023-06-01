@@ -162,11 +162,16 @@ function dashDav(arr) {
 }
 
 function newBoard(ArrD, ArrDC, length) {
+    const newBoad = document.querySelector('.axis')
+    if (length === 0) {
+        newBoad.style.opacity = 0;
+        return
+    }
     console.log(ArrD, ArrDC, length)
     const mass = [];
     mass.push(length)
     console.log(ArrD)
-    const newBoad = document.querySelector('.axis')
+
     if (newBoad) {
         newBoad.remove();
     }
