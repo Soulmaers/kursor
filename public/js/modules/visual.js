@@ -262,6 +262,9 @@ export async function viewConfigurator(arg, params, osi) {
                                 e.parentElement.style.border = `1px solid ${signal}`;
                                 e.parentElement.style.borderRadius = '15px'
                             }
+                            else {
+                                e.parentElement.style.border = '1px solid #fff';
+                            }
 
                         }
                         if (el.name === item.temp) {
