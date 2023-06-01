@@ -186,6 +186,7 @@ export function liCreate() {
     }
 }
 export function view(arg) {
+    console.log(arg)
     const msg = document.querySelectorAll('.msg')
     arg.forEach((el, index) => {
         msg[index].textContent = `${el.name}:${el.value}`

@@ -3,17 +3,13 @@ const wialon = require('wialon');
 const express = require('express');
 const connection = require('./db')
 const { allParams, geo } = require('./sort')
-const nodemailer = require('nodemailer');
-var request = require("request");
+const request = require("request");
+const { prms } = require('./params');
 
-const { prms, prms2 } = require('./params');
-//const { update } = require('../controllers/auth');
 const app = express();
 app.use(express.json());
 
-
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
-
 const session = wialon().session;
 let kluch;
 function init(user) {
@@ -33,24 +29,18 @@ function init(user) {
 
         })
 }
-//init()
-
-
 
 function speed(t1, t2, int, id, res) {
     const prms2 = {
         "itemId": id,   //25343786,
-
         "timeFrom": t1,//t1,//timeFrom,//1657205816,
         "timeTo": t2,//t2,//nowDate,//2757209816,
         "flags": 1,
         "flagsMask": 65281,
         "loadCount": 161000//82710
     }
-
     session.request('messages/load_interval', prms2)
         .then(function (data) {
-            //  console.log(data)
             const arr2 = Object.values(data);
             const arrIterTime = [];
             const arrIterTimeDate = [];
@@ -62,11 +52,9 @@ function speed(t1, t2, int, id, res) {
                 const dateObj = new Date(item * 1000);
                 arrIterTimeDateU.push(dateObj);
                 const utcString = dateObj.toUTCString();
-                //  console.log(utcString)
                 const arrTimeDate = utcString.slice(8, 24);
                 arrIterTimeDate.push(arrTimeDate);
             })
-
             let t = 0;
             const arrIterTimeDateT = arrIterTimeDate.filter(e => (++t) % int === 0);
             const arrSpee = [];
@@ -75,15 +63,9 @@ function speed(t1, t2, int, id, res) {
             })
             let s = 0;
             const arrSpeed = arrSpee.filter(e => (++s) % int === 0)
-
             res.json({ arrSpeed, arrIterTimeDateT, arrIterTimeDateU })
         })
 }
-
-
-
-
-
 function createTable() {
     session.request('core/search_items', prms)
         .catch(function (err) {
@@ -99,23 +81,24 @@ function createTable() {
                 const nameTable = el.nm.replace(/\s+/g, '')
                 if (el.lmsg) {
                     const sensor = Object.entries(el.lmsg.p)
-                    postParametrs(nameTable, sensor)
+                    postParametrs(nameTable, el.id, sensor)
                 }
             })
             zaprosSpisokb(nameCar)
         })
 }
-function postParametrs(name, param) {
+function postParametrs(name, idw, param) {
     param.forEach(el => {
         el.unshift(name)
+        el.unshift(idw)
         el.push('new')
     })
     try {
-        const selectBase = `SELECT name FROM params WHERE nameCar='${name}'`
+        const selectBase = `SELECT name FROM params WHERE idw='${idw}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             if (results.length === 0) {
-                const sql = `INSERT INTO params(nameCar, name, value, status) VALUES?`;
+                const sql = `INSERT INTO params(idw, nameCar, name, value, status) VALUES?`;
                 connection.query(sql, [param], function (err, results) {
                     if (err) console.log(err);
                 });
@@ -127,19 +110,18 @@ function postParametrs(name, param) {
                 });
                 const paramName = [];
                 param.forEach(el => {
-                    paramName.push(el[1])
+                    paramName.push(el[2])
                 })
-
                 param.forEach(el => {
-                    if (mas.includes(el[1])) {
-                        const sql = `UPDATE params SET nameCar='${name}',name='${el[1]}', value='${el[2]}', status='true' WHERE nameCar='${name}' AND name='${el[1]}'`;
+                    if (mas.includes(el[2])) {
+                        const sql = `UPDATE params SET idw='${idw}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='true' WHERE idw='${idw}' AND name='${el[2]}'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err);
                         });
                         return
                     }
                     if (!mas.includes(el[0])) {
-                        const sql = `INSERT INTO params SET nameCar='${name}',name='${el[1]}', value='${el[2]}', status='new'`;
+                        const sql = `INSERT INTO params SET idw='${idw}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='new'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err);
                         });
@@ -148,7 +130,7 @@ function postParametrs(name, param) {
                 })
                 mas.forEach(el => {
                     if (!paramName.includes(el)) {
-                        const sql = `UPDATE params SET  status='false' WHERE nameCar='${name}' AND name='${el}'`;
+                        const sql = `UPDATE params SET  status='false' WHERE idw='${idw}' AND name='${el[2]}'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err);
                         });
@@ -161,9 +143,7 @@ function postParametrs(name, param) {
         console.log(e)
     }
 }
-
 function getMainInfo(name, res) {
-    // console.log('частота запросов' + new Date())
     const flags = 1 + 1026
     const prms = {
         "spec": {
@@ -191,19 +171,15 @@ function getMainInfo(name, res) {
                             const geoY = el.pos.y
                             res.json({ geoX, geoY })
                         }
-
                     }
                 })
-
             }
-
         })
 }
 const convert = (ob) => {
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
     return Array.from(uniq).map(e => JSON.parse(e));
 }
-
 function zaprosSpisokb(name) {
     const massItog = [];
     name.forEach(itey => {
@@ -219,7 +195,7 @@ function zaprosSpisokb(name) {
                     const params = results
                     const modelUniqValues = convert(params)
                     try {
-                        const selectBase = `SELECT name, value FROM params WHERE nameCar='${nameCar}'`
+                        const selectBase = `SELECT name, value FROM params WHERE idw='${itey[1]}'`
                         connection.query(selectBase, function (err, results) {
                             if (err) console.log(err);
                             const data = results
@@ -271,8 +247,6 @@ function zaprosSpisokb(name) {
     })
     setTimeout(proverka, 1000, massItog)
 }
-
-
 function createDate() {
     let today = new Date();
     const year = today.getFullYear();
@@ -398,7 +372,6 @@ async function alarmBase(data, tyres, alarm) {
     dannie.push(alarm)
     dannie.unshift(id)
     const value = [dannie];
-    console.log(value)
     try {
         const sqls = `INSERT INTO alarms (idw, data, name, senspressure, bar,
                             temp, alarm) VALUES?`;
@@ -410,9 +383,6 @@ async function alarmBase(data, tyres, alarm) {
         console.log(e)
     }
 }
-
-
-
 function mail(value, mess) {
     // console.log(value)
     // console.log('ватсап')

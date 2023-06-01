@@ -87,8 +87,9 @@ module.exports.tarirSave = (req, res) => {
     }
 }
 module.exports.tarirView = (req, res) => {
+    const idw = req.body.idw
     try {
-        const postModel = `SELECT * FROM tarir WHERE nameCar='${req.body.activePost}'`
+        const postModel = `SELECT * FROM tarir WHERE idx='${idw}'`
         connection.query(postModel, function (err, results) {
             if (err) console.log(err);
             res.json({ result: results })
@@ -287,9 +288,9 @@ module.exports.barView = (req, res) => {
     }
 }
 module.exports.barViewAll = (req, res) => {
-    const nameCar = req.body.car.replace(/\s+/g, '')
+    const idw = req.body.el
     try {
-        const selectBase = `SELECT * FROM ifBar WHERE nameCar='${nameCar}'`
+        const selectBase = `SELECT * FROM ifBar WHERE idw='${idw}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err)
             res.json({ status: 200, result: results, message: req.body.car })
@@ -398,11 +399,12 @@ module.exports.iconWindows = (req, res) => {
     }
 }
 module.exports.iconFind = (req, res) => {
+    const idw = req.body.idw
     try {
-        const postModel = `SELECT params, coef, icons FROM icon WHERE nameCar='${req.body.activePost}'`
+        const postModel = `SELECT params, coef, icons FROM icon WHERE idw='${idw}'`
         connection.query(postModel, function (err, results) {
             if (err) console.log(err)
-            res.json({ status: 200, result: results, name: req.body.activePost })
+            res.json({ status: 200, result: results, name: idw })
         })
     }
     catch (e) {
@@ -637,9 +639,9 @@ module.exports.tyresView = (req, res) => {
     }
 }
 module.exports.listModel = (req, res) => {
-    const nameCar = req.body.car.replace(/\s+/g, '')
+    const idw = req.body.el
     try {
-        const selectBase = `SELECT osi, trailer,tyres FROM model WHERE nameCar='${nameCar}'`
+        const selectBase = `SELECT osi, trailer,tyres FROM model WHERE idw='${idw}'`
         connection.query(selectBase, function (err, results) {
             console.log(err)
             res.json({ status: 200, result: results, message: req.body.car })
@@ -650,9 +652,9 @@ module.exports.listModel = (req, res) => {
     }
 }
 module.exports.listTyres = (req, res) => {
-    const nameCar = req.body.car.replace(/\s+/g, '')
+    const idw = req.body.el
     try {
-        const selectBase = `SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE nameCar='${nameCar}'`
+        const selectBase = `SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE idw='${idw}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err)
             if (results === undefined) {

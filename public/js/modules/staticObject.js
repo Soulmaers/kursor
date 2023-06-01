@@ -158,12 +158,13 @@ buttOnTarirDisk.addEventListener('click', async () => {
 export async function tarirView() {
     const active = document.querySelector('.color')
     const activePost = active.children[0].textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost }))
+        body: (JSON.stringify({ idw }))
     }
     const res = await fetch('/api/tarirView', param)
     const response = await res.json()
@@ -179,16 +180,10 @@ export async function tarirView() {
         point.push(Number(el.litrs))
         points.push(point)
     })
-    const params = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ activePost }))
-    }
-    const argy = await fetch('api/wialon', params)
+
+    const argy = await fetch('api/wialon', param)
     const arg = await argy.json()
-    const parFind = await fetch('api/iconFind', params)
+    const parFind = await fetch('api/iconFind', param)
     const paramssyFind = await parFind.json()
     arg.values.forEach(el => {
         paramssyFind.result.forEach(it => {
@@ -352,6 +347,7 @@ export function grafikPoly(points, degree, coeffs) {
 }
 
 function grafGradient(arr, znak, color) {
+    console.log(arr, znak, color)
     const foto = document.querySelector('.foto')
     const shkalas = document.querySelector('.shkala')
     if (shkalas) {
@@ -406,8 +402,9 @@ function grafGradient(arr, znak, color) {
         })
         .attr("font-size", "12px")
         .attr("font-family", "sans-serif")
-        .attr("fill", "black")
+        .attr("fill", "white")
         .attr("text-anchor", "middle")
+        .attr("transform", "translate(0, 100)")
     // Создание оси y
     var yAxis = d3.axisLeft(yScale);
     svg.append("g")

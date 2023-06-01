@@ -1,5 +1,4 @@
 
-
 import { loadParamsViewList, conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
 
@@ -18,20 +17,17 @@ export function init(kluch) {
             //  console.log('после')
         });
 };
-
 const wrapContaint = document.querySelector('.wrapper_containt')
 const cont = document.createElement('div')
 cont.classList.add('container2')
 wrapContaint.appendChild(cont);
 export let dann;
 
-
 export function zapros() {
     const tiresActiv = document.querySelector('.tiresActiv')
     if (tiresActiv) {
         tiresActiv.remove()
     }
-    //  console.log('работаем запрос')
     const flagsT = 1 + 1024// + 1024//4096
     const prmsT = {
         "spec": {
@@ -51,7 +47,6 @@ export function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
-            //  console.log(result)
             await result
             const aLLmassObject = [];
             let Allcountr = 0;
@@ -89,28 +84,21 @@ export function zapros() {
                             if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
                                 massObject.push(prob)
                             }
-                            //   console.log(massObject)
                             countr++
                             if (countr === nameObject.length) {
                                 massObject.forEach(e => {
                                     e.group = nameGroup
-                                    //  e.id = el
                                 })
                                 aLLmassObject.push(massObject)
                             }
                             if (aLLmassObject.length === Allcountr) {
                                 aLLmassObject.reverse()
-                                //   console.log(aLLmassObject)
                                 conturTest(aLLmassObject)
-                                // const nameCarCheck = test.map(elem => elem[0].message)
-                                // checkCreate(nameCarCheck)
                             }
                         })
                 })
             });
         })
-
-
     const prmss = {
         "spec": [{
             "type": 'id',
@@ -126,9 +114,6 @@ export function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
-            //  console.log(result)
-
-
         });
 
 
@@ -151,12 +136,11 @@ export function zapros() {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
-            // console.log(result)
             const arr1 = Object.values(result);
             const arrCar = arr1[5];
             dann = arrCar
             const test = await Promise.all(arrCar.map(el => {
-                return loadParamsViewList(el.nm) //запрос в базу с массивом имен машин за готовыми моделями
+                return loadParamsViewList(el.nm, el.id) //запрос в базу с массивом имен машин за готовыми моделями
             })
             )
             const nameCarCheck = test.map(elem => elem[0].message)

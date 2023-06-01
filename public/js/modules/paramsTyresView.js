@@ -161,6 +161,7 @@ export async function viewPokasateli() {
     const active = document.querySelectorAll('.color')
     activePost = active[0].children[0].textContent.replace(/\s+/g, '')
     const idw = document.querySelector('.color').id
+    console.log(idw)
     const param = {
         method: "POST",
         headers: {
@@ -178,6 +179,7 @@ export async function viewPokasateli() {
         if (prev.name < next.name) return -1;
         if (prev.name < next.name) return 1;
     })
+    console.log(data.values)
     view(data.values)
     viewConfigurator(data.values, params.values, osi.values)
 }

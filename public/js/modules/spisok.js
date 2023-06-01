@@ -7,12 +7,13 @@ import { approximateValue } from './staticObject.js'
 import { removeElem, removeArrElem } from './helpersFunc.js'
 const testov = [];
 export async function loadParamsViewList(car, el) {
+    console.log(el)
     const params = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ car }))
+        body: (JSON.stringify({ car, el }))
     }
     const mod = await fetch('api/listModel', params)
     const model = await mod.json()
@@ -25,7 +26,6 @@ export async function loadParamsViewList(car, el) {
     testov.push([model, models, data, osi])
     return [model, models, data, osi, el]
 }
-
 export function conturTest(testov) {
     const groups = document.querySelectorAll('.groups')
     if (groups) {
@@ -38,6 +38,7 @@ export function conturTest(testov) {
         removeArrElem(listItem)
     }
     testov.forEach(el => {
+        console.log(el)
         if (el.length !== 0) {
             const wrapList = document.querySelector('.wrapList')
             const group = document.createElement('div')
@@ -109,7 +110,7 @@ export function conturTest(testov) {
                     const progressBarText = document.createElement('div')
                     progressBarText.classList.add('progressBarText')
                     progress.appendChild(progressBarText)
-                    fnStaticObjectOil(nameCar)
+                    fnStaticObjectOil(elem[4])
                 }
                 if (elem[0].result) {
                     const modelUniq = convert(elem[0].result)
@@ -172,15 +173,16 @@ export function conturTest(testov) {
     zaprosSpisok()
 }
 
-async function fnStaticObjectOil(nameCar) {
-    const activePost = nameCar
+async function fnStaticObjectOil(idw) {
+    console.log('ойл?')
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost }))
+        body: (JSON.stringify({ idw }))
     }
+
     const res = await fetch('/api/tarirView', param)
     const response = await res.json()
     const x = [];
@@ -194,17 +196,12 @@ async function fnStaticObjectOil(nameCar) {
         point.push(Number(el.litrs))
         points.push(point)
     })
-    const params = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ activePost }))
-    }
-    const argy = await fetch('api/wialon', params)
+    console.log('ойл2')
+    const argy = await fetch('api/wialon', param)
     const arg = await argy.json()
-    const parFind = await fetch('api/iconFind', params)
+    const parFind = await fetch('api/iconFind', param)
     const paramssyFind = await parFind.json()
+    console.log(paramssyFind)
     arg.values.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
@@ -219,6 +216,7 @@ async function fnStaticObjectOil(nameCar) {
                     }
                     const approximated = approximateValue(val, x, y, degree);
                     const znak = (approximated[0] * 0.9987).toFixed(0)
+                    console.log(znak)
                     const progressBarText = document.querySelector('.progressBarText')
                     const progressBar = document.querySelector('.progressBar')
                     const value = znak * 100 / y[y.length - 1]
@@ -365,13 +363,13 @@ let countt = 0;
 export function zaprosSpisok() {
     const list = document.querySelectorAll('.listItem')
     list.forEach(async el => {
-        const car = el.children[0].textContent
+        const idw = el.id
         const param = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ car }))
+            body: (JSON.stringify({ idw }))
         }
         const par = await fetch('api/listTyres', param)
         const params = await par.json()
