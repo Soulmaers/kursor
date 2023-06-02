@@ -3229,8 +3229,11 @@ input[type="date"] {
   background: #fff;
   border: 1px solid gray;
   z-index: 10;
-  position: relative;
+  position: absolute;
+  top: 500px;
   border: 1px solid lightgray;
+
+
 }
 
 .sensors {
