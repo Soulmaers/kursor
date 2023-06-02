@@ -137,7 +137,7 @@ async function grafikStartPress(times, datar) {
         .append('div')
         .attr('class', 'chart');
     const margin = { top: 100, right: 10, bottom: 30, left: 10 },
-        width = 610 - margin.left - margin.right,
+        width = 650 - margin.left - margin.right,
         height = 50;
     const count = charts.size()
     let he;
@@ -660,15 +660,10 @@ async function grafikStartPress(times, datar) {
         for (let i = 0; i < chart.length; i++) {
             objTool[i].value === -0.5 ? dav = '-' : dav = objTool[i].value
             objTool[i].tvalue === -0.5 ? temp = '-' : temp = objTool[i].tvalue
-            chart[i].children[2].textContent = `${dav} Бар/${temp} С°/${objTool[i].speed} км.ч`
+            chart[i].children[2].textContent = `${dav} Бар/${temp} С°`
         }
     }
 }
-
-
-
-
-
 function timeConvert(d) {
     const date = new Date(d);
     const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",

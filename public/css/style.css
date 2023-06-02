@@ -3213,6 +3213,14 @@ input[type="date"] {
   font-size: 0.8rem;
 }
 
+
+.testt {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
 .controll {
   width: 500px;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
@@ -3223,8 +3231,6 @@ input[type="date"] {
   z-index: 10;
   position: relative;
   border: 1px solid lightgray;
-
-
 }
 
 .sensors {

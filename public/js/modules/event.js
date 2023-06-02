@@ -11,6 +11,10 @@ import { changeBase } from './configurator.js'
 import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.js'
 import { dataInput, dataSelect, times } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
+import { DraggableContainer } from '../class/Dragdown.js'
+
+
+
 
 
 const auth = document.querySelector('.auth')
@@ -160,6 +164,11 @@ if (configs) {
         card.forEach(el => {
             el.classList.remove('acto')
         })
+        // Создаем экземпляр класса и передаем элемент, который необходимо перемещать
+        const control = document.querySelector('.controll')
+        const draggable = new DraggableContainer(control);
+
+
         const controll = document.querySelector('.container_left')
         const config = document.querySelector('.config')
         const clear = document.querySelector('.clear')
