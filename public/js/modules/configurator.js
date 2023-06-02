@@ -102,27 +102,61 @@ function os(arr) {
             centerOs.forEach(el => {
                 if (el.classList.contains('pricep')) {
                     const cont = document.querySelector('.cont')
-                    const gosNumber = document.querySelector('.gosNumber')
-                    if (!gosNumber) {
+                    const nomerP = document.querySelector('.nomerP')
+                    if (!nomerP) {
                         console.log(cont.firstElementChild.children[1])
+                        const nomerP = document.createElement('div')
+                        nomerP.classList.add('nomerP')
+                        cont.lastElementChild.children[1].appendChild(nomerP)
+                        nomerP.style.top = '65px'
+                        nomerP.style.left = '42px'
+                        cont.lastElementChild.children[1].style.position = 'relative'
+                        nomerP.style.display = 'flex'
                         const gosNumber = document.createElement('input')
                         gosNumber.classList.add('gosNumber')
-                        gosNumber.setAttribute('placeholder', 'A 000 AA 00')
-                        cont.lastElementChild.children[1].appendChild(gosNumber)
-                        cont.lastElementChild.children[1].style.position = 'relative'
-                        gosNumber.style.display = 'flex'
+                        gosNumber.setAttribute('placeholder', 'A 000 AA')
+                        gosNumber.maxLength = 6;
+                        nomerP.appendChild(gosNumber)
+                        const flagss = document.createElement('div')
+                        flagss.classList.add('flagss')
+                        nomerP.appendChild(flagss)
+                        const gosNumber1 = document.createElement('input')
+                        gosNumber1.classList.add('gosNumber1')
+                        gosNumber1.setAttribute('placeholder', '00')
+                        gosNumber1.maxLength = 3;
+                        flagss.appendChild(gosNumber1)
+                        const flag = document.createElement('div')
+                        flag.classList.add('flagy')
+                        flagss.appendChild(flag)
                     }
                 }
                 if (el.classList.contains('tagach')) {
                     const cont0 = document.querySelector('.cont0')
-                    const gosNumberCar = document.querySelector('.gosNumberCar')
-                    if (!gosNumberCar) {
+                    const nomerV = document.querySelector('.nomerV')
+                    if (!nomerV) {
+                        const nomerV = document.createElement('div')
+                        nomerV.classList.add('nomerV')
+                        cont0.children[0].children[1].appendChild(nomerV)
+                        nomerV.style.bottom = '65px'
+                        nomerV.style.left = '42px'
+                        cont0.children[0].children[1].style.position = 'relative'
+                        nomerV.style.display = 'flex'
                         const gosNumberCar = document.createElement('input')
                         gosNumberCar.classList.add('gosNumberCar')
-                        gosNumberCar.setAttribute('placeholder', 'A 000 AA 00')
-                        console.log(cont0)
-                        cont0.children[0].children[1].prepend(gosNumberCar)
-                        cont0.children[0].children[1].style.position = 'relative'
+                        gosNumberCar.setAttribute('placeholder', 'A 000 AA')
+                        gosNumberCar.maxLength = 6;
+                        nomerV.appendChild(gosNumberCar)
+                        const flagss = document.createElement('div')
+                        flagss.classList.add('flagss')
+                        nomerV.appendChild(flagss)
+                        const gosNumberCar1 = document.createElement('input')
+                        gosNumberCar1.classList.add('gosNumberCar1')
+                        gosNumberCar1.setAttribute('placeholder', '00')
+                        gosNumberCar1.maxLength = 3;
+                        flagss.appendChild(gosNumberCar1)
+                        const flag = document.createElement('div')
+                        flag.classList.add('flagy')
+                        flagss.appendChild(flag)
                     }
 
                 }
@@ -157,19 +191,25 @@ function os(arr) {
 
 export async function changeBase(massModel, activePost, idw) {
     const go = document.querySelector('.gosNumber')
+    const go1 = document.querySelector('.gosNumber1')
     const goCar = document.querySelector('.gosNumberCar')
+    const goCar1 = document.querySelector('.gosNumberCar1')
     console.log(goCar)
     let gosp;
     let frontGosp;
-    go ? gosp = (document.querySelector('.gosNumber')).value : gosp = ''
-    goCar ? frontGosp = (document.querySelector('.gosNumberCar')).value : frontGosp = ''
-    console.log(gosp, frontGosp)
+    let gosp1;
+    let frontGosp1;
+    go ? gosp = go.value : gosp = ''
+    goCar ? frontGosp = goCar.value : frontGosp = ''
+    go1 ? gosp1 = go1.value : gosp1 = ''
+    goCar1 ? frontGosp1 = goCar1.value : frontGosp1 = ''
+    console.log(gosp, gosp1, frontGosp, frontGosp1)
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ massModel, idw, activePost, gosp, frontGosp }))
+        body: (JSON.stringify({ massModel, idw, activePost, gosp, gosp1, frontGosp, frontGosp1 }))
     }
     const res = await fetch('/api/updateModel', param)
     const response = await res.json()

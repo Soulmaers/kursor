@@ -118,22 +118,59 @@ export async function loadParamsView() {
                 })
                 if (model.values.find(e => e.trailer === 'Тягач')) {
                     const cont1 = document.querySelector('.cont1')
-                    const gosCar = document.createElement('input')
-                    gosCar.classList.add('gosNumberCar')
-                    gosCar.setAttribute('placeholder', 'A 000 AA 00')
-                    cont1.firstElementChild.children[1].prepend(gosCar)
-                    cont1.firstElementChild.children[1].style.position = 'relative'
-                    model.values[0].frontGosp ? gosCar.value = model.values[0].frontGosp : null
+                    const nomerV = document.createElement('div')
+                    nomerV.classList.add('nomerV')
+                    cont1.children[0].children[1].appendChild(nomerV)
+                    nomerV.style.bottom = '65px'
+                    nomerV.style.left = '42px'
+                    cont1.children[0].children[1].style.position = 'relative'
+                    nomerV.style.display = 'flex'
+                    const gosNumberCar = document.createElement('input')
+                    gosNumberCar.classList.add('gosNumberCar')
+                    gosNumberCar.setAttribute('placeholder', 'A 000 AA')
+                    gosNumberCar.maxLength = 6;
+                    nomerV.appendChild(gosNumberCar)
+                    const flagss = document.createElement('div')
+                    flagss.classList.add('flagss')
+                    nomerV.appendChild(flagss)
+                    const gosNumberCar1 = document.createElement('input')
+                    gosNumberCar1.classList.add('gosNumberCar1')
+                    gosNumberCar1.setAttribute('placeholder', '00')
+                    gosNumberCar1.maxLength = 3;
+                    flagss.appendChild(gosNumberCar1)
+                    const flag = document.createElement('div')
+                    flag.classList.add('flagy')
+                    flagss.appendChild(flag)
+                    model.values[0].frontGosp ? gosNumberCar.value = model.values[0].frontGosp : null
+                    model.values[0].frontGosp1 ? gosNumberCar1.value = model.values[0].frontGosp1 : null
                 }
                 if (model.values.find(e => e.trailer === 'Прицеп')) {
                     const cont = document.querySelector('.cont')
-                    const gos = document.createElement('input')
-                    gos.classList.add('gosNumber')
-                    gos.setAttribute('placeholder', 'A 000 AA 00')
-                    cont.lastElementChild.children[1].appendChild(gos)
+                    const nomerP = document.createElement('div')
+                    nomerP.classList.add('nomerP')
+                    cont.lastElementChild.children[1].appendChild(nomerP)
+                    nomerP.style.top = '65px'
+                    nomerP.style.left = '42px'
                     cont.lastElementChild.children[1].style.position = 'relative'
-                    model.values[0].gosp ? gos.value = model.values[0].gosp : null
-
+                    nomerP.style.display = 'flex'
+                    const gosNumber = document.createElement('input')
+                    gosNumber.classList.add('gosNumber')
+                    gosNumber.setAttribute('placeholder', 'A 000 AA')
+                    gosNumber.maxLength = 6;
+                    nomerP.appendChild(gosNumber)
+                    const flagss = document.createElement('div')
+                    flagss.classList.add('flagss')
+                    nomerP.appendChild(flagss)
+                    const gosNumber1 = document.createElement('input')
+                    gosNumber1.classList.add('gosNumber1')
+                    gosNumber1.setAttribute('placeholder', '00')
+                    gosNumber1.maxLength = 3;
+                    flagss.appendChild(gosNumber1)
+                    const flag = document.createElement('div')
+                    flag.classList.add('flagy')
+                    flagss.appendChild(flag)
+                    model.values[0].gosp ? gosNumber.value = model.values[0].gosp : null
+                    model.values[0].gosp1 ? gosNumber1.value = model.values[0].gosp1 : null
                 }
             }
         })

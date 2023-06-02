@@ -158,9 +158,12 @@ module.exports.updateModel = (req, res) => {
     const nameCar = req.body.activePost
     massiv.forEach(el => {
         el.push(req.body.gosp)
+        el.push(req.body.gosp1)
+        el.push(req.body.frontGosp)
+        el.push(req.body.frontGosp1)
         el.unshift(nameCar)
         el.unshift(idw)
-        el.push(req.body.frontGosp)
+
         try {
             const selectBase = `SELECT osi FROM model WHERE idw='${el[0]}' AND osi='${el[2]}'`
             connection.query(selectBase, function (err, results) {
@@ -168,7 +171,7 @@ module.exports.updateModel = (req, res) => {
                     console.log(err)
                 };
                 if (results.length === 0) {
-                    const selectBase = `INSERT INTO model(idw, nameCar, osi, trailer, tyres, gosp, frontGosp) VALUES?`
+                    const selectBase = `INSERT INTO model(idw, nameCar, osi, trailer, tyres, gosp, gosp1, frontGosp, frontGosp1) VALUES?`
                     connection.query(selectBase, [[el]], function (err, results) {
                         if (err) {
                             console.log(err)
@@ -176,7 +179,7 @@ module.exports.updateModel = (req, res) => {
                     })
                 }
                 if (results.length > 0) {
-                    const postModel = `UPDATE model SET idw='${el[0]}', nameCar='${el[1]}',  osi='${el[2]}', trailer='${el[3]}', tyres='${el[4]}',gosp='${req.body.gosp}',frontGosp='${req.body.frontGosp}' WHERE idw='${el[0]}' AND osi='${el[2]}'`
+                    const postModel = `UPDATE model SET idw='${el[0]}', nameCar='${el[1]}',  osi='${el[2]}', trailer='${el[3]}', tyres='${el[4]}',gosp='${req.body.gosp}',gosp1='${req.body.gosp1}', frontGosp='${req.body.frontGosp}', frontGosp1='${req.body.frontGosp1}' WHERE idw='${el[0]}' AND osi='${el[2]}'`
                     connection.query(postModel, function (err, results) {
                         if (err) {
                             console.log(err)
@@ -606,7 +609,7 @@ module.exports.techViewAll = (req, res) => {
 module.exports.modelView = (req, res) => {
     const idw = req.body.idw
     try {
-        const selectBase = `SELECT idw, nameCar, osi, trailer,tyres, gosp, frontGosp FROM model WHERE  idw ='${idw}'`
+        const selectBase = `SELECT idw, nameCar, osi, trailer,tyres, gosp, gosp1, frontGosp, frontGosp1 FROM model WHERE  idw ='${idw}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err)
             if (results === undefined) {
