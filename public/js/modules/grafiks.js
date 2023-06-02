@@ -39,6 +39,7 @@ export async function fnTime(t1, t2) {
           noGraf.style.display = 'none'
           const global = [];
           const speed = []
+          console.log(result)
           result.messages.forEach(el => {
             const timestamp = el.t;
             const date = new Date(timestamp * 1000);

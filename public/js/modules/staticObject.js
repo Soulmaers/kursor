@@ -49,6 +49,21 @@ function createListFnview(e) {
                         <div class="wrapTarir"><input class="dut" placeholder="ДУТ"><input class="litr" placeholder="литры"></div>
                     </div>`
     }
+
+    const role = document.querySelectorAll('.log')[0].textContent
+    const dut = document.querySelectorAll('.dut')
+    const litr = document.querySelectorAll('.litr')
+    const btnLow = document.querySelector('.btnLow')
+    console.log(dut)
+    if (role !== 'Администратор') {
+        btnLow.style.display = 'none'
+        dut.forEach(e => {
+            e.disabled = true
+        })
+        litr.forEach(e => {
+            e.disabled = true
+        })
+    }
     const wrapTarir = document.querySelectorAll('.wrapTarir')
     e.forEach((el, index) => {
         wrapTarir[index].children[0].value = el.DUT

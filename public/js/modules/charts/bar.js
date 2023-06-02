@@ -82,6 +82,7 @@ async function grafikStartPress(times, datar) {
     const grafics = document.querySelector('.grafics')
     graf.classList.add('infoGraf')
     grafics.appendChild(graf)
+    console.log(datar)
     const newData = datar.map(el => {
         return {
             ...el,

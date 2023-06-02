@@ -265,7 +265,6 @@ export async function viewConfigurator(arg, params, osi) {
                             else {
                                 e.parentElement.style.border = '1px solid #fff';
                             }
-
                         }
                         if (el.name === item.temp) {
                             tiresLink.forEach(e => {

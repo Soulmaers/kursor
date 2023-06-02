@@ -37,6 +37,7 @@ function dis(one) {
         el.disabled = true
     });
 
+
 }
 liCreate()
 
