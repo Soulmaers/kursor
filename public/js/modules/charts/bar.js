@@ -82,7 +82,6 @@ async function grafikStartPress(times, datar) {
     const grafics = document.querySelector('.grafics')
     graf.classList.add('infoGraf')
     grafics.appendChild(graf)
-    console.log(datar)
     const newData = datar.map(el => {
         return {
             ...el,
@@ -137,8 +136,8 @@ async function grafikStartPress(times, datar) {
         .enter()
         .append('div')
         .attr('class', 'chart');
-    const margin = { top: 100, right: 10, bottom: 30, left: 30 },
-        width = 800 - margin.left - margin.right,
+    const margin = { top: 100, right: 10, bottom: 30, left: 10 },
+        width = 610 - margin.left - margin.right,
         height = 50;
     const count = charts.size()
     let he;
@@ -263,6 +262,10 @@ async function grafikStartPress(times, datar) {
             he = height + 30
             pad = 0
         }
+        chartContainer.append('div')
+            .attr('class', 'tooly')
+
+
         // задаем x-шкалу
         const x = d3.scaleTime()
             .domain(d3.extent(data.val, (d) => new Date(d.dates)))
@@ -543,6 +546,12 @@ async function grafikStartPress(times, datar) {
             d = x0 - d0.dates > d1.dates - x0 ? d1 : d0;
             tooltips.style.display = 'block'
             const selectedTime = timeConvert(d.dates)
+            const trigger = d.dates
+            const tooly = document.querySelectorAll('.tooly')
+            tooly.forEach(e => {
+                e.style.display = 'flex'
+            })
+            globalTooltip(trigger)
             // Обновить текст в тултипе
             if (d) {
                 let dav;
@@ -579,7 +588,11 @@ async function grafikStartPress(times, datar) {
         })
             // Добавляем обработчик события mouseout, чтобы скрыть подсказку
             .on("mouseout", function (event, d) {
+                const tooly = document.querySelectorAll('.tooly')
                 tooltips.style.display = 'none'
+                tooly.forEach(e => {
+                    e.style.display = 'none'
+                })
             });
     });
     const legendBar = document.querySelectorAll('.legendBar')
@@ -626,7 +639,35 @@ async function grafikStartPress(times, datar) {
         num++
         new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
     })
+
+    function globalTooltip(time) {
+
+        const objTool = []
+        console.log(time)
+        dat2.forEach(e => {
+            e.val.forEach(el => {
+                if (el.dates === time) {
+
+                    objTool.push({ sens: e.sens, value: el.value, tvalue: el.tvalue, speed: el.speed, time: el.dates })
+                }
+            })
+        })
+        const chart = document.querySelectorAll('.chart')
+        char[char.length - 1].children[2].classList.add('last')
+        console.log(objTool)
+        let dav;
+        let temp;
+        for (let i = 0; i < chart.length; i++) {
+            objTool[i].value === -0.5 ? dav = '-' : dav = objTool[i].value
+            objTool[i].tvalue === -0.5 ? temp = '-' : temp = objTool[i].tvalue
+            chart[i].children[2].textContent = `${dav} Бар/${temp} С°/${objTool[i].speed} км.ч`
+        }
+    }
 }
+
+
+
+
 
 function timeConvert(d) {
     const date = new Date(d);

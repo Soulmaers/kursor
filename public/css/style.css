@@ -2221,6 +2221,12 @@ input[type="date"] {
 
 }
 
+.tooly {
+  width: 140px;
+  height: 25px;
+  font-size: 0.8rem;
+  display: none;
+}
 
 .tooltipGraf {
   border: 1px solid gray;

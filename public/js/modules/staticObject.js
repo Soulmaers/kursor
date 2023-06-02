@@ -54,7 +54,6 @@ function createListFnview(e) {
     const dut = document.querySelectorAll('.dut')
     const litr = document.querySelectorAll('.litr')
     const btnLow = document.querySelector('.btnLow')
-    console.log(dut)
     if (role !== 'Администратор') {
         btnLow.style.display = 'none'
         dut.forEach(e => {
