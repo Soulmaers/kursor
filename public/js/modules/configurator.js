@@ -99,12 +99,12 @@ function os(arr) {
                     arr[arr.length - 1].children[0].style.background = 'gray',//#3333ff'
                     arr[arr.length - 1].classList.add('tagach'))
             const centerOs = document.querySelectorAll('.centerOs')
+            console.log(centerOs)
             centerOs.forEach(el => {
                 if (el.classList.contains('pricep')) {
                     const cont = document.querySelector('.cont')
                     const nomerP = document.querySelector('.nomerP')
                     if (!nomerP) {
-                        console.log(cont.firstElementChild.children[1])
                         const nomerP = document.createElement('div')
                         nomerP.classList.add('nomerP')
                         cont.lastElementChild.children[1].appendChild(nomerP)

@@ -396,7 +396,7 @@ export const divClear = (arr) => {
 }
 export const pricep = (elem) => {
     const cont = document.querySelector('.cont')
-    cont.append(elem.parentNode)
+    cont.prepend(elem.parentNode)
     cont.style.marginTop = '72px'
     cont.style.border = '2px solid darkblue'
     cont.style.padding = '5px'
