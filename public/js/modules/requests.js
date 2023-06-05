@@ -236,7 +236,7 @@ export function viewTech(id) {
     rad[0].checked = true
     let activePost;
     const active = document.querySelectorAll('.color')
-    const idw = document.querySelectorAll('.color').id
+    const idw = document.querySelector('.color').id
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.link_menu')[0]
         activePost = listItem.textContent.replace(/\s+/g, '')
@@ -254,6 +254,7 @@ export function viewTech(id) {
         .then((res) => res.json())
         .then(res => {
             const result = res.values[res.values.length - 1]
+            console.log(result)
             const keys = [];
             if (result) {
                 for (let key in result) {

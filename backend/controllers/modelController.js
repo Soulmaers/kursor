@@ -584,6 +584,7 @@ module.exports.techView = (req, res) => {
         maxMM FROM tyresBase WHERE idw='${req.body.idw}' AND idTyres='${count}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err)
+            console.log(results)
             response.status(200, results, '', res)
         })
     }

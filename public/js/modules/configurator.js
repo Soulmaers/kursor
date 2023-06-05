@@ -48,11 +48,8 @@ export function select() {
                 tiresD.classList.add('tiresD')
                 const tiresT = document.createElement('div');
                 tiresT.classList.add('tiresT')
-                const place = document.createElement('div');
-                place.classList.add('place')
                 link.appendChild(tiresD);
                 link.appendChild(tiresT);
-                link.appendChild(place);
             })
             modul() //запоминаем последнюю выбранную ось
         })
