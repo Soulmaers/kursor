@@ -245,7 +245,7 @@ function zaprosSpisokb(name) {
             console.log(e)
         }
     })
-    setTimeout(proverka, 1000, massItog)
+    //  setTimeout(proverka, 1000, massItog)
 }
 function createDate() {
     let today = new Date();
@@ -290,7 +290,7 @@ function proverka(arr) {
                             alarmBase(data, el, alarm)
                             return
                         }
-                        if (el[2] >= Number(el[4].kvd) && el[3] > 50) {
+                        if (el[2] >= Number(el[4].kvd) && el[3] > -50) {
                             console.log(el + ' ' + 'таблица нет, аларм есть/ Критически высокое давление' + ' ' + time)
                             const data = createDate()
                             alarm = 'Критически высокое давление'
