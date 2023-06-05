@@ -96,6 +96,16 @@ export async function loadParamsView() {
                 viewOs(model.values.length)
                 const osi = document.querySelectorAll('.osi')
                 const centerOs = document.querySelectorAll('.centerOs')
+                model.values.sort((a, b) => {
+                    if (a.osi > b.osi) {
+                        return 1;
+                    } else if (a.osi < b.osi) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
+                console.log(model.values)
                 model.values.forEach(el => {
                     el.trailer == 'Прицеп' ?
                         pricep(centerOs[el.osi - 1])
@@ -199,7 +209,7 @@ export async function loadParamsView() {
 
 function noPricep(elem) {
     const cont1 = document.querySelector('.cont1')
-    cont1.append(elem.parentNode)
+    cont1.appendChild(elem.parentNode)
     cont1.style.border = '2px solid darkblue',
         cont1.style.padding = '5px',
         elem.children[0].style.background = '#000'

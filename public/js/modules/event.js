@@ -357,7 +357,7 @@ export function fnsort(el) {
 
 const buttonTth = document.querySelector('.buttonTth')
 buttonTth.addEventListener('click', pr)
-async function pr() {
+export async function pr() {
     console.log('сохранил')
     const techText = document.querySelectorAll('.tech')
     const formValue = document.querySelectorAll('.formValue')
@@ -392,13 +392,11 @@ async function pr() {
     if (idbaseTyres.textContent !== '') {
         await saveDouble(arrNameColId)
     }
-
-    /*
     const btnShina = document.querySelectorAll('.modals')
     if (btnShina[1].classList.contains('active')) {
         console.log('икс')
         reqProtectorBase()
-    }*/
+    }
     viewTech(tyresActive.id)
 }
 

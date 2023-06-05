@@ -362,13 +362,12 @@ export async function viewOs(counts) {
     container.appendChild(cont2)
     const btnShina = document.querySelectorAll('.modals')
     if (btnShina[1].classList.contains('active')) {
-        console.log('икс')
         styleShinaActive(btnShina[1])
     }
     viewMenuParams()
     modalOs();
 }
-export function styleShinaActive(arg) {
+function styleShinaActive(arg) {
     reqProtectorBase()
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
@@ -397,7 +396,7 @@ export const divClear = (arr) => {
 }
 export const pricep = (elem) => {
     const cont = document.querySelector('.cont')
-    cont.prepend(elem.parentNode)
+    cont.appendChild(elem.parentNode)
     cont.style.marginTop = '72px'
     cont.style.border = '2px solid darkblue'
     cont.style.padding = '5px'
