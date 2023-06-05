@@ -90,7 +90,7 @@ async function grafikStartPress(times, datar) {
     const grafics = document.querySelector('.grafics')
     graf.classList.add('infoGraf')
     grafics.appendChild(graf)
-    // console.log(datar)
+    console.log(datar)
     const newData = datar.map(el => {
         return {
             ...el,
@@ -117,7 +117,7 @@ async function grafikStartPress(times, datar) {
     const gl = times.map(it => {
         return new Date(it)
     })
-    // console.log(global.series)
+    console.log(global.series)
     const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed }) => ({
         sens,
         position,
@@ -653,7 +653,7 @@ async function grafikStartPress(times, datar) {
 
     function globalTooltip(time) {
         const objTool = []
-        console.log(time)
+        //    console.log(time)
         dat2.forEach(e => {
             e.val.forEach(el => {
                 if (el.dates === time) {
@@ -664,7 +664,7 @@ async function grafikStartPress(times, datar) {
         })
         const chart = document.querySelectorAll('.chart')
         char[char.length - 1].children[2].classList.add('last')
-        console.log(objTool)
+        //  console.log(objTool)
         let dav;
         let temp;
         for (let i = 0; i < chart.length; i++) {

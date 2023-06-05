@@ -120,7 +120,7 @@ function postParametrs(name, idw, param) {
                         });
                         return
                     }
-                    if (!mas.includes(el[0])) {
+                    if (!mas.includes(el[2])) {
                         const sql = `INSERT INTO params SET idw='${idw}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='new'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err);
@@ -130,7 +130,7 @@ function postParametrs(name, idw, param) {
                 })
                 mas.forEach(el => {
                     if (!paramName.includes(el)) {
-                        const sql = `UPDATE params SET  status='false' WHERE idw='${idw}' AND name='${el[2]}'`;
+                        const sql = `UPDATE params SET  status='false' WHERE idw='${idw}' AND name='${el}'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err);
                         });
@@ -271,11 +271,10 @@ function proverka(arr) {
         }
         else {
             let alarm;
-            console.log(typeof el[5])
             const sqls1 = `SELECT * FROM alarms WHERE idw=${el[5]} AND senspressure='${el[1]}'`
             connection.query(sqls1, function (err, results) {
                 if (err) console.log(err);
-                console.log(results.length)
+
                 if (results.length === 0) {
                     //  console.log(el[0], el[2], 'таблицу не видит')
                     if (el[6] > 5 && el[3] <= -50) {
@@ -301,7 +300,7 @@ function proverka(arr) {
                             return
                         }
                         else {
-                            console.log(el + ' ' + 'таблицы нет, аларма нет' + ' ' + time)
+                            // console.log(el + ' ' + 'таблицы нет, аларма нет' + ' ' + time)
                             return
                         }
                     }
