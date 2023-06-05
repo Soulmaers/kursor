@@ -65,7 +65,7 @@ export async function datas(t1, t2) {
     console.log(finishArrayData)
     console.log(finishArrayDataT)
     finishArrayData.forEach((el, index) => {
-        el.tvalue = finishArrayDataT[index].value
+        el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
         el.speed = global[1]
     })
     finishArrayData.forEach(e => {
@@ -76,6 +76,7 @@ export async function datas(t1, t2) {
             }
         })
     })
+    //   console.log(finishArrayData)
     grafikStartPress(global[0], finishArrayData)
 }
 
@@ -89,6 +90,7 @@ async function grafikStartPress(times, datar) {
     const grafics = document.querySelector('.grafics')
     graf.classList.add('infoGraf')
     grafics.appendChild(graf)
+    // console.log(datar)
     const newData = datar.map(el => {
         return {
             ...el,
@@ -99,13 +101,13 @@ async function grafikStartPress(times, datar) {
                     return it
                 }
             }),
-            tvalue: el.tvalue.map(it => {
+            tvalue: el.tvalue !== null ? (el.tvalue.map(it => {
                 if (it === -348201.3876 || it === -128 || it === -50 || it === -51) {
                     return -0.5
                 } else {
                     return it
                 }
-            })
+            })) : null
         };
     });
     const global = {
@@ -115,6 +117,7 @@ async function grafikStartPress(times, datar) {
     const gl = times.map(it => {
         return new Date(it)
     })
+    // console.log(global.series)
     const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed }) => ({
         sens,
         position,
@@ -122,7 +125,7 @@ async function grafikStartPress(times, datar) {
         val: value.map((val, i) => ({
             dates: gl[i],
             value: Number(val),
-            tvalue: Number(tvalue[i]),
+            tvalue: tvalue !== null ? Number(tvalue[i]) : null,
             speed: Number(speed[i])
         }))
     }));
@@ -291,10 +294,11 @@ async function grafikStartPress(times, datar) {
             .y0(height)
             .y1(d => y1(d.value))
             .curve(d3.curveStep);
-        const knd = Number(d.bar.knd).toFixed(1)
-        const dvn = Number(d.bar.dvn).toFixed(1)
-        const dnn = Number(d.bar.dnn).toFixed(1)
-        const kvd = Number(d.bar.kvd).toFixed(1)
+        const knd = d.bar !== undefined ? Number(d.bar.knd).toFixed(1) : null
+        const dvn = d.bar !== undefined ? Number(d.bar.dvn).toFixed(1) : null
+        const dnn = d.bar !== undefined ? Number(d.bar.dnn).toFixed(1) : null
+        const kvd = d.bar !== undefined ? Number(d.bar.kvd).toFixed(1) : null
+        console.log(knd)
         const area11 = d3.area()
             .x(d => x(d.dates))
             .y0(height)
@@ -648,7 +652,6 @@ async function grafikStartPress(times, datar) {
     })
 
     function globalTooltip(time) {
-
         const objTool = []
         console.log(time)
         dat2.forEach(e => {
