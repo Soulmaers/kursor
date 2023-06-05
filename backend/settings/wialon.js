@@ -263,6 +263,8 @@ function createDate() {
 }
 function proverka(arr) {
     console.log('проверка')
+    // console.log(arr)
+    const time = new Date()
     arr.forEach(el => {
         if (el[4] === undefined) {
             return
@@ -274,7 +276,7 @@ function proverka(arr) {
                 if (err) console.log(err);
                 if (results.length === 0) {
                     if (el[6] > 5 && el[3] <= -50) {
-                        //   console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
+                        console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
                         const data = createDate()
                         alarm = 'Потеря связи с датчиком'
                         alarmBase(data, el, alarm)
@@ -282,21 +284,21 @@ function proverka(arr) {
                     }
                     else {
                         if (el[2] <= Number(el[4].knd) && el[3] > -50) {
-                            //  console.log(el + ' ' + 'таблица нет, аларм есть/ Критически низкое давление' + ' ' + time)
+                            console.log(el + ' ' + 'таблица нет, аларм есть/ Критически низкое давление' + ' ' + time)
                             const data = createDate()
                             alarm = 'Критически низкое давление'
                             alarmBase(data, el, alarm)
                             return
                         }
                         if (el[2] >= Number(el[4].kvd) && el[3] > 50) {
-                            //  console.log(el + ' ' + 'таблица нет, аларм есть/ Критически высокое давление' + ' ' + time)
+                            console.log(el + ' ' + 'таблица нет, аларм есть/ Критически высокое давление' + ' ' + time)
                             const data = createDate()
                             alarm = 'Критически высокое давление'
                             alarmBase(data, el, alarm)
                             return
                         }
                         else {
-                            //   console.log(el + ' ' + 'таблицы нет, аларма нет' + ' ' + time)
+                            console.log(el + ' ' + 'таблицы нет, аларма нет' + ' ' + time)
                             return
                         }
                     }
