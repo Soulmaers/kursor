@@ -199,7 +199,7 @@ module.exports.savePr = async (req, res) => {
     const value = [Object.values(req.body.arr)]
     if (req.body.arr.dataAdd) {
         try {
-            const sql = `INSERT INTO  tyresBase(dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka,
+            const sql = `INSERT INTO  tyresBase(idw, dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka,
             model,
             psi,
             changeBar,
@@ -218,7 +218,7 @@ module.exports.savePr = async (req, res) => {
     }
     else {
         try {
-            const sql = `INSERT INTO  tyresBase(identificator, nameCar, typeOs, numberOs, idTyres, marka,
+            const sql = `INSERT INTO  tyresBase(idw, identificator, nameCar, typeOs, numberOs, idTyres, marka,
             model,
             psi,
             changeBar,
@@ -512,7 +512,7 @@ module.exports.generate = (req, res) => {
                 res.json({ boolean: false, message: 'Такой ID есть' })
             }
             else {
-                const sql = `INSERT INTO  tyresBase (dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka, model, psi,changeBar,
+                const sql = `INSERT INTO  tyresBase (idw, dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka, model, psi,changeBar,
                     probegNow, dateInstall, probegPass, dateZamer, N1, N2, N3, N4, maxMM) VALUES?`;
                 connection.query(sql, [arr], function (err, results) {
                     if (err) console.log(err)
@@ -526,9 +526,8 @@ module.exports.generate = (req, res) => {
     }
 }
 module.exports.listTyresId = (req, res) => {
-    const nameCar = req.body.activePost
     try {
-        const selectBase = `SELECT * FROM tyresBase WHERE nameCar='${nameCar}'`
+        const selectBase = `SELECT * FROM tyresBase WHERE idw='${req.body.idw}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err)
             res.json({ status: 200, result: results })
@@ -539,9 +538,6 @@ module.exports.listTyresId = (req, res) => {
     }
 }
 module.exports.rotate = (req, res) => {
-    const data1 = req.body.allArray1
-    const data2 = req.body.allArray2
-    const nameCar = req.body.activePost
     const id1 = req.body.relArr[0]
     const id2 = req.body.relArr[1]
     try {
@@ -570,6 +566,7 @@ module.exports.findId = (req, res) => {
 module.exports.techView = (req, res) => {
     const nameCar = req.body.activePost
     const count = req.body.id
+    console.log(req.body.idw)
     try {
         const selectBase = `SELECT marka,
         model,
@@ -584,7 +581,7 @@ module.exports.techView = (req, res) => {
         N2,
         N3,
         N4,
-        maxMM FROM tyresBase WHERE nameCar='${nameCar}' AND idTyres='${count}'`
+        maxMM FROM tyresBase WHERE idw='${req.body.idw}' AND idTyres='${count}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err)
             response.status(200, results, '', res)
@@ -596,7 +593,7 @@ module.exports.techView = (req, res) => {
 }
 module.exports.techViewAll = (req, res) => {
     try {
-        const selectBase = `SELECT * FROM tyresBase WHERE nameCar='${req.body.activePost}'`
+        const selectBase = `SELECT * FROM tyresBase WHERE idw='${req.body.idw}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err)
             response.status(200, results, '', res)

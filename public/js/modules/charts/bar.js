@@ -26,6 +26,10 @@ export async function datas(t1, t2) {
     const sensArr = await fnPar(active)
     const nameArr = await fnParMessage(active)
     const allArrNew = [];
+
+    console.log(global)
+    console.log(sensArr)
+    console.log(nameArr)
     nameArr.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
@@ -49,6 +53,7 @@ export async function datas(t1, t2) {
     })
     const finishArrayData = []
     const finishArrayDataT = []
+
     allArrNew.forEach(e => {
         if (e.params.startsWith('tpms_p')) {
             finishArrayData.push(e)
@@ -57,6 +62,8 @@ export async function datas(t1, t2) {
             finishArrayDataT.push(e)
         }
     })
+    console.log(finishArrayData)
+    console.log(finishArrayDataT)
     finishArrayData.forEach((el, index) => {
         el.tvalue = finishArrayDataT[index].value
         el.speed = global[1]

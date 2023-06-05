@@ -3232,8 +3232,6 @@ input[type="date"] {
   position: absolute;
   top: 500px;
   border: 1px solid lightgray;
-
-
 }
 
 .sensors {
@@ -3248,6 +3246,18 @@ input[type="date"] {
   flex-direction: column;
   width: 100%;
   margin: 20px 0;
+}
+
+.dashPressure {
+  display: flex;
+}
+
+.dashProtector {
+  display: flex;
+}
+
+.boards {
+  display: flex;
 }
 
 .mainConfig {
@@ -4470,7 +4480,6 @@ input[type="text"]:focus {
 .dash_card {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   padding: 10px;
   border: 1px solid gray;
@@ -4816,7 +4825,7 @@ input[type="text"]:focus {
   background-size: cover;
   position: absolute;
   top: 7px;
-  left: 130px;
+  left: 150px;
   cursor: pointer;
   display: none;
 }
@@ -4828,7 +4837,7 @@ input[type="text"]:focus {
   background-size: cover;
   position: absolute;
   top: 7px;
-  left: 130px;
+  left: 150px;
   cursor: pointer;
 
 

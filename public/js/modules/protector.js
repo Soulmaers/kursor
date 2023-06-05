@@ -5,6 +5,7 @@ import { removeArrElem } from './helpersFunc.js'
 export async function reqProtectorBase() {
     let activePost;
     const active = document.querySelectorAll('.color')
+    const idw = document.querySelector('.color').id
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.link_menu')[0]
         activePost = listItem.textContent.replace(/\s+/g, '')
@@ -17,7 +18,7 @@ export async function reqProtectorBase() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ activePost })
+        body: JSON.stringify({ idw })
     })
     const dannie = await res.json();
     if (dannie.values.length == 0) {

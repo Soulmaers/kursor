@@ -28,6 +28,7 @@ export async function reqBaseId() {
     }
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     const formValue = document.querySelectorAll('.formValue')
     const tyresActive = document.querySelector('.tiresActiv')
     const inputMM = document.querySelector('.maxMMM')
@@ -37,6 +38,7 @@ export async function reqBaseId() {
     const arrNameColId = [];
     const pr = Array.from(formValue)
     const maxMM = pr.pop()
+    arrNameColId.push(idw)
     arrNameColId.push(createDate(new Date))
     arrNameColId.push(ide)
     arrNameColId.push(activePost)
@@ -111,6 +113,7 @@ export async function findId() {
 export async function findTyresInstall() {
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     const tyres = document.querySelectorAll('.tires_link')
     const tyresId = [];
     tyres.forEach(el => {
@@ -121,7 +124,7 @@ export async function findTyresInstall() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ activePost, tyresId }))
+        body: (JSON.stringify({ activePost, tyresId, idw }))
     }
     const par = await fetch('api/listTyresId', param)
     const params = await par.json()

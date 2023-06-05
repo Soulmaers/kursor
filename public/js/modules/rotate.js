@@ -32,6 +32,7 @@ export function rotate() {
 export function zbor(rotates) {
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     const messaga = document.querySelector('.messageId')
     const relArr = [];
     rotates.length < 2 ? (messaga.textContent = 'Выберите второе колесо!', messaga.style.color = 'red', setTimeout(() => messaga.textContent = '', 3000)) : null
@@ -55,18 +56,18 @@ export function zbor(rotates) {
     allArray1.push(val1)
     allArray2.push(val2)
     console.log(allArray1, allArray2)
-    updateRotate(relArr, allArray1, allArray2, activePost)
+    updateRotate(relArr, allArray1, allArray2, activePost, idw)
 }
 
 
-async function updateRotate(relArr, allArray1, allArray2, activePost) {
+async function updateRotate(relArr, allArray1, allArray2, activePost, idw) {
 
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ relArr, allArray1, allArray2, activePost }))
+        body: (JSON.stringify({ relArr, allArray1, allArray2, activePost, idw }))
 
     }
     const res = await fetch('/api/rotate', param)

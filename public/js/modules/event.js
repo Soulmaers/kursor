@@ -12,6 +12,7 @@ import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.
 import { dataInput, dataSelect, times } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
+import { protDash, dashViewProtector } from './charts/protek.js'
 
 
 
@@ -87,8 +88,11 @@ btnDash.addEventListener('click', () => {
     sections.style.display = 'none'
     main.style.display = 'none'
     dashView()
+    dashViewProtector()
     getDash()
+    protDash()
     setInterval(getDash, 10000)
+
 });
 const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', mainblock)
@@ -364,10 +368,12 @@ buttonTth.addEventListener('click', async () => {
     })
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
+    const idw = document.querySelector('.color').id
     tyresActive.closest('.osi').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
     const pr = Array.from(formValue)
     const maxMM = pr.pop()
     const idbaseTyres = document.querySelector('.idbaseTyres')
+    arrNameColId.push(idw)
     arrNameColId.push(idbaseTyres.textContent)
     arrNameColId.push(activePost)
     arrNameColId.push(nameOs)

@@ -51,12 +51,3 @@ export class DraggableContainer {
         this.container.removeEventListener('mousemove', this.drag);
     }
 }
-/*
-const body = document.querySelector('.wrapperFull')
-const test = document.createElement('div')
-test.classList.add('testt')
-test.style.width = '100px'
-test.style.height = '100px'
-test.style.border = '1px solid green'
-body.appendChild(test)
-new DraggableContainer(test);*/

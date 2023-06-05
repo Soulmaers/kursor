@@ -236,6 +236,7 @@ export function viewTech(id) {
     rad[0].checked = true
     let activePost;
     const active = document.querySelectorAll('.color')
+    const idw = document.querySelectorAll('.color').id
     if (active[0] == undefined) {
         const listItem = document.querySelectorAll('.link_menu')[0]
         activePost = listItem.textContent.replace(/\s+/g, '')
@@ -248,7 +249,7 @@ export function viewTech(id) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, activePost })
+        body: JSON.stringify({ id, activePost, idw })
     })
         .then((res) => res.json())
         .then(res => {
@@ -332,6 +333,9 @@ export function viewTech(id) {
         }
         )
 }
+
+
+/*
 export function loadParamsViewShina() {
     const titleCar = document.querySelector('.title_two')
     let activePost;
@@ -382,5 +386,5 @@ export function loadParamsViewShina() {
                 console.log('база пустая')
             }
         })
-}
+}*/
 
