@@ -44,7 +44,7 @@ export async function oil(t1, t2) {
     const data = object.time.map((t, i) => ({
         time: t,
         oil: Number(Number(object.left[i]).toFixed(0)),
-        pwr: Number(Number(object.right[i]).toFixed(0))
+        pwr: object.right ? Number(Number(object.right[i]).toFixed(0)) : null
     }))
     console.log(data)
     const grafOld = document.querySelector('.infoGraf')

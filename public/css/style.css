@@ -1299,19 +1299,18 @@ div.spoyler {
 
 .gosNumberCar {
   font-weight: bold;
-  width: 80px;
-  padding: 5px 5px;
+  width: 60px;
   text-align: center;
   box-sizing: border-box;
   border: none;
-  border-right: 0.5px solid black;
+  border-right: 0.5px solid gray;
+  font-size: 0.9rem;
 
 }
 
 .gosNumberCar1 {
   font-weight: bold;
-  width: 40px;
-  padding: 2px;
+  width: 25px;
   text-align: center;
   box-sizing: border-box;
   border: none;
@@ -1322,19 +1321,18 @@ div.spoyler {
 
 .gosNumber {
   font-weight: bold;
-  width: 80px;
-  padding: 5px 5px;
+  width: 60px;
   text-align: center;
   box-sizing: border-box;
   border: none;
   border-right: 0.5px solid black;
+  font-size: 0.9rem;
 
 }
 
 .gosNumber1 {
   font-weight: bold;
-  width: 40px;
-  padding: 2px;
+  width: 25px;
   text-align: center;
   box-sizing: border-box;
   border: none;
@@ -1345,7 +1343,7 @@ div.spoyler {
 
 .nomerP {
   display: flex;
-  width: 120px;
+  width: 85px;
   position: absolute;
   border: 1px solid black;
 
@@ -1353,7 +1351,7 @@ div.spoyler {
 
 .nomerV {
   display: flex;
-  width: 120px;
+  width: 85px;
   position: absolute;
   border: 1px solid black;
 }
@@ -1364,14 +1362,36 @@ div.spoyler {
 }
 
 .flagy {
-  width: 40px;
+  width: 25px;
   height: 15px;
   box-sizing: border-box;
-  background-image: url(../image/nomer.png);
+  /* background-image: url(../image/nomer.png);*/
   background-repeat: no-repeat;
   background-position: center;
+  display: flex;
+  flex-direction: column;
 }
 
+.flagWhite {
+  width: 25px;
+  height: 5px;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.flagBlue {
+  width: 25px;
+  height: 5px;
+  box-sizing: border-box;
+  background-color: blue;
+}
+
+.flagRed {
+  width: 25px;
+  height: 5px;
+  box-sizing: border-box;
+  background-color: red;
+}
 
 .checkGraf {
   font-size: 0.8rem;

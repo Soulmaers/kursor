@@ -121,13 +121,13 @@ export async function loadParamsView() {
                     const nomerV = document.createElement('div')
                     nomerV.classList.add('nomerV')
                     cont1.children[0].children[1].appendChild(nomerV)
-                    nomerV.style.bottom = '65px'
-                    nomerV.style.left = '42px'
+                    nomerV.style.bottom = '70px'
+                    nomerV.style.left = '63.5px'
                     cont1.children[0].children[1].style.position = 'relative'
                     nomerV.style.display = 'flex'
                     const gosNumberCar = document.createElement('input')
                     gosNumberCar.classList.add('gosNumberCar')
-                    gosNumberCar.setAttribute('placeholder', 'A 000 AA')
+                    gosNumberCar.setAttribute('placeholder', 'A000AA')
                     gosNumberCar.maxLength = 6;
                     nomerV.appendChild(gosNumberCar)
                     const flagss = document.createElement('div')
@@ -141,6 +141,15 @@ export async function loadParamsView() {
                     const flag = document.createElement('div')
                     flag.classList.add('flagy')
                     flagss.appendChild(flag)
+                    const elemFlag1 = document.createElement('div')
+                    elemFlag1.classList.add('flagWhite')
+                    flag.appendChild(elemFlag1)
+                    const elemFlag2 = document.createElement('div')
+                    elemFlag2.classList.add('flagBlue')
+                    flag.appendChild(elemFlag2)
+                    const elemFlag3 = document.createElement('div')
+                    elemFlag3.classList.add('flagRed')
+                    flag.appendChild(elemFlag3)
                     model.values[0].frontGosp ? gosNumberCar.value = model.values[0].frontGosp : null
                     model.values[0].frontGosp1 ? gosNumberCar1.value = model.values[0].frontGosp1 : null
                 }
@@ -150,12 +159,12 @@ export async function loadParamsView() {
                     nomerP.classList.add('nomerP')
                     cont.lastElementChild.children[1].appendChild(nomerP)
                     nomerP.style.top = '65px'
-                    nomerP.style.left = '42px'
+                    nomerP.style.left = '63.5px'
                     cont.lastElementChild.children[1].style.position = 'relative'
                     nomerP.style.display = 'flex'
                     const gosNumber = document.createElement('input')
                     gosNumber.classList.add('gosNumber')
-                    gosNumber.setAttribute('placeholder', 'A 000 AA')
+                    gosNumber.setAttribute('placeholder', 'A000AA')
                     gosNumber.maxLength = 6;
                     nomerP.appendChild(gosNumber)
                     const flagss = document.createElement('div')
@@ -169,6 +178,15 @@ export async function loadParamsView() {
                     const flag = document.createElement('div')
                     flag.classList.add('flagy')
                     flagss.appendChild(flag)
+                    const elemFlag1 = document.createElement('div')
+                    elemFlag1.classList.add('flagWhite')
+                    flag.appendChild(elemFlag1)
+                    const elemFlag2 = document.createElement('div')
+                    elemFlag2.classList.add('flagBlue')
+                    flag.appendChild(elemFlag2)
+                    const elemFlag3 = document.createElement('div')
+                    elemFlag3.classList.add('flagRed')
+                    flag.appendChild(elemFlag3)
                     model.values[0].gosp ? gosNumber.value = model.values[0].gosp : null
                     model.values[0].gosp1 ? gosNumber1.value = model.values[0].gosp1 : null
                 }
