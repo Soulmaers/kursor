@@ -215,6 +215,7 @@ export async function tarirView() {
                     const znak = Number((approximated[0] * 0.9987).toFixed(0))
                     const value = znak * 100 / y[y.length - 1]
                     const oilValue = document.querySelector('.oil_value1')
+                    console.log(znak)
                     if (znak < 0) {
                         oilValue.textContent = '----'
                         return

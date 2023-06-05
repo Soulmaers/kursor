@@ -199,6 +199,7 @@ module.exports.savePr = async (req, res) => {
     const value = [Object.values(req.body.arr)]
     if (req.body.arr.dataAdd) {
         try {
+            console.log('дата есть')
             const sql = `INSERT INTO  tyresBase(idw, dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka,
             model,
             psi,
@@ -218,6 +219,7 @@ module.exports.savePr = async (req, res) => {
     }
     else {
         try {
+            console.log('даты нет')
             const sql = `INSERT INTO  tyresBase(idw, identificator, nameCar, typeOs, numberOs, idTyres, marka,
             model,
             psi,
@@ -238,6 +240,7 @@ module.exports.savePr = async (req, res) => {
 }
 module.exports.modalBar = (req, res) => {
     const value = [req.body.arrValue];
+    // console.log(value)
     try {
         const selectBase = `SELECT nameCar, idOs FROM ifBar WHERE idw='${value[0][0]}' AND idOs='${value[0][2]}'`
         connection.query(selectBase, function (err, results) {
@@ -566,7 +569,7 @@ module.exports.findId = (req, res) => {
 module.exports.techView = (req, res) => {
     const nameCar = req.body.activePost
     const count = req.body.id
-    console.log(req.body.idw)
+    //  console.log(req.body.idw)
     try {
         const selectBase = `SELECT marka,
         model,
@@ -584,7 +587,7 @@ module.exports.techView = (req, res) => {
         maxMM FROM tyresBase WHERE idw='${req.body.idw}' AND idTyres='${count}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err)
-            console.log(results)
+            //   console.log(results)
             response.status(200, results, '', res)
         })
     }

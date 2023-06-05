@@ -47,39 +47,13 @@ async function waitArr(el) {
     const tyr = await fetch('api/techViewAll', param)
     const params = await tyr.json();
     console.log(params)
-    const osss = osi.values
     const par = params.values
 
-    osss.forEach(it => {
-        delete it.id
-        delete it.nameCar
-    })
-    par.forEach(el => {
-        osss.forEach(e => {
-            if (el.osNumber === e.idOs) {
-                el.bar = e
-            }
-        })
-    })
-    const itog = res.filter(el => {
-        return par.some(param => {
-            return param.pressure === el[1];
-        });
-    });
-    const finish = itog.filter(elem => {
-        return par.some(param => {
-            return elem[1] === param.pressure;
-        });
-    }).map(elem => {
-        const param = par.find(param => {
-            return elem[1] === param.pressure;
-        });
-        return elem.concat(param.bar);
-    });
+    console.log(par)
 
     const dashObject = {
         id: idw,
-        params: finish
+        params: []
     }
     return dashObject
 }

@@ -182,6 +182,7 @@ export async function reqModalBar(arr, id) {
         arrValue.push(el.textContent)
     })
 
+    console.log(arrValue)
     const bar = await fetch('api/modalBar', {
         method: "POST",
         headers: {
@@ -215,7 +216,9 @@ export async function viewBar(id) {
         for (let key in barValue.values[0]) {
             keys.push(key);
         }
+
         const nval = (Object.entries(barValue.values[0]))
+        console.log(nval)
         nval.shift()
         nval.shift()
         nval.shift()
@@ -254,7 +257,6 @@ export function viewTech(id) {
         .then((res) => res.json())
         .then(res => {
             const result = res.values[res.values.length - 1]
-            console.log(result)
             const keys = [];
             if (result) {
                 for (let key in result) {

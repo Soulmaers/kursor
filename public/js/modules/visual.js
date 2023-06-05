@@ -362,12 +362,13 @@ export async function viewOs(counts) {
     container.appendChild(cont2)
     const btnShina = document.querySelectorAll('.modals')
     if (btnShina[1].classList.contains('active')) {
+        console.log('икс')
         styleShinaActive(btnShina[1])
     }
     viewMenuParams()
     modalOs();
 }
-function styleShinaActive(arg) {
+export function styleShinaActive(arg) {
     reqProtectorBase()
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')

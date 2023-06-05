@@ -49,12 +49,17 @@ export function modalOs() {
     modalClear.addEventListener('click', () => {
         modalCenterOs.style.display = 'none'
     })
-    btnModal.addEventListener('click', () => {
-        const normal = document.querySelector('.normal')
-        normal.value === '' ? messfn() : modalBar()
-    })
-    btnModalClear.addEventListener('click', clearBar)
+
 }
+const btnModal = document.querySelector('.btnModal')
+const btnModalClear = document.querySelector('.btnModalClear')
+btnModal.addEventListener('click', () => {
+    const normal = document.querySelector('.normal')
+    console.log(normal.value)
+    normal.value === '' ? messfn() : modalBar()
+})
+btnModalClear.addEventListener('click', clearBar)
+
 function messfn() {
     const mess = document.querySelector('.mess')
     mess.style.display = 'flex'

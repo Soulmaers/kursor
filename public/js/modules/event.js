@@ -353,8 +353,12 @@ export function fnsort(el) {
     })
     return [numberOs, typeOs, count]
 }
+
+
 const buttonTth = document.querySelector('.buttonTth')
-buttonTth.addEventListener('click', async () => {
+buttonTth.addEventListener('click', pr)
+async function pr() {
+    console.log('сохранил')
     const techText = document.querySelectorAll('.tech')
     const formValue = document.querySelectorAll('.formValue')
     const tyresActive = document.querySelector('.tiresActiv')
@@ -383,16 +387,22 @@ buttonTth.addEventListener('click', async () => {
         arrNameColId.push(e.value)
     })
     !maxMM.value ? arrNameColId.push(maxMM.placeholder) : arrNameColId.push(maxMM.value)
-    arrNameColId.splice(12, 0, arrNameColId.splice(16, 1)[0]);
+    arrNameColId.splice(13, 0, arrNameColId.splice(17, 1)[0]);
+    console.log(arrNameColId)
     if (idbaseTyres.textContent !== '') {
         await saveDouble(arrNameColId)
     }
+
+    /*
     const btnShina = document.querySelectorAll('.modals')
     if (btnShina[1].classList.contains('active')) {
+        console.log('икс')
         reqProtectorBase()
-    }
+    }*/
     viewTech(tyresActive.id)
-})
+}
+
+
 
 const plug = document.querySelectorAll('.plug')
 plug[2].addEventListener('click', () => {

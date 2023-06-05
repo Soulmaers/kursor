@@ -3,6 +3,7 @@ import { objColors, gener } from './content.js'
 import { removeArrElem } from './helpersFunc.js'
 
 export async function reqProtectorBase() {
+    console.log('ра?')
     let activePost;
     const active = document.querySelectorAll('.color')
     const idw = document.querySelector('.color').id
@@ -21,6 +22,8 @@ export async function reqProtectorBase() {
         body: JSON.stringify({ idw })
     })
     const dannie = await res.json();
+    console.log(dannie)
+
     if (dannie.values.length == 0) {
         fnCanvas([])
     }
