@@ -193,6 +193,7 @@ export async function reqModalBar(arr, id) {
     const result = await bar.json();
 }
 export async function viewBar(id) {
+    console.log(id)
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
@@ -211,6 +212,7 @@ export async function viewBar(id) {
         body: JSON.stringify({ id, activePost, idw })
     })
     const barValue = await bar.json();
+    console.log(barValue)
     const keys = [];
     if (barValue.values.length) {
         for (let key in barValue.values[0]) {

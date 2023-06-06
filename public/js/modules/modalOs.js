@@ -21,7 +21,7 @@ export function modalOs() {
             modalCenterOs.style.display = 'block'
             const modalInput = document.querySelectorAll('.modalInput')
             modalInput.forEach(i => {
-                clearElem(i.value)
+                i.value = ''
             })
             const centerOsActiv = document.querySelector('.centerOsActiv')
             const modalNumberOs = document.querySelector('.modalNumberOs')
@@ -34,10 +34,10 @@ export function modalOs() {
             const divfinal = document.querySelectorAll('.divfinal')
             const inpfinal = document.querySelectorAll('.inpfinal')
             divfinal.forEach(e => {
-                clearElem(e.textContent)
+                e.textContent = ''
             })
             inpfinal.forEach(e => {
-                clearElem(e.value)
+                e.value = ''
             })
             viewBar(centerOsActiv.id);
             const norma = document.querySelector('.normal')
@@ -111,6 +111,7 @@ async function modalBar() {
     modalText.forEach(el => {
         arrNameCol.push(el.id)
     })
+    console.log(arrNameCol, centerOsActiv.id)
     await reqModalBar(arrNameCol, centerOsActiv.id);
     viewBar(centerOsActiv.id);
     centerOsActiv.classList.remove('centerOsActiv')

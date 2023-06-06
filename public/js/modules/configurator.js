@@ -200,10 +200,6 @@ function os(arr) {
         }))
     viewMenuParams()
 }
-
-
-
-
 export async function changeBase(massModel, activePost, idw) {
     const go = document.querySelector('.gosNumber')
     const go1 = document.querySelector('.gosNumber1')

@@ -253,8 +253,14 @@ function koleso(kol, btnsens) {
     const paramTemp = [];
     let prmsD = [];
     let prmsT = [];
+    const color = []
     msg.forEach(el => {
+
         el.addEventListener('click', () => {
+            msg.forEach(e => {
+                e.style.color = 'black'
+            })
+            el.style.color = 'green'
             const arrSpreed = [...el.textContent]
             let value;
             arrSpreed.forEach(el => {
@@ -275,6 +281,7 @@ function koleso(kol, btnsens) {
                     value
                 }
                 const valJob = value
+                console.log(kol)
                 valJob.length > 10 ?
                     kol[kol.length - 1].children[0].textContent = '-' :
                     kol[kol.length - 1].children[0].textContent = valJob + '\nБар'
