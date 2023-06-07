@@ -1372,6 +1372,156 @@ div.spoyler {
   flex-direction: column;
 }
 
+
+.altConfig {
+  width: 350px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+}
+
+.containerAlt {
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+
+.containerPricep {
+  margin-top: 50px;
+}
+
+.titleTagach,
+.titlePricep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.choiceT,
+.choiceP {
+  display: flex;
+  width: 40px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quantityP,
+.quantityT,
+.titleP,
+.titleT {
+  font-weight: bold;
+}
+
+.numT,
+.numP {
+  display: flex;
+}
+
+
+.pluT,
+.pluP {
+  margin-top: 5px;
+  width: 15px;
+  height: 15px;
+  background-image: url(../image/plu.png);
+  background-size: cover;
+  cursor: pointer;
+}
+
+.miT,
+.miP {
+  margin-top: 5px;
+  margin-left: 5px;
+  width: 13px;
+  height: 13px;
+  background-image: url(../image/min.png);
+  background-size: cover;
+  cursor: pointer;
+}
+
+.osiTest {
+  width: 312px;
+  display: flex;
+  justify-content: space-between
+}
+
+.tires_spark_test {
+  display: flex;
+}
+
+.centerOsTest {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 212px;
+  flex-direction: column;
+}
+
+.vnutTest {
+  width: 212px;
+  height: 11px;
+  background-color: gray;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.spark {
+  font-size: 0.75rem;
+  margin-bottom: 2px;
+}
+
+.tiresTest {
+  /* margin: 0 0.5px;*/
+  border: 1px solid #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.tiresDTest {
+  width: 48px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+  color: lightgray
+}
+
+.tiresTTest {
+  width: 48px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.tires_link_test {
+  position: relative;
+  background-image: url(../image/0000.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 15px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
 .flagWhite {
   width: 25px;
   height: 5px;
@@ -1629,6 +1779,16 @@ div.spoyler {
 
 .tiresActiv {
   border: 2px solid gray;
+  border-radius: 10px;
+  background-color: lightgray;
+}
+
+.wow {
+  border: 3px solid green
+}
+
+.tiresActivt {
+  border: 2px solid green;
   border-radius: 10px;
   background-color: lightgray;
 }
@@ -2705,7 +2865,8 @@ input[type="date"] {
   cursor: pointer;
 }
 
-.buttOnTarirDisk {
+.buttOnTarirDisk,
+.disk {
   width: 30px;
   height: 30px;
   background-image: url(../image/disk.svg);
@@ -3107,6 +3268,15 @@ input[type="date"] {
   align-items: center;
 }
 
+
+.disketa {
+  display: none;
+  margin: 10px 10px;
+  position: absolute;
+  left: 20px;
+  flex-direction: column;
+}
+
 .buttOnTarir {
   display: none;
   box-sizing: border-box;
@@ -3194,7 +3364,6 @@ input[type="date"] {
 .tires {
   /* margin: 0 0.5px;*/
   border: 1px solid #fff;
-  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;

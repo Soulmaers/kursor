@@ -27,9 +27,6 @@ export async function datas(t1, t2) {
     const nameArr = await fnParMessage(active)
     const allArrNew = [];
 
-    console.log(global)
-    console.log(sensArr)
-    console.log(nameArr)
     nameArr.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
@@ -62,8 +59,7 @@ export async function datas(t1, t2) {
             finishArrayDataT.push(e)
         }
     })
-    console.log(finishArrayData)
-    console.log(finishArrayDataT)
+
     finishArrayData.forEach((el, index) => {
         el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
         el.speed = global[1]
@@ -90,7 +86,6 @@ async function grafikStartPress(times, datar) {
     const grafics = document.querySelector('.grafics')
     graf.classList.add('infoGraf')
     grafics.appendChild(graf)
-    console.log(datar)
     const newData = datar.map(el => {
         return {
             ...el,
@@ -117,7 +112,7 @@ async function grafikStartPress(times, datar) {
     const gl = times.map(it => {
         return new Date(it)
     })
-    console.log(global.series)
+
     const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed }) => ({
         sens,
         position,
@@ -138,7 +133,7 @@ async function grafikStartPress(times, datar) {
         }
         return 0;
     });
-    console.log(dat2)
+
     const container = d3.select('.infoGraf');
     // Связываем данные с контейнером
     const charts = container.selectAll('.charts')
@@ -298,7 +293,7 @@ async function grafikStartPress(times, datar) {
         const dvn = d.bar !== undefined ? Number(d.bar.dvn).toFixed(1) : null
         const dnn = d.bar !== undefined ? Number(d.bar.dnn).toFixed(1) : null
         const kvd = d.bar !== undefined ? Number(d.bar.kvd).toFixed(1) : null
-        console.log(knd)
+
         const area11 = d3.area()
             .x(d => x(d.dates))
             .y0(height)

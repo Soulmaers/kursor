@@ -4,7 +4,7 @@ import { findTyresInstall } from './saveBaseId.js'
 import { geoloc, iconParams } from './wialon.js'
 import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
 import { alarmFind } from './alarmStorage.js'
-import { modalOs } from './modalOs.js'
+
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
 import { iconFind, iconFindWindows } from './configIcons.js'
@@ -15,15 +15,27 @@ import { Tooltip } from '../class/Tooltip.js'
 import { click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { convert } from './helpersFunc.js'
+
+
 let start;
 let time;
 let timeIcon;
 export async function visual(el) {
+    const checkConfig = document.getElementById('check_Title')
+    checkConfig.checked = false
+    const containerAlt = document.querySelector('.containerAlt')
+    if (containerAlt) {
+        containerAlt.remove()
+    }
+    const disketa = document.querySelector('.disketa')
+    disketa.style.display = 'none'
     const tarir = document.querySelector('.tarir')
     if (el.children[0].textContent === 'Цистерна ДТ') {
         tarir.style.display = 'block'
     }
     const tiresLink = document.querySelectorAll('.tires_link')
+    const sensors = document.querySelector('.sensors')
+    sensors.style.display = 'none';
     clearInterval(time)
     clearInterval(timeIcon)
     const wrapperUp = document.querySelector('.wrapper_up')
@@ -62,6 +74,7 @@ export async function visual(el) {
     if (titleCar) {
         titleCar.textContent = el.children[0].textContent
     }
+
     loadParamsView()
     findTyresInstall()
     liCreate()
@@ -196,7 +209,6 @@ export function view(arg) {
         msg[index].textContent = `${el.name}:${el.value}`
     })
 }
-
 export async function viewConfigurator(arg, params, osi) {
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelectorAll('.color')
@@ -204,7 +216,7 @@ export async function viewConfigurator(arg, params, osi) {
     if (params) {
         const parametrs = convert(params)
         const alerts = [];
-        const tiresLink = document.querySelectorAll('.tires_link')
+        const tiresLink = document.querySelectorAll('.tires_link_test')
         let activePost;
         if (active[0] == undefined) {
             const listItem = document.querySelectorAll('.listItem')[0]
@@ -361,13 +373,15 @@ export async function viewOs(counts) {
     cont2.classList.add('cont')
     container.appendChild(cont2)
     const btnShina = document.querySelectorAll('.modals')
+    console.log(btnShina)
     if (btnShina[1].classList.contains('active')) {
         styleShinaActive(btnShina[1])
     }
     viewMenuParams()
-    modalOs();
+    //modalOs();
 }
 function styleShinaActive(arg) {
+    console.log('бтншина')
     reqProtectorBase()
     const tyresD = document.querySelectorAll('.tiresD')
     const tyresT = document.querySelectorAll('.tiresT')
@@ -383,17 +397,7 @@ function styleShinaActive(arg) {
         e.style.justifyContent = 'flex-start'
     })
 }
-//обработка массива для скрытия осей и других элементов
-export const divClear = (arr) => {
-    if (arr.length > 0) {
-        arr.forEach(it => {
-            removeElem(it)
-        })
-    }
-    else {
-        removeElem(arr)
-    }
-}
+
 export const pricep = (elem) => {
     const cont = document.querySelector('.cont')
     cont.appendChild(elem.parentNode)

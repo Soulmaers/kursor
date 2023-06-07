@@ -1,5 +1,6 @@
 
-import { divClear, viewDinamic, viewOs } from './visual.js'
+import { viewDinamic } from './visual.js'
+
 
 export function postModel(massModel) {
     const active = document.querySelectorAll('.color')
@@ -53,14 +54,14 @@ export const reqDelete = (idw) => {
     })
         .then((res) => res.json())
         .then((res) => console.log(res))
-    divClear(osi)
-    divClear(tires)
-    divClear(centerOs)
-    viewOs()
+
+    const containerAlt = document.querySelector('.containerAlt')
+    containerAlt.remove();
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Модель удалена'
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 2000)
+
 }
 export const barDelete = async (idw) => {
     const modalCenterOs = document.querySelector('.modalCenterOs')

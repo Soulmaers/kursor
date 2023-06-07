@@ -23,6 +23,17 @@ export async function loadParamsViewList(car, el) {
     const data = await dat.json()
     const osis = await fetch('api/barViewAll', params)
     const osi = await osis.json()
+
+
+    model.result.sort((a, b) => {
+        if (a.osi > b.osi) {
+            return 1;
+        } else if (a.osi < b.osi) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
     testov.push([model, models, data, osi])
     return [model, models, data, osi, el]
 }
@@ -126,10 +137,16 @@ export function conturTest(testov) {
                 }
                 const listItem = document.getElementById(`${elem[4]}`)
                 const numOs = listItem.querySelectorAll('.gOs');
-                numOs.forEach(el => {
-                    setId(el)
-                })
+                /*  numOs.forEach(el => {
+                      setId(el)
+                  })*/
+
                 const shina = listItem.querySelectorAll('.arc');
+                let num = 0;
+                shina.forEach(e => {
+                    num++
+                    e.setAttribute('id', num)
+                })
                 const r = [];
                 let integer;
                 if (elem[1].result) {

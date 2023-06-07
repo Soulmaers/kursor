@@ -4,13 +4,16 @@ import { pricep } from './visual.js'
 import { zapros } from './menu.js'
 import { removeArrElem } from './helpersFunc.js'
 
+
+
+
 //конфигуратор оси
-export function select() {
+function select() {
     const linkSelect = document.querySelectorAll('.linkSelect');
     const wrapContaint = document.querySelector('.wrapper_containt')
     const cont = document.createElement('div')
     cont.classList.add('container')
-    wrapContaint.insertBefore(cont, wrapContaint.children[2]);
+    wrapContaint.insertBefore(cont, wrapContaint.children[3]);
     const container = document.querySelector('.container')
     linkSelect.forEach(el => {
         el.addEventListener('click', () => {
@@ -51,12 +54,13 @@ export function select() {
                 link.appendChild(tiresD);
                 link.appendChild(tiresT);
             })
-            modul() //запоминаем последнюю выбранную ось
+            // modul() //запоминаем последнюю выбранную ось
         })
     })
 }
 select() //запуск конфигуратора оси
 
+/*
 const lostOs = [];
 function modul() {
     const centerOs = document.querySelectorAll('.centerOs')
@@ -72,8 +76,8 @@ function modul() {
         })
     })
     os(lostOs)
-}
-
+}*/
+/*
 function os(arr) {
     const cont2 = document.createElement('div');
     const container = document.querySelector('.container')
@@ -199,7 +203,8 @@ function os(arr) {
             }
         }))
     viewMenuParams()
-}
+}*/
+
 export async function changeBase(massModel, activePost, idw) {
     const go = document.querySelector('.gosNumber')
     const go1 = document.querySelector('.gosNumber1')

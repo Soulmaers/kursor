@@ -1,5 +1,5 @@
 import { visual, visualNone } from './visual.js'
-import { massivionbd } from './paramsTyresView.js';
+//import { massivionbd } from './paramsTyresView.js';
 
 export function navigator() {
     const nav = document.querySelectorAll('.listItem')
@@ -17,7 +17,7 @@ export function navigator() {
         function route() {
             nav.forEach(e => {
                 visualNone(e);  //скрываем для всех кнопок левый фрейм
-                massivionbd.length = 0;
+                // massivionbd.length = 0;
             })
             visual(el)
             const widthWind = document.querySelector('body').offsetWidth;

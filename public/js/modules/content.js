@@ -34,6 +34,18 @@ export const text = `<div class=" osi">
         </div>
     </div>`
 
+export const textTest = `<div class=" osiTest">
+        <div class="tires_spark_test">
+            <div class="tiresTest mod">
+            </div>
+                  </div>
+            <div class="tires_spark_test">
+                      <div class="tiresTest mod">
+            </div>
+        </div>
+    </div>`
+
+
 export const zamer = `  <div class="zamer">
                         <h3 class="titleZamer" id="zamer">Замер</h3>
                         <div class="wrapTarir"><input class="dut" placeholder="ДУТ"><input class="litr" placeholder="литры"></div>

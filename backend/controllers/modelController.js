@@ -295,7 +295,7 @@ module.exports.barView = (req, res) => {
     }
 }
 module.exports.barViewAll = (req, res) => {
-    const idw = req.body.el
+    const idw = req.body.idw
     try {
         const selectBase = `SELECT * FROM ifBar WHERE idw='${idw}'`
         connection.query(selectBase, function (err, results) {
@@ -657,7 +657,7 @@ module.exports.listModel = (req, res) => {
     }
 }
 module.exports.listTyres = (req, res) => {
-    const idw = req.body.el
+    const idw = req.body.idw
     try {
         const selectBase = `SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE idw='${idw}'`
         connection.query(selectBase, function (err, results) {

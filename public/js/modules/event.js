@@ -13,7 +13,7 @@ import { dataInput, dataSelect, times } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 import { protDash, dashViewProtector } from './charts/protek.js'
-
+import { conf } from './altConfig.js'
 
 
 
@@ -131,15 +131,7 @@ function mainblock() {
     wrapList.style.height = 'none';
 }
 
-export function saveTyres(arr) {
-    const modCnf = document.querySelector('.moduleConfig')
-    const btnSave = document.querySelector('.btn_save')
-    btnSave.addEventListener('click', () => {
-        modCnf.style.display = 'none';
-        postTyres(arr);
-        arr.length = 0;
-    })
-}
+
 const btnGenerate = document.querySelector('.btn_generate')
 btnGenerate.addEventListener('click', reqBaseId)
 const btnBase = document.querySelector('.btn_base')
@@ -329,6 +321,7 @@ modalNameOs.addEventListener('click', () => {
         })
     })
 })
+
 const btnSave = document.querySelector('.btn_save')
 btnSave.addEventListener('click', () => {
     const massModel = [];
@@ -342,6 +335,61 @@ btnSave.addEventListener('click', () => {
     console.log(massModel, activePost, idw)
     changeBase(massModel, activePost, idw)
 })
+
+const disk = document.querySelector('.disk')
+disk.addEventListener('click', () => {
+    const arrModel = [];
+    const arrTyres = [];
+    const active = document.querySelector('.color')
+    const idw = document.querySelector('.color').id
+    const activePost = active.textContent.replace(/\s+/g, '')
+    const osi = document.querySelectorAll('.osiTest')
+    const linkTyres = document.querySelectorAll('.tires_link_test')
+    let index = 0;
+    let indexTyres = 0;
+
+    osi.forEach(el => {
+        index++
+        el.children[1].setAttribute('id', `${index}`)
+        arrModel.push(fnsortTest(el))
+    })
+    linkTyres.forEach(el => {
+        indexTyres++
+        el.setAttribute('id', `${indexTyres}`)
+        arrTyres.push(fnsortTyresTest(el))
+    })
+    console.log(arrModel, activePost, idw)
+    console.log(arrTyres, activePost, idw)
+    changeBase(arrModel, activePost, idw)
+    postTyres(arrTyres, activePost, idw);
+    const sensors = document.querySelector('.sensors')
+    sensors.style.display = 'none';
+})
+
+
+export function fnsortTest(el) {
+    const numberOs = parseFloat(el.children[1].id)
+    let typeOs;
+    let sparka;
+    el.children[1].classList.contains('pricepT') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
+    console.log(el)
+    const spark = el.querySelector('.sparkCheck')
+    if (spark) {
+        spark.checked ? sparka = 4 : sparka = 2
+    }
+    else {
+        sparka = 2
+    }
+    return [numberOs, typeOs, sparka]
+}
+export function fnsortTyresTest(el) {
+    const numOs = el.closest('.osiTest').children[1].id
+    const idw = el.id
+    const relD = el.children[0].getAttribute('rel')
+    const relT = el.children[1].getAttribute('rel')
+    return [idw, relD, relT, numOs]
+}
+
 export function fnsort(el) {
     const numberOs = parseFloat(el.children[1].id)
     let typeOs;
@@ -388,7 +436,6 @@ export async function pr() {
     })
     !maxMM.value ? arrNameColId.push(maxMM.placeholder) : arrNameColId.push(maxMM.value)
     arrNameColId.splice(13, 0, arrNameColId.splice(17, 1)[0]);
-    console.log(arrNameColId)
     if (idbaseTyres.textContent !== '') {
         await saveDouble(arrNameColId)
     }
@@ -540,6 +587,10 @@ delIcon.forEach(el => {
         })
     })
 });
+
+
+
+
 //отрисовываем список под параметры
 const btnsens = document.querySelectorAll('.btnsens')
 const titleSens = document.querySelector('.title_sens')
@@ -635,3 +686,5 @@ class DropDownList {
 new DropDownList({ element: document.querySelector(`#input`), btn: document.querySelector('.buh'), data });
 
 
+const altConfig = document.getElementById('check_Title')
+altConfig.addEventListener('change', conf)

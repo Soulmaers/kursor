@@ -18,7 +18,7 @@ module.exports.datawialon = (req, res) => {
 
 }
 module.exports.datawialonAll = (req, res) => {
-    const idw = req.body.el
+    const idw = req.body.idw
     try {
         const selectBase = `SELECT name, value, status FROM params WHERE idw='${idw}'`
         connection.query(selectBase, function (err, results) {
