@@ -1392,9 +1392,7 @@ div.spoyler {
 
 
 
-.containerPricep {
-  margin-top: 50px;
-}
+
 
 .titleTagach,
 .titlePricep {
@@ -2568,7 +2566,7 @@ input[type="date"] {
 
 .saveId {
   display: flex;
-
+  margin-left: 5px;
 }
 
 .rightBlock {
@@ -2872,6 +2870,16 @@ input[type="date"] {
   background-image: url(../image/disk.svg);
   background-size: cover;
   cursor: pointer;
+}
+
+
+.korz {
+  width: 30px;
+  height: 30px;
+  background-image: url(../image/korz.png);
+  background-size: cover;
+  cursor: pointer;
+
 }
 
 .gal {
@@ -3277,6 +3285,14 @@ input[type="date"] {
   flex-direction: column;
 }
 
+.korzina {
+  display: none;
+  margin: 10px 10px;
+  position: absolute;
+  right: 20px;
+  flex-direction: column;
+}
+
 .buttOnTarir {
   display: none;
   box-sizing: border-box;
@@ -3411,7 +3427,6 @@ input[type="date"] {
 
 
 .controll {
-  width: 500px;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-wrap: wrap;
@@ -3419,7 +3434,7 @@ input[type="date"] {
   border: 1px solid gray;
   z-index: 10;
   position: absolute;
-  top: 500px;
+  left: 300px;
   border: 1px solid lightgray;
 }
 
@@ -3450,13 +3465,10 @@ input[type="date"] {
 }
 
 .mainConfig {
-  width: 40%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   margin: 30px 0;
-
-
+  justify-content: space-around;
 }
 
 .moduleConfig {

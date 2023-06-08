@@ -4,65 +4,11 @@ import { tech } from './tech.js'
 import { gosNum } from './altConfig.js'
 import { modalOs } from './modalOs.js'
 
-export function viewMenuParams() {
-    const kolesos = [];
-    const speedGraf = document.querySelector('.speedGraf')
-    const titleSens = document.querySelector('.title_sens')
-    const sensors = document.querySelector('.sensors')
-    const wrapperMap = document.querySelector('.wrapper_left')
-    const obo = document.querySelector('.obo')
-    const tiresLink = document.querySelectorAll('.tires_link_test')
-    const techInfo = document.querySelector('.techInfo')
-    const grafics = document.querySelector('.grafics')
-    const plug = document.querySelectorAll('.plug')
-    const tableTarir = document.querySelector('.tableTarir')
-    const idbaseTyres = document.querySelector('.idbaseTyres')
-    idbaseTyres.textContent = ''
-    tiresLink.forEach(e => {
-        e.addEventListener('click', () => {
-            if (e.classList.contains('tiresActiv')) {
-                e.classList.remove('tiresActiv')
-                techInfo.style.display = 'none'
-                tableTarir.style.display = 'none'
-                wrapperMap.style.display = 'block'
-                if (plug[1].classList.contains('activGraf')) {
-                    grafics.style.display = 'flex';
-                    wrapperMap.style.display = 'none'
-                }
-                return
-            }
-            kolesos.push(e)
-            speedGraf.style.display = 'none';
-            tiresLink.forEach(e => {
-                obo.style.display = 'none'
-                titleSens.style.display = 'none'
-                sensors.style.display = 'none'
-                tableTarir.style.display = 'none'
-                const msg = document.querySelectorAll('.msg')
-                msg.forEach(el => el.classList.remove('act'))
-                e.classList.remove('tiresActiv')
-            });
-            // sensors.style.display = 'flex';
-            e.classList.add('tiresActiv')
-            //  btnsens[0].style.display = 'flex'
-            //  btnsens[1].style.display = 'flex'
-            techInfo.style.display = 'block'
-            speedGraf.style.display = 'block';
-            wrapperMap.style.display = 'none'
-            grafics.style.display = 'none';
-            tableTarir.style.display = 'none'
-            const idbaseTyres = document.querySelector('.idbaseTyres')
-            idbaseTyres.textContent = ''
-            tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
-        })
-    })
-}
 
 export async function loadParamsView() {
     clearInterval(viewPokasateli)
     const titleCar = document.querySelector('.title_two')
     const btnShina = document.querySelectorAll('.modals')
-
     const listItem = document.querySelectorAll('.link_menu')[0]
     const container = document.querySelector('.container')
     let activePost;
@@ -76,24 +22,21 @@ export async function loadParamsView() {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
     const idw = document.querySelector('.color').id
-    fetch('api/modelView', {
+    const params = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
         body: (JSON.stringify({ idw }))
-    })
-        .then((res) => res.json())
-        .then((res) => {
-            const model = res
-            if (model.values && model.values.length > 0) {
-                createViewModel(model.values);
-            }
-        })
+    }
+    const mod = await fetch('api/modelView', params)
+    const model = await mod.json()
+    if (model.values && model.values.length > 0) {
+        createViewModel(model.values);
+    }
     viewPokasateli()
     setInterval(viewPokasateli, 60000)
 }
-
 function createViewModel(model) {
     const altConfig = document.querySelector('.altConfig')
     const containerAlt = document.createElement('div')
@@ -108,6 +51,7 @@ function createViewModel(model) {
     containerTagach.style.border = '2px solid darkblue'
     containerTagach.style.padding = '2px'
     containerPricep.style.padding = '2px'
+    containerPricep.style.marginTop = '50px'
     for (let i = 0; i < model.length; i++) {
         const item = model[i];
         const container = item.trailer === 'Тягач' ? containerTagach : containerPricep;
@@ -166,6 +110,61 @@ function createViewModel(model) {
     viewMenuParams()
     modalOs();
 }
+
+export function viewMenuParams() {
+    const kolesos = [];
+    const speedGraf = document.querySelector('.speedGraf')
+    const titleSens = document.querySelector('.title_sens')
+    const sensors = document.querySelector('.sensors')
+    const wrapperMap = document.querySelector('.wrapper_left')
+    const obo = document.querySelector('.obo')
+    const tiresLink = document.querySelectorAll('.tires_link_test')
+    const techInfo = document.querySelector('.techInfo')
+    const grafics = document.querySelector('.grafics')
+    const plug = document.querySelectorAll('.plug')
+    const tableTarir = document.querySelector('.tableTarir')
+    const idbaseTyres = document.querySelector('.idbaseTyres')
+    idbaseTyres.textContent = ''
+    tiresLink.forEach(e => {
+        e.addEventListener('click', () => {
+            if (e.classList.contains('tiresActiv')) {
+                e.classList.remove('tiresActiv')
+                techInfo.style.display = 'none'
+                tableTarir.style.display = 'none'
+                wrapperMap.style.display = 'block'
+                if (plug[1].classList.contains('activGraf')) {
+                    grafics.style.display = 'flex';
+                    wrapperMap.style.display = 'none'
+                }
+                return
+            }
+            kolesos.push(e)
+            speedGraf.style.display = 'none';
+            tiresLink.forEach(e => {
+                obo.style.display = 'none'
+                titleSens.style.display = 'none'
+                sensors.style.display = 'none'
+                tableTarir.style.display = 'none'
+                const msg = document.querySelectorAll('.msg')
+                msg.forEach(el => el.classList.remove('act'))
+                e.classList.remove('tiresActiv')
+            });
+            // sensors.style.display = 'flex';
+            e.classList.add('tiresActiv')
+            //  btnsens[0].style.display = 'flex'
+            //  btnsens[1].style.display = 'flex'
+            techInfo.style.display = 'block'
+            speedGraf.style.display = 'block';
+            wrapperMap.style.display = 'none'
+            grafics.style.display = 'none';
+            tableTarir.style.display = 'none'
+            const idbaseTyres = document.querySelector('.idbaseTyres')
+            idbaseTyres.textContent = ''
+            tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
+        })
+    })
+}
+
 
 export async function viewPokasateli() {
     const btnShina = document.querySelectorAll('.modals')

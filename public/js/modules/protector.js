@@ -40,6 +40,7 @@ export async function reqProtectorBase() {
 }
 
 function fnCanvas(arg) {
+    console.log(arg)
     const wrapCanvas = document.querySelectorAll('.wrapCanvas')
     const dan = document.querySelectorAll('.dan')
     if (wrapCanvas) {
@@ -48,7 +49,7 @@ function fnCanvas(arg) {
     if (dan) {
         removeArrElem(dan)
     }
-    const tiresLink = document.querySelectorAll('.tires_link')
+    const tiresLink = document.querySelectorAll('.tires_link_test')
     arg.forEach(el => {
         const massProtector = [];
         const protec = [];
@@ -91,6 +92,7 @@ function fnCanvas(arg) {
     });
 }
 function viewPicture(arr, id, elem, mm) {
+    console.log(arr, id, elem, mm)
     const conts = document.querySelectorAll(`.contBar${id}`)
     conts.forEach(el => {
         el.style.display = 'none'

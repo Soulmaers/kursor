@@ -1,6 +1,6 @@
 
 import { viewDinamic } from './visual.js'
-
+import { createConfig } from './altConfig.js'
 
 export function postModel(massModel) {
     const active = document.querySelectorAll('.color')
@@ -55,8 +55,13 @@ export const reqDelete = (idw) => {
         .then((res) => res.json())
         .then((res) => console.log(res))
 
-    const containerAlt = document.querySelector('.containerAlt')
-    containerAlt.remove();
+    // const containerAlt = document.querySelector('.containerAlt')
+    // containerAlt.remove();
+    const containerTagach = document.querySelector('.containerTagach')
+    containerTagach.remove();
+    const containerPricep = document.querySelector('.containerPricep')
+    containerPricep.remove();
+    createConfig()
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Модель удалена'
     messaga.style.color = 'green'
@@ -341,6 +346,41 @@ export function viewTech(id) {
 }
 
 
+import { zapros } from './menu.js'
+
+//конфигуратор оси
+export async function changeBase(massModel, activePost, idw) {
+    const go = document.querySelector('.gosNumber')
+    const go1 = document.querySelector('.gosNumber1')
+    const goCar = document.querySelector('.gosNumberCar')
+    const goCar1 = document.querySelector('.gosNumberCar1')
+    console.log(goCar)
+    let gosp;
+    let frontGosp;
+    let gosp1;
+    let frontGosp1;
+    go ? gosp = go.value : gosp = ''
+    goCar ? frontGosp = goCar.value : frontGosp = ''
+    go1 ? gosp1 = go1.value : gosp1 = ''
+    goCar1 ? frontGosp1 = goCar1.value : frontGosp1 = ''
+    console.log(gosp, gosp1, frontGosp, frontGosp1)
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ massModel, idw, activePost, gosp, gosp1, frontGosp, frontGosp1 }))
+    }
+    const res = await fetch('/api/updateModel', param)
+    const response = await res.json()
+    const controll = document.querySelector('.container_left')
+    controll.style.display = 'none'
+    const modalCenterOs = document.querySelector('.modalCenterOs')
+    modalCenterOs.style.display = 'none'
+    // const moduleConfig = document.querySelector('.moduleConfig')
+    // moduleConfig.style.display = 'none';
+    zapros();
+}
 /*
 export function loadParamsViewShina() {
     const titleCar = document.querySelector('.title_two')

@@ -1,4 +1,4 @@
-import { postTyres, reqDelete, paramsDelete, barDelete, viewTech } from './requests.js'
+import { postTyres, reqDelete, paramsDelete, barDelete, viewTech, changeBase } from './requests.js'
 import { data } from './content.js'
 import { dashView, getDash } from './dash.js'
 import { alarmClear, clearGraf, visual, visualNone } from './visual.js'
@@ -7,7 +7,6 @@ import { geoloc } from './wialon.js'
 import { reqProtectorBase } from './protector.js'
 import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
-import { changeBase } from './configurator.js'
 import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.js'
 import { dataInput, dataSelect, times } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
@@ -129,6 +128,7 @@ function mainblock() {
     config.appendChild(model);
     wrapList.style.overflowY = 'visible';
     wrapList.style.height = 'none';
+    wrapList.style.height = 'auto'
 }
 
 
@@ -204,32 +204,15 @@ if (configs) {
 }
 //очистка модели из базы и удаление отрисовки
 export function btnDel() {
-    const modCnf = document.querySelector('.moduleConfig')
-    const btnClear = document.querySelector('.btn_clear')
-    const clear = document.querySelector('.clear')
-    const wrapPod = document.querySelector('.wrap_pod')
-    const yes = document.querySelector('.yes')
-    const no = document.querySelector('.no')
-    btnClear.addEventListener('click', () => {
-        wrapPod.style.display = 'flex';
-        clear.style.display = 'none';
-    })
-    no.addEventListener('click', () => {
-        wrapPod.style.display = 'none';
-        clear.style.display = 'block';
-    })
-    yes.addEventListener('click', () => {
-        wrapPod.style.display = 'none';
-        modCnf.style.display = 'none';
-        clear.style.display = 'block';
-        const active = document.querySelectorAll('.color')
-        const activePost = active[0].textContent.replace(/\s+/g, '')
+    const korz = document.querySelector('.korz')
+    korz.addEventListener('click', () => {
         const idw = document.querySelector('.color').id
         alarmClear()
         reqDelete(idw);
         paramsDelete(idw);
         barDelete(idw);
     })
+
 }
 
 const dropdown = document.querySelector('.dropdown')
@@ -296,6 +279,9 @@ rad.forEach(el => {
         }
     })
 })
+
+
+
 const modalNameOs = document.querySelector('.modalNameOs')
 modalNameOs.addEventListener('click', () => {
     const moduleConfig = document.querySelector('.moduleConfig')
@@ -322,6 +308,7 @@ modalNameOs.addEventListener('click', () => {
     })
 })
 
+/*
 const btnSave = document.querySelector('.btn_save')
 btnSave.addEventListener('click', () => {
     const massModel = [];
@@ -334,7 +321,7 @@ btnSave.addEventListener('click', () => {
     })
     console.log(massModel, activePost, idw)
     changeBase(massModel, activePost, idw)
-})
+})*/
 
 const disk = document.querySelector('.disk')
 disk.addEventListener('click', () => {
@@ -390,6 +377,7 @@ export function fnsortTyresTest(el) {
     return [idw, relD, relT, numOs]
 }
 
+/*
 export function fnsort(el) {
     const numberOs = parseFloat(el.children[1].id)
     let typeOs;
@@ -400,7 +388,7 @@ export function fnsort(el) {
         elem.style.display == 'flex' ? count++ : null
     })
     return [numberOs, typeOs, count]
-}
+}*/
 
 
 const buttonTth = document.querySelector('.buttonTth')
@@ -410,7 +398,7 @@ export async function pr() {
     const techText = document.querySelectorAll('.tech')
     const formValue = document.querySelectorAll('.formValue')
     const tyresActive = document.querySelector('.tiresActiv')
-    const osId = tyresActive.closest('.osi').children[1].id
+    const osId = tyresActive.closest('.osiTest').children[1].id
     let nameOs;
     tyresActive.closest('.osi').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
     const arrNameCol = [];
@@ -506,6 +494,7 @@ menuGraf.forEach(el => {
     })
 })
 const card = document.querySelectorAll('.icon_card')
+
 card.forEach(elem => {
     const changeParams = document.querySelector('.changeParams')
     const sensors = document.querySelector('.sensors')
@@ -525,7 +514,8 @@ card.forEach(elem => {
         changeParams.value = '1';
         iconParamsz()
         elem.classList.add('acto')
-        sensors.style.display = 'flex'
+        const checkConfig = document.getElementById('check_Title')
+        checkConfig.checked ? sensors.style.display = 'flex' : sensors.style.display = 'none'
         btnsens[0].style.display = 'none'
         btnsens[1].style.display = 'none'
         btnsens[2].style.display = 'flex'

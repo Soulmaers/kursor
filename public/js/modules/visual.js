@@ -29,6 +29,8 @@ export async function visual(el) {
     }
     const disketa = document.querySelector('.disketa')
     disketa.style.display = 'none'
+    const korzina = document.querySelector('.korzina')
+    korzina.style.display = 'none'
     const tarir = document.querySelector('.tarir')
     if (el.children[0].textContent === 'Цистерна ДТ') {
         tarir.style.display = 'block'
@@ -78,7 +80,6 @@ export async function visual(el) {
     loadParamsView()
     findTyresInstall()
     liCreate()
-    const activePost = el.children[0].textContent.replace(/\s+/g, '')
     const idw = el.id
     iconFind(idw)
     iconFindWindows(idw)
@@ -100,6 +101,11 @@ export async function visual(el) {
     const grafOld = document.querySelector('.infoGraf')
     if (grafOld) {
         removeElem(grafOld)
+    }
+    const btnShina = document.querySelectorAll('.modals')
+    console.log(btnShina)
+    if (btnShina[1].classList.contains('active')) {
+        styleShinaActive(btnShina[1])
     }
     const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
     preloaderGraf.style.opacity = 1;
@@ -136,11 +142,8 @@ export function visualNone(e) {
     const statusObj = document.querySelector('.status_obj')
     clearElem(statusObj.textContent)
     statusObj.style.color = 'gray'
-
-
     const wrapperUp = document.querySelector('.wrapper_up')
     const speedGraf = document.querySelector('.speedGraf')
-    const container = document.querySelector('.container')
     const techInfo = document.querySelector('.techInfo')
     const modalCenterOs = document.querySelector('.modalCenterOs')
     const plus = document.querySelector('.plus')
@@ -172,16 +175,10 @@ export function visualNone(e) {
     wrapperUp.style.display = 'none'
     speedGraf.style.display = 'none'
     e.classList.remove('color')
-    if (container.children.length > 0) {
-        const containerArr = Array.from(container.children)
-        containerArr.forEach(it => {
-            removeElem(it)
-        })
-        const tr = document.querySelectorAll('.tr')
-        tr.forEach(it => {
-            removeElem(it)
-        })
-    }
+    const tr = document.querySelectorAll('.tr')
+    tr.forEach(it => {
+        removeElem(it)
+    })
 }
 //стираем выбранные значения графика скорости
 export function clearGraf() {
@@ -192,7 +189,6 @@ export function clearGraf() {
         clearElem(e.value)
     })
 }
-
 //создаем список под параметры
 export function liCreate() {
     const obo = document.querySelector('.obo')
@@ -325,61 +321,7 @@ export function alarmClear() {
         e.style.border = 'none'
     })
 }
-export async function viewOs(counts) {
-    const container = document.querySelector('.container')
-    if (container.children.length > 0) {
-        const containerArr = Array.from(container.children)
-        containerArr.forEach(it => {
-            removeElem(it)
-        })
-    }
-    const count = counts;
-    for (let i = 0; i < count; i++) {
-        container.innerHTML += `${text}`
-    }
-    const osi = document.querySelectorAll('.osi')
-    let index = 0;
-    osi.forEach(el => {
-        index++
-        const centerOsDiv = document.createElement('div');
-        centerOsDiv.classList.add('centerOs')
-        const vnut = document.createElement('vnut')
-        vnut.classList.add('vnut')
-        centerOsDiv.appendChild(vnut)
-        el.children[0].insertAdjacentElement('afterEnd', centerOsDiv);
-        centerOsDiv.setAttribute("id", `${index}`);
-    })
-    const tires = document.querySelectorAll('.tires')
-    let indexTires = 0;
-    tires.forEach(el => {
-        el.style.display = 'none'
-        indexTires++
-        const link = document.createElement('a');
-        link.classList.add('tires_link')
-        link.setAttribute("id", `${indexTires}`);
-        link.href = "#";
-        el.appendChild(link);
-        const tiresD = document.createElement('div');
-        tiresD.classList.add('tiresD')
-        const tiresT = document.createElement('div');
-        tiresT.classList.add('tiresT')
-        link.appendChild(tiresD);
-        link.appendChild(tiresT);
-    })
-    const cont1 = document.createElement('div');
-    cont1.classList.add('cont1')
-    container.appendChild(cont1)
-    const cont2 = document.createElement('div');
-    cont2.classList.add('cont')
-    container.appendChild(cont2)
-    const btnShina = document.querySelectorAll('.modals')
-    console.log(btnShina)
-    if (btnShina[1].classList.contains('active')) {
-        styleShinaActive(btnShina[1])
-    }
-    viewMenuParams()
-    //modalOs();
-}
+
 function styleShinaActive(arg) {
     console.log('бтншина')
     reqProtectorBase()
@@ -398,15 +340,7 @@ function styleShinaActive(arg) {
     })
 }
 
-export const pricep = (elem) => {
-    const cont = document.querySelector('.cont')
-    cont.appendChild(elem.parentNode)
-    cont.style.marginTop = '72px'
-    cont.style.border = '2px solid darkblue'
-    cont.style.padding = '5px'
-    elem.children[0].style.background = '#000'// "#00FFFF"
-    elem.classList.add('pricep')
-}
+
 export function viewDinamic(arr, maxProtector) {
     const conts = document.querySelectorAll('.contBar2')
     conts.forEach(el => {

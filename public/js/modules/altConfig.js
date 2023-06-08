@@ -9,19 +9,15 @@ export function conf() {
     checkAlt.checked ? createConfig() : clearConfig()
 
 }
-function createConfig() {
-    const cont = document.querySelector('.container')
-    if (cont.childNodes.length > 0) {
-        Array.from(cont.children).forEach(e => {
-            e.remove()
-        })
-    }
+export function createConfig() {
     const alt = document.querySelector('.containerAlt')
     if (alt) {
         alt.remove()
     }
     const disketa = document.querySelector('.disketa')
     disketa.style.display = 'flex'
+    const korzina = document.querySelector('.korzina')
+    korzina.style.display = 'flex'
     console.log('1')
     const altConfig = document.querySelector('.altConfig')
     const containerAlt = document.createElement('div')
@@ -97,12 +93,16 @@ function createConfig() {
     choiceP.appendChild(miP)
 
     listenerNum()
+
+
 }
 
 function clearConfig() {
     loadParamsView()
     const disketa = document.querySelector('.disketa')
     disketa.style.display = 'none'
+    const korzina = document.querySelector('.korzina')
+    korzina.style.display = 'none'
     const containerAlt = document.querySelector('.containerAlt')
     containerAlt.remove()
 
