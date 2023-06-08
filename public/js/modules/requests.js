@@ -347,8 +347,10 @@ import { zapros } from './menu.js'
 
 //конфигуратор оси
 export async function changeBase(massModel, activePost, idw) {
-    const containerAltOne = document.querySelector('.containerAltOne')
-    containerAltOne.remove()
+    // const containerAlt = document.querySelector('.containerAlt')
+    //  containerAlt.remove()
+    reqDelete(idw);
+    paramsDelete(idw);
     const go = document.querySelector('.gosNumber')
     const go1 = document.querySelector('.gosNumber1')
     const goCar = document.querySelector('.gosNumberCar')

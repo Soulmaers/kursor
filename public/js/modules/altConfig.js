@@ -10,39 +10,120 @@ export function conf() {
 
 }
 
-
-
 export function createConfig() {
     const altConfig = document.querySelector('.altConfig')
-    const altOne = document.querySelector('.containerAltOne')
-    if (altOne) {
-        altOne.remove();
-    }
     const alt = document.querySelector('.containerAlt')
-    if (alt) {
-        alt.style.zoom = '0.65'
-        alt.style.MozTransformOrigin = "top"
-        alt.style.MozTransform = "scale(0.65)"
-        alt.style.maxHeight = "550px"
-        alt.style.width = '50%'
-        alt.style.marginLeft = '0'
-        altConfig.appendChild(alt);
-        alt.style.marginTop = '30px';
-    }
     const disketa = document.querySelector('.disketa')
     disketa.style.display = 'flex'
     const korzina = document.querySelector('.korzina')
     korzina.style.display = 'flex'
-    console.log('1')
-    const containerAltOne = document.createElement('div')
-    containerAltOne.classList.add('containerAltOne')
-    altConfig.insertBefore(containerAltOne, altConfig.children[1]);
+
+    if (alt) {
+        console.log('alt')
+        const centerOsTest = document.querySelectorAll('.centerOsTest')
+        const osiTagach = document.querySelectorAll('.tagachT').length
+        const osiPricep = document.querySelectorAll('.pricepT').length
+        console.log(osiTagach, osiPricep)
+        const wrapperTagach = document.createElement('div')
+        wrapperTagach.classList.add('wrapperTagach')
+        const wrapperPricep = document.createElement('div')
+        wrapperPricep.classList.add('wrapperPricep')
+        alt.appendChild(wrapperTagach)
+        alt.appendChild(wrapperPricep)
+        const titleTagach = document.createElement('div')
+        titleTagach.classList.add('titleTagach')
+        wrapperTagach.appendChild(titleTagach)
+        const containerTagach = document.querySelector('.containerTagach')
+        containerTagach.style.marginTop = '20px'
+        wrapperTagach.appendChild(containerTagach)
+        const titlePricep = document.createElement('div')
+        titlePricep.classList.add('titlePricep')
+        wrapperPricep.appendChild(titlePricep)
+        const containerPricep = document.querySelector('.containerPricep')
+        containerPricep.style.marginTop = '20px'
+        wrapperPricep.appendChild(containerPricep)
+        const titleT = document.createElement('div')
+        titleT.classList.add('titleT')
+        titleTagach.appendChild(titleT)
+        titleT.textContent = 'Тягач'
+        const titleP = document.createElement('div')
+        titleP.classList.add('titleP')
+        titlePricep.appendChild(titleP)
+        titleP.textContent = 'Прицеп'
+        const numT = document.createElement('div')
+        numT.classList.add('numT')
+        titleTagach.appendChild(numT)
+        const quantityT = document.createElement('div')
+        quantityT.classList.add('quantityT')
+        numT.appendChild(quantityT)
+        quantityT.textContent = 'Кол-во осей:'
+        const kolvoT = document.createElement('div')
+        kolvoT.classList.add('kolvoT')
+        numT.appendChild(kolvoT)
+        osiTagach ? kolvoT.textContent = osiTagach : kolvoT.textContent = 0
+        const choiceT = document.createElement('div')
+        choiceT.classList.add('choiceT')
+        titleTagach.appendChild(choiceT)
+        const pluT = document.createElement('div')
+        pluT.classList.add('pluT')
+        choiceT.appendChild(pluT)
+        const miT = document.createElement('div')
+        miT.classList.add('miT')
+        choiceT.appendChild(miT)
+        const numP = document.createElement('div')
+        numP.classList.add('numP')
+        titlePricep.appendChild(numP)
+        const quantityP = document.createElement('div')
+        quantityP.classList.add('quantityP')
+        numP.appendChild(quantityP)
+        quantityP.textContent = 'Кол-во осей:'
+        const kolvoP = document.createElement('div')
+        kolvoP.classList.add('kolvoP')
+        numP.appendChild(kolvoP)
+        osiPricep ? kolvoP.textContent = osiPricep : kolvoP.textContent = 0
+        const choiceP = document.createElement('div')
+        choiceP.classList.add('choiceP')
+        titlePricep.appendChild(choiceP)
+        const pluP = document.createElement('div')
+        pluP.classList.add('pluP')
+        choiceP.appendChild(pluP)
+        const miP = document.createElement('div')
+        miP.classList.add('miP')
+        choiceP.appendChild(miP)
+        listenerNum()
+        let index = 0;
+        centerOsTest.forEach(el => {
+            index++
+            console.log(el)
+            if (el.closest('.containerPricep')) {
+                const spark = document.createElement('div')
+                spark.classList.add('spark')
+                spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
+                console.log(spark)
+                el.prepend(spark)
+                el.children[1].style.background = '#000'
+            } else {
+                if (index !== 1 && el.closest('.containerTagach')) {
+                    const spark = document.createElement('div')
+                    spark.classList.add('spark')
+                    spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
+                    el.prepend(spark)
+                }
+            }
+        })
+        sparka()
+        return
+    }
+    console.log('не алт')
+    const containerAlt = document.createElement('div')
+    containerAlt.classList.add('containerAlt')
+    altConfig.insertBefore(containerAlt, altConfig.children[1]);
     const wrapperTagach = document.createElement('div')
     wrapperTagach.classList.add('wrapperTagach')
     const wrapperPricep = document.createElement('div')
     wrapperPricep.classList.add('wrapperPricep')
-    containerAltOne.appendChild(wrapperTagach)
-    containerAltOne.appendChild(wrapperPricep)
+    containerAlt.appendChild(wrapperTagach)
+    containerAlt.appendChild(wrapperPricep)
     const titleTagach = document.createElement('div')
     titleTagach.classList.add('titleTagach')
     wrapperTagach.appendChild(titleTagach)
@@ -83,7 +164,6 @@ export function createConfig() {
     const miT = document.createElement('div')
     miT.classList.add('miT')
     choiceT.appendChild(miT)
-
     const numP = document.createElement('div')
     numP.classList.add('numP')
     titlePricep.appendChild(numP)
@@ -95,7 +175,6 @@ export function createConfig() {
     kolvoP.classList.add('kolvoP')
     numP.appendChild(kolvoP)
     kolvoP.textContent = 0
-
     const choiceP = document.createElement('div')
     choiceP.classList.add('choiceP')
     titlePricep.appendChild(choiceP)
@@ -105,16 +184,11 @@ export function createConfig() {
     const miP = document.createElement('div')
     miP.classList.add('miP')
     choiceP.appendChild(miP)
-
     listenerNum()
-
 
 }
 
-
-
 function clearConfig() {
-
     const disketa = document.querySelector('.disketa')
     disketa.style.display = 'none'
     const korzina = document.querySelector('.korzina')
@@ -124,8 +198,6 @@ function clearConfig() {
         alt.remove();
     }
     loadParamsView()
-    const containerAltOne = document.querySelector('.containerAltOne')
-    containerAltOne.style.display = 'none'
 
 }
 
@@ -257,13 +329,14 @@ function sparka() {
                     linkTest1.appendChild(tiresTTest1);
                 }
                 osSpark.children[1].children[1].style.width = '112px';
-                const nomerP = document.querySelector('.nomerP')
-                nomerP.style.left = '15px'
+
             } else {
                 osSpark.querySelectorAll('.tiresTest.sp').forEach(el => el.remove());
                 osSpark.children[1].children[1].style.width = '214px';
 
             }
+            const nomerP = document.querySelector('.nomerP')
+            nomerP.closest('.centerOsTest').children[0].children[0].checked ? nomerP.style.left = '15px' : nomerP.style.left = '63.5px'
             forTyres()
         });
     });
@@ -274,7 +347,7 @@ function forTyres() {
     const sensors = document.querySelector('.sensors')
     const obo = document.querySelector('.obo')
     const tiresLinkTest = document.querySelectorAll('.tires_link_test')
-    const globalWrapper = document.querySelector('.containerAltOne')
+    const globalWrapper = document.querySelector('.containerAlt')
     const tyres = globalWrapper.querySelectorAll('.tires_link_test')
     console.log(tyres)
     tyres.forEach(e => {

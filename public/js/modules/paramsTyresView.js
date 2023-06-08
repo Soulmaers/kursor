@@ -72,9 +72,6 @@ function createViewModel(model) {
         </div>
     </div>`;
         const centerOs = document.querySelectorAll('.centerOsTest')
-        console.log(container.children)
-        console.log(item.trailer)
-        console.log(centerOs)
         centerOs[i].closest('.containerTagach') ? centerOs[i].classList.add('tagachT') : centerOs[i].classList.add('pricepT')
         if (item.tyres === '4') {
             const osiTest = document.querySelectorAll('.osiTest')

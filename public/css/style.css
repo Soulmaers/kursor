@@ -1384,18 +1384,13 @@ div.spoyler {
 }
 
 .containerAlt {
-  max-height: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 30px;
 }
 
-.containerAltOne {
-  max-height: 600px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+
 
 .buttOnConfig {
   display: none;
@@ -1407,7 +1402,7 @@ div.spoyler {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 .choiceT,
