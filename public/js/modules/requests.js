@@ -349,6 +349,7 @@ import { zapros } from './menu.js'
 export async function changeBase(massModel, activePost, idw) {
     // const containerAlt = document.querySelector('.containerAlt')
     //  containerAlt.remove()
+    console.log(massModel)
     reqDelete(idw);
     paramsDelete(idw);
     const go = document.querySelector('.gosNumber')
