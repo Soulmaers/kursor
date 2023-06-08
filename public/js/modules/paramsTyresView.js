@@ -80,6 +80,7 @@ function createViewModel(model) {
             tiresTest1.classList.add('tiresTest');
             osiTest[i].children[2].prepend(tiresTest1);
             osiTest[i].children[1].children[0].style.width = '112px'
+
         }
     }
     const tiresTest = document.querySelectorAll('.tiresTest')
@@ -99,6 +100,10 @@ function createViewModel(model) {
     })
     const center = document.querySelectorAll('.centerOsTest')
     gosNum(center)
+    const nomerP = document.querySelector('.nomerP')
+    if (nomerP) {
+        nomerP.closest('.osiTest').children[0].children.length === 2 ? nomerP.style.left = '15px' : null
+    }
     const gosNumber = document.querySelector('.gosNumber')
     const gosNumber1 = document.querySelector('.gosNumber1')
     const gosNumberCar = document.querySelector('.gosNumberCar')

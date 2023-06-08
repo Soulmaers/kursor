@@ -215,6 +215,7 @@ export function btnDel() {
             reqDelete(idw);
             paramsDelete(idw);
             barDelete(idw);
+            buttOnConfig[1].style.display = 'none'
         })
         const otmena = document.querySelector('.otmClear')
         otmena.addEventListener('click', () => {
@@ -353,7 +354,7 @@ disk.addEventListener('click', () => {
         postTyres(arrTyres, activePost, idw);
         const sensors = document.querySelector('.sensors')
         sensors.style.display = 'none';
-
+        buttOnConfig[0].style.display = 'none'
     })
 
     otmena.addEventListener('click', () => {

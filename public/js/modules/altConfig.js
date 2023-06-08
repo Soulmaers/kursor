@@ -260,9 +260,12 @@ function sparka() {
                     linkTest1.appendChild(tiresTTest1);
                 }
                 osSpark.children[1].children[1].style.width = '112px';
+                const nomerP = document.querySelector('.nomerP')
+                nomerP.style.left = '15px'
             } else {
                 osSpark.querySelectorAll('.tiresTest.sp').forEach(el => el.remove());
                 osSpark.children[1].children[1].style.width = '214px';
+
             }
             forTyres()
         });
