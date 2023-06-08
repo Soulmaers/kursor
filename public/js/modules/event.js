@@ -206,11 +206,21 @@ if (configs) {
 export function btnDel() {
     const korz = document.querySelector('.korz')
     korz.addEventListener('click', () => {
-        const idw = document.querySelector('.color').id
-        alarmClear()
-        reqDelete(idw);
-        paramsDelete(idw);
-        barDelete(idw);
+        const buttOnConfig = document.querySelectorAll('.buttOnConfig')
+        buttOnConfig[1].style.display = 'flex'
+        const clear = document.querySelector('.galClear')
+        clear.addEventListener('click', () => {
+            const idw = document.querySelector('.color').id
+            alarmClear()
+            reqDelete(idw);
+            paramsDelete(idw);
+            barDelete(idw);
+        })
+        const otmena = document.querySelector('.otmClear')
+        otmena.addEventListener('click', () => {
+            buttOnConfig[1].style.display = 'none'
+        })
+
     })
 
 }
@@ -308,49 +318,48 @@ modalNameOs.addEventListener('click', () => {
     })
 })
 
-/*
-const btnSave = document.querySelector('.btn_save')
-btnSave.addEventListener('click', () => {
-    const massModel = [];
-    const active = document.querySelector('.color')
-    const idw = document.querySelector('.color').id
-    const activePost = active.textContent.replace(/\s+/g, '')
-    const osi = document.querySelectorAll('.osi')
-    osi.forEach(el => {
-        massModel.push(fnsort(el))
-    })
-    console.log(massModel, activePost, idw)
-    changeBase(massModel, activePost, idw)
-})*/
 
 const disk = document.querySelector('.disk')
 disk.addEventListener('click', () => {
-    const arrModel = [];
-    const arrTyres = [];
-    const active = document.querySelector('.color')
-    const idw = document.querySelector('.color').id
-    const activePost = active.textContent.replace(/\s+/g, '')
-    const osi = document.querySelectorAll('.osiTest')
-    const linkTyres = document.querySelectorAll('.tires_link_test')
-    let index = 0;
-    let indexTyres = 0;
 
-    osi.forEach(el => {
-        index++
-        el.children[1].setAttribute('id', `${index}`)
-        arrModel.push(fnsortTest(el))
+    const buttOnConfig = document.querySelectorAll('.buttOnConfig')
+    buttOnConfig[0].style.display = 'flex'
+
+    const save = document.querySelector('.galSave')
+    const otmena = document.querySelector('.otmSave')
+    save.addEventListener('click', () => {
+        const arrModel = [];
+        const arrTyres = [];
+        const active = document.querySelector('.color')
+        const idw = document.querySelector('.color').id
+        const activePost = active.textContent.replace(/\s+/g, '')
+        const osi = document.querySelectorAll('.osiTest')
+        const linkTyres = document.querySelectorAll('.tires_link_test')
+        let index = 0;
+        let indexTyres = 0;
+
+        osi.forEach(el => {
+            index++
+            el.children[1].setAttribute('id', `${index}`)
+            arrModel.push(fnsortTest(el))
+        })
+        linkTyres.forEach(el => {
+            indexTyres++
+            el.setAttribute('id', `${indexTyres}`)
+            arrTyres.push(fnsortTyresTest(el))
+        })
+
+        changeBase(arrModel, activePost, idw)
+        postTyres(arrTyres, activePost, idw);
+        const sensors = document.querySelector('.sensors')
+        sensors.style.display = 'none';
+
     })
-    linkTyres.forEach(el => {
-        indexTyres++
-        el.setAttribute('id', `${indexTyres}`)
-        arrTyres.push(fnsortTyresTest(el))
+
+    otmena.addEventListener('click', () => {
+        buttOnConfig[0].style.display = 'none'
     })
-    console.log(arrModel, activePost, idw)
-    console.log(arrTyres, activePost, idw)
-    changeBase(arrModel, activePost, idw)
-    postTyres(arrTyres, activePost, idw);
-    const sensors = document.querySelector('.sensors')
-    sensors.style.display = 'none';
+
 })
 
 
@@ -376,19 +385,6 @@ export function fnsortTyresTest(el) {
     const relT = el.children[1].getAttribute('rel')
     return [idw, relD, relT, numOs]
 }
-
-/*
-export function fnsort(el) {
-    const numberOs = parseFloat(el.children[1].id)
-    let typeOs;
-    el.children[1].classList.contains('pricep') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
-    const tyres = el.querySelectorAll('.tires')
-    let count = 0;
-    tyres.forEach(elem => {
-        elem.style.display == 'flex' ? count++ : null
-    })
-    return [numberOs, typeOs, count]
-}*/
 
 
 const buttonTth = document.querySelector('.buttonTth')

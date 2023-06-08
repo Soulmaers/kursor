@@ -1397,7 +1397,10 @@ div.spoyler {
   align-items: center;
 }
 
-
+.buttOnConfig {
+  display: none;
+  margin-top: 5px;
+}
 
 .titleTagach,
 .titlePricep {
@@ -1476,7 +1479,7 @@ div.spoyler {
 }
 
 .spark {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   margin-bottom: 2px;
 }
 
@@ -2896,6 +2899,16 @@ input[type="date"] {
   margin: 0 5px;
 }
 
+.galSave,
+.galClear {
+  width: 15px;
+  height: 15px;
+  background-image: url(../image/gal.svg);
+  background-size: cover;
+  cursor: pointer;
+
+}
+
 .gal:hover {
   width: 18px;
   height: 18px;
@@ -2912,6 +2925,16 @@ input[type="date"] {
   background-image: url(../image/otm.svg);
   background-size: cover;
   cursor: pointer;
+}
+
+.otmSave,
+.otmClear {
+  width: 15px;
+  height: 15px;
+  background-image: url(../image/otm.svg);
+  background-size: cover;
+  cursor: pointer;
+  margin: 0 3px;
 }
 
 /*новые иконки*/
