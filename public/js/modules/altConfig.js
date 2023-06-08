@@ -9,26 +9,42 @@ export function conf() {
     checkAlt.checked ? createConfig() : clearConfig()
 
 }
+
+
+
 export function createConfig() {
+    const altConfig = document.querySelector('.altConfig')
+    const altOne = document.querySelector('.containerAltOne')
+    if (altOne) {
+        altOne.remove();
+    }
     const alt = document.querySelector('.containerAlt')
     if (alt) {
-        alt.remove()
+        alt.style.zoom = '0.65'
+        alt.style.MozTransformOrigin = "top"
+        alt.style.MozTransform = "scale(0.65)"
+        alt.style.maxHeight = "550px"
+        alt.style.width = '50%'
+        alt.style.marginLeft = '0'
+        altConfig.appendChild(alt);
+        alt.style.marginTop = '30px';
     }
     const disketa = document.querySelector('.disketa')
     disketa.style.display = 'flex'
     const korzina = document.querySelector('.korzina')
     korzina.style.display = 'flex'
     console.log('1')
-    const altConfig = document.querySelector('.altConfig')
-    const containerAlt = document.createElement('div')
-    containerAlt.classList.add('containerAlt')
-    altConfig.appendChild(containerAlt)
+
+    const containerAltOne = document.createElement('div')
+    containerAltOne.classList.add('containerAltOne')
+    // altConfig.appendChild(containerAltOne)
+    altConfig.insertBefore(containerAltOne, altConfig.children[1]);
     const wrapperTagach = document.createElement('div')
     wrapperTagach.classList.add('wrapperTagach')
     const wrapperPricep = document.createElement('div')
     wrapperPricep.classList.add('wrapperPricep')
-    containerAlt.appendChild(wrapperTagach)
-    containerAlt.appendChild(wrapperPricep)
+    containerAltOne.appendChild(wrapperTagach)
+    containerAltOne.appendChild(wrapperPricep)
     const titleTagach = document.createElement('div')
     titleTagach.classList.add('titleTagach')
     wrapperTagach.appendChild(titleTagach)
@@ -97,14 +113,21 @@ export function createConfig() {
 
 }
 
+
+
 function clearConfig() {
-    loadParamsView()
+
     const disketa = document.querySelector('.disketa')
     disketa.style.display = 'none'
     const korzina = document.querySelector('.korzina')
     korzina.style.display = 'none'
-    const containerAlt = document.querySelector('.containerAlt')
-    containerAlt.remove()
+    const alt = document.querySelector('.containerAlt')
+    if (alt) {
+        alt.remove();
+    }
+    loadParamsView()
+    const containerAltOne = document.querySelector('.containerAltOne')
+    containerAltOne.style.display = 'none'
 
 }
 
@@ -251,7 +274,7 @@ function forTyres() {
     const sensors = document.querySelector('.sensors')
     const obo = document.querySelector('.obo')
     const tiresLinkTest = document.querySelectorAll('.tires_link_test')
-    const globalWrapper = document.querySelector('.containerAlt')
+    const globalWrapper = document.querySelector('.containerAltOne')
     const tyres = globalWrapper.querySelectorAll('.tires_link_test')
     console.log(tyres)
     tyres.forEach(e => {
@@ -348,9 +371,10 @@ function allparamsTyres(btnsens) {
 }
 
 export function gosNum(center) {
+    console.log(center)
     center.forEach(el => {
         if (el.classList.contains('pricepT')) {
-            const containerPricep = document.querySelector('.containerPricep')
+            const containerPricep = el.closest('.containerPricep')
             const nomerP = document.querySelector('.nomerP')
             if (!nomerP) {
                 const nomerP = document.createElement('div')
@@ -388,11 +412,12 @@ export function gosNum(center) {
             }
         }
         if (el.classList.contains('tagachT')) {
-            const containerTagach = document.querySelector('.containerTagach')
+            const containerTagach = el.closest('.containerTagach')
             const nomerV = document.querySelector('.nomerV')
             if (!nomerV) {
                 const nomerV = document.createElement('div')
                 nomerV.classList.add('nomerV')
+                console.log(containerTagach.children[0])
                 containerTagach.children[0].children[1].appendChild(nomerV)
                 nomerV.style.bottom = '70px'
                 nomerV.style.left = '63.5px'

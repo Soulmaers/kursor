@@ -27,6 +27,10 @@ export async function visual(el) {
     if (containerAlt) {
         containerAlt.remove()
     }
+    const containerAltOne = document.querySelector('.containerAltOne')
+    if (containerAltOne) {
+        containerAltOne.remove()
+    }
     const disketa = document.querySelector('.disketa')
     disketa.style.display = 'none'
     const korzina = document.querySelector('.korzina')

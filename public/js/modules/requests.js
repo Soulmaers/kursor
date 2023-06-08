@@ -55,13 +55,10 @@ export const reqDelete = (idw) => {
         .then((res) => res.json())
         .then((res) => console.log(res))
 
-    // const containerAlt = document.querySelector('.containerAlt')
-    // containerAlt.remove();
-    const containerTagach = document.querySelector('.containerTagach')
-    containerTagach.remove();
-    const containerPricep = document.querySelector('.containerPricep')
-    containerPricep.remove();
-    createConfig()
+    const containerAlt = document.querySelector('.containerAlt')
+    containerAlt.remove();
+
+    // createConfig()
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Модель удалена'
     messaga.style.color = 'green'
@@ -350,6 +347,8 @@ import { zapros } from './menu.js'
 
 //конфигуратор оси
 export async function changeBase(massModel, activePost, idw) {
+    const containerAltOne = document.querySelector('.containerAltOne')
+    containerAltOne.remove()
     const go = document.querySelector('.gosNumber')
     const go1 = document.querySelector('.gosNumber1')
     const goCar = document.querySelector('.gosNumberCar')
