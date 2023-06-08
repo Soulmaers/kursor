@@ -34,10 +34,8 @@ export function createConfig() {
     const korzina = document.querySelector('.korzina')
     korzina.style.display = 'flex'
     console.log('1')
-
     const containerAltOne = document.createElement('div')
     containerAltOne.classList.add('containerAltOne')
-    // altConfig.appendChild(containerAltOne)
     altConfig.insertBefore(containerAltOne, altConfig.children[1]);
     const wrapperTagach = document.createElement('div')
     wrapperTagach.classList.add('wrapperTagach')
@@ -135,7 +133,6 @@ function clearConfig() {
 function listenerNum() {
     const arrayPlu = document.querySelectorAll('.pluT, .pluP');
     const arrayMi = document.querySelectorAll('.miT, .miP');
-
     console.log(arrayPlu)
     arrayMi.forEach(e => {
         e.addEventListener('click', () => {
@@ -282,10 +279,6 @@ function forTyres() {
     console.log(tyres)
     tyres.forEach(e => {
         e.addEventListener('click', () => {
-            /* if (e.classList.contains('tiresActivt')) {
-                 e.classList.remove('tiresActivt')
-                 return
-             }*/
             const actBTN = document.querySelector('.actBTN')
             console.log(actBTN)
             if (actBTN) {

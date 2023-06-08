@@ -52,7 +52,9 @@ function createViewModel(model) {
     containerTagach.style.padding = '2px'
     containerPricep.style.padding = '2px'
     containerPricep.style.marginTop = '50px'
+    model.sort((a, b) => a.osi - b.osi)
     for (let i = 0; i < model.length; i++) {
+        console.log(model)
         const item = model[i];
         const container = item.trailer === 'Тягач' ? containerTagach : containerPricep;
         item.trailer === 'Прицеп' ? containerPricep.style.border = '2px solid darkblue' : containerPricep.style.border = 'none'
@@ -70,9 +72,14 @@ function createViewModel(model) {
         </div>
     </div>`;
         const centerOs = document.querySelectorAll('.centerOsTest')
+        console.log(container.children)
+        console.log(item.trailer)
+        console.log(centerOs)
         centerOs[i].closest('.containerTagach') ? centerOs[i].classList.add('tagachT') : centerOs[i].classList.add('pricepT')
         if (item.tyres === '4') {
             const osiTest = document.querySelectorAll('.osiTest')
+            console.log(item.tyres)
+            console.log(osiTest[i])
             const tiresTest = document.createElement('div');
             tiresTest.classList.add('tiresTest');
             osiTest[i].children[0].appendChild(tiresTest);
@@ -80,7 +87,6 @@ function createViewModel(model) {
             tiresTest1.classList.add('tiresTest');
             osiTest[i].children[2].prepend(tiresTest1);
             osiTest[i].children[1].children[0].style.width = '112px'
-
         }
     }
     const tiresTest = document.querySelectorAll('.tiresTest')
@@ -156,6 +162,8 @@ export function viewMenuParams() {
             });
             // sensors.style.display = 'flex';
             e.classList.add('tiresActiv')
+            const checkAlt = document.getElementById('check_Title')
+            checkAlt.checked ? sensors.style.display = 'flex' : null
             //  btnsens[0].style.display = 'flex'
             //  btnsens[1].style.display = 'flex'
             techInfo.style.display = 'block'
