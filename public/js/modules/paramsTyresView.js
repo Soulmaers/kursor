@@ -86,6 +86,14 @@ function createViewModel(model) {
             osiTest[i].children[1].children[0].style.width = '112px'
         }
     }
+    const centerOs = document.querySelectorAll('.centerOsTest')
+    centerOs.forEach(e => {
+        if (e.classList.contains('pricepT')) {
+            console.log(e.children)
+            e.children[0].style.background = '#000'
+        }
+    })
+    console.log(centerOs)
     const tiresTest = document.querySelectorAll('.tiresTest')
     let indexTires = 0;
     tiresTest.forEach(el => {
