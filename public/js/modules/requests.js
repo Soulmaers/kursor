@@ -114,7 +114,7 @@ export const geoPosition = (geo) => {
     const maps = document.createElement('div')
     maps.setAttribute('id', 'map')
     maps.style.width = '100%';
-    maps.style.height = '300px',
+    maps.style.height = '90vh',
         wrap.appendChild(maps)
     const map = L.map('map')
     map.attributionControl.setPrefix(false)

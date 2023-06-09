@@ -40,7 +40,7 @@ function dis(one) {
 
 }
 liCreate()
-
+console.log(screen.width)
 
 if (screen.width === 1366 && screen.height === 768) {
     document.body.style.maxWidth = '1366px';

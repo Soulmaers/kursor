@@ -6,6 +6,7 @@ body {
   border: 1px solid gray;
   /*max-width: 1600px;*/
   box-sizing: border-box;
+
 }
 
 .logotip {
@@ -1587,7 +1588,8 @@ div.spoyler {
 
 .windowStatistic {
   width: 98%;
-  border: 1px solid gray
+  border: 1px solid gray;
+  display: none;
 }
 
 .titleStatic {
