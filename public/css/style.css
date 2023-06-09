@@ -2473,9 +2473,7 @@ input[type="date"] {
   z-index: 3000
 }
 
-.activMenuGraf {
-  background-color: #fff;
-}
+
 
 
 .infoGraf {
@@ -2843,6 +2841,12 @@ input[type="date"] {
 
 .menu_graf:hover {
   background-color: #fff;
+}
+
+
+.activMenuGraf {
+  background-color: #fff;
+  border: 2px solid darkblue
 }
 
 .foto {
