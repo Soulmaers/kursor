@@ -18,6 +18,7 @@ export function createConfig() {
     const korzina = document.querySelector('.korzina')
     korzina.style.display = 'flex'
     if (alt) {
+        alt.style.marginTop = '0'
         nowModel(alt)
         return
     }
