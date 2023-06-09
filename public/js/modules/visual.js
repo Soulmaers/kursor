@@ -21,6 +21,13 @@ let start;
 let time;
 let timeIcon;
 export async function visual(el) {
+    const msg = document.querySelectorAll('.msg')
+    console.log(msg)
+    if (msg) {
+        msg.forEach(e => {
+            e.remove();
+        })
+    }
     const checkConfig = document.getElementById('check_Title')
     checkConfig.checked = false
     const containerAlt = document.querySelector('.containerAlt')
@@ -236,6 +243,7 @@ export async function viewConfigurator(arg, params, osi) {
                 if (e.id == item.tyresdiv) {
                     arg.forEach((el) => {
                         if (el.name === item.pressure) {
+
                             if (activePost === 'А652УА198') {
                                 done = parseFloat((el.value / 10).toFixed(1))
                             }

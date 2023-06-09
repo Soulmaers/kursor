@@ -203,6 +203,7 @@ export async function viewPokasateli() {
         if (prev.name < next.name) return 1;
     })
     view(data.values)
+    console.log(data.values, params.values, osi.values)
     viewConfigurator(data.values, params.values, osi.values)
 }
 

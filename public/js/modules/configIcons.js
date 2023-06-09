@@ -129,12 +129,15 @@ export async function iconFind(idw) {
                             elem.children[0].textContent = val// + 'км'
                         }
                         if (it.icons === 'ign-card') {
-                            if (activePost !== 'КранГаличанинР858ОР178') {
+                            if (idw !== '25766831') {
                                 const val = el.value
                                 elem.children[0].textContent = val + '° C'
                                 val > 0 ? elem.children[0].textContent = 'ВКЛ' : elem.children[0].textContent = 'ВЫКЛ';
                                 const ignTest = document.querySelector('.ignTest_card')
-                                val > 0 ? (ignTest.classList.remove('ignTest_card_vykl'), ignTest.classList.add('ignTest_card_vkl')) : (ignTest.classList.remove('ignTest_card_vkl'), ignTest.classList.add('ignTest_card_vykl'))
+                                if (ignTest) {
+                                    val > 0 ? (ignTest.classList.remove('ignTest_card_vykl'), ignTest.classList.add('ignTest_card_vkl')) : (ignTest.classList.remove('ignTest_card_vkl'), ignTest.classList.add('ignTest_card_vykl'))
+                                }
+
                             }
                         }
                         elem.addEventListener('click', () => {

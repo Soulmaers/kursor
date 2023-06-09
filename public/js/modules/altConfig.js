@@ -1,15 +1,12 @@
 import { textTest } from './content.js'
 import { loadParamsView } from './paramsTyresView.js'
-import { tech } from './tech.js'
 import { objColor, generT, generFront } from './content.js'
 
 export function conf() {
-    console.log('чекед')
     const checkAlt = document.getElementById('check_Title')
     checkAlt.checked ? createConfig() : clearConfig()
 
 }
-
 export function createConfig() {
     const altConfig = document.querySelector('.altConfig')
     const alt = document.querySelector('.containerAlt')
@@ -17,12 +14,10 @@ export function createConfig() {
     disketa.style.display = 'flex'
     const korzina = document.querySelector('.korzina')
     korzina.style.display = 'flex'
-
     if (alt) {
         nowModel(alt)
         return
     }
-    console.log('не алт')
     const containerAlt = document.createElement('div')
     containerAlt.classList.add('containerAlt')
     altConfig.insertBefore(containerAlt, altConfig.children[1]);
@@ -93,7 +88,6 @@ export function createConfig() {
     miP.classList.add('miP')
     choiceP.appendChild(miP)
     listenerNum()
-
 }
 
 function clearConfig() {
@@ -106,14 +100,10 @@ function clearConfig() {
         alt.remove();
     }
     loadParamsView()
-
 }
-
-
 function listenerNum() {
     const arrayPlu = document.querySelectorAll('.pluT, .pluP');
     const arrayMi = document.querySelectorAll('.miT, .miP');
-    console.log(arrayPlu)
     arrayMi.forEach(e => {
         e.addEventListener('click', () => {
             down(e)
@@ -125,9 +115,7 @@ function listenerNum() {
         })
     })
 }
-
 function down(elem) {
-    console.log(elem.parentElement.parentElement.nextElementSibling)
     const elemKolvo = elem.parentElement.previousElementSibling.children[1]
     let count = elem.parentElement.previousElementSibling.children[1].textContent
     count > 0 ? count-- : count
@@ -151,7 +139,6 @@ function createOs(count, parent) {
         parent.innerHTML += `${textTest}`
     }
     let index = 0;
-    console.log(parent)
     Array.from(parent.children).forEach(el => {
         index++
         const centerOsDivTest = document.createElement('div');
@@ -166,7 +153,6 @@ function createOs(count, parent) {
             spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
             centerOsDivTest.prepend(spark)
             centerOsDivTest.classList.add('pricepT');
-            console.log(centerOsDivTest)
             centerOsDivTest.children[1].style.background = '#000'
         } else {
             centerOsDivTest.classList.add('tagachT');
@@ -184,11 +170,9 @@ function createOs(count, parent) {
     const tiresTest = parent.querySelectorAll('.tiresTest')
     let indexTires = 0;
     tiresTest.forEach(el => {
-        console.log(el)
         indexTires++
         const linkTest = document.createElement('a');
         linkTest.classList.add('tires_link_test')
-        //  linkTest.setAttribute("id", `${indexTires}`);
         el.appendChild(linkTest);
         const tiresDTest = document.createElement('div');
         tiresDTest.classList.add('tiresDTest')
@@ -199,16 +183,13 @@ function createOs(count, parent) {
     })
     sparka()
 }
-
 function sparka() {
-    console.log('чек?')
     const sparkCheck = document.querySelectorAll('.sparkCheck')
     sparkCheck.forEach(el => {
         el.addEventListener('change', () => {
             const osSpark = el.closest('.osiTest');
             if (el.checked) {
                 const spElements = osSpark.querySelectorAll('.tiresTest.sp');
-                console.log(spElements)
                 if (spElements.length === 0) {
                     const tiresTest = document.createElement('div');
                     tiresTest.classList.add('tiresTest', 'sp');
@@ -255,10 +236,8 @@ function forTyres() {
     const btnsens = document.querySelectorAll('.btnsens')
     const sensors = document.querySelector('.sensors')
     const obo = document.querySelector('.obo')
-    const tiresLinkTest = document.querySelectorAll('.tires_link_test')
     const globalWrapper = document.querySelector('.containerAlt')
     const tyres = globalWrapper.querySelectorAll('.tires_link_test')
-    console.log(tyres)
     tyres.forEach(e => {
         e.addEventListener('click', () => {
             const actBTN = document.querySelector('.actBTN')
@@ -278,8 +257,6 @@ function forTyres() {
             });
 
             e.classList.add('tiresActivt')
-            console.log(e)
-
             sensors.style.display = 'flex';
             btnsens[0].style.display = 'flex'
             btnsens[1].style.display = 'flex'
@@ -347,7 +324,6 @@ function allparamsTyres(btnsens) {
 }
 
 export function gosNum(center) {
-
     center.forEach(el => {
         if (el.classList.contains('pricepT')) {
             const containerPricep = el.closest('.containerPricep')
@@ -399,7 +375,6 @@ export function gosNum(center) {
             if (!nomerV) {
                 const nomerV = document.createElement('div')
                 nomerV.classList.add('nomerV')
-                console.log(containerTagach.children[0])
                 containerTagach.children[0].children[1].appendChild(nomerV)
                 nomerV.style.bottom = '70px'
                 nomerV.style.left = '63.5px'
@@ -431,18 +406,14 @@ export function gosNum(center) {
                 elemFlag3.classList.add('flagRed')
                 flag.appendChild(elemFlag3)
             }
-
         }
     })
 }
 
-
 function nowModel(alt) {
     const centerOsTest = document.querySelectorAll('.centerOsTest')
-    console.log(centerOsTest)
     const osiTagach = document.querySelectorAll('.tagachT').length
     const osiPricep = document.querySelectorAll('.pricepT').length
-    console.log(osiTagach, osiPricep)
     const wrapperTagach = document.createElement('div')
     wrapperTagach.classList.add('wrapperTagach')
     const wrapperPricep = document.createElement('div')
@@ -511,7 +482,6 @@ function nowModel(alt) {
     choiceP.appendChild(miP)
     const arrayPlu = document.querySelectorAll('.pluT, .pluP');
     const arrayMi = document.querySelectorAll('.miT, .miP');
-    console.log(arrayPlu)
     arrayMi.forEach(e => {
         e.addEventListener('click', () => {
             const elemKolvo = e.parentElement.previousElementSibling.children[1]
@@ -530,7 +500,6 @@ function nowModel(alt) {
             const nomerP = document.createElement('div')
             nomerP.classList.add('nomerP')
             nomerP.style.top = '65px'
-            console.log(osi[osi.length - 1].previousElementSibling.children.length)
             osi[osi.length - 1].previousElementSibling.children.length === 2 ? nomerP.style.left = '15px' : nomerP.style.left = '63.5px'
             osi[osi.length - 1].style.position = 'relative'
             nomerP.style.display = 'flex'
@@ -569,24 +538,17 @@ function nowModel(alt) {
             count++
             elemKolvo.textContent = count
             console.log(e.parentElement.parentElement.nextElementSibling.children.length)
-            let num = count - e.parentElement.parentElement.nextElementSibling.children.length
             createOsNow(e.parentElement.parentElement.nextElementSibling)
-
         })
     })
-
     let index = 0;
-    console.log(centerOsTest)
     centerOsTest.forEach(el => {
         index++
-        console.log(el)
         if (el.closest('.containerPricep')) {
             const spark = document.createElement('div')
             spark.classList.add('spark')
             spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
-            console.log(spark)
             el.prepend(spark)
-            console.log(el.children[0].children[0])
             el.previousElementSibling.children.length === 2 ? el.children[0].children[0].checked = true : null
             el.children[1].style.background = '#000'
         } else {
@@ -595,20 +557,16 @@ function nowModel(alt) {
                 spark.classList.add('spark')
                 spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
                 el.prepend(spark)
-
                 el.previousElementSibling.children.length === 2 ? el.children[0].children[0].checked = true : null
             }
         }
     })
     sparka()
-
 }
 
 function createOsNow(parent) {
     parent.innerHTML += `${textTest}`
     let index = 0;
-    console.log(parent.lastElementChild.parentElement?.classList.contains('containerPricep'))
-
     index++
     const centerOsDivTest = document.createElement('div');
     centerOsDivTest.classList.add('centerOsTest')
@@ -617,7 +575,6 @@ function createOsNow(parent) {
     centerOsDivTest.appendChild(vnutTest)
     parent.lastElementChild.children[0].insertAdjacentElement('afterEnd', centerOsDivTest);
     if (parent.lastElementChild.parentElement?.classList.contains('containerPricep')) {
-        console.log('спарк2')
         const spark = document.createElement('div')
         spark.classList.add('spark')
         spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
@@ -625,34 +582,28 @@ function createOsNow(parent) {
         centerOsDivTest.classList.add('pricepT');
         centerOsDivTest.children[1].style.background = '#000'
         parent.querySelectorAll('.osiTest').forEach(el => {
-            console.log(el.children[1].children[0].children[0])
             el.children[0].children.length === 2 ? el.children[1].children[0].children[0].checked = true : null
         })
     } else {
         centerOsDivTest.classList.add('tagachT');
         if (parent.lastElementChild.parentElement?.classList.contains('containerTagach')) {
-            console.log('спарк1')
             const spark = document.createElement('div')
             spark.classList.add('spark')
             spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
             centerOsDivTest.prepend(spark)
             parent.querySelectorAll('.osiTest').forEach(el => {
-                console.log(el.children[1].children[0].children[0])
                 el.children[0].children.length === 2 ? el.children[1].children[0].children[0].checked = true : null
             })
         }
     }
     const center = document.querySelectorAll('.centerOsTest')
     gosNum(center);
-
     const tiresTest = parent.lastElementChild.querySelectorAll('.tiresTest')
     let indexTires = 0;
     tiresTest.forEach(el => {
-        console.log(el)
         indexTires++
         const linkTest = document.createElement('a');
         linkTest.classList.add('tires_link_test')
-        //  linkTest.setAttribute("id", `${indexTires}`);
         el.appendChild(linkTest);
         const tiresDTest = document.createElement('div');
         tiresDTest.classList.add('tiresDTest')

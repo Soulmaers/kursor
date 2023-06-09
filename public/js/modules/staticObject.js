@@ -213,24 +213,30 @@ export async function tarirView() {
                     }
                     const approximated = approximateValue(val, x, y, degree);
                     const znak = Number((approximated[0] * 0.9987).toFixed(0))
+
                     const value = znak * 100 / y[y.length - 1]
                     const oilValue = document.querySelector('.oil_value1')
                     console.log(znak)
-                    if (znak < 0) {
-                        oilValue.textContent = '----'
-                        return
+                    if (!isNaN(znak)) {
+                        if (znak < 0) {
+                            oilValue.textContent = '----'
+                            return
+                        }
+                        oilValue.textContent = znak
+                        let color = 'steelblue';
+                        if (value > 30 && value < 70) {
+                            color = 'yellow'
+                        }
+                        if (value < 20) {
+                            color = 'red'
+                        }
+                        grafGradient(y, znak, color)
+                        grafikPoly(points, 6, approximated[1])
                     }
-                    oilValue.textContent = znak
-                    let color = 'steelblue';
-                    if (value > 30 && value < 70) {
-                        color = 'yellow'
-                    }
-                    if (value < 20) {
-                        color = 'red'
-                    }
-                    grafGradient(y, znak, color)
-                    grafikPoly(points, 6, approximated[1])
+
                 }
+
+
             }
         })
     })
