@@ -22,6 +22,8 @@ export function postModel(massModel) {
 }
 
 export function postTyres(tyres) {
+    console.log('ченчбэйстайрес')
+    console.log(tyres)
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
     const name = active[0].textContent.replace(/\s+/g, '')
@@ -41,7 +43,7 @@ export function postTyres(tyres) {
     setTimeout(() => messaga.textContent = '', 2000)
 }
 
-export const reqDelete = (idw) => {
+export const reqDelete = async (idw) => {
     const centerOs = document.querySelectorAll('.centerOs')
     const osi = document.querySelectorAll('.osi')
     const tires = document.querySelectorAll('.tires')
@@ -54,11 +56,10 @@ export const reqDelete = (idw) => {
     })
         .then((res) => res.json())
         .then((res) => console.log(res))
-
     const containerAlt = document.querySelector('.containerAlt')
-    containerAlt.remove();
-
-    // createConfig()
+    if (containerAlt) {
+        containerAlt.remove();
+    }
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Модель удалена'
     messaga.style.color = 'green'
@@ -77,7 +78,7 @@ export const barDelete = async (idw) => {
     })
     const result = await complete.json()
 }
-export const paramsDelete = (idw) => {
+export const paramsDelete = async (idw) => {
     fetch('api/paramsDelete', {
         method: "POST",
         headers: {
@@ -349,14 +350,14 @@ import { zapros } from './menu.js'
 export async function changeBase(massModel, activePost, idw) {
     // const containerAlt = document.querySelector('.containerAlt')
     //  containerAlt.remove()
+    console.log('ченчбэйс')
     console.log(massModel)
-    reqDelete(idw);
-    paramsDelete(idw);
+    await reqDelete(idw);
+    // await paramsDelete(idw);
     const go = document.querySelector('.gosNumber')
     const go1 = document.querySelector('.gosNumber1')
     const goCar = document.querySelector('.gosNumberCar')
     const goCar1 = document.querySelector('.gosNumberCar1')
-    console.log(goCar)
     let gosp;
     let frontGosp;
     let gosp1;

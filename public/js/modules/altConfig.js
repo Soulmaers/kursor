@@ -246,8 +246,7 @@ function sparka() {
             if (nomerP) {
                 nomerP.closest('.centerOsTest').children[0].children[0].checked ? nomerP.style.left = '15px' : nomerP.style.left = '63.5px'
             }
-
-            //  forTyres()
+            forTyres()
         });
     });
     forTyres()
@@ -263,7 +262,6 @@ function forTyres() {
     tyres.forEach(e => {
         e.addEventListener('click', () => {
             const actBTN = document.querySelector('.actBTN')
-            console.log(actBTN)
             if (actBTN) {
                 actBTN.classList.remove('actBTN')
             }

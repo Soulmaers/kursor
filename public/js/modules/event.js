@@ -328,46 +328,47 @@ modalNameOs.addEventListener('click', () => {
 
 const disk = document.querySelector('.disk')
 disk.addEventListener('click', () => {
-
     const buttOnConfig = document.querySelectorAll('.buttOnConfig')
     buttOnConfig[0].style.display = 'flex'
-
-    const save = document.querySelector('.galSave')
-    const otmena = document.querySelector('.otmSave')
-    save.addEventListener('click', () => {
-        const arrModel = [];
-        const arrTyres = [];
-        const active = document.querySelector('.color')
-        const idw = document.querySelector('.color').id
-        const activePost = active.textContent.replace(/\s+/g, '')
-        const osi = document.querySelectorAll('.osiTest')
-        const linkTyres = document.querySelectorAll('.tires_link_test')
-        let index = 0;
-        let indexTyres = 0;
-
-        osi.forEach(el => {
-            index++
-            el.children[1].setAttribute('id', `${index}`)
-            arrModel.push(fnsortTest(el))
-        })
-        linkTyres.forEach(el => {
-            indexTyres++
-            el.setAttribute('id', `${indexTyres}`)
-            arrTyres.push(fnsortTyresTest(el))
-        })
-
-        changeBase(arrModel, activePost, idw)
-        postTyres(arrTyres, activePost, idw);
-        const sensors = document.querySelector('.sensors')
-        sensors.style.display = 'none';
-        buttOnConfig[0].style.display = 'none'
-    })
-
-    otmena.addEventListener('click', () => {
-        buttOnConfig[0].style.display = 'none'
-    })
-
 })
+const save = document.querySelector('.galSave')
+const otmena = document.querySelector('.otmSave')
+save.addEventListener('click', () => {
+    console.log('save')
+    const arrModel = [];
+    const arrTyres = [];
+    const active = document.querySelector('.color')
+    const idw = document.querySelector('.color').id
+    const activePost = active.textContent.replace(/\s+/g, '')
+    const osi = document.querySelectorAll('.osiTest')
+    const linkTyres = document.querySelectorAll('.tires_link_test')
+    const buttOnConfig = document.querySelectorAll('.buttOnConfig')
+    let index = 0;
+    let indexTyres = 0;
+    osi.forEach(el => {
+        index++
+        el.children[1].setAttribute('id', `${index}`)
+        arrModel.push(fnsortTest(el))
+    })
+    linkTyres.forEach(el => {
+        indexTyres++
+        el.setAttribute('id', `${indexTyres}`)
+        arrTyres.push(fnsortTyresTest(el))
+    })
+    console.log(arrModel)
+    console.log(arrTyres)
+    changeBase(arrModel, activePost, idw)
+    postTyres(arrTyres, activePost, idw);
+    const sensors = document.querySelector('.sensors')
+    sensors.style.display = 'none';
+    buttOnConfig[0].style.display = 'none'
+})
+const buttOnConfig = document.querySelectorAll('.buttOnConfig')
+otmena.addEventListener('click', () => {
+    buttOnConfig[0].style.display = 'none'
+})
+
+
 
 
 export function fnsortTest(el) {
