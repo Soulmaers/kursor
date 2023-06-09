@@ -287,6 +287,7 @@ export async function viewConfigurator(arg, params, osi) {
                             }
                         }
                         if (el.name === item.temp) {
+
                             tiresLink.forEach(e => {
                                 if (e.id == item.tyresdiv) {
                                     if (el.value === '-128' || el.value === '-50' || el.value === '-51') {
@@ -302,7 +303,7 @@ export async function viewConfigurator(arg, params, osi) {
                                             e.children[1].style.borderRadius = '0 0 30% 30%'
                                         }
                                     }
-                                    if (el.value >= -51 && el.value <= 50) {
+                                    if (el.value >= -51 && el.value <= 70) {
                                         e.children[1].style.border = 'none'
                                         e.children[1].textContent = el.value + '°C'
                                         e.children[1].setAttribute('rel', `${item.temp}`)
