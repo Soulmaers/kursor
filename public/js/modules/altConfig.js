@@ -208,6 +208,7 @@ function sparka() {
             const osSpark = el.closest('.osiTest');
             if (el.checked) {
                 const spElements = osSpark.querySelectorAll('.tiresTest.sp');
+                console.log(spElements)
                 if (spElements.length === 0) {
                     const tiresTest = document.createElement('div');
                     tiresTest.classList.add('tiresTest', 'sp');
@@ -242,8 +243,11 @@ function sparka() {
 
             }
             const nomerP = document.querySelector('.nomerP')
-            nomerP.closest('.centerOsTest').children[0].children[0].checked ? nomerP.style.left = '15px' : nomerP.style.left = '63.5px'
-            forTyres()
+            if (nomerP) {
+                nomerP.closest('.centerOsTest').children[0].children[0].checked ? nomerP.style.left = '15px' : nomerP.style.left = '63.5px'
+            }
+
+            //  forTyres()
         });
     });
     forTyres()
@@ -345,7 +349,7 @@ function allparamsTyres(btnsens) {
 }
 
 export function gosNum(center) {
-    console.log(center)
+
     center.forEach(el => {
         if (el.classList.contains('pricepT')) {
             const containerPricep = el.closest('.containerPricep')
@@ -353,11 +357,11 @@ export function gosNum(center) {
             if (!nomerP) {
                 const nomerP = document.createElement('div')
                 nomerP.classList.add('nomerP')
-                containerPricep.lastElementChild.children[1].appendChild(nomerP)
                 nomerP.style.top = '65px'
                 nomerP.style.left = '63.5px'
                 containerPricep.lastElementChild.children[1].style.position = 'relative'
                 nomerP.style.display = 'flex'
+                containerPricep.lastElementChild.children[1].appendChild(nomerP)
                 const gosNumber = document.createElement('input')
                 gosNumber.classList.add('gosNumber')
                 gosNumber.setAttribute('placeholder', 'A000AA')
@@ -384,6 +388,12 @@ export function gosNum(center) {
                 elemFlag3.classList.add('flagRed')
                 flag.appendChild(elemFlag3)
             }
+            if (nomerP) {
+                containerPricep.lastElementChild.children[1].style.position = 'relative'
+                containerPricep.lastElementChild.children[0].children.length === 1 ? nomerP.style.left = '63.5px' : null
+                containerPricep.lastElementChild.children[1].appendChild(nomerP)
+            }
+
         }
         if (el.classList.contains('tagachT')) {
             const containerTagach = el.closest('.containerTagach')
@@ -430,8 +440,8 @@ export function gosNum(center) {
 
 
 function nowModel(alt) {
-    console.log('alt')
     const centerOsTest = document.querySelectorAll('.centerOsTest')
+    console.log(centerOsTest)
     const osiTagach = document.querySelectorAll('.tagachT').length
     const osiPricep = document.querySelectorAll('.pricepT').length
     console.log(osiTagach, osiPricep)
@@ -501,21 +511,57 @@ function nowModel(alt) {
     const miP = document.createElement('div')
     miP.classList.add('miP')
     choiceP.appendChild(miP)
-
-
-
     const arrayPlu = document.querySelectorAll('.pluT, .pluP');
     const arrayMi = document.querySelectorAll('.miT, .miP');
     console.log(arrayPlu)
     arrayMi.forEach(e => {
         e.addEventListener('click', () => {
-            console.log(e.parentElement.parentElement.nextElementSibling)
             const elemKolvo = e.parentElement.previousElementSibling.children[1]
             let count = e.parentElement.previousElementSibling.children[1].textContent
             count > 0 ? count-- : count
             elemKolvo.textContent = count
-            console.log(e.parentElement.parentElement.nextElementSibling.lastChild)
-            e.parentElement.parentElement.nextElementSibling.lastChild.remove()
+            e.parentElement.parentElement.nextElementSibling.lastElementChild.remove()
+
+            const osiClear = document.querySelectorAll('.centerOsTest')
+            const osi = [];
+            osiClear.forEach(e => {
+
+                if (e.closest('.containerPricep'))
+                    osi.push(e)
+            })
+            const nomerP = document.createElement('div')
+            nomerP.classList.add('nomerP')
+            nomerP.style.top = '65px'
+            console.log(osi[osi.length - 1].previousElementSibling.children.length)
+            osi[osi.length - 1].previousElementSibling.children.length === 2 ? nomerP.style.left = '15px' : nomerP.style.left = '63.5px'
+            osi[osi.length - 1].style.position = 'relative'
+            nomerP.style.display = 'flex'
+            osi[osi.length - 1].appendChild(nomerP)
+            const gosNumber = document.createElement('input')
+            gosNumber.classList.add('gosNumber')
+            gosNumber.setAttribute('placeholder', 'A000AA')
+            gosNumber.maxLength = 6;
+            nomerP.appendChild(gosNumber)
+            const flagss = document.createElement('div')
+            flagss.classList.add('flagss')
+            nomerP.appendChild(flagss)
+            const gosNumber1 = document.createElement('input')
+            gosNumber1.classList.add('gosNumber1')
+            gosNumber1.setAttribute('placeholder', '00')
+            gosNumber1.maxLength = 3;
+            flagss.appendChild(gosNumber1)
+            const flag = document.createElement('div')
+            flag.classList.add('flagy')
+            flagss.appendChild(flag)
+            const elemFlag1 = document.createElement('div')
+            elemFlag1.classList.add('flagWhite')
+            flag.appendChild(elemFlag1)
+            const elemFlag2 = document.createElement('div')
+            elemFlag2.classList.add('flagBlue')
+            flag.appendChild(elemFlag2)
+            const elemFlag3 = document.createElement('div')
+            elemFlag3.classList.add('flagRed')
+            flag.appendChild(elemFlag3)
         })
     })
     arrayPlu.forEach(e => {
@@ -527,6 +573,7 @@ function nowModel(alt) {
             console.log(e.parentElement.parentElement.nextElementSibling.children.length)
             let num = count - e.parentElement.parentElement.nextElementSibling.children.length
             createOsNow(e.parentElement.parentElement.nextElementSibling)
+
         })
     })
 
@@ -541,8 +588,8 @@ function nowModel(alt) {
             spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
             console.log(spark)
             el.prepend(spark)
-
-            el.previousElementSibling.children.length === 2 ? spark.children.checked : null
+            console.log(el.children[0].children[0])
+            el.previousElementSibling.children.length === 2 ? el.children[0].children[0].checked = true : null
             el.children[1].style.background = '#000'
         } else {
             if (index !== 1 && el.closest('.containerTagach')) {
@@ -550,8 +597,8 @@ function nowModel(alt) {
                 spark.classList.add('spark')
                 spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
                 el.prepend(spark)
-                console.log(spark)
-                el.previousElementSibling.children.length === 2 ? spark.children.checked = true : null
+
+                el.previousElementSibling.children.length === 2 ? el.children[0].children[0].checked = true : null
             }
         }
     })
@@ -577,10 +624,12 @@ function createOsNow(parent) {
         spark.classList.add('spark')
         spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
         centerOsDivTest.prepend(spark)
-
         centerOsDivTest.classList.add('pricepT');
-        console.log(centerOsDivTest)
         centerOsDivTest.children[1].style.background = '#000'
+        parent.querySelectorAll('.osiTest').forEach(el => {
+            console.log(el.children[1].children[0].children[0])
+            el.children[0].children.length === 2 ? el.children[1].children[0].children[0].checked = true : null
+        })
     } else {
         centerOsDivTest.classList.add('tagachT');
         if (parent.lastElementChild.parentElement?.classList.contains('containerTagach')) {
@@ -589,8 +638,10 @@ function createOsNow(parent) {
             spark.classList.add('spark')
             spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
             centerOsDivTest.prepend(spark)
-
-
+            parent.querySelectorAll('.osiTest').forEach(el => {
+                console.log(el.children[1].children[0].children[0])
+                el.children[0].children.length === 2 ? el.children[1].children[0].children[0].checked = true : null
+            })
         }
     }
     const center = document.querySelectorAll('.centerOsTest')

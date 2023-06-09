@@ -216,6 +216,12 @@ export function btnDel() {
             paramsDelete(idw);
             barDelete(idw);
             buttOnConfig[1].style.display = 'none'
+            const disketa = document.querySelector('.disketa')
+            const korzina = document.querySelector('.korzina')
+            const checkAlt = document.getElementById('check_Title')
+            disketa.style.display = 'none'
+            korzina.style.display = 'none'
+            checkAlt.checked = false;
         })
         const otmena = document.querySelector('.otmClear')
         otmena.addEventListener('click', () => {

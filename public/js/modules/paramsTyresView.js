@@ -78,10 +78,10 @@ function createViewModel(model) {
             console.log(item.tyres)
             console.log(osiTest[i])
             const tiresTest = document.createElement('div');
-            tiresTest.classList.add('tiresTest');
+            tiresTest.classList.add('tiresTest', 'sp');
             osiTest[i].children[0].appendChild(tiresTest);
             const tiresTest1 = document.createElement('div');
-            tiresTest1.classList.add('tiresTest');
+            tiresTest1.classList.add('tiresTest', 'sp');
             osiTest[i].children[2].prepend(tiresTest1);
             osiTest[i].children[1].children[0].style.width = '112px'
         }
