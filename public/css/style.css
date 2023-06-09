@@ -2843,6 +2843,9 @@ input[type="date"] {
   background-color: #fff;
 }
 
+.checkAlt {
+  color: #000;
+}
 
 .activMenuGraf {
   background-color: #fff;

@@ -8,6 +8,9 @@ export function conf() {
 
 }
 export function createConfig() {
+    const checkAlt = document.querySelector('.checkAlt')
+    checkAlt.style.color = 'red'
+    checkAlt.style.fontWeight = 'bold'
     const altConfig = document.querySelector('.altConfig')
     const alt = document.querySelector('.containerAlt')
     const disketa = document.querySelector('.disketa')
@@ -91,6 +94,9 @@ export function createConfig() {
 }
 
 function clearConfig() {
+    const checkAlt = document.querySelector('.checkAlt')
+    checkAlt.style.color = 'black'
+    checkAlt.style.fontWeight = '400'
     const disketa = document.querySelector('.disketa')
     disketa.style.display = 'none'
     const korzina = document.querySelector('.korzina')

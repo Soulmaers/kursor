@@ -30,6 +30,9 @@ export async function visual(el) {
     }
     const checkConfig = document.getElementById('check_Title')
     checkConfig.checked = false
+    const checkAlt = document.querySelector('.checkAlt')
+    checkAlt.style.color = 'black'
+    checkAlt.style.fontWeight = '400'
     const containerAlt = document.querySelector('.containerAlt')
     if (containerAlt) {
         containerAlt.remove()
