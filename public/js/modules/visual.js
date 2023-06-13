@@ -360,7 +360,7 @@ function styleShinaActive(arg) {
 
 
 export function viewDinamic(arr, maxProtector) {
-    const conts = document.querySelectorAll('.contBar2')
+    const conts = document.querySelectorAll('.contBar22')
     conts.forEach(el => {
         el.style.display = 'none'
     })

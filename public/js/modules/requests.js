@@ -269,6 +269,7 @@ export function viewTech(id) {
                     keys.push(key);
                 }
             }
+            console.log(result)
             const number = document.querySelectorAll('.number')
             const text = document.querySelectorAll('.text')
             const titleMM = document.querySelectorAll('.titleMM')
@@ -320,6 +321,7 @@ export function viewTech(id) {
                         el.id === '1' ? viewDinamic(protectorClear, maxStoc) : viewDinamic(reverseprotectorClear, maxStoc)
                     })
                 })
+                console.log(protectorClear, maxStoc)
                 viewDinamic(protectorClear, maxStoc)
                 const nval = (Object.entries(result))
                 const dd = nval.splice(8, 1)

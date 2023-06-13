@@ -419,7 +419,7 @@ export async function pr() {
     const tyresActive = document.querySelector('.tiresActiv')
     const osId = tyresActive.closest('.osiTest').children[1].id
     let nameOs;
-    tyresActive.closest('.osi').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
+    tyresActive.closest('.osiTest').children[1].classList.contains('pricepT') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
     const arrNameCol = [];
     const arrNameColId = [];
     techText.forEach(el => {
@@ -428,7 +428,7 @@ export async function pr() {
     const active = document.querySelector('.color')
     const activePost = active.textContent.replace(/\s+/g, '')
     const idw = document.querySelector('.color').id
-    tyresActive.closest('.osi').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
+    tyresActive.closest('.osiTest').children[1].classList.contains('pricepT') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
     const pr = Array.from(formValue)
     const maxMM = pr.pop()
     const idbaseTyres = document.querySelector('.idbaseTyres')

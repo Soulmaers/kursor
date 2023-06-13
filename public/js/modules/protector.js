@@ -92,8 +92,9 @@ function fnCanvas(arg) {
     });
 }
 function viewPicture(arr, id, elem, mm) {
-    console.log(arr, id, elem, mm)
+    //  console.log(arr, id, elem, mm)
     const conts = document.querySelectorAll(`.contBar${id}`)
+    console.log(conts)
     conts.forEach(el => {
         el.style.display = 'none'
     })

@@ -4503,15 +4503,13 @@ input[type="text"]:focus {
 
 
 
-.contBar2 {
-
+.contBar22 {
   border-bottom: none;
   border-right: none;
   display: none;
   width: 116px;
   height: 60px;
   background-color: rgba(14, 12, 11, 1);
-
 }
 
 
