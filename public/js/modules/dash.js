@@ -85,7 +85,6 @@ async function waitArr(el) {
 }
 
 export function dashAllSort(test) {
-    console.log(test)
     const globalParams = test.map(el => {
         return el.params.map(it => {
             return [it[2], it[3]]
@@ -109,7 +108,6 @@ export function dashAllSort(test) {
                         }
                     })
                 })
-                console.log(mas)
                 dashDav(mas)
                 const allChecked = Array.from(checkboxes).every(c => !c.checked);
                 if (allChecked) {
@@ -136,7 +134,6 @@ export function dashAllSort(test) {
 
 
 function dashDav(arr) {
-    console.log(arr)
     const length = arr.length
     const color = {
         1: [],
@@ -167,7 +164,6 @@ function newBoard(ArrD, ArrDC, length) {
         newBoad.style.opacity = 0;
         return
     }
-    console.log(ArrD, ArrDC, length)
     const mass = [];
     mass.push(length)
     console.log(ArrD)
@@ -180,10 +176,9 @@ function newBoard(ArrD, ArrDC, length) {
         data.push({ browser: ArrD[i][1], rate: ArrD[i][0], value: ArrDC[i] })
     }
 
-    const height = 500,
-        width = 500,
+    const height = 350,
+        width = 300,
         margin = 30
-
     const colorScale = d3.scaleOrdinal()
         .domain(['Критически', 'Повышенное/Пониженное', 'Норма', 'Потеря датчика'])
         .range(['#FF0000', '#FFFF00', '#009933', 'gray']);
@@ -193,7 +188,7 @@ function newBoard(ArrD, ArrDC, length) {
     // создаем элемент арки с радиусом
     const arc = d3.arc()
         .outerRadius(radius)
-        .innerRadius(85);
+        .innerRadius(40);
 
     const pie = d3.pie()
         .sort(null)
@@ -266,7 +261,6 @@ function newBoard(ArrD, ArrDC, length) {
             return "translate(0, " + i * 12 + ")";
         });
 
-    console.log(legend)
     legend.append("rect")
         .attr("x", width - 10)
         .attr("y", 4)
@@ -279,7 +273,7 @@ function newBoard(ArrD, ArrDC, length) {
         .attr("y", 9)
         .attr("dy", ".35em")
         .style("text-anchor", "end")
-        .style('font-size', '1rem')
+        .style('font-size', '0.9rem')
         .text(function (d) { return d.data.browser; });
 
     var g1 = svg.append("g")
@@ -290,7 +284,7 @@ function newBoard(ArrD, ArrDC, length) {
     g1.append("circle")
         .attr("cx", 0)
         .attr("cy", 0)
-        .attr("r", 85)
+        .attr("r", 45)
         .style('fill', 'white')
         .style('stroke', 'black')
     g1.append("text")

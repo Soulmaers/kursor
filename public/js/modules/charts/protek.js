@@ -1,4 +1,3 @@
-import { generDav } from '../content.js'
 
 export function dashViewProtector() {
     const group = Array.from(document.querySelectorAll('.groups'))
@@ -28,15 +27,15 @@ export async function protDash() {
         return Array.from(el.children[1].children).map(it => it.id)
     }).flat()
     const result = await Promise.all(ids.map(async el => {
-        return waitArr(el)
+        return waitArrProtek(el)
     })
     )
     dashAllSort(result)
 }
 
-async function waitArr(el) {
+async function waitArrProtek(el) {
     const idw = el
-    console.log(idw)
+    //  console.log(idw)
     const param = {
         method: "POST",
         headers: {
@@ -49,11 +48,11 @@ async function waitArr(el) {
     console.log(params)
     const par = params.values
 
-    console.log(par)
+    //  console.log(par)
 
     const dashObject = {
         id: idw,
-        params: []
+        params: par
     }
     return dashObject
 }
@@ -61,9 +60,38 @@ async function waitArr(el) {
 export function dashAllSort(test) {
     const globalParams = test.map(el => {
         return el.params.map(it => {
-            return [it[2], it[3]]
+            return {
+                id: it.idw,
+                params: [it.N1, it.N2, it.N3, it.N4],
+                identificator: it.identificator,
+                maxMM: it.maxMM
+            }
         })
     }).flat()
+
+    // Функция, сравнивающая два элемента массива
+    function compare(a, b) {
+        if (a.identificator !== b.identificator) {
+            // Если поля identificator не совпадают, то сравниваем по ним
+            return a.identificator - b.identificator;
+        } else if (a.id !== b.id) {
+            // Если поля identificator совпадают, а поля id не совпадают, то сравниваем по ним
+            return a.id - b.id;
+        } else {
+            // Если поля identificator и id совпадают, то считаем, что элементы равны
+            return 0;
+        }
+    }
+    // Сортируем массив
+    globalParams.sort(compare);
+    // Удаляем дубликаты
+    const result = [];
+    for (let i = globalParams.length - 1; i >= 0; i--) {
+        const item = globalParams[i];
+        if (!result.find(x => x.identificator === item.identificator)) {
+            result.push(item);
+        }
+    }
     const checkboxes = document.querySelectorAll('.inputProt');
     const ide = document.getElementById('ВсеProt')
     let enabledSettings = []
@@ -74,13 +102,10 @@ export function dashAllSort(test) {
                 ide.checked = false;
                 enabledSettings = Array.from(checkboxes).filter(i => i.checked).map(i => i.value)
                 enabledSettings.forEach(el => {
-                    test.forEach(it => {
-                        console.log(it.id + 'p')
-                        console.log(el)
+                    result.forEach(it => {
+                        console.log(it)
                         if (el == it.id + 'p') {
-                            it.params.forEach(e => {
-                                mas.push([e[2], e[3]])
-                            })
+                            mas.push(it)
                         }
                     })
                 })
@@ -89,50 +114,84 @@ export function dashAllSort(test) {
                 const allChecked = Array.from(checkboxes).every(c => !c.checked);
                 if (allChecked) {
                     ide.checked = true;
-                    dashDav(globalParams)
+                    dashDav(result)
                 }
             }
-            if (this.id == "Все") {
-                const ide = document.getElementById('Все')
+            if (this.id == "ВсеProt") {
+                const ide = document.getElementById('ВсеProt')
                 checkboxes.forEach(el => {
                     el.checked = false
                 })
                 ide.checked = true;
-                dashDav(globalParams)
+                dashDav(result)
             }
 
         })
     });
 
     if (ide.checked) {
-        dashDav(globalParams)
+        dashDav(result)
     }
 }
 
-
 function dashDav(arr) {
     console.log(arr)
+    function fnMin(arra) {
+        let numbers = arra.filter(num => num !== '').map(num => Number(num));
+        let min = Math.min(...numbers);
+        return min
+    }
+
+    const array = arr.map(e => {
+        return {
+            id: e.id,
+            params: fnMin(e.params),
+            identificator: e.identificator,
+            maxMM: e.maxMM
+        }
+    })
+    console.log(array)
     const length = arr.length
     const color = {
         1: [],
         2: [],
         3: [],
-        4: []
+        4: [],
+        5: []
     }
-    arr.forEach((el) => {
-        if (el[0] === -348201.3876) {
-            color[4].push(el[0])
+    function generProt(el) {
+        let generatedValue;
+        if (el >= 80 && el < 100) {
+            generatedValue = 1;
+        }
+        if (el >= 60 && el < 80) {
+            generatedValue = 2;
+        }
+        if (el >= 40 && el < 60) {
+            generatedValue = 3;
+        }
+        if (el < 40) {
+            generatedValue = 4;
+        }
+        return generatedValue;
+    };
+    array.forEach((el) => {
+        if (el.params === Infinity) {
+            color[5].push(el.params)
         }
         else {
-            color[generDav(el[0], el[1])].push(el[0])
+            const percent = (el.params / Number(el.maxMM) * 100).toFixed(0)
+            color[generProt(percent)].push(el.params)
         }
     })
-    const resultRed = Math.round(color[1].length / arr.length * 100);
+    console.log(color)
+    const resultRed = Math.round(color[4].length / arr.length * 100);
+    const resultOrange = Math.round(color[3].length / arr.length * 100);
     const resultYellow = Math.round(color[2].length / arr.length * 100);
-    const resultGreen = Math.round(color[3].length / arr.length * 100);
-    const resultGray = Math.round(color[4].length / arr.length * 100);
-    const arrD = [[resultRed, 'Критически'], [resultYellow, 'Повышенное/Пониженное'], [resultGreen, 'Норма'], [resultGray, 'Потеря датчика']];
-    const arrDC = [color[1].length, color[2].length, color[3].length, color[4].length];
+    const resultGreen = Math.round(color[1].length / arr.length * 100);
+    const resultGray = Math.round(color[5].length / arr.length * 100);
+    const arrD = [[resultRed, 'Требует немедленной замены'], [resultOrange, 'Критический износ'], [resultYellow, 'Изношено'], [resultGreen, 'Норма'], [resultGray, 'Нет данных']];
+    const arrDC = [color[4].length, color[3].length, color[2].length, color[1].length, color[5].length];
     newBoard(arrD, arrDC, length)
 }
 
@@ -142,11 +201,8 @@ function newBoard(ArrD, ArrDC, length) {
         newBoad.style.opacity = 0;
         return
     }
-    console.log(ArrD, ArrDC, length)
     const mass = [];
     mass.push(length)
-    console.log(ArrD)
-
     if (newBoad) {
         newBoad.remove();
     }
@@ -154,21 +210,19 @@ function newBoard(ArrD, ArrDC, length) {
     for (let i = 0; i < ArrD.length; i++) {
         data.push({ browser: ArrD[i][1], rate: ArrD[i][0], value: ArrDC[i] })
     }
-
-    const height = 500,
-        width = 500,
+    const height = 350,
+        width = 300,
         margin = 30
-
     const colorScale = d3.scaleOrdinal()
-        .domain(['Критически', 'Повышенное/Пониженное', 'Норма', 'Потеря датчика'])
-        .range(['#FF0000', '#FFFF00', '#009933', 'gray']);
+        .domain(['Требует немедленной замены', 'Критический износ', 'Изношено', 'Норма', 'Нет данных'])
+        .range(['#FF0000', '#FF6633', '#FFFF00', '#009933', 'gray']);
     // задаем радиус
     const radius = Math.min(width - 2 * margin, height - 2 * margin) / 2.5;
-
+    console.log(radius)
     // создаем элемент арки с радиусом
     const arc = d3.arc()
         .outerRadius(radius)
-        .innerRadius(85);
+        .innerRadius(40);
 
     const pie = d3.pie()
         .sort(null)
@@ -228,34 +282,34 @@ function newBoard(ArrD, ArrDC, length) {
         });
 
 
-    const legendTable = d3.select("svg").append("g")
+    const legendTable = d3.select(".prot").select('svg').append("g")
         .attr("transform", "translate(0, 10)")
         .attr("class", "legendTable");
 
-    var legend = legendTable.selectAll(".legend")
+    var legenda = legendTable.selectAll(".legenda")
         .data(pie(data))
         .enter().append("g")
-        .attr("class", "legend")
+        .attr("class", "legenda")
         .style('margin', '5px 0')
         .attr("transform", function (d, i) {
             return "translate(0, " + i * 12 + ")";
         });
 
-    console.log(legend)
-    legend.append("rect")
+    legenda.append("rect")
         .attr("x", width - 10)
         .attr("y", 4)
         .attr("width", 10)
         .attr("height", 10)
         .style("fill", function (d) { return colorScale(d.data.browser); });
 
-    legend.append("text")
+    legenda.append("text")
         .attr("x", width - 34)
         .attr("y", 9)
         .attr("dy", ".35em")
         .style("text-anchor", "end")
-        .style('font-size', '1rem')
+        .style('font-size', '0.9rem')
         .text(function (d) { return d.data.browser; });
+
 
     var g1 = svg.append("g")
         .attr("transform", function (d, i) {
@@ -265,7 +319,7 @@ function newBoard(ArrD, ArrDC, length) {
     g1.append("circle")
         .attr("cx", 0)
         .attr("cy", 0)
-        .attr("r", 85)
+        .attr("r", 45)
         .style('fill', 'white')
         .style('stroke', 'black')
     g1.append("text")

@@ -26,6 +26,10 @@ body {
 
 }
 
+.listTitleProt {
+  margin: 5px 0;
+}
+
 .da,
 .net {
   font-size: 1.2rem;
@@ -189,6 +193,7 @@ body {
 
 .listTitle {
   width: 100%;
+  margin: 5px 0;
 }
 
 .listTitles {
@@ -2352,10 +2357,10 @@ input[type="date"] {
   justify-content: space-around;
   border: 2px solid lightgray;
   border-radius: 5px;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: bold;
   font-family: Roboto;
-  padding: 5px 10px;
+  padding: 5px 5px;
 
 }
 
@@ -3484,12 +3489,10 @@ input[type="date"] {
   margin: 20px 0;
 }
 
-.dashPressure {
-  display: flex;
-}
-
+.dashPressure,
 .dashProtector {
   display: flex;
+  align-items: center;
 }
 
 .boards {
@@ -4706,7 +4709,6 @@ input[type="text"]:focus {
 
 .wrapper_right_dash {
   display: none;
-  border: 1px solid gray;
 
 }
 
@@ -4715,7 +4717,6 @@ input[type="text"]:focus {
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  border: 1px solid gray;
 }
 
 .dash_title,
