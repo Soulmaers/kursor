@@ -126,8 +126,6 @@ module.exports.sing = async function (req, res) {
         }
         else if (rows.length <= 0) {
             res.render('form.ejs', { message: 'Пользователь не найден!' })
-
-
         }
         else {
             const row = JSON.parse(JSON.stringify(rows))

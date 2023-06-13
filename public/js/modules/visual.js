@@ -66,6 +66,7 @@ export async function visual(el) {
     const plug = document.querySelectorAll('.plug')
     const grafics = document.querySelector('.grafics')
     const delIcon = document.querySelectorAll('.delIcon')
+    main.style.display = 'flex'
     delIcon.forEach(el => {
         el.classList.remove('del')
         el.style.display = 'none'

@@ -79,3 +79,5 @@ router.post('/api/tarirSave', controllerModel.tarirSave)
 router.post('/api/tarirView', controllerModel.tarirView)
 router.post('/api/saveStatus', controllerModel.saveStatus)
 router.post('/api/viewStatus', controllerModel.viewStatus)
+
+

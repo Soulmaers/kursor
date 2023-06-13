@@ -13,8 +13,6 @@ export function init(kluch) {
             }
 
             zapros() //делаем запрос на wialon получаем объекты
-            //  setInterval(zapros, 3000)
-            //  console.log('после')
         });
 };
 const wrapContaint = document.querySelector('.wrapper_containt')
@@ -54,11 +52,9 @@ export function zapros() {
                 Allcountr++
                 const nameGroup = elem.nm
                 const nameObject = elem.u
-                //    console.log(nameGroup)
                 const massObject = [];
                 let countr = 0;
                 nameObject.forEach(el => {
-                    //   console.log(el)
                     const prms2 = {
                         "id": el,
                         "flags": 1025
@@ -69,15 +65,12 @@ export function zapros() {
                             if (code) {
                                 console.log(wialon.core.Errors.getErrorText(code));
                             }
-                            //  console.log(result)
                             const arr3 = await result
-                            //   console.log(arr3)
                             if (!arr3.item.nm) {
                                 return
                             }
                             const objects = arr3.item.nm
                             const prob = await loadParamsViewList(objects, el)
-                            // console.log(prob)
                             const role = document.querySelectorAll('.log')[0].textContent
                             const login = document.querySelectorAll('.log')[1].textContent
                             const massObjectCar = await dostupObject(login)

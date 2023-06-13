@@ -13,7 +13,7 @@ app.use(express.json());
 const session = wialon().session;
 let kluch;
 function init(user) {
-    if (user !== 'TDRMX') {
+    if (user !== 'TDRMX' || !user) {
         kluch = '0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178'
     }
     if (user === 'TDRMX') {
@@ -26,66 +26,37 @@ function init(user) {
         .then(function (data) {
             createTable();
             setInterval(createTable, 60000);
-
         })
 }
 
-function speed(t1, t2, int, id, res) {
-    const prms2 = {
-        "itemId": id,   //25343786,
-        "timeFrom": t1,//t1,//timeFrom,//1657205816,
-        "timeTo": t2,//t2,//nowDate,//2757209816,
-        "flags": 1,
-        "flagsMask": 65281,
-        "loadCount": 161000//82710
-    }
-    session.request('messages/load_interval', prms2)
-        .then(function (data) {
-            const arr2 = Object.values(data);
-            const arrIterTime = [];
-            const arrIterTimeDate = [];
-            const arrIterTimeDateU = [];
-            arr2[1].forEach(el => {
-                arrIterTime.push(el.t);
+async function wialonLongRequest() {
+    return new Promise(function (resolve, reject) {
+        session.request('core/search_items', prms)
+            .catch(function (err) {
+                console.log(err);
             })
-            arrIterTime.forEach(item => {
-                const dateObj = new Date(item * 1000);
-                arrIterTimeDateU.push(dateObj);
-                const utcString = dateObj.toUTCString();
-                const arrTimeDate = utcString.slice(8, 24);
-                arrIterTimeDate.push(arrTimeDate);
+            .then(function (data) {
+                const allCar = Object.entries(data);
+                resolve(allCar)
             })
-            let t = 0;
-            const arrIterTimeDateT = arrIterTimeDate.filter(e => (++t) % int === 0);
-            const arrSpee = [];
-            arr2[1].forEach(el => {
-                arrSpee.push(el.pos.s)
-            })
-            let s = 0;
-            const arrSpeed = arrSpee.filter(e => (++s) % int === 0)
-            res.json({ arrSpeed, arrIterTimeDateT, arrIterTimeDateU })
-        })
+    })
 }
-function createTable() {
-    session.request('core/search_items', prms)
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function (data) {
-            const nameCar = [];
-            const allCar = Object.entries(data);
-            allCar[5][1].forEach(el => {
-                const speed = el.lmsg.pos.s
-                const idw = el.id
-                nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed])
-                const nameTable = el.nm.replace(/\s+/g, '')
-                if (el.lmsg) {
-                    const sensor = Object.entries(el.lmsg.p)
-                    postParametrs(nameTable, el.id, sensor)
-                }
-            })
-            zaprosSpisokb(nameCar)
-        })
+async function createTable() {
+    const allCar = await wialonLongRequest()
+    const nameCar = [];
+    allCar[5][1].forEach(el => {
+        const speed = el.lmsg.pos.s
+        const idw = el.id
+        nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed])
+        const nameTable = el.nm.replace(/\s+/g, '')
+        if (el.lmsg) {
+            const sensor = Object.entries(el.lmsg.p)
+            postParametrs(nameTable, el.id, sensor)
+        }
+    })
+    zaprosSpisokb(nameCar)
+
+
 }
 function postParametrs(name, idw, param) {
     param.forEach(el => {
@@ -144,6 +115,7 @@ function postParametrs(name, idw, param) {
     }
 }
 function getMainInfo(name, res) {
+    console.log(name)
     const flags = 1 + 1026
     const prms = {
         "spec": {
@@ -157,15 +129,22 @@ function getMainInfo(name, res) {
         "from": 0,
         "to": 0
     };
+    if (session) {
+        console.log(true)
+    }
+    else {
+        console.log(false)
+    }
     session.request('core/search_items', prms)
         .catch(function (err) {
             console.log(err);
         })
         .then(function (data) {
             if (data) {
+                console.log('дата')
                 const allCar = Object.values(data);
                 allCar[5].forEach(el => {
-                    if (el.nm === name) {
+                    if (el.id == name) {
                         if (el.pos) {
                             const geoX = el.pos.x
                             const geoY = el.pos.y
@@ -551,14 +530,12 @@ module.exports = {
     getMainInfo,
     createTable,
     init,
-    speed
-
+    wialonLongRequest
 
 }
 
 createDateTest()
 function createDateTest() {
-
     let today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
@@ -574,3 +551,5 @@ function createDateTest() {
     return [todays]
     // console.log(today)
 }
+
+

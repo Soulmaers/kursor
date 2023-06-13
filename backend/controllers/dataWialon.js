@@ -2,6 +2,7 @@ const response = require('../../response')
 const { getMainInfo } = require('../settings/wialon.js')
 const { prms } = require('../settings/params')
 const connection = require('../settings/db')
+const { wialonLongRequest } = require('../settings/wialon.js')
 
 module.exports.datawialon = (req, res) => {
     const idw = req.body.idw
@@ -39,3 +40,12 @@ module.exports.datawialonGeo = (req, res) => {
     }
 }
 
+
+/*
+async function fnsortTest() {
+    console.log('два')
+    const test = await wialonLongRequest()
+    console.log(test)
+}
+
+fnsortTest()*/

@@ -128,7 +128,8 @@ export const geoPosition = (geo) => {
     polyline.addTo(map);
     let iss;
     const act = document.querySelector('.color')
-    const active = act.children[0].textContent
+
+    const active = act.id
     fetch('/api/datawialonGeo', {
         method: "POST",
         headers: {
@@ -139,6 +140,7 @@ export const geoPosition = (geo) => {
         .then((res) => res.json())
         .then((res) => {
             const geo = res
+            console.log(geo)
             const center = [geo.geoY, geo.geoX,]
             map.setView(center, 15)
             map.flyTo(center, 15)

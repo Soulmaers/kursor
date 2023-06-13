@@ -39,7 +39,7 @@ export async function alarmFind() {
         setTimeout(viewAlarmStorage, 1000, activePost, storValue)
     }
 }
-setInterval(alarmFind, 60000)
+//setInterval(alarmFind, 60000)
 
 async function viewAlarmStorage(name, stor) {
     const tbody = document.querySelector('.tbody')
@@ -291,5 +291,6 @@ minus.addEventListener('click', () => {
     alarmStorage.style.display = 'none';
     plus.style.display = 'block';
     minus.style.display = 'none'
+    alarmFind()
 })
 
