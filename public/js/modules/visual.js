@@ -28,6 +28,8 @@ export async function visual(el) {
             e.remove();
         })
     }
+    const starts = document.querySelector('.start')
+    starts.style.display = 'none'
     const checkConfig = document.getElementById('check_Title')
     checkConfig.checked = false
     const checkAlt = document.querySelector('.checkAlt')

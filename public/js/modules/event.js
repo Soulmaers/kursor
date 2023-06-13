@@ -16,7 +16,18 @@ import { conf } from './altConfig.js'
 
 
 
+const logo = document.querySelector('.logo')
 
+logo.addEventListener('click', () => {
+    const main = document.querySelector('.main')
+    const start = document.querySelector('.start')
+    const sections = document.querySelector('.sections')
+    const dash = document.querySelector('.wrapper_right_dash')
+    main.style.display = 'none'
+    dash.style.display = 'none'
+    start.style.display = 'flex'
+    sections.style.display = 'flex'
+})
 const auth = document.querySelector('.auth')
 const authClear = document.querySelector('.authClear')
 if (auth) {
@@ -80,6 +91,8 @@ iconStrela.addEventListener('click', () => {
 })
 const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {
+    const start = document.querySelector('.start')
+    start.style.display = 'none'
     const dash = document.querySelector('.wrapper_right_dash')
     const sections = document.querySelector('.sections')
     const main = document.querySelector('.main')
@@ -97,6 +110,8 @@ const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', mainblock)
 
 function mainblock() {
+    const start = document.querySelector('.start')
+    start.style.display = 'none'
     geoloc()
     const dash = document.querySelector('.wrapper_right_dash')
     const sections = document.querySelector('.sections')

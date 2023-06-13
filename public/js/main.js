@@ -29,6 +29,8 @@ if (login === 'TDRMX' || login === 'Ромакс') {
 }
 role === 'Пользователь' ? dis(nameStatic) : null
 function dis(one) {
+    const chekAlt = document.querySelector('.checkAlt')
+    chekAlt.style.display = 'none';
     const delIcon = document.querySelectorAll('.delIcon')
     delIcon.forEach(e => {
         e.style.display = 'none';
