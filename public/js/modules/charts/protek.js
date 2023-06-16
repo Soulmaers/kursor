@@ -35,7 +35,6 @@ export async function protDash() {
 
 async function waitArrProtek(el) {
     const idw = el
-    //  console.log(idw)
     const param = {
         method: "POST",
         headers: {
@@ -43,20 +42,15 @@ async function waitArrProtek(el) {
         },
         body: (JSON.stringify({ idw }))
     }
-    const tyr = await fetch('api/techViewAll', param)
+    const tyr = await fetch('/api/techViewAll', param)
     const params = await tyr.json();
-    console.log(params)
-    const par = params.values
-
-    //  console.log(par)
-
+    const par = params
     const dashObject = {
         id: idw,
         params: par
     }
     return dashObject
 }
-
 export function dashAllSort(test) {
     const globalParams = test.map(el => {
         return el.params.map(it => {

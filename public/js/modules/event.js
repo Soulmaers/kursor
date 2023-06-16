@@ -1,9 +1,9 @@
-import { postTyres, reqDelete, paramsDelete, barDelete, viewTech, changeBase } from './requests.js'
+import { postTyres, reqDelete, paramsDelete, barDelete, changeBase } from './requests.js'
 import { data } from './content.js'
-import { dashView, getDash } from './dash.js'
+import { dashView, getDash } from './charts/dash.js'
 import { alarmClear, clearGraf, visual, visualNone } from './visual.js'
 import { getUsers } from './admin.js'
-import { geoloc } from './wialon.js'
+import { geoloc } from './geo.js'
 import { reqProtectorBase } from './protector.js'
 import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
@@ -13,7 +13,7 @@ import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 import { protDash, dashViewProtector } from './charts/protek.js'
 import { conf } from './altConfig.js'
-
+import { viewTech } from './tech.js'
 
 
 const logo = document.querySelector('.logo')
@@ -182,13 +182,13 @@ if (configs) {
 
         const controll = document.querySelector('.container_left')
         const config = document.querySelector('.config')
-        const clear = document.querySelector('.clear')
-        const comfirm = document.querySelector('.comfirm')
+        // const clear = document.querySelector('.clear')
+        //const comfirm = document.querySelector('.comfirm')
         const sensors = document.querySelector('.sensors')
         controll.style.display = 'flex'
         config.style.display = 'flex'
-        clear.style.display = 'flex'
-        comfirm.style.display = 'block';
+        //clear.style.display = 'flex'
+        //comfirm.style.display = 'block';
         sensors.style.display = 'none';
         configs.classList.add('conf')
         rotate()

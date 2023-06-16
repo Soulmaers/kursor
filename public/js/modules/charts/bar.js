@@ -12,10 +12,12 @@ async function fn() {
         },
         body: (JSON.stringify({ activePost, idw }))
     }
-    const paramsss = await fetch('api/tyresView', param)
-    const params = await paramsss.json()
-    const os = await fetch('api/barView', param)
-    const osi = await os.json()
+    const paramsss = await fetch('/api/tyresView', param)
+    const paramm = await paramsss.json()
+    const params = paramm.result
+    const os = await fetch('/api/barView', param)
+    const osis = await os.json()
+    const osi = osis.result
     return { osi, params }
 }
 
@@ -30,8 +32,9 @@ export async function datas(t1, t2) {
     nameArr.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
-    const osss = ossParams.osi.values
-    const par = ossParams.params.values
+    const osss = ossParams.osi
+    const par = ossParams.params
+    console.log(osss)
     osss.forEach(it => {
         delete it.id
         delete it.nameCar
@@ -691,7 +694,7 @@ async function iconChart() {
     }
     const res = await fetch('/api/modelView', param)
     const response = await res.json()
-    return response.values
+    return response.result
 }
 
 async function vieModelChart(model, im1) {

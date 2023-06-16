@@ -34,6 +34,21 @@ const prms = {
 };
 
 
+//параметры запроса всех групп с виалона
+const flagsAllGroup = 1 + 1024// + 1024//4096
+const prmsAllGoup = {
+    "spec": {
+        "itemsType": "avl_unit_group",
+        "propName": "sys_name",
+        "propValueMask": "*",
+        "sortType": "sys_name"
+    },
+    "force": 1,
+    "flags": flagsAllGroup,
+    "from": 0,
+    "to": 0xffffffff
+};
+
 
 
 
@@ -55,5 +70,6 @@ const prms22 = {
 
 module.exports = {
     prms,
-    carId
+    carId,
+    prmsAllGoup
 }

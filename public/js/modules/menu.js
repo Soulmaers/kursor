@@ -11,7 +11,6 @@ export function init(kluch) {
             if (code) {
                 return;
             }
-
             zapros() //делаем запрос на wialon получаем объекты
         });
 };
@@ -21,77 +20,32 @@ cont.classList.add('container2')
 wrapContaint.appendChild(cont);
 
 
-export function zapros() {
+export async function zapros() {
+    const params = {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+        }
+
+    }
+    const mods = await fetch('/api/dataSpisok', params)
+    const models = await mods.json()
+    console.log(models)
+
+    const arrayList = models.response.aLLmassObject
+    const nameCarCheck = models.response.arrName
+    //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
+    console.log(arrayList)
+
+    await conturTest(arrayList)
+    //передаем имена объектов для отображения в панели администратора
+    checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')
     if (tiresActiv) {
         tiresActiv.remove()
     }
-    const flagsT = 1 + 1024// + 1024//4096
-    const prmsT = {
-        "spec": {
-            "itemsType": "avl_unit_group",
-            "propName": "sys_name",
-            "propValueMask": "*",
-            "sortType": "sys_name"
-        },
-        "force": 1,
-        "flags": flagsT,
-        "from": 0,
-        "to": 0xffffffff
-    };
-    const remoteT = wialon.core.Remote.getInstance();
-    remoteT.remoteCall('core/search_items', prmsT,
-        async function (code, result) {
-            if (code) {
-                console.log(wialon.core.Errors.getErrorText(code));
-            }
-            await result
-            const aLLmassObject = [];
-            let Allcountr = 0;
-            result.items.forEach(elem => {
-                Allcountr++
-                const nameGroup = elem.nm
-                const nameObject = elem.u
-                const massObject = [];
-                let countr = 0;
-                nameObject.forEach(el => {
-                    const prms2 = {
-                        "id": el,
-                        "flags": 1025
-                    };
-                    const remote3 = wialon.core.Remote.getInstance();
-                    remote3.remoteCall('core/search_item', prms2,
-                        async function (code, result) {
-                            if (code) {
-                                console.log(wialon.core.Errors.getErrorText(code));
-                            }
-                            const arr3 = await result
-                            if (!arr3.item.nm) {
-                                return
-                            }
-                            const objects = arr3.item.nm
-                            const prob = await loadParamsViewList(objects, el)
-                            const role = document.querySelectorAll('.log')[0].textContent
-                            const login = document.querySelectorAll('.log')[1].textContent
-                            const massObjectCar = await dostupObject(login)
-                            if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
-                                massObject.push(prob)
-                            }
-                            countr++
-                            if (countr === nameObject.length) {
-                                massObject.forEach(e => {
-                                    e.group = nameGroup
-                                })
-                                aLLmassObject.push(massObject)
-                            }
-                            if (aLLmassObject.length === Allcountr) {
-                                aLLmassObject.reverse()
-                                conturTest(aLLmassObject)
-                            }
-                        })
-                })
-            });
-        })
+
+    /*
     const prmss = {
         "spec": [{
             "type": 'id',
@@ -108,36 +62,7 @@ export function zapros() {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
             console.log(result)
-        });
-    const flags = 1 + 1024//4096
-    const prms = {
-        "spec": {
-            "itemsType": "avl_unit",
-            "propName": "sys_name",
-            "propValueMask": "*",
-            "sortType": "sys_name"
-        },
-        "force": 1,
-        "flags": flags,
-        "from": 0,
-        "to": 0
-    };
-    const remote1 = wialon.core.Remote.getInstance();
-    remote1.remoteCall('core/search_items', prms,
-        async function (code, result) {
-            if (code) {
-                console.log(wialon.core.Errors.getErrorText(code));
-            }
-            const arr1 = Object.values(result);
-            const arrCar = arr1[5];
-            const test = await Promise.all(arrCar.map(el => {
-                return loadParamsViewList(el.nm, el.id) //запрос в базу с массивом имен машин за готовыми моделями
-            })
-            )
-            const nameCarCheck = test.map(elem => elem[0].message)
-            checkCreate(nameCarCheck)
-        });
-
+        });*/
 }
 
 export async function ggg(id) {
@@ -190,16 +115,3 @@ export async function ggg(id) {
     })
 }
 
-async function dostupObject(name) {
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ name }))
-    }
-    const res = await fetch('/api/viewCheckObject', param)
-    const response = await res.json()
-    const nameCarCheck = response.result.map(elem => elem.Object)
-    return nameCarCheck
-}

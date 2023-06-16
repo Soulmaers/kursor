@@ -1,4 +1,4 @@
-import { generDav } from './content.js'
+import { generDav } from '../content.js'
 
 export function dashView() {
     const group = Array.from(document.querySelectorAll('.groups'))
@@ -42,13 +42,13 @@ async function waitArr(el) {
         },
         body: (JSON.stringify({ idw }))
     }
-    const tyr = await fetch('api/tyresView', param)
+    const tyr = await fetch('/api/tyresView', param)
     const params = await tyr.json();
-    const os = await fetch('api/barView', param)
+    const os = await fetch('/api/barView', param)
     const osi = await os.json()
     const res = await reqSensDash(idw)
-    const osss = osi.values
-    const par = params.values
+    const osss = osi.result
+    const par = params.result
 
     osss.forEach(it => {
         delete it.id

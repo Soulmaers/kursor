@@ -1,13 +1,12 @@
-import { text, objColor, generT, generDav } from './content.js'
-import { viewMenuParams, loadParamsView } from './paramsTyresView.js'
+import { objColor, generT, generDav } from './content.js'
+import { loadParamsView } from './paramsTyresView.js'
 import { findTyresInstall } from './saveBaseId.js'
-import { geoloc, iconParams } from './wialon.js'
-import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
+import { iconParams } from './wialon.js'
 import { alarmFind } from './alarmStorage.js'
-
+import { geoloc } from './geo.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
-import { iconFind, iconFindWindows } from './configIcons.js'
+import { iconFind } from './configIcons.js'
 import { tarirView } from './staticObject.js'
 import { tooltip } from './cursorTooltip.js'
 import { ggg } from './menu.js'
@@ -99,7 +98,6 @@ export async function visual(el) {
     liCreate()
     const idw = el.id
     iconFind(idw)
-    iconFindWindows(idw)
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
@@ -223,6 +221,7 @@ export function view(arg) {
     })
 }
 export async function viewConfigurator(arg, params, osi) {
+    console.log(osi)
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelectorAll('.color')
     const allobj = await ggg(active[0].id)
@@ -357,93 +356,5 @@ function styleShinaActive(arg) {
         e.style.fontSize = '0.8rem'
         e.style.justifyContent = 'flex-start'
     })
-}
-
-
-export function viewDinamic(arr, maxProtector) {
-    const conts = document.querySelectorAll('.contBar22')
-    conts.forEach(el => {
-        el.style.display = 'none'
-    })
-    const arrAll = [];
-    arr.forEach(el => {
-        arrAll.push(el * 10)
-    })
-    const mm = parseFloat(maxProtector * 10)
-    let y1;
-    let y2;
-    let y3;
-    let y4;
-    if (arr.length === 0) {
-        conts.forEach(e => {
-            e.style.display = 'block'
-            e.style.width = '116px'
-        })
-        protekGrafFree()
-    }
-    if (arrAll.length == 2) {
-        if (mm <= 120) {
-            y1 = (mm - arrAll[0]) / 2
-            y2 = (mm - arrAll[1]) / 2
-        }
-        if (mm > 120 && mm <= 180) {
-            y1 = (mm - arrAll[0]) / 3
-            y2 = (mm - arrAll[1]) / 3
-        }
-        if (mm > 180) {
-            y1 = (mm - arrAll[0]) / 4
-            y2 = (mm - arrAll[1]) / 4
-        }
-        conts[0].style.display = 'block'
-        conts[0].style.width = '348px'
-        protekGrafTwo(y1, y2, arr, mm)
-    }
-    if (arrAll.length == 3) {
-        if (mm <= 120) {
-            y1 = (mm - arrAll[0]) / 2
-            y2 = (mm - arrAll[1]) / 2
-            y3 = (mm - arrAll[2]) / 2
-        }
-        if (mm > 120 && mm <= 180) {
-            y1 = (mm - arrAll[0]) / 3
-            y2 = (mm - arrAll[1]) / 3
-            y3 = (mm - arrAll[2]) / 3
-        }
-        if (mm > 180) {
-            y1 = (mm - arrAll[0]) / 4
-            y2 = (mm - arrAll[1]) / 4
-            y3 = (mm - arrAll[2]) / 4
-        }
-        conts[0].style.display = 'block'
-        conts[1].style.display = 'block'
-        conts[0].style.width = '174px'
-        conts[1].style.width = '174px'
-        protekGrafThree(y1, y2, y3, arr, mm)
-    }
-    if (arrAll.length === 4) {
-        conts.forEach(e => {
-            e.style.display = 'block'
-            e.style.width = '116px'
-        })
-        if (mm <= 120) {
-            y1 = (mm - arrAll[0]) / 2
-            y2 = (mm - arrAll[1]) / 2
-            y3 = (mm - arrAll[2]) / 2
-            y4 = (mm - arrAll[3]) / 2
-        }
-        if (mm > 120 && mm <= 180) {
-            y1 = (mm - arrAll[0]) / 3
-            y2 = (mm - arrAll[1]) / 3
-            y3 = (mm - arrAll[2]) / 3
-            y4 = (mm - arrAll[3]) / 3
-        }
-        if (mm > 180) {
-            y1 = (mm - arrAll[0]) / 4
-            y2 = (mm - arrAll[1]) / 4
-            y3 = (mm - arrAll[2]) / 4
-            y4 = (mm - arrAll[3]) / 4
-        }
-        protekGrafFour(y1, y2, y3, y4, arr, mm)
-    }
 }
 

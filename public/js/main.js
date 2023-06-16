@@ -52,3 +52,6 @@ if (screen.width === 1366 && screen.height === 768) {
     document.body.style.height = '1080px';
 }
 
+
+
+
