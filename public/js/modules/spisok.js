@@ -1,11 +1,10 @@
 import { convert } from './helpersFunc.js'
-import { dashView } from './dash.js'
 import { navigator } from './navigator.js'
 import { objColorFront, generDav } from './content.js'
 import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
 import { removeElem, removeArrElem } from './helpersFunc.js'
-const testov = [];
+
 
 export async function loadParamsViewList(car, el) {
     const params = {
@@ -15,15 +14,14 @@ export async function loadParamsViewList(car, el) {
         },
         body: (JSON.stringify({ car, el }))
     }
-    const mod = await fetch('api/listModel', params)
+    const mod = await fetch('/api/listModel', params)
     const model = await mod.json()
-    const tyr = await fetch('api/listTyres', params)
+    const tyr = await fetch('/api/listTyres', params)
     const models = await tyr.json()
-    const dat = await fetch('api/wialonAll', params)
+    const dat = await fetch('/api/wialonAll', params)
     const data = await dat.json()
-    const osis = await fetch('api/barViewAll', params)
+    const osis = await fetch('/api/barViewAll', params)
     const osi = await osis.json()
-
 
     model.result.sort((a, b) => {
         if (a.osi > b.osi) {
@@ -34,10 +32,10 @@ export async function loadParamsViewList(car, el) {
             return 0;
         }
     });
-    testov.push([model, models, data, osi])
     return [model, models, data, osi, el]
 }
-export function conturTest(testov) {
+export async function conturTest(testov) {
+    console.log(testov)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         removeArrElem(groups)
@@ -53,14 +51,14 @@ export function conturTest(testov) {
             const wrapList = document.querySelector('.wrapList')
             const group = document.createElement('div')
             group.classList.add('groups')
-            group.classList.add(`${el[0].group}`)
+            group.classList.add(`${el[0][5]}`)
             group.style.display = 'flex',
                 group.style.flexDirection = 'column'
             group.style.width = 100 + '%',
                 wrapList.appendChild(group)
             const titleModal = document.createElement('div')
             titleModal.classList.add('titleModal')
-            titleModal.textContent = `${el[0].group}` + ' ' + '(' + `${el.length}` + ')'
+            titleModal.textContent = `${el[0][5]}` + ' ' + '(' + `${el.length}` + ')'
             group.appendChild(titleModal)
             const filterV = document.createElement('div')
             filterV.classList.add('filterV')
@@ -76,17 +74,16 @@ export function conturTest(testov) {
             titleModal.appendChild(minusS)
             const pAll = document.createElement('p')
             pAll.classList.add('pAll')
-            pAll.innerHTML = `<input class="checkInListaLL" type="checkbox" rel="${el[0].group}" value="${el[0].group}" id="${el[0].group}"
+            pAll.innerHTML = `<input class="checkInListaLL" type="checkbox" rel="${el[0][5]}" value="${el[0][5]}" id="${el[0][5]}"
                     >Все`
             titleModal.prepend(pAll)
             const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModal')
-            group.classList.add(`${el[0].group}`)
+            group.classList.add(`${el[0][5]}`)
             group.appendChild(hiddenModal)
-            const listArr = document.querySelector(`.${el[0].group}`)
+            const listArr = document.querySelector(`.${el[0][5]}`)
             el.forEach(elem => {
                 const nameCar = elem[0].message.replace(/\s+/g, '')
-                //   dashView(nameCar)
                 const listItemCar = document.createElement('div')
                 listItemCar.classList.add('listItem')
                 listItemCar.classList.add(`${elem[4]}`)
@@ -136,11 +133,6 @@ export function conturTest(testov) {
                     })
                 }
                 const listItem = document.getElementById(`${elem[4]}`)
-                const numOs = listItem.querySelectorAll('.gOs');
-                /*  numOs.forEach(el => {
-                      setId(el)
-                  })*/
-
                 const shina = listItem.querySelectorAll('.arc');
                 let num = 0;
                 shina.forEach(e => {
@@ -150,6 +142,7 @@ export function conturTest(testov) {
                 const r = [];
                 let integer;
                 if (elem[1].result) {
+                    console.log(elem[1].result)
                     const modelUniqValues = convert(elem[1].result)
                     modelUniqValues.forEach(el => {
                         r.push(el.tyresdiv)
@@ -213,12 +206,12 @@ async function fnStaticObjectOil(idw) {
         points.push(point)
     })
     console.log('ойл2')
-    const argy = await fetch('api/wialon', param)
+    const argy = await fetch('/api/wialon', param)
     const arg = await argy.json()
-    const parFind = await fetch('api/iconFind', param)
+    const parFind = await fetch('/api/iconFind', param)
     const paramssyFind = await parFind.json()
     console.log(paramssyFind)
-    arg.values.forEach(el => {
+    arg.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
                 if (it.icons === 'oil-card') {
@@ -387,13 +380,10 @@ export function zaprosSpisok() {
             },
             body: (JSON.stringify({ idw }))
         }
-        const par = await fetch('api/listTyres', param)
-        const params = await par.json()
-        const dat = await fetch('api/wialonAll', param)
-        const data = await dat.json()
-        const osis = await fetch('api/barViewAll', param)
-        const osi = await osis.json()
-        viewListKoleso(data, params, osi, el)
+
+        const listsr = await fetch('/api/spisokList', param)
+        const spisok = await listsr.json()
+        viewListKoleso(spisok[1], spisok[2], spisok[3], el)
     })
     countt++
     if (countt === 1) {
@@ -416,7 +406,7 @@ export function zaprosSpisok() {
     const todays = today + ' ' + time
     updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
-setInterval(zaprosSpisok, 300000)
+setInterval(zaprosSpisok, 60000)
 function viewListKoleso(arg, params, osi, nameCar) {
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');

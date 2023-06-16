@@ -164,6 +164,7 @@ buttOnTarirDisk.addEventListener('click', async () => {
         }
         const res = await fetch('/api/tarirSave', param)
         const response = await res.json()
+        console.log(response)
         tarirView();
         buttOnTarir.style.display = 'none'
     })
@@ -195,11 +196,12 @@ export async function tarirView() {
         points.push(point)
     })
 
-    const argy = await fetch('api/wialon', param)
+    const argy = await fetch('/api/wialon', param)
     const arg = await argy.json()
-    const parFind = await fetch('api/iconFind', param)
+    const parFind = await fetch('/api/iconFind', param)
     const paramssyFind = await parFind.json()
-    arg.values.forEach(el => {
+    console.log(arg)
+    arg.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
                 if (it.icons === 'oil-card') {

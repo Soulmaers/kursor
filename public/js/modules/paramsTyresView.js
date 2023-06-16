@@ -29,10 +29,11 @@ export async function loadParamsView() {
         },
         body: (JSON.stringify({ idw }))
     }
-    const mod = await fetch('api/modelView', params)
+    const mod = await fetch('/api/modelView', params)
     const model = await mod.json()
-    if (model.values && model.values.length > 0) {
-        createViewModel(model.values);
+    console.log(model)
+    if (model.result && model.result.length > 0) {
+        createViewModel(model.result);
     }
     viewPokasateli()
     setInterval(viewPokasateli, 60000)
@@ -200,18 +201,18 @@ export async function viewPokasateli() {
         },
         body: (JSON.stringify({ activePost, idw }))
     }
-    const paramsss = await fetch('api/tyresView', param)
+    const paramsss = await fetch('/api/tyresView', param)
     const params = await paramsss.json()
-    const datas = await fetch('api/wialon', param)
+    const datas = await fetch('/api/wialon', param)
     const data = await datas.json()
-    const os = await fetch('api/barView', param)
+    const os = await fetch('/api/barView', param)
     const osi = await os.json()
-    data.values.sort((prev, next) => {
+    data.sort((prev, next) => {
         if (prev.name < next.name) return -1;
         if (prev.name < next.name) return 1;
     })
-    view(data.values)
-    viewConfigurator(data.values, params.values, osi.values)
+    view(data)
+    viewConfigurator(data, params.result, osi.result)
 }
 
 

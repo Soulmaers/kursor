@@ -1,4 +1,4 @@
-import { viewTech } from './requests.js'
+import { viewTech } from './tech.js'
 import { convert } from './helpersFunc.js'
 
 export function createDate() {
@@ -32,9 +32,9 @@ export async function reqBaseId() {
     const formValue = document.querySelectorAll('.formValue')
     const tyresActive = document.querySelector('.tiresActiv')
     const inputMM = document.querySelector('.maxMMM')
-    const osId = tyresActive.closest('.osi').children[1].id
+    const osId = tyresActive.closest('.osiTest').children[1].id
     let nameOs;
-    tyresActive.closest('.osi').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
+    tyresActive.closest('.osiTest').children[1].classList.contains('pricep') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
     const arrNameColId = [];
     const pr = Array.from(formValue)
     const maxMM = pr.pop()
@@ -80,13 +80,14 @@ export async function reqBaseId() {
 }
 
 export async function saveDouble(arr) {
-    const complete = await fetch('api/savePr', {
+    const complete = await fetch('/api/savePr', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ arr }),
     })
+    console.log(arr)
     const result = await complete.json()
     const tiresActiv = document.querySelector('.tiresActiv').id
     viewTech(tiresActiv)
@@ -97,7 +98,7 @@ export async function saveDouble(arr) {
     return
 }
 export async function findId() {
-    const complete = await fetch('api/findId', {
+    const complete = await fetch('/api/findId', {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
@@ -126,7 +127,7 @@ export async function findTyresInstall() {
         },
         body: (JSON.stringify({ activePost, tyresId, idw }))
     }
-    const par = await fetch('api/listTyresId', param)
+    const par = await fetch('/api/listTyresId', param)
     const params = await par.json()
     const result = Object.values(params.result.reduce(
         (acc, val) => {

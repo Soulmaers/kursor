@@ -1,9 +1,9 @@
 const response = require('../../response')
-const pool = require('../settings/db')
+const pool = require('../config/db')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 const authTokens = {};
-const { init } = require('../settings/wialon.js')
+const { init } = require('../wialon.js')
 const express = require('express')
 const app = express();
 
@@ -160,17 +160,11 @@ module.exports.sing = async function (req, res) {
 }
 
 module.exports.action = function (req, res) {
-    // console.log('юзер')
-    // console.log(req.user)
+    console.log('экшион')
     if (req.user) {
         const login = req.user[0].name
         const role = req.user[0].role
-        //  console.log(login)
-        res.render('in.ejs', {
-            user: login,
-            role: role
-        })
-        init(login)
+        res.redirect(`/data/${login}/${role}`);
     }
     else {
         res.render('form.ejs')
@@ -180,4 +174,58 @@ module.exports.action = function (req, res) {
 
 module.exports.logout = async function (req, res, next) {
     res.redirect('/');
+}
+
+
+
+
+module.exports.checkObject = (req, res) => {
+    const login = req.body.login
+    const role = req.body.role
+    const objects = req.body.objects
+    console.log(objects)
+    try {
+        const selectBase = `SELECT id FROM userObjects WHERE 1`
+        pool.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            if (results.length === 0) {
+                objects.forEach(el => {
+                    const postModel = `INSERT INTO userObjects(login, role, object) VALUES('${login}','${role}','${el}')`
+                    connection.query(postModel, function (err, results) {
+                        if (err) console.log(err);
+                    })
+                })
+            }
+            else {
+                const postModel = `DELETE FROM  userObjects WHERE login='${login}'`
+                pool.query(postModel, function (err, results) {
+                    if (err) console.log(err);
+                    objects.forEach(el => {
+                        const postModel = `INSERT INTO userObjects(login, role, object) VALUES('${login}','${role}','${el}')`
+                        pool.query(postModel, function (err, results) {
+                            if (err) console.log(err);
+                        })
+                    })
+                })
+            }
+            res.json({ message: 'Объекты добавлены' })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+module.exports.viewCheckObject = (req, res) => {
+    const login = req.body.name
+    console.log(login)
+    try {
+        const selectBase = `SELECT Object FROM userObjects WHERE login='${login}'`
+        pool.query(selectBase, function (err, results) {
+            if (err) console.log(err);
+            res.json({ result: results })
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
 }

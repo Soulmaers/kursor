@@ -93,12 +93,13 @@ async function postIconParams(activePost, param, coef, id, idw) {
         },
         body: (JSON.stringify({ activePost, param, coef, id, idw }))
     }
-    const par = await fetch('api/icon', params)
+    const par = await fetch('/api/icon', params)
     const paramssy = await par.json()
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Параметр сохранен'
     messaga.style.color = 'green'
     setTimeout(() => messaga.textContent = '', 3000)
+
     iconFind(idw)
 }
 
@@ -113,11 +114,12 @@ export async function iconFind(idw) {
         },
         body: (JSON.stringify({ idw }))
     }
-    const argy = await fetch('api/wialon', params)
+    const argy = await fetch('/api/wialon', params)
     const arg = await argy.json()
-    const parFind = await fetch('api/iconFind', params)
+    const parFind = await fetch('/api/iconFind', params)
     const paramssyFind = await parFind.json()
-    arg.values.forEach(el => {
+    console.log(paramssyFind)
+    arg.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
                 card.forEach(elem => {
@@ -127,11 +129,13 @@ export async function iconFind(idw) {
                         if (it.icons === 'odom-card') {
                             const val = addZero(8, (el.value * it.coef).toFixed(0))
                             elem.children[0].textContent = val// + 'км'
+
                         }
                         if (it.icons === 'ign-card') {
                             if (idw !== '25766831') {
                                 const val = el.value
                                 elem.children[0].textContent = val + '° C'
+                                console.log(elem.children[0].textContent)
                                 val > 0 ? elem.children[0].textContent = 'ВКЛ' : elem.children[0].textContent = 'ВЫКЛ';
                                 const ignTest = document.querySelector('.ignTest_card')
                                 if (ignTest) {
@@ -190,7 +194,7 @@ async function postIconParamsWindow(activePost, param, coef, nameInput, id, idw)
         },
         body: (JSON.stringify({ activePost, param, coef, nameInput, id, idw }))
     }
-    const par = await fetch('api/iconWindows', params)
+    const par = await fetch('/api/iconWindows', params)
     const paramssy = await par.json()
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Параметр сохранен'
@@ -209,11 +213,11 @@ export async function iconFindWindows(idw) {
         },
         body: (JSON.stringify({ idw }))
     }
-    const argy = await fetch('api/wialon', params)
+    const argy = await fetch('/api/wialon', params)
     const arg = await argy.json()
-    const parFind = await fetch('api/iconFindWindows', params)
+    const parFind = await fetch('/api/iconFindWindows', params)
     const paramssyFind = await parFind.json()
-    arg.values.forEach(el => {
+    arg.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
                 valueStatic.forEach(elem => {
@@ -241,7 +245,7 @@ export async function deleteWinParams(id) {
         },
         body: (JSON.stringify({ activePost, id }))
     }
-    const argy = await fetch('api/deleteSatic', params)
+    const argy = await fetch('/api/deleteSatic', params)
     const arg = await argy.json()
     iconFindWindows(idw)
 }

@@ -1,54 +1,42 @@
 
-export function kranParams() {
+export async function kranParams() {
     const active = document.querySelector('.color')
     const act = active.children[0].textContent
     if (act && act === "КранГаличанин Р858ОР178") {
         const contKran = document.querySelector('.contKran')
         contKran.style.display = 'flex'
     }
-    const flags = 1 + 1024
-    const prms = {
-        "spec": {
-            "itemsType": "avl_unit",
-            "propName": "sys_name",
-            "propValueMask": "*",
-            "sortType": "sys_name"
+    const idw = document.querySelector('.color').id
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
         },
-        "force": 1,
-        "flags": flags,
-        "from": 0,
-        "to": 0
-    };
-    const remote1 = wialon.core.Remote.getInstance();
-    remote1.remoteCall('core/search_items', prms,
-        function (code, result) {
-            if (code) {
-                console.log(wialon.core.Errors.getErrorText(code));
-            }
-            const arr1 = Object.values(result);
-            const arrCar = arr1[5];
-            loadKran(arrCar);
-        });
+        body: (JSON.stringify({ idw }))
+    }
+    const res = await fetch('/api/parametrs', param)
+    const response = await res.json()
+    loadKran(response);
+
 }
 const strela = [];
-function loadKran(arrCar) {
-    const active = document.querySelector('.color')
-    const act = active.children[0].textContent
-    arrCar.forEach(it => {
-        if (it.nm === act && act == 'КранГаличанин Р858ОР178') {
-            const str = it.lmsg.p.user_2u_1
-            if (str) {
-                if (str && str !== strela[strela.length - 1]) {
-                    strela.push(str)
-                    drawMyLine(strela[strela.length - 1], strela[strela.length - 2], true)
-                }
-            }
-            if (!str) {
-                drawMyLine(null, null, false)
+function loadKran(id) {
+    const active = Number(document.querySelector('.color').id)
+    if (id.item.id === active) {
+        const str = id.item.lmsg.p.user_2u_1
+        if (str) {
+            if (str && str !== strela[strela.length - 1]) {
+                strela.push(str)
+                drawMyLine(strela[strela.length - 1], strela[strela.length - 2], true)
             }
         }
-    })
+        if (!str) {
+            drawMyLine(null, null, false)
+        }
+    }
 }
+
+
 
 export function drawMyLine(angleDeg, angleDeg2, boolean) {//Угол в градусах
     const argRed = document.querySelector('.argRed')

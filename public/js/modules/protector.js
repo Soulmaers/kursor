@@ -1,6 +1,7 @@
 
 import { objColors, gener } from './content.js'
 import { removeArrElem } from './helpersFunc.js'
+import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
 
 export async function reqProtectorBase() {
     console.log('ра?')
@@ -14,7 +15,7 @@ export async function reqProtectorBase() {
     else {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
-    const res = await fetch('api/techViewAll', {
+    const res = await fetch('/api/techViewAll', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -24,11 +25,11 @@ export async function reqProtectorBase() {
     const dannie = await res.json();
     console.log(dannie)
 
-    if (dannie.values.length == 0) {
+    if (dannie.length == 0) {
         fnCanvas([])
     }
     else {
-        const result = Object.values(dannie.values.reduce(
+        const result = Object.values(dannie.reduce(
             (acc, val) => {
                 acc[val.identificator] = Object.assign(acc[val.identificator] ?? {}, val);
                 return acc;
@@ -540,3 +541,93 @@ export function protekGrafFreeAll(arr, id, elem) {
     ctx4.fillStyle = 'rgba(14, 12, 11, 1)';
     ctx4.fill();
 }
+
+
+
+export function viewDinamic(arr, maxProtector) {
+    const conts = document.querySelectorAll('.contBar22')
+    conts.forEach(el => {
+        el.style.display = 'none'
+    })
+    const arrAll = [];
+    arr.forEach(el => {
+        arrAll.push(el * 10)
+    })
+    const mm = parseFloat(maxProtector * 10)
+    let y1;
+    let y2;
+    let y3;
+    let y4;
+    if (arr.length === 0) {
+        conts.forEach(e => {
+            e.style.display = 'block'
+            e.style.width = '116px'
+        })
+        protekGrafFree()
+    }
+    if (arrAll.length == 2) {
+        if (mm <= 120) {
+            y1 = (mm - arrAll[0]) / 2
+            y2 = (mm - arrAll[1]) / 2
+        }
+        if (mm > 120 && mm <= 180) {
+            y1 = (mm - arrAll[0]) / 3
+            y2 = (mm - arrAll[1]) / 3
+        }
+        if (mm > 180) {
+            y1 = (mm - arrAll[0]) / 4
+            y2 = (mm - arrAll[1]) / 4
+        }
+        conts[0].style.display = 'block'
+        conts[0].style.width = '348px'
+        protekGrafTwo(y1, y2, arr, mm)
+    }
+    if (arrAll.length == 3) {
+        if (mm <= 120) {
+            y1 = (mm - arrAll[0]) / 2
+            y2 = (mm - arrAll[1]) / 2
+            y3 = (mm - arrAll[2]) / 2
+        }
+        if (mm > 120 && mm <= 180) {
+            y1 = (mm - arrAll[0]) / 3
+            y2 = (mm - arrAll[1]) / 3
+            y3 = (mm - arrAll[2]) / 3
+        }
+        if (mm > 180) {
+            y1 = (mm - arrAll[0]) / 4
+            y2 = (mm - arrAll[1]) / 4
+            y3 = (mm - arrAll[2]) / 4
+        }
+        conts[0].style.display = 'block'
+        conts[1].style.display = 'block'
+        conts[0].style.width = '174px'
+        conts[1].style.width = '174px'
+        protekGrafThree(y1, y2, y3, arr, mm)
+    }
+    if (arrAll.length === 4) {
+        conts.forEach(e => {
+            e.style.display = 'block'
+            e.style.width = '116px'
+        })
+        if (mm <= 120) {
+            y1 = (mm - arrAll[0]) / 2
+            y2 = (mm - arrAll[1]) / 2
+            y3 = (mm - arrAll[2]) / 2
+            y4 = (mm - arrAll[3]) / 2
+        }
+        if (mm > 120 && mm <= 180) {
+            y1 = (mm - arrAll[0]) / 3
+            y2 = (mm - arrAll[1]) / 3
+            y3 = (mm - arrAll[2]) / 3
+            y4 = (mm - arrAll[3]) / 3
+        }
+        if (mm > 180) {
+            y1 = (mm - arrAll[0]) / 4
+            y2 = (mm - arrAll[1]) / 4
+            y3 = (mm - arrAll[2]) / 4
+            y4 = (mm - arrAll[3]) / 4
+        }
+        protekGrafFour(y1, y2, y3, y4, arr, mm)
+    }
+}
+

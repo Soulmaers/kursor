@@ -11,7 +11,7 @@ export async function tooltip() {
         },
         body: (JSON.stringify({ idw }))
     }
-    const parFind = await fetch('api/iconFind', params)
+    const parFind = await fetch('/api/iconFind', params)
     const paramssyFind = await parFind.json()
 
     const iconCard = document.querySelectorAll('.icon_card');

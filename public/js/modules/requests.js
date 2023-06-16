@@ -1,25 +1,5 @@
 
-import { viewDinamic } from './visual.js'
-import { createConfig } from './altConfig.js'
 
-export function postModel(massModel) {
-    const active = document.querySelectorAll('.color')
-    const activePost = active[0].textContent.replace(/\s+/g, '')
-    const idw = document.querySelector('.color').id
-    fetch('api/updateModel', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ massModel, idw, activePost, gosp }),
-    })
-        .then((res) =>
-            res.json())
-    const messaga = document.querySelector('.messageId')
-    messaga.textContent = 'Модель добавлена'
-    messaga.style.color = 'green'
-    setTimeout(() => messaga.textContent = '', 2000)
-}
 
 export function postTyres(tyres) {
     console.log('ченчбэйстайрес')
@@ -28,7 +8,7 @@ export function postTyres(tyres) {
     const activePost = active[0].textContent.replace(/\s+/g, '')
     const name = active[0].textContent.replace(/\s+/g, '')
     const idw = document.querySelector('.color').id
-    fetch('api/tyres', {
+    fetch('/api/tyres', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -44,10 +24,7 @@ export function postTyres(tyres) {
 }
 
 export const reqDelete = async (idw) => {
-    const centerOs = document.querySelectorAll('.centerOs')
-    const osi = document.querySelectorAll('.osi')
-    const tires = document.querySelectorAll('.tires')
-    fetch('api/delete', {
+    fetch('/api/delete', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -69,7 +46,7 @@ export const reqDelete = async (idw) => {
 export const barDelete = async (idw) => {
     const modalCenterOs = document.querySelector('.modalCenterOs')
     modalCenterOs.style.display = 'none'
-    const complete = await fetch('api/barDelete', {
+    const complete = await fetch('/api/barDelete', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -77,9 +54,10 @@ export const barDelete = async (idw) => {
         body: JSON.stringify({ idw }),
     })
     const result = await complete.json()
+    console.log(result)
 }
 export const paramsDelete = async (idw) => {
-    fetch('api/paramsDelete', {
+    fetch('/api/paramsDelete', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -99,73 +77,7 @@ export const paramsDelete = async (idw) => {
         e.style.background = '#fff'
     })
 }
-export const geoPosition = (geo) => {
-    const mapss = document.getElementById('map')
-    if (mapss) {
-        mapss.remove();
-    }
-    let count = 0;
-    count++
-    const container = L.DomUtil.get('map');
-    if (container != null) {
-        container._leaflet_id = null;
-    }
-    const wrap = document.querySelector('.wrapper_up')
-    const maps = document.createElement('div')
-    maps.setAttribute('id', 'map')
-    maps.style.width = '100%';
-    maps.style.height = '90vh',
-        wrap.appendChild(maps)
-    const map = L.map('map')
-    map.attributionControl.setPrefix(false)
-    const leaf = document.querySelector('.leaflet-control-attribution');
-    leaf.style.display = 'none';
-    const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
-    });
-    map.addLayer(layer);
-    const polyline = L.polyline(geo, { color: 'rgb(0, 0, 204)', weight: 1 });
-    polyline.addTo(map);
-    let iss;
-    const act = document.querySelector('.color')
 
-    const active = act.id
-    fetch('/api/datawialonGeo', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ active }),
-    })
-        .then((res) => res.json())
-        .then((res) => {
-            const geo = res
-            console.log(geo)
-            const center = [geo.geoY, geo.geoX,]
-            map.setView(center, 15)
-            map.flyTo(center, 15)
-            if (!iss) {
-                var LeafIcon = L.Icon.extend({
-                    options: {
-                        iconSize: [30, 30],
-                        iconAnchor: [10, 18],
-                        popupAnchor: [0, 0]
-                    }
-                });
-                var greenIcon = new LeafIcon({
-                    iconUrl: '../../image/iconCar2.png',
-                })
-                iss = L.marker(center, { icon: greenIcon }).bindPopup(active).addTo(map);
-                iss.on('mouseover', function (e) {
-                    this.openPopup();
-                });
-                iss.on('mouseout', function (e) {
-                    this.closePopup();
-                });
-            }
-            iss.setLatLng(center, /*{ icon: greenIcon }*/).update();
-        })
-}
 export async function reqModalBar(arr, id) {
     let activePost;
     const active = document.querySelectorAll('.color')
@@ -189,7 +101,7 @@ export async function reqModalBar(arr, id) {
     })
 
     console.log(arrValue)
-    const bar = await fetch('api/modalBar', {
+    const bar = await fetch('/api/modalBar', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -197,6 +109,7 @@ export async function reqModalBar(arr, id) {
         body: JSON.stringify({ id, arr, arrValue, idw }),
     })
     const result = await bar.json();
+    console.log(result)
 }
 export async function viewBar(id) {
     console.log(id)
@@ -210,7 +123,7 @@ export async function viewBar(id) {
         activePost = active[0].textContent.replace(/\s+/g, '')
     }
     const idw = document.querySelector('.color').id
-    const bar = await fetch('api/barView', {
+    const bar = await fetch('/api/barView', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -220,12 +133,12 @@ export async function viewBar(id) {
     const barValue = await bar.json();
     console.log(barValue)
     const keys = [];
-    if (barValue.values.length) {
-        for (let key in barValue.values[0]) {
+    if (barValue.result.length) {
+        for (let key in barValue.result[0]) {
             keys.push(key);
         }
 
-        const nval = (Object.entries(barValue.values[0]))
+        const nval = (Object.entries(barValue.result[0]))
         console.log(nval)
         nval.shift()
         nval.shift()
@@ -242,110 +155,8 @@ export async function viewBar(id) {
         })
     }
 }
-export function viewTech(id) {
-    const rad = document.querySelectorAll('[name=radio]')
-    rad[0].checked = true
-    let activePost;
-    const active = document.querySelectorAll('.color')
-    const idw = document.querySelector('.color').id
-    if (active[0] == undefined) {
-        const listItem = document.querySelectorAll('.link_menu')[0]
-        activePost = listItem.textContent.replace(/\s+/g, '')
-    }
-    else {
-        activePost = active[0].textContent.replace(/\s+/g, '')
-    }
-    fetch('api/techView', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id, activePost, idw })
-    })
-        .then((res) => res.json())
-        .then(res => {
-            const result = res.values[res.values.length - 1]
-            const keys = [];
-            if (result) {
-                for (let key in result) {
-                    keys.push(key);
-                }
-            }
-            console.log(result)
-            const number = document.querySelectorAll('.number')
-            const text = document.querySelectorAll('.text')
-            const titleMM = document.querySelectorAll('.titleMM')
-            const inputMM = document.querySelector('.mmtext')
-            if (!result || result.length === 0) {
-                number.forEach(e => {
-                    e.textContent = ''
-                })
-                text.forEach(e => {
-                    e.textContent = ''
-                })
-                rad.forEach(el => {
-                    el.addEventListener('change', () => {
-                        viewDinamic([])
-                    })
-                })
-                viewDinamic([])
-            }
-            else {
-                number[0].textContent = keys[9]
-                number[1].textContent = keys[10]
-                number[2].textContent = keys[11]
-                number[3].textContent = keys[12]
-                text[0].textContent = result.N1 + 'мм',
-                    text[1].textContent = result.N2 + 'мм',
-                    text[2].textContent = result.N3 + 'мм',
-                    text[3].textContent = result.N4 + 'мм';
-                inputMM.innerHTML = result.maxMM + 'mm';
-                const protector = [];
-                protector.push(result.N1, result.N2, result.N3, result.N4)
-                const protectorClear = [];
-                const protectorClearRigth = [];
-                titleMM.forEach(el => {
-                    el.style.display = 'flex';
-                    if (el.children[1].textContent == 'мм' || el.children[1].textContent == '') {
-                        el.style.display = 'none';
-                    }
-                })
-                protector.forEach(el => {
-                    if (el !== '') {
-                        protectorClear.push(el)
-                        protectorClearRigth.push(el)
-                    }
-                })
-                const reverseprotectorClear = protectorClearRigth.reverse();
-                const maxStoc = result.maxMM
-                rad.forEach(el => {
-                    el.addEventListener('change', () => {
-                        el.id === '1' ? viewDinamic(protectorClear, maxStoc) : viewDinamic(reverseprotectorClear, maxStoc)
-                    })
-                })
-                console.log(protectorClear, maxStoc)
-                viewDinamic(protectorClear, maxStoc)
-                const nval = (Object.entries(result))
-                const dd = nval.splice(8, 1)
-                nval.splice(12, 0, dd[0])
-                const id = nval.splice(2, 1)
-                const idbaseTyres = document.querySelector('.idbaseTyres')
-                idbaseTyres.innerHTML = id[0][1]
-                const tiresActiv = document.querySelector('.tiresActiv')
-                tiresActiv.setAttribute('rel', id[0][1])
-                const formValue = document.querySelectorAll('.formValue')
-                formValue.forEach((el, index) => {
-                    el.value = nval[index][1]
-                })
-            }
-            const inputPSI = document.querySelector('.jobDav')
-            const inputBar = document.querySelector('.bar')
-            inputBar.textContent = (inputPSI.value / 14.504).toFixed(1);
-            const probeg = document.querySelectorAll('.probeg')
-            probeg[2].textContent = probeg[1].value - probeg[0].value
-        }
-        )
-}
+
+
 
 
 import { zapros } from './menu.js'
@@ -384,8 +195,7 @@ export async function changeBase(massModel, activePost, idw) {
     controll.style.display = 'none'
     const modalCenterOs = document.querySelector('.modalCenterOs')
     modalCenterOs.style.display = 'none'
-    // const moduleConfig = document.querySelector('.moduleConfig')
-    // moduleConfig.style.display = 'none';
+    console.log(response)
     zapros();
 }
 /*
