@@ -170,7 +170,7 @@ module.exports.action = function (req, res) {
         const login = req.user[0].name
         const role = req.user[0].role
 
-        res.redirect(`http://localhost:5000/data/${login}/${role}`);
+        res.redirect(`/data/${login}/${role}`);
     }
     else {
         res.render('form.ejs')
