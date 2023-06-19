@@ -46,7 +46,8 @@ const prmsAllGoup = {
     "force": 1,
     "flags": flagsAllGroup,
     "from": 0,
-    "to": 0xffffffff
+    "to": 0xffffffff,
+    "rand": Math.random() // Добавляем рандомный параметр rand
 };
 
 

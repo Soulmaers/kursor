@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const passport = require('passport')
 const routes = require('./backend/settings/routes')
-
+const session = require('express-session')
 //const isToken = require('./middleware/auth.js')
 const app = express();
 require('events').EventEmitter.prototype._maxListeners = 0;
@@ -23,7 +23,11 @@ app.use(cookieParser());
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 
-
+app.use(session({
+    secret: 'some-secret-key',
+    resave: false,
+    saveUninitialized: true
+}))
 
 
 

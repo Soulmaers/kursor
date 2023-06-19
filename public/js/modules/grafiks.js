@@ -14,66 +14,88 @@ export async function fnTime(t1, t2) {
     timeOld = t1
     timeNow = t2
   }
-  return new Promise(function (resolve, reject) {
-    const prms2 = {
-      "itemId": active,
-      "timeFrom": timeOld,
-      "timeTo": timeNow,
-      "flags": 1,
-      "flagsMask": 1,
-      "loadCount": 60000
+  return new Promise(async function (resolve, reject) {
+    const idw = active
+    console.log(idw)
+    const param = {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: (JSON.stringify({ idw, timeOld, timeNow }))
     }
-    const remote2 = wialon.core.Remote.getInstance();
-    remote2.remoteCall('messages/load_interval', prms2,
-      async function (code, result) {
-        if (code) {
-          console.log(wialon.core.Errors.getErrorText(code));
-        }
-        const noGraf = document.querySelector('.noGraf')
-        if (result.count === 0) {
-          const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
-          preloaderGraf.style.opacity = 0;
-          noGraf.style.display = 'flex'
-        }
-        else {
-          noGraf.style.display = 'none'
-          const global = [];
-          const speed = []
-          console.log(result)
-          result.messages.forEach(el => {
-            const timestamp = el.t;
-            const date = new Date(timestamp * 1000);
-            const isoString = date.toISOString();
-            global.push(isoString)
-            speed.push(el.pos.s)
-            resolve([global, speed])
-          })
-        }
+    const res = await fetch('/api/loadInterval', param)
+    const result = await res.json()
+    const noGraf = document.querySelector('.noGraf')
+    if (result.count === 0) {
+      const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+      preloaderGraf.style.opacity = 0;
+      noGraf.style.display = 'flex'
+    }
+    else {
+      noGraf.style.display = 'none'
+      const global = [];
+      const speed = []
+      console.log(result)
+      result.messages.forEach(el => {
+        const timestamp = el.t;
+        const date = new Date(timestamp * 1000);
+        const isoString = date.toISOString();
+        global.push(isoString)
+        speed.push(el.pos.s)
+        resolve([global, speed])
       })
+    }
   })
+
 }
 
 export async function fnPar(active) {
-  return new Promise(function (resolve, reject) {
-    const prms3 = {
-      "source": "",
-      "indexFrom": 0,
-      "indexTo": 60000,
-      "unitId": active,
-      "sensorId": 0
-    };
-    const remote3 = wialon.core.Remote.getInstance();
-    remote3.remoteCall('unit/calc_sensors', prms3,
-      function (code, result) {
-        if (code) {
-          console.log(wialon.core.Errors.getErrorText(code));
-        }
-        const sensArr = result;
-        resolve(sensArr)
-      })
+  return new Promise(async function (resolve, reject) {
+    const idw = active
+    //   console.log(idw)
+    const param = {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: (JSON.stringify({ idw }))
+    }
+    const res = await fetch('/api/sensors', param)
+    const sensArr = await res.json()
+    console.log(sensArr)
+    resolve(sensArr)
   })
+
 }
+
+
 export async function fnParMessage(active) {
+  const idw = active
+  return new Promise(async function (resolve, reject) {
+    const param = {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: (JSON.stringify({ idw }))
+    }
+    const res = await fetch('/api/sensorsName', param)
+    const sensArr = await res.json()
+    console.log(sensArr)
+
+    const nameArr = [];
+    Object.entries(sensArr.item.sens).forEach(el => {
+      nameArr.push([el[1].n, el[1].p])
+    })
+    resolve(nameArr)
+  })
+
+}
+
+
+/*
+export async function fnParMessageT(active) {
   return new Promise(function (resolve, reject) {
     const prmss = {
       'id': active,
@@ -89,12 +111,11 @@ export async function fnParMessage(active) {
         Object.entries(result.item.sens).forEach(el => {
           nameArr.push([el[1].n, el[1].p])
         })
+        console.log(nameArr)
         resolve(nameArr)
       })
   })
-}
-
-
+}*/
 
 
 

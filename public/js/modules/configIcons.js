@@ -1,4 +1,4 @@
-import { iconParams } from './wialon.js'
+import { iconParams } from './status.js'
 function addZero(digits_length, source) {
     let text = source + '';
     while (text.length < digits_length)

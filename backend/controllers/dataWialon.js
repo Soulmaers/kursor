@@ -13,6 +13,11 @@ let log;
 //колесами и параметрами, 
 //готовим данные и отправляем ответ на клиент который отрисовывает список
 exports.dataSpisok = async (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('Last-Modified', (new Date()).toUTCString());
+    res.setHeader('ETag', Math.random().toString(36).substring(2))
     if (!log) {
         const login = await getLog();
         log = login
@@ -44,10 +49,11 @@ exports.dataSpisok = async (req, res) => {
         aLLmassObject.push(objectsWithGroup);
         aLLmassObject.reverse();
     }
-    if (aLLmassObject[1].length !== 0) {
-        await res.json({ response: { aLLmassObject, arrName } });
-    }
-
+    /* if (aLLmassObject[1].length !== 0) {
+         await res.json({ response: { aLLmassObject, arrName } });
+         return
+     }*/
+    setTimeout(() => res.json({ response: { aLLmassObject, arrName } }), 2000);
 };
 
 exports.spisok = async (req, res) => {
@@ -70,13 +76,32 @@ exports.parametrs = async (req, res) => {
 }
 //запрос на wialon и получение сенсоров по id
 exports.sensors = async (req, res) => {
-    console.log(idw)
-    const idw = req.body.active
+    const idw = req.body.idw
     const params = await wialonService.getAllSensorsIdDataFromWialon(idw)
-    console.log(params)
     res.json(params)
 }
 
+//запрос на wialon и получение сенсоров по id
+exports.loadInterval = async (req, res) => {
+    const idw = req.body.idw
+    const timeOld = req.body.timeOld
+    const timeNow = req.body.timeNow
+    const params = await wialonService.loadIntervalDataFromWialon(idw, timeOld, timeNow)
+    res.json(params)
+}
+
+//запрос на wialon и получение сенсоров по id
+exports.sensorsName = async (req, res) => {
+    const idw = req.body.idw
+    const params = await wialonService.getAllNameSensorsIdDataFromWialon(idw)
+    res.json(params)
+}
+
+exports.lastSensors = async (req, res) => {
+    const idw = req.body.idw
+    const params = await wialonService.getLastAllSensorsIdDataFromWialon(idw)
+    res.json(params)
+}
 
 
 

@@ -1,13 +1,12 @@
 import { fnTime, fnPar, fnParMessage } from '../grafiks.js'
 
-
-
 export async function oil(t1, t2) {
     console.log('график топлива')
     const active = document.querySelector('.color').id
     const global = await fnTime(t1, t2)
     const sensArr = await fnPar(active)
     const nameArr = await fnParMessage(active)
+    console.log(global)
     const gl = global[0].map(it => {
         return new Date(it)
     })
@@ -132,6 +131,7 @@ export async function oil(t1, t2) {
     const yAxis1 = d3.axisLeft(y1)
     const yAxis2 = d3.axisLeft(y2)
     const xAxis = d3.axisBottom(x)
+
 
     const line1 = d3.line()
         .x((d) => x(d.time))

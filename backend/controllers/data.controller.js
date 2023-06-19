@@ -6,8 +6,15 @@ const connection = require('../config/db')
 const { createDate, convert } = require('../helpers')
 //const { init } = require('../wialon.js')
 
-let getSession;
+let getSession
 let getLogin;
+
+exports.resetSession = () => {
+    getSession = null;
+    getLogin = null;
+    console.log(getSession, getLogin)
+};
+
 
 exports.getSess = () => {
     return getSession
@@ -22,37 +29,34 @@ exports.getLog = async () => {
     // console.log(login + '..' + 'лог')
     return login;
 };
+let count = 0;
 exports.getData = async (req, res) => {
-    //  console.log('редирект1')
-    // console.log(req.params.role)
-    const login = req.params.login
+    count++
+    console.log(count)
+    if (getSession) {
+        getSession = null
+    }
+    console.log('getData started. Time:', new Date().toString());
+    console.log('request params:', req.params);
+    const login = req.params.login ? req.params.login : null;
     const role = req.params.role
-
-    //init(login)
+    getLogin = login
+    let kluch;
+    if (login == 'Ромакс') {
+        kluch = '7d21706dbf99ed8dd9257b8b1fcc5ab3FDEAE2E1E11A17F978AC054411BB0A0CBD9051B3';
+    }
+    else {
+        kluch = '0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178';
+    }
     try {
-        let kluch;
-        if (login !== 'TDRMX' || !login) {
-            kluch = '0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178'
-        }
-        if (login === 'TDRMX') {
-            kluch = '7d21706dbf99ed8dd9257b8b1fcc5ab3FDEAE2E1E11A17F978AC054411BB0A0CBD9051B3'
-        }
-        //по токену запрашиваем сессию
-        //  console.log('1')
         const session = await wialonModule.login(kluch);
         getSession = session
-        getLogin = login
-        //  console.log(getLogin)
-        //передаем сессию в основную  функцию для запроса данных
-        await updateParams(session)
+        await updateParams(session);
+        setInterval(updateParams, 60000, session);
 
-        //ждем некоторое время, чтобы обновить данные 
-        setInterval(updateParams, 60000, session)
+    } catch (err) {
+        console.log(err);
     }
-    catch (err) {
-        console.log(err)
-    }
-
     //формируем и отправляем ответ на запрос
     res.render('in.ejs', {
         user: login,

@@ -4,6 +4,7 @@ import { checkCreate } from './admin.js'
 
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
+/*
 export function init(kluch) {
     wialon.core.Session.getInstance().initSession("https://hst-api.wialon.com");
     wialon.core.Session.getInstance().loginToken(kluch, "", // try to login
@@ -11,9 +12,9 @@ export function init(kluch) {
             if (code) {
                 return;
             }
-            zapros() //делаем запрос на wialon получаем объекты
+
         });
-};
+};*/
 const wrapContaint = document.querySelector('.wrapper_containt')
 const cont = document.createElement('div')
 cont.classList.add('container2')
@@ -66,52 +67,46 @@ export async function zapros() {
 }
 
 export async function ggg(id) {
-    const allobj = {};
-    const flagss = 4096
-    const prmss = {
-        'id': id,
-        'flags': flagss
-    }
-    return new Promise(function (resolve, reject) {
-        const remote11 = wialon.core.Remote.getInstance();
-        remote11.remoteCall('core/search_item', prmss,
-            async function (code, result) {
-                if (code) {
-                    console.log(wialon.core.Errors.getErrorText(code));
-                }
-                const nameSens = Object.entries(result.item.sens)
-                const arrNameSens = [];
-                nameSens.forEach(el => {
-                    arrNameSens.push([el[1].n, el[1].p])
-                })
-                const prms = {
-                    "unitId":
-                        id,
-                    "sensors": []
-                }
-                const remote1 = wialon.core.Remote.getInstance();
-                remote1.remoteCall('unit/calc_last_message', prms,
-                    async function (code, result) {
-                        if (code) {
-                            console.log(wialon.core.Errors.getErrorText(code));
-                        }
-                        if (result) {
-                            const valueSens = [];
-                            Object.entries(result).forEach(e => {
-                                valueSens.push(e[1])
-                            })
-                            const allArr = [];
-                            arrNameSens.forEach((e, index) => {
-                                allArr.push([...e, valueSens[index]])
-
-                            })
-                            allArr.forEach(it => {
-                                allobj[it[1]] = it[0]
-                            })
-                        }
-                        resolve(allobj)
-                    });
+    return new Promise(async function (resolve, reject) {
+        const idw = id
+        const allobj = {};
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw }))
+        }
+        const ress = await fetch('/api/sensorsName', param)
+        const results = await ress.json()
+        if (!results) {
+            ggg(id)
+        }
+        const nameSens = Object.entries(results.item.sens)
+        const arrNameSens = [];
+        nameSens.forEach(el => {
+            arrNameSens.push([el[1].n, el[1].p])
+        })
+        const res = await fetch('/api/lastSensors', param)
+        const result = await res.json()
+        if (result) {
+            const valueSens = [];
+            Object.entries(result).forEach(e => {
+                valueSens.push(e[1])
             })
-    })
+            const allArr = [];
+            arrNameSens.forEach((e, index) => {
+                allArr.push([...e, valueSens[index]])
+
+            })
+            allArr.forEach(it => {
+                allobj[it[1]] = it[0]
+            })
+        }
+        resolve(allobj)
+    });
 }
+
+
+
 

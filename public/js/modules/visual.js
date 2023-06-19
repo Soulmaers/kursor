@@ -1,7 +1,7 @@
 import { objColor, generT, generDav } from './content.js'
 import { loadParamsView } from './paramsTyresView.js'
 import { findTyresInstall } from './saveBaseId.js'
-import { iconParams } from './wialon.js'
+import { iconParams } from './status.js'
 import { alarmFind } from './alarmStorage.js'
 import { geoloc } from './geo.js'
 import { reqProtectorBase } from './protector.js'
@@ -225,6 +225,7 @@ export async function viewConfigurator(arg, params, osi) {
     console.log(osi)
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelectorAll('.color')
+    //  const allobj = await ggg(active[0].id)
     const allobj = await ggg(active[0].id)
     if (params) {
         const parametrs = convert(params)

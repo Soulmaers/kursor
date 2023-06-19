@@ -24,11 +24,13 @@ async function fn() {
 export async function datas(t1, t2) {
     const ossParams = await fn()
     const active = Number(document.querySelector('.color').id)
+    // const test = await fnParT(active);
+    //  console.log(test)
     const global = await fnTime(t1, t2)
     const sensArr = await fnPar(active)
     const nameArr = await fnParMessage(active)
     const allArrNew = [];
-
+    console.log(global)
     nameArr.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })

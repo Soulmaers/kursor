@@ -6,7 +6,7 @@ const authTokens = {};
 const { init } = require('../wialon.js')
 const express = require('express')
 const app = express();
-
+const datacontroler = require('./data.controller.js')
 
 
 module.exports.update = (req, res) => {
@@ -115,8 +115,13 @@ module.exports.signup = async function (req, res) {
     })
 }
 
+const wialonModule = require('../modules/wialon.module');
 module.exports.page = async function (req, res) {
+    // let session = getSess();
+    // const logout = await wialonModule.logout(session)
+
     res.render('form.ejs', { message: '' });
+
 }
 
 module.exports.sing = async function (req, res) {
@@ -164,7 +169,8 @@ module.exports.action = function (req, res) {
     if (req.user) {
         const login = req.user[0].name
         const role = req.user[0].role
-        res.redirect(`/data/${login}/${role}`);
+
+        res.redirect(`http://localhost:5000/data/${login}/${role}`);
     }
     else {
         res.render('form.ejs')
@@ -173,6 +179,8 @@ module.exports.action = function (req, res) {
 
 
 module.exports.logout = async function (req, res, next) {
+    datacontroler.resetSession();
+
     res.redirect('/');
 }
 

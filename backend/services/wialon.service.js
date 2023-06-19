@@ -5,17 +5,21 @@ const { getSess } = require('../controllers/data.controller.js')
 
 //запрос всех  групп объектов  с виалона
 exports.getAllGroupDataFromWialon = async () => {
-    return new Promise(function (resolve, reject) {
-        getSess().request('core/search_items', prmsAllGoup)
+    return new Promise(async function (resolve, reject) {
+        console.log(getSess())
+
+        const get = getSess()
+        console.log(get._session.th)
+        await getSess().request('core/search_items', prmsAllGoup)
             .catch(function (err) {
                 console.log(err);
             })
             .then(function (data) {
+                console.log(data)
                 resolve(data)
             });
     })
 };
-
 //запрос всех параметров по id объекта
 exports.getAllParamsIdDataFromWialon = async (id) => {
     const prmsId = {
@@ -36,13 +40,50 @@ exports.getAllParamsIdDataFromWialon = async (id) => {
 
 //запрос всех сенсоров по id объекта
 exports.getAllSensorsIdDataFromWialon = async (id) => {
-    console.log(id)
+    const prms3 = {
+        "source": "",
+        "indexFrom": 0,
+        "indexTo": 60000,
+        "unitId": id,
+        "sensorId": 0
+    };
+    return new Promise(function (resolve, reject) {
+        getSess().request('unit/calc_sensors', prms3)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                resolve(data)
+            });
+    })
+};
+
+
+exports.getLastAllSensorsIdDataFromWialon = async (id) => {
+    const prms = {
+        "unitId":
+            id,
+        "sensors": []
+    }
+    return new Promise(function (resolve, reject) {
+        getSess().request('unit/calc_last_message', prms)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                resolve(data)
+            });
+    })
+};
+
+
+exports.getAllNameSensorsIdDataFromWialon = async (id) => {
+    const active = id
     const prmss = {
-        'id': id,
+        'id': active,
         'flags': 4096
     }
     return new Promise(function (resolve, reject) {
-        console.log(getSess())
         getSess().request('core/search_item', prmss)
             .catch(function (err) {
                 console.log(err);
@@ -66,7 +107,6 @@ exports.getDataFromWialon = async (session) => {
     })
 };
 
-
 exports.geoDataFromWialon = async (time1, time2, idw) => {
     const prmsIdTime = {
         "itemId": idw,
@@ -87,6 +127,27 @@ exports.geoDataFromWialon = async (time1, time2, idw) => {
             });
     })
 };
+exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow) => {
+    const prms2 = {
+        "itemId": active,
+        "timeFrom": timeOld,
+        "timeTo": timeNow,
+        "flags": 1,
+        "flagsMask": 1,
+        "loadCount": 60000
+    }
+    return new Promise(function (resolve, reject) {
+        getSess().request('messages/load_interval', prms2)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                resolve(data)
+            });
+    })
+};
+
+
 
 /*
 exports.getMainInfo=(name)=> {
