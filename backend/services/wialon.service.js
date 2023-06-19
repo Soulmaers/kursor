@@ -5,7 +5,6 @@ const { getSess } = require('../controllers/data.controller.js')
 
 //запрос всех  групп объектов  с виалона
 exports.getAllGroupDataFromWialon = async () => {
-    console.log('5')
     return new Promise(function (resolve, reject) {
         getSess().request('core/search_items', prmsAllGoup)
             .catch(function (err) {
@@ -34,7 +33,7 @@ exports.getAllParamsIdDataFromWialon = async (id) => {
     })
 };
 
-/*
+
 //запрос всех сенсоров по id объекта
 exports.getAllSensorsIdDataFromWialon = async (id) => {
     console.log(id)
@@ -52,7 +51,7 @@ exports.getAllSensorsIdDataFromWialon = async (id) => {
                 resolve(data)
             });
     })
-};*/
+};
 
 //запрос данных на виалон по объекту и получение параметров
 exports.getDataFromWialon = async (session) => {

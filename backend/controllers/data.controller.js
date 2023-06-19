@@ -19,19 +19,15 @@ exports.getLog = async () => {
         await new Promise(resolve => setTimeout(resolve, 100));
         login = getLogin;
     }
-    console.log(login + '..' + 'лог')
+    // console.log(login + '..' + 'лог')
     return login;
 };
 exports.getData = async (req, res) => {
-    console.log('редирект1')
-    console.log(req.params.role)
+    //  console.log('редирект1')
+    // console.log(req.params.role)
     const login = req.params.login
     const role = req.params.role
-    //получаем логин и роль и рендерим страницу
-    res.render('in.ejs', {
-        user: login,
-        role: role
-    })
+
     //init(login)
     try {
         let kluch;
@@ -42,18 +38,26 @@ exports.getData = async (req, res) => {
             kluch = '7d21706dbf99ed8dd9257b8b1fcc5ab3FDEAE2E1E11A17F978AC054411BB0A0CBD9051B3'
         }
         //по токену запрашиваем сессию
-        console.log('1')
+        //  console.log('1')
         const session = await wialonModule.login(kluch);
         getSession = session
         getLogin = login
-        console.log(getLogin)
+        //  console.log(getLogin)
         //передаем сессию в основную  функцию для запроса данных
-        setInterval(updateParams, 60000, session)
         await updateParams(session)
+
+        //ждем некоторое время, чтобы обновить данные 
+        setInterval(updateParams, 60000, session)
     }
     catch (err) {
         console.log(err)
     }
+
+    //формируем и отправляем ответ на запрос
+    res.render('in.ejs', {
+        user: login,
+        role: role
+    })
 }
 
 
@@ -72,11 +76,10 @@ async function updateParams(session) {
             //сохраняем параметры в бд
             const resSave = await databaseService.saveDataToDatabase(nameTable, el.id, sensor);
         }
-    });//возвращаем результат работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
-    return await zaprosSpisokb(nameCar)
+    });
+    ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
+    await zaprosSpisokb(nameCar)
 }
-
-
 
 async function zaprosSpisokb(name) {
     const massItog = [];

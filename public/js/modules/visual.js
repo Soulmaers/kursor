@@ -36,6 +36,7 @@ export async function visual(el) {
     checkAlt.style.fontWeight = '400'
     const containerAlt = document.querySelector('.containerAlt')
     if (containerAlt) {
+        console.log('удаляем')
         containerAlt.remove()
     }
     const containerAltOne = document.querySelector('.containerAltOne')

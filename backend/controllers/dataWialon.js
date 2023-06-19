@@ -18,7 +18,6 @@ exports.dataSpisok = async (req, res) => {
         log = login
     }
     const login = log
-    console.log(login + ' ' + 'rrrr');
     const data = await wialonService.getAllGroupDataFromWialon();
     const aLLmassObject = [];
     const arrName = [];
@@ -45,7 +44,10 @@ exports.dataSpisok = async (req, res) => {
         aLLmassObject.push(objectsWithGroup);
         aLLmassObject.reverse();
     }
-    await res.json({ response: { aLLmassObject, arrName } });
+    if (aLLmassObject[1].length !== 0) {
+        await res.json({ response: { aLLmassObject, arrName } });
+    }
+
 };
 
 exports.spisok = async (req, res) => {
