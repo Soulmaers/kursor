@@ -22,13 +22,16 @@ exports.getAllParamsIdDataFromWialon = async (id) => {
         "flags": 1025
     };
     return new Promise(function (resolve, reject) {
-        getSess().request('core/search_item', prmsId)
-            .catch(function (err) {
-                console.log(err);
-            })
-            .then(function (data) {
-                resolve(data)
-            });
+        if (getSess()) {
+            getSess().request('core/search_item', prmsId)
+                .catch(function (err) {
+                    console.log(err);
+                })
+                .then(function (data) {
+                    resolve(data)
+                });
+        }
+
     })
 };
 
@@ -43,13 +46,15 @@ exports.getAllSensorsIdDataFromWialon = async (id) => {
         "sensorId": 0
     };
     return new Promise(function (resolve, reject) {
-        getSess().request('unit/calc_sensors', prms3)
-            .catch(function (err) {
-                console.log(err);
-            })
-            .then(function (data) {
-                resolve(data)
-            });
+        if (getSess()) {
+            getSess().request('unit/calc_sensors', prms3)
+                .catch(function (err) {
+                    console.log(err);
+                })
+                .then(function (data) {
+                    resolve(data)
+                });
+        }
     })
 };
 
@@ -61,13 +66,15 @@ exports.getLastAllSensorsIdDataFromWialon = async (id) => {
         "sensors": []
     }
     return new Promise(function (resolve, reject) {
-        getSess().request('unit/calc_last_message', prms)
-            .catch(function (err) {
-                console.log(err);
-            })
-            .then(function (data) {
-                resolve(data)
-            });
+        if (getSess()) {
+            getSess().request('unit/calc_last_message', prms)
+                .catch(function (err) {
+                    console.log(err);
+                })
+                .then(function (data) {
+                    resolve(data)
+                });
+        }
     })
 };
 
@@ -79,13 +86,15 @@ exports.getAllNameSensorsIdDataFromWialon = async (id) => {
         'flags': 4096
     }
     return new Promise(function (resolve, reject) {
-        getSess().request('core/search_item', prmss)
-            .catch(function (err) {
-                console.log(err);
-            })
-            .then(function (data) {
-                resolve(data)
-            });
+        if (getSess()) {
+            getSess().request('core/search_item', prmss)
+                .catch(function (err) {
+                    console.log(err);
+                })
+                .then(function (data) {
+                    resolve(data)
+                });
+        }
     })
 };
 
@@ -113,13 +122,15 @@ exports.geoDataFromWialon = async (time1, time2, idw) => {
     }
 
     return new Promise(function (resolve, reject) {
-        getSess().request('messages/load_interval', prmsIdTime)
-            .catch(function (err) {
-                console.log(err);
-            })
-            .then(function (data) {
-                resolve(data)
-            });
+        if (getSess()) {
+            getSess().request('messages/load_interval', prmsIdTime)
+                .catch(function (err) {
+                    console.log(err);
+                })
+                .then(function (data) {
+                    resolve(data)
+                });
+        }
     })
 };
 exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow) => {
@@ -132,13 +143,15 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow) => {
         "loadCount": 60000
     }
     return new Promise(function (resolve, reject) {
-        getSess().request('messages/load_interval', prms2)
-            .catch(function (err) {
-                console.log(err);
-            })
-            .then(function (data) {
-                resolve(data)
-            });
+        if (getSess()) {
+            getSess().request('messages/load_interval', prms2)
+                .catch(function (err) {
+                    console.log(err);
+                })
+                .then(function (data) {
+                    resolve(data)
+                });
+        }
     })
 };
 

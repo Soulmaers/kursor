@@ -200,7 +200,6 @@ export async function tarirView() {
     const arg = await argy.json()
     const parFind = await fetch('/api/iconFind', param)
     const paramssyFind = await parFind.json()
-    console.log(arg)
     arg.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {

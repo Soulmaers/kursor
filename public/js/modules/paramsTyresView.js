@@ -8,9 +8,6 @@ import { modalOs } from './modalOs.js'
 export async function loadParamsView() {
     clearInterval(viewPokasateli)
     const titleCar = document.querySelector('.title_two')
-    const btnShina = document.querySelectorAll('.modals')
-    const listItem = document.querySelectorAll('.link_menu')[0]
-    const container = document.querySelector('.container')
     let activePost;
     const active = document.querySelectorAll('.color')
     if (active[0] == undefined) {
@@ -31,7 +28,6 @@ export async function loadParamsView() {
     }
     const mod = await fetch('/api/modelView', params)
     const model = await mod.json()
-    console.log(model)
     if (model.result && model.result.length > 0) {
         createViewModel(model.result);
     }
@@ -39,6 +35,10 @@ export async function loadParamsView() {
     setInterval(viewPokasateli, 60000)
 }
 function createViewModel(model) {
+    const containerAll = document.querySelector('.containerAll')
+    if (containerAll) {
+        containerAll.remove()
+    }
     const altConfig = document.querySelector('.altConfig')
     const containerAlt = document.createElement('div')
     containerAlt.classList.add('containerAlt')
@@ -55,7 +55,6 @@ function createViewModel(model) {
     containerPricep.style.marginTop = '50px'
     model.sort((a, b) => a.osi - b.osi)
     for (let i = 0; i < model.length; i++) {
-        console.log(model)
         const item = model[i];
         const container = item.trailer === 'Тягач' ? containerTagach : containerPricep;
         item.trailer === 'Прицеп' ? containerPricep.style.border = '2px solid darkblue' : containerPricep.style.border = 'none'
@@ -76,8 +75,6 @@ function createViewModel(model) {
         centerOs[i].closest('.containerTagach') ? centerOs[i].classList.add('tagachT') : centerOs[i].classList.add('pricepT')
         if (item.tyres === '4') {
             const osiTest = document.querySelectorAll('.osiTest')
-            console.log(item.tyres)
-            console.log(osiTest[i])
             const tiresTest = document.createElement('div');
             tiresTest.classList.add('tiresTest', 'sp');
             osiTest[i].children[0].appendChild(tiresTest);
@@ -90,11 +87,9 @@ function createViewModel(model) {
     const centerOs = document.querySelectorAll('.centerOsTest')
     centerOs.forEach(e => {
         if (e.classList.contains('pricepT')) {
-            console.log(e.children)
             e.children[0].style.background = '#000'
         }
     })
-    console.log(centerOs)
     const tiresTest = document.querySelectorAll('.tiresTest')
     let indexTires = 0;
     tiresTest.forEach(el => {
@@ -166,12 +161,9 @@ export function viewMenuParams() {
                 msg.forEach(el => el.classList.remove('act'))
                 e.classList.remove('tiresActiv')
             });
-            // sensors.style.display = 'flex';
             e.classList.add('tiresActiv')
             const checkAlt = document.getElementById('check_Title')
             checkAlt.checked ? sensors.style.display = 'flex' : null
-            //  btnsens[0].style.display = 'flex'
-            //  btnsens[1].style.display = 'flex'
             techInfo.style.display = 'block'
             speedGraf.style.display = 'block';
             wrapperMap.style.display = 'none'

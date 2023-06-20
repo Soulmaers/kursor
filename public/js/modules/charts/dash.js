@@ -50,6 +50,7 @@ async function waitArr(el) {
     const osss = osi.result
     const par = params.result
 
+
     osss.forEach(it => {
         delete it.id
         delete it.nameCar
@@ -61,11 +62,15 @@ async function waitArr(el) {
             }
         })
     })
+
+    //   console.log(par)
+    console.log(res)
     const itog = res.filter(el => {
         return par.some(param => {
             return param.pressure === el[1];
         });
     });
+
     const finish = itog.filter(elem => {
         return par.some(param => {
             return elem[1] === param.pressure;
@@ -85,6 +90,7 @@ async function waitArr(el) {
 }
 
 export function dashAllSort(test) {
+    console.log(test)
     const globalParams = test.map(el => {
         return el.params.map(it => {
             return [it[2], it[3]]
@@ -297,7 +303,7 @@ function newBoard(ArrD, ArrDC, length) {
 }
 
 async function reqSensDash(id) {
-    const idw = document.querySelector('.color').id
+    const idw = id
     const param = {
         method: "POST",
         headers: {

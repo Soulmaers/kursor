@@ -35,7 +35,6 @@ export async function loadParamsViewList(car, el) {
     return [model, models, data, osi, el]
 }
 export async function conturTest(testov) {
-    console.log(testov)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         removeArrElem(groups)
@@ -142,7 +141,6 @@ export async function conturTest(testov) {
                 const r = [];
                 let integer;
                 if (elem[1].result) {
-                    console.log(elem[1].result)
                     const modelUniqValues = convert(elem[1].result)
                     modelUniqValues.forEach(el => {
                         r.push(el.tyresdiv)
@@ -183,7 +181,6 @@ export async function conturTest(testov) {
 }
 
 async function fnStaticObjectOil(idw) {
-    console.log('ойл?')
     const param = {
         method: "POST",
         headers: {
@@ -205,12 +202,10 @@ async function fnStaticObjectOil(idw) {
         point.push(Number(el.litrs))
         points.push(point)
     })
-    console.log('ойл2')
     const argy = await fetch('/api/wialon', param)
     const arg = await argy.json()
     const parFind = await fetch('/api/iconFind', param)
     const paramssyFind = await parFind.json()
-    console.log(paramssyFind)
     arg.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
@@ -225,7 +220,6 @@ async function fnStaticObjectOil(idw) {
                     }
                     const approximated = approximateValue(val, x, y, degree);
                     const znak = (approximated[0] * 0.9987).toFixed(0)
-                    console.log(znak)
                     const progressBarText = document.querySelector('.progressBarText')
                     const progressBar = document.querySelector('.progressBar')
                     const value = znak * 100 / y[y.length - 1]

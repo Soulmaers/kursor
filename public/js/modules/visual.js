@@ -21,7 +21,6 @@ let time;
 let timeIcon;
 export async function visual(el) {
     const msg = document.querySelectorAll('.msg')
-    console.log(msg)
     if (msg) {
         msg.forEach(e => {
             e.remove();
@@ -222,10 +221,8 @@ export function view(arg) {
     })
 }
 export async function viewConfigurator(arg, params, osi) {
-    console.log(osi)
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelectorAll('.color')
-    //  const allobj = await ggg(active[0].id)
     const allobj = await ggg(active[0].id)
     if (params) {
         const parametrs = convert(params)
