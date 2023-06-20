@@ -1,4 +1,4 @@
-
+const login = document.querySelectorAll('.log')[1].textContent
 export async function fnTime(t1, t2) {
   const active = Number(document.querySelector('.color').id)
   let timeOld;
@@ -22,7 +22,7 @@ export async function fnTime(t1, t2) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: (JSON.stringify({ idw, timeOld, timeNow }))
+      body: (JSON.stringify({ idw, timeOld, timeNow, login }))
     }
     const res = await fetch('/api/loadInterval', param)
     const result = await res.json()
@@ -59,7 +59,7 @@ export async function fnPar(active) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: (JSON.stringify({ idw }))
+      body: (JSON.stringify({ idw, login }))
     }
     const res = await fetch('/api/sensors', param)
     const sensArr = await res.json()
@@ -78,7 +78,7 @@ export async function fnParMessage(active) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: (JSON.stringify({ idw }))
+      body: (JSON.stringify({ idw, login }))
     }
     const res = await fetch('/api/sensorsName', param)
     const sensArr = await res.json()

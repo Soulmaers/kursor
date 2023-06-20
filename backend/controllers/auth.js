@@ -2,16 +2,12 @@ const response = require('../../response')
 const pool = require('../config/db')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
-const authTokens = {};
-const { init } = require('../wialon.js')
 const express = require('express')
 
-const datacontroler = require('./data.controller.js')
+
 
 
 module.exports.update = (req, res) => {
-    // console.log('запрос на обновление')
-    // console.log(req.body.idx)
     const id = req.body.idx
     const login = req.body.log
     const roleNew = req.body.role
@@ -73,11 +69,8 @@ module.exports.users = (req, res) => {
 
 
 module.exports.signup = async function (req, res) {
-    console.log('сигнап')
-    console.log(req.body)
     pool.query("SELECT  `name`, `password` FROM `users` WHERE `name`='" + req.body.login + "'", (error, rows, field) => {
         if (error) {
-            console.log('не ок1')
             response.status(404, res)
 
         } else if (typeof rows !== 'undefined' && rows.length > 0) {
@@ -92,7 +85,6 @@ module.exports.signup = async function (req, res) {
             })
         }
         else {
-            console.log('все ок')
             const name = req.body.login
             const password = req.body.pass;
             const role = req.body.role;
@@ -115,11 +107,8 @@ module.exports.signup = async function (req, res) {
     })
 }
 
-const wialonModule = require('../modules/wialon.module');
-module.exports.page = async function (req, res) {
-    // let session = getSess();
-    // const logout = await wialonModule.logout(session)
 
+module.exports.page = async function (req, res) {
     res.render('form.ejs', { message: '' });
 
 }
@@ -139,7 +128,6 @@ module.exports.sing = async function (req, res) {
                 const resulty = bcrypt.compareSync(req.body.password, rw.password)
                 //req.body.password== rw.password
                 if (resulty) {
-                    console.log(rw.name)
                     const token = jwt.sign({
                         userId: rw.id,
                         user: rw.name
@@ -180,22 +168,16 @@ module.exports.action = function (req, res) {
     }
 }
 
-const app = express();
-
 
 module.exports.logout = async function (req, res, next) {
-    datacontroler.resetSession();
     res.redirect('/');
 }
-
-
 
 
 module.exports.checkObject = (req, res) => {
     const login = req.body.login
     const role = req.body.role
     const objects = req.body.objects
-    console.log(objects)
     try {
         const selectBase = `SELECT id FROM userObjects WHERE 1`
         pool.query(selectBase, function (err, results) {
@@ -229,7 +211,6 @@ module.exports.checkObject = (req, res) => {
 }
 module.exports.viewCheckObject = (req, res) => {
     const login = req.body.name
-    console.log(login)
     try {
         const selectBase = `SELECT Object FROM userObjects WHERE login='${login}'`
         pool.query(selectBase, function (err, results) {

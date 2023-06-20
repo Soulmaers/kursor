@@ -3,8 +3,9 @@ const databaseService = require('../services/database.service');
 
 exports.iconFind = async (req, res) => {
     const idw = req.body.idw
+    const login = req.body.login
     const icons = await databaseService.iconFindtoBase(idw)
-    res.json({ result: icons, name: idw })
+    res.json({ result: icons, name: idw, login })
 }
 
 exports.icon = async (req, res) => {

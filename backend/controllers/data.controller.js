@@ -5,18 +5,6 @@ const wialonModule = require('../modules/wialon.module');
 const connection = require('../config/db')
 const { createDate, convert } = require('../helpers')
 
-let getSession
-let getLogin;
-
-exports.resetSession = () => {
-    getSession = null;
-    getLogin = null;
-    console.log(getSession, getLogin)
-};
-
-exports.getSess = () => {
-    return getSession
-}
 
 
 const sessions = {}; // объект для хранения всех сессий*module.exports = {
@@ -31,21 +19,24 @@ exports.getData = async (req, res) => {
         const token = await getTokenFromDB(login)
         const session = await wialonModule.login(token);
         sessions[login] = session;
-        getSession = session
         res.json('сессия открыта')
-        await updateParams(session);
-        setInterval(updateParams, 60000, session);
+        await updateParams(login);
+        setInterval(updateParams, 60000, login);
 
     } catch (err) {
         console.log(err);
         res.json('ошибка')
     }
 }
-
+//получаем логин, запрашиваем данные  по всем группам,
+//далее запрашиваем параметры по id объекта,
+//после достаем из базы нужные таблицы с моделями,
+//колесами и параметрами,
+//готовим данные и отправляем ответ на клиент который отрисовывает список
 exports.dataSpisok = async (req, res) => {
     try {
         const login = req.body.login
-        const data = await wialonService.getAllGroupDataFromWialon();
+        const data = await wialonService.getAllGroupDataFromWialon(login);
         const aLLmassObject = [];
         const arrName = [];
         for (const elem of data.items) {
@@ -53,20 +44,14 @@ exports.dataSpisok = async (req, res) => {
             const nameObject = elem.u;
             const massObject = [];
             await Promise.all(nameObject.map(async (el, index) => {
-                console.time(`getAllParamsIdDataFromWialon${index}`);
-                const all = await wialonService.getAllParamsIdDataFromWialon(el);
-                console.timeEnd(`getAllParamsIdDataFromWialon${index}`);
+                const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
                 if (!all.item.nm) {
                     return;
                 }
                 const objects = all.item.nm;
                 arrName.push(objects)
-                console.time(`loadParamsViewList${index}`);
                 const prob = await databaseService.loadParamsViewList(objects, el);
-                console.timeEnd(`loadParamsViewList${index}`);
-                console.time(`dostupObject${index}`);
                 const massObjectCar = await databaseService.dostupObject(login);
-                console.timeEnd(`dostupObject${index}`);
                 if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
                     prob.group = nameGroup;
                     massObject.push(prob);
@@ -106,9 +91,9 @@ async function getTokenFromDB(login) {
 }
 
 
-async function updateParams(session) {
+async function updateParams(login) {
     //запрашиваем данные параметры по обектам с виалона
-    const data = await wialonService.getDataFromWialon(session)
+    const data = await wialonService.getDataFromWialon(login)
     const nameCar = [];
     const allCar = Object.entries(data)
     allCar[5][1].forEach(async el => {

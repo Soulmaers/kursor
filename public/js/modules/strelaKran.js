@@ -1,4 +1,4 @@
-
+const login = document.querySelectorAll('.log')[1].textContent
 export async function kranParams() {
     const active = document.querySelector('.color')
     const act = active.children[0].textContent
@@ -12,7 +12,7 @@ export async function kranParams() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ idw }))
+        body: (JSON.stringify({ idw, login }))
     }
     const res = await fetch('/api/parametrs', param)
     const response = await res.json()

@@ -66,8 +66,9 @@ export async function zapros(login) {
             console.log(result)
         });*/
 }
-
+const login = document.querySelectorAll('.log')[1].textContent
 export async function ggg(id) {
+    console.log('ggg')
     return new Promise(async function (resolve, reject) {
         const idw = id
         const allobj = {};
@@ -76,7 +77,7 @@ export async function ggg(id) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idw }))
+            body: (JSON.stringify({ idw, login }))
         }
         const ress = await fetch('/api/sensorsName', param)
         const results = await ress.json()

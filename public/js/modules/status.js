@@ -1,15 +1,16 @@
 
 import { Tooltip } from '../class/Tooltip.js'
-
+const login = document.querySelectorAll('.log')[1].textContent
 export async function iconParams() {
     const active = document.querySelectorAll('.color')
     const idw = document.querySelector('.color').id
+    console.log(login)
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ idw }))
+        body: (JSON.stringify({ idw, login }))
     }
     const resParams = await fetch('/api/parametrs', param)
     const resultParams = await resParams.json()

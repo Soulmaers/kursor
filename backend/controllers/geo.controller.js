@@ -1,8 +1,5 @@
-const { getSess } = require('./data.controller.js')
+
 const wialonService = require('../services/wialon.service.js')
-
-
-
 
 //получаем запрос с интервалом времени и id
 //делаем запрос на wialon и получаем параметры где берем координаты геопозиции
@@ -10,7 +7,8 @@ exports.geoloc = async (req, res) => {
     const time1 = req.body.nowDate
     const time2 = req.body.timeFrom
     const idw = req.body.idw
-    const geoloc = await wialonService.geoDataFromWialon(time1, time2, idw)
+    const login = req.body.login
+    const geoloc = await wialonService.geoDataFromWialon(time1, time2, idw, login)
     const arr2 = Object.values(geoloc);
     const geo = [];
     var rows = arr2[1].length;
@@ -26,8 +24,7 @@ exports.geoloc = async (req, res) => {
     //забираем сессию, делаем запрос на виалон за параметрами,
     //получаем данные и выбираем координаты,
     //пересылаем в ответ для отображения на карте маркера
-    const session = getSess()
-    const geolocMarker = await wialonService.getDataFromWialon(session)
+    const geolocMarker = await wialonService.getDataFromWialon(login)
     if (geolocMarker) {
         const allCar = Object.values(geolocMarker);
         allCar[5].forEach(el => {

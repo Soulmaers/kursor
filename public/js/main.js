@@ -49,6 +49,10 @@ console.log(models)
 
 
 zapros(login) //делаем запрос на wialon получаем объекты
+
+
+
+
 liCreate()
 console.log(screen.width)
 

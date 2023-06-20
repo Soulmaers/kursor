@@ -1,5 +1,5 @@
 
-
+const login = document.querySelectorAll('.log')[1].textContent
 export async function geoloc() {
     console.log('гео')
     let nowDate = Math.round(new Date().getTime() / 1000)
@@ -12,7 +12,7 @@ export async function geoloc() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ nowDate, timeFrom, idw }))
+        body: (JSON.stringify({ nowDate, timeFrom, idw, login }))
     }
     const geoTest = await fetch('/api/geoloc', params)
     const geoCard = await geoTest.json()

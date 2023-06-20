@@ -1,5 +1,5 @@
 import { generDav } from '../content.js'
-
+const login = document.querySelectorAll('.log')[1].textContent
 export function dashView() {
     const group = Array.from(document.querySelectorAll('.groups'))
     const name = group.map(el => {
@@ -290,14 +290,14 @@ function newBoard(ArrD, ArrDC, length) {
         .text(function (d) { return d });
 }
 
-async function reqSensDash(id) {
+async function reqSensDash(id,) {
     const idw = id
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ idw }))
+        body: (JSON.stringify({ idw, login }))
 
 
     }
