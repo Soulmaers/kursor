@@ -6,13 +6,15 @@ const { getSess } = require('../controllers/data.controller.js')
 //запрос всех  групп объектов  с виалона
 exports.getAllGroupDataFromWialon = async () => {
     return new Promise(async function (resolve, reject) {
-        await getSess().request('core/search_items', prmsAllGoup)
-            .catch(function (err) {
-                console.log(err);
-            })
-            .then(function (data) {
-                resolve(data)
-            });
+        if (getSess()) {
+            await getSess().request('core/search_items', prmsAllGoup)
+                .catch(function (err) {
+                    console.log(err);
+                })
+                .then(function (data) {
+                    resolve(data)
+                });
+        }
     })
 };
 //запрос всех параметров по id объекта

@@ -12,7 +12,7 @@ const wialonModule = require('../modules/wialon.module');
 //после достаем из базы нужные таблицы с моделями, 
 //колесами и параметрами, 
 //готовим данные и отправляем ответ на клиент который отрисовывает список
-exports.dataSpisok = async (req, res) => {
+/*exports.dataSpisok = async (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
@@ -32,7 +32,7 @@ exports.dataSpisok = async (req, res) => {
         let getSession = await getSess();
         getSession = session
         console.time('getAllGroupDataFromWialon');
-        const data = await wialonService.getAllGroupDataFromWialon();
+        const data = await wialonService.getAllGroupDataFromWialon(login);
         console.timeEnd('getAllGroupDataFromWialon');
         const aLLmassObject = [];
         const arrName = [];
@@ -40,10 +40,9 @@ exports.dataSpisok = async (req, res) => {
             const nameGroup = elem.nm;
             const nameObject = elem.u;
             const massObject = [];
-
             await Promise.all(nameObject.map(async (el, index) => {
                 console.time(`getAllParamsIdDataFromWialon${index}`);
-                const all = await wialonService.getAllParamsIdDataFromWialon(el);
+                const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
                 console.timeEnd(`getAllParamsIdDataFromWialon${index}`);
                 if (!all.item.nm) {
                     return;
@@ -65,16 +64,12 @@ exports.dataSpisok = async (req, res) => {
             aLLmassObject.push(objectsWithGroup);
             aLLmassObject.reverse();
         }
-        //  if (aLLmassObject[1].length !== 0) {
         await res.json({ response: { aLLmassObject, arrName } });
-        //   return
-        //  }
-        //setTimeout(() => res.json({ response: { aLLmassObject, arrName } }), 2000);
     }
     catch (e) {
         console.log(e)
     }
-}
+}*/
 
 exports.spisok = async (req, res) => {
     const idw = req.body.idw

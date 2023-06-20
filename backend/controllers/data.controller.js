@@ -25,8 +25,6 @@ exports.getSessiont = (login) => {
     return sessions[login];
 }
 
-
-
 exports.getData = async (req, res) => {
     const login = req.body.login
     try {
@@ -44,9 +42,47 @@ exports.getData = async (req, res) => {
     }
 }
 
-
+exports.dataSpisok = async (req, res) => {
+    try {
+        const login = req.body.login
+        const data = await wialonService.getAllGroupDataFromWialon();
+        const aLLmassObject = [];
+        const arrName = [];
+        for (const elem of data.items) {
+            const nameGroup = elem.nm;
+            const nameObject = elem.u;
+            const massObject = [];
+            await Promise.all(nameObject.map(async (el, index) => {
+                console.time(`getAllParamsIdDataFromWialon${index}`);
+                const all = await wialonService.getAllParamsIdDataFromWialon(el);
+                console.timeEnd(`getAllParamsIdDataFromWialon${index}`);
+                if (!all.item.nm) {
+                    return;
+                }
+                const objects = all.item.nm;
+                arrName.push(objects)
+                console.time(`loadParamsViewList${index}`);
+                const prob = await databaseService.loadParamsViewList(objects, el);
+                console.timeEnd(`loadParamsViewList${index}`);
+                console.time(`dostupObject${index}`);
+                const massObjectCar = await databaseService.dostupObject(login);
+                console.timeEnd(`dostupObject${index}`);
+                if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
+                    prob.group = nameGroup;
+                    massObject.push(prob);
+                }
+            }));
+            const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
+            aLLmassObject.push(objectsWithGroup);
+            aLLmassObject.reverse();
+        }
+        await res.json({ response: { aLLmassObject, arrName } });
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 async function getTokenFromDB(login) {
-    console.log(login)
     return new Promise((resolve, reject) => {
         try {
             const selectBase = `SELECT tokenW FROM wialonSessions WHERE login = '${login}'`
