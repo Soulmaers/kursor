@@ -62,9 +62,6 @@ async function waitArr(el) {
             }
         })
     })
-
-    //   console.log(par)
-    console.log(res)
     const itog = res.filter(el => {
         return par.some(param => {
             return param.pressure === el[1];
@@ -90,7 +87,6 @@ async function waitArr(el) {
 }
 
 export function dashAllSort(test) {
-    console.log(test)
     const globalParams = test.map(el => {
         return el.params.map(it => {
             return [it[2], it[3]]
@@ -129,15 +125,12 @@ export function dashAllSort(test) {
                 ide.checked = true;
                 dashDav(globalParams)
             }
-
         })
     });
-
     if (ide.checked) {
         dashDav(globalParams)
     }
 }
-
 
 function dashDav(arr) {
     const length = arr.length
@@ -163,7 +156,6 @@ function dashDav(arr) {
     const arrDC = [color[1].length, color[2].length, color[3].length, color[4].length];
     newBoard(arrD, arrDC, length)
 }
-
 function newBoard(ArrD, ArrDC, length) {
     const newBoad = document.querySelector('.axis')
     if (length === 0) {
@@ -172,8 +164,6 @@ function newBoard(ArrD, ArrDC, length) {
     }
     const mass = [];
     mass.push(length)
-    console.log(ArrD)
-
     if (newBoad) {
         newBoad.remove();
     }
