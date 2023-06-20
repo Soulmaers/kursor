@@ -19,31 +19,56 @@ exports.getSess = () => {
 }
 
 
+const sessions = {}; // объект для хранения всех сессий*module.exports = {
+
+exports.getSessiont = (login) => {
+    return sessions[login];
+}
+
+
+
 exports.getData = async (req, res) => {
-    if (getSession) {
-        getSession = null
-    }
     const login = req.body.login
-    getLogin = login
-    let kluch;
-    if (login == 'Ромакс') {
-        kluch = '7d21706dbf99ed8dd9257b8b1fcc5ab3FDEAE2E1E11A17F978AC054411BB0A0CBD9051B3';
-    }
-    else {
-        kluch = '0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178';
-    }
     try {
-        const session = await wialonModule.login(kluch);
+        const token = await getTokenFromDB(login)
+        const session = await wialonModule.login(token);
+        sessions[login] = session;
         getSession = session
         res.json('сессия открыта')
-        //   await updateParams(session);
-        //   setInterval(updateParams, 60000, session);
+        await updateParams(session);
+        setInterval(updateParams, 60000, session);
 
     } catch (err) {
         console.log(err);
         res.json('ошибка')
     }
 }
+
+
+async function getTokenFromDB(login) {
+    console.log(login)
+    return new Promise((resolve, reject) => {
+        try {
+            const selectBase = `SELECT tokenW FROM wialonSessions WHERE login = '${login}'`
+            connection.query(selectBase, function (err, results) {
+                if (err) {
+                    console.log(err);
+                    reject(err); // использование reject для ошибки
+                } else if (results.length > 0) {
+                    resolve(results[0].tokenW); // использование resolve для успешной операции
+                } else {
+                    resolve('Пользователь не найден'); // возвращает строку
+                }
+            })
+        }
+        catch (err) {
+            console.log(err);
+            reject(err); // использование reject для ошибки
+        }
+    })
+
+}
+
 
 async function updateParams(session) {
     //запрашиваем данные параметры по обектам с виалона
