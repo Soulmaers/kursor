@@ -24,10 +24,10 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 
 
 app.use(session({
-    secret: 'some-secret-key',
+    secret: 'my-secret-key',
     resave: false,
-    saveUninitialized: true
-}))
+    saveUninitialized: false
+}));
 
 
 

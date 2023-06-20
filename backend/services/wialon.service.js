@@ -9,7 +9,7 @@ exports.getAllGroupDataFromWialon = async () => {
         console.log(getSess())
 
         const get = getSess()
-        console.log(get._session.th)
+        //  console.log(get._session.th)
         await getSess().request('core/search_items', prmsAllGoup)
             .catch(function (err) {
                 console.log(err);

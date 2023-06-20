@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const authTokens = {};
 const { init } = require('../wialon.js')
 const express = require('express')
-const app = express();
+
 const datacontroler = require('./data.controller.js')
 
 
@@ -177,10 +177,11 @@ module.exports.action = function (req, res) {
     }
 }
 
+const app = express();
+
 
 module.exports.logout = async function (req, res, next) {
     datacontroler.resetSession();
-
     res.redirect('/');
 }
 
