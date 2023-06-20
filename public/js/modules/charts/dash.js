@@ -22,6 +22,7 @@ export function dashView() {
 }
 
 export async function getDash() {
+    console.log('гетдаш' + new Date())
     const group = Array.from(document.querySelectorAll('.groups'))
     const ids = group.map(el => {
         return Array.from(el.children[1].children).map(it => it.id)

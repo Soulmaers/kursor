@@ -89,6 +89,8 @@ iconStrela.addEventListener('click', () => {
         cblock.style.width = 70 + '%'
     }
 })
+
+let intervalId
 const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {
     const start = document.querySelector('.start')
@@ -103,13 +105,15 @@ btnDash.addEventListener('click', () => {
     dashViewProtector()
     getDash()
     protDash()
-    setInterval(getDash, 10000)
+    intervalId = setInterval(getDash, 10000)
 
 });
 const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', mainblock)
 
 function mainblock() {
+    console.log('клеар')
+    clearInterval(intervalId)
     const start = document.querySelector('.start')
     start.style.display = 'none'
     geoloc()

@@ -4,9 +4,9 @@ import { tech } from './tech.js'
 import { gosNum } from './altConfig.js'
 import { modalOs } from './modalOs.js'
 
-
+let intervalId
 export async function loadParamsView() {
-    clearInterval(viewPokasateli)
+    clearInterval(intervalId)
     const titleCar = document.querySelector('.title_two')
     let activePost;
     const active = document.querySelectorAll('.color')
@@ -32,7 +32,7 @@ export async function loadParamsView() {
         createViewModel(model.result);
     }
     viewPokasateli()
-    setInterval(viewPokasateli, 60000)
+    intervalId = setInterval(viewPokasateli, 60000);
 }
 function createViewModel(model) {
     const containerAll = document.querySelector('.containerAll')
