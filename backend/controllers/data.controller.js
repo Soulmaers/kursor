@@ -4,7 +4,6 @@ const databaseService = require('../services/database.service');
 const wialonModule = require('../modules/wialon.module');
 const connection = require('../config/db')
 const { createDate, convert } = require('../helpers')
-//const { init } = require('../wialon.js')
 
 let getSession
 let getLogin;
@@ -15,31 +14,16 @@ exports.resetSession = () => {
     console.log(getSession, getLogin)
 };
 
-
 exports.getSess = () => {
     return getSession
 }
-exports.getLog = async () => {
-    let login = getLogin;
-    if (!login) {
-        // Ждем, пока login будет определен в getData
-        await new Promise(resolve => setTimeout(resolve, 100));
-        login = getLogin;
-    }
-    // console.log(login + '..' + 'лог')
-    return login;
-};
-let count = 0;
+
+
 exports.getData = async (req, res) => {
-    count++
-    console.log(count)
     if (getSession) {
         getSession = null
     }
-    console.log('getData started. Time:', new Date().toString());
-    console.log('request params:', req.params);
-    const login = req.params.login ? req.params.login : null;
-    const role = req.params.role
+    const login = req.body.login
     getLogin = login
     let kluch;
     if (login == 'Ромакс') {
@@ -51,19 +35,15 @@ exports.getData = async (req, res) => {
     try {
         const session = await wialonModule.login(kluch);
         getSession = session
+        res.json('сессия открыта')
         await updateParams(session);
         setInterval(updateParams, 60000, session);
 
     } catch (err) {
         console.log(err);
+        res.json('ошибка')
     }
-    //формируем и отправляем ответ на запрос
-    res.render('in.ejs', {
-        user: login,
-        role: role
-    })
 }
-
 
 async function updateParams(session) {
     //запрашиваем данные параметры по обектам с виалона

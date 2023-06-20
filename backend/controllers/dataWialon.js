@@ -2,11 +2,11 @@ const response = require('../../response')
 const connection = require('../config/db')
 const wialonService = require('../services/wialon.service.js')
 const databaseService = require('../services/database.service');
-const { getLog, getSess } = require('./data.controller.js')
+const { getSess } = require('./data.controller.js')
+const wialonModule = require('../modules/wialon.module');
 
 
 
-let log;
 //получаем логин, запрашиваем данные  по всем группам,
 //далее запрашиваем параметры по id объекта, 
 //после достаем из базы нужные таблицы с моделями, 
@@ -18,43 +18,56 @@ exports.dataSpisok = async (req, res) => {
     res.setHeader('Expires', '0');
     res.setHeader('Last-Modified', (new Date()).toUTCString());
     res.setHeader('ETag', Math.random().toString(36).substring(2))
-    if (!log) {
-        const login = await getLog();
-        log = login
+    const login = req.body.login
+    let kluch;
+    if (login == 'Ромакс') {
+        kluch = '7d21706dbf99ed8dd9257b8b1fcc5ab3FDEAE2E1E11A17F978AC054411BB0A0CBD9051B3';
     }
-    const login = log
-    const data = await wialonService.getAllGroupDataFromWialon();
-    const aLLmassObject = [];
-    const arrName = [];
-    for (const elem of data.items) {
-        const nameGroup = elem.nm;
-        const nameObject = elem.u;
-        const massObject = [];
+    else {
+        kluch = '0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178';
+    }
 
-        await Promise.all(nameObject.map(async (el) => {
-            const all = await wialonService.getAllParamsIdDataFromWialon(el);
-            if (!all.item.nm) {
-                return;
-            }
-            const objects = all.item.nm;
-            arrName.push(objects)
-            const prob = await databaseService.loadParamsViewList(objects, el);
-            const massObjectCar = await databaseService.dostupObject(login);
-            if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
-                prob.group = nameGroup;
-                massObject.push(prob);
-            }
-        }));
-        const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
-        aLLmassObject.push(objectsWithGroup);
-        aLLmassObject.reverse();
+    try {
+        const session = await wialonModule.login(kluch);
+        let getSession = getSess();
+        getSession = session
+
+        const data = await wialonService.getAllGroupDataFromWialon();
+        const aLLmassObject = [];
+        const arrName = [];
+        for (const elem of data.items) {
+            const nameGroup = elem.nm;
+            const nameObject = elem.u;
+            const massObject = [];
+
+            await Promise.all(nameObject.map(async (el) => {
+                const all = await wialonService.getAllParamsIdDataFromWialon(el);
+                if (!all.item.nm) {
+                    return;
+                }
+                const objects = all.item.nm;
+                arrName.push(objects)
+                const prob = await databaseService.loadParamsViewList(objects, el);
+                const massObjectCar = await databaseService.dostupObject(login);
+                if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
+                    prob.group = nameGroup;
+                    massObject.push(prob);
+                }
+            }));
+            const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
+            aLLmassObject.push(objectsWithGroup);
+            aLLmassObject.reverse();
+        }
+        //  if (aLLmassObject[1].length !== 0) {
+        await res.json({ response: { aLLmassObject, arrName } });
+        //   return
+        //  }
+        //setTimeout(() => res.json({ response: { aLLmassObject, arrName } }), 2000);
     }
-    /* if (aLLmassObject[1].length !== 0) {
-         await res.json({ response: { aLLmassObject, arrName } });
-         return
-     }*/
-    setTimeout(() => res.json({ response: { aLLmassObject, arrName } }), 2000);
-};
+    catch (e) {
+        console.log(e)
+    }
+}
 
 exports.spisok = async (req, res) => {
     const idw = req.body.idw

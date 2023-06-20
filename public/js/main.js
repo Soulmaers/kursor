@@ -35,7 +35,20 @@ function dis(one) {
 
 
 }
-zapros() //делаем запрос на wialon получаем объекты
+const params = {
+    method: "POST",
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: (JSON.stringify({ login }))
+
+}
+const mods = await fetch('/getData', params)
+const models = await mods.json()
+console.log(models)
+
+
+zapros(login) //делаем запрос на wialon получаем объекты
 liCreate()
 console.log(screen.width)
 

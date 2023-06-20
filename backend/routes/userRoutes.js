@@ -19,7 +19,7 @@ router.get('/logout', controller.logout)
 router.get('/action', isToken, passport.authenticate('jwt', { session: false }), controller.action)
 
 
-router.get('/data/:login/:role', controllerData.getData)
+router.post('/getData', controllerData.getData)
 router.post('/signup', controller.signup)
 router.post('/delete/:id', controller.delete)
 router.post('/update/:id', controller.update)

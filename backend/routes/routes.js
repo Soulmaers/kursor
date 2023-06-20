@@ -13,7 +13,7 @@ const router = express.Router()
 module.exports = router
 
 
-router.get('/api/dataSpisok', controllerWialon.dataSpisok)
+router.post('/api/dataSpisok', controllerWialon.dataSpisok)
 router.post('/api/spisokList', controllerWialon.spisok)
 
 router.post('/api/wialon', controllerWialon.datawialon)

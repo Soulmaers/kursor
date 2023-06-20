@@ -21,12 +21,13 @@ cont.classList.add('container2')
 wrapContaint.appendChild(cont);
 
 
-export async function zapros() {
+export async function zapros(login) {
     const params = {
-        method: "GET",
+        method: "POST",
         headers: {
             'Content-Type': 'application/json',
-        }
+        },
+        body: (JSON.stringify({ login }))
 
     }
     const mods = await fetch('/api/dataSpisok', params)

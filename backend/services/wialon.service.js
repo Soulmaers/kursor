@@ -6,16 +6,11 @@ const { getSess } = require('../controllers/data.controller.js')
 //запрос всех  групп объектов  с виалона
 exports.getAllGroupDataFromWialon = async () => {
     return new Promise(async function (resolve, reject) {
-        console.log(getSess())
-
-        const get = getSess()
-        //  console.log(get._session.th)
         await getSess().request('core/search_items', prmsAllGoup)
             .catch(function (err) {
                 console.log(err);
             })
             .then(function (data) {
-                console.log(data)
                 resolve(data)
             });
     })
