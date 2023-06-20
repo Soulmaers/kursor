@@ -1,7 +1,11 @@
 
 import { Tooltip } from '../class/Tooltip.js'
 const login = document.querySelectorAll('.log')[1].textContent
+
+
+let intervalId
 export async function iconParams() {
+    clearInterval(intervalId)
     const active = document.querySelectorAll('.color')
     const idw = document.querySelector('.color').id
     console.log(login)
@@ -185,7 +189,7 @@ export async function iconParams() {
     }
 
 }
-setInterval(iconParams, 60000)
+intervalId = setInterval(iconParams, 60000)
 
 async function fnWialon(id) {
     const params = {
