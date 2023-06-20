@@ -31,7 +31,9 @@ exports.dataSpisok = async (req, res) => {
         const session = await wialonModule.login(kluch);
         let getSession = await getSess();
         getSession = session
+        console.time('getAllGroupDataFromWialon');
         const data = await wialonService.getAllGroupDataFromWialon();
+        console.timeEnd('getAllGroupDataFromWialon');
         const aLLmassObject = [];
         const arrName = [];
         for (const elem of data.items) {
@@ -39,15 +41,21 @@ exports.dataSpisok = async (req, res) => {
             const nameObject = elem.u;
             const massObject = [];
 
-            await Promise.all(nameObject.map(async (el) => {
+            await Promise.all(nameObject.map(async (el, index) => {
+                console.time(`getAllParamsIdDataFromWialon${index}`);
                 const all = await wialonService.getAllParamsIdDataFromWialon(el);
+                console.timeEnd(`getAllParamsIdDataFromWialon${index}`);
                 if (!all.item.nm) {
                     return;
                 }
                 const objects = all.item.nm;
                 arrName.push(objects)
+                console.time(`loadParamsViewList${index}`);
                 const prob = await databaseService.loadParamsViewList(objects, el);
+                console.timeEnd(`loadParamsViewList${index}`);
+                console.time(`dostupObject${index}`);
                 const massObjectCar = await databaseService.dostupObject(login);
+                console.timeEnd(`dostupObject${index}`);
                 if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
                     prob.group = nameGroup;
                     massObject.push(prob);

@@ -36,8 +36,8 @@ exports.getData = async (req, res) => {
         const session = await wialonModule.login(kluch);
         getSession = session
         res.json('сессия открыта')
-        await updateParams(session);
-        setInterval(updateParams, 60000, session);
+        //   await updateParams(session);
+        //   setInterval(updateParams, 60000, session);
 
     } catch (err) {
         console.log(err);

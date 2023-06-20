@@ -49,8 +49,6 @@ async function waitArr(el) {
     const res = await reqSensDash(idw)
     const osss = osi.result
     const par = params.result
-
-
     osss.forEach(it => {
         delete it.id
         delete it.nameCar
@@ -306,7 +304,6 @@ async function reqSensDash(id) {
     return new Promise(async function (resolve, reject) {
         const resParams = await fetch('/api/sensorsName', param)
         const resultParams = await resParams.json()
-        console.log(resultParams)
         const nameSens = Object.entries(resultParams.item.sens)
         const arrNameSens = [];
         nameSens.forEach(el => {
