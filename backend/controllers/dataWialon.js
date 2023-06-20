@@ -29,9 +29,8 @@ exports.dataSpisok = async (req, res) => {
 
     try {
         const session = await wialonModule.login(kluch);
-        let getSession = getSess();
+        let getSession = await getSess();
         getSession = session
-
         const data = await wialonService.getAllGroupDataFromWialon();
         const aLLmassObject = [];
         const arrName = [];
