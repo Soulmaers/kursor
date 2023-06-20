@@ -30,6 +30,7 @@ export async function getDash() {
         return waitArr(el)
     })
     )
+    console.log(result)
     dashAllSort(result)
 }
 
@@ -131,6 +132,7 @@ export function dashAllSort(test) {
 }
 
 function dashDav(arr) {
+    console.log(arr)
     const length = arr.length
     const color = {
         1: [],
@@ -138,7 +140,8 @@ function dashDav(arr) {
         3: [],
         4: []
     }
-    arr.forEach((el) => {
+    const filteredArr = arr.filter((el) => el[1] !== undefined);
+    filteredArr.forEach((el) => {
         if (el[0] === -348201.3876) {
             color[4].push(el[0])
         }
