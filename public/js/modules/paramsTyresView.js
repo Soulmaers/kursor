@@ -5,7 +5,12 @@ import { gosNum } from './altConfig.js'
 import { modalOs } from './modalOs.js'
 
 let intervalId
+let isProcessing = false;
 export async function loadParamsView() {
+    if (isProcessing) {
+        return;
+    }
+    isProcessing = true;
     clearInterval(intervalId)
     const titleCar = document.querySelector('.title_two')
     let activePost;
@@ -33,6 +38,7 @@ export async function loadParamsView() {
     }
     viewPokasateli()
     intervalId = setInterval(viewPokasateli, 60000);
+    isProcessing = false;
 }
 function createViewModel(model) {
     const containerAll = document.querySelector('.containerAll')

@@ -172,7 +172,7 @@ buttOnTarirDisk.addEventListener('click', async () => {
 
 export async function tarirView() {
     const active = document.querySelector('.color')
-    const activePost = active.children[0].textContent.replace(/\s+/g, '')
+    //   const activePost = active.children[0].textContent.replace(/\s+/g, '')
     const idw = document.querySelector('.color').id
     const param = {
         method: "POST",

@@ -8,7 +8,7 @@ import { reqProtectorBase } from './protector.js'
 import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
 import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.js'
-import { dataInput, dataSelect, times } from './graf.js'
+import { dataInput, dataSelect, times, click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 import { protDash, dashViewProtector } from './charts/protek.js'
@@ -274,7 +274,7 @@ btnShina.forEach(el => {
         const e = document.querySelector('.color')
         visualNone(e);
         visual(e)
-        const activGraf = document.querySelectorAll('.activGraf')
+        const activGraf = document.querySelector('.activGraf')
         if (activGraf) {
             mainblock()
         }
@@ -488,6 +488,8 @@ plug[2].addEventListener('click', () => {
     model.style.marginLeft = '0'
     sections.style.width = '40%'
     visualGrafics.prepend(model);
+    click()
+
     clearGraf()
 })
 

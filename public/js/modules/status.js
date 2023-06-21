@@ -66,7 +66,7 @@ export async function iconParams() {
                 }
                 const statusObj = document.querySelector('.status_obj')
                 let mess;
-                if (document.querySelector('.color').children[0].textContent.startsWith('Цист')) {
+                if (document.querySelector('.color').children[0] && document.querySelector('.color').children[0].textContent.startsWith('Цист')) {
                     if (sats > 4 && it[2] === 1) {
                         statusObj.textContent = 'Online'
                         statusObj.style.color = '#15a32d'

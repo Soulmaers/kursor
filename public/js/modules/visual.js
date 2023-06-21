@@ -19,7 +19,10 @@ import { convert } from './helpersFunc.js'
 let start;
 let time;
 let timeIcon;
+
 export async function visual(el) {
+    el.classList.add('color')
+
     const msg = document.querySelectorAll('.msg')
     if (msg) {
         msg.forEach(e => {
@@ -38,10 +41,10 @@ export async function visual(el) {
         console.log('удаляем')
         containerAlt.remove()
     }
-    const containerAltOne = document.querySelector('.containerAltOne')
-    if (containerAltOne) {
-        containerAltOne.remove()
-    }
+    //   const containerAltOne = document.querySelector('.containerAltOne')
+    //  if (containerAltOne) {
+    //      containerAltOne.remove()
+    //  }
     const disketa = document.querySelector('.disketa')
     disketa.style.display = 'none'
     const korzina = document.querySelector('.korzina')
@@ -88,16 +91,17 @@ export async function visual(el) {
     wrapperUp.style.display = 'flex'
     wrapperCont.style.display = 'flex'
     speedGraf.style.display = 'block'
-    el.classList.add('color')
+
     if (titleCar) {
         titleCar.textContent = el.children[0].textContent
     }
-
-    loadParamsView()
-    findTyresInstall()
-    liCreate()
     const idw = el.id
-    iconFind(idw)
+    await liCreate()
+    await loadParamsView()
+    await iconFind(idw)
+    await iconParams()
+    await alarmFind()
+    findTyresInstall()
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
@@ -108,8 +112,7 @@ export async function visual(el) {
         geoloc()
         time = setInterval(geoloc, 300000) //отрисовываем карту osm
     }
-    alarmFind()
-    iconParams()
+
     tarirView();
     setInterval(tarirView, 300000)
     tooltip()
@@ -125,7 +128,12 @@ export async function visual(el) {
     const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
     preloaderGraf.style.opacity = 1;
     preloaderGraf.style.display = 'flex'
-    setTimeout(click, 700)
+    const graf = document.querySelector('.activGraf')
+    console.log(graf)
+    if (graf) {
+        console.log('клик')
+        setTimeout(click, 700)
+    }
     const zamer = document.querySelectorAll('.zamer')
     const createList = document.querySelector('.createList')
     clearElem(createList.value)
@@ -150,6 +158,8 @@ export async function visual(el) {
     oilValue.textContent = ''
     ign_value.textContent = ''
     oborotValue.textContent = ''
+
+
 }
 export function visualNone(e) {
     const tarir = document.querySelector('.tarir')
@@ -205,7 +215,7 @@ export function clearGraf() {
     })
 }
 //создаем список под параметры
-export function liCreate() {
+export async function liCreate() {
     const obo = document.querySelector('.obo')
     const count = 150;
     for (let i = 0; i < count; i++) {

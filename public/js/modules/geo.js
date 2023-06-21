@@ -1,6 +1,11 @@
 
 const login = document.querySelectorAll('.log')[1].textContent
+let isProcessing = false;
 export async function geoloc() {
+    if (isProcessing) {
+        return;
+    }
+    isProcessing = true;
     console.log('гео')
     let nowDate = Math.round(new Date().getTime() / 1000)
     let nDate = new Date();
@@ -70,4 +75,5 @@ export async function geoloc() {
         });
     }
     iss.setLatLng(center, /*{ icon: greenIcon }*/).update();
+    isProcessing = false;
 }

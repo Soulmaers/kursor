@@ -56,21 +56,27 @@ btnForm.forEach(el =>
         }
     })
 )
-export function click() {
+let isProcessing = false
+export async function click() {
+    if (isProcessing) {
+        return;
+    }
+    isProcessing = true;
     if (times.length !== 0) {
         const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
         preloaderGraf.style.opacity = 1;
         preloaderGraf.style.display = 'flex'
-        dataInput() //фунции выбора интервала графика скорости
+        await dataInput() //фунции выбора интервала графика скорости
     }
     if (times.length === 0) {
         const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
         preloaderGraf.style.opacity = 1;
         preloaderGraf.style.display = 'flex'
-        dataSelect() //фунции выбора интервала графика скорости
+        await dataSelect() //фунции выбора интервала графика скорости
     }
+    isProcessing = false
 }
-export function dataInput() {
+export async function dataInput() {
     const dateTime = times[times.length - 1]
     const selectSpeed = document.querySelector('.select_speed')
     selectSpeed.value = 0;
@@ -80,7 +86,7 @@ export function dataInput() {
     let nowDate = Math.floor(t02.setHours(t02.getHours()) / 1000)
     graftest(timeFrom, nowDate)
 }
-export function dataSelect() {
+export async function dataSelect() {
     let nowDate = Math.round(new Date().getTime() / 1000)
     let nDate = new Date();
     const selectSpeed = document.querySelector('.select_speed')

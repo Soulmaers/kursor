@@ -2,7 +2,12 @@ import { tr } from './content.js'
 import { convert } from './helpersFunc.js'
 import { ggg } from './menu.js'
 
+let isProcessing = false
 export async function alarmFind() {
+    if (isProcessing) {
+        return;
+    }
+    isProcessing = true;
     const tr = document.querySelectorAll('.tr')
     if (tr) {
         tr.forEach(it => {
@@ -38,6 +43,7 @@ export async function alarmFind() {
         })
         setTimeout(viewAlarmStorage, 1000, activePost, storValue)
     }
+    isProcessing = false
 }
 //setInterval(alarmFind, 60000)
 
@@ -140,62 +146,64 @@ async function viewAlarmStorage(name, stor) {
             }
         }
     })
-    t[0].children[5].textContent = 'Время аларма'
-    const best = document.querySelectorAll('.best')
-    best.forEach(el => {
-        const wrapItem = document.createElement('div')
-        wrapItem.classList.add('wrapItem')
-        el.appendChild(wrapItem)
-        const itemIn = document.createElement('div')
-        itemIn.classList.add('itemIn')
-        const itemOut = document.createElement('div')
-        itemOut.classList.add('itemOut')
-        wrapItem.appendChild(itemIn)
-        wrapItem.appendChild(itemOut)
-        el.style.position = 'relative'
-        itemIn.style.position = 'absolute'
-        itemIn.style.left = '2px';
-        itemIn.style.top = '5px';
-        itemOut.style.position = 'absolute'
-        itemOut.style.left = '2px';
-        itemOut.style.top = '5px';
-        const wrapSpoyler = document.createElement('div')
-        wrapSpoyler.classList.add('wrapSpoyler')
-        el.appendChild(wrapSpoyler)
-        const next = nextAll(el)
-        let countts = 0;
-        next.forEach(it => {
-            if (it.classList.contains('norma') !== false) {
-                countts++
-            }
-            if (it.classList.contains('norma') == false
-                && it.children[1].textContent == el.children[1].textContent && countts < 1) {
-                it.classList.add('spoyler');
-                wrapSpoyler.appendChild(it)
-            }
-        });
-        el.addEventListener('click', () => {
-            if (el.classList.contains('activeListtt')) {
-                itemIn.style.display = 'flex'
-                itemOut.style.display = 'none'
-                el.classList.remove('activeListtt')
-                el.querySelector('.wrapSpoyler').style.display = 'none'
-                return
-            }
-            el.classList.add('activeListtt')
-            itemIn.style.display = 'none'
-            itemOut.style.display = 'flex'
-            el.querySelector('.wrapSpoyler').style.display = 'flex'
-            const redHidden = document.querySelectorAll('.spoyler')
-            redHidden.forEach(el => {
-                Array.from(el.children).forEach(it => {
-                    it.style.fontSize = '11px'
-                    it.style.fontWeight = 'normal'
-                    it.style.color = '#000'
+    if (t[0] && t[0].children[5]) {
+        t[0].children[5].textContent = 'Время аларма'
+        const best = document.querySelectorAll('.best')
+        best.forEach(el => {
+            const wrapItem = document.createElement('div')
+            wrapItem.classList.add('wrapItem')
+            el.appendChild(wrapItem)
+            const itemIn = document.createElement('div')
+            itemIn.classList.add('itemIn')
+            const itemOut = document.createElement('div')
+            itemOut.classList.add('itemOut')
+            wrapItem.appendChild(itemIn)
+            wrapItem.appendChild(itemOut)
+            el.style.position = 'relative'
+            itemIn.style.position = 'absolute'
+            itemIn.style.left = '2px';
+            itemIn.style.top = '5px';
+            itemOut.style.position = 'absolute'
+            itemOut.style.left = '2px';
+            itemOut.style.top = '5px';
+            const wrapSpoyler = document.createElement('div')
+            wrapSpoyler.classList.add('wrapSpoyler')
+            el.appendChild(wrapSpoyler)
+            const next = nextAll(el)
+            let countts = 0;
+            next.forEach(it => {
+                if (it.classList.contains('norma') !== false) {
+                    countts++
+                }
+                if (it.classList.contains('norma') == false
+                    && it.children[1].textContent == el.children[1].textContent && countts < 1) {
+                    it.classList.add('spoyler');
+                    wrapSpoyler.appendChild(it)
+                }
+            });
+            el.addEventListener('click', () => {
+                if (el.classList.contains('activeListtt')) {
+                    itemIn.style.display = 'flex'
+                    itemOut.style.display = 'none'
+                    el.classList.remove('activeListtt')
+                    el.querySelector('.wrapSpoyler').style.display = 'none'
+                    return
+                }
+                el.classList.add('activeListtt')
+                itemIn.style.display = 'none'
+                itemOut.style.display = 'flex'
+                el.querySelector('.wrapSpoyler').style.display = 'flex'
+                const redHidden = document.querySelectorAll('.spoyler')
+                redHidden.forEach(el => {
+                    Array.from(el.children).forEach(it => {
+                        it.style.fontSize = '11px'
+                        it.style.fontWeight = 'normal'
+                        it.style.color = '#000'
+                    })
                 })
             })
         })
-    })
+    }
     t.forEach(el => {
         if (el.nextSibling !== null && !el.classList.contains('alarmOpen') && !el.classList.contains('oneName') && !el.classList.contains('spoyler')) {
             if (el.nextSibling.classList.contains('norma') && el.nextSibling.children[1].textContent == el.children[1].textContent) {
