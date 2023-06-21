@@ -22,7 +22,6 @@ let timeIcon;
 
 export async function visual(el) {
     el.classList.add('color')
-
     const msg = document.querySelectorAll('.msg')
     if (msg) {
         msg.forEach(e => {
@@ -41,10 +40,6 @@ export async function visual(el) {
         console.log('удаляем')
         containerAlt.remove()
     }
-    //   const containerAltOne = document.querySelector('.containerAltOne')
-    //  if (containerAltOne) {
-    //      containerAltOne.remove()
-    //  }
     const disketa = document.querySelector('.disketa')
     disketa.style.display = 'none'
     const korzina = document.querySelector('.korzina')
@@ -95,6 +90,17 @@ export async function visual(el) {
     if (titleCar) {
         titleCar.textContent = el.children[0].textContent
     }
+    const graf = document.querySelector('.activGraf')
+    console.log(graf)
+    if (graf) {
+        console.log('клик')
+        setTimeout(click, 700)
+    }
+    if (!graf) {
+        geoloc()
+        time = setInterval(geoloc, 300000)
+    }
+
     const idw = el.id
     await liCreate()
     await loadParamsView()
@@ -107,11 +113,11 @@ export async function visual(el) {
     })
     kranParams()
     setInterval(kranParams, 300000)
-    if (!start || start !== el) {
-        start = el;
-        geoloc()
-        time = setInterval(geoloc, 300000) //отрисовываем карту osm
-    }
+    /*  if (!start || start !== el) {
+          start = el;
+          geoloc()
+          time = setInterval(geoloc, 300000) //отрисовываем карту osm
+      }*/
 
     tarirView();
     setInterval(tarirView, 300000)
@@ -128,12 +134,7 @@ export async function visual(el) {
     const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
     preloaderGraf.style.opacity = 1;
     preloaderGraf.style.display = 'flex'
-    const graf = document.querySelector('.activGraf')
-    console.log(graf)
-    if (graf) {
-        console.log('клик')
-        setTimeout(click, 700)
-    }
+
     const zamer = document.querySelectorAll('.zamer')
     const createList = document.querySelector('.createList')
     clearElem(createList.value)
@@ -158,8 +159,6 @@ export async function visual(el) {
     oilValue.textContent = ''
     ign_value.textContent = ''
     oborotValue.textContent = ''
-
-
 }
 export function visualNone(e) {
     const tarir = document.querySelector('.tarir')

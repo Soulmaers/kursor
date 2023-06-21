@@ -56,12 +56,10 @@ btnForm.forEach(el =>
         }
     })
 )
-let isProcessing = false
+
+
 export async function click() {
-    if (isProcessing) {
-        return;
-    }
-    isProcessing = true;
+
     if (times.length !== 0) {
         const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
         preloaderGraf.style.opacity = 1;
@@ -74,7 +72,6 @@ export async function click() {
         preloaderGraf.style.display = 'flex'
         await dataSelect() //фунции выбора интервала графика скорости
     }
-    isProcessing = false
 }
 export async function dataInput() {
     const dateTime = times[times.length - 1]
@@ -114,17 +111,20 @@ export async function dataSelect() {
             break;
     }
 }
-export function graftest(t1, t2) {
+
+export async function graftest(t1, t2) {
     const activeMenuGraf = document.querySelector('.activMenuGraf')
     if (activeMenuGraf.textContent === 'Давление') {
-        datas(t1, t2)
+        await datas(t1, t2);
     }
     if (activeMenuGraf.textContent === 'Топливо') {
-        oil(t1, t2)
+        await oil(t1, t2)
+
     }
     if (activeMenuGraf.textContent === 'Скорость') {
-        speed(t1, t2)
+        await speed(t1, t2)
     }
+
 }
 selectSpeed.addEventListener('click', () => {
     dateInputValue.value = ''

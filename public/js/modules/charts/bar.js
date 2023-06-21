@@ -21,7 +21,10 @@ async function fn() {
     return { osi, params }
 }
 
+
 export async function datas(t1, t2) {
+
+    console.log('датас')
     const ossParams = await fn()
     const active = Number(document.querySelector('.color').id)
     // const test = await fnParT(active);
@@ -78,7 +81,7 @@ export async function datas(t1, t2) {
         })
     })
     //   console.log(finishArrayData)
-    grafikStartPress(global[0], finishArrayData)
+    await grafikStartPress(global[0], finishArrayData)
 }
 
 async function grafikStartPress(times, datar) {
