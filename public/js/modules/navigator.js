@@ -2,13 +2,10 @@ import { visual, visualNone } from './visual.js'
 //import { massivionbd } from './paramsTyresView.js';
 
 export function navigator() {
-
     const main = document.querySelector('.main')
     main.style.display = 'none';
     const start = document.querySelector('.start')
     start.style.display = 'flex';
-
-
     const nav = document.querySelectorAll('.listItem')
     // nav[0].classList.add('color')
     const menuGraf = document.querySelectorAll('.menu_graf')
@@ -23,9 +20,11 @@ export function navigator() {
         el.addEventListener('click', route)
         function route() {
             nav.forEach(e => {
+                el.classList.remove('color')
                 visualNone(e);  //скрываем для всех кнопок левый фрейм
                 // massivionbd.length = 0;
             })
+            el.classList.add('color')
             visual(el)
             const widthWind = document.querySelector('body').offsetWidth;
             if (widthWind <= 860) {

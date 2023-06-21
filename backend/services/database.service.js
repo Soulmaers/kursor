@@ -63,19 +63,39 @@ exports.saveDataToDatabase = async (name, idw, param) => {
 
 //сохраняем в базу алармы
 exports.alarmBase = async (data, tyres, alarm) => {
+    // console.log(data)
     console.log('данные по алармам')
     const dannie = data.concat(tyres)
     const id = dannie[6]
     dannie.splice(5, 3)
     dannie.push(alarm)
     dannie.unshift(id)
+    console.log(dannie)
     const value = [dannie];
+
     try {
-        const sqls = `INSERT INTO alarms (idw, data, name, senspressure, bar,
+        const selectBase = `SELECT idw, data, name, senspressure, bar, temp ,alarm 
+                    FROM alarms 
+                    WHERE idw='${dannie[0]}' AND
+                          data='${dannie[1]}' AND
+                          name='${dannie[2]}' AND
+                          senspressure='${dannie[3]}' AND
+                          bar='${dannie[4]}' AND
+                          temp='${dannie[5]}' AND
+                          alarm='${dannie[6]}'`
+        connection.query(selectBase, async function (err, results) {
+            console.log(err)
+            if (results.length !== 0) {
+                console.log(results)
+            }
+            else {
+                const sqls = `INSERT INTO alarms (idw, data, name, senspressure, bar,
                             temp, alarm) VALUES?`;
-        connection.query(sqls, [value], function (err, results) {
-            if (err) console.log(err);
-        });
+                connection.query(sqls, [value], function (err, results) {
+                    if (err) console.log(err);
+                });
+            }
+        })
     }
     catch (e) {
         console.log(e)

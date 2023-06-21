@@ -21,7 +21,6 @@ let time;
 let timeIcon;
 
 export async function visual(el) {
-    el.classList.add('color')
     const msg = document.querySelectorAll('.msg')
     if (msg) {
         msg.forEach(e => {
