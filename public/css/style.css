@@ -3,7 +3,6 @@ body {
   color: #333;
   font-family: Arial;
   margin: 0 auto;
-  border: 1px solid gray;
   /*max-width: 1600px;*/
   box-sizing: border-box;
 
@@ -1717,7 +1716,9 @@ div.spoyler {
   height: 98vh;
   display: none;
   background-image: url(../image/start.png);
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center top;
 
 }
 
@@ -4525,7 +4526,6 @@ input[type="text"]:focus {
   display: flex;
   flex-direction: column;
   margin-top: 1%;
-  border: 1px solid lightgray;
 }
 
 .list_arr2 {

@@ -2,11 +2,18 @@ import { visual, visualNone } from './visual.js'
 //import { massivionbd } from './paramsTyresView.js';
 
 export function navigator() {
+
+    const main = document.querySelector('.main')
+    main.style.display = 'none';
+    const start = document.querySelector('.start')
+    start.style.display = 'flex';
+
+
     const nav = document.querySelectorAll('.listItem')
-    nav[0].classList.add('color')
+    // nav[0].classList.add('color')
     const menuGraf = document.querySelectorAll('.menu_graf')
     menuGraf[0].classList.add('activMenuGraf')
-    visual(nav[0])
+    //  visual(nav[0])
     var widthWind = document.querySelector('body').offsetWidth;
     if (widthWind <= 1200) {
         const wrapperLeft = document.querySelector('.wrapper_left')
