@@ -29,6 +29,14 @@ body {
   margin: 5px 0;
 }
 
+
+.toolyStatic {
+  display: flex;
+  width: 140px;
+  height: 25px;
+  font-size: 0.8rem;
+}
+
 .da,
 .net {
   font-size: 1.2rem;

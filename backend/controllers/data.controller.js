@@ -208,7 +208,7 @@ function proverka(arr) {
                             return
                         }
                         else {
-                            console.log(el + ' ' + 'таблицы нет, аларма нет' + ' ' + time)
+                            //     console.log(el + ' ' + 'таблицы нет, аларма нет' + ' ' + time)
                             return
                         }
                     }

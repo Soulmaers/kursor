@@ -251,6 +251,7 @@ async function grafikStartPress(times, datar) {
     })
     const im1 = document.querySelectorAll('.im1')
     char[char.length - 1].children[0].classList.add('last')
+
     // В каждом элементе создаем график
     const end = await vieModelChart(model, im1)
     charts.each(function (d, i) {
@@ -271,12 +272,23 @@ async function grafikStartPress(times, datar) {
             .attr('rel', d.sens)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + pad + ")")
+        chartContainer.append('div')
+            .attr('class', 'tooly')
+
+
         if (i === count - 1) {
             he = height + 30
             pad = 0
+            chartContainer.append('div')
+                .attr('class', 'toolyStatic last')
+                .text('-Бар/-С°');
         }
-        chartContainer.append('div')
-            .attr('class', 'tooly')
+        else {
+            chartContainer.append('div')
+                .attr('class', 'toolyStatic')
+                .text('-Бар/-С°');
+        }
+
 
 
         // задаем x-шкалу
@@ -565,6 +577,10 @@ async function grafikStartPress(times, datar) {
             tooly.forEach(e => {
                 e.style.display = 'flex'
             })
+            const toolyStatic = document.querySelectorAll('.toolyStatic')
+            toolyStatic.forEach(e => {
+                e.style.display = 'none'
+            })
             globalTooltip(trigger)
             // Обновить текст в тултипе
             if (d) {
@@ -606,6 +622,10 @@ async function grafikStartPress(times, datar) {
                 tooltips.style.display = 'none'
                 tooly.forEach(e => {
                     e.style.display = 'none'
+                })
+                const toolyStatic = document.querySelectorAll('.toolyStatic')
+                toolyStatic.forEach(e => {
+                    e.style.display = 'flex'
                 })
             });
     });
@@ -667,6 +687,8 @@ async function grafikStartPress(times, datar) {
         })
         const chart = document.querySelectorAll('.chart')
         char[char.length - 1].children[2].classList.add('last')
+        char[char.length - 1].children[3].classList.add('last')
+
         //  console.log(objTool)
         let dav;
         let temp;
