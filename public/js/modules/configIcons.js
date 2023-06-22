@@ -118,17 +118,21 @@ export async function iconFind(idw) {
     const arg = await argy.json()
     const parFind = await fetch('/api/iconFind', params)
     const paramssyFind = await parFind.json()
+    console.log(arg)
     console.log(paramssyFind)
     arg.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
+
                 card.forEach(elem => {
                     if (elem.id === it.icons) {
+
                         elem.children[0].textContent = (el.value * it.coef).toFixed(1) // + 'км'
                         el.status === 'false' ? elem.children[0].style.color = 'gray' : elem.children[0].style.color = 'black'
                         if (it.icons === 'odom-card') {
                             const val = addZero(8, (el.value * it.coef).toFixed(0))
                             elem.children[0].textContent = val// + 'км'
+                            console.log(elem.children[0].textContent)
 
                         }
                         if (it.icons === 'ign-card') {

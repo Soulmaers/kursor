@@ -28,6 +28,24 @@ export async function visual(el) {
             e.remove();
         })
     }
+    const probegElem = document.querySelector('.odom_value')
+    const starterValue = document.querySelector('.akb_value1')
+    const ohlValue = document.querySelector('.ohl_value')
+    const oilValue = document.querySelector('.oil_value1')
+    const toil_value = document.querySelector('.toil_value')
+    const ign_value = document.querySelector('.ign_value')
+    const oborotValue = document.querySelector('.oborot_value')
+    const motoValue = document.querySelector('.moto_value')
+    motoValue.textContent = ''
+    toil_value.textContent = ''
+    starterValue.textContent = ''
+    probegElem.textContent = ''
+    ohlValue.textContent = ''
+    oilValue.textContent = ''
+    ign_value.textContent = ''
+    oborotValue.textContent = ''
+
+
     const starts = document.querySelector('.start')
     starts.style.display = 'none'
     const checkConfig = document.getElementById('check_Title')
@@ -139,22 +157,7 @@ export async function visual(el) {
             removeElem(e)
         })
     }
-    const probegElem = document.querySelector('.odom_value')
-    const starterValue = document.querySelector('.akb_value1')
-    const ohlValue = document.querySelector('.ohl_value')
-    const oilValue = document.querySelector('.oil_value1')
-    const toil_value = document.querySelector('.toil_value')
-    const ign_value = document.querySelector('.ign_value')
-    const oborotValue = document.querySelector('.oborot_value')
-    const motoValue = document.querySelector('.moto_value')
-    motoValue.textContent = ''
-    toil_value.textContent = ''
-    starterValue.textContent = ''
-    probegElem.textContent = ''
-    ohlValue.textContent = ''
-    oilValue.textContent = ''
-    ign_value.textContent = ''
-    oborotValue.textContent = ''
+
 }
 export function visualNone(e) {
     const tarir = document.querySelector('.tarir')
