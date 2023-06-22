@@ -332,15 +332,15 @@ async function grafikStartPress(times, datar) {
             .y(d => d.value === -0.5 && d.speed > 5 || d.tvalue === -0.5 && d.speed > 5 ? y1(0) : height + 10)
             .curve(d3.curveStep);
         const u = 0;
-        if (i === count - 1) {
-            // добавляем ось x
-            svg.append("g")
-                .attr("class", "osx")
-                .attr("transform", "translate(" + u + "," + (height) + ")")
-                .attr('height', 300)
-                .call(xAxis
-                    .tickFormat(d3.timeFormat('%H:%M')));
-        }
+        //  if (i === count - 1) {
+        // добавляем ось x
+        svg.append("g")
+            .attr("class", "osx")
+            .attr("transform", "translate(" + u + "," + (height) + ")")
+            .attr('height', 300)
+            .call(xAxis
+                .tickFormat(d3.timeFormat('%H:%M')));
+        //   }
         // добавляем первую ось y
         svg.append("g")
             .attr("class", "os1y")
@@ -416,53 +416,10 @@ async function grafikStartPress(times, datar) {
             } else {
                 const inputAllPress_checked = d3.select(".inputAllPress").property("checked");
                 if (inputAllPress_checked) {
-                    // Обходим все элементы с классом chart и масштабируем каждый график
-                    const count2 = charts.size()
                     d3.selectAll(".brush").call(brush.move, null)
-                    d3.selectAll(".chart")
-                        .each(function () {
-                            const chart = this;
-                            const singleData = d3.select(chart).datum();
-                            console.log(singleData.val[0].dates)
-                            console.log(x.invert(extent[0]))
-                            console.log(x.invert(extent[1]))
-                            const filteredData = singleData.val.filter(d => d.dates >= x.invert(extent[0]) && d.dates <= x.invert(extent[1]));
-                            x.domain([x.invert(extent[0]), x.invert(extent[1])]);
-                            console.log(filteredData)
-                            d3.select(chart).select("svg").select(".area1")
-                                .datum(filteredData)
-                                .transition()
-                                .duration(1000)
-                                .attr("d", area1);
-                            d3.select(chart).select("svg").select(".area11")
-                                .datum(filteredData)
-                                .transition()
-                                .duration(1000)
-                                .attr("d", area11);
-                            d3.select(chart).select("svg").select(".area3")
-                                .datum(filteredData)
-                                .transition()
-                                .duration(1000)
-                                .attr("d", area3);
-                            d3.select(chart).select("svg").select(".area2")
-                                .datum(filteredData)
-                                .transition()
-                                .duration(1000)
-                                .attr("d", area2);
-                            d3.select(chart).select("svg").select(".area12")
-                                .datum(filteredData)
-                                .transition()
-                                .duration(1000)
-                                .attr("d", area12);
-                            if (i === this.length - 1) {
-                                d3.select(chart).select("svg").select(".osx")
-                                    .call(d3.axisBottom(x)
-                                        .tickFormat(d3.timeFormat('%H:%M')))
-                                    .transition()
-                                    .duration(1000)
-                                    .call(d3.axisBottom(x));// добавляем ось x
-                            }
-                        });
+                    console.log(dat2)
+                    allUp(extent);
+                    return
                 }
                 else {
                     // Если чекбокс не нажат, то масштабируем только текущий график
@@ -573,7 +530,9 @@ async function grafikStartPress(times, datar) {
                 .attr("stroke", "blue")
                 .attr("stroke-width", 1)
                 .attr("d", area2)
-        });
+
+        })
+
         svg.on("mousemove", function (d) {
             // Определяем координаты курсора в отношении svg
             const [xPosition, yPosition] = d3.mouse(this);
@@ -643,6 +602,163 @@ async function grafikStartPress(times, datar) {
                 })
             });
     });
+
+    const comback = document.querySelector('.comback')
+    comback.addEventListener('click', () => {
+        allUp()
+    })
+    function allUp(extent) {
+        d3.selectAll(".chart")
+            .each(function (d, i, nodes) {
+                const chart = nodes[i];
+                const singleData = d3.select(chart).datum();
+                const x = d3.scaleTime()
+                    .domain(d3.extent(singleData.val, (d) => new Date(d.dates)))
+                    .range([0, width])
+                const y1 = d3.scaleLinear()
+                    .domain([0, 15])//d3.extent(data.val, (d) => d.value))
+                    .range([height, 0]);
+                const y2 = d3.scaleLinear()
+                    .domain(d3.extent(singleData.val, (d) => d.tvalue))
+                    .range([height, 0]);
+                const area1 = d3.area()
+                    .x(d => x(d.dates))
+                    .y0(height)
+                    .y1(d => y1(d.value))
+                    .curve(d3.curveStep);
+                const knd = d.bar !== undefined ? Number(d.bar.knd).toFixed(1) : null
+                const dvn = d.bar !== undefined ? Number(d.bar.dvn).toFixed(1) : null
+                const dnn = d.bar !== undefined ? Number(d.bar.dnn).toFixed(1) : null
+                const kvd = d.bar !== undefined ? Number(d.bar.kvd).toFixed(1) : null
+                const area11 = d3.area()
+                    .x(d => x(d.dates))
+                    .y0(height)
+                    .y1(d => d.value > knd && d.value <= dnn || d.value > dvn && d.value <= kvd ? y1(d.value) : height)
+                    .curve(d3.curveStep);
+                const area12 = d3.area()
+                    .x(d => x(d.dates))
+                    .y0(height)
+                    .y1(d => d.value <= knd || d.value >= kvd ? y1(d.value) : height)
+                    .curve(d3.curveStep);
+                const area2 = d3.area()
+                    .x(d => x(d.dates))
+                    .y0(height)
+                    .y1(d => y2(d.tvalue))
+                    .curve(d3.curveStep);
+                const area3 = d3.line()
+                    .x(d => x(d.dates))
+                    .y(d => d.value === -0.5 && d.speed > 5 || d.tvalue === -0.5 && d.speed > 5 ? y1(0) : height + 10)
+                    .curve(d3.curveStep);
+
+                extent ? x.domain([x.invert(extent[0]), x.invert(extent[1])]) : x.domain(d3.extent(singleData.val, (d) => new Date(d.dates)))
+
+                d3.select(chart).select("svg").select(".area1")
+                    .datum(singleData.val)
+                    .transition()
+                    .duration(1000)
+                    .attr("d", area1);
+                d3.select(chart).select("svg").select(".area11")
+                    .datum(singleData.val)
+                    .transition()
+                    .duration(1000)
+                    .attr("d", area11);
+                d3.select(chart).select("svg").select(".area3")
+                    .datum(singleData.val)
+                    .transition()
+                    .duration(1000)
+                    .attr("d", area3);
+                d3.select(chart).select("svg").select(".area2")
+                    .datum(singleData.val)
+                    .transition()
+                    .duration(1000)
+                    .attr("d", area2);
+                d3.select(chart).select("svg").select(".area12")
+                    .datum(singleData.val)
+                    .transition()
+                    .duration(1000)
+                    .attr("d", area12);
+                d3.select(chart).select("svg").select(".osx")
+                    .call(d3.axisBottom(x)
+                        .tickFormat(d3.timeFormat('%H:%M')))
+                    .transition()
+                    .duration(1000)
+                    .call(d3.axisBottom(x));// добавляем ось x
+
+
+                d3.select(chart).select("svg").on("mousemove", function (d) {
+                    // Определяем координаты курсора в отношении svg
+                    const [xPosition, yPosition] = d3.mouse(this);
+                    // Определяем ближайшую точку на графике
+                    const bisect = d3.bisector(d => d.dates).right;
+                    const x0 = x.invert(xPosition);
+                    const i = bisect(singleData.val, x0, 1);
+                    const d0 = singleData.val[i - 1];
+                    const d1 = singleData.val[i];
+                    d = x0 - d0.dates > d1.dates - x0 ? d1 : d0;
+                    tooltips.style.display = 'block'
+                    const selectedTime = timeConvert(d.dates)
+                    const trigger = d.dates
+                    const tooly = document.querySelectorAll('.tooly')
+                    tooly.forEach(e => {
+                        e.style.display = 'flex'
+                    })
+                    const toolyStatic = document.querySelectorAll('.toolyStatic')
+                    toolyStatic.forEach(e => {
+                        e.style.display = 'none'
+                    })
+                    globalTooltip(trigger)
+                    // Обновить текст в тултипе
+                    if (d) {
+                        let dav;
+                        let temp;
+                        tt1.textContent = `Время: ${(selectedTime)}`
+                        if (d.value === -0.5 && d.speed > 0) {
+                            tt2.textContent = `Давление: Потеря связи с датчиком`
+                            dav = '--'
+                        }
+                        else if (d.value === -0.5 && d.speed === 0) {
+                            tt2.textContent = `Давление: Датчик не на связи`
+                            dav = '-'
+                        }
+                        else {
+                            tt2.textContent = `Давление: ${d.value} Бар`
+                            dav = d.value
+                        }
+                        if (d.tvalue === -0.5 && d.speed > 0) {
+                            tt3.textContent = `Температура: Потеря связи с датчиком`
+                            temp = '--'
+                        }
+                        else if (d.tvalue === -0.5 && d.speed === 0) {
+                            tt3.textContent = `Температура:  Датчик не на связи`
+                            temp = '-'
+                        }
+                        else {
+                            tt3.textContent = `Температура: ${d.tvalue} С°`
+                            temp = d.tvalue
+                        }
+                        tt4.textContent = `Скорость: ${d.speed} км/ч`
+                    }
+                    tooltips.style.left = `${xPosition + 100}px`
+                    tooltips.style.top = `${yPosition + 100}px`
+                })
+                    // Добавляем обработчик события mouseout, чтобы скрыть подсказку
+                    .on("mouseout", function (event, d) {
+                        const tooly = document.querySelectorAll('.tooly')
+                        tooltips.style.display = 'none'
+                        tooly.forEach(e => {
+                            e.style.display = 'none'
+                        })
+                        const toolyStatic = document.querySelectorAll('.toolyStatic')
+                        toolyStatic.forEach(e => {
+                            e.style.display = 'flex'
+                        })
+                    });
+            });
+
+    }
+
+
+
     const legendBar = document.querySelectorAll('.legendBar')
     legendBar[0].addEventListener('click', () => {
         const line1 = d3.selectAll('.line1')
@@ -715,7 +831,15 @@ async function grafikStartPress(times, datar) {
             chart[i].children[2].textContent = `${dav} Бар/${temp} С°`
         }
     }
+
+
+
 }
+
+
+
+
+
 function timeConvert(d) {
     const date = new Date(d);
     const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",

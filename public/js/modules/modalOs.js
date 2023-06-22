@@ -1,6 +1,6 @@
 
 import { reqModalBar, viewBar } from './requests.js'
-import { clearElem } from './helpersFunc.js'
+
 export function modalOs() {
     const modalCenterOs = document.querySelector('.modalCenterOs')
     const modalClear = document.querySelector('.modalClear')
