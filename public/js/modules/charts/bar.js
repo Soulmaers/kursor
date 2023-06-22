@@ -410,14 +410,15 @@ async function grafikStartPress(times, datar) {
         var idleTimeout
         function idled() { idleTimeout = null; }
         async function updateChart() {
+            console.log('апчартс')
             const extent = d3.event.selection
             if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) {
                 if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
             } else {
                 const inputAllPress_checked = d3.select(".inputAllPress").property("checked");
                 if (inputAllPress_checked) {
-                    d3.selectAll(".brush").call(brush.move, null)
                     console.log(dat2)
+                    svg.selectAll(".brush").call(brush.move, null)
                     allUp(extent);
                     return
                 }
@@ -607,7 +608,12 @@ async function grafikStartPress(times, datar) {
     comback.addEventListener('click', () => {
         allUp()
     })
+
+
+
     function allUp(extent) {
+        console.log('оллап')
+        console.log(extent)
         d3.selectAll(".chart")
             .each(function (d, i, nodes) {
                 const chart = nodes[i];
@@ -615,6 +621,7 @@ async function grafikStartPress(times, datar) {
                 const x = d3.scaleTime()
                     .domain(d3.extent(singleData.val, (d) => new Date(d.dates)))
                     .range([0, width])
+
                 const y1 = d3.scaleLinear()
                     .domain([0, 15])//d3.extent(data.val, (d) => d.value))
                     .range([height, 0]);
@@ -649,9 +656,9 @@ async function grafikStartPress(times, datar) {
                     .x(d => x(d.dates))
                     .y(d => d.value === -0.5 && d.speed > 5 || d.tvalue === -0.5 && d.speed > 5 ? y1(0) : height + 10)
                     .curve(d3.curveStep);
-
                 extent ? x.domain([x.invert(extent[0]), x.invert(extent[1])]) : x.domain(d3.extent(singleData.val, (d) => new Date(d.dates)))
-
+                console.log([x.invert(extent[0]), x.invert(extent[1])])
+                //  d3.select(chart).select("svg").select(".brush").call(brush.move, null)
                 d3.select(chart).select("svg").select(".area1")
                     .datum(singleData.val)
                     .transition()
@@ -683,7 +690,6 @@ async function grafikStartPress(times, datar) {
                     .transition()
                     .duration(1000)
                     .call(d3.axisBottom(x));// добавляем ось x
-
 
                 d3.select(chart).select("svg").on("mousemove", function (d) {
                     // Определяем координаты курсора в отношении svg
@@ -804,9 +810,6 @@ async function grafikStartPress(times, datar) {
         new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
     })
 
-
-
-
     function globalTooltip(time) {
         const objTool = []
         //    console.log(time)
@@ -822,7 +825,6 @@ async function grafikStartPress(times, datar) {
         char[char.length - 1].children[2].classList.add('last')
         char[char.length - 1].children[3].classList.add('last')
 
-        //  console.log(objTool)
         let dav;
         let temp;
         for (let i = 0; i < chart.length; i++) {
@@ -835,10 +837,6 @@ async function grafikStartPress(times, datar) {
 
 
 }
-
-
-
-
 
 function timeConvert(d) {
     const date = new Date(d);
