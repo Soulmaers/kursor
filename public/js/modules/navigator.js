@@ -24,7 +24,7 @@ export function navigator() {
                 visualNone(e);  //скрываем для всех кнопок левый фрейм
                 // massivionbd.length = 0;
             })
-            el.classList.add('color')
+
             visual(el)
             const widthWind = document.querySelector('body').offsetWidth;
             if (widthWind <= 860) {

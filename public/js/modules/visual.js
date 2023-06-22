@@ -21,6 +21,7 @@ let time;
 let timeIcon;
 
 export async function visual(el) {
+    el.classList.add('color')
     const msg = document.querySelectorAll('.msg')
     if (msg) {
         msg.forEach(e => {
@@ -98,10 +99,10 @@ export async function visual(el) {
         setTimeout(click, 700)
     }
     if (!graf) {
+        console.log(document.querySelector('.color'))
         geoloc()
         time = setInterval(geoloc, 300000)
     }
-
     const idw = el.id
     await liCreate()
     await loadParamsView()
@@ -114,12 +115,6 @@ export async function visual(el) {
     })
     kranParams()
     setInterval(kranParams, 300000)
-    /*  if (!start || start !== el) {
-          start = el;
-          geoloc()
-          time = setInterval(geoloc, 300000) //отрисовываем карту osm
-      }*/
-
     tarirView();
     setInterval(tarirView, 300000)
     tooltip()

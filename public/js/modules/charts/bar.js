@@ -150,7 +150,7 @@ async function grafikStartPress(times, datar) {
         .append('div')
         .attr('class', 'chart');
     const margin = { top: 100, right: 10, bottom: 30, left: 10 },
-        width = 650 - margin.left - margin.right,
+        width = 700 - margin.left - margin.right,
         height = 50;
     const count = charts.size()
     let he;
@@ -166,8 +166,12 @@ async function grafikStartPress(times, datar) {
     const checkGraf = document.createElement('div')
     checkGraf.classList.add('checkGraf')
     titleGraf.appendChild(checkGraf)
-    checkGraf.innerHTML = `<input class="inputPress" type="checkbox"
-  >Подсветка графика`
+    checkGraf.innerHTML = `<div class="titleControll"><input class="inputPress" type="checkbox">
+  Подсветка графика
+  <input class="inputAllPress" type="checkbox">
+  Общее масштабирование
+  <div class="comback">Масштаб по умолчанию</div></div>`;
+
     infoGraf.appendChild(tooltips)
     const tt1 = document.createElement('div')
     const tt2 = document.createElement('div')
@@ -251,7 +255,6 @@ async function grafikStartPress(times, datar) {
     })
     const im1 = document.querySelectorAll('.im1')
     char[char.length - 1].children[0].classList.add('last')
-
     // В каждом элементе создаем график
     const end = await vieModelChart(model, im1)
     charts.each(function (d, i) {
@@ -275,7 +278,6 @@ async function grafikStartPress(times, datar) {
         chartContainer.append('div')
             .attr('class', 'tooly')
 
-
         if (i === count - 1) {
             he = height + 30
             pad = 0
@@ -288,9 +290,6 @@ async function grafikStartPress(times, datar) {
                 .attr('class', 'toolyStatic')
                 .text('-Бар/-С°');
         }
-
-
-
         // задаем x-шкалу
         const x = d3.scaleTime()
             .domain(d3.extent(data.val, (d) => new Date(d.dates)))
@@ -313,7 +312,6 @@ async function grafikStartPress(times, datar) {
         const dvn = d.bar !== undefined ? Number(d.bar.dvn).toFixed(1) : null
         const dnn = d.bar !== undefined ? Number(d.bar.dnn).toFixed(1) : null
         const kvd = d.bar !== undefined ? Number(d.bar.kvd).toFixed(1) : null
-
         const area11 = d3.area()
             .x(d => x(d.dates))
             .y0(height)
@@ -416,78 +414,94 @@ async function grafikStartPress(times, datar) {
             if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) {
                 if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
             } else {
-                x.domain([x.invert(extent[0]), x.invert(extent[1])])
-                svg.select(".brush").call(brush.move, null)
+                const inputAllPress_checked = d3.select(".inputAllPress").property("checked");
+                if (inputAllPress_checked) {
+                    // Обходим все элементы с классом chart и масштабируем каждый график
+                    const count2 = charts.size()
+                    d3.selectAll(".brush").call(brush.move, null)
+                    d3.selectAll(".chart")
+                        .each(function () {
+                            const chart = this;
+                            const singleData = d3.select(chart).datum();
+                            console.log(singleData.val[0].dates)
+                            console.log(x.invert(extent[0]))
+                            console.log(x.invert(extent[1]))
+                            const filteredData = singleData.val.filter(d => d.dates >= x.invert(extent[0]) && d.dates <= x.invert(extent[1]));
+                            x.domain([x.invert(extent[0]), x.invert(extent[1])]);
+                            console.log(filteredData)
+                            d3.select(chart).select("svg").select(".area1")
+                                .datum(filteredData)
+                                .transition()
+                                .duration(1000)
+                                .attr("d", area1);
+                            d3.select(chart).select("svg").select(".area11")
+                                .datum(filteredData)
+                                .transition()
+                                .duration(1000)
+                                .attr("d", area11);
+                            d3.select(chart).select("svg").select(".area3")
+                                .datum(filteredData)
+                                .transition()
+                                .duration(1000)
+                                .attr("d", area3);
+                            d3.select(chart).select("svg").select(".area2")
+                                .datum(filteredData)
+                                .transition()
+                                .duration(1000)
+                                .attr("d", area2);
+                            d3.select(chart).select("svg").select(".area12")
+                                .datum(filteredData)
+                                .transition()
+                                .duration(1000)
+                                .attr("d", area12);
+                            if (i === this.length - 1) {
+                                d3.select(chart).select("svg").select(".osx")
+                                    .call(d3.axisBottom(x)
+                                        .tickFormat(d3.timeFormat('%H:%M')))
+                                    .transition()
+                                    .duration(1000)
+                                    .call(d3.axisBottom(x));// добавляем ось x
+                            }
+                        });
+                }
+                else {
+                    // Если чекбокс не нажат, то масштабируем только текущий график
+                    x.domain([x.invert(extent[0]), x.invert(extent[1])]);
+                    svg.select(".brush").call(brush.move, null)
+                    svg.select(".area1")
+                        .datum(data.val)
+                        .transition()
+                        .duration(1000)
+                        .attr("d", area1);
+                    svg.select(".area11")
+                        .datum(data.val)
+                        .transition()
+                        .duration(1000)
+                        .attr("d", area11);
+                    svg.select(".area3")
+                        .datum(data.val)
+                        .transition()
+                        .duration(1000)
+                        .attr("d", area3);
+                    svg.select(".area2")
+                        .datum(data.val)
+                        .transition()
+                        .duration(1000)
+                        .attr("d", area2);
+                    svg.select(".area12")
+                        .datum(data.val)
+                        .transition()
+                        .duration(1000)
+                        .attr("d", area12);
+                    // Масштабируем ось X
+                    svg.select(".osx")
+                        .call(d3.axisBottom(x)
+                            .tickFormat(d3.timeFormat('%H:%M')))
+                        .transition()
+                        .duration(1000)
+                        .call(d3.axisBottom(x));
+                }
             }
-            d3.select('.osx')
-                .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x)
-                    .tickFormat(d3.timeFormat('%H:%M')))
-                .transition().duration(1000).call(d3.axisBottom(x))
-            svg.select(".area1")
-                .datum(data.val)
-                .transition()
-                .duration(1000)
-                .attr("fill", function (d) {
-                    if (d3.select(".inputPress").property("checked")) {
-                        return "darkgreen";
-                    } else {
-                        return "#009933";
-                    }
-                })
-                .attr("class", "pat")
-                .attr("class", "area1")
-                .attr("d", area1)
-                .attr("fill-opacity", 1)
-                .attr("stroke", "black")
-                .attr("stroke-width", 1)
-            svg.select(".area11")
-                .datum(data.val)
-                .transition()
-                .duration(1000)
-                .attr("fill", function (d) {
-                    if (d3.select(".inputPress").property("checked")) {
-                        return "#e8eb65";
-                    } else {
-                        return "#009933";
-                    }
-                })
-                .attr("d", area11)
-                .attr("fill-opacity", 0.9)
-            svg.select(".area3")
-                .datum(data.val)
-                .attr("class", "area3")
-                .attr("d", area3)
-                .attr("stroke-width", 3)
-                .attr("stroke", "red")
-                .attr("fill-opacity", 1)
-
-            svg.select(".area12")
-                .datum(data.val)
-                .transition()
-                .duration(1000)
-                .attr("class", "area12")
-                .attr("d", 2)
-                .attr("fill", function (d) {
-                    if (d3.select(".inputPress").property("checked")) {
-                        return "darkred";
-                    } else {
-                        return "#009933";
-                    }
-                })
-                .attr("d", area12)
-                .attr("fill-opacity", 0.9)
-            svg.select(".area2")
-                .datum(data.val)
-                .transition()
-                .duration(1000)
-                .attr("class", "pat")
-                .attr("class", "area2")
-                .attr("fill", "none")
-                .attr("fill-opacity", 0.3)
-                .attr("stroke", "blue")
-                .attr("stroke-width", 1)
-                .attr("d", area2)
         }
         svg.on("dblclick", function () {
             x.domain(d3.extent(data.val, (d) => new Date(d.dates)))
@@ -673,6 +687,9 @@ async function grafikStartPress(times, datar) {
         num++
         new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
     })
+
+
+
 
     function globalTooltip(time) {
         const objTool = []

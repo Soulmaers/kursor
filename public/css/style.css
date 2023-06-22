@@ -3057,6 +3057,25 @@ input[type="date"] {
 
 }
 
+.titleControll {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 500px;
+}
+
+.comback {
+  border: 1px solid black;
+  border-radius: 5px;
+  font-family: Roboto;
+  padding: 2px 2px;
+  cursor: pointer;
+}
+
+.comback:hover {
+  background-color: #fff;
+}
+
 .tooltipsy {
   width: 170px;
   height: 20px;
