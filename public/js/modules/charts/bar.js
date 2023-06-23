@@ -414,7 +414,7 @@ async function grafikStartPress(times, datar) {
         async function updateChart() {
             console.log('апчартс')
             const extent = d3.event.selection
-            if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) {
+            if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 300000) {
                 if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
             } else {
                 const inputAllPress_checked = d3.select(".inputAllPress").property("checked");
@@ -815,7 +815,7 @@ async function grafikStartPress(times, datar) {
             function idled() { idleTimeout = null; }
             function brushed(x) {
                 const extent = d3.event.selection
-                if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 60000) {
+                if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 300000) {
                     if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
                 } else {
                     const inputAllPress_checked = d3.select(".inputAllPress").property("checked");
