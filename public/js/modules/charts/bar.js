@@ -419,7 +419,6 @@ async function grafikStartPress(times, datar) {
             } else {
                 const inputAllPress_checked = d3.select(".inputAllPress").property("checked");
                 if (inputAllPress_checked) {
-
                     var x0 = x.invert(extent[0]);
                     var x1 = x.invert(extent[1]);
                     // Фильтруем данные и сохраняем их в переменной
@@ -429,15 +428,12 @@ async function grafikStartPress(times, datar) {
                             sens: el.sens,
                             position: el.position,
                             bar: el.bar,
-
                             val: el.val.filter((d) => {
                                 return d.dates >= x0 && d.dates <= x1;
                             })
                         };
                     });
-                    console.log(filterData)
                     clearCreate(filterData)
-
                     return
                 }
                 else {
@@ -806,8 +802,6 @@ async function grafikStartPress(times, datar) {
                 .attr("stroke", "blue")
                 .attr("stroke-width", 1)
                 .attr("d", area2);
-
-
             var brush = d3.brushX()
                 .extent([[0, 0], [width, height]])
                 .on("end", function () {
@@ -817,7 +811,6 @@ async function grafikStartPress(times, datar) {
                 .append("g")
                 .attr("class", "brush")
                 .call(brush);
-
             let idleTimeout;
             function idled() { idleTimeout = null; }
             function brushed(x) {
@@ -829,7 +822,6 @@ async function grafikStartPress(times, datar) {
                     if (inputAllPress_checked) {
                         var x0 = x.invert(extent[0]);
                         var x1 = x.invert(extent[1]);
-
                         const filterData = dat2.map(el => {
                             return {
                                 sens: el.sens,
@@ -955,27 +947,6 @@ async function grafikStartPress(times, datar) {
                     .attr("d", area2)
 
             })
-
-            /*
-                        const extent = d3.event.selection
-                        var x0 = x.invert(extent[0]);
-                        var x1 = x.invert(extent[1]);
-                        // Фильтруем данные и сохраняем их в переменной
-                        const filterData = dat2.map(el => {
-                            return {
-                                sens: el.sens,
-                                position: el.position,
-                                bar: el.bar,
-                                val: el.val.filter((d) => {
-                                    return d.dates >= x0 && d.dates <= x1;
-                                })
-                            };
-                        });
-                        clearCreate(filterData)
-                    }*/
-
-
-            //  console.log(charts)
             svg.on("mousemove", function (d) {
                 console.log('тултип')
                 // Определяем координаты курсора в отношении svg

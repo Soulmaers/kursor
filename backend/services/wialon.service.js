@@ -77,8 +77,6 @@ exports.getLastAllSensorsIdDataFromWialon = async (id, login) => {
         //   }
     })
 };
-
-
 exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
     if (!getSessiont(login)) {
         // Если нет, получаем ее перед запросом
@@ -100,7 +98,6 @@ exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
         //}
     })
 };
-
 //запрос данных на виалон по объекту и получение параметров
 exports.getDataFromWialon = async (login) => {
     return new Promise(async function (resolve, reject) {
@@ -113,7 +110,6 @@ exports.getDataFromWialon = async (login) => {
             });
     })
 };
-
 exports.geoDataFromWialon = async (time1, time2, idw, login) => {
     const prmsIdTime = {
         "itemId": idw,
@@ -131,7 +127,6 @@ exports.geoDataFromWialon = async (time1, time2, idw, login) => {
             .then(function (data) {
                 resolve(data)
             });
-        //   }
     })
 };
 exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => {
@@ -151,7 +146,6 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
             .then(function (data) {
                 resolve(data)
             });
-        // }
     })
 };
 
