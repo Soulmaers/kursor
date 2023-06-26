@@ -458,13 +458,14 @@ async function grafikStartPress(times, datar) {
                     brushEndX > brushStartX ? leftToRight = "left to right" : leftToRight = "right to left"
                 }
                 const extent = d3.event.selection
-                if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 300000) {
-                    if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
-                } else {
-                    const inputAllPress_checked = d3.select(".inputAllPress").property("checked");
-                    if (inputAllPress_checked) {
-                        const [x0, x1] = extent.map(x.invert)
-                        if (leftToRight === "left to right") {
+
+                const inputAllPress_checked = d3.select(".inputAllPress").property("checked");
+                if (inputAllPress_checked) {
+                    const [x0, x1] = extent.map(x.invert)
+                    if (leftToRight === "left to right") {
+                        if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 300000) {
+                            if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
+                        } else {
                             arrayDomain.push([x0, x1])
                             const filterData = dat2.map(el => {
                                 return {
@@ -479,29 +480,33 @@ async function grafikStartPress(times, datar) {
                             clearCreate(filterData)
                             return
                         }
-                        else {
-                            arrayDomain.pop()
-                            if (arrayDomain.length === 0) {
-                                const filterData = dat2
-                                clearCreate(filterData)
-                                return
-                            }
-                            const filterData = dat2.map(el => {
-                                return {
-                                    sens: el.sens,
-                                    position: el.position,
-                                    bar: el.bar,
-
-                                    val: el.val.filter((d) => {
-                                        return d.dates >= arrayDomain[arrayDomain.length - 1][0] && d.dates <= arrayDomain[arrayDomain.length - 1][1];
-                                    })
-                                };
-                            });
+                    }
+                    else {
+                        arrayDomain.pop()
+                        if (arrayDomain.length === 0) {
+                            const filterData = dat2
                             clearCreate(filterData)
                             return
                         }
+                        const filterData = dat2.map(el => {
+                            return {
+                                sens: el.sens,
+                                position: el.position,
+                                bar: el.bar,
+
+                                val: el.val.filter((d) => {
+                                    return d.dates >= arrayDomain[arrayDomain.length - 1][0] && d.dates <= arrayDomain[arrayDomain.length - 1][1];
+                                })
+                            };
+                        });
+                        clearCreate(filterData)
+                        return
                     }
-                    else {
+                }
+                else {
+                    if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 300000) {
+                        if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
+                    } else {
                         // Если чекбокс не нажат, то масштабируем только текущий график
                         x.domain([x.invert(extent[0]), x.invert(extent[1])]);
                         svg.select(".brush").call(brush.move, null)
@@ -539,6 +544,7 @@ async function grafikStartPress(times, datar) {
                             .call(d3.axisBottom(x));
                     }
                 }
+
             }
             svg.on("dblclick", function () {
                 x.domain(d3.extent(stor.val, (d) => new Date(d.dates)))
