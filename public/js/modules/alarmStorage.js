@@ -45,14 +45,35 @@ export async function alarmFind() {
     }
     isProcessing = false
 }
-//setInterval(alarmFind, 60000)
 
 async function viewAlarmStorage(name, stor) {
+    function removeDuplicates(arr) {
+        const result = [];
+        const duplicatesIndexes = [];
+        // Проходимся по каждому элементу вложенного массива
+        arr.forEach((item, index) => {
+            // Превращаем текущий элемент в строку для сравнения с другими элеметами
+            const itemAsString = JSON.stringify(item);
+            // Если текущий элемент не является дубликатом - записываем его
+            if (!duplicatesIndexes.includes(index)) {
+                result.push(item);
+                // Находим индексы всех дубликатов текущего элемента
+                for (let i = index + 1; i < arr.length; i++) {
+                    const currentItemAsString = JSON.stringify(arr[i]);
+                    if (itemAsString === currentItemAsString) {
+                        duplicatesIndexes.push(i);
+                    }
+                }
+            }
+        });
+        return result;
+    }
+    const result = stor.map((arr) => removeDuplicates(arr))
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
     const active = document.querySelector('.color')
     const allobj = await ggg(active.id)
-    stor.forEach(el => {
+    result.forEach(el => {
         let count = 0;
         el.forEach(it => {
             if (!allobj.hasOwnProperty(it.senspressure)) {
