@@ -251,6 +251,7 @@ async function grafikStartPress(times, datar) {
         clearCreate()
     })
     let arrayDomain = [];
+    let arrayDomainTwo = []
     function clearCreate(filterData) {
         d3.selectAll('.chart').select('svg').remove()
         d3.selectAll('.chart').select('.tooly').remove()
@@ -264,6 +265,17 @@ async function grafikStartPress(times, datar) {
             else {
                 stor = data
             }
+
+            if (!d3.select(this).select(".brush").empty()) {
+
+                // если объект brush существует, обновляем его
+                brush.extent([[0, 0], [width, height]])
+                    .on("end", brushed);
+
+                d3.select(this).select(".brush").call(brush);
+            }
+
+
             const chartContainer = d3.select(this); // div, в котором будет находиться график
             if (i === count - 1) {
                 he = height + 30
@@ -432,7 +444,7 @@ async function grafikStartPress(times, datar) {
             var brush = d3.brushX()
                 .extent([[0, 0], [width, height]])
                 .on("end", function () {
-                    brushed(x);
+                    brushed(x, i);
                 });
 
             var brushStartX = 0;
@@ -448,7 +460,8 @@ async function grafikStartPress(times, datar) {
             preloaderGraf.style.display = 'none'
             let idleTimeout;
             function idled() { idleTimeout = null; }
-            function brushed(x) {
+            function brushed(x, i) {
+                console.log('брушед')
                 let leftToRight;
                 var brushEndX = d3.event.sourceEvent.clientX;
                 var selection = d3.event.selection;
@@ -493,7 +506,6 @@ async function grafikStartPress(times, datar) {
                                 sens: el.sens,
                                 position: el.position,
                                 bar: el.bar,
-
                                 val: el.val.filter((d) => {
                                     return d.dates >= arrayDomain[arrayDomain.length - 1][0] && d.dates <= arrayDomain[arrayDomain.length - 1][1];
                                 })
@@ -507,6 +519,7 @@ async function grafikStartPress(times, datar) {
                     if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 300000) {
                         if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
                     } else {
+                        console.log(i)
                         // Если чекбокс не нажат, то масштабируем только текущий график
                         x.domain([x.invert(extent[0]), x.invert(extent[1])]);
                         svg.select(".brush").call(brush.move, null)

@@ -123,6 +123,7 @@ export async function visual(el) {
     }
     const idw = el.id
     await liCreate()
+    tooltip()
     await loadParamsView()
     await iconFind(idw)
     await iconParams()
@@ -135,7 +136,7 @@ export async function visual(el) {
     setInterval(kranParams, 300000)
     tarirView();
     setInterval(tarirView, 300000)
-    tooltip()
+
     const grafOld = document.querySelector('.infoGraf')
     if (grafOld) {
         removeElem(grafOld)

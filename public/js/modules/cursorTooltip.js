@@ -21,6 +21,7 @@ export async function tooltip() {
         paramssyFind.result.forEach(it => {
             if (e.id === it.icons) {
                 findFlag = true;
+                console.log(role)
                 if (role === 'Администратор') {
                     new Tooltip(e, [e.getAttribute('rel'), it.params]);
                 }

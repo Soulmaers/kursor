@@ -40,11 +40,12 @@ export async function oil(t1, t2) {
         }
     })
     console.log(object)
-    const data = object.time.map((t, i) => ({
-        time: t,
-        oil: Number(Number(object.left[i]).toFixed(0)),
-        pwr: object.right ? Number(Number(object.right[i]).toFixed(0)) : null
-    }))
+    const data = object.time && object.left && object.right ?
+        object.time.map((t, i) => ({
+            time: t,
+            oil: Number(Number(object.left[i] !== undefined ? Number(object.left[i]).toFixed(0) : 0)),
+            pwr: object.right ? Number(Number(object.right[i]).toFixed(0)) : null
+        })) : []
     console.log(data)
     const grafOld = document.querySelector('.infoGraf')
     if (grafOld) {

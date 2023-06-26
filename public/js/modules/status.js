@@ -130,6 +130,7 @@ export async function iconParams() {
                 }
                 const vals = await fetch('/api/viewStatus', parama)
                 const val = await vals.json()
+                console.log(val)
                 const startDate = val.result[0].time
                 const startDateIng = val.result[0].timeIng
                 const techdate = new Date();
@@ -149,6 +150,7 @@ export async function iconParams() {
                     day === 0 ? dayS = '' : dayS = days + 'д ';
                     hour === 0 ? hourS = '' : hourS = hour + 'ч ';
                     const mess = `${dayS} ${hourS} ${minut} мин`
+                    console.log(mess)
                     return mess;
                 }
                 let statName;
@@ -159,6 +161,8 @@ export async function iconParams() {
                 ignValue.textContent = val.result[0].statusIng
                 const message = `${statName} ${timeStor}`
                 const messageIng = `${statNameIng} ${timeStorIng}`
+                console.log([tsi_card.getAttribute('rel'), message])
+
                 new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
                 new Tooltip(ign_card, [ign_card.getAttribute('rel'), messageIng]);
                 return
@@ -190,7 +194,6 @@ export async function iconParams() {
 
 }
 intervalId = setInterval(iconParams, 60000)
-
 async function fnWialon(id) {
     const params = {
         "id": id,
