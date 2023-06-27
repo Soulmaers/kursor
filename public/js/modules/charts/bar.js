@@ -355,6 +355,12 @@ async function grafikStartPress(times, datar) {
             svg.append("g")
                 .attr("class", "os2y")
                 .attr("transform", "translate(" + width + ", 0)")
+
+
+            const legendBar = document.querySelectorAll('.legendBar')
+            const legendBarCircle = d3.select('.barGraf')
+            console.log(legendBarCircle)
+            console.log(legendBar)
             const clip = svg.append("defs").append("svg:clipPath")
                 .attr("id", "clip")
                 .append("svg:rect")
@@ -391,6 +397,7 @@ async function grafikStartPress(times, datar) {
                 .attr("stroke", "black")
                 .attr("stroke-width", 1)
                 .attr("fill-opacity", 1)
+                .style('display', legendBar[0].classList.contains('noActive') ? 'none' : 'block')
             chartGroup.append("path")
                 .datum(stor.val)
                 .attr("class", "area11")
@@ -405,6 +412,7 @@ async function grafikStartPress(times, datar) {
                     }
                 })
                 .attr("fill-opacity", 0.9)
+                .style('display', legendBar[0].classList.contains('noActive') ? 'none' : 'block')
             chartGroup.append("path")
                 .datum(stor.val)
                 .attr("class", "area12")
@@ -419,6 +427,7 @@ async function grafikStartPress(times, datar) {
                     }
                 })
                 .attr("fill-opacity", 0.9)
+                .style('display', legendBar[0].classList.contains('noActive') ? 'none' : 'block')
             // добавляем области для второй кривой
             chartGroup.append("path")
                 .datum(stor.val)
@@ -430,7 +439,9 @@ async function grafikStartPress(times, datar) {
                 .attr("stroke-width", 1)
                 .transition()
                 .duration(1000)
-                .attr("d", area2);
+                .attr("d", area2)
+                .style('display', legendBar[1].classList.contains('noActive') ? 'none' : 'block')
+
             var brush = d3.brushX()
                 .extent([[0, 0], [width, height]])
                 .on("end", function () {
