@@ -14,8 +14,6 @@ export async function alarmFind() {
             it.remove();
         })
     }
-    const active = document.querySelector('.color')
-    const activePost = active.children[0].textContent.replace(/\s+/g, '')
     const idw = document.querySelector('.color').id
     const par = {
         method: "POST",
@@ -41,7 +39,7 @@ export async function alarmFind() {
             const storList = await stor.json();
             storValue.push(storList)
         })
-        setTimeout(viewAlarmStorage, 1000, activePost, storValue)
+        setTimeout(viewAlarmStorage, 1000, idw, storValue)
     }
     isProcessing = false
 }
@@ -84,7 +82,7 @@ async function viewAlarmStorage(name, stor) {
             const tr = document.createElement('div')
             tr.classList.add('tr')
             tr.classList.add('trnone')
-            tr.classList.add(`${name}`)
+            tr.setAttribute('rel', `${name}`)
             tbody.appendChild(tr)
             const toSearch = "Норма";
             if (count == 1) {
@@ -267,7 +265,7 @@ async function viewAlarmStorage(name, stor) {
             }
         }
     })
-    const arrName = tbody.querySelectorAll(`.${name}`)
+    const arrName = tbody.querySelectorAll(`[rel="${name}"]`);
     arrName.forEach(e => {
         e.children[2].style.background = 'yellow';
         if (e.children[3].textContent == '-51' || e.children[3].textContent == '-50') {

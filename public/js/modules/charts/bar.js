@@ -266,16 +266,6 @@ async function grafikStartPress(times, datar) {
                 stor = data
             }
 
-            if (!d3.select(this).select(".brush").empty()) {
-
-                // если объект brush существует, обновляем его
-                brush.extent([[0, 0], [width, height]])
-                    .on("end", brushed);
-
-                d3.select(this).select(".brush").call(brush);
-            }
-
-
             const chartContainer = d3.select(this); // div, в котором будет находиться график
             if (i === count - 1) {
                 he = height + 30
@@ -446,7 +436,6 @@ async function grafikStartPress(times, datar) {
                 .on("end", function () {
                     brushed(x, i);
                 });
-
             var brushStartX = 0;
             brush.on("start", function () {
                 brushStartX = d3.event.sourceEvent.clientX;
@@ -471,7 +460,6 @@ async function grafikStartPress(times, datar) {
                     brushEndX > brushStartX ? leftToRight = "left to right" : leftToRight = "right to left"
                 }
                 const extent = d3.event.selection
-
                 const inputAllPress_checked = d3.select(".inputAllPress").property("checked");
                 if (inputAllPress_checked) {
                     const [x0, x1] = extent.map(x.invert)
@@ -745,7 +733,6 @@ async function grafikStartPress(times, datar) {
         num++
         new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
     })
-
     function globalTooltip(time) {
         const objTool = []
         //    console.log(time)
