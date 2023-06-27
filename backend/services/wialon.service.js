@@ -6,8 +6,8 @@ const { getSess, getSessiont } = require('../controllers/data.controller.js')
 //запрос всех  групп объектов  с виалона
 exports.getAllGroupDataFromWialon = async (login) => {
     return new Promise(async function (resolve, reject) {
-
-        await getSessiont(login).request('core/search_items', prmsAllGoup)
+        const session = await getSessiont(login);
+        session.request('core/search_items', prmsAllGoup)
             .catch(function (err) {
                 console.log(err);
             })
@@ -24,8 +24,8 @@ exports.getAllParamsIdDataFromWialon = async (id, login) => {
         "flags": 1025
     };
     return new Promise(async function (resolve, reject) {
-        console.log(login)
-        await getSessiont(login).request('core/search_item', prmsId)
+        const session = await getSessiont(login);
+        session.request('core/search_item', prmsId)
             .catch(function (err) {
                 console.log(err);
             })
@@ -101,7 +101,8 @@ exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
 //запрос данных на виалон по объекту и получение параметров
 exports.getDataFromWialon = async (login) => {
     return new Promise(async function (resolve, reject) {
-        await getSessiont(login).request('core/search_items', prms)
+        const session = await getSessiont(login);
+        session.request('core/search_items', prms)
             .catch(function (err) {
                 console.log(err);
             })

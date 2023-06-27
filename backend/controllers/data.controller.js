@@ -9,9 +9,16 @@ const { createDate, convert } = require('../helpers')
 
 const sessions = {}; // объект для хранения всех сессий*module.exports = {
 
-exports.getSessiont = (login) => {
-    return sessions[login];
-}
+exports.getSessiont = async (login) => {
+    if (!sessions[login]) { // если нет сохраненной сессии для данного логина
+        const token = await getTokenFromDB(login);
+        const session = await wialonModule.login(token);
+        console.log('Новая сессия для логина', login);
+        sessions[login] = session; // сохраняем новую сессию
+    }
+    console.log('Отдаем существующую сессию для логина', login);
+    return sessions[login]; // возвращаем сохраненную сессию
+};
 
 exports.getData = async (req, res) => {
     const login = req.body.login
