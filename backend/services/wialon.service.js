@@ -48,7 +48,8 @@ exports.getAllSensorsIdDataFromWialon = async (id, login) => {
         "sensorId": 0
     };
     return new Promise(async function (resolve, reject) {
-        await getSessiont(login).request('unit/calc_sensors', prms3)
+        const session = await getSessiont(login);
+        session.request('unit/calc_sensors', prms3)
             .catch(function (err) {
                 console.log(err);
             })
@@ -67,7 +68,8 @@ exports.getLastAllSensorsIdDataFromWialon = async (id, login) => {
         "sensors": []
     }
     return new Promise(async function (resolve, reject) {
-        await getSessiont(login).request('unit/calc_last_message', prms)
+        const session = await getSessiont(login);
+        session.request('unit/calc_last_message', prms)
             .catch(function (err) {
                 console.log(err);
             })
@@ -78,17 +80,14 @@ exports.getLastAllSensorsIdDataFromWialon = async (id, login) => {
     })
 };
 exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
-    if (!getSessiont(login)) {
-        // Если нет, получаем ее перед запросом
-        await getSessiont(login)
-    }
     const active = id
     const prmss = {
         'id': active,
         'flags': 4096
     }
     return new Promise(async function (resolve, reject) {
-        await getSessiont(login).request('core/search_item', prmss)
+        const session = await getSessiont(login);
+        session.request('core/search_item', prmss)
             .catch(function (err) {
                 console.log(err);
             })
@@ -121,7 +120,8 @@ exports.geoDataFromWialon = async (time1, time2, idw, login) => {
         "loadCount": 82710
     }
     return new Promise(async function (resolve, reject) {
-        await getSessiont(login).request('messages/load_interval', prmsIdTime)
+        const session = await getSessiont(login);
+        session.request('messages/load_interval', prmsIdTime)
             .catch(function (err) {
                 console.log(err);
             })
@@ -140,7 +140,8 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
         "loadCount": 60000
     }
     return new Promise(async function (resolve, reject) {
-        await getSessiont(login).request('messages/load_interval', prms2)
+        const session = await getSessiont(login);
+        session.request('messages/load_interval', prms2)
             .catch(function (err) {
                 console.log(err);
             })
