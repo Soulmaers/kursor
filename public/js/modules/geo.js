@@ -10,7 +10,19 @@ export async function geoloc() {
     let nowDate = Math.round(new Date().getTime() / 1000)
     let nDate = new Date();
     let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
-    console.log(document.querySelector('.color'))
+
+    /*
+        if (!document.querySelector('.color')) {
+            const main = document.querySelector('.main')
+            const start = document.querySelector('.start')
+            const sections = document.querySelector('.sections')
+            const dash = document.querySelector('.wrapper_right_dash')
+            main.style.display = 'none'
+            dash.style.display = 'none'
+            start.style.display = 'flex'
+            sections.style.display = 'flex'
+            return
+        }*/
     const idw = document.querySelector('.color').id
     const params = {
         method: "POST",

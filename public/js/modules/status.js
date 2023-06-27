@@ -3,6 +3,8 @@ import { Tooltip } from '../class/Tooltip.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
 
+
+
 let intervalId
 export async function iconParams() {
     clearInterval(intervalId)
@@ -194,25 +196,7 @@ export async function iconParams() {
 
 }
 intervalId = setInterval(iconParams, 60000)
-async function fnWialon(id) {
-    const params = {
-        "id": id,
-        "flags": 1025
-    }
-    return new Promise(function (resolve, reject) {
-        const remote1 = wialon.core.Remote.getInstance();
-        remote1.remoteCall('core/search_item', params,
-            async function (code, result) {
-                if (code) {
-                    console.log(wialon.core.Errors.getErrorText(code));
-                }
-                if (result) {
-                    const res = result.item.lmsg.p.pwr_ext.toFixed(1)
-                    resolve(res)
-                }
-            })
-    })
-}
+
 
 function addZero(digits_length, source) {
     let text = source + '';

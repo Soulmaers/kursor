@@ -12,6 +12,7 @@ import { dataInput, dataSelect, times, click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 import { protDash, dashViewProtector } from './charts/protek.js'
+import { getStat } from './charts/stat.js'
 import { conf } from './altConfig.js'
 import { viewTech } from './tech.js'
 
@@ -105,13 +106,28 @@ btnDash.addEventListener('click', () => {
     dashViewProtector()
     getDash()
     protDash()
-    intervalId = setInterval(getDash, 10000)
+    getStat()
+    intervalId = setInterval(getDash, 10000),
+        setInterval(getStat, 10000)
 
 });
 const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', mainblock)
 
 function mainblock() {
+
+    const idw = document.querySelector('.color')
+    if (!idw) {
+        const main = document.querySelector('.main')
+        const start = document.querySelector('.start')
+        const sections = document.querySelector('.sections')
+        const dash = document.querySelector('.wrapper_right_dash')
+        main.style.display = 'none'
+        dash.style.display = 'none'
+        start.style.display = 'flex'
+        sections.style.display = 'flex'
+        return
+    }
     console.log('клеар')
     clearInterval(intervalId)
     const start = document.querySelector('.start')
