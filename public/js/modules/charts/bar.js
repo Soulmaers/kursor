@@ -742,6 +742,7 @@ async function grafikStartPress(times, datar) {
     new Tooltip(combacks, ['Cбрасывает масштабирование']);
     new Tooltip(legendBar[0], ['Отключает и включает график давления']);
     new Tooltip(legendBar[1], ['Отключает и включает график температуры']);
+    
     legendBar[0].addEventListener('click', () => {
         const line1 = d3.selectAll('.line1')
         const area1 = d3.selectAll('.area1')

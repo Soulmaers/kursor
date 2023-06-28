@@ -1,7 +1,8 @@
 import { tr } from './content.js'
 import { convert } from './helpersFunc.js'
 import { ggg } from './menu.js'
-
+import { createMap } from './geo.js'
+const login = document.querySelectorAll('.log')[1].textContent
 let isProcessing = false
 export async function alarmFind() {
     if (isProcessing) {
@@ -291,8 +292,21 @@ async function viewAlarmStorage(name, stor) {
         tbody.appendChild(it)
     })
     alarmFire()
-}
 
+
+
+    const mess = document.querySelectorAll('.tr')
+    mess.forEach(tr => {
+        tr.children[2].addEventListener('click', () => {
+            const time = tr.children[0].textContent
+            geoMarker(time, name);
+
+        })
+    })
+
+
+
+}
 function alarmFire() {
     const alarmStorage = document.querySelectorAll('.alarmFire')
     const ogon = document.querySelector('.ogon')
@@ -320,4 +334,35 @@ minus.addEventListener('click', () => {
     minus.style.display = 'none'
     alarmFind()
 })
+
+
+async function geoMarker(time, idw) {
+    const dateString = time;
+    const dateFormat = "dd.mm.yyyy HH:MM";
+    const parts = dateString.match(/(\d+)/g);
+    const dateObj = new Date(parts[2], parts[1] - 1, parts[0], parts[3], parts[4]);
+    const unixTime = Math.floor(dateObj.getTime() / 1000);
+    const nowDate = unixTime
+    const timeFrom = unixTime - 100
+    console.log(nowDate, timeFrom, idw, login); // 1687935780
+
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ nowDate, timeFrom, idw, login }))
+    }
+    const geoTest = await fetch('/api/geoloc', params)
+    const geoCard = await geoTest.json()
+    console.log(geoCard)
+
+    const geo = {
+        geoX: geoCard.resTrack[0][1],
+        geoY: geoCard.resTrack[0][0],
+    }
+    createMap(geo)
+}
+
+
 

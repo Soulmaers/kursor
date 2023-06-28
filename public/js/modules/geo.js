@@ -10,19 +10,6 @@ export async function geoloc() {
     let nowDate = Math.round(new Date().getTime() / 1000)
     let nDate = new Date();
     let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
-
-    /*
-        if (!document.querySelector('.color')) {
-            const main = document.querySelector('.main')
-            const start = document.querySelector('.start')
-            const sections = document.querySelector('.sections')
-            const dash = document.querySelector('.wrapper_right_dash')
-            main.style.display = 'none'
-            dash.style.display = 'none'
-            start.style.display = 'flex'
-            sections.style.display = 'flex'
-            return
-        }*/
     const idw = document.querySelector('.color').id
     const params = {
         method: "POST",
@@ -35,6 +22,12 @@ export async function geoloc() {
     const geoCard = await geoTest.json()
     const geo = geoCard.resTrack
     const geoMarker = geoCard.resMarker
+    createMap(geo, geoMarker)
+
+}
+
+export function createMap(geo, geoMarker) {
+    console.log(geo)
     const mapss = document.getElementById('map')
     if (mapss) {
         mapss.remove();
@@ -59,14 +52,25 @@ export async function geoloc() {
         attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
     });
     map.addLayer(layer);
+    //if (geo) {
     const polyline = L.polyline(geo, { color: 'rgb(0, 0, 204)', weight: 1 });
     polyline.addTo(map);
+    // }
+
     let iss;
-    const nameCar = document.querySelector('.color').children[0].children[0].textContent
-    const center = [geoMarker.geoY, geoMarker.geoX,]
-    console.log(center)
-    map.setView(center, 15)
-    map.flyTo(center, 15)
+    console.log(geoMarker)
+    const nameCar = document.querySelector('.color').children[0].textContent
+    console.log(nameCar)
+    let center;
+    if (geoMarker) {
+        center = [geoMarker.geoY, geoMarker.geoX,]
+    }
+    else {
+        center = [geo.geoY, geo.geoX,]
+    }
+
+    map.setView(center, 12)
+    map.flyTo(center, 12)
     if (!iss) {
         var LeafIcon = L.Icon.extend({
             options: {
@@ -76,9 +80,13 @@ export async function geoloc() {
             }
         });
         var greenIcon = new LeafIcon({
-            iconUrl: '../../image/iconCar2.png',
+            iconUrl: '../../image/iconCar2.png'
+
         })
-        iss = L.marker(center, { icon: greenIcon }).bindPopup(nameCar).addTo(map);
+        const alarmMarker = new LeafIcon({
+            iconUrl: '../../image/er.png'
+        })
+        iss = L.marker(center, { icon: geoMarker ? greenIcon : alarmMarker }).bindPopup(nameCar).addTo(map);
         iss.on('mouseover', function (e) {
             this.openPopup();
         });
