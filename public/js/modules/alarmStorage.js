@@ -299,7 +299,7 @@ async function viewAlarmStorage(name, stor) {
     mess.forEach(tr => {
         tr.children[2].addEventListener('click', () => {
             const time = tr.children[0].textContent
-            geoMarker(time, name);
+            geoMarker(time, name, tr);
 
         })
     })
@@ -336,7 +336,7 @@ minus.addEventListener('click', () => {
 })
 
 
-async function geoMarker(time, idw) {
+async function geoMarker(time, idw, tr) {
     const dateString = time;
     const dateFormat = "dd.mm.yyyy HH:MM";
     const parts = dateString.match(/(\d+)/g);
@@ -355,11 +355,20 @@ async function geoMarker(time, idw) {
     }
     const geoTest = await fetch('/api/geoloc', params)
     const geoCard = await geoTest.json()
-    console.log(geoCard)
 
+    const nameCar = document.querySelector('.color').children[0].textContent
+    const alarm = {
+        car: nameCar,
+        time: tr.children[0].textContent,
+        tyres: tr.children[1].textContent,
+        bar: tr.children[2].textContent,
+        temp: tr.children[3].textContent,
+        alarm: tr.children[4].textContent,
+    }
     const geo = {
         geoX: geoCard.resTrack[0][1],
         geoY: geoCard.resTrack[0][0],
+        info: alarm
     }
     createMap(geo)
 }

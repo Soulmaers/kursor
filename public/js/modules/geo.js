@@ -58,7 +58,6 @@ export function createMap(geo, geoMarker) {
     // }
 
     let iss;
-    console.log(geoMarker)
     const nameCar = document.querySelector('.color').children[0].textContent
     console.log(nameCar)
     let center;
@@ -86,7 +85,10 @@ export function createMap(geo, geoMarker) {
         const alarmMarker = new LeafIcon({
             iconUrl: '../../image/er.png'
         })
-        iss = L.marker(center, { icon: geoMarker ? greenIcon : alarmMarker }).bindPopup(nameCar).addTo(map);
+
+        console.log(geo.info)
+
+        iss = L.marker(center, { icon: geoMarker ? greenIcon : alarmMarker }).bindPopup(geoMarker ? nameCar : `Объект: ${geo.info.car}\nВремя: ${geo.info.time}\nКолесо: ${geo.info.tyres}\nP,bar: ${geo.info.bar}\nt,C: ${geo.info.temp}\nАларм: ${geo.info.alarm}`, { className: 'my-popup' }).addTo(map);
         iss.on('mouseover', function (e) {
             this.openPopup();
         });

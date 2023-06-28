@@ -2521,6 +2521,9 @@ input[type="date"] {
 
 
 
+.my-popup {
+  white-space: pre-wrap;
+}
 
 .infoGraf {
   margin-top: 10px;
