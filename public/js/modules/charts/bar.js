@@ -188,10 +188,10 @@ async function grafikStartPress(times, datar) {
     const checkGraf = document.createElement('div')
     checkGraf.classList.add('checkGraf')
     titleGraf.appendChild(checkGraf)
-    checkGraf.innerHTML = `<div class="titleControll"><input class="inputPress" type="checkbox">
-  Подсветка графика
-  <input class="inputAllPress" type="checkbox">
-  Общее масштабирование
+    checkGraf.innerHTML = `<input class="inputPress" id="inputPress" type="checkbox">
+<label for="inputPress" class="labelPress">Подсветка графика</label>
+<input class="inputAllPress" id="inputAllPress" type="checkbox">
+<label for="inputAllPress"class="labelAllPress"> Общее масштабирование</label>
   <div class="comback">Масштаб по умолчанию</div></div>`;
     infoGraf.appendChild(tooltips)
     const tt1 = document.createElement('div')
@@ -728,6 +728,14 @@ async function grafikStartPress(times, datar) {
         })
     }
     const legendBar = document.querySelectorAll('.legendBar')
+    const labelPress = document.querySelector('.labelPress')
+    const labelAllPress = document.querySelector('.labelAllPress')
+    const combacks = document.querySelector('.comback')
+    new Tooltip(labelPress, ['Включает подсветку графика относительно выставленных значений на ось']);
+    new Tooltip(labelAllPress, ['Включает масштабирование всех графиков']);
+    new Tooltip(combacks, ['Cбрасывает масштабирование']);
+    new Tooltip(legendBar[0], ['Отключает и включает график давления']);
+    new Tooltip(legendBar[1], ['Отключает и включает график температуры']);
     legendBar[0].addEventListener('click', () => {
         const line1 = d3.selectAll('.line1')
         const area1 = d3.selectAll('.area1')

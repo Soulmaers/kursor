@@ -1562,6 +1562,8 @@ div.spoyler {
 .checkGraf {
   font-size: 0.8rem;
   font-family: Roboto;
+  display: flex;
+  align-items: center;
 }
 
 
@@ -3088,6 +3090,7 @@ input[type="date"] {
   font-family: Roboto;
   padding: 2px 2px;
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .comback:hover {

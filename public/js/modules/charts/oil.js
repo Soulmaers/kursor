@@ -1,4 +1,6 @@
 import { fnTime, fnPar, fnParMessage } from '../grafiks.js'
+import { Tooltip } from '../../class/Tooltip.js'
+
 
 export async function oil(t1, t2) {
     console.log('график топлива')
@@ -414,6 +416,8 @@ export async function oil(t1, t2) {
     })
 
     const legendOil = document.querySelectorAll('.legendOil')
+    new Tooltip(legendOil[0], ['Отключает и включает график топливо']);
+    new Tooltip(legendOil[1], ['Отключает и включает график бортовое питание']);
     console.log(legendOil[0])
     legendOil[0].addEventListener('click', () => {
         console.log('нажал топливо')
