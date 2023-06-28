@@ -26,8 +26,9 @@ export async function geoloc() {
 
 }
 
-export function createMap(geo, geoMarker) {
-    console.log(geo)
+export function createMap(geo, geoMarker, alarms) {
+    console.log(alarms)
+    console.log(geoMarker)
     const mapss = document.getElementById('map')
     if (mapss) {
         mapss.remove();
@@ -53,20 +54,16 @@ export function createMap(geo, geoMarker) {
     });
     map.addLayer(layer);
     //if (geo) {
-    const polyline = L.polyline(geo, { color: 'rgb(0, 0, 204)', weight: 1 });
+    const polyline = L.polyline(geo, { color: !alarms ? 'rgb(0, 0, 204)' : 'red', weight: 1 });
     polyline.addTo(map);
     // }
 
     let iss;
     const nameCar = document.querySelector('.color').children[0].textContent
-    console.log(nameCar)
-    let center;
-    if (geoMarker) {
-        center = [geoMarker.geoY, geoMarker.geoX,]
-    }
-    else {
-        center = [geo.geoY, geo.geoX,]
-    }
+
+
+    const center = [geoMarker.geoY, geoMarker.geoX,]
+    console.log(center)
 
     map.setView(center, 12)
     map.flyTo(center, 12)
@@ -86,9 +83,8 @@ export function createMap(geo, geoMarker) {
             iconUrl: '../../image/er.png'
         })
 
-        console.log(geo.info)
 
-        iss = L.marker(center, { icon: geoMarker ? greenIcon : alarmMarker }).bindPopup(geoMarker ? nameCar : `Объект: ${geo.info.car}\nВремя: ${geo.info.time}\nКолесо: ${geo.info.tyres}\nP,bar: ${geo.info.bar}\nt,C: ${geo.info.temp}\nАларм: ${geo.info.alarm}`, { className: 'my-popup' }).addTo(map);
+        iss = L.marker(center, { icon: !alarms ? greenIcon : alarmMarker }).bindPopup(!alarms ? nameCar : `Объект: ${geoMarker.info.car}\nВремя: ${geoMarker.info.time}\nКолесо: ${geoMarker.info.tyres}\nP,bar: ${geoMarker.info.bar}\nt,C: ${geoMarker.info.temp}\nАларм: ${geoMarker.info.alarm}`, { className: 'my-popup' }).addTo(map);
         iss.on('mouseover', function (e) {
             this.openPopup();
         });

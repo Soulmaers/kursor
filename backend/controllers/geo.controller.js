@@ -4,10 +4,12 @@ const wialonService = require('../services/wialon.service.js')
 //получаем запрос с интервалом времени и id
 //делаем запрос на wialon и получаем параметры где берем координаты геопозиции
 exports.geoloc = async (req, res) => {
+
     const time1 = req.body.nowDate
     const time2 = req.body.timeFrom
     const idw = req.body.idw
     const login = req.body.login
+
     const geoloc = await wialonService.geoDataFromWialon(time1, time2, idw, login)
     const arr2 = Object.values(geoloc);
     const geo = [];

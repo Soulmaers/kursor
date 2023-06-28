@@ -355,7 +355,6 @@ async function geoMarker(time, idw, tr) {
     }
     const geoTest = await fetch('/api/geoloc', params)
     const geoCard = await geoTest.json()
-
     const nameCar = document.querySelector('.color').children[0].textContent
     const alarm = {
         car: nameCar,
@@ -370,7 +369,27 @@ async function geoMarker(time, idw, tr) {
         geoY: geoCard.resTrack[0][0],
         info: alarm
     }
-    createMap(geo)
+    const res = await alarmTrackGeo(unixTime, idw)
+    const alarms = 'алармы';
+    createMap(res.resTrack, geo, alarms)
+}
+
+async function alarmTrackGeo(unixTime, idw) {
+    const nowDate = unixTime + 3600
+    const timeFrom = unixTime - 3600
+    console.log(nowDate, timeFrom, idw, login); // 1687935780
+
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ nowDate, timeFrom, idw, login }))
+    }
+    const geoTest = await fetch('/api/geoloc', params)
+    const geoCard = await geoTest.json()
+    return geoCard
+
 }
 
 
