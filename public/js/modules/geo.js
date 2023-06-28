@@ -93,7 +93,7 @@ export function createMap(geo, geoMarker, geoTrack) {
             const alarmCenter = [geoTrack.geoY, geoTrack.geoX]
             map.setView(alarmCenter, 12)
             map.flyTo(alarmCenter, 12)
-            iss2 = L.marker(alarmCenter, { icon: alarmMarker }).bindPopup(`Объект: ${geoTrack.info.car}\nВремя: ${geoTrack.info.time}\nКолесо: ${geoTrack.info.tyres}\nP,bar: ${geoTrack.info.bar}\nt,C: ${geoTrack.info.temp}\nАларм: ${geoTrack.info.alarm}`, { className: 'my-popup' }).addTo(map);
+            iss2 = L.marker(alarmCenter, { icon: alarmMarker }).bindPopup(`Объект: ${geoTrack.info.car}\nВремя: ${geoTrack.info.time}\nКолесо: ${geoTrack.info.tyres}\nP,bar: ${geoTrack.info.bar}\nt,C: ${geoTrack.info.temp}\nСкорость: ${geoTrack.speed}\nАларм: ${geoTrack.info.alarm}`, { className: 'my-popup' }).addTo(map);
             iss2.on('mouseover', function (e) {
                 this.openPopup();
             });

@@ -364,15 +364,18 @@ async function geoMarker(time, idw, tr) {
         temp: tr.children[3].textContent,
         alarm: tr.children[4].textContent,
     }
-    const geo = {
-        geoX: geoCard.resTrack[0][1],
-        geoY: geoCard.resTrack[0][0],
-        info: alarm
-    }
+
     const res = await alarmTrackGeo(unixTime, idw)
     const trackAlarm = res.resTrack;
     const geoCar = geoCard.resMarker
-    console.log(geoCard.resMarker)
+    const speed = await speedAlarm(unixTime, idw)
+    console.log(speed)
+    const geo = {
+        geoX: geoCard.resTrack[0][1],
+        geoY: geoCard.resTrack[0][0],
+        info: alarm,
+        speed: speed
+    }
     createMap(trackAlarm, geoCar, geo)
 }
 
@@ -392,6 +395,23 @@ async function alarmTrackGeo(unixTime, idw) {
     const geoCard = await geoTest.json()
     return geoCard
 
+}
+
+
+async function speedAlarm(unixTime, idw) {
+    const timeNow = unixTime
+    const timeOld = unixTime - 100
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ idw, timeOld, timeNow, login }))
+    }
+    const res = await fetch('/api/loadInterval', param)
+    const result = await res.json()
+    const speed = result.messages[0].pos.s
+    return speed
 }
 
 
