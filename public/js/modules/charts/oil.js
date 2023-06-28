@@ -252,7 +252,11 @@ export async function oil(t1, t2) {
     // Add brushing
     var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
         .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-        .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
+        .on("end", updateChart)
+    var brushStartX = 0;
+    brush.on("start", function () {
+        brushStartX = d3.event.sourceEvent.clientX;
+    });            // Each time the brush selection changes, trigger the 'updateChart' function
     // Add the brushing
     svg
         .append("g")
@@ -261,7 +265,18 @@ export async function oil(t1, t2) {
     // A function that set idleTimeOut to null
     var idleTimeout
     function idled() { idleTimeout = null; }
+    const arrayDomain = [];
     function updateChart() {
+
+        let leftToRight;
+        var brushEndX = d3.event.sourceEvent.clientX;
+        var selection = d3.event.selection;
+        if (!brushStartX || !selection || !selection.length) {
+            console.log("no direction, no selection");
+        } else {
+            brushEndX > brushStartX ? leftToRight = "left to right" : leftToRight = "right to left"
+        }
+
         // What are the selected boundaries?
         const extent = d3.event.selection
         // If no selection or selection is too small, back to initial coordinate. Otherwise, update X axis domain
@@ -269,123 +284,237 @@ export async function oil(t1, t2) {
             if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
             //  x.domain([4, 8])
         } else {
-            x.domain([x.invert(extent[0]), x.invert(extent[1])])
-            svg.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+            if (leftToRight === "left to right") {
+                const [x0, x1] = extent.map(x.invert)
+                console.log('прибавляем последний')
+                arrayDomain.push([x0, x1])
+                console.log(arrayDomain)
+                x.domain([x.invert(extent[0]), x.invert(extent[1])])
+                svg.select(".brush").call(brush.move, null)
+                // Update axis and line position
+                svg.select("g")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x)
+                        .tickFormat(d3.timeFormat('%H:%M')))
+                    .transition().duration(1000).call(d3.axisBottom(x))
+                svg.select('.line1')
+                    .datum(data)
+                    .transition()
+                    .duration(1000)
+                    .attr("fill", "none")
+                    .attr("stroke", "blue")
+                    .attr("stroke-width", 1.5)
+                    .attr("d", line1);
+
+                svg.select('.line2')
+                    .datum(data)
+                    .transition()
+                    .duration(1000)
+                    .attr("fill", "none")
+                    .attr("stroke", "blue")
+                    .attr("stroke-width", 1.5)
+                    .attr("d", line2)
+
+                svg.select(".area1")
+                    .datum(data)
+                    .transition()
+                    .duration(1000)
+                    .attr("fill", "blue")
+                    .attr("class", "pat")
+                    .attr("class", "area1")
+                    .attr("fill-opacity", 0.5)
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 1)
+                    .attr("d", area1)
+
+                svg.select(".area2")
+                    .datum(data)
+                    .transition()
+                    .duration(1000)
+                    .attr("class", "pat")
+                    .attr("class", "area2")
+                    .attr("fill", "#32a885")
+                    .attr("fill-opacity", 0.3)
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 1)
+                    .attr("d", area2)
+                //  svg.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+
+            }
+            else {
+                const [x0, x1] = extent.map(x.invert)
+                arrayDomain.pop()
+                if (arrayDomain.length === 0) {
+                    console.log('пустой массив')
+                    x.domain(d3.extent(data, (d) => new Date(d.time)))
+                    svg.select(".brush").call(brush.move, null)
+                    // Update axis and line position
+                    svg.select("g")
+                        .attr("transform", "translate(0," + height + ")")
+                        .call(d3.axisBottom(x)
+                            .tickFormat(d3.timeFormat('%H:%M')))
+                        .transition().duration(1000).call(d3.axisBottom(x))
+                    svg.select('.line1')
+                        .datum(data)
+                        .transition()
+                        .duration(1000)
+                        .attr("fill", "none")
+                        .attr("stroke", "blue")
+                        .attr("stroke-width", 1.5)
+                        .attr("d", line1);
+
+                    svg.select('.line2')
+                        .datum(data)
+                        .transition()
+                        .duration(1000)
+                        .attr("fill", "none")
+                        .attr("stroke", "blue")
+                        .attr("stroke-width", 1.5)
+                        .attr("d", line2)
+
+                    svg.select(".area1")
+                        .datum(data)
+                        .transition()
+                        .duration(1000)
+                        .attr("fill", "blue")
+                        .attr("class", "pat")
+                        .attr("class", "area1")
+                        .attr("fill-opacity", 0.5)
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 1)
+                        .attr("d", area1)
+
+                    svg.select(".area2")
+                        .datum(data)
+                        .transition()
+                        .duration(1000)
+                        .attr("class", "pat")
+                        .attr("class", "area2")
+                        .attr("fill", "#32a885")
+                        .attr("fill-opacity", 0.3)
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 1)
+                        .attr("d", area2)
+                }
+                else {
+
+                    console.log('удаляем последний')
+                    console.log(arrayDomain)
+                    x.domain([arrayDomain[arrayDomain.length - 1][0], arrayDomain[arrayDomain.length - 1][1]])
+
+                    svg.select(".brush").call(brush.move, null)
+                    // Update axis and line position
+                    svg.select("g")
+                        .attr("transform", "translate(0," + height + ")")
+                        .call(d3.axisBottom(x)
+                            .tickFormat(d3.timeFormat('%H:%M')))
+                        .transition().duration(1000).call(d3.axisBottom(x))
+                    svg.select('.line1')
+                        .datum(data)
+                        .transition()
+                        .duration(1000)
+                        .attr("fill", "none")
+                        .attr("stroke", "blue")
+                        .attr("stroke-width", 1.5)
+                        .attr("d", line1);
+
+                    svg.select('.line2')
+                        .datum(data)
+                        .transition()
+                        .duration(1000)
+                        .attr("fill", "none")
+                        .attr("stroke", "blue")
+                        .attr("stroke-width", 1.5)
+                        .attr("d", line2)
+
+                    svg.select(".area1")
+                        .datum(data)
+                        .transition()
+                        .duration(1000)
+                        .attr("fill", "blue")
+                        .attr("class", "pat")
+                        .attr("class", "area1")
+                        .attr("fill-opacity", 0.5)
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 1)
+                        .attr("d", area1)
+
+                    svg.select(".area2")
+                        .datum(data)
+                        .transition()
+                        .duration(1000)
+                        .attr("class", "pat")
+                        .attr("class", "area2")
+                        .attr("fill", "#32a885")
+                        .attr("fill-opacity", 0.3)
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 1)
+                        .attr("d", area2)
+
+
+
+                    //   svg.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+                }
+
+            }
+
         }
-        // Update axis and line position
-        svg.select("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x)
-                .tickFormat(d3.timeFormat('%H:%M')))
-            .transition().duration(1000).call(d3.axisBottom(x))
-        svg.select('.line1')
-            .datum(data)
-            .transition()
-            .duration(1000)
-            .attr("fill", "none")
-            .attr("stroke", "blue")
-            .attr("stroke-width", 1.5)
-            .attr("d", line1);
 
-        svg.select('.line2')
-            .datum(data)
-            .transition()
-            .duration(1000)
-            .attr("fill", "none")
-            .attr("stroke", "blue")
-            .attr("stroke-width", 1.5)
-            .attr("d", line2)
+        // If user double click, reinitialize the chart
+        svg.on("dblclick", function () {
+            x.domain(d3.extent(data, (d) => new Date(d.time)))
+            svg.select("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x)
+                    .tickFormat(d3.timeFormat('%H:%M')))
+                .transition().call(d3.axisBottom(x))
+            svg.select('.line1')
+                .datum(data)
+                .transition()
+                .duration(1000)
+                .attr("fill", "none")
+                .attr("stroke", "blue")
+                .attr("stroke-width", 1.5)
+                .attr("d", line1)
 
-        svg.select(".area1")
-            .datum(data)
-            .transition()
-            .duration(1000)
-            .attr("fill", "blue")
-            .attr("class", "pat")
-            .attr("class", "area1")
-            .attr("fill-opacity", 0.5)
-            .attr("stroke", "black")
-            .attr("stroke-width", 1)
-            .attr("d", area1)
+            svg.select('.line2')
+                .datum(data)
+                .transition()
+                .duration(1000)
+                .attr("fill", "none")
+                .attr("stroke", "blue")
+                .attr("stroke-width", 1.5)
+                .attr("d", line2)
 
-        svg.select(".area2")
-            .datum(data)
-            .transition()
-            .duration(1000)
-            .attr("class", "pat")
-            .attr("class", "area2")
-            .attr("fill", "#32a885")
-            .attr("fill-opacity", 0.3)
-            .attr("stroke", "black")
-            .attr("stroke-width", 1)
-            .attr("d", area2)
-    }
+            svg.select(".area1")
+                .datum(data)
+                .transition()
+                .duration(1000)
+                .attr("fill", "blue")
+                .attr("class", "pat")
+                .attr("class", "area1")
+                .attr("fill-opacity", 0.5)
+                .attr("stroke", "black")
+                .attr("stroke-width", 1)
+                .attr("d", area1)
+            svg.select(".area2")
+                .datum(data)
+                .transition()
+                .duration(1000)
+                .attr("class", "pat")
+                .attr("class", "area2")
+                .attr("fill", "#32a885")
+                .attr("fill-opacity", 0.3)
+                .attr("stroke", "black")
+                .attr("stroke-width", 1)
+                .attr("d", area2)
+        });
 
-    // If user double click, reinitialize the chart
-    svg.on("dblclick", function () {
-        x.domain(d3.extent(data, (d) => new Date(d.time)))
-        svg.select("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x)
-                .tickFormat(d3.timeFormat('%H:%M')))
-            .transition().call(d3.axisBottom(x))
-        svg.select('.line1')
-            .datum(data)
-            .transition()
-            .duration(1000)
-            .attr("fill", "none")
-            .attr("stroke", "blue")
-            .attr("stroke-width", 1.5)
-            .attr("d", line1)
-
-        svg.select('.line2')
-            .datum(data)
-            .transition()
-            .duration(1000)
-            .attr("fill", "none")
-            .attr("stroke", "blue")
-            .attr("stroke-width", 1.5)
-            .attr("d", line2)
-
-        svg.select(".area1")
-            .datum(data)
-            .transition()
-            .duration(1000)
-            .attr("fill", "blue")
-            .attr("class", "pat")
-            .attr("class", "area1")
-            .attr("fill-opacity", 0.5)
-            .attr("stroke", "black")
-            .attr("stroke-width", 1)
-            .attr("d", area1)
-        svg.select(".area2")
-            .datum(data)
-            .transition()
-            .duration(1000)
-            .attr("class", "pat")
-            .attr("class", "area2")
-            .attr("fill", "#32a885")
-            .attr("fill-opacity", 0.3)
-            .attr("stroke", "black")
-            .attr("stroke-width", 1)
-            .attr("d", area2)
-    });
-
-    svg.on("mousemove", function (d) {
-        // Определяем координаты курсора в отношении svg
-        const [xPosition, yPosition] = d3.mouse(this);
-        // Определяем ближайшую точку на графике
-        const bisect = d3.bisector(d => d.time).right;
-        const x0 = x.invert(xPosition);
-        const i = bisect(data, x0, 1);
-        const d0 = data[i - 1];
-        const d1 = data[i];
-        d = x0 - d0.time > d1.time - x0 ? d1 : d0;
-
-        const tooltip = d3.select(".infoGraf").append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
         svg.on("mousemove", function (d) {
+            const toll = document.querySelector('.tooltip')
+            if (toll) {
+                toll.remove();
+            }
             // Определяем координаты курсора в отношении svg
             const [xPosition, yPosition] = d3.mouse(this);
             // Определяем ближайшую точку на графике
@@ -396,31 +525,45 @@ export async function oil(t1, t2) {
             const d1 = data[i];
             d = x0 - d0.time > d1.time - x0 ? d1 : d0;
 
-            tooltip.style("left", `${xPosition + 100}px`);
-            tooltip.style("top", `${yPosition + 100}px`);
-            // Показать тултип, если он скрыт
-            tooltip.style("display", "block");
-            const selectedTime = timeConvert(d.time)
-            // Отображаем подсказку с координатами и значениями по оси y
-            let oilTool;
-            d.oil === 0 ? oilTool = 'Нет данных' : oilTool = d.oil
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", 0.9);
-            tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${oilTool}<br/>Бортовое питание: ${d.pwr}`)
-        })
-            // Добавляем обработчик события mouseout, чтобы скрыть подсказку
-            .on("mouseout", function (event, d) {
+            const tooltip = d3.select(".infoGraf").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+            svg.on("mousemove", function (d) {
+                // Определяем координаты курсора в отношении svg
+                const [xPosition, yPosition] = d3.mouse(this);
+                // Определяем ближайшую точку на графике
+                const bisect = d3.bisector(d => d.time).right;
+                const x0 = x.invert(xPosition);
+                const i = bisect(data, x0, 1);
+                const d0 = data[i - 1];
+                const d1 = data[i];
+                d = x0 - d0.time > d1.time - x0 ? d1 : d0;
+
+                tooltip.style("left", `${xPosition + 100}px`);
+                tooltip.style("top", `${yPosition + 100}px`);
+                // Показать тултип, если он скрыт
+                tooltip.style("display", "block");
+                const selectedTime = timeConvert(d.time)
+                // Отображаем подсказку с координатами и значениями по оси y
+                let oilTool;
+                d.oil === 0 ? oilTool = 'Нет данных' : oilTool = d.oil
                 tooltip.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-            });
+                    .duration(200)
+                    .style("opacity", 0.9);
+                tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${oilTool}<br/>Бортовое питание: ${d.pwr}`)
+            })
+                // Добавляем обработчик события mouseout, чтобы скрыть подсказку
+                .on("mouseout", function (event, d) {
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
 
-    })
-
+        })
+    }
     const legendOil = document.querySelectorAll('.legendOil')
     const inf = document.querySelector('.infos')
-    new Tooltip(inf, ['График отражает топливо и бортовое питание']);
+    new Tooltip(inf, ['График отражает топливо и бортовое питание', 'Чтобы увеличить график, надо выделить область мышкой слева направо', 'Чтобы вернуть график в предыдущий масштаб, надо выделить область мышкой справа налево', 'Чтобы сбросить масштабирование, два раза кликните на график ']);
     new Tooltip(legendOil[0], ['Отключает и включает график топливо']);
     new Tooltip(legendOil[1], ['Отключает и включает график бортовое питание']);
     console.log(legendOil[0])
