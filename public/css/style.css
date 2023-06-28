@@ -2525,8 +2525,18 @@ input[type="date"] {
 .infoGraf {
   margin-top: 10px;
   border: 1px solid black;
+  position: relative;
 }
 
+.infos {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  left: 20px;
+  top: 20px;
+  background-image: url(../image/info.png);
+  background-size: cover;
+}
 
 
 

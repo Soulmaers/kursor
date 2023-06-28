@@ -101,6 +101,10 @@ async function grafikStartPress(times, datar) {
     const grafics = document.querySelector('.grafics')
     graf.classList.add('infoGraf')
     grafics.appendChild(graf)
+    const info = document.createElement('div')
+    info.classList.add('infos')
+    graf.prepend(info)
+
     const newData = datar.map(el => {
         return {
             ...el,
@@ -731,6 +735,8 @@ async function grafikStartPress(times, datar) {
     const labelPress = document.querySelector('.labelPress')
     const labelAllPress = document.querySelector('.labelAllPress')
     const combacks = document.querySelector('.comback')
+    const inf = document.querySelector('.infos')
+    new Tooltip(inf, ['График отражает давление и температуру по каждому колесу', 'Чтобы увеличить график, надо выделить область мышкой слева направо', 'Чтобы вернуть график в предыдущий масштаб, надо выделить область мышкой справа налево']);
     new Tooltip(labelPress, ['Включает подсветку графика относительно выставленных значений на ось']);
     new Tooltip(labelAllPress, ['Включает масштабирование всех графиков']);
     new Tooltip(combacks, ['Cбрасывает масштабирование']);

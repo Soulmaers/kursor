@@ -60,6 +60,9 @@ export async function oil(t1, t2) {
     const grafics = document.querySelector('.grafics')
     graf.classList.add('infoGraf')
     grafics.appendChild(graf)
+    const info = document.createElement('div')
+    info.classList.add('infos')
+    graf.prepend(info)
 
     // устанавливаем размеры контейнера
     const margin = { top: 10, right: 60, bottom: 30, left: 60 },
@@ -416,6 +419,8 @@ export async function oil(t1, t2) {
     })
 
     const legendOil = document.querySelectorAll('.legendOil')
+    const inf = document.querySelector('.infos')
+    new Tooltip(inf, ['График отражает топливо и бортовое питание']);
     new Tooltip(legendOil[0], ['Отключает и включает график топливо']);
     new Tooltip(legendOil[1], ['Отключает и включает график бортовое питание']);
     console.log(legendOil[0])
