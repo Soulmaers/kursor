@@ -29,6 +29,7 @@ export async function oil(t1, t2) {
     })
     const object = {}
     console.log(finishArrayData)
+
     finishArrayData.forEach(el => {
         object.time = gl
         if (el.sens.startsWith('Топливо')) {
@@ -37,17 +38,14 @@ export async function oil(t1, t2) {
             })
         }
         else {
-
             object.right = el.value
-            el.value = 0
-            object.left = el.value
         }
     })
     console.log(object)
 
     const data = object.time.map((t, i) => ({
         time: t,
-        oil: Number(object.left[i] != null ? Number(object.left[i]).toFixed(0) : 0),
+        oil: object.left ? Number(object.left[i]).toFixed(0) : 0,
         pwr: object.right ? Number(object.right[i] != null ? Number(object.right[i]).toFixed(0) : 0) : null
     }))
 

@@ -1,16 +1,34 @@
 .container_start {
     display: flex;
-    justify-content: center;
+    background-color: #000;
     align-items: center;
-    background-color: lightgray;
-
+    background-image: url(../image/collage.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
     min-height: 1000px;
-    border: 1px solid rgb(84, 74, 228)
+    border: 1px solid rgb(84, 74, 228);
+    z-index: 0;
+    position: relative;
+}
+
+.container_start::after {
+    content: "";
+    background-color: #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 100%;
+    opacity: 0.7;
+    z-index: -1;
 }
 
 .wrappers {
     width: 270px;
     min-height: 350px;
+    margin-left: 30px;
     border: 1px solid rgb(84, 74, 228);
     background-color: rgb(31, 4, 104);
 
