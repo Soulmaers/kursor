@@ -370,13 +370,15 @@ async function geoMarker(time, idw, tr) {
         info: alarm
     }
     const res = await alarmTrackGeo(unixTime, idw)
-    const alarms = 'алармы';
-    createMap(res.resTrack, geo, alarms)
+    const trackAlarm = res.resTrack;
+    const geoCar = geoCard.resMarker
+    console.log(geoCard.resMarker)
+    createMap(trackAlarm, geoCar, geo)
 }
 
 async function alarmTrackGeo(unixTime, idw) {
     const nowDate = unixTime + 3600
-    const timeFrom = unixTime - 3600
+    const timeFrom = unixTime
     console.log(nowDate, timeFrom, idw, login); // 1687935780
 
     const params = {
