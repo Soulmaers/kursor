@@ -20,8 +20,6 @@ async function fn() {
     const osi = osis.result
     return { osi, params }
 }
-
-
 export async function datas(t1, t2) {
     const ossParams = await fn()
     const active = Number(document.querySelector('.color').id)
@@ -29,7 +27,6 @@ export async function datas(t1, t2) {
     const sensArr = await fnPar(active)
     const nameArr = await fnParMessage(active)
     const allArrNew = [];
-    console.log(global)
     nameArr.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
@@ -54,6 +51,9 @@ export async function datas(t1, t2) {
     })
     const finishArrayData = []
     const finishArrayDataT = []
+    const stop = [];
+    const idw = document.querySelector('.color').id
+    console.log(idw)
     allArrNew.forEach(e => {
         if (e.params.startsWith('tpms_p')) {
             finishArrayData.push(e)
@@ -61,11 +61,25 @@ export async function datas(t1, t2) {
         if (e.params.startsWith('tpms_t')) {
             finishArrayDataT.push(e)
         }
+        if (e.params.startsWith('pwr_ext') && e.sens.startsWith('Бортовое')) {
+            e.value.forEach(el => {
+                if (idw === '26821431') {
+                    el >= 13 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
+                    //    console.log('11')
+                }
+                else {
+                    el >= 26.5 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
+                    //   console.log('22')
+                }
+            })
+        }
     })
     finishArrayData.forEach((el, index) => {
         el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
         el.speed = global[1]
+        el.stop = stop
     })
+    console.log(finishArrayData)
     finishArrayData.forEach(e => {
         par.forEach(it => {
             if (e.params === it.pressure) {
@@ -113,7 +127,7 @@ async function grafikStartPress(times, datar) {
     const gl = times.map(it => {
         return new Date(it)
     })
-    const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed }) => ({
+    const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
         sens,
         position,
         bar,
@@ -121,9 +135,25 @@ async function grafikStartPress(times, datar) {
             dates: gl[i],
             value: Number(val),
             tvalue: tvalue !== null ? Number(tvalue[i]) : null,
-            speed: Number(speed[i])
-        }))
+            speed: Number(speed[i]),
+            stop: stop[i]
+        })).filter(obj => obj.stop !== 'ВЫКЛ')
     }));
+
+
+    /*
+    const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
+        sens,
+        position,
+        bar,
+        val: value.map((val, i) => ({
+            dates: gl[i],
+            value: Number(val),
+            tvalue: tvalue !== null ? Number(tvalue[i]) : null,
+            speed: Number(speed[i]),
+            stop: stop[i]
+        }))
+    }));*/
     dat2.sort((a, b) => {
         if (a.position > b.position) {
             return 1;
@@ -133,6 +163,7 @@ async function grafikStartPress(times, datar) {
         }
         return 0;
     });
+    console.log(dat2)
     const container = d3.select('.infoGraf');
     // Связываем данные с контейнером
     const charts = container.selectAll('.charts')
@@ -356,11 +387,7 @@ async function grafikStartPress(times, datar) {
                 .attr("class", "os2y")
                 .attr("transform", "translate(" + width + ", 0)")
 
-
             const legendBar = document.querySelectorAll('.legendBar')
-            const legendBarCircle = d3.select('.barGraf')
-            console.log(legendBarCircle)
-            console.log(legendBar)
             const clip = svg.append("defs").append("svg:clipPath")
                 .attr("id", "clip")
                 .append("svg:rect")

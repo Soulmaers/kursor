@@ -32,6 +32,7 @@ export async function iconParams() {
     })
     const res = await fetch('/api/lastSensors', param)
     const results = await res.json()
+    console.log(results)
     if (results) {
         const valueSens = [];
         Object.entries(results).forEach(e => {

@@ -24,6 +24,7 @@ exports.getData = async (req, res) => {
     const login = req.body.login
     try {
         const token = await getTokenFromDB(login)
+        console.log(token)
         const session = await wialonModule.login(token);
         sessions[login] = session;
         res.json('сессия открыта')
