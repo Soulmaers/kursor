@@ -1,6 +1,7 @@
 .container_start {
     display: flex;
     background-color: #000;
+    justify-content: center;
     align-items: center;
     background-image: url(../image/collage.png);
     background-repeat: no-repeat;
@@ -28,7 +29,6 @@
 .wrappers {
     width: 270px;
     min-height: 350px;
-    margin-left: 30px;
     border: 1px solid rgb(84, 74, 228);
     background-color: rgb(31, 4, 104);
 
