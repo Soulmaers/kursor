@@ -375,7 +375,7 @@ async function geoMarker(time, idw, tr) {
     const dateObj = new Date(parts[2], parts[1] - 1, parts[0], parts[3], parts[4]);
     const unixTime = Math.floor(dateObj.getTime() / 1000);
     const nowDate = unixTime
-    const timeFrom = unixTime - 200
+    const timeFrom = unixTime - 300
     console.log(nowDate, timeFrom, idw, login); // 1687935780
 
     const params = {
@@ -432,7 +432,7 @@ async function alarmTrackGeo(unixTime, idw) {
 
 async function speedAlarm(unixTime, idw) {
     const timeNow = unixTime
-    const timeOld = unixTime - 200
+    const timeOld = unixTime - 300
     const param = {
         method: "POST",
         headers: {
@@ -442,6 +442,7 @@ async function speedAlarm(unixTime, idw) {
     }
     const res = await fetch('/api/loadInterval', param)
     const result = await res.json()
+    console.log(result)
     const speed = result.messages[0].pos.s
     return speed
 }
