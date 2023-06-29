@@ -280,8 +280,6 @@ async function viewAlarmStorage(name, stor) {
     })
     const arrName = tbody.querySelectorAll(`[rel="${name}"]`);
     arrName.forEach(e => {
-
-        console.log(e.children[3].textContent)
         if (e.children[3].textContent <= -50 || e.children[3].textContent > 70) {
             e.children[3].style.background = 'yellow';
         }

@@ -96,11 +96,13 @@ export async function ggg(id) {
             Object.entries(result).forEach(e => {
                 valueSens.push(e[1])
             })
+            //    console.log(valueSens)
             const allArr = [];
             arrNameSens.forEach((e, index) => {
                 allArr.push([...e, valueSens[index]])
 
             })
+            //console.log(allArr)
             allArr.forEach(it => {
                 allobj[it[1]] = it[0]
             })

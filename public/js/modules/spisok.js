@@ -4,7 +4,7 @@ import { objColorFront, generDav } from './content.js'
 import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
 import { removeElem, removeArrElem } from './helpersFunc.js'
-
+const login = document.querySelectorAll('.log')[1].textContent
 
 export async function loadParamsViewList(car, el) {
     const params = {
@@ -81,7 +81,7 @@ export async function conturTest(testov) {
             group.classList.add(`${el[0][5]}`)
             group.appendChild(hiddenModal)
             const listArr = document.querySelector(`.${el[0][5]}`)
-            el.forEach(elem => {
+            el.forEach(async elem => {
                 const nameCar = elem[0].message.replace(/\s+/g, '')
                 const listItemCar = document.createElement('div')
                 listItemCar.classList.add('listItem')
@@ -118,6 +118,13 @@ export async function conturTest(testov) {
                     progress.appendChild(progressBarText)
                     fnStaticObjectOil(elem[4])
                 }
+                const res = await gg(elem[4])
+                let in1;
+                res.forEach(i => {
+                    if (i[0] === 'Зажигание') {
+                        in1 = i[2]
+                    }
+                })
                 if (elem[0].result) {
                     const modelUniq = convert(elem[0].result)
                     modelUniq.forEach(os => {
@@ -150,7 +157,7 @@ export async function conturTest(testov) {
                             if (el.name == item.pressure) {
                                 shina.forEach(e => {
                                     if (e.id == item.tyresdiv) {
-                                        if (el.status === 'false') {
+                                        if (el.status === 'false' && in1 === 1) {
                                             e.children[0].style.fill = 'gray'
                                             return
                                         }
@@ -177,7 +184,46 @@ export async function conturTest(testov) {
     hiddenWindows()
     navigator();
     sortAll()
-    zaprosSpisok()
+    setTimeout(zaprosSpisok, 1000)
+}
+
+async function gg(id) {
+    return new Promise(async function (resolve, reject) {
+        const idw = id
+        const allobj = {};
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw, login }))
+        }
+        const ress = await fetch('/api/sensorsName', param)
+        const results = await ress.json()
+        if (!results) {
+            ggg(id)
+        }
+        const nameSens = Object.entries(results.item.sens)
+        const arrNameSens = [];
+        nameSens.forEach(el => {
+            arrNameSens.push([el[1].n, el[1].p])
+        })
+        const res = await fetch('/api/lastSensors', param)
+        const result = await res.json()
+        if (result) {
+            const valueSens = [];
+            Object.entries(result).forEach(e => {
+                valueSens.push(e[1])
+            })
+            //    console.log(valueSens)
+            const allArr = [];
+            arrNameSens.forEach((e, index) => {
+                allArr.push([...e, valueSens[index]])
+            })
+            resolve(allArr)
+        }
+
+    });
 }
 
 async function fnStaticObjectOil(idw) {
@@ -401,23 +447,26 @@ export function zaprosSpisok() {
     updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
 setInterval(zaprosSpisok, 60000)
-function viewListKoleso(arg, params, osi, nameCar) {
+async function viewListKoleso(params, arg, osi, nameCar) {
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
     if (params.result) {
         const modelUniqValues = convert(params.result)
         const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
-        const r = [];
         let integer;
-        modelUniqValues.forEach(el => {
-            r.push(el.tyresdiv)
+        const res = await gg(nameCar.id)
+        let in1;
+        res.forEach(i => {
+            if (i[0] === 'Зажигание') {
+                in1 = i[2]
+            }
         })
         arg.result.forEach((el) => {
             modelUniqValues.forEach((item) => {
                 if (el.name == item.pressure) {
                     shina.forEach(e => {
                         if (e.id == item.tyresdiv) {
-                            if (el.status === 'false') {
+                            if (el.status === 'false' && in1 === 1) {
                                 e.children[0].style.fill = 'gray'
                                 return
                             }

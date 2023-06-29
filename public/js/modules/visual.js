@@ -124,9 +124,9 @@ export async function visual(el) {
     const idw = el.id
     await liCreate()
     tooltip()
-    await loadParamsView()
     await iconFind(idw)
     await iconParams()
+    await loadParamsView()
     await alarmFind()
     findTyresInstall()
     btnsens.forEach(el => {
@@ -285,7 +285,10 @@ export async function viewConfigurator(arg, params, osi) {
                                     signal = objColor[generDav(done, element)]
                                 }
                             })
-                            if (el.status === 'false') {
+                            const ign = document.querySelector('.ign_value').textContent
+                            console.log(ign)
+                            if (el.status === 'false' && ign === 'ВКЛ') {
+                                console.log(e.children[0])
                                 e.children[0].style.background = 'lightgray';
                                 e.children[0].style.color = '#000'
                                 return
@@ -300,7 +303,6 @@ export async function viewConfigurator(arg, params, osi) {
                             }
                         }
                         if (el.name === item.temp) {
-
                             tiresLink.forEach(e => {
                                 if (e.id == item.tyresdiv) {
                                     if (el.value === '-128' || el.value === '-50' || el.value === '-51') {
@@ -309,7 +311,8 @@ export async function viewConfigurator(arg, params, osi) {
                                         e.children[1].textContent = el.value
                                         e.children[1].style.border = 'none'
                                         e.children[1].style.borderRadius = '0 0 30% 30%'
-                                        if (el.status === 'false') {
+                                        const ign = document.querySelector('.ign_value').textContent
+                                        if (el.status === 'false' && ign === 'ВКЛ') {
                                             e.children[1].style.background = 'lightgray';
                                             e.children[0].style.color = '#000'
                                             e.children[1].style.border = 'none'
@@ -320,7 +323,8 @@ export async function viewConfigurator(arg, params, osi) {
                                         e.children[1].style.border = 'none'
                                         e.children[1].textContent = el.value + '°C'
                                         e.children[1].setAttribute('rel', `${item.temp}`)
-                                        if (el.status === 'false') {
+                                        const ign = document.querySelector('.ign_value').textContent
+                                        if (el.status === 'false' && ign === 'ВКЛ') {
                                             e.children[1].style.background = 'lightgray';
                                             e.children[1].style.border = 'none'
                                             e.children[1].style.borderRadius = '0 0 30% 30%'
