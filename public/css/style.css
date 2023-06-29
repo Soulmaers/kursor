@@ -2556,6 +2556,15 @@ input[type="date"] {
   background-size: cover;
 }
 
+.infosAlarm {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  left: 10px;
+  top: 4px;
+  background-image: url(../image/info.png);
+  background-size: cover;
+}
 
 
 .container_left {
@@ -5219,8 +5228,9 @@ input[type="text"]:focus {
 .oneName {
   width: 100%;
   display: flex;
+  padding-top: 15px;
+  margin: 0;
 
-  margin: 0
 }
 
 .comeback {
@@ -5267,7 +5277,6 @@ input[type="text"]:focus {
   text-align: center;
   width: 100%;
   height: 50vh;
-
   overflow-y: scroll;
   /* здесь рекомендуется использовать scroll вместо auto */
   scrollbar-width: thin;

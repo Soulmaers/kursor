@@ -2,6 +2,7 @@ import { tr } from './content.js'
 import { convert } from './helpersFunc.js'
 import { ggg } from './menu.js'
 import { createMap } from './geo.js'
+import { Tooltip } from '../class/Tooltip.js'
 const login = document.querySelectorAll('.log')[1].textContent
 let isProcessing = false
 export async function alarmFind() {
@@ -69,7 +70,16 @@ async function viewAlarmStorage(name, stor) {
     }
     const result = stor.map((arr) => removeDuplicates(arr))
     const tbody = document.querySelector('.tbody')
+
     tbody.innerHTML = tr
+    const main = document.querySelector('.main')
+    const info = document.createElement('div')
+    info.classList.add('infosAlarm')
+    tbody.prepend(info)
+    const infos = document.querySelector('.infosAlarm')
+    new Tooltip(infos, ['Лента уведомлений отражает зафиксированные отклонения от заданным параметров по давлению и температуре',
+        'Если внутри зафикисрованного отклонения есть дополнительные изменения, то они подгружаются по нажатию стрелки вниз напротив уведомления',
+        'Если нажать красный маркер карты, то на карте отразится место события с переданными туда данными']);
 
     const active = document.querySelector('.color')
     const allobj = await ggg(active.id)
@@ -325,7 +335,12 @@ async function viewAlarmStorage(name, stor) {
 
 
 
+
 }
+
+
+
+
 function alarmFire() {
     const alarmStorage = document.querySelectorAll('.alarmFire')
     const ogon = document.querySelector('.ogon')

@@ -1,6 +1,7 @@
 
 export class Tooltip {
     constructor(element, message) {
+        console.log(element, message)
         this.element = element;
         this.message = message;
         this.tooltip = null;

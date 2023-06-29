@@ -131,20 +131,6 @@ async function grafikStartPress(times, datar) {
     const gl = times.map(it => {
         return new Date(it)
     })
-    const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
-        sens,
-        position,
-        bar,
-        val: value.map((val, i) => ({
-            dates: gl[i],
-            value: Number(val),
-            tvalue: tvalue !== null ? Number(tvalue[i]) : null,
-            speed: Number(speed[i]),
-            stop: stop[i]
-        })).filter(obj => obj.stop !== 'ВЫКЛ')
-    }));
-
-
     /*
     const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
         sens,
@@ -156,8 +142,23 @@ async function grafikStartPress(times, datar) {
             tvalue: tvalue !== null ? Number(tvalue[i]) : null,
             speed: Number(speed[i]),
             stop: stop[i]
-        }))
+        })).filter(obj => obj.stop !== 'ВЫКЛ')
     }));*/
+
+
+
+    const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
+        sens,
+        position,
+        bar,
+        val: value.map((val, i) => ({
+            dates: gl[i],
+            value: Number(val),
+            tvalue: tvalue !== null ? Number(tvalue[i]) : null,
+            speed: Number(speed[i]),
+            stop: stop[i]
+        }))
+    }));
     dat2.sort((a, b) => {
         if (a.position > b.position) {
             return 1;
@@ -742,7 +743,7 @@ async function grafikStartPress(times, datar) {
     new Tooltip(combacks, ['Cбрасывает масштабирование']);
     new Tooltip(legendBar[0], ['Отключает и включает график давления']);
     new Tooltip(legendBar[1], ['Отключает и включает график температуры']);
-    
+
     legendBar[0].addEventListener('click', () => {
         const line1 = d3.selectAll('.line1')
         const area1 = d3.selectAll('.area1')
