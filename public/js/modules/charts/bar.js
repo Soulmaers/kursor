@@ -716,13 +716,14 @@ async function grafikStartPress(times, datar) {
                 if (d) {
                     let dav;
                     let temp;
-                    tt1.textContent = `Время: ${(selectedTime)}`
+                    tt1.textContent = d.stop === 'ВКЛ' ? `Время: ${(selectedTime)}` : null
                     if (d.value === -0.5 && d.speed > 5) {
                         tt2.textContent = `Давление: Потеря связи с датчиком`
                         dav = '--'
                     }
                     else if (d.value === -0.5 && d.speed === 0 && d.stop == 'ВКЛ') {
                         tt2.textContent = `Давление: Датчик не на связи`
+                        tt1.textContent = ''
                         dav = '-'
                     }
                     else if (d.stop == 'ВЫКЛ') {
@@ -739,6 +740,7 @@ async function grafikStartPress(times, datar) {
                     }
                     else if (d.tvalue === -0.5 && d.speed === 0 && d.stop == 'ВКЛ') {
                         tt3.textContent = `Температура:  Датчик не на связи`
+                        tt1.textContent = ''
                         temp = '-'
                     }
                     else if (d.stop == 'ВЫКЛ') {
@@ -829,7 +831,6 @@ async function grafikStartPress(times, datar) {
         dat2.forEach(e => {
             e.val.forEach(el => {
                 if (el.dates === time) {
-
                     objTool.push({ sens: e.sens, value: el.value, tvalue: el.tvalue, speed: el.speed, time: el.dates })
                 }
             })
