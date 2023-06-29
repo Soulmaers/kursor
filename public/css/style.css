@@ -2523,6 +2523,21 @@ input[type="date"] {
 
 .my-popup {
   white-space: pre-wrap;
+
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  font-size: 14px;
+  color: red;
+  background: rgb(255, 255, 255, 0.4);
+  border: 2px solid red;
+  margin: 10px;
+
+}
+
+.leaflet-popup-tip-container {
+  display: none;
 }
 
 .infoGraf {

@@ -75,13 +75,19 @@ export function createMap(geo, geoMarker, geoTrack) {
                 popupAnchor: [0, 0]
             }
         });
+
+        var customIcon = new LeafIcon({
+            iconUrl: '../../image/er.png',
+            iconSize: [20, 20],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, 0],
+            className: 'custom-marker'
+        });
         var greenIcon = new LeafIcon({
             iconUrl: '../../image/iconCar2.png'
 
         })
-        const alarmMarker = new LeafIcon({
-            iconUrl: '../../image/er.png'
-        })
+
         if (geoTrack) {
             iss = L.marker(center, { icon: greenIcon }).bindPopup(nameCar).addTo(map);
             iss.on('mouseover', function (e) {
@@ -93,7 +99,8 @@ export function createMap(geo, geoMarker, geoTrack) {
             const alarmCenter = [geoTrack.geoY, geoTrack.geoX]
             map.setView(alarmCenter, 12)
             map.flyTo(alarmCenter, 12)
-            iss2 = L.marker(alarmCenter, { icon: alarmMarker }).bindPopup(`Объект: ${geoTrack.info.car}\nВремя: ${geoTrack.info.time}\nКолесо: ${geoTrack.info.tyres}\nP,bar: ${geoTrack.info.bar}\nt,C: ${geoTrack.info.temp}\nСкорость: ${geoTrack.speed} км/ч\nУведомление: ${geoTrack.info.alarm}`, { className: 'my-popup' }).addTo(map);
+            iss2 = L.marker(alarmCenter, { icon: customIcon }).bindPopup(`Объект: ${geoTrack.info.car}\nВремя: ${geoTrack.info.time}\nКолесо: ${geoTrack.info.tyres}\nP,bar: ${geoTrack.info.bar}\nt,C: ${geoTrack.info.temp}\nСкорость: ${geoTrack.speed} км/ч\nУведомление: ${geoTrack.info.alarm}`, { width: 60, className: 'my-popup' }).addTo(map);
+            iss2.getPopup().options.className = 'my-popup'
             iss2.on('mouseover', function (e) {
                 this.openPopup();
             });
