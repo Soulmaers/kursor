@@ -70,6 +70,7 @@ async function viewAlarmStorage(name, stor) {
     const result = stor.map((arr) => removeDuplicates(arr))
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
+
     const active = document.querySelector('.color')
     const allobj = await ggg(active.id)
     result.forEach(el => {
@@ -287,6 +288,7 @@ async function viewAlarmStorage(name, stor) {
         const itog = Date.parse(allmassive.join(''))
         return itog
     }
+    // tbody.style.height = '50vh'
     const arr = [];
     vieList.forEach(el => {
         el.style.position = 'relative'
