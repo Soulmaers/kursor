@@ -360,13 +360,14 @@ async function grafikStartPress(times, datar) {
                     .attr('class', 'toolyStatic')
                     .text('-Бар/-С°');
             }
+            const idw = Number(document.querySelector('.color').id)
             // задаем x-шкалу
             const x = d3.scaleTime()
                 .domain(d3.extent(stor.val, (d) => new Date(d.dates)))
                 .range([0, width])
             // задаем y-шкалу для первой оси y
             const y1 = d3.scaleLinear()
-                .domain([0, 15])//d3.extent(data.val, (d) => d.value))
+                .domain(idw !== 26821431 ? [0, 15] : [0, 4])//d3.extent(data.val, (d) => d.value))
                 .range([height, 0]);
             // задаем y-шкалу для второй оси y
             const y2 = d3.scaleLinear()
