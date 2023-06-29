@@ -5159,6 +5159,17 @@ input[type="text"]:focus {
   cursor: pointer;
 }
 
+.mapIcon {
+  width: 16px;
+  height: 16px;
+  background-image: url(../image/map1.png);
+  background-size: cover;
+  position: absolute;
+  top: 2px;
+  left: 475px;
+  cursor: pointer;
+}
+
 .ogon {
 
   width: 16px;
@@ -5171,7 +5182,7 @@ input[type="text"]:focus {
 
 .tr {
   display: none;
-
+  position: relative;
 }
 
 .norma {
@@ -5183,8 +5194,11 @@ input[type="text"]:focus {
 .views {
   display: flex;
   flex-wrap: wrap;
-  cursor: pointer;
   width: 100%;
+}
+
+.best {
+  cursor: pointer;
 }
 
 .oneName {

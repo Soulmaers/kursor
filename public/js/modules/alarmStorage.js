@@ -85,6 +85,7 @@ async function viewAlarmStorage(name, stor) {
             tr.classList.add('trnone')
             tr.setAttribute('rel', `${name}`)
             tbody.appendChild(tr)
+
             const toSearch = "Норма";
             if (count == 1) {
                 tr.classList.add('views')
@@ -268,12 +269,17 @@ async function viewAlarmStorage(name, stor) {
     })
     const arrName = tbody.querySelectorAll(`[rel="${name}"]`);
     arrName.forEach(e => {
-        e.children[2].style.background = 'yellow';
-        if (e.children[3].textContent == '-51' || e.children[3].textContent == '-50') {
+
+        console.log(e.children[3].textContent)
+        if (e.children[3].textContent <= -50 || e.children[3].textContent > 70) {
             e.children[3].style.background = 'yellow';
+        }
+        else {
+            e.children[2].style.background = 'yellow';
         }
     })
     const vieList = document.querySelectorAll('.views')
+    const spoyler = document.querySelectorAll('.spoyler')
     function fntinesort(elem) {
         const dt = [...elem]
         const allmassive = [];
@@ -283,7 +289,17 @@ async function viewAlarmStorage(name, stor) {
     }
     const arr = [];
     vieList.forEach(el => {
+        el.style.position = 'relative'
+        const mapIcon = document.createElement('div')
+        mapIcon.classList.add('mapIcon')
+        el.appendChild(mapIcon)
         arr.push(el)
+    })
+    spoyler.forEach(e => {
+        e.style.position = 'relative'
+        const mapIcon = document.createElement('div')
+        mapIcon.classList.add('mapIcon')
+        e.appendChild(mapIcon)
     })
     arr.sort(function (a, b) {
         return parseFloat(fntinesort(b.children[0].textContent)) - parseFloat(fntinesort(a.children[0].textContent))
@@ -295,10 +311,11 @@ async function viewAlarmStorage(name, stor) {
 
 
 
-    const mess = document.querySelectorAll('.tr')
-    mess.forEach(tr => {
-        tr.children[2].addEventListener('click', () => {
-            const time = tr.children[0].textContent
+    const mess = document.querySelectorAll('.mapIcon')
+    mess.forEach(icons => {
+        icons.addEventListener('click', () => {
+            const time = icons.parentElement.children[0].textContent
+            const tr = icons.parentElement
             geoMarker(time, name, tr);
 
         })

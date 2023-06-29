@@ -199,7 +199,13 @@ function proverka(arr) {
                         return
                     }
                     else {
-
+                        if (el[3] > 70) {
+                            //   console.log(el + ' ' + 'таблица нет, аларм есть/ Критически низкое давление' + ' ' + time)
+                            const data = createDate()
+                            alarm = 'Критически высокая температура'
+                            databaseService.alarmBase(data, el, alarm)
+                            return
+                        }
                         if (el[2] <= Number(el[4].knd) && el[3] > -50) {
                             //   console.log(el + ' ' + 'таблица нет, аларм есть/ Критически низкое давление' + ' ' + time)
                             const data = createDate()
