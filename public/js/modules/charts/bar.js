@@ -719,6 +719,14 @@ async function grafikStartPress(times, datar) {
                     let temp;
                     tt1.textContent = d.stop === 'ВКЛ' ? `Время: ${(selectedTime)}` : null
                     if (d.value === -0.5 && d.speed > 5) {
+                        //  console.log(d.stop)
+                        //  console.log(d.dates)
+                        // const date = new Date(d.dates);
+                        // date.setSeconds(0);
+                        // date.setMinutes(date.getMinutes() - 7);
+                        // console.log(date);
+                        // const selectedData = dat2.filter(d => d.val.find(val => val.dates === date));
+                        //  console.log(selectedData)
                         tt2.textContent = `Давление: Потеря связи с датчиком`
                         dav = '--'
                     }

@@ -41,6 +41,9 @@ export async function fnTime(t1, t2) {
         const timestamp = el.t;
         const date = new Date(timestamp * 1000);
         const isoString = date.toISOString();
+        // const date = new Date(timestamp * 1000);
+        // const isoString = date.toISOString().slice(0, -5) + 'Z';
+        //  console.log(isoString);
         global.push(isoString)
         speed.push(el.pos.s)
         resolve([global, speed])
