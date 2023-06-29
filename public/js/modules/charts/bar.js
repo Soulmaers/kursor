@@ -105,10 +105,11 @@ async function grafikStartPress(times, datar) {
     info.classList.add('infos')
     graf.prepend(info)
 
-    const newData = datar.map(el => {
+    console.log(datar)
+    const newData = datar.map((el, index) => {
         return {
             ...el,
-            value: el.value.map(it => {
+            value: el.value.map((it, i) => {
                 if (it === -348201.3876) {
                     return -0.5
                 } else {
@@ -131,6 +132,33 @@ async function grafikStartPress(times, datar) {
     const gl = times.map(it => {
         return new Date(it)
     })
+
+    const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
+        sens,
+        position,
+        bar,
+        val: value.map((val, i) => {
+            if (stop[i] === 'ВЫКЛ') {
+                return {
+                    dates: gl[i],
+                    value: -0.5,
+                    tvalue: tvalue !== null ? -0.5 : null,
+                    speed: Number(speed[i]),
+                    stop: stop[i]
+                };
+            } else {
+                return {
+                    dates: gl[i],
+                    value: Number(val),
+                    tvalue: tvalue !== null ? Number(tvalue[i]) : null,
+                    speed: Number(speed[i]),
+                    stop: stop[i]
+                };
+            }
+        })
+    }));
+
+    console.log(dat2)
     /*
     const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
         sens,
@@ -146,19 +174,19 @@ async function grafikStartPress(times, datar) {
     }));*/
 
 
-
-    const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
-        sens,
-        position,
-        bar,
-        val: value.map((val, i) => ({
-            dates: gl[i],
-            value: Number(val),
-            tvalue: tvalue !== null ? Number(tvalue[i]) : null,
-            speed: Number(speed[i]),
-            stop: stop[i]
-        }))
-    }));
+    /*
+        const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
+            sens,
+            position,
+            bar,
+            val: value.map((val, i) => ({
+                dates: gl[i],
+                value: Number(val),
+                tvalue: tvalue !== null ? Number(tvalue[i]) : null,
+                speed: Number(speed[i]),
+                stop: stop[i]
+            }))
+        }));*/
     dat2.sort((a, b) => {
         if (a.position > b.position) {
             return 1;
@@ -689,24 +717,32 @@ async function grafikStartPress(times, datar) {
                     let dav;
                     let temp;
                     tt1.textContent = `Время: ${(selectedTime)}`
-                    if (d.value === -0.5 && d.speed > 0) {
+                    if (d.value === -0.5 && d.speed > 5) {
                         tt2.textContent = `Давление: Потеря связи с датчиком`
                         dav = '--'
                     }
-                    else if (d.value === -0.5 && d.speed === 0) {
+                    else if (d.value === -0.5 && d.speed === 0 && d.stop == 'ВКЛ') {
                         tt2.textContent = `Давление: Датчик не на связи`
+                        dav = '-'
+                    }
+                    else if (d.stop == 'ВЫКЛ') {
+                        tt2.textContent = `Двигатель выключен`
                         dav = '-'
                     }
                     else {
                         tt2.textContent = `Давление: ${d.value} Бар`
                         dav = d.value
                     }
-                    if (d.tvalue === -0.5 && d.speed > 0) {
+                    if (d.tvalue === -0.5 && d.speed > 5) {
                         tt3.textContent = `Температура: Потеря связи с датчиком`
                         temp = '--'
                     }
-                    else if (d.tvalue === -0.5 && d.speed === 0) {
+                    else if (d.tvalue === -0.5 && d.speed === 0 && d.stop == 'ВКЛ') {
                         tt3.textContent = `Температура:  Датчик не на связи`
+                        temp = '-'
+                    }
+                    else if (d.stop == 'ВЫКЛ') {
+                        tt3.textContent = ``
                         temp = '-'
                     }
                     else {
