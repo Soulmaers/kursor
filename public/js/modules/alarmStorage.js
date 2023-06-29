@@ -72,10 +72,10 @@ async function viewAlarmStorage(name, stor) {
     const tbody = document.querySelector('.tbody')
 
     tbody.innerHTML = tr
-    const main = document.querySelector('.main')
+    const oneName = document.querySelector('.oneName')
     const info = document.createElement('div')
     info.classList.add('infosAlarm')
-    tbody.prepend(info)
+    oneName.children[0].prepend(info)
     const infos = document.querySelector('.infosAlarm')
     new Tooltip(infos, ['Лента уведомлений отражает зафиксированные отклонения от заданным параметров по давлению и температуре',
         'Если внутри зафикисрованного отклонения есть дополнительные изменения, то они подгружаются по нажатию стрелки вниз напротив уведомления',
