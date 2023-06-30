@@ -38,14 +38,15 @@ export async function loadParamsView() {
     if (model.result && model.result.length > 0) {
         createViewModel(model.result);
     }
-    viewPokasateli()
-    intervalId = setInterval(viewPokasateli, 60000);
-    isProcessing = false;
     const inf = document.querySelector('.infosCenter')
     new Tooltip(inf, ['Если зажигание включено и данные  приходят, то значения подсвечены в зависимости от условий подсветки',
         'Если зажигание включено, а данные не приходят, то колесо будет с серый фоном',
         'Если зажигание выключено, то колесо будет черным, а последние зафиксированные показатели серым цветом',
         'При наведении на колесо появится подсказка с параметром колеса и актуальностью данных'])
+    viewPokasateli()
+    intervalId = setInterval(viewPokasateli, 60000);
+    isProcessing = false;
+
 }
 function createViewModel(model) {
     const containerAll = document.querySelector('.containerAll')

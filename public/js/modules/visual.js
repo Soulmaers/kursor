@@ -123,10 +123,11 @@ export async function visual(el) {
     }
     const idw = el.id
     await liCreate()
+    await loadParamsView()
     tooltip()
     await iconFind(idw)
     await iconParams()
-    await loadParamsView()
+
     await alarmFind()
     findTyresInstall()
     btnsens.forEach(el => {
