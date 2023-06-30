@@ -161,6 +161,12 @@ export async function conturTest(testov) {
                                             e.children[0].style.fill = 'gray'
                                             return
                                         }
+                                        if (in1 === 0) {
+                                            e.children[0].style.fill = '#000'
+                                            //  e.children[0].style.background = 'lightgray';
+                                            //  e.children[1].style.color = 'lightgray'
+                                            return
+                                        }
                                         if (nameCar == 'А652УА198') {
                                             integer = parseFloat((el.value / 10).toFixed(1))
                                         }
@@ -468,6 +474,12 @@ async function viewListKoleso(params, arg, osi, nameCar) {
                         if (e.id == item.tyresdiv) {
                             if (el.status === 'false' && in1 === 1) {
                                 e.children[0].style.fill = 'gray'
+                                return
+                            }
+                            if (in1 === 0) {
+                                e.children[0].style.fill = '#000'
+                                //  e.children[0].style.background = 'lightgray';
+                                //  e.children[1].style.color = 'lightgray'
                                 return
                             }
                             if (activePost == 'А652УА198') {
