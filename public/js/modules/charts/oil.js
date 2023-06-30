@@ -47,11 +47,51 @@ export async function oil(t1, t2) {
 
     const data = object.time.map((t, i) => ({
         time: t,
-        oil: object.left ? Number(object.left[i]).toFixed(0) : 0,
+        oil: object.left ? Number(object.left[i].toFixed(0)) : 0,
         pwr: object.right ? Number(object.right[i] != null ? Number(object.right[i]).toFixed(0) : 0) : null
     }))
 
     console.log(data);
+    const arrayOil = [];
+    const resArray = [];
+
+    for (let i = 0; i < data.length - 5; i++) {
+        data[i].oil === 0 ? data[i].oil = data[i - 1].oil : data[i].oil = data[i].oil
+        data[i + 1].oil === 0 ? data[i + 1].oil = data[i - 1].oil : data[i + 1].oil = data[i + 1].oil
+        // data[i + 5].oil === 0 ? data[i + 5].oil = data[i + 4].oil : data[i + 5].oil = data[i + 5].oil
+        if (data[i].oil <= data[i + 1].oil) {
+            let oneNum = data[i].oil
+            let fiveNum = data[i + 5].oil
+            const res = fiveNum - oneNum
+            res > Number((5 / 100.05 * oneNum).toFixed(0)) ? resArray.push([oneNum, data[i].time]) : null
+
+        }
+        else {
+            // console.log(resArray)
+            if (resArray.length !== 0) {
+                arrayOil.push(resArray[0])
+                resArray.length = 0
+                console.log(resArray)
+            }
+            else {
+                console.log('массив пустой')
+            }
+        }
+    }
+
+    const arrDates = arrayOil.map(([num, str]) => new Date(str)); // массив дат
+    for (let i = 0; i < arrayOil.length - 1; i++) {
+        const diff = arrDates[i + 1].getTime() - arrDates[i].getTime();
+        if (diff < 5 * 60 * 1000) { // если интервал меньше 5 минут
+            console.log(`Элементы ${i} и ${i + 1} находятся в интервале меньше 5 минут`); // выводим информацию о найденных парах элементов
+            arrayOil.splice(i + 1, 1)
+        }
+    }
+    console.log(arrayOil)
+    const objOil = arrayOil.map(it => {
+        return { num: it[0], data: it[1], icon: "../../../image/refuel.png" }
+    })
+
     const grafOld = document.querySelector('.infoGraf')
     if (grafOld) {
         grafOld.remove()
@@ -243,6 +283,42 @@ export async function oil(t1, t2) {
         .attr("transform", "rotate(-90)")
         .attr("text-anchor", "end")
         .text("Напряжение, В")
+
+
+
+    console.log(objOil)
+    console.log(data[0].time)
+
+
+
+
+    svg.selectAll("image")
+        .data(objOil)
+        .enter()
+        .append("image")
+        .attr("x", d => x(new Date(d.data)))
+        //.attr("y", d => y1(d.num) - 30)
+        .attr("xlink:href", "../../../image/ref.png") // путь к иконке
+        .attr("width", 24) // ширина вашей иконки
+        .attr("height", 24) // высота вашей иконки
+        .attr("transform", "translate(-12,0)")
+        .style("position", "absolute")  // установка позиционирования
+    // .style("top", d => y1(new Date(d.oil)) - 100 + "px");
+    /* .on("mouseover", function (d) { // добавляем всплывающую подсказку при наведении мыши на иконку
+         d3.select(this).style("opacity", 0.5); // делаем иконку немного прозрачной при наведении
+         svg.append("text")
+             .attr("class", "marker-label")
+             .attr("x", xScale(new Date(d.data)))
+             .attr("y", height - margin.bottom - iconHeight - 10)
+             .attr("text-anchor", "middle")
+         //  .text(d.label);
+     })
+     .on("mouseout", function (d) { // убираем всплывающую подсказку при убирании мыши с иконки
+         d3.select(this).style("opacity", 1); // возвращаем иконке полную прозрачность
+         svg.select(".marker-label").remove();
+     });*/
+
+
 
 
     const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
@@ -509,12 +585,26 @@ export async function oil(t1, t2) {
                 .attr("stroke-width", 1)
                 .attr("d", area2)
         });
+    }
+    svg.on("mousemove", function (d) {
+        const toll = document.querySelector('.tooltip')
+        if (toll) {
+            toll.remove();
+        }
+        // Определяем координаты курсора в отношении svg
+        const [xPosition, yPosition] = d3.mouse(this);
+        // Определяем ближайшую точку на графике
+        const bisect = d3.bisector(d => d.time).right;
+        const x0 = x.invert(xPosition);
+        const i = bisect(data, x0, 1);
+        const d0 = data[i - 1];
+        const d1 = data[i];
+        d = x0 - d0.time > d1.time - x0 ? d1 : d0;
 
+        const tooltip = d3.select(".infoGraf").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
         svg.on("mousemove", function (d) {
-            const toll = document.querySelector('.tooltip')
-            if (toll) {
-                toll.remove();
-            }
             // Определяем координаты курсора в отношении svg
             const [xPosition, yPosition] = d3.mouse(this);
             // Определяем ближайшую точку на графике
@@ -525,42 +615,28 @@ export async function oil(t1, t2) {
             const d1 = data[i];
             d = x0 - d0.time > d1.time - x0 ? d1 : d0;
 
-            const tooltip = d3.select(".infoGraf").append("div")
-                .attr("class", "tooltip")
-                .style("opacity", 0);
-            svg.on("mousemove", function (d) {
-                // Определяем координаты курсора в отношении svg
-                const [xPosition, yPosition] = d3.mouse(this);
-                // Определяем ближайшую точку на графике
-                const bisect = d3.bisector(d => d.time).right;
-                const x0 = x.invert(xPosition);
-                const i = bisect(data, x0, 1);
-                const d0 = data[i - 1];
-                const d1 = data[i];
-                d = x0 - d0.time > d1.time - x0 ? d1 : d0;
-
-                tooltip.style("left", `${xPosition + 100}px`);
-                tooltip.style("top", `${yPosition + 100}px`);
-                // Показать тултип, если он скрыт
-                tooltip.style("display", "block");
-                const selectedTime = timeConvert(d.time)
-                // Отображаем подсказку с координатами и значениями по оси y
-                let oilTool;
-                d.oil === 0 ? oilTool = 'Нет данных' : oilTool = d.oil
-                tooltip.transition()
-                    .duration(200)
-                    .style("opacity", 0.9);
-                tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${oilTool}<br/>Бортовое питание: ${d.pwr}`)
-            })
-                // Добавляем обработчик события mouseout, чтобы скрыть подсказку
-                .on("mouseout", function (event, d) {
-                    tooltip.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                });
-
+            tooltip.style("left", `${xPosition + 100}px`);
+            tooltip.style("top", `${yPosition + 100}px`);
+            // Показать тултип, если он скрыт
+            tooltip.style("display", "block");
+            const selectedTime = timeConvert(d.time)
+            // Отображаем подсказку с координатами и значениями по оси y
+            let oilTool;
+            d.oil === 0 ? oilTool = 'Нет данных' : oilTool = d.oil
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+            tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${oilTool}<br/>Бортовое питание: ${d.pwr}`)
         })
-    }
+            // Добавляем обработчик события mouseout, чтобы скрыть подсказку
+            .on("mouseout", function (event, d) {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+
+    })
+
     const legendOil = document.querySelectorAll('.legendOil')
     const inf = document.querySelector('.infos')
     new Tooltip(inf, ['График отражает топливо и бортовое питание', 'Чтобы увеличить график, надо выделить область мышкой слева направо', 'Чтобы вернуть график в предыдущий масштаб, надо выделить область мышкой справа налево', 'Чтобы сбросить масштабирование, два раза кликните на график ']);
