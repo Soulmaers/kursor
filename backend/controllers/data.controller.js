@@ -111,8 +111,9 @@ async function updateParams(login) {
         nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed]);
         if (el.lmsg) {
             const sensor = Object.entries(el.lmsg.p);
+            const time = new Date()
             //сохраняем параметры в бд
-            const resSave = await databaseService.saveDataToDatabase(nameTable, el.id, sensor);
+            const resSave = await databaseService.saveDataToDatabase(nameTable, el.id, sensor, time);
         }
     });
     ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд

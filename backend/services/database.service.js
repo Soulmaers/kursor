@@ -4,18 +4,19 @@ const connection = require('../config/db')
 
 
 //сохраняем в базу параметры и обновляем их
-exports.saveDataToDatabase = async (name, idw, param) => {
+exports.saveDataToDatabase = async (name, idw, param, time) => {
     param.forEach(el => {
         el.unshift(name)
         el.unshift(idw)
         el.push('new')
+        el.push(time)
     })
     try {
         const selectBase = `SELECT name FROM params WHERE idw='${idw}'`
         connection.query(selectBase, function (err, results) {
             if (err) console.log(err);
             if (results.length === 0) {
-                const sql = `INSERT INTO params(idw, nameCar, name, value, status) VALUES?`;
+                const sql = `INSERT INTO params(idw, nameCar, name, value, status, time) VALUES?`;
                 connection.query(sql, [param], function (err, results) {
                     if (err) console.log(err);
                 });
@@ -31,14 +32,14 @@ exports.saveDataToDatabase = async (name, idw, param) => {
                 })
                 param.forEach(el => {
                     if (mas.includes(el[2])) {
-                        const sql = `UPDATE params SET idw='${idw}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='true' WHERE idw='${idw}' AND name='${el[2]}'`;
+                        const sql = `UPDATE params SET idw='${idw}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='true',time='${el[5]}'  WHERE idw='${idw}' AND name='${el[2]}'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err);
                         });
                         return
                     }
                     if (!mas.includes(el[2])) {
-                        const sql = `INSERT INTO params SET idw='${idw}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='new'`;
+                        const sql = `INSERT INTO params SET idw='${idw}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='new',time='${el[5]}'`;
                         connection.query(sql, function (err, results) {
                             if (err) console.log(err);
                         });
@@ -203,7 +204,7 @@ exports.dostupObject = async (login) => {
 exports.paramsToBase = async (idw) => {
     return new Promise((resolve, reject) => {
         try {
-            const selectBase = `SELECT nameCar, name, value, status FROM params WHERE idw='${idw}'`
+            const selectBase = `SELECT nameCar, name, value, status, time FROM params WHERE idw='${idw}'`
             connection.query(selectBase, function (err, results) {
                 if (err) console.log(err);
                 resolve(results)

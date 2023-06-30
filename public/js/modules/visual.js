@@ -233,6 +233,7 @@ export async function viewConfigurator(arg, params, osi) {
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelectorAll('.color')
     const allobj = await ggg(active[0].id)
+    console.log(arg)
     if (params) {
         const parametrs = convert(params)
         const alerts = [];
@@ -274,8 +275,15 @@ export async function viewConfigurator(arg, params, osi) {
                                 el.style.position = 'absolute'
                                 el.style.bottom = 0
                             })
+                            const nowTime = new Date()
+                            const nowDate = Math.floor(nowTime.getTime() / 1000);
+                            const oldDate = Math.floor(new Date(el.time).getTime() / 1000);
+                            const timeStor = getHoursDiff(oldDate, nowDate)
+                            console.log(timeStor)
+
                             if (role === 'Администратор') {
-                                new Tooltip(e, [allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')']);
+
+                                new Tooltip(e, [allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')', 'Актуальность данных:' + timeStor]);
                             }
                             else {
                                 new Tooltip(e, [allobj[item.pressure], allobj[item.temp]]);
@@ -286,7 +294,6 @@ export async function viewConfigurator(arg, params, osi) {
                                 }
                             })
                             const ign = document.querySelector('.ign_value').textContent
-                            console.log(ign)
                             if (el.status === 'false' && ign === 'ВКЛ') {
                                 console.log(e.children[0])
                                 e.children[0].style.background = 'lightgray';
@@ -294,11 +301,10 @@ export async function viewConfigurator(arg, params, osi) {
                                 return
                             }
                             if (ign === 'ВЫКЛ') {
-                                console.log(e.children[0])
-                                //  e.children[0].style.background = 'lightgray';
                                 e.children[0].style.color = 'lightgray'
                                 return
                             }
+                            e.children[0].style.background = 'none'
                             e.children[0].style.color = signal;
                             if (signal === '#FF0000') {
                                 e.parentElement.style.border = `1px solid ${signal}`;
@@ -348,6 +354,8 @@ export async function viewConfigurator(arg, params, osi) {
                                             e.children[1].style.color = 'lightgray'
                                             return
                                         }
+                                        //   e.children[1].style.background = '#000';
+                                        e.children[1].style.background = 'none'
                                         e.children[1].style.color = objColor[generT(el.value)];
                                     }
                                 }
@@ -359,6 +367,25 @@ export async function viewConfigurator(arg, params, osi) {
         })
     }
 }
+
+function getHoursDiff(startDate, nowDate) {
+    var diff = nowDate - startDate;
+    let dayS;
+    let hourS;
+    const minutes = Math.floor(diff / 60)
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const day = days % 60;
+    const hour = hours % 24;
+    const minut = minutes % 60;
+    day === 0 ? dayS = '' : dayS = days + 'д ';
+    hour === 0 ? hourS = '' : hourS = hour + 'ч ';
+    const mess = `${dayS} ${hourS} ${minut} мин`
+    console.log(mess)
+    return mess;
+}
+
+
 export function alarmClear() {
     const ogon = document.querySelector('.ogon')
     ogon.style.display = 'none'
