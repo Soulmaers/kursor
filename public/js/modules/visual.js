@@ -230,6 +230,7 @@ export function view(arg) {
     })
 }
 export async function viewConfigurator(arg, params, osi) {
+    console.log('визуал')
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelectorAll('.color')
     const allobj = await ggg(active[0].id)
@@ -279,8 +280,6 @@ export async function viewConfigurator(arg, params, osi) {
                             const nowDate = Math.floor(nowTime.getTime() / 1000);
                             const oldDate = Math.floor(new Date(el.time).getTime() / 1000);
                             const timeStor = getHoursDiff(oldDate, nowDate)
-                            console.log(timeStor)
-
                             if (role === 'Администратор') {
                                 new Tooltip(e, [allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')', 'Актуальность данных:' + timeStor]);
                             }
@@ -294,7 +293,6 @@ export async function viewConfigurator(arg, params, osi) {
                             })
                             const ign = document.querySelector('.ign_value').textContent
                             if (el.status === 'false' && ign === 'ВКЛ') {
-                                console.log(e.children[0])
                                 e.children[0].style.background = 'lightgray';
                                 e.children[0].style.color = '#000'
                                 return
