@@ -719,25 +719,39 @@ async function grafikStartPress(times, datar) {
                     let temp;
                     tt1.textContent = d.stop === 'ВКЛ' ? `Время: ${(selectedTime)}` : null
                     if (d.value === -0.5 && d.speed > 5) {
-                        //  console.log(d.stop)
-                        //  console.log(d.dates)
-                        // const date = new Date(d.dates);
-                        // date.setSeconds(0);
-                        // date.setMinutes(date.getMinutes() - 7);
-                        // console.log(date);
+
+                        const date = new Date(d.dates);
+
+                        date.setMinutes(date.getMinutes() - 7);
+                        console.log(date);
                         // const selectedData = dat2.filter(d => d.val.find(val => val.dates === date));
                         //  console.log(selectedData)
                         tt2.textContent = `Давление: Потеря связи с датчиком`
                         dav = '--'
                     }
-                    else if (d.value === -0.5 && d.speed === 0 && d.stop == 'ВКЛ') {
-                        tt2.textContent = `Давление: Датчик не на связи`
-                        tt1.textContent = ''
-                        dav = '-'
-                    }
                     else if (d.stop == 'ВЫКЛ') {
-                        tt2.textContent = `Двигатель выключен`
-                        dav = '-'
+                        tt2.textContent = `Двигатель выключен`;
+                        dav = '-';
+                    }
+                    else if (d.value === -0.5 && d.speed <= 5 && d.stop == 'ВКЛ') {
+                        for (let i = 0; i < data.val.length; i++) {
+                            if (d.dates === data.val[i].dates) {
+                                console.log(data.val[i].stop)
+                                console.log(data.val[i - 1].stop)
+                                if (data.val[i - 1].stop === 'ВЫКЛ') {
+                                    console.log('один')
+                                    tt2.textContent = `Двигатель выключен`;
+                                    tt1.textContent = ''
+                                    dav = '-';
+                                }
+                                else {
+                                    console.log('два')
+                                    tt2.textContent = `Давление: Датчик не на связи`
+                                    tt1.textContent = ''
+                                    dav = '-'
+                                }
+                            }
+                        }
                     }
                     else {
                         tt2.textContent = `Давление: ${d.value} Бар`
@@ -747,10 +761,22 @@ async function grafikStartPress(times, datar) {
                         tt3.textContent = `Температура: Потеря связи с датчиком`
                         temp = '--'
                     }
-                    else if (d.tvalue === -0.5 && d.speed === 0 && d.stop == 'ВКЛ') {
-                        tt3.textContent = `Температура:  Датчик не на связи`
-                        tt1.textContent = ''
-                        temp = '-'
+                    else if (d.tvalue === -0.5 && d.speed <= 5 && d.stop == 'ВКЛ') {
+                        for (let i = 0; i < data.val.length; i++) {
+                            if (d.dates === data.val[i].dates) {
+                                console.log(data.val[i].stop)
+                                console.log(data.val[i - 1].stop)
+                                if (data.val[i - 1].stop === 'ВЫКЛ') {
+                                    tt3.textContent = ``
+                                    temp = '-'
+                                }
+                                else {
+                                    tt3.textContent = `Давление: Датчик не на связи`
+                                    tt1.textContent = ''
+                                    dav = '-'
+                                }
+                            }
+                        }
                     }
                     else if (d.stop == 'ВЫКЛ') {
                         tt3.textContent = ``
