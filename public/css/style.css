@@ -2548,8 +2548,18 @@ input[type="date"] {
 
 .infos {
   position: absolute;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
+  left: 20px;
+  top: 20px;
+  background-image: url(../image/info.png);
+  background-size: cover;
+}
+
+.infosCenter {
+  position: absolute;
+  width: 28px;
+  height: 28px;
   left: 20px;
   top: 20px;
   background-image: url(../image/info.png);
@@ -5784,7 +5794,8 @@ input[type="text"]:focus {
   }
 
   .wrapper_containt {
-    width: 100%
+    width: 100%;
+    position: relative;
   }
 
   .container {

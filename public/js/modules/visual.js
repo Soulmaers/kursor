@@ -293,6 +293,12 @@ export async function viewConfigurator(arg, params, osi) {
                                 e.children[0].style.color = '#000'
                                 return
                             }
+                            if (ign === 'ВЫКЛ') {
+                                console.log(e.children[0])
+                                //  e.children[0].style.background = 'lightgray';
+                                e.children[0].style.color = 'lightgray'
+                                return
+                            }
                             e.children[0].style.color = signal;
                             if (signal === '#FF0000') {
                                 e.parentElement.style.border = `1px solid ${signal}`;
@@ -314,9 +320,15 @@ export async function viewConfigurator(arg, params, osi) {
                                         const ign = document.querySelector('.ign_value').textContent
                                         if (el.status === 'false' && ign === 'ВКЛ') {
                                             e.children[1].style.background = 'lightgray';
-                                            e.children[0].style.color = '#000'
+                                            e.children[1].style.color = '#000'
                                             e.children[1].style.border = 'none'
                                             e.children[1].style.borderRadius = '0 0 30% 30%'
+                                            return
+                                        }
+                                        if (ign === 'ВЫКЛ') {
+                                            //  e.children[0].style.background = 'lightgray';
+                                            e.children[1].style.color = 'lightgray'
+                                            return
                                         }
                                     }
                                     if (el.value >= -51 && el.value <= 70) {
@@ -329,6 +341,11 @@ export async function viewConfigurator(arg, params, osi) {
                                             e.children[1].style.border = 'none'
                                             e.children[1].style.borderRadius = '0 0 30% 30%'
                                             e.children[1].style.color = '#000'
+                                            return
+                                        }
+                                        if (ign === 'ВЫКЛ') {
+                                            //  e.children[0].style.background = 'lightgray';
+                                            e.children[1].style.color = 'lightgray'
                                             return
                                         }
                                         e.children[1].style.color = objColor[generT(el.value)];

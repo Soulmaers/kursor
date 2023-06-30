@@ -3,6 +3,8 @@ import { view, viewConfigurator } from './visual.js'
 import { tech } from './tech.js'
 import { gosNum } from './altConfig.js'
 import { modalOs } from './modalOs.js'
+import { Tooltip } from '../class/Tooltip.js'
+
 
 let intervalId
 let isProcessing = false;
@@ -39,6 +41,10 @@ export async function loadParamsView() {
     viewPokasateli()
     intervalId = setInterval(viewPokasateli, 60000);
     isProcessing = false;
+    const inf = document.querySelector('.infosCenter')
+    new Tooltip(inf, ['Если зажигание включено и данные  приходят, то значения подсвечены в зависимости от условий подсветки',
+        'Если зажигание включено, а данные не приходят, то колесо будет с серый фоном',
+        'Если зажигание выключено и данные не приходят, то колесо будет черным, а последние зафиксированные показатели серым цветом'])
 }
 function createViewModel(model) {
     const containerAll = document.querySelector('.containerAll')
