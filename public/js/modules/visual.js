@@ -10,6 +10,7 @@ import { iconFind } from './configIcons.js'
 import { tarirView } from './staticObject.js'
 import { tooltip } from './cursorTooltip.js'
 import { ggg } from './menu.js'
+import { gg } from './spisok.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
@@ -235,6 +236,13 @@ export async function viewConfigurator(arg, params, osi) {
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelectorAll('.color')
     const allobj = await ggg(active[0].id)
+    const res = await gg(active[0].id)
+    let in1;
+    res.forEach(i => {
+        if (i[0] === 'Зажигание') {
+            in1 = i[2]
+        }
+    })
     console.log(arg)
     if (params) {
         const parametrs = convert(params)
@@ -293,12 +301,12 @@ export async function viewConfigurator(arg, params, osi) {
                                 }
                             })
                             const ign = document.querySelector('.ign_value').textContent
-                            if (el.status === 'false' && ign === 'ВКЛ') {
+                            if (el.status === 'false' && in1 === 1) {
                                 e.children[0].style.background = 'lightgray';
                                 e.children[0].style.color = '#000'
                                 return
                             }
-                            if (ign === 'ВЫКЛ') {
+                            if (in1 === 0) {
                                 e.children[0].style.color = 'lightgray'
                                 return
                             }
@@ -322,14 +330,14 @@ export async function viewConfigurator(arg, params, osi) {
                                         e.children[1].style.border = 'none'
                                         e.children[1].style.borderRadius = '0 0 30% 30%'
                                         const ign = document.querySelector('.ign_value').textContent
-                                        if (el.status === 'false' && ign === 'ВКЛ') {
+                                        if (el.status === 'false' && in1 === 1) {
                                             e.children[1].style.background = 'lightgray';
                                             e.children[1].style.color = '#000'
                                             e.children[1].style.border = 'none'
                                             e.children[1].style.borderRadius = '0 0 30% 30%'
                                             return
                                         }
-                                        if (ign === 'ВЫКЛ') {
+                                        if (in1 === 0) {
                                             //  e.children[0].style.background = 'lightgray';
                                             e.children[1].style.color = 'lightgray'
                                             return
@@ -339,15 +347,14 @@ export async function viewConfigurator(arg, params, osi) {
                                         e.children[1].style.border = 'none'
                                         e.children[1].textContent = el.value + '°C'
                                         e.children[1].setAttribute('rel', `${item.temp}`)
-                                        const ign = document.querySelector('.ign_value').textContent
-                                        if (el.status === 'false' && ign === 'ВКЛ') {
+                                        if (el.status === 'false' && in1 === 1) {
                                             e.children[1].style.background = 'lightgray';
                                             e.children[1].style.border = 'none'
                                             e.children[1].style.borderRadius = '0 0 30% 30%'
                                             e.children[1].style.color = '#000'
                                             return
                                         }
-                                        if (ign === 'ВЫКЛ') {
+                                        if (in1 === 0) {
                                             //  e.children[0].style.background = 'lightgray';
                                             e.children[1].style.color = 'lightgray'
                                             return

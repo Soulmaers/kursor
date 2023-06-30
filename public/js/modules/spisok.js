@@ -193,7 +193,7 @@ export async function conturTest(testov) {
     setTimeout(zaprosSpisok, 1000)
 }
 
-async function gg(id) {
+export async function gg(id) {
     return new Promise(async function (resolve, reject) {
         const idw = id
         const allobj = {};
