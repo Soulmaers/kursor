@@ -61,12 +61,14 @@ export async function iconParams() {
                 const ignValue = document.querySelector('.ign_value')
                 const tsiValue = document.querySelector('.tsi_value')
                 it[2] === 1 ? status = 'ВКЛ' : status = 'ВЫКЛ'
-                if (it[2] === 1 && power >= 26.5) {
-                    statusTSI = 'ВКЛ'
+                const idws = document.querySelector('.color').id
+                if (idws !== 26821431) {
+                    it[2] === 1 && power >= 26.5 ? statusTSI = 'ВКЛ' : statusTSI = 'ВЫКЛ'
                 }
                 else {
-                    statusTSI = 'ВЫКЛ'
+                    it[2] === 1 && power > 13 ? statusTSI = 'ВКЛ' : statusTSI = 'ВЫКЛ'
                 }
+                console.log(statusTSI)
                 const statusObj = document.querySelector('.status_obj')
                 let mess;
                 if (document.querySelector('.color').children[0] && document.querySelector('.color').children[0].textContent.startsWith('Цист')) {
