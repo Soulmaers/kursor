@@ -282,11 +282,10 @@ export async function viewConfigurator(arg, params, osi) {
                             console.log(timeStor)
 
                             if (role === 'Администратор') {
-
                                 new Tooltip(e, [allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')', 'Актуальность данных:' + timeStor]);
                             }
                             else {
-                                new Tooltip(e, [allobj[item.pressure], allobj[item.temp]]);
+                                new Tooltip(e, [allobj[item.pressure], allobj[item.temp], 'Актуальность данных:' + timeStor]);
                             }
                             osi.forEach(element => {
                                 if (element.idOs == item.osNumber) {
