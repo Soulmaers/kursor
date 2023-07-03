@@ -76,7 +76,9 @@ async function loadValue(array, timeOld, timeNow, login) {
 async function timeSens(array) {
     let rashod = 0;
     let lifting = 0
+    console.log(array)
     for (const e of array) {
+        console.log('элемент')
         const idw = e
         const sensArr = await fnPar(idw)
         const nameSens = await fnParMessage(idw)
@@ -99,12 +101,11 @@ async function timeSens(array) {
                 it.value >= 33 ? lifting++ : 0
                 console.log(it.value)
             }
-
-
         })
         console.log(allArrNew)
-        return { rashod: Number(rashod.toFixed(0)), lifting: lifting }
     }
+    return { rashod: Number(rashod.toFixed(0)), lifting: lifting }
+
 }
 
 function timefn() {

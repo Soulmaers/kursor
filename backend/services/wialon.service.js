@@ -47,6 +47,7 @@ exports.getAllSensorsIdDataFromWialon = async (id, timeOld, timeNow, login) => {
         "unitId": id,
         "sensorId": 0,
 
+
     };
     return new Promise(async function (resolve, reject) {
         const session = await getSessiont(login);

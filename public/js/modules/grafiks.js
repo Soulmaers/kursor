@@ -54,6 +54,7 @@ export async function fnTime(t1, t2) {
 }
 
 export async function fnPar(active) {
+  console.log('запросики')
   return new Promise(async function (resolve, reject) {
     const idw = active
     //   console.log(idw)
