@@ -1766,7 +1766,6 @@ div.spoyler {
 .foto_car {
   width: 100%;
   height: 40%;
-  border: 1px solid black;
 }
 
 .logosamosval {
@@ -1779,7 +1778,6 @@ div.spoyler {
 .table_dannie {
   width: 100%;
   height: 60%;
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
   padding: 5px;
