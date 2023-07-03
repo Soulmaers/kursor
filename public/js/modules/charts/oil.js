@@ -105,7 +105,7 @@ export async function oil(t1, t2) {
     graf.prepend(info)
 
     // устанавливаем размеры контейнера
-    const margin = { top: 10, right: 60, bottom: 30, left: 60 },
+    const margin = { top: 10, right: 60, bottom: 50, left: 60 },
         width = 800 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
     // создаем svg контейнер
@@ -169,12 +169,12 @@ export async function oil(t1, t2) {
     // задаем y-шкалу для первой оси y
     const y1 = d3.scaleLinear()
         .domain([0, d3.max(data, (d) => d.oil)])
-        .range([height, 0]);
+        .range([height - 40, 0]);
 
     // задаем y-шкалу для второй оси y
     const y2 = d3.scaleLinear()
         .domain(d3.extent(data, (d) => d.pwr))
-        .range([height, 0]);
+        .range([height - 40, 0]);
 
 
     const yAxis1 = d3.axisLeft(y1)
@@ -211,7 +211,9 @@ export async function oil(t1, t2) {
     // добавляем первую ось y
     svg.append("g")
         .attr("class", "os1y")
-        .call(yAxis1);
+        .call(yAxis1)
+        .attr("transform", "translate(0, " + (40) + ")")
+    //  .attr("transform", "translate(" + 0 + "," + (margin.top + 40) + ")"); //Сдвигаем вниз на высоту иконки
     // добавляем вторую ось y
     svg.append("g")
         .attr("class", "os2y")
@@ -239,7 +241,8 @@ export async function oil(t1, t2) {
         .attr("fill", "none")
         .attr("stroke", "black")
         .attr("stroke-width", 1.5)
-        .attr("d", line1);
+        .attr("d", line1)
+        .attr("transform", "translate(0, " + (40) + ")")
     // добавляем линии для второй оси y
     chartGroup.append("path")
         .datum(data)
@@ -247,7 +250,8 @@ export async function oil(t1, t2) {
         .attr("fill", "none")
         .attr("stroke", "black")
         .attr("stroke-width", 1.5)
-        .attr("d", line2);
+        .attr("d", line2)
+        .attr("transform", "translate(0, " + (40) + ")")
     // добавляем области для первой кривой
 
     chartGroup.append("path")
@@ -257,7 +261,8 @@ export async function oil(t1, t2) {
         .attr("fill", "blue")
         .attr("fill-opacity", 0.5)
         .attr("stroke", "black")
-        .attr("stroke-width", 1);
+        .attr("stroke-width", 1)
+        .attr("transform", "translate(0, " + (40) + ")")
 
     // добавляем области для второй кривой
     chartGroup.append("path")
@@ -268,7 +273,10 @@ export async function oil(t1, t2) {
         .attr("fill-opacity", 0.8)
         .attr("stroke", "black")
         .attr("stroke-width", 1)
-        .attr("d", area2);
+        .attr("d", area2)
+        .attr("transform", "translate(0, " + (40) + ")")
+
+
     svg.append("text")
         .attr("class", 'obv')
         .attr("x", -130)
@@ -302,8 +310,7 @@ export async function oil(t1, t2) {
         .attr("width", 24) // ширина вашей иконки
         .attr("height", 24) // высота вашей иконки
         .attr("transform", "translate(-12,0)")
-        .style("position", "absolute")  // установка позиционирования
-    // .style("top", d => y1(new Date(d.oil)) - 100 + "px");
+
     /* .on("mouseover", function (d) { // добавляем всплывающую подсказку при наведении мыши на иконку
          d3.select(this).style("opacity", 0.5); // делаем иконку немного прозрачной при наведении
          svg.append("text")
