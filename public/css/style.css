@@ -1724,13 +1724,153 @@ div.spoyler {
 
 .start {
   width: 100%;
-  height: 98vh;
+  /* height: 98vh;*/
   display: none;
-  background-image: url(../image/start.png);
+  /*background-image: url(../image/start.png);*/
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center top;
 
+  flex-wrap: wrap;
+  padding: 5px;
+}
+
+.content_card {
+  border: 1px solid black;
+  width: 49.8%;
+  height: 450px;
+  box-sizing: border-box;
+  display: flex;
+}
+
+.content_card:nth-child(2),
+.content_card:nth-child(4) {
+  margin-left: 5px;
+}
+
+.content_card:nth-child(3),
+.content_card:nth-child(4) {
+  margin-top: 5px;
+}
+
+
+
+.left_block {
+  width: 65%;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.foto_car {
+  width: 100%;
+  height: 40%;
+  border: 1px solid black;
+}
+
+.logosamosval {
+  width: 100%;
+  height: 40%;
+  background-image: url(../image/logosamosval.png);
+  background-size: cover;
+}
+
+.table_dannie {
+  width: 100%;
+  height: 60%;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  box-sizing: border-box;
+
+}
+
+.title_interval {
+  display: flex;
+  width: 100%;
+}
+
+.tac {
+  width: 33%;
+  padding: 1px 2px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table_pokazateli {
+  padding: 5px;
+  list-style-type: none;
+  margin: 2px 0;
+}
+
+.li_table {
+  width: 100%;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+}
+
+.name_list {
+  font-size: 0.9rem;
+}
+
+.rigth_block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid black;
+  padding: 5px;
+  width: 35%
+}
+
+.dash_up,
+.dash_down {
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-family: Roboto;
+  font-weight: bold;
+}
+
+.dash_up {
+  background-image: url(../image/al.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.dash_down {
+  background-image: url(../image/das.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.fura {
+  background-image: url(../image/fura.png);
+  background-size: cover;
+  cursor: pointer;
+}
+
+.ex {
+  background-image: url(../image/ex.png);
+  background-size: cover;
+  cursor: pointer;
+}
+
+.furgon {
+  background-image: url(../image/furgon.png);
+  background-size: cover;
+  cursor: pointer;
 }
 
 .mi {
