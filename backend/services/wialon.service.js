@@ -39,13 +39,14 @@ exports.getAllParamsIdDataFromWialon = async (id, login) => {
 
 
 //запрос всех сенсоров по id объекта
-exports.getAllSensorsIdDataFromWialon = async (id, login) => {
+exports.getAllSensorsIdDataFromWialon = async (id, timeOld, timeNow, login) => {
     const prms3 = {
         "source": "",
         "indexFrom": 0,
         "indexTo": 90000,
         "unitId": id,
-        "sensorId": 0
+        "sensorId": 0,
+
     };
     return new Promise(async function (resolve, reject) {
         const session = await getSessiont(login);
@@ -146,6 +147,7 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
                 console.log(err);
             })
             .then(function (data) {
+                //   console.log(data)
                 resolve(data)
             });
     })

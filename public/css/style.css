@@ -1790,8 +1790,21 @@ div.spoyler {
   width: 100%;
 }
 
+.name_interval {
+  justify-content: center;
+}
+
+.tacs {
+  width: 70%;
+  padding: 1px 2px;
+  font-weight: bold;
+  display: flex;
+
+  align-items: center;
+}
+
 .tac {
-  width: 33%;
+  width: 15%;
   padding: 1px 2px;
   font-weight: bold;
   display: flex;
@@ -1812,7 +1825,7 @@ div.spoyler {
 }
 
 .name_list {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .rigth_block {

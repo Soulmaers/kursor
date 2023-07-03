@@ -1,7 +1,7 @@
 
 import { loadParamsViewList, conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
-
+import { startAllStatic } from './startAllStatic.js'
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
 /*
@@ -40,6 +40,7 @@ export async function zapros(login) {
     console.log(arrayList)
 
     await conturTest(arrayList)
+    await startAllStatic(arrayList)
     //передаем имена объектов для отображения в панели администратора
     checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')
