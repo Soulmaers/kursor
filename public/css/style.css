@@ -1812,6 +1812,10 @@ div.spoyler {
   align-items: center;
 }
 
+.today_value {
+  font-size: 0.8rem;
+}
+
 .table_pokazateli {
   padding: 5px;
   list-style-type: none;

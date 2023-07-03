@@ -16,7 +16,6 @@ export async function startAllStatic(objects) {
         quantityTS: array.length,
         quantityTSjob: 0
     }
-
     const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
@@ -27,17 +26,17 @@ export async function startAllStatic(objects) {
     globalInfo.quantityTSjob = res.quantityTSjob
     globalInfo.probeg = res.probeg
     globalInfo.rashod = sens.rashod
-
+    globalInfo.zapravka = 'в работе';
+    globalInfo.lifting = sens.lifting;
     console.log(globalInfo)
 
     const arr = Object.values(globalInfo)
 
     const todayValue = document.querySelectorAll('.today_value')
-
+    console.log(arr)
     arr.forEach((e, index) => {
-        todayValue[index].textContent = arr[index] ? arr[index] : '-'
+        todayValue[index].textContent = (e !== undefined && e !== null) ? e : '-'
     })
-
 }
 
 async function loadValue(array, timeOld, timeNow, login) {
@@ -76,6 +75,7 @@ async function loadValue(array, timeOld, timeNow, login) {
 
 async function timeSens(array) {
     let rashod = 0;
+    let lifting = 0
     for (const e of array) {
         const idw = e
         const sensArr = await fnPar(idw)
@@ -95,10 +95,16 @@ async function timeSens(array) {
                 console.log(it.value[0])
                 rashod += it.value[0] - it.value[it.value.length - 1]
             }
+            if (it.sens.startsWith('Подъем')) {
+                it.value >= 33 ? lifting++ : 0
+                console.log(it.value)
+            }
+
+
         })
         console.log(allArrNew)
+        return { rashod: Number(rashod.toFixed(0)), lifting: lifting }
     }
-    return { rashod: Number(rashod.toFixed(0)) }
 }
 
 function timefn() {
