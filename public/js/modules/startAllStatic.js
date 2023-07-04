@@ -27,7 +27,7 @@ export async function startAllStatic(objects) {
     globalInfo.zapravka = res.zapravka;
     globalInfo.lifting = res.lifting;
     globalInfo.jobHours = res.moto;
-    globalInfo.prostoy = 'в работе';
+    globalInfo.prostoy = res.prostoy;
     globalInfo.medium = res.medium;
     const arr = Object.values(globalInfo)
     const todayValue = document.querySelectorAll('.today_value')
@@ -44,13 +44,15 @@ async function loadValue(array, timeOld, timeNow, login) {
     let lifting = 0
     let zapravka = 0;
     let motoTime = [];
+    let motoTimeProstoy = [];
     let jobTS = []
-    const times = []
     for (const e of array) {
         let sumRashod = 0;
         let sumZapravka = 0;
         let motoTimeIter;
+        let motoProstoy;
         const time = [];
+        const speed = [];
         const idw = e[4];
         const param = {
             method: "POST",
@@ -62,12 +64,12 @@ async function loadValue(array, timeOld, timeNow, login) {
         try {
             const res = await fetch('/api/loadInterval', param);
             const itog = await res.json();
-            console.log(itog)
             itog.messages.forEach(el => {
                 const timestamp = el.t;
                 const date = new Date(timestamp * 1000);
                 const isoString = date.toISOString();
                 time.push(new Date(isoString))
+                speed.push(el.pos.s)
             })
             const probegZero = Number((itog.messages[0].p.can_mileage).toFixed(0));
             const probegNow = Number((itog.messages[itog.messages.length - 1].p.can_mileage).toFixed(0));
@@ -90,6 +92,7 @@ async function loadValue(array, timeOld, timeNow, login) {
             })
             allArrNew.forEach(el => {
                 el.time = time
+                el.speed = speed
             })
             console.log(allArrNew)
             allArrNew.forEach(it => {
@@ -103,24 +106,27 @@ async function loadValue(array, timeOld, timeNow, login) {
                 }
                 if (it.sens.startsWith('Зажигание')) {
                     const res = moto(it);
-                    motoTimeIter = res
-
+                    motoTimeIter = res.moto
+                    motoProstoy = res.prostoy
                 }
             })
         } catch (error) {
             console.log(error);
         }
         motoTime.push(motoTimeIter)
+        motoTimeProstoy.push(motoProstoy)
         rashod += sumRashod;
         zapravka += sumZapravka;
 
     }
+    const mergedArr = motoTimeProstoy[0].concat(motoTimeProstoy[1]).reduce((acc, el) => acc + el, 0);
+    console.log(mergedArr)
+    const prostoy = timesFormat(mergedArr)
+    console.log(prostoy)
     const motoHours = timesDate(motoTime)
-    console.log(motoHours)
-    console.log(rashod, zapravka)
     const medium = Number(((rashod / probeg) * 100).toFixed(2))
 
-    return { quantityTSjob: countTS, probeg: probeg, rashod: rashod, zapravka: zapravka, lifting: lifting, jobTS: jobTS, medium: medium, moto: motoHours }
+    return { quantityTSjob: countTS, probeg: probeg, rashod: rashod, zapravka: zapravka, lifting: lifting, jobTS: jobTS, medium: medium, moto: motoHours, prostoy: prostoy }
 }
 
 
@@ -130,6 +136,7 @@ function timesDate(dates) {
     const [date1, date2] = dates.map(dateStr => dateStr);
     const diffMs = date2 + date1; // разница между датами в миллисекундах
     totalMs = diffMs;
+    console.log(totalMs)
     const totalSeconds = Math.floor(totalMs / 1000);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -138,35 +145,73 @@ function timesDate(dates) {
     return motoHours
 }
 
+
+function timesFormat(dates) {
+    const totalSeconds = Math.floor(dates);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const motoHours = `${hours}:${minutes}:${seconds}`
+    return motoHours
+}
+
+
 function moto(data) {
     const zeros = [];
     const ones = [];
+    const prostoy = [];
+    const korzina = [];
     let startIndex = 0;
     data.value.forEach((values, index) => {
         if (values !== data.value[startIndex]) {
             const subarray = data.time.slice(startIndex, index);
+            const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index) };
             (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
+            (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
             startIndex = index;
         }
     });
     const subarray = data.time.slice(startIndex);
+    const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex) };
     (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
-    console.log(zeros)
+    (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
     console.log(ones)
     let totalMs = 0;
+    console.log(prostoy)
+
+    const filteredData = prostoy.map(obj => {
+        const newS = [];
+        const timet = [];
+        for (let i = 0; i < obj.speed.length; i++) {
+            if (obj.speed[i] < 10) {
+                newS.push(obj.speed[i]);
+                timet.push(obj.time[i])
+            } else {
+                break;
+            }
+        }
+        return { speed: newS, time: timet };
+    });
+    console.log(filteredData)
+
+    const timeProstoy = filteredData.map(el => {
+        return [el.time[0], el.time[el.time.length - 1]]
+    })
+    const unixProstoy = [];
+    timeProstoy.forEach(it => {
+        const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
+        if (diffInSeconds > 600) {
+            unixProstoy.push(diffInSeconds)
+        }
+    })
+
     ones.forEach(dates => {
         const [date1, date2] = dates.map(dateStr => new Date(dateStr));
         const diffMs = date2.getTime() - date1.getTime(); // разница между датами в миллисекундах
         totalMs += diffMs;
     });
-
-    console.log(totalMs)
-    const totalSeconds = Math.floor(totalMs / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    const motoHours = totalMs// `${hours}:${minutes}:${seconds}`
-    return motoHours
+    const motoHours = totalMs
+    return { moto: motoHours, prostoy: unixProstoy }
 }
 
 function rashodCalc(data) {
