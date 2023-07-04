@@ -11,7 +11,6 @@ export async function startAllStatic(objects) {
     const array = result
         .filter(e => e[0].message.startsWith('Sitrack'))
         .map(e => e);
-    // console.log(array);
     globalInfo = {
         quantityTS: array.length,
         quantityTSjob: 0
@@ -19,19 +18,18 @@ export async function startAllStatic(objects) {
     const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
-
     const res = await loadValue(array, timeOld, timeNow, login)
-    // const sens = await timeSens(res.jobTS, res.time)
+
     console.log(res)
     globalInfo.quantityTSjob = res.quantityTSjob
     globalInfo.probeg = res.probeg
     globalInfo.rashod = res.rashod
     globalInfo.zapravka = res.zapravka;
     globalInfo.lifting = res.lifting;
-    console.log(globalInfo)
-
+    globalInfo.jobHours = 'в работе';
+    globalInfo.prostoy = 'в работе';
+    globalInfo.medium = res.medium;
     const arr = Object.values(globalInfo)
-
     const todayValue = document.querySelectorAll('.today_value')
     // console.log(arr)
     arr.forEach((e, index) => {
@@ -109,7 +107,9 @@ async function loadValue(array, timeOld, timeNow, login) {
         times.push(time)
     }
     console.log(rashod, zapravka)
-    return { quantityTSjob: countTS, probeg: probeg, rashod: rashod, zapravka: zapravka, lifting: lifting, jobTS: jobTS, time: times }
+    const medium = Number(((rashod / probeg) * 100).toFixed(2))
+
+    return { quantityTSjob: countTS, probeg: probeg, rashod: rashod, zapravka: zapravka, lifting: lifting, jobTS: jobTS, medium: medium }
 }
 
 
