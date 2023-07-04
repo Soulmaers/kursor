@@ -36,14 +36,10 @@ export async function fnTime(t1, t2) {
       noGraf.style.display = 'none'
       const global = [];
       const speed = []
-      console.log(result)
       result.messages.forEach(el => {
         const timestamp = el.t;
         const date = new Date(timestamp * 1000);
         const isoString = date.toISOString();
-        // const date = new Date(timestamp * 1000);
-        // const isoString = date.toISOString().slice(0, -5) + 'Z';
-        //  console.log(isoString);
         global.push(isoString)
         speed.push(el.pos.s)
         resolve([global, speed])
@@ -54,7 +50,6 @@ export async function fnTime(t1, t2) {
 }
 
 export async function fnPar(active) {
-  console.log('запросики')
   return new Promise(async function (resolve, reject) {
     const idw = active
     //   console.log(idw)
@@ -67,7 +62,6 @@ export async function fnPar(active) {
     }
     const res = await fetch('/api/sensors', param)
     const sensArr = await res.json()
-    console.log(sensArr)
     resolve(sensArr)
   })
 
@@ -86,8 +80,6 @@ export async function fnParMessage(active) {
     }
     const res = await fetch('/api/sensorsName', param)
     const sensArr = await res.json()
-    console.log(sensArr)
-
     const nameArr = [];
     Object.entries(sensArr.item.sens).forEach(el => {
       nameArr.push([el[1].n, el[1].p])

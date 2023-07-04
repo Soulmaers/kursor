@@ -64,7 +64,6 @@ export async function oil(t1, t2) {
             let fiveNum = data[i + 5].oil
             const res = fiveNum - oneNum
             res > Number((5 / 100.05 * oneNum).toFixed(0)) ? resArray.push([oneNum, data[i].time]) : null
-
         }
         else {
             // console.log(resArray)
