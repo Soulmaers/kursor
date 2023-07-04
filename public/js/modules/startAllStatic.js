@@ -26,7 +26,7 @@ export async function startAllStatic(objects) {
     globalInfo.rashod = res.rashod
     globalInfo.zapravka = res.zapravka;
     globalInfo.lifting = res.lifting;
-    globalInfo.jobHours = 'в работе';
+    globalInfo.jobHours = res.moto;
     globalInfo.prostoy = 'в работе';
     globalInfo.medium = res.medium;
     const arr = Object.values(globalInfo)
@@ -43,11 +43,13 @@ async function loadValue(array, timeOld, timeNow, login) {
     let rashod = 0;
     let lifting = 0
     let zapravka = 0;
+    let motoTime = [];
     let jobTS = []
     const times = []
     for (const e of array) {
         let sumRashod = 0;
         let sumZapravka = 0;
+        let motoTimeIter;
         const time = [];
         const idw = e[4];
         const param = {
@@ -89,35 +91,85 @@ async function loadValue(array, timeOld, timeNow, login) {
             allArrNew.forEach(el => {
                 el.time = time
             })
+            console.log(allArrNew)
             allArrNew.forEach(it => {
                 if (it.sens.startsWith('Топливо')) {
-                    const test = rashodCalc(it)
-                    sumRashod += test[0].rashod;
-                    sumZapravka += test[0].zapravka;
+                    const res = rashodCalc(it)
+                    sumRashod += res[0].rashod;
+                    sumZapravka += res[0].zapravka;
                 }
                 if (it.sens.startsWith('Подъем')) {
                     it.value >= 33 ? lifting++ : 0
+                }
+                if (it.sens.startsWith('Зажигание')) {
+                    const res = moto(it);
+                    motoTimeIter = res
+
                 }
             })
         } catch (error) {
             console.log(error);
         }
+        motoTime.push(motoTimeIter)
         rashod += sumRashod;
         zapravka += sumZapravka;
-        times.push(time)
+
     }
+    const motoHours = timesDate(motoTime)
+    console.log(motoHours)
     console.log(rashod, zapravka)
     const medium = Number(((rashod / probeg) * 100).toFixed(2))
 
-    return { quantityTSjob: countTS, probeg: probeg, rashod: rashod, zapravka: zapravka, lifting: lifting, jobTS: jobTS, medium: medium }
+    return { quantityTSjob: countTS, probeg: probeg, rashod: rashod, zapravka: zapravka, lifting: lifting, jobTS: jobTS, medium: medium, moto: motoHours }
 }
 
 
 
+function timesDate(dates) {
+    let totalMs;
+    const [date1, date2] = dates.map(dateStr => dateStr);
+    const diffMs = date2 + date1; // разница между датами в миллисекундах
+    totalMs = diffMs;
+    const totalSeconds = Math.floor(totalMs / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const motoHours = `${hours}:${minutes}:${seconds}`
+    return motoHours
+}
+
+function moto(data) {
+    const zeros = [];
+    const ones = [];
+    let startIndex = 0;
+    data.value.forEach((values, index) => {
+        if (values !== data.value[startIndex]) {
+            const subarray = data.time.slice(startIndex, index);
+            (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
+            startIndex = index;
+        }
+    });
+    const subarray = data.time.slice(startIndex);
+    (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
+    console.log(zeros)
+    console.log(ones)
+    let totalMs = 0;
+    ones.forEach(dates => {
+        const [date1, date2] = dates.map(dateStr => new Date(dateStr));
+        const diffMs = date2.getTime() - date1.getTime(); // разница между датами в миллисекундах
+        totalMs += diffMs;
+    });
+
+    console.log(totalMs)
+    const totalSeconds = Math.floor(totalMs / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const motoHours = totalMs// `${hours}:${minutes}:${seconds}`
+    return motoHours
+}
 
 function rashodCalc(data) {
-    console.log(data)
-    let oneNum;
     const resArray = [];
     const zapravka = [];
     const ras = [];
@@ -126,7 +178,7 @@ function rashodCalc(data) {
         data.value[i] === 0 ? data.value[i] = data.value[i - 1] : data.value[i] = data.value[i]
         data.value[i + 1] === 0 ? data.value[i + 1] = data.value[i - 1] : data.value[i + 1] = data.value[i + 1]
         if (data.value[i] <= data.value[i + 1]) {
-            oneNum = data.value[i]
+            let oneNum = data.value[i]
             let fiveNum = data.value[i + 5]
             const res = fiveNum - oneNum
             res > Number((5 / 100.05 * oneNum).toFixed(0)) ? resArray.push([oneNum, data.time[i]]) : null
@@ -153,11 +205,7 @@ function rashodCalc(data) {
     const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0)
     const potracheno = sum - rashod;
-    console.log(zapravka)
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
-    console.log(potracheno)
-    console.log(zapravleno)
-
     return [{ rashod: potracheno, zapravka: zapravleno }]
 }
 
