@@ -13,8 +13,9 @@ export async function startAllStatic(objects) {
 
     const array = result
         .filter(e => e[0].message.startsWith('Sitrack'))
+        // .filter(e => e[5].startsWith('Ромакс') && e[0].message !== 'Цистерна ДТ')
         .map(e => e);
-
+    console.log(array)
     const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
@@ -31,7 +32,7 @@ export async function startAllStatic(objects) {
     }
     globalInfo.motoHours = timesDate(globalInfo.motoHours)
     globalInfo.prostoy = timesFormat(globalInfo.prostoy)
-    globalInfo.medium = Number((globalInfo.medium / globalInfo.quantityTSjob).toFixed(2))
+    globalInfo.medium = globalInfo.quantityTSjob !== 0 ? Number((globalInfo.medium / globalInfo.quantityTSjob).toFixed(2)) : 0
     delete globalInfo.nameCar
     delete globalInfo.type
     console.log(globalInfo);
@@ -68,8 +69,8 @@ async function loadValue(array, timeOld, timeNow, login) {
                 time.push(new Date(isoString))
                 speed.push(el.pos.s)
             })
-            const probegZero = Number((itog.messages[0].p.can_mileage).toFixed(0));
-            const probegNow = Number((itog.messages[itog.messages.length - 1].p.can_mileage).toFixed(0));
+            const probegZero = itog.messages[0].p.can_mileage ? Number((itog.messages[0].p.can_mileage).toFixed(0)) : itog.messages[0].p.mileage ? Number((itog.messages[0].p.mileage).toFixed(0)) : null;
+            const probegNow = itog.messages[0].p.can_mileage ? Number((itog.messages[itog.messages.length - 1].p.can_mileage).toFixed(0)) : itog.messages[0].p.mileage ? Number((itog.messages[itog.messages.length - 1].p.mileage).toFixed(0)) : null;
             const probegDay = probegNow - probegZero;
             if (probegDay > 5) {
                 uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 1, probeg: probegDay };
@@ -77,7 +78,6 @@ async function loadValue(array, timeOld, timeNow, login) {
             else {
                 uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 0, probeg: probegDay };
             }
-
             const sensArr = await fnPar(idw)
             const nameSens = await fnParMessage(idw)
             const allArrNew = [];
@@ -93,18 +93,20 @@ async function loadValue(array, timeOld, timeNow, login) {
                 el.time = time
                 el.speed = speed
             })
+            console.log(allArrNew)
             const oil = [];
             const hh = [];
             allArrNew.forEach(it => {
-                if (it.sens.startsWith('Топливо')) {
+                if (it.sens === 'Топливо') {
+                    console.log('один')
                     oil.push(it.value)
-                    const res = rashodCalc(it)
+                    const res = it.value !== undefined && it.value.every(item => item >= 0) ? rashodCalc(it) : [{ rashod: 0, zapravka: 0 }]
+                    console.log(res)
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
                 }
                 if (it.sens.startsWith('Подъем')) {
                     it.value > 0 ? console.log(it.value) : null
                     it.value >= 33 ? lifting++ : 0
-
                 }
                 if (it.sens.startsWith('Зажигание')) {
                     hh.push(it)
@@ -115,12 +117,13 @@ async function loadValue(array, timeOld, timeNow, login) {
             })
             hh[0].oil = oil[0]
             const oneArrayOil = hh.filter(el => !el.sens.startsWith('Топливо'));
-            prostoyHH = oilHH(oneArrayOil[0]);
+
+            prostoyHH = oneArrayOil[0].oil !== undefined && oneArrayOil[0].oil.every(item => item >= 0) ? oilHH(oneArrayOil[0]) : 0
 
         } catch (error) {
             console.log(error);
         }
-        const medium = Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2))
+        const medium = uniqObject[idw].probeg !== 0 ? Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2)) : 0
         uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: 'samosval' }
     }
     return { uniq: uniqObject }
@@ -288,9 +291,10 @@ function rashodCalc(data) {
     if (zapravka.length === 0) {
         ras.push([{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
     }
+
     const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
-    const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0)
-    const potracheno = sum - rashod;
+    const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
+    const potracheno = sum - rashod >= 0 ? sum - rashod : 0;
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
     return [{ rashod: potracheno, zapravka: zapravleno }]
 }
