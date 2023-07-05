@@ -29,6 +29,7 @@ export async function startAllStatic(objects) {
     globalInfo.jobHours = res.moto;
     globalInfo.prostoy = res.prostoy;
     globalInfo.medium = res.medium;
+    globalInfo.hhOil = res.hhOil;
     const arr = Object.values(globalInfo)
     const todayValue = document.querySelectorAll('.today_value')
     // console.log(arr)
@@ -43,6 +44,7 @@ async function loadValue(array, timeOld, timeNow, login) {
     let rashod = 0;
     let lifting = 0
     let zapravka = 0;
+    let hhOil = 0;
     let motoTime = [];
     let motoTimeProstoy = [];
     let jobTS = []
@@ -51,6 +53,7 @@ async function loadValue(array, timeOld, timeNow, login) {
         let sumZapravka = 0;
         let motoTimeIter;
         let motoProstoy;
+        let prostoyHH;
         const time = [];
         const speed = [];
         const idw = e[4];
@@ -95,8 +98,11 @@ async function loadValue(array, timeOld, timeNow, login) {
                 el.speed = speed
             })
             console.log(allArrNew)
+            const oil = [];
+            const hh = [];
             allArrNew.forEach(it => {
                 if (it.sens.startsWith('Топливо')) {
+                    oil.push(it.value)
                     const res = rashodCalc(it)
                     sumRashod += res[0].rashod;
                     sumZapravka += res[0].zapravka;
@@ -106,23 +112,29 @@ async function loadValue(array, timeOld, timeNow, login) {
                     it.value >= 33 ? lifting++ : 0
                 }
                 if (it.sens.startsWith('Зажигание')) {
+                    hh.push(it)
                     const res = moto(it);
                     motoTimeIter = res.moto
                     motoProstoy = res.prostoy
                     console.log(res.prostoy)
                 }
             })
+            hh[0].oil = oil[0]
+
+            const oneArrayOil = hh.filter(el => !el.sens.startsWith('Топливо'));
+            const info = oilHH(oneArrayOil[0]);
+            prostoyHH = info
+
         } catch (error) {
             console.log(error);
         }
         motoTime.push(motoTimeIter)
         motoProstoy ? motoTimeProstoy.push(motoProstoy) : null
-
+        hhOil += prostoyHH
         rashod += sumRashod;
         zapravka += sumZapravka;
 
     }
-    console.log(typeof motoTimeProstoy[0])
     const mergedArr = (motoTimeProstoy || []).length > 1
         ? motoTimeProstoy[0].concat(motoTimeProstoy[1]).reduce((acc, el) => acc + el, 0)
         : motoTimeProstoy.reduce((acc, el) => acc + el, 0);
@@ -132,10 +144,64 @@ async function loadValue(array, timeOld, timeNow, login) {
     const motoHours = timesDate(motoTime)
     const medium = Number(((rashod / probeg) * 100).toFixed(2))
 
-    return { quantityTSjob: countTS, probeg: probeg, rashod: rashod, zapravka: zapravka, lifting: lifting, jobTS: jobTS, medium: medium, moto: motoHours, prostoy: prostoy }
+    console.log(hhOil)
+    return { quantityTSjob: countTS, probeg: probeg, rashod: rashod, zapravka: zapravka, lifting: lifting, jobTS: jobTS, medium: medium, moto: motoHours, prostoy: prostoy, hhOil: hhOil }
 }
 
+function oilHH(data) {
+    console.log(data)
+    const zeros = [];
+    const ones = [];
+    const prostoy = [];
+    const korzina = [];
+    let startIndex = 0;
+    data.value.forEach((values, index) => {
+        if (values !== data.value[startIndex]) {
+            const subarray = data.time.slice(startIndex, index);
+            const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index), oil: data.oil.slice(startIndex, index) };
+            (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
+            (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
+            startIndex = index;
+        }
+    });
+    const subarray = data.time.slice(startIndex);
+    const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex), oil: data.oil.slice(startIndex) };
+    (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
+    (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
+    const filteredData = prostoy.map(obj => {
+        const newS = [];
+        const timet = [];
+        const oil = [];
+        for (let i = 0; i < obj.speed.length; i++) {
+            if (obj.speed[i] < 5) {
+                newS.push(obj.speed[i]);
+                timet.push(obj.time[i])
+                oil.push(obj.oil[i])
+            } else {
+                break;
+            }
+        }
+        return { speed: newS, time: timet, oil: oil };
+    });
+    const timeProstoy = filteredData.map(el => {
+        return { time: [el.time[0], el.time[el.time.length - 1]], oil: [el.oil[0], el.oil[el.oil.length - 1]], speed: [el.speed[0], el.speed[el.speed.length - 1]] }
+    })
+    const oilProstoy = [];
+    timeProstoy.forEach(it => {
+        if (it.time[0] !== undefined) {
+            const diffInSeconds = (it.time[1].getTime() - it.time[0].getTime()) / 1000;
+            console.log(diffInSeconds)
+            if (diffInSeconds > 600) {
+                oilProstoy.push(it.oil[0] - it.oil[1])
+            }
+        }
 
+    })
+    // console.log(oilProstoy)
+    const res = oilProstoy.reduce((acc, el) => acc + el, 0)
+    console.log(res)
+    return res
+}
 
 function timesDate(dates) {
     let totalMs;
