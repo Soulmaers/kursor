@@ -187,7 +187,7 @@ function moto(data) {
         const newS = [];
         const timet = [];
         for (let i = 0; i < obj.speed.length; i++) {
-            if (obj.speed[i] < 10) {
+            if (obj.speed[i] < 5) {
                 newS.push(obj.speed[i]);
                 timet.push(obj.time[i])
             } else {
