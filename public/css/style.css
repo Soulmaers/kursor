@@ -1842,7 +1842,12 @@ div.spoyler {
 
 }
 
-
+.option_sam {
+  font-weight: bold;
+  font-size: 0.8rem;
+  font-family: Roboto;
+  color: black
+}
 
 .table_pokazateli {
   padding: 5px;
