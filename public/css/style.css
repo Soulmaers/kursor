@@ -1756,7 +1756,7 @@ div.spoyler {
 
 
 .left_block {
-  width: 72%;
+  width: 75%;
   border: 1px solid black;
   display: flex;
   flex-direction: column;
@@ -1830,18 +1830,19 @@ div.spoyler {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: black
+  color: black;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-align: center;
 }
 
 .select_summary:focus {
   outline: none;
+
 }
 
-.option_sam {
-  font-size: 0.8rem;
-  font-family: Roboto;
-  color: black
-}
+
 
 .table_pokazateli {
   padding: 5px;
@@ -1866,7 +1867,7 @@ div.spoyler {
   justify-content: space-around;
   border: 1px solid black;
   padding: 5px;
-  width: 28%
+  width: 25%
 }
 
 .dash_up,
