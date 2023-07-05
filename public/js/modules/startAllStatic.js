@@ -102,24 +102,30 @@ async function loadValue(array, timeOld, timeNow, login) {
                     sumZapravka += res[0].zapravka;
                 }
                 if (it.sens.startsWith('Подъем')) {
+                    it.value > 0 ? console.log(it.value) : null
                     it.value >= 33 ? lifting++ : 0
                 }
                 if (it.sens.startsWith('Зажигание')) {
                     const res = moto(it);
                     motoTimeIter = res.moto
                     motoProstoy = res.prostoy
+                    console.log(res.prostoy)
                 }
             })
         } catch (error) {
             console.log(error);
         }
         motoTime.push(motoTimeIter)
-        motoTimeProstoy.push(motoProstoy)
+        motoProstoy ? motoTimeProstoy.push(motoProstoy) : null
+
         rashod += sumRashod;
         zapravka += sumZapravka;
 
     }
-    const mergedArr = motoTimeProstoy[0].concat(motoTimeProstoy[1]).reduce((acc, el) => acc + el, 0);
+    console.log(typeof motoTimeProstoy[0])
+    const mergedArr = (motoTimeProstoy || []).length > 1
+        ? motoTimeProstoy[0].concat(motoTimeProstoy[1]).reduce((acc, el) => acc + el, 0)
+        : motoTimeProstoy.reduce((acc, el) => acc + el, 0);
     console.log(mergedArr)
     const prostoy = timesFormat(mergedArr)
     console.log(prostoy)
@@ -145,16 +151,15 @@ function timesDate(dates) {
     return motoHours
 }
 
-
 function timesFormat(dates) {
     const totalSeconds = Math.floor(dates);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
     const motoHours = `${hours}:${minutes}:${seconds}`
+    console.log(motoHours)
     return motoHours
 }
-
 
 function moto(data) {
     const zeros = [];
@@ -175,10 +180,9 @@ function moto(data) {
     const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex) };
     (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
     (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
-    console.log(ones)
+    // console.log(ones)
     let totalMs = 0;
     console.log(prostoy)
-
     const filteredData = prostoy.map(obj => {
         const newS = [];
         const timet = [];
@@ -192,25 +196,28 @@ function moto(data) {
         }
         return { speed: newS, time: timet };
     });
-    console.log(filteredData)
 
     const timeProstoy = filteredData.map(el => {
         return [el.time[0], el.time[el.time.length - 1]]
     })
     const unixProstoy = [];
+    console.log(timeProstoy)
     timeProstoy.forEach(it => {
-        const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
-        if (diffInSeconds > 600) {
-            unixProstoy.push(diffInSeconds)
+        if (it[0] !== undefined) {
+            const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
+            if (diffInSeconds > 600) {
+                unixProstoy.push(diffInSeconds)
+            }
         }
-    })
 
+    })
     ones.forEach(dates => {
         const [date1, date2] = dates.map(dateStr => new Date(dateStr));
         const diffMs = date2.getTime() - date1.getTime(); // разница между датами в миллисекундах
         totalMs += diffMs;
     });
     const motoHours = totalMs
+    console.log(unixProstoy)
     return { moto: motoHours, prostoy: unixProstoy }
 }
 
@@ -247,10 +254,12 @@ function rashodCalc(data) {
     if (zapravka.length === 0) {
         ras.push([{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
     }
+    console.log(zapravka)
     const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0)
     const potracheno = sum - rashod;
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
+    console.log(rashod)
     return [{ rashod: potracheno, zapravka: zapravleno }]
 }
 
