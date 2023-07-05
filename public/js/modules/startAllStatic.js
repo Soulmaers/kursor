@@ -1,9 +1,12 @@
 
 import { fnParMessage, fnPar } from './grafiks.js'
 
+export let globalInfo = {};
+export let type;
 export async function startAllStatic(objects) {
+    console.log('статика')
     const login = document.querySelectorAll('.log')[1].textContent
-    let globalInfo = {};
+
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
@@ -11,17 +14,14 @@ export async function startAllStatic(objects) {
     const array = result
         .filter(e => e[0].message.startsWith('Sitrack'))
         .map(e => e);
-    globalInfo = {
-        quantityTS: array.length,
-        quantityTSjob: 0
-    }
+
     const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow, login)
-
     console.log(res)
-    globalInfo.quantityTSjob = res.quantityTSjob
+    globalInfo.quantityTS = array.length,
+        globalInfo.quantityTSjob = res.quantityTSjob
     globalInfo.probeg = res.probeg
     globalInfo.rashod = res.rashod
     globalInfo.zapravka = res.zapravka;
@@ -32,12 +32,10 @@ export async function startAllStatic(objects) {
     globalInfo.hhOil = res.hhOil;
     const arr = Object.values(globalInfo)
     const todayValue = document.querySelectorAll('.today_value')
-    // console.log(arr)
     arr.forEach((e, index) => {
         todayValue[index].textContent = (e !== undefined && e !== null) ? e : '-'
     })
 }
-
 async function loadValue(array, timeOld, timeNow, login) {
     let countTS = 0;
     let probeg = 0;
@@ -97,7 +95,6 @@ async function loadValue(array, timeOld, timeNow, login) {
                 el.time = time
                 el.speed = speed
             })
-            console.log(allArrNew)
             const oil = [];
             const hh = [];
             allArrNew.forEach(it => {
@@ -116,11 +113,9 @@ async function loadValue(array, timeOld, timeNow, login) {
                     const res = moto(it);
                     motoTimeIter = res.moto
                     motoProstoy = res.prostoy
-                    console.log(res.prostoy)
                 }
             })
             hh[0].oil = oil[0]
-
             const oneArrayOil = hh.filter(el => !el.sens.startsWith('Топливо'));
             const info = oilHH(oneArrayOil[0]);
             prostoyHH = info
@@ -133,23 +128,17 @@ async function loadValue(array, timeOld, timeNow, login) {
         hhOil += prostoyHH
         rashod += sumRashod;
         zapravka += sumZapravka;
-
     }
     const mergedArr = (motoTimeProstoy || []).length > 1
         ? motoTimeProstoy[0].concat(motoTimeProstoy[1]).reduce((acc, el) => acc + el, 0)
         : motoTimeProstoy.reduce((acc, el) => acc + el, 0);
-    console.log(mergedArr)
     const prostoy = timesFormat(mergedArr)
-    console.log(prostoy)
     const motoHours = timesDate(motoTime)
     const medium = Number(((rashod / probeg) * 100).toFixed(2))
-
-    console.log(hhOil)
     return { quantityTSjob: countTS, probeg: probeg, rashod: rashod, zapravka: zapravka, lifting: lifting, jobTS: jobTS, medium: medium, moto: motoHours, prostoy: prostoy, hhOil: hhOil }
 }
 
 function oilHH(data) {
-    console.log(data)
     const zeros = [];
     const ones = [];
     const prostoy = [];
@@ -195,11 +184,8 @@ function oilHH(data) {
                 oilProstoy.push(it.oil[0] - it.oil[1])
             }
         }
-
     })
-    // console.log(oilProstoy)
     const res = oilProstoy.reduce((acc, el) => acc + el, 0)
-    console.log(res)
     return res
 }
 
@@ -208,7 +194,6 @@ function timesDate(dates) {
     const [date1, date2] = dates.map(dateStr => dateStr);
     const diffMs = date2 + date1; // разница между датами в миллисекундах
     totalMs = diffMs;
-    console.log(totalMs)
     const totalSeconds = Math.floor(totalMs / 1000);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -216,14 +201,12 @@ function timesDate(dates) {
     const motoHours = `${hours}:${minutes}:${seconds}`
     return motoHours
 }
-
 function timesFormat(dates) {
     const totalSeconds = Math.floor(dates);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
     const motoHours = `${hours}:${minutes}:${seconds}`
-    console.log(motoHours)
     return motoHours
 }
 
@@ -246,9 +229,7 @@ function moto(data) {
     const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex) };
     (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
     (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
-    // console.log(ones)
     let totalMs = 0;
-    console.log(prostoy)
     const filteredData = prostoy.map(obj => {
         const newS = [];
         const timet = [];
@@ -267,7 +248,6 @@ function moto(data) {
         return [el.time[0], el.time[el.time.length - 1]]
     })
     const unixProstoy = [];
-    console.log(timeProstoy)
     timeProstoy.forEach(it => {
         if (it[0] !== undefined) {
             const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
@@ -275,7 +255,6 @@ function moto(data) {
                 unixProstoy.push(diffInSeconds)
             }
         }
-
     })
     ones.forEach(dates => {
         const [date1, date2] = dates.map(dateStr => new Date(dateStr));
@@ -283,7 +262,6 @@ function moto(data) {
         totalMs += diffMs;
     });
     const motoHours = totalMs
-    console.log(unixProstoy)
     return { moto: motoHours, prostoy: unixProstoy }
 }
 
@@ -291,7 +269,6 @@ function rashodCalc(data) {
     const resArray = [];
     const zapravka = [];
     const ras = [];
-
     for (let i = 0; i < data.value.length - 5; i++) {
         data.value[i] === 0 ? data.value[i] = data.value[i - 1] : data.value[i] = data.value[i]
         data.value[i + 1] === 0 ? data.value[i + 1] = data.value[i - 1] : data.value[i + 1] = data.value[i + 1]
@@ -300,7 +277,6 @@ function rashodCalc(data) {
             let fiveNum = data.value[i + 5]
             const res = fiveNum - oneNum
             res > Number((5 / 100.05 * oneNum).toFixed(0)) ? resArray.push([oneNum, data.time[i]]) : null
-
         }
         else {
             if (resArray.length !== 0) {
@@ -320,47 +296,13 @@ function rashodCalc(data) {
     if (zapravka.length === 0) {
         ras.push([{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
     }
-    console.log(zapravka)
     const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0)
     const potracheno = sum - rashod;
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
-    console.log(rashod)
     return [{ rashod: potracheno, zapravka: zapravleno }]
 }
 
-async function timeSens(array, time) {
-    console.log(time)
-    let rashod = 0;
-    let lifting = 0
-    for (const e of array) {
-        const idw = e
-        const sensArr = await fnPar(idw)
-        const nameSens = await fnParMessage(idw)
-        const allArrNew = [];
-        nameSens.forEach((item) => {
-            allArrNew.push({ sens: item[0], params: item[1], value: [] })
-        })
-        sensArr.forEach(el => {
-            for (let i = 0; i < allArrNew.length; i++) {
-                allArrNew[i].value.push(Object.values(el)[i])
-            }
-        })
-        allArrNew.forEach(it => {
-            if (it.sens.startsWith('Топливо')) {
-                console.log(it.value[it.value.length - 1])
-                console.log(it.value[0])
-                rashod += it.value[0] - it.value[it.value.length - 1]
-            }
-            if (it.sens.startsWith('Подъем')) {
-                it.value >= 33 ? lifting++ : 0
-            }
-        })
-        console.log(allArrNew)
-    }
-    return { rashod: Number(rashod.toFixed(0)), lifting: lifting }
-
-}
 function timefn() {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);

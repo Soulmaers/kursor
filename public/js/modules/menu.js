@@ -1,7 +1,7 @@
 
 import { loadParamsViewList, conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
-import { startAllStatic } from './startAllStatic.js'
+import { startAllStatic, globalInfo, type } from './startAllStatic.js'
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
 /*
@@ -41,12 +41,33 @@ export async function zapros(login) {
 
     await conturTest(arrayList)
     await startAllStatic(arrayList)
+    setInterval(startAllStatic, 300000, arrayList)
     //передаем имена объектов для отображения в панели администратора
     checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')
     if (tiresActiv) {
         tiresActiv.remove()
     }
+
+
+
+
+    const processDataAtMidnight = () => {
+        const now = new Date();
+        // Проверяем, что время - 23:59:00
+        if (now.getHours() === 12 && now.getMinutes() === 26 && now.getSeconds() === 0) {
+            // Обрабатываем данные
+            console.log(globalInfo)
+            console.log('Processing data at midnight...');
+
+            // Записываем данные в базу SQL
+            // ...
+        }
+    };
+
+    // Запуск функции каждую секунду
+    //setInterval(processDataAtMidnight, 1000)
+
 
     /*
     const prmss = {
