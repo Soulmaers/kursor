@@ -281,7 +281,8 @@ function rashodCalc(data) {
                     ras.push([{ start: [data.value[i], data.time[i]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
                 }
                 else {
-                    ras.push([{ start: [data.value[i], data.time[i]], end: [resArray[0][0], resArray[0][1]] }])
+                    ras.pop();
+                    ras.push([{ start: [zapravka[0].end[0], [zapravka[0].end[1]]], end: [resArray[0][0], resArray[0][1]] }])
                     ras.push([{ start: [data.value[i], data.time[i]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
                 }
                 resArray.length = 0
@@ -294,8 +295,11 @@ function rashodCalc(data) {
 
     const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
+    console.log(zapravka)
+    console.log(ras)
     const potracheno = sum - rashod >= 0 ? sum - rashod : 0;
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
+    console.log(potracheno)
     return [{ rashod: potracheno, zapravka: zapravleno }]
 }
 
