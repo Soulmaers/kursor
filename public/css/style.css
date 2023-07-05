@@ -1815,7 +1815,8 @@ div.spoyler {
   align-items: center;
 }
 
-.today_value {
+.today_value,
+.interval_value {
   font-size: 0.8rem;
 }
 

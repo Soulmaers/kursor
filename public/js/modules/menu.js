@@ -1,7 +1,7 @@
 
 import { loadParamsViewList, conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
-import { startAllStatic, uniqglobalInfo } from './startAllStatic.js'
+import { startAllStatic, uniqglobalInfo, yesterdaySummary } from './startAllStatic.js'
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
 /*
@@ -39,9 +39,10 @@ export async function zapros(login) {
     //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
     console.log(arrayList)
 
-    await conturTest(arrayList)
-    await startAllStatic(arrayList)
+    conturTest(arrayList)
+    startAllStatic(arrayList)
     setInterval(startAllStatic, 300000, arrayList)
+    yesterdaySummary(arrayList);
     //передаем имена объектов для отображения в панели администратора
     checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')
@@ -52,7 +53,6 @@ export async function zapros(login) {
 
     const processDataAtMidnight = () => {
         const now = new Date();
-        //  console.log(now)
         const date = new Date(now);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');

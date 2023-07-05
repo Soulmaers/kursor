@@ -32,6 +32,11 @@ exports.summary = async (req, res) => {
     res.json(result)
 }
 
-
+exports.summaryYestoday = async (req, res) => {
+    const idw = req.body.idw
+    const data = req.body.data
+    const result = await databaseService.summaryYestodayToBase(idw, data)
+    res.json(result)
+}
 
 

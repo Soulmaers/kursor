@@ -6,6 +6,7 @@ export let uniqglobalInfo;
 
 export async function startAllStatic(objects) {
     console.log('статика')
+
     const login = document.querySelectorAll('.log')[1].textContent
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
@@ -98,7 +99,6 @@ async function loadValue(array, timeOld, timeNow, login) {
             const hh = [];
             allArrNew.forEach(it => {
                 if (it.sens === 'Топливо') {
-                    console.log('один')
                     oil.push(it.value)
                     const res = it.value !== undefined && it.value.every(item => item >= 0) ? rashodCalc(it) : [{ rashod: 0, zapravka: 0 }]
                     console.log(res)
@@ -307,4 +307,62 @@ function timefn() {
     const timeNow = unix
     const timeOld = startOfTodayUnix
     return [timeNow, timeOld]
+}
+
+export async function yesterdaySummary(objects) {
+    const now = new Date();
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const year = yesterday.getFullYear();
+    const month = String(yesterday.getMonth() + 1).padStart(2, '0');
+    const day = String(yesterday.getDate()).padStart(2, '0');
+    const data = `${year}-${month}-${day}`;
+
+    const result = objects
+        .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
+        .flat()
+    const array = result
+        .filter(e => e[0].message.startsWith('Sitrack'))
+        .map(e => e);
+    const objectUniq = {};
+    for (const e of array) {
+        const idw = e[4]
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw, data }))
+        }
+        const mods = await fetch('/api/summaryYestoday', params)
+        const models = await mods.json()
+        console.log(models)
+        if (models.length === 0) {
+            return
+        }
+        objectUniq[models[0].idw] = models[0]
+
+    }
+    const globalInfo = {};
+    globalInfo.quantityTS = array.length
+    for (const prop in objectUniq) {
+        const subObj = objectUniq[prop];
+        for (const subProp in subObj) {
+            globalInfo[subProp] = (globalInfo[subProp] || 0) + subObj[subProp];
+        }
+    }
+    delete globalInfo.id
+    delete globalInfo.idw
+    delete globalInfo.nameCar
+    delete globalInfo.type
+    delete globalInfo.data
+    globalInfo.medium = globalInfo.jobTS !== 0 ? Number((globalInfo.medium / globalInfo.jobTS).toFixed(2)) : 0
+    globalInfo.moto = timesDate(globalInfo.moto)
+    globalInfo.prostoy = timesFormat(globalInfo.prostoy)
+    const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
+    const arr = propOrder.map(prop => globalInfo[prop]);
+    const intervalValue = document.querySelectorAll('.interval_value')
+    arr.forEach((e, index) => {
+        intervalValue[index].textContent = (e !== undefined && e !== null) ? e : '-'
+    })
 }

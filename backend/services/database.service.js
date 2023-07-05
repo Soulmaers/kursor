@@ -690,3 +690,24 @@ module.exports.summaryToBase = (idw, arr, data) => {
         }
     })
 }
+
+
+
+module.exports.summaryYestodayToBase = (idw, data) => {
+    console.log(idw, data)
+    return new Promise((resolve, reject) => {
+        try {
+            const selectBase = `SELECT * FROM summary WHERE idw=${idw} AND data='${data}'`
+            connection.query(selectBase, function (err, results) {
+                if (err) console.log(err)
+                resolve(results)
+            })
+        }
+        catch (e) {
+            console.log(e)
+        }
+    })
+}
+
+
+
