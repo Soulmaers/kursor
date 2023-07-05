@@ -56,28 +56,26 @@ export async function oil(t1, t2) {
     const resArray = [];
 
     for (let i = 0; i < data.length - 5; i++) {
-        data[i].oil === 0 ? data[i].oil = data[i - 1].oil : data[i].oil = data[i].oil
-        data[i + 1].oil === 0 ? data[i + 1].oil = data[i - 1].oil : data[i + 1].oil = data[i + 1].oil
+        data[i].oil === 0 && i !== 0 ? data[i].oil = data[i - 1].oil : data[i].oil = data[i].oil
+        data[i + 1].oil === 0 && i !== 0 ? data[i + 1].oil = data[i - 1].oil : data[i + 1].oil = data[i + 1].oil
         // data[i + 5].oil === 0 ? data[i + 5].oil = data[i + 4].oil : data[i + 5].oil = data[i + 5].oil
         if (data[i].oil <= data[i + 1].oil) {
             let oneNum = data[i].oil
             let fiveNum = data[i + 5].oil
             const res = fiveNum - oneNum
-            res > Number((5 / 100.05 * oneNum).toFixed(0)) ? resArray.push([oneNum, data[i].time]) : null
+            res > Number((5 / 100.05 * oneNum).toFixed(0)) && res < 100 ? resArray.push([oneNum, data[i].time]) : null
         }
         else {
             // console.log(resArray)
             if (resArray.length !== 0) {
                 arrayOil.push(resArray[0])
                 resArray.length = 0
-                console.log(resArray)
             }
             else {
                 console.log('массив пустой')
             }
         }
     }
-
     const arrDates = arrayOil.map(([num, str]) => new Date(str)); // массив дат
     for (let i = 0; i < arrayOil.length - 1; i++) {
         const diff = arrDates[i + 1].getTime() - arrDates[i].getTime();
