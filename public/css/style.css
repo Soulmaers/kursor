@@ -1790,6 +1790,7 @@ div.spoyler {
   width: 100%;
   font-size: 0.9rem;
   font-family: Roboto;
+  color: black
 }
 
 .name_interval {
@@ -1829,7 +1830,7 @@ div.spoyler {
   display: flex;
   justify-content: center;
   align-items: center;
-
+  color: black
 }
 
 .select_summary:focus {
@@ -1839,6 +1840,7 @@ div.spoyler {
 .option_sam {
   font-size: 0.8rem;
   font-family: Roboto;
+  color: black
 }
 
 .table_pokazateli {
