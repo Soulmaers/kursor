@@ -1836,6 +1836,11 @@ div.spoyler {
   outline: none;
 }
 
+.option_sam {
+  font-size: 0.8rem;
+  font-family: Roboto;
+}
+
 .table_pokazateli {
   padding: 5px;
   list-style-type: none;
