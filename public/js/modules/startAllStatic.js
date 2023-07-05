@@ -1,12 +1,12 @@
 
 import { fnParMessage, fnPar } from './grafiks.js'
 
-export let globalInfo = {};
-export let type;
+export let uniqglobalInfo;
+
+
 export async function startAllStatic(objects) {
     console.log('статика')
     const login = document.querySelectorAll('.log')[1].textContent
-
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
@@ -19,38 +19,34 @@ export async function startAllStatic(objects) {
     const timeOld = interval[1]
     const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow, login)
-    console.log(res)
-    globalInfo.quantityTS = array.length,
-        globalInfo.quantityTSjob = res.quantityTSjob
-    globalInfo.probeg = res.probeg
-    globalInfo.rashod = res.rashod
-    globalInfo.zapravka = res.zapravka;
-    globalInfo.lifting = res.lifting;
-    globalInfo.jobHours = res.moto;
-    globalInfo.prostoy = res.prostoy;
-    globalInfo.medium = res.medium;
-    globalInfo.hhOil = res.hhOil;
-    const arr = Object.values(globalInfo)
+    uniqglobalInfo = res.uniq
+    console.log(uniqglobalInfo)
+    const globalInfo = {};
+    globalInfo.quantityTS = array.length
+    for (const prop in res.uniq) {
+        const subObj = res.uniq[prop];
+        for (const subProp in subObj) {
+            globalInfo[subProp] = (globalInfo[subProp] || 0) + subObj[subProp];
+        }
+    }
+    globalInfo.motoHours = timesDate(globalInfo.motoHours)
+    globalInfo.prostoy = timesFormat(globalInfo.prostoy)
+    globalInfo.medium = Number((globalInfo.medium / globalInfo.quantityTSjob).toFixed(2))
+    delete globalInfo.nameCar
+    delete globalInfo.type
+    console.log(globalInfo);
+
+    const propOrder = ["quantityTS", "quantityTSjob", 'probeg', "rashod", "zapravka", "lifting", "motoHours", "prostoy", "medium", "hhOil"];
+    const arr = propOrder.map(prop => globalInfo[prop]);
     const todayValue = document.querySelectorAll('.today_value')
     arr.forEach((e, index) => {
         todayValue[index].textContent = (e !== undefined && e !== null) ? e : '-'
     })
 }
 async function loadValue(array, timeOld, timeNow, login) {
-    let countTS = 0;
-    let probeg = 0;
-    let rashod = 0;
-    let lifting = 0
-    let zapravka = 0;
-    let hhOil = 0;
-    let motoTime = [];
-    let motoTimeProstoy = [];
-    let jobTS = []
+    const uniqObject = {};
     for (const e of array) {
-        let sumRashod = 0;
-        let sumZapravka = 0;
-        let motoTimeIter;
-        let motoProstoy;
+        let lifting = 0
         let prostoyHH;
         const time = [];
         const speed = [];
@@ -76,10 +72,12 @@ async function loadValue(array, timeOld, timeNow, login) {
             const probegNow = Number((itog.messages[itog.messages.length - 1].p.can_mileage).toFixed(0));
             const probegDay = probegNow - probegZero;
             if (probegDay > 5) {
-                countTS++;
-                probeg += probegDay
-                jobTS.push(idw)
+                uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 1, probeg: probegDay };
             }
+            else {
+                uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 0, probeg: probegDay };
+            }
+
             const sensArr = await fnPar(idw)
             const nameSens = await fnParMessage(idw)
             const allArrNew = [];
@@ -101,41 +99,31 @@ async function loadValue(array, timeOld, timeNow, login) {
                 if (it.sens.startsWith('Топливо')) {
                     oil.push(it.value)
                     const res = rashodCalc(it)
-                    sumRashod += res[0].rashod;
-                    sumZapravka += res[0].zapravka;
+                    uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
                 }
                 if (it.sens.startsWith('Подъем')) {
                     it.value > 0 ? console.log(it.value) : null
                     it.value >= 33 ? lifting++ : 0
+
                 }
                 if (it.sens.startsWith('Зажигание')) {
                     hh.push(it)
                     const res = moto(it);
-                    motoTimeIter = res.moto
-                    motoProstoy = res.prostoy
+                    const prostoyHours = res.prostoy.reduce((acc, el) => acc + el, 0)
+                    uniqObject[idw] = { ...uniqObject[idw], lifting: lifting, motoHours: res.moto, prostoy: prostoyHours };
                 }
             })
             hh[0].oil = oil[0]
             const oneArrayOil = hh.filter(el => !el.sens.startsWith('Топливо'));
-            const info = oilHH(oneArrayOil[0]);
-            prostoyHH = info
+            prostoyHH = oilHH(oneArrayOil[0]);
 
         } catch (error) {
             console.log(error);
         }
-        motoTime.push(motoTimeIter)
-        motoProstoy ? motoTimeProstoy.push(motoProstoy) : null
-        hhOil += prostoyHH
-        rashod += sumRashod;
-        zapravka += sumZapravka;
+        const medium = Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2))
+        uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: 'samosval' }
     }
-    const mergedArr = (motoTimeProstoy || []).length > 1
-        ? motoTimeProstoy[0].concat(motoTimeProstoy[1]).reduce((acc, el) => acc + el, 0)
-        : motoTimeProstoy.reduce((acc, el) => acc + el, 0);
-    const prostoy = timesFormat(mergedArr)
-    const motoHours = timesDate(motoTime)
-    const medium = Number(((rashod / probeg) * 100).toFixed(2))
-    return { quantityTSjob: countTS, probeg: probeg, rashod: rashod, zapravka: zapravka, lifting: lifting, jobTS: jobTS, medium: medium, moto: motoHours, prostoy: prostoy, hhOil: hhOil }
+    return { uniq: uniqObject }
 }
 
 function oilHH(data) {
@@ -179,7 +167,6 @@ function oilHH(data) {
     timeProstoy.forEach(it => {
         if (it.time[0] !== undefined) {
             const diffInSeconds = (it.time[1].getTime() - it.time[0].getTime()) / 1000;
-            console.log(diffInSeconds)
             if (diffInSeconds > 600) {
                 oilProstoy.push(it.oil[0] - it.oil[1])
             }
@@ -191,9 +178,14 @@ function oilHH(data) {
 
 function timesDate(dates) {
     let totalMs;
-    const [date1, date2] = dates.map(dateStr => dateStr);
-    const diffMs = date2 + date1; // разница между датами в миллисекундах
-    totalMs = diffMs;
+    if (dates.length > 1) {
+        const [date1, date2] = dates.map(dateStr => dateStr);
+        const diffMs = date2 + date1; // разница между датами в миллисекундах
+        totalMs = diffMs;
+    }
+    else {
+        totalMs = dates;
+    }
     const totalSeconds = Math.floor(totalMs / 1000);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);

@@ -23,4 +23,15 @@ exports.techViewAll = async (req, res) => {
 }
 
 
+exports.summary = async (req, res) => {
+    const idw = req.body.idw
+    const arr = req.body.arrayInfo
+    const data = req.body.data
+    console.log(idw, arr, data)
+    const result = await databaseService.summaryToBase(idw, arr, data)
+    res.json(result)
+}
+
+
+
 

@@ -660,3 +660,33 @@ module.exports.techViewAllToBase = (idw) => {
         }
     })
 }
+
+module.exports.summaryToBase = (idw, arr, data) => {
+    const value = []
+    value.push(idw)
+    value.push(data)
+    value.push(arr.type)
+    value.push(arr.nameCar)
+    value.push(arr.quantityTSjob)
+    value.push(arr.probeg)
+    value.push(arr.rashod)
+    value.push(arr.zapravka)
+    value.push(arr.lifting)
+    value.push(arr.motoHours)
+    value.push(arr.prostoy)
+    value.push(arr.medium)
+    value.push(arr.hhOil)
+    console.log(value)
+    return new Promise((resolve, reject) => {
+        try {
+            const sql = `INSERT INTO  summary(idw, data, type, nameCar, jobTS, probeg, rashod, zapravka, dumpTrack,moto, prostoy, medium, oilHH) VALUES?`;
+            connection.query(sql, [[value]], function (err, results) {
+                if (err) console.log(err)
+                resolve(results)
+            })
+        }
+        catch (e) {
+            console.log(e)
+        }
+    })
+}

@@ -1,7 +1,7 @@
 
 import { loadParamsViewList, conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
-import { startAllStatic, globalInfo, type } from './startAllStatic.js'
+import { startAllStatic, uniqglobalInfo } from './startAllStatic.js'
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
 /*
@@ -50,23 +50,38 @@ export async function zapros(login) {
     }
 
 
-
-
     const processDataAtMidnight = () => {
         const now = new Date();
+        //  console.log(now)
+        const date = new Date(now);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const data = `${year}-${month}-${day}`;
         // Проверяем, что время - 23:59:00
-        if (now.getHours() === 12 && now.getMinutes() === 26 && now.getSeconds() === 0) {
+        if (now.getHours() === 23 && now.getMinutes() === 59 && now.getSeconds() === 50) {
             // Обрабатываем данные
-            console.log(globalInfo)
-            console.log('Processing data at midnight...');
+            console.log(Object.entries(uniqglobalInfo))
+            const arraySummary = Object.entries(uniqglobalInfo)
 
-            // Записываем данные в базу SQL
-            // ...
+            arraySummary.forEach(async el => {
+                const idw = el[0]
+                const arrayInfo = el[1]
+                const params = {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: (JSON.stringify({ idw, arrayInfo, data }))
+
+                }
+                const mods = await fetch('/api/summary', params)
+                const models = await mods.json()
+                console.log(models)
+            })
         }
     };
-
-    // Запуск функции каждую секунду
-    //setInterval(processDataAtMidnight, 1000)
+    setInterval(processDataAtMidnight, 1000)
 
 
     /*
