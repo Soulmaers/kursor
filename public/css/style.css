@@ -1843,6 +1843,7 @@ div.spoyler {
   -moz-appearance: none;
   appearance: none;
   text-align: center;
+  cursor: pointer;
 }
 
 .select_summary:focus {
@@ -4132,6 +4133,7 @@ input[type=range]:focus::-ms-fill-upper {
 .flatpickr-wrapper {
   margin: 5px 0
 }
+
 
 .input_interval {
   margin-top: 5px;
