@@ -63,6 +63,7 @@ async function loadValue(array, timeOld, timeNow, login) {
         try {
             const res = await fetch('/api/loadInterval', param);
             const itog = await res.json();
+            console.log(itog)
             itog.messages.forEach(el => {
                 const timestamp = el.t;
                 const date = new Date(timestamp * 1000);
@@ -277,6 +278,7 @@ function rashodCalc(data) {
             if (resArray.length !== 0) {
                 zapravka.push({ start: resArray[0], end: [data.value[i], data.time[i]] })
                 if (zapravka.length === 1) {
+                    console.log([data.value[i], data.time[i]])
                     ras.push([{ start: [data.value[0], data.time[0]], end: [resArray[0][0], resArray[0][1]] }])
                     ras.push([{ start: [data.value[i], data.time[i]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
                 }
@@ -297,6 +299,7 @@ function rashodCalc(data) {
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
     console.log(zapravka)
     console.log(ras)
+
     const potracheno = sum - rashod >= 0 ? sum - rashod : 0;
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
     console.log(potracheno)
