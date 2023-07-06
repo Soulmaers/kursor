@@ -1775,6 +1775,13 @@ div.spoyler {
   background-size: cover;
 }
 
+.logosamosval-pricep {
+  width: 100%;
+  height: 40%;
+  background-image: url(../image/logosamosval-pricep.png);
+  background-size: cover;
+}
+
 .table_dannie {
   width: 100%;
   height: 60%;
@@ -1860,7 +1867,8 @@ div.spoyler {
   text-align: center;
 }
 
-.option_sam {
+.option_sam,
+.option_sam_pr {
   font-weight: bold;
   font-size: 0.8rem;
   font-family: Roboto;

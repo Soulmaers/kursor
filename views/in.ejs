@@ -102,9 +102,6 @@
                 </div>
             </div>
         </div>
-
-
-
         <section class="sections">
             <div class="wrapList">
                 <div class="list_att">
@@ -166,23 +163,21 @@
             </div>
         </section>
         <div class="start">
-            <div class="content_card fura">
-            </div>
-            <div class="content_card samosval">
+            <div class="content_card samosval-pricep">
                 <div class="left_block">
-                    <div class="foto_car logosamosval"></div>
+                    <div class="foto_car logosamosval-pricep"></div>
                     <div class="table_dannie">
                         <div class="title_interval">
                             <div class="tacs name_interval">Параметры</div>
                             <div class="tac today">Сегодня</div>
                             <div class="tac select_dannie"><select class="select_summary">
-                                    <option class="option_sam" selected value="0">Вчера</option>
-                                    <option class="option_sam" value="1">Неделя</option>
-                                    <option class="option_sam" value="2">Месяц</option>
-                                    <option class="option_sam" value="3">Выбрать дату</option>
+                                    <option class="option_sam_pr" selected value="0">Вчера</option>
+                                    <option class="option_sam_pr" value="1">Неделя</option>
+                                    <option class="option_sam_pr" value="2">Месяц</option>
+                                    <option class="option_sam_pr" value="3">Выбрать дату</option>
                                 </select></div>
                         </div>
-                        <ul class="table_pokazateli">
+                        <ul class="table_pokazateli" rel="Самосвал-Прицеп">
                             <li class="li_table">
                                 <div class="tacs name_list">Общее количество ТС</div>
                                 <div class="tac today_value">-</div>
@@ -236,19 +231,83 @@
                         </ul>
                     </div>
                 </div>
-
-
-
-
-
-
-
                 <div class="rigth_block">
                     <div class="dash_up"></div>
                     <div class="dash_down"></div>
                 </div>
-
-
+            </div>
+            <div class="content_card samosval">
+                <div class="left_block">
+                    <div class="foto_car logosamosval"></div>
+                    <div class="table_dannie">
+                        <div class="title_interval">
+                            <div class="tacs name_interval">Параметры</div>
+                            <div class="tac today">Сегодня</div>
+                            <div class="tac select_dannie"><select class="select_summary">
+                                    <option class="option_sam" selected value="0">Вчера</option>
+                                    <option class="option_sam" value="1">Неделя</option>
+                                    <option class="option_sam" value="2">Месяц</option>
+                                    <option class="option_sam" value="3">Выбрать дату</option>
+                                </select></div>
+                        </div>
+                        <ul class="table_pokazateli" rel="Самосвал">
+                            <li class="li_table">
+                                <div class="tacs name_list">Общее количество ТС</div>
+                                <div class="tac today_value">-</div>
+                                <div class="tac interval_value">-</div>
+                            </li>
+                            <li class="li_table">
+                                <div class="tacs name_list">Общее количество ТС в работе</div>
+                                <div class="tac today_value">-</div>
+                                <div class="tac interval_value">-</div>
+                            </li>
+                            <li class="li_table">
+                                <div class="tacs name_list">Общий пробег, км.</div>
+                                <div class="tac today_value">-</div>
+                                <div class="tac interval_value">-</div>
+                            </li>
+                            <li class="li_table">
+                                <div class="tacs name_list">Топливо расход, л.</div>
+                                <div class="tac today_value">-</div>
+                                <div class="tac interval_value">-</div>
+                            </li>
+                            <li class="li_table">
+                                <div class="tacs name_list">Топливо заправлено, л.</div>
+                                <div class="tac today_value">-</div>
+                                <div class="tac interval_value">-</div>
+                            </li>
+                            <li class="li_table">
+                                <div class="tacs name_list">Количество разгрузок</div>
+                                <div class="tac today_value">-</div>
+                                <div class="tac interval_value">-</div>
+                            </li>
+                            <li class="li_table">
+                                <div class="tacs name_list">Количество рабочих часов (время работы)</div>
+                                <div class="tac today_value">-</div>
+                                <div class="tac interval_value">-</div>
+                            </li>
+                            <li class="li_table">
+                                <div class="tacs name_list">Количество простоев (время работы на ХХ)</div>
+                                <div class="tac today_value">-</div>
+                                <div class="tac interval_value">-</div>
+                            </li>
+                            <li class="li_table">
+                                <div class="tacs name_list">Средний расход топлива на 100км, л.</div>
+                                <div class="tac today_value">-</div>
+                                <div class="tac interval_value">-</div>
+                            </li>
+                            <li class="li_table">
+                                <div class="tacs name_list">Расход на холостом ходу</div>
+                                <div class="tac today_value">-</div>
+                                <div class="tac interval_value">-</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="rigth_block">
+                    <div class="dash_up"></div>
+                    <div class="dash_down"></div>
+                </div>
             </div>
             <div class="content_card ex"></div>
             <div class="content_card furgon"></div>
@@ -338,6 +397,7 @@
                                 <option class="option_type" disabled selected value="0">Тип ТС</option>
                                 <option class="option_type" value="1">Фура</option>
                                 <option class="option_type" value="2">Самосвал</option>
+                                <option class="option_type" value="2">Самосвал-Прицеп</option>
                                 <option class="option_type" value="4">Фургон</option>
                                 <option class="option_type" value="5">Тягач</option>
                                 <option class="option_type" value="6">Кран</option>
@@ -472,8 +532,6 @@
                         <div class="icon_card toMoto_card" id="toMoto-card" rel="Осталось до ТО">
                             <p class="card_value toMoto_value"></p>
                         </div>
-
-
                     </div>
                 </div>
             </div>

@@ -107,7 +107,7 @@ exports.loadParamsViewList = async (car, el) => {
     const mod = () => {
         return new Promise((resolve, reject) => {
             try {
-                const selectBase = `SELECT osi, trailer,tyres FROM model WHERE idw='${idw}'`
+                const selectBase = `SELECT osi, trailer,tyres, type FROM model WHERE idw='${idw}'`
                 connection.query(selectBase, async function (err, results) {
                     console.log(err)
                     resolve({ result: results, message: car })

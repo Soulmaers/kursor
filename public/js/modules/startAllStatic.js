@@ -11,15 +11,17 @@ export async function startAllStatic(objects) {
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
+    console.log(result)
     const array = result
         .filter(e => e[0].message.startsWith('Sitrack'))
-        // .filter(e => e[5].startsWith('Ромакс') && e[0].message !== 'Цистерна ДТ')
+        //.filter(e => e[5].startsWith('Ромакс') && e[0].message !== 'Цистерна ДТ')
         .map(e => e);
     console.log(array)
     const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow, login)
+    console.log(res)
     uniqglobalInfo = res.uniq
     console.log(uniqglobalInfo)
     const globalInfo = {};
@@ -34,24 +36,34 @@ export async function startAllStatic(objects) {
     globalInfo.prostoy = timesFormat(globalInfo.prostoy)
     globalInfo.medium = globalInfo.quantityTSjob !== 0 ? Number((globalInfo.medium / globalInfo.quantityTSjob).toFixed(2)) : 0
     delete globalInfo.nameCar
+    const val = document.querySelectorAll('.today_value')
+
+    const todayValue = [];
+    val.forEach(el => {
+        console.log(Object.entries(uniqglobalInfo)[0][1].type)
+        if (el.closest(`[rel="${Object.entries(uniqglobalInfo)[0][1].type}"]`)) {
+            todayValue.push(el)
+        }
+    })
     delete globalInfo.type
-    console.log(globalInfo);
 
     const propOrder = ["quantityTS", "quantityTSjob", 'probeg', "rashod", "zapravka", "lifting", "motoHours", "prostoy", "medium", "hhOil"];
     const arr = propOrder.map(prop => globalInfo[prop]);
-    const todayValue = document.querySelectorAll('.today_value')
+
     arr.forEach((e, index) => {
         todayValue[index].textContent = (e !== undefined && e !== null) ? e : '-'
     })
 }
 async function loadValue(array, timeOld, timeNow, login) {
     const uniqObject = {};
+    console.log(array)
     for (const e of array) {
         let lifting = 0
         let prostoyHH;
         const time = [];
         const speed = [];
         const idw = e[4];
+        console.log(idw)
         const param = {
             method: "POST",
             headers: {
@@ -70,8 +82,9 @@ async function loadValue(array, timeOld, timeNow, login) {
                 time.push(new Date(isoString))
                 speed.push(el.pos.s)
             })
-            const probegZero = itog.messages[0].p.can_mileage ? Number((itog.messages[0].p.can_mileage).toFixed(0)) : itog.messages[0].p.mileage ? Number((itog.messages[0].p.mileage).toFixed(0)) : null;
-            const probegNow = itog.messages[0].p.can_mileage ? Number((itog.messages[itog.messages.length - 1].p.can_mileage).toFixed(0)) : itog.messages[0].p.mileage ? Number((itog.messages[itog.messages.length - 1].p.mileage).toFixed(0)) : null;
+            const probegZero = itog.messages.length !== 0 ? itog.messages[0].p.can_mileage ? Number((itog.messages[0].p.can_mileage).toFixed(0)) : itog.messages[0].p.mileage ? Number((itog.messages[0].p.mileage).toFixed(0)) : 0 : 0;
+            const probegNow = itog.messages.length !== 0 ? itog.messages[0].p.can_mileage ? Number((itog.messages[itog.messages.length - 1].p.can_mileage).toFixed(0)) : itog.messages[0].p.mileage ? Number((itog.messages[itog.messages.length - 1].p.mileage).toFixed(0)) : 0 : 0
+
             const probegDay = probegNow - probegZero;
             if (probegDay > 5) {
                 uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 1, probeg: probegDay };
@@ -105,13 +118,12 @@ async function loadValue(array, timeOld, timeNow, login) {
                         }
                     });
                     oil.push(it.value)
-                    console.log(it)
+
                     const res = it.value !== undefined && it.value.every(item => item >= 0) ? rashodCalc(it) : [{ rashod: 0, zapravka: 0 }]
-                    console.log(res)
+
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
                 }
                 if (it.sens.startsWith('Подъем')) {
-                    it.value > 0 ? console.log(it.value) : null
                     it.value >= 33 ? lifting++ : 0
                 }
                 if (it.sens.startsWith('Зажигание')) {
@@ -130,7 +142,7 @@ async function loadValue(array, timeOld, timeNow, login) {
             console.log(error);
         }
         const medium = uniqObject[idw].probeg !== 0 ? Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2)) : 0
-        uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: 'samosval' }
+        uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: e[0].result[0].type }
     }
     return { uniq: uniqObject }
 }
@@ -267,7 +279,6 @@ function moto(data) {
 }
 
 function rashodCalc(data) {
-    console.log(data)
     const resArray = [];
     const zapravka = [];
     const ras = [];
@@ -284,7 +295,6 @@ function rashodCalc(data) {
             if (resArray.length !== 0) {
                 zapravka.push({ start: resArray[0], end: [data.value[i], data.time[i]] })
                 if (zapravka.length === 1) {
-                    console.log([data.value[i], data.time[i]])
                     ras.push([{ start: [data.value[0], data.time[0]], end: [resArray[0][0], resArray[0][1]] }])
                     ras.push([{ start: [data.value[i], data.time[i]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
                 }
@@ -305,10 +315,8 @@ function rashodCalc(data) {
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
     console.log(zapravka)
     console.log(ras)
-
     const potracheno = sum - rashod >= 0 ? sum - rashod : 0;
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
-    console.log(potracheno)
     return [{ rashod: potracheno, zapravka: zapravleno }]
 }
 
@@ -349,7 +357,6 @@ export async function yesterdaySummary(objects) {
         }
         const mods = await fetch('/api/summaryYestoday', params)
         const models = await mods.json()
-        console.log(models)
         if (models.length === 0) {
             return
         }
@@ -364,6 +371,14 @@ export async function yesterdaySummary(objects) {
             globalInfo[subProp] = (globalInfo[subProp] || 0) + subObj[subProp];
         }
     }
+    const val = document.querySelectorAll('.interval_value')
+    const intervalValue = [];
+    console.log(objectUniq)
+    val.forEach(el => {
+        if (el.closest(`[rel="${Object.entries(objectUniq)[0][1].type}"]`)) {
+            intervalValue.push(el)
+        }
+    })
     delete globalInfo.id
     delete globalInfo.idw
     delete globalInfo.nameCar
@@ -374,7 +389,7 @@ export async function yesterdaySummary(objects) {
     globalInfo.prostoy = timesFormat(globalInfo.prostoy)
     const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
     const arr = propOrder.map(prop => globalInfo[prop]);
-    const intervalValue = document.querySelectorAll('.interval_value')
+
     arr.forEach((e, index) => {
         intervalValue[index].textContent = (e !== undefined && e !== null) ? e : '-'
     })
