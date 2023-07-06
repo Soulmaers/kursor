@@ -694,11 +694,11 @@ module.exports.summaryToBase = (idw, arr, data) => {
 
 
 
-module.exports.summaryYestodayToBase = (idw, data) => {
-    console.log(idw, data)
+module.exports.summaryYestodayToBase = (data) => {
+    // console.log(idw, data)
     return new Promise((resolve, reject) => {
         try {
-            const selectBase = `SELECT * FROM summary WHERE idw=${idw} AND data='${data}'`
+            const selectBase = `SELECT * FROM summary WHERE data='${data}'`
             connection.query(selectBase, function (err, results) {
                 if (err) console.log(err)
                 resolve(results)

@@ -42,7 +42,7 @@ export async function zapros(login) {
     conturTest(arrayList)
     startAllStatic(arrayList)
     setInterval(startAllStatic, 300000, arrayList)
-    yesterdaySummary(arrayList);
+    yesterdaySummary();
     //передаем имена объектов для отображения в панели администратора
     checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')

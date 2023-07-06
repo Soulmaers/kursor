@@ -329,7 +329,7 @@ function timefn() {
     return [timeNow, timeOld]
 }
 
-export async function yesterdaySummary(objects) {
+export async function yesterdaySummary() {
     const now = new Date();
     const yesterday = new Date(now);
     yesterday.setDate(now.getDate() - 1);
@@ -337,71 +337,65 @@ export async function yesterdaySummary(objects) {
     const month = String(yesterday.getMonth() + 1).padStart(2, '0');
     const day = String(yesterday.getDate()).padStart(2, '0');
     const data = `${year}-${month}-${day}`;
-    const result = objects
-        .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
-        .flat()
-    const array = result
-        //   .filter(e => e[0].message.startsWith('Sitrack'))
-        .filter(e => e[6].startsWith('Самосвал'))
-        .map(e => e);
     const objectUniq = {};
-    for (const e of array) {
-        const idw = e[4]
-        const params = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ idw, data }))
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ data }))
+    }
+    const mods = await fetch('/api/summaryYestoday', params)
+    const models = await mods.json()
+    console.log(models)
+    if (models.length === 0) {
+        console.log('нет данных по объектам в базе')
+    }
+    else {
+        for (let i = 0; i < models.length; i++) {
+            objectUniq[models[i].idw] = models[i];
         }
-        const mods = await fetch('/api/summaryYestoday', params)
-        const models = await mods.json()
-        if (models.length === 0) {
-            console.log('нет данных по объектам в базе')
-        }
-        else {
-            objectUniq[models[0].idw] = models[0]
-            const globalInfo = {};
-            for (const prop in objectUniq) {
-                const subObj = objectUniq[prop];
-                if (subObj.type) {
-                    if (globalInfo[subObj.type]) {
-                        for (const subProp in subObj) {
-                            if (subProp !== 'type') {
-                                globalInfo[subObj.type][subProp] = (globalInfo[subObj.type][subProp] || 0) + subObj[subProp];
-                            }
+        console.log(objectUniq)
+        const globalInfo = {};
+        for (const prop in objectUniq) {
+            const subObj = objectUniq[prop];
+            if (subObj.type) {
+                if (globalInfo[subObj.type]) {
+                    for (const subProp in subObj) {
+                        if (subProp !== 'type') {
+                            globalInfo[subObj.type][subProp] = (globalInfo[subObj.type][subProp] || 0) + subObj[subProp];
                         }
-                        globalInfo[subObj.type].quantityTS = (globalInfo[subObj.type].quantityTS || 0) + 1;
                     }
-                    else {
-                        globalInfo[subObj.type] = Object.assign({}, subObj);
-                        globalInfo[subObj.type].quantityTS = 1;
-                    }
+                    globalInfo[subObj.type].quantityTS = (globalInfo[subObj.type].quantityTS || 0) + 1;
+                }
+                else {
+                    globalInfo[subObj.type] = Object.assign({}, subObj);
+                    globalInfo[subObj.type].quantityTS = 1;
                 }
             }
-            for (const prop in globalInfo) {
-                if (globalInfo[prop].type) {
-                    globalInfo[prop].quantityTS = Object.values(objectUniq).filter(subObj => subObj.type === globalInfo[prop].type).length;
-                }
-            }
-            Object.entries(globalInfo).forEach(el => {
-                el[1].moto = timesDate(el[1].moto)
-                el[1].prostoy = timesFormat(el[1].prostoy)
-                el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / el[1].jobTS).toFixed(2)) : 0
-                delete el[1].id
-                delete el[1].idw
-                delete el[1].nameCar
-                delete el[1].type
-                delete el[1].data
-            })
-            const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
-            Object.entries(globalInfo).forEach(it => {
-                const arr = propOrder.map(prop => it[1][prop]);
-                const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
-                arr.forEach((e, index) => {
-                    parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-'
-                })
-            })
         }
+        for (const prop in globalInfo) {
+            if (globalInfo[prop].type) {
+                globalInfo[prop].quantityTS = Object.values(objectUniq).filter(subObj => subObj.type === globalInfo[prop].type).length;
+            }
+        }
+        Object.entries(globalInfo).forEach(el => {
+            el[1].moto = timesDate(el[1].moto)
+            el[1].prostoy = timesFormat(el[1].prostoy)
+            el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / el[1].jobTS).toFixed(2)) : 0
+            delete el[1].id
+            delete el[1].idw
+            delete el[1].nameCar
+            delete el[1].type
+            delete el[1].data
+        })
+        const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
+        Object.entries(globalInfo).forEach(it => {
+            const arr = propOrder.map(prop => it[1][prop]);
+            const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
+            arr.forEach((e, index) => {
+                parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-'
+            })
+        })
     }
 }
