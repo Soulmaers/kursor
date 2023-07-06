@@ -21,17 +21,30 @@ export async function startAllStatic(objects) {
     const res = await loadValue(array, timeOld, timeNow, login)
     uniqglobalInfo = res.uniq
     const globalInfo = {};
+    console.log(res.uniq)
     for (const prop in res.uniq) {
-        const subObj = res.uniq[prop]; if (subObj.type) {
+        const subObj = res.uniq[prop];
+        if (subObj.type) {
             if (globalInfo[subObj.type]) {
-                for (const subProp in subObj) { if (subProp !== 'type') { globalInfo[subObj.type][subProp] = (globalInfo[subObj.type][subProp] || 0) + subObj[subProp]; } }
+                for (const subProp in subObj) {
+                    if (subProp !== 'type') {
+                        globalInfo[subObj.type][subProp] = (globalInfo[subObj.type][subProp] || 0) + subObj[subProp];
+                    }
+                }
                 globalInfo[subObj.type].quantityTS = (globalInfo[subObj.type].quantityTS || 0) + 1;
             }
             else {
                 globalInfo[subObj.type] = Object.assign({}, subObj);
+                globalInfo[subObj.type].quantityTS = 1;
             }
         }
     }
+    for (const prop in globalInfo) {
+        if (globalInfo[prop].type) {
+            globalInfo[prop].quantityTS = Object.values(res.uniq).filter(subObj => subObj.type === globalInfo[prop].type).length;
+        }
+    }
+    console.log(globalInfo)
     Object.entries(globalInfo).forEach(el => {
         el[1].motoHours = timesDate(el[1].motoHours)
         el[1].prostoy = timesFormat(el[1].prostoy)
@@ -56,7 +69,6 @@ async function loadValue(array, timeOld, timeNow, login) {
         const time = [];
         const speed = [];
         const idw = e[4];
-        console.log(idw)
         const param = {
             method: "POST",
             headers: {
@@ -117,7 +129,6 @@ async function loadValue(array, timeOld, timeNow, login) {
                 if (it.sens.startsWith('Зажигание')) {
                     hh.push(it)
                     const res = moto(it);
-                    console.log(res)
                     const prostoyHours = res.prostoy.reduce((acc, el) => acc + el, 0)
                     uniqObject[idw] = { ...uniqObject[idw], lifting: lifting, motoHours: res.moto, prostoy: prostoyHours };
                 }
@@ -131,7 +142,6 @@ async function loadValue(array, timeOld, timeNow, login) {
         }
         const medium = uniqObject[idw].probeg !== 0 ? Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2)) : 0
         uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: e[0].result[0].type }
-        console.log(uniqObject[idw])
     }
     return { uniq: uniqObject }
 }
@@ -218,6 +228,7 @@ function moto(data) {
     const prostoy = [];
     const korzina = [];
     let startIndex = 0;
+    console.log(data)
     data.value.forEach((values, index) => {
         if (values !== data.value[startIndex]) {
             const subarray = data.time.slice(startIndex, index);
