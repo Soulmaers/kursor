@@ -183,6 +183,7 @@ function oilHH(data) {
     const timeProstoy = filteredData.map(el => {
         return { time: [el.time[0], el.time[el.time.length - 1]], oil: [el.oil[0], el.oil[el.oil.length - 1]], speed: [el.speed[0], el.speed[el.speed.length - 1]] }
     })
+    console.log(filteredData)
     const oilProstoy = [];
     timeProstoy.forEach(it => {
         if (it.time[0] !== undefined) {
@@ -256,6 +257,7 @@ function moto(data) {
         return { speed: newS, time: timet };
     });
 
+
     const timeProstoy = filteredData.map(el => {
         return [el.time[0], el.time[el.time.length - 1]]
     })
@@ -278,6 +280,7 @@ function moto(data) {
 }
 
 function rashodCalc(data) {
+    console.log(data)
     const resArray = [];
     const zapravka = [];
     const ras = [];
@@ -293,28 +296,37 @@ function rashodCalc(data) {
         else {
             if (resArray.length !== 0) {
                 zapravka.push({ start: resArray[0], end: [data.value[i], data.time[i]] })
+                if (zapravka.length === 0) {
+                    ras.push([{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
+                }
                 if (zapravka.length === 1) {
                     ras.push([{ start: [data.value[0], data.time[0]], end: [resArray[0][0], resArray[0][1]] }])
                     ras.push([{ start: [data.value[i], data.time[i]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
                 }
                 else {
                     ras.pop();
+                    const count = zapravka.length - 1
+                    console.log(count)
                     ras.push([{ start: [zapravka[0].end[0], [zapravka[0].end[1]]], end: [resArray[0][0], resArray[0][1]] }])
                     ras.push([{ start: [data.value[i], data.time[i]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
                 }
                 resArray.length = 0
             }
+
         }
+
+
     }
-    //if (zapravka.length === 0) {
-    //  ras.push([{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
-    // }
+
     console.log(zapravka)
     console.log(ras)
     const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
-    const potracheno = sum - rashod >= 0 ? sum - rashod : 0;
+    console.log(sum)
+    console.log(rashod)
+    const potracheno = sum - rashod >= 0 && ras.length !== 0 ? sum - rashod : 0;
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
+    console.log(potracheno)
     return [{ rashod: potracheno, zapravka: zapravleno }]
 }
 
@@ -411,6 +423,6 @@ selectSummary.forEach(el => {
         const selectedOption = selectSummary.options[selectSummary.selectedIndex];
         const selectedText = selectedOption.text;
         console.log(selectedText, type)
-        // yesterdaySummary(selectedText, type)
+        yesterdaySummary(selectedText, type)
     });
 })
