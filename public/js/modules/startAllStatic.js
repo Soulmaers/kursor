@@ -363,14 +363,25 @@ export async function yesterdaySummary(objects) {
             objectUniq[models[0].idw] = models[0]
             const globalInfo = {};
             for (const prop in objectUniq) {
-                const subObj = objectUniq[prop]; if (subObj.type) {
+                const subObj = objectUniq[prop];
+                if (subObj.type) {
                     if (globalInfo[subObj.type]) {
-                        for (const subProp in subObj) { if (subProp !== 'type') { globalInfo[subObj.type][subProp] = (globalInfo[subObj.type][subProp] || 0) + subObj[subProp]; } }
+                        for (const subProp in subObj) {
+                            if (subProp !== 'type') {
+                                globalInfo[subObj.type][subProp] = (globalInfo[subObj.type][subProp] || 0) + subObj[subProp];
+                            }
+                        }
                         globalInfo[subObj.type].quantityTS = (globalInfo[subObj.type].quantityTS || 0) + 1;
                     }
                     else {
                         globalInfo[subObj.type] = Object.assign({}, subObj);
+                        globalInfo[subObj.type].quantityTS = 1;
                     }
+                }
+            }
+            for (const prop in globalInfo) {
+                if (globalInfo[prop].type) {
+                    globalInfo[prop].quantityTS = Object.values(objectUniq).filter(subObj => subObj.type === globalInfo[prop].type).length;
                 }
             }
             Object.entries(globalInfo).forEach(el => {
