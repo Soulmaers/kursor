@@ -287,7 +287,7 @@ function rashodCalc(data) {
     for (let i = 0; i < data.value.length - 5; i++) {
         data.value[i] === 0 ? data.value[i] = data.value[i - 1] : data.value[i] = data.value[i]
         data.value[i + 1] === 0 ? data.value[i + 1] = data.value[i - 1] : data.value[i + 1] = data.value[i + 1]
-        if (data.value[i] <= data.value[i + 1]) {
+        if (data.value[i] < data.value[i + 1]) {
             let oneNum = data.value[i]
             let fiveNum = data.value[i + 5]
             const res = fiveNum - oneNum
@@ -312,6 +312,7 @@ function rashodCalc(data) {
                 }
                 resArray.length = 0
             }
+
 
         }
 
