@@ -228,7 +228,6 @@ function moto(data) {
     const prostoy = [];
     const korzina = [];
     let startIndex = 0;
-    console.log(data)
     data.value.forEach((values, index) => {
         if (values !== data.value[startIndex]) {
             const subarray = data.time.slice(startIndex, index);
@@ -307,13 +306,13 @@ function rashodCalc(data) {
             }
         }
     }
-    if (zapravka.length === 0) {
-        ras.push([{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
-    }
-    const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
-    const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
+    //if (zapravka.length === 0) {
+    //  ras.push([{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
+    // }
     console.log(zapravka)
     console.log(ras)
+    const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
+    const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
     const potracheno = sum - rashod >= 0 ? sum - rashod : 0;
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
     return [{ rashod: potracheno, zapravka: zapravleno }]
@@ -329,14 +328,16 @@ function timefn() {
     return [timeNow, timeOld]
 }
 
-export async function yesterdaySummary() {
+export async function yesterdaySummary(interval, type) {
+    console.log('запросик')
     const now = new Date();
     const yesterday = new Date(now);
-    yesterday.setDate(now.getDate() - 1);
+    !interval && !type ? yesterday.setDate(now.getDate() - 1) : yesterday.setDate(now.getDate() - 7);
     const year = yesterday.getFullYear();
     const month = String(yesterday.getMonth() + 1).padStart(2, '0');
     const day = String(yesterday.getDate()).padStart(2, '0');
     const data = `${year}-${month}-${day}`;
+    console.log(data)
     const objectUniq = {};
     const params = {
         method: "POST",
@@ -399,3 +400,17 @@ export async function yesterdaySummary() {
         })
     }
 }
+
+
+
+const selectSummary = document.querySelectorAll('.select_summary');
+selectSummary.forEach(el => {
+    el.addEventListener('change', function () {
+        const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
+        console.log(type)
+        const selectedOption = selectSummary.options[selectSummary.selectedIndex];
+        const selectedText = selectedOption.text;
+        console.log(selectedText, type)
+        // yesterdaySummary(selectedText, type)
+    });
+})
