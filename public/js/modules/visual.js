@@ -46,7 +46,8 @@ export async function visual(el) {
     ign_value.textContent = ''
     oborotValue.textContent = ''
 
-
+    const selectType = document.querySelector('.select_type')
+    selectType.style.display = 'none'
     const starts = document.querySelector('.start')
     starts.style.display = 'none'
     const checkConfig = document.getElementById('check_Title')

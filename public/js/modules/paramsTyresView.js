@@ -49,6 +49,18 @@ export async function loadParamsView() {
 
 }
 function createViewModel(model) {
+    const type = model[0].type
+    const selectType = document.querySelector('.select_type')
+    selectType.style.display = 'flex'
+    Array.from(selectType.children).forEach(el => {
+        if (type !== el.textContent) {
+            el.hidden = true;
+        } else {
+            selectType.selectedIndex = el.index;
+        }
+    });
+    console.log(selectType.children[1].textContent)
+    console.log(model)
     const containerAll = document.querySelector('.containerAll')
     if (containerAll) {
         containerAll.remove()

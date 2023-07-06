@@ -11,7 +11,6 @@ export async function startAllStatic(objects) {
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
-
     const array = result
         .filter(e => e[0].message.startsWith('Sitrack'))
         // .filter(e => e[5].startsWith('Ромакс') && e[0].message !== 'Цистерна ДТ')
@@ -99,8 +98,14 @@ async function loadValue(array, timeOld, timeNow, login) {
             const oil = [];
             const hh = [];
             allArrNew.forEach(it => {
-                if (it.sens === 'Топливо') {
+                if (it.sens.startsWith('Топливо')) {
+                    it.value.forEach((e, i) => {
+                        if (e === -348201) {
+                            it.value[i] = it.value[i - 1];
+                        }
+                    });
                     oil.push(it.value)
+                    console.log(it)
                     const res = it.value !== undefined && it.value.every(item => item >= 0) ? rashodCalc(it) : [{ rashod: 0, zapravka: 0 }]
                     console.log(res)
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
@@ -262,6 +267,7 @@ function moto(data) {
 }
 
 function rashodCalc(data) {
+    console.log(data)
     const resArray = [];
     const zapravka = [];
     const ras = [];

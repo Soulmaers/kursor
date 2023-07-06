@@ -1,6 +1,6 @@
 
 
-
+const login = document.querySelectorAll('.log')[1].textContent
 export function postTyres(tyres) {
     console.log('ченчбэйстайрес')
     console.log(tyres)
@@ -162,7 +162,7 @@ export async function viewBar(id) {
 import { zapros } from './menu.js'
 
 //конфигуратор оси
-export async function changeBase(massModel, activePost, idw) {
+export async function changeBase(massModel, activePost, idw, type) {
     // const containerAlt = document.querySelector('.containerAlt')
     //  containerAlt.remove()
     console.log('ченчбэйс')
@@ -187,7 +187,7 @@ export async function changeBase(massModel, activePost, idw) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ massModel, idw, activePost, gosp, gosp1, frontGosp, frontGosp1 }))
+        body: (JSON.stringify({ massModel, idw, activePost, gosp, gosp1, frontGosp, frontGosp1, type }))
     }
     const res = await fetch('/api/updateModel', param)
     const response = await res.json()
@@ -196,7 +196,7 @@ export async function changeBase(massModel, activePost, idw) {
     const modalCenterOs = document.querySelector('.modalCenterOs')
     modalCenterOs.style.display = 'none'
     console.log(response)
-    zapros();
+    zapros(login);
 }
 
 

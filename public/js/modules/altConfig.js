@@ -11,6 +11,8 @@ export function createConfig() {
     const checkAlt = document.querySelector('.checkAlt')
     checkAlt.style.color = 'red'
     checkAlt.style.fontWeight = 'bold'
+    const selectType = document.querySelector('.select_type')
+    selectType.style.display = 'flex'
     const altConfig = document.querySelector('.altConfig')
     const alt = document.querySelector('.containerAlt')
     const disketa = document.querySelector('.disketa')
@@ -95,6 +97,8 @@ export function createConfig() {
 }
 
 function clearConfig() {
+    const selectType = document.querySelector('.select_type')
+    selectType.style.display = 'none'
     const checkAlt = document.querySelector('.checkAlt')
     checkAlt.style.color = 'black'
     checkAlt.style.fontWeight = '400'

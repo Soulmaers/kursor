@@ -252,12 +252,13 @@ module.exports.alarmFindtoBase = (idw, tyresp) => {
 }
 
 
-exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1) => {
+exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type) => {
     const promises = massiv.map(el => {
         el.push(gosp)
         el.push(gosp1)
         el.push(frontGosp)
         el.push(frontGosp1)
+        el.push(type)
         el.unshift(nameCar)
         el.unshift(idw)
         return new Promise((resolve, reject) => {
@@ -268,7 +269,7 @@ exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontG
                         console.log(err)
                     };
                     if (results.length === 0) {
-                        const selectBase = `INSERT INTO model(idw, nameCar, osi, trailer, tyres, gosp, gosp1, frontGosp, frontGosp1) VALUES?`
+                        const selectBase = `INSERT INTO model(idw, nameCar, osi, trailer, tyres, gosp, gosp1, frontGosp, frontGosp1,type) VALUES?`
                         connection.query(selectBase, [[el]], function (err, results) {
                             if (err) {
                                 console.log(err)
@@ -476,7 +477,7 @@ module.exports.tarirViewToBase = async (idw) => {
 exports.modelViewToBase = (idw) => {
     return new Promise((resolve, reject) => {
         try {
-            const selectBase = `SELECT idw, nameCar, osi, trailer,tyres, gosp, gosp1, frontGosp, frontGosp1 FROM model WHERE  idw ='${idw}'`
+            const selectBase = `SELECT idw, nameCar, osi, trailer,tyres, gosp, gosp1, frontGosp, frontGosp1, type FROM model WHERE  idw ='${idw}'`
             connection.query(selectBase, function (err, results) {
                 if (err) console.log(err)
                 if (results === undefined) {

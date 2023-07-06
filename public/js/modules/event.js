@@ -392,7 +392,13 @@ save.addEventListener('click', () => {
     })
     console.log(arrModel)
     console.log(arrTyres)
-    changeBase(arrModel, activePost, idw)
+    const selectType = document.querySelector('.select_type')
+    const selectedOption = selectType.options[selectType.selectedIndex];
+    const selectedText = selectedOption.text;
+    console.log(selectedText)
+
+
+    changeBase(arrModel, activePost, idw, selectedText)
     postTyres(arrTyres, activePost, idw);
     const sensors = document.querySelector('.sensors')
     sensors.style.display = 'none';
