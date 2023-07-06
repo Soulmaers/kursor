@@ -83,25 +83,6 @@ export async function zapros(login) {
     };
     setInterval(processDataAtMidnight, 1000)
 
-
-    /*
-    const prmss = {
-        "spec": [{
-            "type": 'id',
-            "data": 26821431,//'avl_unit', //26702383,//26702371,
-            "flags": 8388608,//1048576,//1048576,                 //    1048576-шт 8388608-анималс
-            "mode": 0
-        }
-        ]
-    }
-    const remote1s = wialon.core.Remote.getInstance();
-    remote1s.remoteCall('core/update_data_flags', prmss,
-        async function (code, result) {
-            if (code) {
-                console.log(wialon.core.Errors.getErrorText(code));
-            }
-            console.log(result)
-        });*/
 }
 const login = document.querySelectorAll('.log')[1].textContent
 export async function ggg(id) {

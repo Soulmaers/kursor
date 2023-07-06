@@ -378,6 +378,11 @@ save.addEventListener('click', () => {
     const osi = document.querySelectorAll('.osiTest')
     const linkTyres = document.querySelectorAll('.tires_link_test')
     const buttOnConfig = document.querySelectorAll('.buttOnConfig')
+    const go = document.querySelector('.gosNumber')
+    const go1 = document.querySelector('.gosNumber1')
+    const goCar = document.querySelector('.gosNumberCar')
+    const goCar1 = document.querySelector('.gosNumberCar1')
+    console.log(go, go1, goCar, goCar1)
     let index = 0;
     let indexTyres = 0;
     osi.forEach(el => {
@@ -398,7 +403,7 @@ save.addEventListener('click', () => {
     console.log(selectedText)
 
 
-    changeBase(arrModel, activePost, idw, selectedText)
+    changeBase(arrModel, activePost, idw, selectedText, go, go1, goCar, goCar1)
     postTyres(arrTyres, activePost, idw);
     const sensors = document.querySelector('.sensors')
     sensors.style.display = 'none';

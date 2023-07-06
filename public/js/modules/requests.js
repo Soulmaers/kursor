@@ -162,17 +162,12 @@ export async function viewBar(id) {
 import { zapros } from './menu.js'
 
 //конфигуратор оси
-export async function changeBase(massModel, activePost, idw, type) {
+export async function changeBase(massModel, activePost, idw, type, go, go1, goCar, goCar1) {
     // const containerAlt = document.querySelector('.containerAlt')
     //  containerAlt.remove()
     console.log('ченчбэйс')
     console.log(massModel)
     await reqDelete(idw);
-    // await paramsDelete(idw);
-    const go = document.querySelector('.gosNumber')
-    const go1 = document.querySelector('.gosNumber1')
-    const goCar = document.querySelector('.gosNumberCar')
-    const goCar1 = document.querySelector('.gosNumberCar1')
     let gosp;
     let frontGosp;
     let gosp1;

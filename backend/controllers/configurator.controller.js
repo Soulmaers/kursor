@@ -9,6 +9,7 @@ exports.updateModel = async (req, res) => {
     const frontGosp = req.body.frontGosp
     const frontGosp1 = req.body.frontGosp1
     const type = req.body.type
+    console.log(req.body)
     const message = await databaseService.updateModelSaveToBase(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type)
     res.json({ message: 'успех' })
 }

@@ -102,6 +102,8 @@ async function getTokenFromDB(login) {
 async function updateParams(login) {
     //запрашиваем данные параметры по обектам с виалона
     const data = await wialonService.getDataFromWialon(login)
+    // const type = await wialonService.getAnimalsWialon(login)
+    // console.log(type)
     const nameCar = [];
     const allCar = Object.entries(data)
     allCar[5][1].forEach(async el => {

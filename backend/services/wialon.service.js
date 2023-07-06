@@ -38,6 +38,32 @@ exports.getAllParamsIdDataFromWialon = async (id, login) => {
 };
 
 
+exports.getAnimalsWialon = async (login) => {
+
+    const prms = {
+        "spec": [{
+            "type": 'id',
+            "data": 26702371,//'avl_unit', //26702383,//26702371,
+            "flags": 1048576,//8388608,//1048576,//1048576,                 //    1048576-шт 8388608-анималс
+            "mode": 0
+        }
+        ]
+    }
+    return new Promise(async function (resolve, reject) {
+        const session = await getSessiont(login);
+        session.request('core/update_data_flags', prms)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                resolve(data)
+            });
+
+    })
+
+
+};
+
 //запрос всех сенсоров по id объекта
 exports.getAllSensorsIdDataFromWialon = async (id, timeOld, timeNow, login) => {
     const prms3 = {
