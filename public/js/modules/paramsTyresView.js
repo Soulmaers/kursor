@@ -50,16 +50,26 @@ export async function loadParamsView() {
 }
 function createViewModel(model) {
     const type = model[0].type
+    console.log(type)
     const selectType = document.querySelector('.select_type')
-    selectType.style.display = 'flex'
+    selectType.style.display = type !== '' ? 'flex' : 'none'
     Array.from(selectType.children).forEach(el => {
         if (type !== el.textContent) {
             el.hidden = true;
         } else {
-            selectType.selectedIndex = el.index;
+            selectType.value = el.value;
+            selectType.disabled = true;
+            el.disabled = true;
+            el.selected = true;
+            selectType.style.appearance = 'none';
         }
     });
-    console.log(selectType.children[1].textContent)
+
+    if (selectType.value === '') {
+        selectType.selectedIndex = 0;
+    }
+
+
     console.log(model)
     const containerAll = document.querySelector('.containerAll')
     if (containerAll) {

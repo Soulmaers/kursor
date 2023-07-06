@@ -13,6 +13,15 @@ export function createConfig() {
     checkAlt.style.fontWeight = 'bold'
     const selectType = document.querySelector('.select_type')
     selectType.style.display = 'flex'
+    selectType.style.appearance = '';
+    selectType.selectedIndex = 0;
+    selectType.disabled = false;
+
+    // Отображаем все скрытые элементы
+    Array.from(selectType.children).forEach(el => {
+        el.hidden = false;
+        el.disabled = false;
+    });
     const altConfig = document.querySelector('.altConfig')
     const alt = document.querySelector('.containerAlt')
     const disketa = document.querySelector('.disketa')
