@@ -474,6 +474,16 @@ selectSummary.forEach(el => {
         const selectedOption = el.options[el.selectedIndex];
         const selectedText = selectedOption.text;
         console.log(el.value, type)
-        yesterdaySummary(el.value, type)
+
+        if (el.value.startsWith('Выбрать')) {
+            console.log(el.value)
+            console.log(el.closest('.select_summary').nextElementSibling)
+            el.closest('.select_summary').nextElementSibling.style.display = 'flex'
+        }
+        else {
+            el.closest('.select_summary').nextElementSibling.style.display = 'none'
+            yesterdaySummary(el.value, type)
+        }
+
     });
 })

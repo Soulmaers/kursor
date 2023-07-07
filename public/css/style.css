@@ -1854,6 +1854,20 @@ div.spoyler {
   outline: none;
 }
 
+.table_dannie {
+  position: relative;
+}
+
+.calendar {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  right: 10px;
+  top: 30px;
+  border: 1px solid black;
+  padding: 5px;
+}
+
 .select_type {
   border: none;
   background: none;
@@ -4149,6 +4163,12 @@ input[type="date_int"] {
 .select_interval {
   width: 115px;
   padding: 3px 8px;
+}
+
+.btn_speedStart {
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .btn_speed {

@@ -26,7 +26,6 @@ wrapContaint.appendChild(cont);
 export async function zapros(login) {
     const selectElement = document.querySelectorAll('.select_summary');
     selectElement.forEach(el => {
-        console.log(el[0])
         el[0].selected = true;
     })
     const params = {
