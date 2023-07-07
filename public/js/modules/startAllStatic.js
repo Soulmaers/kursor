@@ -113,7 +113,7 @@ async function loadValue(array, timeOld, timeNow, login) {
             const oil = [];
             const hh = [];
             allArrNew.forEach(it => {
-                if (it.sens.startsWith('Топливо')) {
+                if (it.sens === 'Топливо' || it.sens === 'Топливо ДУТ') {
                     it.value.forEach((e, i) => {
                         if (e === -348201) {
                             it.value[i] = it.value[i - 1];
@@ -280,6 +280,7 @@ function moto(data) {
 }
 
 function rashodCalc(data) {
+    console.log(data)
     const resArray = [];
     const zapravka = [];
     const ras = [];

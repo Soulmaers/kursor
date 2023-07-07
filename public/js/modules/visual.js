@@ -387,10 +387,8 @@ function getHoursDiff(startDate, nowDate) {
     day === 0 ? dayS = '' : dayS = days + 'д ';
     hour === 0 ? hourS = '' : hourS = hour + 'ч ';
     const mess = `${dayS} ${hourS} ${minut} мин`
-    console.log(mess)
     return mess;
 }
-
 
 export function alarmClear() {
     const ogon = document.querySelector('.ogon')
