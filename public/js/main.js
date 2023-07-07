@@ -47,7 +47,13 @@ const mods = await fetch('/getData', params)
 const models = await mods.json()
 console.log(models)
 
+window.addEventListener('DOMContentLoaded', function () {
+    const selectElement = document.querySelectorAll('.select_summary');
+    selectElement.forEach(el => {
+        el.value = 'Вчера';
+    })
 
+})
 zapros(login) //делаем запрос на wialon получаем объекты
 
 
