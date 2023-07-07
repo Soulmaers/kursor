@@ -57,9 +57,7 @@ btnForm.forEach(el =>
     })
 )
 
-
 export async function click() {
-
     if (times.length !== 0) {
         const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
         preloaderGraf.style.opacity = 1;

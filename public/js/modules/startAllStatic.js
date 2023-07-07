@@ -301,7 +301,7 @@ function rashodCalc(data) {
             let oneNum = data.value[i]
             let fiveNum = data.value[i + 5]
             const res = fiveNum - oneNum
-            res > Number((5 / 100.05 * oneNum).toFixed(0)) ? resArray.push([oneNum, data.time[i]]) : null
+            res > Number((3 / 100.3 * oneNum).toFixed(0)) ? resArray.push([oneNum, data.time[i]]) : null
         }
         else {
             if (resArray.length !== 0) {
@@ -431,6 +431,7 @@ export async function yesterdaySummary(interval, type) {
                 globalInfo[prop].jobTS = resultJobTS.filter(subObj => subObj.type === globalInfo[prop].type).length;
             }
         }
+
         Object.entries(globalInfo).forEach(el => {
             el[1].moto = timesDate(el[1].moto)
             el[1].prostoy = timesFormat(el[1].prostoy)
@@ -497,8 +498,6 @@ export function element(el) {
         // console.log(times)
         const btn = el.closest('.select_summary').nextElementSibling.children[1]
         const input = el.closest('.select_summary').nextElementSibling.children[0].children[0]
-
-
         Array.from(btn.children).forEach(elem =>
             elem.addEventListener('click', () => {
                 console.log(elem)
