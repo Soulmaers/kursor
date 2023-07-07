@@ -359,7 +359,6 @@ export async function yesterdaySummary(interval, type) {
     if (interval === 'Месяц') {
         int = 30
     }
-
     console.log('запросик')
     console.log(allObjects)
     const data = [];
@@ -380,12 +379,15 @@ export async function yesterdaySummary(interval, type) {
     const mods = await fetch('/api/summaryYestoday', params)
     const models = await mods.json()
     console.log(models)
-    if (models.length === 0) {
+
+    const mod = type ? models.filter(el => el.type === type) : models
+    console.log(mod)
+    if (mod.length === 0) {
         console.log('нет данных по объектам в базе')
     }
     else {
-        for (let i = 0; i < models.length; i++) {
-            objectUniq[models[i].id] = models[i];
+        for (let i = 0; i < mod.length; i++) {
+            objectUniq[mod[i].id] = mod[i];
         }
         const globalInfo = {};
         for (const prop in objectUniq) {
@@ -405,9 +407,27 @@ export async function yesterdaySummary(interval, type) {
                 }
             }
         }
+
+        const resultTS = Object.values(
+            Object.values(objectUniq).reduce((acc, val) => {
+                acc[val.idw] = Object.assign(acc[val.idw] ?? {}, val);
+
+                return acc;
+            }, {})
+        );
+        const resultJobTS = Object.values(
+            Object.values(objectUniq).reduce((acc, val) => {
+                if (val.jobTS === 1) {
+                    acc[val.idw] = Object.assign(acc[val.idw] ?? {}, val);
+                }
+                return acc;
+            }, {})
+        );
+
         for (const prop in globalInfo) {
             if (globalInfo[prop].type) {
-                globalInfo[prop].quantityTS = Object.values(objectUniq).filter(subObj => subObj.type === globalInfo[prop].type).length;
+                globalInfo[prop].quantityTS = resultTS.filter(subObj => subObj.type === globalInfo[prop].type).length;
+                globalInfo[prop].jobTS = resultJobTS.filter(subObj => subObj.type === globalInfo[prop].type).length;
             }
         }
         Object.entries(globalInfo).forEach(el => {
