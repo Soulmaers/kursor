@@ -465,6 +465,9 @@ function convertDate(num) {
 }
 const selectSummary = document.querySelectorAll('.select_summary');
 selectSummary.forEach(el => {
+    if (el.value !== '0') {
+        selectSummary.value = '0';
+    }
     el.addEventListener('change', function () {
         const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
         console.log(type)
