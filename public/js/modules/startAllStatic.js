@@ -473,7 +473,7 @@ selectSummary.forEach(el => {
         console.log(type)
         const selectedOption = el.options[el.selectedIndex];
         const selectedText = selectedOption.text;
-        console.log(selectedText, type)
-        yesterdaySummary(selectedText, type)
+        console.log(el.value, type)
+        yesterdaySummary(el.value, type)
     });
 })
