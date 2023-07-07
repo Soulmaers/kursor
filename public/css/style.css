@@ -4184,6 +4184,14 @@ input[type="date_int"] {
   cursor: pointer;
 }
 
+.btm_formStart {
+  padding: 5px 8px;
+  color: rgb(28, 123, 160);
+  background-color: #fff;
+  border: 1px solid gray;
+  cursor: pointer;
+}
+
 .control {
   color: #fff;
   background-color: rgb(28, 123, 160);

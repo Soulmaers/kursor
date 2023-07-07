@@ -15,7 +15,7 @@ import { protDash, dashViewProtector } from './charts/protek.js'
 import { getStat } from './charts/stat.js'
 import { conf } from './altConfig.js'
 import { viewTech } from './tech.js'
-
+import { element } from './startAllStatic.js'
 
 const logo = document.querySelector('.logo')
 
@@ -199,16 +199,12 @@ if (configs) {
         const control = document.querySelector('.controll')
         const draggable = new DraggableContainer(control);
 
-
         const controll = document.querySelector('.container_left')
         const config = document.querySelector('.config')
-        // const clear = document.querySelector('.clear')
-        //const comfirm = document.querySelector('.comfirm')
         const sensors = document.querySelector('.sensors')
         controll.style.display = 'flex'
         config.style.display = 'flex'
-        //clear.style.display = 'flex'
-        //comfirm.style.display = 'block';
+
         sensors.style.display = 'none';
         configs.classList.add('conf')
         rotate()
@@ -730,3 +726,14 @@ new DropDownList({ element: document.querySelector(`#input`), btn: document.quer
 
 const altConfig = document.getElementById('check_Title')
 altConfig.addEventListener('change', conf)
+
+
+const selectSummary = document.querySelectorAll('.select_summary');
+selectSummary.forEach(el => {
+    if (el.value !== '0') {
+        selectSummary.value = '0';
+    }
+    el.addEventListener('change', function () {
+        element(el)
+    })
+})

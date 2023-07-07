@@ -463,27 +463,53 @@ function convertDate(num) {
     const data = `${year}-${month}-${day}`;
     return data
 }
-const selectSummary = document.querySelectorAll('.select_summary');
-selectSummary.forEach(el => {
-    if (el.value !== '0') {
-        selectSummary.value = '0';
+
+
+export function element(el) {
+    console.log('работаем?')
+    const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
+    console.log(type)
+    if (el.value.startsWith('Выбрать')) {
+        let times;
+        // console.log(el)
+        // console.log(!el.nextElementSibling.children[0].children[0] ? el.nextElementSibling.children[0].id : el.nextElementSibling.children[0].children[0].id)
+        const id = `#${!el.nextElementSibling.children[0].children[0] ? el.nextElementSibling.children[0].id : el.nextElementSibling.children[0].children[0].id}`
+        // console.log(id)
+        el.nextElementSibling.style.display = 'flex'
+        const fp = flatpickr(`${id}`, {
+            mode: "range",
+            dateFormat: "d-m-Y",
+            locale: "ru",
+            static: true,
+            "locale": {
+                "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
+            },
+            onChange: function (selectedDates, dateStr, instance) {
+                times = selectedDates.map(date => {
+                    const year = date.getFullYear();
+                    const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
+                    const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
+                    return `${year}-${month}-${day}`;
+                });
+
+                //  times.push(formattedDates)
+            }
+        });
+        // console.log(times)
+        const btn = el.closest('.select_summary').nextElementSibling.children[1]
+        const input = el.closest('.select_summary').nextElementSibling.children[0].children[0]
+        console.log(input)
+        Array.from(btn.children).forEach(el =>
+            el.addEventListener('click', () => {
+                console.log(el)
+                el.textContent === 'Очистить' ? input.value = '' : (yesterdaySummary(times, type), input.value = '', el.closest('.calendar').style.display = 'none')
+            })
+        )
     }
-    el.addEventListener('change', function () {
-        const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
-        console.log(type)
-        const selectedOption = el.options[el.selectedIndex];
-        const selectedText = selectedOption.text;
-        console.log(el.value, type)
+    else {
+        el.closest('.select_summary').nextElementSibling.style.display = 'none'
+        yesterdaySummary(el.value, type)
+    }
 
-        if (el.value.startsWith('Выбрать')) {
-            console.log(el.value)
-            console.log(el.closest('.select_summary').nextElementSibling)
-            el.closest('.select_summary').nextElementSibling.style.display = 'flex'
-        }
-        else {
-            el.closest('.select_summary').nextElementSibling.style.display = 'none'
-            yesterdaySummary(el.value, type)
-        }
+}
 
-    });
-})
