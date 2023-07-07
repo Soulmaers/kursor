@@ -677,10 +677,11 @@ module.exports.summaryToBase = (idw, arr, data) => {
     value.push(arr.prostoy)
     value.push(arr.medium)
     value.push(arr.hhOil)
+    value.push(arr.company)
     console.log(value)
     return new Promise((resolve, reject) => {
         try {
-            const sql = `INSERT INTO  summary(idw, data, type, nameCar, jobTS, probeg, rashod, zapravka, dumpTrack,moto, prostoy, medium, oilHH) VALUES?`;
+            const sql = `INSERT INTO  summary(idw, data, type, nameCar, jobTS, probeg, rashod, zapravka, dumpTrack,moto, prostoy, medium, oilHH, company) VALUES?`;
             connection.query(sql, [[value]], function (err, results) {
                 if (err) console.log(err)
                 resolve(results)
@@ -693,22 +694,37 @@ module.exports.summaryToBase = (idw, arr, data) => {
 }
 
 
-
-module.exports.summaryYestodayToBase = (data) => {
-    // console.log(idw, data)
+module.exports.summaryYestodayToBase = (data, company) => {
     return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT * FROM summary WHERE data='${data}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) console.log(err)
-                resolve(results)
-            })
+        if (data.length === 1) {
+            try {
+                const selectBase = "SELECT * FROM summary WHERE company IN (?) AND data=?";
+                const values = [company, data];
+                connection.query(selectBase, values, function (err, results) {
+                    if (err) console.log(err)
+                    resolve(results)
+                });
+            } catch (e) {
+                console.log(e)
+            }
+
         }
-        catch (e) {
-            console.log(e)
+        else {
+            try {
+                const selectBase = "SELECT * FROM summary WHERE company IN (?) AND STR_TO_DATE(data, '%Y-%m-%d') >= ? AND STR_TO_DATE(data, '%Y-%m-%d') <= ?";
+                const values = [company, new Date(data[0]), new Date(data[1])];
+                connection.query(selectBase, values, function (err, results) {
+                    if (err) console.log(err);
+                    resolve(results);
+                });
+            } catch (e) {
+                console.log(e);
+            }
+
         }
-    })
-}
+
+    });
+};
 
 
 

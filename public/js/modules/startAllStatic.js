@@ -1,6 +1,6 @@
 
 import { fnParMessage, fnPar } from './grafiks.js'
-
+import { allObjects } from './menu.js'
 export let uniqglobalInfo;
 
 export async function startAllStatic(objects) {
@@ -15,6 +15,7 @@ export async function startAllStatic(objects) {
         //   .filter(e => e[0].message.startsWith('Sitrack'))
         .filter(e => e[6].startsWith('Самосвал'))
         .map(e => e);
+    console.log(array)
     const interval = timefn()
     const timeOld = interval[1]// 1688590800 //
     const timeNow = interval[0]//1688677170 //
@@ -51,6 +52,7 @@ export async function startAllStatic(objects) {
         el[1].medium = el[1].quantityTSjob !== 0 ? Number((el[1].medium / el[1].quantityTSjob).toFixed(2)) : 0
         delete el[1].nameCar
         delete el[1].type
+        delete el[1].company
     })
     const propOrder = ["quantityTS", "quantityTSjob", 'probeg', "rashod", "zapravka", "lifting", "motoHours", "prostoy", "medium", "hhOil"];
     Object.entries(globalInfo).forEach(it => {
@@ -68,6 +70,7 @@ async function loadValue(array, timeOld, timeNow, login) {
         let prostoyHH;
         const time = [];
         const speed = [];
+        const sats = [];
         const idw = e[4];
         const param = {
             method: "POST",
@@ -79,12 +82,15 @@ async function loadValue(array, timeOld, timeNow, login) {
         try {
             const res = await fetch('/api/loadInterval', param);
             const itog = await res.json();
+            console.log(itog)
             itog.messages.forEach(el => {
                 const timestamp = el.t;
                 const date = new Date(timestamp * 1000);
                 const isoString = date.toISOString();
                 time.push(new Date(isoString))
                 speed.push(el.pos.s)
+                sats.push(el.p.sats)
+
             })
             const probegZero = itog.messages.length !== 0 ? itog.messages[0].p.can_mileage ? Number((itog.messages[0].p.can_mileage).toFixed(0)) : itog.messages[0].p.mileage ? Number((itog.messages[0].p.mileage).toFixed(0)) : 0 : 0;
             const probegNow = itog.messages.length !== 0 ? itog.messages[0].p.can_mileage ? Number((itog.messages[itog.messages.length - 1].p.can_mileage).toFixed(0)) : itog.messages[0].p.mileage ? Number((itog.messages[itog.messages.length - 1].p.mileage).toFixed(0)) : 0 : 0
@@ -109,6 +115,7 @@ async function loadValue(array, timeOld, timeNow, login) {
             allArrNew.forEach(el => {
                 el.time = time
                 el.speed = speed
+                el.sats = sats
             })
             const oil = [];
             const hh = [];
@@ -141,7 +148,7 @@ async function loadValue(array, timeOld, timeNow, login) {
             console.log(error);
         }
         const medium = uniqObject[idw].probeg !== 0 ? Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2)) : 0
-        uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: e[0].result[0].type }
+        uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: e[0].result[0].type, company: e[5] }
     }
     return { uniq: uniqObject }
 }
@@ -155,35 +162,37 @@ function oilHH(data) {
     data.value.forEach((values, index) => {
         if (values !== data.value[startIndex]) {
             const subarray = data.time.slice(startIndex, index);
-            const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index), oil: data.oil.slice(startIndex, index) };
+            const speedTime = { sats: data.sats.slice(startIndex, index), speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index), oil: data.oil.slice(startIndex, index) };
             (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
             (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
             startIndex = index;
         }
     });
     const subarray = data.time.slice(startIndex);
-    const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex), oil: data.oil.slice(startIndex) };
+    const speedTime = { sats: data.sats.slice(startIndex), speed: data.speed.slice(startIndex), time: data.time.slice(startIndex), oil: data.oil.slice(startIndex) };
     (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
     (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
     const filteredData = prostoy.map(obj => {
+        // console.log(obj)
         const newS = [];
         const timet = [];
         const oil = [];
+        const sats = [];
         for (let i = 0; i < obj.speed.length; i++) {
             if (obj.speed[i] < 5) {
                 newS.push(obj.speed[i]);
                 timet.push(obj.time[i])
                 oil.push(obj.oil[i])
+                sats.push(obj.sats[i])
             } else {
                 break;
             }
         }
-        return { speed: newS, time: timet, oil: oil };
+        return { speed: newS, time: timet, oil: oil, sats: sats };
     });
     const timeProstoy = filteredData.map(el => {
         return { time: [el.time[0], el.time[el.time.length - 1]], oil: [el.oil[0], el.oil[el.oil.length - 1]], speed: [el.speed[0], el.speed[el.speed.length - 1]] }
     })
-    console.log(filteredData)
     const oilProstoy = [];
     timeProstoy.forEach(it => {
         if (it.time[0] !== undefined) {
@@ -280,7 +289,6 @@ function moto(data) {
 }
 
 function rashodCalc(data) {
-    console.log(data)
     const resArray = [];
     const zapravka = [];
     const ras = [];
@@ -307,7 +315,6 @@ function rashodCalc(data) {
                 else {
                     ras.pop();
                     const count = zapravka.length - 1
-                    console.log(count)
                     ras.push([{ start: [zapravka[0].end[0], [zapravka[0].end[1]]], end: [resArray[0][0], resArray[0][1]] }])
                     ras.push([{ start: [data.value[i], data.time[i]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
                 }
@@ -344,14 +351,23 @@ function timefn() {
 }
 
 export async function yesterdaySummary(interval, type) {
+
+    let int;
+    if (interval === 'Неделя') {
+        int = 7
+    }
+    if (interval === 'Месяц') {
+        int = 30
+    }
+
     console.log('запросик')
-    const now = new Date();
-    const yesterday = new Date(now);
-    !interval && !type ? yesterday.setDate(now.getDate() - 1) : yesterday.setDate(now.getDate() - 7);
-    const year = yesterday.getFullYear();
-    const month = String(yesterday.getMonth() + 1).padStart(2, '0');
-    const day = String(yesterday.getDate()).padStart(2, '0');
-    const data = `${year}-${month}-${day}`;
+    console.log(allObjects)
+    const data = [];
+    const company = allObjects.filter(el => el.length !== 0)
+        .map(el => el[0][5]);
+
+    !interval && !type || interval === 'Вчера' ? data.push(convertDate(1)) : data.push(convertDate(int), convertDate(1));
+
     console.log(data)
     const objectUniq = {};
     const params = {
@@ -359,7 +375,7 @@ export async function yesterdaySummary(interval, type) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ data }))
+        body: (JSON.stringify({ data, company }))
     }
     const mods = await fetch('/api/summaryYestoday', params)
     const models = await mods.json()
@@ -369,9 +385,8 @@ export async function yesterdaySummary(interval, type) {
     }
     else {
         for (let i = 0; i < models.length; i++) {
-            objectUniq[models[i].idw] = models[i];
+            objectUniq[models[i].id] = models[i];
         }
-        console.log(objectUniq)
         const globalInfo = {};
         for (const prop in objectUniq) {
             const subObj = objectUniq[prop];
@@ -405,6 +420,7 @@ export async function yesterdaySummary(interval, type) {
             delete el[1].type
             delete el[1].data
         })
+        console.log(globalInfo)
         const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
@@ -417,13 +433,22 @@ export async function yesterdaySummary(interval, type) {
 }
 
 
-
+function convertDate(num) {
+    const now = new Date();
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - num)
+    const year = yesterday.getFullYear();
+    const month = String(yesterday.getMonth() + 1).padStart(2, '0');
+    const day = String(yesterday.getDate()).padStart(2, '0');
+    const data = `${year}-${month}-${day}`;
+    return data
+}
 const selectSummary = document.querySelectorAll('.select_summary');
 selectSummary.forEach(el => {
     el.addEventListener('change', function () {
         const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
         console.log(type)
-        const selectedOption = selectSummary.options[selectSummary.selectedIndex];
+        const selectedOption = el.options[el.selectedIndex];
         const selectedText = selectedOption.text;
         console.log(selectedText, type)
         yesterdaySummary(selectedText, type)

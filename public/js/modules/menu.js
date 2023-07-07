@@ -15,6 +15,8 @@ export function init(kluch) {
 
         });
 };*/
+
+export let allObjects;
 const wrapContaint = document.querySelector('.wrapper_containt')
 const cont = document.createElement('div')
 cont.classList.add('container2')
@@ -38,7 +40,7 @@ export async function zapros(login) {
     const nameCarCheck = models.response.arrName
     //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
     console.log(arrayList)
-
+    allObjects = arrayList
     conturTest(arrayList)
     startAllStatic(arrayList)
     setInterval(startAllStatic, 300000, arrayList)
@@ -61,6 +63,7 @@ export async function zapros(login) {
         //  console.log('Проверяем, что время - 23:59:30')
         if (now.getHours() === 23 && now.getMinutes() === 59 && now.getSeconds() === 30) {
             // Обрабатываем данные
+            console.log(uniqglobalInfo)
             console.log(Object.entries(uniqglobalInfo))
             const arraySummary = Object.entries(uniqglobalInfo)
 
@@ -81,6 +84,7 @@ export async function zapros(login) {
             })
         }
     };
+    //   setTimeout(processDataAtMidnight, 15000)
     setInterval(processDataAtMidnight, 1000)
 
 }
