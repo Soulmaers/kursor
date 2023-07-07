@@ -58,7 +58,7 @@ export async function zapros(login) {
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const data = `${year}-${month}-${day}`;
-        // Проверяем, что время - 23:59:00
+        //  console.log('Проверяем, что время - 23:59:30')
         if (now.getHours() === 23 && now.getMinutes() === 59 && now.getSeconds() === 30) {
             // Обрабатываем данные
             console.log(Object.entries(uniqglobalInfo))

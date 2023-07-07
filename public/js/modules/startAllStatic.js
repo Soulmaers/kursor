@@ -16,8 +16,8 @@ export async function startAllStatic(objects) {
         .filter(e => e[6].startsWith('Самосвал'))
         .map(e => e);
     const interval = timefn()
-    const timeOld = interval[1]
-    const timeNow = interval[0]
+    const timeOld = interval[1]// 1688590800 //
+    const timeNow = interval[0]//1688677170 //
     const res = await loadValue(array, timeOld, timeNow, login)
     uniqglobalInfo = res.uniq
     const globalInfo = {};
@@ -280,10 +280,10 @@ function moto(data) {
 }
 
 function rashodCalc(data) {
-    console.log(data)
     const resArray = [];
     const zapravka = [];
     const ras = [];
+    let noZapravka;
     for (let i = 0; i < data.value.length - 5; i++) {
         data.value[i] === 0 ? data.value[i] = data.value[i - 1] : data.value[i] = data.value[i]
         data.value[i + 1] === 0 ? data.value[i + 1] = data.value[i - 1] : data.value[i + 1] = data.value[i + 1]
@@ -313,19 +313,20 @@ function rashodCalc(data) {
                 resArray.length = 0
             }
 
-
         }
-
-
     }
-
+    if (zapravka.length === 0 && resArray.length === 0) {
+        console.log('не выполняются')
+        noZapravka = [{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }]
+    }
     console.log(zapravka)
     console.log(ras)
+    console.log(noZapravka)
     const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
     console.log(sum)
     console.log(rashod)
-    const potracheno = sum - rashod >= 0 && ras.length !== 0 ? sum - rashod : 0;
+    const potracheno = sum - rashod >= 0 && ras.length !== 0 ? sum - rashod : noZapravka[0].start[0] - noZapravka[0].end[0];
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
     console.log(potracheno)
     return [{ rashod: potracheno, zapravka: zapravleno }]
