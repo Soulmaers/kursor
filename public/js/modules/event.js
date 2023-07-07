@@ -730,10 +730,9 @@ altConfig.addEventListener('change', conf)
 
 const selectSummary = document.querySelectorAll('.select_summary');
 selectSummary.forEach(el => {
-    if (el.value !== '0') {
-        selectSummary.value = '0';
-    }
+    console.log('работаем?')
     el.addEventListener('change', function () {
         element(el)
     })
+
 })

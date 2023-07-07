@@ -293,6 +293,7 @@ function rashodCalc(data) {
     const zapravka = [];
     const ras = [];
     let noZapravka;
+    console.log(data)
     for (let i = 0; i < data.value.length - 5; i++) {
         data.value[i] === 0 ? data.value[i] = data.value[i - 1] : data.value[i] = data.value[i]
         data.value[i + 1] === 0 ? data.value[i + 1] = data.value[i - 1] : data.value[i + 1] = data.value[i + 1]
@@ -334,7 +335,7 @@ function rashodCalc(data) {
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
     console.log(sum)
     console.log(rashod)
-    const potracheno = sum - rashod >= 0 && ras.length !== 0 ? sum - rashod : noZapravka[0].start[0] - noZapravka[0].end[0];
+    const potracheno = sum - rashod >= 0 && ras.length !== 0 ? sum - rashod : noZapravka[0].start[0] - noZapravka[0].end[0] >= 0 ? noZapravka[0].start[0] - noZapravka[0].end[0] : 0;
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
     console.log(potracheno)
     return [{ rashod: potracheno, zapravka: zapravleno }]
@@ -466,15 +467,12 @@ function convertDate(num) {
 
 
 export function element(el) {
-    console.log('работаем?')
+    el.children[3].textContent = 'Выбрать дату'
     const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
     console.log(type)
     if (el.value.startsWith('Выбрать')) {
-        let times;
-        // console.log(el)
-        // console.log(!el.nextElementSibling.children[0].children[0] ? el.nextElementSibling.children[0].id : el.nextElementSibling.children[0].children[0].id)
+        const times = [];
         const id = `#${!el.nextElementSibling.children[0].children[0] ? el.nextElementSibling.children[0].id : el.nextElementSibling.children[0].children[0].id}`
-        // console.log(id)
         el.nextElementSibling.style.display = 'flex'
         const fp = flatpickr(`${id}`, {
             mode: "range",
@@ -485,24 +483,39 @@ export function element(el) {
                 "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
             },
             onChange: function (selectedDates, dateStr, instance) {
-                times = selectedDates.map(date => {
+                const formattedDates = selectedDates.map(date => {
                     const year = date.getFullYear();
                     const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
                     const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
                     return `${year}-${month}-${day}`;
                 });
-
-                //  times.push(formattedDates)
+                times.push(formattedDates)
+                //  resolve()
+                console.log(times)
             }
         });
         // console.log(times)
         const btn = el.closest('.select_summary').nextElementSibling.children[1]
         const input = el.closest('.select_summary').nextElementSibling.children[0].children[0]
-        console.log(input)
-        Array.from(btn.children).forEach(el =>
-            el.addEventListener('click', () => {
+
+
+        Array.from(btn.children).forEach(elem =>
+            elem.addEventListener('click', () => {
+                console.log(elem)
+                console.log(times)
+                const res = times[times.length - 1];
+                console.log(res)
                 console.log(el)
-                el.textContent === 'Очистить' ? input.value = '' : (yesterdaySummary(times, type), input.value = '', el.closest('.calendar').style.display = 'none')
+                const formatString = res.map(e => {
+                    const parts = e.split('-'); // Разделяем дату на отдельные части
+                    const formattedDate = `${parts[1].replace(/^0+/, '')}/${parts[2]}`;
+                    return formattedDate
+                })
+                console.log(formatString)
+                console.log(formatString)
+                el.children[3].textContent = formatString[0] + '-' + formatString[1]
+                console.log(el.children[0])
+                elem.textContent === 'Очистить' ? input.value = '' : (yesterdaySummary(res, type), input.value = '', elem.closest('.calendar').style.display = 'none')
             })
         )
     }
@@ -510,6 +523,17 @@ export function element(el) {
         el.closest('.select_summary').nextElementSibling.style.display = 'none'
         yesterdaySummary(el.value, type)
     }
+    el.addEventListener('click', function () {
+        console.log('урааа')
+        el.children[3].textContent = 'Выбрат дату'
 
+    })
+    Array.from(el.children).forEach(e => {
+        e.addEventListener('click', () => {
+            if (!e.nextElementSibling) {
+                el.nextElementSibling.style.display = 'flex';
+            }
+        })
+    })
 }
 
