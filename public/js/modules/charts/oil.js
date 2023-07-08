@@ -25,7 +25,7 @@ export async function oil(t1, t2) {
     })
     const finishArrayData = []
     allArrNew.forEach(e => {
-        if (e.sens.startsWith('Бортовое') || e.sens === 'Топливо', e.sens === 'Топливо ДУТ') {
+        if (e.sens.startsWith('Бортовое') || e.sens === 'Топливо' || e.sens === 'Топливо ДУТ') {
             finishArrayData.push(e)
         }
     })
@@ -34,7 +34,7 @@ export async function oil(t1, t2) {
 
     finishArrayData.forEach(el => {
         object.time = gl
-        if (el.sens === 'Топливо', el.sens === 'Топливо ДУТ') {
+        if (el.sens === 'Топливо' || el.sens === 'Топливо ДУТ') {
             object.left = el.value.map(it => {
                 return it === -348201.3876 ? it = 0 : it
             })
