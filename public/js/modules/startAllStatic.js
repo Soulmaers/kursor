@@ -16,8 +16,8 @@ export async function startAllStatic(objects, int) {
         .filter(e => e[6].startsWith('Самосвал'))
         .map(e => e);
     const interval = !int ? timefn() : int
-    const timeOld = 1688763600//interval[1]
-    const timeNow = 1688849999 //interval[0]
+    const timeOld = interval[1]
+    const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow, login)
     console.log(res)
     uniqglobalInfo = res.uniq
