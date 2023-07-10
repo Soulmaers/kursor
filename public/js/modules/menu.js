@@ -95,9 +95,6 @@ export async function zapros(login) {
     };
     //   setTimeout(processDataAtMidnight, 15000)
     setInterval(processDataAtMidnight, 1000)
-
-
-
 }
 
 const login = document.querySelectorAll('.log')[1].textContent

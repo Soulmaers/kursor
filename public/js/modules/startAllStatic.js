@@ -16,9 +16,10 @@ export async function startAllStatic(objects, int) {
         .filter(e => e[6].startsWith('Самосвал'))
         .map(e => e);
     const interval = !int ? timefn() : int
-    const timeOld = interval[1]
-    const timeNow = interval[0]
+    const timeOld = 1688763600//interval[1]
+    const timeNow = 1688849999 //interval[0]
     const res = await loadValue(array, timeOld, timeNow, login)
+    console.log(res)
     uniqglobalInfo = res.uniq
 
     if (!int) {
@@ -123,6 +124,7 @@ async function loadValue(array, timeOld, timeNow, login) {
             const oil = [];
             const hh = [];
             console.log(allArrNew)
+            console.log(idw)
             allArrNew.forEach(it => {
                 if (it.sens === 'Топливо' || it.sens === 'Топливо ДУТ') {
                     it.value.forEach((e, i) => {
@@ -135,13 +137,14 @@ async function loadValue(array, timeOld, timeNow, login) {
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
                 }
                 if (it.sens.startsWith('Подъем')) {
-                    it.value >= 33 ? lifting++ : 0
+                    lifting = moto(it)
                 }
+                uniqObject[idw] = { ...uniqObject[idw], lifting: lifting };
                 if (it.sens.startsWith('Зажигание')) {
                     hh.push(it)
                     const res = moto(it);
                     const prostoyHours = res.prostoy.reduce((acc, el) => acc + el, 0)
-                    uniqObject[idw] = { ...uniqObject[idw], lifting: lifting, motoHours: res.moto, prostoy: prostoyHours };
+                    uniqObject[idw] = { ...uniqObject[idw], motoHours: res.moto, prostoy: prostoyHours };
                 }
             })
             hh[0].oil = oil[0]
@@ -241,20 +244,32 @@ function moto(data) {
     const ones = [];
     const prostoy = [];
     const korzina = [];
+    const razgruzka = [];
     let startIndex = 0;
     data.value.forEach((values, index) => {
         if (values !== data.value[startIndex]) {
             const subarray = data.time.slice(startIndex, index);
             const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index) };
+
             (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
             (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
+
+            if (data.sens.startsWith('Под')) {
+                const raz = { value: data.value.slice(startIndex, index), time: data.time.slice(startIndex, index) };
+                (data.value[startIndex] === 0 ? korzina : razgruzka).push(raz);
+            }
             startIndex = index;
         }
     });
+
     const subarray = data.time.slice(startIndex);
     const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex) };
     (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
     (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
+    if (data.sens.startsWith('Под')) {
+        const raz = { value: data.value.slice(startIndex), time: data.time.slice(startIndex) };
+        (data.value[startIndex] === 0 ? korzina : razgruzka).push(raz);
+    }
     let totalMs = 0;
     const filteredData = prostoy.map(obj => {
         const newS = [];
@@ -274,6 +289,7 @@ function moto(data) {
     const timeProstoy = filteredData.map(el => {
         return [el.time[0], el.time[el.time.length - 1]]
     })
+
     const unixProstoy = [];
     timeProstoy.forEach(it => {
         if (it[0] !== undefined) {
@@ -289,6 +305,32 @@ function moto(data) {
         totalMs += diffMs;
     });
     const motoHours = isNaN(totalMs) ? 0 : totalMs
+    if (data.sens.startsWith('Под')) {
+        const timeGran = razgruzka.map(el => {
+            return [el.time[0], el.time[el.time.length - 1]]
+        })
+        console.log(timeGran)
+        let count = 0
+        if (timeGran.length >= 1) {
+            for (let i = 0; i < timeGran.length - 1; i++) {
+                const diffInSeconds = (timeGran[i + 1][0].getTime() - timeGran[i][1].getTime()) / 1000;
+                console.log(timeGran[i][1], timeGran[i + 1][0])
+                console.log(diffInSeconds)
+                if (diffInSeconds > 1200) {
+                    count++
+                    //  console.log(timeGran[i][1], timeGran[i + 1][0])
+                }
+            }
+            return count
+        }
+        if (timeGran.length === 1) {
+            count = 1
+            return count
+        }
+        else {
+            return 0
+        }
+    }
     return { moto: motoHours, prostoy: unixProstoy }
 }
 
@@ -533,16 +575,10 @@ export function element(el) {
         el.closest('.select_summary').nextElementSibling.style.display = 'none'
         yesterdaySummary(el.value, type)
     }
-    let count = 0;
-    el.addEventListener('click', function () {
-        count++
-        console.log('клик')
-        if (count > 1) {
-            console.log(count)
-            //  el.children[3].textContent = 'Выбрать дату'
-            el.children[0].selected = true;
-        }
 
+    el.addEventListener('click', function () {
+        el.children[3].textContent = 'Выбрать дату'
+        //el.children[0].selected = true;
     })
 }
 
