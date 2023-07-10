@@ -358,7 +358,6 @@ minus.addEventListener('click', () => {
     alarmFind()
 })
 
-
 async function geoMarker(time, idw, tr) {
     const dateString = time;
     const dateFormat = "dd.mm.yyyy HH:MM";

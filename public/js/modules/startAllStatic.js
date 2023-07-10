@@ -3,7 +3,7 @@ import { fnParMessage, fnPar } from './grafiks.js'
 import { allObjects } from './menu.js'
 export let uniqglobalInfo;
 
-export async function startAllStatic(objects) {
+export async function startAllStatic(objects, int) {
     const login = document.querySelectorAll('.log')[1].textContent
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
@@ -15,51 +15,57 @@ export async function startAllStatic(objects) {
         //   .filter(e => e[0].message.startsWith('Sitrack'))
         .filter(e => e[6].startsWith('Самосвал'))
         .map(e => e);
-    const interval = timefn()
+    const interval = !int ? timefn() : int
     const timeOld = interval[1]
     const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow, login)
     uniqglobalInfo = res.uniq
-    const globalInfo = {};
-    for (const prop in res.uniq) {
-        const subObj = res.uniq[prop];
-        if (subObj.type) {
-            if (globalInfo[subObj.type]) {
-                for (const subProp in subObj) {
-                    if (subProp !== 'type') {
-                        globalInfo[subObj.type][subProp] = (globalInfo[subObj.type][subProp] || 0) + subObj[subProp];
+
+    if (!int) {
+        const globalInfo = {};
+        for (const prop in res.uniq) {
+            const subObj = res.uniq[prop];
+            if (subObj.type) {
+                if (globalInfo[subObj.type]) {
+                    for (const subProp in subObj) {
+                        if (subProp !== 'type') {
+                            globalInfo[subObj.type][subProp] = (globalInfo[subObj.type][subProp] || 0) + subObj[subProp];
+                        }
                     }
+                    globalInfo[subObj.type].quantityTS = (globalInfo[subObj.type].quantityTS || 0) + 1;
                 }
-                globalInfo[subObj.type].quantityTS = (globalInfo[subObj.type].quantityTS || 0) + 1;
-            }
-            else {
-                globalInfo[subObj.type] = Object.assign({}, subObj);
-                globalInfo[subObj.type].quantityTS = 1;
+                else {
+                    globalInfo[subObj.type] = Object.assign({}, subObj);
+                    globalInfo[subObj.type].quantityTS = 1;
+                }
             }
         }
-    }
-    for (const prop in globalInfo) {
-        if (globalInfo[prop].type) {
-            globalInfo[prop].quantityTS = Object.values(res.uniq).filter(subObj => subObj.type === globalInfo[prop].type).length;
+        for (const prop in globalInfo) {
+            if (globalInfo[prop].type) {
+                globalInfo[prop].quantityTS = Object.values(res.uniq).filter(subObj => subObj.type === globalInfo[prop].type).length;
+            }
         }
-    }
-    console.log(globalInfo)
-    Object.entries(globalInfo).forEach(el => {
-        el[1].motoHours = timesDate(el[1].motoHours)
-        el[1].prostoy = timesFormat(el[1].prostoy)
-        el[1].medium = el[1].quantityTSjob !== 0 ? Number((el[1].medium / el[1].quantityTSjob).toFixed(2)) : 0
-        delete el[1].nameCar
-        delete el[1].type
-        delete el[1].company
-    })
-    const propOrder = ["quantityTS", "quantityTSjob", 'probeg', "rashod", "zapravka", "lifting", "motoHours", "prostoy", "medium", "hhOil"];
-    Object.entries(globalInfo).forEach(it => {
-        const arr = propOrder.map(prop => it[1][prop]);
-        const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
-        arr.forEach((e, index) => {
-            parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
+        console.log(globalInfo)
+        Object.entries(globalInfo).forEach(el => {
+            el[1].motoHours = timesDate(el[1].motoHours)
+            el[1].prostoy = timesFormat(el[1].prostoy)
+            el[1].medium = el[1].quantityTSjob !== 0 ? Number((el[1].medium / el[1].quantityTSjob).toFixed(2)) : 0
+            delete el[1].nameCar
+            delete el[1].type
+            delete el[1].company
         })
-    })
+        const propOrder = ["quantityTS", "quantityTSjob", 'probeg', "rashod", "zapravka", "lifting", "motoHours", "prostoy", "medium", "hhOil"];
+        Object.entries(globalInfo).forEach(it => {
+            const arr = propOrder.map(prop => it[1][prop]);
+            const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
+            arr.forEach((e, index) => {
+                parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
+            })
+        })
+    }
+    else {
+        return res.uniq
+    }
 }
 async function loadValue(array, timeOld, timeNow, login) {
     const uniqObject = {};
@@ -287,7 +293,6 @@ function moto(data) {
 }
 
 function rashodCalc(data) {
-
     const resArray = [];
     const zapravka = [];
     const ras = [];
@@ -314,7 +319,6 @@ function rashodCalc(data) {
                 }
                 else {
                     ras.pop();
-                    const count = zapravka.length - 1
                     ras.push([{ start: [zapravka[0].end[0], [zapravka[0].end[1]]], end: [resArray[0][0], resArray[0][1]] }])
                     ras.push([{ start: [data.value[i], data.time[i]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
                 }
