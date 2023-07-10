@@ -698,6 +698,8 @@ module.exports.summaryYestodayToBase = (data, company) => {
     return new Promise((resolve, reject) => {
         if (data.length === 1) {
             try {
+                console.log(company)
+                console.log(data)
                 const selectBase = "SELECT * FROM summary WHERE company IN (?) AND data=?";
                 const values = [company, data];
                 connection.query(selectBase, values, function (err, results) {
@@ -711,16 +713,18 @@ module.exports.summaryYestodayToBase = (data, company) => {
         }
         else {
             try {
-                const selectBase = "SELECT * FROM summary WHERE company IN (?) AND STR_TO_DATE(data, '%Y-%m-%d') >= ? AND STR_TO_DATE(data, '%Y-%m-%d') <= ?";
-                const values = [company, new Date(data[0]), new Date(data[1])];
+                console.log(company)
+                console.log(data)
+                const selectBase = "SELECT * FROM summary WHERE company IN (?) AND STR_TO_DATE(data, '%Y-%m-%d') >= ? AND STR_TO_DATE(data, '%Y-%m-%d') <= ?"
+                const values = [company, data[0], data[1]];
                 connection.query(selectBase, values, function (err, results) {
                     if (err) console.log(err);
+                    //   console.log(results)
                     resolve(results);
                 });
             } catch (e) {
                 console.log(e);
             }
-
         }
 
     });

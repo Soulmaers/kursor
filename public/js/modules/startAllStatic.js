@@ -15,14 +15,12 @@ export async function startAllStatic(objects) {
         //   .filter(e => e[0].message.startsWith('Sitrack'))
         .filter(e => e[6].startsWith('Самосвал'))
         .map(e => e);
-    console.log(array)
     const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow, login)
     uniqglobalInfo = res.uniq
     const globalInfo = {};
-    console.log(res.uniq)
     for (const prop in res.uniq) {
         const subObj = res.uniq[prop];
         if (subObj.type) {
@@ -82,7 +80,6 @@ async function loadValue(array, timeOld, timeNow, login) {
         try {
             const res = await fetch('/api/loadInterval', param);
             const itog = await res.json();
-            console.log(itog)
             itog.messages.forEach(el => {
                 const timestamp = el.t;
                 const date = new Date(timestamp * 1000);
@@ -129,7 +126,6 @@ async function loadValue(array, timeOld, timeNow, login) {
                     });
                     oil.push(it.value)
                     const res = it.value !== undefined && it.value.every(item => item >= 0) ? rashodCalc(it) : [{ rashod: 0, zapravka: 0 }]
-                    console.log(res)
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
                 }
                 if (it.sens.startsWith('Подъем')) {
@@ -380,7 +376,6 @@ function timefn() {
 }
 
 export async function yesterdaySummary(interval, type) {
-
     let int;
     if (interval === 'Неделя') {
         int = 7
@@ -388,15 +383,10 @@ export async function yesterdaySummary(interval, type) {
     if (interval === 'Месяц') {
         int = 30
     }
-    console.log('запросик')
-    console.log(allObjects)
     const data = [];
     const company = allObjects.filter(el => el.length !== 0)
         .map(el => el[0][5]);
-
-    !interval && !type || interval === 'Вчера' ? data.push(convertDate(1)) : data.push(convertDate(int), convertDate(1));
-
-    console.log(data)
+    !interval && !type || interval === 'Вчера' ? data.push(convertDate(1)) : typeof interval === 'string' ? data.push(convertDate(int), convertDate(1)) : data.push(interval[0], interval[1])
     const objectUniq = {};
     const params = {
         method: "POST",
@@ -407,8 +397,6 @@ export async function yesterdaySummary(interval, type) {
     }
     const mods = await fetch('/api/summaryYestoday', params)
     const models = await mods.json()
-    console.log(models)
-
     const mod = type ? models.filter(el => el.type === type) : models
     console.log(mod)
     if (mod.length === 0) {
@@ -452,7 +440,6 @@ export async function yesterdaySummary(interval, type) {
                 return acc;
             }, {})
         );
-        console.log(resultJobTS)
         for (const prop in globalInfo) {
             if (globalInfo[prop].type) {
                 globalInfo[prop].quantityTS = resultTS.filter(subObj => subObj.type === globalInfo[prop].type).length;
@@ -464,7 +451,6 @@ export async function yesterdaySummary(interval, type) {
         Object.values(objectUniq).forEach(it => {
             it.jobTS === 1 ? jobNum++ : null
         })
-        console.log(jobNum)
         Object.entries(globalInfo).forEach(el => {
             el[1].moto = timesDate(el[1].moto)
             el[1].prostoy = timesFormat(el[1].prostoy)
@@ -501,9 +487,7 @@ function convertDate(num) {
 
 
 export function element(el) {
-    el.children[3].textContent = 'Выбрать дату'
     const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
-    console.log(type)
     if (el.value.startsWith('Выбрать')) {
         const times = [];
         const id = `#${!el.nextElementSibling.children[0].children[0] ? el.nextElementSibling.children[0].id : el.nextElementSibling.children[0].children[0].id}`
@@ -524,29 +508,19 @@ export function element(el) {
                     return `${year}-${month}-${day}`;
                 });
                 times.push(formattedDates)
-                //  resolve()
-                console.log(times)
             }
         });
-        // console.log(times)
         const btn = el.closest('.select_summary').nextElementSibling.children[1]
         const input = el.closest('.select_summary').nextElementSibling.children[0].children[0]
         Array.from(btn.children).forEach(elem =>
             elem.addEventListener('click', () => {
-                console.log(elem)
-                console.log(times)
                 const res = times[times.length - 1];
-                console.log(res)
-                console.log(el)
                 const formatString = res.map(e => {
                     const parts = e.split('-'); // Разделяем дату на отдельные части
                     const formattedDate = `${parts[1].replace(/^0+/, '')}/${parts[2]}`;
                     return formattedDate
                 })
-                console.log(formatString)
-                console.log(formatString)
                 el.children[3].textContent = formatString[0] + '-' + formatString[1]
-                console.log(el.children[0])
                 elem.textContent === 'Очистить' ? input.value = '' : (yesterdaySummary(res, type), input.value = '', elem.closest('.calendar').style.display = 'none')
             })
         )
@@ -555,17 +529,16 @@ export function element(el) {
         el.closest('.select_summary').nextElementSibling.style.display = 'none'
         yesterdaySummary(el.value, type)
     }
+    let count = 0;
     el.addEventListener('click', function () {
-        console.log('урааа')
-        el.children[3].textContent = 'Выбрат дату'
+        count++
+        console.log('клик')
+        if (count > 1) {
+            console.log(count)
+            //  el.children[3].textContent = 'Выбрать дату'
+            el.children[0].selected = true;
+        }
 
-    })
-    Array.from(el.children).forEach(e => {
-        e.addEventListener('click', () => {
-            if (!e.nextElementSibling) {
-                el.nextElementSibling.style.display = 'flex';
-            }
-        })
     })
 }
 
