@@ -289,7 +289,6 @@ function moto(data) {
     const timeProstoy = filteredData.map(el => {
         return [el.time[0], el.time[el.time.length - 1]]
     })
-
     const unixProstoy = [];
     timeProstoy.forEach(it => {
         if (it[0] !== undefined) {
@@ -309,27 +308,21 @@ function moto(data) {
         const timeGran = razgruzka.map(el => {
             return [el.time[0], el.time[el.time.length - 1]]
         })
-        console.log(timeGran)
-        let count = 0
-        if (timeGran.length >= 1) {
+        const mass = [];
+        if (timeGran.length > 1) {
+            let start = 0; // начальный индекс для сравнения
             for (let i = 0; i < timeGran.length - 1; i++) {
-                const diffInSeconds = (timeGran[i + 1][0].getTime() - timeGran[i][1].getTime()) / 1000;
-                console.log(timeGran[i][1], timeGran[i + 1][0])
-                console.log(diffInSeconds)
+                const diffInSeconds = (timeGran[i + 1][0].getTime() - timeGran[start][1].getTime()) / 1000;
                 if (diffInSeconds > 1200) {
-                    count++
-                    //  console.log(timeGran[i][1], timeGran[i + 1][0])
+                    mass.push([timeGran[start][1], timeGran[i + 1][0]])
+                    start = i + 1; // обновляем начальный индекс
                 }
             }
-            return count
         }
         if (timeGran.length === 1) {
-            count = 1
-            return count
+            mass.push([timeGran])
         }
-        else {
-            return 0
-        }
+        return mass.length
     }
     return { moto: motoHours, prostoy: unixProstoy }
 }
