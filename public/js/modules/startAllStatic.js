@@ -452,7 +452,7 @@ export async function yesterdaySummary(interval, type) {
                 return acc;
             }, {})
         );
-
+        console.log(resultJobTS)
         for (const prop in globalInfo) {
             if (globalInfo[prop].type) {
                 globalInfo[prop].quantityTS = resultTS.filter(subObj => subObj.type === globalInfo[prop].type).length;
@@ -460,17 +460,22 @@ export async function yesterdaySummary(interval, type) {
             }
         }
 
+        let jobNum = 0;
+        Object.values(objectUniq).forEach(it => {
+            it.jobTS === 1 ? jobNum++ : null
+        })
+        console.log(jobNum)
         Object.entries(globalInfo).forEach(el => {
             el[1].moto = timesDate(el[1].moto)
             el[1].prostoy = timesFormat(el[1].prostoy)
-            el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / el[1].jobTS).toFixed(2)) : 0
+            el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / jobNum).toFixed(2)) : 0
             delete el[1].id
             delete el[1].idw
             delete el[1].nameCar
             delete el[1].type
             delete el[1].data
         })
-        console.log(globalInfo)
+
         const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
