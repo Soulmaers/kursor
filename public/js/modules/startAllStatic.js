@@ -17,8 +17,8 @@ export async function startAllStatic(objects) {
         .map(e => e);
     console.log(array)
     const interval = timefn()
-    const timeOld = interval[1]// 1688590800 //
-    const timeNow = interval[0]//1688677170 //
+    const timeOld = interval[1]
+    const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow, login)
     uniqglobalInfo = res.uniq
     const globalInfo = {};
@@ -119,6 +119,7 @@ async function loadValue(array, timeOld, timeNow, login) {
             })
             const oil = [];
             const hh = [];
+            console.log(allArrNew)
             allArrNew.forEach(it => {
                 if (it.sens === 'Топливо' || it.sens === 'Топливо ДУТ') {
                     it.value.forEach((e, i) => {
@@ -128,6 +129,7 @@ async function loadValue(array, timeOld, timeNow, login) {
                     });
                     oil.push(it.value)
                     const res = it.value !== undefined && it.value.every(item => item >= 0) ? rashodCalc(it) : [{ rashod: 0, zapravka: 0 }]
+                    console.log(res)
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
                 }
                 if (it.sens.startsWith('Подъем')) {
@@ -289,17 +291,18 @@ function moto(data) {
 }
 
 function rashodCalc(data) {
+
     const resArray = [];
     const zapravka = [];
     const ras = [];
     let noZapravka;
     console.log(data)
-    for (let i = 0; i < data.value.length - 5; i++) {
+    for (let i = 0; i < data.value.length - 10; i++) {
         data.value[i] === 0 ? data.value[i] = data.value[i - 1] : data.value[i] = data.value[i]
         data.value[i + 1] === 0 ? data.value[i + 1] = data.value[i - 1] : data.value[i + 1] = data.value[i + 1]
-        if (data.value[i] < data.value[i + 1]) {
+        if (data.value[i] <= data.value[i + 1] || data.value[i] <= data.value[i + 2]) {
             let oneNum = data.value[i]
-            let fiveNum = data.value[i + 5]
+            let fiveNum = data.value[i + 10]
             const res = fiveNum - oneNum
             res > Number((3 / 100.3 * oneNum).toFixed(0)) ? resArray.push([oneNum, data.time[i]]) : null
         }
@@ -321,7 +324,6 @@ function rashodCalc(data) {
                 }
                 resArray.length = 0
             }
-
         }
     }
     if (zapravka.length === 0 && resArray.length === 0) {
@@ -340,6 +342,32 @@ function rashodCalc(data) {
     console.log(potracheno)
     return [{ rashod: potracheno, zapravka: zapravleno }]
 }
+
+
+
+
+const findClosestValue = (data, timeFull) => {
+    let closestDiff = Infinity;
+    let closestValue = null;
+
+    for (let y = 0; y < data.time.length; y++) {
+        const unixTime = Math.floor(new Date(data.time[y]).getTime() / 1000);
+        const diff = Math.abs(unixTime - timeFull);
+
+        if (diff === 0) {
+            return [data.value[y], data.time[y]]; // Возвращаем точное совпадающее значение
+        }
+
+        if (diff < closestDiff) {
+            closestDiff = diff;
+            closestValue = [data.value[y], data.time[y]];
+        }
+    }
+
+    // console.log('closestValue: ', closestValue);
+    return closestValue; // Возвращаем ближайшее найденное значение
+};
+
 
 function timefn() {
     const currentDate = new Date();
