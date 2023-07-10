@@ -327,18 +327,9 @@ async function viewAlarmStorage(name, stor) {
             const time = icons.parentElement.children[0].textContent
             const tr = icons.parentElement
             geoMarker(time, name, tr);
-
         })
     })
-
-
-
-
 }
-
-
-
-
 function alarmFire() {
     const alarmStorage = document.querySelectorAll('.alarmFire')
     const ogon = document.querySelector('.ogon')
@@ -375,7 +366,7 @@ async function geoMarker(time, idw, tr) {
     const dateObj = new Date(parts[2], parts[1] - 1, parts[0], parts[3], parts[4]);
     const unixTime = Math.floor(dateObj.getTime() / 1000);
     const nowDate = unixTime
-    const timeFrom = unixTime - 300
+    const timeFrom = unixTime - 3000
     console.log(nowDate, timeFrom, idw, login); // 1687935780
 
     const params = {
@@ -400,6 +391,7 @@ async function geoMarker(time, idw, tr) {
     const res = await alarmTrackGeo(unixTime, idw)
     const trackAlarm = res.resTrack;
     const geoCar = geoCard.resMarker
+    console.log(geoCard)
     const speed = await speedAlarm(unixTime, idw)
     console.log(speed)
     const geo = {
@@ -432,7 +424,7 @@ async function alarmTrackGeo(unixTime, idw) {
 
 async function speedAlarm(unixTime, idw) {
     const timeNow = unixTime
-    const timeOld = unixTime - 300
+    const timeOld = unixTime - 3000
     const param = {
         method: "POST",
         headers: {
