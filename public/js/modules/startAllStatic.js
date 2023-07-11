@@ -309,6 +309,7 @@ function moto(data) {
             return [el.time[0], el.time[el.time.length - 1]]
         })
         const mass = [];
+        console.log(timeGran)
         if (timeGran.length > 1) {
             let start = 0; // начальный индекс для сравнения
             for (let i = 0; i < timeGran.length - 1; i++) {
@@ -322,6 +323,7 @@ function moto(data) {
         if (timeGran.length === 1) {
             mass.push([timeGran])
         }
+        console.log(mass)
         return mass.length
     }
     return { moto: motoHours, prostoy: unixProstoy }
@@ -490,17 +492,20 @@ export async function yesterdaySummary(interval, type) {
         Object.values(objectUniq).forEach(it => {
             it.jobTS === 1 ? jobNum++ : null
         })
+
+        console.log(jobNum)
         Object.entries(globalInfo).forEach(el => {
+            console.log(el[1].medium)
             el[1].moto = timesDate(el[1].moto)
             el[1].prostoy = timesFormat(el[1].prostoy)
-            el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / jobNum).toFixed(2)) : 0
+            el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / (interval ? jobNum : el[1].jobTS)).toFixed(2)) : 0;
             delete el[1].id
             delete el[1].idw
             delete el[1].nameCar
             delete el[1].type
             delete el[1].data
         })
-
+        console.log(globalInfo)
         const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
