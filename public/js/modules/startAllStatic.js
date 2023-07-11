@@ -161,7 +161,7 @@ function oilHH(data) {
     const res = oilProstoy.reduce((acc, el) => acc + el, 0)
     return res
 }
-function timesDate(dates) {
+export function timesDate(dates) {
     let totalMs;
     if (dates.length > 1) {
         const [date1, date2] = dates.map(dateStr => dateStr);
@@ -178,7 +178,7 @@ function timesDate(dates) {
     const motoHours = `${hours}:${minutes}:${seconds}`
     return motoHours
 }
-function timesFormat(dates) {
+export function timesFormat(dates) {
     const totalSeconds = Math.floor(dates);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -306,17 +306,13 @@ function rashodCalc(data) {
         }
     }
     if (zapravka.length === 0 && resArray.length === 0) {
-        console.log('не выполняются')
         noZapravka = [{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }]
     }
-    console.log(zapravka)
-    console.log(ras)
-    console.log(noZapravka)
+
     const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
     const potracheno = sum - rashod >= 0 && ras.length !== 0 ? sum - rashod : noZapravka[0].start[0] - noZapravka[0].end[0] >= 0 ? noZapravka[0].start[0] - noZapravka[0].end[0] : 0;
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
-    console.log(potracheno)
     return [{ rashod: potracheno, zapravka: zapravleno }]
 }
 
@@ -330,6 +326,7 @@ function timefn() {
     return [timeNow, timeOld]
 }
 export async function yesterdaySummary(interval, type) {
+
     let int;
     if (interval === 'Неделя') {
         int = 7
@@ -355,7 +352,6 @@ export async function yesterdaySummary(interval, type) {
     const mods = await fetch('/api/summaryYestoday', params)
     const models = await mods.json()
     const mod = type ? models.filter(el => el.type === type) : models
-    console.log(mod)
     if (mod.length === 0) {
         console.log('нет данных по объектам в базе')
     }
@@ -364,14 +360,12 @@ export async function yesterdaySummary(interval, type) {
             objectUniq[mod[i].id] = mod[i];
         }
         const globalInfo = {};
-        console.log(objectUniq)
         const newObject = Object.entries(objectUniq).reduce((acc, [key, value]) => {
             if (value.jobTS === 1) {
                 acc[key] = value; // Add only "e" value to the new object
             }
             return acc;
         }, {});
-        console.log(newObject)
         for (const prop in newObject) {
             const subObj = newObject[prop];
             if (subObj.type) {
@@ -415,7 +409,6 @@ export async function yesterdaySummary(interval, type) {
         Object.values(newObject).forEach(it => {
             it.jobTS === 1 ? jobNum++ : null
         })
-        console.log(globalInfo)
         Object.entries(globalInfo).forEach(el => {
             el[1].moto = timesDate(el[1].moto)
             el[1].prostoy = timesFormat(el[1].prostoy)
@@ -434,7 +427,10 @@ export async function yesterdaySummary(interval, type) {
                 if (!interval && !type) {
                     parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
                 }
-                parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-'
+                else {
+                    parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-'
+                }
+
             })
         })
     }

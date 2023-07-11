@@ -178,7 +178,6 @@ function dashDav(arr) {
             color[generProt(percent)].push(el.params)
         }
     })
-    console.log(color)
     const resultRed = Math.round(color[4].length / arr.length * 100);
     const resultOrange = Math.round(color[3].length / arr.length * 100);
     const resultYellow = Math.round(color[2].length / arr.length * 100);
