@@ -1,7 +1,8 @@
 
-import { loadParamsViewList, conturTest } from './spisok.js'
+import { conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
-import { startAllStatic, uniqglobalInfo, yesterdaySummary } from './startAllStatic.js'
+import { startAllStatic, yesterdaySummary } from './startAllStatic.js'
+import { startList } from './checkObjectStart.js'
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
 /*
@@ -43,8 +44,9 @@ export async function zapros(login) {
     //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
     console.log(arrayList)
     allObjects = arrayList
-    conturTest(arrayList)
 
+    conturTest(arrayList)
+    startList(arrayList)
     //передаем имена объектов для отображения в панели администратора
     checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')
