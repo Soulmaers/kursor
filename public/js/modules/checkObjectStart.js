@@ -1,4 +1,4 @@
-import { timesFormat, timesDate, convertDate } from './startAllStatic.js'
+import { timesFormat, timesDate, convertDate, yesterdaySummary } from './startAllStatic.js'
 
 export function startList(object) {
     const result = object
@@ -70,8 +70,10 @@ export function startList(object) {
             const checkboxes = event.target.closest('.checkInStart').querySelectorAll('input[type="checkbox"]');
             const isChecked = event.target.checked;
             checkboxes.forEach(checkbox => {
-                checkbox.checked = isChecked;
+                checkbox.checked = false
             });
+            block.children[0].children[0].checked = true;
+            yesterdaySummary()
         }
         // Добавляем обработчик события изменения для каждого чекбокса в текущем блоке
         checkboxes.forEach(checkbox => {
