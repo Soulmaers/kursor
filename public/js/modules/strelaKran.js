@@ -23,6 +23,7 @@ const strela = [];
 function loadKran(id) {
     const active = Number(document.querySelector('.color').id)
     if (id.item.id === active) {
+        console.log(id.item.lmsg.p.user_2u_1)
         const str = id.item.lmsg.p.user_2u_1
         if (str) {
             if (str && str !== strela[strela.length - 1]) {

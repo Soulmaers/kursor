@@ -82,7 +82,7 @@ export async function zapros(login) {
         })
     };
     processDataAtMidnight()
-    setInterval(processDataAtMidnight, 20000)
+    setInterval(processDataAtMidnight, 300000)
 }
 
 const login = document.querySelectorAll('.log')[1].textContent
