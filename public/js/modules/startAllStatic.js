@@ -364,8 +364,16 @@ export async function yesterdaySummary(interval, type) {
             objectUniq[mod[i].id] = mod[i];
         }
         const globalInfo = {};
-        for (const prop in objectUniq) {
-            const subObj = objectUniq[prop];
+        console.log(objectUniq)
+        const newObject = Object.entries(objectUniq).reduce((acc, [key, value]) => {
+            if (value.jobTS === 1) {
+                acc[key] = value; // Add only "e" value to the new object
+            }
+            return acc;
+        }, {});
+        console.log(newObject)
+        for (const prop in newObject) {
+            const subObj = newObject[prop];
             if (subObj.type) {
                 if (globalInfo[subObj.type]) {
                     for (const subProp in subObj) {
@@ -389,7 +397,7 @@ export async function yesterdaySummary(interval, type) {
             }, {})
         );
         const resultJobTS = Object.values(
-            Object.values(objectUniq).reduce((acc, val) => {
+            Object.values(newObject).reduce((acc, val) => {
                 if (val.jobTS === 1) {
                     acc[val.idw] = Object.assign(acc[val.idw] ?? {}, val);
                 }
@@ -404,9 +412,10 @@ export async function yesterdaySummary(interval, type) {
         }
 
         let jobNum = 0;
-        Object.values(objectUniq).forEach(it => {
+        Object.values(newObject).forEach(it => {
             it.jobTS === 1 ? jobNum++ : null
         })
+        console.log(globalInfo)
         Object.entries(globalInfo).forEach(el => {
             el[1].moto = timesDate(el[1].moto)
             el[1].prostoy = timesFormat(el[1].prostoy)
