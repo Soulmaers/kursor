@@ -3,7 +3,7 @@ import { fnParMessage, fnPar } from './grafiks.js'
 import { allObjects } from './menu.js'
 export let uniqglobalInfo;
 
-export async function startAllStatic(objects, int) {
+export async function startAllStatic(objects) {
     const login = document.querySelectorAll('.log')[1].textContent
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
@@ -15,58 +15,11 @@ export async function startAllStatic(objects, int) {
         //   .filter(e => e[0].message.startsWith('Sitrack'))
         .filter(e => e[6].startsWith('Самосвал'))
         .map(e => e);
-    const interval = !int ? timefn() : int
+    const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow, login)
-    console.log(res)
-    uniqglobalInfo = res.uniq
-
-    if (!int) {
-        const globalInfo = {};
-        for (const prop in res.uniq) {
-            const subObj = res.uniq[prop];
-            if (subObj.type) {
-                if (globalInfo[subObj.type]) {
-                    for (const subProp in subObj) {
-                        if (subProp !== 'type') {
-                            globalInfo[subObj.type][subProp] = (globalInfo[subObj.type][subProp] || 0) + subObj[subProp];
-                        }
-                    }
-                    globalInfo[subObj.type].quantityTS = (globalInfo[subObj.type].quantityTS || 0) + 1;
-                }
-                else {
-                    globalInfo[subObj.type] = Object.assign({}, subObj);
-                    globalInfo[subObj.type].quantityTS = 1;
-                }
-            }
-        }
-        for (const prop in globalInfo) {
-            if (globalInfo[prop].type) {
-                globalInfo[prop].quantityTS = Object.values(res.uniq).filter(subObj => subObj.type === globalInfo[prop].type).length;
-            }
-        }
-        console.log(globalInfo)
-        Object.entries(globalInfo).forEach(el => {
-            el[1].motoHours = timesDate(el[1].motoHours)
-            el[1].prostoy = timesFormat(el[1].prostoy)
-            el[1].medium = el[1].quantityTSjob !== 0 ? Number((el[1].medium / el[1].quantityTSjob).toFixed(2)) : 0
-            delete el[1].nameCar
-            delete el[1].type
-            delete el[1].company
-        })
-        const propOrder = ["quantityTS", "quantityTSjob", 'probeg', "rashod", "zapravka", "lifting", "motoHours", "prostoy", "medium", "hhOil"];
-        Object.entries(globalInfo).forEach(it => {
-            const arr = propOrder.map(prop => it[1][prop]);
-            const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
-            arr.forEach((e, index) => {
-                parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
-            })
-        })
-    }
-    else {
-        return res.uniq
-    }
+    return res.uniq
 }
 async function loadValue(array, timeOld, timeNow, login) {
     const uniqObject = {};
@@ -123,8 +76,6 @@ async function loadValue(array, timeOld, timeNow, login) {
             })
             const oil = [];
             const hh = [];
-            console.log(allArrNew)
-            console.log(idw)
             allArrNew.forEach(it => {
                 if (it.sens === 'Топливо' || it.sens === 'Топливо ДУТ') {
                     it.value.forEach((e, i) => {
@@ -150,7 +101,6 @@ async function loadValue(array, timeOld, timeNow, login) {
             hh[0].oil = oil[0]
             const oneArrayOil = hh.filter(el => !el.sens.startsWith('Топливо'));
             prostoyHH = oneArrayOil[0].oil !== undefined && oneArrayOil[0].oil.every(item => item >= 0) ? oilHH(oneArrayOil[0]) : 0
-
         } catch (error) {
             console.log(error);
         }
@@ -180,7 +130,6 @@ function oilHH(data) {
     (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
     (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
     const filteredData = prostoy.map(obj => {
-        // console.log(obj)
         const newS = [];
         const timet = [];
         const oil = [];
@@ -212,7 +161,6 @@ function oilHH(data) {
     const res = oilProstoy.reduce((acc, el) => acc + el, 0)
     return res
 }
-
 function timesDate(dates) {
     let totalMs;
     if (dates.length > 1) {
@@ -250,10 +198,8 @@ function moto(data) {
         if (values !== data.value[startIndex]) {
             const subarray = data.time.slice(startIndex, index);
             const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index) };
-
             (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
             (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
-
             if (data.sens.startsWith('Под')) {
                 const raz = { value: data.value.slice(startIndex, index), time: data.time.slice(startIndex, index) };
                 (data.value[startIndex] === 0 ? korzina : razgruzka).push(raz);
@@ -261,7 +207,6 @@ function moto(data) {
             startIndex = index;
         }
     });
-
     const subarray = data.time.slice(startIndex);
     const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex) };
     (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
@@ -309,7 +254,6 @@ function moto(data) {
             return [el.time[0], el.time[el.time.length - 1]]
         })
         const mass = [];
-        console.log(timeGran)
         if (timeGran.length > 1) {
             let start = 0; // начальный индекс для сравнения
             for (let i = 0; i < timeGran.length - 1; i++) {
@@ -323,7 +267,6 @@ function moto(data) {
         if (timeGran.length === 1) {
             mass.push([timeGran])
         }
-        console.log(mass)
         return mass.length
     }
     return { moto: motoHours, prostoy: unixProstoy }
@@ -334,7 +277,6 @@ function rashodCalc(data) {
     const zapravka = [];
     const ras = [];
     let noZapravka;
-    console.log(data)
     for (let i = 0; i < data.value.length - 10; i++) {
         data.value[i] === 0 ? data.value[i] = data.value[i - 1] : data.value[i] = data.value[i]
         data.value[i + 1] === 0 ? data.value[i + 1] = data.value[i - 1] : data.value[i + 1] = data.value[i + 1]
@@ -372,39 +314,11 @@ function rashodCalc(data) {
     console.log(noZapravka)
     const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
-    console.log(sum)
-    console.log(rashod)
     const potracheno = sum - rashod >= 0 && ras.length !== 0 ? sum - rashod : noZapravka[0].start[0] - noZapravka[0].end[0] >= 0 ? noZapravka[0].start[0] - noZapravka[0].end[0] : 0;
     const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
     console.log(potracheno)
     return [{ rashod: potracheno, zapravka: zapravleno }]
 }
-
-
-
-
-const findClosestValue = (data, timeFull) => {
-    let closestDiff = Infinity;
-    let closestValue = null;
-
-    for (let y = 0; y < data.time.length; y++) {
-        const unixTime = Math.floor(new Date(data.time[y]).getTime() / 1000);
-        const diff = Math.abs(unixTime - timeFull);
-
-        if (diff === 0) {
-            return [data.value[y], data.time[y]]; // Возвращаем точное совпадающее значение
-        }
-
-        if (diff < closestDiff) {
-            closestDiff = diff;
-            closestValue = [data.value[y], data.time[y]];
-        }
-    }
-
-    // console.log('closestValue: ', closestValue);
-    return closestValue; // Возвращаем ближайшее найденное значение
-};
-
 
 function timefn() {
     const currentDate = new Date();
@@ -415,7 +329,6 @@ function timefn() {
     const timeOld = startOfTodayUnix
     return [timeNow, timeOld]
 }
-
 export async function yesterdaySummary(interval, type) {
     let int;
     if (interval === 'Неделя') {
@@ -424,10 +337,13 @@ export async function yesterdaySummary(interval, type) {
     if (interval === 'Месяц') {
         int = 30
     }
+    if (interval === 'Вчера') {
+        int = 1
+    }
     const data = [];
     const company = allObjects.filter(el => el.length !== 0)
         .map(el => el[0][5]);
-    !interval && !type || interval === 'Вчера' ? data.push(convertDate(1)) : typeof interval === 'string' ? data.push(convertDate(int), convertDate(1)) : data.push(interval[0], interval[1])
+    !interval && !type ? data.push(convertDate(0)) : typeof interval === 'string' ? data.push(convertDate(int), convertDate(1)) : data.push(interval[0], interval[1])
     const objectUniq = {};
     const params = {
         method: "POST",
@@ -465,7 +381,6 @@ export async function yesterdaySummary(interval, type) {
                 }
             }
         }
-
         const resultTS = Object.values(
             Object.values(objectUniq).reduce((acc, val) => {
                 acc[val.idw] = Object.assign(acc[val.idw] ?? {}, val);
@@ -492,10 +407,7 @@ export async function yesterdaySummary(interval, type) {
         Object.values(objectUniq).forEach(it => {
             it.jobTS === 1 ? jobNum++ : null
         })
-
-        console.log(jobNum)
         Object.entries(globalInfo).forEach(el => {
-            console.log(el[1].medium)
             el[1].moto = timesDate(el[1].moto)
             el[1].prostoy = timesFormat(el[1].prostoy)
             el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / (interval ? jobNum : el[1].jobTS)).toFixed(2)) : 0;
@@ -505,19 +417,19 @@ export async function yesterdaySummary(interval, type) {
             delete el[1].type
             delete el[1].data
         })
-        console.log(globalInfo)
         const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
             const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
             arr.forEach((e, index) => {
+                if (!interval && !type) {
+                    parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
+                }
                 parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-'
             })
         })
     }
 }
-
-
 function convertDate(num) {
     const now = new Date();
     const yesterday = new Date(now);
@@ -528,8 +440,6 @@ function convertDate(num) {
     const data = `${year}-${month}-${day}`;
     return data
 }
-
-
 export function element(el) {
     const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
     if (el.value.startsWith('Выбрать')) {

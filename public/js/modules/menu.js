@@ -22,7 +22,6 @@ const cont = document.createElement('div')
 cont.classList.add('container2')
 wrapContaint.appendChild(cont);
 
-
 export async function zapros(login) {
     const selectElement = document.querySelectorAll('.select_summary');
     selectElement.forEach(el => {
@@ -39,16 +38,13 @@ export async function zapros(login) {
     const mods = await fetch('/api/dataSpisok', params)
     const models = await mods.json()
     console.log(models)
-
     const arrayList = models.response.aLLmassObject
     const nameCarCheck = models.response.arrName
     //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
     console.log(arrayList)
     allObjects = arrayList
     conturTest(arrayList)
-    startAllStatic(arrayList)
-    setInterval(startAllStatic, 300000, arrayList)
-    yesterdaySummary();
+
     //передаем имена объектов для отображения в панели администратора
     checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')
@@ -57,44 +53,36 @@ export async function zapros(login) {
     }
 
     const processDataAtMidnight = async () => {
+        yesterdaySummary();
+        yesterdaySummary('Вчера');
         const now = new Date();
         const date = new Date(now);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate() - 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
         const data = `${year}-${month}-${day}`;
-        //  console.log('Проверяем, что время - 23:59:30')
-        if (now.getHours() === 0 && now.getMinutes() === 30 && now.getSeconds() === 10) {
-            const currentDate = new Date(); // Текущая дата и время
-            currentDate.setDate(currentDate.getDate() - 1); // Установите дату на предыдущий день
-            currentDate.setHours(0, 0, 0, 0); // Установите время на 0 часов 0 минут 0 секунд
-            const startOfPreviousDayUnix = Math.floor(currentDate.getTime() / 1000);
-            currentDate.setHours(23, 59, 59, 0); // Установите время на 23 часа 59 минут 59 секунд
-            const endOfPreviousDayUnix = Math.floor(currentDate.getTime() / 1000);
-            const int = [endOfPreviousDayUnix, startOfPreviousDayUnix];
-            console.log(int)
-            const res = await startAllStatic(arrayList, int)
-            console.log(res)
-            // Обрабатываем данные
-            const arraySummary = Object.entries(res)
-            arraySummary.forEach(async el => {
-                const idw = el[0]
-                const arrayInfo = el[1]
-                const params = {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: (JSON.stringify({ idw, arrayInfo, data }))
-                }
-                const mods = await fetch('/api/summary', params)
-                const models = await mods.json()
-                console.log(models)
-            })
-        }
+        console.log(data)
+        const res = await startAllStatic(arrayList)
+        console.log(res)
+        // Обрабатываем данные
+        const arraySummary = Object.entries(res)
+        arraySummary.forEach(async el => {
+            const idw = el[0]
+            const arrayInfo = el[1]
+            const params = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: (JSON.stringify({ idw, arrayInfo, data }))
+            }
+            const mods = await fetch('/api/summary', params)
+            const models = await mods.json()
+            console.log(models)
+        })
     };
-    //   setTimeout(processDataAtMidnight, 15000)
-    setInterval(processDataAtMidnight, 1000)
+    processDataAtMidnight()
+    setInterval(processDataAtMidnight, 20000)
 }
 
 const login = document.querySelectorAll('.log')[1].textContent
@@ -127,13 +115,10 @@ export async function ggg(id) {
             Object.entries(result).forEach(e => {
                 valueSens.push(e[1])
             })
-            //    console.log(valueSens)
             const allArr = [];
             arrNameSens.forEach((e, index) => {
                 allArr.push([...e, valueSens[index]])
-
             })
-            //console.log(allArr)
             allArr.forEach(it => {
                 allobj[it[1]] = it[0]
             })

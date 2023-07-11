@@ -678,13 +678,27 @@ module.exports.summaryToBase = (idw, arr, data) => {
     value.push(arr.medium)
     value.push(arr.hhOil)
     value.push(arr.company)
-    console.log(value)
     return new Promise((resolve, reject) => {
         try {
-            const sql = `INSERT INTO  summary(idw, data, type, nameCar, jobTS, probeg, rashod, zapravka, dumpTrack,moto, prostoy, medium, oilHH, company) VALUES?`;
-            connection.query(sql, [[value]], function (err, results) {
-                if (err) console.log(err)
-                resolve(results)
+            const selectBase = `SELECT data, idw FROM summary WHERE idw='${idw}' AND data='${data}'`
+            connection.query(selectBase, function (err, results) {
+                if (err) console.log(err);
+                if (results.length === 0) {
+                    const sql = `INSERT INTO  summary(idw, data, type, nameCar, jobTS, probeg, rashod, zapravka, dumpTrack,moto, prostoy, medium, oilHH, company) VALUES?`;
+                    connection.query(sql, [[value]], function (err, results) {
+                        if (err) console.log(err)
+                        resolve({ message: 'даные добавлены' })
+                    })
+                }
+                else {
+                    const sql = `UPDATE summary SET  idw='${idw}',data='${data}', type='${arr.type}', nameCar='${arr.nameCar}', jobTS='${arr.quantityTSjob}',
+                     probeg='${arr.probeg}', rashod='${arr.rashod}',zapravka='${arr.zapravka}',dumpTrack='${arr.lifting}',moto='${arr.motoHours}',
+                     prostoy='${arr.prostoy}',medium='${arr.medium}',oilHH='${arr.hhOil}',company='${arr.company}'  WHERE  idw='${idw}' AND data='${data}'`;
+                    connection.query(sql, function (err, results) {
+                        if (err) console.log(err)
+                        else resolve({ message: 'данные обновлены' })
+                    });
+                }
             })
         }
         catch (e) {
@@ -698,8 +712,6 @@ module.exports.summaryYestodayToBase = (data, company) => {
     return new Promise((resolve, reject) => {
         if (data.length === 1) {
             try {
-                console.log(company)
-                console.log(data)
                 const selectBase = "SELECT * FROM summary WHERE company IN (?) AND data=?";
                 const values = [company, data];
                 connection.query(selectBase, values, function (err, results) {
@@ -713,8 +725,8 @@ module.exports.summaryYestodayToBase = (data, company) => {
         }
         else {
             try {
-                console.log(company)
-                console.log(data)
+                // console.log(company)
+                //  console.log(data)
                 const selectBase = "SELECT * FROM summary WHERE company IN (?) AND STR_TO_DATE(data, '%Y-%m-%d') >= ? AND STR_TO_DATE(data, '%Y-%m-%d') <= ?"
                 const values = [company, data[0], data[1]];
                 connection.query(selectBase, values, function (err, results) {
