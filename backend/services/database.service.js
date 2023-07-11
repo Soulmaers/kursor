@@ -744,3 +744,22 @@ module.exports.summaryYestodayToBase = (data, company) => {
 
 
 
+module.exports.sumIdwToBase = (data, idw) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const selectBase = "SELECT * FROM summary WHERE idw IN (?) AND data=?";
+            const values = [idw, [data]];
+            console.log(values);
+            connection.query(selectBase, values, function (err, results) {
+                if (err) console.log(err);
+                resolve(results);
+            });
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+};
+
+
+

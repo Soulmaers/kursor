@@ -1,4 +1,4 @@
-import { timesFormat, timesDate } from './startAllStatic.js'
+import { timesFormat, timesDate, convertDate } from './startAllStatic.js'
 
 export function startList(object) {
     const result = object
@@ -35,51 +35,42 @@ export function startList(object) {
             check.appendChild(list)
         }
     })
-
-
     // Получаем все блоки чекбоксов
     const checkboxBlocks = document.querySelectorAll('.checkInStart');
-    console.log(checkboxBlocks)
     // Проходимся по каждому блоку
     checkboxBlocks.forEach((block, index) => {
-        console.log(block.children[0].children)
-        console.log(index)
         // Получаем чекбоксы в текущем блоке
         const checkboxes = Array.from(block.querySelectorAll('.checkListStart')).map(element => {
-            console.log(element)
             return element.children;
         });
         checkboxes.shift()
-        console.log(checkboxes)
+        let enabledSettings = [];
         // Обработка изменений в текущем блоке
         function handleCheckboxChange() {
-            const checkedValues = Array.from(checkboxes)
-                .filter(checkbox => checkbox.checked)
-                .map(checkbox => checkbox.value);
+            enabledSettings = [];
+            checkboxes.forEach(blockCheckboxes => {
+                enabledSettings.push(...Array.from(blockCheckboxes).filter(i => i.checked).map(i => Number(i.value)));
 
-            console.log(`Block ${index + 1}:`, checkedValues);
+            });
+            console.log(enabledSettings);
+            viewStat(enabledSettings)
         }
-
         // Обработка изменений для общего чекбокса "All" в текущем блоке
         function handleCheckboxAllChange(event) {
             const checkboxes = event.target.closest('.checkInStart').querySelectorAll('input[type="checkbox"]');
-            console.log(checkboxes)
             const isChecked = event.target.checked;
-
             checkboxes.forEach(checkbox => {
                 checkbox.checked = isChecked;
             });
         }
-
         // Добавляем обработчик события изменения для каждого чекбокса в текущем блоке
         checkboxes.forEach(checkbox => {
-            console.log(checkbox[0])
-            checkbox[0].addEventListener('change', handleCheckboxChange);
+            checkbox[0].addEventListener('change', () => {
+                handleCheckboxChange();
+            });
         });
-
         // Добавляем обработчик события изменения для общего чекбокса "All" в текущем блоке
         const checkboxAll = block.children[0].children;
-        console.log(checkboxAll)
         checkboxAll[0].addEventListener('change', handleCheckboxAllChange);
     });
 
@@ -87,34 +78,54 @@ export function startList(object) {
 }
 
 // Функция, которую вы хотите запускать при изменении состояния чекбоксов
-function yourFunction(checkedValues) {
+async function viewStat(checkedValues) {
+    console.log('чекед был')
     // Здесь вы можете использовать выбранные значения
     console.log(checkedValues);
-    const newArray = [];
-    const newYesArray = [];
-    checkedValues.forEach(el => {
-        Object.entries(today).forEach(it => {
-            if (Number(el) === it[1].idw) {
-                newArray.push(it[1])
-            }
+    const data = convertDate(0)
+    const idw = checkedValues
+
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ data, idw }))
+    }
+    const mods = await fetch('/api/summaryIdwToBase', params)
+    const models = await mods.json()
+    console.log(models)
+
+    if (models.length === 1) {
+        const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
+        models.forEach(it => {
+            const parentWrapper = document.querySelector(`[rel="${it.type}"]`).children
+            it.quantityTS = models.length
+            it.moto = timesDate(it.moto)
+            it.prostoy = timesFormat(it.prostoy)
+            delete it.id
+            delete it.idw
+            delete it.nameCar
+            delete it.type
+            delete it.data
+            delete it.company
+            const arr = propOrder.map(prop => it[prop]);
+            console.log(models)
+            console.log(arr)
+            arr.forEach((e, index) => {
+                parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
+            })
         })
-        Object.entries(yestoday).forEach(it => {
-            if (Number(el) === it[1].idw) {
-                newYesArray.push(it[1])
-            }
-        })
-        viewStat(newArray)
-        viewStat(newYesArray)
-    })
+    }
+    else {
+        viewMoreElement(models)
+
+    }
 }
 
 
 
-
-
-
-
-function viewStat(newArray) {
+function viewMoreElement(newArray) {
     console.log(newArray)
     let count = 0;
     const objectUniq = {}
@@ -189,15 +200,10 @@ function viewStat(newArray) {
         const arr = propOrder.map(prop => it[1][prop]);
         const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
         arr.forEach((e, index) => {
-            if (count === 0) {
-                parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
-                count++
-            }
-            else {
-                parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-'
-            }
+            parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
 
         })
+
     })
 }
 

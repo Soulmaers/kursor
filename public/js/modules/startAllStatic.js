@@ -316,6 +316,7 @@ function rashodCalc(data) {
     return [{ rashod: potracheno, zapravka: zapravleno }]
 }
 
+
 function timefn() {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
@@ -420,6 +421,7 @@ export async function yesterdaySummary(interval, type) {
             delete el[1].data
         })
         const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
+        console.log(globalInfo)
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
             const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
@@ -435,7 +437,7 @@ export async function yesterdaySummary(interval, type) {
         })
     }
 }
-function convertDate(num) {
+export function convertDate(num) {
     const now = new Date();
     const yesterday = new Date(now);
     yesterday.setDate(now.getDate() - num)

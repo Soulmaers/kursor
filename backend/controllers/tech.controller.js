@@ -35,9 +35,16 @@ exports.summary = async (req, res) => {
 exports.summaryYestoday = async (req, res) => {
     const company = req.body.company
     const data = req.body.data
+    const idw = req.body.idw
     console.log(data)
-    const result = await databaseService.summaryYestodayToBase(data, company)
+    const result = await databaseService.summaryYestodayToBase(data, company, idw)
     res.json(result)
 }
 
-
+exports.summaryIdwToBase = async (req, res) => {
+    const data = req.body.data
+    const idw = req.body.idw
+    console.log(data)
+    const result = await databaseService.sumIdwToBase(data, idw)
+    res.json(result)
+}

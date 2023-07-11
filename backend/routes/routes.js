@@ -35,7 +35,7 @@ router.post('/api/techView', controllerTech.techView)
 router.post('/api/techViewAll', controllerTech.techViewAll)
 router.post('/api/summary', controllerTech.summary)
 router.post('/api/summaryYestoday', controllerTech.summaryYestoday)
-
+router.post('/api/summaryIdwToBase', controllerTech.summaryIdwToBase)
 
 
 
