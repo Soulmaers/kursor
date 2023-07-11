@@ -52,9 +52,19 @@ export function startList(object) {
                 enabledSettings.push(...Array.from(blockCheckboxes).filter(i => i.checked).map(i => Number(i.value)));
 
             });
+            const isOtherCheckboxChecked = checkboxes.find(blockCheckboxes => {
+                return Array.from(blockCheckboxes).some(i => i.checked && i.value !== block.children[0].children.value);
+            });
+
+            // Если есть другие выбранные чекбоксы, снимаем выбор с "All"
+            if (isOtherCheckboxChecked) {
+                checkboxAll[0].checked = false;
+            }
+
             console.log(enabledSettings);
             viewStat(enabledSettings)
         }
+
         // Обработка изменений для общего чекбокса "All" в текущем блоке
         function handleCheckboxAllChange(event) {
             const checkboxes = event.target.closest('.checkInStart').querySelectorAll('input[type="checkbox"]');
@@ -71,6 +81,7 @@ export function startList(object) {
         });
         // Добавляем обработчик события изменения для общего чекбокса "All" в текущем блоке
         const checkboxAll = block.children[0].children;
+        checkboxAll[0].checked = true;
         checkboxAll[0].addEventListener('change', handleCheckboxAllChange);
     });
 
@@ -79,6 +90,7 @@ export function startList(object) {
 
 // Функция, которую вы хотите запускать при изменении состояния чекбоксов
 async function viewStat(checkedValues) {
+    console.log(checkedValues)
     console.log('чекед был')
     // Здесь вы можете использовать выбранные значения
     console.log(checkedValues);
