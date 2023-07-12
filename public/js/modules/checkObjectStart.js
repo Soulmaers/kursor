@@ -60,7 +60,8 @@ export function startList(object) {
             }
             const sele = Array.from(block.closest('.rigth_block').previousElementSibling.children[1].children[0].lastElementChild.children[0])
             const pointDate = times[times.length - 1]
-            viewStat(enabledSettings, sele, pointDate)
+            enabledSettings.length !== 0 ? viewStat(enabledSettings, sele, pointDate) : (yesterdaySummary(),
+                yesterdaySummary('Вчера'), checkboxAll[0].checked = true);
         }
         // Обработка изменений для общего чекбокса "All" в текущем блоке
         function handleCheckboxAllChange(event) {
