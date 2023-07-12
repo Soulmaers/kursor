@@ -60,20 +60,18 @@ export function startList(object) {
             if (isOtherCheckboxChecked) {
                 checkboxAll[0].checked = false;
             }
-
             console.log(enabledSettings);
             viewStat(enabledSettings)
         }
-
         // Обработка изменений для общего чекбокса "All" в текущем блоке
         function handleCheckboxAllChange(event) {
             const checkboxes = event.target.closest('.checkInStart').querySelectorAll('input[type="checkbox"]');
-            const isChecked = event.target.checked;
             checkboxes.forEach(checkbox => {
                 checkbox.checked = false
             });
             block.children[0].children[0].checked = true;
             yesterdaySummary()
+            yesterdaySummary('Вчера')
         }
         // Добавляем обработчик события изменения для каждого чекбокса в текущем блоке
         checkboxes.forEach(checkbox => {
@@ -86,8 +84,6 @@ export function startList(object) {
         checkboxAll[0].checked = true;
         checkboxAll[0].addEventListener('change', handleCheckboxAllChange);
     });
-
-
 }
 
 // Функция, которую вы хотите запускать при изменении состояния чекбоксов
@@ -96,52 +92,63 @@ async function viewStat(checkedValues) {
     console.log('чекед был')
     // Здесь вы можете использовать выбранные значения
     console.log(checkedValues);
-    const data = convertDate(0)
+    const dat = [];
+    dat.push(convertDate(0), convertDate(1))
     const idw = checkedValues
-
-    const params = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ data, idw }))
+    console.log(dat)
+    let count = 0;
+    const dannie = [];
+    for (let i = 0; i < dat.length; i++) {
+        const data = dat[i]
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ data, idw }),
+        };
+        const mods = await fetch('/api/summaryIdwToBase', params);
+        const models = await mods.json();
+        dannie.push(models);
     }
-    const mods = await fetch('/api/summaryIdwToBase', params)
-    const models = await mods.json()
-    console.log(models)
+    console.log(dannie)
+    dannie.forEach(el => {
+        if (el.length === 1) {
+            const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
+            el.forEach(it => {
+                const parentWrapper = document.querySelector(`[rel="${it.type}"]`).children
+                it.quantityTS = el.length
+                it.moto = timesDate(it.moto)
+                it.prostoy = timesFormat(it.prostoy)
+                delete it.id
+                delete it.idw
+                delete it.nameCar
+                delete it.type
+                delete it.data
+                delete it.company
+                const arr = propOrder.map(prop => it[prop]);
+                console.log(el)
+                console.log(arr)
+                arr.forEach((e, index) => {
+                    if (count === 0) {
+                        parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
 
-    if (models.length === 1) {
-        const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
-        models.forEach(it => {
-            const parentWrapper = document.querySelector(`[rel="${it.type}"]`).children
-            it.quantityTS = models.length
-            it.moto = timesDate(it.moto)
-            it.prostoy = timesFormat(it.prostoy)
-            delete it.id
-            delete it.idw
-            delete it.nameCar
-            delete it.type
-            delete it.data
-            delete it.company
-            const arr = propOrder.map(prop => it[prop]);
-            console.log(models)
-            console.log(arr)
-            arr.forEach((e, index) => {
-                parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
+                    }
+                    parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-';
+                })
             })
-        })
-    }
-    else {
-        viewMoreElement(models)
-
-    }
+        }
+        else {
+            viewMoreElement(el, count)
+        }
+        count++
+    })
 }
 
 
 
-function viewMoreElement(newArray) {
+function viewMoreElement(newArray, count) {
     console.log(newArray)
-    let count = 0;
     const objectUniq = {}
     for (let i = 0; i < newArray.length; i++) {
         objectUniq[newArray[i].id] = newArray[i];
@@ -214,10 +221,16 @@ function viewMoreElement(newArray) {
         const arr = propOrder.map(prop => it[1][prop]);
         const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
         arr.forEach((e, index) => {
-            parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
+            if (count === 0) {
+                console.log(count)
+                parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
+            }
+            console.log(count)
+            parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-'
 
         })
 
     })
+    count++
 }
 
