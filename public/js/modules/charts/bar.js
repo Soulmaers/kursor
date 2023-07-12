@@ -913,6 +913,9 @@ async function iconChart() {
 }
 
 async function vieModelChart(model, im1) {
+    model.sort((a, b) => parseInt(a.osi) - parseInt(b.osi));
+    console.log(model)
+    console.log(im1)
     im1.forEach(it => {
         for (let i = 0; i < model.length; i++) {
             const os = document.createElement('div')

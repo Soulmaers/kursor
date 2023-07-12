@@ -9,8 +9,9 @@ exports.updateModel = async (req, res) => {
     const frontGosp = req.body.frontGosp
     const frontGosp1 = req.body.frontGosp1
     const type = req.body.type
+    const tsiControll = req.body.tsiControll
     console.log(req.body)
-    const message = await databaseService.updateModelSaveToBase(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type)
+    const message = await databaseService.updateModelSaveToBase(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll)
     res.json({ message: 'успех' })
 }
 exports.tyres = async (req, res) => {

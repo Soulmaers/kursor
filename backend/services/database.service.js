@@ -252,13 +252,14 @@ module.exports.alarmFindtoBase = (idw, tyresp) => {
 }
 
 
-exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type) => {
+exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll) => {
     const promises = massiv.map(el => {
         el.push(gosp)
         el.push(gosp1)
         el.push(frontGosp)
         el.push(frontGosp1)
         el.push(type)
+        el.push(tsiControll)
         el.unshift(nameCar)
         el.unshift(idw)
         return new Promise((resolve, reject) => {
@@ -269,7 +270,7 @@ exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontG
                         console.log(err)
                     };
                     if (results.length === 0) {
-                        const selectBase = `INSERT INTO model(idw, nameCar, osi, trailer, tyres, gosp, gosp1, frontGosp, frontGosp1,type) VALUES?`
+                        const selectBase = `INSERT INTO model(idw, nameCar, osi, trailer, tyres, gosp, gosp1, frontGosp, frontGosp1,type, tsiControll) VALUES?`
                         connection.query(selectBase, [[el]], function (err, results) {
                             if (err) {
                                 console.log(err)
@@ -280,7 +281,7 @@ exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontG
                         })
                     }
                     if (results.length > 0) {
-                        const postModel = `UPDATE model SET idw='${el[0]}', nameCar='${el[1]}',  osi='${el[2]}', trailer='${el[3]}', tyres='${el[4]}',gosp='${gosp}',gosp1='${gosp1}', frontGosp='${frontGosp}', frontGosp1='${frontGosp1}' WHERE idw='${el[0]}' AND osi='${el[2]}'`
+                        const postModel = `UPDATE model SET idw='${el[0]}', nameCar='${el[1]}',  osi='${el[2]}', trailer='${el[3]}', tyres='${el[4]}',gosp='${gosp}',gosp1='${gosp1}', frontGosp='${frontGosp}', frontGosp1='${frontGosp1}', type='${type}',tsiControll='${tsiControll}' WHERE idw='${el[0]}' AND osi='${el[2]}'`
                         connection.query(postModel, function (err, results) {
                             if (err) {
                                 console.log(err)
@@ -477,7 +478,7 @@ module.exports.tarirViewToBase = async (idw) => {
 exports.modelViewToBase = (idw) => {
     return new Promise((resolve, reject) => {
         try {
-            const selectBase = `SELECT idw, nameCar, osi, trailer,tyres, gosp, gosp1, frontGosp, frontGosp1, type FROM model WHERE  idw ='${idw}'`
+            const selectBase = `SELECT idw, nameCar, osi, trailer,tyres, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll FROM model WHERE  idw ='${idw}'`
             connection.query(selectBase, function (err, results) {
                 if (err) console.log(err)
                 if (results === undefined) {

@@ -1214,13 +1214,15 @@ div.spoyler {
   margin-top: 10px;
 }
 
-.changeParams {
+.changeParams,
+.tsiControll {
   border: 1px solid gray;
   text-align: center;
   font-size: 0.7rem;
   height: 20px;
   max-width: 30px;
   border-radius: 5px;
+  margin-left: 3px;
 }
 
 .title_sensIcon {
@@ -2035,6 +2037,11 @@ div.spoyler {
 
 .koef {
   display: flex;
+  align-items: center;
+}
+
+.engineEvent {
+  display: none;
   align-items: center;
 }
 

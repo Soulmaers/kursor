@@ -165,6 +165,8 @@ import { zapros } from './menu.js'
 export async function changeBase(massModel, activePost, idw, type, go, go1, goCar, goCar1) {
     // const containerAlt = document.querySelector('.containerAlt')
     //  containerAlt.remove()
+    const tsiControll = document.querySelector('.tsiControll').value
+    console.log(tsiControll)
     console.log('ченчбэйс')
     console.log(massModel)
     await reqDelete(idw);
@@ -182,7 +184,7 @@ export async function changeBase(massModel, activePost, idw, type, go, go1, goCa
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ massModel, idw, activePost, gosp, gosp1, frontGosp, frontGosp1, type }))
+        body: (JSON.stringify({ massModel, idw, activePost, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll }))
     }
     const res = await fetch('/api/updateModel', param)
     const response = await res.json()

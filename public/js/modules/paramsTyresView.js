@@ -48,7 +48,12 @@ export async function loadParamsView() {
     isProcessing = false;
 
 }
+export let tsiparam;
 function createViewModel(model) {
+    console.log(model)
+    const tsiControll = document.querySelector('.tsiControll')
+    tsiControll.value = model[0].tsiControll
+    tsiparam = model[0].tsiControll
     const type = model[0].type
     console.log(type)
     const selectType = document.querySelector('.select_type')

@@ -1,5 +1,6 @@
 
 import { Tooltip } from '../class/Tooltip.js'
+import { tsiparam } from './paramsTyresView.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
 
@@ -62,6 +63,8 @@ export async function iconParams() {
                 const tsiValue = document.querySelector('.tsi_value')
                 it[2] === 1 ? status = 'ВКЛ' : status = 'ВЫКЛ'
                 const idws = document.querySelector('.color').id
+                console.log(tsiparam)
+
                 if (idws !== 26821431) {
                     it[2] === 1 && power >= 26.5 ? statusTSI = 'ВКЛ' : statusTSI = 'ВЫКЛ'
                 }
