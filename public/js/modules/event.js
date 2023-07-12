@@ -747,7 +747,12 @@ new DropDownList({ element: document.querySelector(`#input`), btn: document.quer
 
 
 const altConfig = document.getElementById('check_Title')
-altConfig.addEventListener('change', conf)
+altConfig.addEventListener('change', () => {
+    const selectType = document.querySelector('.select_type')
+    const selectOld = selectType.options[selectType.selectedIndex].textContent
+    console.log()
+    conf(selectOld)
+})
 
 
 const selectSummary = document.querySelectorAll('.select_summary');

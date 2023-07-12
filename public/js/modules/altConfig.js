@@ -2,19 +2,29 @@ import { textTest } from './content.js'
 import { loadParamsView } from './paramsTyresView.js'
 import { objColor, generT, generFront } from './content.js'
 
-export function conf() {
+export function conf(selectOld) {
     const checkAlt = document.getElementById('check_Title')
-    checkAlt.checked ? createConfig() : clearConfig()
+    const selectType = document.querySelector('.select_type')
+    console.log(selectType.textContent)
+    checkAlt.checked ? createConfig(selectOld) : clearConfig()
 
 }
-export function createConfig() {
+export function createConfig(selectOld) {
     const checkAlt = document.querySelector('.checkAlt')
     checkAlt.style.color = 'red'
     checkAlt.style.fontWeight = 'bold'
     const selectType = document.querySelector('.select_type')
+
+    for (let i = 0; i < selectType.options.length; i++) {
+        if (selectType.options[i].textContent === selectOld) {
+            console.log(selectType.options[i])
+            selectType.options[i].selected = true;
+            break;
+        }
+    }
     selectType.style.display = 'flex'
     selectType.style.appearance = '';
-    selectType.selectedIndex = 0;
+    // selectType.selectedIndex = 0;
     selectType.disabled = false;
 
     // Отображаем все скрытые элементы
