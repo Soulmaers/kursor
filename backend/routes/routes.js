@@ -16,6 +16,8 @@ module.exports = router
 
 router.post('/api/dataSpisok', controllerData.dataSpisok)
 router.post('/api/spisokList', controllerWialon.spisok)
+router.post('/api/up', controllerData.up)
+
 
 router.post('/api/wialon', controllerWialon.datawialon)
 router.post('/api/wialonAll', controllerWialon.datawialonAll)
@@ -48,7 +50,7 @@ router.post('/api/listTyresId', controllerModel.listTyresId)
 
 router.post('/api/icon', controllerIcon.icon)
 router.post('/api/iconFind', controllerIcon.iconFind)
-
+router.post('/api/saveStatus', controllerIcon.saveStatus)
 
 router.post('/api/to', controllerModel.to)
 router.post('/api/toView', controllerModel.toView)
@@ -60,7 +62,7 @@ router.post('/api/tarirView', controllerTarir.tarirView)
 
 
 
-router.post('/api/saveStatus', controllerModel.saveStatus)
+
 router.post('/api/viewStatus', controllerModel.viewStatus)
 
 

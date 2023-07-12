@@ -62,6 +62,50 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
     }
 };
 
+
+
+exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, status) => {
+    if (status !== undefined) {
+        const mass = [idw, activePost, todays, statusTSI, todays2, status]
+        try {
+            const postModel = `SELECT * FROM statusObj WHERE idw='${idw}'`
+            connection.query(postModel, function (err, results) {
+                if (err) console.log(err);
+                if (results.length === 0) {
+                    const selectBase = `INSERT INTO statusObj(idw, nameCar, time, status, timeIng, statusIng) VALUES?`
+                    connection.query(selectBase, [[mass]], function (err, results) {
+                        if (err) {
+                            console.log(err)
+                        };
+                    })
+                }
+                else {
+                    if (results[0].status !== statusTSI) {
+                        const postModel = `UPDATE statusObj SET time='${todays}',status='${statusTSI}' WHERE idw='${idw}'`
+                        connection.query(postModel, function (err, results) {
+                            if (err) {
+                                console.log(err)
+                            }
+                        })
+                    }
+                    if (results[0].statusIng !== status) {
+                        const postModel = `UPDATE statusObj SET timeIng='${todays2}',statusIng='${status}' WHERE idw='${idw}'`
+                        connection.query(postModel, function (err, results) {
+                            if (err) {
+                                console.log(err)
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+}
+
+
 //сохраняем в базу алармы
 exports.alarmBase = async (data, tyres, alarm) => {
     // console.log(data)

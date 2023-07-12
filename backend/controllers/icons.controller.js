@@ -18,3 +18,12 @@ exports.icon = async (req, res) => {
     res.json({ icons })
 }
 
+exports.saveStatus = async (req, res) => {
+    const idw = req.body.idw
+    const login = req.body.login
+    const icons = await databaseService.saveStatusToBase(idw)
+    res.json({ result: icons, name: idw, login })
+}
+
+
+

@@ -98,12 +98,18 @@ async function getTokenFromDB(login) {
 
 }
 
+exports.up = async (req, res) => {
+    updateParams(req.body.login)
+    res.json({ message: 'ок' })
+}
+
+
+
 
 async function updateParams(login) {
     //запрашиваем данные параметры по обектам с виалона
     const data = await wialonService.getDataFromWialon(login)
     // const type = await wialonService.getAnimalsWialon(login)
-    // console.log(type)
     const nameCar = [];
     const allCar = Object.entries(data)
     allCar[5][1].forEach(async el => {
@@ -111,6 +117,24 @@ async function updateParams(login) {
         const idw = el.id;
         const speed = el.lmsg.pos ? el.lmsg.pos.s : null; // проверка на наличие свойства lmsg и свойства pos.s
         nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed]);
+        const model = await databaseService.modelViewToBase(idw)
+        let statusTSI;
+        if (model[0] && model[0].tsiControll) {
+            statusTSI = el.lmsg.p.pwr_ext > Number(model[0].tsiControll) ? 'ВКЛ' : 'ВЫКЛ';
+        } else {
+            statusTSI = '-';
+        }
+
+        const res = await engine(idw, login)
+        let status;
+        res.forEach(e => {
+            if (e.includes('Зажигание'))
+                status = e[2] === 1 ? 'ВКЛ' : 'ВЫКЛ'
+        })
+        const currentDate = new Date();
+        const todays = Math.floor(currentDate.getTime() / 1000);
+        const activePost = el.nm.replace(/\s+/g, '');
+        const resSaveStatus = await databaseService.saveStatusToBase(activePost, idw, todays, statusTSI, todays, status);
         if (el.lmsg) {
             const sensor = Object.entries(el.lmsg.p);
             const time = new Date()
@@ -121,6 +145,30 @@ async function updateParams(login) {
     ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
     await zaprosSpisokb(nameCar)
 }
+
+async function engine(idw, login) {
+    const resSensor = await wialonService.getAllNameSensorsIdDataFromWialon(idw, login);
+    const nameSens = Object.entries(resSensor.item.sens)
+    const arrNameSens = [];
+    nameSens.forEach(el => {
+        arrNameSens.push([el[1].n, el[1].p])
+    })
+    const res = await wialonService.getLastAllSensorsIdDataFromWialon(idw, login);
+    if (res) {
+        const valueSens = [];
+        Object.entries(res).forEach(e => {
+            valueSens.push(e[1])
+        })
+        const allArr = [];
+        arrNameSens.forEach((e, index) => {
+            allArr.push([...e, valueSens[index]])
+        })
+        return allArr
+    }
+}
+
+
+
 
 async function zaprosSpisokb(name) {
     const massItog = [];

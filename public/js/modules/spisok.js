@@ -6,7 +6,10 @@ import { approximateValue } from './staticObject.js'
 import { removeElem, removeArrElem } from './helpersFunc.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
+
+
 export async function loadParamsViewList(car, el) {
+    console.log('ты работаешь?')
     const params = {
         method: "POST",
         headers: {
@@ -34,6 +37,7 @@ export async function loadParamsViewList(car, el) {
     });
     return [model, models, data, osi, el]
 }
+
 export async function conturTest(testov) {
     const groups = document.querySelectorAll('.groups')
     if (groups) {

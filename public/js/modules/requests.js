@@ -1,4 +1,4 @@
-
+import { loadParamsView } from './paramsTyresView.js'
 
 const login = document.querySelectorAll('.log')[1].textContent
 export function postTyres(tyres) {
@@ -193,7 +193,17 @@ export async function changeBase(massModel, activePost, idw, type, go, go1, goCa
     const modalCenterOs = document.querySelector('.modalCenterOs')
     modalCenterOs.style.display = 'none'
     console.log(response)
+    const par = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ login }))
+    }
+    const zapuskUp = await fetch('/api/up', par)
+    console.log(zapuskUp)
     zapros(login);
+    // loadParamsView()
 }
 
 

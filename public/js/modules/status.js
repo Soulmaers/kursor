@@ -3,9 +3,6 @@ import { Tooltip } from '../class/Tooltip.js'
 import { tsiparam } from './paramsTyresView.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
-
-
-
 let intervalId
 export async function iconParams() {
     clearInterval(intervalId)
@@ -43,6 +40,7 @@ export async function iconParams() {
         arrNameSens.forEach((e, index) => {
             allArr.push([...e, valueSens[index]])
         })
+        console.log(allArr)
         let power;
         let sats;
 
@@ -62,15 +60,8 @@ export async function iconParams() {
                 const ignValue = document.querySelector('.ign_value')
                 const tsiValue = document.querySelector('.tsi_value')
                 it[2] === 1 ? status = 'ВКЛ' : status = 'ВЫКЛ'
-                const idws = document.querySelector('.color').id
                 console.log(tsiparam)
-
-                if (idws !== 26821431) {
-                    it[2] === 1 && power >= 26.5 ? statusTSI = 'ВКЛ' : statusTSI = 'ВЫКЛ'
-                }
-                else {
-                    it[2] === 1 && power > 13 ? statusTSI = 'ВКЛ' : statusTSI = 'ВЫКЛ'
-                }
+                power > Number(tsiparam) ? statusTSI = 'ВКЛ' : statusTSI = 'ВЫКЛ'
                 console.log(statusTSI)
                 const statusObj = document.querySelector('.status_obj')
                 let mess;
@@ -117,18 +108,6 @@ export async function iconParams() {
                     }
                 }
                 const idw = active[0].id
-                const activePost = active[0].children[0].textContent.replace(/\s+/g, '')
-                const currentDate = new Date();
-                const todays = Math.floor(currentDate.getTime() / 1000);
-                const param = {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: (JSON.stringify({ activePost, idw, todays, statusTSI, todays, status }))
-                }
-                const res = await fetch('/api/saveStatus', param)
-                const response = await res.json()
                 const parama = {
                     method: "POST",
                     headers: {
@@ -163,11 +142,11 @@ export async function iconParams() {
                 }
                 let statName;
                 let statNameIng;
-                val.result[0].status === 'ВКЛ' ? statName = 'Включен' : statName = 'Выключен'
+                val.result[0].status === 'ВКЛ' ? statName = 'Включен' : val.result[0].status === '-' ? statName = '-' : statName = 'Выключен'
                 val.result[0].statusIng === 'ВКЛ' ? statNameIng = 'Включено' : statNameIng = 'Выключено'
                 tsiValue.textContent = val.result[0].status
                 ignValue.textContent = val.result[0].statusIng
-                const message = `${statName} ${timeStor}`
+                const message = val.result[0].status === '-' ? null : `${statName} ${timeStor}`
                 const messageIng = `${statNameIng} ${timeStorIng}`
                 console.log([tsi_card.getAttribute('rel'), message])
 

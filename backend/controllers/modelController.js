@@ -12,47 +12,6 @@ module.exports.viewStatus = (req, res) => {
         console.log(e)
     }
 }
-module.exports.saveStatus = (req, res) => {
-    if (req.body.status !== undefined) {
-        const mass = [req.body.idw, req.body.activePost, req.body.todays, req.body.statusTSI, req.body.todays, req.body.status]
-        try {
-            const postModel = `SELECT * FROM statusObj WHERE idw='${req.body.idw}'`
-            connection.query(postModel, function (err, results) {
-                if (err) console.log(err);
-                if (results.length === 0) {
-                    const selectBase = `INSERT INTO statusObj(idw, nameCar, time, status, timeIng, statusIng) VALUES?`
-                    connection.query(selectBase, [[mass]], function (err, results) {
-                        if (err) {
-                            console.log(err)
-                        };
-                    })
-                }
-                else {
-                    if (results[0].status !== req.body.statusTSI) {
-                        const postModel = `UPDATE statusObj SET time='${req.body.todays}',status='${req.body.statusTSI}' WHERE idw='${req.body.idw}'`
-                        connection.query(postModel, function (err, results) {
-                            if (err) {
-                                console.log(err)
-                            }
-                        })
-                    }
-                    if (results[0].statusIng !== req.body.status) {
-                        const postModel = `UPDATE statusObj SET timeIng='${req.body.todays}',statusIng='${req.body.status}' WHERE idw='${req.body.idw}'`
-                        connection.query(postModel, function (err, results) {
-                            if (err) {
-                                console.log(err)
-                            }
-                        })
-                    }
-                }
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    }
-    res.json({ message: 'выполнено' })
-}
 
 module.exports.to = (req, res) => {
     try {
