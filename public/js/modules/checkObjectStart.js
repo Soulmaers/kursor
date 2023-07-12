@@ -1,4 +1,4 @@
-import { timesFormat, timesDate, convertDate, yesterdaySummary } from './startAllStatic.js'
+import { timesFormat, timesDate, convertDate, yesterdaySummary, times } from './startAllStatic.js'
 
 export function startList(object) {
     const result = object
@@ -50,7 +50,6 @@ export function startList(object) {
             enabledSettings = [];
             checkboxes.forEach(blockCheckboxes => {
                 enabledSettings.push(...Array.from(blockCheckboxes).filter(i => i.checked).map(i => Number(i.value)));
-
             });
             const isOtherCheckboxChecked = checkboxes.find(blockCheckboxes => {
                 return Array.from(blockCheckboxes).some(i => i.checked && i.value !== block.children[0].children.value);
@@ -59,10 +58,9 @@ export function startList(object) {
             if (isOtherCheckboxChecked) {
                 checkboxAll[0].checked = false;
             }
-            console.log(enabledSettings);
             const sele = Array.from(block.closest('.rigth_block').previousElementSibling.children[1].children[0].lastElementChild.children[0])
-            console.log(sele)
-            viewStat(enabledSettings, sele)
+            const pointDate = times[times.length - 1]
+            viewStat(enabledSettings, sele, pointDate)
         }
         // Обработка изменений для общего чекбокса "All" в текущем блоке
         function handleCheckboxAllChange(event) {
@@ -88,14 +86,9 @@ export function startList(object) {
         checkboxAll[0].addEventListener('change', handleCheckboxAllChange);
     });
 }
-
 // Функция, которую вы хотите запускать при изменении состояния чекбоксов
-export async function viewStat(checkedValues, sele) {
-    console.log(sele)
-    console.log(checkedValues)
-    console.log('чекед был')
+export async function viewStat(checkedValues, sele, res) {
     // Здесь вы можете использовать выбранные значения
-    console.log(checkedValues);
     let interval;
     sele.forEach(e => {
         if (e.selected === true) {
@@ -103,7 +96,6 @@ export async function viewStat(checkedValues, sele) {
         }
     });
     const dat = [];
-    console.log(interval)
     let int;
     if (interval === 'Неделя') {
         int = 8
@@ -115,17 +107,14 @@ export async function viewStat(checkedValues, sele) {
         int = 1
     }
     else {
-        int = ''
+        int = res
     }
-    console.log(int)
-    int !== '' ? dat.push([convertDate(0)], [convertDate(int), convertDate(1)]) : console.log('пустая')
+    !res ? dat.push([convertDate(0)], [convertDate(int), convertDate(1)]) : dat.push([convertDate(0)], [res[0], res[1]])
     const idw = checkedValues
-    console.log(dat)
     let count = 0;
     const dannie = [];
     for (let i = 0; i < dat.length; i++) {
         const data = dat[i]
-        console.log(data)
         const params = {
             method: "POST",
             headers: {
@@ -137,7 +126,6 @@ export async function viewStat(checkedValues, sele) {
         const models = await mods.json();
         dannie.push(models);
     }
-    console.log(dannie)
     dannie.forEach(el => {
         if (el.length === 1) {
             const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
@@ -153,8 +141,6 @@ export async function viewStat(checkedValues, sele) {
                 delete it.data
                 delete it.company
                 const arr = propOrder.map(prop => it[prop]);
-                console.log(el)
-                console.log(arr)
                 arr.forEach((e, index) => {
                     if (count === 0) {
                         parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
@@ -171,23 +157,18 @@ export async function viewStat(checkedValues, sele) {
     })
 }
 
-
-
 function viewMoreElement(newArray, count) {
-    console.log(newArray)
     const objectUniq = {}
     for (let i = 0; i < newArray.length; i++) {
         objectUniq[newArray[i].id] = newArray[i];
     }
     const globalInfo = {};
-
     const newObject = Object.entries(newArray).reduce((acc, [key, value]) => {
         if (value.jobTS === 1) {
             acc[key] = value; // Add only "e" value to the new object
         }
         return acc;
     }, {});
-
     for (const prop in newObject) {
         const subObj = newObject[prop];
         if (subObj.type) {
@@ -208,7 +189,6 @@ function viewMoreElement(newArray, count) {
     const resultTS = Object.values(
         Object.values(objectUniq).reduce((acc, val) => {
             acc[val.idw] = Object.assign(acc[val.idw] ?? {}, val);
-
             return acc;
         }, {})
     );
@@ -226,7 +206,6 @@ function viewMoreElement(newArray, count) {
             globalInfo[prop].jobTS = resultJobTS.filter(subObj => subObj.type === globalInfo[prop].type).length;
         }
     }
-
     let jobNum = 0;
     Object.values(newObject).forEach(it => {
         it.jobTS === 1 ? jobNum++ : null
@@ -241,7 +220,6 @@ function viewMoreElement(newArray, count) {
         delete el[1].type
         delete el[1].data
     })
-    console.log(globalInfo)
     const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
     Object.entries(globalInfo).forEach(it => {
         const arr = propOrder.map(prop => it[1][prop]);
@@ -255,7 +233,6 @@ function viewMoreElement(newArray, count) {
             parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-'
 
         })
-
     })
     count++
 }

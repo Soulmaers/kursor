@@ -448,10 +448,22 @@ export function convertDate(num) {
     const data = `${year}-${month}-${day}`;
     return data
 }
+export const times = [];
 export function element(el) {
     const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
+    const checkboxBlocks = el.closest('.left_block').nextElementSibling.children[1]
+    const checkboxes = Array.from(checkboxBlocks.querySelectorAll('.checkListStart')).map(element => {
+        return element.children[0];
+    });
+    const arrayIdw = [];
+    checkboxes.shift();
+    checkboxes.forEach(e => {
+        if (e.checked === true) {
+            arrayIdw.push(e.value)
+        }
+    })
+    const sele = Array.from(el.closest('.select_summary').children)
     if (el.value.startsWith('Выбрать')) {
-        const times = [];
         const id = `#${!el.nextElementSibling.children[0].children[0] ? el.nextElementSibling.children[0].id : el.nextElementSibling.children[0].children[0].id}`
         el.nextElementSibling.style.display = 'flex'
         const fp = flatpickr(`${id}`, {
@@ -483,24 +495,13 @@ export function element(el) {
                     return formattedDate
                 })
                 el.children[3].textContent = formatString[0] + '-' + formatString[1]
-                elem.textContent === 'Очистить' ? input.value = '' : (yesterdaySummary(res, type), input.value = '', elem.closest('.calendar').style.display = 'none')
+                elem.textContent === 'Очистить' ? input.value = '' : arrayIdw.length === 0 ? (yesterdaySummary(res, type), input.value = '', elem.closest('.calendar').style.display = 'none') :
+                    (viewStat(arrayIdw, sele, res), input.value = '', elem.closest('.calendar').style.display = 'none')
             })
         )
     }
     else {
         el.closest('.select_summary').nextElementSibling.style.display = 'none'
-        const checkboxBlocks = el.closest('.left_block').nextElementSibling.children[1]
-        const checkboxes = Array.from(checkboxBlocks.querySelectorAll('.checkListStart')).map(element => {
-            return element.children[0];
-        });
-        const arrayIdw = [];
-        checkboxes.shift();
-        checkboxes.forEach(e => {
-            if (e.checked === true) {
-                arrayIdw.push(e.value)
-            }
-        })
-        const sele = Array.from(el.closest('.select_summary').children)
         arrayIdw.length === 0 ? yesterdaySummary(el.value, type) : viewStat(arrayIdw, sele)
     }
     el.addEventListener('click', function () {
