@@ -15,6 +15,13 @@ export function startList(object) {
     arrayGlobal.push(array.filter(item => item[6] === 'Самосвал'));
     arrayGlobal.push(array.filter(item => item[6] === 'Самосвал-Прицеп'));
     let count = 0;
+    const checkInStart = document.querySelectorAll('.checkInStart')
+    console.log(checkInStart)
+    checkInStart.forEach(e => {
+        if (e) {
+            e.remove();
+        }
+    })
     arrayGlobal.forEach(el => {
         count++
         const title = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').nextElementSibling.children[0]
