@@ -55,13 +55,14 @@ export function startList(object) {
             const isOtherCheckboxChecked = checkboxes.find(blockCheckboxes => {
                 return Array.from(blockCheckboxes).some(i => i.checked && i.value !== block.children[0].children.value);
             });
-
             // Если есть другие выбранные чекбоксы, снимаем выбор с "All"
             if (isOtherCheckboxChecked) {
                 checkboxAll[0].checked = false;
             }
             console.log(enabledSettings);
-            viewStat(enabledSettings)
+            const sele = Array.from(block.closest('.rigth_block').previousElementSibling.children[1].children[0].lastElementChild.children[0])
+            console.log(sele)
+            viewStat(enabledSettings, sele)
         }
         // Обработка изменений для общего чекбокса "All" в текущем блоке
         function handleCheckboxAllChange(event) {
@@ -70,6 +71,8 @@ export function startList(object) {
                 checkbox.checked = false
             });
             block.children[0].children[0].checked = true;
+            const sele = Array.from(block.closest('.rigth_block').previousElementSibling.children[1].children[0].lastElementChild.children[0])
+            sele[0].selected = true;
             yesterdaySummary()
             yesterdaySummary('Вчера')
         }
@@ -87,19 +90,42 @@ export function startList(object) {
 }
 
 // Функция, которую вы хотите запускать при изменении состояния чекбоксов
-async function viewStat(checkedValues) {
+export async function viewStat(checkedValues, sele) {
+    console.log(sele)
     console.log(checkedValues)
     console.log('чекед был')
     // Здесь вы можете использовать выбранные значения
     console.log(checkedValues);
+    let interval;
+    sele.forEach(e => {
+        if (e.selected === true) {
+            interval = e.value;
+        }
+    });
     const dat = [];
-    dat.push(convertDate(0), convertDate(1))
+    console.log(interval)
+    let int;
+    if (interval === 'Неделя') {
+        int = 8
+    }
+    else if (interval === 'Месяц') {
+        int = 31
+    }
+    else if (interval === 'Вчера') {
+        int = 1
+    }
+    else {
+        int = ''
+    }
+    console.log(int)
+    int !== '' ? dat.push([convertDate(0)], [convertDate(int), convertDate(1)]) : console.log('пустая')
     const idw = checkedValues
     console.log(dat)
     let count = 0;
     const dannie = [];
     for (let i = 0; i < dat.length; i++) {
         const data = dat[i]
+        console.log(data)
         const params = {
             method: "POST",
             headers: {

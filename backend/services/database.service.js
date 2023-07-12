@@ -746,19 +746,38 @@ module.exports.summaryYestodayToBase = (data, company) => {
 
 module.exports.sumIdwToBase = (data, idw) => {
     return new Promise((resolve, reject) => {
-        try {
-            const selectBase = "SELECT * FROM summary WHERE idw IN (?) AND data=?";
-            const values = [idw, [data]];
-            console.log(values);
-            connection.query(selectBase, values, function (err, results) {
-                if (err) console.log(err);
-                resolve(results);
-            });
-        } catch (e) {
-            console.log(e);
-            reject(e);
+        if (data.length === 1) {
+            console.log('один')
+            console.log(data)
+            try {
+                const selectBase = "SELECT * FROM summary WHERE idw IN (?) AND data=?";
+                const values = [idw, data];
+                console.log(values);
+                connection.query(selectBase, values, function (err, results) {
+                    if (err) console.log(err);
+                    resolve(results);
+                });
+            } catch (e) {
+                console.log(e);
+                reject(e);
+            }
+        }
+        else {
+            try {
+                const selectBase = "SELECT * FROM summary WHERE idw IN (?) AND STR_TO_DATE(data, '%Y-%m-%d') >= ? AND STR_TO_DATE(data, '%Y-%m-%d') <= ?"
+                const values = [idw, data[0], data[1]];
+                console.log(values)
+                connection.query(selectBase, values, function (err, results) {
+                    if (err) console.log(err);
+                    //   console.log(results)
+                    resolve(results);
+                });
+            } catch (e) {
+                console.log(e);
+            }
         }
     });
+
 };
 
 

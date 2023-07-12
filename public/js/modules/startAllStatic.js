@@ -1,6 +1,7 @@
 
 import { fnParMessage, fnPar } from './grafiks.js'
 import { allObjects } from './menu.js'
+import { viewStat } from './checkObjectStart.js'
 export let uniqglobalInfo;
 
 export async function startAllStatic(objects) {
@@ -488,9 +489,20 @@ export function element(el) {
     }
     else {
         el.closest('.select_summary').nextElementSibling.style.display = 'none'
-        yesterdaySummary(el.value, type)
+        const checkboxBlocks = el.closest('.left_block').nextElementSibling.children[1]
+        const checkboxes = Array.from(checkboxBlocks.querySelectorAll('.checkListStart')).map(element => {
+            return element.children[0];
+        });
+        const arrayIdw = [];
+        checkboxes.shift();
+        checkboxes.forEach(e => {
+            if (e.checked === true) {
+                arrayIdw.push(e.value)
+            }
+        })
+        const sele = Array.from(el.closest('.select_summary').children)
+        arrayIdw.length === 0 ? yesterdaySummary(el.value, type) : viewStat(arrayIdw, sele)
     }
-
     el.addEventListener('click', function () {
         el.children[3].textContent = 'Выбрать дату'
         //el.children[0].selected = true;
