@@ -255,12 +255,13 @@ function moto(data) {
             return [el.time[0], el.time[el.time.length - 1]]
         })
         const mass = [];
+        console.log(timeGran)
         if (timeGran.length > 1) {
             let start = 0; // начальный индекс для сравнения
             for (let i = 0; i < timeGran.length - 1; i++) {
                 const diffInSeconds = (timeGran[i + 1][0].getTime() - timeGran[start][1].getTime()) / 1000;
-                if (diffInSeconds > 1200) {
-                    mass.push([timeGran[start][1], timeGran[i + 1][0]])
+                if (diffInSeconds > 900) {
+                    mass.push([timeGran[start][0], timeGran[start][1]])
                     start = i + 1; // обновляем начальный индекс
                 }
             }
@@ -268,11 +269,11 @@ function moto(data) {
         if (timeGran.length === 1) {
             mass.push([timeGran])
         }
+        console.log(mass)
         return mass.length
     }
     return { moto: motoHours, prostoy: unixProstoy }
 }
-
 function rashodCalc(data) {
     const resArray = [];
     const zapravka = [];
@@ -328,7 +329,6 @@ function timefn() {
     return [timeNow, timeOld]
 }
 export async function yesterdaySummary(interval, type) {
-
     let int;
     if (interval === 'Неделя') {
         int = 7
@@ -406,7 +406,6 @@ export async function yesterdaySummary(interval, type) {
                 globalInfo[prop].jobTS = resultJobTS.filter(subObj => subObj.type === globalInfo[prop].type).length;
             }
         }
-
         let jobNum = 0;
         Object.values(newObject).forEach(it => {
             it.jobTS === 1 ? jobNum++ : null

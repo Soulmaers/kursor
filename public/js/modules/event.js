@@ -561,7 +561,10 @@ card.forEach(elem => {
         })
         changeParams.value = '1';
         iconParamsz()
-        elem.classList.add('acto')
+        const checkAlt = document.getElementById('check_Title')
+        if (checkAlt.checked === true) {
+            elem.classList.add('acto')
+        }
         const checkConfig = document.getElementById('check_Title')
         checkConfig.checked ? sensors.style.display = 'flex' : sensors.style.display = 'none'
         btnsens[0].style.display = 'none'

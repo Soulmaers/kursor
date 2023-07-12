@@ -69,7 +69,7 @@ exports.getAllSensorsIdDataFromWialon = async (id, timeOld, timeNow, login) => {
     const prms3 = {
         "source": "",
         "indexFrom": 0,
-        "indexTo": 90000,
+        "indexTo": 180000,
         "unitId": id,
         "sensorId": 0,
 
@@ -144,7 +144,7 @@ exports.geoDataFromWialon = async (time1, time2, idw, login) => {
         "timeTo": time1,//2757209816,
         "flags": 1,
         "flagsMask": 65281,
-        "loadCount": 82710
+        "loadCount": 180000
     }
     return new Promise(async function (resolve, reject) {
         const session = await getSessiont(login);
@@ -164,7 +164,7 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
         "timeTo": timeNow,
         "flags": 1,
         "flagsMask": 1,
-        "loadCount": 90000
+        "loadCount": 180000
     }
     return new Promise(async function (resolve, reject) {
         const session = await getSessiont(login);

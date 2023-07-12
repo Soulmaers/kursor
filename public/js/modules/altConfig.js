@@ -116,6 +116,11 @@ export function createConfig(selectOld) {
 }
 
 function clearConfig() {
+    /*const acto = document.querySelector('.acto')
+    console.log(acto)*/
+    // acto.classList.remove('acto')
+    /* const wrapButton = document.querySelector('.wrapper_button')
+      wrapButton.style.display = 'none'*/
     const selectType = document.querySelector('.select_type')
     selectType.style.display = 'none'
     const checkAlt = document.querySelector('.checkAlt')
