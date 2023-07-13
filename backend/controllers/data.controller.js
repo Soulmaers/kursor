@@ -30,7 +30,7 @@ exports.getData = async (req, res) => {
         res.json('сессия открыта')
         await updateParams(login);
         setInterval(updateParams, 60000, login);
-
+        // test(login)
     } catch (err) {
         console.log(err);
         res.json('ошибка')
@@ -104,7 +104,25 @@ exports.up = async (req, res) => {
 }
 
 
-
+const test = async (login) => {
+    console.log('rr' + login)
+    const data = await wialonService.getDataFromWialon(login)
+    const allCar = Object.entries(data)
+    let count = 0;
+    for (const el of allCar[5][1]) {
+        const rr = await wialonService.loadIntervalDataFromWialon(el.id, 1689243930, 1689243960, 'i')//1689195600, 1689242545
+        const mass = [];
+        rr.messages.forEach(e => {
+            mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, e.pos.s])
+        })
+        console.log('лог' + login)
+        const rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, login)
+        console.log(rez)
+        count++
+        console.log(count)
+        // await databaseService.saveChartDataToBase(mass);
+    }
+}
 
 async function updateParams(login) {
     //запрашиваем данные параметры по обектам с виалона
@@ -115,6 +133,7 @@ async function updateParams(login) {
     allCar[5][1].forEach(async el => {
         const nameTable = el.nm.replace(/\s+/g, '');
         const idw = el.id;
+        const data = el.lmsg.t
         const speed = el.lmsg.pos ? el.lmsg.pos.s : null; // проверка на наличие свойства lmsg и свойства pos.s
         nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed]);
         const model = await databaseService.modelViewToBase(idw)
@@ -124,7 +143,6 @@ async function updateParams(login) {
         } else {
             statusTSI = '-';
         }
-
         const res = await engine(idw, login)
         let status;
         res.forEach(e => {
@@ -135,12 +153,15 @@ async function updateParams(login) {
         const todays = Math.floor(currentDate.getTime() / 1000);
         const activePost = el.nm.replace(/\s+/g, '');
         const resSaveStatus = await databaseService.saveStatusToBase(activePost, idw, todays, statusTSI, todays, status);
+
+
         if (el.lmsg) {
             const sensor = Object.entries(el.lmsg.p);
             const time = new Date()
             //сохраняем параметры в бд
             const resSave = await databaseService.saveDataToDatabase(nameTable, el.id, sensor, time);
         }
+
     });
     ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
     await zaprosSpisokb(nameCar)

@@ -113,14 +113,15 @@ export async function dataSelect() {
 export async function graftest(t1, t2) {
     const activeMenuGraf = document.querySelector('.activMenuGraf')
     if (activeMenuGraf.textContent === 'Давление') {
-        await datas(t1, t2);
+        datas(t1, t2);
+        console.log('финиш')
     }
     if (activeMenuGraf.textContent === 'Топливо') {
-        await oil(t1, t2)
+        oil(t1, t2)
 
     }
     if (activeMenuGraf.textContent === 'Скорость') {
-        await speed(t1, t2)
+        speed(t1, t2)
     }
 
 }

@@ -62,7 +62,30 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
     }
 };
 
-
+exports.saveChartDataToBase = async (mass) => {
+    //console.log(mass);
+    try {
+        const sql = `INSERT INTO chartData(idw, nameCar, data, speed) VALUES ?`;
+        connection.query(sql, [mass], function (err, results) {
+            if (err) console.log(err);
+        });
+    } catch (e) {
+        console.log(e);
+    }
+};
+exports.viewChartDataToBase = async (idw) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const postModel = `SELECT * FROM chartData WHERE idw='${idw}'`
+            connection.query(postModel, function (err, results) {
+                if (err) console.log(err);
+                resolve(results)
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    })
+};
 
 exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, status) => {
     if (status !== undefined) {

@@ -41,6 +41,7 @@ async function loadValue(array, timeOld, timeNow, login) {
         try {
             const res = await fetch('/api/loadInterval', param);
             const itog = await res.json();
+            console.log(itog)
             itog.messages.forEach(el => {
                 const timestamp = el.t;
                 const date = new Date(timestamp * 1000);
@@ -255,7 +256,6 @@ function moto(data) {
             return [el.time[0], el.time[el.time.length - 1]]
         })
         const mass = [];
-        console.log(timeGran)
         if (timeGran.length > 1) {
             let start = 0; // начальный индекс для сравнения
             for (let i = 0; i < timeGran.length - 1; i++) {
@@ -269,20 +269,33 @@ function moto(data) {
         if (timeGran.length === 1) {
             mass.push([timeGran])
         }
-        console.log(mass)
         return mass.length
     }
     return { moto: motoHours, prostoy: unixProstoy }
 }
 function rashodCalc(data) {
+    console.log(data)
     const resArray = [];
     const zapravka = [];
     const ras = [];
     let noZapravka;
+    //console.log(data.value);
+    /* let i = 0;
+     while (i < data.value.length - 1) {
+         if (data.value[i] === data.value[i + 1]) {
+             data.value.splice(i, 1);
+             data.time.splice(i, 1);
+             data.speed.splice(i, 1);
+         } else {
+             i++;
+         }
+     }*/
+    // console.log(data.value);
     for (let i = 0; i < data.value.length - 10; i++) {
         data.value[i] === 0 ? data.value[i] = data.value[i - 1] : data.value[i] = data.value[i]
         data.value[i + 1] === 0 ? data.value[i + 1] = data.value[i - 1] : data.value[i + 1] = data.value[i + 1]
         if (data.value[i] <= data.value[i + 1] || data.value[i] <= data.value[i + 2]) {
+            //  console.log(data.value[i], data.value[i + 1], data.value[i + 2])
             let oneNum = data.value[i]
             let fiveNum = data.value[i + 10]
             const res = fiveNum - oneNum
@@ -310,7 +323,9 @@ function rashodCalc(data) {
     if (zapravka.length === 0 && resArray.length === 0) {
         noZapravka = [{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }]
     }
-
+    console.log(zapravka)
+    console.log(ras)
+    console.log(noZapravka)
     const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
     const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
     const potracheno = sum - rashod >= 0 && ras.length !== 0 ? sum - rashod : noZapravka[0].start[0] - noZapravka[0].end[0] >= 0 ? noZapravka[0].start[0] - noZapravka[0].end[0] : 0;

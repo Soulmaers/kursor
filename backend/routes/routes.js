@@ -26,6 +26,7 @@ router.post('/api/sensors', controllerWialon.sensors)
 router.post('/api/sensorsName', controllerWialon.sensorsName)
 router.post('/api/loadInterval', controllerWialon.loadInterval)
 router.post('/api/lastSensors', controllerWialon.lastSensors)
+router.post('/api/viewChart', controllerWialon.viewChart)
 
 router.post('/api/geoloc', controllerGeo.geoloc)
 router.post('/api/alarmFind', controllerAlarm.alarmFind)

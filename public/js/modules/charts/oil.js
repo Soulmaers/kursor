@@ -62,7 +62,6 @@ export async function oil(t1, t2) {
             let oneNum = data[i].oil
             let fiveNum = data[i + 10].oil
             const res = fiveNum - oneNum
-            console.log(res)
             res > Number((3 / 100.03 * oneNum).toFixed(0)) && res < 100 ? resArray.push([oneNum, data[i].time]) : null
         }
         else {
@@ -76,7 +75,6 @@ export async function oil(t1, t2) {
             }
         }
     }
-    console.log(arrayOil)
     const arrDates = arrayOil.map(([num, str]) => new Date(str)); // массив дат
     for (let i = 0; i < arrayOil.length - 1; i++) {
         const diff = arrDates[i + 1].getTime() - arrDates[i].getTime();

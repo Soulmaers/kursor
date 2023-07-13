@@ -65,7 +65,8 @@ exports.getAnimalsWialon = async (login) => {
 };
 
 //запрос всех сенсоров по id объекта
-exports.getAllSensorsIdDataFromWialon = async (id, timeOld, timeNow, login) => {
+exports.getAllSensorsIdDataFromWialon = async (id, login) => {
+    console.log(id, login)
     const prms3 = {
         "source": "",
         "indexFrom": 0,
@@ -173,7 +174,6 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
                 console.log(err);
             })
             .then(function (data) {
-                //   console.log(data)
                 resolve(data)
             });
     })

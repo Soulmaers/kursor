@@ -26,6 +26,7 @@ export async function fnTime(t1, t2) {
     }
     const res = await fetch('/api/loadInterval', param)
     const result = await res.json()
+    console.log(result)
     const noGraf = document.querySelector('.noGraf')
     if (result.count === 0) {
       const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */

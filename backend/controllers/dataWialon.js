@@ -24,9 +24,9 @@ exports.parametrs = async (req, res) => {
 exports.sensors = async (req, res) => {
     const idw = req.body.idw
     const login = req.body.login
-    const timeOld = req.body.timeOld
-    const timeNow = req.body.timeNow
-    const params = await wialonService.getAllSensorsIdDataFromWialon(idw, timeOld, timeNow, login)
+    //  const timeOld = req.body.timeOld
+    // const timeNow = req.body.timeNow
+    const params = await wialonService.getAllSensorsIdDataFromWialon(idw, login)
     res.json(params)
 }
 //запрос на wialon и получение сенсоров по id
@@ -64,6 +64,12 @@ module.exports.datawialonAll = (req, res) => {
     catch (e) {
         console.log(e)
     }
+}
+
+exports.viewChart = async (req, res) => {
+    const idw = req.body.active
+    const params = await databaseService.viewChartDataToBase(idw)
+    res.json(params)
 }
 
 

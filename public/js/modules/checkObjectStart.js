@@ -12,18 +12,28 @@ export function startList(object) {
         .filter(e => e[6].startsWith('Самосвал'))
         .map(e => e);
     const arrayGlobal = [];
-    arrayGlobal.push(array.filter(item => item[6] === 'Самосвал'));
-    arrayGlobal.push(array.filter(item => item[6] === 'Самосвал-Прицеп'));
+    const filteredArray1 = array.filter(item => item[6] === 'Самосвал');
+    const filteredArray2 = array.filter(item => item[6] === 'Самосвал-Прицеп');
+
+    if (filteredArray1.length > 0) {
+        arrayGlobal.push(filteredArray1);
+    }
+    if (filteredArray2.length > 0) {
+        arrayGlobal.push(filteredArray2);
+    }
     let count = 0;
     const checkInStart = document.querySelectorAll('.checkInStart')
-    console.log(checkInStart)
-    checkInStart.forEach(e => {
-        if (e) {
-            e.remove();
-        }
-    })
+    if (checkInStart) {
+        checkInStart.forEach(e => {
+            if (e) {
+                e.remove();
+            }
+        })
+    }
+    console.log(arrayGlobal)
     arrayGlobal.forEach(el => {
         count++
+        console.log(el)
         const title = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').nextElementSibling.children[0]
         title.textContent = el[0][6]
         const wrapper = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').nextElementSibling

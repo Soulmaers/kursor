@@ -20,78 +20,119 @@ async function fn() {
     const osi = osis.result
     return { osi, params }
 }
+
+
+let isCanceled = false;
+
+async function testovfn(active) {
+    console.log(active)
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ active }))
+    }
+
+    const rest = await fetch('/api/viewChart', param)
+    const resultt = await rest.json()
+    return resultt
+}
 export async function datas(t1, t2) {
-    const ossParams = await fn()
-    const active = Number(document.querySelector('.color').id)
-    const global = await fnTime(t1, t2)
-    console.log(global)
-    const sensArr = await fnPar(active)
-    console.log(sensArr)
-    const nameArr = await fnParMessage(active)
-    console.log(nameArr)
-    const allArrNew = [];
-    nameArr.forEach((item) => {
-        allArrNew.push({ sens: item[0], params: item[1], value: [] })
-    })
-    const osss = ossParams.osi
-    const par = ossParams.params
-    console.log(osss)
-    osss.forEach(it => {
-        delete it.id
-        delete it.nameCar
-    })
-    par.forEach(el => {
-        osss.forEach(e => {
-            if (el.osNumber === e.idOs) {
-                el.bar = e
-            }
+    console.log(isCanceled)
+    if (isCanceled) {
+        return Promise.reject(new Error('Запрос отменен'));
+    }
+
+    isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
+
+    try {
+        const ossParams = await fn()
+        const active = Number(document.querySelector('.color').id)
+
+        console.log(active)
+        console.time(testovfn(active))
+        const ttt = await testovfn(active)
+        console.timeEnd(testovfn(active))
+        console.log(ttt)
+
+
+        console.time(fnTime(t1, t2))
+        const global = await fnTime(t1, t2)
+        console.timeEnd(fnTime(t1, t2))
+        console.log(global)
+        console.time(fnPar(active))
+        const sensArr = await fnPar(active)
+        console.timeEnd(fnPar(active))
+        const tte = sensArr.map(e => JSON.stringify(e));
+        console.log(tte);
+        console.log(sensArr)
+        const nameArr = await fnParMessage(active)
+        const allArrNew = [];
+        nameArr.forEach((item) => {
+            allArrNew.push({ sens: item[0], params: item[1], value: [] })
         })
-    })
-    sensArr.forEach(el => {
-        for (let i = 0; i < allArrNew.length; i++) {
-            allArrNew[i].value.push(Object.values(el)[i])
-        }
-    })
-    const finishArrayData = []
-    const finishArrayDataT = []
-    const stop = [];
-    const idw = document.querySelector('.color').id
-    console.log(idw)
-    allArrNew.forEach(e => {
-        if (e.params.startsWith('tpms_p')) {
-            finishArrayData.push(e)
-        }
-        if (e.params.startsWith('tpms_t')) {
-            finishArrayDataT.push(e)
-        }
-        if (e.params.startsWith('pwr_ext') && e.sens.startsWith('Бортовое')) {
-            e.value.forEach(el => {
-                if (idw === '26821431') {
-                    el >= 13 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
-                    //    console.log('11')
-                }
-                else {
-                    el >= 26.5 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
-                    //   console.log('22')
+        const osss = ossParams.osi
+        const par = ossParams.params
+        osss.forEach(it => {
+            delete it.id
+            delete it.nameCar
+        })
+        par.forEach(el => {
+            osss.forEach(e => {
+                if (el.osNumber === e.idOs) {
+                    el.bar = e
                 }
             })
-        }
-    })
-    finishArrayData.forEach((el, index) => {
-        el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
-        el.speed = global[1]
-        el.stop = stop
-    })
-    console.log(finishArrayData)
-    finishArrayData.forEach(e => {
-        par.forEach(it => {
-            if (e.params === it.pressure) {
-                e.bar = it.bar
-                e.position = Number(it.tyresdiv)
+        })
+        sensArr.forEach(el => {
+            for (let i = 0; i < allArrNew.length; i++) {
+                allArrNew[i].value.push(Object.values(el)[i])
             }
         })
-    })
-    await grafikStartPress(global[0], finishArrayData)
+        const finishArrayData = []
+        const finishArrayDataT = []
+        const stop = [];
+        const idw = document.querySelector('.color').id
+        allArrNew.forEach(e => {
+            if (e.params.startsWith('tpms_p')) {
+                finishArrayData.push(e)
+            }
+            if (e.params.startsWith('tpms_t')) {
+                finishArrayDataT.push(e)
+            }
+            if (e.params.startsWith('pwr_ext') && e.sens.startsWith('Бортовое')) {
+                e.value.forEach(el => {
+                    if (idw === '26821431') {
+                        el >= 13 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
+                        //    console.log('11')
+                    }
+                    else {
+                        el >= 26.5 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
+                        //   console.log('22')
+                    }
+                })
+            }
+        })
+        finishArrayData.forEach((el, index) => {
+            el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
+            el.speed = global[1]
+            el.stop = stop
+        })
+        finishArrayData.forEach(e => {
+            par.forEach(it => {
+                if (e.params === it.pressure) {
+                    e.bar = it.bar
+                    e.position = Number(it.tyresdiv)
+                }
+            })
+        })
+        await grafikStartPress(global[0], finishArrayData)
+        isCanceled = false;
+    }
+    catch (e) {
+        isCanceled = false;
+    }
 }
 
 async function grafikStartPress(times, datar) {
@@ -107,8 +148,6 @@ async function grafikStartPress(times, datar) {
     const info = document.createElement('div')
     info.classList.add('infos')
     graf.prepend(info)
-
-    console.log(datar)
     const newData = datar.map((el, index) => {
         return {
             ...el,
@@ -162,6 +201,10 @@ async function grafikStartPress(times, datar) {
     }));
 
     console.log(dat2)
+    let t = 0;
+    //   dat2.forEach(el => el.val.filter(e => (++t) % 3 === 0));
+
+
     /*
     const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
         sens,
@@ -199,7 +242,6 @@ async function grafikStartPress(times, datar) {
         }
         return 0;
     });
-    console.log(dat2)
     const container = d3.select('.infoGraf');
     // Связываем данные с контейнером
     const charts = container.selectAll('.charts')
@@ -525,12 +567,11 @@ async function grafikStartPress(times, datar) {
             let idleTimeout;
             function idled() { idleTimeout = null; }
             function brushed(x, i) {
-                console.log('брушед')
+
                 let leftToRight;
                 var brushEndX = d3.event.sourceEvent.clientX;
                 var selection = d3.event.selection;
                 if (!brushStartX || !selection || !selection.length) {
-                    console.log("no direction, no selection");
                 } else {
                     brushEndX > brushStartX ? leftToRight = "left to right" : leftToRight = "right to left"
                 }
@@ -582,7 +623,6 @@ async function grafikStartPress(times, datar) {
                     if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 300000) {
                         if (!idleTimeout) return idleTimeout = setTimeout(idled, 350);
                     } else {
-                        console.log(i)
                         // Если чекбокс не нажат, то масштабируем только текущий график
                         x.domain([x.invert(extent[0]), x.invert(extent[1])]);
                         svg.select(".brush").call(brush.move, null)
@@ -694,7 +734,6 @@ async function grafikStartPress(times, datar) {
                     .attr("d", area2)
             })
             svg.on("mousemove", function (d) {
-                console.log('тултип')
                 // Определяем координаты курсора в отношении svg
                 const [xPosition, yPosition] = d3.mouse(this);
                 // Определяем ближайшую точку на графике
@@ -739,16 +778,13 @@ async function grafikStartPress(times, datar) {
                     else if (d.value === -0.5 && d.speed <= 5 && d.stop == 'ВКЛ') {
                         for (let i = 0; i < data.val.length; i++) {
                             if (d.dates === data.val[i].dates) {
-                                console.log(data.val[i].stop)
-                                console.log(data.val[i - 1].stop)
+
                                 if (data.val[i - 1].stop === 'ВЫКЛ') {
-                                    console.log('один')
                                     tt2.textContent = `Двигатель выключен`;
                                     tt1.textContent = ''
                                     dav = '-';
                                 }
                                 else {
-                                    console.log('два')
                                     tt2.textContent = `Давление: Датчик не на связи`
                                     tt1.textContent = ''
                                     dav = '-'
@@ -767,8 +803,6 @@ async function grafikStartPress(times, datar) {
                     else if (d.tvalue === -0.5 && d.speed <= 5 && d.stop == 'ВКЛ') {
                         for (let i = 0; i < data.val.length; i++) {
                             if (d.dates === data.val[i].dates) {
-                                console.log(data.val[i].stop)
-                                console.log(data.val[i - 1].stop)
                                 if (data.val[i - 1].stop === 'ВЫКЛ') {
                                     tt3.textContent = ``
                                     temp = '-'
@@ -917,8 +951,6 @@ async function iconChart() {
 
 async function vieModelChart(model, im1) {
     model.sort((a, b) => parseInt(a.osi) - parseInt(b.osi));
-    console.log(model)
-    console.log(im1)
     im1.forEach(it => {
         for (let i = 0; i < model.length; i++) {
             const os = document.createElement('div')
