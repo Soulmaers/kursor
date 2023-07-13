@@ -407,13 +407,14 @@ export async function yesterdaySummary(interval, type) {
             }
         }
         let jobNum = 0;
-        Object.values(newObject).forEach(it => {
-            it.jobTS === 1 ? jobNum++ : null
-        })
+        console.log(newObject)
+        for (const prop in newObject) {
+            newObject[prop].jobTS === 1 ? jobNum++ : null
+        }
         Object.entries(globalInfo).forEach(el => {
             el[1].moto = timesDate(el[1].moto)
             el[1].prostoy = timesFormat(el[1].prostoy)
-            el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / (interval ? jobNum : el[1].jobTS)).toFixed(2)) : 0;
+            el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / (interval && interval !== 'Вчера' ? jobNum : el[1].jobTS)).toFixed(2)) : 0;
             delete el[1].id
             delete el[1].idw
             delete el[1].nameCar
@@ -421,7 +422,7 @@ export async function yesterdaySummary(interval, type) {
             delete el[1].data
         })
         const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
-        console.log(globalInfo)
+        //console.log(globalInfo)
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
             const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
