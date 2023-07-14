@@ -63,6 +63,7 @@ async function loadValue(array, timeOld, timeNow, login) {
             const sensArr = await fnPar(idw)
             const nameSens = await fnParMessage(idw)
             const allArrNew = [];
+            console.log(sensArr)
             nameSens.forEach((item) => {
                 allArrNew.push({ sens: item[0], params: item[1], value: [] })
             })
