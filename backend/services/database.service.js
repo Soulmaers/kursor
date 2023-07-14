@@ -80,7 +80,7 @@ exports.viewChartDataToBase = async (idw, t1, t2) => {
             const postModel = `SELECT * FROM chartData WHERE idw='${idw}' AND data >= ${t1} AND data <= ${t2}`;
             connection.query(postModel, function (err, results) {
                 if (err) console.log(err);
-                const filteredResults = results.filter((_, index) => index % 2 === 1);
+                const filteredResults = results.filter((_, index) => index % 5 === 1);
                 resolve(filteredResults);
             });
         } catch (e) {
