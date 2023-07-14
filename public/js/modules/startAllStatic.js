@@ -369,6 +369,7 @@ export async function yesterdaySummary(interval, type) {
     const mods = await fetch('/api/summaryYestoday', params)
     const models = await mods.json()
     const mod = type ? models.filter(el => el.type === type) : models
+    console.log(mod)
     if (mod.length === 0) {
         console.log('нет данных по объектам в базе')
     }
@@ -383,8 +384,11 @@ export async function yesterdaySummary(interval, type) {
             }
             return acc;
         }, {});
-        for (const prop in newObject) {
-            const subObj = newObject[prop];
+
+        let obj;
+        interval && interval !== 'Вчера' ? obj = newObject : obj = objectUniq;
+        for (const prop in obj) {
+            const subObj = obj[prop];
             if (subObj.type) {
                 if (globalInfo[subObj.type]) {
                     for (const subProp in subObj) {
@@ -437,7 +441,7 @@ export async function yesterdaySummary(interval, type) {
             delete el[1].data
         })
         const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
-        //console.log(globalInfo)
+
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
             const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children

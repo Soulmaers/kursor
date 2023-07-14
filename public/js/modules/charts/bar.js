@@ -51,11 +51,10 @@ export async function datas(t1, t2) {
         const active = Number(document.querySelector('.color').id)
 
         console.log(active)
-        console.time(testovfn(active))
-        const ttt = await testovfn(active)
-        console.timeEnd(testovfn(active))
-        console.log(ttt)
-
+        // console.time(testovfn(active))
+        // const ttt = await testovfn(active)
+        // console.timeEnd(testovfn(active))
+        //
 
         console.time(fnTime(t1, t2))
         const global = await fnTime(t1, t2)
