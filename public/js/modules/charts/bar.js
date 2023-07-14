@@ -50,7 +50,7 @@ export async function datas(t1, t2) {
         console.time(testovfn(active, t1, t2))
         const ttt = await testovfn(active, t1, t2)
         console.timeEnd(testovfn(active, t1, t2))
-
+        console.log(ttt)
         const itogy = ttt.map(it => {
             return {
                 id: it.idw,
@@ -67,10 +67,10 @@ export async function datas(t1, t2) {
         const speedArray = itogy.map(it => it.speed);
         const global = [timeArray, speedArray];
 
-        console.time(fnTime(t1, t2))
-        const globals = await fnTime(t1, t2)
-        console.timeEnd(fnTime(t1, t2))
-        //  console.log(global)
+        // console.time(fnTime(t1, t2))
+        ///  const globals = await fnTime(t1, t2)
+        // console.timeEnd(fnTime(t1, t2))
+        // console.log(globals)
         // console.time(fnPar(active))
         //  const sensArr = await fnPar(active)
         //  console.timeEnd(fnPar(active))
@@ -100,8 +100,6 @@ export async function datas(t1, t2) {
                 allArrNew[i].value.push(Object.values(el)[i])
             }
         })
-
-        console.log(allArrNew)
         const finishArrayData = []
         const finishArrayDataT = []
         const stop = [];
@@ -139,7 +137,9 @@ export async function datas(t1, t2) {
                 }
             })
         })
+        console.time(await grafikStartPress(global[0], finishArrayData))
         await grafikStartPress(global[0], finishArrayData)
+        console.timeEnd(await grafikStartPress(global[0], finishArrayData))
         isCanceled = false;
     }
     catch (e) {
@@ -186,7 +186,6 @@ async function grafikStartPress(times, datar) {
     const gl = times.map(it => {
         return new Date(it)
     })
-
     const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
         sens,
         position,
@@ -211,7 +210,6 @@ async function grafikStartPress(times, datar) {
             }
         })
     }));
-
     console.log(dat2)
     let t = 0;
     //   dat2.forEach(el => el.val.filter(e => (++t) % 3 === 0));
