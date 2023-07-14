@@ -68,7 +68,9 @@ module.exports.datawialonAll = (req, res) => {
 
 exports.viewChart = async (req, res) => {
     const idw = req.body.active
-    const params = await databaseService.viewChartDataToBase(idw)
+    const t1 = req.body.t1
+    const t2 = req.body.t2
+    const params = await databaseService.viewChartDataToBase(idw, t1, t2)
     res.json(params)
 }
 

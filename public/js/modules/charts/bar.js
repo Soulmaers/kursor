@@ -24,14 +24,14 @@ async function fn() {
 
 let isCanceled = false;
 
-async function testovfn(active) {
+async function testovfn(active, t1, t2) {
     console.log(active)
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ active }))
+        body: (JSON.stringify({ active, t1, t2 }))
     }
 
     const rest = await fetch('/api/viewChart', param)
@@ -51,26 +51,41 @@ export async function datas(t1, t2) {
         const active = Number(document.querySelector('.color').id)
 
         console.log(active)
-        // console.time(testovfn(active))
-        // const ttt = await testovfn(active)
-        // console.timeEnd(testovfn(active))
-        //
+        console.time(testovfn(active, t1, t2))
+        const ttt = await testovfn(active, t1, t2)
+        console.timeEnd(testovfn(active, t1, t2))
 
-        console.time(fnTime(t1, t2))
-        const global = await fnTime(t1, t2)
-        console.timeEnd(fnTime(t1, t2))
-        console.log(global)
-        console.time(fnPar(active))
-        const sensArr = await fnPar(active)
-        console.timeEnd(fnPar(active))
-        const tte = sensArr.map(e => JSON.stringify(e));
-        console.log(tte);
-        console.log(sensArr)
+        const itogy = ttt.map(it => {
+            return {
+                id: it.idw,
+                nameCar: it.nameCar,
+                time: (new Date(it.data * 1000)).toISOString(),
+                speed: it.speed,
+                val: JSON.parse(it.sens)
+            }
+        })
+        const sensTest = itogy.map(e => {
+            return e.val
+        })
+        const timeArray = itogy.map(it => (new Date(it.time)).toISOString());
+        const speedArray = itogy.map(it => it.speed);
+        const global = [timeArray, speedArray];
+
+        //   console.time(fnTime(t1, t2))
+        // const global = await fnTime(t1, t2)
+        //  console.timeEnd(fnTime(t1, t2))
+        //  console.log(global)
+        // console.time(fnPar(active))
+        //  const sensArr = await fnPar(active)
+        //  console.timeEnd(fnPar(active))
+        // console.log(sensArr)
         const nameArr = await fnParMessage(active)
         const allArrNew = [];
+
         nameArr.forEach((item) => {
             allArrNew.push({ sens: item[0], params: item[1], value: [] })
         })
+
         const osss = ossParams.osi
         const par = ossParams.params
         osss.forEach(it => {
@@ -84,11 +99,13 @@ export async function datas(t1, t2) {
                 }
             })
         })
-        sensArr.forEach(el => {
+        sensTest.forEach(el => {
             for (let i = 0; i < allArrNew.length; i++) {
                 allArrNew[i].value.push(Object.values(el)[i])
             }
         })
+
+        console.log(allArrNew)
         const finishArrayData = []
         const finishArrayDataT = []
         const stop = [];
@@ -126,6 +143,8 @@ export async function datas(t1, t2) {
                 }
             })
         })
+        console.log(finishArrayData)
+        console.log(global[0])
         await grafikStartPress(global[0], finishArrayData)
         isCanceled = false;
     }

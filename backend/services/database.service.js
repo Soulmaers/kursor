@@ -65,7 +65,7 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
 exports.saveChartDataToBase = async (mass) => {
     //console.log(mass);
     try {
-        const sql = `INSERT INTO chartData(idw, nameCar, data, speed) VALUES ?`;
+        const sql = `INSERT INTO chartData(idw, nameCar, data, speed, sens) VALUES ?`;
         connection.query(sql, [mass], function (err, results) {
             if (err) console.log(err);
         });
@@ -73,10 +73,25 @@ exports.saveChartDataToBase = async (mass) => {
         console.log(e);
     }
 };
-exports.viewChartDataToBase = async (idw) => {
+exports.viewChartDataToBase = async (idw, t1, t2) => {
+    console.log(t1, t2)
     return new Promise((resolve, reject) => {
         try {
-            const postModel = `SELECT * FROM chartData WHERE idw='${idw}'`
+            const postModel = `SELECT * FROM chartData WHERE idw='${idw}' AND data >= ${t1} AND data <= ${t2}`;
+            connection.query(postModel, function (err, results) {
+                if (err) console.log(err);
+                resolve(results);
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    });
+};
+
+exports.lostChartDataToBase = async () => {
+    return new Promise((resolve, reject) => {
+        try {
+            const postModel = `SELECT data FROM chartData ORDER BY data DESC LIMIT 1`
             connection.query(postModel, function (err, results) {
                 if (err) console.log(err);
                 resolve(results)
@@ -86,6 +101,9 @@ exports.viewChartDataToBase = async (idw) => {
         }
     })
 };
+
+
+
 
 exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, status) => {
     if (status !== undefined) {
