@@ -25,7 +25,6 @@ async function fn() {
 let isCanceled = false;
 
 async function testovfn(active, t1, t2) {
-    console.log(active)
     const param = {
         method: "POST",
         headers: {
@@ -33,7 +32,6 @@ async function testovfn(active, t1, t2) {
         },
         body: (JSON.stringify({ active, t1, t2 }))
     }
-
     const rest = await fetch('/api/viewChart', param)
     const resultt = await rest.json()
     return resultt
@@ -49,8 +47,6 @@ export async function datas(t1, t2) {
     try {
         const ossParams = await fn()
         const active = Number(document.querySelector('.color').id)
-
-        console.log(active)
         console.time(testovfn(active, t1, t2))
         const ttt = await testovfn(active, t1, t2)
         console.timeEnd(testovfn(active, t1, t2))
@@ -71,9 +67,9 @@ export async function datas(t1, t2) {
         const speedArray = itogy.map(it => it.speed);
         const global = [timeArray, speedArray];
 
-        //   console.time(fnTime(t1, t2))
-        // const global = await fnTime(t1, t2)
-        //  console.timeEnd(fnTime(t1, t2))
+        console.time(fnTime(t1, t2))
+        const globals = await fnTime(t1, t2)
+        console.timeEnd(fnTime(t1, t2))
         //  console.log(global)
         // console.time(fnPar(active))
         //  const sensArr = await fnPar(active)
@@ -143,8 +139,6 @@ export async function datas(t1, t2) {
                 }
             })
         })
-        console.log(finishArrayData)
-        console.log(global[0])
         await grafikStartPress(global[0], finishArrayData)
         isCanceled = false;
     }
@@ -779,11 +773,8 @@ async function grafikStartPress(times, datar) {
                     let temp;
                     tt1.textContent = d.stop === 'ВКЛ' ? `Время: ${(selectedTime)}` : null
                     if (d.value === -0.5 && d.speed > 5) {
-
                         const date = new Date(d.dates);
-
                         date.setMinutes(date.getMinutes() - 7);
-                        console.log(date);
                         // const selectedData = dat2.filter(d => d.val.find(val => val.dates === date));
                         //  console.log(selectedData)
                         tt2.textContent = `Давление: Потеря связи с датчиком`
