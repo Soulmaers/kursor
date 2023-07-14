@@ -74,13 +74,14 @@ exports.saveChartDataToBase = async (mass) => {
     }
 };
 exports.viewChartDataToBase = async (idw, t1, t2) => {
-    console.log(t1, t2)
+    console.log(t1, t2);
     return new Promise((resolve, reject) => {
         try {
             const postModel = `SELECT * FROM chartData WHERE idw='${idw}' AND data >= ${t1} AND data <= ${t2}`;
             connection.query(postModel, function (err, results) {
                 if (err) console.log(err);
-                resolve(results);
+                const filteredResults = results.filter((_, index) => index % 2 === 1);
+                resolve(filteredResults);
             });
         } catch (e) {
             console.log(e);

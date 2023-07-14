@@ -60,13 +60,19 @@ export async function datas(t1, t2) {
                 val: JSON.parse(it.sens)
             }
         })
+
+
         const sensTest = itogy.map(e => {
             return e.val
         })
+
         const timeArray = itogy.map(it => (new Date(it.time)).toISOString());
         const speedArray = itogy.map(it => it.speed);
         const global = [timeArray, speedArray];
 
+
+        //  let t = 0;
+        //   dat2.forEach(el => el.val.filter(e => (++t) % 3 === 0));
         // console.time(fnTime(t1, t2))
         ///  const globals = await fnTime(t1, t2)
         // console.timeEnd(fnTime(t1, t2))
@@ -137,6 +143,7 @@ export async function datas(t1, t2) {
                 }
             })
         })
+        console.log(finishArrayData)
         console.time(await grafikStartPress(global[0], finishArrayData))
         await grafikStartPress(global[0], finishArrayData)
         console.timeEnd(await grafikStartPress(global[0], finishArrayData))
@@ -211,9 +218,6 @@ async function grafikStartPress(times, datar) {
         })
     }));
     console.log(dat2)
-    let t = 0;
-    //   dat2.forEach(el => el.val.filter(e => (++t) % 3 === 0));
-
 
     /*
     const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
