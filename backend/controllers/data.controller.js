@@ -26,6 +26,7 @@ exports.getData = async (req, res) => {
         const token = await getTokenFromDB(login)
         console.log(token)
         const session = await wialonModule.login(token);
+        // console.log(session)
         sessions[login] = session;
         res.json('сессия открыта')
         await updateParams(login);
@@ -107,7 +108,7 @@ exports.up = async (req, res) => {
 
 
 const test = async (login) => {
-    // console.log('rr' + login)
+    console.log('rr' + login)
     const data = await wialonService.getDataFromWialon(login)
     const timeBase = await databaseService.lostChartDataToBase()
     const oldTime = Number(timeBase[0].data)
