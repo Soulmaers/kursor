@@ -30,10 +30,10 @@ exports.getData = async (req, res) => {
         sessions[login] = session;
         res.json('сессия открыта')
         await updateParams(login);
-        setInterval(updateParams, 60000, login);
+        setInterval(updateParams, 180000, login);
         //  console.log('повторка?')
-        // setTimeout(test, 15000, login)
-        //  test(login)
+        setTimeout(test, 15000)
+        // test(login)
     } catch (err) {
         console.log(err);
         res.json('ошибка')
@@ -106,10 +106,11 @@ exports.up = async (req, res) => {
     res.json({ message: 'ок' })
 }
 
-
-const test = async (login) => {
-    console.log('rr' + login)
-    const data = await wialonService.getDataFromWialon(login)
+let dataSensToBase;
+const test = async () => {
+    // console.log('rr' + login)
+    //const data = await wialonService.getDataFromWialon(login)
+    const data = dataSensToBase;
     const timeBase = await databaseService.lostChartDataToBase()
     const oldTime = Number(timeBase[0].data)
     const allCar = Object.entries(data)
@@ -119,8 +120,8 @@ const test = async (login) => {
     // console.log(oldTime)
     // console.log(nowTime)
     for (const el of allCar[5][1]) {
-        const rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 3, nowTime, login)//1688205660  1688216460   1689235140 1689195600, 1689242545
-        const rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, login)
+        const rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 3, nowTime, 'i')//1688205660  1688216460   1689235140 1689195600, 1689242545
+        const rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i')
         // console.log(rr.messages.length)
         // console.log(rez.length)
         const mass = [];
@@ -132,6 +133,7 @@ const test = async (login) => {
             el.push(sens[index])
         })
         if (rr.messages.length === rez.length && rr.messages.length !== 0 && rez.length !== 0) {
+            console.log(mass)
             await databaseService.saveChartDataToBase(mass);
             // console.log('запись сделана по id' + ' ' + el.nm)
         }
@@ -141,7 +143,7 @@ const test = async (login) => {
 
     }
     console.log('запись окончена')
-    setInterval(test, 300000, login)
+    setInterval(test, 300000)
 
 }
 
@@ -149,6 +151,7 @@ async function updateParams(login) {
     //запрашиваем данные параметры по обектам с виалона
     const data = await wialonService.getDataFromWialon(login)
     // const type = await wialonService.getAnimalsWialon(login)
+    dataSensToBase = data
     const nameCar = [];
     const allCar = Object.entries(data)
     allCar[5][1].forEach(async el => {
