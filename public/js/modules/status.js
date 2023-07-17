@@ -54,6 +54,7 @@ export async function iconParams() {
         const ign_card = document.querySelector('.ign_card')
         allArr.forEach(async it => {
             if (it.includes('Зажигание')) {
+                console.log(it)
                 count++
                 let status;
                 let statusTSI;
@@ -61,7 +62,7 @@ export async function iconParams() {
                 const tsiValue = document.querySelector('.tsi_value')
                 it[2] === 1 ? status = 'ВКЛ' : status = 'ВЫКЛ'
                 console.log(tsiparam)
-                power > Number(tsiparam) ? statusTSI = 'ВКЛ' : statusTSI = 'ВЫКЛ'
+                Number(tsiparam) && power > Number(tsiparam) ? statusTSI = 'ВКЛ' : statusTSI = 'ВЫКЛ'
                 console.log(statusTSI)
                 const statusObj = document.querySelector('.status_obj')
                 let mess;
