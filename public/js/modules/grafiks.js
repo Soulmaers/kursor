@@ -37,14 +37,17 @@ export async function fnTime(t1, t2) {
       noGraf.style.display = 'none'
       const global = [];
       const speed = []
+      const geo = [];
+      console.log(result.messages)
       result.messages.forEach(el => {
         const timestamp = el.t;
         const date = new Date(timestamp * 1000);
         const isoString = date.toISOString();
         global.push(isoString)
         speed.push(el.pos.s)
-        resolve([global, speed])
+        geo.push([el.pos.y, el.pos.x])
       })
+      resolve([global, speed, geo])
     }
   })
 

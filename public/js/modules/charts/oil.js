@@ -1,5 +1,6 @@
 import { fnTime, fnPar, fnParMessage } from '../grafiks.js'
 import { Tooltip } from '../../class/Tooltip.js'
+//import { dostupObject } from '../../../../backend/services/database.service.js'
 
 
 export async function oil(t1, t2) {
@@ -9,6 +10,7 @@ export async function oil(t1, t2) {
     const sensArr = await fnPar(active)
     const nameArr = await fnParMessage(active)
     console.log(global)
+    console.log(sensArr)
     const gl = global[0].map(it => {
         return new Date(it)
     })
@@ -34,6 +36,7 @@ export async function oil(t1, t2) {
 
     finishArrayData.forEach(el => {
         object.time = gl
+        object.geo = global[2]
         if (el.sens === 'Топливо' || el.sens === 'Топливо ДУТ') {
             object.left = el.value.map(it => {
                 return it === -348201.3876 ? it = 0 : it
@@ -43,9 +46,10 @@ export async function oil(t1, t2) {
             object.right = el.value
         }
     })
-    console.log(object)
+    //  console.log(object)
 
     const data = object.time.map((t, i) => ({
+        geo: object.geo[i],
         time: t,
         oil: object.left ? Number(object.left[i].toFixed(0)) : 0,
         pwr: object.right ? Number(object.right[i] != null ? Number(object.right[i]).toFixed(0) : 0) : null
@@ -62,7 +66,7 @@ export async function oil(t1, t2) {
             let oneNum = data[i].oil
             let fiveNum = data[i + 10].oil
             const res = fiveNum - oneNum
-            res > Number((3 / 100.03 * oneNum).toFixed(0)) && res < 100 ? resArray.push([oneNum, data[i].time]) : null
+            res > Number((3 / 100.03 * oneNum).toFixed(0)) && res < 100 ? resArray.push([oneNum, data[i].time, data[i].geo]) : null
         }
         else {
             // console.log(resArray)
@@ -78,14 +82,14 @@ export async function oil(t1, t2) {
     const arrDates = arrayOil.map(([num, str]) => new Date(str)); // массив дат
     for (let i = 0; i < arrayOil.length - 1; i++) {
         const diff = arrDates[i + 1].getTime() - arrDates[i].getTime();
-        if (diff < 5 * 60 * 1000) { // если интервал меньше 5 минут
+        if (diff < 15 * 60 * 1000) { // если интервал меньше 15 минут
             console.log(`Элементы ${i} и ${i + 1} находятся в интервале меньше 5 минут`); // выводим информацию о найденных парах элементов
             arrayOil.splice(i + 1, 1)
         }
     }
     console.log(arrayOil)
     const objOil = arrayOil.map(it => {
-        return { num: it[0], data: it[1], icon: "../../../image/refuel.png" }
+        return { num: it[0], data: it[1], geo: it[2], icon: "../../../image/refuel.png" }
     })
 
     const grafOld = document.querySelector('.infoGraf')
@@ -294,6 +298,10 @@ export async function oil(t1, t2) {
     console.log(data[0].time)
 
 
+    const tooltip = svg.append("text")
+        .attr("class", "tooltipIcon")
+        .style("opacity", 0);
+
     svg.selectAll("image")
         .data(objOil)
         .enter()
@@ -304,21 +312,88 @@ export async function oil(t1, t2) {
         .attr("xlink:href", "../../../image/ref.png") // путь к иконке
         .attr("width", 24) // ширина вашей иконки
         .attr("height", 24) // высота вашей иконки
+        .style("opacity", 0.5)
         .attr("transform", "translate(-12,0)")
-    /* .on("mouseover", function (d) { // добавляем всплывающую подсказку при наведении мыши на иконку
-         console.log('мув')
-         d3.select(this).style("opacity", 0.3); // делаем иконку немного прозрачной при наведении
-         svg.append("text")
-             .attr("class", "marker-label")
-             .attr("x", xScale(new Date(d.data)))
-             .attr("y", height - margin.bottom - iconHeight - 10)
-             .attr("text-anchor", "middle")
-         //  .text(d.label);
-     })
-     .on("mouseout", function (d) { // убираем всплывающую подсказку при убирании мыши с иконки
-         d3.select(this).style("opacity", 1); // возвращаем иконке полную прозрачность
-         svg.select(".marker-label").remove();
-     });*/
+        .on("click", function (d) {
+            // Ваша функция обработчика события
+
+
+            console.log(d.geo)
+            const mapss = document.getElementById('mapOil')
+            if (this.classList.contains('clickOil')) {
+                mapss.remove();
+                this.classList.remove('clickOil');
+                return
+            }
+            const icons = document.querySelectorAll('.iconOil')
+            icons.forEach(e => {
+                e.classList.remove('clickOil');
+            })
+            if (mapss) {
+                mapss.remove();
+            }
+            const main = document.querySelector('.main')
+            const maps = document.createElement('div')
+            maps.classList.add('mapsOilCard')
+            maps.setAttribute('id', 'mapOil')
+            main.style.position = 'relative'
+            maps.style.width = '300px';
+            maps.style.height = '300px'
+            maps.style.position = 'absolute'
+            maps.style.left = '25px';
+            maps.style.top = '500px';
+            main.appendChild(maps)
+            const map = L.map('mapOil')
+
+            var LeafIcon = L.Icon.extend({
+                options: {
+                    iconSize: [30, 30],
+                    iconAnchor: [10, 18],
+                    popupAnchor: [0, 0]
+                }
+            });
+
+            var customIcon = new LeafIcon({
+                iconUrl: '../../image/ref.png',
+                iconSize: [20, 20],
+                iconAnchor: [20, 20],
+                popupAnchor: [0, 0],
+                className: 'custom-marker-oil'
+            });
+            map.setView(d.geo, 18)
+            map.flyTo(d.geo, 18)
+            const iss = L.marker(d.geo, { icon: customIcon }).bindPopup('машина').addTo(map);
+            iss.on('mouseover', function (e) {
+                this.openPopup();
+            });
+            iss.on('mouseout', function (e) {
+                this.closePopup();
+            });
+            map.attributionControl.setPrefix(false)
+            const leaf = document.querySelector('.leaflet-control-attribution');
+            leaf.style.display = 'none';
+            const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
+            });
+            map.addLayer(layer);
+            this.classList.add('clickOil');
+        });
+    /*  .on("mousemove", function (d) {
+          d3.select(this).style("opacity", 1);
+          tooltip.transition()
+              .duration(200)
+              .style("opacity", 1);
+          tooltip.attr("x", x(new Date(d.data)) - 40)
+              .attr("y", 20)
+              .attr("text-anchor", "middle")
+              .text('Заправка');
+      })
+      .on("mouseout", function (d) {
+          d3.select(this).style("opacity", 0.5);
+          tooltip.transition()
+              .duration(200)
+              .style("opacity", 0);
+      });*/
 
     const imoOil = document.querySelectorAll('.iconOil')
     console.log(imoOil)
@@ -334,7 +409,7 @@ export async function oil(t1, t2) {
 
     // Add brushing
     var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-        .extent([[0, 30], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+        .extent([[0, 50], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
         .on("end", updateChart)
     var brushStartX = 0;
     brush.on("start", function () {

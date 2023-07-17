@@ -94,6 +94,10 @@ iconStrela.addEventListener('click', () => {
 let intervalId
 const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {
+    const mapss = document.getElementById('mapOil')
+    if (mapss) {
+        mapss.remove();
+    }
     const start = document.querySelector('.start')
     start.style.display = 'none'
     const dash = document.querySelector('.wrapper_right_dash')
@@ -115,7 +119,10 @@ const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', mainblock)
 
 function mainblock() {
-
+    const mapss = document.getElementById('mapOil')
+    if (mapss) {
+        mapss.remove();
+    }
     const idw = document.querySelector('.color')
     if (!idw) {
         const main = document.querySelector('.main')
@@ -511,6 +518,10 @@ plug[2].addEventListener('click', () => {
     model.style.marginLeft = '0'
     sections.style.width = '40%'
     visualGrafics.prepend(model);
+    const mapss = document.getElementById('mapOil')
+    if (mapss) {
+        mapss.remove();
+    }
     click()
 
     clearGraf()
@@ -519,6 +530,10 @@ plug[2].addEventListener('click', () => {
 const menuGraf = document.querySelectorAll('.menu_graf')
 menuGraf.forEach(el => {
     el.addEventListener('click', () => {
+        const mapss = document.getElementById('mapOil')
+        if (mapss) {
+            mapss.remove();
+        }
         const grafOld = document.querySelector('.infoGraf')
         if (grafOld) {
             removeElem(grafOld)

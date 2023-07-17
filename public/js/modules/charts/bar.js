@@ -34,6 +34,7 @@ async function testovfn(active, t1, t2) {
     }
     const rest = await fetch('/api/viewChart', param)
     const resultt = await rest.json()
+    console.log(resultt)
     return resultt
 }
 export async function datas(t1, t2) {
