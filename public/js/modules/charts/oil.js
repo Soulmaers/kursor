@@ -294,21 +294,20 @@ export async function oil(t1, t2) {
     console.log(data[0].time)
 
 
-
-
     svg.selectAll("image")
         .data(objOil)
         .enter()
         .append("image")
+        .attr('class', 'iconOil')
         .attr("x", d => x(new Date(d.data)))
         //.attr("y", d => y1(d.num) - 30)
         .attr("xlink:href", "../../../image/ref.png") // путь к иконке
         .attr("width", 24) // ширина вашей иконки
         .attr("height", 24) // высота вашей иконки
         .attr("transform", "translate(-12,0)")
-
     /* .on("mouseover", function (d) { // добавляем всплывающую подсказку при наведении мыши на иконку
-         d3.select(this).style("opacity", 0.5); // делаем иконку немного прозрачной при наведении
+         console.log('мув')
+         d3.select(this).style("opacity", 0.3); // делаем иконку немного прозрачной при наведении
          svg.append("text")
              .attr("class", "marker-label")
              .attr("x", xScale(new Date(d.data)))
@@ -321,8 +320,13 @@ export async function oil(t1, t2) {
          svg.select(".marker-label").remove();
      });*/
 
-
-
+    const imoOil = document.querySelectorAll('.iconOil')
+    console.log(imoOil)
+    imoOil.forEach(el => {
+        el.addEventListener('click', () => {
+            console.log('клик-иконка')
+        })
+    })
 
     const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
     preloaderGraf.style.opacity = 0;
