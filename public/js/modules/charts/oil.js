@@ -334,7 +334,7 @@ export async function oil(t1, t2) {
 
     // Add brushing
     var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-        .extent([[0, 0], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+        .extent([[0, 30], [width, height]])  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
         .on("end", updateChart)
     var brushStartX = 0;
     brush.on("start", function () {

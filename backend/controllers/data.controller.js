@@ -32,7 +32,7 @@ exports.getData = async (req, res) => {
         await updateParams(login);
         setInterval(updateParams, 180000, login);
         //  console.log('повторка?')
-        //  setTimeout(test, 15000)
+        //setTimeout(test, 15000)
         // test(login)
     } catch (err) {
         console.log(err);
