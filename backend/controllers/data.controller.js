@@ -32,8 +32,13 @@ exports.getData = async (req, res) => {
         await updateParams(login);
         setInterval(updateParams, 180000, login);
         //  console.log('повторка?')
+<<<<<<< HEAD
         setTimeout(test, 15000)
         // test(login)
+=======
+        setTimeout(test, 15000, login)
+        //  test(login)
+>>>>>>> 795a646697c0071a392764e38c4384be48820238
     } catch (err) {
         console.log(err);
         res.json('ошибка')
