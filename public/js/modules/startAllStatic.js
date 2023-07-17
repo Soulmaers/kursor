@@ -61,6 +61,7 @@ async function loadValue(array, timeOld, timeNow, login) {
                 uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 0, probeg: probegDay };
             }
             const sensArr = await fnPar(idw)
+            console.log(sensArr)
             const nameSens = await fnParMessage(idw)
             const allArrNew = [];
             console.log(sensArr)
@@ -97,7 +98,7 @@ async function loadValue(array, timeOld, timeNow, login) {
                 if (it.sens.startsWith('Зажигание')) {
                     hh.push(it)
                     const res = moto(it);
-                    const prostoyHours = res.prostoy.reduce((acc, el) => acc + el, 0)
+                    const prostoyHours = res.prostoy !== 0 ? res.prostoy.reduce((acc, el) => acc + el, 0) : 0
                     uniqObject[idw] = { ...uniqObject[idw], motoHours: res.moto, prostoy: prostoyHours };
                 }
             })
@@ -191,88 +192,97 @@ export function timesFormat(dates) {
 }
 
 function moto(data) {
-    const zeros = [];
-    const ones = [];
-    const prostoy = [];
-    const korzina = [];
-    const razgruzka = [];
-    let startIndex = 0;
-    data.value.forEach((values, index) => {
-        if (values !== data.value[startIndex]) {
-            const subarray = data.time.slice(startIndex, index);
-            const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index) };
-            (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
-            (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
-            if (data.sens.startsWith('Под')) {
-                const raz = { value: data.value.slice(startIndex, index), time: data.time.slice(startIndex, index) };
-                (data.value[startIndex] === 0 ? korzina : razgruzka).push(raz);
-            }
-            startIndex = index;
-        }
-    });
-    const subarray = data.time.slice(startIndex);
-    const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex) };
-    (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
-    (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
-    if (data.sens.startsWith('Под')) {
-        const raz = { value: data.value.slice(startIndex), time: data.time.slice(startIndex) };
-        (data.value[startIndex] === 0 ? korzina : razgruzka).push(raz);
+    if (data.value.length === 0) {
+        console.log('ретерн')
+        return { moto: 0, prostoy: 0 }
     }
-    let totalMs = 0;
-    const filteredData = prostoy.map(obj => {
-        const newS = [];
-        const timet = [];
-        for (let i = 0; i < obj.speed.length; i++) {
-            if (obj.speed[i] < 5) {
-                newS.push(obj.speed[i]);
-                timet.push(obj.time[i])
-            } else {
-                break;
-            }
-        }
-        return { speed: newS, time: timet };
-    });
+    else {
 
-
-    const timeProstoy = filteredData.map(el => {
-        return [el.time[0], el.time[el.time.length - 1]]
-    })
-    const unixProstoy = [];
-    timeProstoy.forEach(it => {
-        if (it[0] !== undefined) {
-            const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
-            if (diffInSeconds > 600) {
-                unixProstoy.push(diffInSeconds)
+        const zeros = [];
+        const ones = [];
+        const prostoy = [];
+        const korzina = [];
+        const razgruzka = [];
+        let startIndex = 0;
+        data.value.forEach((values, index) => {
+            if (values !== data.value[startIndex]) {
+                const subarray = data.time.slice(startIndex, index);
+                const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index) };
+                (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
+                (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
+                if (data.sens.startsWith('Под')) {
+                    const raz = { value: data.value.slice(startIndex, index), time: data.time.slice(startIndex, index) };
+                    (data.value[startIndex] === 0 ? korzina : razgruzka).push(raz);
+                }
+                startIndex = index;
             }
+        });
+        const subarray = data.time.slice(startIndex);
+        const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex) };
+        (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
+        (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
+        if (data.sens.startsWith('Под')) {
+            const raz = { value: data.value.slice(startIndex), time: data.time.slice(startIndex) };
+            (data.value[startIndex] === 0 ? korzina : razgruzka).push(raz);
         }
-    })
-    ones.forEach(dates => {
-        const [date1, date2] = dates.map(dateStr => new Date(dateStr));
-        const diffMs = date2.getTime() - date1.getTime(); // разница между датами в миллисекундах
-        totalMs += diffMs;
-    });
-    const motoHours = isNaN(totalMs) ? 0 : totalMs
-    if (data.sens.startsWith('Под')) {
-        const timeGran = razgruzka.map(el => {
-            return [el.time[0], el.time[el.time.length - 1]]
-        })
-        const mass = [];
-        if (timeGran.length > 1) {
-            let start = 0; // начальный индекс для сравнения
-            for (let i = 0; i < timeGran.length - 1; i++) {
-                const diffInSeconds = (timeGran[i + 1][0].getTime() - timeGran[start][1].getTime()) / 1000;
-                if (diffInSeconds > 900) {
-                    mass.push([timeGran[start][0], timeGran[start][1]])
-                    start = i + 1; // обновляем начальный индекс
+        let totalMs = 0;
+        const filteredData = prostoy.map(obj => {
+            const newS = [];
+            const timet = [];
+            for (let i = 0; i < obj.speed.length; i++) {
+                if (obj.speed[i] < 5) {
+                    newS.push(obj.speed[i]);
+                    timet.push(obj.time[i])
+                } else {
+                    break;
                 }
             }
+            return { speed: newS, time: timet };
+        });
+
+
+        const timeProstoy = filteredData.map(el => {
+            return [el.time[0], el.time[el.time.length - 1]]
+        })
+        const unixProstoy = [];
+        timeProstoy.forEach(it => {
+            if (it[0] !== undefined) {
+                const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
+                if (diffInSeconds > 600) {
+                    unixProstoy.push(diffInSeconds)
+                }
+            }
+        })
+        ones.forEach(dates => {
+            const [date1, date2] = dates.map(dateStr => new Date(dateStr));
+            const diffMs = date2.getTime() - date1.getTime(); // разница между датами в миллисекундах
+            totalMs += diffMs;
+        });
+        const motoHours = isNaN(totalMs) ? 0 : totalMs
+        if (data.sens.startsWith('Под')) {
+            const timeGran = razgruzka.map(el => {
+                return [el.time[0], el.time[el.time.length - 1]]
+            })
+            const mass = [];
+            console.log(timeGran)
+            if (timeGran.length > 1) {
+                let start = 0; // начальный индекс для сравнения
+                for (let i = 0; i < timeGran.length - 1; i++) {
+                    const diffInSeconds = (timeGran[i + 1][0].getTime() - timeGran[start][1].getTime()) / 1000;
+                    if (diffInSeconds > 900) {
+                        mass.push([timeGran[start][0], timeGran[start][1]])
+                        start = i + 1; // обновляем начальный индекс
+                    }
+                }
+            }
+            if (timeGran.length === 1) {
+                mass.push([timeGran])
+            }
+            console.log(mass)
+            return mass.length
         }
-        if (timeGran.length === 1) {
-            mass.push([timeGran])
-        }
-        return mass.length
+        return { moto: motoHours, prostoy: unixProstoy }
     }
-    return { moto: motoHours, prostoy: unixProstoy }
 }
 function rashodCalc(data) {
     console.log(data)
