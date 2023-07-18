@@ -90,49 +90,84 @@ export async function oil(t1, t2) {
         pwr: object.right ? Number(object.right[i] != null ? Number(object.right[i]).toFixed(0) : 0) : null
     }))
     console.log(data);
-    const arrayOil = [];
-    const resArray = [];
-    const zapravka = [];
-    for (let i = 0; i < data.length - 10; i++) {
-        data[i].oil === 0 && i !== 0 ? data[i].oil = data[i - 1].oil : data[i].oil = data[i].oil
-        data[i + 1].oil === 0 && i !== 0 ? data[i + 1].oil = data[i - 1].oil : data[i + 1].oil = data[i + 1].oil
-        // data[i + 5].oil === 0 ? data[i + 5].oil = data[i + 4].oil : data[i + 5].oil = data[i + 5].oil
-        // if (data.value[i] <= data.value[i + 1] || data.value[i] <= data.value[i + 2]) {
-        if (data[i].oil <= data[i + 1].oil || data[i].oil <= data[i + 2].oil) {
-            let oneNum = data[i].oil
-            let fiveNum = data[i + 10].oil
-            const res = fiveNum - oneNum
-            res > Number((3 / 100.03 * oneNum).toFixed(0)) && res < 100 ? resArray.push([oneNum, data[i].time, data[i].geo]) : null
-        }
-        else {
-            // console.log(resArray)
-            if (resArray.length !== 0) {
-                arrayOil.push(resArray[0])
-                console.log(data[i].oil, resArray[0][0])
-                zapravka.push([data[i].oil - resArray[0][0], data[i].time])
-                resArray.length = 0
-            }
-            else {
-                console.log('массив пустой')
-            }
+
+    for (let i = 0; i < data.length - 1; i++) {
+        if (data[i].oil === data[i + 1].oil) {
+            data.splice(i, 1);
+            i--; // уменьшаем индекс, чтобы не пропустить следующий объект после удаления
         }
     }
+    const increasingIntervals = [];
+    const decreasingIntervals = [];
+    let start = 0;
+    let end = 0;
+    for (let i = 0; i < data.length - 1; i++) {
+        const currentObj = data[i];
+        const nextObj = data[i + 1];
+        if (currentObj.oil < nextObj.oil) {
+            if (start === end) {
+                start = i;
+            }
+            end = i + 1;
+        } else if (currentObj.oil > nextObj.oil) {
+            if (start !== end) {
+                increasingIntervals.push([data[start], data[end]]);
+            }
+            start = end = i + 1;
+        }
+    }
+    if (start !== end) {
+        increasingIntervals.push([data[start], data[end]]);
+    }
+    start = end = 0;
+    for (let i = 0; i < data.length - 1; i++) {
+        const currentObj = data[i];
+        const nextObj = data[i + 1];
+        if (currentObj.oil > nextObj.oil) {
+            if (start === end) {
+                start = i;
+            }
+            end = i + 1;
+        } else if (currentObj.oil < nextObj.oil) {
+            if (start !== end) {
+                decreasingIntervals.push([data[start], data[end]]);
+            }
+            start = end = i + 1;
+        }
+    }
+    if (start !== end) {
+        decreasingIntervals.push([data[start], data[end]]);
+    }
+    const zapravka = increasingIntervals.filter((interval, index) => {
+        const firstOil = interval[0].oil;
+        const lastOil = interval[interval.length - 1].oil;
+        const difference = lastOil - firstOil;
+        const threshold = firstOil * 0.05;
+        if (index < increasingIntervals.length - 1) {
+            const nextInterval = increasingIntervals[index + 1];
+            const currentTime = interval[interval.length - 1].time;
+            const nextTime = nextInterval[0].time;
+            const timeDifference = nextTime - currentTime;
+
+            if (timeDifference < 5 * 60 * 1000) {
+                interval.push(nextInterval[nextInterval.length - 1]);
+                interval.splice(1, 1)
+                increasingIntervals.splice(index + 1, 1);
+            }
+        }
+        return firstOil !== 0 && difference >= threshold;
+    });
+
+    console.log(decreasingIntervals)
+    console.log(data)
     console.log(zapravka)
-    console.log(arrayOil)
-    const arrDates = arrayOil.map(([num, str]) => new Date(str)); // массив дат
-    for (let i = 0; i < arrayOil.length - 1; i++) {
-        const diff = arrDates[i + 1].getTime() - arrDates[i].getTime();
-        if (diff < 15 * 60 * 1000) { // если интервал меньше 15 минут
-            console.log(`Элементы ${i} и ${i + 1} находятся в интервале меньше 15 минут`); // выводим информацию о найденных парах элементов
-            arrayOil.splice(i + 1, 1)
-        }
-    }
-    console.log(arrayOil)
-    const objOil = arrayOil.map((it, i) => {
-        const times = timesFormat((zapravka[i][1].getTime() / 1000) - (it[1].getTime() / 1000))
+    const objOil = zapravka.map(it => {
+        const times = timesFormat((it[1].time.getTime() / 1000) - (it[0].time.getTime() / 1000))
+        const oilValue = it[1].oil - it[0].oil
+        console.log(oilValue)
         const one = times.slice(2)
         const time = one.split(":")[0]
-        return { num: it[0], data: it[1], geo: it[2], zapravka: zapravka[i], time: time, icon: "../../../image/refuel.png" }
+        return { data: it[0].time, geo: it[0].geo, zapravka: oilValue, time: time, icon: "../../../image/refuel.png" }
     })
 
     const grafOld = document.querySelector('.infoGraf')
@@ -341,7 +376,7 @@ export async function oil(t1, t2) {
     console.log(data[0].time)
 
 
-    const tooltip = svg.append("text")
+    const tooltipOil = svg.append("text")
         .attr("class", "tooltipIcon")
         .style("opacity", 0);
 
@@ -406,7 +441,7 @@ export async function oil(t1, t2) {
             map.setView(d.geo, 18)
             map.flyTo(d.geo, 18)
 
-            const iss = L.marker(d.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nЗаправлено: ${d.zapravka[0]} л.\nВремя: ${d.time} мин.`, { className: 'my-popup-oil' }).addTo(map);
+            const iss = L.marker(d.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nЗаправлено: ${d.zapravka} л.\nВремя: ${d.time} мин.`, { className: 'my-popup-oil' }).addTo(map);
             iss.getPopup().options.className = 'my-popup-oil'
             iss.on('mouseover', function (e) {
                 this.openPopup();
@@ -423,23 +458,30 @@ export async function oil(t1, t2) {
             map.addLayer(layer);
             d3.select(this).style("opacity", 1);
             this.classList.add('clickOil');
-        });
-    /*  .on("mousemove", function (d) {
-          d3.select(this).style("opacity", 1);
-          tooltip.transition()
-              .duration(200)
-              .style("opacity", 1);
-          tooltip.attr("x", x(new Date(d.data)) - 40)
-              .attr("y", 20)
-              .attr("text-anchor", "middle")
-              .text('Заправка');
-      })
-      .on("mouseout", function (d) {
-          d3.select(this).style("opacity", 0.5);
-          tooltip.transition()
-              .duration(200)
-              .style("opacity", 0);
-      });*/
+        })
+    /* .on("mousemove", function (d) {
+         d3.select(this).style("opacity", 1);
+         //  const tooltipOil = d3.select('.tooltipOil');
+         tooltipOil.transition()
+             .duration(200)
+             .style("opacity", 1);
+         tooltipOil.attr("x", x(new Date(d.data)) - 40)
+             .attr("y", 20)
+             .attr("text-anchor", "middle")
+             .text('Заправка');
+         const toll = document.querySelector('.tooltip')
+         if (toll) {
+             toll.remove();
+         }
+     })
+     .on("mouseout", function (d) {
+         d3.select(this).style("opacity", 0.5);
+         // const tooltipOil = d3.select('.tooltipOil');
+         const toll = document.querySelector('.tooltip')
+         if (toll) {
+             toll.remove();
+         }
+     });*/
 
     const imoOil = document.querySelectorAll('.iconOil')
     console.log(imoOil)
@@ -708,25 +750,17 @@ export async function oil(t1, t2) {
                 .attr("d", area2)
         });
     }
-    svg.on("mousemove", function (d) {
-        const toll = document.querySelector('.tooltip')
-        if (toll) {
-            toll.remove();
-        }
-        // Определяем координаты курсора в отношении svg
-        const [xPosition, yPosition] = d3.mouse(this);
-        // Определяем ближайшую точку на графике
-        const bisect = d3.bisector(d => d.time).right;
-        const x0 = x.invert(xPosition);
-        const i = bisect(data, x0, 1);
-        const d0 = data[i - 1];
-        const d1 = data[i];
-        d = x0 - d0.time > d1.time - x0 ? d1 : d0;
 
-        const tooltip = d3.select(".infoGraf").append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
+    svg.on("mousemove", function (d) {
         svg.on("mousemove", function (d) {
+            const toll = document.querySelector('.tooltip')
+            if (toll) {
+                toll.remove();
+            }
+
+            const tooltip = d3.select(".infoGraf").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
             // Определяем координаты курсора в отношении svg
             const [xPosition, yPosition] = d3.mouse(this);
             // Определяем ближайшую точку на графике
@@ -752,6 +786,7 @@ export async function oil(t1, t2) {
         })
             // Добавляем обработчик события mouseout, чтобы скрыть подсказку
             .on("mouseout", function (event, d) {
+                const tooltip = d3.select('.tooltip')
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
