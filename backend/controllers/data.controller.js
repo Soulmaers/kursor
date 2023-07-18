@@ -32,7 +32,7 @@ exports.getData = async (req, res) => {
         await updateParams(login);
         setInterval(updateParams, 180000, login);
         //  console.log('повторка?')
-        setTimeout(test, 15000)
+        //    setTimeout(test, 15000)
         // test(login)
     } catch (err) {
         console.log(err);
@@ -117,30 +117,35 @@ const test = async () => {
     const now = new Date();
     const nowTime = Math.floor(now.getTime() / 1000);
     // let oldTime = !time ? 1689335912 : time
-    // console.log(oldTime)
+    console.log(oldTime)
     // console.log(nowTime)
     for (const el of allCar[5][1]) {
         let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
         let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
-
-        while (rr.messages.length !== rez.length || rr.messages.length === 0 || rez.length === 0) {
-            rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
-            rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
+        if (rr.messages.length === 0 || rez.length === 0) {
+            console.log('нет новый данных')
         }
-        console.log(rr.messages.length);
-        console.log(rez.length);
-        const mass = [];
-        rr.messages.forEach(e => {
-            const geo = JSON.stringify([e.pos.y, e.pos.x]);
-            mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, e.pos.s, geo]);
-        });
-        const sens = rez.map(e => JSON.stringify(e));
-        mass.forEach((el, index) => {
-            el.push(sens[index]);
-        });
+        else {
+            //   console.log(rr, rez)
+            while (rr.messages.length !== rez.length) {
+                rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
+                rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
+            }
+            console.log(rr.messages.length);
+            console.log(rez.length);
+            const mass = [];
+            rr.messages.forEach(e => {
+                const geo = JSON.stringify([e.pos.y, e.pos.x]);
+                mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, e.pos.s, geo]);
+            });
+            const sens = rez.map(e => JSON.stringify(e));
+            mass.forEach((el, index) => {
+                el.push(sens[index]);
+            });
 
-        await databaseService.saveChartDataToBase(mass);
-        console.log('запись сделана по id' + ' ' + el.nm);
+            await databaseService.saveChartDataToBase(mass);
+            console.log('запись сделана по id' + ' ' + el.nm);
+        }
     }
     console.log('запись окончена')
     setInterval(test, 300000)

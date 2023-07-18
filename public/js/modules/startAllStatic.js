@@ -20,6 +20,7 @@ export async function startAllStatic(objects) {
     const timeOld = interval[1]
     const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow, login)
+    console.log(res.uniq)
     return res.uniq
 }
 async function loadValue(array, timeOld, timeNow, login) {
@@ -61,10 +62,8 @@ async function loadValue(array, timeOld, timeNow, login) {
                 uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 0, probeg: probegDay };
             }
             const sensArr = await fnPar(idw)
-            console.log(sensArr)
             const nameSens = await fnParMessage(idw)
             const allArrNew = [];
-            console.log(sensArr)
             nameSens.forEach((item) => {
                 allArrNew.push({ sens: item[0], params: item[1], value: [] })
             })

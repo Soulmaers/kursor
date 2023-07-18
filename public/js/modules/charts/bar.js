@@ -24,7 +24,7 @@ async function fn() {
 
 let isCanceled = false;
 
-async function testovfn(active, t1, t2) {
+export async function testovfn(active, t1, t2) {
     const param = {
         method: "POST",
         headers: {
@@ -34,7 +34,6 @@ async function testovfn(active, t1, t2) {
     }
     const rest = await fetch('/api/viewChart', param)
     const resultt = await rest.json()
-    console.log(resultt)
     return resultt
 }
 export async function datas(t1, t2) {
@@ -42,46 +41,44 @@ export async function datas(t1, t2) {
     if (isCanceled) {
         return Promise.reject(new Error('Запрос отменен'));
     }
-
     isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
-
     try {
         const ossParams = await fn()
         const active = Number(document.querySelector('.color').id)
-        console.time(testovfn(active, t1, t2))
-        const ttt = await testovfn(active, t1, t2)
-        console.timeEnd(testovfn(active, t1, t2))
-        console.log(ttt)
-        const itogy = ttt.map(it => {
-            return {
-                id: it.idw,
-                nameCar: it.nameCar,
-                time: (new Date(it.data * 1000)).toISOString(),
-                speed: it.speed,
-                val: JSON.parse(it.sens)
-            }
-        })
-
-
-        const sensTest = itogy.map(e => {
-            return e.val
-        })
-
-        const timeArray = itogy.map(it => (new Date(it.time)).toISOString());
-        const speedArray = itogy.map(it => it.speed);
-        const global = [timeArray, speedArray];
+        /*  console.time(testovfn(active, t1, t2))
+          const ttt = await testovfn(active, t1, t2)
+          console.timeEnd(testovfn(active, t1, t2))
+          console.log(ttt)
+          const itogy = ttt.map(it => {
+              return {
+                  id: it.idw,
+                  nameCar: it.nameCar,
+                  time: (new Date(it.data * 1000)).toISOString(),
+                  speed: it.speed,
+                  val: JSON.parse(it.sens)
+              }
+          })
+  
+  
+          const sensTest = itogy.map(e => {
+              return e.val
+          })
+  
+          const timeArray = itogy.map(it => (new Date(it.time)).toISOString());
+          const speedArray = itogy.map(it => it.speed);
+          const global = [timeArray, speedArray];*/
 
 
         //  let t = 0;
         //   dat2.forEach(el => el.val.filter(e => (++t) % 3 === 0));
-        // console.time(fnTime(t1, t2))
-        ///  const globals = await fnTime(t1, t2)
-        // console.timeEnd(fnTime(t1, t2))
-        // console.log(globals)
-        // console.time(fnPar(active))
-        //  const sensArr = await fnPar(active)
-        //  console.timeEnd(fnPar(active))
-        // console.log(sensArr)
+        console.time(fnTime(t1, t2))
+        const global = await fnTime(t1, t2)
+        console.timeEnd(fnTime(t1, t2))
+        console.log(global)
+        console.time(fnPar(active))
+        const sensArr = await fnPar(active)
+        console.timeEnd(fnPar(active))
+        console.log(sensArr)
         const nameArr = await fnParMessage(active)
         const allArrNew = [];
 
@@ -102,7 +99,7 @@ export async function datas(t1, t2) {
                 }
             })
         })
-        sensTest.forEach(el => {
+        sensArr.forEach(el => {
             for (let i = 0; i < allArrNew.length; i++) {
                 allArrNew[i].value.push(Object.values(el)[i])
             }

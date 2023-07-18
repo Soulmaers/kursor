@@ -7,10 +7,13 @@ const routes = require('./backend/routes/routes')
 const userRoutes = require('./backend/routes/userRoutes')
 const configRoutes = require('./backend/routes/configRoutes')
 //const isToken = require('./middleware/auth.js')
+const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 require('events').EventEmitter.prototype._maxListeners = 0;
 
-var morgan = require('morgan');
+
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(passport.initialize())
@@ -23,6 +26,9 @@ require('./backend/middleware/passport')(passport); // pass passport for configu
 
 app.use(bodyParser.json())
 app.use(cookieParser());
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+
+app.use(morgan('combined', { stream: accessLogStream }));
 //app.use(morgan('dev')); // log every request to the console
 app.set('view engine', 'ejs'); // set up ejs for templating
 

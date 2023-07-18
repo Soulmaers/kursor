@@ -1,18 +1,55 @@
 import { fnTime, fnPar, fnParMessage } from '../grafiks.js'
 import { Tooltip } from '../../class/Tooltip.js'
+import { testovfn } from './bar.js'
 //import { dostupObject } from '../../../../backend/services/database.service.js'
 
 
 export async function oil(t1, t2) {
     console.log('график топлива')
     const active = document.querySelector('.color').id
+    const nameCar = document.querySelector('.color').children[0].textContent
+    console.log(nameCar)
+    /*  const ttt = await testovfn(active, t1, t2)
+      const nameArr = await fnParMessage(active)
+      const itogy = ttt.map(it => {
+          return {
+              id: it.idw,
+              nameCar: it.nameCar,
+              time: (new Date(it.data * 1000)).toISOString(),
+              speed: it.speed,
+              geo: JSON.parse(it.geo),
+              val: JSON.parse(it.sens)
+          }
+      })
+      console.log(itogy)
+      const gl = itogy.map(it => {
+          return new Date(it.time)
+      })
+      const geo = itogy.map(it => {
+          return it.geo
+      })
+      const allArrNew = [];
+      nameArr.forEach((item) => {
+          allArrNew.push({ sens: item[0], params: item[1], value: [] })
+      })
+      const sensTest = itogy.map(e => {
+          return e.val
+      })
+      sensTest.forEach(el => {
+          for (let i = 0; i < allArrNew.length; i++) {
+              allArrNew[i].value.push(Object.values(el)[i])
+          }
+      })*/
+
     const global = await fnTime(t1, t2)
     const sensArr = await fnPar(active)
     const nameArr = await fnParMessage(active)
     console.log(global)
-    console.log(sensArr)
     const gl = global[0].map(it => {
         return new Date(it)
+    })
+    const geo = global[2].map(it => {
+        return it
     })
     const allArrNew = [];
     nameArr.forEach((item) => {
@@ -25,6 +62,7 @@ export async function oil(t1, t2) {
 
         }
     })
+
     const finishArrayData = []
     allArrNew.forEach(e => {
         if (e.sens.startsWith('Бортовое') || e.sens === 'Топливо' || e.sens === 'Топливо ДУТ') {
@@ -32,11 +70,9 @@ export async function oil(t1, t2) {
         }
     })
     const object = {}
-    console.log(finishArrayData)
-
     finishArrayData.forEach(el => {
         object.time = gl
-        object.geo = global[2]
+        object.geo = geo
         if (el.sens === 'Топливо' || el.sens === 'Топливо ДУТ') {
             object.left = el.value.map(it => {
                 return it === -348201.3876 ? it = 0 : it
@@ -46,18 +82,16 @@ export async function oil(t1, t2) {
             object.right = el.value
         }
     })
-    //  console.log(object)
-
     const data = object.time.map((t, i) => ({
         geo: object.geo[i],
         time: t,
         oil: object.left ? Number(object.left[i].toFixed(0)) : 0,
         pwr: object.right ? Number(object.right[i] != null ? Number(object.right[i]).toFixed(0) : 0) : null
     }))
-
     console.log(data);
     const arrayOil = [];
     const resArray = [];
+    const zapravka = [];
     for (let i = 0; i < data.length - 10; i++) {
         data[i].oil === 0 && i !== 0 ? data[i].oil = data[i - 1].oil : data[i].oil = data[i].oil
         data[i + 1].oil === 0 && i !== 0 ? data[i + 1].oil = data[i - 1].oil : data[i + 1].oil = data[i + 1].oil
@@ -72,6 +106,8 @@ export async function oil(t1, t2) {
             // console.log(resArray)
             if (resArray.length !== 0) {
                 arrayOil.push(resArray[0])
+                console.log(data[i].oil, resArray[0][0])
+                zapravka.push(data[i].oil - resArray[0][0])
                 resArray.length = 0
             }
             else {
@@ -79,6 +115,8 @@ export async function oil(t1, t2) {
             }
         }
     }
+    console.log(zapravka)
+    console.log(arrayOil)
     const arrDates = arrayOil.map(([num, str]) => new Date(str)); // массив дат
     for (let i = 0; i < arrayOil.length - 1; i++) {
         const diff = arrDates[i + 1].getTime() - arrDates[i].getTime();
@@ -88,6 +126,7 @@ export async function oil(t1, t2) {
         }
     }
     console.log(arrayOil)
+
     const objOil = arrayOil.map(it => {
         return { num: it[0], data: it[1], geo: it[2], icon: "../../../image/refuel.png" }
     })
@@ -316,17 +355,16 @@ export async function oil(t1, t2) {
         .attr("transform", "translate(-12,0)")
         .on("click", function (d) {
             // Ваша функция обработчика события
-
-
-            console.log(d.geo)
             const mapss = document.getElementById('mapOil')
             if (this.classList.contains('clickOil')) {
                 mapss.remove();
+                d3.select(this).style("opacity", 0.5);
                 this.classList.remove('clickOil');
                 return
             }
             const icons = document.querySelectorAll('.iconOil')
             icons.forEach(e => {
+                d3.select(this).style("opacity", 0.5);
                 e.classList.remove('clickOil');
             })
             if (mapss) {
@@ -362,7 +400,8 @@ export async function oil(t1, t2) {
             });
             map.setView(d.geo, 18)
             map.flyTo(d.geo, 18)
-            const iss = L.marker(d.geo, { icon: customIcon }).bindPopup('машина').addTo(map);
+
+            const iss = L.marker(d.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}`).addTo(map);
             iss.on('mouseover', function (e) {
                 this.openPopup();
             });
@@ -376,6 +415,7 @@ export async function oil(t1, t2) {
                 attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
             });
             map.addLayer(layer);
+            d3.select(this).style("opacity", 1);
             this.classList.add('clickOil');
         });
     /*  .on("mousemove", function (d) {

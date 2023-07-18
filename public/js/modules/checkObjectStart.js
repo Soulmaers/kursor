@@ -244,10 +244,8 @@ function viewMoreElement(newArray, count) {
         const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
         arr.forEach((e, index) => {
             if (count === 0) {
-                console.log(count)
                 parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
             }
-            console.log(count)
             parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-'
 
         })
