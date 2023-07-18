@@ -2034,10 +2034,19 @@ div.spoyler {
 
 }
 
+.tooltipOil {
+  width: 50px;
+  height: 50px;
+  border: 1px solid green
+}
 
 .koef {
   display: flex;
   align-items: center;
+}
+
+.iconOil {
+  cursor: pointer;
 }
 
 .engineEvent {

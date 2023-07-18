@@ -205,6 +205,7 @@ export async function tarirView() {
             if (el.name === it.params) {
                 if (it.icons === 'oil-card') {
                     const val = el.value
+                    console.log(val)
                     let degree;
                     if (x.length < 3) {
                         degree = 1
@@ -213,11 +214,13 @@ export async function tarirView() {
                         degree = 6
                     }
                     const approximated = approximateValue(val, x, y, degree);
+                    console.log(approximated)
                     const znak = Number((approximated[0] * 0.9987).toFixed(0))
 
                     const value = znak * 100 / y[y.length - 1]
                     const oilValue = document.querySelector('.oil_value1')
                     console.log(znak)
+                    console.log(value)
                     if (!isNaN(znak)) {
                         if (znak < 0) {
                             oilValue.textContent = '----'
