@@ -26,9 +26,9 @@ require('./backend/middleware/passport')(passport); // pass passport for configu
 
 app.use(bodyParser.json())
 app.use(cookieParser());
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+//const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 
-app.use(morgan('combined', { stream: accessLogStream }));
+//app.use(morgan('combined', { stream: accessLogStream }));
 //app.use(morgan('dev')); // log every request to the console
 app.set('view engine', 'ejs'); // set up ejs for templating
 
