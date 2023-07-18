@@ -65,7 +65,7 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
 exports.saveChartDataToBase = async (mass) => {
     //console.log(mass);
     try {
-        const sql = `INSERT INTO chartData(idw, nameCar, data, speed, geo, sens) VALUES ?`;
+        const sql = `INSERT INTO chartData(idw, nameCar, data,time, speed, geo, sens) VALUES ?`;
         connection.query(sql, [mass], function (err, results) {
             if (err) console.log(err);
         });
@@ -74,7 +74,7 @@ exports.saveChartDataToBase = async (mass) => {
     }
 };
 exports.viewChartDataToBase = async (idw, t1, t2) => {
-    console.log(t1, t2);
+    // console.log(t1, t2);
     return new Promise((resolve, reject) => {
         try {
             const postModel = `SELECT * FROM chartData WHERE idw='${idw}' AND data >= ${t1} AND data <= ${t2}`;

@@ -20,6 +20,7 @@ exports.getSessiont = async (login) => {
     return sessions[login]; // возвращаем сохраненную сессию
 };
 
+
 exports.getData = async (req, res) => {
     const login = req.body.login
     try {
@@ -29,11 +30,11 @@ exports.getData = async (req, res) => {
         // console.log(session)
         sessions[login] = session;
         res.json('сессия открыта')
-        await updateParams(login);
-        setInterval(updateParams, 180000, login);
+        //  await updateParams(login);
+        // setInterval(updateParams, 180000, login);
         //  console.log('повторка?')
-        //    setTimeout(test, 15000)
-        // test(login)
+        // setTimeout(test, 15000)
+
     } catch (err) {
         console.log(err);
         res.json('ошибка')
@@ -106,18 +107,18 @@ exports.up = async (req, res) => {
     res.json({ message: 'ок' })
 }
 
-let dataSensToBase;
 const test = async () => {
     // console.log('rr' + login)
-    //const data = await wialonService.getDataFromWialon(login)
-    const data = dataSensToBase;
+    const data = await wialonService.getDataFromWialon('i')
+    updateParams(data)
+    //  const data = dataSensToBase;
     const timeBase = await databaseService.lostChartDataToBase()
     const oldTime = Number(timeBase[0].data)
     const allCar = Object.entries(data)
     const now = new Date();
     const nowTime = Math.floor(now.getTime() / 1000);
     // let oldTime = !time ? 1689335912 : time
-    console.log(oldTime)
+    // console.log(oldTime)
     // console.log(nowTime)
     for (const el of allCar[5][1]) {
         let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
@@ -136,7 +137,7 @@ const test = async () => {
             const mass = [];
             rr.messages.forEach(e => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
-                mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, e.pos.s, geo]);
+                mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, new Date(e.t * 1000), e.pos.s, geo]);
             });
             const sens = rez.map(e => JSON.stringify(e));
             mass.forEach((el, index) => {
@@ -148,15 +149,15 @@ const test = async () => {
         }
     }
     console.log('запись окончена')
-    setInterval(test, 300000)
+
 
 }
-
-async function updateParams(login) {
+//setTimeout(test, 1000)
+//setInterval(test, 60000)
+async function updateParams(data) {
     //запрашиваем данные параметры по обектам с виалона
-    const data = await wialonService.getDataFromWialon(login)
+    //  const data = await wialonService.getDataFromWialon(login)
     // const type = await wialonService.getAnimalsWialon(login)
-    dataSensToBase = data
     const nameCar = [];
     const allCar = Object.entries(data)
     allCar[5][1].forEach(async el => {
@@ -172,7 +173,7 @@ async function updateParams(login) {
         } else {
             statusTSI = '-';
         }
-        const res = await engine(idw, login)
+        const res = await engine(idw)
         let status;
         res.forEach(e => {
             if (e.includes('Зажигание'))
@@ -182,7 +183,6 @@ async function updateParams(login) {
         const todays = Math.floor(currentDate.getTime() / 1000);
         const activePost = el.nm.replace(/\s+/g, '');
         const resSaveStatus = await databaseService.saveStatusToBase(activePost, idw, todays, statusTSI, todays, status);
-
 
         if (el.lmsg) {
             const sensor = Object.entries(el.lmsg.p);
@@ -196,14 +196,14 @@ async function updateParams(login) {
     await zaprosSpisokb(nameCar)
 }
 
-async function engine(idw, login) {
-    const resSensor = await wialonService.getAllNameSensorsIdDataFromWialon(idw, login);
+async function engine(idw) {
+    const resSensor = await wialonService.getAllNameSensorsIdDataFromWialon(idw, 'i');
     const nameSens = Object.entries(resSensor.item.sens)
     const arrNameSens = [];
     nameSens.forEach(el => {
         arrNameSens.push([el[1].n, el[1].p])
     })
-    const res = await wialonService.getLastAllSensorsIdDataFromWialon(idw, login);
+    const res = await wialonService.getLastAllSensorsIdDataFromWialon(idw, 'i');
     if (res) {
         const valueSens = [];
         Object.entries(res).forEach(e => {
@@ -216,9 +216,6 @@ async function engine(idw, login) {
         return allArr
     }
 }
-
-
-
 
 async function zaprosSpisokb(name) {
     const massItog = [];

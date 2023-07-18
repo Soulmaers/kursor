@@ -30,7 +30,12 @@ const fp = flatpickr("#daterange", {
 const dateInputValue = document.getElementById('daterange')
 btnForm.forEach(el =>
     el.addEventListener('click', () => {
+        const mapss = document.getElementById('mapOil')
+        if (mapss) {
+            mapss.remove();
+        }
         if (el.textContent === 'Выполнить' && dateInputValue.value !== '') {
+
             const grafOld = document.querySelector('.infoGraf')
             if (grafOld) {
                 grafOld.remove()

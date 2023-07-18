@@ -2778,19 +2778,17 @@ input[type="date"] {
 
 
 
-.my-popup {
-  white-space: pre-wrap;
 
-}
+
+
 
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
   font-size: 14px;
-  color: blue;
   background: rgb(255, 255, 255, 0.4);
-  border: 2px solid blue;
   margin: 10px;
-
+  color: blue;
+  border: 2px solid blue;
 }
 
 .leaflet-popup-tip-container {
@@ -2811,6 +2809,17 @@ input[type="date"] {
   top: 20px;
   background-image: url(../image/info.png);
   background-size: cover;
+}
+
+.my-popup {
+  white-space: pre-wrap;
+
+}
+
+.my-popup-oil {
+  white-space: pre-wrap;
+  width: 250px;
+
 }
 
 .infosCenter {

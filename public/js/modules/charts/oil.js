@@ -1,6 +1,7 @@
 import { fnTime, fnPar, fnParMessage } from '../grafiks.js'
 import { Tooltip } from '../../class/Tooltip.js'
 import { testovfn } from './bar.js'
+import { timesFormat } from '../startAllStatic.js'
 //import { dostupObject } from '../../../../backend/services/database.service.js'
 
 
@@ -9,59 +10,59 @@ export async function oil(t1, t2) {
     const active = document.querySelector('.color').id
     const nameCar = document.querySelector('.color').children[0].textContent
     console.log(nameCar)
-    /*  const ttt = await testovfn(active, t1, t2)
-      const nameArr = await fnParMessage(active)
-      const itogy = ttt.map(it => {
-          return {
-              id: it.idw,
-              nameCar: it.nameCar,
-              time: (new Date(it.data * 1000)).toISOString(),
-              speed: it.speed,
-              geo: JSON.parse(it.geo),
-              val: JSON.parse(it.sens)
-          }
-      })
-      console.log(itogy)
-      const gl = itogy.map(it => {
-          return new Date(it.time)
-      })
-      const geo = itogy.map(it => {
-          return it.geo
-      })
-      const allArrNew = [];
-      nameArr.forEach((item) => {
-          allArrNew.push({ sens: item[0], params: item[1], value: [] })
-      })
-      const sensTest = itogy.map(e => {
-          return e.val
-      })
-      sensTest.forEach(el => {
-          for (let i = 0; i < allArrNew.length; i++) {
-              allArrNew[i].value.push(Object.values(el)[i])
-          }
-      })*/
-
-    const global = await fnTime(t1, t2)
-    const sensArr = await fnPar(active)
+    const ttt = await testovfn(active, t1, t2)
     const nameArr = await fnParMessage(active)
-    console.log(global)
-    const gl = global[0].map(it => {
-        return new Date(it)
+    const itogy = ttt.map(it => {
+        return {
+            id: it.idw,
+            nameCar: it.nameCar,
+            time: (new Date(it.data * 1000)).toISOString(),
+            speed: it.speed,
+            geo: JSON.parse(it.geo),
+            val: JSON.parse(it.sens)
+        }
     })
-    const geo = global[2].map(it => {
-        return it
+    console.log(itogy)
+    const gl = itogy.map(it => {
+        return new Date(it.time)
+    })
+    const geo = itogy.map(it => {
+        return it.geo
     })
     const allArrNew = [];
     nameArr.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
-    sensArr.forEach(el => {
+    const sensTest = itogy.map(e => {
+        return e.val
+    })
+    sensTest.forEach(el => {
         for (let i = 0; i < allArrNew.length; i++) {
-            //    console.log(Object.values(el)[i])
             allArrNew[i].value.push(Object.values(el)[i])
-
         }
     })
+
+    //  const global = await fnTime(t1, t2)
+    //   const sensArr = await fnPar(active)
+    //  const nameArr = await fnParMessage(active)
+    //   console.log(global)
+    //  const gl = global[0].map(it => {
+    //     return new Date(it)
+    //  })
+    //  const geo = global[2].map(it => {
+    //     return it
+    //  })
+    // const allArrNew = [];
+    /*  nameArr.forEach((item) => {
+          allArrNew.push({ sens: item[0], params: item[1], value: [] })
+      })
+      sensArr.forEach(el => {
+          for (let i = 0; i < allArrNew.length; i++) {
+              //    console.log(Object.values(el)[i])
+              allArrNew[i].value.push(Object.values(el)[i])
+  
+          }
+      })*/
 
     const finishArrayData = []
     allArrNew.forEach(e => {
@@ -96,7 +97,8 @@ export async function oil(t1, t2) {
         data[i].oil === 0 && i !== 0 ? data[i].oil = data[i - 1].oil : data[i].oil = data[i].oil
         data[i + 1].oil === 0 && i !== 0 ? data[i + 1].oil = data[i - 1].oil : data[i + 1].oil = data[i + 1].oil
         // data[i + 5].oil === 0 ? data[i + 5].oil = data[i + 4].oil : data[i + 5].oil = data[i + 5].oil
-        if (data[i].oil <= data[i + 1].oil) {
+        // if (data.value[i] <= data.value[i + 1] || data.value[i] <= data.value[i + 2]) {
+        if (data[i].oil <= data[i + 1].oil || data[i].oil <= data[i + 2].oil) {
             let oneNum = data[i].oil
             let fiveNum = data[i + 10].oil
             const res = fiveNum - oneNum
@@ -107,7 +109,7 @@ export async function oil(t1, t2) {
             if (resArray.length !== 0) {
                 arrayOil.push(resArray[0])
                 console.log(data[i].oil, resArray[0][0])
-                zapravka.push(data[i].oil - resArray[0][0])
+                zapravka.push([data[i].oil - resArray[0][0], data[i].time])
                 resArray.length = 0
             }
             else {
@@ -121,14 +123,16 @@ export async function oil(t1, t2) {
     for (let i = 0; i < arrayOil.length - 1; i++) {
         const diff = arrDates[i + 1].getTime() - arrDates[i].getTime();
         if (diff < 15 * 60 * 1000) { // если интервал меньше 15 минут
-            console.log(`Элементы ${i} и ${i + 1} находятся в интервале меньше 5 минут`); // выводим информацию о найденных парах элементов
+            console.log(`Элементы ${i} и ${i + 1} находятся в интервале меньше 15 минут`); // выводим информацию о найденных парах элементов
             arrayOil.splice(i + 1, 1)
         }
     }
     console.log(arrayOil)
-
-    const objOil = arrayOil.map(it => {
-        return { num: it[0], data: it[1], geo: it[2], icon: "../../../image/refuel.png" }
+    const objOil = arrayOil.map((it, i) => {
+        const times = timesFormat((zapravka[i][1].getTime() / 1000) - (it[1].getTime() / 1000))
+        const one = times.slice(2)
+        const time = one.split(":")[0]
+        return { num: it[0], data: it[1], geo: it[2], zapravka: zapravka[i], time: time, icon: "../../../image/refuel.png" }
     })
 
     const grafOld = document.querySelector('.infoGraf')
@@ -341,6 +345,7 @@ export async function oil(t1, t2) {
         .attr("class", "tooltipIcon")
         .style("opacity", 0);
 
+    console.log(objOil)
     svg.selectAll("image")
         .data(objOil)
         .enter()
@@ -401,7 +406,8 @@ export async function oil(t1, t2) {
             map.setView(d.geo, 18)
             map.flyTo(d.geo, 18)
 
-            const iss = L.marker(d.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}`).addTo(map);
+            const iss = L.marker(d.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nЗаправлено: ${d.zapravka[0]} л.\nВремя: ${d.time} мин.`, { className: 'my-popup-oil' }).addTo(map);
+            iss.getPopup().options.className = 'my-popup-oil'
             iss.on('mouseover', function (e) {
                 this.openPopup();
             });
@@ -648,16 +654,10 @@ export async function oil(t1, t2) {
                         .attr("stroke", "black")
                         .attr("stroke-width", 1)
                         .attr("d", area2)
-
-
-
                     //   svg.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
                 }
-
             }
-
         }
-
         // If user double click, reinitialize the chart
         svg.on("dblclick", function () {
             x.domain(d3.extent(data, (d) => new Date(d.time)))
@@ -756,9 +756,7 @@ export async function oil(t1, t2) {
                     .duration(500)
                     .style("opacity", 0);
             });
-
     })
-
     const legendOil = document.querySelectorAll('.legendOil')
     const inf = document.querySelector('.infos')
     new Tooltip(inf, ['График отражает топливо и бортовое питание', 'Чтобы увеличить график, надо выделить область мышкой слева направо', 'Чтобы вернуть график в предыдущий масштаб, надо выделить область мышкой справа налево', 'Чтобы сбросить масштабирование, два раза кликните на график ']);
