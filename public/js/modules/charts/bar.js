@@ -280,8 +280,8 @@ async function grafikStartPress(times, datar) {
     titleGraf.appendChild(checkGraf)
     checkGraf.innerHTML = `<input class="inputPress" id="inputPress" type="checkbox">
 <label for="inputPress" class="labelPress">Подсветка графика</label>
-<input class="inputAllPress" id="inputAllPress" type="checkbox">
-<label for="inputAllPress"class="labelAllPress"> Общее масштабирование</label>
+<input class="inputAllPress" id="inputAllPress" type="checkbox" checked>
+<label for="inputAllPress"class="labelAllPress" > Общее масштабирование</label>
   <div class="comback">Масштаб по умолчанию</div></div>`;
     infoGraf.appendChild(tooltips)
     const tt1 = document.createElement('div')
