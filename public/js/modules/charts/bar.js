@@ -45,9 +45,9 @@ export async function datas(t1, t2) {
     try {
         const ossParams = await fn()
         const active = Number(document.querySelector('.color').id)
-        console.time(testovfn(active, t1, t2))
+        // console.time(testovfn(active, t1, t2))
         const ttt = await testovfn(active, t1, t2)
-        console.timeEnd(testovfn(active, t1, t2))
+        // console.timeEnd(testovfn(active, t1, t2))
         console.log(ttt)
         const itogy = ttt.map(it => {
             return {
