@@ -97,8 +97,8 @@ export async function oil(t1, t2) {
             i--; // уменьшаем индекс, чтобы не пропустить следующий объект после удаления
         }
     }
+    console.log(data);
     const increasingIntervals = [];
-    const decreasingIntervals = [];
     let start = 0;
     let end = 0;
     for (let i = 0; i < data.length - 1; i++) {
@@ -119,27 +119,7 @@ export async function oil(t1, t2) {
     if (start !== end) {
         increasingIntervals.push([data[start], data[end]]);
     }
-    start = end = 0;
-    for (let i = 0; i < data.length - 1; i++) {
-        const currentObj = data[i];
-        const nextObj = data[i + 1];
-        if (currentObj.oil > nextObj.oil) {
-            if (start === end) {
-                start = i;
-            }
-            end = i + 1;
-        } else if (currentObj.oil < nextObj.oil) {
-            if (start !== end) {
-                decreasingIntervals.push([data[start], data[end]]);
-            }
-            start = end = i + 1;
-        }
-    }
-    if (start !== end) {
-        decreasingIntervals.push([data[start], data[end]]);
-    }
     console.log(increasingIntervals)
-
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0].oil;
         const lastOil = interval[interval.length - 1].oil;
@@ -162,8 +142,25 @@ export async function oil(t1, t2) {
             zapravka.splice(i + 1, 1);
         }
     }
-    console.log(decreasingIntervals)
     console.log(data)
+    console.log(zapravka)
+    const rash = [];
+    const firstData = data[0].oil;
+    const lastData = data[data.length - 1].oil;
+    if (zapravka.length !== 0) {
+        rash.push(firstData - zapravka[0][0].oil);
+        for (let i = 0; i < zapravka.length - 1; i++) {
+            rash.push(zapravka[i][1].oil - zapravka[i + 1][0].oil);
+        }
+        rash.push(zapravka[zapravka.length - 1][1].oil - lastData);
+    }
+    else {
+        rash.push(firstData - lastData)
+    }
+
+
+    const rashod = rash.reduce((el, acc) => el + acc, 0)
+    console.log(rashod);
     console.log(zapravka)
     const objOil = zapravka.map(it => {
         //  const times = timesFormat((it[1].time.getTime() / 1000) - (it[0].time.getTime() / 1000))

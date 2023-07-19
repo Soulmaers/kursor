@@ -285,62 +285,86 @@ function moto(data) {
 }
 function rashodCalc(data) {
     console.log(data)
-    const resArray = [];
-    const zapravka = [];
-    const ras = [];
-    let noZapravka;
-    //console.log(data.value);
-    /* let i = 0;
-     while (i < data.value.length - 1) {
-         if (data.value[i] === data.value[i + 1]) {
-             data.value.splice(i, 1);
-             data.time.splice(i, 1);
-             data.speed.splice(i, 1);
-         } else {
-             i++;
-         }
-     }*/
-    // console.log(data.value);
-    for (let i = 0; i < data.value.length - 10; i++) {
-        data.value[i] === 0 ? data.value[i] = data.value[i - 1] : data.value[i] = data.value[i]
-        data.value[i + 1] === 0 ? data.value[i + 1] = data.value[i - 1] : data.value[i + 1] = data.value[i + 1]
-        if (data.value[i] <= data.value[i + 1] || data.value[i] <= data.value[i + 2]) {
-            //  console.log(data.value[i], data.value[i + 1], data.value[i + 2])
-            let oneNum = data.value[i]
-            let fiveNum = data.value[i + 10]
-            const res = fiveNum - oneNum
-            res > Number((3 / 100.3 * oneNum).toFixed(0)) ? resArray.push([oneNum, data.time[i]]) : null
+    let i = 0;
+    while (i < data.value.length - 1) {
+        if (data.value[i] === data.value[i + 1]) {
+            data.value.splice(i, 1);
+            data.time.splice(i, 1);
+            data.speed.splice(i, 1);
+        } else {
+            i++;
         }
-        else {
-            if (resArray.length !== 0) {
-                zapravka.push({ start: resArray[0], end: [data.value[i], data.time[i]] })
-                if (zapravka.length === 0) {
-                    ras.push([{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
-                }
-                if (zapravka.length === 1) {
-                    ras.push([{ start: [data.value[0], data.time[0]], end: [resArray[0][0], resArray[0][1]] }])
-                    ras.push([{ start: [data.value[i], data.time[i]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
-                }
-                else {
-                    ras.pop();
-                    ras.push([{ start: [zapravka[0].end[0], [zapravka[0].end[1]]], end: [resArray[0][0], resArray[0][1]] }])
-                    ras.push([{ start: [data.value[i], data.time[i]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }])
-                }
-                resArray.length = 0
+    }
+    console.log(data.value)
+    const increasingIntervals = [];
+    let start = 0;
+    let end = 0;
+    for (let i = 0; i < data.value.length - 1; i++) {
+        const currentObj = data.value[i];
+        const nextObj = data.value[i + 1];
+        if (currentObj < nextObj) {
+            if (start === end) {
+                start = i;
+            }
+            end = i + 1;
+        } else if (currentObj > nextObj) {
+            if (start !== end) {
+                increasingIntervals.push([[data.value[start], data.time[start]], [data.value[end], data.time[end]]]);
+            }
+            start = end = i + 1;
+        }
+    }
+    if (start !== end) {
+        increasingIntervals.push([[data.value[start], data.time[start]], [data.value[end], data.time[end]]]);
+    }
+    console.log(increasingIntervals)
+    const zapravka = increasingIntervals.filter((interval, index) => {
+        const firstOil = interval[0][0];
+        const lastOil = interval[interval.length - 1][0];
+        const difference = lastOil - firstOil;
+        const threshold = firstOil * 0.05;
+        if (index < increasingIntervals.length - 1) {
+            const nextInterval = increasingIntervals[index + 1];
+            const currentTime = interval[interval.length - 1][1];
+            const nextTime = nextInterval[0][1];
+            const timeDifference = nextTime - currentTime;
+            if (timeDifference < 5 * 60 * 1000) {
+                interval.push(nextInterval[nextInterval.length - 1]);
+                interval.splice(1, 1)
             }
         }
+        return firstOil > 5 && difference >= threshold;
+    });
+    for (let i = 0; i < zapravka.length - 1; i++) {
+        if (zapravka[i][1][1] === zapravka[i + 1][1][1]) {
+            zapravka.splice(i + 1, 1);
+        }
     }
-    if (zapravka.length === 0 && resArray.length === 0) {
-        noZapravka = [{ start: [data.value[0], data.time[0]], end: [data.value[data.value.length - 1], data.time[data.time.length - 1]] }]
+    const rash = [];
+    const firstData = data.value[0];
+    const lastData = data.value[data.value.length - 1];
+    if (zapravka.length !== 0) {
+        rash.push(firstData - zapravka[0][0][0]);
+        for (let i = 0; i < zapravka.length - 1; i++) {
+            rash.push(zapravka[i][1][0] - zapravka[i + 1][0][0]);
+        }
+        rash.push(zapravka[zapravka.length - 1][1][0] - lastData);
     }
-    console.log(zapravka)
-    console.log(ras)
-    console.log(noZapravka)
-    const sum = zapravka.reduce((acc, el) => acc + el.end[0], 0) + data.value[0];
-    const rashod = ras.reduce((acc, el) => acc + el[0].end[0], 0) < 0 ? 0 : ras.reduce((acc, el) => acc + el[0].end[0], 0)
-    const potracheno = sum - rashod >= 0 && ras.length !== 0 ? sum - rashod : noZapravka[0].start[0] - noZapravka[0].end[0] >= 0 ? noZapravka[0].start[0] - noZapravka[0].end[0] : 0;
-    const zapravleno = (zapravka.reduce((acc, el) => acc + el.end[0], 0) - zapravka.reduce((acc, el) => acc + el.start[0], 0))
-    return [{ rashod: potracheno, zapravka: zapravleno }]
+    else {
+        rash.push(firstData - lastData)
+    }
+
+    const rashod = rash.reduce((el, acc) => el + acc, 0)
+    console.log(rashod);
+    const zap = [];
+    zapravka.forEach(e => {
+        zap.push(e[1][0] - e[0][0])
+    })
+    console.log(zap)
+    const zapravleno = (zap.reduce((acc, el) => acc + el, 0))
+    console.log(zapravleno)
+    console.log(rashod)
+    return [{ rashod: rashod, zapravka: zapravleno }]
 }
 
 

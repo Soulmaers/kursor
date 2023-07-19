@@ -84,7 +84,7 @@ export async function dataInput() {
     let timeFrom = Math.floor(t01.setHours(t01.getHours()) / 1000)
     let t02 = new Date(dateTime[1])
     let nowDate = Math.floor(t02.setHours(t02.getHours()) / 1000)
-    graftest(timeFrom, nowDate)
+    graftest(timeFrom - 10800, nowDate - 10800)
 }
 export async function dataSelect() {
     let nowDate = Math.round(new Date().getTime() / 1000)
@@ -116,6 +116,7 @@ export async function dataSelect() {
 }
 
 export async function graftest(t1, t2) {
+    console.log(t1, t2)
     const activeMenuGraf = document.querySelector('.activMenuGraf')
     if (activeMenuGraf.textContent === 'Давление') {
         datas(t1, t2);
