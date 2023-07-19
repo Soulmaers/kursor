@@ -399,7 +399,9 @@ export async function oil(t1, t2) {
             // Ваша функция обработчика события
             const mapss = document.getElementById('mapOil')
             if (this.classList.contains('clickOil')) {
-                mapss.remove();
+                if (mapss) {
+                    mapss.remove();
+                }
                 d3.select(this).style("opacity", 0.5);
                 this.classList.remove('clickOil');
                 return
@@ -426,7 +428,7 @@ export async function oil(t1, t2) {
             maps.style.top = '500px';
             main.appendChild(maps)
             const map = L.map('mapOil')
-
+            console.log(maps)
             var LeafIcon = L.Icon.extend({
                 options: {
                     iconSize: [30, 30],
@@ -460,7 +462,8 @@ export async function oil(t1, t2) {
                 attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
             });
             map.addLayer(layer);
-
+            const ma = document.querySelector('.mapsOilCard')
+            console.log(ma)
         })
     /* .on("mousemove", function (d) {
          d3.select(this).style("opacity", 1);

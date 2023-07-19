@@ -837,9 +837,28 @@ async function grafikStartPress(times, datar) {
                 console.log('клик')
                 console.log(d)
                 createMap(d);
+                const act = document.querySelector('.activMenuGraf').textContent
+                console.log(act)
+
+                const graph = document.querySelector('.infoGraf')
+                graph.addEventListener('click', function (event) {
+                    event.stopPropagation(); // Остановка всплытия события, чтобы клик на графике не вызывал обработчик события click на document
+                    createMap(d);
+                });
+                document.addEventListener('click', function (event) {
+                    const targetElement = event.target;
+                    const map = document.getElementById('mapOil');
+                    const act = document.querySelector('.activMenuGraf').textContent;
+
+                    if (map && !map.contains(targetElement) && act === 'Давление') {
+                        map.remove();
+                    }
+                });
             })
         })
     }
+
+
     const legendBar = document.querySelectorAll('.legendBar')
     const labelPress = document.querySelector('.labelPress')
     const labelAllPress = document.querySelector('.labelAllPress')
@@ -917,8 +936,6 @@ async function grafikStartPress(times, datar) {
             chart[i].children[2].textContent = `${dav} Бар/${temp} С°`
         }
     }
-
-
 
 }
 
@@ -1015,22 +1032,23 @@ function createMap(data) {
     var LeafIcon = L.Icon.extend({
         options: {
             iconSize: [30, 30],
-            iconAnchor: [10, 18],
-            popupAnchor: [0, 0]
+            iconAnchor: [10, 0],
+            popupAnchor: [10, 25]
         }
     });
 
     var customIcon = new LeafIcon({
         iconUrl: '../../image/iconCar2.png',
-        iconSize: [20, 20],
-        iconAnchor: [20, 20],
-        popupAnchor: [0, 0],
-        className: 'custom-marker-oil'
+        iconSize: [30, 30],
+        iconAnchor: [10, 0],
+        popupAnchor: [10, 25],
+        className: 'custom-marker-bar'
     });
-    map.setView(data.geo, 18)
-    map.flyTo(data.geo, 18)
-
-    const iss = L.marker(data.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nВремя: ${formattedDate},\nСкорость: ${data.speed},\nЗажигание: ${data.stop},\nДавление: ${data.value},\nТемпература: ${data.tvalue}`, { className: 'my-popup-oil' }).addTo(map);
+    map.setView(data.geo, 12)
+    map.flyTo(data.geo, 12)
+    const bar = data.value !== -0.5 ? data.value : '-'
+    const temp = data.tvalue !== -0.5 ? data.tvalue : '-'
+    const iss = L.marker(data.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nВремя: ${formattedDate},\nСкорость: ${data.speed} км/ч,\nЗажигание: ${data.stop},\nДавление: ${bar} Бар,\nТемпература: ${temp} С`, { className: 'my-popup-oil', autoPan: false }).addTo(map);
     iss.getPopup().options.className = 'my-popup-oil'
     iss.on('mouseover', function (e) {
         this.openPopup();
@@ -1046,4 +1064,6 @@ function createMap(data) {
     });
     map.addLayer(layer);
 
+
 }
+

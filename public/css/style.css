@@ -2034,6 +2034,11 @@ div.spoyler {
 
 }
 
+.custom-marker-bar {
+  margin-top: 60px;
+  /* Измените значение на желаемое смещение вниз */
+}
+
 .tooltipOil {
   width: 50px;
   height: 50px;
