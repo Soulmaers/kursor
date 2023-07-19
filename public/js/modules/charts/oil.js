@@ -486,14 +486,6 @@ export async function oil(t1, t2) {
          }
      });*/
 
-    const imoOil = document.querySelectorAll('.iconOil')
-    console.log(imoOil)
-    imoOil.forEach(el => {
-        el.addEventListener('click', () => {
-            console.log('клик-иконка')
-        })
-    })
-
     const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
     preloaderGraf.style.opacity = 0;
     preloaderGraf.style.display = 'none'

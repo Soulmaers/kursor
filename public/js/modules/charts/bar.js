@@ -55,6 +55,7 @@ export async function datas(t1, t2) {
                 nameCar: it.nameCar,
                 time: (new Date(it.data * 1000)).toISOString(),
                 speed: it.speed,
+                geo: JSON.parse(it.geo),
                 val: JSON.parse(it.sens)
             }
         })
@@ -66,7 +67,8 @@ export async function datas(t1, t2) {
 
         const timeArray = itogy.map(it => (new Date(it.time)).toISOString());
         const speedArray = itogy.map(it => it.speed);
-        const global = [timeArray, speedArray];
+        const geoArray = itogy.map(it => it.geo);
+        const global = [timeArray, speedArray, geoArray];
 
 
         //  let t = 0;
@@ -131,6 +133,7 @@ export async function datas(t1, t2) {
         finishArrayData.forEach((el, index) => {
             el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
             el.speed = global[1]
+            el.geo = global[2]
             el.stop = stop
         })
         finishArrayData.forEach(e => {
@@ -142,9 +145,7 @@ export async function datas(t1, t2) {
             })
         })
         console.log(finishArrayData)
-        console.time(await grafikStartPress(global[0], finishArrayData))
         await grafikStartPress(global[0], finishArrayData)
-        console.timeEnd(await grafikStartPress(global[0], finishArrayData))
         isCanceled = false;
     }
     catch (e) {
@@ -184,6 +185,7 @@ async function grafikStartPress(times, datar) {
             })) : null
         };
     });
+    console.log(newData)
     const global = {
         dates: times,
         series: newData
@@ -191,7 +193,7 @@ async function grafikStartPress(times, datar) {
     const gl = times.map(it => {
         return new Date(it)
     })
-    const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
+    const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop, geo }) => ({
         sens,
         position,
         bar,
@@ -202,7 +204,9 @@ async function grafikStartPress(times, datar) {
                     value: -0.5,
                     tvalue: tvalue !== null ? -0.5 : null,
                     speed: Number(speed[i]),
-                    stop: stop[i]
+                    stop: stop[i],
+                    geo: geo[i]
+
                 };
             } else {
                 return {
@@ -210,41 +214,14 @@ async function grafikStartPress(times, datar) {
                     value: Number(val),
                     tvalue: tvalue !== null ? Number(tvalue[i]) : null,
                     speed: Number(speed[i]),
-                    stop: stop[i]
+                    stop: stop[i],
+                    geo: geo[i]
                 };
             }
         })
     }));
     console.log(dat2)
 
-    /*
-    const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
-        sens,
-        position,
-        bar,
-        val: value.map((val, i) => ({
-            dates: gl[i],
-            value: Number(val),
-            tvalue: tvalue !== null ? Number(tvalue[i]) : null,
-            speed: Number(speed[i]),
-            stop: stop[i]
-        })).filter(obj => obj.stop !== 'ВЫКЛ')
-    }));*/
-
-
-    /*
-        const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop }) => ({
-            sens,
-            position,
-            bar,
-            val: value.map((val, i) => ({
-                dates: gl[i],
-                value: Number(val),
-                tvalue: tvalue !== null ? Number(tvalue[i]) : null,
-                speed: Number(speed[i]),
-                stop: stop[i]
-            }))
-        }));*/
     dat2.sort((a, b) => {
         if (a.position > b.position) {
             return 1;
@@ -386,7 +363,6 @@ async function grafikStartPress(times, datar) {
             else {
                 stor = data
             }
-
             const chartContainer = d3.select(this); // div, в котором будет находиться график
             if (i === count - 1) {
                 he = height + 30
@@ -589,7 +565,7 @@ async function grafikStartPress(times, datar) {
                 }
                 const extent = d3.event.selection
                 const inputAllPress_checked = d3.select(".inputAllPress").property("checked");
-                if (inputAllPress_checked) {
+                if (inputAllPress_checked && extent) {
                     const [x0, x1] = extent.map(x.invert)
                     if (leftToRight === "left to right") {
                         if (!extent || Math.abs(x.invert(extent[1]) - x.invert(extent[0])) < 300000) {
@@ -849,6 +825,19 @@ async function grafikStartPress(times, datar) {
                     e.style.display = 'flex'
                 })
             });
+            svg.on("click", function (d) {
+                const [xPosition, yPosition] = d3.mouse(this);
+                // Определяем ближайшую точку на графике
+                const bisect = d3.bisector(d => d.dates).right;
+                const x0 = x.invert(xPosition);
+                const i = bisect(data.val, x0, 1);
+                const d0 = data.val[i - 1];
+                const d1 = data.val[i];
+                d = x0 - d0.dates > d1.dates - x0 ? d1 : d0;
+                console.log('клик')
+                console.log(d)
+                createMap(d);
+            })
         })
     }
     const legendBar = document.querySelectorAll('.legendBar')
@@ -990,4 +979,71 @@ async function vieModelChart(model, im1) {
             }
         }
     })
+}
+
+
+
+function createMap(data) {
+    console.log(data)
+    const nameCar = document.querySelector('.color').children[0].textContent
+
+    const date = new Date(data.dates);
+    const day = date.getDate();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+
+    const mapss = document.getElementById('mapOil')
+    if (mapss) {
+        mapss.remove();
+    }
+    const main = document.querySelector('.main')
+    const maps = document.createElement('div')
+    maps.classList.add('mapsOilCard')
+    maps.setAttribute('id', 'mapOil')
+    main.style.position = 'relative'
+    maps.style.width = '300px';
+    maps.style.height = '300px'
+    maps.style.position = 'absolute'
+    maps.style.left = '25px';
+    maps.style.top = '500px';
+    main.appendChild(maps)
+    const map = L.map('mapOil')
+
+    var LeafIcon = L.Icon.extend({
+        options: {
+            iconSize: [30, 30],
+            iconAnchor: [10, 18],
+            popupAnchor: [0, 0]
+        }
+    });
+
+    var customIcon = new LeafIcon({
+        iconUrl: '../../image/iconCar2.png',
+        iconSize: [20, 20],
+        iconAnchor: [20, 20],
+        popupAnchor: [0, 0],
+        className: 'custom-marker-oil'
+    });
+    map.setView(data.geo, 18)
+    map.flyTo(data.geo, 18)
+
+    const iss = L.marker(data.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nВремя: ${formattedDate},\nСкорость: ${data.speed},\nЗажигание: ${data.stop},\nДавление: ${data.value},\nТемпература: ${data.tvalue}`, { className: 'my-popup-oil' }).addTo(map);
+    iss.getPopup().options.className = 'my-popup-oil'
+    iss.on('mouseover', function (e) {
+        this.openPopup();
+    });
+    iss.on('mouseout', function (e) {
+        this.closePopup();
+    });
+    map.attributionControl.setPrefix(false)
+    const leaf = document.querySelector('.leaflet-control-attribution');
+    leaf.style.display = 'none';
+    const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
+    });
+    map.addLayer(layer);
+
 }
