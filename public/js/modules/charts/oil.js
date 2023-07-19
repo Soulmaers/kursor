@@ -138,6 +138,8 @@ export async function oil(t1, t2) {
     if (start !== end) {
         decreasingIntervals.push([data[start], data[end]]);
     }
+    console.log(increasingIntervals)
+
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0].oil;
         const lastOil = interval[interval.length - 1].oil;
@@ -148,26 +150,36 @@ export async function oil(t1, t2) {
             const currentTime = interval[interval.length - 1].time;
             const nextTime = nextInterval[0].time;
             const timeDifference = nextTime - currentTime;
-
             if (timeDifference < 5 * 60 * 1000) {
                 interval.push(nextInterval[nextInterval.length - 1]);
                 interval.splice(1, 1)
-                increasingIntervals.splice(index + 1, 1);
             }
         }
-        return firstOil !== 0 && difference >= threshold;
+        return firstOil > 5 && difference >= threshold;
     });
-
+    for (let i = 0; i < zapravka.length - 1; i++) {
+        if (zapravka[i][1].time === zapravka[i + 1][1].time) {
+            zapravka.splice(i + 1, 1);
+        }
+    }
     console.log(decreasingIntervals)
     console.log(data)
     console.log(zapravka)
     const objOil = zapravka.map(it => {
-        const times = timesFormat((it[1].time.getTime() / 1000) - (it[0].time.getTime() / 1000))
+        //  const times = timesFormat((it[1].time.getTime() / 1000) - (it[0].time.getTime() / 1000))
         const oilValue = it[1].oil - it[0].oil
         console.log(oilValue)
-        const one = times.slice(2)
-        const time = one.split(":")[0]
-        return { data: it[0].time, geo: it[0].geo, zapravka: oilValue, time: time, icon: "../../../image/refuel.png" }
+        //   const one = times.slice(2)
+        //   const time = one.split(":")[0]
+        const date = new Date(it[0].time);
+        const day = date.getDate();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+        // console.log(formattedDate);
+        return { data: it[0].time, geo: it[0].geo, zapravka: oilValue, time: formattedDate, icon: "../../../image/refuel.png" }
     })
 
     const grafOld = document.querySelector('.infoGraf')
@@ -354,7 +366,6 @@ export async function oil(t1, t2) {
         .attr("d", area2)
         .attr("transform", "translate(0, " + (40) + ")")
 
-
     svg.append("text")
         .attr("class", 'obv')
         .attr("x", -130)
@@ -371,15 +382,9 @@ export async function oil(t1, t2) {
         .text("Напряжение, В")
 
 
-
-    console.log(objOil)
-    console.log(data[0].time)
-
-
     const tooltipOil = svg.append("text")
         .attr("class", "tooltipIcon")
         .style("opacity", 0);
-
     console.log(objOil)
     svg.selectAll("image")
         .data(objOil)
@@ -404,12 +409,14 @@ export async function oil(t1, t2) {
             }
             const icons = document.querySelectorAll('.iconOil')
             icons.forEach(e => {
-                d3.select(this).style("opacity", 0.5);
+                e.style.opacity = 0.5;
                 e.classList.remove('clickOil');
             })
             if (mapss) {
                 mapss.remove();
             }
+            d3.select(this).style("opacity", 1);
+            this.classList.add('clickOil');
             const main = document.querySelector('.main')
             const maps = document.createElement('div')
             maps.classList.add('mapsOilCard')
@@ -441,7 +448,7 @@ export async function oil(t1, t2) {
             map.setView(d.geo, 18)
             map.flyTo(d.geo, 18)
 
-            const iss = L.marker(d.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nЗаправлено: ${d.zapravka} л.\nВремя: ${d.time} мин.`, { className: 'my-popup-oil' }).addTo(map);
+            const iss = L.marker(d.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nЗаправлено: ${d.zapravka} л.\nДата: ${d.time}`, { className: 'my-popup-oil' }).addTo(map);
             iss.getPopup().options.className = 'my-popup-oil'
             iss.on('mouseover', function (e) {
                 this.openPopup();
@@ -456,8 +463,7 @@ export async function oil(t1, t2) {
                 attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
             });
             map.addLayer(layer);
-            d3.select(this).style("opacity", 1);
-            this.classList.add('clickOil');
+
         })
     /* .on("mousemove", function (d) {
          d3.select(this).style("opacity", 1);
