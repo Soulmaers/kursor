@@ -433,7 +433,7 @@ export async function oil(t1, t2) {
                 options: {
                     iconSize: [30, 30],
                     iconAnchor: [10, 18],
-                    popupAnchor: [0, 0]
+                    popupAnchor: [10, 0]
                 }
             });
 
@@ -441,11 +441,11 @@ export async function oil(t1, t2) {
                 iconUrl: '../../image/ref.png',
                 iconSize: [20, 20],
                 iconAnchor: [20, 20],
-                popupAnchor: [0, 0],
+                popupAnchor: [10, 0],
                 className: 'custom-marker-oil'
             });
-            map.setView(d.geo, 18)
-            map.flyTo(d.geo, 18)
+            map.setView(d.geo, 15)
+            map.flyTo(d.geo, 15)
 
             const iss = L.marker(d.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nЗаправлено: ${d.zapravka} л.\nДата: ${d.time}`, { className: 'my-popup-oil' }).addTo(map);
             iss.getPopup().options.className = 'my-popup-oil'

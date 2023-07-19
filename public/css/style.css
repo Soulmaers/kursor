@@ -2795,18 +2795,35 @@ input[type="date"] {
 
 
 
-
-.leaflet-popup-content-wrapper,
-.leaflet-popup-tip {
-  font-size: 14px;
-  background: rgb(255, 255, 255, 0.4);
-  margin: 10px;
-  color: blue;
-  border: 2px solid blue;
-}
-
 .leaflet-popup-tip-container {
   display: none;
+}
+
+.my-popup-alarm .leaflet-popup-content-wrapper {
+  font-size: 12px;
+  background: rgb(255, 255, 255, 0.4);
+  color: red;
+  margin: 10px;
+  border: 2px solid red;
+  width: 250px;
+}
+
+.my-popup-oil .leaflet-popup-content-wrapper {
+  font-size: 12px;
+  background: rgb(255, 255, 255, 0.4);
+  color: green;
+  margin: 10px;
+  border: 2px solid green;
+  width: 200px;
+}
+
+.my-popup-bar .leaflet-popup-content-wrapper {
+  font-size: 12px;
+  background: rgb(255, 255, 255, 0.4);
+  color: blue;
+  margin: 10px;
+  border: 2px solid blue;
+  width: 200px;
 }
 
 .infoGraf {
@@ -2826,6 +2843,11 @@ input[type="date"] {
 }
 
 .my-popup {
+  white-space: pre-wrap;
+
+}
+
+.my-popup-alarm {
   white-space: pre-wrap;
 
 }

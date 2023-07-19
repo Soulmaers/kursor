@@ -1049,7 +1049,7 @@ function createMap(data) {
     const bar = data.value !== -0.5 ? data.value : '-'
     const temp = data.tvalue !== -0.5 ? data.tvalue : '-'
     const iss = L.marker(data.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nВремя: ${formattedDate},\nСкорость: ${data.speed} км/ч,\nЗажигание: ${data.stop},\nДавление: ${bar} Бар,\nТемпература: ${temp} С`, { className: 'my-popup-oil', autoPan: false }).addTo(map);
-    iss.getPopup().options.className = 'my-popup-oil'
+    iss.getPopup().options.className = 'my-popup-bar'
     iss.on('mouseover', function (e) {
         this.openPopup();
     });

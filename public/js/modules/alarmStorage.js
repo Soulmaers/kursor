@@ -356,6 +356,10 @@ minus.addEventListener('click', () => {
     plus.style.display = 'block';
     minus.style.display = 'none'
     alarmFind()
+    const mapss = document.getElementById('mapOil')
+    if (mapss) {
+        mapss.remove();
+    }
 })
 
 async function geoMarker(time, idw, tr) {
@@ -399,9 +403,87 @@ async function geoMarker(time, idw, tr) {
         info: alarm,
         speed: speed
     }
-    createMap(trackAlarm, geoCar, geo)
+    createMaps(trackAlarm, geoCar, geo)
 }
 
+
+
+function createMaps(geo, geoMarker, geoTrack) {
+    const mapss = document.getElementById('mapOil')
+    if (mapss) {
+        mapss.remove();
+    }
+    const main = document.querySelector('.main')
+    const maps = document.createElement('div')
+    maps.classList.add('mapsOilCard')
+    maps.setAttribute('id', 'mapOil')
+    main.style.position = 'relative'
+    maps.style.width = '300px';
+    maps.style.height = '300px'
+    maps.style.position = 'absolute'
+    maps.style.left = '580px';
+    maps.style.top = '40px';
+    maps.style.zIndex = 2099;
+    main.appendChild(maps)
+    const map = L.map('mapOil')
+    console.log(maps)
+    var LeafIcon = L.Icon.extend({
+        options: {
+            iconSize: [30, 30],
+            iconAnchor: [10, 18],
+            popupAnchor: [10, 0]
+        }
+    });
+
+    var customIcon = new LeafIcon({
+        iconUrl: '../../image/er.png',
+        iconSize: [20, 20],
+        iconAnchor: [20, 20],
+        popupAnchor: [10, 0],
+        className: 'custom-marker-alarm'
+    });
+
+    const polyline = L.polyline(geo, { color: 'darkred', weight: 2 });
+    polyline.addTo(map);
+    const nameCar = document.querySelector('.color').children[0].textContent
+    const center = [geoMarker.geoY, geoMarker.geoX]
+    console.log(center)
+
+    var LeafIcon = L.Icon.extend({
+        options: {
+            iconSize: [30, 30],
+            iconAnchor: [10, -20],
+            popupAnchor: [20, 45]
+        }
+    });
+
+    var customIcon = new LeafIcon({
+        iconUrl: '../../image/iconCar2.png',
+        iconSize: [30, 30],
+        iconAnchor: [10, -20],
+        popupAnchor: [20, 45],
+        className: 'custom-marker'
+    });
+    const alarmCenter = [geoTrack.geoY, geoTrack.geoX]
+    map.setView(alarmCenter, 12)
+    map.flyTo(alarmCenter, 12)
+    const iss = L.marker(alarmCenter, { icon: customIcon }).bindPopup(`Объект: ${geoTrack.info.car}\nВремя: ${geoTrack.info.time}\nКолесо: ${geoTrack.info.tyres}\nP,bar: ${geoTrack.info.bar}\nt,C: ${geoTrack.info.temp}\nСкорость: ${geoTrack.speed} км/ч\nУведомление: ${geoTrack.info.alarm}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
+    iss.getPopup().options.className = 'my-popup-alarm'
+    iss.on('mouseover', function (e) {
+        this.openPopup();
+    });
+    iss.on('mouseout', function (e) {
+        this.closePopup();
+    });
+
+    map.attributionControl.setPrefix(false)
+    const leaf = document.querySelector('.leaflet-control-attribution');
+    leaf.style.display = 'none';
+    const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
+    });
+    map.addLayer(layer);
+}
 async function alarmTrackGeo(unixTime, idw) {
     const nowDate = unixTime + 3600
     const timeFrom = unixTime

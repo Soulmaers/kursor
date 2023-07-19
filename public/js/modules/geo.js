@@ -54,18 +54,15 @@ export function createMap(geo, geoMarker, geoTrack) {
     });
     map.addLayer(layer);
     //if (geo) {
-    const polyline = L.polyline(geo, { color: !geoTrack ? 'rgb(0, 0, 204)' : 'darkred', weight: 2 });
+    const polyline = L.polyline(geo, { color: 'rgb(0, 0, 204)', weight: 2 });
     polyline.addTo(map);
     // }
 
     let iss;
-    let iss2;
+
     const nameCar = document.querySelector('.color').children[0].textContent
-
-
     const center = [geoMarker.geoY, geoMarker.geoX]
     console.log(center)
-
 
     if (!iss) {
         var LeafIcon = L.Icon.extend({
@@ -76,48 +73,24 @@ export function createMap(geo, geoMarker, geoTrack) {
             }
         });
 
-        var customIcon = new LeafIcon({
-            iconUrl: '../../image/er.png',
-            iconSize: [20, 20],
+
+        var greenIcon = new LeafIcon({
+            iconUrl: '../../image/iconCar2.png',
+            iconSize: [30, 30],
             iconAnchor: [20, 20],
             popupAnchor: [0, 0],
             className: 'custom-marker'
-        });
-        var greenIcon = new LeafIcon({
-            iconUrl: '../../image/iconCar2.png'
-
         })
+        map.setView(center, 12)
+        map.flyTo(center, 12)
+        iss = L.marker(center, { icon: greenIcon }).bindPopup(nameCar).addTo(map);
+        iss.on('mouseover', function (e) {
+            this.openPopup();
+        });
+        iss.on('mouseout', function (e) {
+            this.closePopup();
+        });
 
-        if (geoTrack) {
-            iss = L.marker(center, { icon: greenIcon }).bindPopup(nameCar).addTo(map);
-            iss.on('mouseover', function (e) {
-                this.openPopup();
-            });
-            iss.on('mouseout', function (e) {
-                this.closePopup();
-            });
-            const alarmCenter = [geoTrack.geoY, geoTrack.geoX]
-            map.setView(alarmCenter, 12)
-            map.flyTo(alarmCenter, 12)
-            iss2 = L.marker(alarmCenter, { icon: customIcon }).bindPopup(`Объект: ${geoTrack.info.car}\nВремя: ${geoTrack.info.time}\nКолесо: ${geoTrack.info.tyres}\nP,bar: ${geoTrack.info.bar}\nt,C: ${geoTrack.info.temp}\nСкорость: ${geoTrack.speed} км/ч\nУведомление: ${geoTrack.info.alarm}`, { width: 60, className: 'my-popup' }).addTo(map);
-            iss2.getPopup().options.className = 'my-popup'
-            iss2.on('mouseover', function (e) {
-                this.openPopup();
-            });
-            iss2.on('mouseout', function (e) {
-                this.closePopup();
-            });
-        } else {
-            map.setView(center, 12)
-            map.flyTo(center, 12)
-            iss = L.marker(center, { icon: greenIcon }).bindPopup(nameCar).addTo(map);
-            iss.on('mouseover', function (e) {
-                this.openPopup();
-            });
-            iss.on('mouseout', function (e) {
-                this.closePopup();
-            });
-        }
     }
     iss.setLatLng(center, /*{ icon: greenIcon }*/).update();
     isProcessing = false;
