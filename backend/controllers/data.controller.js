@@ -49,6 +49,7 @@ exports.dataSpisok = async (req, res) => {
     try {
         const login = req.body.login
         const data = await wialonService.getAllGroupDataFromWialon(login);
+        // console.log(data)
         const aLLmassObject = [];
         const arrName = [];
         for (const elem of data.items) {
@@ -152,8 +153,8 @@ const test = async () => {
 
 
 }
-setTimeout(test, 1000)
-setInterval(test, 60000)
+//setTimeout(test, 1000)
+//setInterval(test, 60000)
 async function updateParams(data) {
     //запрашиваем данные параметры по обектам с виалона
     //  const data = await wialonService.getDataFromWialon(login)

@@ -2,6 +2,7 @@ import { tr } from './content.js'
 import { convert } from './helpersFunc.js'
 import { ggg } from './menu.js'
 import { createMap } from './geo.js'
+import { testovfn } from './charts/bar.js'
 import { Tooltip } from '../class/Tooltip.js'
 const login = document.querySelectorAll('.log')[1].textContent
 let isProcessing = false
@@ -369,18 +370,20 @@ async function geoMarker(time, idw, tr) {
     const dateObj = new Date(parts[2], parts[1] - 1, parts[0], parts[3], parts[4]);
     const unixTime = Math.floor(dateObj.getTime() / 1000);
     const nowDate = unixTime
-    const timeFrom = unixTime - 3000
+    const timeFrom = unixTime - 3600
     console.log(nowDate, timeFrom, idw, login); // 1687935780
-
-    const params = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ nowDate, timeFrom, idw, login }))
-    }
-    const geoTest = await fetch('/api/geoloc', params)
-    const geoCard = await geoTest.json()
+    const ttt = await testovfn(idw, timeFrom, nowDate)
+    const geoCard = ttt.map(e => {
+        return {
+            ...e,
+            geo: JSON.parse(e.geo)
+        };
+    });
+    console.log(geoCard);
+    const trackAlarm = geoCard.map(it => {
+        return it.geo
+    })
+    console.log(trackAlarm);
     const nameCar = document.querySelector('.color').children[0].textContent
     const alarm = {
         car: nameCar,
@@ -390,25 +393,25 @@ async function geoMarker(time, idw, tr) {
         temp: tr.children[3].textContent,
         alarm: tr.children[4].textContent,
     }
-
-    const res = await alarmTrackGeo(unixTime, idw)
-    const trackAlarm = res.resTrack;
-    const geoCar = geoCard.resMarker
-    console.log(geoCard)
-    const speed = await speedAlarm(unixTime, idw)
-    console.log(speed)
+    //  const res = await alarmTrackGeo(unixTime, idw)
+    //  const trackAlarm = res.resTrack;
+    //  const geoCar = geoCard.resMarker
+    //  console.log(geoCard)
+    // const speed = await speedAlarm(unixTime, idw)
+    // console.log(speed)
     const geo = {
-        geoX: geoCard.resTrack[0][1],
-        geoY: geoCard.resTrack[0][0],
+        geoX: geoCard[geoCard.length - 1].geo[1],
+        geoY: geoCard[geoCard.length - 1].geo[0],
         info: alarm,
-        speed: speed
+        speed: geoCard[geoCard.length - 1].speed
     }
-    createMaps(trackAlarm, geoCar, geo)
+    console.log(geo)
+    createMaps(trackAlarm, geo)
 }
 
 
 
-function createMaps(geo, geoMarker, geoTrack) {
+function createMaps(geo, geoTrack) {
     const mapss = document.getElementById('mapOil')
     if (mapss) {
         mapss.remove();
@@ -430,10 +433,6 @@ function createMaps(geo, geoMarker, geoTrack) {
 
     const polyline = L.polyline(geo, { color: 'darkred', weight: 2 });
     polyline.addTo(map);
-    const nameCar = document.querySelector('.color').children[0].textContent
-    const center = [geoMarker.geoY, geoMarker.geoX]
-    console.log(center)
-
     var LeafIcon = L.Icon.extend({
         options: {
             iconSize: [30, 30],
@@ -459,7 +458,6 @@ function createMaps(geo, geoMarker, geoTrack) {
     iss.on('mouseout', function (e) {
         this.closePopup();
     });
-
     map.attributionControl.setPrefix(false)
     const leaf = document.querySelector('.leaflet-control-attribution');
     leaf.style.display = 'none';
@@ -468,41 +466,7 @@ function createMaps(geo, geoMarker, geoTrack) {
     });
     map.addLayer(layer);
 }
-async function alarmTrackGeo(unixTime, idw) {
-    const nowDate = unixTime + 3600
-    const timeFrom = unixTime
-    console.log(nowDate, timeFrom, idw, login); // 1687935780
 
-    const params = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ nowDate, timeFrom, idw, login }))
-    }
-    const geoTest = await fetch('/api/geoloc', params)
-    const geoCard = await geoTest.json()
-    return geoCard
-
-}
-
-
-async function speedAlarm(unixTime, idw) {
-    const timeNow = unixTime
-    const timeOld = unixTime - 3000
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ idw, timeOld, timeNow, login }))
-    }
-    const res = await fetch('/api/loadInterval', param)
-    const result = await res.json()
-    console.log(result)
-    const speed = result.messages[0].pos.s
-    return speed
-}
 
 
 

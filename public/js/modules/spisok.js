@@ -39,6 +39,7 @@ export async function loadParamsViewList(car, el) {
 }
 
 export async function conturTest(testov) {
+    console.log(testov)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         removeArrElem(groups)
@@ -54,14 +55,17 @@ export async function conturTest(testov) {
             const wrapList = document.querySelector('.wrapList')
             const group = document.createElement('div')
             group.classList.add('groups')
-            group.classList.add(`${el[0][5]}`)
+            console.log(group)
+            const nameGroup = el[0][5].replace(/\s/g, '_');
+            group.classList.add(`${nameGroup}`)
+            console.log(group)
             group.style.display = 'flex',
                 group.style.flexDirection = 'column'
             group.style.width = 100 + '%',
                 wrapList.appendChild(group)
             const titleModal = document.createElement('div')
             titleModal.classList.add('titleModal')
-            titleModal.textContent = `${el[0][5]}` + ' ' + '(' + `${el.length}` + ')'
+            titleModal.textContent = `${nameGroup}` + ' ' + '(' + `${el.length}` + ')'
             group.appendChild(titleModal)
             const filterV = document.createElement('div')
             filterV.classList.add('filterV')
@@ -77,15 +81,17 @@ export async function conturTest(testov) {
             titleModal.appendChild(minusS)
             const pAll = document.createElement('p')
             pAll.classList.add('pAll')
-            pAll.innerHTML = `<input class="checkInListaLL" type="checkbox" rel="${el[0][5]}" value="${el[0][5]}" id="${el[0][5]}"
+            pAll.innerHTML = `<input class="checkInListaLL" type="checkbox" rel="${nameGroup}" value="${nameGroup}" id="${nameGroup}"
                     >Все`
             titleModal.prepend(pAll)
             const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModal')
-            group.classList.add(`${el[0][5]}`)
+            group.classList.add(`${nameGroup}`)
             group.appendChild(hiddenModal)
-            const listArr = document.querySelector(`.${el[0][5]}`)
+            const listArr = document.querySelector(`.${nameGroup}`)
             el.forEach(async elem => {
+                console.log(elem)
+                console.log(listArr.children[1])
                 const nameCar = elem[0].message.replace(/\s+/g, '')
                 const listItemCar = document.createElement('div')
                 listItemCar.classList.add('listItem')

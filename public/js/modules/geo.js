@@ -29,6 +29,7 @@ export async function geoloc() {
 export function createMap(geo, geoMarker, geoTrack) {
     console.log(geoMarker)
     console.log(geoTrack)
+    console.log(geo)
     const mapss = document.getElementById('map')
     if (mapss) {
         mapss.remove();

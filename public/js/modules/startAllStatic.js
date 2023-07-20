@@ -11,11 +11,16 @@ export async function startAllStatic(objects) {
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
     result.forEach(el => {
-        el[0].message === 'Цистерна ДТ' ? el.push('Цистерна') : el.push(el[0].result[0].type)
-    })
+        if (el[0].message === 'Цистерна ДТ') {
+            el.push('Цистерна');
+        } else if (el[0].result && el[0].result[0] && el[0].result[0].type) {
+            el.push(el[0].result[0].type);
+        }
+    });
+    console.log(result)
     const array = result
         //   .filter(e => e[0].message.startsWith('Sitrack'))
-        .filter(e => e[6].startsWith('Самосвал'))
+        .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)
         .map(e => e);
     const interval = timefn()
     const timeOld = interval[1]
