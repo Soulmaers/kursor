@@ -52,7 +52,7 @@ export async function conturTest(testov) {
     }
     testov.forEach(el => {
         if (el.length !== 0) {
-            const wrapList = document.querySelector('.wrapList')
+            const lowList = document.querySelector('.low_list')
             const group = document.createElement('div')
             group.classList.add('groups')
             console.log(group)
@@ -62,7 +62,7 @@ export async function conturTest(testov) {
             group.style.display = 'flex',
                 group.style.flexDirection = 'column'
             group.style.width = 100 + '%',
-                wrapList.appendChild(group)
+                lowList.appendChild(group)
             const titleModal = document.createElement('div')
             titleModal.classList.add('titleModal')
             titleModal.textContent = `${nameGroup}` + ' ' + '(' + `${el.length}` + ')'
