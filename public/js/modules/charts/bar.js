@@ -1,5 +1,6 @@
-import { fnTime, fnPar, fnParMessage } from '../grafiks.js'
+import { fnParMessage } from '../grafiks.js'
 import { Tooltip } from '../../class/Tooltip.js'
+import { createMapsUniq } from '../geo.js'
 
 async function fn() {
     const active = document.querySelectorAll('.color')
@@ -834,16 +835,14 @@ async function grafikStartPress(times, datar) {
                 const d0 = data.val[i - 1];
                 const d1 = data.val[i];
                 d = x0 - d0.dates > d1.dates - x0 ? d1 : d0;
-                console.log('клик')
-                console.log(d)
-                createMap(d);
+                createMapsUniq([], d, 'bar')
                 const act = document.querySelector('.activMenuGraf').textContent
                 console.log(act)
 
                 const graph = document.querySelector('.infoGraf')
                 graph.addEventListener('click', function (event) {
                     event.stopPropagation(); // Остановка всплытия события, чтобы клик на графике не вызывал обработчик события click на document
-                    createMap(d);
+                    createMapsUniq([], d, 'bar')
                 });
                 document.addEventListener('click', function (event) {
                     const targetElement = event.target;
@@ -999,72 +998,4 @@ async function vieModelChart(model, im1) {
 }
 
 
-
-function createMap(data) {
-    console.log(data)
-    const nameCar = document.querySelector('.color').children[0].textContent
-
-    const date = new Date(data.dates);
-    const day = date.getDate();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-
-    const mapss = document.getElementById('mapOil')
-    if (mapss) {
-        mapss.remove();
-    }
-    const main = document.querySelector('.main')
-    const maps = document.createElement('div')
-    maps.classList.add('mapsOilCard')
-    maps.setAttribute('id', 'mapOil')
-    main.style.position = 'relative'
-    maps.style.width = '300px';
-    maps.style.height = '300px'
-    maps.style.position = 'absolute'
-    maps.style.left = '25px';
-    maps.style.top = '500px';
-    main.appendChild(maps)
-    const map = L.map('mapOil')
-
-    var LeafIcon = L.Icon.extend({
-        options: {
-            iconSize: [30, 30],
-            iconAnchor: [10, 0],
-            popupAnchor: [10, 25]
-        }
-    });
-
-    var customIcon = new LeafIcon({
-        iconUrl: '../../image/iconCar2.png',
-        iconSize: [30, 30],
-        iconAnchor: [10, 0],
-        popupAnchor: [10, 25],
-        className: 'custom-marker-bar'
-    });
-    map.setView(data.geo, 12)
-    map.flyTo(data.geo, 12)
-    const bar = data.value !== -0.5 ? data.value : '-'
-    const temp = data.tvalue !== -0.5 ? data.tvalue : '-'
-    const iss = L.marker(data.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nВремя: ${formattedDate}\nСкорость: ${data.speed} км/ч\nЗажигание: ${data.stop}\nДавление: ${bar} Бар\nТемпература: ${temp} С`, { className: 'my-popup-oil', autoPan: false }).addTo(map);
-    iss.getPopup().options.className = 'my-popup-bar'
-    iss.on('mouseover', function (e) {
-        this.openPopup();
-    });
-    iss.on('mouseout', function (e) {
-        this.closePopup();
-    });
-    map.attributionControl.setPrefix(false)
-    const leaf = document.querySelector('.leaflet-control-attribution');
-    leaf.style.display = 'none';
-    const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    L.control.scale().addTo(map);
-    map.addLayer(layer);
-    map.on('zoomend', function () {
-        map.panTo(center);
-    });
-
-}
 

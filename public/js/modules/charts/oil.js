@@ -1,7 +1,7 @@
 import { fnTime, fnPar, fnParMessage } from '../grafiks.js'
 import { Tooltip } from '../../class/Tooltip.js'
 import { testovfn } from './bar.js'
-import { timesFormat } from '../startAllStatic.js'
+import { createMapsUniq } from '../geo.js'
 //import { dostupObject } from '../../../../backend/services/database.service.js'
 
 
@@ -416,56 +416,7 @@ export async function oil(t1, t2) {
             }
             d3.select(this).style("opacity", 1);
             this.classList.add('clickOil');
-            const main = document.querySelector('.main')
-            const maps = document.createElement('div')
-            maps.classList.add('mapsOilCard')
-            maps.setAttribute('id', 'mapOil')
-            main.style.position = 'relative'
-            maps.style.width = '300px';
-            maps.style.height = '300px'
-            maps.style.position = 'absolute'
-            maps.style.left = '25px';
-            maps.style.top = '500px';
-            main.appendChild(maps)
-            const map = L.map('mapOil')
-            console.log(maps)
-            var LeafIcon = L.Icon.extend({
-                options: {
-                    iconSize: [30, 30],
-                    iconAnchor: [10, 18],
-                    popupAnchor: [10, 0]
-                }
-            });
-
-            var customIcon = new LeafIcon({
-                iconUrl: '../../image/ref.png',
-                iconSize: [20, 20],
-                iconAnchor: [20, 20],
-                popupAnchor: [10, 0],
-                className: 'custom-marker-oil'
-            });
-            map.setView(d.geo, 15)
-            map.flyTo(d.geo, 15)
-
-            const iss = L.marker(d.geo, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nЗаправлено: ${d.zapravka} л.\nДата: ${d.time}`, { className: 'my-popup-oil' }).addTo(map);
-            iss.getPopup().options.className = 'my-popup-oil'
-            iss.on('mouseover', function (e) {
-                this.openPopup();
-            });
-            iss.on('mouseout', function (e) {
-                this.closePopup();
-            });
-            map.attributionControl.setPrefix(false)
-            const leaf = document.querySelector('.leaflet-control-attribution');
-            leaf.style.display = 'none';
-            const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            L.control.scale().addTo(map);
-            map.addLayer(layer);
-            const ma = document.querySelector('.mapsOilCard')
-            console.log(ma)
-            map.on('zoomend', function () {
-                map.panTo(center);
-            });
+            createMapsUniq([], d, 'oil')
         })
     /* .on("mousemove", function (d) {
          d3.select(this).style("opacity", 1);

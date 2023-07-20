@@ -99,3 +99,108 @@ export function createMap(geo, geoMarker) {
 
     isProcessing = false;
 }
+
+
+
+
+export function createMapsUniq(geoTrack, geo, num) {
+    console.log(geo)
+    console.log(geoTrack)
+    console.log(num)
+    const mapss = document.getElementById('mapOil')
+    if (mapss) {
+        mapss.remove();
+    }
+    const main = document.querySelector('.main')
+    const maps = document.createElement('div')
+    maps.classList.add('mapsOilCard')
+    maps.setAttribute('id', 'mapOil')
+    main.style.position = 'relative'
+    maps.style.width = '300px';
+    maps.style.height = '320px'
+    maps.style.position = 'absolute'
+    maps.style.left = '580px';
+    maps.style.top = '40px';
+    maps.style.zIndex = 2099;
+    main.appendChild(maps)
+    const map = L.map('mapOil')
+    console.log(maps)
+
+    const polyline = L.polyline(geoTrack, { color: 'darkred', weight: 2 });
+    polyline.addTo(map);
+    var LeafIcon = L.Icon.extend({
+        options: {
+            iconSize: [30, 30],
+            iconAnchor: [0, 0],
+            popupAnchor: [20, 25]
+        }
+    });
+    let cl;
+    let iss;
+    let center;
+    let formattedDate;
+    const nameCar = document.querySelector('.color').children[0].textContent
+
+    var customIcon = new LeafIcon({
+        iconUrl: num !== 'oil?' ? '../../image/iconCar2.png' : '../../image/ref.png',
+        iconSize: [30, 30],
+        iconAnchor: [0, 0],
+        popupAnchor: [20, 25],
+        className: 'custom-marker-alarm'
+    });
+    if (num === 'bar') {
+        maps.style.width = '300px';
+        maps.style.height = '300px'
+        maps.style.position = 'absolute'
+        maps.style.left = '25px';
+        maps.style.top = '500px';
+        const date = new Date(geo.dates);
+        const day = date.getDate();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+        center = [geo.geo[0], geo.geo[1]]
+        cl = 'my-popup-bar'
+        iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nВремя: ${formattedDate}\nСкорость: ${geo.speed} км/ч\nЗажигание: ${geo.stop}`, { className: 'my-popup-bar', autoPan: false }).addTo(map);
+    }
+    if (num === 'oil') {
+        maps.style.width = '300px';
+        maps.style.height = '300px'
+        maps.style.position = 'absolute'
+        maps.style.left = '25px';
+        maps.style.top = '500px';
+        center = [geo.geo[0], geo.geo[1]]
+        cl = 'my-popup-oil'
+        iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nЗаправлено: ${geo.zapravka} л.\nДата: ${geo.time}`, { className: 'my-popup-oil' }).addTo(map);
+    }
+    if (num === 'alarm') {
+        center = [geo.geoY, geo.geoX]
+        cl = 'my-popup-alarm'
+        iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${geo.info.car}\nВремя: ${geo.info.time}\nКолесо: ${geo.info.tyres}\nP,bar: ${geo.info.bar}\nt,C: ${geo.info.temp}\nСкорость: ${geo.speed} км/ч\nУведомление: ${geo.info.alarm}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
+    }
+
+
+    map.setView(center, 12)
+    map.flyTo(center, 12)
+    // const iss = L.marker(alarmCenter, { icon: customIcon }).bindPopup(`Объект: ${geoTrack.info.car}\nВремя: ${geoTrack.info.time}\nКолесо: ${geoTrack.info.tyres}\nP,bar: ${geoTrack.info.bar}\nt,C: ${geoTrack.info.temp}\nСкорость: ${geoTrack.speed} км/ч\nУведомление: ${geoTrack.info.alarm}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
+    iss.getPopup().options.className = cl
+    iss.on('mouseover', function (e) {
+        this.openPopup();
+    });
+    iss.on('mouseout', function (e) {
+        this.closePopup();
+    });
+    map.attributionControl.setPrefix(false)
+    const leaf = document.querySelector('.leaflet-control-attribution');
+    leaf.style.display = 'none';
+    const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    L.control.scale({
+        imperial: ''
+    }).addTo(map);
+    map.addLayer(layer);
+    map.on('zoomend', function () {
+        map.panTo(center);
+    });
+}
