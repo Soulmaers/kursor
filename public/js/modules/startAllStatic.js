@@ -17,7 +17,6 @@ export async function startAllStatic(objects) {
             el.push(el[0].result[0].type);
         }
     });
-    console.log(result)
     const array = result
         //   .filter(e => e[0].message.startsWith('Sitrack'))
         .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)
@@ -25,9 +24,7 @@ export async function startAllStatic(objects) {
     const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
-
     const res = await loadValue(array, timeOld, timeNow, login)
-    console.log(res.uniq)
     return res.uniq
 }
 async function loadValue(array, timeOld, timeNow, login) {
@@ -48,7 +45,6 @@ async function loadValue(array, timeOld, timeNow, login) {
                 };*/
         try {
             const itog = await testovfn(idw, timeOld, timeNow)
-            console.log(itog)
             itog.forEach(el => {
                 const timestamp = Number(el.data);
                 const date = new Date(timestamp * 1000);
@@ -90,7 +86,6 @@ async function loadValue(array, timeOld, timeNow, login) {
             })
             const oil = [];
             const hh = [];
-            console.log(allArrNew)
             allArrNew.forEach(it => {
                 if (it.params === 'can_mileage') {
                     const probegZero = it.value.length !== 0 ? Number((it.value[0]).toFixed(0)) : 0;
@@ -309,7 +304,6 @@ function moto(data) {
     }
 }
 function rashodCalc(data) {
-    console.log(data)
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
@@ -318,9 +312,9 @@ function rashodCalc(data) {
             data.speed.splice(i, 1);
         } else {
             i++;
+
         }
     }
-    console.log(data.value)
     const increasingIntervals = [];
     let start = 0;
     let end = 0;
@@ -342,7 +336,6 @@ function rashodCalc(data) {
     if (start !== end) {
         increasingIntervals.push([[data.value[start], data.time[start]], [data.value[end], data.time[end]]]);
     }
-    console.log(increasingIntervals)
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0][0];
         const lastOil = interval[interval.length - 1][0];
