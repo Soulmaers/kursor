@@ -209,14 +209,13 @@ export async function conturTest(testov) {
         await delay(1000);
         zaprosSpisok();
 
-
-        const preloader = document.querySelector('.preloader') /* находим блок Preloader */
-        preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
+        const preloader = document.querySelector('.preloader');
+        preloader.classList.add('preloader_hidden');
 
         // Другой код, который должен выполниться после завершения работы функции zaprosSpisok
     }
 
-    waitAndExecute();
+    window.addEventListener('load', waitAndExecute);
 }
 
 export async function gg(id) {
