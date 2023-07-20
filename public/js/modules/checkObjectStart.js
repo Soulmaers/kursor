@@ -12,7 +12,6 @@ export function startList(object) {
             el.push(el[0].result[0].type);
         }
     });
-    console.log(result)
     const array = result
         //   .filter(e => e[0].message.startsWith('Sitrack'))
         .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)

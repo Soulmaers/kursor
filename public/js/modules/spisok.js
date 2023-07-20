@@ -55,10 +55,8 @@ export async function conturTest(testov) {
             const lowList = document.querySelector('.low_list')
             const group = document.createElement('div')
             group.classList.add('groups')
-            console.log(group)
             const nameGroup = el[0][5].replace(/\s/g, '_');
             group.classList.add(`${nameGroup}`)
-            console.log(group)
             group.style.display = 'flex',
                 group.style.flexDirection = 'column'
             group.style.width = 100 + '%',
@@ -90,8 +88,6 @@ export async function conturTest(testov) {
             group.appendChild(hiddenModal)
             const listArr = document.querySelector(`.${nameGroup}`)
             el.forEach(async elem => {
-                console.log(elem)
-                console.log(listArr.children[1])
                 const nameCar = elem[0].message.replace(/\s+/g, '')
                 const listItemCar = document.createElement('div')
                 listItemCar.classList.add('listItem')

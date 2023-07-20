@@ -22,18 +22,15 @@ export async function geoloc() {
     const geoCard = await geoTest.json()
     const geo = geoCard.resTrack
     const geoMarker = geoCard.resMarker
-    createMap(geo, geoMarker)
-
-}
-
-export function createMap(geo, geoMarker, geoTrack) {
     console.log(geoMarker)
-    console.log(geoTrack)
-    console.log(geo)
     const mapss = document.getElementById('map')
     if (mapss) {
         mapss.remove();
     }
+    Object.keys(geoMarker).length !== 0 ? createMap(geo, geoMarker) : isProcessing = false;
+}
+
+export function createMap(geo, geoMarker) {
     let count = 0;
     count++
     const container = L.DomUtil.get('map');
