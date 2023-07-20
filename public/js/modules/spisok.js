@@ -215,7 +215,34 @@ export async function conturTest(testov) {
         // Другой код, который должен выполниться после завершения работы функции zaprosSpisok
     }
 
-    window.addEventListener('load', waitAndExecute);
+    function waitForImages() {
+        return new Promise((resolve) => {
+            const images = document.querySelectorAll('img');
+            let loadedImagesCount = 0;
+
+            const checkLoadedImages = () => {
+                loadedImagesCount++;
+                if (loadedImagesCount === images.length) {
+                    resolve(); // Все изображения загружены
+                }
+            };
+
+            images.forEach((image) => {
+                if (image.complete) {
+                    checkLoadedImages(); // Если изображение уже загружено, увеличиваем счетчик
+                } else {
+                    image.addEventListener('load', checkLoadedImages); // Слушаем событие load для каждого изображения
+                }
+            });
+        });
+    }
+
+    async function init() {
+        await waitForImages(); // Ожидаем загрузки всех изображений
+        waitAndExecute(); // Запускаем функцию после загрузки изображений
+    }
+
+    init();
 }
 
 export async function gg(id) {
