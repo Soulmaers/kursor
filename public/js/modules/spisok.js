@@ -201,10 +201,6 @@ export async function conturTest(testov) {
     navigator();
     sortAll()
     //setTimeout(zaprosSpisok, 1000)
-    function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
     async function waitAndExecute() {
         await delay(1000);
         zaprosSpisok();
@@ -215,31 +211,32 @@ export async function conturTest(testov) {
         // Другой код, который должен выполниться после завершения работы функции zaprosSpisok
     }
 
-    function waitForImages() {
+    function waitForBackgroundImages() {
         return new Promise((resolve) => {
-            const images = document.querySelectorAll('img');
+            const elementsWithBackgroundImages = document.querySelectorAll('[style*="background-image"]');
             let loadedImagesCount = 0;
 
             const checkLoadedImages = () => {
                 loadedImagesCount++;
-                if (loadedImagesCount === images.length) {
-                    resolve(); // Все изображения загружены
+                if (loadedImagesCount === elementsWithBackgroundImages.length) {
+                    resolve(); // Все фоновые изображения загружены
                 }
             };
 
-            images.forEach((image) => {
-                if (image.complete) {
-                    checkLoadedImages(); // Если изображение уже загружено, увеличиваем счетчик
-                } else {
-                    image.addEventListener('load', checkLoadedImages); // Слушаем событие load для каждого изображения
-                }
+            elementsWithBackgroundImages.forEach((element) => {
+                const backgroundImage = element.style.backgroundImage;
+                const imageUrl = backgroundImage.slice(4, -1).replace(/"/g, "");
+                const image = new Image();
+
+                image.onload = checkLoadedImages;
+                image.src = imageUrl;
             });
         });
     }
 
     async function init() {
-        await waitForImages(); // Ожидаем загрузки всех изображений
-        waitAndExecute(); // Запускаем функцию после загрузки изображений
+        await waitForBackgroundImages(); // Ожидаем загрузки всех фоновых изображений
+        waitAndExecute(); // Запускаем функцию после загрузки фоновых изображений
     }
 
     init();
