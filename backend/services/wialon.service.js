@@ -24,18 +24,21 @@ exports.getAllParamsIdDataFromWialon = async (id, login) => {
         "flags": 1025
     };
     return new Promise(async function (resolve, reject) {
-        const session = await getSessiont(login);
-        session.request('core/search_item', prmsId)
-            .catch(function (err) {
-                console.log(err);
-            })
-            .then(function (data) {
-                //   console.log(data)
-                resolve(data)
-            });
-        //   }
-
-    })
+        try {
+            const session = await getSessiont(login);
+            const data = await session.request('core/search_item', prmsId);
+            // Обработка успешного ответа
+            resolve(data);
+        } catch (err) {
+            if (err.code === 7) {
+                // Запрашиваемый ресурс не найден или не доступен
+                resolve({});
+                return;
+            }
+            resolve({});
+            reject(err);
+        }
+    });
 };
 
 

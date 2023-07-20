@@ -49,25 +49,32 @@ exports.dataSpisok = async (req, res) => {
     try {
         const login = req.body.login
         const data = await wialonService.getAllGroupDataFromWialon(login);
-        // console.log(data)
+        //  console.log(data)
         const aLLmassObject = [];
         const arrName = [];
         for (const elem of data.items) {
             const nameGroup = elem.nm;
             const nameObject = elem.u;
+            console.log(nameObject)
             const massObject = [];
             await Promise.all(nameObject.map(async (el, index) => {
-                const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
-                if (!all.item.nm) {
-                    return;
+                // console.log(el)
+                try {
+                    const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
+                    if (!all.item.nm) {
+                        return;
+                    }
+                    const objects = all.item.nm;
+                    arrName.push(objects)
+                    const prob = await databaseService.loadParamsViewList(objects, el);
+                    const massObjectCar = await databaseService.dostupObject(login);
+                    if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
+                        prob.group = nameGroup;
+                        massObject.push(prob);
+                    }
                 }
-                const objects = all.item.nm;
-                arrName.push(objects)
-                const prob = await databaseService.loadParamsViewList(objects, el);
-                const massObjectCar = await databaseService.dostupObject(login);
-                if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
-                    prob.group = nameGroup;
-                    massObject.push(prob);
+                catch (e) {
+                    console.log(e)
                 }
             }));
             const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
