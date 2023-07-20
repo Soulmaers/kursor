@@ -200,29 +200,8 @@ export async function conturTest(testov) {
     hiddenWindows()
     navigator();
     sortAll()
-    //setTimeout(zaprosSpisok, 1000)
-    async function waitAndExecute() {
-        await delay(1000);
-        zaprosSpisok();
+    setTimeout(zaprosSpisok, 1000)
 
-        const preloader = document.querySelector('.preloader');
-        preloader.classList.add('preloader_hidden');
-
-        // Другой код, который должен выполниться после завершения работы функции zaprosSpisok
-    }
-
-    function waitForDOMLoad() {
-        return new Promise((resolve) => {
-            document.addEventListener('DOMContentLoaded', resolve);
-        });
-    }
-
-    async function init() {
-        await waitForDOMLoad(); // Ожидаем загрузку всего DOM
-        waitAndExecute(); // Запускаем функцию после загрузки DOM
-    }
-
-    init();
 }
 
 export async function gg(id) {
