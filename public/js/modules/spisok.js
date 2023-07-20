@@ -210,6 +210,19 @@ export async function conturTest(testov) {
 
         // Другой код, который должен выполниться после завершения работы функции zaprosSpisok
     }
+
+    function waitForDOMLoad() {
+        return new Promise((resolve) => {
+            document.addEventListener('DOMContentLoaded', resolve);
+        });
+    }
+
+    async function init() {
+        await waitForDOMLoad(); // Ожидаем загрузку всего DOM
+        waitAndExecute(); // Запускаем функцию после загрузки DOM
+    }
+
+    init();
 }
 
 export async function gg(id) {
