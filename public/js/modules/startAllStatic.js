@@ -33,51 +33,41 @@ async function loadValue(array, timeOld, timeNow, login) {
         const time = [];
         const speed = [];
         const sats = [];
-        const time2 = [];
-        const speed2 = [];
-        const sats2 = [];
         const idw = e[4];
-        const ttt = await testovfn(idw, timeOld, timeNow)
-        console.log(ttt)
-        ttt.forEach(el => {
-            const timestamp = Number(el.data);
-            const date = new Date(timestamp * 1000);
-            const isoString = date.toISOString();
-            time2.push(new Date(isoString))
-            speed2.push(el.speed)
-            // sats.push(el.sats)
-        })
-        // console.log(time2, speed2)
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ idw, timeOld, timeNow, login }))
-        };
+        /*        const param = {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: (JSON.stringify({ idw, timeOld, timeNow, login }))
+                };*/
         try {
-            const res = await fetch('/api/loadInterval', param);
-            const itog = await res.json();
+            const itog = await testovfn(idw, timeOld, timeNow)
             console.log(itog)
-            itog.messages.forEach(el => {
-                const timestamp = el.t;
+            itog.forEach(el => {
+                const timestamp = Number(el.data);
                 const date = new Date(timestamp * 1000);
                 const isoString = date.toISOString();
                 time.push(new Date(isoString))
-                speed.push(el.pos.s)
-                sats.push(el.p.sats)
+                speed.push(el.speed)
+                sats.push(el.sats)
             })
-            // console.log(time, speed, sats)
-            const probegZero = itog.messages.length !== 0 ? itog.messages[0].p.can_mileage ? Number((itog.messages[0].p.can_mileage).toFixed(0)) : itog.messages[0].p.mileage ? Number((itog.messages[0].p.mileage).toFixed(0)) : 0 : 0;
-            const probegNow = itog.messages.length !== 0 ? itog.messages[0].p.can_mileage ? Number((itog.messages[itog.messages.length - 1].p.can_mileage).toFixed(0)) : itog.messages[0].p.mileage ? Number((itog.messages[itog.messages.length - 1].p.mileage).toFixed(0)) : 0 : 0
-            const probegDay = probegNow - probegZero;
-            if (probegDay > 5) {
-                uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 1, probeg: probegDay };
-            }
-            else {
-                uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 0, probeg: probegDay };
-            }
-            const sensArr = await fnPar(idw)
+            const sensArr = itog.map(e => {
+                return JSON.parse(e.sens)
+            })
+            /* const res = await fetch('/api/loadInterval', param);
+             const itog = await res.json();
+             console.log(itog)
+             itog.messages.forEach(el => {
+                 const timestamp = el.t;
+                 const date = new Date(timestamp * 1000);
+                 const isoString = date.toISOString();
+                 time.push(new Date(isoString))
+                 speed.push(el.pos.s)
+                 sats.push(el.p.sats)
+             })*/
+            // const sensArr = await fnPar(idw)
+            // console.log(sensArr)
             const nameSens = await fnParMessage(idw)
             const allArrNew = [];
             nameSens.forEach((item) => {
@@ -95,6 +85,20 @@ async function loadValue(array, timeOld, timeNow, login) {
             })
             const oil = [];
             const hh = [];
+            console.log(allArrNew)
+            allArrNew.forEach(it => {
+                if (it.params === 'can_mileage') {
+                    const probegZero = it.value.length !== 0 ? Number((it.value[0]).toFixed(0)) : 0;
+                    const probegNow = it.value.length !== 0 ? Number((it.value[it.value.length - 1]).toFixed(0)) : 0
+                    const probegDay = probegNow - probegZero;
+                    if (probegDay > 5) {
+                        uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 1, probeg: probegDay };
+                    }
+                    else {
+                        uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 0, probeg: probegDay };
+                    }
+                }
+            });
             allArrNew.forEach(it => {
                 if (it.sens === 'Топливо' || it.sens === 'Топливо ДУТ') {
                     it.value.forEach((e, i) => {
