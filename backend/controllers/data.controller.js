@@ -162,8 +162,8 @@ const test = async () => {
 
 
 }
-//setTimeout(test, 1000)
-//setInterval(test, 60000)
+setTimeout(test, 1000)
+setInterval(test, 60000)
 async function updateParams(data) {
     //запрашиваем данные параметры по обектам с виалона
     //  const data = await wialonService.getDataFromWialon(login)
