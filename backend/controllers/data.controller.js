@@ -111,13 +111,15 @@ async function getTokenFromDB(login) {
 }
 
 exports.up = async (req, res) => {
-    updateParams(req.body.login)
+    updateParams()
     res.json({ message: 'ок' })
 }
 
+let dataGlobal;
 const test = async () => {
     // console.log('rr' + login)
     const data = await wialonService.getDataFromWialon('i')
+    dataGlobal = data;
     updateParams(data)
     //  const data = dataSensToBase;
     const timeBase = await databaseService.lostChartDataToBase()
@@ -166,6 +168,7 @@ async function updateParams(data) {
     //запрашиваем данные параметры по обектам с виалона
     //  const data = await wialonService.getDataFromWialon(login)
     // const type = await wialonService.getAnimalsWialon(login)
+    data ? data : data = dataGlobal
     const nameCar = [];
     const allCar = Object.entries(data)
     allCar[5][1].forEach(async el => {

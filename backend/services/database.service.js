@@ -339,6 +339,8 @@ module.exports.alarmFindtoBase = (idw, tyresp) => {
 
 
 exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll) => {
+    console.log(gosp)
+    console.log(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll)
     const promises = massiv.map(el => {
         el.push(gosp)
         el.push(gosp1)

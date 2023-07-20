@@ -169,6 +169,7 @@ export async function changeBase(massModel, activePost, idw, type, go, go1, goCa
     console.log(tsiControll)
     console.log('ченчбэйс')
     console.log(massModel)
+    massModel.length !== 0 ? massModel : massModel.push(['-', '-', '-'])
     await reqDelete(idw);
     let gosp;
     let frontGosp;
@@ -198,12 +199,12 @@ export async function changeBase(massModel, activePost, idw, type, go, go1, goCa
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ login }))
+        body: (JSON.stringify({ idw }))
     }
     const zapuskUp = await fetch('/api/up', par)
     console.log(zapuskUp)
     zapros(login);
-    // loadParamsView()
+
 }
 
 
