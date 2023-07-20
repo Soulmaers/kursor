@@ -624,9 +624,9 @@ function hiddenWindows() {
             el.closest('.groups').children[1].style.display = 'block'
             el.closest('.groups').children[0].style.padding = '5px 80px'
             el.closest('.groups').children[0].children[0].style.display = 'block'
-            el.closest('.groups').children[0].children[4].style.left = '60px'
-            el.closest('.groups').children[0].children[1].style.left = '190px'
-            el.closest('.groups').children[0].children[2].style.left = '190px'
+            // el.closest('.groups').children[0].children[4].style.left = '60px'
+            // el.closest('.groups').children[0].children[1].style.left = '190px'
+            //  el.closest('.groups').children[0].children[2].style.left = '190px'
             const ide = el.closest('.groups').children[0].children[0].children[0]
             const ideValue = el.closest('.groups').children[0].children[0].children[0].id
             const checkboxes = document.querySelectorAll('.checkInList');
@@ -667,9 +667,9 @@ function hiddenWindows() {
             el.closest('.groups').children[1].style.display = 'none'
             el.closest('.groups').children[0].style.padding = '5px 40px'
             el.closest('.groups').children[0].children[0].style.display = 'none'
-            el.closest('.groups').children[0].children[4].style.left = '5px'
-            el.closest('.groups').children[0].children[1].style.left = '170px'
-            el.closest('.groups').children[0].children[2].style.left = '170px'
+            // el.closest('.groups').children[0].children[4].style.left = '5px'
+            // el.closest('.groups').children[0].children[1].style.left = '170px'
+            // el.closest('.groups').children[0].children[2].style.left = '170px'
         })
     })
 }
