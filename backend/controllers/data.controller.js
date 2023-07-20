@@ -137,7 +137,7 @@ const test = async () => {
             const mass = [];
             rr.messages.forEach(e => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
-                mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, new Date(e.t * 1000), e.pos.s, geo]);
+                mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, new Date(e.t * 1000), e.pos.s, e.p.sats, geo]);
             });
             const sens = rez.map(e => JSON.stringify(e));
             mass.forEach((el, index) => {
