@@ -1,7 +1,7 @@
 import { tr } from './content.js'
 import { convert } from './helpersFunc.js'
 import { ggg } from './menu.js'
-import { createMap } from './geo.js'
+import { createMap, createMapsUniq } from './geo.js'
 import { testovfn } from './charts/bar.js'
 import { Tooltip } from '../class/Tooltip.js'
 const login = document.querySelectorAll('.log')[1].textContent
@@ -393,80 +393,13 @@ async function geoMarker(time, idw, tr) {
         temp: tr.children[3].textContent,
         alarm: tr.children[4].textContent,
     }
-    //  const res = await alarmTrackGeo(unixTime, idw)
-    //  const trackAlarm = res.resTrack;
-    //  const geoCar = geoCard.resMarker
-    //  console.log(geoCard)
-    // const speed = await speedAlarm(unixTime, idw)
-    // console.log(speed)
     const geo = {
         geoX: geoCard[geoCard.length - 1].geo[1],
         geoY: geoCard[geoCard.length - 1].geo[0],
         info: alarm,
         speed: geoCard[geoCard.length - 1].speed
     }
-    console.log(geo)
-    createMaps(trackAlarm, geo)
-}
-
-
-
-function createMaps(geo, geoTrack) {
-    const mapss = document.getElementById('mapOil')
-    if (mapss) {
-        mapss.remove();
-    }
-    const main = document.querySelector('.main')
-    const maps = document.createElement('div')
-    maps.classList.add('mapsOilCard')
-    maps.setAttribute('id', 'mapOil')
-    main.style.position = 'relative'
-    maps.style.width = '300px';
-    maps.style.height = '320px'
-    maps.style.position = 'absolute'
-    maps.style.left = '580px';
-    maps.style.top = '40px';
-    maps.style.zIndex = 2099;
-    main.appendChild(maps)
-    const map = L.map('mapOil')
-    console.log(maps)
-
-    const polyline = L.polyline(geo, { color: 'darkred', weight: 2 });
-    polyline.addTo(map);
-    var LeafIcon = L.Icon.extend({
-        options: {
-            iconSize: [30, 30],
-            iconAnchor: [0, 0],
-            popupAnchor: [20, 25]
-        }
-    });
-    var customIcon = new LeafIcon({
-        iconUrl: '../../image/iconCar2.png',
-        iconSize: [30, 30],
-        iconAnchor: [0, 0],
-        popupAnchor: [20, 25],
-        className: 'custom-marker-alarm'
-    });
-    const alarmCenter = [geoTrack.geoY, geoTrack.geoX]
-    map.setView(alarmCenter, 12)
-    map.flyTo(alarmCenter, 12)
-    const iss = L.marker(alarmCenter, { icon: customIcon }).bindPopup(`Объект: ${geoTrack.info.car}\nВремя: ${geoTrack.info.time}\nКолесо: ${geoTrack.info.tyres}\nP,bar: ${geoTrack.info.bar}\nt,C: ${geoTrack.info.temp}\nСкорость: ${geoTrack.speed} км/ч\nУведомление: ${geoTrack.info.alarm}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
-    iss.getPopup().options.className = 'my-popup-alarm'
-    iss.on('mouseover', function (e) {
-        this.openPopup();
-    });
-    iss.on('mouseout', function (e) {
-        this.closePopup();
-    });
-    map.attributionControl.setPrefix(false)
-    const leaf = document.querySelector('.leaflet-control-attribution');
-    leaf.style.display = 'none';
-    const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    L.control.scale().addTo(map);
-    map.addLayer(layer);
-    map.on('zoomend', function () {
-        map.panTo(center);
-    });
+    createMapsUniq(trackAlarm, geo, 'alarm')
 }
 
 
