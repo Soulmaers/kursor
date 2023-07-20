@@ -18,7 +18,7 @@ export async function iconParams() {
     }
     const resParams = await fetch('/api/parametrs', param)
     const resultParams = await resParams.json()
-    const speed = (resultParams.item.pos.s).toFixed(0);
+    const speed = resultParams.item.pos && resultParams.item.pos.s ? (resultParams.item.pos.s).toFixed(0) : '-';
     const strateValue = document.querySelector('.speed_value')
     strateValue.textContent = speed
     const resSensor = await fetch('/api/sensorsName', param)

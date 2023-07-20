@@ -4606,6 +4606,11 @@ div.wrapper {
   z-index: 10;
 }
 
+.configChange {
+  overflow-y: auto;
+  height: 600px;
+  overflow-x: hidden;
+}
 
 .low_list {
   height: 90vh;

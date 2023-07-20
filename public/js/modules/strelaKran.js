@@ -5,25 +5,25 @@ export async function kranParams() {
     if (act && act === "КранГаличанин Р858ОР178") {
         const contKran = document.querySelector('.contKran')
         contKran.style.display = 'flex'
-    }
-    const idw = document.querySelector('.color').id
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ idw, login }))
-    }
-    const res = await fetch('/api/parametrs', param)
-    const response = await res.json()
-    loadKran(response);
 
+        const idw = document.querySelector('.color').id
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw, login }))
+        }
+        const res = await fetch('/api/parametrs', param)
+        const response = await res.json()
+        loadKran(response);
+    }
 }
 const strela = [];
 function loadKran(id) {
     const active = Number(document.querySelector('.color').id)
     if (id.item.id === active) {
-        console.log(id.item.lmsg.p.user_2u_1)
+        //   console.log(id.item.lmsg.p.user_2u_1)
         const str = id.item.lmsg.p.user_2u_1
         if (str) {
             if (str && str !== strela[strela.length - 1]) {

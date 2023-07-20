@@ -24,7 +24,7 @@ async function waitArrProtek(el) {
     }
     const resParams = await fetch('/api/parametrs', param)
     const resultParams = await resParams.json()
-    const speed = (resultParams.item.pos.s).toFixed(0);
+    const speed = resultParams.item && resultParams.item.pos && resultParams.item.pos.s ? (resultParams.item.pos.s).toFixed(0) : null;
     const parama = {
         method: "POST",
         headers: {
@@ -34,7 +34,9 @@ async function waitArrProtek(el) {
     }
     const vals = await fetch('/api/viewStatus', parama)
     const val = await vals.json()
-    const statusTSI = val.result[0].status
+    console.log(val)
+
+    const statusTSI = val.result[0].status !== '-' ? val.result[0].status : null
     const statusIng = val.result[0].statusIng
     const nameCar = val.result[0].nameCar
     const dashObject = {
