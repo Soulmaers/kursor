@@ -200,7 +200,23 @@ export async function conturTest(testov) {
     hiddenWindows()
     navigator();
     sortAll()
-    setTimeout(zaprosSpisok, 1000)
+    //setTimeout(zaprosSpisok, 1000)
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function waitAndExecute() {
+        await delay(1000);
+        zaprosSpisok();
+
+
+        const preloader = document.querySelector('.preloader') /* находим блок Preloader */
+        preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
+
+        // Другой код, который должен выполниться после завершения работы функции zaprosSpisok
+    }
+
+    waitAndExecute();
 }
 
 export async function gg(id) {
@@ -441,14 +457,7 @@ export function zaprosSpisok() {
         const spisok = await listsr.json()
         viewListKoleso(spisok[1], spisok[2], spisok[3], el)
     })
-    countt++
-    if (countt === 1) {
-        setTimeout(load, 500)
-        function load() {
-            const preloader = document.querySelector('.preloader') /* находим блок Preloader */
-            preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
-        }
-    }
+
     const updateTime = document.querySelector('.update_time')
     let today = new Date();
     const year = today.getFullYear();
