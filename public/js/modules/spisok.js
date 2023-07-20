@@ -210,36 +210,6 @@ export async function conturTest(testov) {
 
         // Другой код, который должен выполниться после завершения работы функции zaprosSpisok
     }
-
-    function waitForBackgroundImages() {
-        return new Promise((resolve) => {
-            const elementsWithBackgroundImages = document.querySelectorAll('[style*="background-image"]');
-            let loadedImagesCount = 0;
-
-            const checkLoadedImages = () => {
-                loadedImagesCount++;
-                if (loadedImagesCount === elementsWithBackgroundImages.length) {
-                    resolve(); // Все фоновые изображения загружены
-                }
-            };
-
-            elementsWithBackgroundImages.forEach((element) => {
-                const backgroundImage = element.style.backgroundImage;
-                const imageUrl = backgroundImage.slice(4, -1).replace(/"/g, "");
-                const image = new Image();
-
-                image.onload = checkLoadedImages;
-                image.src = imageUrl;
-            });
-        });
-    }
-
-    async function init() {
-        await waitForBackgroundImages(); // Ожидаем загрузки всех фоновых изображений
-        waitAndExecute(); // Запускаем функцию после загрузки фоновых изображений
-    }
-
-    init();
 }
 
 export async function gg(id) {
