@@ -62,6 +62,25 @@ if (screen.width === 1366 && screen.height === 768) {
     document.body.style.height = '1080px';
 }
 
+async function waitAndExecute() {
 
+    const preloader = document.querySelector('.preloader');
+    preloader.classList.add('preloader_hidden');
+
+    // Другой код, который должен выполниться после завершения работы функции zaprosSpisok
+}
+
+function waitForDOMLoad() {
+    return new Promise((resolve) => {
+        document.addEventListener('DOMContentLoaded', resolve);
+    });
+}
+
+async function init() {
+    await waitForDOMLoad(); // Ожидаем загрузку всего DOM
+    waitAndExecute(); // Запускаем функцию после загрузки DOM
+}
+
+init();
 
 
