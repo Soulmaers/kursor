@@ -5471,7 +5471,7 @@ input[type="text"]:focus {
 .plusS {
   width: 18px;
   height: 18px;
-  background-image: url(../image/icon_max.png);
+  background-image: url(../image/hide.png);
   background-size: cover;
   position: absolute;
   top: 6px;
@@ -5508,7 +5508,7 @@ input[type="text"]:focus {
   display: none;
   width: 16px;
   height: 16px;
-  background-image: url(../image/icon_min.png);
+  background-image: url(../image/view.png);
   background-size: cover;
   position: absolute;
   top: 7px;
