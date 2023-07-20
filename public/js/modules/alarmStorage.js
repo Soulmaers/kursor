@@ -427,21 +427,6 @@ function createMaps(geo, geoMarker, geoTrack) {
     main.appendChild(maps)
     const map = L.map('mapOil')
     console.log(maps)
-    var LeafIcon = L.Icon.extend({
-        options: {
-            iconSize: [30, 30],
-            iconAnchor: [10, 18],
-            popupAnchor: [10, 0]
-        }
-    });
-
-    var customIcon = new LeafIcon({
-        iconUrl: '../../image/er.png',
-        iconSize: [20, 20],
-        iconAnchor: [20, 20],
-        popupAnchor: [10, 0],
-        className: 'custom-marker-alarm'
-    });
 
     const polyline = L.polyline(geo, { color: 'darkred', weight: 2 });
     polyline.addTo(map);
@@ -456,13 +441,12 @@ function createMaps(geo, geoMarker, geoTrack) {
             popupAnchor: [20, 45]
         }
     });
-
     var customIcon = new LeafIcon({
         iconUrl: '../../image/iconCar2.png',
         iconSize: [30, 30],
         iconAnchor: [10, -20],
         popupAnchor: [20, 45],
-        className: 'custom-marker'
+        className: 'custom-marker-alarm'
     });
     const alarmCenter = [geoTrack.geoY, geoTrack.geoX]
     map.setView(alarmCenter, 12)
