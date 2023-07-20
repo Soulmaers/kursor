@@ -32,35 +32,37 @@ export async function geoloc() {
 
 export function createMap(geo, geoMarker) {
     let count = 0;
-    count++
+    count++;
     const container = L.DomUtil.get('map');
     if (container != null) {
         container._leaflet_id = null;
     }
-    const wrap = document.querySelector('.wrapper_up')
-    const maps = document.createElement('div')
-    maps.setAttribute('id', 'map')
+    const wrap = document.querySelector('.wrapper_up');
+    const maps = document.createElement('div');
+    maps.setAttribute('id', 'map');
     maps.style.width = '100%';
-    maps.style.height = '90vh',
-        wrap.appendChild(maps)
-    const map = L.map('map')
-    map.attributionControl.setPrefix(false)
+    maps.style.height = '90vh';
+    wrap.appendChild(maps);
+    const map = L.map('map');
+    map.attributionControl.setPrefix(false);
     const leaf = document.querySelector('.leaflet-control-attribution');
     leaf.style.display = 'none';
-    const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
-    });
+    const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    }).addTo(map);
+    L.control.scale({
+        imperial: ''
+    }).addTo(map);
+
     map.addLayer(layer);
-    //if (geo) {
+
     const polyline = L.polyline(geo, { color: 'rgb(0, 0, 204)', weight: 2 });
     polyline.addTo(map);
-    // }
 
     let iss;
 
-    const nameCar = document.querySelector('.color').children[0].textContent
-    const center = [geoMarker.geoY, geoMarker.geoX]
-    console.log(center)
+    const nameCar = document.querySelector('.color').children[0].textContent;
+    const center = [geoMarker.geoY, geoMarker.geoX];
 
     if (!iss) {
         var LeafIcon = L.Icon.extend({
@@ -70,26 +72,30 @@ export function createMap(geo, geoMarker) {
                 popupAnchor: [0, 0]
             }
         });
-
-
         var greenIcon = new LeafIcon({
             iconUrl: '../../image/iconCar2.png',
             iconSize: [30, 30],
             iconAnchor: [20, 20],
             popupAnchor: [0, 0],
             className: 'custom-marker'
-        })
-        map.setView(center, 12)
-        map.flyTo(center, 12)
+        });
+
+        map.setView(center, 12);
+        map.flyTo(center, 12);
+
         iss = L.marker(center, { icon: greenIcon }).bindPopup(nameCar).addTo(map);
+        iss.getPopup().options.className = 'my-popup-all'
         iss.on('mouseover', function (e) {
             this.openPopup();
         });
         iss.on('mouseout', function (e) {
             this.closePopup();
         });
-
     }
-    iss.setLatLng(center, /*{ icon: greenIcon }*/).update();
+
+    map.on('zoomend', function () {
+        map.panTo(center);
+    });
+
     isProcessing = false;
 }

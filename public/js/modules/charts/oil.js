@@ -458,12 +458,14 @@ export async function oil(t1, t2) {
             map.attributionControl.setPrefix(false)
             const leaf = document.querySelector('.leaflet-control-attribution');
             leaf.style.display = 'none';
-            const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
-            });
+            const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            L.control.scale().addTo(map);
             map.addLayer(layer);
             const ma = document.querySelector('.mapsOilCard')
             console.log(ma)
+            map.on('zoomend', function () {
+                map.panTo(center);
+            });
         })
     /* .on("mousemove", function (d) {
          d3.select(this).style("opacity", 1);

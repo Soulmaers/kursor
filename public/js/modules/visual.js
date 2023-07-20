@@ -237,7 +237,6 @@ export function view(arg) {
     })
 }
 export async function viewConfigurator(arg, params, osi) {
-    console.log('визуал')
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelectorAll('.color')
     const allobj = await ggg(active[0].id)
@@ -248,7 +247,6 @@ export async function viewConfigurator(arg, params, osi) {
             in1 = i[2]
         }
     })
-    console.log(arg)
     if (params) {
         const parametrs = convert(params)
         const alerts = [];

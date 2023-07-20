@@ -422,7 +422,7 @@ function createMaps(geo, geoTrack) {
     maps.setAttribute('id', 'mapOil')
     main.style.position = 'relative'
     maps.style.width = '300px';
-    maps.style.height = '300px'
+    maps.style.height = '320px'
     maps.style.position = 'absolute'
     maps.style.left = '580px';
     maps.style.top = '40px';
@@ -436,15 +436,15 @@ function createMaps(geo, geoTrack) {
     var LeafIcon = L.Icon.extend({
         options: {
             iconSize: [30, 30],
-            iconAnchor: [10, -20],
-            popupAnchor: [20, 45]
+            iconAnchor: [0, 0],
+            popupAnchor: [20, 25]
         }
     });
     var customIcon = new LeafIcon({
         iconUrl: '../../image/iconCar2.png',
         iconSize: [30, 30],
-        iconAnchor: [10, -20],
-        popupAnchor: [20, 45],
+        iconAnchor: [0, 0],
+        popupAnchor: [20, 25],
         className: 'custom-marker-alarm'
     });
     const alarmCenter = [geoTrack.geoY, geoTrack.geoX]
@@ -461,10 +461,12 @@ function createMaps(geo, geoTrack) {
     map.attributionControl.setPrefix(false)
     const leaf = document.querySelector('.leaflet-control-attribution');
     leaf.style.display = 'none';
-    const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
-    });
+    const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    L.control.scale().addTo(map);
     map.addLayer(layer);
+    map.on('zoomend', function () {
+        map.panTo(center);
+    });
 }
 
 

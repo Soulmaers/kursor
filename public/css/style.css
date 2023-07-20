@@ -2802,11 +2802,20 @@ input[type="date"] {
   display: none;
 }
 
+.my-popup-all .leaflet-popup-content-wrapper {
+  font-size: 12px;
+  background: rgb(255, 255, 255, 0.4);
+  color: black;
+  margin: 0;
+  border: 2px solid black;
+
+}
+
 .my-popup-alarm .leaflet-popup-content-wrapper {
   font-size: 12px;
   background: rgb(255, 255, 255, 0.4);
   color: red;
-  margin-bottom: 5px;
+  margin: 0;
   border: 2px solid red;
   width: 250px;
 }
