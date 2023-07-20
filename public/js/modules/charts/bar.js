@@ -1059,11 +1059,12 @@ function createMap(data) {
     map.attributionControl.setPrefix(false)
     const leaf = document.querySelector('.leaflet-control-attribution');
     leaf.style.display = 'none';
-    const layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">!</a> contributors'
-    });
+    const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    L.control.scale().addTo(map);
     map.addLayer(layer);
-
+    map.on('zoomend', function () {
+        map.panTo(center);
+    });
 
 }
 
