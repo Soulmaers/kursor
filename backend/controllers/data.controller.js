@@ -55,7 +55,6 @@ exports.dataSpisok = async (req, res) => {
         for (const elem of data.items) {
             const nameGroup = elem.nm;
             const nameObject = elem.u;
-            console.log(nameObject)
             const massObject = [];
             await Promise.all(nameObject.map(async (el, index) => {
                 // console.log(el)
@@ -174,8 +173,8 @@ async function updateParams(data) {
     allCar[5][1].forEach(async el => {
         const nameTable = el.nm.replace(/\s+/g, '');
         const idw = el.id;
-        const data = el.lmsg.t
-        const speed = el.lmsg.pos ? el.lmsg.pos.s : null; // проверка на наличие свойства lmsg и свойства pos.s
+        //  const data = el.lmsg.t
+        const speed = el.lmsg && el.lmsg.pos && el.lmsg.pos.s ? el.lmsg.pos.s : null;// проверка на наличие свойства lmsg и свойства pos.s
         nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed]);
         const model = await databaseService.modelViewToBase(idw)
         let statusTSI;
