@@ -45,6 +45,7 @@ async function loadValue(array, timeOld, timeNow) {
                 };*/
         try {
             const itog = await testovfn(idw, timeOld, timeNow)
+            console.log(itog)
             itog.forEach(el => {
                 const timestamp = Number(el.data);
                 const date = new Date(timestamp * 1000);
@@ -70,10 +71,25 @@ async function loadValue(array, timeOld, timeNow) {
             // const sensArr = await fnPar(idw)
             // console.log(sensArr)
             const nameSens = await fnParMessage(idw)
+            // nameSens.pop()
+            console.log(nameSens)
             const allArrNew = [];
-            nameSens.forEach((item) => {
-                allArrNew.push({ sens: item[0], params: item[1], value: [] })
-            })
+            if (nameSens.length === sensArr[0].length) {
+                nameSens.forEach((item) => {
+                    allArrNew.push({ sens: item[0], params: item[1], value: [] })
+                })
+            }
+            else {
+                nameSens.pop()
+                nameSens.forEach((item) => {
+                    allArrNew.push({ sens: item[0], params: item[1], value: [] })
+                })
+            }
+
+            console.log(idw)
+            console.log(sensArr)
+            console.log(allArrNew)
+
             sensArr.forEach(el => {
                 for (let i = 0; i < allArrNew.length; i++) {
                     allArrNew[i].value.push(Number(Object.values(el)[i].toFixed(0)))
@@ -128,16 +144,19 @@ async function loadValue(array, timeOld, timeNow) {
             hh[0].oil = oil[0]
             const oneArrayOil = hh.filter(el => !el.sens.startsWith('Топливо'));
             prostoyHH = oneArrayOil[0].oil !== undefined && oneArrayOil[0].oil.every(item => item >= 0) ? oilHH(oneArrayOil[0]) : 0
+
         } catch (error) {
             console.log(error);
         }
-        console.log(uniqObject[idw].probeg)
-        const medium = uniqObject[idw].probeg !== 0 && uniqObject[idw].rashod !== 0 ? Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2)) : 0
+        const medium = uniqObject[idw] && uniqObject[idw].probeg !== 0 && uniqObject[idw].rashod !== 0 ? Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2)) : 0
         uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: e[0].result[0].type, company: e[5] }
+        console.log(uniqObject[idw])
     }
-    return { uniq: uniqObject }
-}
 
+
+    return { uniq: uniqObject }
+
+}
 function oilHH(data) {
     const zeros = [];
     const ones = [];
@@ -305,6 +324,7 @@ function moto(data) {
     }
 }
 function rashodCalc(data) {
+    console.log(data)
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
@@ -378,6 +398,8 @@ function rashodCalc(data) {
         zap.push(e[1][0] - e[0][0])
     })
     const zapravleno = (zap.reduce((acc, el) => acc + el, 0))
+    console.log(rashod)
+    console.log(zapravleno)
     return [{ rashod: rashod < 0 ? 0 : rashod, zapravka: zapravleno < 0 ? 0 : zapravleno }]
 }
 
