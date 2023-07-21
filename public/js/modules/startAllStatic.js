@@ -268,8 +268,6 @@ function moto(data) {
             }
             return { speed: newS, time: timet };
         });
-
-
         const timeProstoy = filteredData.map(el => {
             return [el.time[0], el.time[el.time.length - 1]]
         })
@@ -503,7 +501,7 @@ export async function yesterdaySummary(interval, type) {
             delete el[1].data
         })
         const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
-
+        console.log(globalInfo)
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
             const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
