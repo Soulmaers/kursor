@@ -90,20 +90,20 @@ export async function oil(t1, t2) {
         pwr: object.right ? Number(object.right[i] != null ? Number(object.right[i]).toFixed(0) : 0) : null
     }))
     console.log(data);
-
-    for (let i = 0; i < data.length - 1; i++) {
-        if (data[i].oil === data[i + 1].oil) {
-            data.splice(i, 1);
+    const dat = [...data];
+    for (let i = 0; i < dat.length - 1; i++) {
+        if (dat[i].oil === dat[i + 1].oil) {
+            dat.splice(i, 1);
             i--; // уменьшаем индекс, чтобы не пропустить следующий объект после удаления
         }
     }
-    console.log(data);
+    console.log(dat);
     const increasingIntervals = [];
     let start = 0;
     let end = 0;
-    for (let i = 0; i < data.length - 1; i++) {
-        const currentObj = data[i];
-        const nextObj = data[i + 1];
+    for (let i = 0; i < dat.length - 1; i++) {
+        const currentObj = dat[i];
+        const nextObj = dat[i + 1];
         if (currentObj.oil < nextObj.oil) {
             if (start === end) {
                 start = i;
@@ -111,13 +111,13 @@ export async function oil(t1, t2) {
             end = i + 1;
         } else if (currentObj.oil > nextObj.oil) {
             if (start !== end) {
-                increasingIntervals.push([data[start], data[end]]);
+                increasingIntervals.push([dat[start], dat[end]]);
             }
             start = end = i + 1;
         }
     }
     if (start !== end) {
-        increasingIntervals.push([data[start], data[end]]);
+        increasingIntervals.push([dat[start], dat[end]]);
     }
     console.log(increasingIntervals)
     const zapravka = increasingIntervals.filter((interval, index) => {
@@ -142,7 +142,7 @@ export async function oil(t1, t2) {
             zapravka.splice(i + 1, 1);
         }
     }
-    console.log(data)
+    console.log(dat)
     console.log(zapravka)
     const rash = [];
     const firstData = data[0].oil;
@@ -248,7 +248,7 @@ export async function oil(t1, t2) {
         .text("Бортовое питание")
         .attr("fill", "black");
 
-
+    console.log(data)
     // задаем x-шкалу
     const x = d3.scaleTime()
         .domain(d3.extent(data, (d) => new Date(d.time)))
@@ -726,7 +726,33 @@ export async function oil(t1, t2) {
             tooltip.style("top", `${yPosition + 100}px`);
             // Показать тултип, если он скрыт
             tooltip.style("display", "block");
+            // console.log(d)
             const selectedTime = timeConvert(d.time)
+            //  console.log(selectedTime)
+
+            /* const objTool = []
+             //    console.log(time)
+             dat2.forEach(e => {
+                 e.val.forEach(el => {
+                     if (el.dates === time) {
+                         objTool.push({ sens: e.sens, value: el.value, tvalue: el.tvalue, speed: el.speed, time: el.dates })
+                     }
+                 })
+             })
+             const chart = document.querySelectorAll('.chart')
+             char[char.length - 1].children[2].classList.add('last')
+             char[char.length - 1].children[3].classList.add('last')
+
+             let dav;
+             let temp;
+             for (let i = 0; i < chart.length; i++) {
+                 objTool[i].value === -0.5 ? dav = '-' : dav = objTool[i].value
+                 objTool[i].tvalue === -0.5 ? temp = '-' : temp = objTool[i].tvalue
+                 chart[i].children[2].textContent = `${dav} Бар/${temp} С°`
+             }*/
+
+
+
             // Отображаем подсказку с координатами и значениями по оси y
             let oilTool;
             d.oil === 0 ? oilTool = 'Нет данных' : oilTool = d.oil
