@@ -2812,30 +2812,31 @@ input[type="date"] {
 }
 
 .my-popup-alarm .leaflet-popup-content-wrapper {
-  font-size: 12px;
+  font-size: 11px;
   background: rgb(255, 255, 255, 0.4);
   color: red;
   margin: 0;
   border: 2px solid red;
-  width: 250px;
+  width: 300px;
+
 }
 
 .my-popup-oil .leaflet-popup-content-wrapper {
   font-size: 12px;
   background: rgb(255, 255, 255, 0.4);
-  color: green;
+  color: darkgreen;
   margin: 10px;
-  border: 2px solid green;
-  width: 200px;
+  border: 2px solid darkgreen;
+  width: 210px;
 }
 
 .my-popup-bar .leaflet-popup-content-wrapper {
   font-size: 12px;
   background: rgb(255, 255, 255, 0.4);
   color: blue;
-  margin: 10px;
   border: 2px solid blue;
-  width: 180px;
+  width: 250px;
+
 }
 
 .infoGraf {

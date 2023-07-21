@@ -30,7 +30,7 @@ export async function geoloc() {
     Object.keys(geoMarker).length !== 0 ? createMap(geo, geoMarker) : isProcessing = false;
 }
 
-export function createMap(geo, geoMarker) {
+export async function createMap(geo, geoMarker) {
     let count = 0;
     count++;
     const container = L.DomUtil.get('map');
@@ -82,14 +82,31 @@ export function createMap(geo, geoMarker) {
         map.setView(center, 12);
         map.flyTo(center, 12);
 
-        iss = L.marker(center, { icon: greenIcon }).bindPopup(nameCar).addTo(map);
-        iss.getPopup().options.className = 'my-popup-all'
+        var lat = geoMarker.geoY; // Ваша широта
+        var lon = geoMarker.geoX; // Ваша долгота
+        var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lon + '&accept-language=ru';
+        const response = await fetch(url);
+        const result = await response.json();
+        var address = result.address;
+        const adres = [];
+        adres.push(address.road)
+        adres.push(address.municipality)
+        adres.push(address.county)
+        adres.push(address.city)
+        adres.push(address.state)
+        adres.push(address.country)
+        const res = Object.values(adres).filter(val => val !== undefined).join(', ');
+
+
+        iss = L.marker(center, { icon: greenIcon }).bindPopup(`${nameCar}<br>${res}`).addTo(map);
+        iss.getPopup().options.className = 'my-popup-all';
         iss.on('mouseover', function (e) {
             this.openPopup();
         });
         iss.on('mouseout', function (e) {
             this.closePopup();
         });
+
     }
 
     map.on('zoomend', function () {
@@ -98,7 +115,7 @@ export function createMap(geo, geoMarker) {
 
     isProcessing = false;
 }
-export function createMapsUniq(geoTrack, geo, num) {
+export async function createMapsUniq(geoTrack, geo, num) {
     const mapss = document.getElementById('mapOil')
     if (mapss) {
         mapss.remove();
@@ -108,11 +125,6 @@ export function createMapsUniq(geoTrack, geo, num) {
     maps.classList.add('mapsOilCard')
     maps.setAttribute('id', 'mapOil')
     main.style.position = 'relative'
-    maps.style.width = '300px';
-    maps.style.height = '320px'
-    maps.style.position = 'absolute'
-    maps.style.left = '580px';
-    maps.style.top = '40px';
     maps.style.zIndex = 2099;
     main.appendChild(maps)
     const map = L.map('mapOil')
@@ -123,76 +135,152 @@ export function createMapsUniq(geoTrack, geo, num) {
     var LeafIcon = L.Icon.extend({
         options: {
             iconSize: [30, 30],
-            iconAnchor: [0, 0],
-            popupAnchor: [20, 25]
+            iconAnchor: [0, -10],
+            popupAnchor: [20, 24]
         }
     });
+
     let cl;
     let iss;
     let center;
     let formattedDate;
     const nameCar = document.querySelector('.color').children[0].textContent
-
     var customIcon = new LeafIcon({
         iconUrl: num !== 'oil?' ? '../../image/iconCar2.png' : '../../image/ref.png',
         iconSize: [30, 30],
-        iconAnchor: [0, 0],
-        popupAnchor: [20, 25],
+        iconAnchor: [0, -10],
+        popupAnchor: [20, 24],
         className: 'custom-marker-alarm'
     });
     if (num === 'bar') {
-        maps.style.width = '300px';
-        maps.style.height = '300px'
-        maps.style.position = 'absolute'
-        maps.style.left = '25px';
-        maps.style.top = '500px';
+        const center = [geo.geo[0], geo.geo[1]];
         const date = new Date(geo.dates);
         const day = date.getDate();
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const year = date.getFullYear();
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
-        formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-        center = [geo.geo[0], geo.geo[1]]
-        cl = 'my-popup-bar'
-        iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nВремя: ${formattedDate}\nСкорость: ${geo.speed} км/ч\nЗажигание: ${geo.stop}`, { className: 'my-popup-bar', autoPan: false }).addTo(map);
-    }
-    if (num === 'oil') {
+        const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
         maps.style.width = '300px';
-        maps.style.height = '300px'
-        maps.style.position = 'absolute'
+        maps.style.height = '300px';
+        maps.style.position = 'absolute';
         maps.style.left = '25px';
         maps.style.top = '500px';
-        center = [geo.geo[0], geo.geo[1]]
-        cl = 'my-popup-oil'
-        iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}\nЗаправлено: ${geo.zapravka} л.\nДата: ${geo.time}`, { className: 'my-popup-oil' }).addTo(map);
-    }
-    if (num === 'alarm') {
-        center = [geo.geoY, geo.geoX]
-        cl = 'my-popup-alarm'
-        iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${geo.info.car}\nВремя: ${geo.info.time}\nКолесо: ${geo.info.tyres}\nP,bar: ${geo.info.bar}\nt,C: ${geo.info.temp}\nСкорость: ${geo.speed} км/ч\nУведомление: ${geo.info.alarm}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
-    }
+        const iss = L.marker(center, { icon: customIcon }).addTo(map);
+        const popupContent = `Объект: ${nameCar}<br>Время: ${formattedDate}<br>Скорость: ${geo.speed} км/ч<br>Зажигание: ${geo.stop}`;
+        const popup = L.popup({ className: 'my-popup-bar', autoPan: false });
+        iss.bindPopup(popup).addTo(map);
+        popup.setContent(popupContent);
+        map.setView(center, 12);
+        map.flyTo(center, 12);
+        map.attributionControl.setPrefix(false);
+        const leaf = document.querySelector('.leaflet-control-attribution');
+        leaf.style.display = 'none';
+        const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        L.control.scale({ imperial: '' }).addTo(map);
+        map.addLayer(layer);
+        map.on('zoomend', function () {
+            map.panTo(center);
+        });
+        const lat = center[0];
+        const lon = center[1];
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=ru`;
+        fetch(url)
+            .then(response => response.json())
+            .then(result => {
+                const address = result.address;
+                const adres = [];
+                adres.push(address.road);
+                adres.push(address.municipality);
+                adres.push(address.county);
+                adres.push(address.city);
+                adres.push(address.state);
+                adres.push(address.country);
+                const res = adres.filter(val => val !== undefined).join(', ');
+                if (res) {
+                    const updatedContent = `${popupContent}<br>Адрес: ${res}`;
+                    popup.setContent(updatedContent);
+                }
+            });
 
+        iss.on('mouseover', function (e) {
+            this.openPopup();
+        });
 
-    map.setView(center, 12)
-    map.flyTo(center, 12)
-    // const iss = L.marker(alarmCenter, { icon: customIcon }).bindPopup(`Объект: ${geoTrack.info.car}\nВремя: ${geoTrack.info.time}\nКолесо: ${geoTrack.info.tyres}\nP,bar: ${geoTrack.info.bar}\nt,C: ${geoTrack.info.temp}\nСкорость: ${geoTrack.speed} км/ч\nУведомление: ${geoTrack.info.alarm}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
-    iss.getPopup().options.className = cl
-    iss.on('mouseover', function (e) {
-        this.openPopup();
-    });
-    iss.on('mouseout', function (e) {
-        this.closePopup();
-    });
-    map.attributionControl.setPrefix(false)
-    const leaf = document.querySelector('.leaflet-control-attribution');
-    leaf.style.display = 'none';
-    const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    L.control.scale({
-        imperial: ''
-    }).addTo(map);
-    map.addLayer(layer);
-    map.on('zoomend', function () {
-        map.panTo(center);
-    });
+        iss.on('mouseout', function (e) {
+            this.closePopup();
+        });
+    }
+    else {
+        if (num === 'oil') {
+            center = [geo.geo[0], geo.geo[1]]
+            var lat = center[0]; // Ваша широта
+            var lon = center[1] // Ваша долгота
+            var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lon + '&accept-language=ru';
+            const response = await fetch(url);
+            const result = await response.json();
+            var address = result.address;
+            const adres = [];
+            adres.push(address.road)
+            adres.push(address.municipality)
+            adres.push(address.county)
+            adres.push(address.city)
+            adres.push(address.state)
+            adres.push(address.country)
+            const res = Object.values(adres).filter(val => val !== undefined).join(', ');
+            maps.style.width = '300px';
+            maps.style.height = '300px'
+            maps.style.position = 'absolute'
+            maps.style.left = '25px';
+            maps.style.top = '500px';
+            cl = 'my-popup-oil'
+            iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}<br>Заправлено: ${geo.zapravka} л.<br>Дата: ${geo.time}<br>Адрес: ${res}`, { className: 'my-popup-oil' }).addTo(map);
+        }
+        if (num === 'alarm') {
+            center = [geo.geoY, geo.geoX]
+            var lat = center[0]; // Ваша широта
+            var lon = center[1] // Ваша долгота
+            var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lon + '&accept-language=ru';
+            const response = await fetch(url);
+            const result = await response.json();
+            var address = result.address;
+            const adres = [];
+            adres.push(address.road)
+            adres.push(address.municipality)
+            adres.push(address.county)
+            adres.push(address.city)
+            adres.push(address.state)
+            adres.push(address.country)
+            const res = Object.values(adres).filter(val => val !== undefined).join(', ');
+            maps.style.width = '350px';
+            maps.style.height = '350px'
+            maps.style.position = 'absolute'
+            maps.style.left = '580px';
+            maps.style.top = '40px';
+            cl = 'my-popup-alarm'
+            iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${geo.info.car}\nВремя: ${geo.info.time}\nКолесо: ${geo.info.tyres}\nP,bar: ${geo.info.bar}\nt,C: ${geo.info.temp}\nСкорость: ${geo.speed} км/ч\nУведомление: ${geo.info.alarm}\nАдрес: ${res}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
+        }
+
+        map.setView(center, 12)
+        map.flyTo(center, 12)
+        // const iss = L.marker(alarmCenter, { icon: customIcon }).bindPopup(`Объект: ${geoTrack.info.car}\nВремя: ${geoTrack.info.time}\nКолесо: ${geoTrack.info.tyres}\nP,bar: ${geoTrack.info.bar}\nt,C: ${geoTrack.info.temp}\nСкорость: ${geoTrack.speed} км/ч\nУведомление: ${geoTrack.info.alarm}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
+        iss.getPopup().options.className = cl
+        iss.on('mouseover', function (e) {
+            this.openPopup();
+        });
+        iss.on('mouseout', function (e) {
+            this.closePopup();
+        });
+        map.attributionControl.setPrefix(false)
+        const leaf = document.querySelector('.leaflet-control-attribution');
+        leaf.style.display = 'none';
+        const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        L.control.scale({
+            imperial: ''
+        }).addTo(map);
+        map.addLayer(layer);
+        map.on('zoomend', function () {
+            map.panTo(center);
+        });
+    }
 }
