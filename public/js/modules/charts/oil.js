@@ -89,7 +89,6 @@ export async function oil(t1, t2) {
         oil: object.left ? Number(object.left[i].toFixed(0)) : 0,
         pwr: object.right ? Number(object.right[i] != null ? Number(object.right[i]).toFixed(0) : 0) : null
     }))
-    console.log(data);
     const dat = [...data];
     for (let i = 0; i < dat.length - 1; i++) {
         if (dat[i].oil === dat[i + 1].oil) {
@@ -97,7 +96,6 @@ export async function oil(t1, t2) {
             i--; // уменьшаем индекс, чтобы не пропустить следующий объект после удаления
         }
     }
-    console.log(dat);
     const increasingIntervals = [];
     let start = 0;
     let end = 0;
@@ -142,7 +140,6 @@ export async function oil(t1, t2) {
             zapravka.splice(i + 1, 1);
         }
     }
-    console.log(dat)
     console.log(zapravka)
     const rash = [];
     const firstData = data[0].oil;
@@ -248,7 +245,6 @@ export async function oil(t1, t2) {
         .text("Бортовое питание")
         .attr("fill", "black");
 
-    console.log(data)
     // задаем x-шкалу
     const x = d3.scaleTime()
         .domain(d3.extent(data, (d) => new Date(d.time)))
@@ -491,9 +487,8 @@ export async function oil(t1, t2) {
                 // Update axis and line position
                 svg.select("g")
                     .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(x)
-                        .tickFormat(d3.timeFormat('%H:%M')))
-                    .transition().duration(1000).call(d3.axisBottom(x))
+                    .call(xAxis
+                        .tickFormat(d3.timeFormat('%H:%M')));
                 svg.select('.line1')
                     .datum(data)
                     .transition()
@@ -548,9 +543,8 @@ export async function oil(t1, t2) {
                     // Update axis and line position
                     svg.select("g")
                         .attr("transform", "translate(0," + height + ")")
-                        .call(d3.axisBottom(x)
-                            .tickFormat(d3.timeFormat('%H:%M')))
-                        .transition().duration(1000).call(d3.axisBottom(x))
+                        .call(xAxis
+                            .tickFormat(d3.timeFormat('%H:%M')));
                     svg.select('.line1')
                         .datum(data)
                         .transition()
@@ -594,7 +588,6 @@ export async function oil(t1, t2) {
                         .attr("d", area2)
                 }
                 else {
-
                     console.log('удаляем последний')
                     console.log(arrayDomain)
                     x.domain([arrayDomain[arrayDomain.length - 1][0], arrayDomain[arrayDomain.length - 1][1]])
@@ -603,9 +596,8 @@ export async function oil(t1, t2) {
                     // Update axis and line position
                     svg.select("g")
                         .attr("transform", "translate(0," + height + ")")
-                        .call(d3.axisBottom(x)
-                            .tickFormat(d3.timeFormat('%H:%M')))
-                        .transition().duration(1000).call(d3.axisBottom(x))
+                        .call(xAxis
+                            .tickFormat(d3.timeFormat('%H:%M')));
                     svg.select('.line1')
                         .datum(data)
                         .transition()
@@ -656,9 +648,8 @@ export async function oil(t1, t2) {
             x.domain(d3.extent(data, (d) => new Date(d.time)))
             svg.select("g")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x)
-                    .tickFormat(d3.timeFormat('%H:%M')))
-                .transition().call(d3.axisBottom(x))
+                .call(xAxis
+                    .tickFormat(d3.timeFormat('%H:%M')));
             svg.select('.line1')
                 .datum(data)
                 .transition()
