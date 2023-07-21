@@ -130,6 +130,7 @@ export async function visual(el) {
     const idw = el.id
     await liCreate()
     await loadParamsView()
+    console.log('загрузка')
     tooltip()
     await iconFind(idw)
     await iconParams()
