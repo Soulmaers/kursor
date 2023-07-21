@@ -52,7 +52,9 @@ export async function iconParams() {
         let oborot = 0;
         const tsi_card = document.querySelector('.tsi_card')
         const ign_card = document.querySelector('.ign_card')
+        console.log(allArr)
         allArr.forEach(async it => {
+
             if (it.includes('Зажигание')) {
                 console.log(it)
                 count++

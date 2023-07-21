@@ -162,7 +162,7 @@ export async function oil(t1, t2) {
     const objOil = zapravka.map(it => {
         //  const times = timesFormat((it[1].time.getTime() / 1000) - (it[0].time.getTime() / 1000))
         const oilValue = it[1].oil - it[0].oil
-        console.log(oilValue)
+
         //   const one = times.slice(2)
         //   const time = one.split(":")[0]
         const date = new Date(it[0].time);
@@ -530,6 +530,43 @@ export async function oil(t1, t2) {
                     .attr("stroke", "black")
                     .attr("stroke-width", 1)
                     .attr("d", area2)
+
+                console.log(objOil)
+                svg.selectAll("image")
+                    .data(objOil)
+                    .enter()
+                    .append("image")
+                    .attr('class', 'iconOil')
+                    .attr("x", d => x(new Date(d.data)))
+                    //.attr("y", d => y1(d.num) - 30)
+                    .attr("xlink:href", "../../../image/ref.png") // путь к иконке
+                    .attr("width", 24) // ширина вашей иконки
+                    .attr("height", 24) // высота вашей иконки
+                    .style("opacity", 0.5)
+                    .attr("transform", "translate(-12,0)")
+                    .on("click", function (d) {
+                        // Ваша функция обработчика события
+                        const mapss = document.getElementById('mapOil')
+                        if (this.classList.contains('clickOil')) {
+                            if (mapss) {
+                                mapss.remove();
+                            }
+                            d3.select(this).style("opacity", 0.5);
+                            this.classList.remove('clickOil');
+                            return
+                        }
+                        const icons = document.querySelectorAll('.iconOil')
+                        icons.forEach(e => {
+                            e.style.opacity = 0.5;
+                            e.classList.remove('clickOil');
+                        })
+                        if (mapss) {
+                            mapss.remove();
+                        }
+                        d3.select(this).style("opacity", 1);
+                        this.classList.add('clickOil');
+                        createMapsUniq([], d, 'oil')
+                    })
                 //  svg.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
 
             }
