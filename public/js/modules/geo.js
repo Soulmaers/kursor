@@ -58,7 +58,6 @@ export function createMap(geo, geoMarker) {
 
     const polyline = L.polyline(geo, { color: 'rgb(0, 0, 204)', weight: 2 });
     polyline.addTo(map);
-
     let iss;
 
     const nameCar = document.querySelector('.color').children[0].textContent;
@@ -99,14 +98,7 @@ export function createMap(geo, geoMarker) {
 
     isProcessing = false;
 }
-
-
-
-
 export function createMapsUniq(geoTrack, geo, num) {
-    console.log(geo)
-    console.log(geoTrack)
-    console.log(num)
     const mapss = document.getElementById('mapOil')
     if (mapss) {
         mapss.remove();

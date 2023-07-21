@@ -369,9 +369,9 @@ function rashodCalc(data) {
         rash.push(zapravka[zapravka.length - 1][1][0] - lastData);
     }
     else {
-        rash.push(firstData - lastData)
+        rash.push(firstData - lastData >= 0 ? firstData - lastData : 0)
     }
-
+    console.log(rash)
     const rashod = rash.reduce((el, acc) => el + acc, 0)
     console.log(rashod);
     const zap = [];
