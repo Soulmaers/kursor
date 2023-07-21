@@ -86,11 +86,17 @@ async function loadValue(array, timeOld, timeNow, login) {
             })
             const oil = [];
             const hh = [];
+            console.log(idw)
+            console.log(allArrNew)
             allArrNew.forEach(it => {
+
                 if (it.params === 'can_mileage') {
+
+                    console.log(it.value)
                     const probegZero = it.value.length !== 0 ? Number((it.value[0]).toFixed(0)) : 0;
                     const probegNow = it.value.length !== 0 ? Number((it.value[it.value.length - 1]).toFixed(0)) : 0
                     const probegDay = probegNow - probegZero;
+                    console.log(probegDay)
                     if (probegDay > 5) {
                         uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 1, probeg: probegDay };
                     }
@@ -108,6 +114,9 @@ async function loadValue(array, timeOld, timeNow, login) {
                     });
                     oil.push(it.value)
                     const res = it.value !== undefined && it.value.every(item => item >= 0) ? rashodCalc(it) : [{ rashod: 0, zapravka: 0 }]
+                    console.log(idw)
+                    console.log('рес')
+                    console.log(res)
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
                 }
                 if (it.sens.startsWith('Подъем')) {
@@ -211,6 +220,7 @@ export function timesFormat(dates) {
 }
 
 function moto(data) {
+    console.log(data)
     if (data.value.length === 0) {
         console.log('ретерн')
         return { moto: 0, prostoy: 0 }
@@ -382,7 +392,7 @@ function rashodCalc(data) {
     const zapravleno = (zap.reduce((acc, el) => acc + el, 0))
     console.log(zapravleno)
     console.log(rashod)
-    return [{ rashod: rashod, zapravka: zapravleno }]
+    return [{ rashod: rashod < 0 ? 0 : rashod, zapravka: zapravleno < 0 ? 0 : zapravleno }]
 }
 
 
