@@ -86,6 +86,7 @@ export function iconParamsz() {
     })
 }
 async function postIconParams(activePost, param, coef, id, idw) {
+    console.log(activePost)
     const params = {
         method: "POST",
         headers: {
@@ -98,8 +99,8 @@ async function postIconParams(activePost, param, coef, id, idw) {
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Параметр сохранен'
     messaga.style.color = 'green'
+    console.log('сохранить')
     setTimeout(() => messaga.textContent = '', 3000)
-
     iconFind(idw)
 }
 
@@ -123,17 +124,18 @@ export async function iconFind(idw) {
     arg.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
-
                 card.forEach(elem => {
                     if (elem.id === it.icons) {
-
                         elem.children[0].textContent = (el.value * it.coef).toFixed(1) // + 'км'
                         el.status === 'false' ? elem.children[0].style.color = 'gray' : elem.children[0].style.color = 'black'
+                        if (it.icons === 'oil-card') {
+                            elem.children[0].textContent = ''// + 'км'
+
+                        }
                         if (it.icons === 'odom-card') {
                             const val = addZero(8, (el.value * it.coef).toFixed(0))
                             elem.children[0].textContent = val// + 'км'
                             console.log(elem.children[0].textContent)
-
                         }
                         if (it.icons === 'ign-card') {
                             if (idw !== '25766831') {

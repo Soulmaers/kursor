@@ -11,7 +11,7 @@ exports.iconFind = async (req, res) => {
 exports.icon = async (req, res) => {
     const id = req.body.id
     const param = req.body.param
-    const activePost = req.body.activepost
+    const activePost = req.body.activePost
     const idw = req.body.idw
     const coef = req.body.coef
     const icons = await databaseService.iconSaveToBase(activePost, param, coef, id, idw)

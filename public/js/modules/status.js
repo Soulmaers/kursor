@@ -120,7 +120,6 @@ export async function iconParams() {
                 }
                 const vals = await fetch('/api/viewStatus', parama)
                 const val = await vals.json()
-                console.log(val)
                 const startDate = val.result[0].time
                 const startDateIng = val.result[0].timeIng
                 const techdate = new Date();
@@ -169,16 +168,16 @@ export async function iconParams() {
                 }
                 return
             }
-            if (count === 0) {
-                const ignValue = document.querySelector('.ign_value')
-                const tsiValue = document.querySelector('.tsi_value')
-                ignValue.textContent = '------'
-                tsiValue.textContent = '------'
-            }
-            if (oborot === 0) {
-                const oborotValue = document.querySelector('.oborot_value')
-                oborotValue.textContent = '------'
-            }
+            /*  if (count === 0) {
+                  const ignValue = document.querySelector('.ign_value')
+                  const tsiValue = document.querySelector('.tsi_value')
+                  ignValue.textContent = '------'
+                  tsiValue.textContent = '------'
+              }
+              if (oborot === 0) {
+                  const oborotValue = document.querySelector('.oborot_value')
+                  oborotValue.textContent = '------'
+              }*/
         })
     }
 

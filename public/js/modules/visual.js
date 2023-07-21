@@ -22,6 +22,10 @@ let time;
 let timeIcon;
 
 export async function visual(el) {
+
+
+    const tsiControll = document.querySelector('.tsiControll')
+    tsiControll.value = '';
     el.classList.add('color')
     const msg = document.querySelectorAll('.msg')
     if (msg) {

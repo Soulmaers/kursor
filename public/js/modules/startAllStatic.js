@@ -86,13 +86,8 @@ async function loadValue(array, timeOld, timeNow) {
             })
             const oil = [];
             const hh = [];
-            console.log(idw)
-            console.log(allArrNew)
             allArrNew.forEach(it => {
-
                 if (it.params === 'can_mileage') {
-
-                    console.log(it.value)
                     const probegZero = it.value.length !== 0 ? Number((it.value[0]).toFixed(0)) : 0;
                     const probegNow = it.value.length !== 0 ? Number((it.value[it.value.length - 1]).toFixed(0)) : 0
                     const probegDay = probegNow - probegZero;
@@ -221,9 +216,7 @@ export function timesFormat(dates) {
 }
 
 function moto(data) {
-    console.log(data)
     if (data.value.length === 0) {
-        console.log('ретерн')
         return { moto: 0, prostoy: 0 }
     }
     else {
@@ -292,7 +285,6 @@ function moto(data) {
                 return [el.time[0], el.time[el.time.length - 1]]
             })
             const mass = [];
-            console.log(timeGran)
             if (timeGran.length > 1) {
                 let start = 0; // начальный индекс для сравнения
                 for (let i = 0; i < timeGran.length - 1; i++) {
@@ -306,7 +298,7 @@ function moto(data) {
             if (timeGran.length === 1) {
                 mass.push([timeGran])
             }
-            console.log(mass)
+
             return mass.length
         }
         return { moto: motoHours, prostoy: unixProstoy }
@@ -380,17 +372,12 @@ function rashodCalc(data) {
     else {
         rash.push(firstData - lastData >= 0 ? firstData - lastData : 0)
     }
-    console.log(rash)
     const rashod = rash.reduce((el, acc) => el + acc, 0)
-    console.log(rashod);
     const zap = [];
     zapravka.forEach(e => {
         zap.push(e[1][0] - e[0][0])
     })
-    console.log(zap)
     const zapravleno = (zap.reduce((acc, el) => acc + el, 0))
-    console.log(zapravleno)
-    console.log(rashod)
     return [{ rashod: rashod < 0 ? 0 : rashod, zapravka: zapravleno < 0 ? 0 : zapravleno }]
 }
 
@@ -489,7 +476,6 @@ export async function yesterdaySummary(interval, type) {
             }
         }
         let jobNum = 0;
-        console.log(newObject)
         for (const prop in newObject) {
             newObject[prop].jobTS === 1 ? jobNum++ : null
         }
@@ -504,7 +490,6 @@ export async function yesterdaySummary(interval, type) {
             delete el[1].data
         })
         const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
-        console.log(globalInfo)
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
             const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
