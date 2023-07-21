@@ -429,7 +429,9 @@ export async function yesterdaySummary(interval, type) {
     const mods = await fetch('/api/summaryYestoday', params)
     const models = await mods.json()
     const mod = type ? models.filter(el => el.type === type) : models
-    console.log(mod)
+    mod.forEach(it => {
+        it.rashod < 0 ? it.rashod = 0 : it.rashod
+    })
     if (mod.length === 0) {
         console.log('нет данных по объектам в базе')
     }
