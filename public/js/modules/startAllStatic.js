@@ -27,7 +27,7 @@ export async function startAllStatic(objects) {
     const res = await loadValue(array, timeOld, timeNow, login)
     return res.uniq
 }
-async function loadValue(array, timeOld, timeNow, login) {
+async function loadValue(array, timeOld, timeNow) {
     const uniqObject = {};
     for (const e of array) {
         let lifting = 0
@@ -136,7 +136,8 @@ async function loadValue(array, timeOld, timeNow, login) {
         } catch (error) {
             console.log(error);
         }
-        const medium = uniqObject[idw].probeg !== 0 ? Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2)) : 0
+        console.log(uniqObject[idw].probeg)
+        const medium = uniqObject[idw].probeg !== 0 && uniqObject[idw].rashod !== 0 ? Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2)) : 0
         uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: e[0].result[0].type, company: e[5] }
     }
     return { uniq: uniqObject }
