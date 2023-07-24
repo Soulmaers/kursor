@@ -592,10 +592,11 @@ card.forEach(elem => {
     })
 })
 
-
 const tsiControll = document.querySelector('.tsiControll');
 tsiControll.addEventListener('input', () => {
     let value = tsiControll.value;
+    // Заменяем запятую на точку
+    value = value.replace(',', '.');
     // Удаляем все символы, кроме цифр и точек
     value = value.replace(/[^0-9.]/g, '');
     // Проверяем количество символов после точки
