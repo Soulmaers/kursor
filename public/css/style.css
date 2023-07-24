@@ -1745,7 +1745,7 @@ div.spoyler {
 
 .content_card {
   border: 1px solid black;
-  width: 49.8%;
+  width: 49%;
   height: 450px;
   box-sizing: border-box;
   display: flex;
@@ -1764,7 +1764,7 @@ div.spoyler {
 
 
 .left_block {
-  width: 80%;
+  width: 100%;
   border: 1px solid black;
   display: flex;
   flex-direction: column;
@@ -1778,7 +1778,7 @@ div.spoyler {
 }
 
 .logosamosval {
-  width: 50%;
+  width: 25%;
   height: 70%;
   background-image: url(../image/sitrack.png);
   background-size: contain;
@@ -1794,7 +1794,7 @@ div.spoyler {
 }
 
 .logosamosval-pricep {
-  width: 50%;
+  width: 25%;
   height: 70%;
   background-image: url(../image/logosamosval-pricep.png);
   background-size: contain;
@@ -1853,7 +1853,8 @@ div.spoyler {
   font-size: 0.8rem;
 }
 
-.select_summary {
+.select_summary,
+.select_summary_two {
   border: none;
   width: 100%;
   background: none;
@@ -1936,9 +1937,7 @@ div.spoyler {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid black;
-  padding: 5px;
-  width: 20%
+  width: 30%
 }
 
 .titleCheck {
@@ -1949,6 +1948,7 @@ div.spoyler {
 
 .checkListStart {
   font-size: 0.8rem;
+  margin: 2px 0;
 }
 
 .dash_up,

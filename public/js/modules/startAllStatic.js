@@ -536,7 +536,8 @@ export function convertDate(num) {
 export const times = [];
 export function element(el) {
     const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
-    const checkboxBlocks = el.closest('.left_block').nextElementSibling.children[1]
+    console.log(el.closest('.left_block').lastElementChild.children[0].children[2])
+    const checkboxBlocks = el.closest('.left_block').lastElementChild.children[0].children[2]
     const checkboxes = Array.from(checkboxBlocks.querySelectorAll('.checkListStart')).map(element => {
         return element.children[0];
     });

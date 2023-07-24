@@ -38,10 +38,11 @@ export function startList(object) {
     console.log(arrayGlobal)
     arrayGlobal.forEach(el => {
         count++
-        console.log(el)
-        const title = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').nextElementSibling.children[0]
+
+        const title = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').children[0].lastElementChild.children[0]
+
         title.textContent = el[0][6]
-        const wrapper = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').nextElementSibling
+        const wrapper = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').children[0].lastElementChild
         const check = document.createElement('div')
         check.classList.add('checkInStart')
         wrapper.appendChild(check)
@@ -80,8 +81,9 @@ export function startList(object) {
             if (isOtherCheckboxChecked) {
                 checkboxAll[0].checked = false;
             }
-            const sele = Array.from(block.closest('.rigth_block').previousElementSibling.children[1].children[0].lastElementChild.children[0])
+            const sele = Array.from(block.closest('.left_block').lastElementChild.children[0].children[2].children[0])
             const pointDate = times[times.length - 1]
+            console.log(enabledSettings, sele, pointDate)
             enabledSettings.length !== 0 ? viewStat(enabledSettings, sele, pointDate) : (yesterdaySummary(),
                 yesterdaySummary('Вчера'), checkboxAll[0].checked = true);
         }
@@ -92,7 +94,7 @@ export function startList(object) {
                 checkbox.checked = false
             });
             block.children[0].children[0].checked = true;
-            const sele = Array.from(block.closest('.rigth_block').previousElementSibling.children[1].children[0].lastElementChild.children[0])
+            const sele = Array.from(block.closest('.left_block').lastElementChild.children[0].children[2].children[0])
             sele[0].selected = true;
             yesterdaySummary()
             yesterdaySummary('Вчера')
