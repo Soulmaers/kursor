@@ -209,16 +209,16 @@ export function timesDate(dates) {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-    const motoHours = `${hours}:${minutes}:${seconds}`
+    const motoHours = `${hours}:${minutes}`
     return motoHours
 }
 export function timesFormat(dates) {
     const totalSeconds = Math.floor(dates);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    const motoHours = `${hours}:${minutes}:${seconds}`
-    return motoHours
+    const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+    const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+    const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+    const motoHours = `${hours}:${minutes}`;
+    return motoHours;
 }
 
 function moto(data) {
@@ -493,7 +493,9 @@ export async function yesterdaySummary(interval, type) {
         for (const prop in newObject) {
             newObject[prop].jobTS === 1 ? jobNum++ : null
         }
+        console.log(globalInfo)
         Object.entries(globalInfo).forEach(el => {
+            el[1].goodJob = timesFormat(el[1].moto / 1000 - el[1].prostoy)
             el[1].moto = timesDate(el[1].moto)
             el[1].prostoy = timesFormat(el[1].prostoy)
             el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / (interval && interval !== 'Вчера' ? jobNum : el[1].jobTS)).toFixed(2)) : 0;
@@ -503,7 +505,7 @@ export async function yesterdaySummary(interval, type) {
             delete el[1].type
             delete el[1].data
         })
-        const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
+        const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "goodJob", "medium", "oilHH"];
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
             const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
