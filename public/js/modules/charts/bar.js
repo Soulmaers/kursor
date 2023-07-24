@@ -45,11 +45,14 @@ export async function datas(t1, t2) {
     isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
     try {
         const ossParams = await fn()
+        console.log(ossParams)
         const active = Number(document.querySelector('.color').id)
         // console.time(testovfn(active, t1, t2))
         const ttt = await testovfn(active, t1, t2)
-        // console.timeEnd(testovfn(active, t1, t2))
         console.log(ttt)
+        const noGraf = document.querySelector('.noGraf')
+
+
         const itogy = ttt.map(it => {
             return {
                 id: it.idw,
@@ -60,12 +63,9 @@ export async function datas(t1, t2) {
                 val: JSON.parse(it.sens)
             }
         })
-
-
         const sensTest = itogy.map(e => {
             return e.val
         })
-
         const timeArray = itogy.map(it => (new Date(it.time)).toISOString());
         const speedArray = itogy.map(it => it.speed);
         const geoArray = itogy.map(it => it.geo);
@@ -95,59 +95,70 @@ export async function datas(t1, t2) {
             delete it.id
             delete it.nameCar
         })
-        par.forEach(el => {
-            osss.forEach(e => {
-                if (el.osNumber === e.idOs) {
-                    el.bar = e
-                }
-            })
-        })
-        sensTest.forEach(el => {
-            for (let i = 0; i < allArrNew.length; i++) {
-                allArrNew[i].value.push(Object.values(el)[i])
-            }
-        })
-        const finishArrayData = []
-        const finishArrayDataT = []
-        const stop = [];
-        const idw = document.querySelector('.color').id
-        allArrNew.forEach(e => {
-            if (e.params.startsWith('tpms_p')) {
-                finishArrayData.push(e)
-            }
-            if (e.params.startsWith('tpms_t')) {
-                finishArrayDataT.push(e)
-            }
-            if (e.params.startsWith('pwr_ext') && e.sens.startsWith('Бортовое')) {
-                e.value.forEach(el => {
-                    if (idw === '26821431') {
-                        el >= 13 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
-                        //    console.log('11')
-                    }
-                    else {
-                        el >= 26.5 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
-                        //   console.log('22')
+        console.log(par[0].pressure)
+
+        if (par[0].pressure === 'null') {
+            const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+            preloaderGraf.style.opacity = 0;
+            noGraf.style.display = 'flex'
+            isCanceled = false;
+        }
+        else {
+            noGraf.style.display = 'none'
+            par.forEach(el => {
+                osss.forEach(e => {
+                    if (el.osNumber === e.idOs) {
+                        el.bar = e
                     }
                 })
-            }
-        })
-        finishArrayData.forEach((el, index) => {
-            el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
-            el.speed = global[1]
-            el.geo = global[2]
-            el.stop = stop
-        })
-        finishArrayData.forEach(e => {
-            par.forEach(it => {
-                if (e.params === it.pressure) {
-                    e.bar = it.bar
-                    e.position = Number(it.tyresdiv)
+            })
+            sensTest.forEach(el => {
+                for (let i = 0; i < allArrNew.length; i++) {
+                    allArrNew[i].value.push(Object.values(el)[i])
                 }
             })
-        })
-        console.log(finishArrayData)
-        await grafikStartPress(global[0], finishArrayData)
-        isCanceled = false;
+            const finishArrayData = []
+            const finishArrayDataT = []
+            const stop = [];
+            const idw = document.querySelector('.color').id
+            allArrNew.forEach(e => {
+                if (e.params.startsWith('tpms_p')) {
+                    finishArrayData.push(e)
+                }
+                if (e.params.startsWith('tpms_t')) {
+                    finishArrayDataT.push(e)
+                }
+                if (e.params.startsWith('pwr_ext') && e.sens.startsWith('Бортовое')) {
+                    e.value.forEach(el => {
+                        if (idw === '26821431') {
+                            el >= 13 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
+                            //    console.log('11')
+                        }
+                        else {
+                            el >= 26.5 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
+                            //   console.log('22')
+                        }
+                    })
+                }
+            })
+            finishArrayData.forEach((el, index) => {
+                el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
+                el.speed = global[1]
+                el.geo = global[2]
+                el.stop = stop
+            })
+            finishArrayData.forEach(e => {
+                par.forEach(it => {
+                    if (e.params === it.pressure) {
+                        e.bar = it.bar
+                        e.position = Number(it.tyresdiv)
+                    }
+                })
+            })
+            console.log(finishArrayData)
+            await grafikStartPress(global[0], finishArrayData)
+            isCanceled = false;
+        }
     }
     catch (e) {
         isCanceled = false;
