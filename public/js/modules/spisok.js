@@ -162,13 +162,7 @@ export async function conturTest(testov) {
                         modelUniqValues.forEach((item) => {
                             if (el.name == item.pressure) {
                                 shina.forEach(e => {
-
                                     if (e.id == item.tyresdiv) {
-                                        console.log(e.id, item.tyresdiv)
-                                        console.log(elem[4])
-                                        console.log(el.status)
-
-                                        console.log(in1)
                                         if (el.status === 'false' && in1 === 1) {
                                             e.children[0].style.fill = 'gray'
                                             return
@@ -187,9 +181,6 @@ export async function conturTest(testov) {
                                         }
                                         elem[3].result.forEach(it => {
                                             if (it.idOs == item.osNumber) {
-                                                console.log(integer)
-                                                console.log(it)
-                                                console.log(objColorFront[generDav(integer, it)])
                                                 e.children[0].style.fill = objColorFront[generDav(integer, it)]
                                             }
                                         })

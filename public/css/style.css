@@ -202,6 +202,10 @@ body {
   padding: 5px;
 }
 
+.titleObject {
+  text-align: center;
+}
+
 .listTitle {
   width: 100%;
   margin: 5px 0;
@@ -339,11 +343,10 @@ body {
 
 
 .objectUser {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 40%;
   justify-content: center;
+  height: 430px;
+  overflow-y: auto;
 }
 
 .roleTitle {
@@ -2797,6 +2800,7 @@ input[type="date"] {
 .mapsOilCard {
   z-index: 100;
 }
+
 
 
 
