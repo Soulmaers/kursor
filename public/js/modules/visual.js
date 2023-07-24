@@ -23,7 +23,10 @@ let timeIcon;
 
 export async function visual(el) {
 
-
+    const acto = document.querySelector('.acto')
+    if (acto) {
+        acto.classList.remove('acto');
+    }
     const tsiControll = document.querySelector('.tsiControll')
     tsiControll.value = '';
     el.classList.add('color')

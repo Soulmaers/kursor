@@ -45,7 +45,6 @@ async function loadValue(array, timeOld, timeNow) {
                 };*/
         try {
             const itog = await testovfn(idw, timeOld, timeNow)
-            console.log(itog)
             itog.forEach(el => {
                 const timestamp = Number(el.data);
                 const date = new Date(timestamp * 1000);
@@ -74,27 +73,18 @@ async function loadValue(array, timeOld, timeNow) {
             // nameSens.pop()
             console.log(nameSens)
             const allArrNew = [];
-            if (nameSens.length === sensArr[0].length) {
-                nameSens.forEach((item) => {
-                    allArrNew.push({ sens: item[0], params: item[1], value: [] })
-                })
-            }
-            else {
-                nameSens.pop()
-                nameSens.forEach((item) => {
-                    allArrNew.push({ sens: item[0], params: item[1], value: [] })
-                })
-            }
-
-            console.log(idw)
-            console.log(sensArr)
-            console.log(allArrNew)
-
+            // if (nameSens.length === sensArr[0].length) {
+            nameSens.forEach((item) => {
+                allArrNew.push({ sens: item[0], params: item[1], value: [] })
+            })
             sensArr.forEach(el => {
+                if (el.length === 0) {
+                    return; // Пропускаем текущую итерацию, если sensArr пустой
+                }
                 for (let i = 0; i < allArrNew.length; i++) {
                     allArrNew[i].value.push(Number(Object.values(el)[i].toFixed(0)))
                 }
-            })
+            });
             allArrNew.forEach(el => {
                 el.time = time
                 el.speed = speed
@@ -102,20 +92,23 @@ async function loadValue(array, timeOld, timeNow) {
             })
             const oil = [];
             const hh = [];
-            allArrNew.forEach(it => {
-                if (it.params === 'can_mileage') {
-                    const probegZero = it.value.length !== 0 ? Number((it.value[0]).toFixed(0)) : 0;
-                    const probegNow = it.value.length !== 0 ? Number((it.value[it.value.length - 1]).toFixed(0)) : 0
-                    const probegDay = probegNow - probegZero;
-                    console.log(probegDay)
-                    if (probegDay > 5) {
-                        uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 1, probeg: probegDay };
-                    }
-                    else {
-                        uniqObject[idw] = { ...uniqObject.idw, quantityTSjob: 0, probeg: probegDay };
-                    }
+            const found = allArrNew.some(it => it.params === 'can_mileage');
+            if (found) {
+                console.log('раз');
+                const it = allArrNew.find(it => it.params === 'can_mileage');
+                const probegZero = it.value.length !== 0 ? Number((it.value[0]).toFixed(0)) : 0;
+                const probegNow = it.value.length !== 0 ? Number((it.value[it.value.length - 1]).toFixed(0)) : 0;
+                const probegDay = probegNow - probegZero;
+                console.log(probegDay);
+                if (probegDay > 5) {
+                    uniqObject[idw] = { ...uniqObject[idw], quantityTSjob: 1, probeg: probegDay };
+                } else {
+                    uniqObject[idw] = { ...uniqObject[idw], quantityTSjob: 0, probeg: probegDay };
                 }
-            });
+            } else {
+                console.log('два');
+                uniqObject[idw] = { ...uniqObject[idw], quantityTSjob: 0, probeg: 0 };
+            }
             allArrNew.forEach(it => {
                 if (it.sens === 'Топливо' || it.sens === 'Топливо ДУТ') {
                     it.value.forEach((e, i) => {
@@ -152,10 +145,7 @@ async function loadValue(array, timeOld, timeNow) {
         uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: e[0].result[0].type, company: e[5] }
         console.log(uniqObject[idw])
     }
-
-
     return { uniq: uniqObject }
-
 }
 function oilHH(data) {
     const zeros = [];
@@ -239,7 +229,6 @@ function moto(data) {
         return { moto: 0, prostoy: 0 }
     }
     else {
-
         const zeros = [];
         const ones = [];
         const prostoy = [];
@@ -294,9 +283,13 @@ function moto(data) {
             }
         })
         ones.forEach(dates => {
-            const [date1, date2] = dates.map(dateStr => new Date(dateStr));
-            const diffMs = date2.getTime() - date1.getTime(); // разница между датами в миллисекундах
-            totalMs += diffMs;
+            const validDates = dates.filter(dateStr => dateStr !== undefined);
+            if (validDates.length === 2) {
+                const [date1, date2] = validDates.map(dateStr => new Date(dateStr));
+                const diffMs = date2.getTime() - date1.getTime(); // разница между датами в миллисекундах
+                console.log(date1, date2, diffMs);
+                totalMs += diffMs;
+            }
         });
         const motoHours = isNaN(totalMs) ? 0 : totalMs
         if (data.sens.startsWith('Под')) {
@@ -357,11 +350,13 @@ function rashodCalc(data) {
     if (start !== end) {
         increasingIntervals.push([[data.value[start], data.time[start]], [data.value[end], data.time[end]]]);
     }
+
+    console.log(increasingIntervals)
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0][0];
         const lastOil = interval[interval.length - 1][0];
         const difference = lastOil - firstOil;
-        const threshold = firstOil * 0.05;
+        const threshold = firstOil * 0.15;
         if (index < increasingIntervals.length - 1) {
             const nextInterval = increasingIntervals[index + 1];
             const currentTime = interval[interval.length - 1][1];
@@ -398,6 +393,8 @@ function rashodCalc(data) {
         zap.push(e[1][0] - e[0][0])
     })
     const zapravleno = (zap.reduce((acc, el) => acc + el, 0))
+    console.log(zapravka)
+    console.log(zap)
     console.log(rashod)
     console.log(zapravleno)
     return [{ rashod: rashod < 0 ? 0 : rashod, zapravka: zapravleno < 0 ? 0 : zapravleno }]

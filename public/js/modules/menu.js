@@ -66,6 +66,7 @@ export async function zapros(login) {
         console.log(data)
         const res = await startAllStatic(arrayList)
         console.log(res)
+
         // Обрабатываем данные
         const arraySummary = Object.entries(res)
         arraySummary.forEach(async el => {

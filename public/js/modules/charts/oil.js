@@ -122,7 +122,7 @@ export async function oil(t1, t2) {
         const firstOil = interval[0].oil;
         const lastOil = interval[interval.length - 1].oil;
         const difference = lastOil - firstOil;
-        const threshold = firstOil * 0.05;
+        const threshold = firstOil * 0.15;
         if (index < increasingIntervals.length - 1) {
             const nextInterval = increasingIntervals[index + 1];
             const currentTime = interval[interval.length - 1].time;
