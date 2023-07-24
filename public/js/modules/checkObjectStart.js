@@ -151,10 +151,11 @@ export async function viewStat(checkedValues, sele, res) {
     }
     dannie.forEach(el => {
         if (el.length === 1) {
-            const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
+            const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "goodJob", "medium", "oilHH"];
             el.forEach(it => {
                 const parentWrapper = document.querySelector(`[rel="${it.type}"]`).children
                 it.quantityTS = el.length
+                it.goodJob = timesFormat(it.moto / 1000 - it.prostoy)
                 it.moto = timesDate(it.moto)
                 it.prostoy = timesFormat(it.prostoy)
                 delete it.id
@@ -234,6 +235,7 @@ function viewMoreElement(newArray, count) {
         it.jobTS === 1 ? jobNum++ : null
     })
     Object.entries(globalInfo).forEach(el => {
+        el[1].goodJob = timesFormat(el[1].moto / 1000 - el[1].prostoy)
         el[1].moto = timesDate(el[1].moto)
         el[1].prostoy = timesFormat(el[1].prostoy)
         el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / (count === 1 ? jobNum : el[1].jobTS)).toFixed(2)) : 0;
@@ -243,7 +245,7 @@ function viewMoreElement(newArray, count) {
         delete el[1].type
         delete el[1].data
     })
-    const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "medium", "oilHH"];
+    const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "goodJob", "medium", "oilHH"];
     Object.entries(globalInfo).forEach(it => {
         const arr = propOrder.map(prop => it[1][prop]);
         const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
