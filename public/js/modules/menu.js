@@ -57,6 +57,7 @@ export async function zapros(login) {
     const processDataAtMidnight = async () => {
         yesterdaySummary();
         yesterdaySummary('Вчера');
+        yesterdaySummary('Неделя');
         const now = new Date();
         const date = new Date(now);
         const year = date.getFullYear();

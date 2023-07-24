@@ -406,7 +406,8 @@ function timefn() {
     const timeOld = startOfTodayUnix
     return [timeNow, timeOld]
 }
-export async function yesterdaySummary(interval, type) {
+export async function yesterdaySummary(interval, type, element) {
+    console.log(element)
     let int;
     if (interval === 'Неделя') {
         int = 7
@@ -512,14 +513,19 @@ export async function yesterdaySummary(interval, type) {
             const arr = propOrder.map(prop => it[1][prop]);
             const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
             arr.forEach((e, index) => {
+                let targetIndex = 1;
                 if (!interval && !type) {
-                    parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
-                }
-                else {
-                    parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-'
+                    targetIndex = 1;
+                } else if (interval === 'Вчера' && !type) {
+                    targetIndex = 2;
+                } else if (interval === 'Неделя' && !type) {
+                    targetIndex = 3;
+                } else {
+                    targetIndex = 2;
                 }
 
-            })
+                parentWrapper[index].children[targetIndex].textContent = (e !== undefined && e !== null) ? e : '-';
+            });
         })
     }
 }
@@ -535,9 +541,9 @@ export function convertDate(num) {
 }
 export const times = [];
 export function element(el) {
+    console.log(el.parentNode)
     const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
-    console.log(el.closest('.left_block').lastElementChild.children[0].children[2])
-    const checkboxBlocks = el.closest('.left_block').lastElementChild.children[0].children[2]
+    const checkboxBlocks = el.parentNode
     const checkboxes = Array.from(checkboxBlocks.querySelectorAll('.checkListStart')).map(element => {
         return element.children[0];
     });
@@ -588,7 +594,7 @@ export function element(el) {
     }
     else {
         el.closest('.select_summary').nextElementSibling.style.display = 'none'
-        arrayIdw.length === 0 ? yesterdaySummary(el.value, type) : viewStat(arrayIdw, sele)
+        arrayIdw.length === 0 ? yesterdaySummary(el.value, type, el) : viewStat(arrayIdw, sele)
     }
     el.addEventListener('click', function () {
         el.children[3].textContent = 'Выбрать дату'

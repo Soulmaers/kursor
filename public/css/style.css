@@ -1849,7 +1849,8 @@ div.spoyler {
 }
 
 .today_value,
-.interval_value {
+.interval_value,
+.interval_value2 {
   font-size: 0.8rem;
 }
 
