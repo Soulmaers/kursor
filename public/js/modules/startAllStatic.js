@@ -71,7 +71,6 @@ async function loadValue(array, timeOld, timeNow) {
             // console.log(sensArr)
             const nameSens = await fnParMessage(idw)
             // nameSens.pop()
-            console.log(nameSens)
             const allArrNew = [];
             // if (nameSens.length === sensArr[0].length) {
             nameSens.forEach((item) => {
@@ -99,7 +98,6 @@ async function loadValue(array, timeOld, timeNow) {
                 const probegZero = it.value.length !== 0 ? Number((it.value[0]).toFixed(0)) : 0;
                 const probegNow = it.value.length !== 0 ? Number((it.value[it.value.length - 1]).toFixed(0)) : 0;
                 const probegDay = probegNow - probegZero;
-                console.log(probegDay);
                 if (probegDay > 5) {
                     uniqObject[idw] = { ...uniqObject[idw], quantityTSjob: 1, probeg: probegDay };
                 } else {
@@ -143,7 +141,6 @@ async function loadValue(array, timeOld, timeNow) {
         }
         const medium = uniqObject[idw] && uniqObject[idw].probeg !== 0 && uniqObject[idw].rashod !== 0 ? Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2)) : 0
         uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: e[0].result[0].type, company: e[5] }
-        console.log(uniqObject[idw])
     }
     return { uniq: uniqObject }
 }
@@ -287,7 +284,6 @@ function moto(data) {
             if (validDates.length === 2) {
                 const [date1, date2] = validDates.map(dateStr => new Date(dateStr));
                 const diffMs = date2.getTime() - date1.getTime(); // разница между датами в миллисекундах
-                console.log(date1, date2, diffMs);
                 totalMs += diffMs;
             }
         });
@@ -310,7 +306,6 @@ function moto(data) {
             if (timeGran.length === 1) {
                 mass.push([timeGran])
             }
-
             return mass.length
         }
         return { moto: motoHours, prostoy: unixProstoy }

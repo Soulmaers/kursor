@@ -116,11 +116,6 @@ export function createConfig(selectOld) {
 }
 
 function clearConfig() {
-    /*const acto = document.querySelector('.acto')
-    console.log(acto)*/
-    // acto.classList.remove('acto')
-    /* const wrapButton = document.querySelector('.wrapper_button')
-      wrapButton.style.display = 'none'*/
     const selectType = document.querySelector('.select_type')
     selectType.style.display = 'none'
     const checkAlt = document.querySelector('.checkAlt')
@@ -155,69 +150,17 @@ function down(elem) {
     let count = elem.parentElement.previousElementSibling.children[1].textContent
     count > 0 ? count-- : count
     elemKolvo.textContent = count
-    createOs(count, elem.parentElement.parentElement.nextElementSibling)
+    elem.parentElement.parentElement.nextElementSibling.lastElementChild.remove()
+    //  createOs(count, elem.parentElement.parentElement.nextElementSibling)
 }
 function up(elem) {
     const elemKolvo = elem.parentElement.previousElementSibling.children[1]
     let count = elem.parentElement.previousElementSibling.children[1].textContent
     count++
     elemKolvo.textContent = count
-    createOs(count, elem.parentElement.parentElement.nextElementSibling)
+    createOsNow(elem.parentElement.parentElement.nextElementSibling)
 }
-function createOs(count, parent) {
-    if (parent.children.length !== 0) {
-        Array.from(parent.children).forEach(el => {
-            el.remove()
-        })
-    }
-    for (let i = 0; i < count; i++) {
-        parent.innerHTML += `${textTest}`
-    }
-    let index = 0;
-    Array.from(parent.children).forEach(el => {
-        index++
-        const centerOsDivTest = document.createElement('div');
-        centerOsDivTest.classList.add('centerOsTest')
-        const vnutTest = document.createElement('div')
-        vnutTest.classList.add('vnutTest')
-        centerOsDivTest.appendChild(vnutTest)
-        el.children[0].insertAdjacentElement('afterEnd', centerOsDivTest);
-        if (el.parentElement?.classList.contains('containerPricep')) {
-            const spark = document.createElement('div')
-            spark.classList.add('spark')
-            spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
-            centerOsDivTest.prepend(spark)
-            centerOsDivTest.classList.add('pricepT');
-            centerOsDivTest.children[1].style.background = '#000'
-        } else {
-            centerOsDivTest.classList.add('tagachT');
-            if (index !== 1 && el.parentElement?.classList.contains('containerTagach')) {
-                const spark = document.createElement('div')
-                spark.classList.add('spark')
-                spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
-                centerOsDivTest.prepend(spark)
-            }
-        }
-    })
-    const center = document.querySelectorAll('.centerOsTest')
-    gosNum(center);
 
-    const tiresTest = parent.querySelectorAll('.tiresTest')
-    let indexTires = 0;
-    tiresTest.forEach(el => {
-        indexTires++
-        const linkTest = document.createElement('a');
-        linkTest.classList.add('tires_link_test')
-        el.appendChild(linkTest);
-        const tiresDTest = document.createElement('div');
-        tiresDTest.classList.add('tiresDTest')
-        const tiresTTest = document.createElement('div');
-        tiresTTest.classList.add('tiresTTest')
-        linkTest.appendChild(tiresDTest);
-        linkTest.appendChild(tiresTTest);
-    })
-    sparka()
-}
 function sparka() {
     const sparkCheck = document.querySelectorAll('.sparkCheck')
     sparkCheck.forEach(el => {
@@ -598,10 +541,9 @@ function nowModel(alt) {
     })
     sparka()
 }
-
+let index = 0;
 function createOsNow(parent) {
     parent.innerHTML += `${textTest}`
-    let index = 0;
     index++
     const centerOsDivTest = document.createElement('div');
     centerOsDivTest.classList.add('centerOsTest')
@@ -621,7 +563,8 @@ function createOsNow(parent) {
         })
     } else {
         centerOsDivTest.classList.add('tagachT');
-        if (parent.lastElementChild.parentElement?.classList.contains('containerTagach')) {
+        console.log(index)
+        if (index !== 1 && parent.lastElementChild.parentElement?.classList.contains('containerTagach')) {
             const spark = document.createElement('div')
             spark.classList.add('spark')
             spark.innerHTML = `<input class="sparkCheck" type="checkbox" rel=${index}>Колёса спарены`
