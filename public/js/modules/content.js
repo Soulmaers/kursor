@@ -80,14 +80,22 @@ export const forTyres = `
 </div>`
 
 export function generDav(el, arrBar) {
+    console.log(arrBar)
+    if (el > Number(arrBar.knd) && el <= Number(arrBar.dnn)) {
+        console.log('тру')
+    }
+    console.log(el, arrBar)
     let generatedValue;
     if (el >= Number(arrBar.dnmin) && el <= Number(arrBar.dnmax)) {
+        console.log('3')
         generatedValue = 3;
     }
-    if (el > Number(arrBar.knd) && el <= Number(arrBar.dnn) || el > Number(arrBar.dvn) && el <= Number(arrBar.kvd)) {
+    if (el > Number(arrBar.knd) && el <= Number(arrBar.dnmin) || el > Number(arrBar.dnmax) && el <= Number(arrBar.kvd)) {
+        console.log('2')
         generatedValue = 2;
     }
     if (el <= Number(arrBar.knd) || el >= Number(arrBar.kvd)) {
+        console.log('1')
         generatedValue = 1;
     }
     return generatedValue;
