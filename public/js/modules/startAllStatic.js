@@ -70,6 +70,7 @@ async function loadValue(array, timeOld, timeNow) {
             // const sensArr = await fnPar(idw)
             // console.log(sensArr)
             const nameSens = await fnParMessage(idw)
+            console.log(nameSens)
             // nameSens.pop()
             const allArrNew = [];
             // if (nameSens.length === sensArr[0].length) {
@@ -451,6 +452,7 @@ export async function yesterdaySummary(interval, type) {
 
         let obj;
         interval && interval !== 'Вчера' ? obj = newObject : obj = objectUniq;
+        console.log(obj)
         for (const prop in obj) {
             const subObj = obj[prop];
             if (subObj.type) {
@@ -496,7 +498,6 @@ export async function yesterdaySummary(interval, type) {
         console.log(globalInfo)
         Object.entries(globalInfo).forEach(el => {
             el[1].goodJob = timesFormat(el[1].moto / 1000 - el[1].prostoy)
-            console.log(el[1].goodJob)
             el[1].moto = timesDate(el[1].moto)
             el[1].prostoy = timesFormat(el[1].prostoy)
             el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / (interval && interval !== 'Вчера' ? jobNum : el[1].jobTS)).toFixed(2)) : 0;
