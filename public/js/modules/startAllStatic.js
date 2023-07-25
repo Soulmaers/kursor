@@ -407,7 +407,6 @@ function timefn() {
     return [timeNow, timeOld]
 }
 export async function yesterdaySummary(interval, type, element) {
-    console.log(element)
     let int;
     if (interval === 'Неделя') {
         int = 7
@@ -453,7 +452,6 @@ export async function yesterdaySummary(interval, type, element) {
 
         let obj;
         interval && interval !== 'Вчера' ? obj = newObject : obj = objectUniq;
-        console.log(obj)
         for (const prop in obj) {
             const subObj = obj[prop];
             if (subObj.type) {
@@ -541,14 +539,11 @@ export function convertDate(num) {
 }
 export const times = [];
 export function element(el) {
-    console.log(el.parentNode)
     const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
     const checkboxBlocks = el.closest('.table_dannie').previousElementSibling.lastElementChild.lastElementChild
-    console.log(checkboxBlocks)
     const checkboxes = Array.from(checkboxBlocks.querySelectorAll('.checkListStart')).map(element => {
         return element.children[0];
     });
-    console.log(checkboxes)
     const arrayIdw = [];
     checkboxes.shift();
     checkboxes.forEach(e => {
@@ -556,9 +551,7 @@ export function element(el) {
             arrayIdw.push(e.value)
         }
     })
-    console.log(el.children)
     const sele = Array.from(el.children)
-    console.log(sele)
     if (el.value.startsWith('Выбрать')) {
         const id = `#${!el.nextElementSibling.children[0].children[0] ? el.nextElementSibling.children[0].id : el.nextElementSibling.children[0].children[0].id}`
         el.nextElementSibling.style.display = 'flex'
@@ -590,15 +583,13 @@ export function element(el) {
                     const formattedDate = `${parts[1].replace(/^0+/, '')}/${parts[2]}`;
                     return formattedDate
                 })
-                console.log(el.children[3])
                 el.children[3].textContent = formatString[0] + '-' + formatString[1]
-                elem.textContent === 'Очистить' ? input.value = '' : arrayIdw.length === 0 ? (yesterdaySummary(res, type, el), input.value = '', elem.closest('.calendar').style.display = 'none') :
+                elem.textContent === 'Очистить' ? (input.value = '', elem.closest('.calendar').style.display = 'none', el.children[3].textContent = 'Выбрать дату', el.children[0].selected = true) : arrayIdw.length === 0 ? (yesterdaySummary(res, type, el), input.value = '', elem.closest('.calendar').style.display = 'none') :
                     (viewStat(arrayIdw, el), input.value = '', elem.closest('.calendar').style.display = 'none')
             })
         )
     }
     else {
-        console.log(el.nextElementSibling)
         el.nextElementSibling.style.display = 'none'
         arrayIdw.length === 0 ? yesterdaySummary(el.value, type, el) : viewStat(arrayIdw, el)
     }
