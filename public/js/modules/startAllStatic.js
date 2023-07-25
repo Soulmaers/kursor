@@ -504,10 +504,14 @@ export async function yesterdaySummary(interval, type, element) {
             newObject[prop].jobTS === 1 ? jobNum++ : null
         }
         console.log(globalInfo)
+        console.log(interval)
+        console.log(jobNum)
         Object.entries(globalInfo).forEach(el => {
             el[1].goodJob = timesFormat(el[1].moto / 1000 - el[1].prostoy)
             el[1].moto = timesDate(el[1].moto)
             el[1].prostoy = timesFormat(el[1].prostoy)
+            console.log(el[1].jobTS)
+            // el[1].medium = el[1].rashod / el[1].probeg
             el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / (interval && interval !== 'Вчера' ? jobNum : el[1].jobTS)).toFixed(2)) : 0;
             delete el[1].id
             delete el[1].idw

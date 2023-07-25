@@ -348,7 +348,8 @@ function viewMoreElement(newArray, count, sele) {
         el[1].goodJob = timesFormat(el[1].moto / 1000 - el[1].prostoy)
         el[1].moto = timesDate(el[1].moto)
         el[1].prostoy = timesFormat(el[1].prostoy)
-        el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / (count === 1 ? jobNum : el[1].jobTS)).toFixed(2)) : 0;
+        el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / (count === 1 || count === 2 ? jobNum : el[1].jobTS)).toFixed(2)) : 0;
+        console.log(el[1].medium)
         delete el[1].id
         delete el[1].idw
         delete el[1].nameCar
