@@ -24,7 +24,7 @@ cont.classList.add('container2')
 wrapContaint.appendChild(cont);
 
 export async function zapros(login) {
-    const selectElement = document.querySelectorAll('.select_summary');
+    const selectElement = document.querySelectorAll('.select_summary.one');
     selectElement.forEach(el => {
         el[0].selected = true;
     })
