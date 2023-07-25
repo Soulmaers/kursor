@@ -512,18 +512,18 @@ export async function yesterdaySummary(interval, type, element) {
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
             const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
+
             arr.forEach((e, index) => {
                 let targetIndex = 1;
                 if (!interval && !type) {
                     targetIndex = 1;
-                } else if (interval === 'Вчера' && !type) {
+                } else if ((interval === 'Вчера' && !type) || (element && element.classList.contains('one') && type)) {
                     targetIndex = 2;
-                } else if (interval === 'Неделя' && !type) {
+                } else if ((interval === 'Неделя' && !type) || (element && element.classList.contains('two') && type)) {
                     targetIndex = 3;
                 } else {
                     targetIndex = 2;
                 }
-
                 parentWrapper[index].children[targetIndex].textContent = (e !== undefined && e !== null) ? e : '-';
             });
         })
@@ -554,7 +554,9 @@ export function element(el) {
             arrayIdw.push(e.value)
         }
     })
-    const sele = Array.from(el.closest('.select_summary').children)
+    console.log(el.children)
+    const sele = Array.from(el.children)
+    console.log(sele)
     if (el.value.startsWith('Выбрать')) {
         const id = `#${!el.nextElementSibling.children[0].children[0] ? el.nextElementSibling.children[0].id : el.nextElementSibling.children[0].children[0].id}`
         el.nextElementSibling.style.display = 'flex'
@@ -576,8 +578,8 @@ export function element(el) {
                 times.push(formattedDates)
             }
         });
-        const btn = el.closest('.select_summary').nextElementSibling.children[1]
-        const input = el.closest('.select_summary').nextElementSibling.children[0].children[0]
+        const btn = el.nextElementSibling.children[1]
+        const input = el.nextElementSibling.children[0].children[0]
         Array.from(btn.children).forEach(elem =>
             elem.addEventListener('click', () => {
                 const res = times[times.length - 1];
@@ -586,14 +588,16 @@ export function element(el) {
                     const formattedDate = `${parts[1].replace(/^0+/, '')}/${parts[2]}`;
                     return formattedDate
                 })
+                console.log(el.children[3])
                 el.children[3].textContent = formatString[0] + '-' + formatString[1]
-                elem.textContent === 'Очистить' ? input.value = '' : arrayIdw.length === 0 ? (yesterdaySummary(res, type), input.value = '', elem.closest('.calendar').style.display = 'none') :
-                    (viewStat(arrayIdw, sele, res), input.value = '', elem.closest('.calendar').style.display = 'none')
+                elem.textContent === 'Очистить' ? input.value = '' : arrayIdw.length === 0 ? (yesterdaySummary(res, type, el), input.value = '', elem.closest('.calendar').style.display = 'none') :
+                    (viewStat(arrayIdw, sele, res, el), input.value = '', elem.closest('.calendar').style.display = 'none')
             })
         )
     }
     else {
-        el.closest('.select_summary').nextElementSibling.style.display = 'none'
+        console.log(el.nextElementSibling)
+        el.nextElementSibling.style.display = 'none'
         arrayIdw.length === 0 ? yesterdaySummary(el.value, type, el) : viewStat(arrayIdw, sele)
     }
     el.addEventListener('click', function () {

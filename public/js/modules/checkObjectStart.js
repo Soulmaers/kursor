@@ -112,7 +112,7 @@ export function startList(object) {
     });
 }
 // Функция, которую вы хотите запускать при изменении состояния чекбоксов
-export async function viewStat(checkedValues, sele, res) {
+export async function viewStat(checkedValues, sele, res, element) {
     // Здесь вы можете использовать выбранные значения
     let interval;
     sele.forEach(e => {
@@ -170,7 +170,6 @@ export async function viewStat(checkedValues, sele, res) {
                 arr.forEach((e, index) => {
                     if (count === 0) {
                         parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
-
                     }
                     parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-';
                 })

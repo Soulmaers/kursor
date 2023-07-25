@@ -782,5 +782,13 @@ selectSummary.forEach(el => {
 
     })
 })
+const selectSummaryTwo = document.querySelectorAll('.select_summary_two');
+selectSummaryTwo.forEach(el => {
+    console.log('работаем?')
+    el.addEventListener('change', function () {
+        element(el);
+
+    })
+})
 
 

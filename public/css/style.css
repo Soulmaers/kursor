@@ -1882,6 +1882,14 @@ div.spoyler {
   outline: none;
 }
 
+.select_summary_two:focus {
+  outline: none;
+}
+
+.select_type_two:focus {
+  outline: none;
+}
+
 .table_dannie {
   position: relative;
 }
