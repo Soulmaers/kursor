@@ -152,17 +152,14 @@ const test = async () => {
             mass.forEach((el, index) => {
                 el.push(sens[index]);
             });
-
             await databaseService.saveChartDataToBase(mass);
             console.log('запись сделана по id' + ' ' + el.nm);
         }
     }
     console.log('запись окончена')
-
-
 }
-//setTimeout(test, 1000)
-//setInterval(test, 60000)
+setTimeout(test, 1000)
+setInterval(test, 60000)
 async function updateParams(data) {
     //запрашиваем данные параметры по обектам с виалона
     //  const data = await wialonService.getDataFromWialon(login)
