@@ -3,6 +3,7 @@ import { fnParMessage, fnPar } from './grafiks.js'
 import { allObjects } from './menu.js'
 import { viewStat } from './checkObjectStart.js'
 import { testovfn } from './charts/bar.js'
+import { modalView } from './popup.js'
 export let uniqglobalInfo;
 
 export async function startAllStatic(objects) {
@@ -30,11 +31,15 @@ export async function startAllStatic(objects) {
 async function loadValue(array, timeOld, timeNow) {
     const uniqObject = {};
     for (const e of array) {
+        const name = e[0].message
+        const group = e[5]
+        console.log(e)
         let lifting = 0
         let prostoyHH;
         const time = [];
         const speed = [];
         const sats = [];
+        const geo = [];
         const idw = e[4];
         /*        const param = {
                     method: "POST",
@@ -52,6 +57,7 @@ async function loadValue(array, timeOld, timeNow) {
                 time.push(new Date(isoString))
                 speed.push(el.speed)
                 sats.push(el.sats)
+                geo.push(JSON.parse(el.geo))
             })
             const sensArr = itog.map(e => {
                 return JSON.parse(e.sens)
@@ -89,6 +95,7 @@ async function loadValue(array, timeOld, timeNow) {
                 el.time = time
                 el.speed = speed
                 el.sats = sats
+                el.geo = geo
             })
             const oil = [];
             const hh = [];
@@ -116,7 +123,7 @@ async function loadValue(array, timeOld, timeNow) {
                         }
                     });
                     oil.push(it.value)
-                    const res = it.value !== undefined && it.value.every(item => item >= 0) ? rashodCalc(it) : [{ rashod: 0, zapravka: 0 }]
+                    const res = it.value !== undefined && it.value.every(item => item >= 0) ? rashodCalc(it, name, group) : [{ rashod: 0, zapravka: 0 }]
                     console.log(idw)
                     console.log('рес')
                     console.log(res)
@@ -312,7 +319,8 @@ function moto(data) {
         return { moto: motoHours, prostoy: unixProstoy }
     }
 }
-function rashodCalc(data) {
+
+function rashodCalc(data, name, group) {
     console.log(data)
     let i = 0;
     while (i < data.value.length - 1) {
@@ -320,6 +328,8 @@ function rashodCalc(data) {
             data.value.splice(i, 1);
             data.time.splice(i, 1);
             data.speed.splice(i, 1);
+            data.sats.splice(i, 1);
+            data.geo.splice(i, 1);
         } else {
             i++;
 
@@ -338,13 +348,13 @@ function rashodCalc(data) {
             end = i + 1;
         } else if (currentObj > nextObj) {
             if (start !== end) {
-                increasingIntervals.push([[data.value[start], data.time[start]], [data.value[end], data.time[end]]]);
+                increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
             }
             start = end = i + 1;
         }
     }
     if (start !== end) {
-        increasingIntervals.push([[data.value[start], data.time[start]], [data.value[end], data.time[end]]]);
+        increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
     }
 
     console.log(increasingIntervals)
@@ -374,6 +384,7 @@ function rashodCalc(data) {
     const firstData = data.value[0];
     const lastData = data.value[data.value.length - 1];
     if (zapravka.length !== 0) {
+        modalView(zapravka, name, group);
         rash.push(firstData - zapravka[0][0][0]);
         for (let i = 0; i < zapravka.length - 1; i++) {
             rash.push(zapravka[i][1][0] - zapravka[i + 1][0][0]);
@@ -395,8 +406,6 @@ function rashodCalc(data) {
     console.log(zapravleno)
     return [{ rashod: rashod < 0 ? 0 : rashod, zapravka: zapravleno < 0 ? 0 : zapravleno }]
 }
-
-
 function timefn() {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);

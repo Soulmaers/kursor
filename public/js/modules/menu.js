@@ -28,6 +28,10 @@ export async function zapros(login) {
     selectElement.forEach(el => {
         el[0].selected = true;
     })
+    const selectElementTwo = document.querySelectorAll('.select_summary.two');
+    selectElementTwo.forEach(el => {
+        el[1].selected = true;
+    })
     const params = {
         method: "POST",
         headers: {
