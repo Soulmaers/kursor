@@ -543,10 +543,12 @@ export const times = [];
 export function element(el) {
     console.log(el.parentNode)
     const type = el.closest('.title_interval').nextElementSibling.getAttribute('rel')
-    const checkboxBlocks = el.parentNode
+    const checkboxBlocks = el.closest('.table_dannie').previousElementSibling.lastElementChild.lastElementChild
+    console.log(checkboxBlocks)
     const checkboxes = Array.from(checkboxBlocks.querySelectorAll('.checkListStart')).map(element => {
         return element.children[0];
     });
+    console.log(checkboxes)
     const arrayIdw = [];
     checkboxes.shift();
     checkboxes.forEach(e => {
@@ -591,14 +593,14 @@ export function element(el) {
                 console.log(el.children[3])
                 el.children[3].textContent = formatString[0] + '-' + formatString[1]
                 elem.textContent === 'Очистить' ? input.value = '' : arrayIdw.length === 0 ? (yesterdaySummary(res, type, el), input.value = '', elem.closest('.calendar').style.display = 'none') :
-                    (viewStat(arrayIdw, sele, res, el), input.value = '', elem.closest('.calendar').style.display = 'none')
+                    (viewStat(arrayIdw, el), input.value = '', elem.closest('.calendar').style.display = 'none')
             })
         )
     }
     else {
         console.log(el.nextElementSibling)
         el.nextElementSibling.style.display = 'none'
-        arrayIdw.length === 0 ? yesterdaySummary(el.value, type, el) : viewStat(arrayIdw, sele)
+        arrayIdw.length === 0 ? yesterdaySummary(el.value, type, el) : viewStat(arrayIdw, el)
     }
     el.addEventListener('click', function () {
         el.children[3].textContent = 'Выбрать дату'

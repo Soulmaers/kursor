@@ -82,10 +82,11 @@ export function startList(object) {
                 checkboxAll[0].checked = false;
             }
             const sele = Array.from(block.closest('.left_block').lastElementChild.children[0].children[2].children[0])
+            const element = [block.closest('.left_block').lastElementChild.children[0].children[2].children[0], block.closest('.left_block').lastElementChild.children[0].children[3].children[0]]
             const pointDate = times[times.length - 1]
             console.log(enabledSettings, sele, pointDate)
-            enabledSettings.length !== 0 ? viewStat(enabledSettings, sele, pointDate) : (yesterdaySummary(),
-                yesterdaySummary('Вчера'), checkboxAll[0].checked = true);
+            enabledSettings.length !== 0 ? viewStat(enabledSettings, element) : (yesterdaySummary(),
+                yesterdaySummary('Вчера'), yesterdaySummary('Неделя'), checkboxAll[0].checked = true);
         }
         // Обработка изменений для общего чекбокса "All" в текущем блоке
         function handleCheckboxAllChange(event) {
@@ -98,6 +99,7 @@ export function startList(object) {
             sele[0].selected = true;
             yesterdaySummary()
             yesterdaySummary('Вчера')
+            yesterdaySummary('Неделя')
         }
         // Добавляем обработчик события изменения для каждого чекбокса в текущем блоке
         checkboxes.forEach(checkbox => {
@@ -112,29 +114,69 @@ export function startList(object) {
     });
 }
 // Функция, которую вы хотите запускать при изменении состояния чекбоксов
-export async function viewStat(checkedValues, sele, res, element) {
+export async function viewStat(checkedValues, sele) {
+    console.log(checkedValues, sele)
+    const dat = [];
+    let int = [];
     // Здесь вы можете использовать выбранные значения
     let interval;
-    sele.forEach(e => {
-        if (e.selected === true) {
-            interval = e.value;
+
+    console.log(sele.length)
+    if (sele.length !== 2) {
+        Array.from(sele.children).forEach(e => {
+            if (e.selected === true) {
+                console.log(e.textContent)
+                interval = e.textContent
+            }
+        });
+        if (interval === 'Неделя') {
+            int.push(8)
         }
-    });
-    const dat = [];
-    let int;
-    if (interval === 'Неделя') {
-        int = 8
-    }
-    else if (interval === 'Месяц') {
-        int = 31
-    }
-    else if (interval === 'Вчера') {
-        int = 1
+        else if (interval === 'Месяц') {
+            int.push(31)
+        }
+        else if (interval === 'Вчера') {
+            int.push(1)
+        }
+        else {
+            int.push(convertDateRange(interval))
+        }
+        console.log(int)
+        typeof int[0] === 'number' ? dat.push([convertDate(0)], [convertDate(int), convertDate(1)]) : dat.push([convertDate(0)], [int[0][0], int[0][1]])
     }
     else {
-        int = res
+        sele.forEach(e => {
+            Array.from(e).forEach(it => {
+                if (it.selected === true) {
+                    console.log(it.textContent)
+                    interval = it.textContent
+                }
+            })
+            if (interval === 'Неделя') {
+                int.push(8)
+            }
+            else if (interval === 'Месяц') {
+                int.push(31)
+            }
+            else if (interval === 'Вчера') {
+                int.push(1)
+            }
+            else {
+                int.push(convertDateRange(interval))
+            }
+        });
+        const allNumbers = int.every(item => typeof item === 'number');
+        const allArrays = int.every(item => Array.isArray(item));
+        if (allNumbers) {
+            dat.push([convertDate(0)], [convertDate(int[0]), convertDate(1)], [convertDate(int[1]), convertDate(1)])
+        }
+        else if (allArrays) {
+            dat.push([convertDate(0)], [int[0][0], int[0][1]], [int[1][0], int[1][1]])
+        }
+        else if (typeof int[0] !== typeof int[1]) {
+            typeof int[0] === 'number' ? dat.push([convertDate(0)], [convertDate(int[0]), convertDate(1)], [int[1][0], int[1][1]]) : dat.push([convertDate(0)], [int[0][0], int[0][1]], [convertDate(int[1]), convertDate(1)])
+        }
     }
-    !res ? dat.push([convertDate(0)], [convertDate(int), convertDate(1)]) : dat.push([convertDate(0)], [res[0], res[1]])
     const idw = checkedValues
     let count = 0;
     const dannie = [];
@@ -151,38 +193,105 @@ export async function viewStat(checkedValues, sele, res, element) {
         const models = await mods.json();
         dannie.push(models);
     }
-    dannie.forEach(el => {
-        if (el.length === 1) {
-            const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "goodJob", "medium", "oilHH"];
-            el.forEach(it => {
-                const parentWrapper = document.querySelector(`[rel="${it.type}"]`).children
-                it.quantityTS = el.length
-                it.goodJob = timesFormat(it.moto / 1000 - it.prostoy)
-                it.moto = timesDate(it.moto)
-                it.prostoy = timesFormat(it.prostoy)
-                delete it.id
-                delete it.idw
-                delete it.nameCar
-                delete it.type
-                delete it.data
-                delete it.company
-                const arr = propOrder.map(prop => it[prop]);
-                arr.forEach((e, index) => {
-                    if (count === 0) {
-                        parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
-                    }
-                    parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-';
+    if (dannie.length < 3) {
+        dannie.forEach(el => {
+            console.log(el.length)
+            if (el.length === 1) {
+                const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "goodJob", "medium", "oilHH"];
+                el.forEach(it => {
+                    const parentWrapper = document.querySelector(`[rel="${it.type}"]`).children
+                    it.quantityTS = el.length
+                    it.goodJob = timesFormat(it.moto / 1000 - it.prostoy)
+                    it.moto = timesDate(it.moto)
+                    it.prostoy = timesFormat(it.prostoy)
+                    delete it.id
+                    delete it.idw
+                    delete it.nameCar
+                    delete it.type
+                    delete it.data
+                    delete it.company
+                    const arr = propOrder.map(prop => it[prop]);
+                    console.log(count)
+                    arr.forEach((e, index) => {
+                        if (count === 0) {
+                            console.log('соунт0')
+                            parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
+                            return
+                        }
+                        console.log('соунт1')
+                        let targetIndex;
+                        if (sele.classList.contains('one')) {
+                            targetIndex = 2;
+                        }
+                        else if (sele.classList.contains('two')) {
+                            targetIndex = 3;
+                        }
+                        parentWrapper[index].children[targetIndex].textContent = (e !== undefined && e !== null) ? e : '-';
+                    });
                 })
-            })
-        }
-        else {
-            viewMoreElement(el, count)
-        }
-        count++
-    })
+            }
+            else {
+                viewMoreElement(el, count, sele)
+            }
+            count++
+        })
+    }
+    else {
+        dannie.forEach(el => {
+            if (el.length === 1) {
+                const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "goodJob", "medium", "oilHH"];
+                el.forEach(it => {
+                    const parentWrapper = document.querySelector(`[rel="${it.type}"]`).children
+                    it.quantityTS = el.length
+                    it.goodJob = timesFormat(it.moto / 1000 - it.prostoy)
+                    it.moto = timesDate(it.moto)
+                    it.prostoy = timesFormat(it.prostoy)
+                    delete it.id
+                    delete it.idw
+                    delete it.nameCar
+                    delete it.type
+                    delete it.data
+                    delete it.company
+                    const arr = propOrder.map(prop => it[prop]);
+                    console.log(count)
+                    arr.forEach((e, index) => {
+                        if (count === 0) {
+                            console.log('соунт0')
+                            parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
+                            return
+                        }
+                        if (count === 1) {
+                            console.log('соунт0')
+                            parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-';
+                            return
+                        }
+                        if (count === 2) {
+                            console.log('соунт0')
+                            parentWrapper[index].children[3].textContent = (e !== undefined && e !== null) ? e : '-';
+                            return
+                        }
+                    });
+                })
+            }
+            else {
+                viewMoreElement(el, count)
+            }
+            count++
+        })
+    }
 }
 
-function viewMoreElement(newArray, count) {
+
+function convertDateRange(dateRange) {
+    const [startDate, endDate] = dateRange.split('-');
+    const [startMonth, startDay] = startDate.split('/');
+    const [endMonth, endDay] = endDate.split('/');
+    const startDateFormatted = `2023-${startMonth.padStart(2, '0')}-${startDay.padStart(2, '0')}`;
+    const endDateFormatted = `2023-${endMonth.padStart(2, '0')}-${endDay.padStart(2, '0')}`;
+    return [startDateFormatted, endDateFormatted];
+}
+
+function viewMoreElement(newArray, count, sele) {
     const objectUniq = {}
     for (let i = 0; i < newArray.length; i++) {
         objectUniq[newArray[i].id] = newArray[i];
@@ -250,13 +359,40 @@ function viewMoreElement(newArray, count) {
     Object.entries(globalInfo).forEach(it => {
         const arr = propOrder.map(prop => it[1][prop]);
         const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
-        arr.forEach((e, index) => {
-            if (count === 0) {
-                parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-'
-            }
-            parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-'
-
-        })
+        if (sele) {
+            arr.forEach((e, index) => {
+                if (count === 0) {
+                    console.log('соунт0')
+                    parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
+                    return
+                }
+                console.log('соунт1')
+                let targetIndex;
+                if (sele.classList.contains('one')) {
+                    targetIndex = 2;
+                }
+                else if (sele.classList.contains('two')) {
+                    targetIndex = 3;
+                }
+                parentWrapper[index].children[targetIndex].textContent = (e !== undefined && e !== null) ? e : '-';
+            });
+        }
+        else {
+            arr.forEach((e, index) => {
+                if (count === 0) {
+                    parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
+                    return
+                }
+                if (count === 1) {
+                    parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-';
+                    return
+                }
+                if (count === 2) {
+                    parentWrapper[index].children[3].textContent = (e !== undefined && e !== null) ? e : '-';
+                    return
+                }
+            });
+        }
     })
     count++
 }

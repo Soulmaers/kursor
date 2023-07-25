@@ -60,7 +60,7 @@ exports.dataSpisok = async (req, res) => {
                 // console.log(el)
                 try {
                     const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
-                    if (!all.item.nm) {
+                    if (!all.item) {
                         return;
                     }
                     const objects = all.item.nm;
