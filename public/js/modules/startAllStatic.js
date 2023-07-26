@@ -531,7 +531,7 @@ export async function yesterdaySummary(interval, type, element) {
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
             const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
-
+            console.log(globalInfo)
             arr.forEach((e, index) => {
                 let targetIndex = 1;
                 if (!interval && !type) {
