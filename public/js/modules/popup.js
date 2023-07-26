@@ -40,8 +40,9 @@ let count = 0;
 function createPopup(array) {
     const arr = Object.values(array[0]);
     const body = document.getElementsByTagName('body')[0]
+    const popap = document.querySelector('.popup')
     console.log(body)
-    if (count === 1) {
+    if (popap) {
         const pop = document.createElement('div')
         pop.classList.add('popup')
         pop.style.top = 50 + '%'
