@@ -93,6 +93,10 @@ export async function zapros(login) {
     setInterval(processDataAtMidnight, 60000)
 }
 
+
+
+
+
 const login = document.querySelectorAll('.log')[1].textContent
 export async function ggg(id) {
     console.log('ggg')

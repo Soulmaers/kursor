@@ -32,7 +32,7 @@ export async function modalView(zapravka, name, group) {
     adres.push(address.state);
     adres.push(address.country);
     const res = adres.filter(val => val !== undefined).join(', ');
-    diffInSeconds < 60 ? createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }]) : console.log('ждем условия')
+    diffInSeconds > 60 ? createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }]) : console.log('ждем условия')
 }
 
 

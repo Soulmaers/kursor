@@ -11,6 +11,7 @@ const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
 const app = express();
+
 require('events').EventEmitter.prototype._maxListeners = 0;
 
 
@@ -44,5 +45,8 @@ module.exports = app
 
 require('dotenv').config();
 const port = process.env.PORT
+
+
+
 
 app.listen(port, () => console.log(`Сервер запущен, порт:${port}`))
