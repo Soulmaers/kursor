@@ -130,10 +130,10 @@ export async function viewStat(checkedValues, sele) {
             }
         });
         if (interval === 'Неделя') {
-            int.push(8)
+            int.push(7)
         }
         else if (interval === 'Месяц') {
-            int.push(31)
+            int.push(30)
         }
         else if (interval === 'Вчера') {
             int.push(1)
@@ -153,10 +153,10 @@ export async function viewStat(checkedValues, sele) {
                 }
             })
             if (interval === 'Неделя') {
-                int.push(8)
+                int.push(7)
             }
             else if (interval === 'Месяц') {
-                int.push(31)
+                int.push(30)
             }
             else if (interval === 'Вчера') {
                 int.push(1)
