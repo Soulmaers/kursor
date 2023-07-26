@@ -1,6 +1,6 @@
 
 const connection = require('../config/db')
-
+//const messAlarm = require('./websockets.js')
 
 
 //сохраняем в базу параметры и обновляем их
@@ -159,7 +159,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
     dannie.unshift(id)
     console.log(dannie)
     const value = [dannie];
-
+    //  messAlarm(dannie)
     try {
         const selectBase = `SELECT idw, data, name, senspressure, bar, temp ,alarm 
                     FROM alarms 

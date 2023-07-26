@@ -74,15 +74,23 @@ async function loadValue(array, timeOld, timeNow) {
                  sats.push(el.p.sats)
              })*/
             // const sensArr = await fnPar(idw)
-            // console.log(sensArr)
+            console.log(sensArr)
             const nameSens = await fnParMessage(idw)
             console.log(nameSens)
             // nameSens.pop()
             const allArrNew = [];
-            // if (nameSens.length === sensArr[0].length) {
+
+            if (sensArr[0] && nameSens.length === sensArr[0].length) {
+                nameSens.forEach((item) => {
+                    allArrNew.push({ sens: item[0], params: item[1], value: [] })
+                })
+            }
+            nameSens.pop()
             nameSens.forEach((item) => {
                 allArrNew.push({ sens: item[0], params: item[1], value: [] })
             })
+
+
             sensArr.forEach(el => {
                 if (el.length === 0) {
                     return; // Пропускаем текущую итерацию, если sensArr пустой

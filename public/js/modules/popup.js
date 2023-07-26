@@ -32,11 +32,28 @@ export async function modalView(zapravka, name, group) {
     adres.push(address.state);
     adres.push(address.country);
     const res = adres.filter(val => val !== undefined).join(', ');
-    diffInSeconds > 60 ? createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }]) : console.log('ждем условия')
+    diffInSeconds < 60 ? createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }]) : console.log('ждем условия')
 }
 
 
-let count = 0;
+// Создаем WebSocket-соединение
+const socket = new WebSocket('ws://localhost:3336');
+// Обработчик открытия соединения
+socket.onopen = () => {
+    console.log('Соединение установлено');
+};
+// Обработчик получения сообщения от сервера
+socket.onmessage = (event) => {
+    const message = JSON.parse(event.data);
+    console.log(message)
+    createPopup(message)
+};
+// Обработчик закрытия соединения
+socket.onclose = () => {
+    console.log('Соединение закрыто');
+};
+
+
 function createPopup(array) {
     const arr = Object.values(array[0]);
     const body = document.getElementsByTagName('body')[0]
@@ -69,7 +86,6 @@ function createPopup(array) {
         popup.style.display = "block";
         popup.classList.add('open');
         //  body.style.background = 'lightGray'
-        count++
         const closeButton = document.querySelector('.popup-close');
         closeButton.addEventListener('click', function () {
             popup.remove();
@@ -105,7 +121,6 @@ function createPopup(array) {
         const popup = document.querySelector('.popup');
         popup.style.display = "block";
         popup.classList.add('open');
-        count++
         const closeButton = document.querySelector('.popup-close');
         closeButton.addEventListener('click', function () {
             popup.remove();
