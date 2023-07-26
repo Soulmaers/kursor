@@ -281,7 +281,6 @@ function queryDB(sql) {
     });
 }
 
-
 function proverka(arr) {
     console.log('проверка')
     const time = new Date()

@@ -96,7 +96,6 @@ export async function zapros(login) {
 
 
 
-
 const login = document.querySelectorAll('.log')[1].textContent
 export async function ggg(id) {
     console.log('ggg')
