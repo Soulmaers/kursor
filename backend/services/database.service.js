@@ -150,11 +150,11 @@ exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, s
 
 //сохраняем в базу алармы
 exports.alarmBase = async (data, tyres, alarm) => {
-    // console.log(data)
     console.log('данные по алармам')
     const dannie = data.concat(tyres)
     const id = dannie[6]
     dannie.splice(5, 3)
+    dannie.pop()
     dannie.push(alarm)
     dannie.unshift(id)
     console.log(dannie)

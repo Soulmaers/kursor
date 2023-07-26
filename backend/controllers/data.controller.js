@@ -173,9 +173,9 @@ async function updateParams(data) {
     allCar[5][1].forEach(async el => {
         const nameTable = el.nm.replace(/\s+/g, '');
         const idw = el.id;
-        //  const data = el.lmsg.t
         const speed = el.lmsg && el.lmsg.pos && el.lmsg.pos.s ? el.lmsg.pos.s : null;// проверка на наличие свойства lmsg и свойства pos.s
-        const geo = [el.pos.y, el.pos.x];
+        const geo = el && el.pos && el.pos.x ? [el.pos.y, el.pos.x] : null;
+
         nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed, geo]);
         const model = await databaseService.modelViewToBase(idw)
         let statusTSI;
@@ -284,7 +284,7 @@ function queryDB(sql) {
 
 function proverka(arr) {
     console.log('проверка')
-    console.log(arr)
+
     const time = new Date()
     arr.forEach(el => {
         if (el[4] === undefined) {
