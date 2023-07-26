@@ -114,6 +114,9 @@ exports.up = async (req, res) => {
     res.json({ message: 'ок' })
 }
 
+
+
+
 let dataGlobal;
 const test = async () => {
     // console.log('rr' + login)
