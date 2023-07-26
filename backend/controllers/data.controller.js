@@ -175,7 +175,8 @@ async function updateParams(data) {
         const idw = el.id;
         //  const data = el.lmsg.t
         const speed = el.lmsg && el.lmsg.pos && el.lmsg.pos.s ? el.lmsg.pos.s : null;// проверка на наличие свойства lmsg и свойства pos.s
-        nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed]);
+        const geo = [el.pos.y, el.pos.x];
+        nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed, geo]);
         const model = await databaseService.modelViewToBase(idw)
         let statusTSI;
         if (model[0] && model[0].tsiControll) {
@@ -262,7 +263,7 @@ async function zaprosSpisokb(name) {
                     }
                     for (let y = 0; y < paramsRes.length; y++) {
                         if (paramsRes[y].name === modelUniqValues[k].temp) {
-                            massItog.push([name[i][0], modelUniqValues[k].pressure, parseFloat(integer), parseFloat(paramsRes[y].value), osiBar, name[i][1], name[i][2]]);
+                            massItog.push([name[i][0], modelUniqValues[k].pressure, parseFloat(integer), parseFloat(paramsRes[y].value), osiBar, name[i][1], name[i][2], name[i][3]]);
                         }
                     }
                 }
@@ -283,6 +284,7 @@ function queryDB(sql) {
 
 function proverka(arr) {
     console.log('проверка')
+    console.log(arr)
     const time = new Date()
     arr.forEach(el => {
         if (el[4] === undefined) {
