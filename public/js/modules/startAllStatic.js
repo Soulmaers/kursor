@@ -99,6 +99,7 @@ async function loadValue(array, timeOld, timeNow) {
             })
             const oil = [];
             const hh = [];
+            let probeg;
             const found = allArrNew.some(it => it.params === 'can_mileage');
             if (found) {
                 console.log('раз');
@@ -106,6 +107,7 @@ async function loadValue(array, timeOld, timeNow) {
                 const probegZero = it.value.length !== 0 ? Number((it.value[0]).toFixed(0)) : 0;
                 const probegNow = it.value.length !== 0 ? Number((it.value[it.value.length - 1]).toFixed(0)) : 0;
                 const probegDay = probegNow - probegZero;
+                probeg = probegDay
                 if (probegDay > 5) {
                     uniqObject[idw] = { ...uniqObject[idw], quantityTSjob: 1, probeg: probegDay };
                 } else {
@@ -123,7 +125,7 @@ async function loadValue(array, timeOld, timeNow) {
                         }
                     });
                     oil.push(it.value)
-                    const res = it.value !== undefined && it.value.every(item => item >= 0) ? rashodCalc(it, name, group) : [{ rashod: 0, zapravka: 0 }]
+                    const res = it.value !== undefined && it.value.every(item => item >= 0) && probeg > 5 ? rashodCalc(it, name, group) : [{ rashod: 0, zapravka: 0 }]
                     console.log(idw)
                     console.log('рес')
                     console.log(res)

@@ -49,7 +49,7 @@ export async function oil(t1, t2) {
                 allArrNew[i].value.push(Object.values(el)[i])
             }
         })
-
+        console.log(allArrNew)
         //  const global = await fnTime(t1, t2)
         //   const sensArr = await fnPar(active)
         //  const nameArr = await fnParMessage(active)
@@ -126,7 +126,7 @@ export async function oil(t1, t2) {
             increasingIntervals.push([dat[start], dat[end]]);
         }
         console.log(increasingIntervals)
-        const zapravka = increasingIntervals.filter((interval, index) => {
+        const zapravkaAll = increasingIntervals.filter((interval, index) => {
             const firstOil = interval[0].oil;
             const lastOil = interval[interval.length - 1].oil;
             const difference = lastOil - firstOil;
@@ -143,11 +143,12 @@ export async function oil(t1, t2) {
             }
             return firstOil > 5 && difference >= threshold;
         });
-        for (let i = 0; i < zapravka.length - 1; i++) {
-            if (zapravka[i][1].time === zapravka[i + 1][1].time) {
-                zapravka.splice(i + 1, 1);
+        for (let i = 0; i < zapravkaAll.length - 1; i++) {
+            if (zapravkaAll[i][1].time === zapravkaAll[i + 1][1].time) {
+                zapravkaAll.splice(i + 1, 1);
             }
         }
+        const zapravka = zapravkaAll.filter(e => e[0].pwr >= 16 || e[0].pwr == null);
         console.log(zapravka)
         const rash = [];
         const firstData = data[0].oil;

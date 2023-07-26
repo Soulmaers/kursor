@@ -195,7 +195,6 @@ export async function viewStat(checkedValues, sele) {
     }
     if (dannie.length < 3) {
         dannie.forEach(el => {
-            console.log(el.length)
             if (el.length === 1) {
                 const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "goodJob", "medium", "oilHH"];
                 el.forEach(it => {
@@ -214,11 +213,9 @@ export async function viewStat(checkedValues, sele) {
                     console.log(count)
                     arr.forEach((e, index) => {
                         if (count === 0) {
-                            console.log('соунт0')
                             parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
                             return
                         }
-                        console.log('соунт1')
                         let targetIndex;
                         if (sele.classList.contains('one')) {
                             targetIndex = 2;
@@ -253,20 +250,17 @@ export async function viewStat(checkedValues, sele) {
                     delete it.data
                     delete it.company
                     const arr = propOrder.map(prop => it[prop]);
-                    console.log(count)
+
                     arr.forEach((e, index) => {
                         if (count === 0) {
-                            console.log('соунт0')
                             parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
                             return
                         }
                         if (count === 1) {
-                            console.log('соунт0')
                             parentWrapper[index].children[2].textContent = (e !== undefined && e !== null) ? e : '-';
                             return
                         }
                         if (count === 2) {
-                            console.log('соунт0')
                             parentWrapper[index].children[3].textContent = (e !== undefined && e !== null) ? e : '-';
                             return
                         }
@@ -349,7 +343,6 @@ function viewMoreElement(newArray, count, sele) {
         el[1].moto = timesDate(el[1].moto)
         el[1].prostoy = timesFormat(el[1].prostoy)
         el[1].medium = el[1].jobTS !== 0 ? Number((el[1].medium / (count === 1 || count === 2 ? jobNum : el[1].jobTS)).toFixed(2)) : 0;
-        console.log(el[1].medium)
         delete el[1].id
         delete el[1].idw
         delete el[1].nameCar
@@ -363,11 +356,9 @@ function viewMoreElement(newArray, count, sele) {
         if (sele) {
             arr.forEach((e, index) => {
                 if (count === 0) {
-                    console.log('соунт0')
                     parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
                     return
                 }
-                console.log('соунт1')
                 let targetIndex;
                 if (sele.classList.contains('one')) {
                     targetIndex = 2;
