@@ -28,6 +28,7 @@ export async function alarmFind() {
     const tyres = await fetch('/api/tyresView', par)
     const tyresmassiv = await tyres.json();
     if (tyresmassiv.result) {
+        console.log(tyresmassiv.result)
         const sorTyres = convert(tyresmassiv.result)
         const storValue = [];
         sorTyres.forEach(async e => {
@@ -40,6 +41,7 @@ export async function alarmFind() {
                 body: JSON.stringify({ idw, tyresP })
             })
             const storList = await stor.json();
+            console.log(storList)
             storValue.push(storList)
         })
         setTimeout(viewAlarmStorage, 1000, idw, storValue)

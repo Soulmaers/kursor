@@ -1,5 +1,5 @@
 
-
+import { ggg } from './menu.js'
 
 export async function modalView(zapravka, name, group) {
     console.log(zapravka)
@@ -67,11 +67,13 @@ function poll() {
         if (alert !== null) {
             const mesto = await createMesto(alert[1][7])
             console.log(mesto)
+            const allobj = await ggg(alert[1][6])
+            const tyres = allobj[alert[1][1]]
             let val;
             alert[1][2] !== 'Потеря связи с датчиком' ? val = alert[1][2] + ' ' + 'Бар' : val = alert[1][3] + '' + 't'
             const event = 'Уведомление'
             createPopup([{
-                event: event, time: `Время ${alert[0]}`, name: `Объект: ${alert[1][0]}`, tyres: `Колесо: ${alert[1][1]}`,
+                event: event, time: `Время ${alert[0]}`, name: `Объект: ${alert[1][0]}`, tyres: `Колесо: ${tyres}`,
                 param: `Параметр: ${val}`, alarm: `Событие: ${alert[2]}`, res: `Местоположение: ${mesto}`
             }])
         }

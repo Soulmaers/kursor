@@ -17,12 +17,10 @@ module.exports.alert = async (req, res) => {
             old = alert[3]
         }
         else {
-            console.log('2')
             res.json(null)
         }
     }
     else {
-        console.log('2')
         res.json(null)
     }
 }
