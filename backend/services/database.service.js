@@ -1,8 +1,11 @@
 
 const connection = require('../config/db')
-//const messAlarm = require('./websockets.js')
 
-
+/*
+let socked;
+module.exports = {
+    socked
+}*/
 //сохраняем в базу параметры и обновляем их
 exports.saveDataToDatabase = async (name, idw, param, time) => {
     param.forEach(el => {
@@ -148,8 +151,13 @@ exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, s
 }
 
 
+
+
 //сохраняем в базу алармы
+let count = 0;
 exports.alarmBase = async (data, tyres, alarm) => {
+    count++
+    exports.myVariable = [data, tyres, alarm, count]
     console.log('данные по алармам')
     const dannie = data.concat(tyres)
     const id = dannie[6]
@@ -157,7 +165,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
     dannie.pop()
     dannie.push(alarm)
     dannie.unshift(id)
-    console.log(dannie)
+    // console.log(dannie)
     const value = [dannie];
     //  messAlarm(dannie)
     try {
@@ -174,12 +182,14 @@ exports.alarmBase = async (data, tyres, alarm) => {
             console.log(err)
             if (results.length !== 0) {
                 console.log(results)
+
             }
             else {
                 const sqls = `INSERT INTO alarms (idw, data, name, senspressure, bar,
                             temp, alarm) VALUES?`;
                 connection.query(sqls, [value], function (err, results) {
                     if (err) console.log(err);
+
                 });
             }
         })
@@ -188,6 +198,8 @@ exports.alarmBase = async (data, tyres, alarm) => {
         console.log(e)
     }
 }
+
+
 exports.loadParamsViewList = async (car, el) => {
     const idw = el
     const mod = () => {

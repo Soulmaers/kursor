@@ -35,9 +35,9 @@ export async function modalView(zapravka, name, group) {
     diffInSeconds < 60 ? createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }]) : console.log('ждем условия')
 }
 
-
+/*
 // Создаем WebSocket-соединение
-const socket = new WebSocket('ws://localhost:3336');
+const socket = new WebSocket('ws://localhost:3333');
 // Обработчик открытия соединения
 socket.onopen = () => {
     console.log('Соединение установлено');
@@ -51,7 +51,53 @@ socket.onmessage = (event) => {
 // Обработчик закрытия соединения
 socket.onclose = () => {
     console.log('Соединение закрыто');
-};
+};*/
+
+function poll() {
+    setTimeout(async function () {
+        const par = {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+        const res = await fetch('/api/alert', par)
+        const alert = await res.json();
+        console.log(alert)
+        if (alert !== null) {
+            const mesto = await createMesto(alert[1][7])
+            console.log(mesto)
+            let val;
+            alert[1][2] !== 'Потеря связи с датчиком' ? val = alert[1][2] + ' ' + 'Бар' : val = alert[1][3] + '' + 't'
+            const event = 'Уведомление'
+            createPopup([{
+                event: event, time: `Время ${alert[0]}`, name: `Объект: ${alert[1][0]}`, tyres: `Колесо: ${alert[1][1]}`,
+                param: `Параметр: ${val}`, alarm: `Событие: ${alert[2]}`, res: `Местоположение: ${mesto}`
+            }])
+        }
+        poll()
+    }, 5000)
+}
+poll()
+
+async function createMesto(geo) {
+    const lat = geo[0];
+    const lon = geo[1];
+    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=ru`;
+    const mestnost = await fetch(url)
+    const location = await mestnost.json()
+    const address = location.address;
+    const adres = [];
+    adres.push(address.amenity);
+    adres.push(address.road);
+    adres.push(address.municipality);
+    adres.push(address.county);
+    adres.push(address.city);
+    adres.push(address.state);
+    adres.push(address.country);
+    const res = adres.filter(val => val !== undefined).join(', ');
+    return res
+}
 
 
 function createPopup(array) {

@@ -33,7 +33,6 @@ async function loadValue(array, timeOld, timeNow) {
     for (const e of array) {
         const name = e[0].message
         const group = e[5]
-        console.log(e)
         let lifting = 0
         let prostoyHH;
         const time = [];
@@ -74,9 +73,8 @@ async function loadValue(array, timeOld, timeNow) {
                  sats.push(el.p.sats)
              })*/
             // const sensArr = await fnPar(idw)
-            console.log(sensArr)
+
             const nameSens = await fnParMessage(idw)
-            console.log(nameSens)
             // nameSens.pop()
             const allArrNew = [];
 
@@ -134,9 +132,6 @@ async function loadValue(array, timeOld, timeNow) {
                     });
                     oil.push(it.value)
                     const res = it.value !== undefined && it.value.every(item => item >= 0) && probeg > 5 ? rashodCalc(it, name, group) : [{ rashod: 0, zapravka: 0 }]
-                    console.log(idw)
-                    console.log('рес')
-                    console.log(res)
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
                 }
                 if (it.sens.startsWith('Подъем')) {
@@ -331,7 +326,6 @@ function moto(data) {
 }
 
 function rashodCalc(data, name, group) {
-    console.log(data)
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
@@ -366,8 +360,6 @@ function rashodCalc(data, name, group) {
     if (start !== end) {
         increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
     }
-
-    console.log(increasingIntervals)
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0][0];
         const lastOil = interval[interval.length - 1][0];
@@ -410,10 +402,6 @@ function rashodCalc(data, name, group) {
         zap.push(e[1][0] - e[0][0])
     })
     const zapravleno = (zap.reduce((acc, el) => acc + el, 0))
-    console.log(zapravka)
-    console.log(zap)
-    console.log(rashod)
-    console.log(zapravleno)
     return [{ rashod: rashod < 0 ? 0 : rashod, zapravka: zapravleno < 0 ? 0 : zapravleno }]
 }
 function timefn() {
@@ -531,7 +519,6 @@ export async function yesterdaySummary(interval, type, element) {
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
             const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
-            console.log(globalInfo)
             arr.forEach((e, index) => {
                 let targetIndex = 1;
                 if (!interval && !type) {

@@ -136,7 +136,7 @@ const test = async () => {
         let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
         let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
         if (rr.messages.length === 0 || rez.length === 0) {
-            console.log('нет новый данных')
+            // console.log('нет новый данных')
         }
         else {
             //   console.log(rr, rez)
@@ -144,8 +144,8 @@ const test = async () => {
                 rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
                 rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
             }
-            console.log(rr.messages.length);
-            console.log(rez.length);
+            // console.log(rr.messages.length);
+            //   console.log(rez.length);
             const mass = [];
             rr.messages.forEach(e => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
@@ -161,8 +161,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-//setTimeout(test, 1000)
-//setInterval(test, 60000)
+setTimeout(test, 1000)
+setInterval(test, 60000)
 async function updateParams(data) {
     //запрашиваем данные параметры по обектам с виалона
     //  const data = await wialonService.getDataFromWialon(login)
