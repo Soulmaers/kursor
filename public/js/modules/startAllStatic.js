@@ -40,14 +40,19 @@ async function loadValue(array, timeOld, timeNow) {
         const sats = [];
         const geo = [];
         const idw = e[4];
-        /*        const param = {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: (JSON.stringify({ idw, timeOld, timeNow, login }))
-                };*/
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw }))
+        }
         try {
+            const tsi = await fetch('/api/modelView', param)
+            const tsiY = await tsi.json()
+            const tsiControll = Number(tsiY.result[0].tsiControll)
+
+
             const itog = await testovfn(idw, timeOld, timeNow)
             itog.forEach(el => {
                 const timestamp = Number(el.data);
@@ -87,9 +92,6 @@ async function loadValue(array, timeOld, timeNow) {
             nameSens.forEach((item) => {
                 allArrNew.push({ sens: item[0], params: item[1], value: [] })
             })
-            console.log(idw)
-            console.log(sensArr)
-            console.log(nameSens)
             sensArr.forEach(el => {
                 if (el.length === 0) {
                     return; // Пропускаем текущую итерацию, если sensArr пустой
@@ -327,7 +329,6 @@ function moto(data) {
 }
 
 function rashodCalc(data, name, group) {
-    console.log(data)
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
@@ -406,7 +407,7 @@ function rashodCalc(data, name, group) {
     const zapravleno = (zap.reduce((acc, el) => acc + el, 0))
     return [{ rashod: rashod < 0 ? 0 : rashod, zapravka: zapravleno < 0 ? 0 : zapravleno }]
 }
-function timefn() {
+export function timefn() {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     const startOfTodayUnix = Math.floor(currentDate.getTime() / 1000);

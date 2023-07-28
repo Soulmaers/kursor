@@ -1,5 +1,166 @@
 
 import { ggg } from './menu.js'
+import { timefn, timesFormat } from './startAllStatic.js'
+import { testovfn } from './charts/bar.js'
+import { fnParMessage } from './grafiks.js'
+
+export async function popupProstoy(array) {
+    const result = array
+        .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
+        .flat()
+    const arrays = result.filter(e => e[6] && !e[6].startsWith('Цистерна')).map(e => e);
+    const interval = timefn()
+    const timeOld = interval[1]
+    const timeNow = interval[0]
+
+    for (const e of arrays) {
+
+        const time = [];
+        const speed = [];
+        const sats = [];
+        const geo = [];
+        const idw = e[4];
+        console.log(idw)
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw }))
+        }
+        try {
+            const tsi = await fetch('/api/modelView', param)
+            const tsiY = await tsi.json()
+            let tsiControll = tsiY.result.length !== 0 || tsiY.result.tsiControll && tsiY.result.tsiControll !== '' ? Number(tsiY.result[0].tsiControll) : null;
+            tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
+            if (tsiControll === null) {
+                continue
+            }
+            const itog = await testovfn(idw, timeOld, timeNow)
+            itog.forEach(el => {
+                const timestamp = Number(el.data);
+                const date = new Date(timestamp * 1000);
+                const isoString = date.toISOString();
+                time.push(new Date(isoString))
+                speed.push(el.speed)
+                sats.push(el.sats)
+                geo.push(JSON.parse(el.geo))
+            })
+            const sensArr = itog.map(e => {
+                return JSON.parse(e.sens)
+            })
+            const nameSens = await fnParMessage(idw)
+            const allArrNew = [];
+            if (sensArr[0] && nameSens.length === sensArr[0].length) {
+                nameSens.forEach((item) => {
+                    allArrNew.push({ sens: item[0], params: item[1], value: [] })
+                })
+            }
+            nameSens.pop()
+            nameSens.forEach((item) => {
+                allArrNew.push({ sens: item[0], params: item[1], value: [] })
+            })
+            sensArr.forEach(el => {
+                if (el.length === 0) {
+                    return // Пропускаем текущую итерацию, если sensArr пустой
+                }
+                for (let i = 0; i < allArrNew.length; i++) {
+                    allArrNew[i].value.push(Number(Object.values(el)[i].toFixed(0)))
+                }
+            });
+            allArrNew.forEach(el => {
+                el.time = time
+                el.speed = speed
+                el.sats = sats
+                el.geo = geo
+            })
+            console.log(allArrNew)
+            allArrNew.forEach(async it => {
+                if (it.sens.startsWith('Бортовое')) {
+                    const res = prostoy(it, tsiControll);
+                    if (res !== undefined) {
+                        const map = await createMesto(res[3])
+                        const timesProstoy = timesFormat(res[0])
+                        const group = e[5]
+                        const name = e[0].message
+                        const time = res[1]
+                        const day = time.getDate();
+                        const month = (time.getMonth() + 1).toString().padStart(2, '0');
+                        const year = time.getFullYear();
+                        const hours = time.getHours().toString().padStart(2, '0');
+                        const minutes = time.getMinutes().toString().padStart(2, '0');
+                        const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+                        const lastTime = res[2]
+                        const nowTime = new Date()
+                        const diffInSeconds = (nowTime.getTime() - lastTime.getTime()) / 1000;
+                        diffInSeconds < 60 ? createPopup([{
+                            event: `Простой`, group: `Компания: ${group}`,
+                            name: `Объект: ${name}`,
+                            time: `Время: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`, res: `Местоположение: ${map}`
+                        }]) : console.log('ждем условия')
+                    }
+                }
+            })
+
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+}
+
+
+
+function prostoy(data, tsi) {
+    if (data.value.length === 0) {
+        return undefined
+    }
+    else {
+        const prostoy = [];
+        const korzina = [];
+        let startIndex = 0;
+        data.value.forEach((values, index) => {
+            if (values !== data.value[startIndex]) {
+                const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index), geo: data.geo.slice(startIndex, index) };
+                (data.value[startIndex] <= tsi ? korzina : prostoy).push(speedTime);
+                startIndex = index;
+            }
+        });
+        const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex), geo: data.geo.slice(startIndex) };
+        (data.value[startIndex] <= tsi ? korzina : prostoy).push(speedTime);
+        const filteredData = prostoy.map(obj => {
+            const newS = [];
+            const timet = [];
+            const geo = []
+            for (let i = 0; i < obj.speed.length; i++) {
+                if (obj.speed[i] < 5) {
+                    newS.push(obj.speed[i]);
+                    timet.push(obj.time[i])
+                    geo.push(obj.geo[i])
+                } else {
+                    break;
+                }
+            }
+            return { speed: newS, time: timet, geo: geo };
+        });
+        console.log(filteredData)
+        const timeProstoy = filteredData.map(el => {
+            return [el.time[0], el.time[el.time.length - 1], el.geo[0]]
+        })
+        const unixProstoy = [];
+        console.log(timeProstoy)
+        timeProstoy.forEach(it => {
+            if (it[0] !== undefined) {
+                const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
+                if (diffInSeconds > 600) {
+                    unixProstoy.push([diffInSeconds, it[0], it[1], it[2]])
+                }
+            }
+        })
+        const timeBukl = unixProstoy[unixProstoy.length - 1]
+        return timeBukl
+    }
+}
 
 export async function modalView(zapravka, name, group) {
     console.log(zapravka)
@@ -104,6 +265,7 @@ async function createMesto(geo) {
 
 
 function createPopup(array) {
+    console.log(array)
     const arr = Object.values(array[0]);
     const body = document.getElementsByTagName('body')[0]
     const popap = document.querySelector('.popup')
