@@ -24,7 +24,7 @@ async function waitArrProtek(el) {
     }
     const resParams = await fetch('/api/parametrs', param)
     const resultParams = await resParams.json()
-    const speed = resultParams.item && resultParams.item.pos && resultParams.item.pos.s ? (resultParams.item.pos.s).toFixed(0) : null;
+    const speed = resultParams.item && resultParams.item.pos && (typeof resultParams.item.pos.s === 'number' && resultParams.item.pos.s !== null) ? resultParams.item.pos.s.toFixed(0) : null;
     const parama = {
         method: "POST",
         headers: {
@@ -36,9 +36,9 @@ async function waitArrProtek(el) {
     const val = await vals.json()
     console.log(val)
 
-    const statusTSI = val.result[0].status !== '-' ? val.result[0].status : null
-    const statusIng = val.result[0].statusIng
-    const nameCar = val.result[0].nameCar
+    const statusTSI = val.result.length !== 0 && val.result[0].status !== '-' ? val.result[0].status : 'undefined'
+    const statusIng = val.result.length !== 0 ? val.result[0].statusIng : 'undefined'
+    const nameCar = val.result.length !== 0 ? val.result[0].nameCar : 'undefined'
     const dashObject = {
         id: idw,
         nameCar: nameCar,
@@ -49,8 +49,9 @@ async function waitArrProtek(el) {
 
 
 function dashDav(arr) {
+    //   console.log(arrg)
+    // const arr = arrg.filter(item => item.nameCar !== null && item.params[0] !== null && item.params[1] !== null && item.params[2] !== null)
     console.log(arr)
-
     const length = arr.length
     const color = {
         1: [],
@@ -74,13 +75,13 @@ function dashDav(arr) {
         if (Number(el[0]) === 0 && el[2] === 'ВКЛ') {
             generatedValue = 2;
         }
-        if (el[0] === undefined) {
+        if (el[0] === 'undefined') {
             generatedValue = 4;
         }
-        if (el[1] === undefined) {
+        if (el[1] === 'undefined') {
             generatedValue = 4;
         }
-        if (el[2] === undefined) {
+        if (el[2] === 'undefined') {
             generatedValue = 4;
         }
         return generatedValue;

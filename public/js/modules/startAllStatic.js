@@ -87,8 +87,9 @@ async function loadValue(array, timeOld, timeNow) {
             nameSens.forEach((item) => {
                 allArrNew.push({ sens: item[0], params: item[1], value: [] })
             })
-
-
+            console.log(idw)
+            console.log(sensArr)
+            console.log(nameSens)
             sensArr.forEach(el => {
                 if (el.length === 0) {
                     return; // Пропускаем текущую итерацию, если sensArr пустой
@@ -326,6 +327,7 @@ function moto(data) {
 }
 
 function rashodCalc(data, name, group) {
+    console.log(data)
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
