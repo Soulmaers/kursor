@@ -545,13 +545,7 @@ export async function oil(t1, t2) {
 
                     svg.selectAll("image")
                         .data(objOil)
-                        .attr('class', 'iconOil')
                         .attr("x", d => x(new Date(d.data)))
-                        .attr("xlink:href", "../../../image/ref.png") // путь к иконке
-                        .attr("width", 24) // ширина вашей иконки
-                        .attr("height", 24) // высота вашей иконки
-                        .style("opacity", 0.5)
-                        .attr("transform", "translate(-12,0)")
                         .on("click", function (d) {
                             // Ваша функция обработчика события
                             const mapss = document.getElementById('mapOil')
@@ -634,13 +628,7 @@ export async function oil(t1, t2) {
 
                         svg.selectAll("image")
                             .data(objOil)
-                            .attr('class', 'iconOil')
                             .attr("x", d => x(new Date(d.data)))
-                            .attr("xlink:href", "../../../image/ref.png") // путь к иконке
-                            .attr("width", 24) // ширина вашей иконки
-                            .attr("height", 24) // высота вашей иконки
-                            .style("opacity", 0.5)
-                            .attr("transform", "translate(-12,0)")
                             .on("click", function (d) {
                                 // Ваша функция обработчика события
                                 const mapss = document.getElementById('mapOil')
@@ -721,13 +709,7 @@ export async function oil(t1, t2) {
 
                         svg.selectAll("image")
                             .data(objOil)
-                            .attr('class', 'iconOil')
                             .attr("x", d => x(new Date(d.data)))
-                            .attr("xlink:href", "../../../image/ref.png") // путь к иконке
-                            .attr("width", 24) // ширина вашей иконки
-                            .attr("height", 24) // высота вашей иконки
-                            .style("opacity", 0.5)
-                            .attr("transform", "translate(-12,0)")
                             .on("click", function (d) {
                                 // Ваша функция обработчика события
                                 const mapss = document.getElementById('mapOil')
@@ -805,13 +787,7 @@ export async function oil(t1, t2) {
 
                 svg.selectAll("image")
                     .data(objOil)
-                    .attr('class', 'iconOil')
                     .attr("x", d => x(new Date(d.data)))
-                    .attr("xlink:href", "../../../image/ref.png") // путь к иконке
-                    .attr("width", 24) // ширина вашей иконки
-                    .attr("height", 24) // высота вашей иконки
-                    .style("opacity", 0.5)
-                    .attr("transform", "translate(-12,0)")
                     .on("click", function (d) {
                         // Ваша функция обработчика события
                         const mapss = document.getElementById('mapOil')
