@@ -3,6 +3,7 @@ import { conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
 import { startAllStatic, yesterdaySummary } from './startAllStatic.js'
 import { startList } from './checkObjectStart.js'
+import { popupProstoy } from './popup.js'
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
 /*
@@ -51,6 +52,7 @@ export async function zapros(login) {
 
     conturTest(arrayList)
     startList(arrayList)
+    popupProstoy(arrayList)
     //передаем имена объектов для отображения в панели администратора
     checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')
