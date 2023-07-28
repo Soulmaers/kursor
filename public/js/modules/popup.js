@@ -93,7 +93,7 @@ export async function popupProstoy(array) {
                         const lastTime = res[2]
                         const nowTime = new Date()
                         const diffInSeconds = (nowTime.getTime() - lastTime.getTime()) / 1000;
-                        diffInSeconds > 60 ? createPopup([{
+                        diffInSeconds < 60 ? createPopup([{
                             event: `Простой`, group: `Компания: ${group}`,
                             name: `Объект: ${name}`,
                             time: `Время: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`, res: `Местоположение: ${map}`
