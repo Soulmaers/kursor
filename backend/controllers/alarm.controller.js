@@ -32,12 +32,10 @@ module.exports.logs = async (req, res) => {
     const time = new Date();
     const date = (time.getTime() / 1000).toFixed(0)
     const itog = await databaseService.logsSaveToBase(newdata, date, idw)
-    console.log(itog)
     res.json({ itog })
 }
 module.exports.logsView = async (req, res) => {
     const idw = req.body.arrayId
     const itog = await databaseService.logsFindToBase(idw)
-    console.log(itog)
     res.json(itog)
 }

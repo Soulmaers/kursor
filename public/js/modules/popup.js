@@ -386,7 +386,7 @@ export async function logsView(array) {
     });
 
     document.addEventListener('click', function (event) {
-        if (event.target !== wrapperLogs && event.target !== log) {
+        if (event.target !== wrapperLogs && !wrapperLogs.contains(event.target) && event.target !== log) {
             wrapperLogs.style.display = 'none'; // Скрываем попап при клике на любую область, кроме элемента "log"
             wrapperLogs.classList.remove('clickLog')
         }
