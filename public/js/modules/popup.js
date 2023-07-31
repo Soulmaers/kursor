@@ -365,16 +365,19 @@ export async function logsView(array) {
         const info = int.join(", ");
         return { time: time, typeEvent: typeEvent, content: info }
     })
-    await createLogsTable(mass)
+    const clickLog = document.querySelector('.clickLog')
+    if (!clickLog) {
+        await createLogsTable(mass);
+    }
     const log = document.querySelector('.logs')
     const wrapperLogs = document.querySelector('.wrapperLogs')
-
     function togglePopup() {
         if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
-            wrapperLogs.style.display = 'block'; // Показываем попап
+            wrapperLogs.style.display = 'block'// Показываем попап
+            wrapperLogs.classList.add('clickLog')
         } else {
             wrapperLogs.style.display = 'none'; // Скрываем попап
-            logsView(array)
+            wrapperLogs.classList.remove('clickLog')
         }
     }
     // Добавляем обработчики кликов
@@ -385,13 +388,15 @@ export async function logsView(array) {
     document.addEventListener('click', function (event) {
         if (event.target !== wrapperLogs && event.target !== log) {
             wrapperLogs.style.display = 'none'; // Скрываем попап при клике на любую область, кроме элемента "log"
-            logsView(array)
+            wrapperLogs.classList.remove('clickLog')
         }
     });
 
+    setInterval(logsView, 60000, array)
 }
 
 async function createLogsTable(mass) {
+    console.log('up')
     const wrap = document.querySelector('.wrapperLogs')
     if (wrap) {
         wrap.remove();
@@ -413,6 +418,8 @@ async function createLogsTable(mass) {
             trEvent.appendChild(td)
         }
     })
+
+
 }
 
 
