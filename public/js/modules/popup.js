@@ -152,7 +152,7 @@ function prostoy(data, tsi) {
         timeProstoy.forEach(it => {
             if (it[0] !== undefined) {
                 const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
-                if (diffInSeconds > 600) {
+                if (diffInSeconds > 1800) {
                     unixProstoy.push([diffInSeconds, it[0], it[1], it[2]])
                 }
             }
@@ -269,7 +269,7 @@ async function createMesto(geo) {
 async function createPopup(array) {
     const newdata = JSON.stringify(array)
     //  const newdata = JSON.stringify(array.map(obj => Object.values(obj).join(", ")).join(", "));
-    console.log(newdata);
+    //   console.log(newdata);
 
     const params = {
         method: "POST",
@@ -279,7 +279,8 @@ async function createPopup(array) {
         body: (JSON.stringify({ newdata }))
     }
     const res = await fetch('/api/logs', params)
-    console.log(res)
+    const mess = await res.json()
+    console.log(mess.itog.message)
     const arr = Object.values(array[0]);
     const body = document.getElementsByTagName('body')[0]
     const popap = document.querySelector('.popup')

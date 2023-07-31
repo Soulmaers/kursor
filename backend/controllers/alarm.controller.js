@@ -32,5 +32,5 @@ module.exports.logs = async (req, res) => {
     const date = (time.getTime() / 1000).toFixed(0)
     const itog = await databaseService.logsSaveToBase(newdata, date)
     console.log(itog)
-    res.json(itog)
+    res.json({ itog })
 }
