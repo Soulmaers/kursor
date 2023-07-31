@@ -13,15 +13,12 @@ export async function popupProstoy(array) {
     const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
-
     for (const e of arrays) {
-
         const time = [];
         const speed = [];
         const sats = [];
         const geo = [];
         const idw = e[4];
-        console.log(idw)
         const param = {
             method: "POST",
             headers: {
@@ -141,12 +138,10 @@ function prostoy(data, tsi) {
             }
             return { speed: newS, time: timet, geo: geo };
         });
-        console.log(filteredData)
         const timeProstoy = filteredData.map(el => {
             return [el.time[0], el.time[el.time.length - 1], el.geo[0]]
         })
         const unixProstoy = [];
-        console.log(timeProstoy)
         timeProstoy.forEach(it => {
             if (it[0] !== undefined) {
                 const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
@@ -159,7 +154,6 @@ function prostoy(data, tsi) {
         return timeBukl
     }
 }
-
 export async function modalView(zapravka, name, group, idw) {
     console.log(zapravka[0], name, group)
     const litrazh = zapravka[0][1][0] - zapravka[0][0][0]
@@ -174,7 +168,6 @@ export async function modalView(zapravka, name, group, idw) {
     const hours = time.getHours().toString().padStart(2, '0');
     const minutes = time.getMinutes().toString().padStart(2, '0');
     const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-
     const lat = geo[0];
     const lon = geo[1];
     const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=ru`;
@@ -205,20 +198,17 @@ function poll() {
         }
         const res = await fetch('/api/alert', par)
         const alert = await res.json();
-        console.log(alert)
         if (alert !== null) {
             const mesto = await createMesto(alert[1][7])
-            console.log(alert[1][5])
             const allobj = await ggg(alert[1][5])
             const tyres = allobj[alert[1][1]]
-            console.log(tyres)
             let val;
             alert[1][2] !== 'Потеря связи с датчиком' ? val = alert[1][2] + ' ' + 'Бар' : val = alert[1][3] + '' + 't'
             const event = 'Уведомление'
             createPopup([{
                 event: event, time: `Время ${alert[0]}`, name: `Объект: ${alert[1][0]}`, tyres: `Колесо: ${tyres}`,
                 param: `Параметр: ${val}`, alarm: `Событие: ${alert[2]}`, res: `Местоположение: ${mesto}`
-            }], alert[1][6])
+            }], alert[1][5])
         }
         poll()
     }, 5000)
@@ -247,9 +237,6 @@ async function createMesto(geo) {
 
 async function createPopup(array, idw) {
     const newdata = JSON.stringify(array)
-    //  const newdata = JSON.stringify(array.map(obj => Object.values(obj).join(", ")).join(", "));
-    //   console.log(newdata);
-
     const params = {
         method: "POST",
         headers: {
@@ -259,11 +246,9 @@ async function createPopup(array, idw) {
     }
     const res = await fetch('/api/logs', params)
     const mess = await res.json()
-    console.log(mess.itog.message)
     const arr = Object.values(array[0]);
     const body = document.getElementsByTagName('body')[0]
     const popap = document.querySelector('.popup')
-    console.log(body)
     if (popap) {
         const pop = document.createElement('div')
         pop.classList.add('popup')
@@ -340,7 +325,6 @@ async function createPopup(array, idw) {
 
 
 export async function logsView(array) {
-    console.log('апдейт')
     const arrayId = array
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
@@ -354,13 +338,10 @@ export async function logsView(array) {
     }
     const ress = await fetch('/api/logsView', param)
     const results = await ress.json()
-    console.log(results)
     const mass = results.map(el => {
-        console.log(JSON.parse(el.content)[0].event)
         const typeEvent = JSON.parse(el.content)[0].event
         const int = Object.values(JSON.parse(el.content)[0])
         int.shift()
-        console.log(int)
         const time = times(new Date(Number(el.time) * 1000))
         const info = int.join(", ");
         return { time: time, typeEvent: typeEvent, content: info }
@@ -391,7 +372,6 @@ export async function logsView(array) {
             wrapperLogs.classList.remove('clickLog')
         }
     });
-
     setInterval(logsView, 60000, array)
 }
 
