@@ -193,6 +193,8 @@ export async function modalView(zapravka, name, group) {
     adres.push(address.state);
     adres.push(address.country);
     const res = adres.filter(val => val !== undefined).join(', ');
+    const data = [{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }]
+    console.log(data)
     diffInSeconds < 60 ? createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }]) : console.log('ждем условия')
 }
 
@@ -263,8 +265,20 @@ async function createMesto(geo) {
 }
 
 
-function createPopup(array) {
-    console.log(array)
+async function createPopup(array) {
+    const newdata = JSON.stringify(array)
+    //  const newdata = JSON.stringify(array.map(obj => Object.values(obj).join(", ")).join(", "));
+    console.log(newdata);
+
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ newdata }))
+    }
+    const res = await fetch('/api/logs', params)
+    console.log(res)
     const arr = Object.values(array[0]);
     const body = document.getElementsByTagName('body')[0]
     const popap = document.querySelector('.popup')

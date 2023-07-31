@@ -24,3 +24,13 @@ module.exports.alert = async (req, res) => {
         res.json(null)
     }
 }
+
+
+module.exports.logs = async (req, res) => {
+    const newdata = req.body.newdata
+    const time = new Date();
+    const date = (time.getTime() / 1000).toFixed(0)
+    const itog = await databaseService.logsSaveToBase(newdata, date)
+    console.log(itog)
+    res.json(itog)
+}

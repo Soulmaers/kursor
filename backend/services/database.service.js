@@ -522,7 +522,31 @@ exports.deleteBarToBase = (idw) => {
 }
 
 
-
+exports.logsSaveToBase = async (arr, time) => {
+    const data = [time, arr]
+    console.log(data)
+    return new Promise((resolve, reject) => {
+        const checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'`
+        connection.query(checkExistQuery, function (err, results) {
+            if (err) {
+                console.log(err)
+                reject(err)
+            } else if (results.length > 0) {
+                resolve({ message: 'Событие уже существует в базе логов' })
+            } else {
+                const postModel = `INSERT INTO logs(time, content) VALUES(${time}, '${arr}')`
+                connection.query(postModel, function (err, results) {
+                    if (err) {
+                        console.log(err)
+                        reject(err)
+                    } else {
+                        resolve({ message: 'Событие сохранено в базу логов' })
+                    }
+                })
+            }
+        })
+    })
+}
 
 exports.tarirSaveToBase = async (arr) => {
     return new Promise((resolve, reject) => {
@@ -747,6 +771,8 @@ exports.techViewToBase = (nameCar, count, idw) => {
         }
     })
 }
+
+
 
 module.exports.techViewAllToBase = (idw) => {
     return new Promise((resolve, reject) => {

@@ -35,8 +35,7 @@ export function startList(object) {
             }
         })
     }
-    console.log(arrayGlobal)
-    arrayGlobal.forEach(el => {
+      arrayGlobal.forEach(el => {
         count++
 
         const title = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').children[0].lastElementChild.children[0]
@@ -84,8 +83,7 @@ export function startList(object) {
             const sele = Array.from(block.closest('.left_block').lastElementChild.children[0].children[2].children[0])
             const element = [block.closest('.left_block').lastElementChild.children[0].children[2].children[0], block.closest('.left_block').lastElementChild.children[0].children[3].children[0]]
             const pointDate = times[times.length - 1]
-            console.log(enabledSettings, sele, pointDate)
-            enabledSettings.length !== 0 ? viewStat(enabledSettings, element) : (yesterdaySummary(),
+                    enabledSettings.length !== 0 ? viewStat(enabledSettings, element) : (yesterdaySummary(),
                 yesterdaySummary('Вчера'), yesterdaySummary('Неделя'), checkboxAll[0].checked = true);
         }
         // Обработка изменений для общего чекбокса "All" в текущем блоке
@@ -115,18 +113,15 @@ export function startList(object) {
 }
 // Функция, которую вы хотите запускать при изменении состояния чекбоксов
 export async function viewStat(checkedValues, sele) {
-    console.log(checkedValues, sele)
-    const dat = [];
+       const dat = [];
     let int = [];
     // Здесь вы можете использовать выбранные значения
     let interval;
-
-    console.log(sele.length)
+  
     if (sele.length !== 2) {
         Array.from(sele.children).forEach(e => {
             if (e.selected === true) {
-                console.log(e.textContent)
-                interval = e.textContent
+                              interval = e.textContent
             }
         });
         if (interval === 'Неделя') {
@@ -141,15 +136,13 @@ export async function viewStat(checkedValues, sele) {
         else {
             int.push(convertDateRange(interval))
         }
-        console.log(int)
-        typeof int[0] === 'number' ? dat.push([convertDate(0)], [convertDate(int), convertDate(1)]) : dat.push([convertDate(0)], [int[0][0], int[0][1]])
+              typeof int[0] === 'number' ? dat.push([convertDate(0)], [convertDate(int), convertDate(1)]) : dat.push([convertDate(0)], [int[0][0], int[0][1]])
     }
     else {
         sele.forEach(e => {
             Array.from(e).forEach(it => {
                 if (it.selected === true) {
-                    console.log(it.textContent)
-                    interval = it.textContent
+                                     interval = it.textContent
                 }
             })
             if (interval === 'Неделя') {
@@ -210,8 +203,7 @@ export async function viewStat(checkedValues, sele) {
                     delete it.data
                     delete it.company
                     const arr = propOrder.map(prop => it[prop]);
-                    console.log(count)
-                    arr.forEach((e, index) => {
+                                       arr.forEach((e, index) => {
                         if (count === 0) {
                             parentWrapper[index].children[1].textContent = (e !== undefined && e !== null) ? e : '-';
                             return
