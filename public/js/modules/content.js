@@ -46,6 +46,13 @@ export const textTest = `<div class=" osiTest">
     </div>`
 
 
+export const titleLogs = `<h3 class="trLogs">
+                        <p class="tdLogs">Дата</p>
+                    <p class="tdLogs">Событие</p>
+                    <p class="tdLogs">Содержание</p>
+                     </h3>`
+
+
 export const zamer = `  <div class="zamer">
                         <h3 class="titleZamer" id="zamer">Замер</h3>
                         <div class="wrapTarir"><input class="dut" placeholder="ДУТ"><input class="litr" placeholder="литры"></div>

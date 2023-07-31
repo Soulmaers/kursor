@@ -32,7 +32,7 @@ router.post('/api/geoloc', controllerGeo.geoloc)
 router.post('/api/alarmFind', controllerAlarm.alarmFind)
 router.get('/api/alert', controllerAlarm.alert)
 router.post('/api/logs', controllerAlarm.logs)
-
+router.post('/api/logsView', controllerAlarm.logsView)
 
 
 

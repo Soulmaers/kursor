@@ -522,8 +522,8 @@ exports.deleteBarToBase = (idw) => {
 }
 
 
-exports.logsSaveToBase = async (arr, time) => {
-    const data = [time, arr]
+exports.logsSaveToBase = async (arr, time, idw) => {
+    const data = [time, arr, idw]
     console.log(data)
     return new Promise((resolve, reject) => {
         const checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'`
@@ -534,7 +534,7 @@ exports.logsSaveToBase = async (arr, time) => {
             } else if (results.length > 0) {
                 resolve({ message: 'Событие уже существует в базе логов' })
             } else {
-                const postModel = `INSERT INTO logs(time, content) VALUES(${time}, '${arr}')`
+                const postModel = `INSERT INTO logs(idw, time, content) VALUES(${idw},${time}, '${arr}')`
                 connection.query(postModel, function (err, results) {
                     if (err) {
                         console.log(err)
@@ -547,6 +547,21 @@ exports.logsSaveToBase = async (arr, time) => {
         })
     })
 }
+
+
+
+exports.logsFindToBase = async (id) => {
+    return new Promise((resolve, reject) => {
+        const postModel = `SELECT * FROM logs WHERE idw IN (${id.join(',')})`;
+        connection.query(postModel, function (err, results) {
+            if (err)
+                reject(err); // передаём ошибку в reject
+            resolve(results);
+        })
+    })
+}
+
+
 
 exports.tarirSaveToBase = async (arr) => {
     return new Promise((resolve, reject) => {

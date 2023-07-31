@@ -3,6 +3,7 @@ import { ggg } from './menu.js'
 import { timefn, timesFormat } from './startAllStatic.js'
 import { testovfn } from './charts/bar.js'
 import { fnParMessage } from './grafiks.js'
+import { titleLogs } from './content.js'
 
 export async function popupProstoy(array) {
     const result = array
@@ -96,8 +97,8 @@ export async function popupProstoy(array) {
                         diffInSeconds < 60 ? createPopup([{
                             event: `Простой`, group: `Компания: ${group}`,
                             name: `Объект: ${name}`,
-                            time: `Время: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`, res: `Местоположение: ${map}`
-                        }]) : console.log('ждем условия')
+                            time: `Дата начала простоя: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`, res: `Местоположение: ${map}`
+                        }], idw) : console.log('ждем условия')
                     }
                 }
             })
@@ -108,9 +109,6 @@ export async function popupProstoy(array) {
         }
     }
 }
-
-
-
 function prostoy(data, tsi) {
     if (data.value.length === 0) {
         return undefined
@@ -152,7 +150,7 @@ function prostoy(data, tsi) {
         timeProstoy.forEach(it => {
             if (it[0] !== undefined) {
                 const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
-                if (diffInSeconds > 1800) {
+                if (diffInSeconds > 1200) {
                     unixProstoy.push([diffInSeconds, it[0], it[1], it[2]])
                 }
             }
@@ -162,8 +160,7 @@ function prostoy(data, tsi) {
     }
 }
 
-export async function modalView(zapravka, name, group) {
-    console.log(zapravka)
+export async function modalView(zapravka, name, group, idw) {
     console.log(zapravka[0], name, group)
     const litrazh = zapravka[0][1][0] - zapravka[0][0][0]
     const geo = zapravka[0][0][2]
@@ -195,26 +192,8 @@ export async function modalView(zapravka, name, group) {
     const res = adres.filter(val => val !== undefined).join(', ');
     const data = [{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }]
     console.log(data)
-    diffInSeconds < 60 ? createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }]) : console.log('ждем условия')
+    diffInSeconds < 60 ? createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }], idw) : console.log('ждем условия')
 }
-
-/*
-// Создаем WebSocket-соединение
-const socket = new WebSocket('ws://localhost:3333');
-// Обработчик открытия соединения
-socket.onopen = () => {
-    console.log('Соединение установлено');
-};
-// Обработчик получения сообщения от сервера
-socket.onmessage = (event) => {
-    const message = JSON.parse(event.data);
-    console.log(message)
-    createPopup(message)
-};
-// Обработчик закрытия соединения
-socket.onclose = () => {
-    console.log('Соединение закрыто');
-};*/
 
 function poll() {
     setTimeout(async function () {
@@ -239,7 +218,7 @@ function poll() {
             createPopup([{
                 event: event, time: `Время ${alert[0]}`, name: `Объект: ${alert[1][0]}`, tyres: `Колесо: ${tyres}`,
                 param: `Параметр: ${val}`, alarm: `Событие: ${alert[2]}`, res: `Местоположение: ${mesto}`
-            }])
+            }], alert[1][6])
         }
         poll()
     }, 5000)
@@ -266,7 +245,7 @@ async function createMesto(geo) {
 }
 
 
-async function createPopup(array) {
+async function createPopup(array, idw) {
     const newdata = JSON.stringify(array)
     //  const newdata = JSON.stringify(array.map(obj => Object.values(obj).join(", ")).join(", "));
     //   console.log(newdata);
@@ -276,7 +255,7 @@ async function createPopup(array) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ newdata }))
+        body: (JSON.stringify({ newdata, idw }))
     }
     const res = await fetch('/api/logs', params)
     const mess = await res.json()
@@ -319,7 +298,7 @@ async function createPopup(array) {
         setTimeout(function () {
             popup.remove();
             //   popup.style.display = "none";
-        }, 20000);
+        }, 10000);
 
     }
     else {
@@ -354,7 +333,95 @@ async function createPopup(array) {
         setTimeout(function () {
             popup.remove();
             //   popup.style.display = "none";
-        }, 20000);
+        }, 10000);
     }
 
+}
+
+
+export async function logsView(array) {
+    console.log('апдейт')
+    const arrayId = array
+        .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
+        .flat()
+        .map(it => it[4])
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ arrayId }))
+    }
+    const ress = await fetch('/api/logsView', param)
+    const results = await ress.json()
+    console.log(results)
+    const mass = results.map(el => {
+        console.log(JSON.parse(el.content)[0].event)
+        const typeEvent = JSON.parse(el.content)[0].event
+        const int = Object.values(JSON.parse(el.content)[0])
+        int.shift()
+        console.log(int)
+        const time = times(new Date(Number(el.time) * 1000))
+        const info = int.join(", ");
+        return { time: time, typeEvent: typeEvent, content: info }
+    })
+    await createLogsTable(mass)
+    const log = document.querySelector('.logs')
+    const wrapperLogs = document.querySelector('.wrapperLogs')
+
+    function togglePopup() {
+        if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
+            wrapperLogs.style.display = 'block'; // Показываем попап
+        } else {
+            wrapperLogs.style.display = 'none'; // Скрываем попап
+            logsView(array)
+        }
+    }
+    // Добавляем обработчики кликов
+    log.addEventListener('click', function (event) {
+        togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
+    });
+
+    document.addEventListener('click', function (event) {
+        if (event.target !== wrapperLogs && event.target !== log) {
+            wrapperLogs.style.display = 'none'; // Скрываем попап при клике на любую область, кроме элемента "log"
+            logsView(array)
+        }
+    });
+
+}
+
+async function createLogsTable(mass) {
+    const wrap = document.querySelector('.wrapperLogs')
+    if (wrap) {
+        wrap.remove();
+    }
+    const body = document.getElementsByTagName('body')[0]
+    const log = document.createElement('div')
+    log.classList.add('wrapperLogs')
+    body.appendChild(log)
+    log.innerHTML = titleLogs
+
+    mass.forEach(el => {
+        const trEvent = document.createElement('div')
+        trEvent.classList.add('trEvent')
+        log.appendChild(trEvent)
+        for (var key in el) {
+            const td = document.createElement('p')
+            td.classList.add('tdEvent')
+            td.textContent = el[key]
+            trEvent.appendChild(td)
+        }
+    })
+}
+
+
+function times(time) {
+    const day = time.getDate();
+    const month = (time.getMonth() + 1).toString().padStart(2, '0');
+    const year = time.getFullYear();
+    const hours = time.getHours().toString().padStart(2, '0');
+    const minutes = time.getMinutes().toString().padStart(2, '0');
+    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+    return formattedDate
 }

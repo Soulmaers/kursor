@@ -134,7 +134,7 @@ async function loadValue(array, timeOld, timeNow) {
                         }
                     });
                     oil.push(it.value)
-                    const res = it.value !== undefined && it.value.every(item => item >= 0) && probeg > 5 ? rashodCalc(it, name, group) : [{ rashod: 0, zapravka: 0 }]
+                    const res = it.value !== undefined && it.value.every(item => item >= 0) && probeg > 5 ? rashodCalc(it, name, group, idw) : [{ rashod: 0, zapravka: 0 }]
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
                 }
                 if (it.sens.startsWith('Подъем')) {
@@ -328,7 +328,7 @@ function moto(data) {
     }
 }
 
-function rashodCalc(data, name, group) {
+function rashodCalc(data, name, group, idw) {
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
@@ -389,7 +389,7 @@ function rashodCalc(data, name, group) {
     const firstData = data.value[0];
     const lastData = data.value[data.value.length - 1];
     if (zapravka.length !== 0) {
-        modalView(zapravka, name, group);
+        modalView(zapravka, name, group, idw);
         rash.push(firstData - zapravka[0][0][0]);
         for (let i = 0; i < zapravka.length - 1; i++) {
             rash.push(zapravka[i][1][0] - zapravka[i + 1][0][0]);
