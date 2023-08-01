@@ -2,9 +2,10 @@
 const wialonService = require('../services/wialon.service.js')
 const databaseService = require('../services/database.service');
 const wialonModule = require('../modules/wialon.module');
+const statistika = require('../modules/statistika.module');
 const connection = require('../config/db')
 const { createDate, convert } = require('../helpers')
-
+const constorller = require('./data.controller.js')
 
 
 const sessions = {}; // объект для хранения всех сессий*module.exports = {
@@ -47,7 +48,13 @@ exports.getData = async (req, res) => {
 //готовим данные и отправляем ответ на клиент который отрисовывает список
 exports.dataSpisok = async (req, res) => {
     try {
-        const login = req.body.login
+        let login;
+        if (req && req.body && req.body.login) {
+            login = req.body.login
+        }
+        else {
+            login = 'i'
+        }
         const data = await wialonService.getAllGroupDataFromWialon(login);
         //  console.log(data)
         const aLLmassObject = [];
@@ -80,7 +87,11 @@ exports.dataSpisok = async (req, res) => {
             aLLmassObject.push(objectsWithGroup);
             aLLmassObject.reverse();
         }
-        await res.json({ response: { aLLmassObject, arrName } });
+
+        if (req && req.body && req.body.login) {
+            await res.json({ response: { aLLmassObject, arrName } });
+        }
+        return aLLmassObject
     }
     catch (e) {
         console.log(e)
@@ -135,12 +146,12 @@ const test = async () => {
     for (const el of allCar[5][1]) {
         let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
         let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
-        if (rr.messages.length === 0 || rez.length === 0) {
+        if (rr.messages.length === 0 || rez && rez.length === 0) {
             // console.log('нет новый данных')
         }
         else {
             //   console.log(rr, rez)
-            while (rr.messages.length !== rez.length) {
+            while (rez && rr.messages.length !== rez.length) {
                 rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
                 rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
             }
@@ -161,12 +172,10 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-//setTimeout(test, 1000)
-//setInterval(test, 60000)
+setTimeout(test, 1000)
+setInterval(test, 60000)
 async function updateParams(data) {
-    //запрашиваем данные параметры по обектам с виалона
-    //  const data = await wialonService.getDataFromWialon(login)
-    // const type = await wialonService.getAnimalsWialon(login)
+
     data ? data : data = dataGlobal
     const nameCar = [];
     const allCar = Object.entries(data)
@@ -175,7 +184,6 @@ async function updateParams(data) {
         const idw = el.id;
         const speed = el.lmsg && el.lmsg.pos && el.lmsg.pos.s ? el.lmsg.pos.s : null;// проверка на наличие свойства lmsg и свойства pos.s
         const geo = el && el.pos && el.pos.x ? [el.pos.y, el.pos.x] : null;
-
         nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed, geo]);
         const model = await databaseService.modelViewToBase(idw)
         let statusTSI;
@@ -205,6 +213,24 @@ async function updateParams(data) {
     });
     ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
     await zaprosSpisokb(nameCar)
+    const res = await constorller.dataSpisok()
+    const global = await statistika.startAllStatic(res)
+    const prostoy = await statistika.popupProstoy(res)
+
+    const arraySummary = Object.entries(global)
+    const now = new Date();
+    const date = new Date(now);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const datas = `${year}-${month}-${day}`;
+    arraySummary.forEach(async el => {
+        const idw = el[0]
+        const arrayInfo = el[1]
+        const res = await databaseService.summaryToBase(idw, arrayInfo, datas)
+        console.log(res)
+    })
+
 }
 
 async function engine(idw) {

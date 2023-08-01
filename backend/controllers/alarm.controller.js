@@ -39,3 +39,4 @@ module.exports.logsView = async (req, res) => {
     const itog = await databaseService.logsFindToBase(idw)
     res.json(itog)
 }
+

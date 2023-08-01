@@ -1,9 +1,9 @@
 
 import { conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
-import { startAllStatic, yesterdaySummary } from './startAllStatic.js'
+import { yesterdaySummary } from './startAllStatic.js'
 import { startList } from './checkObjectStart.js'
-import { popupProstoy, logsView } from './popup.js'
+import { logsView } from './popup.js'
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178-токен основной
 
 /*
@@ -52,7 +52,6 @@ export async function zapros(login) {
 
     conturTest(arrayList)
     startList(arrayList)
-    popupProstoy(arrayList)
     logsView(arrayList)
     //передаем имена объектов для отображения в панели администратора
     checkCreate(nameCarCheck)
@@ -71,10 +70,10 @@ export async function zapros(login) {
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const data = `${year}-${month}-${day}`;
-        const res = await startAllStatic(arrayList)
-        console.log(res)
+        //  const res = await startAllStatic(arrayList)
+        //  console.log(res)
 
-        // Обрабатываем данные
+        /*// Обрабатываем данные
         const arraySummary = Object.entries(res)
         arraySummary.forEach(async el => {
             const idw = el[0]
@@ -88,7 +87,7 @@ export async function zapros(login) {
             }
             const mods = await fetch('/api/summary', params)
             const models = await mods.json()
-        })
+        })*/
     };
     processDataAtMidnight()
     setInterval(processDataAtMidnight, 60000)

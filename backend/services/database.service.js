@@ -1,6 +1,6 @@
 
 const connection = require('../config/db')
-
+const databaseService = require('./database.service');
 /*
 let socked;
 module.exports = {
@@ -152,24 +152,30 @@ exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, s
 
 
 
-function controllerSaveToBase(arr, id) {
-    console.log(arr)
-    console.log(id)
+exports.controllerSaveToBase = async (arr, id) => {
+    const idw = id
+    const date = new Date()
+    const time = (date.getTime() / 1000).toFixed(0)
+    const newdata = JSON.stringify(arr)
+    const res = await databaseService.logsSaveToBase(newdata, time, idw)
+    return res
 }
 
 //сохраняем в базу алармы
 let count = 0;
 exports.alarmBase = async (data, tyres, alarm) => {
-    let val;
-    dannie[6] !== 'Потеря связи с датчиком' ? val = dannie[4] + ' ' + 'Бар' : val = dannie[5] + '' + 't'
-    controllerSaveToBase([{
-        event: 'Предупреждение', time: `Время ${dannie[1]}`, name: `Объект: ${dannie[2]}`, tyres: `Колесо: ${dannie[3]}`,
-        param: `Параметр: ${val}`, alarm: `Событие: ${dannie[6]}`, res: `Местоположение: ${dannie[7]}`
-    }], dannie[5])
-    count++
     exports.myVariable = [data, tyres, alarm, count]
     console.log('данные по алармам')
     const dannie = data.concat(tyres)
+    let val;
+    dannie[6] !== 'Потеря связи с датчиком' ? val = dannie[3] + ' ' + 'Бар' : val = dannie[4] + '' + 't'
+    const res = await databaseService.controllerSaveToBase([{
+        event: 'Предупреждение', name: `Компания: ${dannie[9]}`, name: `Объект: ${dannie[1]}`, time: `Время ${dannie[0]}`, tyres: `Колесо: ${dannie[2]}`,
+        param: `Параметр: ${val}`, alarm: `Событие: ${alarm}`, res: `${dannie[8]}`
+    }], dannie[6])
+    console.log('Предупреждение' + ' ' + res.message)
+    count++
+
     const id = dannie[6]
     dannie.splice(5, 3)
     dannie.pop()
@@ -532,7 +538,6 @@ exports.deleteBarToBase = (idw) => {
 
 exports.logsSaveToBase = async (arr, time, idw) => {
     const data = [time, arr, idw]
-    console.log(data)
     return new Promise((resolve, reject) => {
         const checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'`
         connection.query(checkExistQuery, function (err, results) {
@@ -856,6 +861,23 @@ module.exports.summaryToBase = (idw, arr, data) => {
         }
     })
 }
+
+
+module.exports.group = (idw) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const selectBase = `SELECT company FROM summary WHERE idw=${idw}`;
+            connection.query(selectBase, function (err, results) {
+                if (err) console.log(err)
+                resolve(results)
+            });
+        } catch (e) {
+            console.log(e)
+        }
+    })
+}
+
+
 
 
 module.exports.summaryYestodayToBase = (data, company) => {

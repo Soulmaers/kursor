@@ -5,330 +5,99 @@ import { testovfn } from './charts/bar.js'
 import { fnParMessage } from './grafiks.js'
 import { titleLogs } from './content.js'
 
-export async function popupProstoy(array) {
-    const result = array
-        .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
-        .flat()
-    const arrays = result.filter(e => e[6] && !e[6].startsWith('Цистерна')).map(e => e);
-    const interval = timefn()
-    const timeOld = interval[1]
-    const timeNow = interval[0]
-    for (const e of arrays) {
-        const time = [];
-        const speed = [];
-        const sats = [];
-        const geo = [];
-        const idw = e[4];
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ idw }))
-        }
-        try {
-            const tsi = await fetch('/api/modelView', param)
-            const tsiY = await tsi.json()
-            let tsiControll = tsiY.result.length !== 0 || tsiY.result.tsiControll && tsiY.result.tsiControll !== '' ? Number(tsiY.result[0].tsiControll) : null;
-            tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
-            if (tsiControll === null) {
-                continue
-            }
-            const itog = await testovfn(idw, timeOld, timeNow)
-            itog.forEach(el => {
-                const timestamp = Number(el.data);
-                const date = new Date(timestamp * 1000);
-                const isoString = date.toISOString();
-                time.push(new Date(isoString))
-                speed.push(el.speed)
-                sats.push(el.sats)
-                geo.push(JSON.parse(el.geo))
-            })
-            const sensArr = itog.map(e => {
-                return JSON.parse(e.sens)
-            })
-            const nameSens = await fnParMessage(idw)
-            const allArrNew = [];
-            if (sensArr[0] && nameSens.length === sensArr[0].length) {
-                nameSens.forEach((item) => {
-                    allArrNew.push({ sens: item[0], params: item[1], value: [] })
-                })
-            }
-            nameSens.pop()
-            nameSens.forEach((item) => {
-                allArrNew.push({ sens: item[0], params: item[1], value: [] })
-            })
-            sensArr.forEach(el => {
-                if (el.length === 0) {
-                    return // Пропускаем текущую итерацию, если sensArr пустой
-                }
-                for (let i = 0; i < allArrNew.length; i++) {
-                    allArrNew[i].value.push(Number(Object.values(el)[i].toFixed(0)))
-                }
-            });
-            allArrNew.forEach(el => {
-                el.time = time
-                el.speed = speed
-                el.sats = sats
-                el.geo = geo
-            })
-            console.log(allArrNew)
-            allArrNew.forEach(async it => {
-                if (it.sens.startsWith('Бортовое')) {
-                    const res = prostoy(it, tsiControll);
-                    if (res !== undefined) {
-                        const map = await createMesto(res[3])
-                        const timesProstoy = timesFormat(res[0])
-                        const group = e[5]
-                        const name = e[0].message
-                        const time = res[1]
-                        const day = time.getDate();
-                        const month = (time.getMonth() + 1).toString().padStart(2, '0');
-                        const year = time.getFullYear();
-                        const hours = time.getHours().toString().padStart(2, '0');
-                        const minutes = time.getMinutes().toString().padStart(2, '0');
-                        const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-                        const lastTime = res[2]
-                        const nowTime = new Date()
-                        const diffInSeconds = (nowTime.getTime() - lastTime.getTime()) / 1000;
-                        diffInSeconds < 60 ? createPopup([{
-                            event: `Простой`, group: `Компания: ${group}`,
-                            name: `Объект: ${name}`,
-                            time: `Дата начала простоя: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`, res: `Местоположение: ${map}`
-                        }], idw) : console.log('ждем условия')
-                    }
-                }
-            })
 
-        }
-        catch (e) {
-            console.log(e)
-        }
-    }
-}
-function prostoy(data, tsi) {
-    if (data.value.length === 0) {
-        return undefined
-    }
-    else {
-        const prostoy = [];
-        const korzina = [];
-        let startIndex = 0;
-        data.value.forEach((values, index) => {
-            if (values !== data.value[startIndex]) {
-                const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index), geo: data.geo.slice(startIndex, index) };
-                (data.value[startIndex] <= tsi ? korzina : prostoy).push(speedTime);
-                startIndex = index;
-            }
-        });
-        const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex), geo: data.geo.slice(startIndex) };
-        (data.value[startIndex] <= tsi ? korzina : prostoy).push(speedTime);
-        const filteredData = prostoy.map(obj => {
-            const newS = [];
-            const timet = [];
-            const geo = []
-            for (let i = 0; i < obj.speed.length; i++) {
-                if (obj.speed[i] < 5) {
-                    newS.push(obj.speed[i]);
-                    timet.push(obj.time[i])
-                    geo.push(obj.geo[i])
-                } else {
-                    break;
-                }
-            }
-            return { speed: newS, time: timet, geo: geo };
-        });
-        const timeProstoy = filteredData.map(el => {
-            return [el.time[0], el.time[el.time.length - 1], el.geo[0]]
-        })
-        const unixProstoy = [];
-        timeProstoy.forEach(it => {
-            if (it[0] !== undefined) {
-                const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
-                if (diffInSeconds > 1200) {
-                    unixProstoy.push([diffInSeconds, it[0], it[1], it[2]])
-                }
-            }
-        })
-        const timeBukl = unixProstoy[unixProstoy.length - 1]
-        return timeBukl
-    }
-}
-export async function modalView(zapravka, name, group, idw) {
-    console.log(zapravka[0], name, group)
-    const litrazh = zapravka[0][1][0] - zapravka[0][0][0]
-    const geo = zapravka[0][0][2]
-    const time = zapravka[0][0][1]
-    const lastTime = zapravka[0][1][1]
-    const nowTime = new Date()
-    const diffInSeconds = (nowTime.getTime() - lastTime.getTime()) / 1000;
-    const day = time.getDate();
-    const month = (time.getMonth() + 1).toString().padStart(2, '0');
-    const year = time.getFullYear();
-    const hours = time.getHours().toString().padStart(2, '0');
-    const minutes = time.getMinutes().toString().padStart(2, '0');
-    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-    const lat = geo[0];
-    const lon = geo[1];
-    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=ru`;
-    const mestnost = await fetch(url)
-    const location = await mestnost.json()
-    const address = location.address;
-    const adres = [];
-    adres.push(address.amenity);
-    adres.push(address.road);
-    adres.push(address.municipality);
-    adres.push(address.county);
-    adres.push(address.city);
-    adres.push(address.state);
-    adres.push(address.country);
-    const res = adres.filter(val => val !== undefined).join(', ');
-    const data = [{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }]
-    console.log(data)
-    diffInSeconds < 60 ? createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${res}` }], idw) : console.log('ждем условия')
-}
-
-function poll() {
-    setTimeout(async function () {
-        const par = {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }
-        const res = await fetch('/api/alert', par)
-        const alert = await res.json();
-        if (alert !== null) {
-            const mesto = await createMesto(alert[1][7])
-            const allobj = await ggg(alert[1][5])
-            const tyres = allobj[alert[1][1]]
-            let val;
-            alert[1][2] !== 'Потеря связи с датчиком' ? val = alert[1][2] + ' ' + 'Бар' : val = alert[1][3] + '' + 't'
-            const event = 'Уведомление'
-            createPopup([{
-                event: event, time: `Время ${alert[0]}`, name: `Объект: ${alert[1][0]}`, tyres: `Колесо: ${tyres}`,
-                param: `Параметр: ${val}`, alarm: `Событие: ${alert[2]}`, res: `Местоположение: ${mesto}`
-            }], alert[1][5])
-        }
-        poll()
-    }, 5000)
-}
-poll()
 
 async function createMesto(geo) {
+    console.log(geo)
     const lat = geo[0];
     const lon = geo[1];
-    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=ru`;
-    const mestnost = await fetch(url)
-    const location = await mestnost.json()
-    const address = location.address;
-    const adres = [];
-    adres.push(address.amenity);
-    adres.push(address.road);
-    adres.push(address.municipality);
-    adres.push(address.county);
-    adres.push(address.city);
-    adres.push(address.state);
-    adres.push(address.country);
-    const res = adres.filter(val => val !== undefined).join(', ');
-    return res
+    try {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=ru`;
+        const mestnost = await fetch(url)
+        const location = await mestnost.json()
+        console.log(location)
+        const address = location.address;
+        const adres = [];
+        adres.push(address.amenity);
+        adres.push(address.road);
+        adres.push(address.municipality);
+        adres.push(address.county);
+        adres.push(address.city);
+        adres.push(address.state);
+        adres.push(address.country);
+        const res = adres.filter(val => val !== undefined).join(', ');
+        if (res) {
+            return res
+        }
+        else {
+            return null
+        }
+    }
+
+    catch (e) {
+        return null
+    }
 }
 
-
-async function createPopup(array, idw) {
-    const newdata = JSON.stringify(array)
-    const params = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ newdata, idw }))
-    }
-    const res = await fetch('/api/logs', params)
-    const mess = await res.json()
+let position = 20
+async function createPopup(array) {
+    console.log(position)
     const arr = Object.values(array[0]);
+    console.log(arr)
     const body = document.getElementsByTagName('body')[0]
     const popap = document.querySelector('.popup')
-    if (popap) {
-        const pop = document.createElement('div')
-        pop.classList.add('popup')
-        pop.style.top = 50 + '%'
-        body.prepend(pop)
-        const popupHead = document.createElement('div')
-        popupHead.classList.add('popup-header')
-        popupHead.textContent = arr[0]
-        arr.shift()
-        pop.appendChild(popupHead)
-        const popupContent = document.createElement('div')
-        popupContent.classList.add('popup-content')
-        pop.appendChild(popupContent)
-        for (let i = 0; i < arr.length; i++) {
-            const item = document.createElement('div');
-            item.classList.add('body_content');
-            item.textContent = arr[i];
-            popupContent.appendChild(item); // Добавляем каждый элемент в родительский элемент
-        }
-        const popupClose = document.createElement('div')
-        popupClose.classList.add('popup-close')
-        popupClose.textContent = 'X'
-        pop.appendChild(popupClose)
-        const popup = document.querySelector('.popup');
-        popup.style.display = "block";
-        popup.classList.add('open');
-        //  body.style.background = 'lightGray'
-        const closeButton = document.querySelector('.popup-close');
-        closeButton.addEventListener('click', function () {
-            popup.remove();
-        });
-        setTimeout(function () {
-            popup.remove();
-            //   popup.style.display = "none";
-        }, 10000);
-
+    // if (popap) {
+    const pop = document.createElement('div')
+    pop.classList.add('popup')
+    pop.style.top = position + '%'
+    body.prepend(pop)
+    const popupHead = document.createElement('div')
+    popupHead.classList.add('popup-header')
+    popupHead.textContent = arr[0]
+    arr.shift()
+    pop.appendChild(popupHead)
+    const popupContent = document.createElement('div')
+    popupContent.classList.add('popup-content')
+    pop.appendChild(popupContent)
+    for (let i = 0; i < arr.length; i++) {
+        const item = document.createElement('div');
+        item.classList.add('body_content');
+        item.textContent = arr[i];
+        popupContent.appendChild(item); // Добавляем каждый элемент в родительский элемент
     }
-    else {
-        const pop = document.createElement('div')
-        pop.classList.add('popup')
-        body.prepend(pop)
-        const popupHead = document.createElement('div')
-        popupHead.classList.add('popup-header')
-        popupHead.textContent = arr[0]
-        arr.shift()
-        pop.appendChild(popupHead)
-        const popupContent = document.createElement('div')
-        popupContent.classList.add('popup-content')
-        pop.appendChild(popupContent)
-        for (let i = 0; i < arr.length; i++) {
-            const item = document.createElement('div');
-            item.classList.add('body_content');
-            item.textContent = arr[i];
-            popupContent.appendChild(item); // Добавляем каждый элемент в родительский элемент
-        }
-        const popupClose = document.createElement('div')
-        popupClose.classList.add('popup-close')
-        popupClose.textContent = 'X'
-        pop.appendChild(popupClose)
-        const popup = document.querySelector('.popup');
-        popup.style.display = "block";
-        popup.classList.add('open');
-        const closeButton = document.querySelector('.popup-close');
-        closeButton.addEventListener('click', function () {
-            popup.remove();
-        });
-        setTimeout(function () {
-            popup.remove();
-            //   popup.style.display = "none";
-        }, 10000);
-    }
+    const popupClose = document.createElement('div')
+    popupClose.classList.add('popup-close')
+    popupClose.textContent = 'X'
+    pop.appendChild(popupClose)
+    const popup = document.querySelector('.popup');
+    popup.style.display = "block";
+    popup.classList.add('open');
+    //  body.style.background = 'lightGray'
+    position += 30
+    const closeButton = document.querySelector('.popup-close');
+    closeButton.addEventListener('click', function () {
+        popup.remove();
+    });
+    setTimeout(function () {
+        popup.remove();
+        position = 0
+        //   popup.style.display = "none";
+    }, 10000);
 
 }
 
 let previus = 0;
+let num = 0;
 export async function logsView(array) {
     const arrayId = array
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
         .map(it => it[4])
+
+    const arrayIdGroup = array
+        .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
+        .flat()
+        .map(it => [it[4], it[5]])
     const param = {
         method: "POST",
         headers: {
@@ -338,50 +107,93 @@ export async function logsView(array) {
     }
     const ress = await fetch('/api/logsView', param)
     const results = await ress.json()
+    previus = results.length
+    num++
     console.log(results.length)
-    const eve = results.length - previus
-    console.log(eve)
-    const mass = results.map(el => {
-        const typeEvent = JSON.parse(el.content)[0].event
-        const int = Object.values(JSON.parse(el.content)[0])
-        int.shift()
-        const time = times(new Date(Number(el.time) * 1000))
-        const info = int.join(", ");
-        return { time: time, typeEvent: typeEvent, content: info }
+    if (previus !== results.length && num !== 0) {
+        const num = results.length - previus
+        const arrayPopup = results.slice(-num)
+        previus = results.length
+        arrayPopup.forEach(el => {
+            const content = JSON.parse(el.content)
+            const event = content[0].event
+            const id = Number(el.idw)
+            const group = arrayIdGroup
+                .filter(it => it[0] === id)
+                .map(it => it[1]);
+            const time = new Date(Number(el.time) * 1000)
+            const day = time.getDate();
+            const month = (time.getMonth() + 1).toString().padStart(2, '0');
+            const year = time.getFullYear();
+            const hours = time.getHours().toString().padStart(2, '0');
+            const minutes = time.getMinutes().toString().padStart(2, '0');
+            const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+            let mess;
+            if (event === 'Заправка') {
+                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, litrazh: `${content[0].litrazh}`, time: `Время заправки: ${formattedDate}`, res: `Местоположение: ${content[0].res}` }]
+            }
+            if (event === 'Простой') {
+                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, time: `${content[0].time}`, alarm: `${content[0].alarm}`, res: `Местоположение: ${content[0].res}` }]
+            }
+            if (event === 'Предупреждение') {
+                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, time: `${content[0].time}`, tyres: `${content[0].tyres}`, param: `${content[0].param}`, alarm: `${content[0].alarm}`, res: `Местоположение: ${content[0].res}` }]
+            }
+            console.log(mess)
+            createPopup(mess)
+        })
+    }
+    const mass = Promise.all(results.map(async el => {
+        const parsedContent = JSON.parse(el.content);
+        const typeEvent = parsedContent[0].event;
+        const koor = (parsedContent[0].res).split(",");
+        const coord = [parseFloat(koor[0]), parseFloat(koor[1])];
+        let g;
+        const geo = await createMesto(coord);
+        console.log(geo)
+        geo === null ? g = koor : g = geo
+        console.log(g)
+        const int = Object.values(parsedContent[0]);
+        int.shift();
+        int.pop();
+        const time = times(new Date(Number(el.time) * 1000));
+        const info = `${int.join(", ")}, Местоположение: ${g}`;
+        return { time: time, typeEvent: typeEvent, content: info };
+    }));
+    mass.then(async results => {
+        console.log(results)
+        const clickLog = document.querySelector('.clickLog')
+        if (!clickLog) {
+            await createLogsTable(results);
+            const log = document.querySelector('.logs')
+            const wrapperLogs = document.querySelector('.wrapperLogs')
+            function togglePopup() {
+                if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
+                    wrapperLogs.style.display = 'block'// Показываем попап
+                    wrapperLogs.classList.add('clickLog')
+                    const trEvent = document.querySelectorAll('.trEvent')
+                } else {
+                    wrapperLogs.style.display = 'none'; // Скрываем попап
+                    wrapperLogs.classList.remove('clickLog')
+                }
+            }
+            // Добавляем обработчики кликов
+            log.addEventListener('click', function (event) {
+                togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
+            });
+            document.addEventListener('click', function (event) {
+                if (event.target !== wrapperLogs && !wrapperLogs.contains(event.target) && event.target !== log) {
+                    wrapperLogs.style.display = 'none'; // Скрываем попап при клике на любую область, кроме элемента "log"
+                    wrapperLogs.classList.remove('clickLog')
+                }
+            });
+        }
+    }).catch(error => {
+        console.error(error);
     })
-    const clickLog = document.querySelector('.clickLog')
-    if (!clickLog) {
-        await createLogsTable(mass);
-    }
-    const log = document.querySelector('.logs')
-    const wrapperLogs = document.querySelector('.wrapperLogs')
-    function togglePopup() {
-        if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
-            wrapperLogs.style.display = 'block'// Показываем попап
-            wrapperLogs.classList.add('clickLog')
-            const trEvent = document.querySelectorAll('.trEvent')
-            previus = trEvent.length
-            console.log(previus)
-        } else {
-            wrapperLogs.style.display = 'none'; // Скрываем попап
-            wrapperLogs.classList.remove('clickLog')
-        }
-    }
-    // Добавляем обработчики кликов
-    log.addEventListener('click', function (event) {
-        togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
-    });
-
-    document.addEventListener('click', function (event) {
-        if (event.target !== wrapperLogs && !wrapperLogs.contains(event.target) && event.target !== log) {
-            wrapperLogs.style.display = 'none'; // Скрываем попап при клике на любую область, кроме элемента "log"
-            wrapperLogs.classList.remove('clickLog')
-        }
-    });
     setInterval(logsView, 60000, array)
 }
-
 async function createLogsTable(mass) {
+    console.log(mass)
     console.log('up')
     const wrap = document.querySelector('.wrapperLogs')
     if (wrap) {
