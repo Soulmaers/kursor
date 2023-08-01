@@ -534,7 +534,7 @@ exports.logsSaveToBase = async (arr, time, idw) => {
             } else if (results.length > 0) {
                 resolve({ message: 'Событие уже существует в базе логов' })
             } else {
-                const postModel = `INSERT INTO logs(idw, time, content) VALUES(${idw},${time}, '${arr}')`
+                const postModel = `INSERT INTO logs(idw, time, content) VALUES(${idw}, ${time}, '${arr}')`
                 connection.query(postModel, function (err, results) {
                     if (err) {
                         console.log(err)
