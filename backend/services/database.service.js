@@ -152,10 +152,20 @@ exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, s
 
 
 
+function controllerSaveToBase(arr, id) {
+    console.log(arr)
+    console.log(id)
+}
 
 //сохраняем в базу алармы
 let count = 0;
 exports.alarmBase = async (data, tyres, alarm) => {
+    let val;
+    dannie[6] !== 'Потеря связи с датчиком' ? val = dannie[4] + ' ' + 'Бар' : val = dannie[5] + '' + 't'
+    controllerSaveToBase([{
+        event: 'Предупреждение', time: `Время ${dannie[1]}`, name: `Объект: ${dannie[2]}`, tyres: `Колесо: ${dannie[3]}`,
+        param: `Параметр: ${val}`, alarm: `Событие: ${dannie[6]}`, res: `Местоположение: ${dannie[7]}`
+    }], dannie[5])
     count++
     exports.myVariable = [data, tyres, alarm, count]
     console.log('данные по алармам')
@@ -165,9 +175,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
     dannie.pop()
     dannie.push(alarm)
     dannie.unshift(id)
-    // console.log(dannie)
     const value = [dannie];
-    //  messAlarm(dannie)
     try {
         const selectBase = `SELECT idw, data, name, senspressure, bar, temp ,alarm 
                     FROM alarms 
