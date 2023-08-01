@@ -323,7 +323,7 @@ async function createPopup(array, idw) {
 
 }
 
-
+let previus = 0;
 export async function logsView(array) {
     const arrayId = array
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
@@ -338,6 +338,9 @@ export async function logsView(array) {
     }
     const ress = await fetch('/api/logsView', param)
     const results = await ress.json()
+    console.log(results.length)
+    const eve = results.length - previus
+    console.log(eve)
     const mass = results.map(el => {
         const typeEvent = JSON.parse(el.content)[0].event
         const int = Object.values(JSON.parse(el.content)[0])
@@ -356,6 +359,9 @@ export async function logsView(array) {
         if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
             wrapperLogs.style.display = 'block'// Показываем попап
             wrapperLogs.classList.add('clickLog')
+            const trEvent = document.querySelectorAll('.trEvent')
+            previus = trEvent.length
+            console.log(previus)
         } else {
             wrapperLogs.style.display = 'none'; // Скрываем попап
             wrapperLogs.classList.remove('clickLog')

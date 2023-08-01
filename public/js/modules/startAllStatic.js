@@ -137,6 +137,7 @@ async function loadValue(array, timeOld, timeNow) {
                     const res = it.value !== undefined && it.value.every(item => item >= 0) && probeg > 5 ? rashodCalc(it, name, group, idw) : [{ rashod: 0, zapravka: 0 }]
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
                 }
+                uniqObject[idw] = { ...uniqObject[idw], rashod: 0, zapravka: 0 };
                 if (it.sens.startsWith('Подъем')) {
                     lifting = moto(it)
                 }
