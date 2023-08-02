@@ -74,5 +74,12 @@ exports.viewChart = async (req, res) => {
     res.json(params)
 }
 
+exports.quantityLogs = async (req, res) => {
+    console.log('предКВАНТ')
+    const login = req.body.login;
+    const data = await databaseService.quantityFindToBase(login)
+    res.json(data)
+}
+
 
 

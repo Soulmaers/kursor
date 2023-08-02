@@ -1717,9 +1717,29 @@ div.spoyler {
 }
 
 .windowStatistic {
-  width: 98%;
+  width: 100%;
   border: 1px solid gray;
-  display: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.navigatorStatic {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+
+.navstat {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 22%;
+  padding: 5px 2px;
+  border-radius: 10px;
+  border: solid 2px darkblue;
+  font-size: 0.8rem;
+
 }
 
 .titleStatic {

@@ -4,40 +4,9 @@ import { timefn, timesFormat } from './startAllStatic.js'
 import { testovfn } from './charts/bar.js'
 import { fnParMessage } from './grafiks.js'
 import { titleLogs } from './content.js'
+import { reverseGeocode } from './geo.js'
 
 
-
-async function createMesto(geo) {
-    console.log(geo)
-    const lat = geo[0];
-    const lon = geo[1];
-    try {
-        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=ru`;
-        const mestnost = await fetch(url)
-        const location = await mestnost.json()
-        console.log(location)
-        const address = location.address;
-        const adres = [];
-        adres.push(address.amenity);
-        adres.push(address.road);
-        adres.push(address.municipality);
-        adres.push(address.county);
-        adres.push(address.city);
-        adres.push(address.state);
-        adres.push(address.country);
-        const res = adres.filter(val => val !== undefined).join(', ');
-        if (res) {
-            return res
-        }
-        else {
-            return null
-        }
-    }
-
-    catch (e) {
-        return null
-    }
-}
 
 let position = 20
 async function createPopup(array) {
@@ -116,13 +85,16 @@ export async function logsView(array) {
         },
         body: (JSON.stringify({ login }))
     }
+    console.log('запросКванто')
     const resLog = await fetch('/api/quantityLogs', paramLog)
     const resultsLog = await resLog.json()
     console.log(resultsLog[0].quantity)
     const viewNum = results.length - resultsLog[0].quantity
     viewTableNum(viewNum)
-    previus = results.length
-    num++
+    if (num === 0) {
+        previus = results.length
+    }
+
     console.log(results.length)
     console.log(previus)
     if (previus !== results.length && num !== 0) {
@@ -156,26 +128,28 @@ export async function logsView(array) {
             console.log(mess)
             createPopup(mess)
         })
+        previus = results.length
     }
+    num++
     const mass = Promise.all(results.map(async el => {
         const parsedContent = JSON.parse(el.content);
         const typeEvent = parsedContent[0].event;
         const koor = (parsedContent[0].res).split(",");
-        const coord = [parseFloat(koor[0]), parseFloat(koor[1])];
-        let g;
-        const geo = await createMesto(coord);
-        console.log(geo)
-        geo === null ? g = koor : g = geo
-        console.log(g)
+        const geo = await reverseGeocode(parseFloat(koor[0]), parseFloat(koor[1]));
+        const id = parseFloat(el.idw)
+        const group = arrayIdGroup
+            .filter(it => it[0] === id)
+            .map(it => it[1]);
         const int = Object.values(parsedContent[0]);
         int.shift();
-        int.pop();
+        if (!int.some(e => e.startsWith('Комп'))) {
+            int.unshift(`Компания: ${group[0]}`);
+        }
         const time = times(new Date(Number(el.time) * 1000));
-        const info = `${int.join(", ")}, Местоположение: ${g}`;
+        const info = `${int.join(", ")}, Местоположение: ${geo}`;
         return { time: time, typeEvent: typeEvent, content: info };
     }));
     mass.then(async results => {
-        console.log(results)
         const clickLog = document.querySelector('.clickLog')
         if (!clickLog) {
             await createLogsTable(results);
@@ -199,18 +173,18 @@ export async function logsView(array) {
                     }
                     const res = await fetch('/api/viewLogs', param)
                     const confirm = await res.json()
-                    console.log(confirm)
-                    const paramLog = {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: (JSON.stringify({ login }))
-                    }
-                    const resLog = await fetch('/api/quantityLogs', paramLog)
-                    const resultsLog = await resLog.json()
-                    console.log(resultsLog[0].quantity)
-                    const viewNum = results.length - resultsLog[0].quantity
+                    /*  const paramLog = {
+                          method: "POST",
+                          headers: {
+                              'Content-Type': 'application/json',
+                          },
+                          body: (JSON.stringify({ login }))
+                      }
+                      const resLog = await fetch('/api/quantityLogs', paramLog)
+                     // const resultsLog = await resLog.json()*/
+                    //console.log(resultsLog[0].quantity)
+                    const viewNum = results.length - quantity
+                    // const viewNum = results.length - resultsLog[0].quantity
                     viewTableNum(viewNum)
                 } else {
                     wrapperLogs.style.display = 'none'; // Скрываем попап
@@ -228,10 +202,13 @@ export async function logsView(array) {
                 }
             });
         }
+        else {
+
+        }
     }).catch(error => {
         console.error(error);
     })
-    setInterval(logsView, 60000, array)
+    setTimeout(logsView, 60000, array)
 }
 
 
@@ -252,11 +229,11 @@ async function createLogsTable(mass) {
     log.classList.add('wrapperLogs')
     body.appendChild(log)
     log.innerHTML = titleLogs
-
+    var firstChild = log.firstChild;
     mass.forEach(el => {
         const trEvent = document.createElement('div')
         trEvent.classList.add('trEvent')
-        log.appendChild(trEvent)
+        log.insertBefore(trEvent, firstChild.nextSibling)
         for (var key in el) {
             const td = document.createElement('p')
             td.classList.add('tdEvent')

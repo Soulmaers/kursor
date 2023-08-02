@@ -1,4 +1,4 @@
-
+//e156e8924c3a4e75bc1eac26f153457e-ключ апи https://opencagedata.com/dashboard#geocoding
 const login = document.querySelectorAll('.log')[1].textContent
 let isProcessing = false;
 export async function geoloc() {
@@ -41,7 +41,7 @@ export async function createMap(geo, geoMarker) {
     const maps = document.createElement('div');
     maps.setAttribute('id', 'map');
     maps.style.width = '100%';
-    maps.style.height = '90vh';
+    maps.style.height = '450px';
     wrap.appendChild(maps);
     const map = L.map('map');
     map.attributionControl.setPrefix(false);
@@ -81,23 +81,7 @@ export async function createMap(geo, geoMarker) {
 
         map.setView(center, 12);
         map.flyTo(center, 12);
-
-        var lat = geoMarker.geoY; // Ваша широта
-        var lon = geoMarker.geoX; // Ваша долгота
-        var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lon + '&accept-language=ru';
-        const response = await fetch(url);
-        const result = await response.json();
-        var address = result.address;
-        const adres = [];
-        adres.push(address.road)
-        adres.push(address.municipality)
-        adres.push(address.county)
-        adres.push(address.city)
-        adres.push(address.state)
-        adres.push(address.country)
-        const res = Object.values(adres).filter(val => val !== undefined).join(', ');
-
-
+        const res = await reverseGeocode(geoMarker.geoY, geoMarker.geoX)
         iss = L.marker(center, { icon: greenIcon }).bindPopup(`${nameCar}<br>${res}`).addTo(map);
         iss.getPopup().options.className = 'my-popup-all';
         iss.on('mouseover', function (e) {
@@ -114,6 +98,26 @@ export async function createMap(geo, geoMarker) {
     });
 
     isProcessing = false;
+}
+
+
+export async function reverseGeocode(geoY, geoX) {
+    const API_KEY = 'e156e8924c3a4e75bc1eac26f153457e';
+    const API_URL = `https://api.opencagedata.com/geocode/v1/json`
+    var lat = geoY; // Ваша широта
+    var lng = geoX; // Ваша долгота
+    const responses = await fetch(`${API_URL}?q=${lat},${lng}&key=${API_KEY}&no_annotations=1&language=ru`);
+    const data = await responses.json();
+    var address = data.results[0].components;
+    const adres = [];
+    adres.push(address.road_reference)
+    adres.push(address.municipality)
+    adres.push(address.county)
+    adres.push(address.town)
+    adres.push(address.state)
+    adres.push(address.country)
+    const res = Object.values(adres).filter(val => val !== undefined).join(', ');
+    return res
 }
 export async function createMapsUniq(geoTrack, geo, num) {
     const mapss = document.getElementById('mapOil')
@@ -182,27 +186,11 @@ export async function createMapsUniq(geoTrack, geo, num) {
         map.on('zoomend', function () {
             map.panTo(center);
         });
-        const lat = center[0];
-        const lon = center[1];
-        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=ru`;
-        fetch(url)
-            .then(response => response.json())
-            .then(result => {
-                const address = result.address;
-                const adres = [];
-                adres.push(address.road);
-                adres.push(address.municipality);
-                adres.push(address.county);
-                adres.push(address.city);
-                adres.push(address.state);
-                adres.push(address.country);
-                const res = adres.filter(val => val !== undefined).join(', ');
-                if (res) {
-                    const updatedContent = `${popupContent}<br>Адрес: ${res}`;
-                    popup.setContent(updatedContent);
-                }
-            });
-
+        const res = await reverseGeocode(center[0], center[1])
+        if (res) {
+            const updatedContent = `${popupContent}<br>Адрес: ${res}`;
+            popup.setContent(updatedContent);
+        }
         iss.on('mouseover', function (e) {
             this.openPopup();
         });
@@ -214,20 +202,7 @@ export async function createMapsUniq(geoTrack, geo, num) {
     else {
         if (num === 'oil') {
             center = [geo.geo[0], geo.geo[1]]
-            var lat = center[0]; // Ваша широта
-            var lon = center[1] // Ваша долгота
-            var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lon + '&accept-language=ru';
-            const response = await fetch(url);
-            const result = await response.json();
-            var address = result.address;
-            const adres = [];
-            adres.push(address.road)
-            adres.push(address.municipality)
-            adres.push(address.county)
-            adres.push(address.city)
-            adres.push(address.state)
-            adres.push(address.country)
-            const res = Object.values(adres).filter(val => val !== undefined).join(', ');
+            const res = await reverseGeocode(center[0], center[1])
             maps.style.width = '300px';
             maps.style.height = '300px'
             maps.style.position = 'absolute'
@@ -238,20 +213,7 @@ export async function createMapsUniq(geoTrack, geo, num) {
         }
         if (num === 'alarm') {
             center = [geo.geoY, geo.geoX]
-            var lat = center[0]; // Ваша широта
-            var lon = center[1] // Ваша долгота
-            var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lon + '&accept-language=ru';
-            const response = await fetch(url);
-            const result = await response.json();
-            var address = result.address;
-            const adres = [];
-            adres.push(address.road)
-            adres.push(address.municipality)
-            adres.push(address.county)
-            adres.push(address.city)
-            adres.push(address.state)
-            adres.push(address.country)
-            const res = Object.values(adres).filter(val => val !== undefined).join(', ');
+            const res = await reverseGeocode(center[0], center[1])
             maps.style.width = '350px';
             maps.style.height = '350px'
             maps.style.position = 'absolute'

@@ -363,8 +363,7 @@ module.exports.alarmFindtoBase = (idw, tyresp) => {
     })
 }
 exports.quantityFindToBase = async (login, quantity) => {
-    const arr = [[login, quantity]]
-    console.log(login, quantity)
+    console.log('квантити')
     return new Promise((resolve, reject) => {
         try {
             const selectBase = `SELECT quantity FROM viewLogs WHERE login='${login}'`
@@ -406,7 +405,7 @@ exports.quantitySaveToBase = async (login, quantity) => {
                 else {
                     console.log('число' + quantity)
                     if (quantity !== undefined) {
-                        const postModel = `UPDATE viewLogs SET quantity='${quantity}'`
+                        const postModel = `UPDATE viewLogs SET quantity='${quantity}' WHERE login='${login}'`
                         connection.query(postModel, function (err, results) {
                             if (err) {
                                 console.log(err)

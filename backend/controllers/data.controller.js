@@ -127,16 +127,13 @@ exports.up = async (req, res) => {
 
 
 exports.viewLogs = async (req, res) => {
+    console.log('вьюлог')
     const login = req.body.login;
     console.log(login)
     const data = req.body.quantity ? await databaseService.quantitySaveToBase(login, req.body.quantity) : await databaseService.quantitySaveToBase(login)
     res.json(data)
 }
-exports.quantityLogs = async (req, res) => {
-    const login = req.body.login;
-    const data = await databaseService.quantityFindToBase(login)
-    res.json(data)
-}
+
 
 let dataGlobal;
 const test = async () => {
@@ -182,8 +179,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-//setTimeout(test, 1000)
-//setInterval(test, 60000)
+setTimeout(test, 1000)
+setInterval(test, 60000)
 async function updateParams(data) {
 
     data ? data : data = dataGlobal

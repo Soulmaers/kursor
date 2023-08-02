@@ -9,6 +9,7 @@ async function testovfn(active, t1, t2) {
 
 
 exports.startAllStatic = async (objects) => {
+    console.log('статик?')
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
@@ -27,6 +28,7 @@ exports.startAllStatic = async (objects) => {
     const timeOld = interval[1]
     const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow)
+    //  console.log(res)
     return res.uniq
 }
 async function loadValue(array, timeOld, timeNow) {
@@ -105,6 +107,7 @@ async function loadValue(array, timeOld, timeNow) {
                 console.log('два');
                 uniqObject[idw] = { ...uniqObject[idw], quantityTSjob: 0, probeg: 0 };
             }
+            let hasFuelSensor = false;
             allArrNew.forEach(it => {
                 if (it.sens === 'Топливо' || it.sens === 'Топливо ДУТ') {
                     it.value.forEach((e, i) => {
@@ -115,7 +118,10 @@ async function loadValue(array, timeOld, timeNow) {
                     oil.push(it.value)
                     const res = it.value !== undefined && it.value.every(item => item >= 0) && probeg > 5 ? rashodCalc(it, name, group, idw) : [{ rashod: 0, zapravka: 0 }]
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
-
+                    hasFuelSensor = true;
+                }
+                if (!hasFuelSensor) {
+                    uniqObject[idw] = { ...uniqObject[idw], rashod: 0, zapravka: 0 };
                 }
                 if (it.sens.startsWith('Подъем')) {
                     lifting = moto(it)
@@ -309,6 +315,7 @@ function moto(data) {
 }
 
 function rashodCalc(data, name, group, idw) {
+    console.log('заправки')
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
@@ -369,7 +376,10 @@ function rashodCalc(data, name, group, idw) {
     const firstData = data.value[0];
     const lastData = data.value[data.value.length - 1];
     if (zapravka.length !== 0) {
-        modalView(zapravka, name, group, idw);
+        if (zapravka[zapravka.length - 1][1][0] - data.value[data.value.length - 1] > 0) {
+            modalView(zapravka, name, group, idw);
+        }
+
         rash.push(firstData - zapravka[0][0][0]);
         for (let i = 0; i < zapravka.length - 1; i++) {
             rash.push(zapravka[i][1][0] - zapravka[i + 1][0][0]);
@@ -381,6 +391,7 @@ function rashodCalc(data, name, group, idw) {
     }
     const rashod = rash.reduce((el, acc) => el + acc, 0)
     const zap = [];
+
     zapravka.forEach(e => {
         zap.push(e[1][0] - e[0][0])
     })
@@ -399,7 +410,6 @@ function timefn() {
 
 
 async function modalView(zapravka, name, group, idw) {
-    console.log(zapravka)
     const litrazh = zapravka[0][1][0] - zapravka[0][0][0]
     const geo = zapravka[0][0][2]
     const time = zapravka[0][0][1]
@@ -488,6 +498,8 @@ exports.popupProstoy = async (array) => {
             if (it.sens.startsWith('Бортовое')) {
                 const res = prostoy(it, tsiControll);
                 if (res !== undefined) {
+                    console.log(res[2].getTime() / 1000)
+                    console.log(((new Date()).getTime() / 1000).toFixed(0))
                     const map = res[3]
                     const timesProstoy = timesFormat(res[0])
                     const group = e[5]
@@ -553,7 +565,7 @@ function prostoy(data, tsi) {
         timeProstoy.forEach(it => {
             if (it[0] !== undefined) {
                 const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
-                if (diffInSeconds > 1200) {
+                if (diffInSeconds > 1200 && data.value[data.value.length - 1] <= tsi || diffInSeconds > 1200 && data.speed[data.speed.length - 1] >= 5) {
                     unixProstoy.push([diffInSeconds, it[0], it[1], it[2]])
                 }
             }
