@@ -15,14 +15,14 @@ import { Tooltip } from '../class/Tooltip.js'
 import { click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { convert } from './helpersFunc.js'
-
+import { createChart } from './detalisation.js'
 
 let start;
 let time;
 let timeIcon;
 
 export async function visual(el) {
-
+    createChart()
     const acto = document.querySelector('.acto')
     if (acto) {
         acto.classList.remove('acto');

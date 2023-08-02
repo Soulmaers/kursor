@@ -135,7 +135,15 @@ export async function logsView(array) {
         const parsedContent = JSON.parse(el.content);
         const typeEvent = parsedContent[0].event;
         const koor = (parsedContent[0].res).split(",");
+        //    let geo;
+        // try {
         const geo = await reverseGeocode(parseFloat(koor[0]), parseFloat(koor[1]));
+        //  }
+        //catch (e) {
+        //     geo = [parseFloat(koor[0]), parseFloat(koor[1])]
+        //  console.log(e)
+        // }
+        console.log(geo)
         const id = parseFloat(el.idw)
         const group = arrayIdGroup
             .filter(it => it[0] === id)
