@@ -35,11 +35,14 @@ export function createChart() {
 
     const combinedData = combineIntervals(data);
 
-    const svgWidth = 800;
-    const svgHeight = 50; // Высота графика 50px, чтобы вместить высоту 10px и отступы
+    const width = 800; // Ширина графика
+    const svgHeight = 50; // Высота SVG элемента
     const margin = { top: 10, right: 20, bottom: 10, left: 50 };
-    const width = svgWidth - margin.left - margin.right;
     const height = svgHeight - margin.top - margin.bottom;
+
+
+
+
 
     const tooltip = d3.select(".jobTSDetalisationLine")
         .append("div")
@@ -53,7 +56,7 @@ export function createChart() {
 
     const svg = d3.select(".jobTSDetalisationLine")
         .append("svg")
-        .attr("width", svgWidth)
+        .attr("width", "100%")
         .attr("height", svgHeight);
 
     const xScale = d3.scaleTime()
@@ -61,7 +64,7 @@ export function createChart() {
         .range([0, width]);
 
     const g = svg.append("g")
-        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+        .attr("transform", `translate(${0}, ${margin.top})`);
 
     g.selectAll("rect")
         .data(combinedData)
