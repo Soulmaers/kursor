@@ -64,30 +64,7 @@ export async function zapros(login) {
         yesterdaySummary();
         yesterdaySummary('Вчера');
         yesterdaySummary('Неделя');
-        const now = new Date();
-        const date = new Date(now);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const data = `${year}-${month}-${day}`;
-        //  const res = await startAllStatic(arrayList)
-        //  console.log(res)
 
-        /*// Обрабатываем данные
-        const arraySummary = Object.entries(res)
-        arraySummary.forEach(async el => {
-            const idw = el[0]
-            const arrayInfo = el[1]
-            const params = {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: (JSON.stringify({ idw, arrayInfo, data }))
-            }
-            const mods = await fetch('/api/summary', params)
-            const models = await mods.json()
-        })*/
     };
     processDataAtMidnight()
     setInterval(processDataAtMidnight, 60000)

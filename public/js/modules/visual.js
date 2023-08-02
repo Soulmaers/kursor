@@ -22,7 +22,7 @@ let time;
 let timeIcon;
 
 export async function visual(el) {
-    createChart()
+
     const acto = document.querySelector('.acto')
     if (acto) {
         acto.classList.remove('acto');
@@ -135,7 +135,8 @@ export async function visual(el) {
         time = setInterval(geoloc, 300000)
     }
     const idw = el.id
-    await liCreate()
+    createChart()
+    liCreate()
     await loadParamsView()
     console.log('загрузка')
     tooltip()
