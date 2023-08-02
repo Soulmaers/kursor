@@ -362,6 +362,73 @@ module.exports.alarmFindtoBase = (idw, tyresp) => {
         }
     })
 }
+exports.quantityFindToBase = async (login, quantity) => {
+    const arr = [[login, quantity]]
+    console.log(login, quantity)
+    return new Promise((resolve, reject) => {
+        try {
+            const selectBase = `SELECT quantity FROM viewLogs WHERE login='${login}'`
+            connection.query(selectBase, function (err, results) {
+                if (err) {
+                    console.log(err)
+                };
+                resolve(results)
+            })
+        }
+        catch (e) {
+            console.log(e)
+        }
+    })
+}
+exports.quantitySaveToBase = async (login, quantity) => {
+
+    console.log(login, quantity)
+    return new Promise((resolve, reject) => {
+        try {
+            const selectBase = `SELECT login FROM viewLogs WHERE login='${login}'`
+            connection.query(selectBase, function (err, results) {
+                if (err) {
+                    console.log(err)
+                };
+                console.log(results.length)
+                if (results.length === 0) {
+                    const arr = [[login, 0]]
+                    const selectBase = `INSERT INTO viewLogs(login, quantity) VALUES?`;
+                    connection.query(selectBase, [arr], function (err, results) {
+                        if (err) {
+                            console.log(err)
+                            reject(err)
+                        } else {
+                            resolve({ message: 'quntity добавлено' })
+                        }
+                    })
+                }
+                else {
+                    console.log('число' + quantity)
+                    if (quantity !== undefined) {
+                        const postModel = `UPDATE viewLogs SET quantity='${quantity}'`
+                        connection.query(postModel, function (err, results) {
+                            if (err) {
+                                console.log(err)
+                                reject(err)
+                            } else {
+                                resolve({ message: 'quntity обновлено' })
+                            }
+                        })
+                    }
+                    else {
+                        resolve({ message: 'quntity старое' })
+                    }
+                }
+            })
+        }
+        catch (e) {
+            console.log(e)
+        }
+    })
+}
+
+
 
 
 exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll) => {

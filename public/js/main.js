@@ -48,9 +48,22 @@ const models = await mods.json()
 console.log(models)
 
 
+
+const param = {
+    method: "POST",
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: (JSON.stringify({ login }))
+
+}
+
+const res = await fetch('/api/viewLogs', param)
+const confirm = await res.json()
+console.log(confirm)
+
+
 zapros(login) //делаем запрос на wialon получаем объекты
-
-
 liCreate()
 console.log(screen.width)
 

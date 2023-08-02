@@ -89,6 +89,7 @@ async function createPopup(array) {
 let previus = 0;
 let num = 0;
 export async function logsView(array) {
+    const login = document.querySelectorAll('.log')[1].textContent
     const arrayId = array
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
@@ -107,9 +108,23 @@ export async function logsView(array) {
     }
     const ress = await fetch('/api/logsView', param)
     const results = await ress.json()
+
+    const paramLog = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ login }))
+    }
+    const resLog = await fetch('/api/quantityLogs', paramLog)
+    const resultsLog = await resLog.json()
+    console.log(resultsLog[0].quantity)
+    const viewNum = results.length - resultsLog[0].quantity
+    viewTableNum(viewNum)
     previus = results.length
     num++
     console.log(results.length)
+    console.log(previus)
     if (previus !== results.length && num !== 0) {
         const num = results.length - previus
         const arrayPopup = results.slice(-num)
@@ -166,11 +181,37 @@ export async function logsView(array) {
             await createLogsTable(results);
             const log = document.querySelector('.logs')
             const wrapperLogs = document.querySelector('.wrapperLogs')
-            function togglePopup() {
+            async function togglePopup() {
                 if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
                     wrapperLogs.style.display = 'block'// Показываем попап
                     wrapperLogs.classList.add('clickLog')
                     const trEvent = document.querySelectorAll('.trEvent')
+                    console.log(trEvent)
+                    const quantity = trEvent.length;
+                    console.log(quantity)
+                    const param = {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: (JSON.stringify({ login, quantity }))
+
+                    }
+                    const res = await fetch('/api/viewLogs', param)
+                    const confirm = await res.json()
+                    console.log(confirm)
+                    const paramLog = {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: (JSON.stringify({ login }))
+                    }
+                    const resLog = await fetch('/api/quantityLogs', paramLog)
+                    const resultsLog = await resLog.json()
+                    console.log(resultsLog[0].quantity)
+                    const viewNum = results.length - resultsLog[0].quantity
+                    viewTableNum(viewNum)
                 } else {
                     wrapperLogs.style.display = 'none'; // Скрываем попап
                     wrapperLogs.classList.remove('clickLog')
@@ -191,6 +232,13 @@ export async function logsView(array) {
         console.error(error);
     })
     setInterval(logsView, 60000, array)
+}
+
+
+function viewTableNum(num) {
+    console.log(num)
+    const nums = document.querySelector('.num')
+    nums.textContent = num
 }
 async function createLogsTable(mass) {
     console.log(mass)

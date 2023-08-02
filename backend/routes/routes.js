@@ -17,6 +17,8 @@ module.exports = router
 router.post('/api/dataSpisok', controllerData.dataSpisok)
 router.post('/api/spisokList', controllerWialon.spisok)
 router.post('/api/up', controllerData.up)
+router.post('/api/viewLogs', controllerData.viewLogs)
+router.post('/api/quantityLogs', controllerData.quantityLogs)
 
 
 router.post('/api/wialon', controllerWialon.datawialon)

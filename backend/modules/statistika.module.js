@@ -399,6 +399,7 @@ function timefn() {
 
 
 async function modalView(zapravka, name, group, idw) {
+    console.log(zapravka)
     const litrazh = zapravka[0][1][0] - zapravka[0][0][0]
     const geo = zapravka[0][0][2]
     const time = zapravka[0][0][1]
