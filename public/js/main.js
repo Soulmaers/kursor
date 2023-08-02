@@ -58,9 +58,9 @@ const param = {
 
 }
 
-const res = await fetch('/api/viewLogs', param)
-const confirm = await res.json()
-console.log(confirm)
+//const res = await fetch('/api/viewLogs', param)
+//const confirm = await res.json()
+//console.log(confirm)
 
 
 zapros(login) //делаем запрос на wialon получаем объекты
