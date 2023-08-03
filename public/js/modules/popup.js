@@ -88,7 +88,7 @@ export async function logsView(array) {
     console.log('запросКванто')
     const resLog = await fetch('/api/quantityLogs', paramLog)
     const resultsLog = await resLog.json()
-
+    console.log(resultsLog)
     const viewNum = results.length - resultsLog[0].quantity
     viewTableNum(viewNum)
     if (num === 0) {
