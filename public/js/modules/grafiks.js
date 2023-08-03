@@ -84,6 +84,7 @@ export async function fnParMessage(active) {
     }
     const res = await fetch('/api/sensorsName', param)
     const sensArr = await res.json()
+    console.log(sensArr)
     const nameArr = [];
     Object.entries(sensArr.item.sens).forEach(el => {
       nameArr.push([el[1].n, el[1].p])

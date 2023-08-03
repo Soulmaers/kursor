@@ -939,7 +939,7 @@ export async function oil(t1, t2) {
     }
 }
 
-function timeConvert(d) {
+export function timeConvert(d) {
     const date = new Date(d);
     const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
         "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];

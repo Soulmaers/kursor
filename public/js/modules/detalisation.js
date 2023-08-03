@@ -1,7 +1,7 @@
 import { testovfn } from './charts/bar.js'
 import { fnParMessage } from './grafiks.js'
 import { timefn } from './startAllStatic.js'
-
+import { timeConvert } from './charts/oil.js'
 export async function createChart() {
 
 
@@ -36,16 +36,17 @@ export async function createChart() {
         nameSens.push([el[0], el[1]])
     })
     const allArrNew = [];
-    if (sensArr[0] && nameSens.length === sensArr[0].length) {
-        nameSens.forEach((item) => {
-            allArrNew.push({ sens: item[0], params: item[1], value: [] })
-        })
-    }
-    nameSens.pop()
+    /*
+        if (sensArr[0] && nameSens.length === Object.values(sensArr[0]).length) {
+            nameSens.forEach((item) => {
+                allArrNew.push({ sens: item[0], params: item[1], value: [] })
+            })
+        }*/
+
     nameSens.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
-    console.log(sensArr)
+
     sensArr.forEach(el => {
         if (el.length === 0) {
             return; // Пропускаем текущую итерацию, если sensArr пустой
@@ -125,13 +126,12 @@ export async function createChart() {
                 currentInterval = { ...data[i] };
             }
         }
-
         combinedData.push({ ...currentInterval });
         return combinedData;
     }
 
     const combinedData = combineIntervals(data);
-
+    console.log(combinedData)
     const width = 673; // Ширина графика
     const svgHeight = 80; // Высота SVG элемента
     const margin = { top: 10, right: 20, bottom: 10, left: 50 };
@@ -147,7 +147,9 @@ export async function createChart() {
 
     const tooltip = d3.select(".jobTSDetalisationLine")
         .append("div")
+        .attr("class", "tooltipStat")
         .style("position", "absolute")
+        .style('width', '120px')
         .style("padding", "5px")
         .style("background-color", "rgba(0, 0, 0, 0.7)")
         .style("color", "#fff")
@@ -185,11 +187,26 @@ export async function createChart() {
         //.attr("stroke-width", 1) // Толщина контура - 2 пикселя
         .attr("height", 30) // Высота 10px
         .attr("fill", d => (objColor[d.condition]))
-        .on("mouseover", (event, d) => {
-            tooltip.style("display", "block");
-            tooltip.html(`Status: ${d.condition}<br>Time: ${d.time.toLocaleString()}`)
-                .style("left", `${event.pageX}px`)
-                .style("top", `${event.pageY}px`);
+        .on("mousemove", function (event, d) {
+
+            // Определяем координаты курсора в отношении svg
+            const [xPosition, yPosition] = d3.mouse(this);
+            console.log([xPosition, yPosition])
+            // Определяем ближайшую точку на графике
+            const bisect = d3.bisector(d => d.time).right;
+            const x0 = xScale.invert(xPosition);
+            const i = bisect(combinedData, x0, 1);
+            const d0 = combinedData[i - 1];
+            const d1 = combinedData[i];
+            d = x0 - d0.time > d1.time - x0 ? d1 : d0;
+
+            const selectedTime = timeConvert(d.time)
+            const tool = document.querySelector('.tooltipStat')
+            console.log(tool)
+            tool.style.display = 'block'
+            tool.textContent = `Скорость: ${d.speed} км/ч\nВремя: ${selectedTime}`
+            tool.style.top = '330px'//'50px'
+            tool.style.left = '350px'
         })
         .on("mouseout", () => {
             tooltip.style("display", "none");
@@ -199,6 +216,8 @@ export async function createChart() {
     g.append("g")
         .attr("transform", `translate(0, 30)`) // Отступ для оси x
         .call(xAxis);
+
+
 
     /*
 const width = 500; // ширина графика
