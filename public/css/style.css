@@ -3033,7 +3033,15 @@ input[type="date"] {
   margin: 0;
   border: 2px solid red;
   width: 300px;
+}
 
+.my-popup-stat .leaflet-popup-content-wrapper {
+  font-size: 11px;
+  background: rgb(255, 255, 255, 0.4);
+  color: brown;
+  margin: 0;
+  border: 2px solid red;
+  width: 210px;
 }
 
 .my-popup-oil .leaflet-popup-content-wrapper {

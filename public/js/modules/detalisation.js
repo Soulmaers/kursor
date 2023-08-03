@@ -2,6 +2,7 @@ import { testovfn } from './charts/bar.js'
 import { fnParMessage } from './grafiks.js'
 import { timefn } from './startAllStatic.js'
 import { timeConvert } from './charts/oil.js'
+import { createMapsUniq } from './geo.js'
 export async function createChart() {
 
     const today = document.querySelector('.jobTSDetalisationDate')
@@ -108,19 +109,6 @@ export async function createChart() {
     if (chartStatic) {
         chartStatic.remove();
     }
-    /*
-        const numDataPoints = 50;
-        const data = [];
-        const statusOptions = ['move', 'parking'];
-    
-        for (let i = 0; i < numDataPoints; i++) {
-            const randomStatus = statusOptions[Math.floor(Math.random() * statusOptions.length)];
-            data.push({
-                time: new Date(2023, 7, 2, 12, i, 0), // Фиксированный день и месяц (2023-08-02)
-                status: randomStatus,
-            });
-        }
-        console.log(data)*/
     // Функция для объединения смежных интервалов с одинаковым статусом
     function combineIntervals(data) {
         const combinedData = [];
@@ -218,7 +206,36 @@ export async function createChart() {
 
             d3.select(this).attr("fill", d => (objColor[d.condition]))
             tooltip.style("display", "none");
-        });
+        })
+        .on("click", function (d) {
+            const [xPosition, yPosition] = d3.mouse(this);
+            // Определяем ближайшую точку на графике
+            const bisect = d3.bisector(d => d.time).right;
+            const x0 = xScale.invert(xPosition);
+            const i = bisect(combinedData, x0, 1);
+            const d0 = combinedData[i - 1];
+            const d1 = combinedData[i];
+            d = x0 - d0.dates > d1.dates - x0 ? d1 : d0;
+            createMapsUniq([], d, 'stat')
+
+
+            const graph = document.querySelector('.jobTSDetalisationLine')
+            graph.addEventListener('click', function (event) {
+                event.stopPropagation(); // Остановка всплытия события, чтобы клик на графике не вызывал обработчик события click на document
+                createMapsUniq([], d, 'stat')
+            });
+            document.addEventListener('click', function (event) {
+                const targetElement = event.target;
+                const map = document.getElementById('mapOil');
+
+                if (map && !map.contains(targetElement)) {
+                    map.remove();
+                }
+            });
+        })
+
+
+
     const timeFormat = d3.timeFormat("%H:%M");
     const xAxis = d3.axisBottom(xScale).tickFormat(timeFormat);
     g.append("g")

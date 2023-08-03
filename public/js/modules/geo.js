@@ -1,4 +1,5 @@
 //e156e8924c3a4e75bc1eac26f153457e-ключ апи https://opencagedata.com/dashboard#geocoding
+import { timeConvert } from './charts/oil.js'
 const login = document.querySelectorAll('.log')[1].textContent
 let isProcessing = false;
 export async function geoloc() {
@@ -230,7 +231,21 @@ export async function createMapsUniq(geoTrack, geo, num) {
             cl = 'my-popup-alarm'
             iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${geo.info.car}\nВремя: ${geo.info.time}\nКолесо: ${geo.info.tyres}\nP,bar: ${geo.info.bar}\nt,C: ${geo.info.temp}\nСкорость: ${geo.speed} км/ч\nУведомление: ${geo.info.alarm}\nАдрес: ${res}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
         }
-
+        if (num === 'stat') {
+            const selectedTime = timeConvert(geo.time)
+            console.log(geo)
+            console.log(num)
+            center = [geo.geo[0], geo.geo[1]]
+            console.log(center)
+            const res = await reverseGeocode(center[0], center[1])
+            maps.style.width = '350px';
+            maps.style.height = '350px'
+            maps.style.position = 'absolute'
+            maps.style.left = '580px';
+            maps.style.top = '40px';
+            cl = 'my-popup-stat';
+            iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}<br>Время: ${selectedTime}<br>Состояние: ${geo.condition}<br>Скорость: ${geo.speed} км/ч<br>Местоположение: ${res}`, { width: 60, className: 'my-popup-stat', autoPan: false }).addTo(map);
+        }
         map.setView(center, 12)
         map.flyTo(center, 12)
         // const iss = L.marker(alarmCenter, { icon: customIcon }).bindPopup(`Объект: ${geoTrack.info.car}\nВремя: ${geoTrack.info.time}\nКолесо: ${geoTrack.info.tyres}\nP,bar: ${geoTrack.info.bar}\nt,C: ${geoTrack.info.temp}\nСкорость: ${geoTrack.speed} км/ч\nУведомление: ${geoTrack.info.alarm}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
