@@ -1728,7 +1728,6 @@ div.spoyler {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   padding: 2px;
   box-sizing: border-box;
   position: relative;
@@ -1767,11 +1766,12 @@ div.spoyler {
 
 
 .jobTSDetalisationCharts_legenda {
+  margin-top: 40px;
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 80%;
-  margin-bottom: 20px;
+
 }
 
 .move {
@@ -1795,8 +1795,8 @@ div.spoyler {
 }
 
 .jobTSDetalisationGraf {
+  margin-top: 20px;
   width: 90%;
-  height: 60px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1808,8 +1808,6 @@ div.spoyler {
 
 .jobTSDetalisationLine {
   width: 674px;
-  margin-bottom: 30px;
-
 }
 
 

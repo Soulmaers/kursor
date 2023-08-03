@@ -15,7 +15,7 @@ import { Tooltip } from '../class/Tooltip.js'
 import { click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { convert } from './helpersFunc.js'
-import { createChart } from './detalisation.js'
+import { timeIntervalStatistiks } from './detalisation.js'
 
 let start;
 let time;
@@ -23,6 +23,12 @@ let timeIcon;
 
 export async function visual(el) {
 
+    const jobTSDetalisationLine = document.querySelectorAll('.jobTSDetalisationLine');
+    jobTSDetalisationLine.forEach(e => {
+        while (e.firstChild) {
+            e.removeChild(e.firstChild);
+        }
+    });
     const acto = document.querySelector('.acto')
     if (acto) {
         acto.classList.remove('acto');
@@ -135,7 +141,7 @@ export async function visual(el) {
         time = setInterval(geoloc, 300000)
     }
     const idw = el.id
-    createChart()
+    timeIntervalStatistiks();
     liCreate()
     await loadParamsView()
     console.log('загрузка')

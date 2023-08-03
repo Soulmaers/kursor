@@ -3,22 +3,112 @@ import { fnParMessage } from './grafiks.js'
 import { timefn } from './startAllStatic.js'
 import { timeConvert } from './charts/oil.js'
 import { createMapsUniq } from './geo.js'
-export async function createChart() {
-
-    const today = document.querySelector('.jobTSDetalisationDate')
-    const todayData = new Date();
-    var day = String(todayData.getDate()).padStart(2, '0');
-    var month = String(todayData.getMonth() + 1).padStart(2, '0');
-    var year = todayData.getFullYear();
-    var formattedDate = day + "." + month + "." + year;
-    today.textContent = `Сегодня: ${formattedDate}`
 
 
-    const noGraf = document.querySelector('.noGraf')
+export async function timeIntervalStatistiks() {
+    const today = document.querySelector('.todayTitle')
+    const yestoday = document.querySelector('.yestodayTitle')
+    const week = document.querySelector('.weekTitle')
+    today.textContent = `Сегодня: ${convertTime(1)}`
+    yestoday.textContent = `Вчера: ${convertTime(2)}`
+    week.textContent = `Неделя: ${convertTime(3)}`
+
+
+    statistics(timefn(), today, 1)
+    statistics(yesTo(), yestoday, 2)
+    statistics(weekTo(), week, 3)
+
+}
+
+function convertTime(num) {
+    if (num === 1) {
+        const todayData = new Date();
+        var day = String(todayData.getDate()).padStart(2, '0');
+        var month = String(todayData.getMonth() + 1).padStart(2, '0');
+        var year = todayData.getFullYear();
+        var formattedDate = day + "." + month + "." + year;
+        return formattedDate
+    }
+    if (num === 2) {
+        const todayData = new Date();
+        var day = String(todayData.getDate() - 1).padStart(2, '0');
+        var month = String(todayData.getMonth() + 1).padStart(2, '0');
+        var year = todayData.getFullYear();
+        var formattedDate = day + "." + month + "." + year;
+        return formattedDate
+    }
+    if (num === 3) {
+        const todayData = new Date();
+        var day = String(todayData.getDate() - 7).padStart(2, '0');
+        var month = String(todayData.getMonth() + 1).padStart(2, '0');
+        var year = todayData.getFullYear();
+        if (day <= 0) {
+            // Если день стал отрицательным, значит нужно уменьшить месяц на 1
+            todayData.setMonth(todayData.getMonth() - 1);
+            // Получаем последний день предыдущего месяца
+            const lastDayOfPrevMonth = new Date(todayData.getFullYear(), todayData.getMonth() + 1, 0).getDate();
+            // Устанавливаем день на последний день предыдущего месяца
+            day = String(lastDayOfPrevMonth + (Number(day))).padStart(2, '0');
+            month = String(todayData.getMonth() + 1).padStart(2, '0');
+        }
+        var formattedDate = day + "." + month + "." + year;
+        const todayData2 = new Date();
+        todayData2.setDate(todayData2.getDate() - 1); // Вычитаем 1 день из текущей даты
+        var day2 = String(todayData2.getDate()).padStart(2, '0');
+        var month2 = String(todayData2.getMonth() + 1).padStart(2, '0');
+        var year2 = todayData2.getFullYear();
+        if (day2 <= 0) {
+            // Если день стал отрицательным, значит нужно уменьшить месяц на 1
+            todayData2.setMonth(todayData2.getMonth() - 1);
+            // Получаем последний день предыдущего месяца
+            const lastDayOfPrevMonth = new Date(todayData2.getFullYear(), todayData2.getMonth() + 1, 0).getDate();
+            // Устанавливаем день на последний день предыдущего месяца
+            day2 = String(lastDayOfPrevMonth + Number(day2)).padStart(2, '0');
+            month = String(todayData.getMonth() + 1).padStart(2, '0');
+        }
+        var formattedDate2 = day2 + "." + month2 + "." + year2;
+        return `${formattedDate}-${formattedDate2}`
+    }
+}
+
+
+function yesTo() {
+    // Получаем текущую дату и время в формате JavaScript Date
+    const currentDate = new Date();
+    // Вычисляем времена для вчерашнего дня
+    const yesterdayStart = new Date(currentDate);
+    yesterdayStart.setDate(currentDate.getDate() - 1);
+    yesterdayStart.setHours(0, 0, 0, 0);
+    const yesterdayEnd = new Date(currentDate);
+    yesterdayEnd.setDate(currentDate.getDate() - 1);
+    yesterdayEnd.setHours(23, 59, 59, 999);
+    // Переводим времена в формат юникс-времени (миллисекунды)
+    const unixTimeYesterdayStart = Math.floor(yesterdayStart.getTime() / 1000);
+    const unixTimeYesterdayEnd = Math.floor(yesterdayEnd.getTime() / 1000);
+    return [unixTimeYesterdayEnd, unixTimeYesterdayStart]
+
+}
+function weekTo() {
+    // Получаем текущую дату и время в формате JavaScript Date
+    const currentDate = new Date();
+    // Вычисляем времена для вчерашнего дня
+    const yesterdayStart = new Date(currentDate);
+    yesterdayStart.setDate(currentDate.getDate() - 7);
+    yesterdayStart.setHours(0, 0, 0, 0);
+    const yesterdayEnd = new Date(currentDate);
+    yesterdayEnd.setDate(currentDate.getDate() - 1);
+    yesterdayEnd.setHours(23, 59, 59, 999);
+    // Переводим времена в формат юникс-времени (миллисекунды)
+    const unixTimeYesterdayStart = Math.floor(yesterdayStart.getTime() / 1000);
+    const unixTimeYesterdayEnd = Math.floor(yesterdayEnd.getTime() / 1000);
+    console.log([unixTimeYesterdayEnd, unixTimeYesterdayStart])
+    return [unixTimeYesterdayEnd, unixTimeYesterdayStart]
+
+}
+export async function statistics(interval, ele, num) {
+
     const active = document.querySelector('.color').id
-    const nameCar = document.querySelector('.color').children[0].textContent
-
-    const interval = timefn()
+    // const interval = timefn()
     const t1 = interval[1]
     const t2 = interval[0]
     const itog = await testovfn(active, t1, t2)
@@ -45,17 +135,10 @@ export async function createChart() {
         nameSens.push([el[0], el[1]])
     })
     const allArrNew = [];
-    /*
-        if (sensArr[0] && nameSens.length === Object.values(sensArr[0]).length) {
-            nameSens.forEach((item) => {
-                allArrNew.push({ sens: item[0], params: item[1], value: [] })
-            })
-        }*/
 
     nameSens.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
-
     sensArr.forEach(el => {
         if (el.length === 0) {
             return; // Пропускаем текущую итерацию, если sensArr пустой
@@ -70,15 +153,12 @@ export async function createChart() {
         el.sats = sats
         el.geo = geo
     })
-    console.log(allArrNew)
     const engine = allArrNew.filter(it => it.sens === 'Зажигание' || it.sens.startsWith('Борт'));
     console.log(engine)
     engine[0].pwr = engine[1].value
     engine[0].condition = [];
     const dannie = []
     dannie.push(engine[0])
-    console.log(dannie)
-
     for (let i = 0; i < dannie[0].value.length; i++) {
         if (dannie[0].speed[i] > 5) {
             dannie[0].condition[i] = 'Движется'
@@ -102,10 +182,13 @@ export async function createChart() {
             time: item.time[index],
         }))
     );
-
     console.log(data);
+    createChart(data, ele, num)
 
-    const chartStatic = document.querySelector('.chartStatic')
+}
+
+function createChart(data, ele, num) {
+    const chartStatic = document.querySelector(`.chartStatic${num}`)
     if (chartStatic) {
         chartStatic.remove();
     }
@@ -133,15 +216,19 @@ export async function createChart() {
     const margin = { top: 10, right: 20, bottom: 10, left: 50 };
     const height = svgHeight - margin.top - margin.bottom;
 
-
     const objColor = {
         'Движется': ' #8fd14f',
         'Парковка': '#3399ff',
         'Повернут ключ зажигания': '#fef445'
     }
-    const tooltip = d3.select(".jobTSDetalisationLine")
+    const obj = {
+        1: 'todayChart',
+        2: 'yestodayChart',
+        3: 'weekChart',
+    }
+    const tooltip = d3.select(`.${obj[num]}`)
         .append("div")
-        .attr("class", "tooltipStat")
+        .attr("class", `tooltipStat${num}`)
         .style("position", "absolute")
         .style('width', '130px')
         .style("padding", "5px")
@@ -150,22 +237,16 @@ export async function createChart() {
         .style("border-radius", "5px")
         .style("font-size", "12px")
         .style("display", "none");
-
-    const svg = d3.select(".jobTSDetalisationLine")
+    const svg = d3.select(`.${obj[num]}`)
         .append("svg")
-        .attr('class', 'chartStatic')
+        .attr('class', `chartStatic${num}`)
         .attr("width", "100%")
         .attr("height", svgHeight);
-
     const xScale = d3.scaleTime()
         .domain(d3.extent(data, d => d.time))
         .range([0, width]);
-
-
-
     const g = svg.append("g")
         .attr("transform", `translate(${0}, ${margin.top})`);
-
     g.selectAll("rect")
         .data(combinedData)
         .enter()
@@ -195,15 +276,14 @@ export async function createChart() {
             d = x0 - d0.time > d1.time - x0 ? d1 : d0;
 
             const selectedTime = timeConvert(d.time)
-            const tool = document.querySelector('.tooltipStat')
+            const tool = document.querySelector(`.tooltipStat${num}`)
             console.log(tool)
             tool.style.display = 'block'
             tool.textContent = `Скорость: ${d.speed} км/ч\nВремя: ${selectedTime}\nСостояние: ${d.condition}`
             tool.style.top = '330px'//'50px'
             tool.style.left = '350px'
         })
-        .on("mouseout", () => {
-
+        .on("mouseout", function (event, d) {
             d3.select(this).attr("fill", d => (objColor[d.condition]))
             tooltip.style("display", "none");
         })
@@ -219,7 +299,7 @@ export async function createChart() {
             createMapsUniq([], d, 'stat')
 
 
-            const graph = document.querySelector('.jobTSDetalisationLine')
+            const graph = document.querySelector(`.${obj[num]}`)
             graph.addEventListener('click', function (event) {
                 event.stopPropagation(); // Остановка всплытия события, чтобы клик на графике не вызывал обработчик события click на document
                 createMapsUniq([], d, 'stat')
@@ -233,40 +313,13 @@ export async function createChart() {
                 }
             });
         })
-
-
-
-    const timeFormat = d3.timeFormat("%H:%M");
+    let timeFormat;
+    if (num === 3) {
+        timeFormat = d3.timeFormat("%d")
+    }
+    timeFormat = d3.timeFormat("%H:%M");
     const xAxis = d3.axisBottom(xScale).tickFormat(timeFormat);
     g.append("g")
         .attr("transform", `translate(0, 30)`) // Отступ для оси x
         .call(xAxis);
-
-
-
-    /*
-const width = 500; // ширина графика
-const height = 100; // высота графика
-
-const svg = d3.select("body")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-const data = [
-    { time: 0, color: "green" },
-    { time: 1, color: "blue" },
-    { time: 2, color: "purple" },
-    // Добавьте остальные состояния здесь
-];
-
-svg.selectAll("rect")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("x", d => d.time * (width / data.length)) // установка координаты X для каждого прямоугольника
-    .attr("y", 0) // установка координаты Y
-    .attr("width", width / data.length) // установка ширины прямоугольника
-    .attr("height", height) // установка высоты прямоугольника
-    .style("fill", d => d.color); // установка цвета прямоугольника*/
 }
