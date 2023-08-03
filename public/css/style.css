@@ -1801,18 +1801,11 @@ div.spoyler {
 
 
 .jobTSDetalisationLine {
-  width: 100%;
+  width: 674px;
+  margin-bottom: 30px;
 
 }
 
-
-.jobTSDetalisationOs {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.7rem;
-}
 
 
 

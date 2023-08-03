@@ -110,7 +110,6 @@ export async function reverseGeocode(geoY, geoX) {
     try {
         const responses = await fetch(`${API_URL}?q=${lat},${lng}&key=${API_KEY}&no_annotations=1&language=ru`);
         const data = await responses.json();
-        console.log(data)
         var address = data.results[0].components;
         const adres = [];
         adres.push(address.road_reference)

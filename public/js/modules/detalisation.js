@@ -45,6 +45,7 @@ export async function createChart() {
     nameSens.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
+    console.log(sensArr)
     sensArr.forEach(el => {
         if (el.length === 0) {
             return; // Пропускаем текущую итерацию, если sensArr пустой
@@ -60,37 +61,64 @@ export async function createChart() {
         el.geo = geo
     })
     console.log(allArrNew)
+    const engine = allArrNew.filter(it => it.sens === 'Зажигание' || it.sens.startsWith('Борт'));
+    console.log(engine)
+    engine[0].pwr = engine[1].value
+    engine[0].condition = [];
+    const dannie = []
+    dannie.push(engine[0])
+    console.log(dannie)
 
+    for (let i = 0; i < dannie[0].value.length; i++) {
+        if (dannie[0].speed[i] > 5) {
+            dannie[0].condition[i] = 'Движется'
+        }
+        else if (dannie[0].speed[i] === 0 && dannie[0].value[i] === 1) {
+            dannie[0].condition[i] = 'Повернут ключ зажигания'
+        }
+        else dannie[0].condition[i] = 'Парковка'
+    }
+    delete dannie[0].params
+    delete dannie[0].sens
+    console.log(dannie[0])
+    const data = dannie.flatMap(item =>
+        item.value.map((cValue, index) => ({
+            value: cValue,
+            condition: item.condition[index],
+            pwr: item.pwr[index],
+            geo: item.geo[index],
+            speed: item.speed[index],
+            sats: item.sats[index],
+            time: item.time[index],
+        }))
+    );
 
-
-
-
-
+    console.log(data);
 
     const chartStatic = document.querySelector('.chartStatic')
     if (chartStatic) {
         chartStatic.remove();
     }
-
-    const numDataPoints = 50;
-    const data = [];
-    const statusOptions = ['move', 'parking'];
-
-    for (let i = 0; i < numDataPoints; i++) {
-        const randomStatus = statusOptions[Math.floor(Math.random() * statusOptions.length)];
-        data.push({
-            time: new Date(2023, 7, 2, 12, i, 0), // Фиксированный день и месяц (2023-08-02)
-            status: randomStatus,
-        });
-    }
-
+    /*
+        const numDataPoints = 50;
+        const data = [];
+        const statusOptions = ['move', 'parking'];
+    
+        for (let i = 0; i < numDataPoints; i++) {
+            const randomStatus = statusOptions[Math.floor(Math.random() * statusOptions.length)];
+            data.push({
+                time: new Date(2023, 7, 2, 12, i, 0), // Фиксированный день и месяц (2023-08-02)
+                status: randomStatus,
+            });
+        }
+        console.log(data)*/
     // Функция для объединения смежных интервалов с одинаковым статусом
     function combineIntervals(data) {
         const combinedData = [];
         let currentInterval = { ...data[0] };
 
         for (let i = 1; i < data.length; i++) {
-            if (data[i].status === currentInterval.status) {
+            if (data[i].time === currentInterval.time) {
                 currentInterval.time = data[i].time;
             } else {
                 combinedData.push({ ...currentInterval });
@@ -104,13 +132,17 @@ export async function createChart() {
 
     const combinedData = combineIntervals(data);
 
-    const width = 800; // Ширина графика
-    const svgHeight = 50; // Высота SVG элемента
+    const width = 673; // Ширина графика
+    const svgHeight = 80; // Высота SVG элемента
     const margin = { top: 10, right: 20, bottom: 10, left: 50 };
     const height = svgHeight - margin.top - margin.bottom;
 
 
-
+    const objColor = {
+        'Движется': 'lightgreen',
+        'Парковка': 'lightblue',
+        'Повернут ключ зажигания': 'yellow'
+    }
 
 
     const tooltip = d3.select(".jobTSDetalisationLine")
@@ -133,6 +165,8 @@ export async function createChart() {
         .domain(d3.extent(data, d => d.time))
         .range([0, width]);
 
+
+
     const g = svg.append("g")
         .attr("transform", `translate(${0}, ${margin.top})`);
 
@@ -145,26 +179,26 @@ export async function createChart() {
         .attr("width", (d) => {
             const nextIndex = combinedData.indexOf(d) + 1;
             const nextTime = (nextIndex < combinedData.length) ? combinedData[nextIndex].time : xScale.range()[1];
-            return xScale(nextTime) - xScale(d.time);
+            return xScale(d.time);
         })
-        .attr("stroke", "gray") // Цвет контура - черный
-        .attr("stroke-width", 1) // Толщина контура - 2 пикселя
+        // .attr("stroke", "gray") // Цвет контура - черный
+        //.attr("stroke-width", 1) // Толщина контура - 2 пикселя
         .attr("height", 30) // Высота 10px
-        .attr("fill", d => (d.status === 'move' ? "lightgreen" : "lightblue"))
+        .attr("fill", d => (objColor[d.condition]))
         .on("mouseover", (event, d) => {
             tooltip.style("display", "block");
-            tooltip.html(`Status: ${d.status}<br>Time: ${d.time.toLocaleString()}`)
+            tooltip.html(`Status: ${d.condition}<br>Time: ${d.time.toLocaleString()}`)
                 .style("left", `${event.pageX}px`)
                 .style("top", `${event.pageY}px`);
         })
         .on("mouseout", () => {
             tooltip.style("display", "none");
         });
-
-    const xAxis = d3.axisBottom(xScale);
-    /*  g.append("g")
-          .attr("transform", `translate(0, 30)`) // Отступ для оси x
-          .call(xAxis);*/
+    const timeFormat = d3.timeFormat("%H:%M");
+    const xAxis = d3.axisBottom(xScale).tickFormat(timeFormat);
+    g.append("g")
+        .attr("transform", `translate(0, 30)`) // Отступ для оси x
+        .call(xAxis);
 
     /*
 const width = 500; // ширина графика
