@@ -1775,23 +1775,23 @@ div.spoyler {
 }
 
 .move {
-  background-color: lightgreen;
+  background-color: #8fd14f;
 }
 
 .parking {
-  background-color: lightblue;
+  background-color: #3399ff;
 }
 
 .engineTS {
-  background-color: yellow;
+  background-color: #fef445;
 }
 
 .jobHHTS {
-  background-color: lightcoral;
+  background-color: #f24726;
 }
 
 .notConnect {
-  background-color: lightgray;
+  background-color: #757686;
 }
 
 .jobTSDetalisationGraf {

@@ -4,6 +4,14 @@ import { timefn } from './startAllStatic.js'
 import { timeConvert } from './charts/oil.js'
 export async function createChart() {
 
+    const today = document.querySelector('.jobTSDetalisationDate')
+    const todayData = new Date();
+    var day = String(todayData.getDate()).padStart(2, '0');
+    var month = String(todayData.getMonth() + 1).padStart(2, '0');
+    var year = todayData.getFullYear();
+    var formattedDate = day + "." + month + "." + year;
+    today.textContent = `Сегодня: ${formattedDate}`
+
 
     const noGraf = document.querySelector('.noGraf')
     const active = document.querySelector('.color').id
@@ -139,17 +147,15 @@ export async function createChart() {
 
 
     const objColor = {
-        'Движется': 'lightgreen',
-        'Парковка': 'lightblue',
-        'Повернут ключ зажигания': 'yellow'
+        'Движется': ' #8fd14f',
+        'Парковка': '#3399ff',
+        'Повернут ключ зажигания': '#fef445'
     }
-
-
     const tooltip = d3.select(".jobTSDetalisationLine")
         .append("div")
         .attr("class", "tooltipStat")
         .style("position", "absolute")
-        .style('width', '120px')
+        .style('width', '130px')
         .style("padding", "5px")
         .style("background-color", "rgba(0, 0, 0, 0.7)")
         .style("color", "#fff")
@@ -176,18 +182,18 @@ export async function createChart() {
         .data(combinedData)
         .enter()
         .append("rect")
-        .attr("x", d => xScale(d.time) - (xScale(combinedData[0].time) - xScale(data[0].time)))
+        .attr("x", d => xScale(d.time))
         .attr("y", 0)
+        //  .attr("stroke", "none")
         .attr("width", (d) => {
-            const nextIndex = combinedData.indexOf(d) + 1;
-            const nextTime = (nextIndex < combinedData.length) ? combinedData[nextIndex].time : xScale.range()[1];
             return xScale(d.time);
         })
-        // .attr("stroke", "gray") // Цвет контура - черный
-        //.attr("stroke-width", 1) // Толщина контура - 2 пикселя
         .attr("height", 30) // Высота 10px
         .attr("fill", d => (objColor[d.condition]))
         .on("mousemove", function (event, d) {
+            g.selectAll("rect").attr("fill", d => (objColor[d.condition]))
+            d3.select(this).attr("fill", 'black');
+
 
             // Определяем координаты курсора в отношении svg
             const [xPosition, yPosition] = d3.mouse(this);
@@ -204,11 +210,13 @@ export async function createChart() {
             const tool = document.querySelector('.tooltipStat')
             console.log(tool)
             tool.style.display = 'block'
-            tool.textContent = `Скорость: ${d.speed} км/ч\nВремя: ${selectedTime}`
+            tool.textContent = `Скорость: ${d.speed} км/ч\nВремя: ${selectedTime}\nСостояние: ${d.condition}`
             tool.style.top = '330px'//'50px'
             tool.style.left = '350px'
         })
         .on("mouseout", () => {
+
+            d3.select(this).attr("fill", d => (objColor[d.condition]))
             tooltip.style("display", "none");
         });
     const timeFormat = d3.timeFormat("%H:%M");
