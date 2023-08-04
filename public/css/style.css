@@ -1765,6 +1765,18 @@ div.spoyler {
 }
 
 
+.chartJobTS {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 220px;
+}
+
+.activStatic {
+  background-color: #deebfa;
+  color: darkblue
+}
+
 .jobTSDetalisationCharts_legenda {
   margin-top: 40px;
   display: flex;

@@ -123,7 +123,7 @@ export async function reverseGeocode(geoY, geoX) {
         return res
     }
     catch (e) {
-        console.log(e)
+        // console.log(e)
         return [geoY, geoX]
     }
 

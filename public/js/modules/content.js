@@ -180,5 +180,38 @@ export const data = ["BFGoodrich", "Bridgestone", "Continental", "Cordiant", "Du
 export const dataIdTyres = ['01id', '02id', '03id', '04id'];
 
 
-export const jobTSDetalisation = 6
-
+export const jobTSDetalisation = `    <div class="jobTSDetalisationGraf">
+                        <div class="jobTSDetalisationDate todayTitle">Сегодня</div>
+                        <div class="jobTSDetalisationLine todayChart"></div>
+                        <div class="jobTSDetalisationDate yestodayTitle">Вчера</div>
+                        <div class="jobTSDetalisationLine yestodayChart"></div>
+                        <div class="jobTSDetalisationDate weekTitle">Неделя</div>
+                        <div class="jobTSDetalisationLine weekChart"></div>
+                    </div>
+                    <div class="jobTSDetalisationCharts_legenda">
+                        <div class="legendaButton move">Движение</div>
+                        <div class="legendaButton parking">Парковка</div>
+                        <div class="legendaButton engineTS">Повернут ключ зажигания</div>
+                        <div class="legendaButton jobHHTS">Работа на холостом ходу</div>
+                        <div class="legendaButton notConnect">ТС не на связи</div>
+                    </div>`
+export const jobTS = `  <div class="jobTSDetalisationGraf">
+<div class="chartJobTS">
+                        <div class="jobTSDetalisationDate todayTitle">Сегодня</div>
+                        <div class="jobTSDetalisationLine todayChart"></div>
+                        </div>
+                        <div class="chartJobTS">
+                        <div class="jobTSDetalisationDate yestodayTitle">Вчера</div>
+                        <div class="jobTSDetalisationLine yestodayChart"></div>
+                                </div>
+                        <div class="chartJobTS">
+                        <div class="jobTSDetalisationDate weekTitle">Неделя</div>
+                        <div class="jobTSDetalisationLine weekChart"></div>
+                                </div>
+                    </div>
+                    <div class="jobTSDetalisationCharts_legenda">
+                        <div class="legendaButton move">Движение</div>
+                        <div class="legendaButton parking">Парковка</div>
+                        <div class="legendaButton jobHHTS">Работа на холостом ходу</div>
+                        <div class="legendaButton notConnect">ТС не на связи</div>
+                    </div>`

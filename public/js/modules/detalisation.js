@@ -3,23 +3,69 @@ import { fnParMessage } from './grafiks.js'
 import { timefn } from './startAllStatic.js'
 import { timeConvert } from './charts/oil.js'
 import { createMapsUniq } from './geo.js'
+import { jobTSDetalisation, jobTS } from './content.js'
+
+
+
+const objectRazmetka = {
+    'nav1': { html: jobTSDetalisation, data: [], fn: createChart },
+    'nav2': { html: jobTS, data: [], fn: createJobTS }
+}
 
 
 export async function timeIntervalStatistiks() {
+
+    const navstat = document.querySelectorAll('.navstat')
+    const act = document.querySelector('.activStatic').id
+
+    const windowStatistic = document.querySelector('.windowStatistic')
+    windowStatistic.insertAdjacentHTML('beforeend', ` ${objectRazmetka[act].html}`);
     const today = document.querySelector('.todayTitle')
     const yestoday = document.querySelector('.yestodayTitle')
     const week = document.querySelector('.weekTitle')
+    navstat.forEach(el => {
+        el.addEventListener('click', () => {
+            console.log('клик')
+            navstat.forEach(el => {
+                el.classList.remove('activStatic')
+            })
+
+            el.classList.add('activStatic')
+            const act = document.querySelector('.activStatic').id
+            windowStatistic.children[1].remove()
+            windowStatistic.children[1].remove()
+            windowStatistic.insertAdjacentHTML('beforeend', ` ${objectRazmetka[act].html}`);
+
+            const today = document.querySelector('.todayTitle')
+            const yestoday = document.querySelector('.yestodayTitle')
+            const week = document.querySelector('.weekTitle')
+            eskiz(today, yestoday, week)
+            objectRazmetka[act].fn(objectRazmetka[act].data[0], 1)
+
+            act !== 'nav1' ? updateHTML() : null
+            function updateHTML() {
+                const jobTSDetalisationGraf = document.querySelector(".jobTSDetalisationGraf")
+                jobTSDetalisationGraf.style.flexDirection = 'row'
+                jobTSDetalisationGraf.style.justifyContent = 'center'
+                const jobTSDetalisationLine = document.querySelector(".jobTSDetalisationLine")
+                jobTSDetalisationLine.style.width = '200px'
+            }
+        })
+    })
+    eskiz(today, yestoday, week)
+    statistics(timefn(), today, 1)
+    statistics(yesTo(), yestoday, 2)
+    statistics(weekTo(), week, 3)
+}
+
+
+
+function eskiz(today, yestoday, week) {
     today.textContent = `Сегодня: ${convertTime(1)}`
     yestoday.textContent = `Вчера: ${convertTime(2)}`
     week.textContent = `Неделя: ${convertTime(3)}`
 
-
-    statistics(timefn(), today, 1)
-    statistics(yesTo(), yestoday, 2)
-    statistics(weekTo(), week, 3)
-
 }
-
 function convertTime(num) {
     if (num === 1) {
         const todayData = new Date();
@@ -70,8 +116,6 @@ function convertTime(num) {
         return `${formattedDate}-${formattedDate2}`
     }
 }
-
-
 function yesTo() {
     // Получаем текущую дату и время в формате JavaScript Date
     const currentDate = new Date();
@@ -86,7 +130,6 @@ function yesTo() {
     const unixTimeYesterdayStart = Math.floor(yesterdayStart.getTime() / 1000);
     const unixTimeYesterdayEnd = Math.floor(yesterdayEnd.getTime() / 1000);
     return [unixTimeYesterdayEnd, unixTimeYesterdayStart]
-
 }
 function weekTo() {
     // Получаем текущую дату и время в формате JavaScript Date
@@ -119,8 +162,6 @@ export async function statistics(interval, ele, num) {
     let tsiControll = model.result.length !== 0 || model.result[0].tsiControll && model.result[0].tsiControll !== '' ? Number(model.result[0].tsiControll) : null;
     tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
     console.log(tsiControll)
-
-
 
     // const interval = timefn()
     const t1 = interval[1]
@@ -173,7 +214,6 @@ export async function statistics(interval, ele, num) {
     engine[0].condition = [];
     const dannie = []
     dannie.push(engine[0])
-    console.log(dannie)
 
     for (let i = 0; i < dannie[0].value.length; i++) {
         if (dannie[0].speed[i] > 5) {
@@ -187,7 +227,6 @@ export async function statistics(interval, ele, num) {
         }
     }
     const intStop = prostoy(dannie[0], tsiControll)
-    console.log(intStop)
     if (intStop) {
         const startIndex = dannie[0].time.findIndex(time => time === intStop[1]);
         const endIndex = dannie[0].time.findIndex(time => time === intStop[2]);
@@ -213,7 +252,12 @@ export async function statistics(interval, ele, num) {
             time: item.time[index],
         }))
     );
-    console.log(data);
+
+
+    objectRazmetka['nav1'].data.push(data);
+    objectRazmetka['nav2'].data.push(dannieSortJobTS(data));
+    console.log(objectRazmetka)
+    const act = document.querySelector('.activStatic').id
     createChart(data, ele, num)
 
 }
@@ -268,6 +312,86 @@ function prostoy(data, tsi) {
         const timeBukl = unixProstoy[unixProstoy.length - 1]
         return timeBukl
     }
+}
+
+
+
+function createJobTS(data, ele, num) {
+    console.log(data)
+    /* const chartStatic = document.querySelector(`.chartStatic${num}`)
+     if (chartStatic) {
+         chartStatic.remove();
+     }
+ 
+     const objColor = {
+         'Движется': ' #8fd14f',
+         'Парковка': '#3399ff',
+         'Работа на холостом ходу': '#f24726'
+     }
+     const obj = {
+         1: 'todayChart',
+         2: 'yestodayChart',
+         3: 'weekChart',
+     }
+     // Задание размеров графика
+     var width = 200;
+     var height = 200;
+ 
+     // Создание контейнера для графика
+     var svg = d3.select(`${obj[num]}`)
+         .append("svg")
+         .attr("width", width)
+         .attr("height", height);
+ 
+ 
+     // Массив значений для столбцов
+     var values = Object.values(data)
+     console.log(values)
+ 
+ 
+ 
+     // Создание масштаба для оси Y
+     var yScale = d3.scaleLinear()
+         .domain([0, 86400]) // Используем максимальное значение для определения диапазона
+         .range([0, height - 20]); // Подстраиваем высоту графика
+ 
+     // Отрисовка столбцов
+     svg.selectAll("rect")
+         .data(values)
+         .enter()
+         .append("rect")
+         .attr("x", function (d, i) {
+             return i * (width / values.length);
+         })
+         .attr("y", function (d) {
+             return height - yScale(parseInt(d[values[0]].split(" ")[0]));
+         })
+         .attr("width", width / values.length - 10)
+         .attr("height", function (d) {
+             return yScale(parseInt(d[values[0]].split(" ")[0]));
+         })
+         .attr("fill", function (d, i) {
+             return objColor[i];
+         });
+ 
+     // Добавление подписей к столбцам
+     svg.selectAll("text")
+         .data(values)
+         .enter()
+         .append("text")
+         .text(function (d) {
+             return d[values[0]];
+         })
+         .attr("x", function (d, i) {
+             return i * (width / values.length) + 5;
+         })
+         .attr("y", function (d) {
+             return height - yScale(parseInt(d[values[0]].split(" ")[0])) - 5;
+         })
+         .attr("fill", "white")
+         .attr("font-size", "12px");*/
+
+
 }
 function createChart(data, ele, num) {
     const chartStatic = document.querySelector(`.chartStatic${num}`)
@@ -404,4 +528,59 @@ function createChart(data, ele, num) {
     g.append("g")
         .attr("transform", `translate(0, 30)`) // Отступ для оси x
         .call(xAxis);
+
+}
+
+
+
+function dannieSortJobTS(datas, ele, num) {
+
+    const data = datas.map(el => ({
+        geo: el.geo,
+        sats: el.sats,
+        pwr: el.pwr,
+        value: el.value,
+        time: el.time,
+        speed: el.speed,
+        condition: el.condition === 'Повернут ключ зажигания' ? 'Парковка' : el.condition
+    }));
+    console.log(data)
+    const obj = {};
+    let start;
+    let end;
+    let currentCondition;
+    for (let i = 0; i < data.length; i++) {
+        const current = data[i];
+
+        if (current.condition !== currentCondition) {
+            if (start && end) {
+                const duration = subtractTimes(end, start);
+                obj[currentCondition] = obj[currentCondition] || 0;
+                obj[currentCondition] += duration;
+            }
+            start = current.time;
+        }
+        end = current.time;
+        currentCondition = current.condition;
+    }
+    // Добавляем последний отрезок времени
+    if (start && end && currentCondition) {
+        const duration = subtractTimes(end, start);
+        obj[currentCondition] = obj[currentCondition] || 0;
+        obj[currentCondition] += duration;
+    }
+    function subtractTimes(end, start) {
+        const diff = (end.getTime() / 1000) - (start.getTime() / 1000)
+        return diff
+    }
+    /*for (let key in obj) {
+        const totalSeconds = Math.floor(obj[key]);
+        const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+        const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+        const motoHours = `${hours} ч.:${minutes} мин.`;
+
+        obj[key] = motoHours
+    }*/
+    return obj
+
 }

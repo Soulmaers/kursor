@@ -23,12 +23,11 @@ let timeIcon;
 
 export async function visual(el) {
 
-    const jobTSDetalisationLine = document.querySelectorAll('.jobTSDetalisationLine');
-    jobTSDetalisationLine.forEach(e => {
-        while (e.firstChild) {
-            e.removeChild(e.firstChild);
-        }
-    });
+    const jobTSDetalisationGraf = document.querySelector('.jobTSDetalisationGraf');
+    if (jobTSDetalisationGraf) jobTSDetalisationGraf.remove()
+    const jobTSDetalisationChartsLegenda = document.querySelector('.jobTSDetalisationCharts_legenda');
+    if (jobTSDetalisationChartsLegenda) jobTSDetalisationChartsLegenda.remove()
+
     const acto = document.querySelector('.acto')
     if (acto) {
         acto.classList.remove('acto');
