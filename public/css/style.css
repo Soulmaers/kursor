@@ -1758,7 +1758,7 @@ div.spoyler {
   padding: 5px 2px;
   border-radius: 10px;
   border: solid 2px darkblue;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-family: Roboto;
   font-weight: bold;
   cursor: pointer;
@@ -1804,15 +1804,9 @@ div.spoyler {
 
 }
 
-
-
 .jobTSDetalisationLine {
   width: 674px;
 }
-
-
-
-
 
 .titleStatic {
   text-align: center;
@@ -1833,7 +1827,6 @@ div.spoyler {
 
 
 .nameStatic {
-
   display: flex;
   align-items: center;
   font-family: Roboto;

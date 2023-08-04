@@ -179,8 +179,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-setTimeout(test, 1000)
-setInterval(test, 60000)
+//setTimeout(test, 1000)
+//setInterval(test, 60000)
 async function updateParams(data) {
 
     data ? data : data = dataGlobal

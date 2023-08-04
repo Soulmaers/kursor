@@ -106,13 +106,27 @@ function weekTo() {
 
 }
 export async function statistics(interval, ele, num) {
+    const idw = document.querySelector('.color').id
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ idw }))
+    }
+    const mod = await fetch('/api/modelView', params)
+    const model = await mod.json()
+    let tsiControll = model.result.length !== 0 || model.result[0].tsiControll && model.result[0].tsiControll !== '' ? Number(model.result[0].tsiControll) : null;
+    tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
+    console.log(tsiControll)
 
-    const active = document.querySelector('.color').id
+
+
     // const interval = timefn()
     const t1 = interval[1]
     const t2 = interval[0]
-    const itog = await testovfn(active, t1, t2)
-    const res = await fnParMessage(active)
+    const itog = await testovfn(idw, t1, t2)
+    const res = await fnParMessage(idw)
     const time = [];
     const speed = [];
     const sats = [];
@@ -155,19 +169,25 @@ export async function statistics(interval, ele, num) {
     })
     console.log(allArrNew)
     const engine = allArrNew.filter(it => it.sens === 'Зажигание' || it.sens.startsWith('Борт'));
-    console.log(engine)
     engine[0].pwr = engine[1].value
     engine[0].condition = [];
     const dannie = []
     dannie.push(engine[0])
+    console.log(dannie)
+    // prostoy(dannie[0], tsiControll)
     for (let i = 0; i < dannie[0].value.length; i++) {
         if (dannie[0].speed[i] > 5) {
-            dannie[0].condition[i] = 'Движется'
+            dannie[0].condition[i] = 'Движется';
         }
         else if (dannie[0].speed[i] === 0 && dannie[0].value[i] === 1) {
-            dannie[0].condition[i] = 'Повернут ключ зажигания'
+            dannie[0].condition[i] = 'Повернут ключ зажигания';
         }
-        else dannie[0].condition[i] = 'Парковка'
+        else if (dannie[0].speed[i] < 5 && dannie[0].pwr[i] > tsiControll && (dannie[0].time[i + 1] - dannie[0].time[i]) > 10) {
+            dannie[0].condition[i] = 'Работа на ХХ';
+        }
+        else {
+            dannie[0].condition[i] = 'Парковка';
+        }
     }
     delete dannie[0].params
     delete dannie[0].sens
@@ -188,6 +208,59 @@ export async function statistics(interval, ele, num) {
 
 }
 
+function prostoy(data, tsi) {
+    console.log(data)
+    if (data.pwr.length === 0) {
+        return undefined
+    }
+    else {
+        const prostoy = [];
+        const korzina = [];
+        let startIndex = 0;
+        data.pwr.forEach((values, index) => {
+            if (values !== data.pwr[startIndex]) {
+                const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index), geo: data.geo.slice(startIndex, index) };
+                (data.pwr[startIndex] <= tsi ? korzina : prostoy).push(speedTime);
+                startIndex = index;
+            }
+        });
+        const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex), geo: data.geo.slice(startIndex) };
+        (data.pwr[startIndex] <= tsi ? korzina : prostoy).push(speedTime);
+
+        console.log(prostoy)
+        const filteredData = prostoy.map(obj => {
+            const newS = [];
+            const timet = [];
+            const geo = []
+            for (let i = 0; i < obj.speed.length; i++) {
+                if (obj.speed[i] < 5) {
+                    newS.push(obj.speed[i]);
+                    timet.push(obj.time[i])
+                    geo.push(obj.geo[i])
+                } else {
+                    break;
+                }
+            }
+
+            return { speed: newS, time: timet, geo: geo };
+        });
+
+        const timeProstoy = filteredData.map(el => {
+            return [el.time[0], el.time[el.time.length - 1], el.geo[0]]
+        })
+        const unixProstoy = [];
+        timeProstoy.forEach(it => {
+            if (it[0] !== undefined) {
+                const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
+                if (diffInSeconds > 1200 && data.value[data.value.length - 1] <= tsi || diffInSeconds > 1200 && data.speed[data.speed.length - 1] >= 5) {
+                    unixProstoy.push([diffInSeconds, it[0], it[1], it[2]])
+                }
+            }
+        })
+        const timeBukl = unixProstoy[unixProstoy.length - 1]
+        return timeBukl
+    }
+}
 function createChart(data, ele, num) {
     const chartStatic = document.querySelector(`.chartStatic${num}`)
     if (chartStatic) {
@@ -263,7 +336,6 @@ function createChart(data, ele, num) {
         .on("mousemove", function (event, d) {
             g.selectAll("rect").attr("fill", d => (objColor[d.condition]))
             d3.select(this).attr("fill", 'black');
-
 
             // Определяем координаты курсора в отношении svg
             const [xPosition, yPosition] = d3.mouse(this);
