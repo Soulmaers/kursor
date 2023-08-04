@@ -174,7 +174,7 @@ export async function statistics(interval, ele, num) {
     const dannie = []
     dannie.push(engine[0])
     console.log(dannie)
-    // prostoy(dannie[0], tsiControll)
+
     for (let i = 0; i < dannie[0].value.length; i++) {
         if (dannie[0].speed[i] > 5) {
             dannie[0].condition[i] = 'Движется';
@@ -182,16 +182,26 @@ export async function statistics(interval, ele, num) {
         else if (dannie[0].speed[i] === 0 && dannie[0].value[i] === 1) {
             dannie[0].condition[i] = 'Повернут ключ зажигания';
         }
-        else if (dannie[0].speed[i] < 5 && dannie[0].pwr[i] > tsiControll && (dannie[0].time[i + 1] - dannie[0].time[i]) > 10) {
-            dannie[0].condition[i] = 'Работа на ХХ';
-        }
         else {
             dannie[0].condition[i] = 'Парковка';
         }
     }
+    const intStop = prostoy(dannie[0], tsiControll)
+    console.log(intStop)
+    if (intStop) {
+        const startIndex = dannie[0].time.findIndex(time => time === intStop[1]);
+        const endIndex = dannie[0].time.findIndex(time => time === intStop[2]);
+        if (startIndex !== -1 && endIndex !== -1) {
+            // Обновить значения в свойстве condition
+            for (let i = startIndex; i <= endIndex; i++) {
+                dannie[0].condition[i] = 'Работа на холостом ходу';
+            }
+        }
+    }
+    console.log(dannie[0]);
     delete dannie[0].params
     delete dannie[0].sens
-    console.log(dannie[0])
+
     const data = dannie.flatMap(item =>
         item.value.map((cValue, index) => ({
             value: cValue,
@@ -209,7 +219,6 @@ export async function statistics(interval, ele, num) {
 }
 
 function prostoy(data, tsi) {
-    console.log(data)
     if (data.pwr.length === 0) {
         return undefined
     }
@@ -217,6 +226,7 @@ function prostoy(data, tsi) {
         const prostoy = [];
         const korzina = [];
         let startIndex = 0;
+        console.log(data.pwr)
         data.pwr.forEach((values, index) => {
             if (values !== data.pwr[startIndex]) {
                 const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index), geo: data.geo.slice(startIndex, index) };
@@ -241,10 +251,8 @@ function prostoy(data, tsi) {
                     break;
                 }
             }
-
             return { speed: newS, time: timet, geo: geo };
         });
-
         const timeProstoy = filteredData.map(el => {
             return [el.time[0], el.time[el.time.length - 1], el.geo[0]]
         })
@@ -293,7 +301,8 @@ function createChart(data, ele, num) {
     const objColor = {
         'Движется': ' #8fd14f',
         'Парковка': '#3399ff',
-        'Повернут ключ зажигания': '#fef445'
+        'Повернут ключ зажигания': '#fef445',
+        'Работа на холостом ходу': '#f24726'
     }
     const obj = {
         1: 'todayChart',
