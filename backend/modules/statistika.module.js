@@ -356,7 +356,6 @@ function rashodCalc(data, name, group, idw) {
 
         increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
     }
-    console.log(increasingIntervals)
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0][0];
         const lastOil = interval[interval.length - 1][0];
@@ -389,11 +388,12 @@ function rashodCalc(data, name, group, idw) {
         console.log((new Date().getTime() / 1000).toFixed(0))
         const diff = (Number(new Date().getTime() / 1000).toFixed(0)) - (zapravka[zapravka.length - 1][1][1].getTime() / 1000)
         console.log(diff)
-        if (zapravka[zapravka.length - 1][1][0] >= data.value[data.value.length - 1] && diff > 120) {
+        console.log(zapravka[zapravka.length - 1][1][0])
+        console.log(data.value[data.value.length - 1])
+        if (zapravka[zapravka.length - 1][1][0] > data.value[data.value.length - 1] || zapravka[zapravka.length - 1][1][0] === data.value[data.value.length - 1] && diff > 300) {
             console.log(zapravka + 'условие')
             modalView(zapravka, name, group, idw);
         }
-
         rash.push(firstData - zapravka[0][0][0]);
         for (let i = 0; i < zapravka.length - 1; i++) {
             rash.push(zapravka[i][1][0] - zapravka[i + 1][0][0]);
