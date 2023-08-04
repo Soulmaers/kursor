@@ -153,6 +153,7 @@ export async function statistics(interval, ele, num) {
         el.sats = sats
         el.geo = geo
     })
+    console.log(allArrNew)
     const engine = allArrNew.filter(it => it.sens === 'Зажигание' || it.sens.startsWith('Борт'));
     console.log(engine)
     engine[0].pwr = engine[1].value

@@ -316,14 +316,15 @@ function moto(data) {
 
 function rashodCalc(data, name, group, idw) {
     console.log('заправки')
+
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
-            data.value.splice(i, 1);
-            data.time.splice(i, 1);
-            data.speed.splice(i, 1);
-            data.sats.splice(i, 1);
-            data.geo.splice(i, 1);
+            data.value.splice(i + 1, 1);
+            data.time.splice(i + 1, 1);
+            data.speed.splice(i + 1, 1);
+            data.sats.splice(i + 1, 1);
+            data.geo.splice(i + 1, 1)
         } else {
             i++;
 
@@ -348,8 +349,10 @@ function rashodCalc(data, name, group, idw) {
         }
     }
     if (start !== end) {
+
         increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
     }
+
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0][0];
         const lastOil = interval[interval.length - 1][0];
@@ -367,6 +370,7 @@ function rashodCalc(data, name, group, idw) {
         }
         return firstOil > 5 && difference >= threshold;
     });
+
     for (let i = 0; i < zapravka.length - 1; i++) {
         if (zapravka[i][1][1] === zapravka[i + 1][1][1]) {
             zapravka.splice(i + 1, 1);
@@ -376,7 +380,13 @@ function rashodCalc(data, name, group, idw) {
     const firstData = data.value[0];
     const lastData = data.value[data.value.length - 1];
     if (zapravka.length !== 0) {
-        if (zapravka[zapravka.length - 1][1][0] - data.value[data.value.length - 1] > 0) {
+        console.log(zapravka)
+        console.log(zapravka[zapravka.length - 1][1][1].getTime() / 1000)
+        console.log((new Date().getTime() / 1000).toFixed(0))
+        const diff = (Number(new Date().getTime() / 1000).toFixed(0)) - (zapravka[zapravka.length - 1][1][1].getTime() / 1000)
+        console.log(diff)
+        if (zapravka[zapravka.length - 1][1][0] >= data.value[data.value.length - 1] && diff > 120) {
+            console.log(zapravka + 'условие')
             modalView(zapravka, name, group, idw);
         }
 
