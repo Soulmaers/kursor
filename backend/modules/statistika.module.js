@@ -320,11 +320,11 @@ function rashodCalc(data, name, group, idw) {
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
-            data.value.splice(i + 1, 1);
-            data.time.splice(i + 1, 1);
-            data.speed.splice(i + 1, 1);
-            data.sats.splice(i + 1, 1);
-            data.geo.splice(i + 1, 1)
+            data.value.splice(i, 1);
+            data.time.splice(i, 1);
+            data.speed.splice(i, 1);
+            data.sats.splice(i, 1);
+            data.geo.splice(i, 1)
         } else {
             i++;
 
@@ -336,12 +336,16 @@ function rashodCalc(data, name, group, idw) {
     for (let i = 0; i < data.value.length - 1; i++) {
         const currentObj = data.value[i];
         const nextObj = data.value[i + 1];
-        if (currentObj < nextObj) {
+        const div = (data.time[i + 1].getTime() / 1000) - (data.time[i].getTime() / 1000)
+        //  console.log(div)
+        if (currentObj < nextObj && div < 180) {
             if (start === end) {
                 start = i;
             }
             end = i + 1;
         } else if (currentObj > nextObj) {
+            //  console.log(data.time[end])
+            //  console.log(data.time[data.time.length - 1])
             if (start !== end) {
                 increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
             }
@@ -352,7 +356,7 @@ function rashodCalc(data, name, group, idw) {
 
         increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
     }
-
+    console.log(increasingIntervals)
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0][0];
         const lastOil = interval[interval.length - 1][0];
