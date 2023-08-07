@@ -390,7 +390,7 @@ function rashodCalc(data, name, group, idw) {
         console.log(diff)
         console.log(zapravka[zapravka.length - 1][1][0])
         console.log(data.value[data.value.length - 1])
-        if (zapravka[zapravka.length - 1][1][0] > data.value[data.value.length - 1] || zapravka[zapravka.length - 1][1][0] === data.value[data.value.length - 1] && diff > 300) {
+        if (zapravka[zapravka.length - 1][1][0] > data.value[data.value.length - 1] && diff > 300) {
             console.log(zapravka + 'условие')
             modalView(zapravka, name, group, idw);
         }
