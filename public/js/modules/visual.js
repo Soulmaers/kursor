@@ -140,6 +140,7 @@ export async function visual(el) {
         time = setInterval(geoloc, 300000)
     }
     const idw = el.id
+
     timeIntervalStatistiks();
     liCreate()
     await loadParamsView()

@@ -14,17 +14,23 @@ const objectRazmetka = {
 
 
 export async function timeIntervalStatistiks() {
+    const act = document.querySelector('.activStatic').id
+    for (let key in objectRazmetka) {
+        objectRazmetka[key].data = []
+    }
 
     const navstat = document.querySelectorAll('.navstat')
-    const act = document.querySelector('.activStatic').id
 
     const windowStatistic = document.querySelector('.windowStatistic')
     windowStatistic.insertAdjacentHTML('beforeend', ` ${objectRazmetka[act].html}`);
     const today = document.querySelector('.todayTitle')
     const yestoday = document.querySelector('.yestodayTitle')
     const week = document.querySelector('.weekTitle')
+
+    console.log(act + 'акт')
+    act !== 'nav1' ? updateHTML() : null
     navstat.forEach(el => {
-        el.addEventListener('click', () => {
+        el.addEventListener('click', async () => {
             console.log('клик')
             navstat.forEach(el => {
                 el.classList.remove('activStatic')
@@ -35,30 +41,47 @@ export async function timeIntervalStatistiks() {
             windowStatistic.children[1].remove()
             windowStatistic.children[1].remove()
             windowStatistic.insertAdjacentHTML('beforeend', ` ${objectRazmetka[act].html}`);
+            act !== 'nav1' ? updateHTML() : null
 
             const today = document.querySelector('.todayTitle')
             const yestoday = document.querySelector('.yestodayTitle')
             const week = document.querySelector('.weekTitle')
             eskiz(today, yestoday, week)
-            objectRazmetka[act].fn(objectRazmetka[act].data[0], 1)
-
-            act !== 'nav1' ? updateHTML() : null
-            function updateHTML() {
-                const jobTSDetalisationGraf = document.querySelector(".jobTSDetalisationGraf")
-                jobTSDetalisationGraf.style.flexDirection = 'row'
-                jobTSDetalisationGraf.style.justifyContent = 'center'
-                const jobTSDetalisationLine = document.querySelector(".jobTSDetalisationLine")
-                jobTSDetalisationLine.style.width = '200px'
+            await load(act, 0, 1)
+            await load(act, 1, 2)
+            await load(act, 2, 3)
+            async function load(act, el, num) {
+                console.log('load')
+                objectRazmetka[act].fn(objectRazmetka[act].data[el], num)
             }
+            //   objectRazmetka[act].fn(objectRazmetka[act].data[1], 2)
+            //   objectRazmetka[act].fn(objectRazmetka[act].data[2], 3)
+
         })
     })
+
     eskiz(today, yestoday, week)
-    statistics(timefn(), today, 1)
-    statistics(yesTo(), yestoday, 2)
-    statistics(weekTo(), week, 3)
+    await statistics(timefn(), today, 1)
+    await statistics(yesTo(), yestoday, 2)
+    await statistics(weekTo(), week, 3)
 }
 
-
+function updateHTML() {
+    console.log('работает апдейт')
+    const jobTSDetalisationGraf = document.querySelector(".jobTSDetalisationGraf")
+    jobTSDetalisationGraf.style.flexDirection = 'row'
+    jobTSDetalisationGraf.style.justifyContent = 'center'
+    const jobTSDetalisationLine = document.querySelector(".jobTSDetalisationLine")
+    jobTSDetalisationLine.style.width = '200px'
+    const chartJobTS = document.querySelectorAll('.chartJobTS')
+    const jobTSDetalisationDate = document.querySelectorAll(".jobTSDetalisationDate")
+    jobTSDetalisationDate.forEach(el => {
+        el.style.fontSize = '13px'
+    })
+    chartJobTS.forEach(el => {
+        el.style.alignItems = 'start'
+    })
+}
 
 function eskiz(today, yestoday, week) {
     today.textContent = `Сегодня: ${convertTime(1)}`
@@ -258,8 +281,9 @@ export async function statistics(interval, ele, num) {
     objectRazmetka['nav2'].data.push(dannieSortJobTS(data));
     console.log(objectRazmetka)
     const act = document.querySelector('.activStatic').id
-    createChart(data, ele, num)
-
+    console.log(act, num)
+    /// createChart(data, ele, num)
+    objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)
 }
 
 function prostoy(data, tsi) {
@@ -314,90 +338,166 @@ function prostoy(data, tsi) {
     }
 }
 
-
-
-function createJobTS(data, ele, num) {
+function createJobTS(data, num) {
+    console.log('рисуем график')
+    const jobTSDetalisationLine = document.querySelectorAll('.jobTSDetalisationLine')
+    jobTSDetalisationLine.forEach(e => {
+        e.style.width = '200px'
+    })
+    console.log(num)
     console.log(data)
-    /* const chartStatic = document.querySelector(`.chartStatic${num}`)
-     if (chartStatic) {
-         chartStatic.remove();
-     }
- 
-     const objColor = {
-         'Движется': ' #8fd14f',
-         'Парковка': '#3399ff',
-         'Работа на холостом ходу': '#f24726'
-     }
-     const obj = {
-         1: 'todayChart',
-         2: 'yestodayChart',
-         3: 'weekChart',
-     }
-     // Задание размеров графика
-     var width = 200;
-     var height = 200;
- 
-     // Создание контейнера для графика
-     var svg = d3.select(`${obj[num]}`)
-         .append("svg")
-         .attr("width", width)
-         .attr("height", height);
- 
- 
-     // Массив значений для столбцов
-     var values = Object.values(data)
-     console.log(values)
- 
- 
- 
-     // Создание масштаба для оси Y
-     var yScale = d3.scaleLinear()
-         .domain([0, 86400]) // Используем максимальное значение для определения диапазона
-         .range([0, height - 20]); // Подстраиваем высоту графика
- 
-     // Отрисовка столбцов
-     svg.selectAll("rect")
-         .data(values)
-         .enter()
-         .append("rect")
-         .attr("x", function (d, i) {
-             return i * (width / values.length);
-         })
-         .attr("y", function (d) {
-             return height - yScale(parseInt(d[values[0]].split(" ")[0]));
-         })
-         .attr("width", width / values.length - 10)
-         .attr("height", function (d) {
-             return yScale(parseInt(d[values[0]].split(" ")[0]));
-         })
-         .attr("fill", function (d, i) {
-             return objColor[i];
-         });
- 
-     // Добавление подписей к столбцам
-     svg.selectAll("text")
-         .data(values)
-         .enter()
-         .append("text")
-         .text(function (d) {
-             return d[values[0]];
-         })
-         .attr("x", function (d, i) {
-             return i * (width / values.length) + 5;
-         })
-         .attr("y", function (d) {
-             return height - yScale(parseInt(d[values[0]].split(" ")[0])) - 5;
-         })
-         .attr("fill", "white")
-         .attr("font-size", "12px");*/
-
-
-}
-function createChart(data, ele, num) {
     const chartStatic = document.querySelector(`.chartStatic${num}`)
     if (chartStatic) {
         chartStatic.remove();
     }
+
+    const objColor = {
+        'Движется': ' #8fd14f',
+        'Парковка': '#3399ff',
+        'Работа на холостом ходу': '#f24726'
+    }
+    const obj = {
+        1: 'todayChart',
+        2: 'yestodayChart',
+        3: 'weekChart',
+    }
+
+    const dataArray = Object.entries(data).map(([category, value]) => ({ category, value }));
+    // Задание размеров графика
+    var width = 220;
+    var height = 200;
+
+    console.log(`${obj[num]}`)
+    // Создание контейнера для графика
+    var svg = d3.select(`.${obj[num]}`)
+        .append("svg")
+        .attr('class', `chartStatic${num}`)
+        .attr("width", width)
+        .attr("height", height);
+    console.log(svg)
+    var maxValue = d3.max(dataArray.map(item => item.value));
+    console.log(maxValue)
+    // Массив значений для столбцов
+    console.log(data)
+
+    // Создание масштаба для оси Y
+    var yScale = d3.scaleLinear()
+        .domain([0, num === 3 ? maxValue * 1.3 : 86400]) // Используем максимальное значение для определения диапазона
+        .range([0, height - 20]); // Подстраиваем высоту графика
+    const barWidth = 40; // Ширина каждого столбца
+    // Присоединяет данные к rect элементам и задает их атрибуты
+    // Создание столбцов
+    const bars = svg.selectAll("rect")
+        .data(dataArray)
+        .enter()
+        .append("rect")
+        .attr("x", function (d, i) {
+            return i * barWidth;
+        })
+        .attr("y", (d) => height - yScale(d.value))
+        .attr("width", barWidth - 1)
+        .attr("height", (d) => yScale(d.value))
+        .attr('stroke', 'black')
+        .attr("fill", function (d, i) {
+            return objColor[d.category];
+        });
+
+    const datas = [dataArray]
+    const viewData = datas[0].map(function (d) {
+        var time = convertToHoursAndMinutes(d.value);
+        return {
+            category: d.category, value: d.value, hours: time.hours, minutes: time.minutes
+        }
+    });
+
+
+    // values: (time.hours > 0 ? time.hours + " ч.\n " : "") + (time.minutes > 0 ? time.minutes + " мин." : "")
+    function convertToHoursAndMinutes(value) {
+        console.log(value)
+        const hours = Math.floor(value / 3600)
+        const lastSeconds = value % 3600
+        const minutes = Math.floor(lastSeconds / 60)
+        console.log(hours)
+        return { hours: hours, minutes: minutes };
+    }
+    console.log(viewData)
+
+
+
+    svg.selectAll("g.values")
+        .data(viewData)
+        .enter()
+        .append('g')
+        .attr('class', 'values')
+        .attr('transform', function (d, i) {
+            const x = i * barWidth + (barWidth - 1) / 2; // центрирование текста на столбце
+            var barHeight = yScale(d.value);
+            console.log(barHeight)
+            var y = height - barHeight;
+            return `translate(${x}, ${y})`;
+        })
+        .each(function (d, i) {
+            var barHeight = yScale(d.value);
+            if (d.hours > 0) {
+                d3.select(this)
+                    .append('text')
+                    .attr('x', 0)
+                    .attr('y', 0)
+                    .attr('dy', barHeight > 10 ? '1.55em' : '-1.75em') // Смещение вверх над столбцем для часов
+                    .text(d.hours + ' ч.')
+                    .attr("fill", "black")
+                    .attr("font-size", "10px")
+                    .style('text-anchor', 'middle'); // Центрирование текста
+            }
+            if (d.minutes > 0) {
+                d3.select(this)
+                    .append('text')
+                    .attr('x', 0)
+                    .attr('y', 0)
+                    .attr('dy', barHeight > 10 ? '2.75em' : '-0.35em') // Смещение вверх над часами для минут
+                    .text(d.minutes + ' мин.')
+                    .attr("fill", "black")
+                    .attr("font-size", "10px")
+                    .style('text-anchor', 'middle'); // Центрирование текста
+            }
+        });
+
+
+
+    /*
+        svg.selectAll("text")
+            .data(viewData)
+            .enter()
+            .append("text")
+            .text(function (d) {
+                return `${d.hours}\n${d.minutes}`;
+            })
+            .attr("x", function (d, i) {
+                return i * barWidth + barWidth / 2; // Размещаем текст в центре столбца
+            })
+            .attr("y", function (d) {
+                var barHeight = yScale(d.value);
+                var y = height - barHeight;
+                y = isNaN(y) ? 0 : y;
+                console.log(barHeight)
+                if (barHeight < 10) {
+                    return y + 0;
+                } else {
+                    return y + 30;
+                }
+            })
+            .attr("fill", "black")
+            .attr("font-size", "10px")
+            .attr("text-anchor", "middle"); // Задаем якорь текста в середине
+    */
+
+}
+function createChart(data, num) {
+    const chartStatic = document.querySelector(`.chartStatic${num}`)
+    if (chartStatic) {
+        chartStatic.remove();
+    }
+
     // Функция для объединения смежных интервалов с одинаковым статусом
     function combineIntervals(data) {
         const combinedData = [];
@@ -416,7 +516,7 @@ function createChart(data, ele, num) {
     }
 
     const combinedData = combineIntervals(data);
-    console.log(combinedData)
+    console.log(combinedData, num)
     const width = 673; // Ширина графика
     const svgHeight = 80; // Высота SVG элемента
     const margin = { top: 10, right: 20, bottom: 10, left: 50 };

@@ -137,7 +137,6 @@ export async function logsView(array) {
         const koor = (parsedContent[0].res).split(",");
 
         const geo = await reverseGeocode(parseFloat(koor[0]), parseFloat(koor[1]));
-
         const id = parseFloat(el.idw)
         const group = arrayIdGroup
             .filter(it => it[0] === id)

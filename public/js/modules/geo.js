@@ -111,21 +111,32 @@ export async function reverseGeocode(geoY, geoX) {
     try {
         const responses = await fetch(`${API_URL}?q=${lat},${lng}&key=${API_KEY}&no_annotations=1&language=ru`);
         const data = await responses.json();
-        var address = data.results[0].components;
-        const adres = [];
-        adres.push(address.road_reference)
-        adres.push(address.municipality)
-        adres.push(address.county)
-        adres.push(address.town)
-        adres.push(address.state)
-        adres.push(address.country)
-        const res = Object.values(adres).filter(val => val !== undefined).join(', ');
-        return res
+        console.log(data.results.length)
+        if (!responses.ok) {
+            if (responses.status === 402) {
+
+                return [geoY, geoX];
+            }
+
+            else {
+                const address = data.results[0].components;
+                const adres = [];
+                adres.push(address.road_reference)
+                adres.push(address.municipality)
+                adres.push(address.county)
+                adres.push(address.town)
+                adres.push(address.state)
+                adres.push(address.country)
+                const res = Object.values(adres).filter(val => val !== undefined).join(', ');
+                return res
+            }
+        }
     }
     catch (e) {
         // console.log(e)
         return [geoY, geoX]
     }
+
 
 }
 export async function createMapsUniq(geoTrack, geo, num) {
