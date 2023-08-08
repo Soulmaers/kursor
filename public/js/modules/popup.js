@@ -116,13 +116,13 @@ export async function logsView(array) {
             const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
             let mess;
             if (event === 'Заправка') {
-                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, litrazh: `${content[0].litrazh}`, time: `Время заправки: ${formattedDate}`, res: `Местоположение: ${content[0].res}` }]
+                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, litrazh: `${content[0].litrazh}`, time: `Время заправки: ${formattedDate}` }]
             }
             if (event === 'Простой') {
-                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, time: `${content[0].time}`, alarm: `${content[0].alarm}`, res: `Местоположение: ${content[0].res}` }]
+                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, time: `${content[0].time}`, alarm: `${content[0].alarm}` }]
             }
             if (event === 'Предупреждение') {
-                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, time: `${content[0].time}`, tyres: `${content[0].tyres}`, param: `${content[0].param}`, alarm: `${content[0].alarm}`, res: `Местоположение: ${content[0].res}` }]
+                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, time: `${content[0].time}`, tyres: `${content[0].tyres}`, param: `${content[0].param}`, alarm: `${content[0].alarm}` }]
             }
             console.log(mess)
             createPopup(mess)
