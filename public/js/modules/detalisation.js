@@ -726,6 +726,8 @@ async function dannieOilTS(idw, num) {
 
 
 function dannieSortJobTS(datas, ele, num) {
+
+
     const data = datas.map(el => ({
         geo: el.geo,
         sats: el.sats,

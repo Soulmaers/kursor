@@ -25,7 +25,6 @@ module.exports.alert = async (req, res) => {
     }
 }
 
-
 module.exports.logs = async (req, res) => {
     const newdata = req.body.newdata
     const idw = req.body.idw

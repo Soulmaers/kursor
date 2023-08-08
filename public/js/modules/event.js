@@ -13,6 +13,7 @@ import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 import { protDash, dashViewProtector } from './charts/protek.js'
 import { getStat } from './charts/stat.js'
+
 import { conf } from './altConfig.js'
 import { viewTech } from './tech.js'
 import { element } from './startAllStatic.js'
