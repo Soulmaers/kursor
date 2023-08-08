@@ -216,3 +216,22 @@ export const jobTS = `  <div class="jobTSDetalisationGraf">
                         <div class="legendaButton jobHHTS">Работа на холостом ходу</div>
                         <div class="legendaButton notConnect">ТС не на связи</div>
                     </div>`
+export const oilTS = `  <div class="jobTSDetalisationGraf">
+<div class="chartJobTS">
+                        <div class="jobTSDetalisationDate todayTitle">Сегодня</div>
+                        <div class="jobTSDetalisationLine todayChart"></div>
+                        </div>
+                        <div class="chartJobTS">
+                        <div class="jobTSDetalisationDate yestodayTitle">Вчера</div>
+                        <div class="jobTSDetalisationLine yestodayChart"></div>
+                                </div>
+                        <div class="chartJobTS">
+                        <div class="jobTSDetalisationDate weekTitle">Неделя</div>
+                        <div class="jobTSDetalisationLine weekChart"></div>
+                                </div>
+                    </div>
+                    <div class="jobTSDetalisationCharts_legenda">
+                        <div class="legendaButton move">Заправка</div>
+                        <div class="legendaButton rashodTS">Израсходовано</div>
+                        <div class="legendaButton jobHHTS">Слив топлива</div>
+                                          </div>`

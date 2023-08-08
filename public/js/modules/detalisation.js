@@ -1,15 +1,16 @@
 import { testovfn } from './charts/bar.js'
 import { fnParMessage } from './grafiks.js'
-import { timefn } from './startAllStatic.js'
+import { timefn, convertDate } from './startAllStatic.js'
 import { timeConvert } from './charts/oil.js'
 import { createMapsUniq } from './geo.js'
-import { jobTSDetalisation, jobTS } from './content.js'
+import { jobTSDetalisation, jobTS, oilTS } from './content.js'
 
 
 
 const objectRazmetka = {
     'nav1': { html: jobTSDetalisation, data: [], fn: createChart },
-    'nav2': { html: jobTS, data: [], fn: createJobTS }
+    'nav2': { html: jobTS, data: [], fn: createJobTS },
+    'nav3': { html: oilTS, data: [], fn: createOilTS }
 }
 
 
@@ -282,6 +283,7 @@ export async function statistics(interval, ele, num) {
 
     objectRazmetka['nav1'].data.push(data);
     objectRazmetka['nav2'].data.push(dannieSortJobTS(data));
+    objectRazmetka['nav3'].data.push(await dannieOilTS(idw, num));
     console.log(objectRazmetka)
     const act = document.querySelector('.activStatic').id
     console.log(act, num)
@@ -341,6 +343,95 @@ function prostoy(data, tsi) {
     }
 }
 
+
+function createOilTS(data, num) {
+    const jobTSDetalisationChartsLegenda = document.querySelector('.jobTSDetalisationCharts_legenda')
+    const legendaButton = document.querySelectorAll('.legendaButton')
+    jobTSDetalisationChartsLegenda.style.justifyContent = 'center'
+    legendaButton.forEach(el => {
+        el.style.margin = '0 10px'
+    })
+    const jobTSDetalisationLine = document.querySelectorAll('.jobTSDetalisationLine')
+    jobTSDetalisationLine.forEach(e => {
+        e.style.width = '200px'
+    })
+    const chartStatic = document.querySelector(`.chartStatic${num}`)
+    if (chartStatic) {
+        chartStatic.remove();
+    }
+    const objColor = {
+        'Заправлено': ' #8fd14f',
+        'Израсходовано': '#3fd6e0',
+        'Слив топлива': '#f24726'
+    }
+    const obj = {
+        1: 'todayChart',
+        2: 'yestodayChart',
+        3: 'weekChart',
+    }
+    const dataArray = Object.entries(data).map(([category, value]) => ({ category, value }));
+    // Задание размеров графика
+    var width = 220;
+    var height = 200;
+    // Создание контейнера для графика
+    var svg = d3.select(`.${obj[num]}`)
+        .append("svg")
+        .attr('class', `chartStatic${num}`)
+        .attr("width", width)
+        .attr("height", height);
+
+    var maxValue = d3.max(dataArray.map(item => item.value));
+    // Создание масштаба для оси Y
+    var yScale = d3.scaleLinear()
+        .domain([0, maxValue * 1.3]) // Используем максимальное значение для определения диапазона
+        .range([0, height - 20]); // Подстраиваем высоту графика
+    const barWidth = 60; // Ширина каждого столбца
+
+    svg.selectAll("rect")
+        .data(dataArray)
+        .enter()
+        .append("rect")
+        .attr("x", function (d, i) {
+            return i * barWidth;
+        })
+        .attr("y", (d) => height - yScale(d.value))
+        .attr("width", barWidth - 1)
+        .attr("height", (d) => yScale(d.value))
+        .attr('stroke', (d) => yScale(d.value) > 3 ? 'black' : objColor[d.category])
+        .attr("fill", function (d, i) {
+            return objColor[d.category];
+        });
+    svg.selectAll('.text-label')
+        .data(dataArray)
+        .enter()
+        .append('text')
+        .attr('class', 'text-label')
+        .attr('x', function (d, i) {
+            return i * barWidth + barWidth / 2; // Центрирование текста над каждым столбцом
+        })
+        .attr('y', function (d) {
+            if (yScale(d.value) > 30) {
+                return (height - yScale(d.value)) + yScale(d.value) / 2; // Центрирование по вертикали столбца
+            } else {
+                return height - yScale(d.value) - 5; // Расположение над столбцом с небольшим отступом
+            }
+        })
+        .attr('dy', function (d) {
+            if (yScale(d.value) > 30) {
+                return '0.35em'; // Отступ для центрированного текста
+            } else {
+                return '-1em'; // Отступ для текста над столбцом
+            }
+        })
+        .text(function (d) {
+            return d.value + ' л.';
+        })
+        .attr("fill", "black")
+        .attr("font-size", "14px")
+        .attr("font-family", "Roboto")
+        .attr("font-weight", "bold")
+        .style('text-anchor', 'middle');
+}
 function createJobTS(data, num) {
     const jobTSDetalisationLine = document.querySelectorAll('.jobTSDetalisationLine')
     jobTSDetalisationLine.forEach(e => {
@@ -406,8 +497,6 @@ function createJobTS(data, num) {
             category: d.category, value: d.value, hours: time.hours, minutes: time.minutes
         }
     });
-
-
     // values: (time.hours > 0 ? time.hours + " ч.\n " : "") + (time.minutes > 0 ? time.minutes + " мин." : "")
     function convertToHoursAndMinutes(value) {
         console.log(value)
@@ -417,10 +506,6 @@ function createJobTS(data, num) {
         console.log(hours)
         return { hours: hours, minutes: minutes };
     }
-    console.log(viewData)
-
-
-
     svg.selectAll("g.values")
         .data(viewData)
         .enter()
@@ -434,7 +519,6 @@ function createJobTS(data, num) {
             return `translate(${x}, ${y})`;
         })
         .each(function (d, i) {
-            //barHeight / 2)
             console.log(d.hours, d.minutes)
             var barHeight = yScale(d.value);
             if (d.hours > 0) {
@@ -464,43 +548,12 @@ function createJobTS(data, num) {
                     .style('text-anchor', 'middle'); // Центрирование текста
             }
         });
-
-
-
-    /*
-        svg.selectAll("text")
-            .data(viewData)
-            .enter()
-            .append("text")
-            .text(function (d) {
-                return `${d.hours}\n${d.minutes}`;
-            })
-            .attr("x", function (d, i) {
-                return i * barWidth + barWidth / 2; // Размещаем текст в центре столбца
-            })
-            .attr("y", function (d) {
-                var barHeight = yScale(d.value);
-                var y = height - barHeight;
-                y = isNaN(y) ? 0 : y;
-                console.log(barHeight)
-                if (barHeight < 10) {
-                    return y + 0;
-                } else {
-                    return y + 30;
-                }
-            })
-            .attr("fill", "black")
-            .attr("font-size", "10px")
-            .attr("text-anchor", "middle"); // Задаем якорь текста в середине
-    */
-
 }
 function createChart(data, num) {
     const chartStatic = document.querySelector(`.chartStatic${num}`)
     if (chartStatic) {
         chartStatic.remove();
     }
-
     // Функция для объединения смежных интервалов с одинаковым статусом
     function combineIntervals(data) {
         const combinedData = [];
@@ -634,10 +687,45 @@ function createChart(data, num) {
 
 }
 
+async function dannieOilTS(idw, num) {
+    let number;
+    let data
+    if (num === 1) {
+        number = 0
+        data = [convertDate(number)]
+    }
+    if (num === 2) {
+        number = 1
+        data = [convertDate(number)]
+    }
+    if (num === 3) {
+        number = 7
+        data = [convertDate(number), convertDate(1)]
+    }
+
+    console.log(data)
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data, idw }),
+    };
+    const mods = await fetch('/api/summaryIdwToBase', params);
+    const models = await mods.json();
+    let zap = models.reduce((acc, el) => el.zapravka + acc, 0)
+    let ras = models.reduce((acc, el) => el.rashod + acc, 0)
+    console.log(zap, ras)
+    const obj = {}
+    zap !== 0 ? obj['Заправлено'] = zap : null
+    ras !== 0 ? obj['Израсходовано'] = ras : null
+    console.log(obj)
+    return obj
+
+}
 
 
 function dannieSortJobTS(datas, ele, num) {
-
     const data = datas.map(el => ({
         geo: el.geo,
         sats: el.sats,
@@ -676,14 +764,6 @@ function dannieSortJobTS(datas, ele, num) {
         const diff = (end.getTime() / 1000) - (start.getTime() / 1000)
         return diff
     }
-    /*for (let key in obj) {
-        const totalSeconds = Math.floor(obj[key]);
-        const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-        const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-        const motoHours = `${hours} ч.:${minutes} мин.`;
-
-        obj[key] = motoHours
-    }*/
     return obj
 
 }
