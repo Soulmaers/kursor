@@ -280,14 +280,21 @@ export async function statistics(interval, ele, num) {
         }))
     );
 
-
-    objectRazmetka['nav1'].data.push(data);
-    objectRazmetka['nav2'].data.push(dannieSortJobTS(data));
+    const datas = data.map((item, index, arr) => {
+        if (index === 0 || item.condition !== arr[index - 1].condition) {
+            const conditionGroup = arr.slice(index).findIndex(el => el.condition !== item.condition);
+            const endIndex = conditionGroup === -1 ? arr.length : index + conditionGroup;
+            const conditionItems = arr.slice(index, endIndex);
+            const interval = conditionItems.length > 1 ? conditionItems[conditionItems.length - 1].time - conditionItems[0].time : 0;
+            conditionItems.forEach(condItem => condItem.interval = convertToHoursAndMinutes(interval / 1000));
+        }
+        return item;
+    });
+    objectRazmetka['nav1'].data.push(datas);
+    objectRazmetka['nav2'].data.push(dannieSortJobTS(datas));
     objectRazmetka['nav3'].data.push(await dannieOilTS(idw, num));
     console.log(objectRazmetka)
     const act = document.querySelector('.activStatic').id
-    console.log(act, num)
-    /// createChart(data, ele, num)
     objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)
 }
 
@@ -342,7 +349,6 @@ function prostoy(data, tsi) {
         return timeBukl
     }
 }
-
 
 function createOilTS(data, num) {
     const jobTSDetalisationChartsLegenda = document.querySelector('.jobTSDetalisationCharts_legenda')
@@ -432,6 +438,13 @@ function createOilTS(data, num) {
         .attr("font-weight", "bold")
         .style('text-anchor', 'middle');
 }
+
+function convertToHoursAndMinutes(value) {
+    const hours = Math.floor(value / 3600)
+    const lastSeconds = value % 3600
+    const minutes = Math.floor(lastSeconds / 60)
+    return { hours: hours, minutes: minutes };
+}
 function createJobTS(data, num) {
     const jobTSDetalisationLine = document.querySelectorAll('.jobTSDetalisationLine')
     jobTSDetalisationLine.forEach(e => {
@@ -441,7 +454,6 @@ function createJobTS(data, num) {
     if (chartStatic) {
         chartStatic.remove();
     }
-
     const objColor = {
         'Движется': ' #8fd14f',
         'Парковка': '#3399ff',
@@ -452,7 +464,6 @@ function createJobTS(data, num) {
         2: 'yestodayChart',
         3: 'weekChart',
     }
-
     const dataArray = Object.entries(data).map(([category, value]) => ({ category, value }));
     // Задание размеров графика
     var width = 220;
@@ -498,14 +509,7 @@ function createJobTS(data, num) {
         }
     });
     // values: (time.hours > 0 ? time.hours + " ч.\n " : "") + (time.minutes > 0 ? time.minutes + " мин." : "")
-    function convertToHoursAndMinutes(value) {
-        console.log(value)
-        const hours = Math.floor(value / 3600)
-        const lastSeconds = value % 3600
-        const minutes = Math.floor(lastSeconds / 60)
-        console.log(hours)
-        return { hours: hours, minutes: minutes };
-    }
+
     svg.selectAll("g.values")
         .data(viewData)
         .enter()
@@ -636,12 +640,10 @@ function createChart(data, num) {
             const d0 = combinedData[i - 1];
             const d1 = combinedData[i];
             d = x0 - d0.time > d1.time - x0 ? d1 : d0;
-
             const selectedTime = timeConvert(d.time)
             const tool = document.querySelector(`.tooltipStat${num}`)
-            console.log(tool)
             tool.style.display = 'block'
-            tool.textContent = `Скорость: ${d.speed} км/ч\nВремя: ${selectedTime}\nСостояние: ${d.condition}`
+            tool.textContent = `Скорость: ${d.speed} км/ч\nВремя: ${selectedTime}\nСостояние: ${d.condition}\nИнтервал: ${d.interval.hours} ч.${d.interval.minutes} мин.`
             tool.style.top = '330px'//'50px'
             tool.style.left = '350px'
         })
@@ -726,8 +728,6 @@ async function dannieOilTS(idw, num) {
 
 
 function dannieSortJobTS(datas, ele, num) {
-
-
     const data = datas.map(el => ({
         geo: el.geo,
         sats: el.sats,
