@@ -1,6 +1,7 @@
 
 const connection = require('../config/db')
 const databaseService = require('./database.service');
+const wialonService = require('./wialon.service.js')
 /*
 let socked;
 module.exports = {
@@ -152,13 +153,47 @@ exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, s
 
 
 
-exports.controllerSaveToBase = async (arr, id) => {
+exports.controllerSaveToBase = async (arr, id, geo) => {
     const idw = id
     const date = new Date()
     const time = (date.getTime() / 1000).toFixed(0)
     const newdata = JSON.stringify(arr)
-    const res = await databaseService.logsSaveToBase(newdata, time, idw)
+    const geoLoc = JSON.stringify(geo)
+    const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc)
     return res
+}
+
+
+exports.ggg = async (id) => {
+    console.log('ggg')
+    return new Promise(async function (resolve, reject) {
+        const idw = id
+        const allobj = {};
+        const ress = await wialonService.getAllNameSensorsIdDataFromWialon(idw)
+        if (!ress) {
+            ggg(id)
+        }
+        const nameSens = Object.entries(ress.item.sens)
+        const arrNameSens = [];
+        nameSens.forEach(el => {
+            arrNameSens.push([el[1].n, el[1].p])
+        })
+        const result = await wialonService.getLastAllSensorsIdDataFromWialon(idw)
+        if (result) {
+            const valueSens = [];
+            Object.entries(result).forEach(e => {
+                valueSens.push(e[1])
+            })
+            const allArr = [];
+            arrNameSens.forEach((e, index) => {
+                allArr.push([...e, valueSens[index]])
+            })
+            allArr.forEach(it => {
+                allobj[it[1]] = it[0]
+            })
+        }
+        resolve(allobj)
+    });
 }
 
 //сохраняем в базу алармы
@@ -168,11 +203,16 @@ exports.alarmBase = async (data, tyres, alarm) => {
     console.log('данные по алармам')
     const dannie = data.concat(tyres)
     let val;
-    dannie[6] !== 'Потеря связи с датчиком' ? val = dannie[3] + ' ' + 'Бар' : val = dannie[4] + '' + 't'
-    const res = await databaseService.controllerSaveToBase([{
-        event: 'Предупреждение', name: `Компания: ${dannie[9]}`, name: `Объект: ${dannie[1]}`, time: `Время ${dannie[0]}`, tyres: `Колесо: ${dannie[2]}`,
-        param: `Параметр: ${val}`, alarm: `Событие: ${alarm}`, res: `${dannie[8]}`
-    }], dannie[6])
+
+    console.log(alarm)
+    const allSens = await databaseService.ggg(dannie[6])
+    const tyress = allSens[dannie[2]]
+    console.log(dannie)
+    alarm !== 'Потеря связи с датчиком' ? val = dannie[3] + ' ' + 'Бар' : val = dannie[4] + '' + 't'
+    const res = alarm !== 'Норма' ? await databaseService.controllerSaveToBase([{
+        event: 'Предупреждение', name: `Компания: ${dannie[9]}`, name: `Объект: ${dannie[1]}`, time: `Время ${dannie[0]}`, tyres: `Колесо: ${tyress}`,
+        param: `Параметр: ${val}`, alarm: `Событие: ${alarm}`
+    }], dannie[6], dannie[8]) : 'Норма. В базу не пишем'
     console.log('Предупреждение' + ' ' + res.message)
     count++
 
@@ -426,10 +466,6 @@ exports.quantitySaveToBase = async (login, quantity) => {
         }
     })
 }
-
-
-
-
 exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll) => {
     console.log(gosp)
     console.log(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll)
@@ -482,7 +518,6 @@ exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontG
 
     return Promise.all(promises)
 }
-
 
 exports.tyresSaveToBase = (nameCar, tyres, idw) => {
     const promises = tyres.map(el => {
@@ -602,7 +637,7 @@ exports.deleteBarToBase = (idw) => {
 }
 
 
-exports.logsSaveToBase = async (arr, time, idw) => {
+exports.logsSaveToBase = async (arr, time, idw, geo) => {
     const data = [time, arr, idw]
     return new Promise((resolve, reject) => {
         const checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'`
@@ -613,7 +648,7 @@ exports.logsSaveToBase = async (arr, time, idw) => {
             } else if (results.length > 0) {
                 resolve({ message: 'Событие уже существует в базе логов' })
             } else {
-                const postModel = `INSERT INTO logs(idw, time, content) VALUES(${idw}, ${time}, '${arr}')`
+                const postModel = `INSERT INTO logs(idw, time, content, geo) VALUES(${idw}, ${time}, '${arr}','${geo}')`
                 connection.query(postModel, function (err, results) {
                     if (err) {
                         console.log(err)

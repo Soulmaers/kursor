@@ -5,9 +5,6 @@ async function testovfn(active, t1, t2) {
     const resultt = await databaseService.viewChartDataToBase(active, t1, t2)
     return resultt
 }
-
-
-
 exports.startAllStatic = async (objects) => {
     console.log('статик?')
     const result = objects
@@ -353,7 +350,6 @@ function rashodCalc(data, name, group, idw) {
         }
     }
     if (start !== end) {
-
         increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
     }
     const zapravka = increasingIntervals.filter((interval, index) => {
@@ -390,7 +386,8 @@ function rashodCalc(data, name, group, idw) {
         console.log(diff)
         console.log(zapravka[zapravka.length - 1][1][0])
         console.log(data.value[data.value.length - 1])
-        if (zapravka[zapravka.length - 1][1][0] > data.value[data.value.length - 1] && diff > 300) {
+        //zapravka[zapravka.length - 1][1][0] > data.value[data.value.length - 1] && 
+        if (diff > 300) {
             console.log(zapravka + 'условие')
             modalView(zapravka, name, group, idw);
         }
@@ -405,7 +402,6 @@ function rashodCalc(data, name, group, idw) {
     }
     const rashod = rash.reduce((el, acc) => el + acc, 0)
     const zap = [];
-
     zapravka.forEach(e => {
         zap.push(e[1][0] - e[0][0])
     })
@@ -427,7 +423,7 @@ async function modalView(zapravka, name, group, idw) {
     const litrazh = zapravka[0][1][0] - zapravka[0][0][0]
     const geo = zapravka[0][0][2]
     const time = zapravka[0][0][1]
-
+    console.log(geo)
     const day = time.getDate();
     const month = (time.getMonth() + 1).toString().padStart(2, '0');
     const year = time.getFullYear();
@@ -435,8 +431,8 @@ async function modalView(zapravka, name, group, idw) {
     const minutes = time.getMinutes().toString().padStart(2, '0');
     const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
 
-    const data = [{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `${geo}` }]
-    const res = await databaseService.controllerSaveToBase(data, idw)
+    const data = [{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}` }]
+    const res = await databaseService.controllerSaveToBase(data, idw, geo)
     console.log('Заправка' + ' ' + res.message)
     //  createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${geo}` }], idw)
 }
@@ -528,9 +524,9 @@ exports.popupProstoy = async (array) => {
                     const data = [{
                         event: `Простой`, group: `Компания: ${group}`,
                         name: `Объект: ${name}`,
-                        time: `Дата начала простоя: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`, res: `${map}`
+                        time: `Дата начала простоя: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`
                     }]
-                    const resu = await databaseService.controllerSaveToBase(data, idw)
+                    const resu = await databaseService.controllerSaveToBase(data, idw, map)
                     console.log('Простой' + ' ' + resu.message)
                 }
             }

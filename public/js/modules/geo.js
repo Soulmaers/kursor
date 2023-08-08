@@ -144,13 +144,14 @@ export async function createMapsUniq(geoTrack, geo, num) {
     if (mapss) {
         mapss.remove();
     }
+    const wrapp = document.querySelector('.wrapperFull')
     const main = document.querySelector('.main')
     const maps = document.createElement('div')
     maps.classList.add('mapsOilCard')
     maps.setAttribute('id', 'mapOil')
     main.style.position = 'relative'
     maps.style.zIndex = 2099;
-    main.appendChild(maps)
+    num !== 'log' ? main.appendChild(maps) : wrapp.appendChild(maps)
     const map = L.map('mapOil')
     console.log(maps)
 
@@ -168,7 +169,7 @@ export async function createMapsUniq(geoTrack, geo, num) {
     let iss;
     let center;
     let formattedDate;
-    const nameCar = document.querySelector('.color').children[0].textContent
+    const nameCar = document.querySelector('.color') ? document.querySelector('.color').children[0].textContent : null
     var customIcon = new LeafIcon({
         iconUrl: num !== 'oil?' ? '../../image/iconCar2.png' : '../../image/ref.png',
         iconSize: [30, 30],
@@ -256,6 +257,22 @@ export async function createMapsUniq(geoTrack, geo, num) {
             maps.style.top = '40px';
             cl = 'my-popup-stat';
             iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}<br>Время: ${selectedTime}<br>Состояние: ${geo.condition}<br>Скорость: ${geo.speed} км/ч<br>Местоположение: ${res}`, { width: 60, className: 'my-popup-stat', autoPan: false }).addTo(map);
+        }
+        if (num === 'log') {
+            console.log(geo)
+            console.log(num)
+            const selectedTime = geo[0].logs[0]
+
+            center = [geo[0].geo[0], geo[0].geo[1]]
+            console.log(center)
+            const res = await reverseGeocode(center[0], center[1])
+            maps.style.width = '350px';
+            maps.style.height = '350px'
+            maps.style.position = 'absolute'
+            maps.style.left = '580px';
+            maps.style.top = '40px';
+            cl = 'my-popup-log';
+            iss = L.marker(center, { icon: customIcon }).bindPopup(`Время: ${selectedTime}<br>Состояние: ${geo[0].logs[1]}<br>Содержание: ${geo[0].logs[2]}`, { width: 60, className: 'my-popup-log', autoPan: false }).addTo(map);
         }
         map.setView(center, 12)
         map.flyTo(center, 12)

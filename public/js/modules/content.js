@@ -49,7 +49,8 @@ export const textTest = `<div class=" osiTest">
 export const titleLogs = `<h3 class="trLogs">
                         <p class="tdLogs">Дата</p>
                     <p class="tdLogs">Событие</p>
-                    <p class="tdLogs">Содержание</p>
+                                   <p class="tdLogs">Содержание</p>
+                                          <p class="tdLogs">Местоположение</p>
                      </h3>`
 
 

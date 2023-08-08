@@ -182,6 +182,7 @@ export async function statistics(interval, ele, num) {
     }
     const mod = await fetch('/api/modelView', params)
     const model = await mod.json()
+    console.log(model)
     let tsiControll = model.result.length !== 0 || model.result[0].tsiControll && model.result[0].tsiControll !== '' ? Number(model.result[0].tsiControll) : null;
     tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
     console.log(tsiControll)
@@ -190,6 +191,7 @@ export async function statistics(interval, ele, num) {
     const t1 = interval[1]
     const t2 = interval[0]
     const itog = await testovfn(idw, t1, t2)
+    console.log(itog)
     const res = await fnParMessage(idw)
     const time = [];
     const speed = [];
@@ -238,6 +240,7 @@ export async function statistics(interval, ele, num) {
     const dannie = []
     dannie.push(engine[0])
 
+    console.log(dannie)
     for (let i = 0; i < dannie[0].value.length; i++) {
         if (dannie[0].speed[i] > 5) {
             dannie[0].condition[i] = 'Движется';
@@ -339,13 +342,10 @@ function prostoy(data, tsi) {
 }
 
 function createJobTS(data, num) {
-    console.log('рисуем график')
     const jobTSDetalisationLine = document.querySelectorAll('.jobTSDetalisationLine')
     jobTSDetalisationLine.forEach(e => {
         e.style.width = '200px'
     })
-    console.log(num)
-    console.log(data)
     const chartStatic = document.querySelector(`.chartStatic${num}`)
     if (chartStatic) {
         chartStatic.remove();
@@ -367,26 +367,23 @@ function createJobTS(data, num) {
     var width = 220;
     var height = 200;
 
-    console.log(`${obj[num]}`)
     // Создание контейнера для графика
     var svg = d3.select(`.${obj[num]}`)
         .append("svg")
         .attr('class', `chartStatic${num}`)
         .attr("width", width)
         .attr("height", height);
-    console.log(svg)
+
     var maxValue = d3.max(dataArray.map(item => item.value));
-    console.log(maxValue)
-    // Массив значений для столбцов
-    console.log(data)
 
     // Создание масштаба для оси Y
     var yScale = d3.scaleLinear()
         .domain([0, num === 3 ? maxValue * 1.3 : 86400]) // Используем максимальное значение для определения диапазона
         .range([0, height - 20]); // Подстраиваем высоту графика
-    const barWidth = 40; // Ширина каждого столбца
+    const barWidth = 60; // Ширина каждого столбца
     // Присоединяет данные к rect элементам и задает их атрибуты
     // Создание столбцов
+
     const bars = svg.selectAll("rect")
         .data(dataArray)
         .enter()
@@ -397,7 +394,7 @@ function createJobTS(data, num) {
         .attr("y", (d) => height - yScale(d.value))
         .attr("width", barWidth - 1)
         .attr("height", (d) => yScale(d.value))
-        .attr('stroke', 'black')
+        .attr('stroke', (d) => yScale(d.value) > 3 ? 'black' : objColor[d.category])
         .attr("fill", function (d, i) {
             return objColor[d.category];
         });
@@ -437,27 +434,33 @@ function createJobTS(data, num) {
             return `translate(${x}, ${y})`;
         })
         .each(function (d, i) {
+            //barHeight / 2)
+            console.log(d.hours, d.minutes)
             var barHeight = yScale(d.value);
             if (d.hours > 0) {
                 d3.select(this)
                     .append('text')
                     .attr('x', 0)
-                    .attr('y', 0)
-                    .attr('dy', barHeight > 10 ? '1.55em' : '-1.75em') // Смещение вверх над столбцем для часов
+                    .attr('y', barHeight > 30 ? barHeight / 3 : 0)
+                    .attr('dy', barHeight > 30 ? '0.75em' : '-1.75em') // Смещение вверх над столбцем для часов
                     .text(d.hours + ' ч.')
                     .attr("fill", "black")
-                    .attr("font-size", "10px")
+                    .attr("font-size", "14px")
+                    .attr("font-family", "Roboto")
+                    .attr("font-weight", "bold")
                     .style('text-anchor', 'middle'); // Центрирование текста
             }
             if (d.minutes > 0) {
                 d3.select(this)
                     .append('text')
                     .attr('x', 0)
-                    .attr('y', 0)
-                    .attr('dy', barHeight > 10 ? '2.75em' : '-0.35em') // Смещение вверх над часами для минут
+                    .attr('y', barHeight > 30 ? barHeight / 3 : 0)
+                    .attr('dy', barHeight > 30 ? '1.75em' : '-0.35em') // Смещение вверх над часами для минут
                     .text(d.minutes + ' мин.')
                     .attr("fill", "black")
-                    .attr("font-size", "10px")
+                    .attr("font-size", "14px")
+                    .attr("font-family", "Roboto")
+                    .attr("font-weight", "bold")
                     .style('text-anchor', 'middle'); // Центрирование текста
             }
         });

@@ -1,10 +1,10 @@
-
+import { DraggableContainer } from '../class/Dragdown.js'
 import { ggg } from './menu.js'
 import { timefn, timesFormat } from './startAllStatic.js'
 import { testovfn } from './charts/bar.js'
 import { fnParMessage } from './grafiks.js'
 import { titleLogs } from './content.js'
-import { reverseGeocode } from './geo.js'
+import { reverseGeocode, createMapsUniq } from './geo.js'
 
 
 
@@ -77,7 +77,6 @@ export async function logsView(array) {
     }
     const ress = await fetch('/api/logsView', param)
     const results = await ress.json()
-
     const paramLog = {
         method: "POST",
         headers: {
@@ -134,9 +133,8 @@ export async function logsView(array) {
     const mass = Promise.all(results.map(async el => {
         const parsedContent = JSON.parse(el.content);
         const typeEvent = parsedContent[0].event;
-        const koor = (parsedContent[0].res).split(",");
-
-        const geo = await reverseGeocode(parseFloat(koor[0]), parseFloat(koor[1]));
+        const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
+        const geo = geoloc !== null ? await reverseGeocode(parseFloat(Number(geoloc[0]).toFixed(6)), parseFloat(Number(geoloc[1]).toFixed(6))) : 'нет данных'
         const id = parseFloat(el.idw)
         const group = arrayIdGroup
             .filter(it => it[0] === id)
@@ -147,13 +145,39 @@ export async function logsView(array) {
             int.unshift(`Компания: ${group[0]}`);
         }
         const time = times(new Date(Number(el.time) * 1000));
-        const info = `${int.join(", ")}, Местоположение: ${geo}`;
-        return { time: time, typeEvent: typeEvent, content: info };
+        const info = `${int.join(", ")}`;
+        return { time: time, typeEvent: typeEvent, content: info, geo: geo };
     }));
     mass.then(async results => {
         const clickLog = document.querySelector('.clickLog')
         if (!clickLog) {
             await createLogsTable(results);
+            const tr = document.querySelectorAll('.trEvent')
+            tr.forEach(e => {
+                if (e.lastElementChild.textContent !== 'нет данных') {
+                    e.lastElementChild.style.cursor = 'pointer'
+                    e.lastElementChild.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        const geo = [];
+                        geo.push(parseFloat(e.lastElementChild.textContent.split(',')[0]))
+                        geo.push(parseFloat(e.lastElementChild.textContent.split(',')[1]))
+                        console.log(geo)
+                        const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[1].textContent, e.lastElementChild.parentElement.children[2].textContent] }]
+                        createMapsUniq([], obj, 'log')
+
+                    })
+                    document.addEventListener('click', function (event) {
+                        const targetElement = event.target;
+                        const map = document.getElementById('mapOil');
+
+                        if (map && !map.contains(targetElement)) {
+                            map.remove();
+                        }
+                    });
+
+                }
+            })
+
             const log = document.querySelector('.logs')
             const wrapperLogs = document.querySelector('.wrapperLogs')
             async function togglePopup() {
@@ -161,9 +185,7 @@ export async function logsView(array) {
                     wrapperLogs.style.display = 'block'// Показываем попап
                     wrapperLogs.classList.add('clickLog')
                     const trEvent = document.querySelectorAll('.trEvent')
-                    console.log(trEvent)
                     const quantity = trEvent.length;
-                    console.log(quantity)
                     const param = {
                         method: "POST",
                         headers: {
@@ -174,53 +196,50 @@ export async function logsView(array) {
                     }
                     const res = await fetch('/api/viewLogs', param)
                     const confirm = await res.json()
-                    /*  const paramLog = {
-                          method: "POST",
-                          headers: {
-                              'Content-Type': 'application/json',
-                          },
-                          body: (JSON.stringify({ login }))
-                      }
-                      const resLog = await fetch('/api/quantityLogs', paramLog)
-                     // const resultsLog = await resLog.json()*/
-                    //console.log(resultsLog[0].quantity)
                     const viewNum = results.length - quantity
-                    // const viewNum = results.length - resultsLog[0].quantity
                     viewTableNum(viewNum)
                 } else {
                     wrapperLogs.style.display = 'none'; // Скрываем попап
                     wrapperLogs.classList.remove('clickLog')
                 }
             }
+            const numy = document.querySelector('.num')
             // Добавляем обработчики кликов
             log.addEventListener('click', function (event) {
+                const wr = document.querySelector('.trLogs')
+                const draggable = new DraggableContainer(wr);
+                togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
+            });
+            numy.addEventListener('click', function (event) {
+                event.stopPropagation();
                 togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
             });
             document.addEventListener('click', function (event) {
-                if (event.target !== wrapperLogs && !wrapperLogs.contains(event.target) && event.target !== log) {
+                if (event.target !== wrapperLogs && !wrapperLogs.contains(event.target) && event.target !== log && event.target !== numy) {
                     wrapperLogs.style.display = 'none'; // Скрываем попап при клике на любую область, кроме элемента "log"
                     wrapperLogs.classList.remove('clickLog')
                 }
             });
         }
-        else {
 
-        }
     }).catch(error => {
         console.error(error);
     })
     setTimeout(logsView, 60000, array)
 }
 
-
 function viewTableNum(num) {
     console.log(num)
     const nums = document.querySelector('.num')
     nums.textContent = num
 }
+
+const objColor = {
+    'Заправка': 'darkblue',
+    'Простой': 'darkgreen',
+    'Предупреждение': 'darkred'
+}
 async function createLogsTable(mass) {
-    console.log(mass)
-    console.log('up')
     const wrap = document.querySelector('.wrapperLogs')
     if (wrap) {
         wrap.remove();
@@ -240,12 +259,12 @@ async function createLogsTable(mass) {
             td.classList.add('tdEvent')
             td.textContent = el[key]
             trEvent.appendChild(td)
+            td.style.color = objColor[td.textContent]
         }
     })
 
 
 }
-
 
 function times(time) {
     const day = time.getDate();
