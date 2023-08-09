@@ -133,8 +133,9 @@ async function loadValue(array, timeOld, timeNow) {
             })
             hh[0].oil = oil[0]
             const oneArrayOil = hh.filter(el => !el.sens.startsWith('Топливо'));
-            prostoyHH = oneArrayOil[0].oil !== undefined && oneArrayOil[0].oil.every(item => item >= 0) ? oilHH(oneArrayOil[0]) : 0
 
+            prostoyHH = oneArrayOil[0].oil !== undefined && oneArrayOil[0].oil.every(item => item >= 0) ? oilHH(oneArrayOil[0]) : 0
+            console.log(prostoyHH)
         } catch (error) {
             console.log(error);
         }
@@ -144,55 +145,71 @@ async function loadValue(array, timeOld, timeNow) {
     return { uniq: uniqObject }
 }
 function oilHH(data) {
-    const zeros = [];
-    const ones = [];
-    const prostoy = [];
-    const korzina = [];
-    let startIndex = 0;
-    data.value.forEach((values, index) => {
-        if (values !== data.value[startIndex]) {
-            const subarray = data.time.slice(startIndex, index);
-            const speedTime = { sats: data.sats.slice(startIndex, index), speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index), oil: data.oil.slice(startIndex, index) };
-            (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
-            (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
-            startIndex = index;
+
+    const arr = [];
+    let currentObj = null;
+    let currentArr = [];
+
+    for (let i = 0; i < data.value.length; i++) {
+        const currentValue = data.value[i];
+        const currentSpeed = data.speed[i];
+        const currentTime = data.time[i];
+        const currentSats = data.sats[i];
+        const currentOil = data.oil[i];
+        if (currentValue === 1) {
+            if (!currentObj) {
+                currentObj = { value: [], speed: [], oil: [], time: [], sats: [] };
+                currentArr.push(currentObj);
+            }
+
+            currentObj.value.push(currentValue);
+            currentObj.speed.push(currentSpeed);
+            currentObj.sats.push(currentSats);
+            currentObj.oil.push(currentOil);
+            currentObj.time.push(currentTime);
+        } else {
+            if (currentObj) {
+                arr.push(currentArr);
+            }
+            currentObj = null;
+            currentArr = [];
         }
-    });
-    const subarray = data.time.slice(startIndex);
-    const speedTime = { sats: data.sats.slice(startIndex), speed: data.speed.slice(startIndex), time: data.time.slice(startIndex), oil: data.oil.slice(startIndex) };
-    (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
-    (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
-    const filteredData = prostoy.map(obj => {
-        const newS = [];
-        const timet = [];
-        const oil = [];
-        const sats = [];
-        for (let i = 0; i < obj.speed.length; i++) {
-            if (obj.speed[i] < 5) {
-                newS.push(obj.speed[i]);
-                timet.push(obj.time[i])
-                oil.push(obj.oil[i])
-                sats.push(obj.sats[i])
-            } else {
-                break;
+    }
+
+    if (currentObj) {
+        arr.push(currentArr);
+    }
+
+    const filteredArr = arr.map(subArr => {
+        const filteredSubArr = { value: [], speed: [], oil: [], time: [], sats: [] };
+
+        for (let i = 0; i < subArr[0].speed.length; i++) {
+            if (subArr[0].speed[i] < 5) {
+                filteredSubArr.value.push(subArr[0].value[i]);
+                filteredSubArr.speed.push(subArr[0].speed[i]);
+                filteredSubArr.oil.push(subArr[0].oil[i]);
+                filteredSubArr.time.push(subArr[0].time[i]);
+                filteredSubArr.sats.push(subArr[0].sats[i]);
             }
         }
-        return { speed: newS, time: timet, oil: oil, sats: sats };
+
+        return filteredSubArr;
     });
-    const timeProstoy = filteredData.map(el => {
+    const timeProstoy = filteredArr.map(el => {
         return { time: [el.time[0], el.time[el.time.length - 1]], oil: [el.oil[0], el.oil[el.oil.length - 1]], speed: [el.speed[0], el.speed[el.speed.length - 1]] }
     })
     const oilProstoy = [];
     timeProstoy.forEach(it => {
         if (it.time[0] !== undefined) {
             const diffInSeconds = (it.time[1].getTime() - it.time[0].getTime()) / 1000;
-            if (diffInSeconds > 600) {
-                oilProstoy.push(it.oil[0] - it.oil[1])
+            if (diffInSeconds > 1200) {
+                oilProstoy.push(it.oil[0] - it.oil[1] > 0 ? it.oil[0] - it.oil[1] : 0)
             }
         }
     })
+
     const res = oilProstoy.reduce((acc, el) => acc + el, 0)
-    return res
+    return res > 0 ? res : 0
 }
 function timesDate(dates) {
     let totalMs;
@@ -379,14 +396,7 @@ function rashodCalc(data, name, group, idw) {
     const firstData = data.value[0];
     const lastData = data.value[data.value.length - 1];
     if (zapravka.length !== 0) {
-        console.log(zapravka)
-        console.log(zapravka[zapravka.length - 1][1][1].getTime() / 1000)
-        console.log((new Date().getTime() / 1000).toFixed(0))
         const diff = (Number(new Date().getTime() / 1000).toFixed(0)) - (zapravka[zapravka.length - 1][1][1].getTime() / 1000)
-        console.log(diff)
-        console.log(zapravka[zapravka.length - 1][1][0])
-        console.log(data.value[data.value.length - 1])
-        //zapravka[zapravka.length - 1][1][0] > data.value[data.value.length - 1] && 
         if (diff > 300) {
             console.log(zapravka + 'условие')
             modalView(zapravka, name, group, idw);
@@ -423,7 +433,6 @@ async function modalView(zapravka, name, group, idw) {
     const litrazh = zapravka[0][1][0] - zapravka[0][0][0]
     const geo = zapravka[0][0][2]
     const time = zapravka[0][0][1]
-    console.log(geo)
     const day = time.getDate();
     const month = (time.getMonth() + 1).toString().padStart(2, '0');
     const year = time.getFullYear();
@@ -432,7 +441,7 @@ async function modalView(zapravka, name, group, idw) {
     const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
 
     const data = [{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}` }]
-    const res = await databaseService.controllerSaveToBase(data, idw, geo)
+    const res = await databaseService.controllerSaveToBase(data, idw, geo, formattedDate)
     console.log('Заправка' + ' ' + res.message)
     //  createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${geo}` }], idw)
 }

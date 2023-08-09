@@ -153,13 +153,13 @@ exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, s
 
 
 
-exports.controllerSaveToBase = async (arr, id, geo) => {
+exports.controllerSaveToBase = async (arr, id, geo, start) => {
     const idw = id
     const date = new Date()
     const time = (date.getTime() / 1000).toFixed(0)
     const newdata = JSON.stringify(arr)
     const geoLoc = JSON.stringify(geo)
-    const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc)
+    const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, start)
     return res
 }
 
@@ -637,10 +637,17 @@ exports.deleteBarToBase = (idw) => {
 }
 
 
-exports.logsSaveToBase = async (arr, time, idw, geo) => {
+exports.logsSaveToBase = async (arr, time, idw, geo, start) => {
     const data = [time, arr, idw]
     return new Promise((resolve, reject) => {
-        const checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'`
+        let checkExistQuery;
+        if (start) {
+            checkExistQuery = `SELECT * FROM logs WHERE startOil='${start}'`
+        }
+        else {
+            checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'`
+        }
+
         connection.query(checkExistQuery, function (err, results) {
             if (err) {
                 console.log(err)
@@ -648,7 +655,14 @@ exports.logsSaveToBase = async (arr, time, idw, geo) => {
             } else if (results.length > 0) {
                 resolve({ message: 'Событие уже существует в базе логов' })
             } else {
-                const postModel = `INSERT INTO logs(idw, time, content, geo) VALUES(${idw}, ${time}, '${arr}','${geo}')`
+                let postModel;
+                if (start) {
+                    postModel = `INSERT INTO logs(idw, time, content, geo, startOil) VALUES(${idw}, ${time}, '${arr}','${geo}','${start}')`
+                }
+                else {
+                    postModel = `INSERT INTO logs(idw, time, content, geo) VALUES(${idw}, ${time}, '${arr}','${geo}')`
+                }
+
                 connection.query(postModel, function (err, results) {
                     if (err) {
                         console.log(err)
