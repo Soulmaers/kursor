@@ -164,11 +164,12 @@ export function createChart(data, num) {
     const svg = d3.select(`.${obj[num]}`)
         .append("svg")
         .attr('class', `chartStatic${num}`)
-        .attr("width", "100%")
+        .attr("width", width)
         .attr("height", svgHeight);
     const xScale = d3.scaleTime()
         .domain(d3.extent(data, d => d.time))
         .range([0, width]);
+
     const g = svg.append("g")
         .attr("transform", `translate(${0}, ${margin.top})`);
     g.selectAll("rect")
@@ -238,7 +239,13 @@ export function createChart(data, num) {
         timeFormat = d3.timeFormat("%d")
     }
     timeFormat = d3.timeFormat("%H:%M");
-    const xAxis = d3.axisBottom(xScale).tickFormat(timeFormat);
+    const xAxis = d3.axisBottom(xScale).tickFormat(timeFormat)
+    const ticks = [xScale.domain()[0], ...xAxis.scale().ticks(xAxis.ticks()[0])];
+    //, xScale.domain()[1]]
+    ticks[0] = new Date(ticks[0].getTime() + 5 * 60 * 1000); // Смещение первого тика на 5 минут вперед
+    // ticks[ticks.length - 1] = new Date(ticks[ticks.length - 1].getTime() - 5 * 60 * 1000);
+
+    xAxis.tickValues(ticks).tickSizeOuter(0)
     g.append("g")
         .attr("transform", `translate(0, 30)`) // Отступ для оси x
         .call(xAxis);
