@@ -3,14 +3,15 @@ import { fnParMessage } from './grafiks.js'
 import { timefn, convertDate } from './startAllStatic.js'
 import { timeConvert } from './charts/oil.js'
 import { createMapsUniq } from './geo.js'
-import { jobTSDetalisation, jobTS, oilTS } from './content.js'
+import { jobTSDetalisation, jobTS, oilTS, melageTS } from './content.js'
 
 
 
 const objectRazmetka = {
     'nav1': { html: jobTSDetalisation, data: [], fn: createChart },
     'nav2': { html: jobTS, data: [], fn: createJobTS },
-    'nav3': { html: oilTS, data: [], fn: createOilTS }
+    'nav3': { html: oilTS, data: [], fn: createOilTS },
+    'nav4': { html: melageTS, data: [], fn: createMelagiTS }
 }
 
 
@@ -19,9 +20,7 @@ export async function timeIntervalStatistiks() {
     for (let key in objectRazmetka) {
         objectRazmetka[key].data = []
     }
-
     const navstat = document.querySelectorAll('.navstat')
-
     const windowStatistic = document.querySelector('.windowStatistic')
     windowStatistic.insertAdjacentHTML('beforeend', ` ${objectRazmetka[act].html}`);
     const today = document.querySelector('.todayTitle')
@@ -36,35 +35,38 @@ export async function timeIntervalStatistiks() {
             navstat.forEach(el => {
                 el.classList.remove('activStatic')
             })
-
             el.classList.add('activStatic')
             const act = document.querySelector('.activStatic').id
             windowStatistic.children[1].remove()
             windowStatistic.children[1].remove()
             windowStatistic.insertAdjacentHTML('beforeend', ` ${objectRazmetka[act].html}`);
-            act !== 'nav1' ? updateHTML() : null
-
-            const today = document.querySelector('.todayTitle')
-            const yestoday = document.querySelector('.yestodayTitle')
-            const week = document.querySelector('.weekTitle')
-            eskiz(today, yestoday, week)
-            await load(act, 0, 1)
-            await load(act, 1, 2)
-            await load(act, 2, 3)
+            act !== 'nav1' && act !== 'nav4' ? updateHTML() : null
+            if (act === 'nav4') {
+                const interval = document.querySelector('.intervalTitle')
+                interval.textContent = `10 дней: ${convertTime(4)}`
+                await load(act, 0, 1)
+            }
+            else {
+                const today = document.querySelector('.todayTitle')
+                const yestoday = document.querySelector('.yestodayTitle')
+                const week = document.querySelector('.weekTitle')
+                eskiz(today, yestoday, week)
+                await load(act, 0, 1)
+                await load(act, 1, 2)
+                await load(act, 2, 3)
+            }
             async function load(act, el, num) {
                 console.log('load')
                 objectRazmetka[act].fn(objectRazmetka[act].data[el], num)
             }
-            //   objectRazmetka[act].fn(objectRazmetka[act].data[1], 2)
-            //   objectRazmetka[act].fn(objectRazmetka[act].data[2], 3)
-
         })
     })
+    act !== 'nav4' ? eskiz(today, yestoday, week) : null
+    statistics(weekTo(), 'int', 4)
+    await statistics(timefn(), 'today', 1)
+    await statistics(yesTo(), 'yestoday', 2)
+    await statistics(weekTo(), 'week', 3)
 
-    eskiz(today, yestoday, week)
-    await statistics(timefn(), today, 1)
-    await statistics(yesTo(), yestoday, 2)
-    await statistics(weekTo(), week, 3)
 }
 
 function updateHTML() {
@@ -107,9 +109,9 @@ function convertTime(num) {
         var formattedDate = day + "." + month + "." + year;
         return formattedDate
     }
-    if (num === 3) {
+    if (num === 3 || num === 4) {
         const todayData = new Date();
-        var day = String(todayData.getDate() - 7).padStart(2, '0');
+        var day = String(todayData.getDate() - (num !== 4 ? 7 : 10)).padStart(2, '0');
         var month = String(todayData.getMonth() + 1).padStart(2, '0');
         var year = todayData.getFullYear();
         if (day <= 0) {
@@ -174,6 +176,12 @@ function weekTo() {
 }
 export async function statistics(interval, ele, num) {
     const idw = document.querySelector('.color').id
+    if (ele === 'int') {
+        console.log(ele, num)
+        objectRazmetka['nav4'].data.push(await dannieOilTS(idw, num));
+        return
+    }
+    console.log('раззззз')
     const params = {
         method: "POST",
         headers: {
@@ -264,7 +272,6 @@ export async function statistics(interval, ele, num) {
             }
         }
     }
-    console.log(dannie[0]);
     delete dannie[0].params
     delete dannie[0].sens
 
@@ -350,6 +357,98 @@ function prostoy(data, tsi) {
     }
 }
 
+function createMelagiTS(data, num) {
+    const chartJobTS = document.querySelector('.chartJobTS')
+    chartJobTS.style.width = '600px'
+    const chartStatic = document.querySelector(`.chartStatic${num}`)
+    if (chartStatic) {
+        chartStatic.remove();
+    }
+    const jobTSDetalisationLine = document.querySelector('.jobTSDetalisationLine')
+    jobTSDetalisationLine.style.width = '600px'
+    console.log(data)
+    console.log(num)
+    const obj = {
+        1: 'intervalChart',
+
+    }
+    var width = 600;
+    var height = 250;
+
+    var svg = d3.select(`.${obj[num]}`)
+        .append("svg")
+        .attr('class', `chartStatic${num}`)
+        .attr("width", width)
+        .attr("height", height + 20);
+    var maxValue = d3.max(data.map(item => item.melagi));
+    var xScale = d3.scaleBand()
+        .domain(data.map(function (d) { return d.data; }))
+        .range([0, width])
+    var yScale = d3.scaleLinear()
+        .domain([0, maxValue * 1.3])
+        .range([0, height + 20]);
+    const barWidth = 60 // Ширина каждого столбца с использованием .bandwidth()
+    // Создание столбцов
+    svg.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", (d) => xScale(d.data)) // Изменено на использование xScale с d.data
+        .attr("y", (d) => height - yScale(d.melagi))
+        .attr("width", barWidth)
+        .attr("height", (d) => yScale(d.melagi))
+        .attr('stroke', 'steelblue')
+        .attr("fill", 'steelblue')
+        .attr("opacity", 0.5);
+    svg.selectAll('.text-label')
+        .data(data)
+        .enter()
+        .append('text')
+        .attr('class', 'text-label')
+        .attr('x', function (d, i) {
+            return i * barWidth + barWidth / 2; // Центрирование текста над каждым столбцом
+        })
+        .attr('y', function (d) {
+            if (yScale(d.melagi) > 30) {
+                return (height - yScale(d.melagi)) + yScale(d.melagi) / 2; // Центрирование по вертикали столбца
+            } else {
+                return height - yScale(d.melagi) - 5; // Расположение над столбцом с небольшим отступом
+            }
+        })
+        .attr('dy', function (d) {
+            if (yScale(d.melagi) > 30) {
+                return '0.35em'; // Отступ для центрированного текста
+            } else {
+                return '-1em'; // Отступ для текста над столбцом
+            }
+        })
+        .text(function (d) {
+            return d.melagi + ' км.';
+        })
+        .attr("fill", "black")
+        .attr("font-size", "14px")
+        .attr("font-family", "Roboto")
+        .attr("font-weight", "bold")
+        .style('text-anchor', 'middle');
+
+    svg.selectAll('.data-label')
+        .data(data)
+        .enter()
+        .append('text')
+        .attr('class', 'data-label')
+        .attr('x', function (d) {
+            return xScale(d.data) + barWidth / 2; // Центрирование текста под каждым столбцом
+        })
+        .attr('y', height + 15) // Ниже основной части столбца с небольшим отступом
+        .text(function (d) {
+            return d.data;
+        })
+        .attr("fill", "black")
+        .attr("font-size", "12px")
+        .attr("font-family", "Roboto")
+        .style('text-anchor', 'middle');
+
+}
 function createOilTS(data, num) {
     const jobTSDetalisationChartsLegenda = document.querySelector('.jobTSDetalisationCharts_legenda')
     const legendaButton = document.querySelectorAll('.legendaButton')
@@ -704,6 +803,10 @@ async function dannieOilTS(idw, num) {
         number = 7
         data = [convertDate(number), convertDate(1)]
     }
+    if (num === 4) {
+        number = 10
+        data = [convertDate(number), convertDate(1)]
+    }
 
     console.log(data)
     const params = {
@@ -715,14 +818,27 @@ async function dannieOilTS(idw, num) {
     };
     const mods = await fetch('/api/summaryIdwToBase', params);
     const models = await mods.json();
-    let zap = models.reduce((acc, el) => el.zapravka + acc, 0)
-    let ras = models.reduce((acc, el) => el.rashod + acc, 0)
-    console.log(zap, ras)
-    const obj = {}
-    zap !== 0 ? obj['Заправлено'] = zap : null
-    ras !== 0 ? obj['Израсходовано'] = ras : null
-    console.log(obj)
-    return obj
+
+    let obj = {}
+    console.log(num)
+    if (num === 4) {
+        console.log('четыре')
+        obj = models.map(it => {
+            return { data: `${it.data.split('-')[2]}-${it.data.split('-')[1]}`, melagi: it.probeg }
+        })
+        return obj
+    }
+    else {
+        console.log('не четыре')
+        let zap = models.reduce((acc, el) => el.zapravka + acc, 0)
+        let ras = models.reduce((acc, el) => el.rashod + acc, 0)
+        console.log(zap, ras)
+        zap !== 0 ? obj['Заправлено'] = zap : null
+        ras !== 0 ? obj['Израсходовано'] = ras : null
+        console.log(obj)
+        return obj
+    }
+
 
 }
 

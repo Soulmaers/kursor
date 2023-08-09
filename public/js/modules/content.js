@@ -235,3 +235,11 @@ export const oilTS = `  <div class="jobTSDetalisationGraf">
                         <div class="legendaButton rashodTS">Израсходовано</div>
                         <div class="legendaButton jobHHTS">Слив топлива</div>
                                           </div>`
+
+export const melageTS = `  <div class="jobTSDetalisationGraf">
+<div class="chartJobTS">
+                        <div class="jobTSDetalisationDate intervalTitle">Сегодня</div>
+                        <div class="jobTSDetalisationLine intervalChart"></div>
+                        </div></div>
+                               <div class="jobTSDetalisationCharts_legenda">
+                                                               </div>`
