@@ -1,8 +1,4 @@
 import { DraggableContainer } from '../class/Dragdown.js'
-import { ggg } from './menu.js'
-import { timefn, timesFormat } from './startAllStatic.js'
-import { testovfn } from './charts/bar.js'
-import { fnParMessage } from './grafiks.js'
 import { titleLogs } from './content.js'
 import { reverseGeocode, createMapsUniq } from './geo.js'
 
@@ -134,7 +130,7 @@ export async function logsView(array) {
         const parsedContent = JSON.parse(el.content);
         const typeEvent = parsedContent[0].event;
         const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
-        const geo = geoloc !== null ? await reverseGeocode(parseFloat(Number(geoloc[0]).toFixed(6)), parseFloat(Number(geoloc[1]).toFixed(6))) : 'нет данных'
+        const geo = geoloc !== null ? geoloc : 'нет данных'
         const id = parseFloat(el.idw)
         const group = arrayIdGroup
             .filter(it => it[0] === id)
