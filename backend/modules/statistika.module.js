@@ -22,8 +22,8 @@ exports.startAllStatic = async (objects) => {
         .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)
         .map(e => e);
     const interval = timefn()
-    const timeOld = 1691528400 //interval[1]
-    const timeNow = 1691614800//interval[0]
+    const timeOld = interval[1]
+    const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow)
     //  console.log(res)
     return res.uniq
