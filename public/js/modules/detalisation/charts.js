@@ -76,7 +76,6 @@ export function createJobTS(data, num) {
         .attr('transform', function (d, i) {
             const x = i * barWidth + (barWidth - 1) / 2; // центрирование текста на столбце
             var barHeight = yScale(d.value);
-            console.log(barHeight)
             var y = height - barHeight;
             return `translate(${x}, ${y})`;
         })
@@ -115,7 +114,6 @@ export function createChart(data, num) {
     if (chartStatic) {
         chartStatic.remove();
     }
-    console.log(data)
     // Функция для объединения смежных интервалов с одинаковым статусом
     function combineIntervals(data) {
         const combinedData = [];
@@ -230,7 +228,6 @@ export function createChart(data, num) {
                 const map = document.getElementById('mapOil');
 
                 if (map && !map.contains(targetElement)) {
-                    console.log('ремуве')
                     map.remove();
                 }
             });

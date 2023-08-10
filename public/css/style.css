@@ -1780,6 +1780,33 @@ div.spoyler {
   color: darkblue
 }
 
+.calen {
+  margin-left: 5px;
+  margin-bottom: 2px;
+  width: 13px;
+  height: 13px;
+  background-image: url(../image/cal.png);
+  background-size: contain;
+  background-position: center center;
+  cursor: pointer;
+
+
+}
+
+.yestodayTitle {
+  position: relative;
+}
+
+.weekTitle {
+  position: relative;
+}
+
+.jobTSDetalisationDate {
+  display: flex;
+  align-items: center;
+}
+
+
 .jobTSDetalisationCharts_legenda {
   margin-top: 40px;
   display: flex;
@@ -3119,6 +3146,8 @@ input[type="date"] {
   width: 250px;
 
 }
+
+
 
 .infosCenter {
   position: absolute;

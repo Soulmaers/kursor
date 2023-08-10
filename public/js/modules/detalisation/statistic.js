@@ -88,10 +88,8 @@ export async function dannieOilTS(idw, num) {
     else {
         let zap = models.reduce((acc, el) => el.zapravka + acc, 0)
         let ras = models.reduce((acc, el) => el.rashod + acc, 0)
-        console.log(zap, ras)
         zap !== 0 ? obj['Заправлено'] = zap : null
         ras !== 0 ? obj['Израсходовано'] = ras : null
-        console.log(obj)
         return obj
     }
 

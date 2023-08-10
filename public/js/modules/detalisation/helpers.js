@@ -1,4 +1,5 @@
 
+import { cal2, cal3 } from '../content.js'
 
 export function updateHTML() {
     console.log('работает апдейт')
@@ -24,12 +25,10 @@ export function convertToHoursAndMinutes(value) {
     return { hours: hours, minutes: minutes };
 }
 
-
 export function eskiz(today, yestoday, week) {
     today.textContent = `Сегодня: ${convertTime(1)}`
-    yestoday.textContent = `Вчера: ${convertTime(2)}`
-    week.textContent = `Неделя: ${convertTime(3)}`
-
+    yestoday.innerHTML = `Вчера: ${convertTime(2)}<div class="calen" rel="cal2"></div>${cal2}`
+    week.innerHTML = `Неделя: ${convertTime(3)}<div class="calen" rel="cal3"></div>${cal3}`
 }
 export function convertTime(num) {
     if (num === 1) {
@@ -109,7 +108,6 @@ export function weekTo() {
     // Переводим времена в формат юникс-времени (миллисекунды)
     const unixTimeYesterdayStart = Math.floor(yesterdayStart.getTime() / 1000);
     const unixTimeYesterdayEnd = Math.floor(yesterdayEnd.getTime() / 1000);
-    console.log([unixTimeYesterdayEnd, unixTimeYesterdayStart])
     return [unixTimeYesterdayEnd, unixTimeYesterdayStart]
 
 }

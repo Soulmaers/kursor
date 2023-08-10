@@ -3,10 +3,9 @@ import { fnParMessage } from './grafiks.js'
 import { timefn, convertDate } from './startAllStatic.js'
 import { prostoy, dannieOilTS, dannieSortJobTS } from './detalisation/statistic.js'
 
-import { jobTSDetalisation, jobTS, oilTS, melageTS } from './content.js'
+import { jobTSDetalisation, jobTS, oilTS, melageTS, cal2, cal3 } from './content.js'
 import { eskiz, convertTime, updateHTML, yesTo, weekTo, convertToHoursAndMinutes } from './detalisation/helpers.js'
 import { createChart, createJobTS, createOilTS, createMelagiTS } from './detalisation/charts.js'
-
 
 
 export async function timeIntervalStatistiks() {
@@ -51,6 +50,7 @@ export async function timeIntervalStatistiks() {
                 const yestoday = document.querySelector('.yestodayTitle')
                 const week = document.querySelector('.weekTitle')
                 eskiz(today, yestoday, week)
+                eventClikInterval()
                 await load(act, 0, 1)
                 await load(act, 1, 2)
                 await load(act, 2, 3)
@@ -62,11 +62,67 @@ export async function timeIntervalStatistiks() {
         })
     })
     act !== 'nav4' ? eskiz(today, yestoday, week) : (document.querySelector('.intervalTitle').textContent = `10 дней: ${convertTime(4)}`)
+
+    eventClikInterval();
     statistics(weekTo(), 'int', 4, objectRazmetka)
     await statistics(timefn(), 'today', 1, objectRazmetka)
     await statistics(yesTo(), 'yestoday', 2, objectRazmetka)
     await statistics(weekTo(), 'week', 3, objectRazmetka)
     console.log('функция отработала')
+}
+
+function eventClikInterval() {
+    const act = document.querySelector('.activStatic').id
+    const calen = Array.from(document.querySelectorAll('.calen'))
+    calen.forEach(el => {
+        el.addEventListener('click', (event) => {
+            console.log(el.nextElementSibling)
+            el.nextElementSibling.style.display = 'flex'
+
+            act !== 'nav1' ? (el.nextElementSibling.style.right = 0, el.nextElementSibling.style.top = '15px') : (el.nextElementSibling.style.top = 0,
+                el.nextElementSibling.style.right = '-200px');
+            el.nextElementSibling.children[1].children[0].addEventListener('click', () => {
+                el.nextElementSibling.style.display = 'none'
+                el.nextElementSibling.children[0].children[0].value = ''
+            })
+            const ide = `#${!el.nextElementSibling.children[0].children[0] ? el.nextElementSibling.children[0].id : el.nextElementSibling.children[0].children[0].id}`
+            console.log(ide)
+            const fp = flatpickr(ide, {
+                mode: "range",
+                dateFormat: "d-m-Y",
+                locale: "ru",
+                static: true,
+                "locale": {
+                    "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
+                },
+                onChange: function (selectedDates, dateStr, instance) {
+                    const formattedDates = selectedDates.map(date => {
+                        console.log(date.getTime() / 1000)
+                        const year = date.getFullYear();
+                        const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
+                        const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
+                        return [`${year}-${month}-${day}`, `${day}.${month}.${year}`, date.getTime() / 1000];
+                    });
+
+                    console.log(formattedDates)
+                    el.nextElementSibling.children[1].children[1].addEventListener('click', () => {
+                        el.nextElementSibling.style.display = 'none'
+                        el.nextElementSibling.children[0].children[0].value = ''
+                        const perem = el.getAttribute('rel') === cal2 ? cal2 : cal3;
+
+
+                        el.parentElement.innerHTML = formattedDates[0][1] !== formattedDates[1][1]
+                            ? `${formattedDates[0][1]}-${formattedDates[1][1]}<div class="calen" rel="${el.getAttribute('rel')}"></div>${perem}`
+                            : `${formattedDates[0][1]}<div class="calen" rel="${el.getAttribute('rel')}"></div>${perem}`;
+                        eventClikInterval()
+                        //   statistics(formattedDates, 'free', 3, objectRazmetka)
+                    })
+                }
+            });
+
+        })
+    })
+
 }
 
 
