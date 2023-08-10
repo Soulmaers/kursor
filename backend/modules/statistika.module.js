@@ -22,8 +22,8 @@ exports.startAllStatic = async (objects) => {
         .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)
         .map(e => e);
     const interval = timefn()
-    const timeOld = interval[1]
-    const timeNow = interval[0]
+    const timeOld = 1691528400 //interval[1]
+    const timeNow = 1691614800//interval[0]
     const res = await loadValue(array, timeOld, timeNow)
     //  console.log(res)
     return res.uniq
@@ -438,7 +438,7 @@ async function modalView(zapravka, name, group, idw) {
     const year = time.getFullYear();
     const hours = time.getHours().toString().padStart(2, '0');
     const minutes = time.getMinutes().toString().padStart(2, '0');
-    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}${idw}`;
 
     const data = [{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}` }]
     const res = await databaseService.controllerSaveToBase(data, idw, geo, formattedDate)

@@ -153,7 +153,7 @@ export async function createMapsUniq(geoTrack, geo, num) {
     maps.style.zIndex = 2099;
     num !== 'log' ? main.appendChild(maps) : wrapp.appendChild(maps)
     const map = L.map('mapOil')
-    console.log(maps)
+    console.log(maps.parentElement)
 
     const polyline = L.polyline(geoTrack, { color: 'darkred', weight: 2 });
     polyline.addTo(map);

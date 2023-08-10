@@ -2,6 +2,215 @@
 
 import { allObjects } from './menu.js'
 import { viewStat } from './checkObjectStart.js'
+import { fnParMessage } from './grafiks.js'
+
+async function testovfn(active, t1, t2) {
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ active, t1, t2 }))
+    }
+    const rest = await fetch('/api/viewChart', param)
+    const resultt = await rest.json()
+    return resultt
+}
+export const startAllStati = async (objects) => {
+    console.log('статик?')
+    const result = objects
+        .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
+        .flat()
+    result.forEach(el => {
+        if (el[0].message === 'Цистерна ДТ') {
+            el.push('Цистерна');
+        } else if (el[0].result && el[0].result[0] && el[0].result[0].type) {
+            el.push(el[0].result[0].type);
+        }
+    });
+    const array = result
+        //   .filter(e => e[0].message.startsWith('Sitrack'))
+        .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)
+        .map(e => e);
+    const interval = timefn()
+    const timeOld = interval[1]
+    const timeNow = interval[0]
+    const res = await loadValue(array, timeOld, timeNow)
+    //  console.log(res)
+    return res.uniq
+}
+async function loadValue(array, timeOld, timeNow) {
+    const uniqObject = {};
+    for (const e of array) {
+        const name = e[0].message
+        const group = e[5]
+        let lifting = 0
+        let prostoyHH;
+        const time = [];
+        const speed = [];
+        const sats = [];
+        const geo = [];
+        const idw = e[4];
+
+        const itog = await testovfn(idw, timeOld, timeNow)
+        itog.forEach(el => {
+            const timestamp = Number(el.data);
+            const date = new Date(timestamp * 1000);
+            const isoString = date.toISOString();
+            time.push(new Date(isoString))
+            speed.push(el.speed)
+            sats.push(el.sats)
+            geo.push(JSON.parse(el.geo))
+        })
+        const sensArr = itog.map(e => {
+            return JSON.parse(e.sens)
+        })
+        const res = await fnParMessage(idw)
+        const nameSens = [];
+        const allArrNew = [];
+        res.forEach((item) => {
+            allArrNew.push({ sens: item[0], params: item[1], value: [] })
+        })
+
+        if (sensArr[0] && nameSens.length === sensArr[0].length) {
+            nameSens.forEach((item) => {
+                allArrNew.push({ sens: item[0], params: item[1], value: [] })
+            })
+        }
+        nameSens.pop()
+        nameSens.forEach((item) => {
+            allArrNew.push({ sens: item[0], params: item[1], value: [] })
+        })
+        sensArr.forEach(el => {
+            if (el.length === 0) {
+                return; // Пропускаем текущую итерацию, если sensArr пустой
+            }
+            for (let i = 0; i < allArrNew.length; i++) {
+                allArrNew[i].value.push(Number(Object.values(el)[i].toFixed(0)))
+            }
+        });
+        allArrNew.forEach(el => {
+            el.time = time
+            el.speed = speed
+            el.sats = sats
+            el.geo = geo
+        })
+        console.log(allArrNew)
+        const hh = [];
+        const oil = [];
+        allArrNew.forEach(it => {
+            if (it.sens === 'Топливо' || it.sens === 'Топливо ДУТ') {
+                it.value.forEach((e, i) => {
+                    if (e === -348201) {
+                        it.value[i] = it.value[i - 1];
+                    }
+                });
+                oil.push(it.value)
+            }
+            if (it.sens.startsWith('Зажигание')) {
+                hh.push(it)
+            }
+        })
+
+        hh[0].oil = oil[0]
+        const oneArrayOil = hh.filter(el => !el.sens.startsWith('Топливо'));
+        // prostoyHH = oneArrayOil[0].oil !== undefined && oneArrayOil[0].oil.every(item => item >= 0) ? oilHH(oneArrayOil[0]) : 0
+        console.log(prostoyHH)
+    }
+}
+
+function oilHH(data) {
+    console.log(data)
+    const arr = [];
+    let currentObj = null;
+    let currentArr = [];
+
+    for (let i = 0; i < data.value.length; i++) {
+        const currentValue = data.value[i];
+        const currentSpeed = data.speed[i];
+        const currentTime = data.time[i];
+        const currentSats = data.sats[i];
+        const currentOil = data.oil[i];
+        if (currentValue === 1) {
+            if (!currentObj) {
+                currentObj = { value: [], speed: [], oil: [], time: [], sats: [] };
+                currentArr.push(currentObj);
+            }
+
+            currentObj.value.push(currentValue);
+            currentObj.speed.push(currentSpeed);
+            currentObj.sats.push(currentSats);
+            currentObj.oil.push(currentOil);
+            currentObj.time.push(currentTime);
+        } else {
+            if (currentObj) {
+                arr.push(currentArr);
+            }
+            currentObj = null;
+            currentArr = [];
+        }
+    }
+
+    if (currentObj) {
+        arr.push(currentArr);
+    }
+
+
+    console.log(arr)
+    const newArr = [];
+
+    arr.forEach(subArr => {
+        const newSubArr = { value: [], speed: [], oil: [], time: [], sats: [] };
+
+        subArr.forEach((currentValue, index) => {
+            if (subArr[0].speed[index] < 5) {
+                console.log(subArr[0].speed[index])
+                newSubArr.value.push(currentValue);
+                newSubArr.speed.push(subArr[0].speed[index]);
+                newSubArr.oil.push(subArr[0].oil[index]);
+                newSubArr.time.push(subArr[0].time[index]);
+                newSubArr.sats.push(subArr[0].sats[index]);
+            }
+        });
+
+        newArr.push(newSubArr);
+    });
+
+    console.log(newArr);
+
+    /*
+        const filteredArr = arr.map(subArr => {
+            const filteredSubArr = { value: [], speed: [], oil: [], time: [], sats: [] };
+    
+            for (let i = 0; i < subArr[0].speed.length; i++) {
+                if (subArr[0].speed[i] < 5) {
+                    filteredSubArr.value.push(subArr[0].value[i]);
+                    filteredSubArr.speed.push(subArr[0].speed[i]);
+                    filteredSubArr.oil.push(subArr[0].oil[i]);
+                    filteredSubArr.time.push(subArr[0].time[i]);
+                    filteredSubArr.sats.push(subArr[0].sats[i]);
+                }
+            }
+    
+            return filteredSubArr;
+        });*/
+
+    const timeProstoy = newArr.map(el => {
+        return { time: [el[0].time[0], el[0].time[el[0].time.length - 1]], oil: [el[0].oil[0], el[0].oil[el[0].oil.length - 1]], speed: [el[0].speed[0], el[0].speed[el[0].speed.length - 1]] }
+    })
+    const oilProstoy = [];
+    timeProstoy.forEach(it => {
+        if (it.time[0] !== undefined) {
+            const diffInSeconds = (it.time[1].getTime() - it.time[0].getTime()) / 1000;
+            if (diffInSeconds > 1200) {
+                oilProstoy.push(it.oil[0] - it.oil[1] > 0 ? it.oil[0] - it.oil[1] : 0)
+            }
+        }
+    })
+
+    const res = oilProstoy.reduce((acc, el) => acc + el, 0)
+    return res > 0 ? res : 0
+}
 
 
 export function timesDate(dates) {
