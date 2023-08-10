@@ -209,7 +209,7 @@ function oilHH(data) {
     })
 
     const res = oilProstoy.reduce((acc, el) => acc + el, 0)
-    return res > 0 ? res : 0
+    return 0//res > 0 ? res : 0
 }
 function timesDate(dates) {
     let totalMs;
