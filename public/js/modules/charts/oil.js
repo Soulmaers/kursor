@@ -792,9 +792,9 @@ export async function oil(t1, t2) {
                         // Ваша функция обработчика события
                         const mapss = document.getElementById('mapOil')
                         if (this.classList.contains('clickOil')) {
-                            if (mapss) {
-                                mapss.remove();
-                            }
+                            //  if (mapss) {
+                            //      mapss.remove();
+                            //  }
                             d3.select(this).style("opacity", 0.5);
                             this.classList.remove('clickOil');
                             return
@@ -804,9 +804,9 @@ export async function oil(t1, t2) {
                             e.style.opacity = 0.5;
                             e.classList.remove('clickOil');
                         })
-                        if (mapss) {
-                            mapss.remove();
-                        }
+                        // if (mapss) {
+                        //     mapss.remove();
+                        //  }
                         d3.select(this).style("opacity", 1);
                         this.classList.add('clickOil');
                         createMapsUniq([], d, 'oil')
@@ -820,7 +820,6 @@ export async function oil(t1, t2) {
                 if (toll) {
                     toll.remove();
                 }
-
                 const tooltip = d3.select(".infoGraf").append("div")
                     .attr("class", "tooltip")
                     .style("opacity", 0);
@@ -840,30 +839,6 @@ export async function oil(t1, t2) {
                 tooltip.style("display", "block");
                 // console.log(d)
                 const selectedTime = timeConvert(d.time)
-                //  console.log(selectedTime)
-
-                /* const objTool = []
-                 //    console.log(time)
-                 dat2.forEach(e => {
-                     e.val.forEach(el => {
-                         if (el.dates === time) {
-                             objTool.push({ sens: e.sens, value: el.value, tvalue: el.tvalue, speed: el.speed, time: el.dates })
-                         }
-                     })
-                 })
-                 const chart = document.querySelectorAll('.chart')
-                 char[char.length - 1].children[2].classList.add('last')
-                 char[char.length - 1].children[3].classList.add('last')
-    
-                 let dav;
-                 let temp;
-                 for (let i = 0; i < chart.length; i++) {
-                     objTool[i].value === -0.5 ? dav = '-' : dav = objTool[i].value
-                     objTool[i].tvalue === -0.5 ? temp = '-' : temp = objTool[i].tvalue
-                     chart[i].children[2].textContent = `${dav} Бар/${temp} С°`
-                 }*/
-
-
 
                 // Отображаем подсказку с координатами и значениями по оси y
                 let oilTool;
