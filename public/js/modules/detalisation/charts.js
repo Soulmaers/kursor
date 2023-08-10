@@ -230,6 +230,7 @@ export function createChart(data, num) {
                 const map = document.getElementById('mapOil');
 
                 if (map && !map.contains(targetElement)) {
+                    console.log('ремуве')
                     map.remove();
                 }
             });

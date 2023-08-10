@@ -50,28 +50,6 @@ export async function oil(t1, t2) {
             }
         })
         console.log(allArrNew)
-        //  const global = await fnTime(t1, t2)
-        //   const sensArr = await fnPar(active)
-        //  const nameArr = await fnParMessage(active)
-        //   console.log(global)
-        //  const gl = global[0].map(it => {
-        //     return new Date(it)
-        //  })
-        //  const geo = global[2].map(it => {
-        //     return it
-        //  })
-        // const allArrNew = [];
-        /*  nameArr.forEach((item) => {
-              allArrNew.push({ sens: item[0], params: item[1], value: [] })
-          })
-          sensArr.forEach(el => {
-              for (let i = 0; i < allArrNew.length; i++) {
-                  //    console.log(Object.values(el)[i])
-                  allArrNew[i].value.push(Object.values(el)[i])
-      
-              }
-          })*/
-
         const finishArrayData = []
         allArrNew.forEach(e => {
             if (e.sens.startsWith('Бортовое') || e.sens === 'Топливо' || e.sens === 'Топливо ДУТ') {
@@ -404,10 +382,15 @@ export async function oil(t1, t2) {
             .attr("transform", "translate(-12,0)")
             .on("click", function (d) {
                 // Ваша функция обработчика события
+                console.log('кликнул')
                 const mapss = document.getElementById('mapOil')
+
                 if (this.classList.contains('clickOil')) {
+                    console.log(mapss)
                     if (mapss) {
+                        console.log(mapss)
                         mapss.remove();
+                        console.log('удалили')
                     }
                     d3.select(this).style("opacity", 0.5);
                     this.classList.remove('clickOil');
@@ -419,11 +402,18 @@ export async function oil(t1, t2) {
                     e.classList.remove('clickOil');
                 })
                 if (mapss) {
+                    console.log(mapss)
                     mapss.remove();
+                    console.log('удалили')
                 }
                 d3.select(this).style("opacity", 1);
                 this.classList.add('clickOil');
-                createMapsUniq([], d, 'oil')
+                const graph = document.querySelector('.infoGraf')
+                graph.addEventListener('click', function (event) {
+                    event.stopPropagation(); // Остановка всплытия события, чтобы клик на графике не вызывал обработчик события click на document
+                    createMapsUniq([], d, 'oil')
+                });
+                //createMapsUniq([], d, 'oil')
             })
 
         /* .on("mousemove", function (d) {
@@ -790,11 +780,15 @@ export async function oil(t1, t2) {
                     .attr("x", d => x(new Date(d.data)))
                     .on("click", function (d) {
                         // Ваша функция обработчика события
+                        console.log('кликнул')
                         const mapss = document.getElementById('mapOil')
+
                         if (this.classList.contains('clickOil')) {
-                            //  if (mapss) {
-                            //      mapss.remove();
-                            //  }
+                            if (mapss) {
+                                console.log(mapss)
+                                mapss.remove();
+                                console.log('удалили')
+                            }
                             d3.select(this).style("opacity", 0.5);
                             this.classList.remove('clickOil');
                             return
@@ -804,9 +798,11 @@ export async function oil(t1, t2) {
                             e.style.opacity = 0.5;
                             e.classList.remove('clickOil');
                         })
-                        // if (mapss) {
-                        //     mapss.remove();
-                        //  }
+                        if (mapss) {
+                            console.log(mapss)
+                            mapss.remove();
+                            console.log('удалили')
+                        }
                         d3.select(this).style("opacity", 1);
                         this.classList.add('clickOil');
                         createMapsUniq([], d, 'oil')

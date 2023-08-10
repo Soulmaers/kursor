@@ -153,8 +153,6 @@ export async function createMapsUniq(geoTrack, geo, num) {
     maps.style.zIndex = 2099;
     num !== 'log' ? main.appendChild(maps) : wrapp.appendChild(maps)
     const map = L.map('mapOil')
-    console.log(maps.parentElement)
-
     const polyline = L.polyline(geoTrack, { color: 'darkred', weight: 2 });
     polyline.addTo(map);
     var LeafIcon = L.Icon.extend({
@@ -221,20 +219,8 @@ export async function createMapsUniq(geoTrack, geo, num) {
         });
     }
     else {
-        if (num === 'oil') {
-            center = [geo.geo[0], geo.geo[1]]
-            const res = await reverseGeocode(center[0], center[1])
-            maps.style.width = '300px';
-            maps.style.height = '300px'
-            maps.style.position = 'absolute'
-            maps.style.left = '25px';
-            maps.style.top = '500px';
-            cl = 'my-popup-oil'
-            iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}<br>Заправлено: ${geo.zapravka} л.<br>Дата: ${geo.time}<br>Адрес: ${res}`, { className: 'my-popup-oil' }).addTo(map);
-        }
         if (num === 'alarm') {
             center = [geo.geoY, geo.geoX]
-            //  const res = await reverseGeocode(center[0], center[1])
             maps.style.width = '350px';
             maps.style.height = '350px'
             maps.style.position = 'absolute'
@@ -243,12 +229,21 @@ export async function createMapsUniq(geoTrack, geo, num) {
             cl = 'my-popup-alarm'
             iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${geo.info.car}\nВремя: ${geo.info.time}\nКолесо: ${geo.info.tyres}\nP,bar: ${geo.info.bar}\nt,C: ${geo.info.temp}\nСкорость: ${geo.speed} км/ч\nУведомление: ${geo.info.alarm}\nАдрес: ${geo.geoY, geo.geoX}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
         }
+        if (num === 'oil') {
+            center = [geo.geo[0], geo.geo[1]]
+            //  const res = await reverseGeocode(center[0], center[1])
+            console.log(geo)
+            maps.style.width = '300px';
+            maps.style.height = '300px'
+            maps.style.position = 'absolute'
+            maps.style.left = '25px';
+            maps.style.top = '500px';
+            cl = 'my-popup-oil'
+            iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}<br>Заправлено: ${geo.zapravka} л.<br>Дата: ${geo.time}<br>Адрес: ${geo.geo[0], geo.geo[1]}`, { className: 'my-popup-oil' }).addTo(map);
+        }
         if (num === 'stat') {
             const selectedTime = timeConvert(geo.time)
-            console.log(geo)
-            console.log(num)
             center = [geo.geo[0], geo.geo[1]]
-            console.log(center)
             //  const res = await reverseGeocode(center[0], center[1])
             maps.style.width = '350px';
             maps.style.height = '350px'
@@ -259,12 +254,9 @@ export async function createMapsUniq(geoTrack, geo, num) {
             iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}<br>Время: ${selectedTime}<br>Состояние: ${geo.condition}<br>Скорость: ${geo.speed} км/ч<br>Местоположение: ${geo.geo[0], geo.geo[1]}`, { width: 60, className: 'my-popup-stat', autoPan: false }).addTo(map);
         }
         if (num === 'log') {
-            console.log(geo)
-            console.log(num)
             const selectedTime = geo[0].logs[0]
 
             center = [geo[0].geo[0], geo[0].geo[1]]
-            console.log(center)
             // const res = await reverseGeocode(center[0], center[1])
             maps.style.width = '350px';
             maps.style.height = '350px'

@@ -37,7 +37,7 @@ export const startAllStati = async (objects) => {
     const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow)
     //  console.log(res)
-    return res.uniq
+    return //res.uniq
 }
 async function loadValue(array, timeOld, timeNow) {
     const uniqObject = {};
