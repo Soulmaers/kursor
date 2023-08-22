@@ -90,8 +90,8 @@ export async function logsView(array) {
         previus = results.length
     }
 
-    console.log(results.length)
-    console.log(previus)
+    // console.log(results.length)
+    // console.log(previus)
     if (previus !== results.length && num !== 0) {
         const num = results.length - previus
         const arrayPopup = results.slice(-num)

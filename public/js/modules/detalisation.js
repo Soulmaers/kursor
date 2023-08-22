@@ -10,10 +10,10 @@ import { createChart, createJobTS, createOilTS, createMelagiTS } from './detalis
 
 export async function timeIntervalStatistiks() {
     const objectRazmetka = {
-        'nav1': { html: jobTSDetalisation, data: [], fn: createChart },
-        'nav2': { html: jobTS, data: [], fn: createJobTS },
-        'nav3': { html: oilTS, data: [], fn: createOilTS },
-        'nav4': { html: melageTS, data: [], fn: createMelagiTS }
+        'nav1': { html: jobTSDetalisation, data: [], fn: createChart, title: { to: null, yes: null, week: null } },
+        'nav2': { html: jobTS, data: [], fn: createJobTS, title: { to: null, yes: null, week: null } },
+        'nav3': { html: oilTS, data: [], fn: createOilTS, title: { to: null, yes: null, week: null } },
+        'nav4': { html: melageTS, data: [], fn: createMelagiTS, title: { to: null, yes: null, week: null } }
     }
     const act = document.querySelector('.activStatic').id
     console.log(objectRazmetka)
@@ -23,14 +23,11 @@ export async function timeIntervalStatistiks() {
     const today = document.querySelector('.todayTitle')
     const yestoday = document.querySelector('.yestodayTitle')
     const week = document.querySelector('.weekTitle')
-
-    console.log(act + 'акт')
     act !== 'nav1' ? updateHTML() : null
-
     navstat.forEach(el => {
         el.addEventListener('click', async () => {
-            console.log(objectRazmetka)
             console.log('клик')
+            console.log(objectRazmetka)
             navstat.forEach(el => {
                 el.classList.remove('activStatic')
             })
@@ -49,8 +46,10 @@ export async function timeIntervalStatistiks() {
                 const today = document.querySelector('.todayTitle')
                 const yestoday = document.querySelector('.yestodayTitle')
                 const week = document.querySelector('.weekTitle')
-                eskiz(today, yestoday, week)
-                eventClikInterval()
+                today.innerHTML = objectRazmetka[act].title.to
+                yestoday.innerHTML = objectRazmetka[act].title.yes
+                week.innerHTML = objectRazmetka[act].title.week
+                eventClikInterval(objectRazmetka)
                 await load(act, 0, 1)
                 await load(act, 1, 2)
                 await load(act, 2, 3)
@@ -61,9 +60,10 @@ export async function timeIntervalStatistiks() {
             }
         })
     })
-    act !== 'nav4' ? eskiz(today, yestoday, week) : (document.querySelector('.intervalTitle').textContent = `10 дней: ${convertTime(4)}`)
+    act !== 'nav4' ? eskiz(today, yestoday, week, objectRazmetka) : (document.querySelector('.intervalTitle').textContent = `10 дней: ${convertTime(4)}`)
+    console.log(objectRazmetka)
 
-    eventClikInterval();
+    eventClikInterval(objectRazmetka);
     statistics(weekTo(), 'int', 4, objectRazmetka)
     await statistics(timefn(), 'today', 1, objectRazmetka)
     await statistics(yesTo(), 'yestoday', 2, objectRazmetka)
@@ -71,11 +71,12 @@ export async function timeIntervalStatistiks() {
     console.log('функция отработала')
 }
 
-function eventClikInterval() {
+function eventClikInterval(objectRazmetka) {
     const act = document.querySelector('.activStatic').id
     const calen = Array.from(document.querySelectorAll('.calen'))
     calen.forEach(el => {
         el.addEventListener('click', (event) => {
+            const times = [];
             console.log(el.nextElementSibling)
             el.nextElementSibling.style.display = 'flex'
 
@@ -103,29 +104,38 @@ function eventClikInterval() {
                         const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
                         return [`${year}-${month}-${day}`, `${day}.${month}.${year}`, date.getTime() / 1000];
                     });
+                    times.push(formattedDates)
 
-                    console.log(formattedDates)
                     el.nextElementSibling.children[1].children[1].addEventListener('click', () => {
-                        el.nextElementSibling.style.display = 'none'
-                        el.nextElementSibling.children[0].children[0].value = ''
-                        const perem = el.getAttribute('rel') === cal2 ? cal2 : cal3;
-
-
-                        el.parentElement.innerHTML = formattedDates[0][1] !== formattedDates[1][1]
-                            ? `${formattedDates[0][1]}-${formattedDates[1][1]}<div class="calen" rel="${el.getAttribute('rel')}"></div>${perem}`
-                            : `${formattedDates[0][1]}<div class="calen" rel="${el.getAttribute('rel')}"></div>${perem}`;
-                        eventClikInterval()
-                        //   statistics(formattedDates, 'free', 3, objectRazmetka)
+                        // el.nextElementSibling.style.display = 'none'
+                        //  el.nextElementSibling.children[0].children[0].value = ''
+                        const perem = el.getAttribute('rel') === 'cal2' ? cal2 : cal3;
+                        console.log(times[times.length - 1])
+                        console.log(el)
+                        const titles = times[times.length - 1][0][0] !== times[times.length - 1][1][0]
+                            ? `${times[times.length - 1][0][1]}-${times[times.length - 1][1][1]}<div class="calen" rel="${el.getAttribute('rel')}"></div>${perem}`
+                            : `${times[times.length - 1][1][1]}<div class="calen" rel="${el.getAttribute('rel')}"></div>${perem}`;
+                        el.parentElement.innerHTML = titles
+                        console.log(el.getAttribute('rel'))
+                        if (el.getAttribute('rel') === 'cal2') {
+                            for (let key in objectRazmetka) {
+                                objectRazmetka[key].title.yes = titles
+                            }
+                        }
+                        else {
+                            for (let key in objectRazmetka) {
+                                objectRazmetka[key].title.week = titles
+                            }
+                        }
+                        eventClikInterval(objectRazmetka)
+                        statistics(times[times.length - 1], 'free', el.getAttribute('rel'), objectRazmetka)
                     })
                 }
             });
 
         })
     })
-
 }
-
-
 export async function statistics(interval, ele, num, objectRazmetka) {
     const idw = document.querySelector('.color').id
     if (ele === 'int') {
@@ -149,8 +159,8 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     console.log(tsiControll)
 
     // const interval = timefn()
-    const t1 = interval[1]
-    const t2 = interval[0]
+    const t1 = !isNaN(num) ? interval[1] : interval[0][2]
+    const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
     const itog = await testovfn(idw, t1, t2)
     console.log(itog)
     const res = await fnParMessage(idw)
@@ -249,10 +259,24 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         }
         return item;
     });
-    objectRazmetka['nav1'].data.push(datas);
-    objectRazmetka['nav2'].data.push(dannieSortJobTS(datas));
-    objectRazmetka['nav3'].data.push(await dannieOilTS(idw, num));
-    console.log(objectRazmetka)
-    const act = document.querySelector('.activStatic').id
-    objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)
+
+    console.log(num)
+    if (isNaN(num)) {
+        console.log(datas)
+        console.log(interval, ele, num, objectRazmetka)
+        objectRazmetka['nav1'].data.splice(num === 'cal2' ? 1 : 2, 1, datas);
+        objectRazmetka['nav2'].data.splice(num === 'cal2' ? 1 : 2, 1, dannieSortJobTS(datas));
+        objectRazmetka['nav3'].data.splice(num === 'cal2' ? 1 : 2, 1, await dannieOilTS(idw, num, interval));
+        console.log(objectRazmetka)
+        const act = document.querySelector('.activStatic').id
+        objectRazmetka[act].fn(objectRazmetka[act].data[num === 'cal2' ? 1 : 2], num === 'cal2' ? 2 : 3)
+    }
+    else {
+        objectRazmetka['nav1'].data.push(datas);
+        objectRazmetka['nav2'].data.push(dannieSortJobTS(datas));
+        objectRazmetka['nav3'].data.push(await dannieOilTS(idw, num));
+        console.log(objectRazmetka)
+        const act = document.querySelector('.activStatic').id
+        objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)
+    }
 }

@@ -26,6 +26,7 @@ async function fn() {
 let isCanceled = false;
 
 export async function testovfn(active, t1, t2) {
+    console.log(active, t1, t2)
     const param = {
         method: "POST",
         headers: {

@@ -25,10 +25,18 @@ export function convertToHoursAndMinutes(value) {
     return { hours: hours, minutes: minutes };
 }
 
-export function eskiz(today, yestoday, week) {
+export function eskiz(today, yestoday, week, objectRazmetka) {
     today.textContent = `Сегодня: ${convertTime(1)}`
     yestoday.innerHTML = `Вчера: ${convertTime(2)}<div class="calen" rel="cal2"></div>${cal2}`
     week.innerHTML = `Неделя: ${convertTime(3)}<div class="calen" rel="cal3"></div>${cal3}`
+
+    for (let key in objectRazmetka) {
+        objectRazmetka[key].title.to = `Сегодня: ${convertTime(1)}`
+        objectRazmetka[key].title.yes = `Вчера: ${convertTime(2)}<div class="calen" rel="cal2"></div>${cal2}`
+        objectRazmetka[key].title.week = `Неделя: ${convertTime(3)}<div class="calen" rel="cal3"></div>${cal3}`
+
+    }
+
 }
 export function convertTime(num) {
     if (num === 1) {

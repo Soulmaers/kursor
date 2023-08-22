@@ -49,25 +49,31 @@ export function prostoy(data, tsi) {
     }
 }
 
-export async function dannieOilTS(idw, num) {
+export async function dannieOilTS(idw, num, interval) {
     let number;
     let data
-    if (num === 1) {
-        number = 0
-        data = [convertDate(number)]
+    if (interval) {
+        data = [interval[0][0], interval[1][0]]
     }
-    if (num === 2) {
-        number = 1
-        data = [convertDate(number)]
+    else {
+        if (num === 1) {
+            number = 0
+            data = [convertDate(number)]
+        }
+        if (num === 2) {
+            number = 1
+            data = [convertDate(number)]
+        }
+        if (num === 3) {
+            number = 7
+            data = [convertDate(number), convertDate(1)]
+        }
+        if (num === 4) {
+            number = 10
+            data = [convertDate(number), convertDate(1)]
+        }
     }
-    if (num === 3) {
-        number = 7
-        data = [convertDate(number), convertDate(1)]
-    }
-    if (num === 4) {
-        number = 10
-        data = [convertDate(number), convertDate(1)]
-    }
+    console.log(data)
     const params = {
         method: "POST",
         headers: {
