@@ -2136,6 +2136,11 @@ div.spoyler {
   position: relative;
 }
 
+.loading {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
 .calendar {
   display: none;
   flex-direction: column;

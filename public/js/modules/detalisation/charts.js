@@ -148,6 +148,7 @@ export function createChart(data, num) {
         2: 'yestodayChart',
         3: 'weekChart',
     }
+
     const tooltip = d3.select(`.${obj[num]}`)
         .append("div")
         .attr("class", `tooltipStat${num}`)

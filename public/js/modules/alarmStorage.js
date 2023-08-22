@@ -41,7 +41,6 @@ export async function alarmFind() {
                 body: JSON.stringify({ idw, tyresP })
             })
             const storList = await stor.json();
-            console.log(storList)
             storValue.push(storList)
         })
         setTimeout(viewAlarmStorage, 1000, idw, storValue)

@@ -30,7 +30,6 @@ export async function iconParams() {
     })
     const res = await fetch('/api/lastSensors', param)
     const results = await res.json()
-    console.log(results)
     if (results) {
         const valueSens = [];
         Object.entries(results).forEach(e => {
@@ -40,7 +39,6 @@ export async function iconParams() {
         arrNameSens.forEach((e, index) => {
             allArr.push([...e, valueSens[index]])
         })
-        console.log(allArr)
         let power;
         let sats;
 
@@ -52,7 +50,6 @@ export async function iconParams() {
         let oborot = 0;
         const tsi_card = document.querySelector('.tsi_card')
         const ign_card = document.querySelector('.ign_card')
-        console.log(allArr)
         allArr.forEach(async it => {
 
             if (it.includes('Зажигание')) {
@@ -63,9 +60,7 @@ export async function iconParams() {
                 const ignValue = document.querySelector('.ign_value')
                 const tsiValue = document.querySelector('.tsi_value')
                 it[2] === 1 ? status = 'ВКЛ' : status = 'ВЫКЛ'
-                console.log(tsiparam)
                 Number(tsiparam) && power > Number(tsiparam) ? statusTSI = 'ВКЛ' : statusTSI = 'ВЫКЛ'
-                console.log(statusTSI)
                 const statusObj = document.querySelector('.status_obj')
                 let mess;
                 if (document.querySelector('.color').children[0] && document.querySelector('.color').children[0].textContent.startsWith('Цист')) {

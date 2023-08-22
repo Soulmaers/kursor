@@ -80,18 +80,13 @@ export async function logsView(array) {
         },
         body: (JSON.stringify({ login }))
     }
-    console.log('запросКванто')
     const resLog = await fetch('/api/quantityLogs', paramLog)
     const resultsLog = await resLog.json()
-    console.log(resultsLog)
     const viewNum = results.length - resultsLog[0].quantity
     viewTableNum(viewNum)
     if (num === 0) {
         previus = results.length
     }
-
-    // console.log(results.length)
-    // console.log(previus)
     if (previus !== results.length && num !== 0) {
         const num = results.length - previus
         const arrayPopup = results.slice(-num)
