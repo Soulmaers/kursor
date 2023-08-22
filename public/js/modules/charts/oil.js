@@ -411,9 +411,9 @@ export async function oil(t1, t2) {
                 const graph = document.querySelector('.infoGraf')
                 graph.addEventListener('click', function (event) {
                     event.stopPropagation(); // Остановка всплытия события, чтобы клик на графике не вызывал обработчик события click на document
-                    createMapsUniq([], d, 'oil')
+                    //  createMapsUniq([], d, 'oil')
                 });
-                //createMapsUniq([], d, 'oil')
+                createMapsUniq([], d, 'oil')
             })
 
         /* .on("mousemove", function (d) {

@@ -369,6 +369,7 @@ function rashodCalc(data, name, group, idw) {
     if (start !== end) {
         increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
     }
+    console.log(idw)
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0][0];
         const lastOil = interval[interval.length - 1][0];
@@ -396,9 +397,10 @@ function rashodCalc(data, name, group, idw) {
     const firstData = data.value[0];
     const lastData = data.value[data.value.length - 1];
     if (zapravka.length !== 0) {
+        // console.log(zapravka)
         const diff = (Number(new Date().getTime() / 1000).toFixed(0)) - (zapravka[zapravka.length - 1][1][1].getTime() / 1000)
         if (diff > 300) {
-            console.log(zapravka + 'условие')
+            //  console.log(zapravka + 'условие')
             modalView(zapravka, name, group, idw);
         }
         rash.push(firstData - zapravka[0][0][0]);
@@ -430,9 +432,10 @@ function timefn() {
 
 
 async function modalView(zapravka, name, group, idw) {
-    const litrazh = zapravka[0][1][0] - zapravka[0][0][0]
-    const geo = zapravka[0][0][2]
-    const time = zapravka[0][0][1]
+    //console.log(zapravka[zapravka.length - 1][1][0] - zapravka[zapravka.length - 1][0][0])
+    const litrazh = zapravka[zapravka.length - 1][1][0] - zapravka[zapravka.length - 1][0][0]
+    const geo = zapravka[zapravka.length - 1][0][2]
+    const time = zapravka[zapravka.length - 1][0][1]
     const day = time.getDate();
     const month = (time.getMonth() + 1).toString().padStart(2, '0');
     const year = time.getFullYear();

@@ -159,6 +159,7 @@ exports.controllerSaveToBase = async (arr, id, geo, start) => {
     const time = (date.getTime() / 1000).toFixed(0)
     const newdata = JSON.stringify(arr)
     const geoLoc = JSON.stringify(geo)
+    // console.log(newdata, time, idw, geoLoc, start)
     const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, start)
     return res
 }
