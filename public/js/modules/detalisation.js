@@ -39,7 +39,9 @@ export async function timeIntervalStatistiks() {
             act !== 'nav1' && act !== 'nav4' ? updateHTML() : null
             if (act === 'nav4') {
                 const interval = document.querySelector('.intervalTitle')
-                interval.textContent = `10 дней: ${convertTime(4)}`
+                interval.innerHTML = `10 дней: ${convertTime(4)} <div class="calen" rel="cal2"></div>${cal2}`
+                eventClikInterval(objectRazmetka)
+                await statistics(weekTo(), 'int', 4, objectRazmetka)
                 await load(act, 0, 1)
             }
             else {
@@ -60,14 +62,16 @@ export async function timeIntervalStatistiks() {
             }
         })
     })
-    act !== 'nav4' ? eskiz(today, yestoday, week, objectRazmetka) : (document.querySelector('.intervalTitle').textContent = `10 дней: ${convertTime(4)}`)
+    act !== 'nav4' ? eskiz(today, yestoday, week, objectRazmetka) : (document.querySelector('.intervalTitle').innerHTML = `10 дней: ${convertTime(4)}<div class="calen" rel="cal2"></div>${cal2}`)
     console.log(objectRazmetka)
 
     eventClikInterval(objectRazmetka);
-    statistics(weekTo(), 'int', 4, objectRazmetka)
+
+    await statistics(weekTo(), 'int', 4, objectRazmetka)
     await statistics(timefn(), 'today', 1, objectRazmetka)
     await statistics(yesTo(), 'yestoday', 2, objectRazmetka)
     await statistics(weekTo(), 'week', 3, objectRazmetka)
+
     console.log('функция отработала')
 }
 
@@ -106,7 +110,7 @@ function eventClikInterval(objectRazmetka) {
                     });
                     times.push(formattedDates)
 
-                    el.nextElementSibling.children[1].children[1].addEventListener('click', () => {
+                    el.nextElementSibling.children[1].children[1].addEventListener('click', async () => {
                         // el.nextElementSibling.style.display = 'none'
                         //  el.nextElementSibling.children[0].children[0].value = ''
                         const perem = el.getAttribute('rel') === 'cal2' ? cal2 : cal3;
@@ -117,18 +121,28 @@ function eventClikInterval(objectRazmetka) {
                             : `${times[times.length - 1][1][1]}<div class="calen" rel="${el.getAttribute('rel')}"></div>${perem}`;
                         el.parentElement.innerHTML = titles
                         console.log(el.getAttribute('rel'))
-                        if (el.getAttribute('rel') === 'cal2') {
-                            for (let key in objectRazmetka) {
-                                objectRazmetka[key].title.yes = titles
+                        if (act !== 'nav4') {
+                            if (el.getAttribute('rel') === 'cal2') {
+                                for (let key in objectRazmetka) {
+                                    objectRazmetka[key].title.yes = titles
+                                }
                             }
+                            else {
+                                for (let key in objectRazmetka) {
+                                    objectRazmetka[key].title.week = titles
+                                }
+                            }
+                            eventClikInterval(objectRazmetka)
+                            statistics(times[times.length - 1], 'free', el.getAttribute('rel'), objectRazmetka)
                         }
                         else {
-                            for (let key in objectRazmetka) {
-                                objectRazmetka[key].title.week = titles
-                            }
+                            console.log('работает отрисовка')
+                            eventClikInterval(objectRazmetka)
+                            const idw = document.querySelector('.color').id
+                            objectRazmetka['nav4'].data.splice(0, 1, (await dannieOilTS(idw, 4, times[times.length - 1])));
+                            objectRazmetka['nav4'].fn(objectRazmetka['nav4'].data[0], 1)
+                            //  await load(nav4, 0, 1)
                         }
-                        eventClikInterval(objectRazmetka)
-                        statistics(times[times.length - 1], 'free', el.getAttribute('rel'), objectRazmetka)
                     })
                 }
             });
@@ -140,8 +154,15 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     const idw = document.querySelector('.color').id
     if (ele === 'int') {
         console.log(ele, num)
-        objectRazmetka['nav4'].data.push(await dannieOilTS(idw, num));
-        return
+        if (objectRazmetka['nav4'].data.length === 0) {
+            objectRazmetka['nav4'].data.push(await dannieOilTS(idw, num));
+            return
+        }
+        else {
+            objectRazmetka['nav4'].data.splice(0, 1, await dannieOilTS(idw, num));
+            return
+        }
+
     }
     console.log('раззззз')
     const params = {

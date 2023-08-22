@@ -262,12 +262,17 @@ export function createMelagiTS(data, num) {
     }
     const jobTSDetalisationLine = document.querySelector('.jobTSDetalisationLine')
     jobTSDetalisationLine.style.width = '600px'
+    jobTSDetalisationLine.style.display = 'flex'
+    jobTSDetalisationLine.style.justifyContent = 'center'
+
     const obj = {
         1: 'intervalChart',
 
     }
-    var width = 600;
+    console.log(data.length)
+    var width = data.length * 60;
     var height = 250;
+
 
     var svg = d3.select(`.${obj[num]}`)
         .append("svg")

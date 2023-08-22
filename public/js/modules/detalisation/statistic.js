@@ -73,7 +73,6 @@ export async function dannieOilTS(idw, num, interval) {
             data = [convertDate(number), convertDate(1)]
         }
     }
-    console.log(data)
     const params = {
         method: "POST",
         headers: {
