@@ -66,6 +66,19 @@ module.exports.datawialonAll = (req, res) => {
     }
 }
 
+
+
+
+
+exports.viewStructura = async (req, res) => {
+    const idw = req.body.active
+    const t1 = [req.body.tt1]
+    const t2 = [req.body.tt2]
+    console.log('структура?')
+    // console.log(t1, t2)
+    const params = await databaseService.viewStructuraToBase(idw, t1, t2)
+    res.json(params)
+}
 exports.viewChart = async (req, res) => {
     const idw = req.body.active
     const t1 = req.body.t1
