@@ -12,7 +12,7 @@ export async function oil(t1, t2) {
     const nameCar = document.querySelector('.color').children[0].textContent
     console.log(nameCar)
     const ttt = await testovfn(active, t1, t2)
-    const nameArr = await fnParMessage(active)
+    const nameArr = JSON.parse(ttt[ttt.length - 1].allSensParams) //await fnParMessage(active)
     const itogy = ttt.map(it => {
         return {
             id: it.idw,

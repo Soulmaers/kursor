@@ -34,8 +34,6 @@ async function waitArrProtek(el) {
     }
     const vals = await fetch('/api/viewStatus', parama)
     const val = await vals.json()
-    console.log(val)
-
     const statusTSI = val.result.length !== 0 && val.result[0].status !== '-' ? val.result[0].status : 'undefined'
     const statusIng = val.result.length !== 0 ? val.result[0].statusIng : 'undefined'
     const nameCar = val.result.length !== 0 ? val.result[0].nameCar : 'undefined'
@@ -51,7 +49,6 @@ async function waitArrProtek(el) {
 function dashDav(arr) {
     //   console.log(arrg)
     // const arr = arrg.filter(item => item.nameCar !== null && item.params[0] !== null && item.params[1] !== null && item.params[2] !== null)
-    console.log(arr)
     const length = arr.length
     const color = {
         1: [],
@@ -86,8 +83,6 @@ function dashDav(arr) {
         }
         return generatedValue;
     };
-
-    console.log(color)
     const resultRed = Math.round(color[1].length / arr.length * 100);
     const resultOrange = Math.round(color[2].length / arr.length * 100);
     const resultYellow = Math.round(color[3].length / arr.length * 100);

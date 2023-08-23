@@ -327,10 +327,5 @@ async function reqSensDash(id,) {
             })
             resolve(allArr)
         }
-
     });
 }
-
-
-
-

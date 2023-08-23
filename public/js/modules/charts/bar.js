@@ -26,7 +26,6 @@ async function fn() {
 let isCanceled = false;
 
 export async function testovfn(active, t1, t2) {
-    console.log(active, t1, t2)
     const param = {
         method: "POST",
         headers: {
@@ -39,7 +38,6 @@ export async function testovfn(active, t1, t2) {
     return resultt
 }
 export async function datas(t1, t2) {
-    console.log(isCanceled)
     if (isCanceled) {
         return Promise.reject(new Error('Запрос отменен'));
     }
@@ -61,17 +59,20 @@ export async function datas(t1, t2) {
                 time: (new Date(it.data * 1000)).toISOString(),
                 speed: it.speed,
                 geo: JSON.parse(it.geo),
-                val: JSON.parse(it.sens)
+                val: JSON.parse(it.sens),
             }
         })
+        //  console.log(JSON.parse(ttt[ttt.length - 1].allSensParams))
         const sensTest = itogy.map(e => {
             return e.val
         })
+
         const timeArray = itogy.map(it => (new Date(it.time)).toISOString());
         const speedArray = itogy.map(it => it.speed);
         const geoArray = itogy.map(it => it.geo);
         const global = [timeArray, speedArray, geoArray];
-        const nameArr = await fnParMessage(active)
+        const nameArr = JSON.parse(ttt[ttt.length - 1].allSensParams) //await fnParMessage(active)
+        console.log(nameArr)
         const allArrNew = [];
 
         nameArr.forEach((item) => {

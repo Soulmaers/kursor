@@ -211,7 +211,6 @@ function newBoard(ArrD, ArrDC, length) {
         .range(['#FF0000', '#FF6633', '#FFFF00', '#009933', 'gray']);
     // задаем радиус
     const radius = Math.min(width - 2 * margin, height - 2 * margin) / 2.5;
-    console.log(radius)
     // создаем элемент арки с радиусом
     const arc = d3.arc()
         .outerRadius(radius)
@@ -238,7 +237,6 @@ function newBoard(ArrD, ArrDC, length) {
         .style("fill", function (d) { return colorScale(d.data.browser); });
     g.append("text")
         .attr("transform", function (d) {
-            console.log(arc.centroid(d)[0])
             if (arc.centroid(d)[0] != NaN) {
                 return "translate(" + arc.centroid(d) + ")";
             }
@@ -250,7 +248,6 @@ function newBoard(ArrD, ArrDC, length) {
             if (d.data.rate !== 0) {
                 return d.data.rate + "%"
             }
-
         });
     g.append("text")
         .attr("transform", function (d) {
@@ -259,11 +256,9 @@ function newBoard(ArrD, ArrDC, length) {
             const ar2 = parseFloat(val[1] + 15)
             const m = [];
             m.push(ar1, ar2)
-            console.log(m[0])
             if (m[0] != NaN) {
                 return "translate(" + m + ")";
             }
-
         })
         .style("text-anchor", "middle")
         .style('font-size', '1rem')
@@ -271,10 +266,7 @@ function newBoard(ArrD, ArrDC, length) {
             if (d.data.value !== 0) {
                 return `(${d.data.value})`
             }
-
         });
-
-
     const legendTable = d3.select(".prot").select('svg').append("g")
         .attr("transform", "translate(0, 10)")
         .attr("class", "legendTable");
@@ -308,7 +300,6 @@ function newBoard(ArrD, ArrDC, length) {
         .attr("transform", function (d, i) {
             return "translate(0,0)";
         });
-
     g1.append("circle")
         .attr("cx", 0)
         .attr("cy", 0)
