@@ -185,8 +185,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-//setTimeout(test, 1000)
-//setInterval(test, 60000)
+setTimeout(test, 1000)
+setInterval(test, 60000)
 
 function ggg(nameSens, rez) {
     const nameSenz = Object.entries(nameSens.item.sens)
