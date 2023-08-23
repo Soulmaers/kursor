@@ -153,6 +153,7 @@ const test = async () => {
     for (const el of allCar[5][1]) {
         let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
         let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
+        let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
         if (rr.messages.length === 0 || rez && rez.length === 0) {
             // console.log('нет новый данных')
         }
@@ -161,17 +162,22 @@ const test = async () => {
             while (rez && rr.messages.length !== rez.length) {
                 rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
                 rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
+                nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
             }
             // console.log(rr.messages.length);
             //   console.log(rez.length);
             const mass = [];
+            const allArray = ggg(nameSens, rez)
+            // console.log(allArray)
             rr.messages.forEach(e => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
                 mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, new Date(e.t * 1000), e.pos.s, e.p.sats, geo]);
             });
             const sens = rez.map(e => JSON.stringify(e));
+            const arr = JSON.stringify(allArray)
             mass.forEach((el, index) => {
                 el.push(sens[index]);
+                el.push(arr)
             });
             await databaseService.saveChartDataToBase(mass);
             console.log('запись сделана по id' + ' ' + el.nm);
@@ -179,8 +185,22 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-//setTimeout(test, 1000)
-//setInterval(test, 60000)
+setTimeout(test, 1000)
+setInterval(test, 60000)
+
+function ggg(nameSens, rez) {
+    const nameSenz = Object.entries(nameSens.item.sens)
+    const arrNameSens = [];
+    nameSenz.forEach(el => {
+        arrNameSens.push([el[1].n, el[1].p])
+    })
+    const valueSens = Object.values(rez[rez.length - 1])
+    const allArr = [];
+    arrNameSens.forEach((e, index) => {
+        allArr.push([...e, valueSens[index]])
+    })
+    return allArr
+}
 async function updateParams(data) {
 
     data ? data : data = dataGlobal

@@ -71,18 +71,6 @@ export async function datas(t1, t2) {
         const speedArray = itogy.map(it => it.speed);
         const geoArray = itogy.map(it => it.geo);
         const global = [timeArray, speedArray, geoArray];
-
-
-        //  let t = 0;
-        //   dat2.forEach(el => el.val.filter(e => (++t) % 3 === 0));
-        /* console.time(fnTime(t1, t2))
-         const global = await fnTime(t1, t2)
-         console.timeEnd(fnTime(t1, t2))
-         console.log(global)
-         console.time(fnPar(active))
-         const sensArr = await fnPar(active)
-         console.timeEnd(fnPar(active))
-         console.log(sensArr)*/
         const nameArr = await fnParMessage(active)
         const allArrNew = [];
 
