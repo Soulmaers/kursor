@@ -76,9 +76,7 @@ export async function timeIntervalStatistiks() {
     await statistics(yesTo(), 'yestoday', 2, objectRazmetka)
     loader.style.display = 'none'
     loaders(week.nextElementSibling, loader)
-    console.time('неделька')
-    statistics(weekTo(), 'week', 3, objectRazmetka)
-    console.timeEnd('неделька')
+    await statistics(weekTo(), 'week', 3, objectRazmetka)
     loader.style.display = 'none'
     console.log('функция отработала')
 }
@@ -181,13 +179,8 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
     const t1 = !isNaN(num) ? interval[1] : interval[0][2]
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
-    console.time('данные с базы')
     const itog = await testovfn(idw, t1, t2)
-    console.timeEnd('данные с базы')
-    console.log(itog)
-    console.time('данные с виалона сенсоры названия')
     const res = await fnParMessage(idw)
-    console.timeEnd('данные с виалона сенсоры названия')
     const time = [];
     const speed = [];
     const sats = [];

@@ -77,6 +77,43 @@ exports.saveChartDataToBase = async (mass) => {
         console.log(e);
     }
 };
+
+exports.saveStructuraToBase = async (mass) => {
+    const data = mass[0]
+    const idw = mass[1]
+    console.log(mass)
+    try {
+        const postModel = `SELECT * FROM structura WHERE data=? AND idw=?`
+        connection.query(postModel, [data, idw], function (err, results) {
+            if (err) console.log(err);
+            if (results.length === 0) {
+                const sql = `INSERT INTO structura( data,idw,info) VALUES ?`;
+                connection.query(sql, [[mass]], function (err, results) {
+                    if (err) console.log(err);
+                })
+            }
+        });
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+
+exports.viewStructuraToBase = async (idw, t1, t2) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const postModel = "SELECT * FROM structura WHERE idw=? AND data >= ? AND data <= ?";
+            connection.query(postModel, [idw, t1, t2], function (err, results) { // Массив с параметрами для подстановки
+                if (err) console.log(err);
+                resolve(results);
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    });
+};
+
+
 exports.viewChartDataToBase = async (idw, t1, t2) => {
     return new Promise((resolve, reject) => {
         try {

@@ -3,6 +3,7 @@ const wialonService = require('../services/wialon.service.js')
 const databaseService = require('../services/database.service');
 const wialonModule = require('../modules/wialon.module');
 const statistika = require('../modules/statistika.module');
+const structura = require('../modules/structura.module.js')
 const connection = require('../config/db')
 const { createDate, convert } = require('../helpers')
 const constorller = require('./data.controller.js')
@@ -87,7 +88,6 @@ exports.dataSpisok = async (req, res) => {
             aLLmassObject.push(objectsWithGroup);
             aLLmassObject.reverse();
         }
-
         if (req && req.body && req.body.login) {
             await res.json({ response: { aLLmassObject, arrName } });
         }
@@ -127,7 +127,6 @@ exports.up = async (req, res) => {
 
 
 exports.viewLogs = async (req, res) => {
-    console.log('вьюлог')
     const login = req.body.login;
     console.log(login)
     const data = req.body.quantity ? await databaseService.quantitySaveToBase(login, req.body.quantity) : await databaseService.quantitySaveToBase(login)
@@ -187,6 +186,20 @@ const test = async () => {
 }
 //setTimeout(test, 1000)
 //setInterval(test, 60000)
+
+const hunterTime = async () => {
+    const now = new Date();
+    if (now.getHours() === 0 && now.getMinutes() === 0) { // если время 0 часов и 0 минут
+        const nowUnix = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime() / 1000);
+        const previousDayUnix = nowUnix - 3600 * 24;
+        const previousDayEndUnix = nowUnix - 1;
+        console.log(previousDayUnix, previousDayEndUnix);
+        const res = await constorller.dataSpisok()
+        structura.datas(res, previousDayEndUnix, previousDayUnix)
+    }
+};
+hunterTime();
+setInterval(hunterTime, 50000)
 
 function ggg(nameSens, rez) {
     const nameSenz = Object.entries(nameSens.item.sens)
