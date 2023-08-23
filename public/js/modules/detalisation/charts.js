@@ -253,7 +253,7 @@ export function createChart(data, num) {
 
 export function createMelagiTS(data, num) {
     const chartJobTS = document.querySelector('.chartJobTS')
-    chartJobTS.style.width = '600px'
+    chartJobTS.style.width = '700px'
     chartJobTS.style.alignItems = 'center'
     const intervalTitle = document.querySelector('.intervalTitle')
     intervalTitle.style.fontSize = '16px'
@@ -262,7 +262,7 @@ export function createMelagiTS(data, num) {
         chartStatic.remove();
     }
     const jobTSDetalisationLine = document.querySelector('.jobTSDetalisationLine')
-    jobTSDetalisationLine.style.width = '600px'
+    jobTSDetalisationLine.style.width = '700px'
     jobTSDetalisationLine.style.display = 'flex'
     jobTSDetalisationLine.style.justifyContent = 'center'
 
@@ -271,7 +271,7 @@ export function createMelagiTS(data, num) {
 
     }
     console.log(data.length)
-    var width = data.length * 60;
+    var width = data.length * 50;
     var height = 250;
 
 
@@ -287,7 +287,7 @@ export function createMelagiTS(data, num) {
     var yScale = d3.scaleLinear()
         .domain([0, maxValue * 1.3])
         .range([0, height + 20]);
-    const barWidth = 60 // Ширина каждого столбца с использованием .bandwidth()
+    const barWidth = 50 // Ширина каждого столбца с использованием .bandwidth()
     // Создание столбцов
     svg.selectAll("rect")
         .data(data)
@@ -323,13 +323,49 @@ export function createMelagiTS(data, num) {
             }
         })
         .text(function (d) {
-            return d.melagi + ' км.';
+            return d.melagi;
         })
         .attr("fill", "black")
         .attr("font-size", "14px")
         .attr("font-family", "Roboto")
         .attr("font-weight", "bold")
-        .style('text-anchor', 'middle');
+        .style('text-anchor', 'middle')
+
+    svg.selectAll('.text-label1')
+        .data(data)
+        .enter()
+        .append('text')
+        .attr('class', 'text-label1')
+        .attr('x', function (d, i) {
+            return i * barWidth + barWidth / 2; // Центрирование текста над каждым столбцом
+        })
+        .attr('y', function (d) {
+            if (yScale(d.melagi) > 40) {
+                return (height - yScale(d.melagi)) + yScale(d.melagi) / 1.5; // Центрирование по вертикали столбца
+            } else if (yScale(d.melagi) > 20 && yScale(d.melagi) <= 40) {
+                return (height - yScale(d.melagi)) + yScale(d.melagi) / 1.2; // Центрирование по вертикали столбца
+            }
+            else {
+                return height - yScale(d.melagi) + 10; // Расположение над столбцом с небольшим отступом
+            }
+        })
+        .attr('dy', function (d) {
+            if (yScale(d.melagi) > 30) {
+                return '0.35em'; // Отступ для центрированного текста
+            } else {
+                return '-1em'; // Отступ для текста над столбцом
+            }
+        })
+        .text(function (d) {
+            return ' км.';
+        })
+        .attr("fill", "black")
+        .attr("font-size", "14px")
+        .attr("font-family", "Roboto")
+        .attr("font-weight", "bold")
+        .style('text-anchor', 'middle')
+
+
 
     svg.selectAll('.data-label')
         .data(data)
