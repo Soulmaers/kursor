@@ -56,19 +56,19 @@ export async function datas(t1, t2) {
     isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
     try {
         const active = Number(document.querySelector('.color').id)
-        const tt1 = '2023-08-23'//convertTineAll(t1)
-        const tt2 = '2023-08-23'//convertTineAll(t2)
-        console.log(tt1, tt2)
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ active, tt1, tt2 }))
-        }
-        const rest = await fetch('/api/viewStructura', param)
-        const resultt = await rest.json()
-        console.log(JSON.parse(resultt[0].info))
+        /* const tt1 = '2023-08-23'//convertTineAll(t1)
+         const tt2 = '2023-08-23'//convertTineAll(t2)
+         console.log(tt1, tt2)
+         const param = {
+             method: "POST",
+             headers: {
+                 'Content-Type': 'application/json',
+             },
+             body: (JSON.stringify({ active, tt1, tt2 }))
+         }
+         const rest = await fetch('/api/viewStructura', param)
+         const resultt = await rest.json()
+         console.log(JSON.parse(resultt[0].info))*/
 
         const ossParams = await fn()
         console.log(ossParams)
