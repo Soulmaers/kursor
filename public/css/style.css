@@ -8,6 +8,24 @@ body {
 
 }
 
+
+.rigthFrame {
+  width: 10px;
+  background-color: rgba(6, 28, 71, 1);
+  display: flex;
+  align-items: center;
+}
+
+.strR {
+  display: none;
+}
+
+.strR,
+.strL {
+  color: #FFF;
+  cursor: pointer;
+}
+
 .wrapperLogs {
   display: none;
   width: 720px;
@@ -4881,8 +4899,6 @@ div.wrapper {
   width: 30%;
   display: none;
   flex-direction: column;
-  margin-top: 1%;
-  border: 1px solid lightgray;
 }
 
 
@@ -5252,11 +5268,17 @@ input[type="text"]:focus {
 
 }
 
-.sections {
-  width: 35%;
+.leftFrame {
+  width: 100%;
   display: flex;
   flex-direction: column;
   margin-top: 1%;
+}
+
+.sections {
+  display: flex;
+  width: 35%;
+  display: flex;
 }
 
 .list_arr2 {
@@ -6097,16 +6119,12 @@ input[type="text"]:focus {
 
   }
 
-
-
   .sections {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 1%;
-    border: 1px solid lightgray;
   }
 
   .wrapper_up {
@@ -6401,7 +6419,6 @@ input[type="text"]:focus {
     display: flex;
     flex-direction: column;
     margin-top: 1%;
-    border: 1px solid lightgray;
   }
 
   .main {
