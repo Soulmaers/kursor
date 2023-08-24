@@ -1,4 +1,4 @@
-
+import { geoloc } from '../modules/geo.js'
 
 export class Flash {
     constructor(one, two, three, sec) {
@@ -22,7 +22,10 @@ export class Flash {
         if (this.sec) {
             this.sec.style.width = '10px';
             this.sec.style.transition = 'width 0.3s ease-in-out';
+
         }
+        const start = document.querySelector('.start')
+        start.style.display === 'none' ? geoloc() : null
 
     }
     handleClickTwo() {
@@ -38,5 +41,7 @@ export class Flash {
             this.sec.style.width = '35%';
             this.sec.style.transition = 'width 0.3s ease-in-out';
         }
+        const start = document.querySelector('.start')
+        start.style.display === 'none' ? geoloc() : null
     }
 }
