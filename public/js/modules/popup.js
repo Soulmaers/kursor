@@ -146,35 +146,35 @@ export async function logsView(array) {
             const tr = document.querySelectorAll('.trEvent')
 
             tr.forEach(e => {
-                if (e.lastElementChild.textContent !== 'нет данных') {
-                    e.lastElementChild.style.cursor = 'pointer'
-                    //   e.lastElementChild.addEventListener('click', (event) => {
-                    // Сохраняем ссылку на функцию-обработчик события
-                    const clickHandler = (event) => {
-                        event.stopPropagation();
-                        const geo = [];
-                        geo.push(parseFloat(e.lastElementChild.textContent.split(',')[0]))
-                        geo.push(parseFloat(e.lastElementChild.textContent.split(',')[1]))
-                        console.log(geo)
-                        const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[1].textContent, e.lastElementChild.parentElement.children[2].textContent] }]
-                        createMapsUniq([], obj, 'log')
-                        document.addEventListener('click', function (event) {
-                            const targetElement = event.target;
-                            const map = document.getElementById('mapOil');
-                            if (map && !map.contains(targetElement)) {
-                                console.log('удаляем поп')
-                                map.remove();
-                                // Удаляем прослушиватель события после закрытия карты
-                                document.removeEventListener('click', clickHandler);
-                            }
-                        });
-                    };
-                    // Добавляем прослушиватель события
-                    e.lastElementChild.addEventListener('click', clickHandler);
-                    //    })
+                //   if (e.lastElementChild.textContent !== 'нет данных') {
+                e.style.cursor = 'pointer'
+                //   e.lastElementChild.addEventListener('click', (event) => {
+                // Сохраняем ссылку на функцию-обработчик события
+                const clickHandler = (event) => {
+                    event.stopPropagation();
+                    const geo = [];
+                    geo.push(parseFloat(e.lastElementChild.textContent.split(',')[0]))
+                    geo.push(parseFloat(e.lastElementChild.textContent.split(',')[1]))
+                    console.log(geo)
+                    const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[1].textContent, e.lastElementChild.parentElement.children[2].textContent] }]
+                    createMapsUniq([], obj, 'log')
+                    document.addEventListener('click', function (event) {
+                        const targetElement = event.target;
+                        const map = document.getElementById('mapOil');
+                        if (map && !map.contains(targetElement)) {
+                            console.log('удаляем поп')
+                            map.remove();
+                            // Удаляем прослушиватель события после закрытия карты
+                            document.removeEventListener('click', clickHandler);
+                        }
+                    });
+                };
+                // Добавляем прослушиватель события
+                e.addEventListener('click', clickHandler);
+                //    })
 
 
-                }
+                // }
             })
 
             const log = document.querySelector('.logs')
