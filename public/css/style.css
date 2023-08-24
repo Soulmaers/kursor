@@ -8,6 +8,7 @@ body {
 
 }
 
+
 .footer {
   height: 20px;
   background-color: rgba(6, 28, 71, 1);
@@ -2010,7 +2011,7 @@ div.spoyler {
 .content_card {
   border: 1px solid black;
   width: 49%;
-  height: 450px;
+  height: 435px;
   box-sizing: border-box;
   display: flex;
 }
