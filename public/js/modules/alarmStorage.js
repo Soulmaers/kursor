@@ -4,6 +4,10 @@ import { ggg } from './menu.js'
 import { createMap, createMapsUniq } from './geo.js'
 import { testovfn } from './charts/bar.js'
 import { Tooltip } from '../class/Tooltip.js'
+import { DraggableContainer } from '../class/Dragdown.js'
+
+
+
 const login = document.querySelectorAll('.log')[1].textContent
 let isProcessing = false
 export async function alarmFind() {
@@ -348,10 +352,25 @@ const plus = document.querySelector('.plus')
 const minus = document.querySelector('.minus')
 const alarmStorage = document.querySelector('.alarmStorage')
 
-plus.addEventListener('click', () => {
+plus.addEventListener('click', (event) => {
     alarmStorage.style.display = 'block';
+    new DraggableContainer(alarmStorage)
+
     plus.style.display = 'none';
     minus.style.display = 'block'
+    event.stopPropagation();
+    document.addEventListener('click', function (event) {
+        if (event.target !== alarmStorage && !alarmStorage.contains(event.target) && event.target !== minus) {
+            alarmStorage.style.display = 'none';
+            plus.style.display = 'block';
+            minus.style.display = 'none'
+            alarmFind()
+            const mapss = document.getElementById('mapOil')
+            if (mapss) {
+                mapss.remove();
+            }
+        }
+    });
 })
 minus.addEventListener('click', () => {
     alarmStorage.style.display = 'none';

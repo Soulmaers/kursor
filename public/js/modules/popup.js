@@ -125,7 +125,8 @@ export async function logsView(array) {
         const parsedContent = JSON.parse(el.content);
         const typeEvent = parsedContent[0].event;
         const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
-        const geo = geoloc !== null ? geoloc : 'нет данных'
+        const geo = geoloc !== null ? geoloc.map(e => e.toFixed(5)) : 'нет данных'
+        console.log(geo)
         const id = parseFloat(el.idw)
         const group = arrayIdGroup
             .filter(it => it[0] === id)
