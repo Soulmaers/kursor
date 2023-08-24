@@ -8,6 +8,10 @@ body {
 
 }
 
+.footer {
+  height: 20px;
+  background-color: rgba(6, 28, 71, 1);
+}
 
 .rigthFrame {
   width: 10px;
