@@ -126,7 +126,6 @@ export async function logsView(array) {
         const typeEvent = parsedContent[0].event;
         const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
         const geo = geoloc !== null ? geoloc.map(e => e.toFixed(5)) : 'нет данных'
-        console.log(geo)
         const id = parseFloat(el.idw)
         const group = arrayIdGroup
             .filter(it => it[0] === id)
@@ -168,7 +167,6 @@ export async function logsView(array) {
                 };
                 e.addEventListener('click', clickHandler);
             })
-
             const log = document.querySelector('.logs')
             const wrapperLogs = document.querySelector('.alllogs')
             async function togglePopup() {
@@ -263,7 +261,6 @@ async function createLogsTable(mass) {
         }
     })
     const trEvent = document.querySelectorAll('.trEvent')
-    console.log(trEvent)
     trEvent.forEach(el => {
         el.setAttribute('tabindex', '0');
         el.addEventListener('mouseenter', function () {

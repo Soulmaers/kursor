@@ -40,13 +40,16 @@
 
 
     <header class="header">
-        <div class="logotip">
-            <img class="logo" src="https://static.tildacdn.com/tild3330-6536-4662-a364-386639656261/Asset_1log3_1.svg">
-        </div>
-        <div class="menu">
-            <a class="monitoring dash" href="#">Дашборд</a>
-            <a class="monitoring monitor" href="#">Мониторинг</a>
-            <a class="monitoring sklad" href="#">Склад</a>
+        <div class="headerLogoMenu">
+            <div class="logotip">
+                <img class="logo"
+                    src="https://static.tildacdn.com/tild3330-6536-4662-a364-386639656261/Asset_1log3_1.svg">
+            </div>
+            <div class="menu">
+                <a class="monitoring dash" href="#">Дашборд</a>
+                <a class="monitoring monitor" href="#">Мониторинг</a>
+                <a class="monitoring sklad" href="#">Склад</a>
+            </div>
         </div>
         <div class="burger">
             <div class="menu_burger"></div>
@@ -54,12 +57,14 @@
             <div class="menu_burger"></div>
             <!--<div class="menu_burger"></div>-->
         </div>
-        <% if (role!=='Пользователь' ) { %><%-include('admin') %>
-                <% } %>
-                    <div class="logs">
-                        <div class="num"></div>
-                    </div>
-                    <%-include('profile') %>
+        <div class="headerAdmin">
+            <% if (role!=='Пользователь' ) { %><%-include('admin') %>
+                    <% } %>
+                        <div class="logs">
+                            <div class="num"></div>
+                        </div>
+                        <%-include('profile') %>
+        </div>
     </header>
     <div class="comeback">
         <div class="iconStrela"></div>

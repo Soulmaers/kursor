@@ -3,11 +3,20 @@ body {
   color: #333;
   font-family: Arial;
   margin: 0 auto;
-  /*max-width: 1600px;*/
   box-sizing: border-box;
 
 }
 
+.headerAdmin {
+  display: flex;
+  align-items: center;
+
+}
+
+.headerLogoMenu {
+  display: flex;
+  align-items: center;
+}
 
 .footer {
   height: 20px;
@@ -1199,6 +1208,7 @@ div.spoyler {
 .header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: rgba(6, 28, 71, 1);
 }
 
@@ -1222,9 +1232,9 @@ div.spoyler {
 
 .auth,
 .configs {
-  color: lightgray;
+  color: #fff;
   font-family: Roboto;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 900;
   cursor: pointer;
   text-decoration: none;
@@ -1232,13 +1242,15 @@ div.spoyler {
 }
 
 .auth:hover {
-  font-size: 0.9rem;
-  color: #fff;
+  border-bottom: 1px solid #fff
 }
 
 .configs:hover {
-  font-size: 0.9rem;
-  color: #fff;
+  border-bottom: 1px solid #fff
+}
+
+.configs {
+  display: none;
 }
 
 .list_menu {
@@ -1270,15 +1282,13 @@ div.spoyler {
 .monitoring {
   text-decoration: none;
   font-family: Roboto;
-  color: lightgray;
-  font-weight: 900;
+  color: #fff;
+  font-weight: bold;
   font-size: 1rem;
 }
 
 .monitoring:hover {
-  color: #fff;
-  font-size: 1.2rem;
-
+  border-bottom: 1px solid #fff;
 }
 
 .logo {
@@ -1783,7 +1793,7 @@ div.spoyler {
 }
 
 .hiddenModal {
-  display: none;
+  display: block;
 }
 
 .windowStatistic {
@@ -5866,6 +5876,7 @@ input[type="text"]:focus {
   top: 6px;
   left: 5px;
   cursor: pointer;
+  display: none;
 }
 
 .filterV {
@@ -5894,7 +5905,7 @@ input[type="text"]:focus {
 }
 
 .minusS {
-  display: none;
+  display: block;
   width: 16px;
   height: 16px;
   background-image: url(../image/view.png);
@@ -6229,13 +6240,17 @@ input[type="text"]:focus {
 
   .auth,
   .configs {
-    color: lightgray;
+    color: #fff;
     font-family: Roboto;
-    font-size: 0.55rem;
-    font-weight: 900;
+    font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
     text-decoration: none;
 
+  }
+
+  .configs {
+    display: none;
   }
 
   .control_panel {
@@ -6263,11 +6278,11 @@ input[type="text"]:focus {
   }
 
   .auth:hover {
-    font-size: 0.55rem;
+    border-bottom: 1px solid #fff
   }
 
   .configs:hover {
-    font-size: 0.55rem;
+    border-bottom: 1px solid #fff
   }
 
   .list_att {
