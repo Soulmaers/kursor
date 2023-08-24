@@ -66,15 +66,16 @@ console.log(confirm)*/
 
 zapros(login) //делаем запрос на wialon получаем объекты
 liCreate()
+console.log(screen.width)
 console.log(screen.height)
-/*
+
 if (screen.width === 1366 && screen.height === 768) {
-    document.body.style.maxWidth = '1366px';
-    // document.body.style.maxHeight = '768px';
+    // document.body.style.maxWidth = '1366px';
+    document.body.style.height = '768px';
 } else if (screen.width === 1920 && screen.height === 1080) {
-    document.body.style.maxWidth = '1920px';
-    //document.body.style.maxHeight = '1080px';
-}*/
+    // document.body.style.maxWidth = '1920px';
+    document.body.style.height = '1080px';
+}
 
 async function waitAndExecute() {
 
