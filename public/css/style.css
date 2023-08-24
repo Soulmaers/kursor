@@ -1956,7 +1956,7 @@ div.spoyler {
 
 .wrapper_left {
   display: block;
-  width: 55%;
+  width: 100%;
   min-height: 600px;
   box-sizing: border-box;
   border: 1px solid lightgray;
