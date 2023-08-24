@@ -14,7 +14,8 @@ body {
   background-color: rgba(6, 28, 71, 1);
 }
 
-.rigthFrame {
+.rigthFrame,
+.twoframe {
   width: 10px;
   background-color: rgba(6, 28, 71, 1);
   display: flex;

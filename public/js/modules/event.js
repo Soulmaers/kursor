@@ -21,11 +21,20 @@ import { element } from './startAllStatic.js'
 
 
 
-const strR = document.querySelector('.strR')
-const strL = document.querySelector('.strL')
+
 const leftFrame = document.querySelector('.leftFrame')
+const rigthFrame = document.querySelectorAll('.rigthFrame')
 const sec = document.querySelector('.sections')
-new Flash(strL, strR, leftFrame, sec)
+const centerBlock = document.querySelector('.centerBlock')
+for (let i = 0; i < rigthFrame.length; i++) {
+    console.log(rigthFrame[i].children[0])
+    const strR = rigthFrame[i].children[0]
+    const strL = rigthFrame[i].children[1]
+    console.log(i)
+    i !== 1 ? new Flash(strL, strR, leftFrame, sec) : new Flash(strL, strR, centerBlock)
+}
+
+
 
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
@@ -132,6 +141,8 @@ function mainblock() {
     if (mapss) {
         mapss.remove();
     }
+    const twoframe = document.querySelector('.twoframe')
+    twoframe.style.display = 'flex'
     const idw = document.querySelector('.color')
     if (!idw) {
         const main = document.querySelector('.main')
@@ -501,6 +512,8 @@ export async function pr() {
 
 const plug = document.querySelectorAll('.plug')
 plug[2].addEventListener('click', () => {
+    const twoframe = document.querySelector('.twoframe')
+    twoframe.style.display = 'none'
     const wRight = document.querySelector('.wrapper_right')
     const wLeft = document.querySelector('.wrapper_left')
     const model = document.querySelector('.wrapper_containt')
