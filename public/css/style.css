@@ -37,8 +37,8 @@ body {
 
 .alllogs {
   display: none;
-  width: 740px;
-  height: 630px;
+  width: 760px;
+  height: 640px;
   position: absolute;
   top: 20%;
   left: 55%;
@@ -51,19 +51,21 @@ body {
 }
 
 .wrapperLogs {
-  width: 740px;
+  width: 760px;
   height: 600px;
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #fff;
   margin-top: 30px;
+  margin-bottom: 10px;
+  border-radius: 0 0 10px 10px;
 }
 
 .trLogs,
 .trEvent {
   display: flex;
   align-items: center;
-  width: 700px;
+  width: 740px;
   font-size: 1rem;
   padding: 2px;
   margin: 2px;
@@ -82,7 +84,6 @@ body {
 
 .trLogs {
   font-family: Roboto;
-  margin-top: 10px;
 }
 
 .tdEvent {

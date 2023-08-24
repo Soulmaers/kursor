@@ -267,8 +267,17 @@ async function createLogsTable(mass) {
             td.style.color = objColor[td.textContent]
         }
     })
-
-
+    const trEvent = document.querySelectorAll('.trEvent')
+    console.log(trEvent)
+    trEvent.forEach(el => {
+        el.setAttribute('tabindex', '0');
+        el.addEventListener('mouseenter', function () {
+            el.style.backgroundColor = 'lightgray';
+        });
+        el.addEventListener('mouseleave', function () {
+            el.style.backgroundColor = '';
+        });
+    });
 }
 
 function times(time) {
