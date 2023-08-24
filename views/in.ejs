@@ -106,70 +106,76 @@
             </div>
         </div>
         <section class="sections">
-            <div class="wrapList">
-                <div class="list_att">
-                    <div class="list_item1">Машина</div>
-                    <div class="list_item2">Тягач</div>
-                    <div class="list_item3">Прицеп</div>
-                </div>
-                <div class="low_list">
-                    <div class="sensors">
-                        <div class="wrapper_button">
-                            <button class="btnsens">Давление</button>
-                            <button class="btnsens">Температура</button>
-                            <button class="btnsens">Параметры</button>
-                            <div class="engineEvent">
-                                <p class="title_p">&#402;</p><input class="tsiControll" value="">
+            <div class="leftFrame">
+                <div class="wrapList">
+                    <div class="list_att">
+                        <div class="list_item1">Машина</div>
+                        <div class="list_item2">Тягач</div>
+                        <div class="list_item3">Прицеп</div>
+                    </div>
+                    <div class="low_list">
+                        <div class="sensors">
+                            <div class="wrapper_button">
+                                <button class="btnsens">Давление</button>
+                                <button class="btnsens">Температура</button>
+                                <button class="btnsens">Параметры</button>
+                                <div class="engineEvent">
+                                    <p class="title_p">&#402;</p><input class="tsiControll" value="">
+                                </div>
+                                <div class="koef">
+                                    <p class="title_p">Коэф.</p><input class="changeParams" value="1">
+                                </div>
                             </div>
-                            <div class="koef">
-                                <p class="title_p">Коэф.</p><input class="changeParams" value="1">
-                            </div>
+                            <div class="title_sens">Параметры:</div>
+                            <ul class="obo">
+                            </ul>
                         </div>
-                        <div class="title_sens">Параметры:</div>
-                        <ul class="obo">
+                    </div>
+
+                </div>
+
+                <div class="visualGrafics">
+                    <div class="blockRigth">
+                        <ul class="legend">
+                            <h4 class="titleLegend">Легенда графиков</h4>
+                            <li class="itemsLegend"></li>
+                            <li class="itemsLegend"></li>
+                            <li class="itemsLegend"></li>
+                            <li class="itemsLegend"></li>
+                            <li class="itemsLegend"></li>
+                            <li class="itemsLegend"></li>
+                            <li class="itemsLegend"></li>
+                            <li class="itemsLegend"></li>
+                            <li class="itemsLegend"></li>
+                            <li class="itemsLegend"></li>
+                            <li class="itemsLegend"></li>
+                            <li class="itemsLegend"></li>
                         </ul>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="visualGrafics">
-                <div class="blockRigth">
-                    <ul class="legend">
-                        <h4 class="titleLegend">Легенда графиков</h4>
-                        <li class="itemsLegend"></li>
-                        <li class="itemsLegend"></li>
-                        <li class="itemsLegend"></li>
-                        <li class="itemsLegend"></li>
-                        <li class="itemsLegend"></li>
-                        <li class="itemsLegend"></li>
-                        <li class="itemsLegend"></li>
-                        <li class="itemsLegend"></li>
-                        <li class="itemsLegend"></li>
-                        <li class="itemsLegend"></li>
-                        <li class="itemsLegend"></li>
-                        <li class="itemsLegend"></li>
-                    </ul>
-                    <div class="speedGraf">
-                        <div class="form_speed">
-                            <label>Интервал
-                                <select class="select_speed">
-                                    <option disabled selected value="0">Указанный интервал</option>
-                                    <option class="option_int" value="1">За сутки</option>
-                                    <option class="option_int" value="2">За неделю</option>
-                                    <option class="option_int" value="3">За месяц</option>
-                                </select>
-                            </label>
-                            <label>Календарь
-                                <input type="text" id="daterange" placeholder="Выберите диапазон дат">
-                            </label>
-                            <div class="btn_speedStart">
-                                <button class="btm_form">Очистить</button>
-                                <button class="btm_form control">Выполнить</button>
+                        <div class="speedGraf">
+                            <div class="form_speed">
+                                <label>Интервал
+                                    <select class="select_speed">
+                                        <option disabled selected value="0">Указанный интервал</option>
+                                        <option class="option_int" value="1">За сутки</option>
+                                        <option class="option_int" value="2">За неделю</option>
+                                        <option class="option_int" value="3">За месяц</option>
+                                    </select>
+                                </label>
+                                <label>Календарь
+                                    <input type="text" id="daterange" placeholder="Выберите диапазон дат">
+                                </label>
+                                <div class="btn_speedStart">
+                                    <button class="btm_form">Очистить</button>
+                                    <button class="btm_form control">Выполнить</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="rigthFrame">
+                <div class="strR">&#10095</div>
+                <div class="strL">&#10094</div>
             </div>
         </section>
         <div id="messages"></div>

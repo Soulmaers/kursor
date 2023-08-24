@@ -11,6 +11,7 @@ import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.
 import { dataInput, dataSelect, times, click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
+import { Flash } from '../class/Flash.js'
 import { protDash, dashViewProtector } from './charts/protek.js'
 import { getStat } from './charts/stat.js'
 
@@ -18,8 +19,15 @@ import { conf } from './altConfig.js'
 import { viewTech } from './tech.js'
 import { element } from './startAllStatic.js'
 
-const logo = document.querySelector('.logo')
 
+
+const strR = document.querySelector('.strR')
+const strL = document.querySelector('.strL')
+const leftFrame = document.querySelector('.leftFrame')
+const sec = document.querySelector('.sections')
+new Flash(strL, strR, leftFrame, sec)
+
+const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
     const main = document.querySelector('.main')
     const start = document.querySelector('.start')

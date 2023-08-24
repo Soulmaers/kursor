@@ -133,6 +133,7 @@ export async function datas(t1, t2) {
             const finishArrayData = []
             const finishArrayDataT = []
             const stop = [];
+
             const idw = document.querySelector('.color').id
             allArrNew.forEach(e => {
                 if (e.params.startsWith('tpms_p')) {
@@ -154,12 +155,14 @@ export async function datas(t1, t2) {
                     })
                 }
             })
+
             finishArrayData.forEach((el, index) => {
                 el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
                 el.speed = global[1]
                 el.geo = global[2]
                 el.stop = stop
             })
+            console.log(finishArrayData)
             finishArrayData.forEach(e => {
                 par.forEach(it => {
                     if (e.params === it.pressure) {
