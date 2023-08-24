@@ -16,10 +16,11 @@ body {
 
 .rigthFrame,
 .twoframe {
-  width: 10px;
+  width: 14px;
   background-color: rgba(6, 28, 71, 1);
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .strR {
@@ -28,6 +29,7 @@ body {
 
 .strR,
 .strL {
+  padding: 0 2px;
   color: #FFF;
   cursor: pointer;
 }

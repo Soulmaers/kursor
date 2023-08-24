@@ -1,4 +1,6 @@
 import { geoloc } from '../modules/geo.js'
+import { timeIntervalStatistiks } from '../modules/detalisation.js'
+
 
 export class Flash {
     constructor(one, two, three, sec) {
@@ -25,7 +27,7 @@ export class Flash {
 
         }
         const start = document.querySelector('.start')
-        start.style.display === 'none' ? geoloc() : null
+        start.style.display === 'none' ? (geoloc()) : null
 
     }
     handleClickTwo() {
@@ -42,6 +44,6 @@ export class Flash {
             this.sec.style.transition = 'width 0.3s ease-in-out';
         }
         const start = document.querySelector('.start')
-        start.style.display === 'none' ? geoloc() : null
+        start.style.display === 'none' ? (geoloc()) : null
     }
 }

@@ -114,6 +114,10 @@ export function createChart(data, num) {
     if (chartStatic) {
         chartStatic.remove();
     }
+
+    const jobTSDetalisationGraf = document.querySelector('.jobTSDetalisationGraf ')
+    const widthInPx = jobTSDetalisationGraf.offsetWidth;
+    console.log(widthInPx)
     // Функция для объединения смежных интервалов с одинаковым статусом
     function combineIntervals(data) {
         const combinedData = [];
@@ -132,7 +136,7 @@ export function createChart(data, num) {
     }
 
     const combinedData = combineIntervals(data);
-    const width = 673; // Ширина графика
+    const width = 674//widthInPx; // Ширина графика
     const svgHeight = 80; // Высота SVG элемента
     const margin = { top: 10, right: 20, bottom: 10, left: 50 };
     const height = svgHeight - margin.top - margin.bottom;
