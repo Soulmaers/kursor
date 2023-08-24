@@ -178,7 +178,7 @@ export async function logsView(array) {
             })
 
             const log = document.querySelector('.logs')
-            const wrapperLogs = document.querySelector('.wrapperLogs')
+            const wrapperLogs = document.querySelector('.alllogs')
             async function togglePopup() {
                 if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
                     wrapperLogs.style.display = 'block'// Показываем попап
@@ -205,7 +205,7 @@ export async function logsView(array) {
             const numy = document.querySelector('.num')
             // Добавляем обработчики кликов
             log.addEventListener('click', function (event) {
-                const wr = document.querySelector('.trLogs')
+                const wr = document.querySelector('.alllogs')
                 const draggable = new DraggableContainer(wr);
                 togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
             });
@@ -239,14 +239,20 @@ const objColor = {
     'Предупреждение': 'darkred'
 }
 async function createLogsTable(mass) {
-    const wrap = document.querySelector('.wrapperLogs')
+    const wrap = document.querySelector('.alllogs')
     if (wrap) {
         wrap.remove();
     }
     const body = document.getElementsByTagName('body')[0]
     const log = document.createElement('div')
     log.classList.add('wrapperLogs')
-    body.appendChild(log)
+    const headerlog = document.createElement('div')
+    headerlog.classList.add('header_logs')
+    const alllogs = document.createElement('div')
+    alllogs.classList.add('alllogs')
+    body.appendChild(alllogs)
+    // alllogs.appendChild(headerlog)
+    alllogs.appendChild(log)
     log.innerHTML = titleLogs
     var firstChild = log.firstChild;
     mass.forEach(el => {

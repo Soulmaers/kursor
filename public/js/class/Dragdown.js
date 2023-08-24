@@ -2,10 +2,10 @@
 console.log('дроп')
 
 export class DraggableContainer {
-
     constructor(element) {
         console.log(element)
-        this.container = element.parentElement;
+        //  this.container = element.parentElement;
+        this.elem = element
         this.isDragging = false;
         this.initialX = 0;
         this.initialY = 0;
@@ -16,17 +16,15 @@ export class DraggableContainer {
         this.dragEnd = this.dragEnd.bind(this);
         this.drag = this.drag.bind(this);
         // добавляем обработчики событий
-        this.container.addEventListener('mousedown', this.dragStart);
-        this.container.addEventListener('mouseup', this.dragEnd);
-        this.container.addEventListener('mousemove', this.drag);
-
+        this.elem.addEventListener('mousedown', this.dragStart);
+        this.elem.addEventListener('mouseup', this.dragEnd);
+        this.elem.addEventListener('mousemove', this.drag);
     }
-
     dragStart(event) {
         if (event.button === 0) { // проверяем, что зажата левая кнопка мыши
             this.initialX = event.clientX - this.xOffset;
             this.initialY = event.clientY - this.yOffset;
-            if (event.target === this.container) {
+            if (event.target === this.elem) {
                 this.isDragging = true;
             }
         }
@@ -44,13 +42,13 @@ export class DraggableContainer {
             this.currentY = event.clientY - this.initialY;
             this.xOffset = this.currentX;
             this.yOffset = this.currentY;
-            this.container.style.transform = `translate3d(${this.currentX}px, ${this.currentY}px, 0)`;
+            this.elem.style.transform = `translate3d(${this.currentX}px, ${this.currentY}px, 0)`;
         }
     }
     destroy() {
         // удаляем обработчики событий
-        this.container.removeEventListener('mousedown', this.dragStart);
-        this.container.removeEventListener('mouseup', this.dragEnd);
-        this.container.removeEventListener('mousemove', this.drag);
+        this.elem.removeEventListener('mousedown', this.dragStart);
+        this.elem.removeEventListener('mouseup', this.dragEnd);
+        this.elem.removeEventListener('mousemove', this.drag);
     }
 }
