@@ -144,12 +144,8 @@ export async function logsView(array) {
         if (!clickLog) {
             await createLogsTable(results);
             const tr = document.querySelectorAll('.trEvent')
-
             tr.forEach(e => {
-                //   if (e.lastElementChild.textContent !== 'нет данных') {
                 e.style.cursor = 'pointer'
-                //   e.lastElementChild.addEventListener('click', (event) => {
-                // Сохраняем ссылку на функцию-обработчик события
                 const clickHandler = (event) => {
                     event.stopPropagation();
                     const geo = [];
@@ -169,12 +165,7 @@ export async function logsView(array) {
                         }
                     });
                 };
-                // Добавляем прослушиватель события
                 e.addEventListener('click', clickHandler);
-                //    })
-
-
-                // }
             })
 
             const log = document.querySelector('.logs')
@@ -250,8 +241,11 @@ async function createLogsTable(mass) {
     headerlog.classList.add('header_logs')
     const alllogs = document.createElement('div')
     alllogs.classList.add('alllogs')
+    const spanTitle = document.createElement('p')
+    spanTitle.classList.add('spanTitle')
+    spanTitle.textContent = 'Логи событий'
     body.appendChild(alllogs)
-    // alllogs.appendChild(headerlog)
+    alllogs.appendChild(spanTitle)
     alllogs.appendChild(log)
     log.innerHTML = titleLogs
     var firstChild = log.firstChild;
