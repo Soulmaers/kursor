@@ -82,7 +82,7 @@ export async function createMap(geo, geoMarker) {
 
         map.setView(center, 12);
         map.flyTo(center, 12);
-        const res = await reverseGeocode(geoMarker.geoY, geoMarker.geoX)
+        const res = `${geoMarker.geoY}, ${geoMarker.geoX}`//await reverseGeocode(geoMarker.geoY, geoMarker.geoX)
         iss = L.marker(center, { icon: greenIcon }).bindPopup(`${nameCar}<br>${res}`).addTo(map);
         iss.getPopup().options.className = 'my-popup-all';
         iss.on('mouseover', function (e) {
