@@ -32,7 +32,7 @@ export class DraggableContainer {
     dragEnd(event) {
         this.initialX = this.currentX;
         this.initialY = this.currentY;
-
+        this.elem.style.opacity = 1
         this.isDragging = false;
     }
     drag(event) {
@@ -43,9 +43,11 @@ export class DraggableContainer {
             this.xOffset = this.currentX;
             this.yOffset = this.currentY;
             this.elem.style.transform = `translate3d(${this.currentX}px, ${this.currentY}px, 0)`;
+            this.elem.style.opacity = 0.8
         }
     }
     destroy() {
+
         // удаляем обработчики событий
         this.elem.removeEventListener('mousedown', this.dragStart);
         this.elem.removeEventListener('mouseup', this.dragEnd);

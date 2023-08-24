@@ -54,6 +54,7 @@ if (auth) {
         getUsers()
         const account = document.querySelector('.account')
         account.style.display = 'flex'
+        new DraggableContainer(account)
     })
     authClear.addEventListener('click', () => {
         const account = document.querySelector('.account')

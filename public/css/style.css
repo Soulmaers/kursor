@@ -13,6 +13,8 @@ body {
 
 }
 
+
+
 .headerLogoMenu {
   display: flex;
   align-items: center;
@@ -205,6 +207,7 @@ body {
   font-size: 1.4rem;
   font-weight: bold;
   font-family: Roboto;
+  color: #fff
 }
 
 .messageeWin {
@@ -236,6 +239,7 @@ body {
   padding: 5px;
   cursor: pointer;
   font-weight: bold;
+  color: #fff
 }
 
 .y,
@@ -250,7 +254,7 @@ body {
 }
 
 .da:hover {
-  background-color: #fff;
+  border-bottom: 1px solid #fff
 }
 
 .y:hover {
@@ -262,24 +266,27 @@ body {
 }
 
 .net:hover {
-  background-color: #fff;
+  border-bottom: 1px solid #fff
 }
 
 .account {
   display: none;
-  background-color: #FFF;
+  background-color: rgba(6, 28, 71, 1);
   width: 650px;
   height: 500px;
   border: 1px solid gray;
   position: absolute;
+  left: 500px;
+  top: 30px;
   padding: 5px;
   font-family: Roboto;
-  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5)
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+  border-radius: 10px
 }
 
 
 .btnWrap {
-  background-color: #fff;
+  background-color: rgba(6, 28, 71, 1);
   width: 160px;
   margin: 0 auto;
   flex-direction: column;
@@ -292,8 +299,7 @@ body {
 }
 
 .btn-warning:hover {
-  border: 1px solid black;
-  background-color: #fff;
+  border-bottom: 1px solid #fff
 }
 
 .btn-warning,
@@ -302,12 +308,12 @@ body {
   width: 98%;
   border: 1px solid gray;
   box-sizing: border-box;
-  background-color: lightgray;
+  background-color: rgba(6, 28, 71, 1);
   padding: 5px 0;
   font-size: 0.8rem;
   font-family: Roboto;
   font-weight: 700;
-  color: #000;
+  color: #fff;
   cursor: pointer;
 
 }
@@ -333,13 +339,13 @@ body {
 }
 
 .accountControl {
+  margin-top: 20px;
   width: 100%;
-  background-color: lightgray;
+  background-color: rgba(6, 28, 71, 1);
   position: relative;
-  border: 1px solid black;
+  border: 1px solid #fff;
   display: flex;
   flex-direction: column;
-
   align-items: center;
 }
 
@@ -443,7 +449,11 @@ body {
 .low_modal {
   width: 100%;
   display: flex;
+  background-color: rgba(6, 28, 71, 1);
+}
 
+.titleForm {
+  color: #fff
 }
 
 .clearConfirmCheckModal {
@@ -497,11 +507,16 @@ body {
   font-family: Roboto;
   font-weight: bold;
   font-size: 0.9rem;
-  border: 2px solid lightgreen;
-  background-color: rgb(207, 228, 207);
+  border: 3px solid rgba(6, 28, 71, 1);
+  background-color: #fff;
   border-radius: 5px;
   padding: 5px 0;
   cursor: pointer;
+}
+
+
+.titleAccount {
+  color: #fff
 }
 
 .usersTitle {
@@ -693,13 +708,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 10px;
 }
 
 .form-control {
   width: 156px;
   margin: 10px 0;
-  border: 2px solid lightgreen;
-  background-color: rgb(207, 228, 207);
+  border: 2px solid rgba(6, 28, 71, 1);
+  background-color: #fff;
   border-radius: 5px;
   min-height: 24px;
 }
@@ -751,8 +767,8 @@ body {
   height: 32px;
   margin: 10px 0;
   font-size: 0.75rem;
-  border: 2px solid lightgreen;
-  background-color: rgb(207, 228, 207);
+  border: 2px solid rgba(6, 28, 71, 1);
+  background-color: #fff;
   border-radius: 5px;
   min-height: 24px;
 }
@@ -761,7 +777,7 @@ body {
 
 .singUpForm {
   width: 50%;
-  border: 1px solid black;
+  border: 1px solid #fff;
   display: flex;
   flex-direction: column;
   margin: 0 2px;
@@ -770,7 +786,7 @@ body {
 
 .listAccount {
   width: 50%;
-  border: 1px solid black;
+  border: 1px solid #fff;
   display: flex;
   flex-direction: column;
   margin: 0 2px;
@@ -785,6 +801,7 @@ body {
   align-items: center;
   background-color: #fff;
   overflow-y: auto;
+  border-radius: 10px;
 }
 
 
@@ -793,6 +810,7 @@ body {
   position: absolute;
   top: 10px;
   right: 10px;
+  color: #fff
 }
 
 @import url(https://fonts.googleapis.com/css?family=Roboto+Condensed);
@@ -5755,7 +5773,7 @@ input[type="text"]:focus {
 
 .alarmStorage {
   display: none;
-  height: 630px;
+  max-height: 630px;
   border: 1px solid gray;
   z-index: 2000;
   background-color: rgba(6, 28, 71, 1);
