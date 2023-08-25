@@ -46,9 +46,9 @@ async function waitArrProtek(el) {
 }
 
 
-function dashDav(arr) {
-    //   console.log(arrg)
-    // const arr = arrg.filter(item => item.nameCar !== null && item.params[0] !== null && item.params[1] !== null && item.params[2] !== null)
+function dashDav(arrg) {
+
+    const arr = arrg.filter(item => item.nameCar !== null && item.params[0] !== null && item.params[1] !== null && item.params[2] !== null)
     const length = arr.length
     const color = {
         1: [],
@@ -57,10 +57,18 @@ function dashDav(arr) {
         4: []
 
     }
+    console.log(arr)
     arr.forEach(el => {
-        color[generStat(el.params)].push(el.nameCar)
+        const type = generStat(el.params);
+        console.log(el.nameCar)
+        if (color.hasOwnProperty(type)) {
+            color[type].push(el.nameCar ? el.nameCar : console.log(el.nameCar));
+        } else {
+            console.error(el + `Invalid type ${type} returned from generStat`);
+        }
     })
     function generStat(el) {
+        console.log(el)
         let generatedValue;
 
         if (Number(el[0]) > 0) {

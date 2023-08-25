@@ -60,6 +60,7 @@ body {
   z-index: 1000;
   border-radius: 10px;
   background-color: rgba(6, 28, 71, 1);
+  cursor: move;
 
 }
 
@@ -283,7 +284,8 @@ body {
   font-family: Roboto;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
-  z-index: 2500
+  z-index: 2500;
+  cursor: move;
 }
 
 
@@ -2037,7 +2039,8 @@ div.spoyler {
   min-height: 600px;
   box-sizing: border-box;
   border: 1px solid lightgray;
-
+  background-color: #fff;
+  z-index: 10;
 }
 
 .wrapper_up {
@@ -5784,6 +5787,7 @@ input[type="text"]:focus {
   left: -300px;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
+  cursor: move
 }
 
 

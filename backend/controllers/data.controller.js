@@ -162,11 +162,12 @@ const test = async () => {
                 rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
                 rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
                 nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
+
             }
             // console.log(rr.messages.length);
             //   console.log(rez.length);
             const mass = [];
-            const allArray = ggg(nameSens, rez)
+            allArray = ggg(nameSens, rez)
             // console.log(allArray)
             rr.messages.forEach(e => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
@@ -184,8 +185,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-//setTimeout(test, 1000)
-//setInterval(test, 60000)
+setTimeout(test, 1000)
+setInterval(test, 60000)
 
 const hunterTime = async () => {
     const now = new Date();
@@ -198,7 +199,7 @@ const hunterTime = async () => {
         structura.datas(res, previousDayEndUnix, previousDayUnix)
     }
 };
-//hunterTime();
+hunterTime();
 setInterval(hunterTime, 50000)
 
 function ggg(nameSens, rez) {
@@ -207,6 +208,7 @@ function ggg(nameSens, rez) {
     nameSenz.forEach(el => {
         arrNameSens.push([el[1].n, el[1].p])
     })
+    console.log(rez)
     const valueSens = Object.values(rez[rez.length - 1])
     const allArr = [];
     arrNameSens.forEach((e, index) => {

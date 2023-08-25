@@ -25,6 +25,7 @@ exports.startAllStatic = async (objects) => {
     const timeOld = interval[1]
     const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow)
+    console.log(res)
     return res.uniq
 }
 async function loadValue(array, timeOld, timeNow) {
@@ -55,35 +56,55 @@ async function loadValue(array, timeOld, timeNow) {
                 return JSON.parse(e.sens)
             })
             const nameSens = JSON.parse(itog[itog.length - 1].allSensParams) //await wialonService.getAllNameSensorsIdDataFromWialon(idw)
-            //console.log(res)
-            //   const nameSens = [];
-            //   Object.entries(res.item.sens).forEach(el => {
-            //       nameSens.push([el[1].n, el[1].p])
-            //   })
-            const allArrNew = [];
-            if (sensArr[0] && nameSens.length === sensArr[0].length) {
-                nameSens.forEach((item) => {
-                    allArrNew.push({ sens: item[0], params: item[1], value: [] })
-                })
-            }
-            nameSens.pop()
-            nameSens.forEach((item) => {
-                allArrNew.push({ sens: item[0], params: item[1], value: [] })
+            console.log(name)
+            //    console.log(itog)
+            //console.log(nameSens)
+            const allsens = itog.map(it => {
+                return { sens: JSON.parse(it.allSensParams).map(e => e[0]), params: JSON.parse(it.allSensParams).map(e => e[1]), val: JSON.parse(it.allSensParams).map(e => e[2]) }
             })
-            sensArr.forEach(el => {
-                if (el.length === 0) {
-                    return; // Пропускаем текущую итерацию, если sensArr пустой
-                }
-                for (let i = 0; i < allArrNew.length; i++) {
-                    allArrNew[i].value.push(Number(Object.values(el)[i].toFixed(0)))
-                }
-            });
+            // console.log(allsens)
+            const allArrNew = allsens.reduce((accumulator, current) => {
+                current.sens.forEach((sens, idx) => {
+                    const params = current.params[idx];
+                    const value = current.val[idx];
+                    const found = accumulator.find(
+                        (item) => item.sens === sens && item.params === params
+                    );
+                    if (found) {
+                        found.value.push(value);
+                    } else {
+                        accumulator.push({ sens, params, value: [value] });
+                    }
+                });
+                return accumulator;
+            }, []);
+
+            // console.log(reza);
+            /* const allArrNew = [];
+             if (sensArr[0] && nameSens.length === sensArr[0].length) {
+                 nameSens.forEach((item) => {
+                     allArrNew.push({ sens: item[0], params: item[1], value: [] })
+                 })
+             }
+             // nameSens.pop()
+             nameSens.forEach((item) => {
+                 allArrNew.push({ sens: item[0], params: item[1], value: [] })
+             })
+             sensArr.forEach(el => {
+                 if (el.length === 0) {
+                     return; // Пропускаем текущую итерацию, если sensArr пустой
+                 }
+                 for (let i = 0; i < allArrNew.length; i++) {
+                     allArrNew[i].value.push(Number(Object.values(el)[i].toFixed(0)))
+                 }
+             });*/
             allArrNew.forEach(el => {
                 el.time = time
                 el.speed = speed
                 el.sats = sats
                 el.geo = geo
             })
+            //  console.log(allArrNew)
             const oil = [];
             const hh = [];
             let probeg;
@@ -91,6 +112,7 @@ async function loadValue(array, timeOld, timeNow) {
             if (found) {
                 console.log('раз');
                 const it = allArrNew.find(it => it.params === 'can_mileage');
+                //  console.log(it)
                 const probegZero = it.value.length !== 0 ? Number((it.value[0]).toFixed(0)) : 0;
                 const probegNow = it.value.length !== 0 ? Number((it.value[it.value.length - 1]).toFixed(0)) : 0;
                 const probegDay = probegNow - probegZero;
@@ -330,7 +352,6 @@ function moto(data) {
 
 function rashodCalc(data, name, group, idw) {
     console.log('заправки')
-
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
@@ -397,7 +418,6 @@ function rashodCalc(data, name, group, idw) {
     const firstData = data.value[0];
     const lastData = data.value[data.value.length - 1];
     if (zapravka.length !== 0) {
-        // console.log(zapravka)
         const diff = (Number(new Date().getTime() / 1000).toFixed(0)) - (zapravka[zapravka.length - 1][1][1].getTime() / 1000)
         if (diff > 300) {
             //  console.log(zapravka + 'условие')
@@ -412,6 +432,7 @@ function rashodCalc(data, name, group, idw) {
     else {
         rash.push(firstData - lastData >= 0 ? firstData - lastData : 0)
     }
+
     const rashod = rash.reduce((el, acc) => el + acc, 0)
     const zap = [];
     zapravka.forEach(e => {

@@ -53,6 +53,7 @@ logo.addEventListener('click', () => {
     main.style.display = 'none'
     dash.style.display = 'none'
     start.style.display = 'flex'
+    start.style.width = 100 + '%'
     sections.style.display = 'flex'
 })
 const auth = document.querySelector('.auth')

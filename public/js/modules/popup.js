@@ -188,6 +188,7 @@ export async function logsView(array) {
             const numy = document.querySelector('.num')
             // Добавляем обработчики кликов
             log.addEventListener('click', function (event) {
+                event.stopPropagation();
                 const wr = document.querySelector('.alllogs')
                 const draggable = new DraggableContainer(wr);
                 togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
