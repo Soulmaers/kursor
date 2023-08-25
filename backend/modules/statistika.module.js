@@ -25,7 +25,6 @@ exports.startAllStatic = async (objects) => {
     const timeOld = interval[1]
     const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow)
-    //  console.log(res)
     return res.uniq
 }
 async function loadValue(array, timeOld, timeNow) {
@@ -55,11 +54,12 @@ async function loadValue(array, timeOld, timeNow) {
             const sensArr = itog.map(e => {
                 return JSON.parse(e.sens)
             })
-            const res = await wialonService.getAllNameSensorsIdDataFromWialon(idw)
-            const nameSens = [];
-            Object.entries(res.item.sens).forEach(el => {
-                nameSens.push([el[1].n, el[1].p])
-            })
+            const nameSens = JSON.parse(itog[itog.length - 1].allSensParams) //await wialonService.getAllNameSensorsIdDataFromWialon(idw)
+            //console.log(res)
+            //   const nameSens = [];
+            //   Object.entries(res.item.sens).forEach(el => {
+            //       nameSens.push([el[1].n, el[1].p])
+            //   })
             const allArrNew = [];
             if (sensArr[0] && nameSens.length === sensArr[0].length) {
                 nameSens.forEach((item) => {
