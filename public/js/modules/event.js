@@ -11,7 +11,7 @@ import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.
 import { dataInput, dataSelect, times, click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
-import { Flash } from '../class/Flash.js'
+import { Flash, CloseBTN } from '../class/Flash.js'
 import { protDash, dashViewProtector } from './charts/protek.js'
 import { getStat } from './charts/stat.js'
 
@@ -50,11 +50,13 @@ logo.addEventListener('click', () => {
 const auth = document.querySelector('.auth')
 const authClear = document.querySelector('.authClear')
 if (auth) {
-    auth.addEventListener('click', () => {
+    auth.addEventListener('click', (event) => {
         getUsers()
+        event.stopPropagation();
         const account = document.querySelector('.account')
         account.style.display = 'flex'
         new DraggableContainer(account)
+        new CloseBTN(account)
     })
     authClear.addEventListener('click', () => {
         const account = document.querySelector('.account')

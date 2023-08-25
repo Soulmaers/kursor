@@ -1,6 +1,7 @@
 import { fnParMessage } from '../grafiks.js'
 import { Tooltip } from '../../class/Tooltip.js'
 import { createMapsUniq } from '../geo.js'
+import { CloseBTN } from '../../class/Flash.js'
 
 async function fn() {
     const active = document.querySelectorAll('.color')
@@ -883,8 +884,6 @@ async function grafikStartPress(times, datar) {
             })
         })
     }
-
-
     const legendBar = document.querySelectorAll('.legendBar')
     const labelPress = document.querySelector('.labelPress')
     const labelAllPress = document.querySelector('.labelAllPress')

@@ -1,4 +1,5 @@
 import { DraggableContainer } from '../class/Dragdown.js'
+import { CloseBTN } from '../class/Flash.js'
 import { titleLogs } from './content.js'
 import { reverseGeocode, createMapsUniq } from './geo.js'
 
@@ -154,16 +155,8 @@ export async function logsView(array) {
                     console.log(geo)
                     const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[1].textContent, e.lastElementChild.parentElement.children[2].textContent] }]
                     createMapsUniq([], obj, 'log')
-                    document.addEventListener('click', function (event) {
-                        const targetElement = event.target;
-                        const map = document.getElementById('mapOil');
-                        if (map && !map.contains(targetElement)) {
-                            console.log('удаляем поп')
-                            map.remove();
-                            // Удаляем прослушиватель события после закрытия карты
-                            document.removeEventListener('click', clickHandler);
-                        }
-                    });
+                    const map = document.getElementById('mapOil');
+                    new CloseBTN(map)
                 };
                 e.addEventListener('click', clickHandler);
             })
@@ -203,12 +196,7 @@ export async function logsView(array) {
                 event.stopPropagation();
                 togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
             });
-            document.addEventListener('click', function (event) {
-                if (event.target !== wrapperLogs && !wrapperLogs.contains(event.target) && event.target !== log && event.target !== numy) {
-                    wrapperLogs.style.display = 'none'; // Скрываем попап при клике на любую область, кроме элемента "log"
-                    wrapperLogs.classList.remove('clickLog')
-                }
-            });
+            new CloseBTN(wrapperLogs, log, numy)
         }
 
     }).catch(error => {

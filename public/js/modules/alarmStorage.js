@@ -5,7 +5,7 @@ import { createMap, createMapsUniq } from './geo.js'
 import { testovfn } from './charts/bar.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { DraggableContainer } from '../class/Dragdown.js'
-
+import { CloseBTN } from '../class/Flash.js'
 
 
 const login = document.querySelectorAll('.log')[1].textContent
@@ -324,9 +324,6 @@ async function viewAlarmStorage(name, stor) {
         tbody.appendChild(it)
     })
     alarmFire()
-
-
-
     const mess = document.querySelectorAll('.mapIcon')
     mess.forEach(icons => {
         icons.addEventListener('click', () => {
@@ -359,18 +356,20 @@ plus.addEventListener('click', (event) => {
     plus.style.display = 'none';
     minus.style.display = 'block'
     event.stopPropagation();
-    document.addEventListener('click', function (event) {
-        if (event.target !== alarmStorage && !alarmStorage.contains(event.target) && event.target !== minus) {
-            alarmStorage.style.display = 'none';
-            plus.style.display = 'block';
-            minus.style.display = 'none'
-            alarmFind()
-            const mapss = document.getElementById('mapOil')
-            if (mapss) {
-                mapss.remove();
-            }
-        }
-    });
+
+    new CloseBTN(alarmStorage, minus, plus, 'alarm')
+    /*   document.addEventListener('click', function (event) {
+           if (event.target !== alarmStorage && !alarmStorage.contains(event.target) && event.target !== minus) {
+               alarmStorage.style.display = 'none';
+               plus.style.display = 'block';
+               minus.style.display = 'none'
+               alarmFind()
+               const mapss = document.getElementById('mapOil')
+               if (mapss) {
+                   mapss.remove();
+               }
+           }
+       });*/
 })
 minus.addEventListener('click', () => {
     alarmStorage.style.display = 'none';
