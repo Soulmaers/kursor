@@ -11,7 +11,7 @@ import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.
 import { dataInput, dataSelect, times, click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
-import { Flash, CloseBTN } from '../class/Flash.js'
+import { Flash, CloseBTN, ResizeContainer } from '../class/Flash.js'
 import { protDash, dashViewProtector } from './charts/protek.js'
 import { getStat } from './charts/stat.js'
 
@@ -26,14 +26,22 @@ const leftFrame = document.querySelector('.leftFrame')
 const rigthFrame = document.querySelectorAll('.rigthFrame')
 const sec = document.querySelector('.sections')
 const centerBlock = document.querySelector('.centerBlock')
+const start = document.querySelector('.start')
+const wrapleft = document.querySelector('.wrapper_left')
+
+const secondFlash = document.querySelectorAll('.secondFlash')
 for (let i = 0; i < rigthFrame.length; i++) {
     console.log(rigthFrame[i].children[0])
     const strR = rigthFrame[i].children[0]
     const strL = rigthFrame[i].children[1]
     console.log(i)
     i !== 1 ? new Flash(strL, strR, leftFrame, sec) : new Flash(strL, strR, centerBlock)
+    //  i !== 1 ? new ResizeContainer(sec, start, rigthFrame[i]) : new ResizeContainer(centerBlock, wrapleft, rigthFrame[i])
 }
+for (let i = 0; i < secondFlash.length; i++) {
 
+    i !== 1 ? new ResizeContainer(sec, start, secondFlash[i]) : new ResizeContainer(centerBlock, wrapleft, secondFlash[i])
+}
 
 
 const logo = document.querySelector('.logo')

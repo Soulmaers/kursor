@@ -33,6 +33,7 @@ export class Flash {
         this.two.style.display = 'none'
         this.one.style.display = 'block'
         this.three.style.opacity = '1';
+        this.three.style.width = 550 + 'px'
         setTimeout(() => {
             this.three.style.display = 'flex';
         }, 300);
@@ -90,5 +91,62 @@ export class CloseBTN {
             }
         }
 
+    }
+}
+
+
+
+export class ResizeContainer {
+    constructor(leftContainer, rightContainer, resizeHandle) {
+        this.leftContainer = leftContainer;
+        this.rightContainer = rightContainer;
+        this.resizeHandle = resizeHandle;
+        this.isResizing = false;
+        this.initialX = null;
+
+        // Add event listeners
+        this.resizeHandle.addEventListener('mousedown', this.startResize.bind(this));
+        document.addEventListener('mousemove', this.resize.bind(this));
+        document.addEventListener('mouseup', this.stopResize.bind(this));
+    }
+
+    startResize(event) {
+        this.isResizing = true;
+        this.initialX = event.clientX;
+        this.originalLeftContainerWidth = this.leftContainer.offsetWidth;
+        this.originalRightContainerWidth = this.rightContainer.offsetWidth;
+    }
+
+    resize(event) {
+        if (!this.isResizing) {
+            return;
+        }
+
+        const dx = event.clientX - this.initialX;
+        const minContainerWidth = 50; // Set the minimum width (pixels) for containers
+        const newLeftWidth = this.originalLeftContainerWidth + dx;
+        const newRightWidth = this.originalRightContainerWidth - dx;
+
+        if (newLeftWidth < minContainerWidth || newRightWidth < minContainerWidth) {
+            return;
+        }
+
+        this.resizeHandle.style.transform = `translateX(${dx}px)`;
+    }
+
+    stopResize(event) {
+        if (!this.isResizing) {
+            return;
+        }
+
+        const dx = event.clientX - this.initialX;
+        const newLeftWidth = this.originalLeftContainerWidth + dx;
+        const newRightWidth = this.originalRightContainerWidth - dx;
+        this.leftContainer.style.width = `${newLeftWidth}px`;
+        this.rightContainer.style.width = 100 + '%'//`${newRightWidth}px`;
+
+        this.isResizing = false;
+        this.initialX = null;
+        this.resizeHandle.style.transform = 'translateX(0)';
     }
 }
