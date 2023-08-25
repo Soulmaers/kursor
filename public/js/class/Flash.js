@@ -93,6 +93,9 @@ export class CloseBTN {
 
     }
 }
+
+
+
 export class ResizeContainer {
     constructor(leftContainer, rightContainer, resizeHandle) {
         this.leftContainer = leftContainer;
@@ -118,6 +121,7 @@ export class ResizeContainer {
         if (!this.isResizing) {
             return;
         }
+
         const dx = event.clientX - this.initialX;
         const minContainerWidth = 50; // Set the minimum width (pixels) for containers
         const newLeftWidth = this.originalLeftContainerWidth + dx;
@@ -129,22 +133,20 @@ export class ResizeContainer {
 
         this.resizeHandle.style.transform = `translateX(${dx}px)`;
     }
+
     stopResize(event) {
         if (!this.isResizing) {
             return;
         }
-        const start = document.querySelector('.start')
-        const color = document.querySelector('.color')
-        start.style.display === 'none' ? (geoloc()) : null
+
         const dx = event.clientX - this.initialX;
         const newLeftWidth = this.originalLeftContainerWidth + dx;
         const newRightWidth = this.originalRightContainerWidth - dx;
         this.leftContainer.style.width = `${newLeftWidth}px`;
-        this.rightContainer.style.width = color ? 100 + '%' : `${newRightWidth}px`;
+        this.rightContainer.style.width = 100 + '%'//`${newRightWidth}px`;
 
         this.isResizing = false;
         this.initialX = null;
         this.resizeHandle.style.transform = 'translateX(0)';
     }
 }
-
