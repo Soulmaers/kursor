@@ -78,7 +78,6 @@ if (screen.width === 1366 && screen.height === 768) {
 }
 
 async function waitAndExecute() {
-
     const preloader = document.querySelector('.preloader');
     preloader.classList.add('preloader_hidden');
 

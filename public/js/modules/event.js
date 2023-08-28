@@ -27,9 +27,13 @@ const rigthFrame = document.querySelectorAll('.rigthFrame')
 const sec = document.querySelector('.sections')
 const centerBlock = document.querySelector('.centerBlock')
 const start = document.querySelector('.start')
+const menu = document.querySelector('.menu')
 const wrapleft = document.querySelector('.wrapper_left')
 
 const secondFlash = document.querySelectorAll('.secondFlash')
+
+
+const mainMenu = document.querySelector('.main_menu')
 for (let i = 0; i < rigthFrame.length; i++) {
     console.log(rigthFrame[i].children[0])
     const strR = rigthFrame[i].children[0]
@@ -44,6 +48,11 @@ for (let i = 0; i < secondFlash.length; i++) {
 }
 
 
+mainMenu.addEventListener('click', (event) => {
+    event.stopPropagation();
+    menu.style.display = 'flex'
+})
+new CloseBTN(menu, mainMenu)
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
     const main = document.querySelector('.main')
@@ -332,6 +341,8 @@ btnShina.forEach(el => {
     })
 })
 
+
+/*
 const burger = document.querySelector('.burger')
 burger.addEventListener('click', () => {
     const control = document.querySelector('.control_panel')
@@ -350,7 +361,7 @@ burger.addEventListener('click', () => {
     control.style.paddingTop = '5px'
     burger.classList.add('burgerActive')
 
-})
+})*/
 const rad = document.querySelectorAll('[name=radio]')
 rad.forEach(el => {
     el.addEventListener('change', () => {

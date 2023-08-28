@@ -6108,9 +6108,70 @@ input[type="text"]:focus {
 
 @media (max-width: 860px) {
 
+  .header {
+    position: relative;
+  }
 
   .start {
     display: none;
+  }
+
+  .menu {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 70px;
+    border: 2px solid #fff;
+    z-index: 100;
+    background-color: rgba(6, 28, 71, 1);
+    width: 170px;
+    padding: 0;
+  }
+
+  .monitoring {
+    width: 100%;
+    height: 30px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 0;
+    font-family: 'Arial';
+    text-align: center;
+    border-bottom: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .monitoring:hover {
+    border-left: 2px solid #fff;
+  }
+
+  .auth {
+    border-top: 5px solid #fff;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: Arial;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: darkcyan;
+  }
+
+  .auth:hover {
+    border-left: 2px solid #fff;
+  }
+
+  .footer {
+    height: 40px;
   }
 
   .rigthFrame {
@@ -6125,15 +6186,39 @@ input[type="text"]:focus {
   .mobile_list {
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    padding: 0;
+    padding: 0 5px;
     margin: 0;
+    height: 40px;
+
   }
 
   .mobile_item {
     list-style-type: none;
+    box-sizing: border-box;
+    border-right: 1px solid #fff;
+    box-sizing: border-box;
+    padding: 2px 6px;
+    width: 15%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    padding: 2px;
+  .mobile_item:nth-child(4) {
+    border: none
+  }
+
+  .mobile_item:nth-child(1) {
+    width: 20%;
+  }
+
+  .mobile_item:nth-child(2) {
+    width: 30%;
+  }
+
+  .mobile_item:nth-child(3) {
+    width: 35%;
   }
 
   .mobile_link {
@@ -6141,6 +6226,12 @@ input[type="text"]:focus {
     font-weight: bold;
     text-decoration: none;
   }
+
+  .mobile_item:hover .mobile_link {
+    border-bottom: 1px solid #fff;
+  }
+
+
 
 
 
@@ -6284,24 +6375,6 @@ input[type="text"]:focus {
     font-size: 0.6rem;
   }
 
-  .monitoring {
-    text-decoration: none;
-    font-family: Roboto;
-    color: lightgray;
-    font-weight: 900;
-    font-size: 0.6rem;
-  }
-
-  .menu {
-    padding: 0;
-    width: 40%;
-  }
-
-  .monitoring:hover {
-    font-size: 0.6rem;
-  }
-
-  .auth,
   .configs {
     color: #fff;
     font-family: Roboto;
@@ -6320,7 +6393,8 @@ input[type="text"]:focus {
     display: none;
   }
 
-  .burger {
+  .burger,
+  .main_menu {
     width: 10%;
     display: flex;
     flex-direction: column;
