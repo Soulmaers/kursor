@@ -617,39 +617,46 @@ function hiddenWindows() {
             el.closest('.groups').children[0].children[4].style.left = '60px'
             // el.closest('.groups').children[0].children[1].style.left = '190px'
             //  el.closest('.groups').children[0].children[2].style.left = '190px'
-            const ide = el.closest('.groups').children[0].children[0].children[0]
-            const ideValue = el.closest('.groups').children[0].children[0].children[0].id
-            const checkboxes = document.querySelectorAll('.checkInList');
-            let enabledSettings = []
-            if (ide.checked === true) {
-                checkboxes.forEach(el => {
-                    el.checked === false ? enabledSettings.push(el) : null
-                })
-            }
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function () {
-                    if (this.id !== ideValue) {
-                        checkbox.closest('.listItem').style.display = 'none'
-                    }
-                })
-            });
-            ide.addEventListener('change', () => {
-                if (ide.checked) {
-                    Array.from(ide.closest('.groups').children[1].children).forEach(it => {
-                        it.style.display = 'none'
-                    })
-                }
-                else if (!ide.checked) {
-                    Array.from(ide.closest('.groups').children[1].children).forEach(it => {
-                        it.style.display = 'flex'
-                    })
-                    checkboxes.forEach(e => {
-                        e.checked = true
-                    })
-                }
-            })
+
         })
     })
+    const group = document.querySelectorAll('.groups')
+    group.forEach(it => {
+        const ide = it.children[0].children[0].children[0]
+        const ideValue = it.children[0].children[0].children[0].id
+        const checkboxes = document.querySelectorAll('.checkInList');
+        let enabledSettings = []
+        console.log(checkboxes)
+        if (ide.checked === true) {
+            checkboxes.forEach(el => {
+                el.checked === false ? enabledSettings.push(el) : null
+            })
+        }
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function (event) {
+                if (this.id !== ideValue) {
+                    checkbox.closest('.listItem').style.display = 'none'
+                }
+                event.stopPropagation();
+            })
+        });
+        ide.addEventListener('change', () => {
+            if (ide.checked) {
+                Array.from(ide.closest('.groups').children[1].children).forEach(it => {
+                    it.style.display = 'none'
+                })
+            }
+            else if (!ide.checked) {
+                Array.from(ide.closest('.groups').children[1].children).forEach(it => {
+                    it.style.display = 'flex'
+                })
+                checkboxes.forEach(e => {
+                    e.checked = true
+                })
+            }
+        })
+    })
+
     minusS.forEach(el => {
         el.addEventListener('click', () => {
             el.style.display = 'none'

@@ -464,6 +464,47 @@ body {
   color: #fff
 }
 
+
+
+/*код для кастомизации чекбоксов*/
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 3px;
+  background-color: #fff;
+
+}
+
+input[type="checkbox"]:checked {
+  background-color: #fff;
+  ;
+}
+
+input[type="checkbox"]:checked::before {
+  content: "\2713";
+  font-size: 14px;
+  display: block;
+  font-weight: bold;
+  height: 14px;
+  width: 14px;
+  color: rgba(6, 28, 71, 1);
+  ;
+  text-align: center;
+  line-height: 15px;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  display: block;
+  height: 14px;
+  width: 14px;
+  border-radius: 2px;
+  border: 1px solid rgba(6, 28, 71, 1);
+  ;
+}
+
 .clearConfirmCheckModal {
   padding: 10px;
   height: 80px;
@@ -6273,6 +6314,11 @@ input[type="text"]:focus {
   .list_trail2 {
     padding: 0;
   }
+
+
+
+
+
 
 
 
