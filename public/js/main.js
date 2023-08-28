@@ -73,11 +73,13 @@ const lowList = document.querySelector('.low_list')
 if (screen.width === 1366 && screen.height === 768) {
     // document.body.style.maxWidth = '1366px';
     document.body.style.height = '768px';
-    wrapperFull.style.height = '693px'
+    // wrapperFull.style.height = '693px'
 } else if (screen.width === 1920 && screen.height === 1080) {
     document.body.style.height = '1080px';
-    wrapperFull.style.height = '1005px'
+    // wrapperFull.style.height = '1005px'
 }
+console.log(wrapperFull.clientHeight)
+wrapperFull.style.height = screen.height - 75 + 'px'
 lowList.style.height = wrapperFull.clientHeight - 20 + 'px';
 console.log(lowList.style.height)
 async function waitAndExecute() {

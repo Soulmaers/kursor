@@ -5013,10 +5013,7 @@ div.wrapper {
 }
 
 .low_list {
-  height: 90vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-
+  overflow: auto;
 }
 
 .list_item1 {
