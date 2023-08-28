@@ -2,11 +2,13 @@ import { visual, visualNone } from './visual.js'
 //import { massivionbd } from './paramsTyresView.js';
 
 export function navigator() {
+
     const main = document.querySelector('.main')
     main.style.display = 'none';
     const start = document.querySelector('.start')
     start.style.display = 'flex';
     const nav = document.querySelectorAll('.listItem')
+    // const rigthFrame = document.querySelectorAll('.rigthFrame')
     // nav[0].classList.add('color')
     const menuGraf = document.querySelectorAll('.menu_graf')
     menuGraf[0].classList.add('activMenuGraf')
@@ -15,6 +17,10 @@ export function navigator() {
     if (widthWind <= 1200) {
         const wrapperLeft = document.querySelector('.wrapper_left')
         wrapperLeft.style.display = 'none'
+    }
+    if (widthWind <= 860) {
+        start.style.display = 'none';
+        //  rigthFrame.style.display = 'none';
     }
     nav.forEach(el => {
         el.addEventListener('click', route)
@@ -26,7 +32,7 @@ export function navigator() {
             })
 
             visual(el)
-            const widthWind = document.querySelector('body').offsetWidth;
+
             if (widthWind <= 860) {
                 const cblock = document.querySelector('.centerBlock')
                 cblock.style.width = 100 + '%'
