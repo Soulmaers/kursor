@@ -68,21 +68,18 @@ zapros(login) //делаем запрос на wialon получаем объе�
 liCreate()
 console.log(screen.width)
 console.log(screen.height)
-const hei = screen.height
-
-console.log(hei)
-const body = document.querySelector('body');
-console.log(body)
-body.style.height = hei + 'px'
-/*
+const wrapperFull = document.querySelector('.wrapperFull')
+const lowList = document.querySelector('.low_list')
 if (screen.width === 1366 && screen.height === 768) {
     // document.body.style.maxWidth = '1366px';
     document.body.style.height = '768px';
+    wrapperFull.style.height = '693px'
 } else if (screen.width === 1920 && screen.height === 1080) {
-    // document.body.style.maxWidth = '1920px';
     document.body.style.height = '1080px';
-}*/
-
+    wrapperFull.style.height = '1005px'
+}
+lowList.style.height = wrapperFull.clientHeight - 20 + 'px';
+console.log(lowList.style.height)
 async function waitAndExecute() {
     const preloader = document.querySelector('.preloader');
     preloader.classList.add('preloader_hidden');

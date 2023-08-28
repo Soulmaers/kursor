@@ -5053,7 +5053,6 @@ div.wrapper {
 .wrapperFull {
   display: flex;
   position: relative;
-  height: 94vh;
 }
 
 .osi_list {
