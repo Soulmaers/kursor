@@ -20,7 +20,7 @@ export function navigator() {
     if (widthWind > 860 && widthWind <= 1200) {
         const wrapperLeft = document.querySelector('.wrapper_left')
         wrapperLeft.style.display = 'none'
-        menu.style.display = 'flex'
+        // menu.style.display = 'flex'
     }
     if (widthWind <= 860) {
         start.style.display = 'none';

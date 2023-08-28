@@ -50,9 +50,10 @@ for (let i = 0; i < secondFlash.length; i++) {
 
 mainMenu.addEventListener('click', (event) => {
     event.stopPropagation();
+    new CloseBTN(menu, mainMenu)
     menu.style.display = 'flex'
 })
-new CloseBTN(menu, mainMenu)
+
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
     const main = document.querySelector('.main')

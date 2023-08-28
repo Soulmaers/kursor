@@ -87,6 +87,7 @@ export class CloseBTN {
         else {
             const isClickedOnElem1 = this.elem1.contains(event.target);
             if (!isClickedOnElem1) {
+                console.log('закрыли')
                 this.elem1.style.display = 'none';
             }
         }
