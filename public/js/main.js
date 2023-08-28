@@ -79,7 +79,7 @@ if (screen.width === 1366 && screen.height === 768) {
     // wrapperFull.style.height = '1005px'
 }
 console.log(wrapperFull.clientHeight)
-wrapperFull.style.height = screen.height - 75 + 'px'
+wrapperFull.style.height = screen.height - 85 + 'px'
 lowList.style.height = wrapperFull.clientHeight - 20 + 'px';
 console.log(lowList.style.height)
 async function waitAndExecute() {
