@@ -22,7 +22,7 @@ let time;
 let timeIcon;
 
 export async function visual(el) {
-
+    console.log('сработала!!!!')
     const jobTSDetalisationGraf = document.querySelector('.jobTSDetalisationGraf');
     if (jobTSDetalisationGraf) jobTSDetalisationGraf.remove()
     const jobTSDetalisationChartsLegenda = document.querySelector('.jobTSDetalisationCharts_legenda');

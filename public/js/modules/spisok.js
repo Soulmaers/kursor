@@ -626,7 +626,6 @@ function hiddenWindows() {
         const ideValue = it.children[0].children[0].children[0].id
         const checkboxes = document.querySelectorAll('.checkInList');
         let enabledSettings = []
-        console.log(checkboxes)
         if (ide.checked === true) {
             checkboxes.forEach(el => {
                 el.checked === false ? enabledSettings.push(el) : null
@@ -637,10 +636,9 @@ function hiddenWindows() {
                 if (this.id !== ideValue) {
                     checkbox.closest('.listItem').style.display = 'none'
                 }
-                event.stopPropagation();
             })
         });
-        ide.addEventListener('change', () => {
+        ide.addEventListener('change', (event) => {
             if (ide.checked) {
                 Array.from(ide.closest('.groups').children[1].children).forEach(it => {
                     it.style.display = 'none'

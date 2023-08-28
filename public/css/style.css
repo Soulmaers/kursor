@@ -6262,6 +6262,10 @@ input[type="text"]:focus {
     display: flex;
   }
 
+  .mobile_active {
+    background-color: gray;
+  }
+
   .mobile_list {
     display: flex;
     align-items: center;

@@ -57,6 +57,11 @@ mainMenu.addEventListener('click', (event) => {
 const mobileItem = document.querySelectorAll('.mobile_item')
 mobileItem.forEach(el => {
     el.addEventListener('click', () => {
+
+        mobileItem.forEach(el => {
+            el.classList.remove('mobile_active')
+        })
+        el.classList.toggle('mobile_active');
         console.log(el.children.textContent)
         if (el.children[0].textContent === 'Список') {
             const sections = document.querySelector('.sections')
@@ -73,6 +78,7 @@ mobileItem.forEach(el => {
             start.style.flexDirection = 'column'
             start.style.flexWrap = 'nowrap'
             start.style.overflow = 'auto';
+            start.style.height = '572px'
             wrapFull.style.height = ''
             contentCard.forEach(it => {
                 it.style.width = 96 + '%'
