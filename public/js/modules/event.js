@@ -54,6 +54,53 @@ mainMenu.addEventListener('click', (event) => {
     menu.style.display = 'flex'
 })
 
+const mobileItem = document.querySelectorAll('.mobile_item')
+mobileItem.forEach(el => {
+    el.addEventListener('click', () => {
+        console.log(el.children.textContent)
+        if (el.children[0].textContent === 'Список') {
+            const sections = document.querySelector('.sections')
+            sections.style.display = 'flex'
+            start.style.display = 'none'
+        }
+        if (el.children[0].textContent === 'Статистика') {
+            console.log('нажал')
+            const sections = document.querySelector('.sections')
+            const wrapFull = document.querySelector('.wrapperFull')
+            const contentCard = document.querySelectorAll('.content_card')
+            sections.style.display = 'none'
+            start.style.display = 'flex'
+            start.style.flexDirection = 'column'
+            start.style.flexWrap = 'nowrap'
+            start.style.overflow = 'auto';
+            wrapFull.style.height = ''
+            contentCard.forEach(it => {
+                it.style.width = 96 + '%'
+                it.style.height = '550px'
+                it.style.margin = '2px'
+                if (!it.children[0]) {
+
+                    it.remove();
+                }
+                else {
+                    it.children[0].children[0].children[0].style.width = 50 + '%'
+                    it.children[0].children[0].children[1].style.display = 'none'
+                    it.children[0].children[0].children[2].style.display = 'none'
+                    it.children[0].children[0].children[3].style.width = 50 + '%'
+                    it.children[0].children[0].style.justifyContent = 'space-around'
+                    it.children[0].children[0].children[3].children[0].style.fontSize = '1rem'
+                    it.children[0].children[1].children[0].children[0].style.width = 50 + '%'
+                    it.children[0].children[1].children[0].children[3].style.width = 20 + '%'
+                    it.children[0].children[1].children[0].children[3].children[1].style.right = '40px'
+                    Array.from(it.children[0].children[1].children[1].children).forEach(e => {
+                        e.children[0].style.width = 50 + '%'
+                    })
+                }
+            })
+
+        }
+    })
+})
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
     const main = document.querySelector('.main')

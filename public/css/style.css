@@ -2096,7 +2096,7 @@ div.spoyler {
 .content_card {
   border: 1px solid black;
   width: 49%;
-  height: 435px;
+  height: 500px;
   box-sizing: border-box;
   display: flex;
 }
@@ -5858,12 +5858,13 @@ input[type="text"]:focus {
   width: 164px;
   border: 1px solid gray;
   box-sizing: border-box;
-  background-color: lightgray;
+  background-color: rgba(6, 28, 71, 1);
+  ;
   padding: 5px 15px;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-family: Arial;
   font-weight: 700;
-  color: #000;
+  color: #fff;
   cursor: pointer;
 
 }
@@ -6102,7 +6103,7 @@ input[type="text"]:focus {
 }
 
 .state_tyres {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 }
 
 
@@ -6225,6 +6226,7 @@ input[type="text"]:focus {
     align-items: center;
     padding: 0 5px;
     margin: 0;
+    width: 100%;
     height: 40px;
 
   }
@@ -6235,7 +6237,6 @@ input[type="text"]:focus {
     border-right: 1px solid #fff;
     box-sizing: border-box;
     padding: 2px 6px;
-    width: 15%;
     height: 40px;
     display: flex;
     align-items: center;
@@ -6243,7 +6244,8 @@ input[type="text"]:focus {
   }
 
   .mobile_item:nth-child(4) {
-    border: none
+    border: none;
+    width: 15%;
   }
 
   .mobile_item:nth-child(1) {
@@ -6266,6 +6268,10 @@ input[type="text"]:focus {
 
   .mobile_item:hover .mobile_link {
     border-bottom: 1px solid #fff;
+  }
+
+  .list_trail2 {
+    padding: 0;
   }
 
 
@@ -6607,7 +6613,7 @@ input[type="text"]:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1px solid gray;
+    border: 1px solid rgba(6, 28, 71, 1);
     padding: 2px 5px;
     box-sizing: border-box;
     text-align: center;
@@ -6618,19 +6624,18 @@ input[type="text"]:focus {
     width: 100%;
     border: 1px solid gray;
     box-sizing: border-box;
-    background-color: lightgray;
+    background-color: rgba(6, 28, 71, 1);
     padding: 5px 0px;
-    font-size: 0.65rem;
+    font-size: 0.8rem;
     font-family: Arial;
-
-    font-weight: 700;
-    color: #000;
+    font-weight: bold;
+    color: #fff;
     cursor: pointer;
   }
 
 
   .state_tyres {
-    font-size: 0.65rem;
+    font-size: 0.8rem;
   }
 
   .state {
@@ -6776,7 +6781,8 @@ input[type="text"]:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid gray;
+  border: 1px solid rgba(6, 28, 71, 1);
+  ;
   padding: 2px 3px;
   box-sizing: border-box;
   text-align: center;
@@ -6787,18 +6793,18 @@ input[type="text"]:focus {
   width: 100%;
   border: 1px solid gray;
   box-sizing: border-box;
-  background-color: lightgray;
+  background-color: rgba(6, 28, 71, 1);
   padding: 5px 0px;
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   font-family: Arial;
-  font-weight: 700;
+  font-weight: bold;
   color: #000;
   cursor: pointer;
 }
 
 
 .state_tyres {
-  font-size: 0.65rem;
+  font-size: 0.8rem;
 }
 
 .state {
@@ -6813,8 +6819,27 @@ input[type="text"]:focus {
 
 }
 
+.headerTitle :hover {
+  border: 1px solid darkgrey;
+  background-color: darkgrey;
+
+}
+
+.state :hover {
+  border: 1px solid darkgrey;
+  background-color: darkgrey;
+}
 
 @media (min-width: 1301px) {
+  .headerTitle :hover {
+    border: 1px solid darkgrey;
+    background-color: darkgrey;
+  }
+
+  .state :hover {
+    border: 1px solid darkgrey;
+    background-color: darkgrey;
+  }
 
   .grafics {
     display: none;
@@ -6908,7 +6933,7 @@ input[type="text"]:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1px solid gray;
+    border: 1px solid rgba(6, 28, 71, 1);
     padding: 2px 3px;
     box-sizing: border-box;
     text-align: center;
@@ -6919,12 +6944,13 @@ input[type="text"]:focus {
     width: 100%;
     border: 1px solid gray;
     box-sizing: border-box;
-    background-color: lightgray;
+    background-color: rgba(6, 28, 71, 1);
+    ;
     padding: 5px 0px;
-    font-size: 0.65rem;
+    font-size: 0.8rem;
     font-family: Arial;
-    font-weight: 700;
-    color: #000;
+    font-weight: bold;
+    color: #fff;
     cursor: pointer;
   }
 
@@ -6933,7 +6959,7 @@ input[type="text"]:focus {
   }
 
   .state_tyres {
-    font-size: 0.65rem;
+    font-size: 0.8rem;
   }
 
   .state {
@@ -6941,13 +6967,11 @@ input[type="text"]:focus {
   }
 
   .headerTitle :hover {
-    background-color: #fff;
-    border: 1px solid #000
+    border: 1px solid darkgrey
   }
 
   .state :hover {
-    background-color: #fff;
-    border: 1px solid #000
+    border: 1px solid darkgrey
   }
 
 
