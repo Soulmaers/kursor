@@ -58,24 +58,30 @@ const param = {
 
 }
 
-
+/*
 const res = await fetch('/api/viewLogs', param)
 const confirm = await res.json()
-console.log(confirm)
+console.log(confirm)*/
 
 
 zapros(login) //делаем запрос на wialon получаем объекты
 liCreate()
 console.log(screen.width)
 console.log(screen.height)
+const hei = screen.height
 
+console.log(hei)
+const body = document.querySelector('body');
+console.log(body)
+body.style.height = hei + 'px'
+/*
 if (screen.width === 1366 && screen.height === 768) {
     // document.body.style.maxWidth = '1366px';
     document.body.style.height = '768px';
 } else if (screen.width === 1920 && screen.height === 1080) {
     // document.body.style.maxWidth = '1920px';
     document.body.style.height = '1080px';
-}
+}*/
 
 async function waitAndExecute() {
     const preloader = document.querySelector('.preloader');
