@@ -17,11 +17,10 @@ export function navigator() {
     menuGraf[0].classList.add('activMenuGraf')
     //  visual(nav[0])
     var widthWind = document.querySelector('body').offsetWidth;
-    if (widthWind > 860 && widthWind <= 1200 || widthWind > 1200) {
+    if (widthWind > 860 && widthWind <= 1200) {
         const wrapperLeft = document.querySelector('.wrapper_left')
         wrapperLeft.style.display = 'none'
         menu.style.display = 'flex'
-        headerAdmin.appendChild(auth)
     }
     if (widthWind <= 860) {
         start.style.display = 'none';
