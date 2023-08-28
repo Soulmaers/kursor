@@ -4,22 +4,28 @@ import { visual, visualNone } from './visual.js'
 export function navigator() {
 
     const main = document.querySelector('.main')
+    const auth = document.querySelector('.auth')
+    const menu = document.querySelector('.menu')
     main.style.display = 'none';
     const start = document.querySelector('.start')
     start.style.display = 'flex';
     const nav = document.querySelectorAll('.listItem')
     // const rigthFrame = document.querySelectorAll('.rigthFrame')
     // nav[0].classList.add('color')
+    const headerAdmin = document.querySelector('.headerAdmin')
     const menuGraf = document.querySelectorAll('.menu_graf')
     menuGraf[0].classList.add('activMenuGraf')
     //  visual(nav[0])
     var widthWind = document.querySelector('body').offsetWidth;
-    if (widthWind <= 1200) {
+    if (widthWind > 860 && widthWind <= 1200 || widthWind > 1200) {
         const wrapperLeft = document.querySelector('.wrapper_left')
         wrapperLeft.style.display = 'none'
+        menu.style.display = 'flex'
+        headerAdmin.appendChild(auth)
     }
     if (widthWind <= 860) {
         start.style.display = 'none';
+        menu.appendChild(auth)
         //  rigthFrame.style.display = 'none';
     }
     nav.forEach(el => {
