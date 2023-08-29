@@ -44,7 +44,7 @@ export async function loadParamsView() {
         'Если зажигание выключено, то колесо будет черным, а последние зафиксированные показатели серым цветом',
         'При наведении на колесо появится подсказка с параметром колеса и актуальностью данных'])
     viewPokasateli()
-    intervalId = setInterval(viewPokasateli, 60000);
+    intervalId = setInterval(viewPokasateli, 120000);
     isProcessing = false;
 
 }

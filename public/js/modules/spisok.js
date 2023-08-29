@@ -452,7 +452,7 @@ export function zaprosSpisok() {
     const todays = today + ' ' + time
     updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
-setInterval(zaprosSpisok, 60000)
+setInterval(zaprosSpisok, 120000)
 async function viewListKoleso(params, arg, osi, nameCar) {
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
