@@ -6353,13 +6353,13 @@ input[type="text"]:focus {
     width: 100%
   }
 
-  .tdEvent,
-  .td.Logs {
+  .tdEvent {
     width: 25%
   }
 
-
-
+  .tdLogs {
+    width: 35%
+  }
 
 
 
