@@ -28,6 +28,7 @@ const sec = document.querySelector('.sections')
 const centerBlock = document.querySelector('.centerBlock')
 const start = document.querySelector('.start')
 const menu = document.querySelector('.menu')
+const main = document.querySelector('.main')
 const wrapleft = document.querySelector('.wrapper_left')
 
 const secondFlash = document.querySelectorAll('.secondFlash')
@@ -73,6 +74,7 @@ mobileItem.forEach(el => {
             const sections = document.querySelector('.sections')
             const wrapFull = document.querySelector('.wrapperFull')
             const contentCard = document.querySelectorAll('.content_card')
+            main.style.display = 'none'
             sections.style.display = 'none'
             start.style.display = 'flex'
             start.style.flexDirection = 'column'

@@ -133,7 +133,7 @@ export async function conturTest(testov) {
                 // console.log(resTest.length !== 0 ? JSON.parse(resTest[0].allSensParams) : 'пусто')
                 //  console.log(resTest ? JSON.parse(resTest) : 'пусто')
 
-                console.log(res)
+                // console.log(res)
                 let in1;
                 res.forEach(i => {
                     if (i[0] === 'Зажигание') {

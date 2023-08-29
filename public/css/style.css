@@ -1597,7 +1597,7 @@ div.spoyler {
 
 .gosNumber {
   font-weight: bold;
-  width: 60px;
+  width: 65px;
   text-align: center;
   box-sizing: border-box;
   border: none;
@@ -1619,7 +1619,7 @@ div.spoyler {
 
 .nomerP {
   display: flex;
-  width: 85px;
+  width: 90px;
   position: absolute;
   border: 1px solid black;
 
@@ -1627,7 +1627,7 @@ div.spoyler {
 
 .nomerV {
   display: flex;
-  width: 85px;
+  width: 90px;
   position: absolute;
   border: 1px solid black;
 }
@@ -1635,6 +1635,7 @@ div.spoyler {
 .flagss {
   display: flex;
   flex-direction: column;
+  width: 25px;
 }
 
 .flagy {
@@ -5660,10 +5661,11 @@ input[type="text"]:focus {
   background-color: #fff;
   border: 1px solid gray;
   position: absolute;
-  top: 40px;
-  right: -150px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 2000;
-  width: 400px;
+  width: 360px;
   font-family: Arial;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5)
 }
@@ -6418,6 +6420,7 @@ input[type="text"]:focus {
 
   .wrapper_containt {
     width: 100%;
+    overflow: auto;
   }
 
   .wrapper_right {
@@ -6537,6 +6540,7 @@ input[type="text"]:focus {
     flex-wrap: wrap;
     justify-content: center;
     margin: 0;
+    overflow: auto;
   }
 
   .sections {
