@@ -313,7 +313,7 @@ function fnTagach(arr, nameCarId) {
         .attr("class", "axis2")
         .attr("width", 25)
         .attr("height", 25)
-        .style('margin', '0 0.5px')
+        .style('margin', '0 1px')
         .append("g")
         .attr('class', 'gOs')
         .attr('id', arr.osi)

@@ -6315,9 +6315,50 @@ input[type="text"]:focus {
     border-bottom: 1px solid #fff;
   }
 
-  .list_trail2 {
+  .list_trail2,
+  .list_profil2 {
     padding: 0;
   }
+
+  .alllogs {
+    display: none;
+    width: 350px;
+    height: 350px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(6, 28, 71, 1);
+    background-color: #fff;
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    border-radius: 10px;
+    background-color: rgba(6, 28, 71, 1);
+    cursor: move;
+  }
+
+  .wrapperLogs {
+    width: 350px;
+    height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #fff;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .trLogs,
+  .trEvent {
+    width: 100%
+  }
+
+  .tdEvent,
+  .td.Logs {
+    width: 25%
+  }
+
+
 
 
 
@@ -6544,10 +6585,6 @@ input[type="text"]:focus {
     padding-left: 2px;
   }
 
-  .list_profil2,
-  .list_trail2 {
-    width: 42%;
-  }
 
   .logotip {
     width: 20%;
