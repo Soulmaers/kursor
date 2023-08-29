@@ -4,6 +4,7 @@ import { objColorFront, generDav } from './content.js'
 import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
 import { removeElem, removeArrElem } from './helpersFunc.js'
+import { testovfn } from './charts/bar.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
 
@@ -124,7 +125,15 @@ export async function conturTest(testov) {
                     progress.appendChild(progressBarText)
                     fnStaticObjectOil(elem[4])
                 }
+
                 const res = await gg(elem[4])
+                // const t1 = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
+                // const t2 = t1 - 600
+                //    const resTest = await testovfn(elem[4])
+                // console.log(resTest.length !== 0 ? JSON.parse(resTest[0].allSensParams) : 'пусто')
+                //  console.log(resTest ? JSON.parse(resTest) : 'пусто')
+
+                console.log(res)
                 let in1;
                 res.forEach(i => {
                     if (i[0] === 'Зажигание') {

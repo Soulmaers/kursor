@@ -6,6 +6,7 @@ export function navigator() {
     const main = document.querySelector('.main')
     const auth = document.querySelector('.auth')
     const menu = document.querySelector('.menu')
+    const sections = document.querySelector('.sections')
     main.style.display = 'none';
     const start = document.querySelector('.start')
     start.style.display = 'flex';
@@ -25,6 +26,7 @@ export function navigator() {
     if (widthWind <= 860) {
         start.style.display = 'none';
         menu.appendChild(auth)
+        document.querySelector('.mobile_spisok').classList.add('mobile_active')
         //  rigthFrame.style.display = 'none';
     }
     nav.forEach(el => {
@@ -39,7 +41,6 @@ export function navigator() {
             console.log(ide)
             if (event.target !== ide) {
                 visual(el)
-
                 if (widthWind <= 860) {
                     const cblock = document.querySelector('.centerBlock')
                     cblock.style.width = 100 + '%'
@@ -48,10 +49,17 @@ export function navigator() {
                     const main = document.querySelector('.main')
                     main.style.display = 'flex'
                     const wrapperLeft = document.querySelector('.wrapper_left')
-                    wrapperLeft.style.display = 'block'
+                    wrapperLeft.style.display = 'none'
                     const nameCar = document.querySelector('.color')
                     const titleName = document.querySelector('.titleName')
                     titleName.textContent = nameCar.children[0].textContent
+                    sections.style.display = 'none'
+                    document.querySelector('.mobile_active').classList.remove('mobile_active')
+                    document.querySelector('.mobile_config').classList.add('mobile_active')
+                    document.querySelector('.mainAlarm').textContent = 'Уведом.'
+                    document.querySelector('.state_tyres').textContent = 'Шины'
+                    document.querySelector('.rigth_icons').style.order = 2
+                    document.querySelector('.config').style.order = 3
                 }
                 if (widthWind >= 861 && widthWind <= 1200) {
                     const comeback = document.querySelector('.comeback')

@@ -122,7 +122,8 @@ exports.viewChartDataToBase = async (idw, t1, t2) => {
                 //    const filteredResults = results.filter((_, index) => index % 10 === 1);
                 resolve(results);
             });
-        } catch (e) {
+        }
+        catch (e) {
             console.log(e);
         }
     });

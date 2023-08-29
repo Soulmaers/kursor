@@ -2135,7 +2135,6 @@ div.spoyler {
 }
 
 .content_card {
-  border: 1px solid black;
   width: 49%;
   height: 500px;
   box-sizing: border-box;
@@ -2156,7 +2155,6 @@ div.spoyler {
 
 .left_block {
   width: 100%;
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
   padding: 5px;
@@ -4037,8 +4035,10 @@ input[type="date"] {
 
 .speed_card {
   background-image: url(../image/cardS.png);
-  background-size: cover;
   cursor: pointer;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .akb_card {
@@ -5679,7 +5679,7 @@ input[type="text"]:focus {
 .divModalBTN,
 .divModalClearBTN {
   background-color: #fff;
-  width: 110px;
+  width: 120px;
   flex-direction: column;
   align-items: center;
   border: 1px solid gray;
@@ -6361,14 +6361,44 @@ input[type="text"]:focus {
     width: 35%
   }
 
+  .state {
+    width: 25%;
+  }
 
+  .headerTitle {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid rgba(6, 28, 71, 1);
+    padding: 2px 5px;
+    box-sizing: border-box;
+    text-align: center;
+  }
 
+  .plug {
+    width: 100%;
+    border: 1px solid gray;
+    box-sizing: border-box;
+    background-color: rgba(6, 28, 71, 1);
+    padding: 5px 0px;
+    font-size: 0.8rem;
+    font-family: Arial;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+  }
 
+  .plus,
+  .minus {
+    width: 15px;
+    height: 15px;
+    left: 3px;
+  }
 
-
-
-
-
+  .ogon {
+    right: 6px;
+  }
 
   .wrapList {
     width: 100%
@@ -6386,17 +6416,51 @@ input[type="text"]:focus {
     width: 100%;
   }
 
+  .wrapper_containt {
+    width: 100%;
+  }
+
   .wrapper_right {
     width: 100%;
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
+
+  .rigth_icons,
+  .left_icons {
+    display: flex;
+    width: 100%;
+  }
+
+  .icon_card {
+    width: 16%;
+    height: 50px;
+  }
+
+
+  .toil_value,
+  .to_value1,
+  .ohl_value,
+  .oil_value1,
+  .ign_value,
+  .akb_value1,
+  .speed_value,
+  .moto_value,
+  .tsi_value,
+  .odom_value {
+    font-size: 0.8rem;
+    font-family: Arial;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+
 
   .icon {
     width: 100%;
     flex-direction: row;
     box-sizing: border-box;
-
     order: -1
   }
 
@@ -6434,13 +6498,9 @@ input[type="text"]:focus {
     right: 0;
   }
 
-
-
   .card_speeds {
     display: flex;
-
     width: 100%;
-
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -6462,7 +6522,6 @@ input[type="text"]:focus {
 
   }
 
-
   .btn_icon {
     width: 100%;
     font-size: 0.6rem;
@@ -6478,7 +6537,6 @@ input[type="text"]:focus {
     flex-wrap: wrap;
     justify-content: center;
     margin: 0;
-
   }
 
   .sections {
@@ -6492,8 +6550,6 @@ input[type="text"]:focus {
   .wrapper_up {
     display: none;
   }
-
-
 
   .logo {
     margin-left: 5px;
@@ -6516,17 +6572,13 @@ input[type="text"]:focus {
     font-weight: bold;
     cursor: pointer;
     text-decoration: none;
-
-  }
-
-  .configs {
     display: none;
+
   }
 
   .control_panel {
     display: none;
   }
-
 
   .main_menu {
     width: 10%;
@@ -6585,7 +6637,6 @@ input[type="text"]:focus {
     padding-left: 2px;
   }
 
-
   .logotip {
     width: 20%;
   }
@@ -6604,12 +6655,12 @@ input[type="text"]:focus {
   }
 
   .wrap_alarm {
-    width: 37%;
+    width: 25%;
     display: flex;
     flex-direction: column;
     align-items: center;
     border: 1px solid gray;
-    padding: 2px 5px;
+    padding: 2px 3px;
     box-sizing: border-box;
     text-align: center;
     position: relative;
@@ -6633,7 +6684,6 @@ input[type="text"]:focus {
     width: 100%;
     padding: 5px 0;
   }
-
 
   .techInfo {
     width: 100%;
@@ -6695,42 +6745,11 @@ input[type="text"]:focus {
     margin-top: 20px;
   }
 
-  .headerTitle {
-    width: 18%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid rgba(6, 28, 71, 1);
-    padding: 2px 5px;
-    box-sizing: border-box;
-    text-align: center;
-
-  }
-
-  .plug {
-    width: 100%;
-    border: 1px solid gray;
-    box-sizing: border-box;
-    background-color: rgba(6, 28, 71, 1);
-    padding: 5px 0px;
-    font-size: 0.8rem;
-    font-family: Arial;
-    font-weight: bold;
-    color: #fff;
-    cursor: pointer;
-  }
-
-
   .state_tyres {
     font-size: 0.8rem;
   }
 
-  .state {
-    width: 27%
-  }
-
   .container_left {
-
     left: 0;
     top: 0
   }
@@ -6864,7 +6883,7 @@ input[type="text"]:focus {
 }
 
 .headerTitle {
-  width: 21.5%;
+  width: 25%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6885,7 +6904,7 @@ input[type="text"]:focus {
   font-size: 0.8rem;
   font-family: Arial;
   font-weight: bold;
-  color: #000;
+  color: #fff;
   cursor: pointer;
 }
 
@@ -6895,7 +6914,7 @@ input[type="text"]:focus {
 }
 
 .state {
-  width: 27%
+  width: 25%
 }
 
 .grafics {

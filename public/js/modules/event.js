@@ -78,7 +78,7 @@ mobileItem.forEach(el => {
             start.style.flexDirection = 'column'
             start.style.flexWrap = 'nowrap'
             start.style.overflow = 'auto';
-            //   start.style.height = '572px'
+            start.style.height = '572px'
             wrapFull.style.height = ''
             contentCard.forEach(it => {
                 it.style.width = 96 + '%'
@@ -154,6 +154,8 @@ iconStrela.addEventListener('click', () => {
         comeback.style.display = 'none'
         const main = document.querySelector('.main')
         main.style.display = 'flex' ? main.style.display = 'none' : null
+        document.querySelector('.mobile_active').classList.remove('mobile_active')
+        document.querySelector('.mobile_spisok').classList.add('mobile_active')
         return
     }
     if (widthWind > 860 && widthWind <= 1200) {
