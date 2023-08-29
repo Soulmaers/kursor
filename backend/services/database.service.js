@@ -81,7 +81,6 @@ exports.saveChartDataToBase = async (mass) => {
 exports.saveStructuraToBase = async (mass) => {
     const data = mass[0]
     const idw = mass[1]
-    console.log(mass)
     try {
         const postModel = `SELECT * FROM structura WHERE data=? AND idw=?`
         connection.query(postModel, [data, idw], function (err, results) {

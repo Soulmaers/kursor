@@ -49,7 +49,7 @@ export async function zapros(login) {
     //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
     console.log(arrayList)
     allObjects = arrayList
-    // startAllStati(arrayList)
+    startAllStati(arrayList)
     conturTest(arrayList)
     startList(arrayList)
     logsView(arrayList)

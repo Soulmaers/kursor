@@ -33,10 +33,10 @@ export const startAllStati = async (objects) => {
         .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)
         .map(e => e);
     const interval = timefn()
-    const timeOld = 1691614800 // interval[1]
-    const timeNow = 1691701200///interval[0]
+    const timeOld = interval[1]
+    const timeNow = interval[0]
     const res = await loadValue(array, timeOld, timeNow)
-    //  console.log(res)
+    console.log(res)
     return //res.uniq
 }
 async function loadValue(array, timeOld, timeNow) {
@@ -65,6 +65,7 @@ async function loadValue(array, timeOld, timeNow) {
         const sensArr = itog.map(e => {
             return JSON.parse(e.sens)
         })
+        console.log(name)
         const res = await fnParMessage(idw)
         const nameSens = [];
         const allArrNew = [];

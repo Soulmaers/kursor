@@ -208,7 +208,7 @@ function ggg(nameSens, rez) {
     nameSenz.forEach(el => {
         arrNameSens.push([el[1].n, el[1].p])
     })
-    console.log(rez)
+    //  console.log(rez)
     const valueSens = Object.values(rez[rez.length - 1])
     const allArr = [];
     arrNameSens.forEach((e, index) => {

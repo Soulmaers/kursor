@@ -55,14 +55,16 @@ async function loadValue(array, timeOld, timeNow) {
             const sensArr = itog.map(e => {
                 return JSON.parse(e.sens)
             })
-            const nameSens = JSON.parse(itog[itog.length - 1].allSensParams) //await wialonService.getAllNameSensorsIdDataFromWialon(idw)
+            //   const nameSens = JSON.parse(itog[itog.length - 1].allSensParams) //await wialonService.getAllNameSensorsIdDataFromWialon(idw)
             console.log(name)
             //    console.log(itog)
             //console.log(nameSens)
             const allsens = itog.map(it => {
                 return { sens: JSON.parse(it.allSensParams).map(e => e[0]), params: JSON.parse(it.allSensParams).map(e => e[1]), val: JSON.parse(it.allSensParams).map(e => e[2]) }
             })
-            // console.log(allsens)
+            if (allsens.length === 0) {
+                continue
+            }
             const allArrNew = allsens.reduce((accumulator, current) => {
                 current.sens.forEach((sens, idx) => {
                     const params = current.params[idx];
@@ -98,6 +100,8 @@ async function loadValue(array, timeOld, timeNow) {
                      allArrNew[i].value.push(Number(Object.values(el)[i].toFixed(0)))
                  }
              });*/
+
+
             allArrNew.forEach(el => {
                 el.time = time
                 el.speed = speed
@@ -112,9 +116,30 @@ async function loadValue(array, timeOld, timeNow) {
             if (found) {
                 console.log('раз');
                 const it = allArrNew.find(it => it.params === 'can_mileage');
-                //  console.log(it)
-                const probegZero = it.value.length !== 0 ? Number((it.value[0]).toFixed(0)) : 0;
-                const probegNow = it.value.length !== 0 ? Number((it.value[it.value.length - 1]).toFixed(0)) : 0;
+                let probegZero = 0
+                let probegNow = 0;
+                if (it.value.length !== 0) {
+                    if (Number(it.value[it.value.length - 1].toFixed(0)) === 0) {
+                        for (let i = it.value.length - 1; i >= 0; i--) {
+                            if (Number(it.value[i].toFixed(0)) !== 0) {
+                                probegNow = Number(it.value[i].toFixed(0));
+                                break;
+                            }
+                        }
+                    } else {
+                        probegNow = Number(it.value[it.value.length - 1].toFixed(0));
+                    }
+                    if (Number(it.value[0].toFixed(0)) === 0) {
+                        for (let i = 0; i <= it.value.length - 1; i++) {
+                            if (Number(it.value[i].toFixed(0)) !== 0) {
+                                probegZero = Number(it.value[i].toFixed(0));
+                                break;
+                            }
+                        }
+                    } else {
+                        probegZero = Number(it.value[0].toFixed(0));
+                    }
+                }
                 const probegDay = probegNow - probegZero;
                 probeg = probegDay
                 if (probegDay > 5) {
@@ -153,7 +178,7 @@ async function loadValue(array, timeOld, timeNow) {
                     uniqObject[idw] = { ...uniqObject[idw], motoHours: res.moto, prostoy: prostoyHours };
                 }
             })
-            hh[0].oil = oil[0]
+            hh[0].oil = oil[0] ? oil[0] : 0
             const oneArrayOil = hh.filter(el => !el.sens.startsWith('Топливо'));
 
             prostoyHH = oneArrayOil[0].oil !== undefined && oneArrayOil[0].oil.every(item => item >= 0) ? oilHH(oneArrayOil[0]) : 0
@@ -352,6 +377,7 @@ function moto(data) {
 
 function rashodCalc(data, name, group, idw) {
     console.log('заправки')
+    console.log(name)
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
@@ -454,7 +480,7 @@ function timefn() {
 
 async function modalView(zapravka, name, group, idw) {
     //console.log(zapravka[zapravka.length - 1][1][0] - zapravka[zapravka.length - 1][0][0])
-    const litrazh = zapravka[zapravka.length - 1][1][0] - zapravka[zapravka.length - 1][0][0]
+    const litrazh = parseFloat((zapravka[zapravka.length - 1][1][0] - zapravka[zapravka.length - 1][0][0]).toFixed(0))
     const geo = zapravka[zapravka.length - 1][0][2]
     const time = zapravka[zapravka.length - 1][0][1]
     const day = time.getDate();
