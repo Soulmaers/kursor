@@ -941,7 +941,7 @@ async function grafikStartPress(times, datar) {
     })
     function globalTooltip(time) {
         const objTool = []
-        //    console.log(time)
+        console.log(dat2)
         dat2.forEach(e => {
             e.val.forEach(el => {
                 if (el.dates === time) {
@@ -952,7 +952,7 @@ async function grafikStartPress(times, datar) {
         const chart = document.querySelectorAll('.chart')
         char[char.length - 1].children[2].classList.add('last')
         char[char.length - 1].children[3].classList.add('last')
-
+        console.log(objTool)
         let dav;
         let temp;
         for (let i = 0; i < chart.length; i++) {
