@@ -180,7 +180,7 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     const t1 = !isNaN(num) ? interval[1] : interval[0][2]
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
     const itog = await testovfn(idw, t1, t2)
-    const res = await fnParMessage(idw)
+    const nameArr = itog[itog.length - 1] !== undefined ? itog[itog.length - 1].allSensParams ? JSON.parse(itog[itog.length - 1].allSensParams) : [] : []
     const time = [];
     const speed = [];
     const sats = [];
@@ -195,24 +195,22 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         geo.push(JSON.parse(el.geo))
     })
     const sensArr = itog.map(e => {
-        return JSON.parse(e.sens)
+        return JSON.parse(e.allSensParams)
     })
     const nameSens = [];
-    res.forEach(el => {
+    nameArr.forEach(el => {
         nameSens.push([el[0], el[1]])
     })
     const allArrNew = [];
     nameSens.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
-    //console.log(allArrNew)
-    // console.log(sensArr)
     sensArr.forEach(el => {
         if (el.length === 0) {
             return; // Пропускаем текущую итерацию, если sensArr пустой
         }
         for (let i = 0; i < allArrNew.length; i++) {
-            allArrNew[i].value.push(Number(Object.values(el)[i].toFixed(0)))
+            allArrNew[i].value.push(Number(Object.values(el)[i][2].toFixed(0)))
         }
     });
     allArrNew.forEach(el => {
@@ -221,8 +219,7 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         el.sats = sats
         el.geo = geo
     })
-
-    const engine = allArrNew.filter(it => it.sens === 'Зажигание' || it.sens.startsWith('Борт'));
+    const engine = [...allArrNew].filter(it => it.sens === 'Зажигание' || it.sens.startsWith('Борт'));
     engine[0].pwr = engine[1].value
     engine[0].condition = [];
     const dannie = []

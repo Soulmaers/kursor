@@ -866,6 +866,8 @@ input[type="checkbox"]::before {
 
 .loader {
   display: flex;
+  justify-content: center;
+  align-items: center;
   margin: auto;
   width: 350px;
   color: white;
@@ -877,77 +879,14 @@ input[type="checkbox"]::before {
   opacity: 1;
 }
 
-.loader:after {
-  content: "";
-  display: table;
-  clear: both;
-}
 
-.v {
-  float: left;
-  height: 100px;
-  line-height: 120px;
-  width: 50px;
-}
 
-.loader>.v {
-  border-left: 1px solid #444;
-  border-right: 1px solid #222;
-}
 
-.covers {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-}
 
-.covers span {
-  background: linear-gradient(180deg, white 0, #ddd 100%);
-  animation: up 2s infinite;
-}
 
-@keyframes up {
-  0% {
-    margin-bottom: 0;
-  }
 
-  16% {
-    margin-bottom: 100%;
-    height: 20px;
-  }
 
-  50% {
-    margin-bottom: 0;
-  }
 
-  100% {
-    margin-bottom: 0;
-  }
-}
-
-.covers span:nth-child(2) {
-  animation-delay: .142857s;
-}
-
-.covers span:nth-child(3) {
-  animation-delay: .285714s;
-}
-
-.covers span:nth-child(4) {
-  animation-delay: .428571s;
-}
-
-.covers span:nth-child(5) {
-  animation-delay: .571428s;
-}
-
-.covers span:nth-child(6) {
-  animation-delay: .714285s;
-}
-
-.covers span:nth-child(7) {
-  animation-delay: .857142s;
-}
 
 
 
@@ -1368,7 +1307,7 @@ div.spoyler {
 
 .main {
   display: flex;
-  width: 100%;
+  width: 74%;
   margin-top: 1%;
   margin: 0 5px;
 
@@ -1651,7 +1590,7 @@ div.spoyler {
 
 
 .altConfig {
-  width: 350px;
+  width: 335px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -1886,7 +1825,7 @@ div.spoyler {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-family: Arial;
   font-weight: bold;
   padding: 5px 10px;
@@ -1905,6 +1844,7 @@ div.spoyler {
   font-family: Arial;
   font-weight: bold;
   cursor: pointer;
+  text-align: center;
 }
 
 
@@ -1952,7 +1892,7 @@ div.spoyler {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 80%;
+  width: 100%;
 
 }
 
@@ -2004,9 +1944,9 @@ div.spoyler {
 
 }
 
-.jobTSDetalisationLine {
-  width: 674px;
-}
+/*.jobTSDetalisationLine {
+  min-width: 421px;
+}*/
 
 .titleStatic {
   text-align: center;
@@ -2137,7 +2077,7 @@ div.spoyler {
 
 .content_card {
   width: 49%;
-  height: 500px;
+  height: 50%;
   box-sizing: border-box;
   display: flex;
 }
@@ -3788,7 +3728,7 @@ input[type="date"] {
 /*новые иконки*/
 .left_icons,
 .rigth_icons {
-  width: 100px;
+  width: 80px;
   /*  height: 600px;*/
   /* border: 1px solid gray*/
 }
@@ -5406,7 +5346,7 @@ input[type="text"]:focus {
 
 .sections {
   display: flex;
-  width: 35%;
+  width: 450px;
   display: flex;
 }
 
@@ -6152,6 +6092,14 @@ input[type="text"]:focus {
 
 
 @media (max-width: 860px) {
+  .jobTSDetalisationDate {
+    text-align: center;
+  }
+
+  .windowStatistic {
+    height: 50vh;
+    width: 100%;
+  }
 
   .header {
     position: relative;
@@ -6230,7 +6178,7 @@ input[type="text"]:focus {
   }
 
   .container_flash {
-    width: 100px;
+    width: 120px;
     padding: 1px 1px;
     margin: 2px;
     border: 1px solid #fff;
@@ -6406,6 +6354,32 @@ input[type="text"]:focus {
     width: 100%
   }
 
+  .checkAlt {
+    display: none;
+  }
+
+  .navstat {
+    padding: 2px;
+    width: 30%
+  }
+
+  .navstat:nth-child(3) {
+    width: 15%;
+  }
+
+  .navstat:nth-child(4) {
+    width: 15%;
+  }
+
+  .legendaButton {
+    font-size: 0.6rem;
+    padding: 5px;
+  }
+
+  .jobTSDetalisationCharts_legenda {
+    width: 100%;
+  }
+
   .wrapperFull {
     display: flex;
     flex-direction: column;
@@ -6541,6 +6515,7 @@ input[type="text"]:focus {
     justify-content: center;
     margin: 0;
     overflow: auto;
+    width: 100%
   }
 
   .sections {
@@ -6674,6 +6649,7 @@ input[type="text"]:focus {
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin: 0 5px;
   }
 
   .headerMain {
@@ -6761,9 +6737,55 @@ input[type="text"]:focus {
   .listItem {
     height: 32px;
   }
+
+  .noGraf {
+    margin-top: 50px;
+    display: none;
+    font-family: Arial;
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 50px auto;
+    border: 1px solid darkblue;
+    padding: 10px;
+  }
+
+  .checkGraf {
+    font-size: 0.5rem;
+  }
+
+  .toolyStatic {
+    width: 60px;
+    margin-left: 5px;
+  }
+
+  .legendBar,
+  .legendOil {
+    font-size: 0.8rem;
+  }
+
+  .titleGraf {
+    font-size: 0.9rem;
+  }
+
+  .infos {
+    top: 3px;
+    left: 10px;
+  }
+
+  .nav_graf {
+    width: 100%;
+  }
+
+  .menu_graf {
+    font-size: 0.7rem;
+  }
+
+  .grafics {
+    flex-direction: column;
+  }
 }
 
-@media (min-width: 861px) and (max-width: 1300px) {
+@media (min-width: 861px) and (max-width: 1365px) {
 
 
   .sections {
@@ -6940,7 +6962,7 @@ input[type="text"]:focus {
   background-color: darkgrey;
 }
 
-@media (min-width: 1301px) {
+@media (min-width: 1366px) {
   .headerTitle :hover {
     border: 1px solid darkgrey;
     background-color: darkgrey;

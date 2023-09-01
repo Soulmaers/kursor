@@ -49,11 +49,13 @@ export function convertTime(num) {
     }
     if (num === 2) {
         const todayData = new Date();
-        var day = String(todayData.getDate() - 1).padStart(2, '0');
-        var month = String(todayData.getMonth() + 1).padStart(2, '0');
-        var year = todayData.getFullYear();
-        var formattedDate = day + "." + month + "." + year;
-        return formattedDate
+        todayData.setDate(todayData.getDate() - 1);
+        const day = String(todayData.getDate()).padStart(2, '0');
+        const month = String(todayData.getMonth() + 1).padStart(2, '0');
+        const year = todayData.getFullYear();
+        const formattedDate = day + "." + month + "." + year;
+        return formattedDate;
+
     }
     if (num === 3 || num === 4) {
         const todayData = new Date();

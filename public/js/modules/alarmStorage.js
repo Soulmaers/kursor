@@ -110,6 +110,7 @@ async function viewAlarmStorage(name, stor) {
             if (it.alarm == toSearch) {
                 tr.classList.add('norma')
             }
+            // console.log(it)
             for (var key in it) {
                 const td = document.createElement('p')
                 td.classList.add('td')

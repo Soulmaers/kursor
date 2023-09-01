@@ -23,6 +23,7 @@ let timeIcon;
 
 export async function visual(el) {
     console.log('сработала!!!!')
+    const widthWind = document.querySelector('body').offsetWidth;
     const jobTSDetalisationGraf = document.querySelector('.jobTSDetalisationGraf');
     if (jobTSDetalisationGraf) jobTSDetalisationGraf.remove()
     const jobTSDetalisationChartsLegenda = document.querySelector('.jobTSDetalisationCharts_legenda');
@@ -35,6 +36,7 @@ export async function visual(el) {
     const tsiControll = document.querySelector('.tsiControll')
     tsiControll.value = '';
     el.classList.add('color')
+    console.log('есть колор')
     const msg = document.querySelectorAll('.msg')
     if (msg) {
         msg.forEach(e => {
@@ -118,7 +120,13 @@ export async function visual(el) {
         grafics.style.display = 'flex'
     }
     else {
-        wrapperLeft.style.display = 'block'
+        if (widthWind < 860) {
+            wrapperLeft.style.display = 'none'
+        }
+        else {
+            wrapperLeft.style.display = 'block'
+        }
+
     }
     alarmClear();
     wrapperUp.style.display = 'flex'

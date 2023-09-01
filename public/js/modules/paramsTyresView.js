@@ -181,6 +181,7 @@ export function viewMenuParams() {
     const plug = document.querySelectorAll('.plug')
     const tableTarir = document.querySelector('.tableTarir')
     const idbaseTyres = document.querySelector('.idbaseTyres')
+    var widthWind = document.querySelector('body').offsetWidth;
     idbaseTyres.textContent = ''
     tiresLink.forEach(e => {
         e.addEventListener('click', () => {
@@ -188,7 +189,7 @@ export function viewMenuParams() {
                 e.classList.remove('tiresActiv')
                 techInfo.style.display = 'none'
                 tableTarir.style.display = 'none'
-                wrapperMap.style.display = 'block'
+                wrapperMap.style.display = widthWind >= 860 ? 'block' : 'none'
                 if (plug[1].classList.contains('activGraf')) {
                     grafics.style.display = 'flex';
                     wrapperMap.style.display = 'none'

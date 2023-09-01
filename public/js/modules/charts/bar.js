@@ -28,7 +28,7 @@ let isCanceled = false;
 
 
 
-function convertTineAll(t) {
+export function convertTineAll(t) {
     const date = new Date(t * 1000);
     // Используйте методы объекта Date для получения года, месяца и дня
     const year = date.getFullYear();
@@ -51,140 +51,174 @@ export async function testovfn(active, t1, t2) {
     return resultt
 }
 export async function datas(t1, t2) {
+    console.log(t2)
     if (isCanceled) {
         return Promise.reject(new Error('Запрос отменен'));
     }
     isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
     try {
         const active = Number(document.querySelector('.color').id)
-        /* const tt1 = '2023-08-23'//convertTineAll(t1)
-         const tt2 = '2023-08-23'//convertTineAll(t2)
-         console.log(tt1, tt2)
-         const param = {
-             method: "POST",
-             headers: {
-                 'Content-Type': 'application/json',
-             },
-             body: (JSON.stringify({ active, tt1, tt2 }))
-         }
-         const rest = await fetch('/api/viewStructura', param)
-         const resultt = await rest.json()
-         console.log(JSON.parse(resultt[0].info))*/
+        const tt1 = convertTineAll(t1)
+        const tt2 = convertTineAll(t2)
+        console.log(tt1, tt2)
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ active, tt1, tt2 }))
+        }
+        const rest = await fetch('/api/viewStructura', param)
+        const resultt = await rest.json()
+        console.log(resultt)
+        //  const dat = resultt.map(e => JSON.parse(e.info))
 
-        const ossParams = await fn()
-        console.log(ossParams)
-        const ttt = await testovfn(active, t1, t2)
-        console.log(ttt)
-        const noGraf = document.querySelector('.noGraf')
-        const itogy = ttt.map(it => {
-            return {
-                id: it.idw,
-                nameCar: it.nameCar,
-                time: (new Date(it.data * 1000)).toISOString(),
-                speed: it.speed,
-                geo: JSON.parse(it.geo),
-                val: JSON.parse(it.sens),
+        function parseInfo(data) {
+            return data.map(item => {
+                return {
+                    ...JSON.parse(item.info)
+                };
+            });
+        }
+        console.time()
+        const dat = parseInfo(resultt);
+        console.timeEnd()
+        const merged = {};
+        dat.forEach((obj) => {
+            for (const key in obj) {
+                if (!merged.hasOwnProperty(key)) {
+                    merged[key] = { ...obj[key], val: [] };
+                }
+                merged[key].val.push(...obj[key].val);
             }
-        })
-        //  console.log(JSON.parse(ttt[ttt.length - 1].allSensParams))
-        const sensTest = itogy.map(e => {
-            return e.val
-        })
-
-        const timeArray = itogy.map(it => (new Date(it.time)).toISOString());
-        const speedArray = itogy.map(it => it.speed);
-        const geoArray = itogy.map(it => it.geo);
-        const global = [timeArray, speedArray, geoArray];
-        const nameArr = JSON.parse(ttt[ttt.length - 1].allSensParams) //await fnParMessage(active)
-        console.log(nameArr)
-        const allArrNew = [];
-
-        nameArr.forEach((item) => {
-            allArrNew.push({ sens: item[0], params: item[1], value: [] })
-        })
-
-        const osss = ossParams.osi
-        const par = ossParams.params
-        osss.forEach(it => {
-            delete it.id
-            delete it.nameCar
-        })
-        console.log(par[0].pressure)
-
-        if (par[0].pressure === 'null') {
-            const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
-            preloaderGraf.style.opacity = 0;
-            noGraf.style.display = 'flex'
-            isCanceled = false;
-        }
-        else {
-            noGraf.style.display = 'none'
-            par.forEach(el => {
-                osss.forEach(e => {
-                    if (el.osNumber === e.idOs) {
-                        el.bar = e
-                    }
+        });
+        const dat1 = [merged];
+        let dat2 = Object.values(dat1[0]).map(e => {
+            return {
+                ...e, // Keep other properties
+                val: e.val.map(item => {
+                    return {
+                        ...item, // Keep other properties
+                        dates: new Date(item.dates) // Convert "dates" property to Date object
+                    };
                 })
-            })
-            sensTest.forEach(el => {
-                for (let i = 0; i < allArrNew.length; i++) {
-                    allArrNew[i].value.push(Object.values(el)[i])
-                }
-            })
-            const finishArrayData = []
-            const finishArrayDataT = []
-            const stop = [];
-
-            const idw = document.querySelector('.color').id
-            allArrNew.forEach(e => {
-                if (e.params.startsWith('tpms_p')) {
-                    finishArrayData.push(e)
-                }
-                if (e.params.startsWith('tpms_t')) {
-                    finishArrayDataT.push(e)
-                }
-                if (e.params.startsWith('pwr_ext') && e.sens.startsWith('Бортовое')) {
-                    e.value.forEach(el => {
-                        if (idw === '26821431') {
-                            el >= 13 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
-                            //    console.log('11')
-                        }
-                        else {
-                            el >= 26.5 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
-                            //   console.log('22')
-                        }
-                    })
-                }
-            })
-
-            finishArrayData.forEach((el, index) => {
-                el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
-                el.speed = global[1]
-                el.geo = global[2]
-                el.stop = stop
-            })
-            console.log(finishArrayData)
-            finishArrayData.forEach(e => {
-                par.forEach(it => {
-                    if (e.params === it.pressure) {
-                        e.bar = it.bar
-                        e.position = Number(it.tyresdiv)
-                    }
-                })
-            })
-            console.log(finishArrayData)
-            await grafikStartPress(global[0], finishArrayData)
-            isCanceled = false;
-        }
+            };
+        });
+        console.log(dat2)
+        /*
+          const ossParams = await fn()
+          console.log(ossParams)
+          const ttt = await testovfn(active, t1, t2)
+          console.log(ttt)
+          const noGraf = document.querySelector('.noGraf')
+          const itogy = ttt.map(it => {
+              return {
+                  id: it.idw,
+                  nameCar: it.nameCar,
+                  time: (new Date(it.data * 1000)).toISOString(),
+                  speed: it.speed,
+                  geo: JSON.parse(it.geo),
+                  val: JSON.parse(it.sens),
+              }
+          })
+          //  console.log(JSON.parse(ttt[ttt.length - 1].allSensParams))
+          const sensTest = itogy.map(e => {
+              return e.val
+          })
+  
+          const timeArray = itogy.map(it => (new Date(it.time)).toISOString());
+          const speedArray = itogy.map(it => it.speed);
+          const geoArray = itogy.map(it => it.geo);
+          const global = [timeArray, speedArray, geoArray];
+          const nameArr = JSON.parse(ttt[ttt.length - 1].allSensParams) //await fnParMessage(active)
+          console.log(nameArr)
+          const allArrNew = [];
+  
+          nameArr.forEach((item) => {
+              allArrNew.push({ sens: item[0], params: item[1], value: [] })
+          })
+  
+          const osss = ossParams.osi
+          const par = ossParams.params
+          osss.forEach(it => {
+              delete it.id
+              delete it.nameCar
+          })
+          if (par[0].pressure === 'null') {
+              const preloaderGraf = document.querySelector('.loader')
+              preloaderGraf.style.opacity = 0;
+              noGraf.style.display = 'flex'
+              isCanceled = false;
+          }
+          else {
+              noGraf.style.display = 'none'
+              par.forEach(el => {
+                  osss.forEach(e => {
+                      if (el.osNumber === e.idOs) {
+                          el.bar = e
+                      }
+                  })
+              })
+              sensTest.forEach(el => {
+                  for (let i = 0; i < allArrNew.length; i++) {
+                      allArrNew[i].value.push(Object.values(el)[i])
+                  }
+              })
+              const finishArrayData = []
+              const finishArrayDataT = []
+              const stop = [];
+  
+              const idw = document.querySelector('.color').id
+              allArrNew.forEach(e => {
+                  if (e.params.startsWith('tpms_p')) {
+                      finishArrayData.push(e)
+                  }
+                  if (e.params.startsWith('tpms_t')) {
+                      finishArrayDataT.push(e)
+                  }
+                  if (e.params.startsWith('pwr_ext') && e.sens.startsWith('Бортовое')) {
+                      e.value.forEach(el => {
+                          if (idw === '26821431') {
+                              el >= 13 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
+                              //    console.log('11')
+                          }
+                          else {
+                              el >= 26.5 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
+                              //   console.log('22')
+                          }
+                      })
+                  }
+              })
+  
+              finishArrayData.forEach((el, index) => {
+                  el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
+                  el.speed = global[1]
+                  el.geo = global[2]
+                  el.stop = stop
+              })
+              console.log(finishArrayData)
+              finishArrayData.forEach(e => {
+                  par.forEach(it => {
+                      if (e.params === it.pressure) {
+                          e.bar = it.bar
+                          e.position = Number(it.tyresdiv)
+                      }
+                  })
+              })
+              console.log(finishArrayData)*/
+        await grafikStartPress(dat2)
+        isCanceled = false;
+        // }
     }
     catch (e) {
         isCanceled = false;
     }
 }
 
-async function grafikStartPress(times, datar) {
+async function grafikStartPress(dat2) {
     const model = await iconChart()
     const grafOld = document.querySelector('.infoGraf')
+    console.log(grafOld)
     if (grafOld) {
         grafOld.remove()
     }
@@ -195,71 +229,73 @@ async function grafikStartPress(times, datar) {
     const info = document.createElement('div')
     info.classList.add('infos')
     graf.prepend(info)
-    const newData = datar.map((el, index) => {
-        return {
-            ...el,
-            value: el.value.map((it, i) => {
-                if (it === -348201.3876) {
-                    return -0.5
-                } else {
-                    return it
-                }
-            }),
-            tvalue: el.tvalue !== null ? (el.tvalue.map(it => {
-                if (it === -348201.3876 || it === -128 || it === -50 || it === -51) {
-                    return -0.5
-                } else {
-                    return it
-                }
-            })) : null
-        };
-    });
-    console.log(newData)
-    const global = {
-        dates: times,
-        series: newData
-    }
-    const gl = times.map(it => {
-        return new Date(it)
-    })
-    const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop, geo }) => ({
-        sens,
-        position,
-        bar,
-        val: value.map((val, i) => {
-            if (stop[i] === 'ВЫКЛ') {
-                return {
-                    dates: gl[i],
-                    value: -0.5,
-                    tvalue: tvalue !== null ? -0.5 : null,
-                    speed: Number(speed[i]),
-                    stop: stop[i],
-                    geo: geo[i]
-
-                };
-            } else {
-                return {
-                    dates: gl[i],
-                    value: Number(val),
-                    tvalue: tvalue !== null ? Number(tvalue[i]) : null,
-                    speed: Number(speed[i]),
-                    stop: stop[i],
-                    geo: geo[i]
-                };
-            }
-        })
-    }));
-    console.log(dat2)
-
-    dat2.sort((a, b) => {
-        if (a.position > b.position) {
-            return 1;
-        }
-        if (a.position < b.position) {
-            return -1;
-        }
-        return 0;
-    });
+    /* const newData = datar.map((el, index) => {
+         return {
+             ...el,
+             value: el.value.map((it, i) => {
+                 if (it === -348201.3876) {
+                     return -0.5
+                 } else {
+                     return it
+                 }
+             }),
+             tvalue: el.tvalue !== null ? (el.tvalue.map(it => {
+                 if (it === -348201.3876 || it === -128 || it === -50 || it === -51) {
+                     return -0.5
+                 } else {
+                     return it
+                 }
+             })) : null
+         };
+     });
+     console.log(newData)
+     const global = {
+         dates: times,
+         series: newData
+     }
+     const gl = times.map(it => {
+         return new Date(it)
+     })
+ 
+     const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop, geo }) => ({
+         sens,
+         position,
+         bar,
+         val: value.map((val, i) => {
+             if (stop[i] === 'ВЫКЛ') {
+                 return {
+                     dates: gl[i],
+                     value: -0.5,
+                     tvalue: tvalue !== null ? -0.5 : null,
+                     speed: Number(speed[i]),
+                     stop: stop[i],
+                     geo: geo[i]
+ 
+                 };
+             } else {
+                 return {
+                     dates: gl[i],
+                     value: Number(val),
+                     tvalue: tvalue !== null ? Number(tvalue[i]) : null,
+                     speed: Number(speed[i]),
+                     stop: stop[i],
+                     geo: geo[i]
+                 };
+             }
+         })
+     }));
+     console.log(dat2)
+ 
+     dat2.sort((a, b) => {
+         if (a.position > b.position) {
+             return 1;
+         }
+         if (a.position < b.position) {
+             return -1;
+         }
+         return 0;
+     });
+     console.log(dat2)*/
     const container = d3.select('.infoGraf');
     // Связываем данные с контейнером
     const charts = container.selectAll('.charts')
@@ -267,9 +303,10 @@ async function grafikStartPress(times, datar) {
         .enter()
         .append('div')
         .attr('class', 'chart');
-    const margin = { top: 100, right: 10, bottom: 30, left: 10 },
-        width = 700 - margin.left - margin.right,
-        height = 50;
+    const margin = { top: 100, right: 10, bottom: 30, left: 10 }
+    var widthWind = document.querySelector('body').offsetWidth;
+    const width = widthWind >= 860 ? 700 - margin.left - margin.right : widthWind - 80
+    const height = 50;
     const count = charts.size()
     let he;
     let pad;
@@ -940,19 +977,18 @@ async function grafikStartPress(times, datar) {
         new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
     })
     function globalTooltip(time) {
-        const objTool = []
-        //    console.log(time)
+        const objTool = [];
         dat2.forEach(e => {
             e.val.forEach(el => {
-                if (el.dates === time) {
+                if (el.dates.getTime() === time.getTime()) {
                     objTool.push({ sens: e.sens, value: el.value, tvalue: el.tvalue, speed: el.speed, time: el.dates })
                 }
             })
         })
+        //console.log('Количество элементов, соответствующих условию:', counter);
         const chart = document.querySelectorAll('.chart')
         char[char.length - 1].children[2].classList.add('last')
         char[char.length - 1].children[3].classList.add('last')
-
         let dav;
         let temp;
         for (let i = 0; i < chart.length; i++) {

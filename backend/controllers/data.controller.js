@@ -48,6 +48,7 @@ exports.getData = async (req, res) => {
 //колесами и параметрами,
 //готовим данные и отправляем ответ на клиент который отрисовывает список
 exports.dataSpisok = async (req, res) => {
+    //  await databaseService.createIndexDataToDatabase()
     try {
         let login;
         if (req && req.body && req.body.login) {
@@ -185,8 +186,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-//setTimeout(test, 1000)
-//setInterval(test, 60000)
+setTimeout(test, 1000)
+setInterval(test, 300000)
 
 const hunterTime = async () => {
     const now = new Date();
@@ -199,25 +200,31 @@ const hunterTime = async () => {
         structura.datas(res, previousDayEndUnix, previousDayUnix)
     }
 };
-//hunterTime();
+hunterTime();
 setInterval(hunterTime, 50000)
 
 function ggg(nameSens, rez) {
-    const nameSenz = Object.entries(nameSens.item.sens)
-    const arrNameSens = [];
-    nameSenz.forEach(el => {
-        arrNameSens.push([el[1].n, el[1].p])
-    })
-    //  console.log(rez)
-    const valueSens = Object.values(rez[rez.length - 1])
-    const allArr = [];
-    arrNameSens.forEach((e, index) => {
-        allArr.push([...e, valueSens[index]])
-    })
-    return allArr
+    if (rez) {
+        const nameSenz = Object.entries(nameSens.item.sens)
+        const arrNameSens = [];
+        nameSenz.forEach(el => {
+            arrNameSens.push([el[1].n, el[1].p])
+        })
+        //  console.log(rez)
+        const valueSens = Object.values(rez[rez.length - 1])
+        const allArr = [];
+        arrNameSens.forEach((e, index) => {
+            allArr.push([...e, valueSens[index]])
+        })
+        return allArr
+    }
+    else {
+        return
+    }
+
 }
 async function updateParams(data) {
-
+    console.log('работаем?')
     data ? data : data = dataGlobal
     const nameCar = [];
     const allCar = Object.entries(data)

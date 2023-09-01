@@ -10,6 +10,7 @@ export function conf(selectOld) {
 
 }
 export function createConfig(selectOld) {
+    // document.querySelector('.wrapperFull').style.height = ''
     const checkAlt = document.querySelector('.checkAlt')
     checkAlt.style.color = 'red'
     checkAlt.style.fontWeight = 'bold'

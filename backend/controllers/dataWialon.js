@@ -5,8 +5,29 @@ const databaseService = require('../services/database.service');
 
 exports.spisok = async (req, res) => {
     const idw = req.body.idw
-    const result = await databaseService.loadParamsViewList(idw, idw);
-    res.json(result)
+    const arr = req.body.arrId
+
+    if (arr) {
+        const promises = arr.map(async (idw) => {
+            const nameSensors = await databaseService.loadParamsViewList(idw, idw);
+            return { result: nameSensors, idw };
+        });
+        // Дождаться завершения всех промисов и вернуть результат
+        try {
+            const result = await Promise.all(promises);
+            res.json({ res: result, id: idw });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Произошла ошибка");
+        }
+    }
+    else {
+
+        const result = await databaseService.loadParamsViewList(idw, idw);
+        res.json(result)
+    }
+
+
 }
 exports.datawialon = async (req, res) => {
     const idw = req.body.idw
@@ -42,14 +63,51 @@ exports.loadInterval = async (req, res) => {
 exports.sensorsName = async (req, res) => {
     const idw = req.body.idw
     const login = req.body.login
-    const params = await wialonService.getAllNameSensorsIdDataFromWialon(idw, login)
-    res.json(params)
+    const arr = req.body.arr
+    if (arr) {
+        const promises = arr.map(async (idw) => {
+            const nameSensors = await wialonService.getAllNameSensorsIdDataFromWialon(idw, login);
+            return { result: nameSensors, idw };
+        });
+
+        // Дождаться завершения всех промисов и вернуть результат
+        try {
+            const result = await Promise.all(promises);
+            res.json({ res: result, id: idw });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Произошла ошибка");
+        }
+    }
+    else {
+        const params = await wialonService.getAllNameSensorsIdDataFromWialon(idw, login)
+        res.json(params)
+    }
+
 }
 exports.lastSensors = async (req, res) => {
     const idw = req.body.idw
     const login = req.body.login
-    const params = await wialonService.getLastAllSensorsIdDataFromWialon(idw, login)
-    res.json(params)
+    const arr = req.body.arr
+    if (arr) {
+        const promises = arr.map(async (idw) => {
+            const lastSensors = await wialonService.getLastAllSensorsIdDataFromWialon(idw, login)
+            return { result: lastSensors, idw };
+        });
+
+        // Дождаться завершения всех промисов и вернуть результат
+        try {
+            const result = await Promise.all(promises);
+            res.json({ res: result, id: idw });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Произошла ошибка");
+        }
+    }
+    else {
+        const params = await wialonService.getLastAllSensorsIdDataFromWialon(idw, login)
+        res.json(params)
+    }
 }
 
 module.exports.datawialonAll = (req, res) => {
@@ -76,7 +134,9 @@ exports.viewStructura = async (req, res) => {
     const t2 = [req.body.tt2]
     console.log('структура?')
     // console.log(t1, t2)
+    //    console.time()
     const params = await databaseService.viewStructuraToBase(idw, t1, t2)
+    // console.timeEnd()
     res.json(params)
 }
 exports.viewChart = async (req, res) => {

@@ -40,7 +40,12 @@ export async function loadParamsViewList(car, el) {
 }
 
 export async function conturTest(testov) {
-    console.log(testov)
+    const result = testov
+        .map(el => Object.values(el)) // получаем массивы всех id
+        .flat()
+        .map(e => e[4])
+
+    const final = await alternativa(result)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         removeArrElem(groups)
@@ -125,19 +130,10 @@ export async function conturTest(testov) {
                     progress.appendChild(progressBarText)
                     fnStaticObjectOil(elem[4])
                 }
-
-                const res = await gg(elem[4])
-                // const t1 = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
-                // const t2 = t1 - 600
-                //    const resTest = await testovfn(elem[4])
-                // console.log(resTest.length !== 0 ? JSON.parse(resTest[0].allSensParams) : 'пусто')
-                //  console.log(resTest ? JSON.parse(resTest) : 'пусто')
-
-                // console.log(res)
                 let in1;
-                res.forEach(i => {
-                    if (i[0] === 'Зажигание') {
-                        in1 = i[2]
+                final.forEach(i => {
+                    if (i[0] === 'Зажигание' && i[2] === elem[4]) {
+                        in1 = i[3]
                     }
                 })
                 if (elem[0].result) {
@@ -208,6 +204,54 @@ export async function conturTest(testov) {
     setTimeout(zaprosSpisok, 1000)
 
 }
+
+
+export async function alternativa(arr) {
+    return new Promise(async function (resolve, reject) {
+        const allobj = {};
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ arr, login }))
+        }
+        const ress = await fetch('/api/sensorsName', param)
+        const results = await ress.json()
+        if (!results) {
+            ggg(id)
+        }
+        const arrNameSens = [];
+        const nameSens = results.res.map(e => {
+            return { sens: Object.entries(e.result.item.sens), id: e.idw }
+        })
+        nameSens.forEach(el => {
+            const arrName = [];
+            el.sens.forEach(it => {
+                arrName.push([it[1].n, it[1].p, el.id])
+            })
+
+            arrNameSens.push(arrName)
+        })
+        const res = await fetch('/api/lastSensors', param)
+        const result = await res.json()
+        if (result) {
+            const valueSens = [];
+            result.res.forEach(e => {
+                valueSens.push(Object.values(e.result))
+            })
+            const allArr = [];
+            arrNameSens.forEach((e, index) => {
+                for (let i = 0; i < e.length; i++) {
+                    allArr.push([...e[i], valueSens[index][i]])
+                }
+            })
+            resolve(allArr)
+        }
+
+    });
+}
+
 
 export async function gg(id) {
     return new Promise(async function (resolve, reject) {
@@ -320,21 +364,21 @@ function fnTagach(arr, nameCarId) {
     }
     const svg = d3.select(listItem).select(".list_profil2").append("svg")
         .attr("class", "axis2")
-        .attr("width", 25)
-        .attr("height", 25)
+        .attr("width", 18)
+        .attr("height", 18)
         .style('margin', '0 1px')
         .append("g")
         .attr('class', 'gOs')
         .attr('id', arr.osi)
         .attr("transform",
-            "translate(" + (12.5) + "," + (12.5) + ")");
+            "translate(" + (9) + "," + (9) + ")");
     // задаем радиус
-    const radius = 5;
+    const radius = 4;
     const rr = (Math.PI / 180);
     // создаем элемент арки с радиусом
     const arc = d3.arc()
         .outerRadius(radius)
-        .innerRadius(12)
+        .innerRadius(8)
         .startAngle(function (d) { return d.startAngle + Math.PI })
         .endAngle(function (d) { return d.endAngle + Math.PI });
     const pie = d3.pie()
@@ -383,20 +427,20 @@ function fnPricep(arr, nameCarId) {
     }
     const svg = d3.select(listItem).select(".list_trail2").append("svg")
         .attr("class", "axis2")
-        .attr("width", 25)
-        .attr("height", 25)
+        .attr("width", 18)
+        .attr("height", 18)
         .style('margin', '0 0.5px')
         .append("g")
         .attr('class', 'gOs')
         .attr('id', arr.osi)
         .attr("transform",
-            "translate(" + (12.5) + "," + (12.5) + ")");
+            "translate(" + (9) + "," + (9) + ")");
     // задаем радиус
-    const radius = 5;
+    const radius = 4;
     // создаем элемент арки с радиусом
     const arc = d3.arc()
         .outerRadius(radius)
-        .innerRadius(12)
+        .innerRadius(8)
         .startAngle(function (d) { return d.startAngle + Math.PI })
         .endAngle(function (d) { return d.endAngle + Math.PI });
     const pie = d3.pie()
@@ -431,23 +475,37 @@ function fnPricep(arr, nameCarId) {
         .style('fill', 'white')
 }
 let countt = 0;
-export function zaprosSpisok() {
+export async function zaprosSpisok() {
     const list = document.querySelectorAll('.listItem')
+    const arrId = Array.from(list).map(el => parseFloat(el.id))
+    const res = await alternativa(arrId)
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ arrId }))
+    }
+
+    const listsr = await fetch('/api/spisokList', param)
+    const spisoks = await listsr.json()
+    console.log(spisoks)
     list.forEach(async el => {
         const idw = el.id
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ idw }))
-        }
-
-        const listsr = await fetch('/api/spisokList', param)
-        const spisok = await listsr.json()
-        viewListKoleso(spisok[1], spisok[2], spisok[3], el)
+        const inn = res.filter(e => {
+            if (e[2] === parseFloat(idw)) {
+                return e;
+            }
+        });
+        const spisok1 = spisoks.res.filter(e => {
+            if (e.idw === parseFloat(idw)) {
+                return e.result
+            }
+        });
+        const spisok = spisok1[0].result
+        //  console.log(spisok)
+        viewListKoleso(spisok[1], spisok[2], spisok[3], el, inn)
     })
-
     const updateTime = document.querySelector('.update_time')
     let today = new Date();
     const year = today.getFullYear();
@@ -462,18 +520,19 @@ export function zaprosSpisok() {
     updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
 setInterval(zaprosSpisok, 120000)
-async function viewListKoleso(params, arg, osi, nameCar) {
+async function viewListKoleso(params, arg, osi, nameCar, inn) {
+    // console.log(params, arg, osi)
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
     if (params.result) {
         const modelUniqValues = convert(params.result)
         const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
         let integer;
-        const res = await gg(nameCar.id)
+        //  const res = await gg(nameCar.id)
         let in1;
-        res.forEach(i => {
+        inn.forEach(i => {
             if (i[0] === 'Зажигание') {
-                in1 = i[2]
+                in1 = i[3]
             }
         })
         arg.result.forEach((el) => {

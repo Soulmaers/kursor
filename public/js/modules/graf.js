@@ -90,15 +90,16 @@ export async function dataSelect() {
     let nowDate = Math.round(new Date().getTime() / 1000)
     let nDate = new Date();
     const selectSpeed = document.querySelector('.select_speed')
+    const activeMenuGraf = document.querySelector('.activMenuGraf')
     let timeFrom;
     switch (selectSpeed.value) {
         case '0': {
             timeFrom = Math.round(nDate.setHours(nDate.getHours() - 24) / 1000);
-            graftest(timeFrom, nowDate)
+            activeMenuGraf.textContent === 'Топливо' ? graftest(timeFrom, nowDate) : graftest(nowDate, nowDate)
         }
             break;
         case '1': {
-            timeFrom = Math.round(nDate.setHours(nDate.getHours() - 24) / 1000);
+            timeFrom = Math.round(nDate.setDate(nDate.getDate() - 1) / 1000);
             graftest(timeFrom, nowDate)
         }
             break;

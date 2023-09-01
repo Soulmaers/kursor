@@ -161,7 +161,7 @@
                                 <label>Интервал
                                     <select class="select_speed">
                                         <option disabled selected value="0">Указанный интервал</option>
-                                        <option class="option_int" value="1">За сутки</option>
+                                        <option class="option_int" value="1">За вчера</option>
                                         <option class="option_int" value="2">За неделю</option>
                                         <option class="option_int" value="3">За месяц</option>
                                     </select>
@@ -751,90 +751,73 @@
 
                 <!--   <div class="im1"></div>-->
                 <div class="noGraf">Нет данных за последние 24 часа</div>
-                <div class="loader">
-                    <span class="v">L</span>
-                    <span class="v">O</span>
-                    <span class="v">A</span>
-                    <span class="v">D</span>
-                    <span class="v">I</span>
-                    <span class="v">N</span>
-                    <span class="v">G</span>
-
-                    <div class="covers">
-                        <span class="v"></span>
-                        <span class="v"></span>
-                        <span class="v"></span>
-                        <span class="v"></span>
-                        <span class="v"></span>
-                        <span class="v"></span>
-                        <span class="v"></span>
-                    </div>
-                </div>
-
+                <div class="loader">Загрузка...</div>
             </div>
-        </main>
-        <div class="account">
-            <div class="accountControl">
-                <h3 class="titleAccount">Настройка прав доступа</h3>
-                <div class="low_modal">
-                    <div class="singUpForm">
-                        <h4 class="titleForm">Форма регистрации</h4>
-                        <div class="sigup">
-                            <%-include('signup') %>
-                        </div>
-                    </div>
-                    <div class="listAccount">
-                        <h4 class="titleForm">Список пользователей</h4>
-                        <div class="listAccountReal">
-                            <li class="usersTitle"><span class="loginTitle">Логин</span><span class="roleTitle">Права
-                                </span> </li>
 
-                        </div>
+    </div>
+    </main>
+    <div class="account">
+        <div class="accountControl">
+            <h3 class="titleAccount">Настройка прав доступа</h3>
+            <div class="low_modal">
+                <div class="singUpForm">
+                    <h4 class="titleForm">Форма регистрации</h4>
+                    <div class="sigup">
+                        <%-include('signup') %>
                     </div>
-                    <span class="authClear">&#10006</span>
                 </div>
-                <p class="message"></p>
-                <div class="clearConfirm">
-                    <p class="messagee">Удалить пользователя?</p>
-                    <div class="da">Удалить</div>
-                    <div class="net">Отмена</div>
+                <div class="listAccount">
+                    <h4 class="titleForm">Список пользователей</h4>
+                    <div class="listAccountReal">
+                        <li class="usersTitle"><span class="loginTitle">Логин</span><span class="roleTitle">Права
+                            </span> </li>
+
+                    </div>
+                </div>
+                <span class="authClear">&#10006</span>
+            </div>
+            <p class="message"></p>
+            <div class="clearConfirm">
+                <p class="messagee">Удалить пользователя?</p>
+                <div class="da">Удалить</div>
+                <div class="net">Отмена</div>
+            </div>
+        </div>
+        <div class="profilUser">
+            <h3 class="titleAccount">Профиль пользователя</h3>
+            <div class="centerWrapper">
+                <div class="loginUser">
+                    <div class="titleLogin">Логин</div>
+                    <div class="nameUser"></div>
+                </div>
+                <div class="roleUser">
+                    <div class="titleRole">Права доступа</div>
+                    <div class="userRole"></div>
+                </div>
+                <div class="objectUser">
+                    <div class="titleObject">Объекты</div>
+                    <form class="check_boxs">
+                        <p class="listTitless"><input class="checkIn" type="checkbox" rel="" value="all" id="all"
+                                checked>Все
+                        </p>
+                    </form>
+
                 </div>
             </div>
-            <div class="profilUser">
-                <h3 class="titleAccount">Профиль пользователя</h3>
-                <div class="centerWrapper">
-                    <div class="loginUser">
-                        <div class="titleLogin">Логин</div>
-                        <div class="nameUser"></div>
-                    </div>
-                    <div class="roleUser">
-                        <div class="titleRole">Права доступа</div>
-                        <div class="userRole"></div>
-                    </div>
-                    <div class="objectUser">
-                        <div class="titleObject">Объекты</div>
-                        <form class="check_boxs">
-                            <p class="listTitless"><input class="checkIn" type="checkbox" rel="" value="all" id="all"
-                                    checked>Все
-                            </p>
-                        </form>
-
-                    </div>
-                </div>
-                <p class="messagech"></p>
-                <div class="btnClick">
-                    <div class="okey">OK</div>
-                    <div class="close">Закрыть</div>
-                </div>
-                <div class="clearConfirmCheckModal">
-                    <div class="messageeCheck">Сохранить изменения?</div>
-                    <div class="dad">Да</div>
-                    <div class="nent">Отмена</div>
-                </div>
-
+            <p class="messagech"></p>
+            <div class="btnClick">
+                <div class="okey">OK</div>
+                <div class="close">Закрыть</div>
+            </div>
+            <div class="clearConfirmCheckModal">
+                <div class="messageeCheck">Сохранить изменения?</div>
+                <div class="dad">Да</div>
+                <div class="nent">Отмена</div>
             </div>
 
         </div>
+
+    </div>
     </div>
 
     <footer class="footer">
