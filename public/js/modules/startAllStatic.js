@@ -33,8 +33,8 @@ export const startAllStati = async (objects) => {
         .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)
         .map(e => e);
     const interval = timefn()
-    const timeOld = interval[1]
-    const timeNow = interval[0]
+    const timeOld = 1693429200//interval[1]
+    const timeNow = 1693515600//interval[0]
     const res = await loadValue(array, timeOld, timeNow)
     console.log(res)
     return //res.uniq

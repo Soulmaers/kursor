@@ -6,6 +6,8 @@ export function navigator() {
     const main = document.querySelector('.main')
     const auth = document.querySelector('.auth')
     const menu = document.querySelector('.menu')
+    const lowList = document.querySelector('.low_list')
+    const wrapperFull = document.querySelector('.wrapperFull')
     const sections = document.querySelector('.sections')
     main.style.display = 'none';
     const start = document.querySelector('.start')
@@ -25,7 +27,11 @@ export function navigator() {
     }
     if (widthWind <= 860) {
         start.style.display = 'none';
-        menu.appendChild(auth)
+        wrapperFull.style.minHeight = screen.height - 85 + 'px'
+        lowList.style.height = wrapperFull.clientHeight - 20 + 'px';
+        if (auth) {
+            menu.appendChild(auth)
+        }
         document.querySelector('.mobile_spisok').classList.add('mobile_active')
         //  rigthFrame.style.display = 'none';
     }
@@ -60,6 +66,10 @@ export function navigator() {
                     document.querySelector('.state_tyres').textContent = 'Шины'
                     document.querySelector('.rigth_icons').style.order = 2
                     document.querySelector('.config').style.order = 3
+                    document.querySelector('.side').appendChild(document.querySelector('.select_type'))
+                    document.querySelector('.select_type').style.order = 1
+                    document.querySelectorAll('.itemSide')[1].style.order = 2
+
                 }
                 if (widthWind >= 861 && widthWind <= 1200) {
                     const comeback = document.querySelector('.comeback')

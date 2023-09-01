@@ -1,15 +1,20 @@
 const databaseService = require('../services/database.service');
 const wialonService = require('../services/wialon.service');
-
+const structura = require('./structura.module')
 async function testovfn(active, t1, t2) {
     const resultt = await databaseService.viewChartDataToBase(active, t1, t2)
     return resultt
 }
 exports.startAllStatic = async (objects) => {
     console.log('статик?')
+    const interval = timefn()
+    const timeOld = interval[1]
+    const timeNow = interval[0]
+    structura.datas(objects, timeNow, timeOld)
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
+
     result.forEach(el => {
         if (el[0].message === 'Цистерна ДТ') {
             el.push('Цистерна');
@@ -21,9 +26,7 @@ exports.startAllStatic = async (objects) => {
         //   .filter(e => e[0].message.startsWith('Sitrack'))
         .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)
         .map(e => e);
-    const interval = timefn()
-    const timeOld = interval[1]
-    const timeNow = interval[0]
+
     const res = await loadValue(array, timeOld, timeNow)
     console.log(res)
     return res.uniq
@@ -68,7 +71,7 @@ async function loadValue(array, timeOld, timeNow) {
             const allArrNew = allsens.reduce((accumulator, current) => {
                 current.sens.forEach((sens, idx) => {
                     const params = current.params[idx];
-                    const value = current.val[idx];
+                    const value = parseFloat(current.val[idx].toFixed(0));
                     const found = accumulator.find(
                         (item) => item.sens === sens && item.params === params
                     );
@@ -80,27 +83,6 @@ async function loadValue(array, timeOld, timeNow) {
                 });
                 return accumulator;
             }, []);
-
-            // console.log(reza);
-            /* const allArrNew = [];
-             if (sensArr[0] && nameSens.length === sensArr[0].length) {
-                 nameSens.forEach((item) => {
-                     allArrNew.push({ sens: item[0], params: item[1], value: [] })
-                 })
-             }
-             // nameSens.pop()
-             nameSens.forEach((item) => {
-                 allArrNew.push({ sens: item[0], params: item[1], value: [] })
-             })
-             sensArr.forEach(el => {
-                 if (el.length === 0) {
-                     return; // Пропускаем текущую итерацию, если sensArr пустой
-                 }
-                 for (let i = 0; i < allArrNew.length; i++) {
-                     allArrNew[i].value.push(Number(Object.values(el)[i].toFixed(0)))
-                 }
-             });*/
-
 
             allArrNew.forEach(el => {
                 el.time = time
@@ -377,7 +359,6 @@ function moto(data) {
 
 function rashodCalc(data, name, group, idw) {
     console.log('заправки')
-    console.log(name)
     let i = 0;
     while (i < data.value.length - 1) {
         if (data.value[i] === data.value[i + 1]) {
@@ -399,7 +380,7 @@ function rashodCalc(data, name, group, idw) {
         const nextObj = data.value[i + 1];
         const div = (data.time[i + 1].getTime() / 1000) - (data.time[i].getTime() / 1000)
         //  console.log(div)
-        if (currentObj < nextObj && div < 180) {
+        if (currentObj < nextObj) {
             if (start === end) {
                 start = i;
             }
@@ -417,6 +398,7 @@ function rashodCalc(data, name, group, idw) {
         increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
     }
     console.log(idw)
+    //  console.log(increasingIntervals)
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0][0];
         const lastOil = interval[interval.length - 1][0];
@@ -446,19 +428,21 @@ function rashodCalc(data, name, group, idw) {
     if (zapravka.length !== 0) {
         const diff = (Number(new Date().getTime() / 1000).toFixed(0)) - (zapravka[zapravka.length - 1][1][1].getTime() / 1000)
         if (diff > 300) {
-            //  console.log(zapravka + 'условие')
+            console.log(zapravka + 'условие')
             modalView(zapravka, name, group, idw);
         }
+        //  console.log(firstData - zapravka[0][0][0])
         rash.push(firstData - zapravka[0][0][0]);
         for (let i = 0; i < zapravka.length - 1; i++) {
             rash.push(zapravka[i][1][0] - zapravka[i + 1][0][0]);
         }
+        console.log(zapravka[zapravka.length - 1][1][0], lastData)
         rash.push(zapravka[zapravka.length - 1][1][0] - lastData);
     }
     else {
         rash.push(firstData - lastData >= 0 ? firstData - lastData : 0)
     }
-
+    // console.log(rash)
     const rashod = rash.reduce((el, acc) => el + acc, 0)
     const zap = [];
     zapravka.forEach(e => {

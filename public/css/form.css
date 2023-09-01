@@ -7,7 +7,8 @@
     background-repeat: no-repeat;
     background-size: cover;
     cursor: pointer;
-    min-height: 1000px;
+    width: 100%;
+    height: 100vh;
     border: 1px solid rgb(84, 74, 228);
     z-index: 0;
     position: relative;
@@ -27,8 +28,6 @@
 }
 
 .wrappers {
-    width: 270px;
-    min-height: 350px;
     border: 1px solid rgb(84, 74, 228);
     background-color: rgb(31, 4, 104);
 

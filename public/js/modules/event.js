@@ -30,11 +30,13 @@ const start = document.querySelector('.start')
 const menu = document.querySelector('.menu')
 const main = document.querySelector('.main')
 const wrapleft = document.querySelector('.wrapper_left')
-
+const wrapright = document.querySelector('.wrapper_right')
+const comeback = document.querySelector('.comeback')
 const secondFlash = document.querySelectorAll('.secondFlash')
-
-
+const sections = document.querySelector('.sections')
+const techinfo = document.querySelector('.techInfo')
 const mainMenu = document.querySelector('.main_menu')
+const grafics = document.querySelector('.grafics')
 for (let i = 0; i < rigthFrame.length; i++) {
     console.log(rigthFrame[i].children[0])
     const strR = rigthFrame[i].children[0]
@@ -57,30 +59,33 @@ mainMenu.addEventListener('click', (event) => {
 
 const mobileItem = document.querySelectorAll('.mobile_item')
 mobileItem.forEach(el => {
-    el.addEventListener('click', () => {
 
+    el.addEventListener('click', () => {
         mobileItem.forEach(el => {
             el.classList.remove('mobile_active')
         })
         el.classList.toggle('mobile_active');
-        console.log(el.children.textContent)
+        console.log(el.children[0].textContent)
         if (el.children[0].textContent === 'Список') {
             const sections = document.querySelector('.sections')
+            const centerBlock = document.querySelector('.centerBlock')
             sections.style.display = 'flex'
+            centerBlock.style.display = 'flex'
             start.style.display = 'none'
+            comeback.style.display = 'none'
+            main.style.display = 'none'
         }
         if (el.children[0].textContent === 'Статистика') {
             console.log('нажал')
-            const sections = document.querySelector('.sections')
             const wrapFull = document.querySelector('.wrapperFull')
             const contentCard = document.querySelectorAll('.content_card')
+            comeback.style.display = 'none'
             main.style.display = 'none'
             sections.style.display = 'none'
             start.style.display = 'flex'
             start.style.flexDirection = 'column'
             start.style.flexWrap = 'nowrap'
             start.style.overflow = 'auto';
-            start.style.height = '572px'
             wrapFull.style.height = ''
             contentCard.forEach(it => {
                 it.style.width = 96 + '%'
@@ -105,6 +110,46 @@ mobileItem.forEach(el => {
                     })
                 }
             })
+
+        }
+        if (el.children[0].textContent === 'Карта') {
+            const color = document.querySelector('.color')
+            if (color) {
+                document.querySelector('.jobTSDetalisation').textContent = 'Время раб. ТС дет.'
+                document.querySelector('.engineTS').textContent = 'Зажигание ВКЛ'
+                document.querySelector('.jobHHTS').textContent = 'Холостой ход'
+                document.getElementById('map').style.height = ''
+                console.log('картиа же')
+                console.log(color)
+                sections.style.display = 'none'
+                start.style.display = 'none'
+                main.style.display = 'flex'
+                centerBlock.style.display = 'none'
+                console.log(techinfo)
+                techinfo.style.display = 'none'
+                grafics.style.display = 'none'
+                wrapleft.style.display = 'block'
+            }
+            else {
+                console.log('ничего')
+            }
+
+        }
+        if (el.children[0].textContent === 'Конфигуратор') {
+            const color = document.querySelector('.color')
+            if (color) {
+                grafics.style.display = 'none'
+                sections.style.display = 'none'
+                start.style.display = 'none'
+                main.style.display = 'flex'
+                centerBlock.style.display = 'flex'
+                wrapleft.style.display = 'none'
+                techinfo.style.display = 'none'
+                wrapright.style.display = 'flex'
+            }
+            else {
+                console.log('ничего')
+            }
 
         }
     })
@@ -145,15 +190,21 @@ rotateDiv.addEventListener('click', () => {
         e.classList.remove('rotates')
     })
 })
-
+const widthWind = document.querySelector('body').offsetWidth;
 const iconStrela = document.querySelector('.iconStrela')
 iconStrela.addEventListener('click', () => {
-    const widthWind = document.querySelector('body').offsetWidth;
     if (widthWind <= 860) {
+        const centerBlock = document.querySelector('.centerBlock')
         const sections = document.querySelector('.sections')
+        const visualGrafics = document.querySelector('.visualGrafics')
+        const wrapList = document.querySelector('.wrapList')
+        centerBlock.style.display = 'flex'
         sections.style.display = 'flex'
+        sections.style.width = 100 + '%'
+        wrapList.style.height = '';
         const comeback = document.querySelector('.comeback')
         comeback.style.display = 'none'
+        visualGrafics.style.display = 'none'
         const main = document.querySelector('.main')
         main.style.display = 'flex' ? main.style.display = 'none' : null
         document.querySelector('.mobile_active').classList.remove('mobile_active')
@@ -396,6 +447,10 @@ btnShina.forEach(el => {
         if (activGraf) {
             mainblock()
         }
+        if (widthWind <= 860) {
+            sections.style.display = 'none'
+            wrapleft.style.display = 'none'
+        }
     })
 })
 
@@ -593,6 +648,7 @@ export async function pr() {
 
 const plug = document.querySelectorAll('.plug')
 plug[2].addEventListener('click', () => {
+
     const twoframe = document.querySelector('.twoframe')
     twoframe.style.display = 'none'
     const wRight = document.querySelector('.wrapper_right')
@@ -605,22 +661,30 @@ plug[2].addEventListener('click', () => {
     const wrapList = document.querySelector('.wrapList')
     const techInfo = document.querySelector('.techInfo')
     plug[2].classList.add('activGraf')
-    wrapList.style.overflowY = 'auto';
-    wrapList.style.height = '300px';
-    model.style.zoom = '0.65'
-    model.style.MozTransformOrigin = "top"
-    model.style.MozTransform = "scale(0.65)"
-    model.style.maxHeight = "550px"
     wRight.style.display = 'none';
     techInfo.style.display = 'none';
     wLeft.style.display = 'none';
     grafics.style.display = 'flex';
-    visualGrafics.style.display = 'flex';
-    main.style.flexDirection = 'column'
-    model.style.width = '50%'
-    model.style.marginLeft = '0'
-    sections.style.width = '40%'
-    visualGrafics.prepend(model);
+    if (widthWind > 860) {
+        wrapList.style.overflowY = 'auto';
+        wrapList.style.height = '300px';
+        model.style.zoom = '0.65'
+        model.style.MozTransformOrigin = "top"
+        model.style.MozTransform = "scale(0.65)"
+        model.style.maxHeight = "550px"
+        wRight.style.display = 'none';
+        techInfo.style.display = 'none';
+        wLeft.style.display = 'none';
+        grafics.style.display = 'flex';
+        visualGrafics.style.display = 'flex';
+        main.style.flexDirection = 'column'
+        model.style.width = '50%'
+        model.style.marginLeft = '0'
+        sections.style.width = '40%'
+
+        visualGrafics.prepend(model);
+    }
+
     const mapss = document.getElementById('mapOil')
     if (mapss) {
         mapss.remove();

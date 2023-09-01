@@ -7,6 +7,16 @@ let socked;
 module.exports = {
     socked
 }*/
+
+exports.createIndexDataToDatabase = async () => {
+    const selectBase = `CREATE INDEX idx_id ON chartData(idw, data)`
+    connection.query(selectBase, function (err, results) {
+        if (err) console.log(err);
+        console.log(results)
+    })
+}
+
+
 //сохраняем в базу параметры и обновляем их
 exports.saveDataToDatabase = async (name, idw, param, time) => {
     param.forEach(el => {
@@ -79,16 +89,29 @@ exports.saveChartDataToBase = async (mass) => {
 };
 
 exports.saveStructuraToBase = async (mass) => {
-    const data = mass[0]
-    const idw = mass[1]
+    const data = mass[0];
+    const idw = mass[1];
+    const info = mass[2]
+    console.log('структура')
     try {
-        const postModel = `SELECT * FROM structura WHERE data=? AND idw=?`
+        const postModel = `SELECT info FROM structura WHERE data = ? AND idw = ?`;
         connection.query(postModel, [data, idw], function (err, results) {
             if (err) console.log(err);
             if (results.length === 0) {
-                const sql = `INSERT INTO structura( data,idw,info) VALUES ?`;
+                const sql = `INSERT INTO structura (data, idw, info) VALUES ?`;
                 connection.query(sql, [[mass]], function (err, results) {
                     if (err) console.log(err);
+                    console.log('запись сделана')
+                });
+            }
+            else {
+                const postModel = `UPDATE structura  SET data='${data}',idw='${idw}',info='${info}' WHERE data = ? AND idw = ?`
+                connection.query(postModel, [data, idw], function (err, results) {
+                    if (err) {
+                        console.log(err)
+
+                    }
+                    console.log('апдейт')
                 })
             }
         });

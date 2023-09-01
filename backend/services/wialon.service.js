@@ -127,6 +127,9 @@ exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
         //}
     })
 };
+
+
+
 //запрос данных на виалон по объекту и получение параметров
 exports.getDataFromWialon = async (login) => {
     return new Promise(async function (resolve, reject) {

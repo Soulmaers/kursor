@@ -1,17 +1,38 @@
-import { fnTime, fnPar, fnParMessage } from '../grafiks.js'
 import { Tooltip } from '../../class/Tooltip.js'
-import { testovfn } from './bar.js'
+import { testovfn, convertTineAll } from './bar.js'
 import { createMapsUniq } from '../geo.js'
 //import { dostupObject } from '../../../../backend/services/database.service.js'
 
 
 export async function oil(t1, t2) {
+    console.log(t1, t2)
     console.log('график топлива')
     const noGraf = document.querySelector('.noGraf')
     const active = document.querySelector('.color').id
     const nameCar = document.querySelector('.color').children[0].textContent
     console.log(nameCar)
+    //  const tt1 = convertTineAll(t1)
+    //  const tt2 = convertTineAll(t1)
+
     const ttt = await testovfn(active, t1, t2)
+    /* const param = {
+         method: "POST",
+         headers: {
+             'Content-Type': 'application/json',
+         },
+         body: (JSON.stringify({ active, tt1, tt2 }))
+     }
+     const rest = await fetch('/api/viewStructura', param)
+     const resultt = await rest.json()
+     function parseInfo(data) {
+         return data.map(item => {
+             return {
+                 ...JSON.parse(item.info)
+             };
+         });
+     }
+     const dat = parseInfo(resultt);
+     console.log(dat)*/
     const nameArr = JSON.parse(ttt[ttt.length - 1].allSensParams) //await fnParMessage(active)
     const itogy = ttt.map(it => {
         return {
@@ -23,7 +44,7 @@ export async function oil(t1, t2) {
             val: JSON.parse(it.sens)
         }
     })
-    console.log(itogy)
+
     if (itogy.length === 0) {
         console.log('нуллл')
         const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
@@ -174,10 +195,10 @@ export async function oil(t1, t2) {
         const info = document.createElement('div')
         info.classList.add('infos')
         graf.prepend(info)
-
+        var widthWind = document.querySelector('body').offsetWidth;
         // устанавливаем размеры контейнера
         const margin = { top: 10, right: 60, bottom: 50, left: 60 },
-            width = 800 - margin.left - margin.right,
+            width = widthWind >= 860 ? 800 - margin.left - margin.right : widthWind - 80,
             height = 500 - margin.top - margin.bottom;
         // создаем svg контейнер
         const svg = d3.select(".infoGraf").append("svg")

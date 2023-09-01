@@ -4,10 +4,7 @@ import { createMapsUniq } from '../geo.js'
 
 export function createJobTS(data, num) {
     // console.log(objectRazmetka)
-    const jobTSDetalisationLine = document.querySelectorAll('.jobTSDetalisationLine')
-    jobTSDetalisationLine.forEach(e => {
-        e.style.width = '200px'
-    })
+
     const chartStatic = document.querySelector(`.chartStatic${num}`)
     if (chartStatic) {
         chartStatic.remove();
@@ -23,8 +20,18 @@ export function createJobTS(data, num) {
         3: 'weekChart',
     }
     const dataArray = Object.entries(data).map(([category, value]) => ({ category, value }));
+
+    const windowStatistic = document.querySelector('.windowStatistic')
+    const chartJobTS = document.querySelector('.chartJobTS')
+    var widthWind = document.querySelector('body').offsetWidth;
+    const jobTSDetalisationLines = document.querySelector('.jobTSDetalisationLine')
+
+    jobTSDetalisationLines.style.width = ''
+    jobTSDetalisationLines.style.width = widthWind / 3 //widthWind / 3 - 15
+    chartJobTS.style.alignItems = 'center';
+    const width = widthWind < 860 ? widthWind / 3 - 15 : windowStatistic.clientWidth / 3 - 40//widthInPx; // Ширина графика
     // Задание размеров графика
-    var width = 220;
+    //   var width = 220;
     var height = 200;
 
     // Создание контейнера для графика
@@ -133,14 +140,16 @@ export function createChart(data, num) {
         }
         combinedData.push({ ...currentInterval });
         return combinedData;
-    }
 
+    }
+    const windowStatistic = document.querySelector('.windowStatistic')
+    var widthWind = document.querySelector('body').offsetWidth;
     const combinedData = combineIntervals(data);
-    const width = 674//widthInPx; // Ширина графика
+    const width = widthWind < 860 ? widthWind - 15 : windowStatistic.clientWidth - 40//widthInPx; // Ширина графика
     const svgHeight = 80; // Высота SVG элемента
     const margin = { top: 10, right: 20, bottom: 10, left: 50 };
     const height = svgHeight - margin.top - margin.bottom;
-
+    console.log(width)
     const objColor = {
         'Движется': ' #8fd14f',
         'Парковка': '#3399ff',
@@ -266,7 +275,17 @@ export function createMelagiTS(data, num) {
         chartStatic.remove();
     }
     const jobTSDetalisationLine = document.querySelector('.jobTSDetalisationLine')
-    jobTSDetalisationLine.style.width = '700px'
+
+
+    const windowStatistic = document.querySelector('.windowStatistic')
+    var widthWind = document.querySelector('body').offsetWidth;
+
+
+    jobTSDetalisationLine.style.width = ''
+    jobTSDetalisationLine.style.width = widthWind / 3 //widthWind / 3 - 15
+    chartJobTS.style.alignItems = 'center';
+    const width = widthWind < 860 ? widthWind - 5 : data.length * 50;
+
     jobTSDetalisationLine.style.display = 'flex'
     jobTSDetalisationLine.style.justifyContent = 'center'
 
@@ -275,10 +294,8 @@ export function createMelagiTS(data, num) {
 
     }
     console.log(data.length)
-    var width = data.length * 50;
+    //   var width = data.length * 50;
     var height = 250;
-
-
     var svg = d3.select(`.${obj[num]}`)
         .append("svg")
         .attr('class', `chartStatic${num}`)
@@ -291,7 +308,7 @@ export function createMelagiTS(data, num) {
     var yScale = d3.scaleLinear()
         .domain([0, maxValue * 1.3])
         .range([0, height + 20]);
-    const barWidth = 50 // Ширина каждого столбца с использованием .bandwidth()
+    const barWidth = widthWind < 860 ? widthWind / data.length : 50 // Ширина каждого столбца с использованием .bandwidth()
     // Создание столбцов
     svg.selectAll("rect")
         .data(data)
@@ -397,10 +414,7 @@ export function createOilTS(data, num) {
     legendaButton.forEach(el => {
         el.style.margin = '0 10px'
     })
-    const jobTSDetalisationLine = document.querySelectorAll('.jobTSDetalisationLine')
-    jobTSDetalisationLine.forEach(e => {
-        e.style.width = '200px'
-    })
+
     const chartStatic = document.querySelector(`.chartStatic${num}`)
     if (chartStatic) {
         chartStatic.remove();
@@ -417,7 +431,17 @@ export function createOilTS(data, num) {
     }
     const dataArray = Object.entries(data).map(([category, value]) => ({ category, value }));
     // Задание размеров графика
-    var width = 220;
+
+    const windowStatistic = document.querySelector('.windowStatistic')
+    const chartJobTS = document.querySelector('.chartJobTS')
+    var widthWind = document.querySelector('body').offsetWidth;
+    const jobTSDetalisationLines = document.querySelector('.jobTSDetalisationLine')
+
+    jobTSDetalisationLines.style.width = ''
+    jobTSDetalisationLines.style.width = widthWind / 3 //widthWind / 3 - 15
+    chartJobTS.style.alignItems = 'center';
+    const width = widthWind < 860 ? widthWind / 3 - 15 : windowStatistic.clientWidth / 3 - 40//widthInPx; // Ширина графика
+    // var width = 220;
     var height = 200;
     // Создание контейнера для графика
     var svg = d3.select(`.${obj[num]}`)

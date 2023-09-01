@@ -2,6 +2,7 @@
 const databaseService = require('../services/database.service');
 
 exports.datas = async (objects, now, old) => {
+
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
@@ -168,7 +169,7 @@ exports.datas = async (objects, now, old) => {
             mass.push(JSON.stringify(dat2))
 
             // console.log(mass)
-            const res = await databaseService.saveStructuraToBase(mass)
+            const res = dat2.length !== 0 ? await databaseService.saveStructuraToBase(mass) : console.log('пустой массив')
 
         }
     }
