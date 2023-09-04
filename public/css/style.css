@@ -2099,7 +2099,7 @@ div.spoyler {
 }
 
 .logosamosval {
-  width: 25%;
+  width: 50%;
   height: 70%;
   background-image: url(../image/sitrack.png);
   background-size: contain;
@@ -2115,7 +2115,7 @@ div.spoyler {
 }
 
 .logosamosval-pricep {
-  width: 25%;
+  width: 50%;
   height: 70%;
   background-image: url(../image/logosamosval-pricep.png);
   background-size: contain;
@@ -2273,7 +2273,7 @@ div.spoyler {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 30%
+  width: 50%
 }
 
 .titleCheck {
