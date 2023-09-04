@@ -167,21 +167,21 @@ logo.addEventListener('click', () => {
     sections.style.display = 'flex'
 })
 const auth = document.querySelector('.settings')
-const authClear = document.querySelector('.authClear')
+const authClear = document.querySelector('.close_settings')
+const account = document.querySelector('.settings_users')
+
 if (auth) {
     auth.addEventListener('click', (event) => {
         getUsers()
         event.stopPropagation();
-        const account = document.querySelector('.settings_users')
         account.style.display = 'flex'
         const setOne = document.querySelector('.set_one')
         setOne.classList.add('active_set')
         settingsRotate();
         new DraggableContainer(account)
-        new CloseBTN(account)
+        //  new CloseBTN(account)
     })
     authClear.addEventListener('click', () => {
-        const account = document.querySelector('.account')
         account.style.display = 'none'
     })
 }
