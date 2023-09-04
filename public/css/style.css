@@ -7221,6 +7221,7 @@ input[type="text"]:focus {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #fff;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
 .header_title_settings {
@@ -7350,6 +7351,8 @@ input[type="text"]:focus {
 .label_item {
   margin-left: 10px;
   color: rgba(6, 28, 71, 1);
+  font-size: 0.8rem;
+  font-weight: bold;
 }
 
 .uniqBar:hover .description {
@@ -7384,4 +7387,46 @@ input[type="text"]:focus {
   animation-duration: 1s;
   animation-timing-function: ease;
   animation-iteration-count: 1;
+}
+
+.nameSet:hover .alarmF {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+
+.tableAlarmSet {
+  width: 85%;
+  min-height: 200px;
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.upSet {
+  color: rgba(6, 28, 71, 1);
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.downSet {
+  color: rgba(6, 28, 71, 1);
+  color: rgba(6, 28, 71, 1);
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+
+}
+
+.nameSet {
+  text-align: left;
+}
+
+.lineSet {
+  border-bottom: 1px solid darkblue;
 }
