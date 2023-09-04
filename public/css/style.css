@@ -7430,3 +7430,11 @@ input[type="text"]:focus {
 .lineSet {
   border-bottom: 1px solid darkblue;
 }
+
+.fab {
+  width: 30px;
+}
+
+.uniqF {
+  width: 14px;
+}
