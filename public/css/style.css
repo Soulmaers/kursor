@@ -7352,6 +7352,10 @@ input[type="text"]:focus {
   color: rgba(6, 28, 71, 1);
 }
 
+.uniqBar:hover .description {
+  color: gray;
+}
+
 .description {
   color: lightgray;
   margin-left: 25px;
