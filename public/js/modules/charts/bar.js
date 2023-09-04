@@ -977,12 +977,8 @@ async function grafikStartPress(dat2) {
         new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
     })
     function globalTooltip(time) {
-<<<<<<< HEAD
         const objTool = []
         console.log(dat2)
-=======
-        const objTool = [];
->>>>>>> 0237a119d56a10afb1ff719f5339f15e9eb4233e
         dat2.forEach(e => {
             e.val.forEach(el => {
                 if (el.dates.getTime() === time.getTime()) {
@@ -994,10 +990,7 @@ async function grafikStartPress(dat2) {
         const chart = document.querySelectorAll('.chart')
         char[char.length - 1].children[2].classList.add('last')
         char[char.length - 1].children[3].classList.add('last')
-<<<<<<< HEAD
         console.log(objTool)
-=======
->>>>>>> 0237a119d56a10afb1ff719f5339f15e9eb4233e
         let dav;
         let temp;
         for (let i = 0; i < chart.length; i++) {

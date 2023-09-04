@@ -5346,7 +5346,7 @@ input[type="text"]:focus {
 
 .sections {
   display: flex;
-  width: 450px;
+  /* min-width: 450px;*/
   display: flex;
 }
 
@@ -7124,4 +7124,42 @@ input[type="text"]:focus {
   font-family: Arial;
   border: 1px solid #000;
 
+}
+
+
+
+
+
+
+
+
+
+
+
+.list_item_list {
+  width: 100px;
+  margin: 0 5px;
+}
+
+.list_name2,
+.list_profil2,
+.list_trail2 {
+  width: 100px;
+}
+
+
+
+.popup-background {
+  position: fixed;
+  /* зафиксировать позицию элемента */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* цвет фона с прозрачностью */
+  z-index: 1;
+  /* Установить меньший z-index, чем у основного содержимого */
+  display: none;
+  /* Скрыть элемент, когда он не нужен */
 }

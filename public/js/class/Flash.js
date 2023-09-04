@@ -68,6 +68,8 @@ export class CloseBTN {
             if (!isClickedOnElem1 && !isClickedOnElem2 && !isClickedOnElem3) {
                 this.elem1.style.display = 'none';
                 this.elem1.classList.remove('clickLog')
+                const pop = document.querySelector('.popup-background')
+                pop.style.display = 'none'
             }
         }
         if (this.elem4) {
@@ -82,6 +84,8 @@ export class CloseBTN {
                 if (mapss) {
                     mapss.remove();
                 }
+                const pop = document.querySelector('.popup-background')
+                pop.style.display = 'none'
             }
         }
         else {
@@ -89,6 +93,8 @@ export class CloseBTN {
             if (!isClickedOnElem1) {
                 console.log('закрыли')
                 this.elem1.style.display = 'none';
+                const pop = document.querySelector('.popup-background')
+                pop.style.display = 'none'
             }
         }
 

@@ -164,6 +164,8 @@ export async function logsView(array) {
             const wrapperLogs = document.querySelector('.alllogs')
             async function togglePopup() {
                 if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
+                    const pop = document.querySelector('.popup-background')
+                    pop.style.display = 'block'
                     wrapperLogs.style.display = 'block'// Показываем попап
                     wrapperLogs.classList.add('clickLog')
                     const trEvent = document.querySelectorAll('.trEvent')
@@ -183,6 +185,7 @@ export async function logsView(array) {
                 } else {
                     wrapperLogs.style.display = 'none'; // Скрываем попап
                     wrapperLogs.classList.remove('clickLog')
+
                 }
             }
             const numy = document.querySelector('.num')
@@ -197,7 +200,9 @@ export async function logsView(array) {
                 event.stopPropagation();
                 togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
             });
+
             new CloseBTN(wrapperLogs, log, numy)
+
         }
 
     }).catch(error => {
