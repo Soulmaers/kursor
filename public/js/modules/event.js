@@ -18,7 +18,7 @@ import { getStat } from './charts/stat.js'
 import { conf } from './altConfig.js'
 import { viewTech } from './tech.js'
 import { element } from './startAllStatic.js'
-
+import { settingsRotate } from './settingsRotate.js'
 
 
 
@@ -166,14 +166,17 @@ logo.addEventListener('click', () => {
     start.style.width = 100 + '%'
     sections.style.display = 'flex'
 })
-const auth = document.querySelector('.auth')
+const auth = document.querySelector('.settings')
 const authClear = document.querySelector('.authClear')
 if (auth) {
     auth.addEventListener('click', (event) => {
         getUsers()
         event.stopPropagation();
-        const account = document.querySelector('.account')
+        const account = document.querySelector('.settings_users')
         account.style.display = 'flex'
+        const setOne = document.querySelector('.set_one')
+        setOne.classList.add('active_set')
+        settingsRotate();
         new DraggableContainer(account)
         new CloseBTN(account)
     })

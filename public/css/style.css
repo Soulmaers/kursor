@@ -148,7 +148,7 @@ body {
   background-image: url(../image/logs.png);
   background-size: cover;
   border-radius: 10px;
-  margin: 0 25px;
+  margin: 0 15px;
   cursor: pointer;
   display: flex;
   align-items: end;
@@ -276,22 +276,12 @@ body {
 }
 
 .account {
-  display: none;
-  background-color: rgba(6, 28, 71, 1);
-  width: 650px;
-  height: 500px;
-  border: 1px solid gray;
-  position: absolute;
-  left: 500px;
-  top: 30px;
-  padding: 5px;
+  display: flex;
+  height: 560px;
   font-family: Arial;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-  z-index: 2500;
-  cursor: move;
+  border-radius: 0 0 10px 0;
 }
-
 
 .btnWrap {
   background-color: rgba(6, 28, 71, 1);
@@ -347,14 +337,12 @@ body {
 }
 
 .accountControl {
-  margin-top: 20px;
   width: 100%;
-  background-color: rgba(6, 28, 71, 1);
   position: relative;
-  border: 1px solid #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 0 0 10px 0;
 }
 
 .profilUser {
@@ -455,9 +443,10 @@ body {
 }
 
 .low_modal {
-  width: 100%;
+  width: 95%;
   display: flex;
   background-color: rgba(6, 28, 71, 1);
+  min-height: 400px;
 }
 
 .titleForm {
@@ -565,7 +554,10 @@ input[type="checkbox"]::before {
 
 
 .titleAccount {
-  color: #fff
+  color: rgba(6, 28, 71, 1);
+  height: 36px;
+  margin: 0;
+  line-height: 40px;
 }
 
 .usersTitle {
@@ -826,7 +818,6 @@ input[type="checkbox"]::before {
 
 .singUpForm {
   width: 50%;
-  border: 1px solid #fff;
   display: flex;
   flex-direction: column;
   margin: 0 2px;
@@ -835,7 +826,6 @@ input[type="checkbox"]::before {
 
 .listAccount {
   width: 50%;
-  border: 1px solid #fff;
   display: flex;
   flex-direction: column;
   margin: 0 2px;
@@ -1231,8 +1221,7 @@ div.spoyler {
 
 .control_panel {
   display: flex;
-  flex-direction: column;
-
+  align-items: center;
   padding: 10px 0;
 }
 
@@ -7162,4 +7151,148 @@ input[type="text"]:focus {
   /* Установить меньший z-index, чем у основного содержимого */
   display: none;
   /* Скрыть элемент, когда он не нужен */
+}
+
+.settings {
+  width: 40px;
+  height: 40px;
+  background-image: url(../image/set.png);
+  background-size: cover;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+
+
+
+.settings:hover {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+.logs:hover {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(20deg);
+  }
+
+  40% {
+    transform: rotate(-20deg);
+  }
+
+  60% {
+    transform: rotate(15deg);
+  }
+
+  80% {
+    transform: rotate(-15deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+
+
+
+.settings_users {
+  width: 1000px;
+  height: 600px;
+  display: none;
+  flex-direction: column;
+  border: 1px solid darkblue;
+  box-sizing: border-box;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+}
+
+.header_title_settings {
+  height: 40px;
+  background-color: rgba(6, 28, 71, 1);
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.info_settings,
+.close_settings {
+  color: #fff;
+  font-size: 1rem;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  margin: 5px;
+}
+
+.container_settings {
+  display: flex;
+}
+
+.content_setting {
+  width: 70%;
+  height: 560px;
+}
+
+.close_settings {
+  cursor: pointer;
+}
+
+.nav_settings {
+  width: 30%;
+  height: 560px;
+  background-color: rgba(6, 28, 71, 1);
+  border-radius: 0 0 0 10px;
+}
+
+.list_settings {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item_settings {
+  color: #fff;
+  font-size: 0.9rem;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  padding: 10px 5px;
+  cursor: pointer;
+}
+
+.active_set {
+  color: rgba(6, 28, 71, 1);
+  background-color: #fff;
+}
+
+.fas {
+  width: 20px;
+}
+
+.item_settings {
+  position: relative;
+}
+
+.item_settings:hover .fas {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
 }
