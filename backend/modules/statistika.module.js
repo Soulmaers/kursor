@@ -427,7 +427,7 @@ function rashodCalc(data, name, group, idw) {
     const lastData = data.value[data.value.length - 1];
     if (zapravka.length !== 0) {
         const diff = (Number(new Date().getTime() / 1000).toFixed(0)) - (zapravka[zapravka.length - 1][1][1].getTime() / 1000)
-        if (diff > 300) {
+        if (diff > 600) {
             console.log(zapravka + 'условие')
             modalView(zapravka, name, group, idw);
         }
@@ -436,7 +436,6 @@ function rashodCalc(data, name, group, idw) {
         for (let i = 0; i < zapravka.length - 1; i++) {
             rash.push(zapravka[i][1][0] - zapravka[i + 1][0][0]);
         }
-        console.log(zapravka[zapravka.length - 1][1][0], lastData)
         rash.push(zapravka[zapravka.length - 1][1][0] - lastData);
     }
     else {
@@ -463,8 +462,10 @@ function timefn() {
 
 
 async function modalView(zapravka, name, group, idw) {
+    //console.log(zapravka)
     //console.log(zapravka[zapravka.length - 1][1][0] - zapravka[zapravka.length - 1][0][0])
     const litrazh = parseFloat((zapravka[zapravka.length - 1][1][0] - zapravka[zapravka.length - 1][0][0]).toFixed(0))
+    console.log(litrazh)
     const geo = zapravka[zapravka.length - 1][0][2]
     const time = zapravka[zapravka.length - 1][0][1]
     const day = time.getDate();
