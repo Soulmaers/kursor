@@ -1,10 +1,11 @@
 
 
 
-const objViewContent = {
+export const objViewContent = {
     set_one: 'account',
     set_two: 'listView',
-    set_three: 'notification'
+    set_three: 'notification',
+    set_four: 'contactSet'
 }
 
 

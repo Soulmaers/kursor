@@ -7313,7 +7313,8 @@ input[type="text"]:focus {
 }
 
 .listView,
-.notification {
+.notification,
+.contactSet {
   display: none;
   height: 560px;
   font-family: Arial;
@@ -7396,8 +7397,23 @@ input[type="text"]:focus {
   animation-iteration-count: 1;
 }
 
+.addContact:hover .conF {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
 
 .tableAlarmSet {
+  width: 85%;
+  min-height: 200px;
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.contact_set_add {
   width: 85%;
   min-height: 200px;
   background-color: #fff;
@@ -7414,7 +7430,6 @@ input[type="text"]:focus {
 }
 
 .downSet {
-  color: rgba(6, 28, 71, 1);
   color: rgba(6, 28, 71, 1);
   font-size: 0.8rem;
   font-weight: bold;
@@ -7437,4 +7452,36 @@ input[type="text"]:focus {
 
 .uniqF {
   width: 14px;
+}
+
+.usersTitleSet {
+  margin: 5px 2px;
+  display: flex;
+  width: 95%;
+  font-family: Arial;
+  font-weight: bold;
+  font-size: 0.9rem;
+  background-color: #fff;
+}
+
+.emailTitle,
+.phoneTitle,
+.addContact {
+  margin: 5px 2px;
+  display: flex;
+  width: 30%;
+  font-family: Arial;
+  font-weight: bold;
+  font-size: 0.9rem;
+  background-color: #fff;
+  color: rgba(6, 28, 71, 1);
+}
+
+.addContact {
+  width: 40%;
+}
+
+.fa-plus {
+  margin-left: 15px;
+  cursor: pointer;
 }

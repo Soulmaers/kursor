@@ -61,12 +61,15 @@
         </div>
 
         <div class="headerAdmin">
-            <% if (role!=='Пользователь' ) { %><%-include('admin') %>
-                    <% } %>
-                        <div class="logs">
-                            <div class="num"></div>
-                        </div>
-                        <%-include('profile') %>
+            <div class="control_panel">
+                <a class="settings"></a>
+                <a class="configs">Конфигуратор</a>
+
+            </div>
+            <div class="logs">
+                <div class="num"></div>
+            </div>
+            <%-include('profile') %>
         </div>
     </header>
     <div class="comeback">
@@ -849,7 +852,7 @@
                             <li class="uniqBar">
                                 <input type="checkbox" id="checkbox2">
                                 <i class="fas fa-compress-arrows-alt f"></i> <label class="label_item" for="checkbox2">
-                                    Состояние</label><span class="description">описание статуса объекта (движеться,
+                                    Состояние</label><span class="description">описание статуса объекта (движется,
                                     парковка, ТС не на связи)</span>
                             </li>
                             <li class="uniqBar">
@@ -896,7 +899,22 @@
                     </div>
                     <div class="buttonSaveSettings"> <i class="saveIcon fas fa-sd-card"></i> Сохранить настройки</div>
                 </div>
+                <div class="content_set contactSet">
+                    <h3 class="titleAccount">Настройка оповещений</h3>
+                    <div class="content_list_settings">
+                        <div class="contact_set_add">
+                            <div class="header_contact">
+                                <li class="usersTitleSet"><span class="emailTitle">Email</span><span
+                                        class="phoneTitle">Телефон</span>
+                                    <span class="addContact">Добавить контакт <i class="fas fa-plus conF"></i>
+                                    </span>
+                                </li>
 
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
                 <div class="content_set notification">
                     <h3 class="titleAccount">Настройка уведомлений</h3>
                     <div class="content_list_settings">
