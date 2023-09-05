@@ -40,27 +40,40 @@ export function jobFormSET() {
 
 
 const emailValidation = () => {
+    const validTextInspect = document.querySelector('.valid_text')
+    if (validTextInspect) {
+        validTextInspect.remove();
+    }
     const emailInput = document.querySelector('.email_set');
+    const phoneInput = document.querySelector('.phone_set');
     // Приводим значение поля ввода email к нижнему регистру для упрощенной валидации.
     const email = emailInput.value.toLowerCase();
+    const phone = phoneInput.value
     // Паттерн для валидации email-адреса.
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // Валидация значение поля email.
-    if (emailPattern.test(email)) {
-        console.log('ok')
+    const setForm = document.querySelector('.set_form')
+    const validText = document.createElement('span')
+    validText.classList.add('valid_text')
+    validText.style.color = 'red'
+    validText.style.fontSize = '0.7rem'
 
-    } else {
-        console.log('ne ok')
-        const setForm = document.querySelector('.set_form')
-        const validText = document.createElement('span')
-        validText.style.color = 'red'
-        validText.style.fontSize = '0.7rem'
+    validText.style.width = '150px'
+    validText.style.position = 'absolute'
+    validText.style.top = '84%'
+    validText.style.left = '5%'
+    setForm.appendChild(validText)
+
+
+    // Валидация значение поля email.
+    if (email === '' && phone === '') {
+        validText.textContent = 'Добавьте контакты'
+    }
+    else if (!emailPattern.test(email)) {
         validText.textContent = 'Введите корректный e-mail'
-        validText.style.width = '150px'
-        validText.style.position = 'absolute'
-        validText.style.top = '84%'
-        validText.style.left = '5%'
-        setForm.appendChild(validText)
+    }
+    else {
+        console.log('ne ok')
+
     }
 }
 

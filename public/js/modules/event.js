@@ -213,7 +213,7 @@ addForm.addEventListener('click', () => {
 const closeForm = document.querySelector('.close_settings_form')
 closeForm.addEventListener('click', () => {
     document.querySelector('.set_form').style.display = 'none'
-    document.querySelector('.popup-background').style.display = 'none'
+    //  document.querySelector('.popup-background').style.display = 'none'
     account.style.zIndex = 2
 })
 const rotateDiv = document.querySelector('.rotateDiv')
