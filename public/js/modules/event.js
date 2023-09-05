@@ -207,12 +207,14 @@ const addForm = document.querySelector('.conF')
 addForm.addEventListener('click', () => {
     const pop = document.querySelector('.popup-background')
     pop.style.display = 'block'
+    account.style.zIndex = 0
     jobFormSET();
 })
 const closeForm = document.querySelector('.close_settings_form')
 closeForm.addEventListener('click', () => {
     document.querySelector('.set_form').style.display = 'none'
     document.querySelector('.popup-background').style.display = 'none'
+    account.style.zIndex = 2
 })
 const rotateDiv = document.querySelector('.rotateDiv')
 rotateDiv.addEventListener('click', () => {
