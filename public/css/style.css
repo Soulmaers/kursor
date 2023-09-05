@@ -7498,3 +7498,38 @@ input[type="text"]:focus {
   margin-left: 15px;
   cursor: pointer;
 }
+
+.set_form {
+  width: 280px;
+  height: 170px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  position: absolute;
+  left: 60%;
+  top: 35%;
+  transform: translate(-50%, -50%);
+  border: 1px solid darkblue;
+}
+
+.set_form_name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  border-radius: 10px 10px 0 0;
+  background-color: rgba(6, 28, 71, 1);
+}
+
+.set_form_header {
+  color: #fff;
+  box-sizing: border-box;
+  padding: 5px;
+  font-weight: bold;
+  line-height: 25px;
+}
+
+.close_settings_form {
+  color: #fff
+}
