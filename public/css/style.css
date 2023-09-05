@@ -1365,6 +1365,7 @@ div.spoyler {
 #map {
   width: 300px;
   height: 300px;
+  z-index: 0;
 
 }
 
@@ -2017,7 +2018,6 @@ div.spoyler {
   box-sizing: border-box;
   border: 1px solid lightgray;
   background-color: #fff;
-  z-index: 10;
 }
 
 .wrapper_up {
