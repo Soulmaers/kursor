@@ -69,7 +69,13 @@ export async function conturTest(testov) {
                 lowList.appendChild(group)
             const titleModal = document.createElement('div')
             titleModal.classList.add('titleModal')
-            titleModal.textContent = `${nameGroup}` + ' ' + '(' + `${el.length}` + ')'
+            if (login === 'Курсор') {
+                titleModal.textContent = `${'Компания...'}` + ' ' + '(' + `${el.length}` + ')'
+            }
+            else {
+                titleModal.textContent = `${nameGroup}` + ' ' + '(' + `${el.length}` + ')'
+            }
+
             group.appendChild(titleModal)
             const filterV = document.createElement('div')
             filterV.classList.add('filterV')
