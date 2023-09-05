@@ -3,7 +3,7 @@ const pool = require('../config/db')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 const express = require('express')
-
+const databaseService = require('../services/database.service');
 
 
 
@@ -65,6 +65,24 @@ module.exports.users = (req, res) => {
     catch (e) {
         console.log(e)
     }
+}
+
+exports.saveProfil = async (req, res) => {
+    const mass = req.body.mass
+    const params = await databaseService.saveToBaseProfil(mass)
+    res.json(params)
+}
+
+exports.findProfil = async (req, res) => {
+    const login = req.body.login
+    const params = await databaseService.findToBaseProfil(login)
+    res.json(params)
+}
+
+exports.deleteProfil = async (req, res) => {
+    const uniqId = req.body.uniqId
+    const params = await databaseService.deleteToBaseProfil(uniqId)
+    res.json(params)
 }
 
 

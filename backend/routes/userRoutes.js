@@ -24,6 +24,10 @@ router.post('/signup', controller.signup)
 router.post('/delete/:id', controller.delete)
 router.post('/update/:id', controller.update)
 router.get('/users', controller.users)
+router.post('/api/saveProfil', controller.saveProfil)
+router.post('/api/findProfil', controller.findProfil)
+router.post('/api/deleteProfil/:id', controller.deleteProfil)
 
 router.post('/api/checkObject', controller.checkObject)
 router.post('/api/viewCheckObject', controller.viewCheckObject)
+

@@ -786,6 +786,53 @@ exports.tarirSaveToBase = async (arr) => {
     })
 }
 
+module.exports.saveToBaseProfil = async (mass) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const postModel = `INSERT INTO profil (uniqId, login, role, email, phone) VALUES (?)`;
+            connection.query(postModel, [mass], function (err, results) {
+                if (err) console.log(err);
+                resolve({ result: results });
+            });
+        }
+        catch (e) {
+            console.log(e);
+        }
+    });
+}
+module.exports.deleteToBaseProfil = async (uniqId) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const selectBase = `DELETE FROM profil WHERE uniqId = '${uniqId}'`;
+            connection.query(selectBase, function (err, results) {
+                resolve({ status: 200, result: results, message: `Пользователь удален` })
+            })
+        }
+        catch (e) {
+            console.log(e)
+        }
+    });
+}
+
+
+module.exports.findToBaseProfil = async (login) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const postModel = `SELECT * FROM profil WHERE login='${login}'`
+            connection.query(postModel, function (err, results) {
+                if (err) console.log(err);
+                resolve({ result: results })
+            })
+        }
+        catch (e) {
+            console.log(e)
+        }
+    })
+}
+
+
+
+
 module.exports.tarirViewToBase = async (idw) => {
     return new Promise((resolve, reject) => {
         try {

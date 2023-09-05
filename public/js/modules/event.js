@@ -155,6 +155,11 @@ mobileItem.forEach(el => {
         }
     })
 })
+
+
+
+
+
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
     const main = document.querySelector('.main')
@@ -170,6 +175,7 @@ logo.addEventListener('click', () => {
 const auth = document.querySelector('.settings')
 const authClear = document.querySelector('.close_settings')
 const account = document.querySelector('.settings_users')
+
 
 if (auth) {
     auth.addEventListener('click', (event) => {
@@ -191,6 +197,8 @@ if (auth) {
         else {
             getUsers()
             setOne.classList.add('active_set')
+            const navClick = document.querySelector(`.${objViewContent[setOne.getAttribute('rel')]}`)
+            navClick.style.display = 'flex'
         }
         settingsRotate();
         new DraggableContainer(account)
@@ -198,6 +206,12 @@ if (auth) {
     })
     authClear.addEventListener('click', () => {
         account.style.display = 'none'
+        const navItem = document.querySelector('.active_set')
+        navItem.classList.remove('active_set')
+        const contentSet = document.querySelectorAll('.content_set')
+        contentSet.forEach(e => {
+            e.style.display = 'none'
+        })
         const pop = document.querySelector('.popup-background')
         pop.style.display = 'none'
     })
@@ -210,6 +224,10 @@ addForm.addEventListener('click', () => {
     account.style.zIndex = 0
     jobFormSET();
 })
+
+
+
+
 const closeForm = document.querySelector('.close_settings_form')
 closeForm.addEventListener('click', () => {
     if (document.querySelector('.valid_text')) {
