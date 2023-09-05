@@ -7584,3 +7584,35 @@ input[type="text"]:focus {
 input:focus {
   outline: none;
 }
+
+.item_contact_set {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid rgba(6, 28, 71, 1);
+  color: rgba(6, 28, 71, 1);
+}
+
+.icon_set {
+  margin-left: 130px;
+}
+
+.body_set {
+  width: 95%;
+}
+
+.view_email,
+.view_phone {
+  padding: 5px;
+  width: 30%;
+}
+
+.fa-trash-alt {
+  cursor: pointer;
+}
+
+.fa-trash-alt:hover {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
