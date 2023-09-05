@@ -27,3 +27,43 @@ export function settingsRotate() {
 
     })
 }
+
+
+export function jobFormSET() {
+    const setForm = document.querySelector('.set_form')
+    setForm.style.display = 'flex'
+
+    const setFormButton = document.querySelector('.set_form_button');
+    setFormButton.addEventListener('click', emailValidation)
+
+}
+
+
+const emailValidation = () => {
+    const emailInput = document.querySelector('.email_set');
+    // Приводим значение поля ввода email к нижнему регистру для упрощенной валидации.
+    const email = emailInput.value.toLowerCase();
+    // Паттерн для валидации email-адреса.
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Валидация значение поля email.
+    if (emailPattern.test(email)) {
+        console.log('ok')
+
+    } else {
+        console.log('ne ok')
+        const setForm = document.querySelector('.set_form')
+        const validText = document.createElement('span')
+        validText.style.color = 'red'
+        validText.style.fontSize = '0.7rem'
+        validText.textContent = 'Введите корректный e-mail'
+        validText.style.width = '150px'
+        validText.style.position = 'absolute'
+        validText.style.top = '84%'
+        validText.style.left = '5%'
+        setForm.appendChild(validText)
+    }
+}
+
+
+
+

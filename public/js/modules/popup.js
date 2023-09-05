@@ -164,8 +164,6 @@ export async function logsView(array) {
             const wrapperLogs = document.querySelector('.alllogs')
             async function togglePopup() {
                 if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
-                    const pop = document.querySelector('.popup-background')
-                    pop.style.display = 'block'
                     wrapperLogs.style.display = 'block'// Показываем попап
                     wrapperLogs.classList.add('clickLog')
                     const trEvent = document.querySelectorAll('.trEvent')

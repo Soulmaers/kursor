@@ -7160,7 +7160,8 @@ input[type="text"]:focus {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: gray;
+  opacity: 0.9;
   /* цвет фона с прозрачностью */
   z-index: 1;
   /* Установить меньший z-index, чем у основного содержимого */
@@ -7235,6 +7236,7 @@ input[type="text"]:focus {
   transform: translate(-50%, -50%);
   background-color: #fff;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+  z-index: 2;
 }
 
 .header_title_settings {
@@ -7403,6 +7405,26 @@ input[type="text"]:focus {
   animation-iteration-count: 1;
 }
 
+.set_form_button {
+  font-size: 0.8rem;
+  color: #fff;
+  padding: 7px 10px;
+  background-color: rgba(6, 28, 71, 1);
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-right: 10px;
+  align-self: self-end;
+}
+
+.set_form_button:hover .saveIcon {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
 .nameSet:hover .alarmF {
   animation-name: wiggle;
   animation-duration: 1s;
@@ -7502,14 +7524,18 @@ input[type="text"]:focus {
 .set_form {
   width: 280px;
   height: 170px;
-  display: flex;
+  display: none;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   border-radius: 10px;
   position: absolute;
-  left: 60%;
-  top: 35%;
+  left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
   border: 1px solid darkblue;
+  z-index: 2;
+  background-color: #fff;
 }
 
 .set_form_name {
@@ -7531,5 +7557,30 @@ input[type="text"]:focus {
 }
 
 .close_settings_form {
+  cursor: pointer;
   color: #fff
+}
+
+.set_form_body {
+  text-align: center;
+  width: 250px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.form_input_set {
+  height: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 5px;
+  color: rgba(6, 28, 71, 1);
+  font-weight: 500;
+  font-size: 0.8rem;
+  border: none;
+  border-bottom: 1px solid rgba(6, 28, 71, 1);
+}
+
+input:focus {
+  outline: none;
 }

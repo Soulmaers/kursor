@@ -18,7 +18,7 @@ import { getStat } from './charts/stat.js'
 import { conf } from './altConfig.js'
 import { viewTech } from './tech.js'
 import { element } from './startAllStatic.js'
-import { settingsRotate, objViewContent } from './settingsRotate.js'
+import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 
 
 
@@ -174,8 +174,9 @@ const account = document.querySelector('.settings_users')
 if (auth) {
     auth.addEventListener('click', (event) => {
         const role = document.querySelectorAll('.log')[0].textContent
-
         event.stopPropagation();
+        const pop = document.querySelector('.popup-background')
+        pop.style.display = 'block'
         account.style.display = 'flex'
         const setOne = document.querySelector('.set_one')
         const setTwo = document.querySelector('.set_two')
@@ -197,8 +198,22 @@ if (auth) {
     })
     authClear.addEventListener('click', () => {
         account.style.display = 'none'
+        const pop = document.querySelector('.popup-background')
+        pop.style.display = 'none'
     })
 }
+
+const addForm = document.querySelector('.conF')
+addForm.addEventListener('click', () => {
+    const pop = document.querySelector('.popup-background')
+    pop.style.display = 'block'
+    jobFormSET();
+})
+const closeForm = document.querySelector('.close_settings_form')
+closeForm.addEventListener('click', () => {
+    document.querySelector('.set_form').style.display = 'none'
+    document.querySelector('.popup-background').style.display = 'none'
+})
 const rotateDiv = document.querySelector('.rotateDiv')
 rotateDiv.addEventListener('click', () => {
     const rotates = document.querySelectorAll('.rotates')
