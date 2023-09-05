@@ -80,6 +80,8 @@ function viewListContact(email, phone) {
     const bodySet = document.querySelector('.body_set')
     const newList = document.createElement('li');
     newList.classList.add('item_contact_set');
+    const uniqId = Math.random().toString(36).substr(2, 5)
+    newList.setAttribute('id', uniqId);
     newList.innerHTML = `
         <div class="view_email">${email}</div>
         <div class="view_phone">${phone}</div>

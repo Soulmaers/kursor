@@ -7504,12 +7504,24 @@ input[type="text"]:focus {
 .addContact {
   margin: 5px 2px;
   display: flex;
-  width: 30%;
+  justify-content: center;
   font-family: Arial;
   font-weight: bold;
   font-size: 0.9rem;
   background-color: #fff;
   color: rgba(6, 28, 71, 1);
+}
+
+.addContact {
+  width: 40%;
+}
+
+.emailTitle {
+  width: 35%;
+}
+
+.phoneTitle {
+  width: 25%
 }
 
 .addContact {
@@ -7604,6 +7616,9 @@ input:focus {
 .view_phone {
   padding: 5px;
   width: 30%;
+  display: flex;
+  justify-content: center;
+  font-size: 0.8rem;
 }
 
 .fa-trash-alt {
