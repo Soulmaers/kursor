@@ -89,19 +89,20 @@ mobileItem.forEach(el => {
             wrapFull.style.height = ''
             contentCard.forEach(it => {
                 it.style.width = 96 + '%'
-                it.style.height = '550px'
+                it.style.minHeight = '550px'
                 it.style.margin = '2px'
                 if (!it.children[0]) {
 
                     it.remove();
                 }
                 else {
+                    //console.log(it.children[0].children[0].children[0])
                     it.children[0].children[0].children[0].style.width = 50 + '%'
-                    it.children[0].children[0].children[1].style.display = 'none'
-                    it.children[0].children[0].children[2].style.display = 'none'
-                    it.children[0].children[0].children[3].style.width = 50 + '%'
+                    //    it.children[0].children[0].children[1].style.display = 'none'
+                    //   it.children[0].children[0].children[2].style.display = 'none'
+                    // it.children[0].children[0].children[3].style.width = 50 + '%'
                     it.children[0].children[0].style.justifyContent = 'space-around'
-                    it.children[0].children[0].children[3].children[0].style.fontSize = '1rem'
+                    // it.children[0].children[0].children[3].children[0].style.fontSize = '1rem'
                     it.children[0].children[1].children[0].children[0].style.width = 50 + '%'
                     it.children[0].children[1].children[0].children[3].style.width = 20 + '%'
                     it.children[0].children[1].children[0].children[3].children[1].style.right = '40px'
