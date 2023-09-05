@@ -1,6 +1,4 @@
 
-
-
 export const objViewContent = {
     set_one: 'account',
     set_two: 'listView',
@@ -32,7 +30,6 @@ export function settingsRotate() {
 export function jobFormSET() {
     const setForm = document.querySelector('.set_form')
     setForm.style.display = 'flex'
-
     const setFormButton = document.querySelector('.set_form_button');
     setFormButton.addEventListener('click', emailValidation)
 
@@ -56,14 +53,11 @@ const emailValidation = () => {
     validText.classList.add('valid_text')
     validText.style.color = 'red'
     validText.style.fontSize = '0.7rem'
-
     validText.style.width = '150px'
     validText.style.position = 'absolute'
     validText.style.top = '84%'
     validText.style.left = '5%'
     setForm.appendChild(validText)
-
-
     // Валидация значение поля email.
     if (email === '' && phone === '') {
         validText.textContent = 'Добавьте контакты'
@@ -72,11 +66,28 @@ const emailValidation = () => {
         validText.textContent = 'Введите корректный e-mail'
     }
     else {
-        console.log('ne ok')
+        viewListContact(email, phone)
 
     }
 }
 
+function viewListContact(email, phone) {
+    document.querySelector('.set_form').style.display = 'none'
+    document.querySelector('.email_set').value = ''
+    document.querySelector('.phone_set').value = ''
+    const account = document.querySelector('.settings_users')
+    account.style.zIndex = 2;
+    const bodySet = document.querySelector('.body_set')
+    const newList = document.createElement('li');
+    newList.classList.add('item_contact_set');
+    newList.innerHTML = `
+        <div class="view_email">${email}</div>
+        <div class="view_phone">${phone}</div>
+        <div class="icon_set"><i class="fas fa-trash-alt"></i></div>
+    `;
+    bodySet.appendChild(newList);
+
+}
 
 
 

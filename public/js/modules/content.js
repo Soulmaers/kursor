@@ -62,6 +62,12 @@ export const textTest = `<div class=" osiTest">
     </div>`
 
 
+export const setViewContact = `  <li class="item_contact_set">
+                                    <div class="view_email"></div>
+                                    <div class="view_phone"></div>
+                                    <div class="icon_set"><i class="fas fa-trash-alt"></i></div>
+                                </li>`
+
 export const titleLogs = `<h3 class="trLogs">
                         <p class="tdLogs">Дата</p>
                     <p class="tdLogs">Событие</p>

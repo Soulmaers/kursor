@@ -212,6 +212,11 @@ addForm.addEventListener('click', () => {
 })
 const closeForm = document.querySelector('.close_settings_form')
 closeForm.addEventListener('click', () => {
+    if (document.querySelector('.valid_text')) {
+        document.querySelector('.valid_text').textContent = ''
+    }
+    document.querySelector('.email_set').value = ''
+    document.querySelector('.phone_set').value = ''
     document.querySelector('.set_form').style.display = 'none'
     //  document.querySelector('.popup-background').style.display = 'none'
     account.style.zIndex = 2
