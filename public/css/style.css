@@ -166,7 +166,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 250px;
+  width: 300px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   background-color: #fff;
@@ -179,7 +179,7 @@ body {
 }
 
 .popup-header {
-  width: 250px;
+  width: 300px;
   margin-bottom: 10px;
   font-size: 1.5rem;
   text-align: center;
@@ -196,7 +196,7 @@ body {
 
 .body_content {
   margin: 5px 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: rgba(6, 28, 71, 1);
 
 }

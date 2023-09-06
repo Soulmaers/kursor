@@ -152,3 +152,23 @@ export class ResizeContainer {
         this.resizeHandle.style.transform = 'translateX(0)';
     }
 }
+
+
+
+export class ColumnHeaderManager {
+    constructor(columnHeaders) {
+        this.columnHeaders = columnHeaders;
+    }
+
+    moveColumnHeader(fromIndex, toIndex) {
+        if (fromIndex < 0 || fromIndex >= this.columnHeaders.length || toIndex < 0 || toIndex >= this.columnHeaders.length) {
+            console.log('Неверный индекс заголовка колонки');
+            return;
+        }
+
+        const columnHeader = this.columnHeaders[fromIndex];
+        this.columnHeaders.splice(fromIndex, 1);
+        this.columnHeaders.splice(toIndex, 0, columnHeader);
+    }
+}
+
