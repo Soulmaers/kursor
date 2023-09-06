@@ -4846,7 +4846,7 @@ div.wrapper {
 }
 
 .container_flash {
-  width: 180px;
+  width: 220px;
   display: flex;
   flex-direction: column;
 
@@ -6184,7 +6184,7 @@ input[type="text"]:focus {
   }
 
   .container_flash {
-    width: 120px;
+    width: 220px;
     padding: 1px 1px;
     margin: 2px;
     border: 1px solid #fff;

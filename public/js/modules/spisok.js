@@ -46,7 +46,7 @@ export async function conturTest(testov) {
         .map(e => e[4])
 
     const final = await alternativa(result)
-    console.log(final)
+
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         removeArrElem(groups)
@@ -143,6 +143,7 @@ export async function conturTest(testov) {
                 let oil;
                 let pwr;
                 let statusnew;
+                let sats;
                 final.forEach(i => {
                     if (i[0] === 'Зажигание' && i[2] === elem[4]) {
                         in1 = i[3] === -348201.3876 ? 'no' : i[3]
@@ -154,6 +155,7 @@ export async function conturTest(testov) {
                         pwr = i[3] === -348201.3876 ? 'no' : parseFloat(i[3].toFixed(1))
                     }
                 })
+
                 if (elem[0].result) {
                     const modelUniq = convert(elem[0].result)
                     modelUniq.forEach(os => {
@@ -184,15 +186,20 @@ export async function conturTest(testov) {
                         r.push(el.tyresdiv)
                     })
                     elem[2].result.forEach((el) => {
+                        if (el.name === 'sats') {
+                            sats = el.value
+                        }
                         modelUniqValues.forEach((item) => {
                             if (el.name == item.pressure) {
+
                                 shina.forEach(e => {
                                     if (e.id == item.tyresdiv) {
+                                        // console.log(elem[4], el.status, in1)
                                         if (el.status === 'false' && in1 === 1) {
                                             e.children[0].style.fill = 'gray'
                                             return
                                         }
-                                        if (in1 === 0) {
+                                        if (in1 === 0 || in1 === 'no') {
                                             e.children[0].style.fill = '#000'
                                             //  e.children[0].style.background = 'lightgray';
                                             //  e.children[1].style.color = 'lightgray'
@@ -220,7 +227,8 @@ export async function conturTest(testov) {
                     oil: [oil, oil],
                     type: [type, type],
                     pwr: [pwr, pwr],
-                    statusnew: [statusnew, `<i class="fas fa-power-off"></i>`]
+                    statusnew: [statusnew, `<i class="fas fa-power-off"></i>`],
+                    sats: [sats, sats]
                 }
                 for (let i = 0; i < countElem.length; i++) {
                     const newClass = countElem[i].getAttribute('rel')
@@ -233,6 +241,7 @@ export async function conturTest(testov) {
                     i === 2 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
                     i === 3 && iconValues[newClass][0] === 'Тип ТС' || i === 3 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
                     i === 4 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
+                    i === 5 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
                     listItemCar.appendChild(newCel)
                 }
             })
@@ -244,8 +253,6 @@ export async function conturTest(testov) {
     setTimeout(zaprosSpisok, 1000)
 
 }
-
-
 export async function alternativa(arr) {
     return new Promise(async function (resolve, reject) {
         const allobj = {};
@@ -561,7 +568,6 @@ export async function zaprosSpisok() {
 }
 setInterval(zaprosSpisok, 120000)
 async function viewListKoleso(params, arg, osi, nameCar, inn) {
-    // console.log(params, arg, osi)
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
     if (params.result) {
