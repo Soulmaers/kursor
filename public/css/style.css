@@ -6114,6 +6114,7 @@ input[type="text"]:focus {
 
   .start {
     display: none;
+    height: 98vh;
   }
 
   .main_menu:hover {
