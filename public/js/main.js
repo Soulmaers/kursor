@@ -71,7 +71,7 @@ console.log(screen.height)
 const wrapperFull = document.querySelector('.wrapperFull')
 const lowList = document.querySelector('.low_list')
 const start = document.querySelector('.start')
-if (screen.width === 1366 && screen.height === 768) {
+if (screen.width >= 1366 && screen.height === 768) {
     // document.body.style.maxWidth = '1366px';
     document.body.style.minHeight = '768px';
     // wrapperFull.style.height = '693px'
