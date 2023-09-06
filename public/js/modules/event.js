@@ -45,11 +45,8 @@ for (let i = 0; i < rigthFrame.length; i++) {
     i !== 1 ? new Flash(strL, strR, leftFrame, sec) : new Flash(strL, strR, centerBlock)
     //  i !== 1 ? new ResizeContainer(sec, start, rigthFrame[i]) : new ResizeContainer(centerBlock, wrapleft, rigthFrame[i])
 }
-for (let i = 0; i < secondFlash.length; i++) {
 
-    i !== 1 ? new ResizeContainer(sec, start, secondFlash[i]) : new ResizeContainer(centerBlock, wrapleft, secondFlash[i])
-}
-
+new ResizeContainer(sec, start, secondFlash[0])
 
 mainMenu.addEventListener('click', (event) => {
     event.stopPropagation();

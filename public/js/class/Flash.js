@@ -139,12 +139,13 @@ export class ResizeContainer {
         if (!this.isResizing) {
             return;
         }
-
+        console.log(this.leftContainer)
+        console.log(this.rightContainer)
         const dx = event.clientX - this.initialX;
         const newLeftWidth = this.originalLeftContainerWidth + dx;
         const newRightWidth = this.originalRightContainerWidth - dx;
         this.leftContainer.style.width = `${newLeftWidth}px`;
-        this.rightContainer.style.width = 100 + '%'//`${newRightWidth}px`;
+        this.rightContainer.style.width = `${newRightWidth}px`;
 
         this.isResizing = false;
         this.initialX = null;
