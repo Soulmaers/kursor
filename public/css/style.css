@@ -1801,6 +1801,7 @@ div.spoyler {
 
 .hiddenModal {
   display: block;
+  width: 900px;
 }
 
 .windowStatistic {
@@ -2063,15 +2064,11 @@ div.spoyler {
 
 .start {
   width: 100%;
-  /* height: 98vh;*/
+  height: 98vh;
   display: none;
-  /*background-image: url(../image/start.png);*/
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center top;
-
   flex-wrap: wrap;
   padding: 5px;
+  background-color: #fff;
 }
 
 .content_card {
@@ -4991,9 +4988,7 @@ div.wrapper {
 
 .list_att {
   display: flex;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  width: 900px;
 }
 
 .configChange {
@@ -5004,6 +4999,7 @@ div.wrapper {
 
 .low_list {
   overflow: auto;
+
 }
 
 .list_item1 {
@@ -5355,7 +5351,7 @@ input[type="text"]:focus {
 .sections {
   display: flex;
   /* min-width: 450px;*/
-  display: flex;
+  width: 25%
 }
 
 .list_arr2 {
@@ -6606,7 +6602,7 @@ input[type="text"]:focus {
   }
 
   .listItem {
-    width: 100%;
+    width: 900px;
 
   }
 

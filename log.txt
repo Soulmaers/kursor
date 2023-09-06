@@ -496,6 +496,7 @@ Platform: undefined
 Device: Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1
 
 Username: soulmaers
+<<<<<<< HEAD
 Login time: Wed Sep 06 2023 14:49:49 GMT+0300 (Москва, стандартное время)
 Platform: undefined
 Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0
@@ -569,4 +570,194 @@ Username: admin
 Login time: Wed Sep 06 2023 15:24:53 GMT+0300 (Москва, стандартное время)
 Platform: undefined
 Device: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36
+=======
+Login time: Wed Sep 06 2023 14:50:33 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 14:53:50 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 14:59:16 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:09:03 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:11:13 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:14:08 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:15:35 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:16:14 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:16:26 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:16:41 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:18:03 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:18:16 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:18:41 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:20:50 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:27:45 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:28:07 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:28:50 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:29:14 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:30:36 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:31:27 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:32:00 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:39:07 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:41:18 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:41:34 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:41:56 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:43:14 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:44:22 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 15:57:23 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 16:00:29 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 16:02:31 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 16:03:05 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 16:03:22 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 16:04:43 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 16:04:58 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 16:06:34 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 16:07:22 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 16:08:48 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+
+Username: soulmaers
+Login time: Wed Sep 06 2023 16:09:22 GMT+0300 (Москва, стандартное время)
+Platform: "Windows"
+Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+>>>>>>> bb5bb16c4f677641619d77f3dd730ae316572f25
 
