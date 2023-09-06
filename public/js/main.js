@@ -71,14 +71,23 @@ console.log(screen.height)
 const wrapperFull = document.querySelector('.wrapperFull')
 const lowList = document.querySelector('.low_list')
 const start = document.querySelector('.start')
+if (screen.width < 860) {
+    const newColumn = document.querySelectorAll('.newColumn')
+    const newCel = document.querySelectorAll('.newCel')
+    newColumn.forEach(e => e.remove())
+    newCel.forEach(e => e.remove())
+
+}
 if (screen.width >= 1366 && screen.height === 768) {
     // document.body.style.maxWidth = '1366px';
     document.body.style.minHeight = '768px';
     // wrapperFull.style.height = '693px'
+    start.style.height = '98vh'
 } else if (screen.width === 1920 && screen.height === 1080) {
     document.body.style.minHeight = '1080px';
     // wrapperFull.style.height = '1005px'
 }
+
 console.log(wrapperFull.clientHeight)
 wrapperFull.style.minHeight = screen.height - 85 + 'px'
 lowList.style.height = wrapperFull.clientHeight - 20 + 'px';
@@ -89,6 +98,9 @@ async function waitAndExecute() {
 
     // Другой код, который должен выполниться после завершения работы функции zaprosSpisok
 }
+
+
+
 
 function waitForDOMLoad() {
     return new Promise((resolve) => {

@@ -175,6 +175,10 @@ module.exports.action = function (req, res) {
     if (req.user) {
         const login = req.user[0].name
         const role = req.user[0].role
+        const device = req.headers['user-agent'];
+        const platform = req.headers['sec-ch-ua-platform']
+        logLogin(login, platform, device)
+        console.log(req.ip)
         res.render('in.ejs', {
             user: login,
             role: role
@@ -185,6 +189,27 @@ module.exports.action = function (req, res) {
         res.render('form.ejs')
     }
 }
+
+
+const fs = require('fs');
+
+// Функция для записи логов
+function logLogin(username, platform, device) {
+    // Получение текущей даты и времени
+    const currentDate = new Date();
+    // Формирование строки с данными для записи
+    const logEntry = `Username: ${username}\nLogin time: ${currentDate}\nPlatform: ${platform}\nDevice: ${device}\n\n`;
+
+    // Запись строки в файл логов
+    fs.appendFile('log.txt', logEntry, (err) => {
+        if (err) {
+            console.error('Ошибка записи лога:', err);
+        } else {
+            console.log('Лог успешно записан');
+        }
+    });
+}
+
 
 
 module.exports.logout = async function (req, res, next) {

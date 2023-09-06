@@ -29,7 +29,7 @@ exports.getData = async (req, res) => {
         const token = await getTokenFromDB(login)
         console.log(token)
         const session = await wialonModule.login(token);
-        // console.log(session)
+        console.log('сессия' + ' ' + session)
         sessions[login] = session;
         res.json('сессия открыта')
         //  await updateParams(login);
@@ -58,7 +58,6 @@ exports.dataSpisok = async (req, res) => {
             login = 'i'
         }
         const data = await wialonService.getAllGroupDataFromWialon(login);
-        //  console.log(data)
         const aLLmassObject = [];
         const arrName = [];
         for (const elem of data.items) {

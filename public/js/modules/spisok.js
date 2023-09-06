@@ -46,6 +46,7 @@ export async function conturTest(testov) {
         .map(e => e[4])
 
     const final = await alternativa(result)
+    console.log(final)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         removeArrElem(groups)
@@ -99,6 +100,7 @@ export async function conturTest(testov) {
             group.classList.add(`${nameGroup}`)
             group.appendChild(hiddenModal)
             const listArr = document.querySelector(`.${nameGroup}`)
+            const countElem = document.querySelectorAll('.newColumn')
             el.forEach(async elem => {
                 const nameCar = elem[0].message.replace(/\s+/g, '')
                 const listItemCar = document.createElement('div')
@@ -122,29 +124,41 @@ export async function conturTest(testov) {
                 const listTrail = document.createElement('div')
                 listTrail.classList.add('list_trail2')
                 listItemCar.appendChild(listTrail)
-                if (nameCar === 'ЦистернаДТ') {
-                    listProfil.style.width = 60 + '%'
-                    removeElem(listTrail)
-                    const progress = document.createElement('div')
-                    progress.classList.add('progress')
-                    listProfil.appendChild(progress)
-                    const progressBar = document.createElement('div')
-                    progressBar.classList.add('progressBar')
-                    progress.appendChild(progressBar)
-                    const progressBarText = document.createElement('div')
-                    progressBarText.classList.add('progressBarText')
-                    progress.appendChild(progressBarText)
-                    fnStaticObjectOil(elem[4])
-                }
+                /* if (nameCar === 'ЦистернаДТ') {
+                     listProfil.style.width = 60 + '%'
+                     removeElem(listTrail)
+                     const progress = document.createElement('div')
+                     progress.classList.add('progress')
+                     listProfil.appendChild(progress)
+                     const progressBar = document.createElement('div')
+                     progressBar.classList.add('progressBar')
+                     progress.appendChild(progressBar)
+                     const progressBarText = document.createElement('div')
+                     progressBarText.classList.add('progressBarText')
+                     progress.appendChild(progressBarText)
+                     fnStaticObjectOil(elem[4])
+                 }*/
                 let in1;
+                let type;
+                let oil;
+                let pwr;
+                let statusnew;
                 final.forEach(i => {
                     if (i[0] === 'Зажигание' && i[2] === elem[4]) {
-                        in1 = i[3]
+                        in1 = i[3] === -348201.3876 ? 'no' : i[3]
+                    }
+                    if (i[0] === 'Топливо' && i[2] === elem[4]) {
+                        oil = i[3] === -348201.3876 ? 'no' : `${i[3].toFixed(0)} л.`
+                    }
+                    if (i[0].startsWith('Бортовое') && i[2] === elem[4]) {
+                        pwr = i[3] === -348201.3876 ? 'no' : parseFloat(i[3].toFixed(1))
                     }
                 })
                 if (elem[0].result) {
                     const modelUniq = convert(elem[0].result)
                     modelUniq.forEach(os => {
+                        type = os.type
+                        statusnew = os.tsiControll === '' ? 'no' : pwr > Number(os.tsiControll) ? 'ВКЛ' : 'ВЫКЛ';
                         const osi = document.createElement('div')
                         osi.classList.add('osi_list')
                         if (os.trailer !== 'Прицеп' && os.tyres === '2' || os.trailer !== 'Прицеп' && os.tyres === '4') {
@@ -200,6 +214,26 @@ export async function conturTest(testov) {
                             }
                         })
                     })
+                }
+                const iconValues = {
+                    ingine: [in1, `<i class="fas fa-key f "></i>`],
+                    oil: [oil, oil],
+                    type: [type, type],
+                    pwr: [pwr, pwr],
+                    statusnew: [statusnew, `<i class="fas fa-power-off"></i>`]
+                }
+                for (let i = 0; i < countElem.length; i++) {
+                    const newClass = countElem[i].getAttribute('rel')
+                    const newCel = document.createElement('div')
+                    newCel.classList.add('newCel')
+                    newCel.classList.add(`${newClass}`)
+                    newCel.innerHTML = iconValues[newClass][1]
+                    i === 0 && iconValues[newClass][0] === 'ВКЛ' ? newCel.children[0].classList.add('toogleIcon') : i === 0 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
+                    i === 1 && iconValues[newClass][0] === 1 ? newCel.children[0].classList.add('toogleIcon') : i === 1 && iconValues[newClass][0] === 'no' ? newCel.innerHTML = 'no' : null
+                    i === 2 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
+                    i === 3 && iconValues[newClass][0] === 'Тип ТС' || i === 3 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
+                    i === 4 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
+                    listItemCar.appendChild(newCel)
                 }
             })
         }
