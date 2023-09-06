@@ -15,7 +15,7 @@ async function createPopup(array) {
     // if (popap) {
     const pop = document.createElement('div')
     pop.classList.add('popup')
-    pop.style.top = position + '%'
+    //  pop.style.top = position + '%'
     body.prepend(pop)
     const popupHead = document.createElement('div')
     popupHead.classList.add('popup-header')

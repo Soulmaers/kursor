@@ -47,7 +47,6 @@ for (let i = 0; i < rigthFrame.length; i++) {
 }
 
 new ResizeContainer(sec, start, secondFlash[0])
-
 mainMenu.addEventListener('click', (event) => {
     event.stopPropagation();
     new CloseBTN(menu, mainMenu)

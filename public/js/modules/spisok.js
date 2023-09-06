@@ -144,6 +144,7 @@ export async function conturTest(testov) {
                 let pwr;
                 let statusnew;
                 let sats;
+                let meliage;
                 final.forEach(i => {
                     if (i[0] === 'Зажигание' && i[2] === elem[4]) {
                         in1 = i[3] === -348201.3876 ? 'no' : i[3]
@@ -154,13 +155,15 @@ export async function conturTest(testov) {
                     if (i[0].startsWith('Бортовое') && i[2] === elem[4]) {
                         pwr = i[3] === -348201.3876 ? 'no' : parseFloat(i[3].toFixed(1))
                     }
+                    if (i[0].startsWith('Одом') && i[2] === elem[4]) {
+                        meliage = i[3] === -348201.3876 ? 'no' : `${i[3].toFixed(0)} км.`
+                    }
                 })
 
                 if (elem[0].result) {
                     const modelUniq = convert(elem[0].result)
                     modelUniq.forEach(os => {
                         type = os.type
-                        statusnew = os.tsiControll === '' ? 'no' : pwr > Number(os.tsiControll) ? 'ВКЛ' : 'ВЫКЛ';
                         const osi = document.createElement('div')
                         osi.classList.add('osi_list')
                         if (os.trailer !== 'Прицеп' && os.tyres === '2' || os.trailer !== 'Прицеп' && os.tyres === '4') {
@@ -221,6 +224,7 @@ export async function conturTest(testov) {
                             }
                         })
                     })
+                    statusnew = sats === '' ? 'no' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
                 }
                 const iconValues = {
                     ingine: [in1, `<i class="fas fa-key f "></i>`],
@@ -228,7 +232,9 @@ export async function conturTest(testov) {
                     type: [type, type],
                     pwr: [pwr, pwr],
                     statusnew: [statusnew, `<i class="fas fa-power-off"></i>`],
-                    sats: [sats, sats]
+                    sats: [sats, sats],
+                    meliage: [meliage, meliage]
+
                 }
                 for (let i = 0; i < countElem.length; i++) {
                     const newClass = countElem[i].getAttribute('rel')
@@ -242,6 +248,7 @@ export async function conturTest(testov) {
                     i === 3 && iconValues[newClass][0] === 'Тип ТС' || i === 3 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
                     i === 4 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
                     i === 5 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
+                    i === 6 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
                     listItemCar.appendChild(newCel)
                 }
             })
