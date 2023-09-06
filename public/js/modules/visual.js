@@ -259,9 +259,10 @@ export function view(arg) {
 }
 export async function viewConfigurator(arg, params, osi) {
     const role = document.querySelectorAll('.log')[0].textContent
-    const active = document.querySelectorAll('.color')
-    const allobj = await ggg(active[0].id)
-    const res = await gg(active[0].id)
+    const active = document.querySelector('.color')
+    const allobj = await ggg(active.id)
+    const res = await gg(active.id)
+
     let in1;
     res.forEach(i => {
         if (i[0] === 'Зажигание') {
@@ -291,8 +292,7 @@ export async function viewConfigurator(arg, params, osi) {
                 if (e.id == item.tyresdiv) {
                     arg.forEach((el) => {
                         if (el.name === item.pressure) {
-
-                            if (activePost === 'А652УА198') {
+                            if (active.id === '26702383') {
                                 done = parseFloat((el.value / 10).toFixed(1))
                             }
                             else {
