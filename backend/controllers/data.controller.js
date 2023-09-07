@@ -185,8 +185,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-//setTimeout(test, 1000)
-//setInterval(test, 300000)
+setTimeout(test, 1000)
+setInterval(test, 300000)
 
 const hunterTime = async () => {
     const now = new Date();
@@ -194,12 +194,12 @@ const hunterTime = async () => {
         const nowUnix = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime() / 1000);
         const previousDayUnix = nowUnix - 3600 * 24;
         const previousDayEndUnix = nowUnix - 1;
-        console.log(previousDayUnix, previousDayEndUnix);
+        //   console.log(previousDayUnix, previousDayEndUnix);
         const res = await constorller.dataSpisok()
         structura.datas(res, previousDayEndUnix, previousDayUnix)
     }
 };
-//hunterTime();
+hunterTime();
 setInterval(hunterTime, 50000)
 
 function ggg(nameSens, rez) {

@@ -8,7 +8,7 @@ exports.datas = async (objects, now, old) => {
         .flat()
     try {
         for (const e of result) {
-            console.log(e[4])
+            // console.log(e[4])
             const params = await databaseService.tyresViewToBase(e[4])
             const osiBar = await databaseService.barViewToBase(e[4])
             const ossParams = { osi: osiBar.result, params: params }
@@ -158,7 +158,7 @@ exports.datas = async (objects, now, old) => {
                 return 0;
             });
             const data = new Date(old * 1000)
-            console.log(data)
+            //  console.log(data)
             const year = data.getFullYear();
             const month = String(data.getMonth() + 1).padStart(2, '0');
             const day = String(data.getDate()).padStart(2, '0');
@@ -169,7 +169,7 @@ exports.datas = async (objects, now, old) => {
             mass.push(JSON.stringify(dat2))
 
             // console.log(mass)
-            const res = dat2.length !== 0 ? await databaseService.saveStructuraToBase(mass) : console.log('пустой массив')
+            const res = dat2.length !== 0 ? await databaseService.saveStructuraToBase(mass) : null
 
         }
     }

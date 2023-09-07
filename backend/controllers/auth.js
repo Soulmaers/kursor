@@ -177,8 +177,8 @@ module.exports.action = function (req, res) {
         const role = req.user[0].role
         const device = req.headers['user-agent'];
         const platform = req.headers['sec-ch-ua-platform']
-        logLogin(login, platform, device)
-        console.log(req.ip)
+        const ip = req.ip
+        logLogin(login, ip, platform, device)
         res.render('in.ejs', {
             user: login,
             role: role
@@ -194,11 +194,11 @@ module.exports.action = function (req, res) {
 const fs = require('fs');
 
 // Функция для записи логов
-function logLogin(username, platform, device) {
+function logLogin(username, ip, platform, device) {
     // Получение текущей даты и времени
     const currentDate = new Date();
     // Формирование строки с данными для записи
-    const logEntry = `Username: ${username}\nLogin time: ${currentDate}\nPlatform: ${platform}\nDevice: ${device}\n\n`;
+    const logEntry = `Username: ${username}\nip: ${ip}\nLogin time: ${currentDate}\nPlatform: ${platform}\nDevice: ${device}\n\n`;
 
     // Запись строки в файл логов
     fs.appendFile('log.txt', logEntry, (err) => {
