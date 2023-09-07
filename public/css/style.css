@@ -7672,14 +7672,19 @@ input:focus {
 .newCel {
   width: 60px;
   text-align: center;
-  color: rgba(6, 28, 71, 1);
+  color: gray;
+  /*rgba(6, 28, 71, 1);*/
   font-size: 0.7rem;
   font-family: Arial;
   margin: 0 5px;
 }
 
+.actIcon {
+  color: lightgray;
+}
+
 .toogleIcon {
-  color: #66ff00
+  color: rgba(6, 28, 71, 1);
 }
 
 .buttonSaveSettings:active {

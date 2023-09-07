@@ -227,15 +227,16 @@ export async function conturTest(testov) {
                     statusnew = sats === '' ? 'no' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
                 }
                 const iconValues = {
-                    ingine: [in1, `<i class="fas fa-key f "></i>`],
+                    ingine: [in1, `<i class="fas fa-key actIcon"></i>`],
                     oil: [oil, oil],
                     type: [type, type],
                     pwr: [pwr, pwr],
-                    statusnew: [statusnew, `<i class="fas fa-power-off"></i>`],
+                    statusnew: [statusnew, `<i class="fas fa-satellite-dish actIcon"></i>`],
                     sats: [sats, sats],
                     meliage: [meliage, meliage]
 
                 }
+                console.log(iconValues.pwr, elem[0].message)
                 for (let i = 0; i < countElem.length; i++) {
                     const newClass = countElem[i].getAttribute('rel')
                     const newCel = document.createElement('div')
@@ -274,11 +275,16 @@ const viewList = async () => {
     const ress = await fetch('/api/viewList', param)
     const results = await ress.json()
     console.log(results)
-    const objChangeList = results.res[0]
-    const uniqBar = document.querySelectorAll('.uniqBar')
-    uniqBar.forEach(el => {
-        objChangeList[el.children[0].id] = el.children[0].checked = objChangeList[el.children[0].id] === 'false' ? false : true
-    })
+    if (results.res.length === 0) {
+        return
+    } else {
+        const objChangeList = results.res[0]
+        const uniqBar = document.querySelectorAll('.uniqBar')
+        uniqBar.forEach(el => {
+            objChangeList[el.children[0].id] = el.children[0].checked = objChangeList[el.children[0].id] === 'false' ? false : true
+        })
+    }
+
 }
 export async function alternativa(arr) {
     return new Promise(async function (resolve, reject) {
