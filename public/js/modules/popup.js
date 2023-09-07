@@ -96,7 +96,7 @@ export async function logsView(array) {
             const content = JSON.parse(el.content)
             const event = content[0].event
             const id = Number(el.idw)
-            const group = arrayIdGroup
+            const group = login === 'Курсор' ? 'demo' : arrayIdGroup
                 .filter(it => it[0] === id)
                 .map(it => it[1]);
             const time = new Date(Number(el.time) * 1000)
@@ -107,6 +107,7 @@ export async function logsView(array) {
             const minutes = time.getMinutes().toString().padStart(2, '0');
             const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
             let mess;
+            console.log(group)
             if (event === 'Заправка') {
                 mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, litrazh: `${content[0].litrazh}`, time: `Время заправки: ${formattedDate}` }]
             }
@@ -134,7 +135,7 @@ export async function logsView(array) {
         const int = Object.values(parsedContent[0]);
         int.shift();
         if (!int.some(e => e.startsWith('Комп'))) {
-            int.unshift(`Компания: ${group[0]}`);
+            int.unshift(`Компания: ${login === 'Курсор' ? 'demo' : group[0]}`);
         }
         const time = times(new Date(Number(el.time) * 1000));
         const info = `${int.join(", ")}`;
