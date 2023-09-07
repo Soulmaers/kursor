@@ -25,5 +25,15 @@ exports.saveStatus = async (req, res) => {
     res.json({ result: icons, name: idw, login })
 }
 
+exports.saveList = async (req, res) => {
+    const obj = req.body.changeList
+    const okey = await databaseService.saveListToBase(obj)
+    res.json({ message: okey })
+}
 
+exports.viewList = async (req, res) => {
+    const login = req.body.login
+    const result = await databaseService.viewListToBase(login)
+    res.json({ res: result })
+}
 

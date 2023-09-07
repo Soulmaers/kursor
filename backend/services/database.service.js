@@ -120,6 +120,52 @@ exports.saveStructuraToBase = async (mass) => {
     }
 };
 
+exports.saveListToBase = async (obj) => {
+    try {
+        const { login, statusnew, ingine, oil, type, pwr, sats, meliage, condition, pressure } = obj;
+
+        const postModel = `SELECT login FROM list WHERE login='${login}'`;
+        connection.query(postModel, function (err, results) {
+            if (err) console.log(err);
+            if (results.length === 0) {
+                const sql = `INSERT INTO list (login, pressure,\`condition\`, statusnew,  oil, ingine,sats, meliage,pwr,type) VALUES ('${login}',
+                 '${pressure}', '${condition}', '${statusnew}', '${oil}', '${ingine}', '${sats}', '${meliage}', '${pwr}', '${type}')`;
+                connection.query(sql, function (err, results) {
+                    if (err) console.log(err);
+                    console.log('запись сделана');
+                });
+            }
+            else {
+                const postModel = `UPDATE list SET login='${login}',pressure='${pressure}',\`condition\`='${condition}', statusnew='${statusnew}',
+                oil='${oil}', ingine='${ingine}',sats='${sats}',meliage='${meliage}',pwr='${pwr}',type='${type}' WHERE login = ?`
+                connection.query(postModel, [login], function (err, results) {
+                    if (err) {
+                        console.log(err)
+
+                    }
+                    console.log('апдейт')
+                })
+            }
+        });
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+exports.viewListToBase = async (login) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const postModel = `SELECT * FROM list WHERE login=?`;
+            connection.query(postModel, [login], function (err, results) { // Массив с параметрами для подстановки
+                if (err) console.log(err);
+                resolve(results);
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    })
+}
+
 
 exports.viewStructuraToBase = async (idw, t1, t2) => {
     return new Promise((resolve, reject) => {

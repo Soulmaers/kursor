@@ -7635,6 +7635,18 @@ input:focus {
   cursor: pointer;
 }
 
+.fa-times {
+  cursor: pointer;
+  text-align: center;
+}
+
+.fa-times:hover {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
 .fa-trash-alt:hover {
   animation-name: wiggle;
   animation-duration: 1s;
@@ -7667,5 +7679,47 @@ input:focus {
 }
 
 .toogleIcon {
-  color: green
+  color: #66ff00
+}
+
+.buttonSaveSettings:active {
+  background-color: steelblue;
+}
+
+.confirm {
+  width: 200px;
+  height: 70px;
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.header_confirm {
+  font-weight: bold;
+  width: 200px;
+  height: 30px;
+  background-color: rgba(6, 28, 71, 1);
+  border-radius: 5px 5px 0 0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.body_confirm {
+  height: 40px;
+  color: rgba(6, 28, 71, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
 }

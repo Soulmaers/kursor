@@ -60,6 +60,9 @@ router.post('/api/listTyresId', controllerModel.listTyresId)
 router.post('/api/icon', controllerIcon.icon)
 router.post('/api/iconFind', controllerIcon.iconFind)
 router.post('/api/saveStatus', controllerIcon.saveStatus)
+router.post('/api/saveList', controllerIcon.saveList)
+router.post('/api/viewList', controllerIcon.viewList)
+
 
 router.post('/api/to', controllerModel.to)
 router.post('/api/toView', controllerModel.toView)

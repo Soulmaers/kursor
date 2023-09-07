@@ -254,11 +254,31 @@ export async function conturTest(testov) {
             })
         }
     })
+
+    viewList(login)
     hiddenWindows()
     navigator();
     sortAll()
     setTimeout(zaprosSpisok, 1000)
 
+}
+
+const viewList = async () => {
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ login }))
+    }
+    const ress = await fetch('/api/viewList', param)
+    const results = await ress.json()
+    console.log(results)
+    const objChangeList = results.res[0]
+    const uniqBar = document.querySelectorAll('.uniqBar')
+    uniqBar.forEach(el => {
+        objChangeList[el.children[0].id] = el.children[0].checked = objChangeList[el.children[0].id] === 'false' ? false : true
+    })
 }
 export async function alternativa(arr) {
     return new Promise(async function (resolve, reject) {
