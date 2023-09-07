@@ -1801,7 +1801,7 @@ div.spoyler {
 
 .hiddenModal {
   display: block;
-  width: 900px;
+  width: 1200px;
 }
 
 .windowStatistic {
@@ -4988,7 +4988,9 @@ div.wrapper {
 
 .list_att {
   display: flex;
-  width: 900px;
+  width: 1200px;
+  padding: 5px 0;
+  border-bottom: 2px solid rgba(6, 28, 71, 1);
 }
 
 .configChange {
@@ -5342,7 +5344,6 @@ input[type="text"]:focus {
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-top: 1%;
 }
 
 .sections {
@@ -6600,7 +6601,7 @@ input[type="text"]:focus {
   }
 
   .listItem {
-    width: 900px;
+    width: 1200px;
 
   }
 
@@ -7151,6 +7152,7 @@ input[type="text"]:focus {
 .list_item_list {
   width: 100px;
   margin: 0;
+  color: rgba(6, 28, 71, 1);
 }
 
 .list_name2,
@@ -7673,6 +7675,7 @@ input:focus {
   width: 60px;
   display: flex;
   justify-content: center;
+  align-items: center;
   color: black;
   /*rgba(6, 28, 71, 1);*/
   font-size: 0.7rem;
@@ -7689,6 +7692,10 @@ input:focus {
 }
 
 .buttonSaveSettings:active {
+  background-color: steelblue;
+}
+
+.set_form_button:active {
   background-color: steelblue;
 }
 
