@@ -150,9 +150,31 @@ export async function conturTest(testov) {
                 let statusnew;
                 let sats;
                 let meliage;
+                let condition;
+
                 final.forEach(i => {
                     if (i[0] === 'Зажигание' && i[2] === elem[4]) {
                         in1 = i[3] === -348201.3876 ? 'no' : i[3]
+                    }
+                    if (i[0] === 'Скорость' && i[2] === elem[4]) {
+                        const speed = i[3] === -348201.3876 ? 'no' : i[3]
+                        console.log(elem[0].message)
+                        console.log(speed, in1)
+                        if (speed > 5) {
+                            condition = `<i class="fas fa-play-circle toogleIcon"></i>`;
+                        }
+                        else if (speed <= 5 && in1 === 1) {
+                            condition = `<i class="fas fa-pause-circle toogleIcon"></i>`;
+                        }
+                        else if (speed <= 5 && in1 === 0 || speed === 'no' && in1 === 0 || !speed && in1 === 0) {
+                            condition = `<i class="fas fa-parking toogleIcon"></i>`;
+                        }
+                        else if (speed === 'no' && in1 === 'no') {
+                            condition = `<i class="fas fa-power-off></i>`;
+                        }
+                        else if (!speed && !in1) {
+                            condition = 'no';
+                        }
                     }
                     if (i[0] === 'Топливо' && i[2] === elem[4]) {
                         oil = i[3] === -348201.3876 ? 'no' : `${i[3].toFixed(0)} л.`
@@ -230,6 +252,7 @@ export async function conturTest(testov) {
                         })
                     })
                     statusnew = sats === '' ? 'no' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
+
                 }
                 const iconValues = {
                     ingine: [in1, `<i class="fas fa-key actIcon"></i>`],
@@ -238,10 +261,9 @@ export async function conturTest(testov) {
                     pwr: [pwr, pwr],
                     statusnew: [statusnew, `<i class="fas fa-satellite-dish actIcon"></i>`],
                     sats: [sats, sats],
-                    meliage: [meliage, meliage]
-
+                    meliage: [meliage, meliage],
+                    condition: [condition, condition]
                 }
-                console.log(iconValues.pwr, elem[0].message)
                 for (let i = 0; i < countElem.length; i++) {
                     const newClass = countElem[i].getAttribute('rel')
                     const newCel = document.createElement('div')
@@ -256,6 +278,7 @@ export async function conturTest(testov) {
                     i === 4 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
                     i === 5 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
                     i === 6 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
+                    i === 7 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
                     listItemCar.appendChild(newCel)
                 }
             })
@@ -292,13 +315,10 @@ export const viewList = async (login) => {
     }
     const titleChangeList = document.querySelectorAll('.title_list_global')
     titleChangeList.forEach(el => {
-        console.log(el)
-        console.log(objChangeList[el.getAttribute('rel')])
         el.style.display = objChangeList[el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
     })
 
     const newCelChange = document.querySelectorAll('.newCelChange')
-    console.log(newCelChange)
     newCelChange.forEach(el => {
         el.style.display = objChangeList[el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
     })
