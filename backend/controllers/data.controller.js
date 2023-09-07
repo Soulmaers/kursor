@@ -185,8 +185,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-//setTimeout(test, 1000)
-//setInterval(test, 300000)
+setTimeout(test, 1000)
+setInterval(test, 300000)
 
 const hunterTime = async () => {
     const now = new Date();
