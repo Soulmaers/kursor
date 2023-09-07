@@ -30,6 +30,50 @@ export function settingsRotate() {
 
 
 
+
+
+
+
+
+const saveCheckListToBase = async () => {
+    const uniqBar = document.querySelectorAll('.uniqBar')
+    const login = document.querySelectorAll('.log')[1].textContent
+    const changeList = { login: login }
+    uniqBar.forEach(el => {
+        console.log(el)
+        el.children[0].checked ? changeList[el.children[0].id] = true : changeList[el.children[0].id] = false
+    })
+    console.log(changeList)
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ changeList }))
+    }
+    const res = await fetch('/api/saveList', param)
+    const results = await res.json()
+    const confirm = document.querySelector('.confirm')
+    console.log(confirm)
+    confirm.style.display = 'flex'
+    const account = document.querySelector('.settings_users')
+    const pop = document.querySelector('.popup-background')
+    pop.style.display = 'block'
+    account.style.zIndex = 0
+    setTimeout(() => {
+        confirm.style.display = 'none'
+        account.style.zIndex = 2
+    }, 3000)
+    confirm.children[0].children[0].addEventListener('click', () => {
+        confirm.style.display = 'none'
+        account.style.zIndex = 2
+    })
+}
+const buttonList = document.querySelector('.listView').lastElementChild
+console.log(buttonList)
+buttonList.addEventListener('click', saveCheckListToBase)
+
+
 const viewProfil = async (login) => {
     document.querySelectorAll('.item_contact_set').forEach(it => it.remove())
 
