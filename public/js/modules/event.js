@@ -158,6 +158,7 @@ mobileItem.forEach(el => {
 
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
+    const pen = document.querySelectorAll('.rigthFrame')[0]
     const main = document.querySelector('.main')
     const start = document.querySelector('.start')
     const sections = document.querySelector('.sections')
@@ -165,6 +166,7 @@ logo.addEventListener('click', () => {
     main.style.display = 'none'
     dash.style.display = 'none'
     start.style.display = 'flex'
+    pen.style.display = 'flex'
     start.style.width = 100 + '%'
     sections.style.display = 'flex'
 })
@@ -300,7 +302,9 @@ btnDash.addEventListener('click', () => {
         mapss.remove();
     }
     const start = document.querySelector('.start')
+    const pen = document.querySelectorAll('.rigthFrame')[0]
     start.style.display = 'none'
+    pen.style.display = 'none';
     const dash = document.querySelector('.wrapper_right_dash')
     const sections = document.querySelector('.sections')
     const main = document.querySelector('.main')
@@ -324,8 +328,10 @@ function mainblock() {
     if (mapss) {
         mapss.remove();
     }
+    const pen = document.querySelectorAll('.rigthFrame')[0]
     const twoframe = document.querySelector('.twoframe')
     twoframe.style.display = 'flex'
+    pen.style.display = 'flex'
     const idw = document.querySelector('.color')
     if (!idw) {
         const main = document.querySelector('.main')

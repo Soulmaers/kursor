@@ -83,6 +83,7 @@ export async function conturTest(testov) {
             titleModal.appendChild(filterV)
             const filterVN = document.createElement('div')
             filterVN.classList.add('filterVN')
+            login === 'Курсор' ? (filterVN.style.display = 'none', filterV.style.display = 'none') : null
             titleModal.appendChild(filterVN)
             const minusS = document.createElement('div')
             minusS.classList.add('minusS')
