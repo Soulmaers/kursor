@@ -7672,7 +7672,7 @@ input:focus {
 .newCel {
   width: 60px;
   text-align: center;
-  color: gray;
+  color: black;
   /*rgba(6, 28, 71, 1);*/
   font-size: 0.7rem;
   font-family: Arial;
