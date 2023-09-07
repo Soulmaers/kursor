@@ -119,9 +119,13 @@ export async function conturTest(testov) {
     value=${nameCar} rel=${nameCar} id=${nameCar}OO checked>`
                 listName.prepend(listCheck)
                 const listProfil = document.createElement('div')
+                listProfil.classList.add('newCelChange')
+                listProfil.setAttribute('rel', `pressure`)
                 listProfil.classList.add('list_profil2')
                 listItemCar.appendChild(listProfil)
                 const listTrail = document.createElement('div')
+                listTrail.classList.add('newCelChange')
+                listTrail.setAttribute('rel', `pressure`)
                 listTrail.classList.add('list_trail2')
                 listItemCar.appendChild(listTrail)
                 /* if (nameCar === 'ЦистернаДТ') {
@@ -241,7 +245,8 @@ export async function conturTest(testov) {
                     const newClass = countElem[i].getAttribute('rel')
                     const newCel = document.createElement('div')
                     newCel.classList.add('newCel')
-                    newCel.classList.add(`${newClass}`)
+                    newCel.classList.add('newCelChange')
+                    newCel.setAttribute('rel', `${newClass}`)
                     newCel.innerHTML = iconValues[newClass][1]
                     i === 0 && iconValues[newClass][0] === 'ВКЛ' ? newCel.children[0].classList.add('toogleIcon') : i === 0 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
                     i === 1 && iconValues[newClass][0] === 1 ? newCel.children[0].classList.add('toogleIcon') : i === 1 && iconValues[newClass][0] === 'no' ? newCel.innerHTML = 'no' : null
@@ -264,7 +269,7 @@ export async function conturTest(testov) {
 
 }
 
-const viewList = async () => {
+export const viewList = async (login) => {
     const param = {
         method: "POST",
         headers: {
@@ -274,17 +279,28 @@ const viewList = async () => {
     }
     const ress = await fetch('/api/viewList', param)
     const results = await ress.json()
-    console.log(results)
+    const objChangeList = results.res[0]
     if (results.res.length === 0) {
         return
     } else {
-        const objChangeList = results.res[0]
+
         const uniqBar = document.querySelectorAll('.uniqBar')
         uniqBar.forEach(el => {
-            objChangeList[el.children[0].id] = el.children[0].checked = objChangeList[el.children[0].id] === 'false' ? false : true
+            el.children[0].checked = objChangeList[el.children[0].id] === 'false' ? false : true
         })
     }
+    const titleChangeList = document.querySelectorAll('.title_list_global')
+    titleChangeList.forEach(el => {
+        console.log(el)
+        console.log(objChangeList[el.getAttribute('rel')])
+        el.style.display = objChangeList[el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
+    })
 
+    const newCelChange = document.querySelectorAll('.newCelChange')
+    console.log(newCelChange)
+    newCelChange.forEach(el => {
+        el.style.display = objChangeList[el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
+    })
 }
 export async function alternativa(arr) {
     return new Promise(async function (resolve, reject) {

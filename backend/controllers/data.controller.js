@@ -185,8 +185,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-setTimeout(test, 1000)
-setInterval(test, 300000)
+//setTimeout(test, 1000)
+//setInterval(test, 300000)
 
 const hunterTime = async () => {
     const now = new Date();
@@ -200,7 +200,7 @@ const hunterTime = async () => {
     }
 };
 hunterTime();
-setInterval(hunterTime, 50000)
+//setInterval(hunterTime, 50000)
 
 function ggg(nameSens, rez) {
     if (rez) {

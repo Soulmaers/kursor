@@ -1,4 +1,5 @@
 
+import { viewList } from './spisok.js'
 export const objViewContent = {
     set_one: 'account',
     set_two: 'listView',
@@ -53,6 +54,7 @@ const saveCheckListToBase = async () => {
     }
     const res = await fetch('/api/saveList', param)
     const results = await res.json()
+    viewList(login)
     const confirm = document.querySelector('.confirm')
     console.log(confirm)
     confirm.style.display = 'flex'
@@ -63,7 +65,7 @@ const saveCheckListToBase = async () => {
     setTimeout(() => {
         confirm.style.display = 'none'
         account.style.zIndex = 2
-    }, 3000)
+    }, 2000)
     confirm.children[0].children[0].addEventListener('click', () => {
         confirm.style.display = 'none'
         account.style.zIndex = 2

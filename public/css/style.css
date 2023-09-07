@@ -5003,28 +5003,25 @@ div.wrapper {
 }
 
 .list_item1 {
-  width: 40%;
+  min-width: 150px;
   display: flex;
   justify-content: center;
-
   font-family: Arial;
   font-weight: bold;
 }
 
 .list_item2 {
-  width: 30%;
+  width: 100px;
   display: flex;
   justify-content: center;
-
   font-family: Arial;
   font-weight: bold;
 }
 
 .list_item3 {
-  width: 30%;
+  width: 100px;
   display: flex;
   justify-content: center;
-
   font-family: Arial;
   font-weight: bold;
 }
@@ -5365,7 +5362,7 @@ input[type="text"]:focus {
 
 .list_name2 {
   font-size: 0.8rem;
-  width: 40%;
+  min-width: 120px;
   display: flex;
   align-items: center;
   margin-left: 30px;
@@ -5385,10 +5382,11 @@ input[type="text"]:focus {
   font-size: 1rem;
   display: flex;
   align-items: center;
-  width: 30%;
+  width: 100px;
   padding-left: 5px;
   box-sizing: border-box;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 
@@ -5399,9 +5397,9 @@ input[type="text"]:focus {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  width: 30%;
+  width: 100px;
   padding-left: 5px;
-
+  justify-content: center;
 }
 
 
@@ -7152,7 +7150,7 @@ input[type="text"]:focus {
 
 .list_item_list {
   width: 100px;
-  margin: 0 5px;
+  margin: 0;
 }
 
 .list_name2,
@@ -7308,8 +7306,8 @@ input[type="text"]:focus {
   background-color: #fff;
 }
 
-.fas {
-  width: 30px;
+.w30 {
+  width: 30px
 }
 
 .f {
@@ -7442,6 +7440,10 @@ input[type="text"]:focus {
   animation-iteration-count: 1;
 }
 
+.alarmF {
+  width: 30px;
+}
+
 .addContact:hover .conF {
   animation-name: wiggle;
   animation-duration: 1s;
@@ -7491,9 +7493,6 @@ input[type="text"]:focus {
   border-bottom: 1px solid darkblue;
 }
 
-.fab {
-  width: 30px;
-}
 
 .uniqF {
   width: 14px;
@@ -7665,18 +7664,20 @@ input:focus {
 
 .newColumn {
   width: 60px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
   color: rgba(6, 28, 71, 1);
 }
 
 .newCel {
   width: 60px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
   color: black;
   /*rgba(6, 28, 71, 1);*/
   font-size: 0.7rem;
   font-family: Arial;
-  margin: 0 5px;
+  margin: 0;
 }
 
 .actIcon {
