@@ -463,7 +463,7 @@ module.exports.alarmFindtoBase = (idw, tyresp) => {
     })
 }
 exports.quantityFindToBase = async (login, quantity) => {
-    console.log('квантити')
+   // console.log('квантити')
     return new Promise((resolve, reject) => {
         try {
             const selectBase = `SELECT quantity FROM viewLogs WHERE login='${login}'`
@@ -481,7 +481,7 @@ exports.quantityFindToBase = async (login, quantity) => {
 }
 exports.quantitySaveToBase = async (login, quantity) => {
 
-    console.log(login, quantity)
+ //   console.log(login, quantity)
     return new Promise((resolve, reject) => {
         try {
             const selectBase = `SELECT login FROM viewLogs WHERE login='${login}'`
@@ -489,7 +489,7 @@ exports.quantitySaveToBase = async (login, quantity) => {
                 if (err) {
                     console.log(err)
                 };
-                console.log(results.length)
+             //   console.log(results.length)
                 if (results.length === 0) {
                     const arr = [[login, 0]]
                     const selectBase = `INSERT INTO viewLogs(login, quantity) VALUES?`;
@@ -503,7 +503,7 @@ exports.quantitySaveToBase = async (login, quantity) => {
                     })
                 }
                 else {
-                    console.log('число' + quantity)
+                  //  console.log('число' + quantity)
                     if (quantity !== undefined) {
                         const postModel = `UPDATE viewLogs SET quantity='${quantity}' WHERE login='${login}'`
                         connection.query(postModel, function (err, results) {
@@ -527,8 +527,8 @@ exports.quantitySaveToBase = async (login, quantity) => {
     })
 }
 exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll) => {
-    console.log(gosp)
-    console.log(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll)
+  //  console.log(gosp)
+ //   console.log(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll)
     const promises = massiv.map(el => {
         el.push(gosp)
         el.push(gosp1)
