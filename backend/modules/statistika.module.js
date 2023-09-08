@@ -398,7 +398,6 @@ function rashodCalc(data, name, group, idw) {
         increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
     }
     console.log(idw)
-    //  console.log(increasingIntervals)
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0][0];
         const lastOil = interval[interval.length - 1][0];
@@ -425,9 +424,10 @@ function rashodCalc(data, name, group, idw) {
     const rash = [];
     const firstData = data.value[0];
     const lastData = data.value[data.value.length - 1];
+    console.log(zapravka)
     if (zapravka.length !== 0) {
         const diff = (Number(new Date().getTime() / 1000).toFixed(0)) - (zapravka[zapravka.length - 1][1][1].getTime() / 1000)
-        if (diff > 600) {
+        if (diff > 240) {
             console.log(zapravka + 'условие')
             modalView(zapravka, name, group, idw);
         }

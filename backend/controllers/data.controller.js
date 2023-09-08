@@ -199,8 +199,8 @@ const hunterTime = async () => {
         structura.datas(res, previousDayEndUnix, previousDayUnix)
     }
 };
-//hunterTime();
-//setInterval(hunterTime, 50000)
+hunterTime();
+setInterval(hunterTime, 50000)
 
 function ggg(nameSens, rez) {
     if (rez) {
