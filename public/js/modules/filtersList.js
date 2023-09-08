@@ -45,6 +45,7 @@ const selectOn = (event) => {
 
 
 const selectOff = (event) => {
+
     console.log(event.target)
     event.target.style.display = 'none'
     event.target.previousElementSibling.style.display = 'block'
@@ -76,7 +77,55 @@ const selectOff = (event) => {
         console.log(e)
         e.style.display === 'none' ? e.style.display = 'flex' : null;
     });
+    const titleList = document.querySelectorAll('.viewIcon')
+    titleList.forEach(item => {
+        if (item.children[0].style.border) {
+            console.log(item.children)
+            //  dubleSelectOn(item.children[1].children[1])
+        }
+    })
+
 }
+
+const dubleSelectOn = (event) => {
+    console.log(event)
+    //  event.style.display = 'none'
+    // event.nextElementSibling.style.display = 'block'
+    const newCelChange = document.querySelectorAll('.newCelChange')
+    newCelChange.forEach(el => {
+        if (event.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
+            if (el.getAttribute('rel') === event.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
+                if (el.children.length === 0) {
+                    el.closest('.listItem').style.display = 'none'
+                }
+            }
+        }
+        else {
+            if (el.getAttribute('rel') === event.parentNode.parentNode.getAttribute('rel')) {
+                if (el.children.length === 0) {
+                    el.textContent === 'no' ? el.closest('.listItem').style.display = 'none' : null
+                }
+                else {
+                    if (!el.children[0].classList.contains('toogleIcon') || el.textContent === 'no') {
+                        el.closest('.listItem').style.display = 'none'
+                    }
+
+                }
+            }
+        }
+    })
+    const titleModal = document.querySelectorAll('.titleModal')
+    titleModal.forEach(e => {
+        const visibleChildren = Array.from(e.nextElementSibling.children).filter(it => it.style.display !== 'none');
+        if (visibleChildren.length === 0) {
+            e.style.display = 'none';
+        }
+    });
+}
+
+
+
+
 
 const selection = (event) => {
     event.target.children[1].style.display = 'flex'

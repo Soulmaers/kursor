@@ -121,14 +121,12 @@ export async function conturTest(testov) {
                 listName.prepend(listCheck)
                 const listProfil = document.createElement('div')
                 listProfil.classList.add('newCelChange')
-                listProfil.setAttribute('rel', `pressure`)
-                listProfil.setAttribute('rel', `tagach`)
+                listProfil.setAttribute('rel', `pressure tagach`)
                 listProfil.classList.add('list_profil2')
                 listItemCar.appendChild(listProfil)
                 const listTrail = document.createElement('div')
                 listTrail.classList.add('newCelChange')
-                listTrail.setAttribute('rel', `pressure`)
-                listTrail.setAttribute('rel', `pricep`)
+                listTrail.setAttribute('rel', `pressure pricep`)
                 listTrail.classList.add('list_trail2')
                 listItemCar.appendChild(listTrail)
                 /* if (nameCar === 'ЦистернаДТ') {
@@ -298,6 +296,7 @@ export async function conturTest(testov) {
 }
 
 export const viewList = async (login) => {
+    console.log('тут?')
     const param = {
         method: "POST",
         headers: {
@@ -319,12 +318,12 @@ export const viewList = async (login) => {
     }
     const titleChangeList = document.querySelectorAll('.title_list_global')
     titleChangeList.forEach(el => {
-        el.style.display = objChangeList[el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
+        el.style.display = objChangeList[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
     })
 
     const newCelChange = document.querySelectorAll('.newCelChange')
     newCelChange.forEach(el => {
-        el.style.display = objChangeList[el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
+        el.style.display = objChangeList[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
     })
     globalSelect()
 }
