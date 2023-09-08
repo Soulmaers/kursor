@@ -102,8 +102,6 @@ exports.getLastAllSensorsIdDataFromWialon = async (id, login) => {
                 console.log(err);
             })
             .then(function (data) {
-                // console.log(id)
-                //  console.log(data)
                 resolve(data)
             });
         //   }

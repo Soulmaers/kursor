@@ -7750,5 +7750,17 @@ input:focus {
 
 i.tOn,
 i.tOff {
+  cursor: pointer;
+}
+
+i.tOn {
+  display: none;
+}
+
+.dzin {
+  cursor: pointer;
+}
+
+.tipe {
   display: none;
 }

@@ -181,6 +181,7 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
     const itog = await testovfn(idw, t1, t2)
     const nameArr = itog[itog.length - 1] !== undefined ? itog[itog.length - 1].allSensParams ? JSON.parse(itog[itog.length - 1].allSensParams) : [] : []
+    console.log(nameArr)
     const time = [];
     const speed = [];
     const sats = [];
@@ -208,18 +209,24 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     nameSens.forEach((item) => {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
+    console.log(sensArr)
+    if (sensArr.length === 0) {
+        return
+    }
     sensArr.forEach(el => {
         if (el.length === 0) {
             return; // Пропускаем текущую итерацию, если sensArr пустой
         }
-        el.forEach(it => {
-            if (it[0] === 'Зажигание') {
-                allArrNew[0].value.push(Number(Object.values(it)[2].toFixed(0)))
-            }
-            if (it[0].startsWith('Бортовое')) {
-                allArrNew[1].value.push(Number(Object.values(it)[2].toFixed(0)))
-            }
-        })
+        else {
+            el.forEach(it => {
+                if (it[0] === 'Зажигание') {
+                    allArrNew[0].value.push(Number(Object.values(it)[2].toFixed(0)))
+                }
+                if (it[0].startsWith('Бортовое')) {
+                    allArrNew[1].value.push(Number(Object.values(it)[2].toFixed(0)))
+                }
+            })
+        }
 
     });
     allArrNew.forEach(el => {
@@ -228,6 +235,8 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         el.sats = sats
         el.geo = geo
     })
+    console.log(idw)
+    console.log(allArrNew)
     const engine = [...allArrNew].filter(it => it.sens === 'Зажигание' || it.sens.startsWith('Борт'));
     engine[0].pwr = engine[1].value
     engine[0].condition = [];

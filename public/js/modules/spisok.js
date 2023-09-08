@@ -122,11 +122,13 @@ export async function conturTest(testov) {
                 const listProfil = document.createElement('div')
                 listProfil.classList.add('newCelChange')
                 listProfil.setAttribute('rel', `pressure`)
+                listProfil.setAttribute('rel', `tagach`)
                 listProfil.classList.add('list_profil2')
                 listItemCar.appendChild(listProfil)
                 const listTrail = document.createElement('div')
                 listTrail.classList.add('newCelChange')
                 listTrail.setAttribute('rel', `pressure`)
+                listTrail.setAttribute('rel', `pricep`)
                 listTrail.classList.add('list_trail2')
                 listItemCar.appendChild(listTrail)
                 /* if (nameCar === 'ЦистернаДТ') {
@@ -151,17 +153,18 @@ export async function conturTest(testov) {
                 let sats;
                 let meliage;
                 let condition;
-
                 final.forEach(i => {
+
+
                     if (i[0] === 'Зажигание' && i[2] === elem[4]) {
                         in1 = i[3] === -348201.3876 ? 'no' : i[3]
                     }
                     if (i[0] === 'Скорость' && i[2] === elem[4]) {
                         const speed = i[3] === -348201.3876 ? 'no' : i[3]
-                        console.log(elem[0].message)
-                        console.log(speed, in1)
+                        // console.log(elem[0].message)
+                        // console.log(speed, in1)
                         if (speed > 5) {
-                            condition = `<i class="fas fa-play-circle toogleIcon"></i>`;
+                            condition = `<i class="fas fa-arrow-alt-circle-right toogleIcon"></i>`;
                         }
                         else if (speed <= 5 && in1 === 1) {
                             condition = `<i class="fas fa-pause-circle toogleIcon"></i>`;
@@ -364,6 +367,7 @@ export async function alternativa(arr) {
                     allArr.push([...e[i], valueSens[index][i]])
                 }
             })
+
             resolve(allArr)
         }
 

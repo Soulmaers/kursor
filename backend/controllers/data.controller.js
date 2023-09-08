@@ -168,7 +168,8 @@ const test = async () => {
             //   console.log(rez.length);
             const mass = [];
             allArray = ggg(nameSens, rez)
-            // console.log(allArray)
+            console.log(el.id)
+            console.log(allArray)
             rr.messages.forEach(e => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
                 mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, new Date(e.t * 1000), e.pos.s, e.p.sats, geo]);
