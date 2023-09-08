@@ -4,7 +4,7 @@ import { objColorFront, generDav } from './content.js'
 import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
 import { removeElem, removeArrElem } from './helpersFunc.js'
-import { testovfn } from './charts/bar.js'
+import { globalSelect } from './filtersList.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
 
@@ -322,6 +322,7 @@ export const viewList = async (login) => {
     newCelChange.forEach(el => {
         el.style.display = objChangeList[el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
     })
+    globalSelect()
 }
 export async function alternativa(arr) {
     return new Promise(async function (resolve, reject) {

@@ -199,7 +199,10 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     })
     const nameSens = [];
     nameArr.forEach(el => {
-        nameSens.push([el[0], el[1]])
+        if (el[0] === 'Зажигание' || el[0].startsWith('Бортовое')) {
+            nameSens.push([el[0], el[1]])
+        }
+
     })
     const allArrNew = [];
     nameSens.forEach((item) => {
@@ -209,9 +212,15 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         if (el.length === 0) {
             return; // Пропускаем текущую итерацию, если sensArr пустой
         }
-        for (let i = 0; i < allArrNew.length; i++) {
-            allArrNew[i].value.push(Number(Object.values(el)[i][2].toFixed(0)))
-        }
+        el.forEach(it => {
+            if (it[0] === 'Зажигание') {
+                allArrNew[0].value.push(Number(Object.values(it)[2].toFixed(0)))
+            }
+            if (it[0].startsWith('Бортовое')) {
+                allArrNew[1].value.push(Number(Object.values(it)[2].toFixed(0)))
+            }
+        })
+
     });
     allArrNew.forEach(el => {
         el.time = time

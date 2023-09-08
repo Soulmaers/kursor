@@ -6865,7 +6865,7 @@ input[type="text"]:focus {
 
 
   .listItem {
-    width: 100%;
+    width: 1200px;
     height: 32px;
   }
 
@@ -6997,7 +6997,7 @@ input[type="text"]:focus {
   }
 
   .listItem {
-    width: 100%;
+    width: 1200px;
     padding: 3px 0;
     position: relative;
   }
@@ -7197,6 +7197,13 @@ input[type="text"]:focus {
 }
 
 .logs:hover {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+.dzin:hover {
   animation-name: wiggle;
   animation-duration: 1s;
   animation-timing-function: ease;
@@ -7735,4 +7742,13 @@ input:focus {
   justify-content: center;
   align-items: center;
   padding: 0 10px;
+}
+
+.mleft {
+  margin-left: 3px;
+}
+
+i.tOn,
+i.tOff {
+  display: none;
 }
