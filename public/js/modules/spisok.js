@@ -267,6 +267,7 @@ export async function conturTest(testov) {
                     meliage: [meliage, meliage],
                     condition: [condition, condition]
                 }
+
                 for (let i = 0; i < countElem.length; i++) {
                     const newClass = countElem[i].getAttribute('rel')
                     const newCel = document.createElement('div')

@@ -184,8 +184,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-setTimeout(test, 1000)
-setInterval(test, 300000)
+//setTimeout(test, 1000)
+//setInterval(test, 300000)
 
 const hunterTime = async () => {
     const now = new Date();
@@ -198,7 +198,7 @@ const hunterTime = async () => {
         structura.datas(res, previousDayEndUnix, previousDayUnix)
     }
 };
-hunterTime();
+//hunterTime();
 setInterval(hunterTime, 50000)
 
 function ggg(nameSens, rez) {
