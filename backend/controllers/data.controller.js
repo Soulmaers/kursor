@@ -154,7 +154,7 @@ const test = async () => {
         let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
         let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
         if (rr.messages.length === 0 || rez && rez.length === 0) {
-            // console.log('нет новый данных')
+            console.log('нет новый данных')
         }
         else {
             //   console.log(rr, rez)
@@ -168,8 +168,6 @@ const test = async () => {
             //   console.log(rez.length);
             const mass = [];
             allArray = ggg(nameSens, rez)
-            console.log(el.id)
-            console.log(allArray)
             rr.messages.forEach(e => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
                 mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, new Date(e.t * 1000), e.pos.s, e.p.sats, geo]);
