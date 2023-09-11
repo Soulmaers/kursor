@@ -89,8 +89,9 @@ const dubleSelectOn = (elem) => {
     const newCelChange = document.querySelectorAll('.newCelChange')
     newCelChange.forEach(el => {
         if (elem.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
-            if (el.getAttribute('rel') === elem.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
+            if (el.getAttribute('rel').split(' ')[1] === elem.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
                 if (el.children.length === 0) {
+
                     el.closest('.listItem').style.display = 'none'
                 }
             }
