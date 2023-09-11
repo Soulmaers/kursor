@@ -534,6 +534,9 @@ exports.popupProstoy = async (array) => {
         nameSens.forEach((item) => {
             allArrNew.push({ sens: item[0], params: item[1], value: [] })
         })
+        if (sensArr.length === 0) {
+            return
+        }
         sensArr.forEach(el => {
             if (el.length === 0) {
                 return // Пропускаем текущую итерацию, если sensArr пустой

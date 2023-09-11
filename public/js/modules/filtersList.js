@@ -12,7 +12,7 @@ const selectOn = (event) => {
     const newCelChange = document.querySelectorAll('.newCelChange')
     newCelChange.forEach(el => {
         if (event.target.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
-            if (el.getAttribute('rel') === event.target.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
+            if (el.getAttribute('rel').split(' ')[1] === event.target.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
                 if (el.children.length === 0) {
                     el.closest('.listItem').style.display = 'none'
                 }
@@ -53,7 +53,7 @@ const selectOff = (event) => {
     const newCelChange = document.querySelectorAll('.newCelChange')
     newCelChange.forEach(el => {
         if (event.target.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
-            if (el.getAttribute('rel') === event.target.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
+            if (el.getAttribute('rel').split(' ')[1] === event.target.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
                 if (el.children.length === 0) {
                     el.closest('.listItem').style.display = 'flex'
                 }
