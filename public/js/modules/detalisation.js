@@ -209,6 +209,20 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         allArrNew.push({ sens: item[0], params: item[1], value: [] })
     })
     if (sensArr.length === 0) {
+        if (isNaN(num)) {
+            objectRazmetka['nav1'].data.splice(num === 'cal2' ? 1 : 2, 1, []);
+            objectRazmetka['nav2'].data.splice(num === 'cal2' ? 1 : 2, 1, dannieSortJobTS([]));
+            objectRazmetka['nav3'].data.splice(num === 'cal2' ? 1 : 2, 1, await dannieOilTS(idw, num, interval));
+            const act = document.querySelector('.activStatic').id
+            objectRazmetka[act].fn(objectRazmetka[act].data[num === 'cal2' ? 1 : 2], num === 'cal2' ? 2 : 3)
+        }
+        else {
+            objectRazmetka['nav1'].data.push([]);
+            objectRazmetka['nav2'].data.push(dannieSortJobTS([]));
+            objectRazmetka['nav3'].data.push(await dannieOilTS(idw, num));
+            const act = document.querySelector('.activStatic').id
+            objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)
+        }
         return
     }
     sensArr.forEach(el => {
@@ -284,7 +298,6 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         }
         return item;
     });
-    console.log(datas)
     if (isNaN(num)) {
         objectRazmetka['nav1'].data.splice(num === 'cal2' ? 1 : 2, 1, datas);
         objectRazmetka['nav2'].data.splice(num === 'cal2' ? 1 : 2, 1, dannieSortJobTS(datas));
@@ -299,4 +312,5 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         const act = document.querySelector('.activStatic').id
         objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)
     }
+    console.log(objectRazmetka)
 }

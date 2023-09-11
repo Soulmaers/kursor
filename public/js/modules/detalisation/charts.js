@@ -117,6 +117,9 @@ export function createJobTS(data, num) {
         });
 }
 export function createChart(data, num) {
+    if (data.length === 0) {
+        return
+    }
     const chartStatic = document.querySelector(`.chartStatic${num}`)
     if (chartStatic) {
         chartStatic.remove();
