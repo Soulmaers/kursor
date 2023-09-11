@@ -120,6 +120,7 @@ exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
                 console.log(err);
             })
             .then(function (data) {
+                console.log(data)
                 resolve(data)
             });
         //}
