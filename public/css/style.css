@@ -7768,3 +7768,8 @@ i.tOn {
 .borderTitle {
   border: 1px solid rgba(6, 28, 71, 1);
 }
+
+.pens {
+  width: 2px;
+  background-color: rgba(6, 28, 71, 1);
+}

@@ -1,11 +1,7 @@
 import { visual, visualNone } from './visual.js'
 //import { massivionbd } from './paramsTyresView.js';
-import { ColumnHeaderManager } from '../class/Flash.js'
-export function navigator() {
-    const listItemList = document.querySelectorAll('.list_item_list')
-    console.log([...listItemList])
-    new ColumnHeaderManager([...listItemList]);
 
+export function navigator() {
     const main = document.querySelector('.main')
     const auth = document.querySelector('.auth')
     const menu = document.querySelector('.menu')

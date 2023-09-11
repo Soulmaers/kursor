@@ -1,8 +1,5 @@
 
 
-
-console.log('test')
-
 const selectOn = (event) => {
     event.target.style.display = 'none'
     event.target.nextElementSibling.style.display = 'block'
@@ -42,7 +39,6 @@ const selectOn = (event) => {
 
 
 const selectOff = (event) => {
-    console.log(event.target.parentNode.previousElementSibling)
     event.target.style.display = 'none'
     event.target.previousElementSibling.style.display = 'block'
     event.target.parentNode.previousElementSibling.style.color = 'rgba(6, 28, 71, 1)'
@@ -83,15 +79,11 @@ const selectOff = (event) => {
 }
 
 const dubleSelectOn = (elem) => {
-    console.log(elem)
-    //  event.style.display = 'none'
-    // event.nextElementSibling.style.display = 'block'
     const newCelChange = document.querySelectorAll('.newCelChange')
     newCelChange.forEach(el => {
         if (elem.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
             if (el.getAttribute('rel').split(' ')[1] === elem.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
                 if (el.children.length === 0) {
-
                     el.closest('.listItem').style.display = 'none'
                 }
             }
@@ -132,8 +124,9 @@ const selectionOff = (event) => {
     event.target.children[1].children[1].style.display === 'block' ? event.target.children[0].style.color = 'gray' : null
 }
 
+
+
 export function globalSelect() {
-    // const titleList = document.querySelector('.fa-truck-pickup')
     const titleList = document.querySelectorAll('.viewIcon')
     titleList.forEach(item => {
         item.addEventListener('mouseenter', selection)
@@ -146,6 +139,98 @@ export function globalSelect() {
         }
 
     })
+}
 
+export function draggable() {
+    const elem = document.querySelector('.list_att')
+    const elemArray = [];
+    const elemCelev = [];
+    let dragged;
+    Array.from(elem.children).forEach(el => {
+        // console.log(el)
+        el.setAttribute('draggable', true);
+        el.addEventListener('dragstart', handleDragStart);
+        el.addEventListener('dragover', handleDragOver);
+        el.addEventListener('drop', handleDrop);
+    })
+
+
+
+    function handleDragStart(event) {
+        if (elemArray.length !== 0) {
+            elemArray.length = 0
+        }
+        console.log('раз два??')
+        dragged = event.target;
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/html', dragged.outerHTML);
+        // Создаем временный контейнер для хранения всех элементов, включая дочерние
+        const tempContainer = document.createElement('div');
+        tempContainer.appendChild(dragged.cloneNode(true));
+        console.log(tempContainer)
+        // Сериализуем временный контейнер и передаем его данные
+        event.dataTransfer.setData('text/html', tempContainer.innerHTML);
+
+        const newCelChange = document.querySelectorAll('.newCelChange')
+        newCelChange.forEach(el => {
+            if (tempContainer.children[0].getAttribute('rel').split(' ')[1]) {
+                if (el.getAttribute('rel').split(' ')[1] === tempContainer.children[0].getAttribute('rel').split(' ')[1]) {
+                    elemArray.push(el)
+                }
+            }
+            else {
+                if (el.getAttribute('rel') === event.target.closest('.viewIcon').getAttribute('rel')) {
+                    elemArray.push(el)
+                }
+            }
+        })
+    }
+    function handleDragOver(event) {
+        event.preventDefault();
+        event.target.classList.add('drag-over');
+        event.dataTransfer.dropEffect = 'move';
+    }
+    function handleDrop(event) {
+        event.preventDefault();
+        event.target.classList.remove('drag-over');
+        const data = event.dataTransfer.getData('text/html');
+        console.log(data)
+        const tempContainer = document.createElement('div');
+        tempContainer.innerHTML = data;
+
+        tempContainer.children[0].children[1].style.display = 'none'
+        const container = document.querySelector('.list_att')
+        elem.insertBefore(tempContainer.children[0], event.target.closest('.viewIcon'));
+        // Удаляем перетаскиваемый элемент
+        const newCelChange = document.querySelectorAll('.newCelChange')
+        newCelChange.forEach(el => {
+            if (event.target.closest('.viewIcon').getAttribute('rel').split(' ')[1]) {
+                if (el.getAttribute('rel').split(' ')[1] === event.target.closest('.viewIcon').getAttribute('rel').split(' ')[1]) {
+                    elemCelev.push(el)
+                }
+            }
+            else {
+                if (el.getAttribute('rel') === event.target.closest('.viewIcon').getAttribute('rel')) {
+                    elemCelev.push(el)
+                }
+            }
+        })
+        console.log(elemArray.length)
+        console.log(elemCelev.length)
+        elemCelev.forEach((e, index) => {
+            e.parentElement.insertBefore(elemArray[index], e)
+        })
+        elemArray.length = 0
+        elemCelev.length = 0
+        dragged.remove();
+        Array.from(elem.children).forEach((el) => {
+            el.removeEventListener('dragstart', handleDragStart);
+            el.removeEventListener('dragover', handleDragOver);
+            el.removeEventListener('drop', handleDrop);
+        });
+        // attachListeners()
+        draggable()
+        globalSelect()
+    }
 
 }

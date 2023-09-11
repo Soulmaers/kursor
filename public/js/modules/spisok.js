@@ -5,6 +5,8 @@ import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
 import { removeElem, removeArrElem } from './helpersFunc.js'
 import { globalSelect } from './filtersList.js'
+import { DivDraggable } from '../class/Flash.js'
+
 const login = document.querySelectorAll('.log')[1].textContent
 
 
@@ -317,6 +319,8 @@ export const viewList = async (login) => {
     newCelChange.forEach(el => {
         el.style.display = objChangeList[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
     })
+    //  const listAtt = document.querySelector('.list_att')
+    // new DivDraggable(listAtt)
     globalSelect()
 }
 export async function alternativa(arr) {

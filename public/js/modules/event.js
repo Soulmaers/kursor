@@ -11,7 +11,7 @@ import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.
 import { dataInput, dataSelect, times, click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
-import { Flash, CloseBTN, ResizeContainer } from '../class/Flash.js'
+import { Flash, CloseBTN, ResizeContainer, DivDraggable } from '../class/Flash.js'
 import { protDash, dashViewProtector } from './charts/protek.js'
 import { getStat } from './charts/stat.js'
 
@@ -19,7 +19,7 @@ import { conf } from './altConfig.js'
 import { viewTech } from './tech.js'
 import { element } from './startAllStatic.js'
 import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
-
+import { draggable } from './filtersList.js'
 
 
 const leftFrame = document.querySelector('.leftFrame')
@@ -52,6 +52,11 @@ mainMenu.addEventListener('click', (event) => {
     new CloseBTN(menu, mainMenu)
     menu.style.display = 'flex'
 })
+
+const listAtt = document.querySelector('.list_att')
+//new DivDraggable(listAtt)
+draggable()
+
 
 const mobileItem = document.querySelectorAll('.mobile_item')
 mobileItem.forEach(el => {
