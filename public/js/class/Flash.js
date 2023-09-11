@@ -12,7 +12,6 @@ export class Flash {
         this.two.addEventListener('click', this.handleClickTwo.bind(this))
     }
     handleClickOne() {
-        console.log(this.sec)
         this.one.style.display = 'none'
         this.two.style.display = 'block'
         this.three.style.opacity = '0';
@@ -104,7 +103,6 @@ export class ResizeContainer {
         this.resizeHandle = resizeHandle;
         this.isResizing = false;
         this.initialX = null;
-
         // Add event listeners
         this.resizeHandle.addEventListener('mousedown', this.startResize.bind(this));
         document.addEventListener('mousemove', this.resize.bind(this));
@@ -122,7 +120,6 @@ export class ResizeContainer {
         if (!this.isResizing) {
             return;
         }
-
         const dx = event.clientX - this.initialX;
         const minContainerWidth = 50; // Set the minimum width (pixels) for containers
         const newLeftWidth = this.originalLeftContainerWidth + dx;
@@ -131,7 +128,6 @@ export class ResizeContainer {
         if (newLeftWidth < minContainerWidth || newRightWidth < minContainerWidth) {
             return;
         }
-
         this.resizeHandle.style.transform = `translateX(${dx}px)`;
     }
 
@@ -139,14 +135,11 @@ export class ResizeContainer {
         if (!this.isResizing) {
             return;
         }
-        console.log(this.leftContainer)
-        console.log(this.rightContainer)
         const dx = event.clientX - this.initialX;
         const newLeftWidth = this.originalLeftContainerWidth + dx;
         const newRightWidth = this.originalRightContainerWidth - dx;
         this.leftContainer.style.width = `${newLeftWidth}px`;
         this.rightContainer.style.width = `${newRightWidth}px`;
-
         this.isResizing = false;
         this.initialX = null;
         this.resizeHandle.style.transform = 'translateX(0)';

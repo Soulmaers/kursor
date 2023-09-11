@@ -152,39 +152,35 @@ export async function conturTest(testov) {
                 let meliage;
                 let condition;
                 final.forEach(i => {
-
-
                     if (i[0] === 'Зажигание' && i[2] === elem[4]) {
-                        in1 = i[3] === -348201.3876 ? 'no' : i[3]
+                        in1 = i[3] === -348201.3876 ? '-' : i[3]
                     }
                     if (i[0] === 'Скорость' && i[2] === elem[4]) {
-                        const speed = i[3] === -348201.3876 ? 'no' : i[3]
-                        // console.log(elem[0].message)
-                        // console.log(speed, in1)
+                        const speed = i[3] === -348201.3876 ? '-' : i[3]
                         if (speed > 5) {
                             condition = `<i class="fas fa-arrow-alt-circle-right toogleIcon"></i>`;
                         }
                         else if (speed <= 5 && in1 === 1) {
                             condition = `<i class="fas fa-pause-circle toogleIcon"></i>`;
                         }
-                        else if (speed <= 5 && in1 === 0 || speed === 'no' && in1 === 0 || !speed && in1 === 0) {
+                        else if (speed <= 5 && in1 === 0 || speed === '-' && in1 === 0 || !speed && in1 === 0) {
                             condition = `<i class="fas fa-parking toogleIcon"></i>`;
                         }
-                        else if (speed === 'no' && in1 === 'no') {
+                        else if (speed === '-' && in1 === '-') {
                             condition = `<i class="fas fa-power-off></i>`;
                         }
                         else if (!speed && !in1) {
-                            condition = 'no';
+                            condition = '-';
                         }
                     }
                     if (i[0] === 'Топливо' && i[2] === elem[4]) {
-                        oil = i[3] === -348201.3876 ? 'no' : `${i[3].toFixed(0)} л.`
+                        oil = i[3] === -348201.3876 ? '-' : `${i[3].toFixed(0)} л.`
                     }
                     if (i[0].startsWith('Бортовое') && i[2] === elem[4]) {
-                        pwr = i[3] === -348201.3876 ? 'no' : parseFloat(i[3].toFixed(1))
+                        pwr = i[3] === -348201.3876 ? '-' : parseFloat(i[3].toFixed(1))
                     }
                     if (i[0].startsWith('Одом') && i[2] === elem[4]) {
-                        meliage = i[3] === -348201.3876 ? 'no' : `${i[3].toFixed(0)} км.`
+                        meliage = i[3] === -348201.3876 ? '-' : `${i[3].toFixed(0)} км.`
                     }
                 })
 
@@ -230,7 +226,7 @@ export async function conturTest(testov) {
                                             e.children[0].style.fill = 'gray'
                                             return
                                         }
-                                        if (in1 === 0 || in1 === 'no') {
+                                        if (in1 === 0 || in1 === '-') {
                                             e.children[0].style.fill = '#000'
                                             //  e.children[0].style.background = 'lightgray';
                                             //  e.children[1].style.color = 'lightgray'
@@ -252,7 +248,7 @@ export async function conturTest(testov) {
                             }
                         })
                     })
-                    statusnew = sats === '' ? 'no' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
+                    statusnew = sats === '' ? '-' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
 
                 }
                 const iconValues = {
@@ -273,14 +269,10 @@ export async function conturTest(testov) {
                     newCel.classList.add('newCelChange')
                     newCel.setAttribute('rel', `${newClass}`)
                     newCel.innerHTML = iconValues[newClass][1]
-                    i === 0 && iconValues[newClass][0] === 'ВКЛ' ? newCel.children[0].classList.add('toogleIcon') : i === 0 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
-                    i === 1 && iconValues[newClass][0] === 1 ? newCel.children[0].classList.add('toogleIcon') : i === 1 && iconValues[newClass][0] === 'no' ? newCel.innerHTML = 'no' : null
-                    i === 2 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
-                    i === 3 && iconValues[newClass][0] === 'Тип ТС' || i === 3 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
-                    i === 4 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
-                    i === 5 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
-                    i === 6 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
-                    i === 7 && iconValues[newClass][0] === undefined ? newCel.innerHTML = 'no' : null
+                    i === 0 && iconValues[newClass][0] === 'ВКЛ' ? newCel.children[0].classList.add('toogleIcon') : i === 0 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
+                    i === 1 && iconValues[newClass][0] === 1 ? newCel.children[0].classList.add('toogleIcon') : i === 1 && iconValues[newClass][0] === '-' ? newCel.innerHTML = '-' : null
+                    i === 3 && iconValues[newClass][0] === 'Тип ТС' || i === 3 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
+                    i >= 4 && i <= 7 && iconValues[newClass][0] === undefined || i === 2 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
                     listItemCar.appendChild(newCel)
                 }
             })
