@@ -8,12 +8,12 @@ const connection = require('../config/db')
 const { createDate, convert } = require('../helpers')
 const constorller = require('./data.controller.js')
 
-
+require('dotenv').config();
 const sessions = {}; // объект для хранения всех сессий*module.exports = {
 
 exports.getSessiont = async (login) => {
     if (!sessions[login]) { // если нет сохраненной сессии для данного логина
-        const token = await getTokenFromDB(login);
+        const token = process.env.TOKEN//await getTokenFromDB(login);
         const session = await wialonModule.login(token);
         console.log('Новая сессия для логина', login);
         sessions[login] = session; // сохраняем новую сессию
@@ -26,7 +26,7 @@ exports.getSessiont = async (login) => {
 exports.getData = async (req, res) => {
     const login = req.body.login
     try {
-        const token = await getTokenFromDB(login)
+        const token = process.env.TOKEN// await getTokenFromDB(login)
         console.log(token)
         const session = await wialonModule.login(token);
         console.log('сессия' + ' ' + session)
@@ -97,6 +97,8 @@ exports.dataSpisok = async (req, res) => {
         console.log(e)
     }
 }
+
+/*
 async function getTokenFromDB(login) {
     return new Promise((resolve, reject) => {
         try {
@@ -118,7 +120,7 @@ async function getTokenFromDB(login) {
         }
     })
 
-}
+}*/
 
 exports.up = async (req, res) => {
     updateParams()
@@ -184,8 +186,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-setTimeout(test, 1000)
-setInterval(test, 300000)
+//setTimeout(test, 1000)
+//setInterval(test, 300000)
 
 const hunterTime = async () => {
     const now = new Date();
@@ -198,7 +200,7 @@ const hunterTime = async () => {
         structura.datas(res, previousDayEndUnix, previousDayUnix)
     }
 };
-hunterTime();
+//hunterTime();
 setInterval(hunterTime, 50000)
 
 function ggg(nameSens, rez) {

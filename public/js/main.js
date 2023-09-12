@@ -47,7 +47,7 @@ const mods = await fetch('/getData', params)
 const models = await mods.json()
 console.log(models)
 
-
+inits();
 
 const param = {
     method: "POST",
@@ -58,10 +58,10 @@ const param = {
 
 }
 
-
+/*
 const res = await fetch('/api/viewLogs', param)
 const confirm = await res.json()
-console.log(confirm)
+console.log(confirm)*/
 
 zapros(login) //делаем запрос на wialon получаем объекты
 liCreate()
@@ -115,3 +115,120 @@ async function init() {
 init();
 
 
+
+function inits() {
+    wialon.core.Session.getInstance().initSession("https://hst-api.wialon.com");
+    wialon.core.Session.getInstance().loginToken("0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178", "", // try to login
+        function (code) {
+            if (code) {
+                return;
+            }
+            zapross()
+        });
+};
+
+
+
+function zapross() {
+
+    const params11 = {
+        "itemId": 26936623,
+        "ivalType": 1,
+        "timeFrom": 1693914776,
+        "timeTo": 1694519576,
+        "detectors": [
+            {
+                "type": 'sensors',
+                "filter1": 0
+            }, {
+                "type": 'lls',
+                "filter1": 0
+            }, {
+                "type": 'trips',
+                "filter1": 0
+            }
+        ],
+    }
+
+    const remote122 = wialon.core.Remote.getInstance();
+    remote122.remoteCall('events/load', params11,
+        function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+
+
+            const params112 = {
+                "selector": {
+                    "type": '*',
+                    //   "expr": 'trips{m<90}',
+                    "timeFrom": 1693914776,
+                    "timeTo": 1694519576,
+                    "detalization": 3
+                }
+            }
+            const remote1221 = wialon.core.Remote.getInstance();
+            remote1221.remoteCall('events/get', params112,
+                function (code, result) {
+                    if (code) {
+                        console.log(wialon.core.Errors.getErrorText(code));
+                    }
+                    console.log(result)
+
+                });
+        });
+
+
+
+
+
+    console.log('запрос!!')
+
+    const params = {
+        "mode": "add",
+        "units": [
+            {
+                "id": 26936623,
+                "detect":
+                {
+                    "ignition": 0,
+                    "sensors": 0,
+                    'trips': 0,
+                    'lls': 0,
+                    "counters": 0
+                }
+            },
+        ]
+    }
+
+    const remote111 = wialon.core.Remote.getInstance();
+    remote111.remoteCall('events/update_units', params,
+        function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+
+            const prms = {
+                //   "lang": 'ru',
+                //   "measure": 0,
+                "detalization": 23
+            }
+
+            const remote1 = wialon.core.Remote.getInstance();
+            remote1.remoteCall('events/check_updates&params', prms,
+                function (code, result) {
+                    if (code) {
+                        console.log(wialon.core.Errors.getErrorText(code));
+                    }
+                    console.log(result)
+
+                });
+
+        });
+
+
+
+
+}

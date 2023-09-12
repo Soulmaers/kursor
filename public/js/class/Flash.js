@@ -109,6 +109,7 @@ export class ResizeContainer {
         document.addEventListener('mouseup', this.stopResize.bind(this));
     }
     startResize(event) {
+        event.preventDefault()
         this.isResizing = true;
         this.initialX = event.clientX;
         this.originalLeftContainerWidth = this.leftContainer.offsetWidth;
