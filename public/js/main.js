@@ -47,7 +47,7 @@ const mods = await fetch('/getData', params)
 const models = await mods.json()
 console.log(models)
 
-inits();
+//inits();
 
 const param = {
     method: "POST",
