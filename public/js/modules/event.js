@@ -11,7 +11,7 @@ import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.
 import { dataInput, dataSelect, times, click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
-import { Flash, CloseBTN, ResizeContainer, DivDraggable } from '../class/Flash.js'
+import { Flash, CloseBTN, ResizeContainer } from '../class/Flash.js'
 import { protDash, dashViewProtector } from './charts/protek.js'
 import { getStat } from './charts/stat.js'
 
@@ -53,8 +53,6 @@ mainMenu.addEventListener('click', (event) => {
     menu.style.display = 'flex'
 })
 
-const listAtt = document.querySelector('.list_att')
-//new DivDraggable(listAtt)
 draggable()
 
 

@@ -5,7 +5,6 @@ import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
 import { removeElem, removeArrElem } from './helpersFunc.js'
 import { globalSelect } from './filtersList.js'
-import { DivDraggable } from '../class/Flash.js'
 
 const login = document.querySelectorAll('.log')[1].textContent
 
