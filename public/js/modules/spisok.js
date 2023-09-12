@@ -253,14 +253,15 @@ export async function conturTest(testov) {
 
                 }
                 const iconValues = {
-                    ingine: [in1, `<i class="fas fa-key actIcon"></i>`],
-                    oil: [oil, oil],
-                    type: [type, type],
-                    pwr: [pwr, pwr],
                     statusnew: [statusnew, `<i class="fas fa-satellite-dish actIcon"></i>`],
+                    ingine: [in1, `<i class="fas fa-key actIcon"></i>`],
+                    condition: [condition, condition],
+                    oil: [oil, oil],
+                    pwr: [pwr, pwr],
                     sats: [sats, sats],
+                    type: [type, type],
                     meliage: [meliage, meliage],
-                    condition: [condition, condition]
+
                 }
 
                 for (let i = 0; i < countElem.length; i++) {
@@ -268,14 +269,19 @@ export async function conturTest(testov) {
                     const newCel = document.createElement('div')
                     newCel.classList.add('newCel')
                     newCel.classList.add('newCelChange')
+                    console.log(newClass)
                     newCel.setAttribute('rel', `${newClass}`)
+                    newClass === 'type' || newClass === 'meliage' ? newCel.classList.add('newCelTextType') : null
                     newCel.innerHTML = iconValues[newClass][1]
                     i === 0 && iconValues[newClass][0] === 'ВКЛ' ? newCel.children[0].classList.add('toogleIcon') : i === 0 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
                     i === 1 && iconValues[newClass][0] === 1 ? newCel.children[0].classList.add('toogleIcon') : i === 1 && iconValues[newClass][0] === '-' ? newCel.innerHTML = '-' : null
-                    i === 3 && iconValues[newClass][0] === 'Тип ТС' || i === 3 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
-                    i >= 4 && i <= 7 && iconValues[newClass][0] === undefined || i === 2 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
+                    i === 6 && iconValues[newClass][0] === 'Тип ТС' || i === 6 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
+                    i >= 2 && i <= 5 && iconValues[newClass][0] === undefined || i === 7 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
                     listItemCar.appendChild(newCel)
+
                 }
+                listItemCar.insertBefore(listTrail, listItemCar.children[6])
+                listItemCar.insertBefore(listProfil, listItemCar.children[5])
             })
         }
     })

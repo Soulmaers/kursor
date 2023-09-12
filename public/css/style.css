@@ -7672,14 +7672,13 @@ input:focus {
 }
 
 .newColumn {
-  width: 60px;
   display: flex;
   justify-content: center;
   color: rgba(6, 28, 71, 1);
 }
 
 .newCel {
-  width: 60px;
+  width: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7688,6 +7687,10 @@ input:focus {
   font-size: 0.7rem;
   font-family: Arial;
   margin: 0;
+}
+
+.newCelTextType {
+  width: 80px;
 }
 
 .actIcon {
@@ -7772,4 +7775,17 @@ i.tOn {
 .pens {
   width: 2px;
   background-color: rgba(6, 28, 71, 1);
+}
+
+.viewIcon {
+  width: 40px;
+}
+
+.textType {
+  width: 80px;
+}
+
+.list_item2,
+.list_item3 {
+  width: 100px;
 }
