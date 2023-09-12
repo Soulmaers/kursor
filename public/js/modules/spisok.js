@@ -352,6 +352,7 @@ export async function alternativa(arr) {
         })
         const res = await fetch('/api/lastSensors', param)
         const result = await res.json()
+        //  console.log(result)
         if (result) {
             const valueSens = [];
             result.res.forEach(e => {
