@@ -9,21 +9,22 @@ const { createDate, convert } = require('../helpers')
 const constorller = require('./data.controller.js')
 
 require('dotenv').config();
-const sessions = {}; // объект для хранения всех сессий*module.exports = {
+//const sessions = {}; // объект для хранения всех сессий*module.exports = {
 
+/*
 exports.getSessiont = async (login) => {
     if (!sessions[login]) { // если нет сохраненной сессии для данного логина
         const token = process.env.TOKEN//await getTokenFromDB(login);
         const session = await wialonModule.login(token);
-        console.log('Новая сессия для логина', login);
+        //   console.log('Новая сессия для логина', login);
         sessions[login] = session; // сохраняем новую сессию
     }
     console.log(sessions)
     // console.log('Отдаем существующую сессию для логина', login);
     return sessions[login]; // возвращаем сохраненную сессию
-};
+};*/
 
-
+/*
 exports.getData = async (req, res) => {
     const login = req.body.login
     try {
@@ -43,7 +44,7 @@ exports.getData = async (req, res) => {
         console.log(err);
         res.json('ошибка')
     }
-}
+}*/
 //получаем логин, запрашиваем данные  по всем группам,
 //далее запрашиваем параметры по id объекта,
 //после достаем из базы нужные таблицы с моделями,
@@ -116,7 +117,7 @@ exports.viewLogs = async (req, res) => {
 
 
 let dataGlobal;
-const test = async () => {
+exports.test = async () => {
     // console.log('rr' + login)
     const data = await wialonService.getDataFromWialon('i')
     dataGlobal = data;
@@ -168,7 +169,7 @@ const test = async () => {
 setTimeout(test, 1000)
 setInterval(test, 300000)
 
-const hunterTime = async () => {
+exports.hunterTime = async () => {
     const now = new Date();
     if (now.getHours() === 0 && now.getMinutes() === 0) { // если время 0 часов и 0 минут
         const nowUnix = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime() / 1000);
@@ -179,8 +180,13 @@ const hunterTime = async () => {
         structura.datas(res, previousDayEndUnix, previousDayUnix)
     }
 };
+<<<<<<< HEAD
 hunterTime();
 setInterval(hunterTime, 50000)
+=======
+//hunterTime();
+//setInterval(hunterTime, 50000)
+>>>>>>> 153e32ddaff39b5e7ef1139cc08cb6556af0ed80
 
 function ggg(nameSens, rez) {
     if (rez) {

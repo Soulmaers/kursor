@@ -35,6 +35,7 @@ function dis(one) {
 
 
 }
+/*
 const params = {
     method: "POST",
     headers: {
@@ -45,7 +46,7 @@ const params = {
 }
 const mods = await fetch('/getData', params)
 const models = await mods.json()
-console.log(models)
+console.log(models)*/
 
 //inits();
 

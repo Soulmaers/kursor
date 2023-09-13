@@ -1,12 +1,12 @@
 
 const { prms, prmsAllGoup } = require('../params')
 const { getSess, getSessiont } = require('../controllers/data.controller.js')
-
+const geSession = require('../../index.js')
 
 //запрос всех  групп объектов  с виалона
 exports.getAllGroupDataFromWialon = async () => {
     return new Promise(async function (resolve, reject) {
-        const session = await getSessiont('i');
+        const session = await geSession.geSession();
         //  console.log('где?')
         console.log(session)
         session.request('core/search_items', prmsAllGoup)
@@ -27,7 +27,7 @@ exports.getAllParamsIdDataFromWialon = async (id, login) => {
     };
     return new Promise(async function (resolve, reject) {
         try {
-            const session = await getSessiont('i');
+            const session = await geSession.geSession();
             const data = await session.request('core/search_item', prmsId);
             // Обработка успешного ответа
             resolve(data);
@@ -55,7 +55,7 @@ exports.getAnimalsWialon = async (login) => {
         ]
     }
     return new Promise(async function (resolve, reject) {
-        const session = await getSessiont('i');
+        const session = await geSession.geSession();
         session.request('core/update_data_flags', prms)
             .catch(function (err) {
                 console.log(err);
@@ -80,7 +80,7 @@ exports.getAllSensorsIdDataFromWialon = async (id, login) => {
 
     };
     try {
-        const session = await getSessiont('i');
+        const session = await geSession.geSession();
         const data = await session.request('unit/calc_sensors', prms3)
         return data
     }
@@ -98,7 +98,7 @@ exports.getLastAllSensorsIdDataFromWialon = async (id, login) => {
         "sensors": []
     }
     return new Promise(async function (resolve, reject) {
-        const session = await getSessiont('i');
+        const session = await geSession.geSession();
         session.request('unit/calc_last_message', prms)
             .catch(function (err) {
                 console.log(err);
@@ -116,7 +116,7 @@ exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
         'flags': 4096
     }
     return new Promise(async function (resolve, reject) {
-        const session = await getSessiont('i');
+        const session = await geSession.geSession();
         session.request('core/search_item', prmss)
             .catch(function (err) {
                 console.log(err);
@@ -133,7 +133,10 @@ exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
 //запрос данных на виалон по объекту и получение параметров
 exports.getDataFromWialon = async (login) => {
     return new Promise(async function (resolve, reject) {
-        const session = await getSessiont('i');
+        console.log('хочу сессию')
+        const session = await geSession.geSession();
+        //  console.log(sessions)
+        //  const session = await getSessiont('i');
         session.request('core/search_items', prms)
             .catch(function (err) {
                 console.log(err);
@@ -153,7 +156,7 @@ exports.geoDataFromWialon = async (time1, time2, idw, login) => {
         "loadCount": 180000
     }
     return new Promise(async function (resolve, reject) {
-        const session = await getSessiont('i');
+        const session = await geSession.geSession();
         session.request('messages/load_interval', prmsIdTime)
             .catch(function (err) {
                 console.log(err);
@@ -173,7 +176,7 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
         "loadCount": 180000
     }
     return new Promise(async function (resolve, reject) {
-        const session = await getSessiont('i');
+        const session = await geSession.geSession();
         session.request('messages/load_interval', prms2)
             .catch(function (err) {
                 console.log(err);
@@ -201,7 +204,7 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
     }
 
     return new Promise(async function (resolve, reject) {
-        const session = await getSessiont('i');
+        const session = await geSession.geSession();
         session.request('events/update_units', prms)
             .catch(function (err) {
                 console.log(err);
