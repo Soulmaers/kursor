@@ -110,6 +110,32 @@ exports.lastSensors = async (req, res) => {
     }
 }
 
+
+exports.updateSensors = async (req, res) => {
+    const idw = req.body.idw
+    const login = req.body.login
+    const arr = req.body.arr
+
+    /* const promises = arr.map(async (idw) => {
+         const lastSensors = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(idw)
+         //  console.log(lastSensors)
+         return { result: lastSensors, idw };
+     });*/
+
+    // Дождаться завершения всех промисов и вернуть результат
+    try {
+        const result = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(arr)
+        //     const result = await Promise.all(promises);
+        //   console.log(result)
+        res.json({ res: result });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Произошла ошибка");
+    }
+
+}
+
+
 module.exports.datawialonAll = (req, res) => {
     const idw = req.body.idw
     try {

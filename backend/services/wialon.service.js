@@ -4,9 +4,11 @@ const { getSess, getSessiont } = require('../controllers/data.controller.js')
 
 
 //запрос всех  групп объектов  с виалона
-exports.getAllGroupDataFromWialon = async (login) => {
+exports.getAllGroupDataFromWialon = async () => {
     return new Promise(async function (resolve, reject) {
         const session = await getSessiont('i');
+        //  console.log('где?')
+        //   console.log(session)
         session.request('core/search_items', prmsAllGoup)
             .catch(function (err) {
                 console.log(err);
@@ -178,6 +180,41 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
             })
             .then(function (data) {
                 resolve(data)
+            });
+    })
+};
+
+
+exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
+    const prms = {
+        "mode": "add",
+        "units": arr.map(id => ({
+            "id": id,
+            "detect": {
+                'trips': 0
+
+            }
+        }))
+    };
+    const prmsUp = {
+        "detalization": 1
+    }
+
+    return new Promise(async function (resolve, reject) {
+        const session = await getSessiont('i');
+        session.request('events/update_units', prms)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                session.request('events/check_updates&params', prmsUp)
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+                    .then(function (data) {
+                        // console.log(data)
+                        resolve(data)
+                    });
             });
     })
 };

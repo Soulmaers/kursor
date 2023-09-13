@@ -122,14 +122,14 @@ exports.saveStructuraToBase = async (mass) => {
 
 exports.saveListToBase = async (obj) => {
     try {
-        const { login, statusnew, ingine, oil, type, pwr, sats, meliage, condition, pressure } = obj;
+        const { login, statusnew, ingine, oil, type, pwr, sats, meliage, condition, pressure, lasttime } = obj;
 
         const postModel = `SELECT login FROM list WHERE login='${login}'`;
         connection.query(postModel, function (err, results) {
             if (err) console.log(err);
             if (results.length === 0) {
-                const sql = `INSERT INTO list (login, pressure,\`condition\`, statusnew,  oil, ingine,sats, meliage,pwr,type) VALUES ('${login}',
-                 '${pressure}', '${condition}', '${statusnew}', '${oil}', '${ingine}', '${sats}', '${meliage}', '${pwr}', '${type}')`;
+                const sql = `INSERT INTO list (login, pressure,\`condition\`, statusnew,  oil, ingine,sats, meliage,pwr,type, lasttime) VALUES ('${login}',
+                 '${pressure}', '${condition}', '${statusnew}', '${oil}', '${ingine}', '${sats}', '${meliage}', '${pwr}', '${type}', '${lasttime}')`;
                 connection.query(sql, function (err, results) {
                     if (err) console.log(err);
                     console.log('запись сделана');
@@ -137,7 +137,7 @@ exports.saveListToBase = async (obj) => {
             }
             else {
                 const postModel = `UPDATE list SET login='${login}',pressure='${pressure}',\`condition\`='${condition}', statusnew='${statusnew}',
-                oil='${oil}', ingine='${ingine}',sats='${sats}',meliage='${meliage}',pwr='${pwr}',type='${type}' WHERE login = ?`
+                oil='${oil}', ingine='${ingine}',sats='${sats}',meliage='${meliage}',pwr='${pwr}',type='${type}',lasttime='${lasttime}' WHERE login = ?`
                 connection.query(postModel, [login], function (err, results) {
                     if (err) {
                         console.log(err)
@@ -509,7 +509,7 @@ module.exports.alarmFindtoBase = (idw, tyresp) => {
     })
 }
 exports.quantityFindToBase = async (login, quantity) => {
-   // console.log('квантити')
+    // console.log('квантити')
     return new Promise((resolve, reject) => {
         try {
             const selectBase = `SELECT quantity FROM viewLogs WHERE login='${login}'`
@@ -527,7 +527,7 @@ exports.quantityFindToBase = async (login, quantity) => {
 }
 exports.quantitySaveToBase = async (login, quantity) => {
 
- //   console.log(login, quantity)
+    //   console.log(login, quantity)
     return new Promise((resolve, reject) => {
         try {
             const selectBase = `SELECT login FROM viewLogs WHERE login='${login}'`
@@ -535,7 +535,7 @@ exports.quantitySaveToBase = async (login, quantity) => {
                 if (err) {
                     console.log(err)
                 };
-             //   console.log(results.length)
+                //   console.log(results.length)
                 if (results.length === 0) {
                     const arr = [[login, 0]]
                     const selectBase = `INSERT INTO viewLogs(login, quantity) VALUES?`;
@@ -549,7 +549,7 @@ exports.quantitySaveToBase = async (login, quantity) => {
                     })
                 }
                 else {
-                  //  console.log('число' + quantity)
+                    //  console.log('число' + quantity)
                     if (quantity !== undefined) {
                         const postModel = `UPDATE viewLogs SET quantity='${quantity}' WHERE login='${login}'`
                         connection.query(postModel, function (err, results) {
@@ -573,8 +573,8 @@ exports.quantitySaveToBase = async (login, quantity) => {
     })
 }
 exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll) => {
-  //  console.log(gosp)
- //   console.log(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll)
+    //  console.log(gosp)
+    //   console.log(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll)
     const promises = massiv.map(el => {
         el.push(gosp)
         el.push(gosp1)

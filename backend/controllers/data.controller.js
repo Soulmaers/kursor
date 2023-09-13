@@ -18,6 +18,7 @@ exports.getSessiont = async (login) => {
         console.log('Новая сессия для логина', login);
         sessions[login] = session; // сохраняем новую сессию
     }
+    //  console.log(sessions)
     // console.log('Отдаем существующую сессию для логина', login);
     return sessions[login]; // возвращаем сохраненную сессию
 };

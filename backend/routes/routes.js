@@ -30,7 +30,7 @@ router.post('/api/loadInterval', controllerWialon.loadInterval)
 router.post('/api/lastSensors', controllerWialon.lastSensors)
 router.post('/api/viewChart', controllerWialon.viewChart)
 router.post('/api/viewStructura', controllerWialon.viewStructura)
-
+router.post('/api/updateSensors', controllerWialon.updateSensors)
 
 router.post('/api/geoloc', controllerGeo.geoloc)
 router.post('/api/alarmFind', controllerAlarm.alarmFind)
