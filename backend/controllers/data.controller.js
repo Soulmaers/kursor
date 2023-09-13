@@ -99,29 +99,6 @@ exports.dataSpisok = async (req, res) => {
     }
 }
 
-/*
-async function getTokenFromDB(login) {
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT tokenW FROM wialonSessions WHERE login = '${login}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) {
-                    console.log(err);
-                    reject(err); // использование reject для ошибки
-                } else if (results.length > 0) {
-                    resolve(results[0].tokenW); // использование resolve для успешной операции
-                } else {
-                    resolve('Пользователь не найден'); // возвращает строку
-                }
-            })
-        }
-        catch (err) {
-            console.log(err);
-            reject(err); // использование reject для ошибки
-        }
-    })
-
-}*/
 
 exports.up = async (req, res) => {
     updateParams()
@@ -187,8 +164,8 @@ const test = async () => {
     }
     console.log('запись окончена')
 }
-//setTimeout(test, 1000)
-//setInterval(test, 300000)
+setTimeout(test, 1000)
+setInterval(test, 300000)
 
 const hunterTime = async () => {
     const now = new Date();
@@ -201,7 +178,7 @@ const hunterTime = async () => {
         structura.datas(res, previousDayEndUnix, previousDayUnix)
     }
 };
-//hunterTime();
+hunterTime();
 setInterval(hunterTime, 50000)
 
 function ggg(nameSens, rez) {
