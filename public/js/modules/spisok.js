@@ -315,7 +315,6 @@ export async function alternativa(arr) {
     });
 }
 function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in1) {
-    console.log(data[1])
     const countElem = document.querySelectorAll('.newColumn')
     let oil;
     let pwr;
@@ -367,15 +366,11 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
         type: [type, type],
         meliage: [meliage, meliage],
         lasttime: [updatetime, updatetime]
-
     }
-    //  console.log(iconValues)
+
     for (let i = 0; i < countElem.length; i++) {
         const newClass = countElem[i].getAttribute('rel')
-
         const existingCel = listItemCar.querySelector(`.newCel[rel="${newClass}"]`);
-
-        //   console.log(existingCel)
         if (!existingCel) {
             const newCel = document.createElement('div')
             newCel.classList.add('newCel')
@@ -386,7 +381,7 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
             newCel.innerHTML = iconValues[newClass][1]
             i === 0 && iconValues[newClass][0] === 'ВКЛ' ? newCel.children[0].classList.add('toogleIcon') : i === 0 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
             i === 1 && iconValues[newClass][0] === 1 ? newCel.children[0].classList.add('toogleIcon') : i === 1 && iconValues[newClass][0] === '-' ? newCel.innerHTML = '-' : null
-            i === 6 && iconValues[newClass][0] === 'Тип ТС' || i === 6 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
+            i === 6 && iconValues[newClass][0] === 'Тип ТС' || i === 6 && iconValues[newClass][0] == undefined ? newCel.innerHTML = '-' : null
             i >= 2 && i <= 5 && iconValues[newClass][0] === undefined || i >= 7 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
             listItemCar.appendChild(newCel)
         }
@@ -670,7 +665,7 @@ async function viewListKoleso(model, params, arg, osi, nameCar, inn, res) {
     let sats;
     let type;
     const idw = parseFloat(nameCar.id)
-    type = model.result && model.result.length !== 0 ? model.result[0].type : null
+    type = model.result && model.result.length !== 0 ? model.result[0].type : undefined
     const massItog = [];
     const shina = nameCar.querySelectorAll('.arc');
 

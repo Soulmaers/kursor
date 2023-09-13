@@ -11,7 +11,9 @@ const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
 const app = express();
+const wialonModule = require('./backend/modules/wialon.module');
 const databaseService = require('./backend/services/database.service');
+const globalstart = require('./backend/controllers/data.controller.js');
 const WebSocket = require('ws');
 require('events').EventEmitter.prototype._maxListeners = 0;
 
@@ -31,48 +33,48 @@ app.use(configRoutes)
 
 require('dotenv').config();
 const port = process.env.PORT
-const server = app.listen(port, () => console.log(`Сервер запущен, порт:${port}`))
-
-
-
-/*
-
-// Создаем WebSocket-сервер
-const wss = new WebSocket.Server({ server });
-const findVar = () => {
-    wss.on('connection', (ws) => {
-        let dannie;
-        if (databaseService.myVariable && databaseService.myVariable !== dannie) {
-            console.log('да')
-            dannie = databaseService.myVariable
-            let val;
-            dannie[1][2] !== 'Потеря связи с датчиком' ? val = dannie[1][2] + ' ' + 'Бар' : val = dannie[1][3] + '' + 't'
-            const event = 'Уведомление'
-
-            const value = [{
-                event: event, time: `Время ${dannie[0]}`, name: `Объект: ${dannie[1][0]}`, tyres: `Колесо: ${dannie[1][1]}`,
-                param: `Параметр: ${val}`, alarm: `Событие: ${dannie[2]}`
-            }]
-            console.log(value)
-            console.log('конст?')
-            wss.clients.forEach((client) => {
-                if (client.readyState === WebSocket.OPEN) {
-                    console.log(client.readyState)
-                    client.send(JSON.stringify(value)); // Отправляем сообщение клиенту
-                }
-            });
-        }
-        ws.on('message', (message) => {
-            console.log('Received message:', message);
+const initServer = () => {
+    return new Promise((resolve) => {
+        app.listen(port, () => {
+            console.log(`Сервер запущен, порт:${port}`);
+            resolve();
         });
-        // Обработка закрытия соединения WebSocket-клиента
-        ws.on('close', () => {
-            console.log('WebSocket client disconnected');
-        });
-    })
+    });
+}
+async function init() {
+    await initServer()
+    await wialon()
+    // globalstart.test()
+    // globalstart.hunterTime()
+    setInterval(globalstart.test, 300000)
+    setInterval(globalstart.hunterTime, 50000)
+    console.log('сессия открыта')
+}
+init()
+
+
+let session;
+async function wialon() {
+    const token = process.env.TOKEN// await getTokenFromDB(login)
+    console.log(token)
+    session = await wialonModule.login(token);
 }
 
-findVar()
-setInterval(findVar, 5000)
+exports.geSession = async () => {
+    return new Promise(async (resolve, reject) => {
+        if (session) { // Если сессия уже инициализирована
+            resolve(session);
+        } else {
+            // Добавьте interval для попытки повторения, пока сессия не будет инициализирована
+            const interval = setInterval(() => {
+                if (session) {
+                    clearInterval(interval); // Остановите interval, когда сессия будет готова
+                    resolve(session);
+                }
+            }, 500);
+        }
+    });
+}
 
-*/
+
+
