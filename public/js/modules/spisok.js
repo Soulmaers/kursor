@@ -290,10 +290,12 @@ export async function alternativa(arr) {
         const result = await res.json()
         const restest = await fetch('/api/updateSensors', param)
         const resulttest = await restest.json()
-        // console.log(resulttest.res)
         const updateTime = Object.entries(resulttest.res).map(el => {
             //  console.log(Object.values(el[1]))
-            return { id: parseFloat(el[0]), lastime: Object.values(el[1])[0].trips && Object.values(el[1])[0].trips.length !== 0 ? Object.values(el[1])[0].trips.m : null }
+            return {
+                id: parseFloat(el[0]), lastime: Object.values(el[1])[0].trips && Object.values(el[1])[0].trips.length !== 0 ? Object.values(el[1])[0].trips.m : null,
+                speed: Object.values(el[1])[0].trips && Object.values(el[1])[0].trips.length !== 0 ? Object.values(el[1])[0].trips.curr_speed : null
+            }
         })
         if (result) {
             const valueSens = [];
@@ -313,6 +315,7 @@ export async function alternativa(arr) {
     });
 }
 function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in1) {
+    console.log(data[1])
     const countElem = document.querySelectorAll('.newColumn')
     let oil;
     let pwr;
@@ -323,11 +326,8 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
     data[1].forEach(i => {
         if (i.id === elemId) {
             updatetime = convertTime(i.lastime)
-        }
-    })
-    data[0].forEach(i => {
-        if (i[0] === 'Скорость' && i[2] === elemId) {
-            const speed = i[3] === -348201.3876 ? '-' : i[3]
+
+            const speed = i.speed === -348201.3876 ? '-' : i.speed
             if (speed > 5) {
                 condition = `<i class="fas fa-arrow-alt-circle-right toogleIcon"></i>`;
             }
@@ -344,6 +344,9 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
                 condition = '-';
             }
         }
+
+    })
+    data[0].forEach(i => {
         if (i[0] === 'Топливо' && i[2] === elemId) {
             oil = i[3] === -348201.3876 ? '-' : `${i[3].toFixed(0)} л.`
         }

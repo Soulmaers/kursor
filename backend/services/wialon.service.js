@@ -8,7 +8,7 @@ exports.getAllGroupDataFromWialon = async () => {
     return new Promise(async function (resolve, reject) {
         const session = await getSessiont('i');
         //  console.log('где?')
-        //   console.log(session)
+        console.log(session)
         session.request('core/search_items', prmsAllGoup)
             .catch(function (err) {
                 console.log(err);
@@ -80,7 +80,7 @@ exports.getAllSensorsIdDataFromWialon = async (id, login) => {
 
     };
     try {
-        const session = await getSessiont(login);
+        const session = await getSessiont('i');
         const data = await session.request('unit/calc_sensors', prms3)
         return data
     }
@@ -197,7 +197,7 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
         }))
     };
     const prmsUp = {
-        "detalization": 1
+        "detalization": 3
     }
 
     return new Promise(async function (resolve, reject) {
