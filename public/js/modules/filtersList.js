@@ -134,45 +134,8 @@ const selectionOff = (event) => {
 
 export function globalSelect() {
     const titleList = document.querySelectorAll('.viewIcon')
-    const sortIcon = document.querySelector('.iconsort')
-    const element = document.querySelector('.conditionSort');
-    const sortCondition = document.querySelector('.sortCondition')
-    const grays = document.querySelectorAll('.grays')
-    element.addEventListener('mouseenter', () => {
-        element.style.width = '70px'
-        sortIcon.style.display = 'block'
-        let hasToogleIcon = false;
-
-        grays.forEach(e => {
-            if (e.classList.contains('toogleIcon')) {
-                hasToogleIcon = true;
-            }
-        });
-        hasToogleIcon ? sortIcon.style.color = 'gray' : sortIcon.style.color = 'rgba(6, 28, 71, 1)'
-
-    })
-    sortCondition.addEventListener('mouseleave', () => {
-        sortCondition.style.display = 'none'
-        sortIcon.classList.remove('cluch')
-        // sortIcon.style.color = 'rgba(6, 28, 71, 1)'
-    })
-    element.addEventListener('mouseleave', () => {
-        sortIcon.style.display = 'none'
-        element.style.width = '40px'
-        sortIcon.classList.contains('cluch') ? sortCondition.style.display = 'flex' : sortCondition.style.display = 'none'
-        //    sortIcon.style.color = 'gray'
-    })
-    sortIcon.addEventListener('click', () => {
-        console.log('кликнул')
-        element.style.position = 'relative'
-        sortIcon.classList.toggle('cluch')
-        sortIcon.classList.contains('cluch') ? (sortCondition.style.display = 'flex') :
-            (sortCondition.style.display = 'none')
-    })
-
-    grays.forEach(el => {
-        el.addEventListener('click', filterCondition)
-    })
+    conditionFilter()
+    typeFilter()
     titleList.forEach(item => {
         item.addEventListener('mouseenter', selection)
         item.addEventListener('mouseleave', selectionOff)
@@ -188,9 +151,6 @@ export function globalSelect() {
 }
 
 function filterCondition(event, clickedElement) {
-
-
-
     const targetElement = clickedElement || event.target;
     const grays = document.querySelectorAll('.grays');
     grays.forEach(e => {
@@ -253,6 +213,7 @@ function filterCondition(event, clickedElement) {
             }
         })
     }
+    const element = document.querySelector('.conditionSort');
     const sortIcon = document.querySelector('.iconsort')
     let hasToogleIcon = false;
     grays.forEach(e => {
@@ -260,8 +221,93 @@ function filterCondition(event, clickedElement) {
             hasToogleIcon = true;
         }
     });
-    hasToogleIcon ? sortIcon.style.color = 'gray' : sortIcon.style.color = 'rgba(6, 28, 71, 1)'
+    hasToogleIcon ? (element.children[0].style.color = 'gray', sortIcon.style.color = 'gray') : (element.children[0].style.color = 'rgba(6, 28, 71, 1)', sortIcon.style.color = 'rgba(6, 28, 71, 1)')
 }
+
+
+function typeFilter() {
+    const sortIcon = document.querySelector('.iconsortType')
+    const element = document.querySelector('.sortType');
+    const sortCondition = document.querySelector('.sortConditionType')
+    element.addEventListener('mouseenter', () => {
+        element.style.width = '70px'
+        sortIcon.style.display = 'block'
+        /*  let hasToogleIcon = false;
+  
+          grays.forEach(e => {
+              if (e.classList.contains('toogleIcon')) {
+                  hasToogleIcon = true;
+              }
+          });
+          hasToogleIcon ? sortIcon.style.color = 'gray' : sortIcon.style.color = 'rgba(6, 28, 71, 1)'*/
+    })
+    sortCondition.addEventListener('mouseleave', () => {
+        sortCondition.style.display = 'none'
+        sortIcon.classList.remove('cluch')
+    })
+    sortIcon.addEventListener('click', () => {
+        console.log('кликнул')
+        element.style.position = 'relative'
+        sortIcon.classList.toggle('cluch')
+        sortIcon.classList.contains('cluch') ? (sortCondition.style.display = 'flex') :
+            (sortCondition.style.display = 'none')
+    })
+
+    element.addEventListener('mouseleave', () => {
+        sortIcon.style.display = 'none'
+        element.style.width = '70px'
+        sortIcon.classList.contains('cluch') ? sortCondition.style.display = 'flex' : sortCondition.style.display = 'none'
+        /*  let hasToogleIcon = false;
+          grays.forEach(e => {
+              if (e.classList.contains('toogleIcon')) {
+                  hasToogleIcon = true;
+              }
+          });
+          hasToogleIcon ? (element.children[0].style.color = 'gray', sortIcon.style.color = 'gray') : (element.children[0].style.color = 'rgba(6, 28, 71, 1)', sortIcon.style.color = 'rgba(6, 28, 71, 1)')*/
+    })
+
+
+}
+function conditionFilter() {
+    const sortIcon = document.querySelector('.iconsort')
+    const element = document.querySelector('.conditionSort');
+    const sortCondition = document.querySelector('.sortCondition')
+    const grays = document.querySelectorAll('.grays')
+    element.addEventListener('mouseenter', () => {
+        element.style.width = '70px'
+        sortIcon.style.display = 'block'
+
+
+    })
+    sortCondition.addEventListener('mouseleave', () => {
+        sortCondition.style.display = 'none'
+        sortIcon.classList.remove('cluch')
+    })
+    element.addEventListener('mouseleave', () => {
+        sortIcon.style.display = 'none'
+        element.style.width = '40px'
+        sortIcon.classList.contains('cluch') ? sortCondition.style.display = 'flex' : sortCondition.style.display = 'none'
+        let hasToogleIcon = false;
+        grays.forEach(e => {
+            if (e.classList.contains('toogleIcon')) {
+                hasToogleIcon = true;
+            }
+        });
+        hasToogleIcon ? (element.children[0].style.color = 'gray', sortIcon.style.color = 'gray') : (element.children[0].style.color = 'rgba(6, 28, 71, 1)', sortIcon.style.color = 'rgba(6, 28, 71, 1)')
+    })
+    sortIcon.addEventListener('click', () => {
+        console.log('кликнул')
+        element.style.position = 'relative'
+        sortIcon.classList.toggle('cluch')
+        sortIcon.classList.contains('cluch') ? (sortCondition.style.display = 'flex') :
+            (sortCondition.style.display = 'none')
+    })
+    grays.forEach(el => {
+        el.addEventListener('click', filterCondition)
+    })
+}
+
+
 
 
 export function draggable() {

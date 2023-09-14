@@ -7820,7 +7820,59 @@ i.tOn {
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
+.sortConditionType {
+  display: none;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-around;
+  margin-left: 3px;
+  position: absolute;
+  top: 20px;
+  left: 40px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 3px;
+  border: 1px solid rgba(6, 28, 71, 1);
+  z-index: 1;
+  height: 200px;
+  width: 180px;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+  font-size: 0.7rem;
+}
+
+.text_type {
+  margin: 2px 15px;
+}
+
+.fa-check {
+  cursor: pointer;
+  color: gray;
+}
+
+.item_type {
+  width: 100%;
+  display: flex;
+
+  align-items: center;
+  list-style-type: none;
+  border-bottom: 1px solid rgba(6, 28, 71, 1);
+}
+
+.item_type:hover .fa-check {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
 i.iconsort {
+  display: none;
+  margin-left: 3px;
+  color: rgba(6, 28, 71, 1);
+  cursor: pointer;
+}
+
+i.iconsortType {
   display: none;
   margin-left: 3px;
   color: rgba(6, 28, 71, 1);
