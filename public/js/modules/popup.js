@@ -33,7 +33,7 @@ async function createPopup(array) {
     }
     const popupClose = document.createElement('div')
     popupClose.classList.add('popup-close')
-    popupClose.textContent = 'X'
+    popupClose.innerHTML = `<i class="fas fa fa-times w30"></i>`
     pop.appendChild(popupClose)
     const popup = document.querySelector('.popup');
     popup.style.display = "block";

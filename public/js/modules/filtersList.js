@@ -148,13 +148,13 @@ export function globalSelect() {
                 hasToogleIcon = true;
             }
         });
-        hasToogleIcon ? sortIcon.style.color = 'rgba(6, 28, 71, 1)' : sortIcon.style.color = 'gray'
+        hasToogleIcon ? sortIcon.style.color = 'gray' : sortIcon.style.color = 'rgba(6, 28, 71, 1)'
 
     })
     sortCondition.addEventListener('mouseleave', () => {
         sortCondition.style.display = 'none'
         sortIcon.classList.remove('cluch')
-        sortIcon.style.color = 'gray'
+        // sortIcon.style.color = 'rgba(6, 28, 71, 1)'
     })
     element.addEventListener('mouseleave', () => {
         sortIcon.style.display = 'none'
@@ -188,6 +188,9 @@ export function globalSelect() {
 }
 
 function filterCondition(event, clickedElement) {
+
+
+
     const targetElement = clickedElement || event.target;
     const grays = document.querySelectorAll('.grays');
     grays.forEach(e => {
@@ -250,6 +253,14 @@ function filterCondition(event, clickedElement) {
             }
         })
     }
+    const sortIcon = document.querySelector('.iconsort')
+    let hasToogleIcon = false;
+    grays.forEach(e => {
+        if (e.classList.contains('toogleIcon')) {
+            hasToogleIcon = true;
+        }
+    });
+    hasToogleIcon ? sortIcon.style.color = 'gray' : sortIcon.style.color = 'rgba(6, 28, 71, 1)'
 }
 
 
