@@ -215,6 +215,16 @@ function filterCondition(event, clickedElement) {
                                 dubleSelectOn(item.children[1].children[1])
                             }
                         })
+                        const titleModal = document.querySelectorAll('.titleModal')
+                        titleModal.forEach(e => {
+                            const visibleChildren = Array.from(e.nextElementSibling.children).filter(it => it.style.display !== 'none');
+                            if (visibleChildren.length === 0) {
+                                e.style.display = 'none';
+                            }
+                            else {
+                                e.style.display = 'flex';
+                            }
+                        });
 
                     } else {
                         e.closest('.listItem').style.display = 'none';
@@ -225,13 +235,6 @@ function filterCondition(event, clickedElement) {
                 }
             }
         })
-        const titleModal = document.querySelectorAll('.titleModal')
-        titleModal.forEach(e => {
-            const visibleChildren = Array.from(e.nextElementSibling.children).filter(it => it.style.display !== 'none');
-            if (visibleChildren.length === 0) {
-                e.style.display = 'none';
-            }
-        });
 
     } else {
         const list = document.querySelectorAll('.listItem')
