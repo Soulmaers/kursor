@@ -324,7 +324,9 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
 
     data[1].forEach(i => {
         if (i.id === elemId) {
-            updatetime = convertTime(i.lastime)
+            const nowTime = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
+            const currentTime = nowTime - i.lastime
+            updatetime = convertTime(currentTime)
 
             const speed = i.speed === -348201.3876 ? '-' : i.speed
             if (speed > 5) {

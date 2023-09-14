@@ -118,13 +118,8 @@ const dubleSelectOn = (elem) => {
     });
 }
 
-
-
-
-
 const selection = (event) => {
     event.target.children[1].style.display = 'flex'
-
 }
 const selectionOff = (event) => {
     event.target.children[1].style.display = 'none'
@@ -138,8 +133,6 @@ const selectionOff = (event) => {
     })
     act ? event.target.children[0].style.color = 'gray' : null
 }
-
-
 
 export function globalSelect() {
     const titleList = document.querySelectorAll('.viewIcon')
