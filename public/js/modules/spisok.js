@@ -328,13 +328,13 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
 
             const speed = i.speed === -348201.3876 ? '-' : i.speed
             if (speed > 5) {
-                condition = `<i class="fas fa-arrow-alt-circle-right toogleIcon"></i>`;
+                condition = `<i class="fas fa-arrow-alt-circle-right toogleIcon" rel="01g"></i>`;
             }
             else if (speed <= 5 && in1 === 1) {
-                condition = `<i class="fas fa-pause-circle toogleIcon"></i>`;
+                condition = `<i class="fas fa-pause-circle toogleIcon"rel="02g"></i>`;
             }
             else if (speed <= 5 && in1 === 0 || speed === '-' && in1 === 0 || !speed && in1 === 0) {
-                condition = `<i class="fas fa-parking toogleIcon"></i>`;
+                condition = `<i class="fas fa-parking toogleIcon"rel="03g"></i>`;
             }
             else if (speed === '-' && in1 === '-') {
                 condition = `<i class="fas fa-power-off></i>`;
