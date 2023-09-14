@@ -75,6 +75,13 @@ const selectOff = (event) => {
             dubleSelectOn(item.children[1].children[1])
         }
     })
+    const grays = document.querySelectorAll('.grays')
+    grays.forEach(e => {
+        if (e.classList.contains('toogleIcon')) {
+            filterCondition(null, e)
+        }
+    })
+
 
 }
 
@@ -180,28 +187,34 @@ export function globalSelect() {
     })
 }
 
-
-
-function filterCondition(event) {
+function filterCondition(event, clickedElement) {
+    const targetElement = clickedElement || event.target;
     const grays = document.querySelectorAll('.grays');
     grays.forEach(e => {
-        if (e !== event.target) {
+        if (e !== targetElement) {
             e.classList.remove('toogleIcon')
         }
     });
-    event.target.classList.toggle('toogleIcon');
-    if (event.target.classList.contains('toogleIcon')) {
+    !clickedElement ? targetElement.classList.toggle('toogleIcon') : null
+    if (targetElement.classList.contains('toogleIcon')) {
         const newCelChange = document.querySelectorAll('.newCelChange')
         const list = document.querySelectorAll('.listItem')
         list.forEach(e => e.style.display = 'none')
         Array.from(newCelChange).forEach(e => {
-            if (e.getAttribute('rel') === event.target.parentNode.parentNode.getAttribute('rel')) {
+            if (e.getAttribute('rel') === targetElement.parentNode.parentNode.getAttribute('rel')) {
                 if (e.children[0]) {
-                    let relAttr = event.target.getAttribute('rel');
+                    let relAttr = targetElement.getAttribute('rel');
                     let childRelAttr = e.children[0].getAttribute('rel');
 
                     if (relAttr === childRelAttr) {
                         e.closest('.listItem').style.display = 'flex';
+                        const titleList = document.querySelectorAll('.viewIcon')
+                        titleList.forEach(item => {
+                            if (item.children[0].style.color === 'gray') {
+                                console.log(item.children[0])
+                                dubleSelectOn(item.children[1].children[1])
+                            }
+                        })
 
                     } else {
                         e.closest('.listItem').style.display = 'none';
@@ -221,7 +234,6 @@ function filterCondition(event) {
         });
 
     } else {
-        console.log('тут?')
         const list = document.querySelectorAll('.listItem')
         list.forEach(e => e.style.display = 'flex')
         const titleList = document.querySelectorAll('.viewIcon')
@@ -234,6 +246,8 @@ function filterCondition(event) {
     }
 
 }
+
+
 export function draggable() {
     const elem = document.querySelector('.list_att')
     const elemArray = [];
