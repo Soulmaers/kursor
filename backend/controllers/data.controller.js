@@ -166,8 +166,6 @@ exports.test = async () => {
     }
     console.log('запись окончена')
 }
-setTimeout(test, 1000)
-setInterval(test, 300000)
 
 exports.hunterTime = async () => {
     const now = new Date();
@@ -180,13 +178,6 @@ exports.hunterTime = async () => {
         structura.datas(res, previousDayEndUnix, previousDayUnix)
     }
 };
-<<<<<<< HEAD
-hunterTime();
-setInterval(hunterTime, 50000)
-=======
-//hunterTime();
-//setInterval(hunterTime, 50000)
->>>>>>> 153e32ddaff39b5e7ef1139cc08cb6556af0ed80
 
 function ggg(nameSens, rez) {
     if (rez) {
