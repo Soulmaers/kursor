@@ -129,6 +129,14 @@ const selection = (event) => {
 const selectionOff = (event) => {
     event.target.children[1].style.display = 'none'
     event.target.children[1].children[1].style.display === 'block' ? event.target.children[0].style.color = 'gray' : null
+    let act = false
+    const grays = document.querySelectorAll('.grays')
+    grays.forEach(e => {
+        if (e.classList.contains('toogleIcon')) {
+            act = true
+        }
+    })
+    act ? event.target.children[0].style.color = 'gray' : null
 }
 
 
