@@ -128,6 +128,45 @@ const selectionOff = (event) => {
 
 export function globalSelect() {
     const titleList = document.querySelectorAll('.viewIcon')
+    const sortIcon = document.querySelector('.iconsort')
+    const element = document.querySelector('.conditionSort');
+    const sortCondition = document.querySelector('.sortCondition')
+    const grays = document.querySelectorAll('.grays')
+    element.addEventListener('mouseenter', () => {
+        element.style.width = '70px'
+        sortIcon.style.display = 'block'
+        let hasToogleIcon = false;
+
+        grays.forEach(e => {
+            if (e.classList.contains('toogleIcon')) {
+                hasToogleIcon = true;
+            }
+        });
+        hasToogleIcon ? sortIcon.style.color = 'rgba(6, 28, 71, 1)' : sortIcon.style.color = 'gray'
+
+    })
+    sortCondition.addEventListener('mouseleave', () => {
+        sortCondition.style.display = 'none'
+        sortIcon.classList.remove('cluch')
+        sortIcon.style.color = 'gray'
+    })
+    element.addEventListener('mouseleave', () => {
+        sortIcon.style.display = 'none'
+        element.style.width = '40px'
+        sortIcon.classList.contains('cluch') ? sortCondition.style.display = 'flex' : sortCondition.style.display = 'none'
+        //    sortIcon.style.color = 'gray'
+    })
+    sortIcon.addEventListener('click', () => {
+        console.log('кликнул')
+        element.style.position = 'relative'
+        sortIcon.classList.toggle('cluch')
+        sortIcon.classList.contains('cluch') ? (sortCondition.style.display = 'flex') :
+            (sortCondition.style.display = 'none')
+    })
+
+    grays.forEach(el => {
+        el.addEventListener('click', filterCondition)
+    })
     titleList.forEach(item => {
         item.addEventListener('mouseenter', selection)
         item.addEventListener('mouseleave', selectionOff)
@@ -141,6 +180,60 @@ export function globalSelect() {
     })
 }
 
+
+
+function filterCondition(event) {
+    const grays = document.querySelectorAll('.grays');
+    grays.forEach(e => {
+        if (e !== event.target) {
+            e.classList.remove('toogleIcon')
+        }
+    });
+    event.target.classList.toggle('toogleIcon');
+    if (event.target.classList.contains('toogleIcon')) {
+        const newCelChange = document.querySelectorAll('.newCelChange')
+        const list = document.querySelectorAll('.listItem')
+        list.forEach(e => e.style.display = 'none')
+        Array.from(newCelChange).forEach(e => {
+            if (e.getAttribute('rel') === event.target.parentNode.parentNode.getAttribute('rel')) {
+                if (e.children[0]) {
+                    let relAttr = event.target.getAttribute('rel');
+                    let childRelAttr = e.children[0].getAttribute('rel');
+
+                    if (relAttr === childRelAttr) {
+                        e.closest('.listItem').style.display = 'flex';
+
+                    } else {
+                        e.closest('.listItem').style.display = 'none';
+                    }
+                }
+                else {
+                    e.closest('.listItem').style.display = 'none'
+                }
+            }
+        })
+        const titleModal = document.querySelectorAll('.titleModal')
+        titleModal.forEach(e => {
+            const visibleChildren = Array.from(e.nextElementSibling.children).filter(it => it.style.display !== 'none');
+            if (visibleChildren.length === 0) {
+                e.style.display = 'none';
+            }
+        });
+
+    } else {
+        console.log('тут?')
+        const list = document.querySelectorAll('.listItem')
+        list.forEach(e => e.style.display = 'flex')
+        const titleList = document.querySelectorAll('.viewIcon')
+        titleList.forEach(item => {
+            if (item.children[0].style.color === 'gray') {
+                console.log(item.children[0])
+                dubleSelectOn(item.children[1].children[1])
+            }
+        })
+    }
+
+}
 export function draggable() {
     const elem = document.querySelector('.list_att')
     const elemArray = [];
