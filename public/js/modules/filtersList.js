@@ -195,7 +195,8 @@ function filterCondition(event, clickedElement) {
             e.classList.remove('toogleIcon')
         }
     });
-    !clickedElement ? targetElement.classList.toggle('toogleIcon') : null
+
+    !clickedElement ? (targetElement.classList.toggle('toogleIcon'), targetElement.closest('.viewIcon').children[0].style.color = 'gray') : null
     if (targetElement.classList.contains('toogleIcon')) {
         const newCelChange = document.querySelectorAll('.newCelChange')
         const list = document.querySelectorAll('.listItem')
@@ -237,6 +238,9 @@ function filterCondition(event, clickedElement) {
         })
 
     } else {
+        console.log(targetElement.closest('.viewIcon').children[0].nextElementSibling.children[1])
+        targetElement.closest('.viewIcon').children[0].nextElementSibling.children[1].style.display !== 'none' ? targetElement.closest('.viewIcon').children[0].style.color = 'gray' :
+            targetElement.closest('.viewIcon').children[0].style.color = 'rgba(6, 28, 71, 1)'
         const list = document.querySelectorAll('.listItem')
         list.forEach(e => e.style.display = 'flex')
         const titleList = document.querySelectorAll('.viewIcon')
