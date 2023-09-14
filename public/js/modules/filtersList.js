@@ -41,7 +41,7 @@ const selectOn = (event) => {
 const selectOff = (event) => {
     event.target.style.display = 'none'
     event.target.previousElementSibling.style.display = 'block'
-
+    event.target.parentNode.previousElementSibling.style.color = 'rgba(6, 28, 71, 1)'
     const newCelChange = document.querySelectorAll('.newCelChange')
     newCelChange.forEach(el => {
         if (event.target.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
@@ -75,25 +75,19 @@ const selectOff = (event) => {
             dubleSelectOn(item.children[1].children[1])
         }
     })
-    if (event.target.parentNode.parentNode.getAttribute('rel') === 'condition') {
-        const grays = document.querySelectorAll('.grays')
-        grays.forEach(e => {
-            if (e.classList.contains('toogleIcon')) {
-                filterCondition(null, e)
-            }
-        })
-        let act = false
-        grays.forEach(e => {
-            if (e.classList.contains('toogleIcon')) {
-                act = true
-            }
-        })
-        act ? event.target.parentNode.previousElementSibling.style.color = 'gray' : event.target.parentNode.previousElementSibling.style.color = 'rgba(6, 28, 71, 1)'
-    }
-    else {
-        event.target.parentNode.previousElementSibling.style.color = 'rgba(6, 28, 71, 1)'
-    }
-
+    const grays = document.querySelectorAll('.grays')
+    grays.forEach(e => {
+        if (e.classList.contains('toogleIcon')) {
+            filterCondition(null, e)
+        }
+    })
+    let act = false
+    grays.forEach(e => {
+        if (e.classList.contains('toogleIcon')) {
+            act = true
+        }
+    })
+    act ? event.target.parentElement.previousElementSibling.style.color = 'gray' : null
 
 }
 
@@ -190,6 +184,7 @@ export function globalSelect() {
         }
 
     })
+
 }
 
 function filterCondition(event, clickedElement) {
@@ -200,7 +195,6 @@ function filterCondition(event, clickedElement) {
             e.classList.remove('toogleIcon')
         }
     });
-
     !clickedElement ? (targetElement.classList.toggle('toogleIcon'), targetElement.closest('.viewIcon').children[0].style.color = 'gray') : null
     if (targetElement.classList.contains('toogleIcon')) {
         const newCelChange = document.querySelectorAll('.newCelChange')
@@ -256,7 +250,6 @@ function filterCondition(event, clickedElement) {
             }
         })
     }
-
 }
 
 
