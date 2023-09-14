@@ -18,7 +18,7 @@ export function startList(object) {
         .map(e => e);
     const arrayGlobal = [];
     const filteredArray1 = array.filter(item => item[6] === 'Самосвал');
-    const filteredArray2 = array.filter(item => item[6] === 'Самосвал-Прицеп');
+    const filteredArray2 = array.filter(item => item[6] === 'Самосвал-Полуприцеп');
 
     if (filteredArray1.length > 0) {
         arrayGlobal.push(filteredArray1);
