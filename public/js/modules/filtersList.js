@@ -1,4 +1,5 @@
-
+import { storTitleList } from './content.js'
+import { Tooltip } from '../class/Tooltip.js'
 
 const selectOn = (event) => {
     event.target.style.display = 'none'
@@ -122,6 +123,10 @@ const selection = (event) => {
 const selectionOff = (event) => {
     event.target.children[1].style.display = 'none'
     event.target.children[1].children[1].style.display === 'block' ? event.target.children[0].style.color = 'gray' : null
+    const sortIcon = document.querySelector('.iconsort')
+    console.log(sortIcon.previousElementSibling.previousElementSibling)
+    sortIcon.previousElementSibling.children[1].style.display === 'block' ? sortIcon.previousElementSibling.previousElementSibling.style.color = 'gray' :
+        sortIcon.previousElementSibling.previousElementSibling.style.color = 'rgba(6, 28, 71, 1)'
 }
 
 export function globalSelect() {
@@ -214,9 +219,7 @@ function filterType() {
             bool = true
         }
     })
-
-
-    list.forEach(e => e.style.display = 'none')
+    // list.forEach(e => e.style.display = 'none')
     checkCond()
     const finalArray = [];
     document.querySelectorAll('.listItem').forEach(e => {
@@ -293,7 +296,7 @@ function typeFilter() {
     })
     sortCondition.addEventListener('mouseleave', () => {
         sortCondition.style.display = 'none'
-        sortIcon.classList.remove('cluch')
+        //   sortIcon.classList.remove('cluch')
     })
     sortIcon.addEventListener('click', () => {
         console.log('кликнул')
@@ -304,7 +307,7 @@ function typeFilter() {
     element.addEventListener('mouseleave', () => {
         sortIcon.style.display = 'none'
         element.style.width = '70px'
-        sortCondition.style.display = 'none'
+
 
     })
     const grays = document.querySelectorAll('.graysType')
@@ -327,12 +330,12 @@ function conditionFilter() {
     })
     sortCondition.addEventListener('mouseleave', () => {
         sortCondition.style.display = 'none'
-        sortIcon.classList.remove('cluch')
+        // sortIcon.classList.remove('cluch')
     })
     element.addEventListener('mouseleave', () => {
         sortIcon.style.display = 'none'
         element.style.width = '40px'
-        sortCondition.style.display = 'none'
+        // sortCondition.style.display = 'none'
         let hasToogleIcon = false;
         grays.forEach(e => {
             if (e.classList.contains('toogleIcon')) {
@@ -443,7 +446,14 @@ export function draggable() {
         });
         // attachListeners()
         draggable()
+        const viewIcon = document.querySelectorAll('.viewIcon')
+        viewIcon.forEach(e => {
+            const relValues = e.getAttribute('rel').split(' ');
+            const lastRel = relValues[relValues.length - 1];
+            new Tooltip(e, [storTitleList[lastRel]]);
+        });
         globalSelect()
+
     }
 
 }
