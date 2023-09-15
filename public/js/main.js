@@ -3,7 +3,6 @@ import { zapros } from './modules/menu.js'
 import { btnDel } from './modules/event.js'
 import { liCreate } from './modules/visual.js'
 
-<<<<<<< HEAD
 let kluch;
 const role = document.querySelectorAll('.log')[0].textContent
 const login = document.querySelectorAll('.log')[1].textContent
@@ -99,8 +98,6 @@ async function waitAndExecute() {
 
     // Другой код, который должен выполниться после завершения работы функции zaprosSpisok
 }
-=======
->>>>>>> 2b7629d122c774c67ee963990bd6b418eea986bd
 
 
 
@@ -160,10 +157,10 @@ async function init() {
 
     }
 
-    /*
+
     const res = await fetch('/api/viewLogs', param)
     const confirm = await res.json()
-    console.log(confirm)*/
+    console.log(confirm)
 
     zapros(login) //делаем запрос на wialon получаем объекты
     liCreate()
