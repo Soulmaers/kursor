@@ -3,6 +3,7 @@ import { zapros } from './modules/menu.js'
 import { btnDel } from './modules/event.js'
 import { liCreate } from './modules/visual.js'
 
+<<<<<<< HEAD
 let kluch;
 const role = document.querySelectorAll('.log')[0].textContent
 const login = document.querySelectorAll('.log')[1].textContent
@@ -100,6 +101,8 @@ async function waitAndExecute() {
 }
 
 
+=======
+>>>>>>> 6117cbd84b125e55befae0ac3a04bd92be64fbae
 
 
 function waitForDOMLoad() {
