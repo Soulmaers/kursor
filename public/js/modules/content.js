@@ -1,4 +1,24 @@
 
+
+
+export const storTitleList = {
+    statusnew: 'Статус on/off',
+    ingine: 'Зажигание',
+    condition: 'Состояние',
+    tagach: 'Давление в шинах тягача',
+    pricep: 'Давление в шинах прицепа',
+    oil: 'Топливо',
+    pwr: 'Бортовое питание',
+    sats: 'Спутники',
+    type: 'Тип ТС',
+    meliage: 'Пробег',
+    lasttime: 'Актуальность данных'
+}
+
+
+
+
+
 export const formUpdate = `<div class="form-group">
 <label>Логин</label>
 <input type="text" class="form-control" name="username">

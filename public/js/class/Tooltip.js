@@ -23,10 +23,11 @@ export class Tooltip {
         this.tooltip.style.position = "absolute";
         this.tooltip.style.top = "0";
         this.tooltip.style.left = "0";
-        this.tooltip.style.backgroundColor = "white";
-        this.tooltip.style.color = "black";
+        this.tooltip.style.backgroundColor = "rgba(6, 28, 71, 1)";
+        this.tooltip.style.color = "#fff";
         this.tooltip.style.padding = "5px";
         this.tooltip.style.zIndex = 99999;
+        this.tooltip.style.borderRadius = '5px'
         document.body.appendChild(this.tooltip);
         this.message.forEach(el => {
             this.tooltipLow = document.createElement("div");
