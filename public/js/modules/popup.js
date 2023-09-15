@@ -47,7 +47,7 @@ async function createPopup(array) {
         popup.remove();
         position = 0
         //   popup.style.display = "none";
-    }, 10000);
+    }, 60000);
 
 }
 

@@ -186,6 +186,8 @@ body {
   background-color: rgba(6, 28, 71, 1);
   border-radius: 10px 10px 0 0;
   color: #fff;
+  display: flex;
+  justify-content: space-around;
 }
 
 .popup-content {
@@ -1304,7 +1306,7 @@ div.spoyler {
 
 
 .main {
-  display: flex;
+  display: none;
   width: 74%;
   margin-top: 1%;
   margin: 0;
@@ -6184,7 +6186,7 @@ input[type="text"]:focus {
   }
 
   .container_flash {
-    width: 220px;
+    width: 180px;
     padding: 1px 1px;
     margin: 2px;
     border: 1px solid #fff;
@@ -6602,8 +6604,8 @@ input[type="text"]:focus {
   }
 
   .listItem {
-    width: 1200px;
-
+    width: 100%;
+    height: 32px;
   }
 
   .list_item1 {
@@ -6742,9 +6744,7 @@ input[type="text"]:focus {
     top: 0
   }
 
-  .listItem {
-    height: 32px;
-  }
+
 
   .noGraf {
     margin-top: 50px;
@@ -7844,7 +7844,7 @@ i.tOn {
   margin: 2px 15px;
 }
 
-.fa-check {
+.graysType {
   cursor: pointer;
   color: gray;
 }
@@ -7884,4 +7884,8 @@ i.iconsortType {
   animation-duration: 1s;
   animation-timing-function: ease;
   animation-iteration-count: 1;
+}
+
+.hiddenModal {
+  width: 100%;
 }
