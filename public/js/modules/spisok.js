@@ -212,7 +212,8 @@ export async function conturTest(testov) {
         }
     })
 
-
+    //  const preloader = document.querySelector('.preloader');
+    //  preloader.classList.add('preloader_hidden');
     viewList(login)
     hiddenWindows()
     navigator();
