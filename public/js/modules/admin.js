@@ -311,11 +311,12 @@ export function checkCreate(nameCar) {
     const ide = document.getElementById('all')
     nameCar.forEach(elem => {
         const box = document.querySelector('.check_boxs')
-        const activePost = elem.replace(/\s+/g, '')
+        const activePost = elem[0].replace(/\s+/g, '')
+        const idw = elem[1]
         const list = document.createElement('p')
         list.classList.add('listTitles')
         list.innerHTML = `<input class="checkIn" type="checkbox" 
-    value=${activePost} rel=${activePost} id=${activePost}O>${activePost}`
+    value=${activePost} rel=${activePost} id=${idw}>${activePost}`
         box.appendChild(list)
 
     })
@@ -323,7 +324,7 @@ export function checkCreate(nameCar) {
     let enabledSettings = []
     if (ide.checked === true) {
         checkboxes.forEach(el => {
-            el.checked === false ? enabledSettings.push(el.value) : null
+            el.checked === false ? enabledSettings.push([el.value, el.id]) : null
         })
     }
 
@@ -331,7 +332,7 @@ export function checkCreate(nameCar) {
         checkbox.addEventListener('change', function () {
             if (this.id !== "all") {
                 ide.checked = false;
-                enabledSettings = Array.from(checkboxes).filter(i => i.checked).map(i => i.value)
+                enabledSettings = Array.from(checkboxes).filter(i => i.checked).map(i => [i.value, i.id])
 
 
             }
@@ -342,7 +343,7 @@ export function checkCreate(nameCar) {
                     el.checked = false
                     ide.checked = true;
                     if (el.checked !== true) {
-                        enabledSettings.push(el.value)
+                        enabledSettings.push([el.value, el.id])
                     }
                 })
                 ide.checked = true;
@@ -350,7 +351,6 @@ export function checkCreate(nameCar) {
         })
     });
     const dad = document.querySelector('.dad');
-
     dad.addEventListener('click', () => {
         const clearConfirm = document.querySelector('.clearConfirmCheckModal')
         clearConfirm.style.display = 'none'
@@ -434,7 +434,6 @@ async function fnViewcheck(name) {
         checkboxes.forEach(el => {
             el.checked = false
             // ide.checked = true
-            console.log(el.value)
             response.result.forEach(item => {
                 if (el.value === item.Object) {
                     ide.checked = false

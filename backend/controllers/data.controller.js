@@ -75,9 +75,13 @@ exports.dataSpisok = async (req, res) => {
                         return;
                     }
                     const objects = all.item.nm;
-                    arrName.push(objects)
+                    const idw = all.item.id
+                    arrName.push([objects, idw])
+                    //  console.log(objects, el)
                     const prob = await databaseService.loadParamsViewList(objects, el);
+                    //  console.log(prob)
                     const massObjectCar = await databaseService.dostupObject(login);
+                    //   console.log(massObjectCar)
                     if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
                         prob.group = nameGroup;
                         massObject.push(prob);
@@ -94,6 +98,7 @@ exports.dataSpisok = async (req, res) => {
         if (req && req.body && req.body.login) {
             await res.json({ response: { aLLmassObject, arrName } });
         }
+        //console.log(aLLmassObject)
         return aLLmassObject
     }
     catch (e) {
@@ -173,7 +178,6 @@ exports.hunterTime = async () => {
         const nowUnix = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime() / 1000);
         const previousDayUnix = nowUnix - 3600 * 24;
         const previousDayEndUnix = nowUnix - 1;
-        //   console.log(previousDayUnix, previousDayEndUnix);
         const res = await constorller.dataSpisok()
         structura.datas(res, previousDayEndUnix, previousDayUnix)
     }

@@ -19,32 +19,19 @@ async function init() {
     const role = document.querySelectorAll('.log')[0].textContent
     const login = document.querySelectorAll('.log')[1].textContent
     const radioVal = document.querySelector('.radioVal')
-    const nameStatic = document.querySelectorAll('.nameStatic')
 
-    if (login !== 'TDRMX' || login !== 'Ромакс') {
-
-        if (role !== 'Пользователь') {
-            btnDel();
-        }
-    }
-    if (login === 'TDRMX' || login === 'Ромакс') {
-        radioVal.style.marginTop = '10px'
-        radioVal.style.marginLeft = '10px'
-        radioVal.style.justifyContent = 'start'
-        radioVal.style.display = 'none'
-    }
-    role === 'Пользователь' ? dis(nameStatic) : null
-    function dis(one) {
+    role === 'Пользователь' ? dis() : btnDel()
+    function dis() {
         const chekAlt = document.querySelector('.checkAlt')
         chekAlt.style.display = 'none';
         const delIcon = document.querySelectorAll('.delIcon')
         delIcon.forEach(e => {
             e.style.display = 'none';
         })
-        one.forEach(el => {
-            el.disabled = true
-        });
-
+        radioVal.style.marginTop = '10px'
+        radioVal.style.marginLeft = '10px'
+        radioVal.style.justifyContent = 'start'
+        radioVal.style.display = 'none'
 
     }
 

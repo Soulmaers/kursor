@@ -23,9 +23,6 @@ module.exports.update = (req, res) => {
     }
 }
 
-
-
-
 module.exports.delete = (req, res) => {
     // console.log('запрос на удаление')
     // console.log(req.body.idx)
@@ -221,13 +218,14 @@ module.exports.checkObject = (req, res) => {
     const login = req.body.login
     const role = req.body.role
     const objects = req.body.objects
+    // console.log(objects)
     try {
         const selectBase = `SELECT id FROM userObjects WHERE 1`
         pool.query(selectBase, function (err, results) {
             if (err) console.log(err);
             if (results.length === 0) {
                 objects.forEach(el => {
-                    const postModel = `INSERT INTO userObjects(login, role, object) VALUES('${login}','${role}','${el}')`
+                    const postModel = `INSERT INTO userObjects(login, role, object, idw) VALUES('${login}','${role}','${el[0]}','${el[1]}')`
                     connection.query(postModel, function (err, results) {
                         if (err) console.log(err);
                     })
@@ -238,7 +236,7 @@ module.exports.checkObject = (req, res) => {
                 pool.query(postModel, function (err, results) {
                     if (err) console.log(err);
                     objects.forEach(el => {
-                        const postModel = `INSERT INTO userObjects(login, role, object) VALUES('${login}','${role}','${el}')`
+                        const postModel = `INSERT INTO userObjects(login, role, object, idw) VALUES('${login}','${role}','${el[0]}','${el[1]}')`
                         pool.query(postModel, function (err, results) {
                             if (err) console.log(err);
                         })

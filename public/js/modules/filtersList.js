@@ -118,6 +118,7 @@ const dubleSelectOn = (elem) => {
 }
 
 const selection = (event) => {
+    console.log(event)
     event.target.children[1].style.display = 'flex'
 }
 const selectionOff = (event) => {
