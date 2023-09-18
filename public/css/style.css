@@ -190,6 +190,7 @@ body {
   color: #fff;
   display: flex;
   justify-content: space-around;
+  align-items: center;
 }
 
 .popup-content {

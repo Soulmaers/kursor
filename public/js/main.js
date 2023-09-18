@@ -36,7 +36,7 @@ async function init() {
     }
 
 
-    inits();
+    // inits();
 
     const param = {
         method: "POST",
@@ -156,18 +156,24 @@ function zapross() {
         "id": 26702383,
         "flags": 0x0010000000
     };
-    const prms1444 = {
-        "spec": [{
-            "type": 'id',
-            "data": 26702383,//26702371,//'avl_unit', //26702383,//26702371,
-            "flags": 1,// 8388608, //1048576,//8388608,//1048576,//1048576,                 //    1048576-шт 8388608-анималс
-            "mode": 0
-        }
-        ]
-    }
+    const flagsAllGroup = '0x3FFFFFFFFFFFFFF'// 0x0100000000000	// + 1024//4096
+    const prmsAllGoup = {
+        "spec": {
+            "itemsType": "avl_resource",
+            "propName": "trailers",
+            "propType": 'propitemname',
+            "propValueMask": "*",
+            "sortType": "trailers"
+        },
+        "force": 1,
+        "flags": flagsAllGroup,
+        "from": 0,
+        "to": 0xffffffff,
+        //  "rand": Math.random() // Добавляем рандомный параметр rand
+    };
 
     const remote122144 = wialon.core.Remote.getInstance();
-    remote122144.remoteCall('core/search_item', prmsId,
+    remote122144.remoteCall('core/search_items', prmsAllGoup,
         function (code, result) {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
