@@ -1,5 +1,6 @@
 //e156e8924c3a4e75bc1eac26f153457e-ключ апи https://opencagedata.com/dashboard#geocoding
 import { timeConvert } from './charts/oil.js'
+import { DraggableContainer } from '../class/Dragdown.js'
 const login = document.querySelectorAll('.log')[1].textContent
 let isProcessing = false;
 export async function geoloc() {
@@ -140,19 +141,23 @@ export async function reverseGeocode(geoY, geoX) {
 
 }
 export async function createMapsUniq(geoTrack, geo, num) {
-    const mapss = document.getElementById('mapOil')
+    const mapss = document.querySelector('.wrapMap')
     if (mapss) {
         mapss.remove();
     }
     const wrapp = document.querySelector('.wrapperFull')
     const main = document.querySelector('.main')
+    const wrapMap = document.createElement('div')
+    wrapMap.classList.add('wrapMap')
     const maps = document.createElement('div')
     maps.classList.add('mapsOilCard')
     maps.setAttribute('id', 'mapOil')
-    main.style.position = 'relative'
-    maps.style.zIndex = 2099;
-    num !== 'log' ? main.appendChild(maps) : wrapp.appendChild(maps)
+    wrapMap.appendChild(maps)
+    //  wrapMap.style.position = 'relative'
+    wrapMap.style.zIndex = 2099;
+    num !== 'log' ? main.appendChild(wrapMap) : wrapp.appendChild(wrapMap)
     const map = L.map('mapOil')
+    console.log(map)
     const polyline = L.polyline(geoTrack, { color: 'darkred', weight: 2 });
     polyline.addTo(map);
     var LeafIcon = L.Icon.extend({
@@ -186,9 +191,12 @@ export async function createMapsUniq(geoTrack, geo, num) {
         const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
         maps.style.width = '300px';
         maps.style.height = '300px';
-        maps.style.position = 'absolute';
-        maps.style.left = '25px';
-        maps.style.top = '500px';
+        wrapMap.style.height = '320px';
+        wrapMap.style.position = 'absolute';
+        wrapMap.style.left = '25px';
+        wrapMap.style.top = '500px';
+        wrapMap.style.width = '300px';
+        new DraggableContainer(wrapMap);
         const iss = L.marker(center, { icon: customIcon }).addTo(map);
         const popupContent = `Объект: ${nameCar}<br>Время: ${formattedDate}<br>Скорость: ${geo.speed} км/ч<br>Зажигание: ${geo.stop}`;
         const popup = L.popup({ className: 'my-popup-bar', autoPan: false });
@@ -223,9 +231,11 @@ export async function createMapsUniq(geoTrack, geo, num) {
             center = [geo.geoY, geo.geoX]
             maps.style.width = '350px';
             maps.style.height = '350px'
-            maps.style.position = 'absolute'
-            maps.style.left = '580px';
-            maps.style.top = '40px';
+            wrapMap.style.height = '370px'
+            wrapMap.style.position = 'absolute'
+            wrapMap.style.left = '580px';
+            wrapMap.style.top = '40px';
+            new DraggableContainer(wrapMap);
             cl = 'my-popup-alarm'
             iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${geo.info.car}\nВремя: ${geo.info.time}\nКолесо: ${geo.info.tyres}\nP,bar: ${geo.info.bar}\nt,C: ${geo.info.temp}\nСкорость: ${geo.speed} км/ч\nУведомление: ${geo.info.alarm}\nАдрес: ${geo.geoY, geo.geoX}`, { width: 60, className: 'my-popup-alarm', autoPan: false }).addTo(map);
         }
@@ -235,9 +245,12 @@ export async function createMapsUniq(geoTrack, geo, num) {
             console.log(geo)
             maps.style.width = '300px';
             maps.style.height = '300px'
-            maps.style.position = 'absolute'
-            maps.style.left = '25px';
-            maps.style.top = '500px';
+            wrapMap.style.height = '320px';
+            wrapMap.style.width = '300px';
+            wrapMap.style.position = 'absolute'
+            wrapMap.style.left = '25px';
+            wrapMap.style.top = '500px';
+            new DraggableContainer(wrapMap);
             cl = 'my-popup-oil'
             iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}<br>Заправлено: ${geo.zapravka} л.<br>Дата: ${geo.time}<br>Адрес: ${geo.geo[0], geo.geo[1]}`, { className: 'my-popup-oil' }).addTo(map);
         }
@@ -247,22 +260,26 @@ export async function createMapsUniq(geoTrack, geo, num) {
             //  const res = await reverseGeocode(center[0], center[1])
             maps.style.width = '350px';
             maps.style.height = '350px'
-            maps.style.position = 'absolute'
-            maps.style.left = '580px';
-            maps.style.top = '40px';
+            wrapMap.style.position = 'absolute'
+            wrapMap.style.left = '580px';
+            wrapMap.style.top = '40px';
+            wrapMap.style.height = '370px'
+            new DraggableContainer(wrapMap);
             cl = 'my-popup-stat';
             iss = L.marker(center, { icon: customIcon }).bindPopup(`Объект: ${nameCar}<br>Время: ${selectedTime}<br>Состояние: ${geo.condition}<br>Скорость: ${geo.speed} км/ч<br>Местоположение: ${geo.geo[0], geo.geo[1]}`, { width: 60, className: 'my-popup-stat', autoPan: false }).addTo(map);
         }
         if (num === 'log') {
             const selectedTime = geo[0].logs[0]
-
             center = [geo[0].geo[0], geo[0].geo[1]]
             // const res = await reverseGeocode(center[0], center[1])
             maps.style.width = '350px';
             maps.style.height = '350px'
-            maps.style.position = 'absolute'
-            maps.style.left = '580px';
-            maps.style.top = '40px';
+            wrapMap.style.position = 'absolute'
+            wrapMap.style.left = '580px';
+            wrapMap.style.top = '40px';
+            wrapMap.style.height = '370px'
+            new DraggableContainer(wrapMap);
+
             cl = 'my-popup-log';
             iss = L.marker(center, { icon: customIcon }).bindPopup(`Время: ${selectedTime}<br>Состояние: ${geo[0].logs[1]}<br>Содержание: ${geo[0].logs[2]}`, { width: 60, className: 'my-popup-log', autoPan: false }).addTo(map);
         }

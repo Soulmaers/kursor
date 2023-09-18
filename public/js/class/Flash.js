@@ -77,16 +77,11 @@ export class CloseBTN {
                 this.elem3.style.display = 'block';
                 this.elem2.style.display = 'none'
                 alarmFind()
-                const mapss = document.getElementById('mapOil')
-                if (mapss) {
-                    mapss.remove();
-                }
             }
         }
         else {
             const isClickedOnElem1 = this.elem1.contains(event.target);
             if (!isClickedOnElem1) {
-                console.log('закрыли')
                 this.elem1.style.display = 'none';
             }
         }

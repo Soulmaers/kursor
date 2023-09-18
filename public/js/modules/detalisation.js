@@ -230,7 +230,6 @@ export async function statistics(interval, ele, num, objectRazmetka) {
             return; // Пропускаем текущую итерацию, если sensArr пустой
         }
         else {
-            console.log(el.length)
             el.forEach(it => {
                 if (it[0] === 'Зажигание') {
                     allArrNew[0].value.push(Number(Object.values(it)[2].toFixed(0)))

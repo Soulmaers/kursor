@@ -357,20 +357,16 @@ plus.addEventListener('click', (event) => {
     plus.style.display = 'none';
     minus.style.display = 'block'
     event.stopPropagation();
-
+    document.addEventListener('click', function (event) {
+        const targetElement = event.target;
+        const map = document.getElementById('mapOil');
+        const wrapMap = document.querySelector('.wrapMap')
+        if (wrapMap && !wrapMap.contains(targetElement)) {
+            console.log('удаляем карту?')
+            wrapMap.remove();
+        }
+    });
     new CloseBTN(alarmStorage, minus, plus, 'alarm')
-    /*   document.addEventListener('click', function (event) {
-           if (event.target !== alarmStorage && !alarmStorage.contains(event.target) && event.target !== minus) {
-               alarmStorage.style.display = 'none';
-               plus.style.display = 'block';
-               minus.style.display = 'none'
-               alarmFind()
-               const mapss = document.getElementById('mapOil')
-               if (mapss) {
-                   mapss.remove();
-               }
-           }
-       });*/
 })
 minus.addEventListener('click', () => {
     alarmStorage.style.display = 'none';
@@ -378,8 +374,9 @@ minus.addEventListener('click', () => {
     minus.style.display = 'none'
     alarmFind()
     const mapss = document.getElementById('mapOil')
-    if (mapss) {
-        mapss.remove();
+    const wrapMap = document.querySelector('.wrapMap')
+    if (wrapMap) {
+        wrapMap.remove();
     }
 })
 

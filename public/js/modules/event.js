@@ -308,6 +308,7 @@ let intervalId
 const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {
     const mapss = document.getElementById('mapOil')
+    console.log(mapss)
     if (mapss) {
         mapss.remove();
     }
@@ -335,6 +336,7 @@ monitor.addEventListener('click', mainblock)
 
 function mainblock() {
     const mapss = document.getElementById('mapOil')
+    console.log(mapss)
     if (mapss) {
         mapss.remove();
     }
@@ -755,6 +757,7 @@ plug[2].addEventListener('click', () => {
     }
 
     const mapss = document.getElementById('mapOil')
+    console.log(mapss)
     if (mapss) {
         mapss.remove();
     }
@@ -767,6 +770,7 @@ const menuGraf = document.querySelectorAll('.menu_graf')
 menuGraf.forEach(el => {
     el.addEventListener('click', () => {
         const mapss = document.getElementById('mapOil')
+        console.log(mapss)
         if (mapss) {
             mapss.remove();
         }

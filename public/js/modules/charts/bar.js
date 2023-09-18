@@ -104,108 +104,6 @@ export async function datas(t1, t2) {
                 })
             };
         });
-        console.log(dat2)
-        /*
-          const ossParams = await fn()
-          console.log(ossParams)
-          const ttt = await testovfn(active, t1, t2)
-          console.log(ttt)
-          const noGraf = document.querySelector('.noGraf')
-          const itogy = ttt.map(it => {
-              return {
-                  id: it.idw,
-                  nameCar: it.nameCar,
-                  time: (new Date(it.data * 1000)).toISOString(),
-                  speed: it.speed,
-                  geo: JSON.parse(it.geo),
-                  val: JSON.parse(it.sens),
-              }
-          })
-          //  console.log(JSON.parse(ttt[ttt.length - 1].allSensParams))
-          const sensTest = itogy.map(e => {
-              return e.val
-          })
-  
-          const timeArray = itogy.map(it => (new Date(it.time)).toISOString());
-          const speedArray = itogy.map(it => it.speed);
-          const geoArray = itogy.map(it => it.geo);
-          const global = [timeArray, speedArray, geoArray];
-          const nameArr = JSON.parse(ttt[ttt.length - 1].allSensParams) //await fnParMessage(active)
-          console.log(nameArr)
-          const allArrNew = [];
-  
-          nameArr.forEach((item) => {
-              allArrNew.push({ sens: item[0], params: item[1], value: [] })
-          })
-  
-          const osss = ossParams.osi
-          const par = ossParams.params
-          osss.forEach(it => {
-              delete it.id
-              delete it.nameCar
-          })
-          if (par[0].pressure === 'null') {
-              const preloaderGraf = document.querySelector('.loader')
-              preloaderGraf.style.opacity = 0;
-              noGraf.style.display = 'flex'
-              isCanceled = false;
-          }
-          else {
-              noGraf.style.display = 'none'
-              par.forEach(el => {
-                  osss.forEach(e => {
-                      if (el.osNumber === e.idOs) {
-                          el.bar = e
-                      }
-                  })
-              })
-              sensTest.forEach(el => {
-                  for (let i = 0; i < allArrNew.length; i++) {
-                      allArrNew[i].value.push(Object.values(el)[i])
-                  }
-              })
-              const finishArrayData = []
-              const finishArrayDataT = []
-              const stop = [];
-  
-              const idw = document.querySelector('.color').id
-              allArrNew.forEach(e => {
-                  if (e.params.startsWith('tpms_p')) {
-                      finishArrayData.push(e)
-                  }
-                  if (e.params.startsWith('tpms_t')) {
-                      finishArrayDataT.push(e)
-                  }
-                  if (e.params.startsWith('pwr_ext') && e.sens.startsWith('Бортовое')) {
-                      e.value.forEach(el => {
-                          if (idw === '26821431') {
-                              el >= 13 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
-                              //    console.log('11')
-                          }
-                          else {
-                              el >= 26.5 ? stop.push('ВКЛ') : stop.push('ВЫКЛ')
-                              //   console.log('22')
-                          }
-                      })
-                  }
-              })
-  
-              finishArrayData.forEach((el, index) => {
-                  el.tvalue = finishArrayDataT.length !== 0 ? finishArrayDataT[index].value : null
-                  el.speed = global[1]
-                  el.geo = global[2]
-                  el.stop = stop
-              })
-              console.log(finishArrayData)
-              finishArrayData.forEach(e => {
-                  par.forEach(it => {
-                      if (e.params === it.pressure) {
-                          e.bar = it.bar
-                          e.position = Number(it.tyresdiv)
-                      }
-                  })
-              })
-              console.log(finishArrayData)*/
         await grafikStartPress(dat2)
         isCanceled = false;
         // }
@@ -229,73 +127,6 @@ async function grafikStartPress(dat2) {
     const info = document.createElement('div')
     info.classList.add('infos')
     graf.prepend(info)
-    /* const newData = datar.map((el, index) => {
-         return {
-             ...el,
-             value: el.value.map((it, i) => {
-                 if (it === -348201.3876) {
-                     return -0.5
-                 } else {
-                     return it
-                 }
-             }),
-             tvalue: el.tvalue !== null ? (el.tvalue.map(it => {
-                 if (it === -348201.3876 || it === -128 || it === -50 || it === -51) {
-                     return -0.5
-                 } else {
-                     return it
-                 }
-             })) : null
-         };
-     });
-     console.log(newData)
-     const global = {
-         dates: times,
-         series: newData
-     }
-     const gl = times.map(it => {
-         return new Date(it)
-     })
- 
-     const dat2 = global.series.map(({ position, bar, sens, value, tvalue, speed, stop, geo }) => ({
-         sens,
-         position,
-         bar,
-         val: value.map((val, i) => {
-             if (stop[i] === 'ВЫКЛ') {
-                 return {
-                     dates: gl[i],
-                     value: -0.5,
-                     tvalue: tvalue !== null ? -0.5 : null,
-                     speed: Number(speed[i]),
-                     stop: stop[i],
-                     geo: geo[i]
- 
-                 };
-             } else {
-                 return {
-                     dates: gl[i],
-                     value: Number(val),
-                     tvalue: tvalue !== null ? Number(tvalue[i]) : null,
-                     speed: Number(speed[i]),
-                     stop: stop[i],
-                     geo: geo[i]
-                 };
-             }
-         })
-     }));
-     console.log(dat2)
- 
-     dat2.sort((a, b) => {
-         if (a.position > b.position) {
-             return 1;
-         }
-         if (a.position < b.position) {
-             return -1;
-         }
-         return 0;
-     });
-     console.log(dat2)*/
     const container = d3.select('.infoGraf');
     // Связываем данные с контейнером
     const charts = container.selectAll('.charts')
@@ -913,9 +744,9 @@ async function grafikStartPress(dat2) {
                     const targetElement = event.target;
                     const map = document.getElementById('mapOil');
                     const act = document.querySelector('.activMenuGraf').textContent;
-
-                    if (map && !map.contains(targetElement) && act === 'Давление') {
-                        map.remove();
+                    const wrapMap = document.querySelector('.wrapMap')
+                    if (wrapMap && !wrapMap.contains(targetElement) && act === 'Давление') {
+                        wrapMap.remove();
                     }
                 });
             })

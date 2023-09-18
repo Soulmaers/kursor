@@ -17,8 +17,8 @@ export class DraggableContainer {
         this.drag = this.drag.bind(this);
         // добавляем обработчики событий
         this.elem.addEventListener('mousedown', this.dragStart);
-        this.elem.addEventListener('mouseup', this.dragEnd);
-        this.elem.addEventListener('mousemove', this.drag);
+        window.addEventListener('mouseup', this.dragEnd);
+        window.addEventListener('mousemove', this.drag);
     }
     dragStart(event) {
         if (event.button === 0) { // проверяем, что зажата левая кнопка мыши
@@ -47,10 +47,9 @@ export class DraggableContainer {
         }
     }
     destroy() {
-
         // удаляем обработчики событий
         this.elem.removeEventListener('mousedown', this.dragStart);
-        this.elem.removeEventListener('mouseup', this.dragEnd);
-        this.elem.removeEventListener('mousemove', this.drag);
+        window.removeEventListener('mouseup', this.dragEnd);
+        window.removeEventListener('mousemove', this.drag);
     }
 }

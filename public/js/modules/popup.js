@@ -155,8 +155,8 @@ export async function logsView(array) {
                     console.log(geo)
                     const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[1].textContent, e.lastElementChild.parentElement.children[2].textContent] }]
                     createMapsUniq([], obj, 'log')
-                    const map = document.getElementById('mapOil');
-                    new CloseBTN(map)
+                    const wrap = document.querySelector('.wrapMap')
+                    new CloseBTN(wrap)
                 };
                 e.addEventListener('click', clickHandler);
             })

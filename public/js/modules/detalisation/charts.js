@@ -238,14 +238,15 @@ export function createChart(data, num) {
             const graph = document.querySelector(`.${obj[num]}`)
             graph.addEventListener('click', function (event) {
                 event.stopPropagation(); // Остановка всплытия события, чтобы клик на графике не вызывал обработчик события click на document
-                createMapsUniq([], d, 'stat')
+                //   createMapsUniq([], d, 'stat')
             });
             document.addEventListener('click', function (event) {
                 const targetElement = event.target;
                 const map = document.getElementById('mapOil');
-
-                if (map && !map.contains(targetElement)) {
-                    map.remove();
+                const wrapMap = document.querySelector('.wrapMap')
+                if (wrapMap && !wrapMap.contains(targetElement)) {
+                    console.log('удаляем карту?')
+                    wrapMap.remove();
                 }
             });
         })

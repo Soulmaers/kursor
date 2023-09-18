@@ -11,28 +11,9 @@ export async function oil(t1, t2) {
     const active = document.querySelector('.color').id
     const nameCar = document.querySelector('.color').children[0].textContent
     console.log(nameCar)
-    //  const tt1 = convertTineAll(t1)
-    //  const tt2 = convertTineAll(t1)
 
     const ttt = await testovfn(active, t1, t2)
-    /* const param = {
-         method: "POST",
-         headers: {
-             'Content-Type': 'application/json',
-         },
-         body: (JSON.stringify({ active, tt1, tt2 }))
-     }
-     const rest = await fetch('/api/viewStructura', param)
-     const resultt = await rest.json()
-     function parseInfo(data) {
-         return data.map(item => {
-             return {
-                 ...JSON.parse(item.info)
-             };
-         });
-     }
-     const dat = parseInfo(resultt);
-     console.log(dat)*/
+
     const nameArr = JSON.parse(ttt[ttt.length - 1].allSensParams) //await fnParMessage(active)
     const itogy = ttt.map(it => {
         return {
@@ -163,16 +144,11 @@ export async function oil(t1, t2) {
             rash.push(firstData - lastData)
         }
 
-
         const rashod = rash.reduce((el, acc) => el + acc, 0)
         console.log(rashod);
         console.log(zapravka)
         const objOil = zapravka.map(it => {
-            //  const times = timesFormat((it[1].time.getTime() / 1000) - (it[0].time.getTime() / 1000))
             const oilValue = it[1].oil - it[0].oil
-
-            //   const one = times.slice(2)
-            //   const time = one.split(":")[0]
             const date = new Date(it[0].time);
             const day = date.getDate();
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -405,13 +381,11 @@ export async function oil(t1, t2) {
                 // Ваша функция обработчика события
                 console.log('кликнул')
                 const mapss = document.getElementById('mapOil')
-
+                const wrapMap = document.querySelector('.wrapMap')
                 if (this.classList.contains('clickOil')) {
-                    console.log(mapss)
-                    if (mapss) {
-                        console.log(mapss)
-                        mapss.remove();
-                        console.log('удалили')
+                    if (wrapMap) {
+                        wrapMap.remove();
+
                     }
                     d3.select(this).style("opacity", 0.5);
                     this.classList.remove('clickOil');
@@ -561,8 +535,10 @@ export async function oil(t1, t2) {
                             // Ваша функция обработчика события
                             const mapss = document.getElementById('mapOil')
                             if (this.classList.contains('clickOil')) {
-                                if (mapss) {
-                                    mapss.remove();
+                                const wrapMap = document.querySelector('.wrapMap')
+                                if (wrapMap) {
+                                    wrapMap.remove();
+
                                 }
                                 d3.select(this).style("opacity", 0.5);
                                 this.classList.remove('clickOil');
@@ -573,8 +549,10 @@ export async function oil(t1, t2) {
                                 e.style.opacity = 0.5;
                                 e.classList.remove('clickOil');
                             })
-                            if (mapss) {
-                                mapss.remove();
+                            const wrapMap = document.querySelector('.wrapMap')
+                            if (wrapMap) {
+                                wrapMap.remove();
+
                             }
                             d3.select(this).style("opacity", 1);
                             this.classList.add('clickOil');
@@ -644,8 +622,10 @@ export async function oil(t1, t2) {
                                 // Ваша функция обработчика события
                                 const mapss = document.getElementById('mapOil')
                                 if (this.classList.contains('clickOil')) {
-                                    if (mapss) {
-                                        mapss.remove();
+                                    const wrapMap = document.querySelector('.wrapMap')
+                                    if (wrapMap) {
+                                        wrapMap.remove();
+
                                     }
                                     d3.select(this).style("opacity", 0.5);
                                     this.classList.remove('clickOil');
@@ -656,8 +636,10 @@ export async function oil(t1, t2) {
                                     e.style.opacity = 0.5;
                                     e.classList.remove('clickOil');
                                 })
-                                if (mapss) {
-                                    mapss.remove();
+                                const wrapMap = document.querySelector('.wrapMap')
+                                if (wrapMap) {
+                                    wrapMap.remove();
+
                                 }
                                 d3.select(this).style("opacity", 1);
                                 this.classList.add('clickOil');
@@ -725,8 +707,10 @@ export async function oil(t1, t2) {
                                 // Ваша функция обработчика события
                                 const mapss = document.getElementById('mapOil')
                                 if (this.classList.contains('clickOil')) {
-                                    if (mapss) {
-                                        mapss.remove();
+                                    const wrapMap = document.querySelector('.wrapMap')
+                                    if (wrapMap) {
+                                        wrapMap.remove();
+
                                     }
                                     d3.select(this).style("opacity", 0.5);
                                     this.classList.remove('clickOil');
@@ -737,8 +721,10 @@ export async function oil(t1, t2) {
                                     e.style.opacity = 0.5;
                                     e.classList.remove('clickOil');
                                 })
-                                if (mapss) {
-                                    mapss.remove();
+                                const wrapMap = document.querySelector('.wrapMap')
+                                if (wrapMap) {
+                                    wrapMap.remove();
+
                                 }
                                 d3.select(this).style("opacity", 1);
                                 this.classList.add('clickOil');
@@ -805,10 +791,10 @@ export async function oil(t1, t2) {
                         const mapss = document.getElementById('mapOil')
 
                         if (this.classList.contains('clickOil')) {
-                            if (mapss) {
-                                console.log(mapss)
-                                mapss.remove();
-                                console.log('удалили')
+                            const wrapMap = document.querySelector('.wrapMap')
+                            if (wrapMap) {
+                                wrapMap.remove();
+
                             }
                             d3.select(this).style("opacity", 0.5);
                             this.classList.remove('clickOil');
@@ -819,10 +805,10 @@ export async function oil(t1, t2) {
                             e.style.opacity = 0.5;
                             e.classList.remove('clickOil');
                         })
-                        if (mapss) {
-                            console.log(mapss)
-                            mapss.remove();
-                            console.log('удалили')
+                        const wrapMap = document.querySelector('.wrapMap')
+                        if (wrapMap) {
+                            wrapMap.remove();
+
                         }
                         d3.select(this).style("opacity", 1);
                         this.classList.add('clickOil');

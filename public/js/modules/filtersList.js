@@ -146,7 +146,6 @@ export function globalSelect() {
     })
 
 }
-
 function filterCondition(event, clickedElement) {
     console.log('работаем конд?')
     const targetElement = clickedElement || event.target;
