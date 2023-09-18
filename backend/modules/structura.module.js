@@ -8,7 +8,6 @@ exports.datas = async (objects, now, old) => {
         .flat()
     try {
         for (const e of result) {
-            // console.log(e[4])
             const params = await databaseService.tyresViewToBase(e[4])
             const osiBar = await databaseService.barViewToBase(e[4])
             const ossParams = { osi: osiBar.result, params: params }
