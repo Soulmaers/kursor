@@ -220,6 +220,7 @@ export async function oil(t1, t2) {
             .attr("cy", -20)
             .attr("fill", "#32a885")
             .attr('stroke', 'black')
+            .attr('opacity', 0.3)
 
         svga.append("text")
             .attr('class', 'legendOil')
@@ -316,7 +317,7 @@ export async function oil(t1, t2) {
             .attr("class", "line2")
             .attr("fill", "none")
             .attr("stroke", "black")
-            .attr("stroke-width", 1.5)
+            .attr("stroke-width", 0.5)
             .attr("d", line2)
             .attr("transform", "translate(0, " + (40) + ")")
         // добавляем области для первой кривой
@@ -337,8 +338,8 @@ export async function oil(t1, t2) {
             .attr("class", "pat")
             .attr("class", "area2")
             .attr("fill", "#32a885")
-            .attr("fill-opacity", 0.8)
             .attr("stroke", "black")
+            .attr("fill-opacity", 0.2)
             .attr("stroke-width", 1)
             .attr("d", area2)
             .attr("transform", "translate(0, " + (40) + ")")
@@ -489,7 +490,7 @@ export async function oil(t1, t2) {
                         .transition()
                         .duration(1000)
                         .attr("fill", "none")
-                        .attr("stroke", "blue")
+                        .attr("stroke", "black")
                         .attr("stroke-width", 1.5)
                         .attr("d", line1);
 
@@ -498,8 +499,8 @@ export async function oil(t1, t2) {
                         .transition()
                         .duration(1000)
                         .attr("fill", "none")
-                        .attr("stroke", "blue")
-                        .attr("stroke-width", 1.5)
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 0.5)
                         .attr("d", line2)
 
                     svg.select(".area1")
@@ -521,7 +522,7 @@ export async function oil(t1, t2) {
                         .attr("class", "pat")
                         .attr("class", "area2")
                         .attr("fill", "#32a885")
-                        .attr("fill-opacity", 0.3)
+                        .attr("fill-opacity", 0.2)
                         .attr("stroke", "black")
                         .attr("stroke-width", 1)
                         .attr("d", area2)
@@ -578,7 +579,7 @@ export async function oil(t1, t2) {
                             .transition()
                             .duration(1000)
                             .attr("fill", "none")
-                            .attr("stroke", "blue")
+                            .attr("stroke", "black")
                             .attr("stroke-width", 1.5)
                             .attr("d", line1);
 
@@ -587,8 +588,8 @@ export async function oil(t1, t2) {
                             .transition()
                             .duration(1000)
                             .attr("fill", "none")
-                            .attr("stroke", "blue")
-                            .attr("stroke-width", 1.5)
+                            .attr("stroke", "black")
+                            .attr("stroke-width", 0.5)
                             .attr("d", line2)
 
                         svg.select(".area1")
@@ -610,7 +611,7 @@ export async function oil(t1, t2) {
                             .attr("class", "pat")
                             .attr("class", "area2")
                             .attr("fill", "#32a885")
-                            .attr("fill-opacity", 0.3)
+                            .attr("fill-opacity", 0.2)
                             .attr("stroke", "black")
                             .attr("stroke-width", 1)
                             .attr("d", area2)
@@ -662,7 +663,7 @@ export async function oil(t1, t2) {
                             .transition()
                             .duration(1000)
                             .attr("fill", "none")
-                            .attr("stroke", "blue")
+                            .attr("stroke", "black")
                             .attr("stroke-width", 1.5)
                             .attr("d", line1);
 
@@ -671,8 +672,8 @@ export async function oil(t1, t2) {
                             .transition()
                             .duration(1000)
                             .attr("fill", "none")
-                            .attr("stroke", "blue")
-                            .attr("stroke-width", 1.5)
+                            .attr("stroke", "black")
+                            .attr("stroke-width", 0.5)
                             .attr("d", line2)
 
                         svg.select(".area1")
@@ -694,7 +695,7 @@ export async function oil(t1, t2) {
                             .attr("class", "pat")
                             .attr("class", "area2")
                             .attr("fill", "#32a885")
-                            .attr("fill-opacity", 0.3)
+                            .attr("fill-opacity", 0.2)
                             .attr("stroke", "black")
                             .attr("stroke-width", 1)
                             .attr("d", area2)
@@ -746,7 +747,7 @@ export async function oil(t1, t2) {
                     .transition()
                     .duration(1000)
                     .attr("fill", "none")
-                    .attr("stroke", "blue")
+                    .attr("stroke", "black")
                     .attr("stroke-width", 1.5)
                     .attr("d", line1)
 
@@ -755,8 +756,8 @@ export async function oil(t1, t2) {
                     .transition()
                     .duration(1000)
                     .attr("fill", "none")
-                    .attr("stroke", "blue")
-                    .attr("stroke-width", 1.5)
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 0.5)
                     .attr("d", line2)
 
                 svg.select(".area1")
@@ -777,7 +778,7 @@ export async function oil(t1, t2) {
                     .attr("class", "pat")
                     .attr("class", "area2")
                     .attr("fill", "#32a885")
-                    .attr("fill-opacity", 0.3)
+                    .attr("fill-opacity", 0.2)
                     .attr("stroke", "black")
                     .attr("stroke-width", 1)
                     .attr("d", area2)
