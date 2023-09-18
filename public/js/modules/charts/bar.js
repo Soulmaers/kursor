@@ -739,7 +739,7 @@ async function grafikStartPress(dat2) {
                 const graph = document.querySelector('.infoGraf')
                 graph.addEventListener('click', function (event) {
                     event.stopPropagation(); // Остановка всплытия события, чтобы клик на графике не вызывал обработчик события click на document
-                    createMapsUniq([], d, 'bar')
+                    //  createMapsUniq([], d, 'bar')
                 });
                 document.addEventListener('click', function (event) {
                     const targetElement = event.target;
