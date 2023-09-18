@@ -197,8 +197,8 @@ function filterCondition(event, clickedElement) {
             hasToogleIcon = true;
         }
     });
-    hasToogleIcon ? (element.children[0].style.color = 'gray', sortIcon.style.color = 'gray') : (element.children[0].style.color = 'rgba(6, 28, 71, 1)', sortIcon.style.color = 'rgba(6, 28, 71, 1)')
-    filterType()
+    hasToogleIcon ? (element.children[0].style.color = 'gray', sortIcon.style.color = 'gray') : (filterType(), element.children[0].style.color = 'rgba(6, 28, 71, 1)', sortIcon.style.color = 'rgba(6, 28, 71, 1)')
+    //   
     checkZero()
 }
 
@@ -262,10 +262,9 @@ function filterType() {
             }
         }
         else {
-            // check()
-            //  checkCond()
             console.log('тутуже?')
             i.style.color = 'gray'
+
         }
     })
     console.log(arrayIconsElements)
@@ -273,17 +272,32 @@ function filterType() {
     const element = document.querySelector('.sortType');
     const sortIcon = document.querySelector('.iconsortType')
 
+
     let hasToogleIcon = false;
     grays.forEach(e => {
         if (e.classList.contains('toogleIcon')) {
             hasToogleIcon = true;
         }
     });
-    hasToogleIcon ? (element.children[0].style.color = 'gray', sortIcon.style.color = 'gray') : (list.forEach(e => e.style.display = 'flex'), checkCond(), element.children[0].style.color = 'rgba(6, 28, 71, 1)', sortIcon.style.color = 'rgba(6, 28, 71, 1)')
+    if (hasToogleIcon) {
+        element.children[0].style.color = 'gray', sortIcon.style.color = 'gray'
+    }
+    else {
+        if (bool) {
+            list.forEach(et => Array.from(et.children).forEach(e => {
+                if (e.children[0] && e.children[0].getAttribute('rel') === icon.getAttribute('rel')) {
+                    et.style.display = 'flex'
+                }
+            }))
+        }
+        else {
+            element.children[0].style.color = 'rgba(6, 28, 71, 1)', sortIcon.style.color = 'rgba(6, 28, 71, 1)'
+            list.forEach(et => et.style.display = 'flex')
+        }
+    }
     check(),
         checkZero()
 }
-
 function checkZero() {
     const titleModal = document.querySelectorAll('.titleModal')
     titleModal.forEach(e => {
