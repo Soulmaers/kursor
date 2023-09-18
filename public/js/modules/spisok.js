@@ -253,8 +253,6 @@ export const viewList = async (login) => {
     newCelChange.forEach(el => {
         el.style.display = objChangeList[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
     })
-    //  const listAtt = document.querySelector('.list_att')
-    // new DivDraggable(listAtt)
     globalSelect()
 }
 export async function alternativa(arr) {
