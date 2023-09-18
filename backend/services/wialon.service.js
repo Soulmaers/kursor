@@ -7,8 +7,6 @@ const geSession = require('../../index.js')
 exports.getAllGroupDataFromWialon = async () => {
     return new Promise(async function (resolve, reject) {
         const session = await geSession.geSession();
-        //  console.log('где?')
-        console.log(session)
         session.request('core/search_items', prmsAllGoup)
             .catch(function (err) {
                 console.log(err);

@@ -112,6 +112,7 @@ export async function conturTest(testov) {
                 listArr.children[1].appendChild(listItemCar)
                 const listName = document.createElement('div')
                 listName.classList.add('list_name2')
+                listName.setAttribute('rel', `name`)
                 listItemCar.appendChild(listName)
                 listName.textContent = elem[0].message
                 const listCheck = document.createElement('p')

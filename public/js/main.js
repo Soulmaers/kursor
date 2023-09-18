@@ -36,7 +36,7 @@ async function init() {
     }
 
 
-    //inits();
+    inits();
 
     const param = {
         method: "POST",
@@ -47,10 +47,10 @@ async function init() {
 
     }
 
-
-    const res = await fetch('/api/viewLogs', param)
-    const confirm = await res.json()
-    console.log(confirm)
+    /*
+        const res = await fetch('/api/viewLogs', param)
+        const confirm = await res.json()
+        console.log(confirm)*/
 
     zapros(login) //делаем запрос на wialon получаем объекты
     liCreate()
@@ -152,7 +152,29 @@ function zapross() {
 
                 });
         });
+    const prmsId = {
+        "id": 26702383,
+        "flags": 0x0010000000
+    };
+    const prms1444 = {
+        "spec": [{
+            "type": 'id',
+            "data": 26702383,//26702371,//'avl_unit', //26702383,//26702371,
+            "flags": 1,// 8388608, //1048576,//8388608,//1048576,//1048576,                 //    1048576-шт 8388608-анималс
+            "mode": 0
+        }
+        ]
+    }
 
+    const remote122144 = wialon.core.Remote.getInstance();
+    remote122144.remoteCall('core/search_item', prmsId,
+        function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+
+        });
     console.log('запрос!!')
     /*  const params = {
           "mode": "add",

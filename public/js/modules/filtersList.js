@@ -61,9 +61,10 @@ const selectOff = (event) => {
     titleModal.forEach(e => {
         e.style.display === 'none' ? e.style.display = 'flex' : null;
     });
-    filterType()
+    // 
     check()
-    checkCond()
+    filterType()
+    //  checkCond()
 
     const grays = document.querySelectorAll('.grays')
     let act = false
@@ -169,6 +170,7 @@ function filterCondition(event, clickedElement) {
                     if (relAttr === childRelAttr) {
                         e.closest('.listItem').style.display = 'flex';
                         check()
+                        filterType()
                         checkZero()
                     } else {
                         e.closest('.listItem').style.display = 'none';
@@ -196,10 +198,9 @@ function filterCondition(event, clickedElement) {
         }
     });
     hasToogleIcon ? (element.children[0].style.color = 'gray', sortIcon.style.color = 'gray') : (element.children[0].style.color = 'rgba(6, 28, 71, 1)', sortIcon.style.color = 'rgba(6, 28, 71, 1)')
+    filterType()
     checkZero()
 }
-
-
 
 function check() {
     const titleList = document.querySelectorAll('.viewIcon')
@@ -221,46 +222,54 @@ function filterType() {
             icon = e
         }
     })
-    // list.forEach(e => e.style.display = 'none')
-    checkCond()
+    list.forEach(e => e.style.display = 'none')
     console.log(icon)
-    const finalArray = [];
-    document.querySelectorAll('.listItem').forEach(e => {
-        if (e.style.display === 'flex') {
-            console.log(e)
-            Array.from(e.children).forEach(it => {
-                if (it.classList.contains('newCelChange')) {
-                    finalArray.push(it)
-                }
-            })
-        }
-    })
-    const actualArayFlex = [];
+    const arrayIconsElements = []
     grays.forEach(i => {
         if (i.classList.contains('toogleIcon')) {
             i.closest('.viewIcon').children[0].style.color = 'gray'
             i.style.color = 'rgba(6, 28, 71, 1)'
-            const newCelChange = document.querySelectorAll('.newCelChange')
-            Array.from(bool ? finalArray : newCelChange).forEach(e => {
-                if (e.getAttribute('rel') === i.closest('.viewIcon').getAttribute('rel')) {
-                    if (e.textContent === i.nextElementSibling.textContent) {
-                        actualArayFlex.push(e)
-                        //  e.closest('.listItem').style.display = 'flex';
+            if (!bool) {
+                list.forEach(it => {
+                    Array.from(it.children).forEach(e => {
+                        if (e.getAttribute('rel') === i.closest('.viewIcon').getAttribute('rel')) {
+                            if (e.textContent === i.nextElementSibling.textContent) {
+                                arrayIconsElements.push(e.closest('.listItem'))
+                            }
+                        }
+                    })
+                })
+            }
+            else {
+                console.log('не бул')
+                list.forEach(it => {
+                    let firstCondition = false;
+                    let secondCondition = false;
+                    Array.from(it.children).forEach(e => {
+                        if (e.getAttribute('rel') === i.closest('.viewIcon').getAttribute('rel') && e.textContent === i.nextElementSibling.textContent) {
+                            firstCondition = true;
+                        }
+                        if (e.children[0] && e.children[0].getAttribute('rel') === icon.getAttribute('rel')) {
+                            secondCondition = true;
+                        }
+                    });
+
+                    if (firstCondition && secondCondition) {
+                        arrayIconsElements.push(it);
                     }
-                    else {
-                        //  bool ? e.closest('.listItem').style.display = 'none' : null
-                    }
-                }
-            })
+                    console.log(firstCondition, secondCondition, it)
+                });
+            }
         }
         else {
+            // check()
+            //  checkCond()
             console.log('тутуже?')
             i.style.color = 'gray'
         }
     })
-    console.log(actualArayFlex)
-    list.forEach(e => e.style.display = 'none')
-    actualArayFlex.forEach(e => e.closest('.listItem').style.display = 'flex')
+    console.log(arrayIconsElements)
+    arrayIconsElements.forEach(el => el.style.display = 'flex')
     const element = document.querySelector('.sortType');
     const sortIcon = document.querySelector('.iconsortType')
 
@@ -270,9 +279,9 @@ function filterType() {
             hasToogleIcon = true;
         }
     });
-    hasToogleIcon ? (element.children[0].style.color = 'gray', sortIcon.style.color = 'gray') : (list.forEach(e => e.style.display = 'flex'), element.children[0].style.color = 'rgba(6, 28, 71, 1)', sortIcon.style.color = 'rgba(6, 28, 71, 1)')
-    check()
-    checkZero()
+    hasToogleIcon ? (element.children[0].style.color = 'gray', sortIcon.style.color = 'gray') : (list.forEach(e => e.style.display = 'flex'), checkCond(), element.children[0].style.color = 'rgba(6, 28, 71, 1)', sortIcon.style.color = 'rgba(6, 28, 71, 1)')
+    check(),
+        checkZero()
 }
 
 function checkZero() {

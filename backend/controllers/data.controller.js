@@ -9,46 +9,7 @@ const { createDate, convert } = require('../helpers')
 const constorller = require('./data.controller.js')
 
 require('dotenv').config();
-//const sessions = {}; // объект для хранения всех сессий*module.exports = {
 
-/*
-exports.getSessiont = async (login) => {
-    if (!sessions[login]) { // если нет сохраненной сессии для данного логина
-        const token = process.env.TOKEN//await getTokenFromDB(login);
-        const session = await wialonModule.login(token);
-        //   console.log('Новая сессия для логина', login);
-        sessions[login] = session; // сохраняем новую сессию
-    }
-    console.log(sessions)
-    // console.log('Отдаем существующую сессию для логина', login);
-    return sessions[login]; // возвращаем сохраненную сессию
-};*/
-
-/*
-exports.getData = async (req, res) => {
-    const login = req.body.login
-    try {
-        const token = process.env.TOKEN// await getTokenFromDB(login)
-        console.log(token)
-        const session = await wialonModule.login(token);
-        console.log('сессия' + ' ' + session)
-        sessions[login] = session;
-        console.log(sessions[login])
-        res.json('сессия открыта')
-        //  await updateParams(login);
-        // setInterval(updateParams, 180000, login);
-        //  console.log('повторка?')
-        // setTimeout(test, 15000)
-
-    } catch (err) {
-        console.log(err);
-        res.json('ошибка')
-    }
-}*/
-//получаем логин, запрашиваем данные  по всем группам,
-//далее запрашиваем параметры по id объекта,
-//после достаем из базы нужные таблицы с моделями,
-//колесами и параметрами,
 //готовим данные и отправляем ответ на клиент который отрисовывает список
 exports.dataSpisok = async (req, res) => {
     //  await databaseService.createIndexDataToDatabase()
