@@ -17,11 +17,14 @@ async function createPopup(array) {
     pop.classList.add('popup')
     //  pop.style.top = position + '%'
     body.prepend(pop)
+    const popH = document.createElement('div')
+    popH.classList.add('popH')
     const popupHead = document.createElement('div')
     popupHead.classList.add('popup-header')
     popupHead.textContent = arr[0]
     arr.shift()
-    pop.appendChild(popupHead)
+    pop.appendChild(popH)
+    popH.appendChild(popupHead)
     const popupContent = document.createElement('div')
     popupContent.classList.add('popup-content')
     pop.appendChild(popupContent)
@@ -33,7 +36,7 @@ async function createPopup(array) {
     }
     const popupClose = document.createElement('div')
     popupClose.innerHTML = `<i class="fas fa fa-times popup-close"></i>`
-    pop.appendChild(popupClose)
+    popH.appendChild(popupClose)
     const popup = document.querySelector('.popup');
     popup.style.display = "block";
     popup.classList.add('open');
@@ -47,7 +50,7 @@ async function createPopup(array) {
         popup.remove();
         position = 0
         //   popup.style.display = "none";
-    }, 60000);
+    }, 600000);
 
 }
 
