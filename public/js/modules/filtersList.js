@@ -214,13 +214,16 @@ function filterType() {
     const list = document.querySelectorAll('.listItem');
     const gray = document.querySelectorAll('.grays')
     let bool = false;
+    let icon;
     gray.forEach(e => {
         if (e.classList.contains('toogleIcon')) {
             bool = true
+            icon = e
         }
     })
     // list.forEach(e => e.style.display = 'none')
     checkCond()
+    console.log(icon)
     const finalArray = [];
     document.querySelectorAll('.listItem').forEach(e => {
         if (e.style.display === 'flex') {
@@ -243,7 +246,6 @@ function filterType() {
                     if (e.textContent === i.nextElementSibling.textContent) {
                         actualArayFlex.push(e)
                         //  e.closest('.listItem').style.display = 'flex';
-
                     }
                     else {
                         //  bool ? e.closest('.listItem').style.display = 'none' : null

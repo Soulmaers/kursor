@@ -31,6 +31,7 @@ export function navigator() {
         if (auth) {
             menu.appendChild(auth)
         }
+        
         document.querySelector('.mobile_spisok').classList.add('mobile_active')
         //  rigthFrame.style.display = 'none';
     }

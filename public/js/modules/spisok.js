@@ -235,6 +235,7 @@ export const viewList = async (login) => {
     const results = await ress.json()
     const objChangeList = results.res[0]
     if (results.res.length === 0) {
+        globalSelect()
         return
     } else {
 
