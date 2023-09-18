@@ -368,7 +368,7 @@ async function grafikStartPress(dat2) {
                 .transition()
                 .duration(1000)
                 .attr("d", area3)
-                .attr("stroke-width", 3)
+                .attr("stroke-width", 1)
                 .attr("stroke", "red")
                 .attr("fill-opacity", 1)
             // добавляем области для первой кривой
@@ -402,6 +402,7 @@ async function grafikStartPress(dat2) {
                         return "#009933";
                     }
                 })
+                .attr("stroke-width", 1)
                 .attr("fill-opacity", 0.9)
                 .style('display', legendBar[0].classList.contains('noActive') ? 'none' : 'block')
             chartGroup.append("path")
@@ -558,7 +559,7 @@ async function grafikStartPress(dat2) {
                     .datum(stor.val)
                     .attr("class", "area3")
                     .attr("d", area3)
-                    .attr("stroke-width", 3)
+                    .attr("stroke-width", 1)
                     .attr("stroke", "red")
                     .attr("fill-opacity", 1)
                 svg.select(".area1")

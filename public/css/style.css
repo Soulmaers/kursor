@@ -3222,7 +3222,7 @@ input[type="date"] {
 
 .my-popup-bar .leaflet-popup-content-wrapper {
   font-size: 12px;
-  background: rgb(255, 255, 255, 0.4);
+  background: rgb(255, 255, 255, 0.6);
   color: blue;
   border: 2px solid blue;
   width: 250px;
