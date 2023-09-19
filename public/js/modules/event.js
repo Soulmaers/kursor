@@ -599,6 +599,9 @@ disk.addEventListener('click', () => {
 const save = document.querySelector('.galSave')
 const otmena = document.querySelector('.otmSave')
 save.addEventListener('click', () => {
+    const wrapRight = document.querySelector('.wrapRight')
+    wrapRight.style.zIndex = 0,
+        document.querySelector('.popup-background').style.display = 'none'
     console.log('save')
     const arrModel = [];
     const arrTyres = [];
