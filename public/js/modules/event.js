@@ -812,6 +812,8 @@ card.forEach(elem => {
     elem.addEventListener('click', () => {
         const tiresActivt = document.querySelector('.tiresActivt')
         tiresActivt ? tiresActivt.classList.remove('tiresActivt') : null
+        const tiresActiv = document.querySelector('.tiresActiv')
+        tiresActiv ? tiresActiv.classList.remove('tiresActiv') : null
         const msg = document.querySelectorAll('.msg')
         msg.forEach(el => {
             el.style.fontWeight = '300'
@@ -852,6 +854,10 @@ card.forEach(elem => {
 
 const closeIconConfig = document.querySelector('.closeIconConfig')
 closeIconConfig.addEventListener('click', () => {
+    const tiresActivt = document.querySelector('.tiresActivt')
+    tiresActivt ? tiresActivt.classList.remove('tiresActivt') : null
+    const tiresActiv = document.querySelector('.tiresActiv')
+    tiresActiv ? tiresActiv.classList.remove('tiresActiv') : null
     const sensors = document.querySelector('.sensors')
     const wright = document.querySelector('.wrapper_right')
     document.querySelector('.acto') ? document.querySelector('.acto').classList.remove('acto') : null

@@ -3221,28 +3221,28 @@ input[type="date"] {
 
 .my-popup-alarm .leaflet-popup-content-wrapper {
   font-size: 11px;
-  background: rgb(255, 255, 255, 0.4);
-  color: red;
+  background: #fff;
+  color: rgba(6, 28, 71, 1);
+  border: 2px solid rgba(6, 28, 71, 1);
   margin: 0;
-  border: 2px solid red;
   width: 300px;
 }
 
 .my-popup-stat .leaflet-popup-content-wrapper {
   font-size: 11px;
-  background: rgb(255, 255, 255, 0.4);
-  color: brown;
+  background: #fff;
+  color: rgba(6, 28, 71, 1);
+  border: 2px solid rgba(6, 28, 71, 1);
   margin: 0;
-  border: 2px solid brown;
   width: 210px;
 }
 
 .my-popup-log .leaflet-popup-content-wrapper {
   font-size: 11px;
-  background: rgb(255, 255, 255, 0.4);
-  color: brown;
+  background: #fff;
+  color: rgba(6, 28, 71, 1);
+  border: 2px solid rgba(6, 28, 71, 1);
   margin: 0;
-  border: 2px solid brown;
   width: 210px;
 }
 
@@ -3250,18 +3250,18 @@ input[type="date"] {
 
 .my-popup-oil .leaflet-popup-content-wrapper {
   font-size: 12px;
-  background: rgb(255, 255, 255, 0.4);
-  color: darkgreen;
+  background: #fff;
+  color: rgba(6, 28, 71, 1);
+  border: 2px solid rgba(6, 28, 71, 1);
   margin: 10px;
-  border: 2px solid darkgreen;
   width: 210px;
 }
 
 .my-popup-bar .leaflet-popup-content-wrapper {
   font-size: 12px;
-  background: rgb(255, 255, 255, 0.6);
-  color: blue;
-  border: 2px solid blue;
+  background: #fff;
+  color: rgba(6, 28, 71, 1);
+  border: 2px solid rgba(6, 28, 71, 1);
   width: 250px;
 
 }
