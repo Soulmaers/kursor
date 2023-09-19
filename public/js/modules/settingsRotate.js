@@ -36,45 +36,67 @@ export function settingsRotate() {
 
 
 
-const saveCheckListToBase = async () => {
+export const saveCheckListToBase = async (nums) => {
     const uniqBar = document.querySelectorAll('.uniqBar')
     const login = document.querySelectorAll('.log')[1].textContent
     const changeList = { login: login }
+
+    const viewIcon = document.querySelectorAll('.viewIcon')
+    const arrayIndexTitleList = []
+    viewIcon.forEach((e, index) => {
+        const relValues = e.getAttribute('rel').split(' ');
+        const lastRel = relValues[relValues.length - 1];
+        arrayIndexTitleList.push({ rel: lastRel, index: index })
+
+    });
     uniqBar.forEach(el => {
         console.log(el)
         el.children[0].checked ? changeList[el.children[0].id] = true : changeList[el.children[0].id] = false
     })
-    console.log(changeList)
+    arrayIndexTitleList.forEach(el => {
+        if (el.rel in changeList) {
+            el.view = changeList[el.rel];
+        } else {
+            el.view = changeList['pressure'];
+        }
+    });
+    const mass = arrayIndexTitleList.reduce((result, e) => {
+        result[e.rel] = JSON.stringify(e);
+        return result;
+    }, {})
+    mass.login = login
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ changeList }))
+        body: (JSON.stringify({ mass, login }))
     }
     const res = await fetch('/api/saveList', param)
     const results = await res.json()
     viewList(login)
-    const confirm = document.querySelector('.confirm')
-    console.log(confirm)
-    confirm.style.display = 'flex'
-    const account = document.querySelector('.settings_users')
-    const pop = document.querySelector('.popup-background')
-    pop.style.display = 'block'
-    account.style.zIndex = 0
-    setTimeout(() => {
-        confirm.style.display = 'none'
-        account.style.zIndex = 2
-    }, 2000)
-    confirm.children[0].children[0].addEventListener('click', () => {
-        confirm.style.display = 'none'
-        account.style.zIndex = 2
-    })
+    if (!nums) {
+        const confirm = document.querySelector('.confirm')
+        console.log(confirm)
+        confirm.style.display = 'flex'
+        const account = document.querySelector('.settings_users')
+        const pop = document.querySelector('.popup-background')
+        pop.style.display = 'block'
+        account.style.zIndex = 0
+        setTimeout(() => {
+            confirm.style.display = 'none'
+            account.style.zIndex = 2
+        }, 2000)
+        confirm.children[0].children[0].addEventListener('click', () => {
+            confirm.style.display = 'none'
+            account.style.zIndex = 2
+        })
+    }
+
 }
 const buttonList = document.querySelector('.listView').lastElementChild
 console.log(buttonList)
-buttonList.addEventListener('click', saveCheckListToBase)
-
+buttonList.addEventListener('click', () => saveCheckListToBase())
 
 const viewProfil = async (login) => {
     document.querySelectorAll('.item_contact_set').forEach(it => it.remove())

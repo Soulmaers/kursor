@@ -1,6 +1,6 @@
 import { storTitleList } from './content.js'
 import { Tooltip } from '../class/Tooltip.js'
-
+import { saveCheckListToBase } from './settingsRotate.js'
 const selectOn = (event) => {
     event.target.style.display = 'none'
     event.target.nextElementSibling.style.display = 'block'
@@ -470,13 +470,19 @@ export function draggable() {
             el.removeEventListener('drop', handleDrop);
         });
         // attachListeners()
-        draggable()
+
         const viewIcon = document.querySelectorAll('.viewIcon')
-        viewIcon.forEach(e => {
+        const arrayIndexTitleList = []
+        viewIcon.forEach((e, index) => {
             const relValues = e.getAttribute('rel').split(' ');
             const lastRel = relValues[relValues.length - 1];
+            console.log(lastRel)
+            arrayIndexTitleList.push({ rel: lastRel, index: index })
             new Tooltip(e, [storTitleList[lastRel]]);
         });
+        console.log(arrayIndexTitleList)
+        saveCheckListToBase(1)
+        draggable()
         globalSelect()
 
     }

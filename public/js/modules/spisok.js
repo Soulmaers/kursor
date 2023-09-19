@@ -224,7 +224,6 @@ export async function conturTest(testov) {
 }
 
 export const viewList = async (login) => {
-    console.log('тут?')
     const param = {
         method: "POST",
         headers: {
@@ -235,26 +234,50 @@ export const viewList = async (login) => {
     const ress = await fetch('/api/viewList', param)
     const results = await ress.json()
     const objChangeList = results.res[0]
+    delete objChangeList.login
+    delete objChangeList.id
+    const parsedObj = {};
+    for (let key in objChangeList) {
+        parsedObj[key] = JSON.parse(objChangeList[key]);
+    }
+    const parsedTtile = Object.assign({}, parsedObj);
+    delete parsedObj.tagach
+    for (let key in parsedObj) {
+        if (key === 'pricep') {
+            parsedObj.pressure = parsedObj.pricep
+            delete parsedObj.pricep
+        }
+    }
     if (results.res.length === 0) {
         globalSelect()
         return
     } else {
-
         const uniqBar = document.querySelectorAll('.uniqBar')
         uniqBar.forEach(el => {
-            el.children[0].checked = objChangeList[el.children[0].id] === 'false' ? false : true
+            el.children[0].checked = parsedObj[el.children[0].id].view === false ? false : true
         })
     }
     const titleChangeList = document.querySelectorAll('.title_list_global')
-    console.log(objChangeList)
     titleChangeList.forEach(el => {
-        el.style.display = objChangeList[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
+        el.style.display = parsedObj[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')].view === false ? 'none' : 'flex'
     })
 
     const newCelChange = document.querySelectorAll('.newCelChange')
     newCelChange.forEach(el => {
-        el.style.display = objChangeList[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')] === 'false' ? 'none' : 'flex'
+        el.style.display = parsedObj[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')].view === false ? 'none' : 'flex'
     })
+    for (let key in parsedTtile) {
+        const index = parsedTtile[key].index;
+        const rel = key;
+        const attributeList = Array.from(document.querySelectorAll('[rel]')).filter((el) => {
+            return el.getAttribute('rel').split(' ').includes(rel);
+        });
+        attributeList.forEach(el => {
+            const parent = el.parentNode;
+            const sibling = parent.children[index + 1];
+            parent.insertBefore(el, sibling);
+        });
+    }
     globalSelect()
 }
 export async function alternativa(arr) {
@@ -370,7 +393,6 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
         meliage: [meliage, meliage],
         lasttime: [updatetime, updatetime]
     }
-
     for (let i = 0; i < countElem.length; i++) {
         const newClass = countElem[i].getAttribute('rel')
         const existingCel = listItemCar.querySelector(`.newCel[rel="${newClass}"]`);
@@ -382,18 +404,18 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
             newClass === 'type' || newClass === 'meliage' ? newCel.classList.add('newCelTextType') : null
             newClass === 'lasttime' ? newCel.classList.add('newCelTimeType') : null
             newCel.innerHTML = iconValues[newClass][1]
-            i === 0 && iconValues[newClass][0] === 'ВКЛ' ? newCel.children[0].classList.add('toogleIcon') : i === 0 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
-            i === 1 && iconValues[newClass][0] === 1 ? newCel.children[0].classList.add('toogleIcon') : i === 1 && iconValues[newClass][0] === '-' ? newCel.innerHTML = '-' : null
-            i === 6 && iconValues[newClass][0] === 'Тип ТС' || i === 6 && iconValues[newClass][0] == undefined ? newCel.innerHTML = '-' : null
-            i >= 2 && i <= 5 && iconValues[newClass][0] === undefined || i >= 7 && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
+            iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
+            newClass === 'statusnew' && iconValues[newClass][0] === 'ВКЛ' ? newCel.children[0].classList.add('toogleIcon') : newClass === 'statusnew' && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
+            newClass === 'ingine' && iconValues[newClass][0] === 1 ? newCel.children[0].classList.add('toogleIcon') : newClass === 'ingine' && iconValues[newClass][0] === '-' ? newCel.innerHTML = '-' : null
+            newClass === 'type' && iconValues[newClass][0] === 'Тип ТС' || newClass === 'type' && iconValues[newClass][0] == undefined ? newCel.innerHTML = '-' : null
             listItemCar.appendChild(newCel)
         }
         else {
             existingCel.innerHTML = iconValues[newClass][1];
-            i === 0 && iconValues[newClass][0] === 'ВКЛ' ? existingCel.children[0].classList.add('toogleIcon') : i === 0 && iconValues[newClass][0] === undefined ? existingCel.innerHTML = '-' : null;
-            i === 1 && iconValues[newClass][0] === 1 ? existingCel.children[0].classList.add('toogleIcon') : i === 1 && iconValues[newClass][0] === '-' ? existingCel.innerHTML = '-' : null;
-            i === 6 && iconValues[newClass][0] === 'Тип ТС' || i === 6 && iconValues[newClass][0] === undefined ? existingCel.innerHTML = '-' : null;
-            i >= 2 && i <= 5 && iconValues[newClass][0] === undefined || i >= 7 && iconValues[newClass][0] === undefined ? existingCel.innerHTML = '-' : null;
+            newClass === 'statusnew' && iconValues[newClass][0] === 'ВКЛ' ? existingCel.children[0].classList.add('toogleIcon') : newClass === 'statusnew' && iconValues[newClass][0] === undefined ? existingCel.innerHTML = '-' : null;
+            newClass === 'ingine' && iconValues[newClass][0] === 1 ? existingCel.children[0].classList.add('toogleIcon') : newClass === 'ingine' && iconValues[newClass][0] === '-' ? existingCel.innerHTML = '-' : null;
+            newClass === 'type' && iconValues[newClass][0] === 'Тип ТС' || newClass === 'type' && iconValues[newClass][0] === undefined ? existingCel.innerHTML = '-' : null;
+            iconValues[newClass][0] === undefined ? existingCel.innerHTML = '-' : null;
         }
     }
 

@@ -122,21 +122,21 @@ exports.saveStructuraToBase = async (mass) => {
 
 exports.saveListToBase = async (obj) => {
     try {
-        const { login, statusnew, ingine, oil, type, pwr, sats, meliage, condition, pressure, lasttime } = obj;
-
+        const { login, statusnew, ingine, oil, type, pwr, sats, meliage, condition, tagach, pricep, lasttime } = obj;
+        console.log(login)
         const postModel = `SELECT login FROM list WHERE login='${login}'`;
         connection.query(postModel, function (err, results) {
             if (err) console.log(err);
             if (results.length === 0) {
-                const sql = `INSERT INTO list (login, pressure,\`condition\`, statusnew,  oil, ingine,sats, meliage,pwr,type, lasttime) VALUES ('${login}',
-                 '${pressure}', '${condition}', '${statusnew}', '${oil}', '${ingine}', '${sats}', '${meliage}', '${pwr}', '${type}', '${lasttime}')`;
+                const sql = `INSERT INTO list (login, tagach, pricep,\`condition\`, statusnew,  oil, ingine,sats, meliage,pwr,type, lasttime) VALUES ('${login}',
+                 '${tagach}','${pricep}', '${condition}', '${statusnew}', '${oil}', '${ingine}', '${sats}', '${meliage}', '${pwr}', '${type}', '${lasttime}')`;
                 connection.query(sql, function (err, results) {
                     if (err) console.log(err);
                     console.log('запись сделана');
                 });
             }
             else {
-                const postModel = `UPDATE list SET login='${login}',pressure='${pressure}',\`condition\`='${condition}', statusnew='${statusnew}',
+                const postModel = `UPDATE list SET login='${login}',tagach='${tagach}',pricep='${pricep}',\`condition\`='${condition}', statusnew='${statusnew}',
                 oil='${oil}', ingine='${ingine}',sats='${sats}',meliage='${meliage}',pwr='${pwr}',type='${type}',lasttime='${lasttime}' WHERE login = ?`
                 connection.query(postModel, [login], function (err, results) {
                     if (err) {

@@ -26,8 +26,10 @@ exports.saveStatus = async (req, res) => {
 }
 
 exports.saveList = async (req, res) => {
-    const obj = req.body.changeList
-    const okey = await databaseService.saveListToBase(obj)
+    const obj = req.body.mass
+    const login = req.body.login
+    console.log(obj)
+    const okey = await databaseService.saveListToBase(obj, login)
     res.json({ message: okey })
 }
 

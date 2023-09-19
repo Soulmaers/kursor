@@ -35,7 +35,8 @@ async function createPopup(array) {
         popupContent.appendChild(item); // Добавляем каждый элемент в родительский элемент
     }
     const popupClose = document.createElement('div')
-    popupClose.innerHTML = `<i class="fas fa fa-times popup-close"></i>`
+    popupClose.classList.add('popup-close')
+    popupClose.innerHTML = `<i class="fas fa fa-times "></i>`
     popH.appendChild(popupClose)
     const popup = document.querySelector('.popup');
     popup.style.display = "block";
