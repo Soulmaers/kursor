@@ -209,7 +209,7 @@ export function viewMenuParams() {
             });
             e.classList.add('tiresActiv')
             const checkAlt = document.getElementById('check_Title')
-            checkAlt.checked ? (sensors.style.display = 'flex',
+            checkAlt.checked ? (sensors.style.display = 'flex', new DraggableContainer(sensors),
                 wright.style.zIndex = 2,
                 document.querySelector('.popup-background').style.display = 'block') : null
             techInfo.style.display = 'block'

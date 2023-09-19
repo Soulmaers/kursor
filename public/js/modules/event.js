@@ -810,6 +810,8 @@ card.forEach(elem => {
     const obo = document.querySelector('.obo')
     const wRight = document.querySelector('.wrapper_right')
     elem.addEventListener('click', () => {
+        const tiresActivt = document.querySelector('.tiresActivt')
+        tiresActivt ? tiresActivt.classList.remove('tiresActivt') : null
         const msg = document.querySelectorAll('.msg')
         msg.forEach(el => {
             el.style.fontWeight = '300'
@@ -838,7 +840,7 @@ card.forEach(elem => {
             elem.classList.add('acto')
         }
         const checkConfig = document.getElementById('check_Title')
-        checkConfig.checked ? (sensors.style.display = 'flex', wRight.style.zIndex = 2,
+        checkConfig.checked ? (sensors.style.display = 'flex', new DraggableContainer(sensors), wRight.style.zIndex = 2,
             document.querySelector('.popup-background').style.display = 'block') : sensors.style.display = 'none'
         btnsens[0].style.display = 'none'
         btnsens[1].style.display = 'none'
