@@ -10,6 +10,8 @@ export function conf(selectOld) {
 
 }
 export function createConfig(selectOld) {
+    const tiresActiv = document.querySelector('.tiresActiv')
+    tiresActiv ? tiresActiv.classList.remove('tiresActiv') : null
     // document.querySelector('.wrapperFull').style.height = ''
     const checkAlt = document.querySelector('.checkAlt')
     checkAlt.style.color = 'red'
@@ -117,6 +119,14 @@ export function createConfig(selectOld) {
 }
 
 function clearConfig() {
+    const wrapRight = document.querySelector('.wrapper_right')
+    const sensors = document.querySelector('.sensors')
+    const msg = document.querySelectorAll('.msg')
+    msg.forEach(el => el.style.fontWeight = '300')
+    document.querySelector('.acto') ? document.querySelector('.acto').classList.remove('acto') : null
+    document.querySelector('.actBTN') ? document.querySelector('.actBTN').classList.remove('actBTN') : null
+    sensors.style.display === 'flex' ? (sensors.style.display = 'none', wrapRight.style.zIndex = 0,
+        document.querySelector('.popup-background').style.display = 'none') : null
     const selectType = document.querySelector('.select_type')
     selectType.style.display = 'none'
     const checkAlt = document.querySelector('.checkAlt')
@@ -219,22 +229,21 @@ function forTyres() {
     const tyres = globalWrapper.querySelectorAll('.tires_link_test')
     tyres.forEach(e => {
         e.addEventListener('click', () => {
-            const actBTN = document.querySelector('.actBTN')
-            if (actBTN) {
-                actBTN.classList.remove('actBTN')
-            }
+            /*  const actBTN = document.querySelector('.actBTN')
+              if (actBTN) {
+                  actBTN.classList.remove('actBTN')
+              }*/
+            const tact = document.querySelector('.tiresActivt')
+            tact ? obo.style.display = 'flex' : obo.style.display = 'none'
 
-            obo.style.display = 'none'
-            sensors.style.display = 'none'
             tyres.forEach(e => {
                 const msg = document.querySelectorAll('.msg')
                 msg.forEach(el => {
-                    el.style.color = 'black';
+                    el.style.color = 'rgba(6, 28, 71, 1)';
                     el.classList.remove('act')
                 })
                 e.classList.remove('tiresActivt')
             });
-
             e.classList.add('tiresActivt')
             sensors.style.display = 'flex';
             btnsens[0].style.display = 'flex'
@@ -253,9 +262,10 @@ function allparamsTyres(btnsens) {
         el.addEventListener('click', () => {
             const tiresActivt = document.querySelector('.tiresActivt')
             msg.forEach(e => {
-                e.style.color = 'black'
+                e.style.color = 'rgba(6, 28, 71, 1)'
             })
             el.style.color = 'green'
+            el.style.fontWeight = 'bold'
             const arrSpreed = [...el.textContent]
             let value;
             arrSpreed.forEach(el => {

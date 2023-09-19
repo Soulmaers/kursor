@@ -4,7 +4,7 @@ import { tech } from './tech.js'
 import { gosNum } from './altConfig.js'
 import { modalOs } from './modalOs.js'
 import { Tooltip } from '../class/Tooltip.js'
-
+import { DraggableContainer } from '../class/Dragdown.js'
 
 let intervalId
 let isProcessing = false;
@@ -181,14 +181,19 @@ export function viewMenuParams() {
     const plug = document.querySelectorAll('.plug')
     const tableTarir = document.querySelector('.tableTarir')
     const idbaseTyres = document.querySelector('.idbaseTyres')
+    const sections = document.querySelector('.sections')
+    const wright = document.querySelector('.wrapper_right')
     var widthWind = document.querySelector('body').offsetWidth;
     idbaseTyres.textContent = ''
     tiresLink.forEach(e => {
         e.addEventListener('click', () => {
+            const acto = document.querySelector('.acto')
+            acto ? acto.classList.remove('acto') : null
             if (e.classList.contains('tiresActiv')) {
                 e.classList.remove('tiresActiv')
                 techInfo.style.display = 'none'
                 tableTarir.style.display = 'none'
+                sensors.style.display = 'none'
                 wrapperMap.style.display = widthWind >= 860 ? 'block' : 'none'
                 if (plug[1].classList.contains('activGraf')) {
                     grafics.style.display = 'flex';
@@ -199,17 +204,14 @@ export function viewMenuParams() {
             kolesos.push(e)
             speedGraf.style.display = 'none';
             tiresLink.forEach(e => {
-                obo.style.display = 'none'
-                titleSens.style.display = 'none'
-                sensors.style.display = 'none'
                 tableTarir.style.display = 'none'
-                const msg = document.querySelectorAll('.msg')
-                msg.forEach(el => el.classList.remove('act'))
                 e.classList.remove('tiresActiv')
             });
             e.classList.add('tiresActiv')
             const checkAlt = document.getElementById('check_Title')
-            checkAlt.checked ? sensors.style.display = 'flex' : null
+            checkAlt.checked ? (sensors.style.display = 'flex',
+                wright.style.zIndex = 2,
+                document.querySelector('.popup-background').style.display = 'block') : null
             techInfo.style.display = 'block'
             speedGraf.style.display = 'block';
             wrapperMap.style.display = 'none'
@@ -217,6 +219,8 @@ export function viewMenuParams() {
             tableTarir.style.display = 'none'
             const idbaseTyres = document.querySelector('.idbaseTyres')
             idbaseTyres.textContent = ''
+
+
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
         })
     })

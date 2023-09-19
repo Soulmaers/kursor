@@ -767,6 +767,7 @@ plug[2].addEventListener('click', () => {
 })
 
 const menuGraf = document.querySelectorAll('.menu_graf')
+
 menuGraf.forEach(el => {
     el.addEventListener('click', () => {
         const mapss = document.getElementById('mapOil')
@@ -804,15 +805,28 @@ card.forEach(elem => {
     const btnsens = document.querySelectorAll('.btnsens')
     const titleSens = document.querySelector('.title_sens')
     const obo = document.querySelector('.obo')
+    const wRight = document.querySelector('.wrapper_right')
     elem.addEventListener('click', () => {
+        const msg = document.querySelectorAll('.msg')
+        msg.forEach(el => {
+            el.style.fontWeight = '300'
+            el.style.color = 'rgba(6, 28, 71, 1)'
+        }
+        )
+
         if (elem.classList.contains('acto')) {
             elem.classList.remove('acto')
             sensors.style.display = 'none'
             btnsens[2].style.display = 'none'
+            const actBTN = document.querySelector('.actBTN')
+            actBTN ? actBTN.classList.remove('actBTN') : null
+            wRight.style.zIndex = 0,
+                document.querySelector('.popup-background').style.display = 'none'
             return
         }
         card.forEach(el => {
             el.classList.remove('acto')
+
         })
         changeParams.value = '1';
         iconParamsz()
@@ -821,15 +835,25 @@ card.forEach(elem => {
             elem.classList.add('acto')
         }
         const checkConfig = document.getElementById('check_Title')
-        checkConfig.checked ? sensors.style.display = 'flex' : sensors.style.display = 'none'
+        checkConfig.checked ? (sensors.style.display = 'flex', wRight.style.zIndex = 2,
+            document.querySelector('.popup-background').style.display = 'block') : sensors.style.display = 'none'
         btnsens[0].style.display = 'none'
         btnsens[1].style.display = 'none'
         btnsens[2].style.display = 'flex'
         const engineEvent = document.querySelector('.engineEvent')
         elem.id === 'tsi-card' ? engineEvent.style.display = 'flex' : engineEvent.style.display = 'none'
-        obo.style.display = 'none'
-        titleSens.style.display = 'none'
     })
+})
+
+const closeIconConfig = document.querySelector('.closeIconConfig')
+closeIconConfig.addEventListener('click', () => {
+    const sensors = document.querySelector('.sensors')
+    const wright = document.querySelector('.wrapper_right')
+    document.querySelector('.acto') ? document.querySelector('.acto').classList.remove('acto') : null
+    document.querySelector('.actBTN') ? document.querySelector('.actBTN').classList.remove('actBTN') : null
+    sensors.style.display = 'none'
+    wright.style.zIndex = 0,
+        document.querySelector('.popup-background').style.display = 'none'
 })
 
 const tsiControll = document.querySelector('.tsiControll');
@@ -878,8 +902,8 @@ valueStatic.forEach(elem => {
         btnsens[0].style.display = 'none'
         btnsens[1].style.display = 'none'
         btnsens[2].style.display = 'flex'
-        obo.style.display = 'none'
-        titleSens.style.display = 'none'
+        //   obo.style.display = 'none'
+        //  titleSens.style.display = 'none'
     })
 })
 const delIcon = document.querySelectorAll('.delIcon')
@@ -918,13 +942,13 @@ btnsens.forEach(e => {
     e.addEventListener('click', () => {
         if (e.classList.contains('actBTN')) {
             e.classList.remove('actBTN')
-            obo.style.display = 'none';
-            titleSens.style.display = 'none';
+            //   obo.style.display = 'none';
+            //  titleSens.style.display = 'none';
             return
         }
         btnsens.forEach(el => {
-            obo.style.display = 'none';
-            titleSens.style.display = 'none';
+            //  obo.style.display = 'none';
+            // titleSens.style.display = 'none';
             el.classList.remove('actBTN')
         })
         e.classList.add('actBTN')
