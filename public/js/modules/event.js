@@ -599,7 +599,7 @@ disk.addEventListener('click', () => {
 const save = document.querySelector('.galSave')
 const otmena = document.querySelector('.otmSave')
 save.addEventListener('click', () => {
-    const wrapRight = document.querySelector('.wrapRight')
+    const wrapRight = document.querySelector('.wrapper_right')
     wrapRight.style.zIndex = 0,
         document.querySelector('.popup-background').style.display = 'none'
     console.log('save')
