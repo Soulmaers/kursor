@@ -4,6 +4,7 @@ const databaseService = require('../services/database.service');
 const wialonModule = require('../modules/wialon.module');
 const statistika = require('../modules/statistika.module');
 const structura = require('../modules/structura.module.js')
+const events = require('../modules/events.module.js')
 const connection = require('../config/db')
 const { createDate, convert } = require('../helpers')
 const constorller = require('./data.controller.js')
@@ -164,6 +165,8 @@ function ggg(nameSens, rez) {
     }
 
 }
+
+
 async function updateParams(data) {
     console.log('работаем?')
     data ? data : data = dataGlobal
@@ -206,7 +209,7 @@ async function updateParams(data) {
     const res = await constorller.dataSpisok()
     const global = await statistika.startAllStatic(res)
     const prostoy = await statistika.popupProstoy(res)
-
+    await events.eventFunction(res)
     const arraySummary = Object.entries(global)
     const now = new Date();
     const date = new Date(now);
