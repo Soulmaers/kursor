@@ -53,7 +53,7 @@ async function modalView(filled, name, group, idw, geo, time) {
         event: filled > 0 ? `Заправка` : 'Слив', litrazh: filled > 0 ? `Запралено: ${filled} л.` : `Слив: ${filled - (filled * 2)}`,
         time: `Время: ${formattedDate}`
     }]
-    const res = await databaseService.controllerSaveToBase(data, idw, group, name, geo, filled)
+    const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name, filled)
     console.log('Заправка' + ' ' + res.message)
 
 }

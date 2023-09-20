@@ -123,6 +123,7 @@ export async function logsView(array) {
         const parsedContent = JSON.parse(el.content);
         const typeEvent = parsedContent[0].event;
         const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
+        console.log(geoloc)
         const geo = geoloc !== null ? geoloc.map(e => e.toFixed(5)) : 'нет данных'
         const id = parseFloat(el.idw)
         const group = arrayIdGroup
