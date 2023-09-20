@@ -2,7 +2,7 @@ import { DraggableContainer } from '../class/Dragdown.js'
 import { CloseBTN } from '../class/Flash.js'
 import { titleLogs } from './content.js'
 import { reverseGeocode, createMapsUniq } from './geo.js'
-
+import { Tooltip } from '../class/Tooltip.js'
 
 
 
@@ -130,12 +130,9 @@ export async function logsView(array) {
             .map(it => it[1]);
         const int = Object.values(parsedContent[0]);
         int.shift();
-        if (!int.some(e => e.startsWith('Комп'))) {
-            int.unshift(`Компания: ${login === 'Курсор' ? 'demo' : group[0]}`);
-        }
         const time = times(new Date(Number(el.time) * 1000));
         const info = `${int.join(", ")}`;
-        return { time: time, typeEvent: typeEvent, content: info, geo: geo };
+        return { time: time, group: typeEvent !== 'Предупреждение' ? el.group : login === 'Курсор' ? 'demo' : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
     }));
     mass.then(async results => {
         const clickLog = document.querySelector('.clickLog')
@@ -149,8 +146,8 @@ export async function logsView(array) {
                     const geo = [];
                     geo.push(parseFloat(e.lastElementChild.textContent.split(',')[0]))
                     geo.push(parseFloat(e.lastElementChild.textContent.split(',')[1]))
-                    console.log(geo)
-                    const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[1].textContent, e.lastElementChild.parentElement.children[2].textContent] }]
+                    console.log(e)
+                    const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[2].textContent, e.lastElementChild.parentElement.children[4].textContent] }]
                     createMapsUniq([], obj, 'log')
                     const wrap = document.querySelector('.wrapMap')
                     new CloseBTN(wrap)
@@ -215,10 +212,10 @@ function viewTableNum(num) {
 const objColor = {
     'Заправка': 'darkblue',
     'Простой': 'darkgreen',
-    'Предупреждение': 'darkred'
+    'Предупреждение': 'darkred',
+    'Слив': 'yellow'
 }
 async function createLogsTable(mass) {
-    // console.log(mass)
     const wrap = document.querySelector('.alllogs')
     if (wrap) {
         wrap.remove();
@@ -233,15 +230,23 @@ async function createLogsTable(mass) {
     const spanTitle = document.createElement('p')
     spanTitle.classList.add('spanTitle')
     spanTitle.textContent = 'Логи событий'
+    const icon = document.createElement('i')
+    icon.classList.add('fas')
+    icon.classList.add('fa-binoculars')
+    icon.classList.add('allobjects')
     body.appendChild(alllogs)
     alllogs.appendChild(spanTitle)
+    alllogs.appendChild(icon)
     alllogs.appendChild(log)
     log.innerHTML = titleLogs
     var firstChild = log.firstChild;
+    new Tooltip(icon, ['Все объекты/Текущий']);
     mass.forEach(el => {
         const trEvent = document.createElement('div')
         trEvent.classList.add('trEvent')
+        trEvent.setAttribute('rel', `${el.id}`)
         log.insertBefore(trEvent, firstChild.nextSibling)
+        delete el.id
         for (var key in el) {
             const td = document.createElement('p')
             td.classList.add('tdEvent')

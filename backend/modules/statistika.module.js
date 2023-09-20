@@ -578,7 +578,7 @@ exports.popupProstoy = async (array) => {
                         name: `Объект: ${name}`,
                         time: `Дата начала простоя: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`
                     }]
-                    const resu = await databaseService.controllerSaveToBase(data, idw, map)
+                    const resu = await databaseService.controllerSaveToBase(data, idw, map, group, name)
                     console.log('Простой' + ' ' + resu.message)
                 }
             }

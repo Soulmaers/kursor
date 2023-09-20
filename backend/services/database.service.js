@@ -258,16 +258,7 @@ exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, s
 
 
 
-exports.controllerSaveToBase = async (arr, id, geo, start) => {
-    const idw = id
-    const date = new Date()
-    const time = (date.getTime() / 1000).toFixed(0)
-    const newdata = JSON.stringify(arr)
-    const geoLoc = JSON.stringify(geo)
-    console.log(newdata, time, idw, geoLoc, start)
-    const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, start)
-    return res
-}
+
 
 
 exports.ggg = async (id) => {
@@ -309,16 +300,14 @@ exports.alarmBase = async (data, tyres, alarm) => {
     console.log('данные по алармам')
     const dannie = data.concat(tyres)
     let val;
-
-    console.log(alarm)
     const allSens = await databaseService.ggg(dannie[6])
     const tyress = allSens[dannie[2]]
     console.log(dannie)
     alarm !== 'Потеря связи с датчиком' ? val = dannie[3] + ' ' + 'Бар' : val = dannie[4] + '' + 't'
     const res = alarm !== 'Норма' ? await databaseService.controllerSaveToBase([{
-        event: 'Предупреждение', name: `Компания: ${dannie[9]}`, name: `Объект: ${dannie[1]}`, time: `Время ${dannie[0]}`, tyres: `Колесо: ${tyress}`,
+        event: 'Предупреждение', time: `Время ${dannie[0]}`, tyres: `Колесо: ${tyress}`,
         param: `Параметр: ${val}`, alarm: `Событие: ${alarm}`
-    }], dannie[6], dannie[8]) : 'Норма. В базу не пишем'
+    }], dannie[6], dannie[8], dannie[1], dannie[1]) : 'Норма. В базу не пишем'
     console.log('Предупреждение' + ' ' + res.message)
     count++
 
@@ -743,9 +732,23 @@ exports.deleteBarToBase = (idw) => {
 }
 
 
-exports.logsSaveToBase = async (arr, time, idw, geo, start) => {
-    //  console.log(arr, time, idw, geo, start)
-    const data = [time, arr, idw]
+
+exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
+    // console.log(arr, id, group, name, geo, start)
+    const idw = id
+    const date = new Date()
+    const time = (date.getTime() / 1000).toFixed(0)
+    const newdata = JSON.stringify(arr)
+    const geoLoc = JSON.stringify(geo)
+    // console.log(newdata, time, idw, geoLoc, start)
+    const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, group, name, start)
+    return res
+}
+
+
+exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
+    console.log(arr, time, idw, geo, group, name, start)
+    //  const data = [time, arr, idw]
     return new Promise((resolve, reject) => {
         let checkExistQuery;
         if (start) {
@@ -764,10 +767,10 @@ exports.logsSaveToBase = async (arr, time, idw, geo, start) => {
             } else {
                 let postModel;
                 if (start) {
-                    postModel = `INSERT INTO logs(idw, time, content, geo, litragh) VALUES(${idw}, ${time}, '${arr}','${geo}','${start}')`
+                    postModel = `INSERT INTO logs(idw, time, content, geo, litragh, groups, name) VALUES(${idw}, ${time}, '${arr}','${geo}','${start}','${group}','${name}')`
                 }
                 else {
-                    postModel = `INSERT INTO logs(idw, time, content, geo) VALUES(${idw}, ${time}, '${arr}','${geo}')`
+                    postModel = `INSERT INTO logs(idw, time, content, geo,groups, name) VALUES(${idw}, ${time}, '${arr}','${geo}','${group}','${name}')`
                 }
 
                 connection.query(postModel, function (err, results) {

@@ -22,13 +22,17 @@ let time;
 let timeIcon;
 
 export async function visual(el) {
-    console.log('сработала!!!!')
+
+    const allobjects = document.querySelector('.allobjects')
+    allobjects.style.display = 'block'
+    allobjects.style.color = '#fff'
+    const trEventLogs = document.querySelectorAll('.trEvent')
+    trEventLogs.forEach(e => e.style.display = 'flex')
     const widthWind = document.querySelector('body').offsetWidth;
     const jobTSDetalisationGraf = document.querySelector('.jobTSDetalisationGraf');
     if (jobTSDetalisationGraf) jobTSDetalisationGraf.remove()
     const jobTSDetalisationChartsLegenda = document.querySelector('.jobTSDetalisationCharts_legenda');
     if (jobTSDetalisationChartsLegenda) jobTSDetalisationChartsLegenda.remove()
-
     const acto = document.querySelector('.acto')
     if (acto) {
         acto.classList.remove('acto');
@@ -36,7 +40,11 @@ export async function visual(el) {
     const tsiControll = document.querySelector('.tsiControll')
     tsiControll.value = '';
     el.classList.add('color')
-    console.log('есть колор')
+    trEventLogs.forEach(item => {
+        item.getAttribute('rel') !== el.id ? item.style.display = 'none' : null
+
+
+    })
     const msg = document.querySelectorAll('.msg')
     if (msg) {
         msg.forEach(e => {

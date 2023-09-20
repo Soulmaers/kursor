@@ -334,7 +334,28 @@ btnDash.addEventListener('click', () => {
 const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', mainblock)
 
+const monitoring = document.querySelectorAll('.monitoring')
+
+monitoring.forEach(el => {
+    el.addEventListener('click', () => {
+        const allobjects = document.querySelector('.allobjects')
+        allobjects.style.display = 'none'
+        allobjects.style.color = 'gray'
+        const trEventLogs = document.querySelectorAll('.trEvent')
+        trEventLogs.forEach(e => e.style.display = 'flex')
+    })
+})
 function mainblock() {
+    const color = document.querySelector('color')
+    const allobjects = document.querySelector('.allobjects')
+    allobjects.style.display = 'block'
+    allobjects.style.color = '#fff'
+    const trEventLogs = document.querySelectorAll('.trEvent')
+    trEventLogs.forEach(item => {
+        item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
+
+
+    })
     const mapss = document.getElementById('mapOil')
     console.log(mapss)
     if (mapss) {

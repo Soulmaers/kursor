@@ -52,11 +52,11 @@ body {
 
 .alllogs {
   display: none;
-  width: 770px;
+  width: 870px;
   height: 650px;
   position: absolute;
   top: 20%;
-  left: 55%;
+  left: 45%;
   border: 1px solid rgba(6, 28, 71, 1);
   background-color: #fff;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
@@ -65,6 +65,26 @@ body {
   background-color: rgba(6, 28, 71, 1);
   cursor: move;
 
+}
+
+
+
+i.allobjects {
+  position: absolute;
+  color: #fff;
+  top: 15px;
+  right: 20px;
+  cursor: pointer;
+  display: none;
+}
+
+
+
+.allobjects:hover {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
 }
 
 .spanTitle {
@@ -76,7 +96,7 @@ body {
 }
 
 .wrapperLogs {
-  width: 770px;
+  width: 870px;
   height: 600px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -84,6 +104,7 @@ body {
   margin-top: 15px;
   margin-bottom: 10px;
   border-radius: 0 0 10px 10px;
+  position: relative;
 }
 
 .wrapperLogs::-webkit-scrollbar {
@@ -109,7 +130,7 @@ body {
 .trEvent {
   display: flex;
   align-items: center;
-  width: 770px;
+  width: 870px;
   font-size: 0.8rem;
   padding: 2px;
   margin: 2px;
@@ -121,7 +142,7 @@ body {
 .tdLogs,
 .tdEvent {
   margin: 2px;
-  width: 15%;
+  width: 14%;
 }
 
 
@@ -133,12 +154,12 @@ body {
   font-size: 0.7rem;
 }
 
-.tdLogs:nth-child(3n) {
-  width: 65%;
+.tdLogs:nth-child(5n) {
+  width: 31%;
 }
 
-.tdEvent:nth-child(3n) {
-  width: 65%;
+.tdEvent:nth-child(5n) {
+  width: 31%;
 }
 
 .logs {
