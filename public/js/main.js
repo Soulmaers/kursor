@@ -106,10 +106,11 @@ function inits() {
 
 function zapross() {
     const params11 = {
-        "itemId": 25399425,
+        "itemId": 26936623,
         "ivalType": 1,
         "timeFrom": 1695100646,
-        "timeTo": 1695204856,
+        "timeTo":
+            1695211428,
         "detectors": [
             {
                 "type": 'sensors',
@@ -137,7 +138,8 @@ function zapross() {
                     "type": '*',
                     //   "expr": 'trips{m<90}',
                     "timeFrom": 1695100646,
-                    "timeTo": 1695204856,
+                    "timeTo":
+                        1695211428,
                     "detalization": 23
                 }
             }
@@ -187,7 +189,7 @@ function zapross() {
         "mode": "add",
         "units": [
             {
-                "id": 25399425,
+                "id": 26936623,
                 "detect":
                 {
                     "ignition": 0,
@@ -211,7 +213,7 @@ function zapross() {
             const prms = {
                 //   "lang": 'ru',
                 //   "measure": 0,
-                "detalization": 23
+                "detalization": 3
             }
 
 
