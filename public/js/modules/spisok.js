@@ -314,6 +314,7 @@ export async function alternativa(arr) {
         const result = await res.json()
         const restest = await fetch('/api/updateSensors', param)
         const resulttest = await restest.json()
+        console.log(resulttest)
         const updateTime = Object.entries(resulttest.res).map(el => {
             //  console.log(Object.values(el[1]))
             return {

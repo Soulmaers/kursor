@@ -192,7 +192,8 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
         "units": arr.map(id => ({
             "id": id,
             "detect": {
-                'trips': 0
+                'trips': 0,
+                'lls': 0
 
             }
         }))
@@ -213,7 +214,6 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
                         console.log(err);
                     })
                     .then(function (data) {
-                        // console.log(data)
                         resolve(data)
                     });
             });

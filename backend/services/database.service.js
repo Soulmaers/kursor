@@ -264,7 +264,7 @@ exports.controllerSaveToBase = async (arr, id, geo, start) => {
     const time = (date.getTime() / 1000).toFixed(0)
     const newdata = JSON.stringify(arr)
     const geoLoc = JSON.stringify(geo)
-    // console.log(newdata, time, idw, geoLoc, start)
+    console.log(newdata, time, idw, geoLoc, start)
     const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, start)
     return res
 }
@@ -744,11 +744,12 @@ exports.deleteBarToBase = (idw) => {
 
 
 exports.logsSaveToBase = async (arr, time, idw, geo, start) => {
+    //  console.log(arr, time, idw, geo, start)
     const data = [time, arr, idw]
     return new Promise((resolve, reject) => {
         let checkExistQuery;
         if (start) {
-            checkExistQuery = `SELECT * FROM logs WHERE startOil='${start}'`
+            checkExistQuery = `SELECT * FROM logs WHERE litragh='${start}' AND idw='${idw}'`
         }
         else {
             checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'`
@@ -763,7 +764,7 @@ exports.logsSaveToBase = async (arr, time, idw, geo, start) => {
             } else {
                 let postModel;
                 if (start) {
-                    postModel = `INSERT INTO logs(idw, time, content, geo, startOil) VALUES(${idw}, ${time}, '${arr}','${geo}','${start}')`
+                    postModel = `INSERT INTO logs(idw, time, content, geo, litragh) VALUES(${idw}, ${time}, '${arr}','${geo}','${start}')`
                 }
                 else {
                     postModel = `INSERT INTO logs(idw, time, content, geo) VALUES(${idw}, ${time}, '${arr}','${geo}')`

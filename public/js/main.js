@@ -36,7 +36,7 @@ async function init() {
     }
 
 
-    // inits();
+    //  inits();
 
     const param = {
         method: "POST",
@@ -105,12 +105,11 @@ function inits() {
 
 
 function zapross() {
-
     const params11 = {
-        "itemId": 26702386,
+        "itemId": 25887688,
         "ivalType": 1,
-        "timeFrom": 1693914776,
-        "timeTo": 1694519576,
+        "timeFrom": 1695100646,
+        "timeTo": 1695200646,
         "detectors": [
             {
                 "type": 'sensors',
@@ -137,8 +136,8 @@ function zapross() {
                 "selector": {
                     "type": '*',
                     //   "expr": 'trips{m<90}',
-                    "timeFrom": 1693914776,
-                    "timeTo": 1694519576,
+                    "timeFrom": 1695100646,
+                    "timeTo": 1695200646,
                     "detalization": 23
                 }
             }
@@ -152,6 +151,8 @@ function zapross() {
 
                 });
         });
+
+
     const prmsId = {
         "id": 26702383,
         "flags": 0x0010000000
@@ -182,48 +183,50 @@ function zapross() {
 
         });
     console.log('запрос!!')
-    /*  const params = {
-          "mode": "add",
-          "units": [
-              {
-                  "id": 26936623,
-                  "detect":
-                  {
-                      "ignition": 0,
-                      "sensors": 0,
-                      'trips': 0,
-                      'lls': 0,
-                      "counters": 0
-                  }
-              },
-          ]
-      }
-  
-      const remote111 = wialon.core.Remote.getInstance();
-      remote111.remoteCall('events/update_units', params,
-          function (code, result) {
-              if (code) {
-                  console.log(wialon.core.Errors.getErrorText(code));
-              }
-              console.log(result)
-  
-              const prms = {
-                  //   "lang": 'ru',
-                  //   "measure": 0,
-                  "detalization": 23
-              }
-  
-              const remote1 = wialon.core.Remote.getInstance();
-              remote1.remoteCall('events/check_updates&params', prms,
-                  function (code, result) {
-                      if (code) {
-                          console.log(wialon.core.Errors.getErrorText(code));
-                      }
-                      console.log(result)
-  
-                  });
-  
-          });*/
+    const params = {
+        "mode": "add",
+        "units": [
+            {
+                "id": 26936623,
+                "detect":
+                {
+                    "ignition": 0,
+                    "sensors": 0,
+                    'trips': 0,
+                    'lls': 0,
+                    "counters": 0
+                }
+            },
+        ]
+    }
+
+    const remote111 = wialon.core.Remote.getInstance();
+    remote111.remoteCall('events/update_units', params,
+        function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+
+            const prms = {
+                //   "lang": 'ru',
+                //   "measure": 0,
+                "detalization": 23
+            }
+
+
+
+            const remote1 = wialon.core.Remote.getInstance();
+            remote1.remoteCall('events/check_updates&params', prms,
+                function (code, result) {
+                    if (code) {
+                        console.log(wialon.core.Errors.getErrorText(code));
+                    }
+                    console.log(result)
+
+                });
+
+        });
 
 
 
