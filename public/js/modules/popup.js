@@ -225,6 +225,7 @@ const objColor = {
     'Предупреждение': 'darkred'
 }
 async function createLogsTable(mass) {
+    // console.log(mass)
     const wrap = document.querySelector('.alllogs')
     if (wrap) {
         wrap.remove();

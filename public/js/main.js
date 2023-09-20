@@ -36,7 +36,7 @@ async function init() {
     }
 
 
-    //  inits();
+    inits();
 
     const param = {
         method: "POST",
@@ -106,10 +106,10 @@ function inits() {
 
 function zapross() {
     const params11 = {
-        "itemId": 25887688,
+        "itemId": 25399425,
         "ivalType": 1,
         "timeFrom": 1695100646,
-        "timeTo": 1695200646,
+        "timeTo": 1695204856,
         "detectors": [
             {
                 "type": 'sensors',
@@ -137,7 +137,7 @@ function zapross() {
                     "type": '*',
                     //   "expr": 'trips{m<90}',
                     "timeFrom": 1695100646,
-                    "timeTo": 1695200646,
+                    "timeTo": 1695204856,
                     "detalization": 23
                 }
             }
@@ -187,7 +187,7 @@ function zapross() {
         "mode": "add",
         "units": [
             {
-                "id": 26936623,
+                "id": 25399425,
                 "detect":
                 {
                     "ignition": 0,

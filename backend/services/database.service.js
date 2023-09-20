@@ -786,6 +786,7 @@ exports.logsSaveToBase = async (arr, time, idw, geo, start) => {
 
 
 exports.logsFindToBase = async (id) => {
+    // console.log(id)
     return new Promise((resolve, reject) => {
         const postModel = `SELECT * FROM logs WHERE idw IN (${id.join(',')})`;
         connection.query(postModel, function (err, results) {
@@ -1111,7 +1112,7 @@ module.exports.summaryToBase = (idw, arr, data) => {
                     const sql = `INSERT INTO  summary(idw, data, type, nameCar, jobTS, probeg, rashod, zapravka, dumpTrack,moto, prostoy, medium, oilHH, company) VALUES?`;
                     connection.query(sql, [[value]], function (err, results) {
                         if (err) console.log(err)
-                        resolve({ message: 'даные добавлены' })
+                        resolve({ message: 'данные добавлены' })
                     })
                 }
                 else {

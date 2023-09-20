@@ -316,10 +316,9 @@ export async function alternativa(arr) {
         const resulttest = await restest.json()
         console.log(resulttest)
         const updateTime = Object.entries(resulttest.res).map(el => {
-            //  console.log(Object.values(el[1]))
             return {
-                id: parseFloat(el[0]), lastime: Object.values(el[1])[0].trips && Object.values(el[1])[0].trips.length !== 0 ? Object.values(el[1])[0].trips.m : null,
-                speed: Object.values(el[1])[0].trips && Object.values(el[1])[0].trips.length !== 0 ? Object.values(el[1])[0].trips.curr_speed : null
+                id: parseFloat(el[0]), lastime: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.m : null,
+                speed: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.curr_speed : null
             }
         })
         if (result) {
@@ -333,7 +332,7 @@ export async function alternativa(arr) {
                     allArr.push([...e[i], valueSens[index][i]])
                 }
             })
-            //  console.log(allArr)
+            console.log(updateTime)
             resolve([allArr, updateTime])
         }
 
@@ -394,6 +393,7 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
         meliage: [meliage, meliage],
         lasttime: [updatetime, updatetime]
     }
+    // console.log(iconValues.lasttime)
     for (let i = 0; i < countElem.length; i++) {
         const newClass = countElem[i].getAttribute('rel')
         const existingCel = listItemCar.querySelector(`.newCel[rel="${newClass}"]`);
