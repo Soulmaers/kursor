@@ -5,17 +5,12 @@ import { reverseGeocode, createMapsUniq } from './geo.js'
 
 
 
-let position = 20
+
 async function createPopup(array) {
-    console.log(position)
     const arr = Object.values(array[0]);
-    console.log(arr)
     const body = document.getElementsByTagName('body')[0]
-    const popap = document.querySelector('.popup')
-    // if (popap) {
     const pop = document.createElement('div')
     pop.classList.add('popup')
-    //  pop.style.top = position + '%'
     body.prepend(pop)
     const popH = document.createElement('div')
     popH.classList.add('popH')
@@ -41,15 +36,13 @@ async function createPopup(array) {
     const popup = document.querySelector('.popup');
     popup.style.display = "block";
     popup.classList.add('open');
-    //  body.style.background = 'lightGray'
-    position += 30
     const closeButton = document.querySelector('.popup-close');
     closeButton.addEventListener('click', function () {
         popup.remove();
     });
     setTimeout(function () {
         popup.remove();
-        position = 0
+        //  position = 0
         //   popup.style.display = "none";
     }, 10000);
 

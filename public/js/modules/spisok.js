@@ -314,7 +314,6 @@ export async function alternativa(arr) {
         const result = await res.json()
         const restest = await fetch('/api/updateSensors', param)
         const resulttest = await restest.json()
-        console.log(resulttest)
         const updateTime = Object.entries(resulttest.res).map(el => {
             return {
                 id: parseFloat(el[0]), lastime: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.m : null,
@@ -640,7 +639,6 @@ function fnPricep(arr, nameCarId) {
         .style('fill', 'white')
 }
 export async function zaprosSpisok() {
-    console.log('обновление данных' + ' ' + new Date())
     const list = document.querySelectorAll('.listItem')
     const arrId = Array.from(list).map(el => parseFloat(el.id))
     const res = await alternativa(arrId)
