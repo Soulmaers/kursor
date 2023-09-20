@@ -432,17 +432,16 @@ function rashodCalc(data, name, group, idw) {
         const initTime = time1 - time0;
         return initTime >= 2 * 60 * 1000;
     });
-    console.log(filteredZapravka)
     const rash = [];
     const firstData = data.value[0];
     const lastData = data.value[data.value.length - 1];
-    if (zapravka.length !== 0) {
+    if (filteredZapravka.length !== 0) {
 
-        rash.push(firstData - zapravka[0][0][0]);
-        for (let i = 0; i < zapravka.length - 1; i++) {
-            rash.push(zapravka[i][1][0] - zapravka[i + 1][0][0]);
+        rash.push(firstData - filteredZapravka[0][0][0]);
+        for (let i = 0; i < filteredZapravka.length - 1; i++) {
+            rash.push(filteredZapravka[i][1][0] - filteredZapravka[i + 1][0][0]);
         }
-        rash.push(zapravka[zapravka.length - 1][1][0] - lastData);
+        rash.push(filteredZapravka[filteredZapravka.length - 1][1][0] - lastData);
     }
     else {
         rash.push(firstData - lastData >= 0 ? firstData - lastData : 0)
@@ -450,7 +449,7 @@ function rashodCalc(data, name, group, idw) {
     // console.log(rash)
     const rashod = rash.reduce((el, acc) => el + acc, 0)
     const zap = [];
-    zapravka.forEach(e => {
+    filteredZapravka.forEach(e => {
         zap.push(e[1][0] - e[0][0])
     })
     const zapravleno = (zap.reduce((acc, el) => acc + el, 0))
