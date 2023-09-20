@@ -332,7 +332,6 @@ export async function alternativa(arr) {
                     allArr.push([...e[i], valueSens[index][i]])
                 }
             })
-            console.log(updateTime)
             resolve([allArr, updateTime])
         }
 

@@ -397,7 +397,6 @@ function rashodCalc(data, name, group, idw) {
     if (start !== end) {
         increasingIntervals.push([[data.value[start], data.time[start], data.geo[start]], [data.value[end], data.time[end], data.geo[end]]]);
     }
-    console.log(increasingIntervals)
     const zapravka = increasingIntervals.filter((interval, index) => {
         const firstOil = interval[0][0];
         const lastOil = interval[interval.length - 1][0];
@@ -427,7 +426,13 @@ function rashodCalc(data, name, group, idw) {
         }
 
     }
-    console.log(zapravka)
+    const filteredZapravka = zapravka.filter(e => {
+        const time0 = e[0][1];
+        const time1 = e[1][1];
+        const initTime = time1 - time0;
+        return initTime >= 2 * 60 * 1000;
+    });
+    console.log(filteredZapravka)
     const rash = [];
     const firstData = data.value[0];
     const lastData = data.value[data.value.length - 1];

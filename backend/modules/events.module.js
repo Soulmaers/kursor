@@ -17,7 +17,7 @@ exports.eventFunction = async (arr) => {
                 id: el[0],
                 filled: parseFloat((eventObject.filled).toFixed(0)),
                 oil: parseFloat((eventObject.value).toFixed(0)),
-                time: eventObject.m,
+                time: eventObject.from.t,
                 geo: [eventObject.to.y, eventObject.to.x]
 
             };
