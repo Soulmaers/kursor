@@ -349,8 +349,7 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
         if (i.id === elemId) {
             const nowTime = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
             const currentTime = nowTime - i.lastime
-            updatetime = convertTime(currentTime)
-
+            updatetime = i.lastime == null ? undefined : convertTime(currentTime)
             const speed = i.speed === -348201.3876 ? '-' : i.speed
             if (speed > 5) {
                 condition = `<i class="fas fa-arrow-alt-circle-right toogleIcon" rel="01g"></i>`;
@@ -392,7 +391,6 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
         meliage: [meliage, meliage],
         lasttime: [updatetime, updatetime]
     }
-    // console.log(iconValues.lasttime)
     for (let i = 0; i < countElem.length; i++) {
         const newClass = countElem[i].getAttribute('rel')
         const existingCel = listItemCar.querySelector(`.newCel[rel="${newClass}"]`);
