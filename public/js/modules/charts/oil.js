@@ -129,16 +129,21 @@ export async function oil(t1, t2) {
             }
         }
         const zapravka = zapravkaAll.filter(e => e[0].pwr >= 16 || e[0].pwr == null);
-        console.log(zapravka)
+        const filteredZapravka = zapravka.filter(e => {
+            const time0 = (e[0].time).getTime() / 1000;
+            const time1 = (e[1].time).getTime() / 1000;
+            const initTime = time1 - time0;
+            return initTime >= 2 * 60;
+        });
         const rash = [];
         const firstData = data[0].oil;
         const lastData = data[data.length - 1].oil;
-        if (zapravka.length !== 0) {
-            rash.push(firstData - zapravka[0][0].oil);
-            for (let i = 0; i < zapravka.length - 1; i++) {
-                rash.push(zapravka[i][1].oil - zapravka[i + 1][0].oil);
+        if (filteredZapravka.length !== 0) {
+            rash.push(firstData - filteredZapravka[0][0].oil);
+            for (let i = 0; i < filteredZapravka.length - 1; i++) {
+                rash.push(filteredZapravka[i][1].oil - filteredZapravka[i + 1][0].oil);
             }
-            rash.push(zapravka[zapravka.length - 1][1].oil - lastData);
+            rash.push(filteredZapravka[filteredZapravka.length - 1][1].oil - lastData);
         }
         else {
             rash.push(firstData - lastData)
@@ -146,8 +151,8 @@ export async function oil(t1, t2) {
 
         const rashod = rash.reduce((el, acc) => el + acc, 0)
         console.log(rashod);
-        console.log(zapravka)
-        const objOil = zapravka.map(it => {
+        console.log(filteredZapravka)
+        const objOil = filteredZapravka.map(it => {
             const oilValue = it[1].oil - it[0].oil
             const date = new Date(it[0].time);
             const day = date.getDate();
