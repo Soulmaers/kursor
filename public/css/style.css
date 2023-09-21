@@ -28,14 +28,21 @@ body {
   display: none;
 }
 
-.rigthFrame,
-.twoframe {
+.rigthFrame {
   width: 14px;
   background-color: rgba(6, 28, 71, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: col-resize;
+}
+
+.secondFlash2 {
+  width: 17px;
+  background-color: rgba(6, 28, 71, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .strR {
