@@ -782,10 +782,9 @@ plug[2].addEventListener('click', () => {
         visualGrafics.prepend(model);
     }
 
-    const mapss = document.getElementById('mapOil')
-    console.log(mapss)
-    if (mapss) {
-        mapss.remove();
+    const wrapMap = document.querySelector('wrapMap')
+    if (wrapMap) {
+        wrapMap.remove();
     }
     click()
 

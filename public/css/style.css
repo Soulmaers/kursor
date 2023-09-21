@@ -169,7 +169,7 @@ i.choice {
   font-size: 0.7rem;
 }
 
-.tdLogs:nth-child(6n) {
+.tdLogs:nth-child(5n) {
   width: 31%;
 }
 
@@ -8026,7 +8026,7 @@ i.iconsortType {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative
+  position: relative;
 }
 
 i.filterEvent {
@@ -8034,6 +8034,7 @@ i.filterEvent {
   color: rgba(6, 28, 71, 1);
   margin-left: 5px;
   cursor: pointer;
+
 }
 
 
@@ -8053,11 +8054,21 @@ i.acEvent {
   left: 40px;
   background-color: #fff;
   padding: 10px;
-  border-radius: 3px;
+  border-radius: 5px;
   border: 1px solid rgba(6, 28, 71, 1);
   z-index: 1;
-  height: 200px;
+  height: 120px;
   width: 180px;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
   font-size: 0.7rem;
+}
+
+.graysEvent {
+  color: gray;
+  cursor: pointer;
+}
+
+.text_types {
+  color: rgba(6, 28, 71, 1);
+  margin: 2px 15px;
 }

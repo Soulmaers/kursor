@@ -315,9 +315,8 @@ function times(time) {
     return formattedDate
 }
 
-function eventFilter(event) {
-    const eTarget = event.target
-    eTarget.classList.toggle('acEvent')
+function eventFilter() {
     const sortConditionTypeFilter = document.querySelector('.sortConditionTypeFilter')
-    eTarget.classList.contains('acEvent') ? sortConditionTypeFilter.style.display = 'flex' : sortConditionTypeFilter.style.display = 'none'
+    sortConditionTypeFilter.style.display = 'flex'
+    sortConditionTypeFilter.addEventListener('mouseleave', () => sortConditionTypeFilter.style.display = 'none')
 }
