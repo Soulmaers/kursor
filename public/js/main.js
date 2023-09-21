@@ -35,7 +35,6 @@ async function init() {
 
     }
 
-
     inits();
 
     const param = {
