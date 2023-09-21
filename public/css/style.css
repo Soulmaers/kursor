@@ -78,7 +78,9 @@ i.allobjects {
   display: none;
 }
 
-
+i.choice {
+  color: gray;
+}
 
 .allobjects:hover {
   animation-name: wiggle;

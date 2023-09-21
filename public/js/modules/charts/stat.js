@@ -57,10 +57,8 @@ function dashDav(arrg) {
         4: []
 
     }
-    console.log(arr)
     arr.forEach(el => {
         const type = generStat(el.params);
-        console.log(el.nameCar)
         if (color.hasOwnProperty(type)) {
             color[type].push(el.nameCar ? el.nameCar : console.log(el.nameCar));
         } else {
@@ -68,7 +66,6 @@ function dashDav(arrg) {
         }
     })
     function generStat(el) {
-        console.log(el)
         let generatedValue;
 
         if (Number(el[0]) > 0) {
@@ -115,7 +112,6 @@ function newBoard(ArrD, ArrDC, length) {
     for (let i = 0; i < ArrD.length; i++) {
         data.push({ nameCar: ArrD[i][2], browser: ArrD[i][1], rate: ArrD[i][0], value: ArrDC[i] })
     }
-    console.log(data)
     const height = 350,
         width = 300,
         margin = 30
@@ -124,7 +120,6 @@ function newBoard(ArrD, ArrDC, length) {
         .range(['lightblue', 'red', 'lightgreen', 'gray']);
     // задаем радиус
     const radius = Math.min(width - 2 * margin, height - 2 * margin) / 2.5;
-    console.log(radius)
     // создаем элемент арки с радиусом
     const arc = d3.arc()
         .outerRadius(radius)
@@ -150,7 +145,6 @@ function newBoard(ArrD, ArrDC, length) {
         .style("fill", function (d) { return colorScale(d.data.browser); });
     g.append("text")
         .attr("transform", function (d) {
-            console.log(arc.centroid(d)[0])
             if (arc.centroid(d)[0] != NaN) {
                 return "translate(" + arc.centroid(d) + ")";
             }
@@ -170,7 +164,6 @@ function newBoard(ArrD, ArrDC, length) {
             const ar2 = parseFloat(val[1] + 15)
             const m = [];
             m.push(ar1, ar2)
-            console.log(m[0])
             if (m[0] != NaN) {
                 return "translate(" + m + ")";
             }
@@ -241,7 +234,6 @@ function newBoard(ArrD, ArrDC, length) {
 
     g.on("mouseover", function (d, i) {
         tooltip.selectAll("*").remove();
-        console.log(d.data.nameCar.length)
         for (let i = 0; i < d.data.nameCar.length; i++) {
             tooltip.append("div").text(`${d.data.nameCar[i]}`);
         }

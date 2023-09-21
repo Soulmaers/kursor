@@ -9,7 +9,6 @@ export function dashViewProtector() {
     }).flat()
     const box = document.querySelectorAll('.check_box')
     const listTitleProt = document.querySelector('.listTitleProt')
-    console.log(name)
     if (!listTitleProt) {
         for (let i = 0; i < name.length; i++) {
             const list = document.createElement('p')
@@ -97,13 +96,11 @@ export function dashAllSort(test) {
                 enabledSettings = Array.from(checkboxes).filter(i => i.checked).map(i => i.value)
                 enabledSettings.forEach(el => {
                     result.forEach(it => {
-                        console.log(it)
                         if (el == it.id + 'p') {
                             mas.push(it)
                         }
                     })
                 })
-                console.log(mas)
                 dashDav(mas)
                 const allChecked = Array.from(checkboxes).every(c => !c.checked);
                 if (allChecked) {
@@ -129,7 +126,6 @@ export function dashAllSort(test) {
 }
 
 function dashDav(arr) {
-    console.log(arr)
     function fnMin(arra) {
         let numbers = arra.filter(num => num !== '').map(num => Number(num));
         let min = Math.min(...numbers);
@@ -144,7 +140,6 @@ function dashDav(arr) {
             maxMM: e.maxMM
         }
     })
-    console.log(array)
     const length = arr.length
     const color = {
         1: [],

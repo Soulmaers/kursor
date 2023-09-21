@@ -179,6 +179,7 @@ logo.addEventListener('click', () => {
     pen.style.display = 'flex'
     start.style.width = 100 + '%'
     sections.style.display = 'flex'
+
 })
 const auth = document.querySelector('.settings')
 const authClear = document.querySelector('.close_settings')
@@ -307,6 +308,8 @@ iconStrela.addEventListener('click', () => {
 let intervalId
 const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {
+    const color = document.querySelector('.color')
+    color ? color.classList.remove('color') : null
     const mapss = document.getElementById('mapOil')
     console.log(mapss)
     if (mapss) {
@@ -331,11 +334,13 @@ btnDash.addEventListener('click', () => {
         setInterval(getStat, 10000)
 
 });
-const monitor = document.querySelector('.monitor')
-monitor.addEventListener('click', mainblock)
 
-const monitoring = document.querySelectorAll('.monitoring')
 
+
+
+
+
+/*
 monitoring.forEach(el => {
     el.addEventListener('click', () => {
         const allobjects = document.querySelector('.allobjects')
@@ -344,18 +349,25 @@ monitoring.forEach(el => {
         const trEventLogs = document.querySelectorAll('.trEvent')
         trEventLogs.forEach(e => e.style.display = 'flex')
     })
-})
+})*/
+
+
+
+const monitor = document.querySelector('.monitor')
+monitor.addEventListener('click', mainblock)
+
+
 function mainblock() {
-    const color = document.querySelector('color')
-    const allobjects = document.querySelector('.allobjects')
-    allobjects.style.display = 'block'
-    allobjects.style.color = '#fff'
-    const trEventLogs = document.querySelectorAll('.trEvent')
-    trEventLogs.forEach(item => {
-        item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
-
-
-    })
+    /* const color = document.querySelector('.color')
+     console.log(color.id)
+     const allobjects = document.querySelector('.allobjects')
+     allobjects.style.display = 'block'
+     allobjects.style.color = '#fff'
+     const trEventLogs = document.querySelectorAll('.trEvent')
+     console.log(trEventLogs)
+     trEventLogs.forEach(item => {
+         item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
+     })*/
     const mapss = document.getElementById('mapOil')
     console.log(mapss)
     if (mapss) {

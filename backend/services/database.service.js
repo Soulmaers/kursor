@@ -747,8 +747,6 @@ exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
 
 
 exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
-    console.log(arr, time, idw, geo, group, name, start)
-    //  const data = [time, arr, idw]
     return new Promise((resolve, reject) => {
         let checkExistQuery;
         if (start) {
@@ -789,7 +787,6 @@ exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
 
 
 exports.logsFindToBase = async (id) => {
-    // console.log(id)
     return new Promise((resolve, reject) => {
         const postModel = `SELECT * FROM logs WHERE idw IN (${id.join(',')})`;
         connection.query(postModel, function (err, results) {

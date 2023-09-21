@@ -23,9 +23,8 @@ let timeIcon;
 
 export async function visual(el) {
 
-    const allobjects = document.querySelector('.allobjects')
-    allobjects.style.display = 'block'
-    allobjects.style.color = '#fff'
+    const choice = document.querySelector('.choice')
+    choice ? choice.classList.remove('choice') : null
     const trEventLogs = document.querySelectorAll('.trEvent')
     trEventLogs.forEach(e => e.style.display = 'flex')
     const widthWind = document.querySelector('body').offsetWidth;
@@ -40,11 +39,9 @@ export async function visual(el) {
     const tsiControll = document.querySelector('.tsiControll')
     tsiControll.value = '';
     el.classList.add('color')
-    trEventLogs.forEach(item => {
-        item.getAttribute('rel') !== el.id ? item.style.display = 'none' : null
-
-
-    })
+    /* trEventLogs.forEach(item => {
+         item.getAttribute('rel') !== el.id ? item.style.display = 'none' : null
+     })*/
     const msg = document.querySelectorAll('.msg')
     if (msg) {
         msg.forEach(e => {

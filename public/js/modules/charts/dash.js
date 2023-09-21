@@ -22,7 +22,6 @@ export function dashView() {
 }
 
 export async function getDash() {
-    console.log('гетдаш' + new Date())
     const group = Array.from(document.querySelectorAll('.groups'))
     const ids = group.map(el => {
         return Array.from(el.children[1].children).map(it => it.id)
@@ -31,7 +30,6 @@ export async function getDash() {
         return waitArr(el)
     })
     )
-    console.log(result)
     dashAllSort(result)
 }
 
@@ -133,7 +131,6 @@ export function dashAllSort(test) {
 }
 
 function dashDav(arr) {
-    console.log(arr)
     const length = arr.length
     const color = {
         1: [],
@@ -209,7 +206,6 @@ function newBoard(ArrD, ArrDC, length) {
         .style("fill", function (d) { return colorScale(d.data.browser); });
     g.append("text")
         .attr("transform", function (d) {
-            console.log(arc.centroid(d)[0])
             if (arc.centroid(d)[0] != NaN) {
                 return "translate(" + arc.centroid(d) + ")";
             }
@@ -230,7 +226,6 @@ function newBoard(ArrD, ArrDC, length) {
             const ar2 = parseFloat(val[1] + 15)
             const m = [];
             m.push(ar1, ar2)
-            console.log(m[0])
             if (m[0] != NaN) {
                 return "translate(" + m + ")";
             }

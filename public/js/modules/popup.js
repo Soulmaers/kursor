@@ -103,15 +103,15 @@ export async function logsView(array) {
             const minutes = time.getMinutes().toString().padStart(2, '0');
             const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
             let mess;
-            console.log(group)
+            console.log(el)
             if (event === 'Заправка') {
-                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, litrazh: `${content[0].litrazh}`, time: `Время заправки: ${formattedDate}` }]
+                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `${el.name}`, litrazh: `${content[0].litrazh}`, time: `Время заправки: ${formattedDate}` }]
             }
             if (event === 'Простой') {
-                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, time: `${content[0].time}`, alarm: `${content[0].alarm}` }]
+                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `${el.name}`, time: `${content[0].time}`, alarm: `${content[0].alarm}` }]
             }
             if (event === 'Предупреждение') {
-                mess = [{ event: event, group: `Компания: ${group}`, name: `${content[0].name}`, time: `${content[0].time}`, tyres: `${content[0].tyres}`, param: `${content[0].param}`, alarm: `${content[0].alarm}` }]
+                mess = [{ event: event, group: `Компания: ${group}`, name: `${el.name}`, time: `${content[0].time}`, tyres: `${content[0].tyres}`, param: `${content[0].param}`, alarm: `${content[0].alarm}` }]
             }
             console.log(mess)
             createPopup(mess)
@@ -123,7 +123,6 @@ export async function logsView(array) {
         const parsedContent = JSON.parse(el.content);
         const typeEvent = parsedContent[0].event;
         const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
-        console.log(geoloc)
         const geo = geoloc !== null ? geoloc.map(e => e.toFixed(5)) : 'нет данных'
         const id = parseFloat(el.idw)
         const group = arrayIdGroup
@@ -133,7 +132,7 @@ export async function logsView(array) {
         int.shift();
         const time = times(new Date(Number(el.time) * 1000));
         const info = `${int.join(", ")}`;
-        return { time: time, group: typeEvent !== 'Предупреждение' ? el.group : login === 'Курсор' ? 'demo' : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
+        return { time: time, group: typeEvent !== 'Предупреждение' ? el.groups : login === 'Курсор' ? 'demo' : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
     }));
     mass.then(async results => {
         const clickLog = document.querySelector('.clickLog')
@@ -161,7 +160,22 @@ export async function logsView(array) {
                 if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
                     wrapperLogs.style.display = 'block'// Показываем попап
                     wrapperLogs.classList.add('clickLog')
+                    const color = document.querySelector('.color')
                     const trEvent = document.querySelectorAll('.trEvent')
+                    const allobjects = document.querySelector('.allobjects')
+                    console.log(color)
+                    color ? (allobjects.style.display = 'block', trEvent.forEach(item => {
+                        item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
+                    })) : (trEvent.forEach(item => { item.style.display = 'flex' }), allobjects.style.display = 'none')
+                    allobjects.addEventListener('click', chanchColor)
+
+
+
+
+
+
+
+
                     const quantity = trEvent.length;
                     const param = {
                         method: "POST",
@@ -187,15 +201,18 @@ export async function logsView(array) {
                 event.stopPropagation();
                 const wr = document.querySelector('.alllogs')
                 const draggable = new DraggableContainer(wr);
+                console.log('топпап')
                 togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
             });
             numy.addEventListener('click', function (event) {
                 event.stopPropagation();
+                console.log('топпап2')
                 togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
             });
 
             new CloseBTN(wrapperLogs, log, numy)
-
+            const allobjects = document.querySelector('.allobjects')
+            allobjects.removeEventListener('click', chanchColor)
         }
 
     }).catch(error => {
@@ -204,6 +221,21 @@ export async function logsView(array) {
     setTimeout(logsView, 60000, array)
 }
 
+
+function chanchColor() {
+    const allobjects = document.querySelector('.allobjects')
+    console.log('джойс')
+
+    const color = document.querySelector('.color')
+    const trEvent = document.querySelectorAll('.trEvent')
+    const choice = document.querySelector('.choice')
+    choice ? trEvent.forEach(e => {
+        if (e.getAttribute('rel') !== color.id) {
+            e.style.display = 'none'
+        }
+    }) : trEvent.forEach(e => e.style.display = 'flex')
+    allobjects.classList.toggle('choice')
+}
 function viewTableNum(num) {
     console.log(num)
     const nums = document.querySelector('.num')
