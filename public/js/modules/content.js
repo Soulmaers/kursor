@@ -83,11 +83,48 @@ export const textTest = `<div class=" osiTest">
 
 
 
+
+export const filterEvent = ` <i class="fas fa-power-off filterEvent"></i>
+<ul class="sortConditionType">
+     <li class="item_type"><i class="fas fa-check graysEvent"></i>
+         <p class="text_type">Предупреждение</p>
+     </li>
+     <li class="item_type"><i class="fas fa-check graysEvent"></i>
+         <p class="text_type">Заправка</p>
+     </li>
+     <li class="item_type"><i class="fas fa-check graysEvent"></i>
+         <p class="text_type">Слив</p>
+     </li>
+     <li class="item_type"><i class="fas fa-check graysEvent"></i>
+         <p class="text_type">Простой</p>
+     </li>
+     <li class="item_type"><i class="fas fa-check graysEvent"></i>
+         <p class="text_type">Тех. обслуживание</p>
+     </li>
+                   </ul>`
+
+
 export const titleLogs = `<h3 class="trLogs">
                         <p class="tdLogs">Дата</p>
                                        <p class="tdLogs">Группа</p>
                         <p class="tdLogs">Объект</p>
-                           <p class="tdLogs">Событие</p>
+                           <p class="tdLogs evnt">Событие  <i class="fas fa-power-off filterEvent"></i>  <ul class="sortConditionTypeFilter">
+        <li class="item_type"><i class="fas fa-check graysEvent"></i>
+            <p class="text_type">Предупреждение</p>
+        </li>
+        <li class="item_type"><i class="fas fa-check graysEvent"></i>
+            <p class="text_type">Заправка</p>
+        </li>
+        <li class="item_type"><i class="fas fa-check graysEvent"></i>
+            <p class="text_type">Слив</p>
+        </li>
+        <li class="item_type"><i class="fas fa-check graysEvent"></i>
+            <p class="text_type">Простой</p>
+        </li>
+        <li class="item_type"><i class="fas fa-check graysEvent"></i>
+            <p class="text_type">Тех. обслуживание</p>
+        </li>
+    </ul></p>
                                    <p class="tdLogs">Содержание</p>
                                           <p class="tdLogs">Местоположение</p>
                      </h3>`

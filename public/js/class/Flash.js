@@ -20,11 +20,11 @@ export class Flash {
         /* setTimeout(() => {
              this.three.style.display = 'none';
          }, 300);*/
-        if (this.sec) {
-            this.sec.style.width = '10px';
-            this.sec.style.transition = 'width 0.3s ease-in-out';
-            this.three.style.width = '98%'
-        }
+        // if (this.sec) {
+        this.sec.style.width = '10px';
+        this.sec.style.transition = 'width 0.3s ease-in-out';
+        this.three.style.width = '98%'
+        // }
         const start = document.querySelector('.start')
         start.style.display === 'none' ? (geoloc()) : null
 
@@ -40,11 +40,11 @@ export class Flash {
         }, 300);
         //   this.three.style.transition = 'opacity 0.5s ease-in-out';
 
-        if (this.sec) {
-            this.sec.style.width = '550px';
-            this.sec.style.transition = 'width 0.3s ease-in-out';
-            this.three.style.width = '74%'
-        }
+        //   if (this.sec) {
+        this.sec.style.width = '550px';
+        this.sec.style.transition = 'width 0.3s ease-in-out';
+        this.three.style.width = '74%'
+        //   }
         const start = document.querySelector('.start')
         start.style.display === 'none' ? (geoloc()) : null
     }

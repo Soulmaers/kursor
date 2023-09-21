@@ -3,7 +3,7 @@ import { CloseBTN } from '../class/Flash.js'
 import { titleLogs } from './content.js'
 import { reverseGeocode, createMapsUniq } from './geo.js'
 import { Tooltip } from '../class/Tooltip.js'
-
+import { filterEvent } from './content.js'
 
 
 async function createPopup(array) {
@@ -173,14 +173,6 @@ export async function logsView(array) {
                         item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
                     })) : (trEvent.forEach(item => { item.style.display = 'flex' }), allobjects.style.display = 'none')
                     allobjects.addEventListener('click', chanchColor)
-
-
-
-
-
-
-
-
                     const quantity = trEvent.length;
                     const param = {
                         method: "POST",
@@ -277,6 +269,12 @@ async function createLogsTable(mass) {
     alllogs.appendChild(icon)
     alllogs.appendChild(log)
     log.innerHTML = titleLogs
+    const evnt = document.querySelector('.evnt')
+    evnt.addEventListener('mouseenter', () => evnt.children[0].style.display = 'flex')
+    evnt.addEventListener('mouseleave', () => evnt.children[0].style.display = 'none')
+    const filterEvent = document.querySelector('.filterEvent')
+    filterEvent.addEventListener('click', eventFilter)
+
     var firstChild = log.firstChild;
     new Tooltip(icon, ['Все объекты/Текущий']);
     mass.forEach(el => {
@@ -289,6 +287,8 @@ async function createLogsTable(mass) {
             const td = document.createElement('p')
             td.classList.add('tdEvent')
             td.textContent = el[key]
+
+
             trEvent.appendChild(td)
             td.style.color = objColor[td.textContent]
         }
@@ -313,4 +313,11 @@ function times(time) {
     const minutes = time.getMinutes().toString().padStart(2, '0');
     const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
     return formattedDate
+}
+
+function eventFilter(event) {
+    const eTarget = event.target
+    eTarget.classList.toggle('acEvent')
+    const sortConditionTypeFilter = document.querySelector('.sortConditionTypeFilter')
+    eTarget.classList.contains('acEvent') ? sortConditionTypeFilter.style.display = 'flex' : sortConditionTypeFilter.style.display = 'none'
 }

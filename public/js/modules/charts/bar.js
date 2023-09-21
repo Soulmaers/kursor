@@ -822,12 +822,20 @@ async function grafikStartPress(dat2) {
         const chart = document.querySelectorAll('.chart')
         char[char.length - 1].children[2].classList.add('last')
         char[char.length - 1].children[3].classList.add('last')
-        console.log(objTool)
+        const newObjTool = [];
+        if (objTool.length > chart.length) {
+            for (let i = 0; i <= objTool.length; i++) {
+                if (i % 2 !== 0) {
+                    newObjTool.push(objTool[i])
+                }
+
+            }
+        }
         let dav;
         let temp;
         for (let i = 0; i < chart.length; i++) {
-            objTool[i].value === -0.5 ? dav = '-' : dav = objTool[i].value
-            objTool[i].tvalue === -0.5 ? temp = '-' : temp = objTool[i].tvalue
+            newObjTool[i].value === -0.5 ? dav = '-' : dav = newObjTool[i].value
+            newObjTool[i].tvalue === -0.5 ? temp = '-' : temp = newObjTool[i].tvalue
             chart[i].children[2].textContent = `${dav} Бар/${temp} С°`
         }
     }

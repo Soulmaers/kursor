@@ -48,9 +48,9 @@ export async function visual(el) {
             e.remove();
         })
     }
-    const mapss = document.getElementById('mapOil')
-    if (mapss) {
-        mapss.remove();
+    const wrapMap = document.querySelector('.wrapMap')
+    if (wrapMap) {
+        wrapMap.remove();
     }
     const probegElem = document.querySelector('.odom_value')
     const starterValue = document.querySelector('.akb_value1')

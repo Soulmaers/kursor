@@ -363,10 +363,10 @@ function mainblock() {
     if (mapss) {
         mapss.remove();
     }
-    const pen = document.querySelectorAll('.rigthFrame')[0]
-    const twoframe = document.querySelector('.twoframe')
-    twoframe.style.display = 'flex'
-    pen.style.display = 'flex'
+    //   const pen = document.querySelectorAll('.rigthFrame')[0]
+    // const twoframe = document.querySelector('.twoframe')
+    // twoframe.style.display = 'flex'
+    //   pen.style.display = 'flex'
     const idw = document.querySelector('.color')
     if (!idw) {
         const main = document.querySelector('.main')
@@ -746,8 +746,8 @@ export async function pr() {
 const plug = document.querySelectorAll('.plug')
 plug[2].addEventListener('click', () => {
 
-    const twoframe = document.querySelector('.twoframe')
-    twoframe.style.display = 'none'
+    // const twoframe = document.querySelector('.twoframe')
+    //twoframe.style.display = 'none'
     const wRight = document.querySelector('.wrapper_right')
     const wLeft = document.querySelector('.wrapper_left')
     const model = document.querySelector('.wrapper_containt')
