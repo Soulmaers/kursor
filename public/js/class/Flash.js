@@ -39,7 +39,7 @@ export class Flash {
         this.three.style.transition = 'opacity 0.5s ease-in-out';
 
         if (this.sec) {
-            this.sec.style.width = '35%';
+            this.sec.style.width = '25%';
             this.sec.style.transition = 'width 0.3s ease-in-out';
         }
         const start = document.querySelector('.start')
