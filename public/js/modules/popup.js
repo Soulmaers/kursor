@@ -35,13 +35,18 @@ async function createPopup(array) {
     popH.appendChild(popupClose)
     const popup = document.querySelector('.popup');
     popup.style.display = "block";
+    const popy = document.querySelector('.popup-background')
+    popy.style.display = 'block'
+
     popup.classList.add('open');
     const closeButton = document.querySelector('.popup-close');
     closeButton.addEventListener('click', function () {
         popup.remove();
+        popy.style.display = 'none'
     });
     setTimeout(function () {
         popup.remove();
+        popy.style.display = 'none'
         //  position = 0
         //   popup.style.display = "none";
     }, 10000);
