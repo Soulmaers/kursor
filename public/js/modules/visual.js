@@ -373,9 +373,9 @@ export async function viewConfigurator(arg, params, osi) {
                                             return
                                         }
                                     }
-                                    if (el.value >= -51 && el.value <= 70) {
+                                    if (el.value >= -51 && el.value <= 70 || el.value === 'err') {
                                         e.children[1].style.border = 'none'
-                                        e.children[1].textContent = el.value + '°C'
+                                        e.children[1].textContent = el.value !== 'err' ? el.value + '°C' : 'err'
                                         e.children[1].setAttribute('rel', `${item.temp}`)
                                         if (el.status === 'false' && in1 === 1) {
                                             e.children[1].style.background = 'lightgray';

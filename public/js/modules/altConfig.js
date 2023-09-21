@@ -294,12 +294,13 @@ function allparamsTyres(btnsens) {
             }
             if (btnsens[1].classList.contains('actBTN')) {
                 arrSpreed.forEach(el => {
+                    console.log(el)
                     if (el === ':') {
                         tiresActivt.children[1].setAttribute('rel', arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                         prmsT.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                     }
                 })
-                if (value === '-128' || value === '-51' || value.length > 10) {
+                if (value === '-128' || value === '-51' || value === '-50' || value.length > 10) {
                     value = 'err'
                     tiresActivt.children[1].textContent = value
                 }

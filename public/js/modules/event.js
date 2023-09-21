@@ -357,16 +357,7 @@ monitor.addEventListener('click', mainblock)
 
 
 function mainblock() {
-    /* const color = document.querySelector('.color')
-     console.log(color.id)
-     const allobjects = document.querySelector('.allobjects')
-     allobjects.style.display = 'block'
-     allobjects.style.color = '#fff'
-     const trEventLogs = document.querySelectorAll('.trEvent')
-     console.log(trEventLogs)
-     trEventLogs.forEach(item => {
-         item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
-     })*/
+
     const mapss = document.getElementById('mapOil')
     console.log(mapss)
     if (mapss) {
