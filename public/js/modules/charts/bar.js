@@ -830,14 +830,25 @@ async function grafikStartPress(dat2) {
                 }
 
             }
+            let dav;
+            let temp;
+            for (let i = 0; i < chart.length; i++) {
+                newObjTool[i].value === -0.5 ? dav = '-' : dav = newObjTool[i].value
+                newObjTool[i].tvalue === -0.5 ? temp = '-' : temp = newObjTool[i].tvalue
+                chart[i].children[2].textContent = `${dav} Бар/${temp} С°`
+            }
+
         }
-        let dav;
-        let temp;
-        for (let i = 0; i < chart.length; i++) {
-            newObjTool[i].value === -0.5 ? dav = '-' : dav = newObjTool[i].value
-            newObjTool[i].tvalue === -0.5 ? temp = '-' : temp = newObjTool[i].tvalue
-            chart[i].children[2].textContent = `${dav} Бар/${temp} С°`
+        else {
+            let dav;
+            let temp;
+            for (let i = 0; i < chart.length; i++) {
+                objTool[i].value === -0.5 ? dav = '-' : dav = objTool[i].value
+                objTool[i].tvalue === -0.5 ? temp = '-' : temp = objTool[i].tvalue
+                chart[i].children[2].textContent = `${dav} Бар/${temp} С°`
+            }
         }
+
     }
 
 }
