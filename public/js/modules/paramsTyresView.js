@@ -219,8 +219,6 @@ export function viewMenuParams() {
             tableTarir.style.display = 'none'
             const idbaseTyres = document.querySelector('.idbaseTyres')
             idbaseTyres.textContent = ''
-
-
             tech()//отображаем тех.характеристики+логика формул+забираем нужные данные в базу.
         })
     })

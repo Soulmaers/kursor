@@ -16,13 +16,13 @@ import { click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { convert } from './helpersFunc.js'
 import { timeIntervalStatistiks } from './detalisation.js'
-
+import { Flash } from '../class/Flash.js'
 let start;
 let time;
 let timeIcon;
 
 export async function visual(el) {
-
+    const main = document.querySelector('.main')
     const choice = document.querySelector('.choice')
     choice ? choice.classList.remove('choice') : null
     const trEventLogs = document.querySelectorAll('.trEvent')
@@ -102,7 +102,6 @@ export async function visual(el) {
     const wrapperLeft = document.querySelector('.wrapper_left')
     const titleCar = document.querySelector('.title_two')
     const btnsens = document.querySelectorAll('.btnsens')
-    const main = document.querySelector('.main')
     const plug = document.querySelectorAll('.plug')
     const grafics = document.querySelector('.grafics')
     const delIcon = document.querySelectorAll('.delIcon')
@@ -263,6 +262,7 @@ export function view(arg) {
     })
 }
 export async function viewConfigurator(arg, params, osi) {
+    console.log(arg, params)
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelector('.color')
     const allobj = await ggg(active.id)
@@ -352,6 +352,7 @@ export async function viewConfigurator(arg, params, osi) {
                         if (el.name === item.temp) {
                             tiresLink.forEach(e => {
                                 if (e.id == item.tyresdiv) {
+                                    console.log(e.id, el.value)
                                     if (el.value === '-128' || el.value === '-50' || el.value === '-51') {
                                         el.value = 'err'
                                         e.children[1].style.color = 'red'

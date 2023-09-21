@@ -8,21 +8,22 @@ export class Flash {
             this.two = two,
             this.three = three
         this.sec = sec
+        console.log(this.one, this.two, this.sec, this.three)
         this.one.addEventListener('click', this.handleClickOne.bind(this))
         this.two.addEventListener('click', this.handleClickTwo.bind(this))
     }
     handleClickOne() {
         this.one.style.display = 'none'
         this.two.style.display = 'block'
-        this.three.style.opacity = '0';
-        this.three.style.transition = 'opacity 0.5s ease-in-out';
-        setTimeout(() => {
-            this.three.style.display = 'none';
-        }, 300);
+        // this.three.style.opacity = '0';
+        // this.three.style.transition = 'opacity 0.5s ease-in-out';
+        /* setTimeout(() => {
+             this.three.style.display = 'none';
+         }, 300);*/
         if (this.sec) {
             this.sec.style.width = '10px';
             this.sec.style.transition = 'width 0.3s ease-in-out';
-
+            this.three.style.width = '98%'
         }
         const start = document.querySelector('.start')
         start.style.display === 'none' ? (geoloc()) : null
@@ -32,15 +33,17 @@ export class Flash {
         this.two.style.display = 'none'
         this.one.style.display = 'block'
         this.three.style.opacity = '1';
-        this.three.style.width = 550 + 'px'
+        //  this.three.style.width = 550 + 'px'
         setTimeout(() => {
-            this.three.style.display = 'flex';
+            const color = document.querySelector('.color')
+            !color ? this.three.style.display = 'flex' : this.three.style.display = 'none'
         }, 300);
-        this.three.style.transition = 'opacity 0.5s ease-in-out';
+        //   this.three.style.transition = 'opacity 0.5s ease-in-out';
 
         if (this.sec) {
-            this.sec.style.width = '25%';
+            this.sec.style.width = '550px';
             this.sec.style.transition = 'width 0.3s ease-in-out';
+            this.three.style.width = '74%'
         }
         const start = document.querySelector('.start')
         start.style.display === 'none' ? (geoloc()) : null

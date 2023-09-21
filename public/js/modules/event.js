@@ -24,7 +24,7 @@ import { draggable } from './filtersList.js'
 import { storTitleList } from './content.js'
 
 const leftFrame = document.querySelector('.leftFrame')
-const rigthFrame = document.querySelectorAll('.rigthFrame')
+const rigthFrame = document.querySelector('.rigthFrame')
 const sec = document.querySelector('.sections')
 const centerBlock = document.querySelector('.centerBlock')
 const start = document.querySelector('.start')
@@ -39,14 +39,12 @@ const techinfo = document.querySelector('.techInfo')
 const mainMenu = document.querySelector('.main_menu')
 const grafics = document.querySelector('.grafics')
 const viewIcon = document.querySelectorAll('.viewIcon')
-for (let i = 0; i < rigthFrame.length; i++) {
-    console.log(rigthFrame[i].children[0])
-    const strR = rigthFrame[i].children[0]
-    const strL = rigthFrame[i].children[1]
-    console.log(i)
-    i !== 1 ? new Flash(strL, strR, leftFrame, sec) : new Flash(strL, strR, centerBlock)
-    //  i !== 1 ? new ResizeContainer(sec, start, rigthFrame[i]) : new ResizeContainer(centerBlock, wrapleft, rigthFrame[i])
-}
+const color = document.querySelector('.color')
+
+const strR = rigthFrame.children[0]
+const strL = rigthFrame.children[1]
+new Flash(strL, strR, color ? main : start, sec)
+
 
 new ResizeContainer(sec, start, secondFlash[0])
 mainMenu.addEventListener('click', (event) => {
@@ -173,13 +171,14 @@ logo.addEventListener('click', () => {
     const start = document.querySelector('.start')
     const sections = document.querySelector('.sections')
     const dash = document.querySelector('.wrapper_right_dash')
+    const color = document.querySelector('.color')
     main.style.display = 'none'
     dash.style.display = 'none'
     start.style.display = 'flex'
     pen.style.display = 'flex'
     start.style.width = 100 + '%'
     sections.style.display = 'flex'
-
+    color.classList.remove('color')
 })
 const auth = document.querySelector('.settings')
 const authClear = document.querySelector('.close_settings')
