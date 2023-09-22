@@ -243,7 +243,7 @@ const objColor = {
     'Заправка': 'darkblue',
     'Простой': 'darkgreen',
     'Предупреждение': 'darkred',
-    'Слив': 'yellow'
+    'Слив': 'red'
 }
 async function createLogsTable(mass) {
     const wrap = document.querySelector('.alllogs')
