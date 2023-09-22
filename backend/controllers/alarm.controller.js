@@ -38,4 +38,14 @@ module.exports.logsView = async (req, res) => {
     const itog = await databaseService.logsFindToBase(idw)
     res.json(itog)
 }
-
+module.exports.saveEvent = async (req, res) => {
+    const login = req.body.login
+    const obj = req.body.objEvent
+    const itog = await databaseService.eventSaveToBase(login, obj)
+    res.json({ itog })
+}
+module.exports.viewEvent = async (req, res) => {
+    const login = req.body.login
+    const itog = await databaseService.eventFindToBase(login)
+    res.json({ itog })
+}

@@ -76,21 +76,7 @@ export const saveCheckListToBase = async (nums) => {
     const results = await res.json()
     viewList(login)
     if (!nums) {
-        const confirm = document.querySelector('.confirm')
-        console.log(confirm)
-        confirm.style.display = 'flex'
-        const account = document.querySelector('.settings_users')
-        const pop = document.querySelector('.popup-background')
-        pop.style.display = 'block'
-        account.style.zIndex = 0
-        setTimeout(() => {
-            confirm.style.display = 'none'
-            account.style.zIndex = 2
-        }, 2000)
-        confirm.children[0].children[0].addEventListener('click', () => {
-            confirm.style.display = 'none'
-            account.style.zIndex = 2
-        })
+        eventSave()
     }
 
 }
@@ -226,3 +212,88 @@ async function viewListContact(email, phone) {
 
 
 
+
+const buttonEvent = document.querySelector('.notification').lastElementChild
+buttonEvent.addEventListener('click', () => saveCheckEventToBase())
+
+
+
+function eventSave() {
+    const confirm = document.querySelector('.confirm')
+    console.log(confirm)
+    confirm.style.display = 'flex'
+    const account = document.querySelector('.settings_users')
+    const pop = document.querySelector('.popup-background')
+    pop.style.display = 'block'
+    account.style.zIndex = 0
+    setTimeout(() => {
+        confirm.style.display = 'none'
+        account.style.zIndex = 2
+    }, 2000)
+    confirm.children[0].children[0].addEventListener('click', () => {
+        confirm.style.display = 'none'
+        account.style.zIndex = 2
+    })
+}
+async function saveCheckEventToBase() {
+    eventSave()
+    const celEvent = document.querySelectorAll('.celEven')
+    const objEvent = {
+        email: [],
+        alert: [],
+        what: [],
+        teleg: [],
+        sms: []
+    };
+    celEvent.forEach(el => {
+        if (el.children[0].checked)
+            objEvent[el.getAttribute('rel')].push(el.parentNode.firstElementChild.textContent)
+    })
+    for (let key in objEvent) {
+        objEvent[key] = JSON.stringify(objEvent[key])
+    }
+    console.log(objEvent)
+
+    const prms = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ objEvent, login }))
+    }
+    const res = await fetch('/api/saveEvent', prms)
+    const result = await res.json()
+    console.log(result)
+}
+
+const setThree = document.querySelector('.set_three')
+setThree.addEventListener('click', viewCheckedEvent)
+
+
+async function viewCheckedEvent() {
+    const prms = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ login }))
+    }
+    const res = await fetch('/api/viewEvent', prms)
+    const result = await res.json()
+    console.log(result)
+    delete result.itog[0].login
+    delete result.itog[0].id
+    const viewObj = result.itog[0]
+    for (let key in viewObj) {
+        viewObj[key] = JSON.parse(viewObj[key])
+    }
+    console.log(viewObj)
+    const celEvent = document.querySelectorAll('.celEven')
+    celEvent.forEach(e => {
+        viewObj[e.getAttribute('rel')].forEach(it => {
+            if (it === e.parentNode.firstElementChild.textContent) {
+                e.children[0].checked = true
+            }
+        })
+    })
+}

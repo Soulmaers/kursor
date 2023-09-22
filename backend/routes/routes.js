@@ -37,8 +37,8 @@ router.post('/api/alarmFind', controllerAlarm.alarmFind)
 router.get('/api/alert', controllerAlarm.alert)
 router.post('/api/logs', controllerAlarm.logs)
 router.post('/api/logsView', controllerAlarm.logsView)
-
-
+router.post('/api/saveEvent', controllerAlarm.saveEvent)
+router.post('/api/viewEvent', controllerAlarm.viewEvent)
 
 
 router.post('/api/savePr', controllerTech.savePr)

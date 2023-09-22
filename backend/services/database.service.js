@@ -119,8 +119,42 @@ exports.saveStructuraToBase = async (mass) => {
         console.log(e);
     }
 };
+exports.eventSaveToBase = async (login, obj) => {
+    console.log(obj, login)
+    return new Promise((resolve, reject) => {
+        try {
+            const postModel = `SELECT login FROM eventSpam WHERE login='${login}'`;
+            connection.query(postModel, function (err, results) {
+                if (err) console.log(err);
+                if (results.length === 0) {
+                    console.log(login)
+                    const sql = `INSERT INTO eventSpam (login, email, alert, what, teleg,  sms) VALUES ('${login}',
+                 '${obj.email}','${obj.alert}', '${obj.what}', '${obj.teleg}', '${obj.sms}')`;
+                    connection.query(sql, function (err, results) {
+                        if (err) console.log(err);
+                        resolve('запись сделана');
+                    });
+                }
+                else {
+                    const postModel = `UPDATE eventSpam SET login='${login}',email='${obj.email}',alert='${obj.alert}', what='${obj.what}',
+                teleg='${obj.teleg}', sms='${obj.sms}' WHERE login = ?`
+                    connection.query(postModel, [login], function (err, results) {
+                        if (err) {
+                            console.log(err)
+
+                        }
+                        resolve('апдейт')
+                    })
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    })
+};
 
 exports.saveListToBase = async (obj) => {
+    
     try {
         const { login, statusnew, ingine, oil, type, pwr, sats, meliage, condition, tagach, pricep, lasttime } = obj;
         console.log(login)
@@ -165,7 +199,19 @@ exports.viewListToBase = async (login) => {
         }
     })
 }
-
+exports.eventFindToBase = async (login) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const postModel = `SELECT * FROM eventSpam WHERE login=?`;
+            connection.query(postModel, [login], function (err, results) { // Массив с параметрами для подстановки
+                if (err) console.log(err);
+                resolve(results);
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    })
+}
 
 exports.viewStructuraToBase = async (idw, t1, t2) => {
     return new Promise((resolve, reject) => {

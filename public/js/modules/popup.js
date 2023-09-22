@@ -93,7 +93,7 @@ export async function logsView(array) {
         const num = results.length - previus
         const arrayPopup = results.slice(-num)
         previus = results.length
-        arrayPopup.forEach(el => {
+        arrayPopup.forEach(async el => {
             const content = JSON.parse(el.content)
             const event = content[0].event
             const id = Number(el.idw)
@@ -118,9 +118,30 @@ export async function logsView(array) {
             if (event === 'Предупреждение') {
                 mess = [{ event: event, group: `Компания: ${group}`, name: `${el.name}`, time: `${content[0].time}`, tyres: `${content[0].tyres}`, param: `${content[0].param}`, alarm: `${content[0].alarm}` }]
             }
+            if (event === 'Слив') {
+                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `${el.name}`, litrazh: `${content[0].litrazh}`, time: `Время слива: ${formattedDate}` }]
+            }
             console.log(mess)
-            createPopup(mess)
-        })
+            const prms = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: (JSON.stringify({ login }))
+            }
+            const res = await fetch('/api/viewEvent', prms)
+            const result = await res.json()
+            console.log(result)
+            delete result.itog[0].login
+            delete result.itog[0].id
+            const viewObj = result.itog[0]
+            for (let key in viewObj) {
+                viewObj[key] = JSON.parse(viewObj[key])
+            }
+            viewObj[alert].forEach(e=>{
+                e === event ? createPopup(mess):null
+            })
+                 })
         previus = results.length
     }
     num++
@@ -400,5 +421,6 @@ function filterEventLogs(event) {
             check = true
         }
     })
-    !check ? choice || !color ? trEvent.forEach(e => e.style.display = 'flex') : trEvent.forEach(e => { if (color.id === e.getAttribute('rel')) { e.style.display = 'flex' } }) : evnt.style.color = 'gray'
+    !check ? evnt.style.color = 'rgba(6, 28, 71, 1)' : evnt.style.color = 'gray'
+    !check ? choice || !color ? trEvent.forEach(e => e.style.display = 'flex') : trEvent.forEach(e => { if (color.id === e.getAttribute('rel')) { e.style.display = 'flex' } }) : null
 }
