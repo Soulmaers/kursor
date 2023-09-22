@@ -211,6 +211,7 @@ function check() {
     })
 }
 function filterType() {
+    console.log('флитре')
     const grays = document.querySelectorAll('.graysType');
     const list = document.querySelectorAll('.listItem');
     const gray = document.querySelectorAll('.grays')

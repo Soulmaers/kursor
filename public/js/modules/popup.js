@@ -162,13 +162,23 @@ export async function logsView(array) {
             const log = document.querySelector('.logs')
             const wrapperLogs = document.querySelector('.alllogs')
             async function togglePopup() {
+                const grays = document.querySelectorAll('.graysEvent')
+                grays.forEach(e => {
+                    if (e.classList.contains('toogleIconEvent')) {
+                        e.classList.remove('toogleIconEvent')
+                    }
+                })
                 if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
                     wrapperLogs.style.display = 'block'// Показываем попап
                     wrapperLogs.classList.add('clickLog')
                     const color = document.querySelector('.color')
+                    const evnt = document.querySelector('.evnt')
+                    evnt.style.color = 'rgba(6, 28, 71, 1)'
                     const trEvent = document.querySelectorAll('.trEvent')
+                    trEvent.forEach(item => item.style.display = 'flex')
                     const allobjects = document.querySelector('.allobjects')
-                    console.log(color)
+                    const choice = document.querySelector('.choice')
+                    choice ? choice.classList.remove('choice') : null
                     color ? (allobjects.style.display = 'block', trEvent.forEach(item => {
                         item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
                     })) : (trEvent.forEach(item => { item.style.display = 'flex' }), allobjects.style.display = 'none')
@@ -220,17 +230,41 @@ export async function logsView(array) {
 
 
 function chanchColor() {
+    const grays = document.querySelectorAll('.graysEvent')
     const allobjects = document.querySelector('.allobjects')
     console.log('джойс')
+    let check = false
+    grays.forEach(el => {
+        if (el.classList.contains('toogleIconEvent')) {
+            check = true
+        }
+    })
 
     const color = document.querySelector('.color')
     const trEvent = document.querySelectorAll('.trEvent')
     const choice = document.querySelector('.choice')
-    choice ? trEvent.forEach(e => {
-        if (e.getAttribute('rel') !== color.id) {
-            e.style.display = 'none'
+    if (choice) {
+        trEvent.forEach(e => {
+            if (e.getAttribute('rel') !== color.id) {
+                e.style.display = 'none';
+            }
+        });
+    } else {
+        if (!check) {
+            trEvent.forEach(e => e.style.display = 'flex');
         }
-    }) : trEvent.forEach(e => e.style.display = 'flex')
+        else {
+            grays.forEach(el => {
+                if (el.classList.contains('toogleIconEvent')) {
+                    trEvent.forEach(it => {
+                        if (it.children[3].textContent === el.nextElementSibling.textContent) {
+                            it.style.display = 'flex'
+                        }
+                    })
+                }
+            })
+        }
+    }
     allobjects.classList.toggle('choice')
 }
 function viewTableNum(num) {
@@ -287,8 +321,6 @@ async function createLogsTable(mass) {
             const td = document.createElement('p')
             td.classList.add('tdEvent')
             td.textContent = el[key]
-
-
             trEvent.appendChild(td)
             td.style.color = objColor[td.textContent]
         }
@@ -318,5 +350,55 @@ function times(time) {
 function eventFilter() {
     const sortConditionTypeFilter = document.querySelector('.sortConditionTypeFilter')
     sortConditionTypeFilter.style.display = 'flex'
-    sortConditionTypeFilter.addEventListener('mouseleave', () => sortConditionTypeFilter.style.display = 'none')
+    const grays = document.querySelectorAll('.graysEvent')
+    sortConditionTypeFilter.addEventListener('mouseleave', () => (sortConditionTypeFilter.style.display = 'none', grays.forEach(el => {
+        el.removeEventListener('click', filterEventLogs);
+    })))
+
+    grays.forEach(el => {
+        el.addEventListener('click', filterEventLogs)
+    })
+}
+
+function filterEventLogs(event) {
+    const choice = document.querySelector('.choice')
+    event.target.classList.toggle('toogleIconEvent')
+    console.log('клик по эвент?')
+    const grays = document.querySelectorAll('.graysEvent')
+    const trEvent = document.querySelectorAll('.trEvent')
+    trEvent.forEach(e => e.style.display = 'none')
+    const color = document.querySelector('.color')
+    const evnt = document.querySelector('.evnt')
+    grays.forEach(el => {
+        if (el.classList.contains('toogleIconEvent')) {
+            trEvent.forEach(it => {
+                if (!color) {
+                    if (it.children[3].textContent === el.nextElementSibling.textContent) {
+                        it.style.display = 'flex'
+                    }
+                }
+                else {
+                    if (!choice) {
+                        if (it.children[3].textContent === el.nextElementSibling.textContent && color.id === it.getAttribute('rel')) {
+                            it.style.display = 'flex'
+                        }
+                    }
+                    else {
+                        if (it.children[3].textContent === el.nextElementSibling.textContent) {
+                            it.style.display = 'flex'
+                        }
+                    }
+
+                }
+
+            })
+        }
+    })
+    let check = false
+    grays.forEach(el => {
+        if (el.classList.contains('toogleIconEvent')) {
+            check = true
+        }
+    })
+    !check ? choice || !color ? trEvent.forEach(e => e.style.display = 'flex') : trEvent.forEach(e => { if (color.id === e.getAttribute('rel')) { e.style.display = 'flex' } }) : evnt.style.color = 'gray'
 }

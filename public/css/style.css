@@ -177,6 +177,10 @@ i.choice {
   width: 31%;
 }
 
+.tdLogs {
+  color: rgba(6, 28, 71, 1);
+}
+
 .logs {
   width: 40px;
   height: 40px;
@@ -8071,4 +8075,8 @@ i.acEvent {
 .text_types {
   color: rgba(6, 28, 71, 1);
   margin: 2px 15px;
+}
+
+.toogleIconEvent {
+  color: rgba(6, 28, 71, 1);
 }
