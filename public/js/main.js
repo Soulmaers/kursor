@@ -105,11 +105,11 @@ function inits() {
 
 function zapross() {
     const params11 = {
-        "itemId": 25872822,
+        "itemId": 25766831,
         "ivalType": 1,
-        "timeFrom": 1695293916 - 21600,
+        "timeFrom": 1695675600 -343800,
         "timeTo":
-            1695293916,
+            1695675600,
         "detectors": [
             {
                 "type": 'sensors',
@@ -136,9 +136,9 @@ function zapross() {
                 "selector": {
                     "type": '*',
                     //   "expr": 'trips{m<90}',
-                    "timeFrom": 1695293916 - 21600,
+                    "timeFrom": 1695675600 -343800,
                     "timeTo":
-                        1695293916,
+                        1695675600,
                     "detalization": 23
                 }
             }
@@ -188,7 +188,7 @@ function zapross() {
         "mode": "add",
         "units": [
             {
-                "id": 25872822,
+                "id": 25766831,
                 "detect":
                 {
                     "ignition": 0,

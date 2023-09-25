@@ -6,6 +6,27 @@ import { Tooltip } from '../class/Tooltip.js'
 import { filterEvent } from './content.js'
 
 
+const objFuncAlarm = {
+    email: { fn: sendEmail },
+    alert: { fn: createPopup },
+    what: { fn: sendWhat },
+    teleg: { fn: sendTeleg },
+    sms: { fn: sendSMS }
+}
+
+function sendEmail(){
+    console.log('отправка почта')
+}
+function sendWhat() {
+    console.log('отправка ватсап')
+}
+function sendTeleg() {
+    console.log('отправка телега')
+}
+function sendSMS() {
+    console.log('отправка смс')
+}
+
 async function createPopup(array) {
     const arr = Object.values(array[0]);
     const body = document.getElementsByTagName('body')[0]
@@ -138,9 +159,17 @@ export async function logsView(array) {
             for (let key in viewObj) {
                 viewObj[key] = JSON.parse(viewObj[key])
             }
-            viewObj[alert].forEach(e=>{
+            for (let key in viewObj) {
+        viewObj[key].forEach(e=>{
+            console.log(e, event, objFuncAlarm[viewObj[key]])
+            e === event ? objFuncAlarm[viewObj[key]].fn(mess) : null
+                       })
+            }
+
+           /* viewObj[alert].forEach(e=>{
+       
                 e === event ? createPopup(mess):null
-            })
+            })*/
                  })
         previus = results.length
     }

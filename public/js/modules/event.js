@@ -309,10 +309,9 @@ const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {
     const color = document.querySelector('.color')
     color ? color.classList.remove('color') : null
-    const mapss = document.getElementById('mapOil')
-    console.log(mapss)
-    if (mapss) {
-        mapss.remove();
+    const wrapMap = document.querySelector('.wrapMap')
+      if (wrapMap) {
+        wrapMap.remove();
     }
     const start = document.querySelector('.start')
     const pen = document.querySelectorAll('.rigthFrame')[0]
@@ -357,11 +356,9 @@ monitor.addEventListener('click', mainblock)
 
 
 function mainblock() {
-
-    const mapss = document.getElementById('mapOil')
-    console.log(mapss)
-    if (mapss) {
-        mapss.remove();
+    const wrapMap = document.querySelector('.wrapMap')
+    if (wrapMap) {
+        wrapMap.remove();
     }
     //   const pen = document.querySelectorAll('.rigthFrame')[0]
     // const twoframe = document.querySelector('.twoframe')
@@ -790,15 +787,12 @@ plug[2].addEventListener('click', () => {
 
     clearGraf()
 })
-
 const menuGraf = document.querySelectorAll('.menu_graf')
-
 menuGraf.forEach(el => {
     el.addEventListener('click', () => {
-        const mapss = document.getElementById('mapOil')
-        console.log(mapss)
-        if (mapss) {
-            mapss.remove();
+        const wrapMap = document.querySelector('.wrapMap')
+        if (wrapMap) {
+            wrapMap.remove();
         }
         const grafOld = document.querySelector('.infoGraf')
         if (grafOld) {
@@ -823,7 +817,6 @@ menuGraf.forEach(el => {
     })
 })
 const card = document.querySelectorAll('.icon_card')
-
 card.forEach(elem => {
     const changeParams = document.querySelector('.changeParams')
     const sensors = document.querySelector('.sensors')
