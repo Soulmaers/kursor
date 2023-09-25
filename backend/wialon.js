@@ -4,7 +4,7 @@ const express = require('express');
 const connection = require('./config/db')
 const request = require("request");
 const { prms } = require('./params');
-
+const request = require("request");
 const app = express();
 app.use(express.json());
 

@@ -190,8 +190,10 @@ module.exports.action = function (req, res) {
 
 const fs = require('fs');
 
+
 // Функция для записи логов
 function logLogin(username, ip, platform, device) {
+ 
     // Получение текущей даты и времени
     const currentDate = new Date();
     // Формирование строки с данными для записи
@@ -205,7 +207,7 @@ function logLogin(username, ip, platform, device) {
             console.log('Лог успешно записан');
         }
     });
-}
+  }
 
 
 

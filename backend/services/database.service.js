@@ -2,6 +2,8 @@
 const connection = require('../config/db')
 const databaseService = require('./database.service');
 const wialonService = require('./wialon.service.js')
+const helpers = require('../helpers.js')
+const send = require('./send.service.js')
 /*
 let socked;
 module.exports = {
@@ -154,7 +156,7 @@ exports.eventSaveToBase = async (login, obj) => {
 };
 
 exports.saveListToBase = async (obj) => {
-    
+
     try {
         const { login, statusnew, ingine, oil, type, pwr, sats, meliage, condition, tagach, pricep, lasttime } = obj;
         console.log(login)
@@ -478,12 +480,22 @@ exports.loadParamsViewList = async (car, el) => {
 exports.dostupObject = async (login) => {
     return new Promise((resolve, reject) => {
         try {
-            const selectBase = `SELECT Object FROM userObjects WHERE login='${login}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) console.log(err);
-                const nameCarCheck = results.map(elem => elem.Object)
-                resolve(nameCarCheck)
-            })
+            if (isNaN(login)) {
+                const selectBase = `SELECT Object FROM userObjects WHERE login='${login}'`
+                connection.query(selectBase, function (err, results) {
+                    if (err) console.log(err);
+                    const nameCarCheck = results.map(elem => elem.Object)
+                    resolve(nameCarCheck)
+                })
+            }
+            else {
+                const selectBase = `SELECT login FROM userObjects WHERE idw='${login}'`
+                connection.query(selectBase, function (err, results) {
+                    if (err) console.log(err);
+                    const nameCarCheck = results.map(elem => elem.login)
+                    resolve(nameCarCheck)
+                })
+            }
         }
         catch (e) {
             console.log(e)
@@ -777,20 +789,49 @@ exports.deleteBarToBase = (idw) => {
     })
 }
 
-
-
 exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
-    // console.log(arr, id, group, name, geo, start)
     const idw = id
     const date = new Date()
     const time = (date.getTime() / 1000).toFixed(0)
     const newdata = JSON.stringify(arr)
     const geoLoc = JSON.stringify(geo)
-    console.log(newdata, time, idw, geoLoc, group, name, start)
     const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, group, name, start)
+    const mess = await helpers.processing(arr, time, idw, geoLoc, group, name, start)
+    const objFuncAlarm = {
+        email: { fn: send.sendEmail },
+        what: { fn: send.sendWhat },
+        teleg: { fn: send.sendTeleg },
+        sms: { fn: send.sendSMS }
+    }
+    const event = mess.msg[0].event
+    mess.logins.forEach(async el => {
+        const itog = await this.eventFindToBase(el)
+        if (itog.length !== 0) {
+            delete itog[0].id
+            delete itog[0].login
+            delete itog.alert
+            const viewObj = itog[0]
+            for (let key in viewObj) {
+                viewObj[key] = JSON.parse(viewObj[key]);
+                viewObj[key] = viewObj[key].map(el => {
+                    if (el === 'Давление' || el === 'Температура') {
+                        return 'Предупреждение';
+                    }
+                    return el;
+                });
+            }
+            for (let key in viewObj) {
+                viewObj[key].forEach(e => {
+                    e === event ? objFuncAlarm[key]?.fn(mess) : null;
+                });
+            }
+        }
+        else {
+            console.log('нет данных')
+        }
+    })
     return res
 }
-
 
 exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
     return new Promise((resolve, reject) => {

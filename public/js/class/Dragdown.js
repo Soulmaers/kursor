@@ -3,7 +3,6 @@ console.log('дроп')
 
 export class DraggableContainer {
     constructor(element) {
-        console.log(element)
         //  this.container = element.parentElement;
         this.elem = element
         this.isDragging = false;

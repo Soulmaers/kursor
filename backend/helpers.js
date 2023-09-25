@@ -1,5 +1,4 @@
-
-
+const databaseService = require('./services/database.service');
 exports.createDate = () => {
     let today = new Date();
     const year = today.getFullYear();
@@ -18,4 +17,25 @@ exports.createDate = () => {
 exports.convert = (ob) => {
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
     return Array.from(uniq).map(e => JSON.parse(e));
+}
+
+
+exports.processing=async (arr, timez, idw, geoLoc, group, name, start)=>{
+ const newdata=arr[0]
+     let mess;
+    const res=await  databaseService.dostupObject(idw)
+         const event=newdata.event
+    if (event === 'Заправка') {
+        mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, litrazh: `${start}`, time: `Время заправки: ${newdata.time}` }]
+    }
+    if (event === 'Простой') {
+        mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, time: `${newdata.time}`, alarm: `${newdata.alarm}` }]
+    }
+    if (event === 'Предупреждение') {
+        mess = [{ event: event, name: `${name}`, time: `${newdata.time}`, tyres: `${newdata.tyres}`, param: `${newdata.param}`, alarm: `${newdata.alarm}` }]
+    }
+    if (event === 'Слив') {
+        mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, litrazh: `${start}`, time: `Время слива: ${newdata.time}` }]
+    }
+    return {msg:mess, logins:res}
 }

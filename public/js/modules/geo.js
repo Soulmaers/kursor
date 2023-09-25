@@ -281,7 +281,7 @@ export async function createMapsUniq(geoTrack, geo, num) {
             new DraggableContainer(wrapMap);
 
             cl = 'my-popup-log';
-            iss = L.marker(center, { icon: customIcon }).bindPopup(`Время: ${selectedTime}<br>Состояние: ${geo[0].logs[1]}<br>Содержание: ${geo[0].logs[2]}`, { width: 60, className: 'my-popup-log', autoPan: false }).addTo(map);
+            iss = L.marker(center, { icon: customIcon }).bindPopup(`Время: ${selectedTime}<br>Объект: ${geo[0].logs[1]}<br>Время события: ${geo[0].logs[2]}`, { width: 60, className: 'my-popup-log', autoPan: false }).addTo(map);
         }
         map.setView(center, 12)
         map.flyTo(center, 12)

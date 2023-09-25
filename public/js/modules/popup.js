@@ -14,9 +14,7 @@ const objFuncAlarm = {
     sms: { fn: sendSMS }
 }
 
-function sendEmail(){
-    console.log('отправка почта')
-}
+
 function sendWhat() {
     console.log('отправка ватсап')
 }
@@ -27,7 +25,62 @@ function sendSMS() {
     console.log('отправка смс')
 }
 
+function sendEmail(mess) {
+    console.log(mess)
+
+    let smtpTransport;
+    try {
+        smtpTransport = nodemailer.createTransport({
+            host: 'smtp.mail.ru',
+            port: 465,
+            secure: true, // true for 465, false for other ports 587
+            auth: {
+                user: "develop@cursor-gps.ru",
+                pass: process.env.MAIL_PASS  //NphLycnf9gqPysYJt3jf
+            }
+        });
+    } catch (e) {
+        return console.log('Error: ' + e.name + ":" + e.message);
+    }
+
+    let mailOptions = {
+        from: 'develop@cursor-gps.ru', // sender address
+        to: 'soulmaers@gmail.com', // list of receivers
+        subject: 'Уведомление', // Subject line
+        text: mess // plain text body
+    };
+    smtpTransport.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            // return console.log(error);
+            return console.log(error);
+        } else {
+            console.log('отправлено')
+        }
+
+    })
+}
+/*
+var options = {
+    method: 'POST',
+    url: 'https://api.ultramsg.com/instance45156/messages/chat',
+    headers: { 'content-type': ' application/x-www-form-urlencoded' },
+    form: {
+        "token": "0cnqlft2roemo3j4",
+        "to": 89627295770,
+        "body": message
+    }
+};
+
+request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+
+    console.log(body);
+});*/
+
+
+
 async function createPopup(array) {
+    console.log(array)
     const arr = Object.values(array[0]);
     const body = document.getElementsByTagName('body')[0]
     const pop = document.createElement('div')
@@ -142,7 +195,6 @@ export async function logsView(array) {
             if (event === 'Слив') {
                 mess = [{ event: event, group: `Компания: ${el.groups}`, name: `${el.name}`, litrazh: `${content[0].litrazh}`, time: `Время слива: ${formattedDate}` }]
             }
-            console.log(mess)
             const prms = {
                 method: "POST",
                 headers: {
@@ -152,25 +204,28 @@ export async function logsView(array) {
             }
             const res = await fetch('/api/viewEvent', prms)
             const result = await res.json()
-            console.log(result)
-            delete result.itog[0].login
-            delete result.itog[0].id
-            const viewObj = result.itog[0]
-            for (let key in viewObj) {
-                viewObj[key] = JSON.parse(viewObj[key])
-            }
-            for (let key in viewObj) {
-        viewObj[key].forEach(e=>{
-            console.log(e, event, objFuncAlarm[viewObj[key]])
-            e === event ? objFuncAlarm[viewObj[key]].fn(mess) : null
-                       })
-            }
+            if (result.itog.length !== 0) {
+                delete result.itog[0].login
+                delete result.itog[0].id
+                const viewObj = result.itog[0]
+                for (let key in viewObj) {
+                    viewObj[key] = JSON.parse(viewObj[key]);
+                    viewObj[key] = viewObj[key].map(el => {
+                        if (el === 'Давление' || el === 'Температура') {
+                            return 'Предупреждение';
+                        }
+                        return el;
+                    });
+                }
+                viewObj.alert.forEach(e => {
+                    e === event ? createPopup(mess) : null; // Это изменено
+                });
 
-           /* viewObj[alert].forEach(e=>{
-       
-                e === event ? createPopup(mess):null
-            })*/
-                 })
+            }
+            else {
+                console.log('нет данных')
+            }
+        })
         previus = results.length
     }
     num++
@@ -258,12 +313,10 @@ export async function logsView(array) {
                 event.stopPropagation();
                 const wr = document.querySelector('.alllogs')
                 const draggable = new DraggableContainer(wr);
-                console.log('топпап')
                 togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
             });
             numy.addEventListener('click', function (event) {
                 event.stopPropagation();
-                console.log('топпап2')
                 togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
             });
 
@@ -275,7 +328,7 @@ export async function logsView(array) {
     }).catch(error => {
         console.error(error);
     })
-    setTimeout(logsView, 60000, array)
+    setTimeout(logsView, 10000, array)
 }
 
 
