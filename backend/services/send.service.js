@@ -29,8 +29,8 @@ exports.sendEmail = async(mess, login) => {
     const msg = this.convertMessage(message)
          const contact = await databaseService.findToBaseProfil(login)
         if (contact.result.length !== 0) {
-            const email = contact.result[0].email
-
+            contact.result.forEach(el => {
+            const email = el.email
             let smtpTransport;
             try {
                 smtpTransport = nodemailer.createTransport({
@@ -62,6 +62,7 @@ exports.sendEmail = async(mess, login) => {
                 }
 
             })
+        })
         }
         else {
             return
@@ -69,27 +70,27 @@ exports.sendEmail = async(mess, login) => {
   }
 
 exports.sendWhat = async(mess,login) => {
-    console.log('сколько раз отправляю?')
-    const message = mess
+     const message = mess
     const msg = this.convertMessage(message)
           const contact = await databaseService.findToBaseProfil(login)
-        console.log(msg)
-        if (contact.result.length !== 0) {
-            const phone = parseFloat(contact.result[0].phone)
-                     console.log(phone)
-            console.log(typeof msg)
-            var options = {
-                'method': 'POST',
-                'url': 'https://wappi.pro/api/sync/message/send?profile_id=2c69ae90-ce24',
-                'headers': {
-                    'Authorization': 'd1ef53ec05c096936e8e4f970a350ba44ac34dff'
-                },
-                body: `{ "body": "${msg}", "recipient": "${phone}" }`
-            };
-            request(options, async function (error, response) {
-                if (error) throw new Error(error);
-                console.log(response.body);
+           if (contact.result.length !== 0) {
+            contact.result.forEach(el => {
+                const phone = parseFloat(el.phone)
+                        var options = {
+                    'method': 'POST',
+                    'url': 'https://wappi.pro/api/sync/message/send?profile_id=2c69ae90-ce24',
+                    'headers': {
+                        'Authorization': 'd1ef53ec05c096936e8e4f970a350ba44ac34dff'
+                    },
+                    body: `{ "body": "${msg}", "recipient": "${phone}" }`
+                };
+                request(options, async function (error, response) {
+                    if (error) throw new Error(error);
+                    console.log(response.body);
+                });
+                
             });
+           
 
         }
         else {
