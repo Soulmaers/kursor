@@ -3,81 +3,7 @@ import { CloseBTN } from '../class/Flash.js'
 import { titleLogs } from './content.js'
 import { reverseGeocode, createMapsUniq } from './geo.js'
 import { Tooltip } from '../class/Tooltip.js'
-import { filterEvent } from './content.js'
-
-
-const objFuncAlarm = {
-    email: { fn: sendEmail },
-    alert: { fn: createPopup },
-    what: { fn: sendWhat },
-    teleg: { fn: sendTeleg },
-    sms: { fn: sendSMS }
-}
-
-
-function sendWhat() {
-    console.log('отправка ватсап')
-}
-function sendTeleg() {
-    console.log('отправка телега')
-}
-function sendSMS() {
-    console.log('отправка смс')
-}
-
-function sendEmail(mess) {
-    console.log(mess)
-
-    let smtpTransport;
-    try {
-        smtpTransport = nodemailer.createTransport({
-            host: 'smtp.mail.ru',
-            port: 465,
-            secure: true, // true for 465, false for other ports 587
-            auth: {
-                user: "develop@cursor-gps.ru",
-                pass: process.env.MAIL_PASS  //NphLycnf9gqPysYJt3jf
-            }
-        });
-    } catch (e) {
-        return console.log('Error: ' + e.name + ":" + e.message);
-    }
-
-    let mailOptions = {
-        from: 'develop@cursor-gps.ru', // sender address
-        to: 'soulmaers@gmail.com', // list of receivers
-        subject: 'Уведомление', // Subject line
-        text: mess // plain text body
-    };
-    smtpTransport.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            // return console.log(error);
-            return console.log(error);
-        } else {
-            console.log('отправлено')
-        }
-
-    })
-}
-/*
-var options = {
-    method: 'POST',
-    url: 'https://api.ultramsg.com/instance45156/messages/chat',
-    headers: { 'content-type': ' application/x-www-form-urlencoded' },
-    form: {
-        "token": "0cnqlft2roemo3j4",
-        "to": 89627295770,
-        "body": message
-    }
-};
-
-request(options, function (error, response, body) {
-    if (error) throw new Error(error);
-
-    console.log(body);
-});*/
-
-
+import {visual} from './visual.js'
 
 async function createPopup(array) {
     console.log(array)
@@ -253,8 +179,10 @@ export async function logsView(array) {
             await createLogsTable(results);
             const tr = document.querySelectorAll('.trEvent')
             tr.forEach(e => {
-                e.style.cursor = 'pointer'
-                const clickHandler = (event) => {
+                e.style.cursor='default'
+                e.children[3].style.cursor = 'pointer'
+                e.children[2].style.cursor = 'pointer'
+                            const clickHandler = (event) => {
                     event.stopPropagation();
                     const geo = [];
                     geo.push(parseFloat(e.lastElementChild.textContent.split(',')[0]))
@@ -265,7 +193,8 @@ export async function logsView(array) {
                     const wrap = document.querySelector('.wrapMap')
                     new CloseBTN(wrap)
                 };
-                e.addEventListener('click', clickHandler);
+                e.children[3].addEventListener('click', clickHandler);
+                e.children[2].addEventListener('click', clickHandlerObject);
             })
             const log = document.querySelector('.logs')
             const wrapperLogs = document.querySelector('.alllogs')
@@ -334,7 +263,19 @@ export async function logsView(array) {
     setTimeout(logsView, 10000, array)
 }
 
-
+function clickHandlerObject(event){
+    const allobjects = document.querySelector('.allobjects')
+  allobjects.style.display='flex'
+const element=event.target
+const id=element.parentElement.getAttribute('rel')
+const listItem=document.querySelectorAll('.listItem')
+    listItem.forEach(it=>{
+        if(it.getAttribute('rel')===id){
+            visual(it)
+            chanchColor() 
+        }
+    })
+}
 function chanchColor() {
     const grays = document.querySelectorAll('.graysEvent')
     const allobjects = document.querySelector('.allobjects')

@@ -22,6 +22,9 @@ let time;
 let timeIcon;
 
 export async function visual(el) {
+    const color=document.querySelector('.color')
+    color? color.classList.remove('color'):null
+    console.log(el)
     const main = document.querySelector('.main')
     const choice = document.querySelector('.choice')
     choice ? choice.classList.remove('choice') : null

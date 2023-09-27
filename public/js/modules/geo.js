@@ -93,21 +93,8 @@ export async function createMap(geo, geoMarker) {
         const res = `${geoMarker.geoY}, ${geoMarker.geoX}`//await reverseGeocode(geoMarker.geoY, geoMarker.geoX)
         iss = L.marker(center, { icon: greenIcon }).bindPopup(`${nameCar}<br>${res}`).addTo(map);
     const marker = L.marker(center, { icon: divIcon }).addTo(map);
-      
-     
-     //   element.style.transform = `rotate(${degrees}deg)`;
-        console.log(geoMarker)
-       /*
-        const leafletPane = document.querySelector('.leaflet-marker-pane')
-        const leafletIcon = document.querySelector('.leaflet-marker-icon')
-        leafletIcon.style.position = 'relative'
-        const wrapDiv = document.createElement('img')
-        wrapDiv.classList.add('custom-marker-arrow')
-        wrapDiv.src = "../../image/arrow.png";
-        const diva = document.createElement('div')
-        leafletPane.appendChild(diva)
-        diva.classList.add('wrapContainerArrow')
-        diva.appendChild(wrapDiv)*/
+            console.log(geoMarker)
+    
 
                iss.getPopup().options.className = 'my-popup-all';
         iss.on('mouseover', function (e) {
@@ -116,7 +103,6 @@ export async function createMap(geo, geoMarker) {
         iss.on('mouseout', function (e) {
             this.closePopup();
         });
-      // setMarkerDirection(marker, geoMarker.course) 
     }
 
     map.on('zoomend', function () {
@@ -125,24 +111,6 @@ export async function createMap(geo, geoMarker) {
  
     isProcessing = false;
 }
-
-function setMarkerDirection(marker, course) {
-    var lat = marker.getLatLng().lat;
-    var lng = marker.getLatLng().lng;
-    var bearing = course * Math.PI / 180; // перевод градусов в радианы
-    var distance = 0.001; // расстояние в километрах
-    var R = 6371; // радиус Земли в километрах
-    var lat2 = Math.asin(Math.sin(lat * Math.PI / 180) * Math.cos(distance / R) +
-        Math.cos(lat * Math.PI / 180) * Math.sin(distance / R) * Math.cos(bearing));
-    var lng2 = lng + Math.atan2(Math.sin(bearing) * Math.sin(distance / R) * Math.cos(lat * Math.PI / 180),
-        Math.cos(distance / R) - Math.sin(lat * Math.PI / 180) * Math.sin(lat2));
-
-   // marker.setLatLng([lat2 * 180 / Math.PI, lng2 * 180 / Math.PI]);
-   // marker.setRotationAngle(course);
-}
-
-
-
 
 export async function reverseGeocode(geoY, geoX) {
     const API_KEY = 'e156e8924c3a4e75bc1eac26f153457e';
@@ -215,8 +183,8 @@ export async function createMapsUniq(geoTrack, geo, num) {
     let formattedDate;
     const nameCar = document.querySelector('.color') ? document.querySelector('.color').children[0].textContent : null
     var customIcon = new LeafIcon({
-        iconUrl: num !== 'oil?' ? '../../image/iconCar2.png' : '../../image/ref.png',
-        iconSize: [30, 30],
+        iconUrl: num !== 'oil?' ? '../../image/trailer.png' : '../../image/ref.png',
+        iconSize: [30, 22],
         iconAnchor: [0, -10],
         popupAnchor: [20, 24],
         className: 'custom-marker-alarm'
