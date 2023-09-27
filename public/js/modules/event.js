@@ -333,37 +333,14 @@ btnDash.addEventListener('click', () => {
 
 });
 
-
-
-
-
-
-/*
-monitoring.forEach(el => {
-    el.addEventListener('click', () => {
-        const allobjects = document.querySelector('.allobjects')
-        allobjects.style.display = 'none'
-        allobjects.style.color = 'gray'
-        const trEventLogs = document.querySelectorAll('.trEvent')
-        trEventLogs.forEach(e => e.style.display = 'flex')
-    })
-})*/
-
-
-
 const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', mainblock)
-
 
 function mainblock() {
     const wrapMap = document.querySelector('.wrapMap')
     if (wrapMap) {
         wrapMap.remove();
     }
-    //   const pen = document.querySelectorAll('.rigthFrame')[0]
-    // const twoframe = document.querySelector('.twoframe')
-    // twoframe.style.display = 'flex'
-    //   pen.style.display = 'flex'
     const idw = document.querySelector('.color')
     if (!idw) {
         const main = document.querySelector('.main')
@@ -1069,7 +1046,6 @@ selectSummary.forEach(el => {
     console.log('работаем?')
     el.addEventListener('change', function () {
         element(el);
-
     })
 })
 

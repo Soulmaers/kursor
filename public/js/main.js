@@ -46,32 +46,13 @@ async function init() {
 
     }
 
-/*
+
     const res = await fetch('/api/viewLogs', param)
     const confirm = await res.json()
-    console.log(confirm)*/
+    console.log(confirm)
 
-    /*
-        function requestPermission() {
-            return new Promise(function (resolve, reject) {
-                const permissionResult = Notification.requestPermission(function (result) {
-                    // Поддержка устаревшей версии с функцией обратного вызова.
-                    resolve(result);
-                });
     
-                if (permissionResult) {
-                    permissionResult.then(resolve, reject);
-                }
-            })
-                .then(function (permissionResult) {
-                    if (permissionResult !== 'granted') {
-                        throw new Error('Permission not granted.');
-                    }
-                });
-        }
-        requestPermission()*/
-
-    zapros(login) //делаем запрос на wialon получаем объекты
+         zapros(login) //делаем запрос на wialon получаем объекты
     liCreate()
     console.log(screen.width)
     console.log(screen.height)
