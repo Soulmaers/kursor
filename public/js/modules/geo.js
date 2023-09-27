@@ -74,28 +74,30 @@ export async function createMap(geo, geoMarker) {
             }
         });
         var greenIcon = new LeafIcon({
-            iconUrl: '../../image/iconCar2.png',
-            iconSize: [30, 30],
+            iconUrl: '../../image/trailer.png',
+            iconSize: [30, 22],
             iconAnchor: [20, 20],
             popupAnchor: [0, 0],
             className: 'custom-marker'
         });
-/*
-        var icon = L.icon({
-            iconUrl: '../../image/arrow.png',
-            iconSize: [20, 20],
-            iconAnchor: [30, 30],
-            popupAnchor: [0, -10],
-            className: 'custom-marker-arrow'
-        });*/
 
-     
+
+        var divIcon = L.divIcon({
+            className: 'custom-marker-arrow',
+            html: `<div class="wrapContainerArrow" style="height: 75px;transform: rotate(${geoMarker.course}deg);"><img src="../../image/arrow.png" style="width: 20px"></div>`
+          //  iconSize: [50, 50],
+          //  iconAnchor: [25, 25]
+        });
              map.setView(center, 12);
         map.flyTo(center, 12);
         const res = `${geoMarker.geoY}, ${geoMarker.geoX}`//await reverseGeocode(geoMarker.geoY, geoMarker.geoX)
         iss = L.marker(center, { icon: greenIcon }).bindPopup(`${nameCar}<br>${res}`).addTo(map);
-       // var marker = L.marker(center, { icon: icon }).addTo(map);
-
+    const marker = L.marker(center, { icon: divIcon }).addTo(map);
+      
+     
+     //   element.style.transform = `rotate(${degrees}deg)`;
+        console.log(geoMarker)
+       /*
         const leafletPane = document.querySelector('.leaflet-marker-pane')
         const leafletIcon = document.querySelector('.leaflet-marker-icon')
         leafletIcon.style.position = 'relative'
@@ -105,10 +107,9 @@ export async function createMap(geo, geoMarker) {
         const diva = document.createElement('div')
         leafletPane.appendChild(diva)
         diva.classList.add('wrapContainerArrow')
-        diva.appendChild(wrapDiv)
+        diva.appendChild(wrapDiv)*/
 
-
-        iss.getPopup().options.className = 'my-popup-all';
+               iss.getPopup().options.className = 'my-popup-all';
         iss.on('mouseover', function (e) {
             this.openPopup();
         });
@@ -136,8 +137,8 @@ function setMarkerDirection(marker, course) {
     var lng2 = lng + Math.atan2(Math.sin(bearing) * Math.sin(distance / R) * Math.cos(lat * Math.PI / 180),
         Math.cos(distance / R) - Math.sin(lat * Math.PI / 180) * Math.sin(lat2));
 
-    marker.setLatLng([lat2 * 180 / Math.PI, lng2 * 180 / Math.PI]);
-    marker.setRotationAngle(course);
+   // marker.setLatLng([lat2 * 180 / Math.PI, lng2 * 180 / Math.PI]);
+   // marker.setRotationAngle(course);
 }
 
 

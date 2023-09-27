@@ -2474,18 +2474,20 @@ div.spoyler {
 position: relative;
 }
 
-.custom-marker-arrow{
-max-width: 100%;
-
+.custom-marker.rotate {
+  transform-origin: 50% 50%;
 }
-
 .wrapContainerArrow{
-  height: 88px;
-    left: 0;
+  height: 78px;
+  width: 30px;
+    left: -15px;
     position: absolute;
-    top: -28px;
+    top: -38px;
     transition: transform 1s;
-}
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    }
 .custom-marker-bar {
   margin-top: 60px;
   /* Измените значение на желаемое смещение вниз */

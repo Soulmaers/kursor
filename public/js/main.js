@@ -46,10 +46,10 @@ async function init() {
 
     }
 
-
+/*
     const res = await fetch('/api/viewLogs', param)
     const confirm = await res.json()
-    console.log(confirm)
+    console.log(confirm)*/
 
     /*
         function requestPermission() {
@@ -125,11 +125,11 @@ function inits() {
 
 function zapross() {
     const params11 = {
-        "itemId": 25399453,
+        "itemId": 26702371,
         "ivalType": 1,
-        "timeFrom": 1695675600 - 743800,
+        "timeFrom": 1695799819 - 743800,
         "timeTo":
-            1695711718,
+            1695799819,
         "detectors": [
             {
                 "type": 'sensors',
@@ -156,9 +156,9 @@ function zapross() {
                 "selector": {
                     "type": '*',
                     //   "expr": 'trips{m<90}',
-                    "timeFrom": 1695675600 - 743800,
+                    "timeFrom": 1695799819 - 743800,
                     "timeTo":
-                        1695711718,
+                        1695799819,
                     "detalization": 23
                 }
             }
