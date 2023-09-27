@@ -84,7 +84,7 @@ export async function createMap(geo, geoMarker) {
 
         var divIcon = L.divIcon({
             className: 'custom-marker-arrow',
-            html: `<div class="wrapContainerArrow" style="height: 75px;transform: rotate(${geoMarker.course}deg);"><img src="../../image/arrow.png" style="width: 20px"></div>`
+            html: `<div class="wrapContainerArrow" style="height: 75px;transform: rotate(${geoMarker.course}deg);"><img src="../../image/arrow2.png" style="width: 20px"></div>`
           //  iconSize: [50, 50],
           //  iconAnchor: [25, 25]
         });
