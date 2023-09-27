@@ -2470,8 +2470,22 @@ div.spoyler {
   animation-iteration-count: 1;
 }
 
+.custom-marker{
+position: relative;
+}
 
+.custom-marker-arrow{
+max-width: 100%;
 
+}
+
+.wrapContainerArrow{
+  height: 88px;
+    left: 0;
+    position: absolute;
+    top: -28px;
+    transition: transform 1s;
+}
 .custom-marker-bar {
   margin-top: 60px;
   /* Измените значение на желаемое смещение вниз */
@@ -7666,6 +7680,7 @@ input[type="text"]:focus {
   background-color: #fff;
   color: rgba(6, 28, 71, 1);
 }
+
 
 .addContact {
   width: 40%;

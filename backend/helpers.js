@@ -20,13 +20,13 @@ exports.convert = (ob) => {
 }
 
 
-exports.processing=async (arr, timez, idw, geoLoc, group, name, start)=>{
- const newdata=arr[0]
-     let mess;
-    const res=await  databaseService.dostupObject(idw)
-         const event=newdata.event
+exports.processing = async (arr, timez, idw, geoLoc, group, name, start) => {
+    const newdata = arr[0]
+    let mess;
+    const res = await databaseService.dostupObject(idw)
+    const event = newdata.event
     if (event === 'Заправка') {
-        mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, litrazh: `${start}`, time: `Время заправки: ${newdata.time}` }]
+        mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, litrazh: `${start}`, time: `${newdata.time}` }]
     }
     if (event === 'Простой') {
         mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, time: `${newdata.time}`, alarm: `${newdata.alarm}` }]
@@ -35,7 +35,10 @@ exports.processing=async (arr, timez, idw, geoLoc, group, name, start)=>{
         mess = [{ event: event, name: `${name}`, time: `${newdata.time}`, tyres: `${newdata.tyres}`, param: `${newdata.param}`, alarm: `${newdata.alarm}` }]
     }
     if (event === 'Слив') {
-        mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, litrazh: `${start}`, time: `Время слива: ${newdata.time}` }]
+        mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, litrazh: `${start}`, time: `${newdata.time}` }]
     }
-    return {msg:mess, logins:res}
+    if (event === 'Потеря связи') {
+        mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, lasttime: `${newdata.lasttime}` }]
+    }
+    return { msg: mess, logins: res }
 }

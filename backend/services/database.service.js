@@ -352,13 +352,12 @@ exports.alarmBase = async (data, tyres, alarm) => {
     const tyress = allSens[dannie[2]]
     console.log(dannie)
     alarm !== 'Потеря связи с датчиком' ? val = dannie[3] + ' ' + 'Бар' : val = dannie[4] + '' + 't'
-    const res = alarm !== 'Норма' ? await databaseService.controllerSaveToBase([{
+    const res = alarm !== 'Норма' && alarm !== 'Потеря связи с датчиком' ? await databaseService.controllerSaveToBase([{
         event: 'Предупреждение', time: `Время ${dannie[0]}`, tyres: `Колесо: ${tyress}`,
-        param: `Параметр: ${val}`, alarm: `Событие: ${alarm}`
+        param: `Параметр: ${val}`, alarm: `Описание: ${alarm}`
     }], dannie[6], dannie[8], dannie[1], dannie[1]) : 'Норма. В базу не пишем'
     console.log('Предупреждение' + ' ' + res.message)
     count++
-
     const id = dannie[6]
     dannie.splice(5, 3)
     dannie.pop()
@@ -795,41 +794,47 @@ exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
     const time = (date.getTime() / 1000).toFixed(0)
     const newdata = JSON.stringify(arr)
     const geoLoc = JSON.stringify(geo)
-    const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, group, name, start)
-    const mess = await helpers.processing(arr, time, idw, geoLoc, group, name, start)
-    const objFuncAlarm = {
-        email: { fn: send.sendEmail },
-        what: { fn: send.sendWhat },
-        teleg: { fn: send.sendTeleg },
-        sms: { fn: send.sendSMS }
+     const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, group, name, start)
+    if (res.message === 'Событие уже существует в базе логов') {
+        null
     }
-    const event = mess.msg[0].event
-    mess.logins.forEach(async el => {
-        const itog = await this.eventFindToBase(el)
-        if (itog.length !== 0) {
-            delete itog[0].id
-            delete itog[0].login
-            delete itog.alert
-            const viewObj = itog[0]
-            for (let key in viewObj) {
-                viewObj[key] = JSON.parse(viewObj[key]);
-                viewObj[key] = viewObj[key].map(el => {
-                    if (el === 'Давление' || el === 'Температура') {
-                        return 'Предупреждение';
-                    }
-                    return el;
-                });
-            }
-            for (let key in viewObj) {
-                viewObj[key].forEach(e => {
-                    e === event ? objFuncAlarm[key]?.fn(mess) : null;
-                });
-            }
+    else {
+        const mess = await helpers.processing(arr, time, idw, geoLoc, group, name, start)
+        const objFuncAlarm = {
+            email: { fn: send.sendEmail },
+            what: { fn: send.sendWhat },
+            teleg: { fn: send.sendTeleg },
+            sms: { fn: send.sendSMS }
         }
-        else {
-            console.log('нет данных')
-        }
-    })
+        const event = mess.msg[0].event
+        mess.logins.forEach(async el => {
+            const itog = await this.eventFindToBase(el)
+            console.log(itog)
+            if (itog.length !== 0) {
+                delete itog[0].id
+                delete itog[0].login
+                delete itog.alert
+                const viewObj = itog[0]
+                for (let key in viewObj) {
+                    viewObj[key] = JSON.parse(viewObj[key]);
+                    viewObj[key] = viewObj[key].map(el => {
+                        if (el === 'Давление' || el === 'Температура') {
+                            return 'Предупреждение';
+                        }
+                        return el;
+                    });
+                }
+                for (let key in viewObj) {
+                    viewObj[key].forEach(e => {
+                        e === event ? objFuncAlarm[key]?.fn(mess.msg[0], el) : null;
+                    });
+                }
+            }
+            else {
+                console.log('нет данных')
+            }
+        })
+    }
     return res
 }
 

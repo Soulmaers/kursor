@@ -184,16 +184,19 @@ export async function logsView(array) {
             let mess;
             console.log(el)
             if (event === 'Заправка') {
-                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `${el.name}`, litrazh: `${content[0].litrazh}`, time: `Время заправки: ${formattedDate}` }]
+                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `Объект: ${el.name}`, litrazh: `${content[0].litrazh}`, time: `Время заправки: ${formattedDate}` }]
             }
             if (event === 'Простой') {
-                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `${el.name}`, time: `${content[0].time}`, alarm: `${content[0].alarm}` }]
+                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `Объект: ${el.name}`, time: `${content[0].time}`, alarm: `${content[0].alarm}` }]
             }
             if (event === 'Предупреждение') {
                 mess = [{ event: event, group: `Компания: ${group}`, name: `${el.name}`, time: `${content[0].time}`, tyres: `${content[0].tyres}`, param: `${content[0].param}`, alarm: `${content[0].alarm}` }]
             }
             if (event === 'Слив') {
-                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `${el.name}`, litrazh: `${content[0].litrazh}`, time: `Время слива: ${formattedDate}` }]
+                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `Объект: ${el.name}`, litrazh: `${content[0].litrazh}`, time: `Время слива: ${formattedDate}` }]
+            }
+            if (event === 'Потеря связи') {
+                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `Объект: ${el.name}`, lasttime:`${content[0].lasttime}`}]
             }
             const prms = {
                 method: "POST",
@@ -380,7 +383,8 @@ const objColor = {
     'Заправка': 'darkblue',
     'Простой': 'darkgreen',
     'Предупреждение': 'darkred',
-    'Слив': 'red'
+    'Слив': 'red',
+    'Потеря связи': '#28ad9e'
 }
 async function createLogsTable(mass) {
     const wrap = document.querySelector('.alllogs')

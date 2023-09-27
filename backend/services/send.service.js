@@ -3,31 +3,31 @@ const databaseService = require('./database.service')
 const request = require("request");
 
 exports.convertMessage = (mess) => {
-    let msg;
+        let msg;
     if (mess.event === 'Заправка') {
-        msg = `Событие: ${mess.event}\n${mess.group}\nОбъект: ${mess.name}\nЗаправлено: ${mess.litrazh}\nВремя заправки: ${mess.time}`
+        msg = `Событие: ${mess.event}\u2028${mess.group}\u2028Объект: ${mess.name}\u2028Заправлено: ${mess.litrazh} л.\u2028${mess.time}`
     }
     if (mess.event === 'Простой') {
-        msg = `Событие: ${mess.event}\n${mess.group}\nОбъект: ${mess.name}\nВремя простоя: ${mess.alarm}\nВремя события: ${mess.time}`
+        msg = `Событие: ${mess.event}\u2028${mess.group}\u2028Объект: ${mess.name}\nВремя простоя: ${mess.alarm}\u2028${mess.time}`
     }
     if (mess.event === 'Предупреждение') {
-        msg = `Событие: ${mess.event}\nОбъект: ${mess.name}\n${mess.tyres}\nПараметр: ${mess.param}\n${mess.alarm}\nВремя события: ${mess.time}`
+        msg = `Событие: ${mess.event}\u2028Объект: ${mess.name}\u2028${mess.tyres}\u2028Параметр: ${mess.param}\u2028${mess.alarm}\u2028${mess.time}`
     }
     if (mess.event === 'Слив') {
-        msg = `Событие: ${mess.event}\n${mess.group}\nОбъект: ${mess.name}\nСлив: ${mess.litrazh}\nВремя события: ${mess.time}`
+        msg = `Событие: ${mess.event}\u2028${mess.group}\u2028Объект: ${mess.name}\u2028Слив: ${mess.litrazh} л.\u2028${mess.time}`
+    }
+    if (mess.event === 'Потеря связи') {
+        msg = `Событие: ${mess.event}\u2028${mess.group}\u2028Объект: ${mess.name}\u2028${mess.lasttime}`
     }
     return msg
 }
 
 
 
-exports.sendEmail = (mess) => {
-    //  console.log(mess, 'отправка на почту')
-    const message = mess.msg[0]
+exports.sendEmail = async(mess, login) => {
+     const message = mess
     const msg = this.convertMessage(message)
-    //  console.log(msg)
-    mess.logins.forEach(async el => {
-        const contact = await databaseService.findToBaseProfil(el)
+         const contact = await databaseService.findToBaseProfil(login)
         if (contact.result.length !== 0) {
             const email = contact.result[0].email
 
@@ -66,39 +66,35 @@ exports.sendEmail = (mess) => {
         else {
             return
         }
-    })
-}
+  }
 
-
-exports.sendWhat = (mess) => {
-    //ultramsg.com
-    const message = mess.msg[0]
+exports.sendWhat = async(mess,login) => {
+    console.log('сколько раз отправляю?')
+    const message = mess
     const msg = this.convertMessage(message)
-    mess.logins.forEach(async el => {
-        const contact = await databaseService.findToBaseProfil(el)
+          const contact = await databaseService.findToBaseProfil(login)
         console.log(msg)
         if (contact.result.length !== 0) {
             const phone = parseFloat(contact.result[0].phone)
-
-            var option = {
-                method: 'POST',
-                url: 'https://api.ultramsg.com/instance45156/messages/chat',
-                headers: { 'content-type': ' application/x-www-form-urlencoded' },
-                form: {
-                    "token": "0cnqlft2roemo3j4",
-                    "to": phone,
-                    "body": msg
-                }
+                     console.log(phone)
+            console.log(typeof msg)
+            var options = {
+                'method': 'POST',
+                'url': 'https://wappi.pro/api/sync/message/send?profile_id=2c69ae90-ce24',
+                'headers': {
+                    'Authorization': 'd1ef53ec05c096936e8e4f970a350ba44ac34dff'
+                },
+                body: `{ "body": "${msg}", "recipient": "${phone}" }`
             };
-            request(option, function (error, response, body) {
+            request(options, async function (error, response) {
                 if (error) throw new Error(error);
-                console.log(body);
+                console.log(response.body);
             });
+
         }
         else {
             return
         }
-    })
 }
 
 exports.sendTeleg = (mess) => {

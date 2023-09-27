@@ -21,7 +21,8 @@ exports.geoloc = async (req, res) => {
         el.push(arr2[1][index].pos.y, arr2[1][index].pos.x);
     })
     let geoX,
-        geoY;
+        geoY,
+        course;
     //получаем id объекта,
     //забираем сессию, делаем запрос на виалон за параметрами,
     //получаем данные и выбираем координаты,
@@ -32,12 +33,14 @@ exports.geoloc = async (req, res) => {
         allCar[5].forEach(el => {
             if (el.id === Number(idw)) {
                 if (el.pos) {
+                    console.log(el.pos)
                     geoX = el.pos.x
                     geoY = el.pos.y
+                    course=el.pos.c
                 }
             }
         })
     }
-    res.json({ resTrack: geo, resMarker: { geoX, geoY } })
+    res.json({ resTrack: geo, resMarker: { geoX, geoY, course } })
 }
 

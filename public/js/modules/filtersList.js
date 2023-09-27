@@ -119,14 +119,12 @@ const dubleSelectOn = (elem) => {
 }
 
 const selection = (event) => {
-    console.log(event)
     event.target.children[1].style.display = 'flex'
 }
 const selectionOff = (event) => {
     event.target.children[1].style.display = 'none'
     event.target.children[1].children[1].style.display === 'block' ? event.target.children[0].style.color = 'gray' : null
     const sortIcon = document.querySelector('.iconsort')
-    console.log(sortIcon.previousElementSibling.previousElementSibling)
     sortIcon.previousElementSibling.children[1].style.display === 'block' ? sortIcon.previousElementSibling.previousElementSibling.style.color = 'gray' :
         sortIcon.previousElementSibling.previousElementSibling.style.color = 'rgba(6, 28, 71, 1)'
 }

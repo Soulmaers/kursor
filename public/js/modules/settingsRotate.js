@@ -61,10 +61,12 @@ export const saveCheckListToBase = async (nums) => {
         }
     });
     const mass = arrayIndexTitleList.reduce((result, e) => {
+        console.log(e)
         result[e.rel] = JSON.stringify(e);
         return result;
     }, {})
     mass.login = login
+    console.log(mass)
     const param = {
         method: "POST",
         headers: {
@@ -139,11 +141,6 @@ export const findIdClose = async (e) => {
     viewProfil(login)
 }
 
-
-
-
-
-
 const emailValidation = () => {
     const validTextInspect = document.querySelector('.valid_text')
     if (validTextInspect) {
@@ -176,7 +173,7 @@ const emailValidation = () => {
     }
 }
 function validatePhoneNumber(number) {
-    const regex = /^[8]\d{10}$/; // Регулярное выражение для проверки формата
+    const regex = /^[7]\d{10}$/; // Регулярное выражение для проверки формата
     return regex.test(number);
 }
 

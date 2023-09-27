@@ -95,27 +95,21 @@ exports.test = async () => {
     const allCar = Object.entries(data)
     const now = new Date();
     const nowTime = Math.floor(now.getTime() / 1000);
-    // let oldTime = !time ? 1689335912 : time
-    // console.log(oldTime)
-    // console.log(nowTime)
-    for (const el of allCar[5][1]) {
+     for (const el of allCar[5][1]) {
         let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
         let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
         let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
         if (rr.messages.length === 0 || rez && rez.length === 0) {
-            console.log('нет новый данных')
+          null
         }
         else {
-            //   console.log(rr, rez)
-            while (rez && rr.messages.length !== rez.length) {
+                      while (rez && rr.messages.length !== rez.length) {
                 rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
                 rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
                 nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
 
             }
-            // console.log(rr.messages.length);
-            //   console.log(rez.length);
-            const mass = [];
+                    const mass = [];
             allArray = ggg(nameSens, rez)
             rr.messages.forEach(e => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
@@ -128,10 +122,8 @@ exports.test = async () => {
                 el.push(arr)
             });
             await databaseService.saveChartDataToBase(mass);
-            console.log('запись сделана по id' + ' ' + el.nm);
-        }
+                 }
     }
-    console.log('запись окончена')
 }
 
 exports.hunterTime = async () => {
@@ -282,6 +274,7 @@ async function zaprosSpisokb(name) {
                     }
                     for (let y = 0; y < paramsRes.length; y++) {
                         if (paramsRes[y].name === modelUniqValues[k].temp) {
+                            //   console.log(name)
                             massItog.push([name[i][0], modelUniqValues[k].pressure, parseFloat(integer), parseFloat(paramsRes[y].value), osiBar, name[i][1], name[i][2], name[i][3]]);
                         }
                     }
@@ -301,8 +294,88 @@ function queryDB(sql) {
     });
 }
 
+
+function isSensorLost(el) {
+    return el[6] > 5 && el[3] <= -50;
+}
+
+function isTemperatureHigh(el) {
+    return el[3] > 70 && el[6] > 5;
+}
+
+function isPressureHigh(el) {
+    return el[2] >= Number(el[4].kvd) && el[3] > -50 && el[6] > 5;
+}
+
+function isPressureLow(el) {
+    return el[2] <= Number(el[4].knd) && el[3] > -50 && el[6] > 5;
+}
+
+function handleNewAlarmCase(data, el, alarm) {
+    databaseService.alarmBase(data, el, alarm);
+}
+
 function proverka(arr) {
-    console.log('проверка')
+    console.log('проверка');
+    const time = new Date();
+
+    arr.forEach(el => {
+        if (el[4] === undefined) {
+            return;
+        }
+
+        let alarm;
+        const sqls1 = `SELECT * FROM alarms WHERE idw=${el[5]} AND senspressure='${el[1]}'`;
+
+        connection.query(sqls1, function (err, results) {
+            if (err) console.log(err);
+
+            if (results.length === 0) {
+                if (isSensorLost(el)) {
+                    alarm = 'Потеря связи с датчиком';
+                } else if (isTemperatureHigh(el)) {
+                    alarm = 'Критически высокая температура';
+                } else if (isPressureLow(el)) {
+                    alarm = 'Критически низкое давление';
+                } else if (isPressureHigh(el)) {
+                    alarm = 'Критически высокое давление';
+                }
+
+                if (alarm) {
+                    const data = createDate();
+                    handleNewAlarmCase(data, el, alarm);
+                }
+
+                return;
+            }
+
+            const lastResult = results[results.length - 1];
+
+            if (isSensorLost(el)) {
+                if (lastResult.alarm !== 'Потеря связи с датчиком') {
+                    alarm = 'Потеря связи с датчиком';
+                }
+            } else if (isPressureLow(el) || isPressureHigh(el)) {
+                if (lastResult.bar !== String(el[2]) && lastResult.alarm !== 'Потеря связи с датчиком') {
+                    alarm = isPressureLow(el) ? 'Критически низкое давление' : 'Критически высокое давление';
+                }
+            } else {
+                if (lastResult.alarm !== 'Норма') {
+                    alarm = 'Норма';
+                }
+            }
+
+            if (alarm) {
+                const data = createDate();
+                handleNewAlarmCase(data, el, alarm);
+            }
+        });
+    });
+}
+
+/*
+function proverka(arr) {
+
     const time = new Date()
     arr.forEach(el => {
         if (el[4] === undefined) {
@@ -426,4 +499,4 @@ function proverka(arr) {
             });
         }
     })
-}
+}*/

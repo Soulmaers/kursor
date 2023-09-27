@@ -233,30 +233,32 @@ export const viewList = async (login) => {
     }
     const ress = await fetch('/api/viewList', param)
     const results = await ress.json()
-    const objChangeList = results.res[0]
-    delete objChangeList.login
-    delete objChangeList.id
-    const parsedObj = {};
-    for (let key in objChangeList) {
-        parsedObj[key] = JSON.parse(objChangeList[key]);
-    }
-    const parsedTtile = Object.assign({}, parsedObj);
-    delete parsedObj.tagach
-    for (let key in parsedObj) {
-        if (key === 'pricep') {
-            parsedObj.pressure = parsedObj.pricep
-            delete parsedObj.pricep
-        }
-    }
+    console.log(results)
+   
     if (results.res.length === 0) {
         globalSelect()
         return
     } else {
+        const objChangeList = results.res[0]
+        delete objChangeList.login
+        delete objChangeList.id
+        const parsedObj = {};
+        for (let key in objChangeList) {
+            parsedObj[key] = JSON.parse(objChangeList[key]);
+        }
+        const parsedTtile = Object.assign({}, parsedObj);
+        delete parsedObj.tagach
+        for (let key in parsedObj) {
+            if (key === 'pricep') {
+                parsedObj.pressure = parsedObj.pricep
+                delete parsedObj.pricep
+            }
+        }
         const uniqBar = document.querySelectorAll('.uniqBar')
         uniqBar.forEach(el => {
             el.children[0].checked = parsedObj[el.children[0].id].view === false ? false : true
         })
-    }
+   
     const titleChangeList = document.querySelectorAll('.title_list_global')
     titleChangeList.forEach(el => {
         el.style.display = parsedObj[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')].view === false ? 'none' : 'flex'
@@ -279,6 +281,7 @@ export const viewList = async (login) => {
         });
     }
     globalSelect()
+    }
 }
 export async function alternativa(arr) {
     return new Promise(async function (resolve, reject) {

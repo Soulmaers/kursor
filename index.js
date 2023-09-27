@@ -15,6 +15,7 @@ const wialonModule = require('./backend/modules/wialon.module');
 const databaseService = require('./backend/services/database.service');
 const globalstart = require('./backend/controllers/data.controller.js');
 const WebSocket = require('ws');
+const webpush = require('web-push');
 require('events').EventEmitter.prototype._maxListeners = 0;
 
 //const socked = require('./backend/services/database.services.js')
