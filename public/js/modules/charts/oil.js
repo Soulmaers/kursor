@@ -63,15 +63,15 @@ export async function oil(t1, t2) {
             object.geo = geo
             if (el.sens === 'Топливо' || el.sens === 'Топливо ДУТ') {
                 object.left = el.value.map(it => {
-                    return it === -348201.3876 ? it = 0 : it
+                    return it === -348201.3876||it===undefined ? it = 0 : it
                 })
             }
             else {
                 object.right = el.value
             }
         })
-        const data = object.time.map((t, i) => ({
-            geo: object.geo[i],
+         const data = object.time.map((t, i) => (console.log(object.left[i]) ,{
+                   geo: object.geo[i],
             time: t,
             oil: object.left ? Number(object.left[i].toFixed(0)) : 0,
             pwr: object.right ? Number(object.right[i] != null ? Number(object.right[i]).toFixed(0) : 0) : null
