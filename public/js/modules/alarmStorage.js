@@ -1,7 +1,7 @@
 import { tr } from './content.js'
 import { convert } from './helpersFunc.js'
 import { ggg } from './menu.js'
-import { createMap, createMapsUniq } from './geo.js'
+import { createMapsUniq } from './geo.js'
 import { testovfn } from './charts/bar.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { DraggableContainer } from '../class/Dragdown.js'
