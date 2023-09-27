@@ -2065,6 +2065,12 @@ div.spoyler {
   margin-left: 30px;
 }
 
+.tooltipIcon{
+  color:rgba(6, 28, 71, 1);
+background-color: #fff;
+font-size: 0.8rem;
+font-weight: bold;
+}
 .actoStatic {
   border: 2px solid green;
   background-color: lightcyan;

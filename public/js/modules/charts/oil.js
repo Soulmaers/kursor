@@ -6,8 +6,7 @@ import { createMapsUniq } from '../geo.js'
 
 export async function oil(t1, t2) {
     console.log(t1, t2)
-    console.log('график топлива')
-    const noGraf = document.querySelector('.noGraf')
+     const noGraf = document.querySelector('.noGraf')
     const active = document.querySelector('.color').id
     const nameCar = document.querySelector('.color').children[0].textContent
     console.log(nameCar)
@@ -290,7 +289,7 @@ export async function oil(t1, t2) {
         // добавляем вторую ось y
         svg.append("g")
             .attr("class", "os2y")
-            .attr("transform", "translate(" + width + ", 0)")
+            .attr("transform", "translate(" + width + ", 40)")
             .call(yAxis2)
             .selectAll(".tick text")
             .attr("x", '15')
@@ -364,7 +363,6 @@ export async function oil(t1, t2) {
             .attr("text-anchor", "end")
             .text("Напряжение, В")
 
-
         const tooltipOil = svg.append("text")
             .attr("class", "tooltipIcon")
             .style("opacity", 0);
@@ -417,29 +415,26 @@ export async function oil(t1, t2) {
                 createMapsUniq([], d, 'oil')
             })
 
-        /* .on("mousemove", function (d) {
+         .on("mousemove", function (d) {
              d3.select(this).style("opacity", 1);
              //  const tooltipOil = d3.select('.tooltipOil');
+           d3.select('.tooltip')
+               .style("opacity", 0)
              tooltipOil.transition()
                  .duration(200)
                  .style("opacity", 1);
              tooltipOil.attr("x", x(new Date(d.data)) - 40)
-                 .attr("y", 20)
+                 .attr("y", 35)
                  .attr("text-anchor", "middle")
-                 .text('Заправка');
-             const toll = document.querySelector('.tooltip')
-             if (toll) {
-                 toll.remove();
-             }
-         })
+                 .text(`Заправка: ${d.zapravka} л.`)
+            
+                    })
          .on("mouseout", function (d) {
              d3.select(this).style("opacity", 0.5);
-             // const tooltipOil = d3.select('.tooltipOil');
-             const toll = document.querySelector('.tooltip')
-             if (toll) {
-                 toll.remove();
-             }
-         });*/
+             tooltipOil.transition()
+                 .duration(200)
+                 .style("opacity", 0);
+         });
 
         const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
         preloaderGraf.style.opacity = 0;
@@ -823,7 +818,7 @@ export async function oil(t1, t2) {
             });
         }
 
-        svg.on("mousemove", function (d) {
+       
             svg.on("mousemove", function (d) {
                 const toll = document.querySelector('.tooltip')
                 if (toll) {
@@ -858,13 +853,13 @@ export async function oil(t1, t2) {
                 tooltip.html(`Время: ${(selectedTime)}<br/>Топливо: ${oilTool}<br/>Бортовое питание: ${d.pwr}`)
             })
                 // Добавляем обработчик события mouseout, чтобы скрыть подсказку
-                .on("mouseout", function (event, d) {
+                svg.on("mouseout", function (event, d) {
                     const tooltip = d3.select('.tooltip')
                     tooltip.transition()
                         .duration(500)
                         .style("opacity", 0);
                 });
-        })
+    
         const legendOil = document.querySelectorAll('.legendOil')
         const inf = document.querySelector('.infos')
         new Tooltip(inf, ['График отражает топливо и бортовое питание', 'Чтобы увеличить график, надо выделить область мышкой слева направо', 'Чтобы вернуть график в предыдущий масштаб, надо выделить область мышкой справа налево', 'Чтобы сбросить масштабирование, два раза кликните на график ']);
