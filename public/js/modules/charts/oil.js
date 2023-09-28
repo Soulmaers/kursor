@@ -38,6 +38,9 @@ export async function oil(t1, t2) {
         const geo = itogy.map(it => {
             return it.geo
         })
+        const speed = itogy.map(it => {
+            return it.speed
+        })
         const allArrNew = [];
         nameArr.forEach((item) => {
             allArrNew.push({ sens: item[0], params: item[1], value: [] })
@@ -61,6 +64,7 @@ export async function oil(t1, t2) {
         finishArrayData.forEach(el => {
             object.time = gl
             object.geo = geo
+            object.speed = speed
             if (el.sens === 'Топливо' || el.sens === 'Топливо ДУТ') {
                 object.left = el.value.map(it => {
                     return it === -348201.3876||it===undefined ? it = 0 : it
@@ -70,22 +74,25 @@ export async function oil(t1, t2) {
                 object.right = el.value
             }
         })
-         const data = object.time.map((t, i) => (console.log(object.left[i]) ,{
+        console.log(object)
+         const data = object.time.map((t, i) => ({
                    geo: object.geo[i],
+             speed: object.speed[i],
             time: t,
             oil: object.left ? Number(object.left[i].toFixed(0)) : 0,
             pwr: object.right ? Number(object.right[i] != null ? Number(object.right[i]).toFixed(0) : 0) : null
         }))
         const dat = [...data];
-        for (let i = 0; i < dat.length - 1; i++) {
+       /* for (let i = 0; i < dat.length - 1; i++) {
             if (dat[i].oil === dat[i + 1].oil) {
                 dat.splice(i, 1);
                 i--; // уменьшаем индекс, чтобы не пропустить следующий объект после удаления
             }
-        }
+        }*/
         const increasingIntervals = [];
         let start = 0;
         let end = 0;
+
         for (let i = 0; i < dat.length - 1; i++) {
             const currentObj = dat[i];
             const nextObj = dat[i + 1];
@@ -96,13 +103,23 @@ export async function oil(t1, t2) {
                 end = i + 1;
             } else if (currentObj.oil > nextObj.oil) {
                 if (start !== end) {
-                    increasingIntervals.push([dat[start], dat[end]]);
+                    const interval = dat.slice(start, end + 1);
+                    const highSpeedCount = interval.filter(obj => obj.speed > 10).length;
+
+                    if (highSpeedCount < 3) {
+                        increasingIntervals.push([dat[start], dat[end]]);
+                    }
                 }
                 start = end = i + 1;
             }
         }
         if (start !== end) {
-            increasingIntervals.push([dat[start], dat[end]]);
+            const interval = dat.slice(start, end + 1);
+            const highSpeedCount = interval.filter(obj => obj.speed > 10).length;
+
+            if (highSpeedCount < 3) {
+                increasingIntervals.push([dat[start], dat[end]]);
+            }
         }
         console.log(increasingIntervals)
         const zapravkaAll = increasingIntervals.filter((interval, index) => {
@@ -127,6 +144,7 @@ export async function oil(t1, t2) {
                 zapravkaAll.splice(i + 1, 1);
             }
         }
+        console.log(zapravkaAll)
         const zapravka = zapravkaAll.filter(e => e[0].pwr >= 16 || e[0].pwr == null);
         const filteredZapravka = zapravka.filter(e => {
             const time0 = (e[0].time).getTime() / 1000;
@@ -151,18 +169,28 @@ export async function oil(t1, t2) {
         const rashod = rash.reduce((el, acc) => el + acc, 0)
         console.log(rashod);
         console.log(filteredZapravka)
-        const objOil = filteredZapravka.map(it => {
-            const oilValue = it[1].oil - it[0].oil
-            const date = new Date(it[0].time);
-            const day = date.getDate();
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear();
-            const hours = date.getHours().toString().padStart(2, '0');
-            const minutes = date.getMinutes().toString().padStart(2, '0');
-            const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-            // console.log(formattedDate);
-            return { data: it[0].time, geo: it[0].geo, zapravka: oilValue, time: formattedDate, icon: "../../../image/refuel.png" }
-        })
+        const objOil = filteredZapravka.reduce((result, it) => {
+            const oilValue = it[1].oil - it[0].oil;
+            console.log(oilValue)
+            if (oilValue > 10&& it[1].speed<10||it[0].speed<10) {
+                const date = new Date(it[0].time);
+                const day = date.getDate();
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const year = date.getFullYear();
+                const hours = date.getHours().toString().padStart(2, '0');
+                const minutes = date.getMinutes().toString().padStart(2, '0');
+                const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+
+                result.push({
+                    data: it[0].time,
+                    geo: it[0].geo,
+                    zapravka: oilValue,
+                    time: formattedDate,
+                    icon: "../../../image/refuel.png"
+                });
+            }
+            return result;
+        }, []);
 
         const grafOld = document.querySelector('.infoGraf')
         if (grafOld) {
