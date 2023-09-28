@@ -5,10 +5,50 @@ import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
 import { convertTime, removeArrElem } from './helpersFunc.js'
 import { globalSelect } from './filtersList.js'
-
+import  {dataspisok}  from './menu.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
+simulateLoader();
 
+
+let sensorsName = false;
+let lastSensor = false;
+let updateSensor = false;
+
+function simulateLoader() {
+    let progress = 0;
+    let loaderProgress = document.querySelector('.loaders-progress');
+
+    let interval = setInterval(function () {
+        progress = updateProgress(progress);
+
+        if (progress >= 100) {
+            clearInterval(interval);
+            const loaders = document.querySelector('.loaders');
+            loaders.style.display = 'none';
+        } else {
+            loaderProgress.textContent = progress + '%';
+        }
+    }, 200);
+}
+
+function updateProgress(progress) {
+    let load = 0;
+
+    if (dataspisok) {
+        progress = sensorsName ? 66 : 40;
+        load += sensorsName ? 1 : 0;
+
+        if (sensorsName && lastSensor) {
+            progress = updateSensor ? 100 : 95;
+            load++;
+        }
+    } else {
+        progress += 3 * (load === 1 ? 2 : (load === 2 ? 3 : 1));
+    }
+
+    return progress;
+}
 
 export async function loadParamsViewList(car, el) {
     console.log('ты работаешь?')
@@ -52,8 +92,8 @@ export async function conturTest(testov) {
     if (groups) {
         removeArrElem(groups)
     }
-    const preloader = document.querySelector('.preloader') /* находим блок Preloader */
-    preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
+    //const preloader = document.querySelector('.preloader') /* находим блок Preloader */
+   // preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
     const listItem = document.querySelectorAll('.listItem')
     if (listItem) {
         removeArrElem(listItem)
@@ -313,10 +353,14 @@ export async function alternativa(arr) {
             })
             arrNameSens.push(arrName)
         })
+        sensorsName=true
         const res = await fetch('/api/lastSensors', param)
         const result = await res.json()
+lastSensor = true
+     
         const restest = await fetch('/api/updateSensors', param)
         const resulttest = await restest.json()
+       updateSensor = true
         const updateTime = Object.entries(resulttest.res).map(el => {
             return {
                 id: parseFloat(el[0]), lastime: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.m : null,

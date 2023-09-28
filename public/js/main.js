@@ -46,10 +46,10 @@ async function init() {
 
     }
 
-
+/*
     const res = await fetch('/api/viewLogs', param)
     const confirm = await res.json()
-    console.log(confirm)
+    console.log(confirm)*/
 
     
          zapros(login) //делаем запрос на wialon получаем объекты
@@ -81,13 +81,10 @@ async function init() {
     wrapperFull.style.minHeight = screen.height - 80 + 'px'
     lowList.style.height = wrapperFull.clientHeight - 20 + 'px';
     console.log(lowList.style.height)
-    async function waitAndExecute() {
-        const preloader = document.querySelector('.preloader');
-        preloader.classList.add('preloader_hidden');
-
-        // Другой код, который должен выполниться после завершения работы функции zaprosSpisok
-    }
 }
+
+
+
 init();
 
 
