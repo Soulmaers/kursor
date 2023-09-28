@@ -113,14 +113,14 @@ exports.test = async () => {
             allArray = ggg(nameSens, rez)
             rr.messages.forEach(e => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
-                mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, new Date(e.t * 1000), e.pos.s, e.p.sats, geo]);
+                mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, new Date(e.t * 1000), e.pos.s, e.p.sats, geo, e.pos.c]);
             });
             const sens = rez.map(e => JSON.stringify(e));
             const arr = JSON.stringify(allArray)
             mass.forEach((el, index) => {
                 el.push(sens[index]);
                 el.push(arr)
-            });
+                         });
             await databaseService.saveChartDataToBase(mass);
                  }
     }
