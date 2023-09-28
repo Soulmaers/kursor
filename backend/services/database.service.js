@@ -81,7 +81,7 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
 exports.saveChartDataToBase = async (mass) => {
     //console.log(mass);
     try {
-        const sql = `INSERT INTO chartData(idw, nameCar, data,time, speed,sats, geo, sens, allSensParams) VALUES ?`;
+        const sql = `INSERT INTO chartData(idw, nameCar, data,time, speed,sats, geo, curse, sens, allSensParams) VALUES ?`;
         connection.query(sql, [mass], function (err, results) {
             if (err) console.log(err);
         });

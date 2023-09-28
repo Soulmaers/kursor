@@ -108,9 +108,9 @@ function zapross() {
     const params11 = {
         "itemId": 26702371,
         "ivalType": 1,
-        "timeFrom": 1695799819 - 743800,
+        "timeFrom": 1695427200,
         "timeTo":
-            1695799819,
+            1695513600,
         "detectors": [
             {
                 "type": 'sensors',
@@ -137,9 +137,9 @@ function zapross() {
                 "selector": {
                     "type": '*',
                     //   "expr": 'trips{m<90}',
-                    "timeFrom": 1695799819 - 743800,
+                    "timeFrom": 1695427200,
                     "timeTo":
-                        1695799819,
+                        1695513600,
                     "detalization": 23
                 }
             }
