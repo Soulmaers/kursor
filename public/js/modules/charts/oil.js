@@ -83,16 +83,15 @@ export async function oil(t1, t2) {
             pwr: object.right ? Number(object.right[i] != null ? Number(object.right[i]).toFixed(0) : 0) : null
         }))
         const dat = [...data];
-       /* for (let i = 0; i < dat.length - 1; i++) {
+        for (let i = 0; i < dat.length - 1; i++) {
             if (dat[i].oil === dat[i + 1].oil) {
                 dat.splice(i, 1);
                 i--; // уменьшаем индекс, чтобы не пропустить следующий объект после удаления
             }
-        }*/
+        }
         const increasingIntervals = [];
         let start = 0;
         let end = 0;
-
         for (let i = 0; i < dat.length - 1; i++) {
             const currentObj = dat[i];
             const nextObj = dat[i + 1];
@@ -103,24 +102,15 @@ export async function oil(t1, t2) {
                 end = i + 1;
             } else if (currentObj.oil > nextObj.oil) {
                 if (start !== end) {
-                    const interval = dat.slice(start, end + 1);
-                    const highSpeedCount = interval.filter(obj => obj.speed > 10).length;
-
-                    if (highSpeedCount < 3) {
-                        increasingIntervals.push([dat[start], dat[end]]);
-                    }
+                    increasingIntervals.push([dat[start], dat[end]]);
                 }
                 start = end = i + 1;
             }
         }
         if (start !== end) {
-            const interval = dat.slice(start, end + 1);
-            const highSpeedCount = interval.filter(obj => obj.speed > 10).length;
-
-            if (highSpeedCount < 3) {
-                increasingIntervals.push([dat[start], dat[end]]);
-            }
+            increasingIntervals.push([dat[start], dat[end]]);
         }
+        
         console.log(increasingIntervals)
         const zapravkaAll = increasingIntervals.filter((interval, index) => {
             const firstOil = interval[0].oil;

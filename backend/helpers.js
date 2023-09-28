@@ -40,5 +40,8 @@ exports.processing = async (arr, timez, idw, geoLoc, group, name, start) => {
     if (event === 'Потеря связи') {
         mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, lasttime: `${newdata.lasttime}` }]
     }
+    if (event === 'Состояние') {
+        mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, condition: `${newdata.lasttime}` }]
+    }
     return { msg: mess, logins: res }
 }

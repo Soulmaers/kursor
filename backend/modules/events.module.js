@@ -15,36 +15,55 @@ exports.eventFunction = async (arr) => {
 
 }
 
+const objCondition={
+    0:'Стоянка',
+    1:'Поездка',
+    2:'Остановка'
+}
 function lastMsgFunc(rt, all) {
     const itogEvents = Object.entries(rt).map(el => {
         const eventObject = el[1][1] ? Object.values(Object.values(el[1])[1])[0] : null
-        if (eventObject) {
+            if (eventObject) {
             return {
                 id: el[0],
                 time: eventObject.m,
-                geo: [eventObject.to.y, eventObject.to.x]
-
+                geo: [eventObject.to.y, eventObject.to.x],
+                condition: objCondition[eventObject.state]
             };
         }
         return { event: null };
     }).filter(eventObj => eventObj.event !== null);
     const mass = [];
+    const condition=[]
     const nowDate = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
 
     all.forEach(e => {
         itogEvents.forEach(it => {
             if (parseFloat(it.id) === e[4]) {
                 const lastTime = nowDate - it.time
-                mass.push({ id: it.id, group: e[5], name: e[0].message, lastTime: lastTime, time: it.time, geo: it.geo, });
+                mass.push({ id: it.id, group: e[5], name: e[0].message, lastTime: lastTime, time: it.time, geo: it.geo });
+                condition.push({ id: it.id, group: e[5], name: e[0].message, condition:it.condition, time: it.time, geo: it.geo })
             }
         });
     });
-
     mass.forEach(e => {
             e.lastTime > 3600 ? checkSortLastTime(e.id, e.group, e.name, e.time, e.geo) : null
     })
-
+    condition.forEach(e=>{
+    //    checkSortCondition(e.id, e.group, e.name, e.condition,e.time, e.geo)
+    })
 }
+
+async function checkSortCondition(idw, group, name, condition, time, geo) {
+       const data = [{
+        event: 'Состояние',
+        condition: `${condition}`
+    }]
+      const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
+    console.log(time,condition,name,res)
+   }
+
+
 async function checkSortLastTime(idw, group, name, time, geo) {
        const times = new Date(time * 1000)
     const day = times.getDate();

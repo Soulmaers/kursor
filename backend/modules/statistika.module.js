@@ -290,7 +290,7 @@ function moto(data) {
                 startIndex = index;
             }
         });
-        const subarray = data.time.slice(startIndex);
+            const subarray = data.time.slice(startIndex);
         const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex) };
         (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
         (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
@@ -337,11 +337,11 @@ function moto(data) {
             const timeGran = razgruzka.map(el => {
                 return [el.time[0], el.time[el.time.length - 1]]
             })
-            const mass = [];
+                   const mass = [];
             if (timeGran.length > 1) {
                 let start = 0; // начальный индекс для сравнения
                 for (let i = 0; i < timeGran.length - 1; i++) {
-                    const diffInSeconds = (timeGran[i + 1][0].getTime() - timeGran[start][1].getTime()) / 1000;
+                                      const diffInSeconds = (timeGran[i + 1][0].getTime() - timeGran[start][1].getTime()) / 1000;
                     if (diffInSeconds > 900) {
                         mass.push([timeGran[start][0], timeGran[start][1]])
                         start = i + 1; // обновляем начальный индекс
@@ -412,7 +412,7 @@ function rashodCalc(data, name, group, idw) {
                 interval.splice(1, 1)
             }
         }
-        return firstOil > 5 && difference >= threshold;
+        return firstOil > 5 && difference > 60 && difference >= threshold;
     });
 
     for (let i = 0; i < zapravka.length - 1; i++) {

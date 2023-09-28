@@ -121,7 +121,7 @@ exports.test = async () => {
                 el.push(sens[index]);
                 el.push(arr)
                          });
-            await databaseService.saveChartDataToBase(mass);
+                     await databaseService.saveChartDataToBase(mass);
                  }
     }
 }

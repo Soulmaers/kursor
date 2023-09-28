@@ -845,7 +845,7 @@ exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
             checkExistQuery = `SELECT * FROM logs WHERE litragh='${start}' AND idw='${idw}'`
         }
         else {
-            checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'`
+            checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'AND idw='${idw}'`
         }
 
         connection.query(checkExistQuery, function (err, results) {

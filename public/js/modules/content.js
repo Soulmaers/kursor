@@ -125,6 +125,9 @@ export const titleLogs = `<h3 class="trLogs">
          <li class="item_type"><i class="fas fa-check graysEvent"></i>
             <p class="text_types">Потеря связи</p>
         </li>
+         <li class="item_type"><i class="fas fa-check graysEvent"></i>
+            <p class="text_types">Состояние</p>
+        </li>
         <li class="item_type"><i class="fas fa-check graysEvent"></i>
             <p class="text_types">Тех. обслуживание</p>
         </li>
