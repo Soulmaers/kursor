@@ -54,7 +54,7 @@ function updateProgress(progress) {
             load += 1;
         }
     } else {
-        progress += 3 * (load === 1 ? 2 : (load === 2 ? 3 : 1));
+        progress += 1 * (load === 1 ? 2 : (load === 2 ? 3 : 1));
     }
 
     return progress;
