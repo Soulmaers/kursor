@@ -30,6 +30,7 @@ background-color: rgba(6, 28, 71, 1);
   color:#fff
 }
 
+
 .loaders-globe {
   width: 150px;
   height: 170px;
@@ -1339,9 +1340,10 @@ div.spoyler {
 .menu {
   width: 50%;
   display: flex;
-  align-items: center;
-  padding: 10px 0;
-}
+  align-items: end;
+  height: 60px;
+  margin-left:15px
+  }
 
 .control_panel {
   display: flex;
@@ -5554,7 +5556,7 @@ input[type="text"]:focus {
 .sections {
   display: flex;
   /* min-width: 450px;*/
-  width: 25%
+  width: 26%
 }
 
 .list_arr2 {
@@ -6266,7 +6268,8 @@ input[type="text"]:focus {
 
 
 .monitoring {
-  margin-left: 15px;
+  padding:8px;
+margin:0 10px;
 }
 
 
@@ -8165,4 +8168,10 @@ i.acEvent {
 
 .toogleIconEvent {
   color: rgba(6, 28, 71, 1);
+}
+
+.tablo{
+  background-color: #fff;
+  color: rgba(6, 28, 71, 1);
+  border-radius: 5px 5px 0 0;
 }
