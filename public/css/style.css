@@ -34,8 +34,8 @@ background-color: rgba(6, 28, 71, 1);
 }
 
 .loaders-globe {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background-image: url(../image/test4.png);
   background-position: center;
