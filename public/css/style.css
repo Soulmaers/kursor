@@ -37,11 +37,11 @@ background-color: rgba(6, 28, 71, 1);
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background-image: url(../image/test4.png);
+  background-image: url(../image/gl1.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  animation: spin-horizontal 2s infinite linear;
+  animation: spin-horizontal 5s infinite linear;
 }
 
 @keyframes spin-horizontal {

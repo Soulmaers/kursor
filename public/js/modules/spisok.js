@@ -33,16 +33,22 @@ function simulateLoader() {
 }
 
 function updateProgress(progress) {
-    if(progress===95){
+    if(progress===95||progress===96){
         return progress
     }
     let load = 0;
 
     if (dataspisok) {
         if (sensorsName) {
+            const loaderGlobal = document.querySelector('.loaders-globe')
+            loaderGlobal
+            loaderGlobal.style.animation = 'spin-horizontal 1s infinite linear'
             progress = 66;
             load += 1;
         } else {
+            const loaderGlobal = document.querySelector('.loaders-globe')
+            loaderGlobal
+          loaderGlobal.style.animation='spin-horizontal 2s infinite linear'
             progress = 52;
         }
 
@@ -50,11 +56,14 @@ function updateProgress(progress) {
             progress = 100;
             load += 1;
         } else if (lastSensor) {
+            const loaderGlobal = document.querySelector('.loaders-globe')
+            loaderGlobal
+            loaderGlobal.style.animation = 'spin-horizontal 0.5s infinite linear'
             progress = 95;
             load += 1;
         }
     } else {
-        progress += 1 * (load === 1 ? 2 : (load === 2 ? 3 : 1));
+        progress += 2 * (load === 1 ? 2 : (load === 2 ? 3 : 1));
     }
 
     return progress;
