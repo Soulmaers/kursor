@@ -160,12 +160,10 @@ mobileItem.forEach(el => {
     })
 })
 
-
-
-
-
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
+    const tablo = document.querySelector('.tablo')
+    tablo? tablo.classList.remove('tablo'):null
     const pen = document.querySelectorAll('.rigthFrame')[0]
     const main = document.querySelector('.main')
     const start = document.querySelector('.start')
@@ -333,10 +331,22 @@ btnDash.addEventListener('click', () => {
 
 });
 
+
+const monitoring=document.querySelectorAll('.monitoring')
+monitoring.forEach(e=>{
+    e.addEventListener('click', ()=>{
+        monitoring.forEach(el=>{
+            el.classList.remove('tablo')
+        })
+        e.classList.add('tablo')
+    })
+})
 const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', mainblock)
 
 function mainblock() {
+    const rightFrame=document.querySelector('.rigthFrame')
+    rightFrame.style.display='flex'
     const wrapperFull = document.querySelector('.wrapperFull')
     const lowList = document.querySelector('.low_list')
     lowList.style.height = wrapperFull.clientHeight - 20 + 'px';

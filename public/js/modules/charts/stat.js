@@ -57,8 +57,8 @@ function dashDav(arrg) {
         4: []
 
     }
-    arr.forEach(el => {
-        const type = generStat(el.params);
+      arr.forEach(el => {
+             const type = generStat(el.params);
         if (color.hasOwnProperty(type)) {
             color[type].push(el.nameCar ? el.nameCar : console.log(el.nameCar));
         } else {

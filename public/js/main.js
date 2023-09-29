@@ -35,7 +35,7 @@ async function init() {
 
     }
 
-    inits();
+   // inits();
 
     const param = {
         method: "POST",
