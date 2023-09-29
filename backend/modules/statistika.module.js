@@ -6,7 +6,7 @@ async function testovfn(active, t1, t2) {
     return resultt
 }
 exports.startAllStatic = async (objects) => {
-      const interval = timefn()
+       const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
     structura.datas(objects, timeNow, timeOld)
@@ -25,8 +25,9 @@ exports.startAllStatic = async (objects) => {
         //   .filter(e => e[0].message.startsWith('Sitrack'))
         .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)
         .map(e => e);
-
+   // console.log(array)
     const res = await loadValue(array, timeOld, timeNow)
+    console.log(res)
       return res.uniq
 }
 async function loadValue(array, timeOld, timeNow) {
@@ -44,8 +45,8 @@ async function loadValue(array, timeOld, timeNow) {
 
         try {
             const itog = await testovfn(idw, timeOld, timeNow)
-            itog.forEach(el => {
-                const timestamp = Number(el.data);
+                 itog.forEach(el => {
+                                             const timestamp = Number(el.data);
                 const date = new Date(timestamp * 1000);
                 const isoString = date.toISOString();
                 time.push(new Date(isoString))
@@ -60,7 +61,7 @@ async function loadValue(array, timeOld, timeNow) {
                 return { sens: JSON.parse(it.allSensParams).map(e => e[0]), params: JSON.parse(it.allSensParams).map(e => e[1]), val: JSON.parse(it.allSensParams).map(e => e[2]) }
             })
             if (allsens.length === 0) {
-                continue
+                            continue
             }
             const allArrNew = allsens.reduce((accumulator, current) => {
                 current.sens.forEach((sens, idx) => {

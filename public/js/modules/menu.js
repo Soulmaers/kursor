@@ -1,7 +1,7 @@
 
 import { conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
-import { yesterdaySummary, startAllStati } from './startAllStatic.js'
+import { yesterdaySummary} from './startAllStatic.js'
 import { startList } from './checkObjectStart.js'
 import { logsView } from './popup.js'
 

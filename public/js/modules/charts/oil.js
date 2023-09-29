@@ -434,7 +434,7 @@ export async function oil(t1, t2) {
             })
 
          .on("mousemove", function (d) {
-             d3.select(this).style("opacity", 1);
+            // d3.select(this).style("opacity", 1);
              //  const tooltipOil = d3.select('.tooltipOil');
            d3.select('.tooltip')
                .style("opacity", 0)
@@ -448,7 +448,7 @@ export async function oil(t1, t2) {
             
                     })
          .on("mouseout", function (d) {
-             d3.select(this).style("opacity", 0.5);
+           //  d3.select(this).style("opacity", 0.5);
              tooltipOil.transition()
                  .duration(200)
                  .style("opacity", 0);

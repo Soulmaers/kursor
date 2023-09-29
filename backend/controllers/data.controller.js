@@ -19,7 +19,7 @@ exports.dataSpisok = async (req, res) => {
             login = req.body.login
         }
         else {
-            login = 'i'
+            login = 'soulmaers'
         }
         const data = await wialonService.getAllGroupDataFromWialon(login);
               const aLLmassObject = [];
@@ -49,14 +49,14 @@ exports.dataSpisok = async (req, res) => {
                     console.log(e)
                 }
             }));
-                     const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
+                             const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
             aLLmassObject.push(objectsWithGroup);
             aLLmassObject.reverse();
         }
         if (req && req.body && req.body.login) {
             await res.json({ response: { aLLmassObject, arrName } });
         }
-               return aLLmassObject
+                     return aLLmassObject
     }
     catch (e) {
         console.log(e)
@@ -192,8 +192,8 @@ async function updateParams(data) {
     });
     ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
     await zaprosSpisokb(nameCar)
-    const res = await constorller.dataSpisok()
-    const global = await statistika.startAllStatic(res)
+     const res = await constorller.dataSpisok()
+         const global = await statistika.startAllStatic(res)
     const prostoy = await statistika.popupProstoy(res)
     await events.eventFunction(res)
     const arraySummary = Object.entries(global)
@@ -281,7 +281,7 @@ async function zaprosSpisokb(name) {
 function queryDB(sql) {
     return new Promise((resolve, reject) => {
         connection.query(sql, function (err, results) {
-            if (err) return reject(err);
+            if (err)console.log(err);
             return resolve(results);
         });
     });

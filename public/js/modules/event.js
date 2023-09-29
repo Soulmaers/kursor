@@ -337,6 +337,9 @@ const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', mainblock)
 
 function mainblock() {
+    const wrapperFull = document.querySelector('.wrapperFull')
+    const lowList = document.querySelector('.low_list')
+    lowList.style.height = wrapperFull.clientHeight - 20 + 'px';
     const wrapMap = document.querySelector('.wrapMap')
     if (wrapMap) {
         wrapMap.remove();
@@ -731,14 +734,15 @@ plug[2].addEventListener('click', () => {
     const sections = document.querySelector('.sections')
     const wrapList = document.querySelector('.wrapList')
     const techInfo = document.querySelector('.techInfo')
+    const lowList=document.querySelector('.low_list')
     plug[2].classList.add('activGraf')
     wRight.style.display = 'none';
     techInfo.style.display = 'none';
     wLeft.style.display = 'none';
     grafics.style.display = 'flex';
     if (widthWind > 860) {
-        wrapList.style.overflowY = 'auto';
-        wrapList.style.height = '300px';
+     //   wrapList.style.overflow = 'auto';
+               lowList.style.height = '300px';
         model.style.zoom = '0.65'
         model.style.MozTransformOrigin = "top"
         model.style.MozTransform = "scale(0.65)"
