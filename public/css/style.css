@@ -34,10 +34,9 @@ background-color: rgba(6, 28, 71, 1);
 }
 
 .loaders-globe {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-image: url(../image/gl1.png);
+  width: 150px;
+  height: 170px;
+    background-image: url(../image/gl1.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
