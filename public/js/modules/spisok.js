@@ -14,7 +14,7 @@ simulateLoader();
 let sensorsName = false;
 let lastSensor = false;
 let updateSensor = false;
-
+let finishload=false
 function simulateLoader() {
     let progress = 0;
     let loaderProgress = document.querySelector('.loaders-progress');
@@ -22,26 +22,36 @@ function simulateLoader() {
     let interval = setInterval(function () {
         progress = updateProgress(progress);
 
-        if (progress >= 100) {
+        if (finishload) {
             clearInterval(interval);
             const loaders = document.querySelector('.loaders');
             loaders.style.display = 'none';
         } else {
             loaderProgress.textContent = progress + '%';
         }
-    }, 200);
+    }, 300);
 }
 
 function updateProgress(progress) {
+    if(progress===95){
+        return progress
+    }
     let load = 0;
 
     if (dataspisok) {
-        progress = sensorsName ? 66 : 40;
-        load += sensorsName ? 1 : 0;
+        if (sensorsName) {
+            progress = 66;
+            load += 1;
+        } else {
+            progress = 52;
+        }
 
-        if (sensorsName && lastSensor) {
-            progress = updateSensor ? 100 : 95;
-            load++;
+        if (lastSensor && finishload) {
+            progress = 100;
+            load += 1;
+        } else if (lastSensor) {
+            progress = 95;
+            load += 1;
         }
     } else {
         progress += 3 * (load === 1 ? 2 : (load === 2 ? 3 : 1));
@@ -252,7 +262,7 @@ export async function conturTest(testov) {
             })
         }
     })
-
+    finishload=true
     //  const preloader = document.querySelector('.preloader');
     //  preloader.classList.add('preloader_hidden');
     viewList(login)
