@@ -112,22 +112,10 @@ exports.lastSensors = async (req, res) => {
 
 
 exports.updateSensors = async (req, res) => {
-    const idw = req.body.idw
-    const login = req.body.login
     const arr = req.body.arr
-
-    /* const promises = arr.map(async (idw) => {
-         const lastSensors = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(idw)
-         //  console.log(lastSensors)
-         return { result: lastSensors, idw };
-     });*/
-
-    // Дождаться завершения всех промисов и вернуть результат
-    try {
+     try {
         const result = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(arr)
-        //     const result = await Promise.all(promises);
-        //   console.log(result)
-        res.json({ res: result });
+             res.json({ res: result });
     } catch (err) {
         console.error(err);
         res.status(500).send("Произошла ошибка");
@@ -158,12 +146,8 @@ exports.viewStructura = async (req, res) => {
     const idw = req.body.active
     const t1 = [req.body.tt1]
     const t2 = [req.body.tt2]
-    console.log('структура?')
-    // console.log(t1, t2)
-    //    console.time()
-    const params = await databaseService.viewStructuraToBase(idw, t1, t2)
-    // console.timeEnd()
-    res.json(params)
+        const params = await databaseService.viewStructuraToBase(idw, t1, t2)
+       res.json(params)
 }
 exports.viewChart = async (req, res) => {
     const idw = req.body.active
@@ -174,8 +158,7 @@ exports.viewChart = async (req, res) => {
 }
 
 exports.quantityLogs = async (req, res) => {
-    console.log('предКВАНТ')
-    const login = req.body.login;
+      const login = req.body.login;
     const data = await databaseService.quantityFindToBase(login)
     res.json(data)
 }

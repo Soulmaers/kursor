@@ -56,6 +56,13 @@ async function createPopup(array) {
 let previus = 0;
 let num = 0;
 export async function logsView(array) {
+    let bool = false
+    array.forEach(el => {
+        el.length !== 0 ? bool = true : null
+    })
+    if (!bool) {
+        return
+    }
     const login = document.querySelectorAll('.log')[1].textContent
     const arrayId = array
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов

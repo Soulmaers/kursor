@@ -348,7 +348,7 @@ function conditionFilter() {
     const element = document.querySelector('.conditionSort');
     const sortCondition = document.querySelector('.sortCondition')
     const grays = document.querySelectorAll('.grays')
-    element.addEventListener('mouseenter', () => {
+       element.addEventListener('mouseenter', () => {
         element.style.width = '70px'
         sortIcon.style.display = 'block'
     })

@@ -13,8 +13,7 @@ require('dotenv').config();
 
 //готовим данные и отправляем ответ на клиент который отрисовывает список
 exports.dataSpisok = async (req, res) => {
-    //  await databaseService.createIndexDataToDatabase()
-    try {
+       try {
         let login;
         if (req && req.body && req.body.login) {
             login = req.body.login
@@ -23,35 +22,34 @@ exports.dataSpisok = async (req, res) => {
             login = 'i'
         }
         const data = await wialonService.getAllGroupDataFromWialon(login);
-        const aLLmassObject = [];
+              const aLLmassObject = [];
         const arrName = [];
         for (const elem of data.items) {
             const nameGroup = elem.nm;
             const nameObject = elem.u;
             const massObject = [];
             await Promise.all(nameObject.map(async (el, index) => {
-                // console.log(el)
-                try {
+                        try {
                     const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
-                    if (!all.item) {
+                                 if (!all.item) {
                         return;
                     }
                     const objects = all.item.nm;
                     const idw = all.item.id
                     arrName.push([objects, idw])
-                                    const prob = await databaseService.loadParamsViewList(objects, el);
-                                   const massObjectCar = await databaseService.dostupObject(login);
+                                     const prob = await databaseService.loadParamsViewList(objects, el);
+                                  const massObjectCar = await databaseService.dostupObject(login);
                                                if (massObjectCar.includes(`${prob[4]}`)) {
                         prob.group = nameGroup;
                         massObject.push(prob);
-                                         }
+                                               }
+                                         
                 }
                 catch (e) {
                     console.log(e)
                 }
             }));
-          
-            const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
+                     const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
             aLLmassObject.push(objectsWithGroup);
             aLLmassObject.reverse();
         }
@@ -210,8 +208,7 @@ async function updateParams(data) {
         const idw = el[0]
         const arrayInfo = el[1]
         const res = await databaseService.summaryToBase(idw, arrayInfo, datas)
-        console.log(res)
-    })
+           })
 
 }
 
