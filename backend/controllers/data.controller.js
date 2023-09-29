@@ -39,20 +39,18 @@ exports.dataSpisok = async (req, res) => {
                     const objects = all.item.nm;
                     const idw = all.item.id
                     arrName.push([objects, idw])
-                    //  console.log(objects, el)
-                    const prob = await databaseService.loadParamsViewList(objects, el);
-                    //  console.log(prob)
-                    const massObjectCar = await databaseService.dostupObject(login);
-                    //   console.log(massObjectCar)
-                    if (massObjectCar.includes(prob[0].message.replace(/\s+/g, ''))) {
+                                    const prob = await databaseService.loadParamsViewList(objects, el);
+                                   const massObjectCar = await databaseService.dostupObject(login);
+                                               if (massObjectCar.includes(`${prob[4]}`)) {
                         prob.group = nameGroup;
                         massObject.push(prob);
-                    }
+                                         }
                 }
                 catch (e) {
                     console.log(e)
                 }
             }));
+          
             const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
             aLLmassObject.push(objectsWithGroup);
             aLLmassObject.reverse();

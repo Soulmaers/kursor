@@ -480,10 +480,11 @@ exports.dostupObject = async (login) => {
     return new Promise((resolve, reject) => {
         try {
             if (isNaN(login)) {
-                const selectBase = `SELECT Object FROM userObjects WHERE login='${login}'`
+                const selectBase = `SELECT idw FROM userObjects WHERE login='${login}'`
                 connection.query(selectBase, function (err, results) {
                     if (err) console.log(err);
-                    const nameCarCheck = results.map(elem => elem.Object)
+                   // console.log(results)
+                    const nameCarCheck = results.map(elem => elem.idw)
                     resolve(nameCarCheck)
                 })
             }
@@ -879,7 +880,7 @@ exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
 
 
 exports.logsFindToBase = async (id) => {
-    return new Promise((resolve, reject) => {
+     return new Promise((resolve, reject) => {
         const postModel = `SELECT * FROM logs WHERE idw IN (${id.join(',')})`;
         connection.query(postModel, function (err, results) {
             if (err)

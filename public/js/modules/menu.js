@@ -46,7 +46,7 @@ export async function zapros(login) {
     }
     const mods = await fetch('/api/dataSpisok', params)
     const models = await mods.json()
-    console.log(models)
+ 
     const arrayList = models.response.aLLmassObject
     const nameCarCheck = models.response.arrName
     //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
@@ -58,7 +58,7 @@ export async function zapros(login) {
     startList(arrayList)
     logsView(arrayList)
     //передаем имена объектов для отображения в панели администратора
-    checkCreate(nameCarCheck)
+     checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')
     if (tiresActiv) {
         tiresActiv.remove()

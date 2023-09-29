@@ -255,7 +255,7 @@ module.exports.checkObject = (req, res) => {
 module.exports.viewCheckObject = (req, res) => {
     const login = req.body.name
     try {
-        const selectBase = `SELECT Object FROM userObjects WHERE login='${login}'`
+        const selectBase = `SELECT Object, idw FROM userObjects WHERE login='${login}'`
         pool.query(selectBase, function (err, results) {
             if (err) console.log(err);
             res.json({ result: results })

@@ -308,7 +308,7 @@ export async function deleteFn(id, log) {
 }
 
 export function checkCreate(nameCar) {
-    const ide = document.getElementById('all')
+       const ide = document.getElementById('all')
     nameCar.forEach(elem => {
         const box = document.querySelector('.check_boxs')
         const activePost = elem[0].replace(/\s+/g, '')
@@ -423,8 +423,7 @@ async function fnViewcheck(name) {
     }
     const res = await fetch('/api/viewCheckObject', param)
     const response = await res.json()
-    console.log(response)
-    if (response.result.length === 0) {
+     if (response.result.length === 0) {
         checkboxes.forEach(el => {
             el.checked = false
             ide.checked = true
@@ -433,9 +432,8 @@ async function fnViewcheck(name) {
     else {
         checkboxes.forEach(el => {
             el.checked = false
-            // ide.checked = true
-            response.result.forEach(item => {
-                if (el.value === item.Object) {
+                 response.result.forEach(item => {
+                if (el.id === item.idw) {
                     ide.checked = false
                     el.checked = true;
                 }
