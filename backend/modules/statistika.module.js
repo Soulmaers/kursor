@@ -6,8 +6,7 @@ async function testovfn(active, t1, t2) {
     return resultt
 }
 exports.startAllStatic = async (objects) => {
-    console.log('статик?')
-    const interval = timefn()
+      const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
     structura.datas(objects, timeNow, timeOld)
@@ -28,8 +27,7 @@ exports.startAllStatic = async (objects) => {
         .map(e => e);
 
     const res = await loadValue(array, timeOld, timeNow)
-    console.log(res)
-    return res.uniq
+      return res.uniq
 }
 async function loadValue(array, timeOld, timeNow) {
     const uniqObject = {};
@@ -58,11 +56,7 @@ async function loadValue(array, timeOld, timeNow) {
             const sensArr = itog.map(e => {
                 return JSON.parse(e.sens)
             })
-            //   const nameSens = JSON.parse(itog[itog.length - 1].allSensParams) //await wialonService.getAllNameSensorsIdDataFromWialon(idw)
-            console.log(name)
-            //    console.log(itog)
-            //console.log(nameSens)
-            const allsens = itog.map(it => {
+                  const allsens = itog.map(it => {
                 return { sens: JSON.parse(it.allSensParams).map(e => e[0]), params: JSON.parse(it.allSensParams).map(e => e[1]), val: JSON.parse(it.allSensParams).map(e => e[2]) }
             })
             if (allsens.length === 0) {

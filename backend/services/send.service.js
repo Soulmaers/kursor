@@ -86,8 +86,7 @@ exports.sendWhat = async(mess,login) => {
                 };
                 request(options, async function (error, response) {
                     if (error) throw new Error(error);
-                    console.log(response.body);
-                });
+                                 });
                 
             });
            

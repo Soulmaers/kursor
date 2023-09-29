@@ -81,7 +81,7 @@ async function checkSortLastTime(idw, group, name, time, geo) {
 
 function oilFunc(rt, all) {
     const itogEvents = Object.entries(rt).map(el => {
-        const eventObject = Object.values(Object.values(el[1])[0].lls)[0];
+         const eventObject = el[1][0].lls ?Object.values(Object.values(el[1])[0].lls)[0]:null
         const fill = eventObject ? Object.values(Object.values(el[1])[0].lls)[0].filled !== 0 ? Object.values(Object.values(el[1])[0].lls)[0].filled : null : null
         if (eventObject && fill) {
             return {

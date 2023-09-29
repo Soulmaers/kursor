@@ -155,8 +155,7 @@ function ggg(nameSens, rez) {
 
 
 async function updateParams(data) {
-    console.log('работаем?')
-    data ? data : data = dataGlobal
+      data ? data : data = dataGlobal
     const nameCar = [];
     const allCar = Object.entries(data)
     allCar[5][1].forEach(async el => {
