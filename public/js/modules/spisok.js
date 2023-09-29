@@ -40,15 +40,10 @@ function updateProgress(progress) {
 
     if (dataspisok) {
         if (sensorsName) {
-            const loaderGlobal = document.querySelector('.loaders-globe')
-            loaderGlobal
-            loaderGlobal.style.animation = 'spin-horizontal 1s infinite linear'
-            progress = 66;
+                      progress = 66;
             load += 1;
         } else {
-            const loaderGlobal = document.querySelector('.loaders-globe')
-            loaderGlobal
-          loaderGlobal.style.animation='spin-horizontal 2s infinite linear'
+       
             progress = 52;
         }
 
@@ -56,10 +51,7 @@ function updateProgress(progress) {
             progress = 100;
             load += 1;
         } else if (lastSensor) {
-            const loaderGlobal = document.querySelector('.loaders-globe')
-            loaderGlobal
-            loaderGlobal.style.animation = 'spin-horizontal 0.5s infinite linear'
-            progress = 95;
+                  progress = 95;
             load += 1;
         }
     } else {
