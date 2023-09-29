@@ -60,8 +60,7 @@ exports.dataSpisok = async (req, res) => {
         if (req && req.body && req.body.login) {
             await res.json({ response: { aLLmassObject, arrName } });
         }
-        //console.log(aLLmassObject)
-        return aLLmassObject
+               return aLLmassObject
     }
     catch (e) {
         console.log(e)

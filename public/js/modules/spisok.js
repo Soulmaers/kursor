@@ -264,8 +264,6 @@ export async function conturTest(testov) {
         }
     })
     finishload=true
-    //  const preloader = document.querySelector('.preloader');
-    //  preloader.classList.add('preloader_hidden');
     viewList(login)
     hiddenWindows()
     navigator();
@@ -406,7 +404,8 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
         if (i.id === elemId) {
             const nowTime = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
             const currentTime = nowTime - i.lastime
-            updatetime = i.lastime == null ? undefined : convertTime(currentTime)
+                          statusnew = currentTime>3600? 'ВЫКЛ':statusnew
+                updatetime = i.lastime == null ? undefined : convertTime(currentTime)
             const speed = i.speed === -348201.3876 ? '-' : i.speed
             if (speed > 5) {
                 condition = `<i class="fas fa-arrow-alt-circle-right toogleIcon" rel="01g"></i>`;
