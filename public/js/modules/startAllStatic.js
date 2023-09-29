@@ -116,8 +116,7 @@ async function loadValue(array, timeOld, timeNow) {
         hh[0].oil = oil[0]
         const oneArrayOil = hh.filter(el => !el.sens.startsWith('Топливо'));
         // prostoyHH = oneArrayOil[0].oil !== undefined && oneArrayOil[0].oil.every(item => item >= 0) ? oilHH(oneArrayOil[0]) : 0
-        console.log(prostoyHH)
-    }
+     }
 }
 
 function oilHH(data) {
@@ -125,7 +124,6 @@ function oilHH(data) {
     const arr = [];
     let currentObj = null;
     let currentArr = [];
-
     for (let i = 0; i < data.value.length; i++) {
         const currentValue = data.value[i];
         const currentSpeed = data.speed[i];
@@ -155,11 +153,7 @@ function oilHH(data) {
     if (currentObj) {
         arr.push(currentArr);
     }
-
-
-    console.log(arr)
     const newArr = [];
-
     arr.forEach(subArr => {
         const newSubArr = { value: [], speed: [], oil: [], time: [], sats: [] };
 
@@ -177,25 +171,7 @@ function oilHH(data) {
         newArr.push(newSubArr);
     });
 
-    console.log(newArr);
-
-    /*
-        const filteredArr = arr.map(subArr => {
-            const filteredSubArr = { value: [], speed: [], oil: [], time: [], sats: [] };
-    
-            for (let i = 0; i < subArr[0].speed.length; i++) {
-                if (subArr[0].speed[i] < 5) {
-                    filteredSubArr.value.push(subArr[0].value[i]);
-                    filteredSubArr.speed.push(subArr[0].speed[i]);
-                    filteredSubArr.oil.push(subArr[0].oil[i]);
-                    filteredSubArr.time.push(subArr[0].time[i]);
-                    filteredSubArr.sats.push(subArr[0].sats[i]);
-                }
-            }
-    
-            return filteredSubArr;
-        });*/
-
+ 
     const timeProstoy = newArr.map(el => {
         return { time: [el[0].time[0], el[0].time[el[0].time.length - 1]], oil: [el[0].oil[0], el[0].oil[el[0].oil.length - 1]], speed: [el[0].speed[0], el[0].speed[el[0].speed.length - 1]] }
     })
@@ -251,6 +227,13 @@ export function timefn() {
     return [timeNow, timeOld]
 }
 export async function yesterdaySummary(interval, type, element) {
+    let bool=false
+    allObjects.forEach(el=>{
+        el.length!==0?bool=true:null
+    })
+      if(!bool){
+        return
+    }
     let int;
     if (interval === 'Неделя') {
         int = 7
@@ -275,6 +258,7 @@ export async function yesterdaySummary(interval, type, element) {
     }
     const mods = await fetch('/api/summaryYestoday', params)
     const models = await mods.json()
+    console.log(models)
     const mod = type ? models.filter(el => el.type === type) : models
     mod.forEach(it => {
         it.rashod < 0 ? it.rashod = 0 : it.rashod

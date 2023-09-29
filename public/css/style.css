@@ -24,9 +24,6 @@ body {
   z-index: 9999;
 background-color: rgba(6, 28, 71, 1);
 }
-
-
-
 .loaders-progress {
   margin-top:10px;
   font-size: 20px;

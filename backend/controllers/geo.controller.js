@@ -33,8 +33,7 @@ exports.geoloc = async (req, res) => {
         allCar[5].forEach(el => {
             if (el.id === Number(idw)) {
                 if (el.pos) {
-                    console.log(el.pos)
-                    geoX = el.pos.x
+                                  geoX = el.pos.x
                     geoY = el.pos.y
                     course=el.pos.c
                 }

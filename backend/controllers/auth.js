@@ -204,7 +204,7 @@ function logLogin(username, ip, platform, device) {
         if (err) {
             console.error('Ошибка записи лога:', err);
         } else {
-            console.log('Лог успешно записан');
+          null//  console.log('Лог успешно записан');
         }
     });
   }

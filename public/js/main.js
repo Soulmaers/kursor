@@ -12,7 +12,7 @@ function waitForDOMLoad() {
 }
 
 async function init() {
-    await waitForDOMLoad(); // Ожидаем загрузку всего DOM
+ //   await waitForDOMLoad(); // Ожидаем загрузку всего DOM
     //  waitAndExecute(); // Запускаем функцию после загрузки DOM
 
 

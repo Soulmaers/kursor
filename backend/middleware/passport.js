@@ -5,19 +5,10 @@ const db = require('../config/db')
 
 
 const cookieExtractor = function (req) {
-    console.log('job2')
-    // console.log(req.cookies['AuthToken'])
     var token = null;
     if (req && req.cookies.AuthToken) token = req.cookies['AuthToken'];
-    // console.log(token)
-
     return token;
-    //  const jwtExample = req.cookies['AuthToken']
-    // console.log(valid)
-
-    // console.log(req.cookies)
-
-};
+ };
 
 module.exports = function (passport) {
     var opts = {};
