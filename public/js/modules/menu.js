@@ -43,7 +43,8 @@ export async function zapros(login) {
     //startAllStati(arrayList)
     conturTest(arrayList)
     startList(arrayList)
-    logsView(arrayList)
+   // logsView(arrayList)
+    setInterval(logsView, 10000, arrayList)
     //передаем имена объектов для отображения в панели администратора
      checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')

@@ -56,7 +56,7 @@ async function createPopup(array) {
 let previus = 0;
 let num = 0;
 export async function logsView(array) {
-    let bool = false
+      let bool = false
     array.forEach(el => {
         el.length !== 0 ? bool = true : null
     })
@@ -267,7 +267,7 @@ export async function logsView(array) {
     }).catch(error => {
         console.error(error);
     })
-    setTimeout(logsView, 10000, array)
+    
 }
 
 function clickHandlerObject(event){

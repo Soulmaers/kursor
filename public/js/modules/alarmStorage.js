@@ -53,6 +53,7 @@ export async function alarmFind() {
 }
 
 async function viewAlarmStorage(name, stor) {
+
     function removeDuplicates(arr) {
         const result = [];
         const duplicatesIndexes = [];
@@ -76,7 +77,6 @@ async function viewAlarmStorage(name, stor) {
     }
     const result = stor.map((arr) => removeDuplicates(arr))
     const tbody = document.querySelector('.tbody')
-
     tbody.innerHTML = tr
     const oneName = document.querySelector('.oneName')
     const info = document.createElement('div')

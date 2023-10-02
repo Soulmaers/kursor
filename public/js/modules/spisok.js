@@ -334,8 +334,7 @@ export const viewList = async (login) => {
 }
 export async function alternativa(arr) {
     return new Promise(async function (resolve, reject) {
-        const allobj = {};
-        const param = {
+               const param = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -352,8 +351,6 @@ export async function alternativa(arr) {
         const nameSens = results.res.map(e => {
             return { sens: Object.entries(e.result.item.sens), id: e.idw }
         })
-
-
         nameSens.forEach(el => {
             const arrName = [];
             el.sens.forEach(it => {
@@ -362,7 +359,7 @@ export async function alternativa(arr) {
             })
             arrNameSens.push(arrName)
         })
-        sensorsName=true
+              sensorsName=true
         const res = await fetch('/api/lastSensors', param)
         const result = await res.json()
 lastSensor = true
@@ -388,8 +385,10 @@ lastSensor = true
                 }
             })
             resolve([allArr, updateTime])
-        }
-
+         //   allArr.splice(0, allArr.length);
+            arrNameSens.splice(0,  arrNameSens.length);
+                 // updateTime.splice(0, arrNameSens.length);
+            }
     });
 }
 function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in1) {
