@@ -1408,8 +1408,11 @@ div.spoyler {
   font-size: 1rem;
 }
 
-.monitoring:hover {
-  border-bottom: 1px solid #fff;
+.monitoring:hover .w20 {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
 }
 
 .logo {
@@ -7539,7 +7542,7 @@ display: flex;
   width: 30px
 }
 .w20 {
-  width: 20px
+margin-right:10px;
 }
 .f {
   margin: 0 5px;
