@@ -5567,7 +5567,6 @@ input[type="text"]:focus {
 }
 
 
-
 .list_name2 {
   font-size: 0.8rem;
   min-width: 120px;
@@ -6270,8 +6269,8 @@ input[type="text"]:focus {
 .monitoring {
   padding:8px;
 margin:0 10px;
+display: flex;
 }
-
 
 .alarmOpen {
   box-sizing: border-box;
@@ -7539,7 +7538,9 @@ margin:0 10px;
 .w30 {
   width: 30px
 }
-
+.w20 {
+  width: 20px
+}
 .f {
   margin: 0 5px;
   width: 14px;
