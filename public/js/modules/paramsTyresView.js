@@ -44,10 +44,11 @@ export async function loadParamsView() {
         'Если зажигание выключено, то колесо будет черным, а последние зафиксированные показатели серым цветом',
         'При наведении на колесо появится подсказка с параметром колеса и актуальностью данных'])
     viewPokasateli()
-    intervalId = setInterval(viewPokasateli, 120000);
-    isProcessing = false;
 
+    intervalId = setInterval(viewPokasateli, 60000)
+    isProcessing = false;
 }
+
 export let tsiparam;
 function createViewModel(model) {
     console.log(model)
@@ -226,33 +227,42 @@ export function viewMenuParams() {
 
 
 export async function viewPokasateli() {
-    const btnShina = document.querySelectorAll('.modals')
-    if (btnShina[1].classList.contains('active') === true) {
+    const color = document.querySelector('.color')
+    console.log(color)
+    if (!color) {
         return
     }
-    let activePost;
-    const active = document.querySelectorAll('.color')
-    activePost = active[0].children[0].textContent.replace(/\s+/g, '')
-    const idw = document.querySelector('.color').id
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ activePost, idw }))
+    else {
+        console.log('апдейт?')
+        const btnShina = document.querySelectorAll('.modals')
+        if (btnShina[1].classList.contains('active') === true) {
+            return
+        }
+        let activePost;
+        const active = document.querySelectorAll('.color')
+        activePost = active[0].children[0].textContent.replace(/\s+/g, '')
+        const idw = document.querySelector('.color').id
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ activePost, idw }))
+        }
+        const paramsss = await fetch('/api/tyresView', param)
+        const params = await paramsss.json()
+        const datas = await fetch('/api/wialon', param)
+        const data = await datas.json()
+        const os = await fetch('/api/barView', param)
+        const osi = await os.json()
+        data.sort((prev, next) => {
+            if (prev.name < next.name) return -1;
+            if (prev.name < next.name) return 1;
+        })
+        view(data)
+        viewConfigurator(data, params.result, osi.result)
+
     }
-    const paramsss = await fetch('/api/tyresView', param)
-    const params = await paramsss.json()
-    const datas = await fetch('/api/wialon', param)
-    const data = await datas.json()
-    const os = await fetch('/api/barView', param)
-    const osi = await os.json()
-    data.sort((prev, next) => {
-        if (prev.name < next.name) return -1;
-        if (prev.name < next.name) return 1;
-    })
-    view(data)
-    viewConfigurator(data, params.result, osi.result)
 }
 
 

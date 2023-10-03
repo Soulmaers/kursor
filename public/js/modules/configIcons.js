@@ -99,13 +99,11 @@ async function postIconParams(activePost, param, coef, id, idw) {
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Параметр сохранен'
     messaga.style.color = 'green'
-    console.log('сохранить')
     setTimeout(() => messaga.textContent = '', 3000)
     iconFind(idw)
 }
 
 export async function iconFind(idw) {
-    console.log(idw)
     const changeParams = document.querySelector('.changeParams')
     const card = document.querySelectorAll('.icon_card')
     const params = {
@@ -119,8 +117,6 @@ export async function iconFind(idw) {
     const arg = await argy.json()
     const parFind = await fetch('/api/iconFind', params)
     const paramssyFind = await parFind.json()
-    console.log(arg)
-    console.log(paramssyFind)
     arg.forEach(el => {
         paramssyFind.result.forEach(it => {
             if (el.name === it.params) {
@@ -135,13 +131,11 @@ export async function iconFind(idw) {
                         if (it.icons === 'odom-card') {
                             const val = addZero(8, (el.value * it.coef).toFixed(0))
                             elem.children[0].textContent = val// + 'км'
-                            console.log(elem.children[0].textContent)
                         }
                         if (it.icons === 'ign-card') {
                             if (idw !== '25766831') {
                                 const val = el.value
                                 elem.children[0].textContent = val + '° C'
-                                console.log(elem.children[0].textContent)
                                 val > 0 ? elem.children[0].textContent = 'ВКЛ' : elem.children[0].textContent = 'ВЫКЛ';
                                 const ignTest = document.querySelector('.ignTest_card')
                                 if (ignTest) {
