@@ -22,8 +22,8 @@ let time;
 let timeIcon;
 
 export async function visual(el) {
-    const color=document.querySelector('.color')
-    color? color.classList.remove('color'):null
+    const color = document.querySelector('.color')
+    color ? color.classList.remove('color') : null
     console.log(el)
     const main = document.querySelector('.main')
     const choice = document.querySelector('.choice')
@@ -162,8 +162,8 @@ export async function visual(el) {
     tooltip()
     await iconFind(idw)
     await iconParams()
-
     await alarmFind()
+
     findTyresInstall()
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
@@ -355,7 +355,7 @@ export async function viewConfigurator(arg, params, osi) {
                         if (el.name === item.temp) {
                             tiresLink.forEach(e => {
                                 if (e.id == item.tyresdiv) {
-                                                                        if (el.value === '-128' || el.value === '-50' || el.value === '-51') {
+                                    if (el.value === '-128' || el.value === '-50' || el.value === '-51') {
                                         el.value = 'err'
                                         e.children[1].style.color = 'red'
                                         e.children[1].textContent = el.value

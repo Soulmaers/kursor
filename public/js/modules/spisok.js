@@ -5,7 +5,7 @@ import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
 import { convertTime, removeArrElem } from './helpersFunc.js'
 import { globalSelect } from './filtersList.js'
-import  {dataspisok}  from './menu.js'
+import { dataspisok } from './menu.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
 simulateLoader();
@@ -14,7 +14,7 @@ simulateLoader();
 let sensorsName = false;
 let lastSensor = false;
 let updateSensor = false;
-let finishload=false
+let finishload = false
 function simulateLoader() {
     let progress = 0;
     let loaderProgress = document.querySelector('.loaders-progress');
@@ -33,17 +33,17 @@ function simulateLoader() {
 }
 
 function updateProgress(progress) {
-    if(progress===95||progress===96){
+    if (progress === 95 || progress === 96) {
         return progress
     }
     let load = 0;
 
     if (dataspisok) {
         if (sensorsName) {
-                      progress = 66;
+            progress = 66;
             load += 1;
         } else {
-       
+
             progress = 52;
         }
 
@@ -51,7 +51,7 @@ function updateProgress(progress) {
             progress = 100;
             load += 1;
         } else if (lastSensor) {
-                  progress = 95;
+            progress = 95;
             load += 1;
         }
     } else {
@@ -104,7 +104,7 @@ export async function conturTest(testov) {
         removeArrElem(groups)
     }
     //const preloader = document.querySelector('.preloader') /* находим блок Preloader */
-   // preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
+    // preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
     const listItem = document.querySelectorAll('.listItem')
     if (listItem) {
         removeArrElem(listItem)
@@ -263,12 +263,12 @@ export async function conturTest(testov) {
             })
         }
     })
-    finishload=true
+    finishload = true
     viewList(login)
     hiddenWindows()
     navigator();
     sortAll()
-    setTimeout(zaprosSpisok, 1000)
+    setInterval(zaprosSpisok, 30000)
 
 }
 
@@ -283,7 +283,7 @@ export const viewList = async (login) => {
     const ress = await fetch('/api/viewList', param)
     const results = await ress.json()
     console.log(results)
-   
+
     if (results.res.length === 0) {
         globalSelect()
         return
@@ -307,40 +307,41 @@ export const viewList = async (login) => {
         uniqBar.forEach(el => {
             el.children[0].checked = parsedObj[el.children[0].id].view === false ? false : true
         })
-   
-    const titleChangeList = document.querySelectorAll('.title_list_global')
-    titleChangeList.forEach(el => {
-        el.style.display = parsedObj[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')].view === false ? 'none' : 'flex'
-    })
 
-    const newCelChange = document.querySelectorAll('.newCelChange')
-    newCelChange.forEach(el => {
-        el.style.display = parsedObj[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')].view === false ? 'none' : 'flex'
-    })
-    for (let key in parsedTtile) {
-        const index = parsedTtile[key].index;
-        const rel = key;
-        const attributeList = Array.from(document.querySelectorAll('[rel]')).filter((el) => {
-            return el.getAttribute('rel').split(' ').includes(rel);
-        });
-        attributeList.forEach(el => {
-            const parent = el.parentNode;
-            const sibling = parent.children[index + 1];
-            parent.insertBefore(el, sibling);
-        });
-    }
-    globalSelect()
+        const titleChangeList = document.querySelectorAll('.title_list_global')
+        titleChangeList.forEach(el => {
+            el.style.display = parsedObj[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')].view === false ? 'none' : 'flex'
+        })
+
+        const newCelChange = document.querySelectorAll('.newCelChange')
+        newCelChange.forEach(el => {
+            el.style.display = parsedObj[el.getAttribute('rel').split(' ')[1] ? el.getAttribute('rel').split(' ')[0] : el.getAttribute('rel')].view === false ? 'none' : 'flex'
+        })
+        for (let key in parsedTtile) {
+            const index = parsedTtile[key].index;
+            const rel = key;
+            const attributeList = Array.from(document.querySelectorAll('[rel]')).filter((el) => {
+                return el.getAttribute('rel').split(' ').includes(rel);
+            });
+            attributeList.forEach(el => {
+                const parent = el.parentNode;
+                const sibling = parent.children[index + 1];
+                parent.insertBefore(el, sibling);
+            });
+        }
+        globalSelect()
     }
 }
 export async function alternativa(arr) {
     return new Promise(async function (resolve, reject) {
-               const param = {
+        const param = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
             body: (JSON.stringify({ arr }))
         }
+        console.log('делаем обновление по трем запросам')
         const ress = await fetch('/api/sensorsName', param)
         const results = await ress.json()
 
@@ -359,14 +360,14 @@ export async function alternativa(arr) {
             })
             arrNameSens.push(arrName)
         })
-              sensorsName=true
+        sensorsName = true
         const res = await fetch('/api/lastSensors', param)
         const result = await res.json()
-lastSensor = true
-     
+        lastSensor = true
+
         const restest = await fetch('/api/updateSensors', param)
         const resulttest = await restest.json()
-       updateSensor = true
+        updateSensor = true
         const updateTime = Object.entries(resulttest.res).map(el => {
             return {
                 id: parseFloat(el[0]), lastime: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.m : null,
@@ -385,10 +386,10 @@ lastSensor = true
                 }
             })
             resolve([allArr, updateTime])
-         //   allArr.splice(0, allArr.length);
-            arrNameSens.splice(0,  arrNameSens.length);
-                 // updateTime.splice(0, arrNameSens.length);
-            }
+            //   allArr.splice(0, allArr.length);
+            arrNameSens.splice(0, arrNameSens.length);
+            // updateTime.splice(0, arrNameSens.length);
+        }
     });
 }
 function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in1) {
@@ -403,8 +404,8 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
         if (i.id === elemId) {
             const nowTime = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
             const currentTime = nowTime - i.lastime
-                          statusnew = currentTime>3600? 'ВЫКЛ':statusnew
-                updatetime = i.lastime == null ? undefined : convertTime(currentTime)
+            statusnew = currentTime > 3600 ? 'ВЫКЛ' : statusnew
+            updatetime = i.lastime == null ? undefined : convertTime(currentTime)
             const speed = i.speed === -348201.3876 ? '-' : i.speed
             if (speed > 5) {
                 condition = `<i class="fas fa-arrow-alt-circle-right toogleIcon" rel="01g"></i>`;
@@ -735,7 +736,6 @@ export async function zaprosSpisok() {
     const todays = today + ' ' + time
     updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
-setInterval(zaprosSpisok, 10000)
 async function viewListKoleso(model, params, arg, osi, nameCar, inn, res) {
     let in1;
     let statusnew;

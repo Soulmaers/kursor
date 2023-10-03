@@ -2,8 +2,9 @@ const databaseService = require('../services/database.service');
 
 module.exports.alarmFind = async (req, res) => {
     const idw = req.body.idw
-    const tyresp = req.body.tyresP
-    const alarms = await databaseService.alarmFindtoBase(idw, tyresp)
+    // const tyresp = req.body.tyresP
+    const array = req.body.sorTyrest
+    const alarms = await databaseService.alarmFindtoBase(idw, array)
     res.json(alarms)
 }
 

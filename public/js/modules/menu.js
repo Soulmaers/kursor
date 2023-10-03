@@ -1,7 +1,7 @@
 
 import { conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
-import { yesterdaySummary} from './startAllStatic.js'
+import { yesterdaySummary } from './startAllStatic.js'
 import { startList } from './checkObjectStart.js'
 import { logsView } from './popup.js'
 
@@ -33,20 +33,20 @@ export async function zapros(login) {
     }
     const mods = await fetch('/api/dataSpisok', params)
     const models = await mods.json()
- 
+
     const arrayList = models.response.aLLmassObject
     const nameCarCheck = models.response.arrName
     //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
     console.log(arrayList)
     allObjects = arrayList
-    dataspisok=true
+    dataspisok = true
     //startAllStati(arrayList)
     conturTest(arrayList)
     startList(arrayList)
-   logsView(arrayList)
-    setInterval(logsView, 10000, arrayList)
+    logsView(arrayList)
+    setInterval(logsView, 60000, arrayList)
     //передаем имена объектов для отображения в панели администратора
-     checkCreate(nameCarCheck)
+    checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')
     if (tiresActiv) {
         tiresActiv.remove()

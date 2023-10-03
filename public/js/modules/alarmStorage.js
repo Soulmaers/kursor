@@ -31,29 +31,47 @@ export async function alarmFind() {
     }
     const tyres = await fetch('/api/tyresView', par)
     const tyresmassiv = await tyres.json();
-    if (tyresmassiv.result) {
-        console.log(tyresmassiv.result)
-        const sorTyres = convert(tyresmassiv.result)
-        const storValue = [];
-        sorTyres.forEach(async e => {
-            const tyresP = e.pressure
-            const stor = await fetch('/api/alarmFind', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ idw, tyresP })
-            })
-            const storList = await stor.json();
-            storValue.push(storList)
+    console.log(tyresmassiv)
+    if (tyresmassiv.result.length !== 0) {
+        const sorTyrest = convert(tyresmassiv.result).reduce((acc, el) => {
+            acc.push(el.pressure)
+            return acc;
+        }, [])
+
+        const stor = await fetch('/api/alarmFind', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idw, sorTyrest })
         })
-        setTimeout(viewAlarmStorage, 1000, idw, storValue)
+        const storList = await stor.json();
+        viewAlarmStorage(idw, storList)
     }
     isProcessing = false
 }
 
-async function viewAlarmStorage(name, stor) {
 
+const funcSortArray = (arr) => {
+    const duplicates = {};
+    // Проходимся по каждому объекту в исходном массиве
+    arr.forEach(obj => {
+        const { senspressure } = obj;
+        if (!duplicates[senspressure]) {
+            // Если в объекте duplicates еще нет подмассива с текущим значением "pressure", создаем его
+            duplicates[senspressure] = [obj];
+        } else {
+            // Если подмассив уже существует, добавляем текущий объект в него
+            duplicates[senspressure].push(obj);
+        }
+    });
+    // Преобразуем объект duplicates в массив подмассивов с одинаковыми объектами по свойству "pressure"
+    const resultArray = Object.values(duplicates);
+    return resultArray
+}
+
+async function viewAlarmStorage(name, stor) {
+    const resultArray = funcSortArray(stor)
     function removeDuplicates(arr) {
         const result = [];
         const duplicatesIndexes = [];
@@ -75,7 +93,7 @@ async function viewAlarmStorage(name, stor) {
         });
         return result;
     }
-    const result = stor.map((arr) => removeDuplicates(arr))
+    const result = resultArray.map((arr) => removeDuplicates(arr))
     const tbody = document.querySelector('.tbody')
     tbody.innerHTML = tr
     const oneName = document.querySelector('.oneName')
@@ -351,6 +369,7 @@ const minus = document.querySelector('.minus')
 const alarmStorage = document.querySelector('.alarmStorage')
 
 plus.addEventListener('click', (event) => {
+    console.log('блок?')
     alarmStorage.style.display = 'block';
     new DraggableContainer(alarmStorage)
 
@@ -372,7 +391,9 @@ minus.addEventListener('click', () => {
     alarmStorage.style.display = 'none';
     plus.style.display = 'block';
     minus.style.display = 'none'
+    console.time()
     alarmFind()
+    console.timeEnd()
     const mapss = document.getElementById('mapOil')
     const wrapMap = document.querySelector('.wrapMap')
     if (wrapMap) {

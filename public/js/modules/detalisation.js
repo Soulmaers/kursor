@@ -9,7 +9,7 @@ import { createChart, createJobTS, createOilTS, createMelagiTS } from './detalis
 
 
 export async function timeIntervalStatistiks() {
-  
+
     console.log('загрузка графиков')
     const objectRazmetka = {
         'nav1': { html: jobTSDetalisation, data: [], fn: createChart, title: { to: null, yes: null, week: null } },
@@ -31,7 +31,7 @@ export async function timeIntervalStatistiks() {
     act !== 'nav1' ? updateHTML() : null
     navstat.forEach(el => {
         el.addEventListener('click', async () => {
-                    navstat.forEach(el => {
+            navstat.forEach(el => {
                 el.classList.remove('activStatic')
             })
             el.classList.add('activStatic')
@@ -60,7 +60,7 @@ export async function timeIntervalStatistiks() {
                 await load(act, 2, 3)
             }
             async function load(act, el, num) {
-                              objectRazmetka[act].fn(objectRazmetka[act].data[el], num)
+                objectRazmetka[act].fn(objectRazmetka[act].data[el], num)
             }
         })
     })
@@ -177,7 +177,6 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     const t1 = !isNaN(num) ? interval[1] : interval[0][2]
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
     const itog = await testovfn(idw, t1, t2)
-    console.log(itog)
     const nameArr = itog[itog.length - 1] !== undefined ? itog[itog.length - 1].allSensParams ? JSON.parse(itog[itog.length - 1].allSensParams) : [] : []
     const time = [];
     const speed = [];
@@ -245,7 +244,7 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         el.sats = sats
         el.geo = geo
     })
-     const engine = [...allArrNew].filter(it => it.sens === 'Зажигание' || it.sens.startsWith('Борт'));
+    const engine = [...allArrNew].filter(it => it.sens === 'Зажигание' || it.sens.startsWith('Борт'));
     engine[0].pwr = engine[1].value
     engine[0].condition = [];
     const dannie = []
@@ -309,4 +308,5 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         const act = document.querySelector('.activStatic').id
         objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)
     }
+    objectRazmetka = null;
 }

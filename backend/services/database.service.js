@@ -11,12 +11,11 @@ module.exports = {
 }*/
 
 exports.createIndexDataToDatabase = async () => {
-    const selectBase = `CREATE INDEX idx_id ON chartData(idw, data)`
+    const selectBase = `CREATE INDEX idx_id ON alarms(idw, senspressure)`
     connection.query(selectBase, function (err, results) {
         if (err) console.log(err);
-          })
+    })
 }
-
 
 //сохраняем в базу параметры и обновляем их
 exports.saveDataToDatabase = async (name, idw, param, time) => {
@@ -127,7 +126,7 @@ exports.eventSaveToBase = async (login, obj) => {
             connection.query(postModel, function (err, results) {
                 if (err) console.log(err);
                 if (results.length === 0) {
-                                    const sql = `INSERT INTO eventSpam (login, email, alert, what, teleg,  sms) VALUES ('${login}',
+                    const sql = `INSERT INTO eventSpam (login, email, alert, what, teleg,  sms) VALUES ('${login}',
                  '${obj.email}','${obj.alert}', '${obj.what}', '${obj.teleg}', '${obj.sms}')`;
                     connection.query(sql, function (err, results) {
                         if (err) console.log(err);
@@ -156,7 +155,7 @@ exports.saveListToBase = async (obj) => {
 
     try {
         const { login, statusnew, ingine, oil, type, pwr, sats, meliage, condition, tagach, pricep, lasttime } = obj;
-            const postModel = `SELECT login FROM list WHERE login='${login}'`;
+        const postModel = `SELECT login FROM list WHERE login='${login}'`;
         connection.query(postModel, function (err, results) {
             if (err) console.log(err);
             if (results.length === 0) {
@@ -373,7 +372,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
         connection.query(selectBase, async function (err, results) {
             console.log(err)
             if (results.length !== 0) {
-             
+
             }
             else {
                 const sqls = `INSERT INTO alarms (idw, data, name, senspressure, bar,
@@ -478,7 +477,7 @@ exports.dostupObject = async (login) => {
                 const selectBase = `SELECT idw FROM userObjects WHERE login='${login}'`
                 connection.query(selectBase, function (err, results) {
                     if (err) console.log(err);
-                   // console.log(results)
+                    // console.log(results)
                     const nameCarCheck = results.map(elem => elem.idw)
                     resolve(nameCarCheck)
                 })
@@ -531,10 +530,11 @@ exports.iconFindtoBase = async (idw) => {
     })
 }
 
-module.exports.alarmFindtoBase = (idw, tyresp) => {
+module.exports.alarmFindtoBase = (idw, array) => {
     return new Promise((resolve, reject) => {
         try {
-            const sqls1 = `SELECT data, senspressure, bar, temp, alarm  FROM alarms WHERE idw='${idw}' AND senspressure='${tyresp}'`
+            const formattedArray = array.map(item => `'${item}'`).join(","); // Форматируем массив под SQL запрос
+            const sqls1 = `SELECT data, senspressure, bar, temp, alarm FROM alarms WHERE idw='${idw}' AND senspressure IN (${formattedArray})`
             connection.query(sqls1, function (err, results) {
                 if (err) console.log(err)
                 if (results.length === 0) {
@@ -790,7 +790,7 @@ exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
     const time = (date.getTime() / 1000).toFixed(0)
     const newdata = JSON.stringify(arr)
     const geoLoc = JSON.stringify(geo)
-     const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, group, name, start)
+    const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, group, name, start)
     if (res.message === 'Событие уже существует в базе логов') {
         null
     }
@@ -805,7 +805,7 @@ exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
         const event = mess.msg[0].event
         mess.logins.forEach(async el => {
             const itog = await this.eventFindToBase(el)
-                   if (itog.length !== 0) {
+            if (itog.length !== 0) {
                 delete itog[0].id
                 delete itog[0].login
                 delete itog.alert
@@ -874,18 +874,18 @@ exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
 
 
 exports.logsFindToBase = async (id) => {
- if(id.length!==0){
-     return new Promise((resolve, reject) => {
-         const postModel = `SELECT * FROM logs WHERE idw IN (${id.join(',')})`;
-         connection.query(postModel, function (err, results) {
-             if (err)
-                 reject(err); // передаём ошибку в reject
-             resolve(results);
-         })
-     })
+    if (id.length !== 0) {
+        return new Promise((resolve, reject) => {
+            const postModel = `SELECT * FROM logs WHERE idw IN (${id.join(',')})`;
+            connection.query(postModel, function (err, results) {
+                if (err)
+                    reject(err); // передаём ошибку в reject
+                resolve(results);
+            })
+        })
 
- }
-   
+    }
+
 }
 
 
@@ -907,7 +907,7 @@ exports.tarirSaveToBase = async (arr) => {
                 }
                 if (results.length > 0) {
                     arr.forEach(el => {
-                                               const postModel = `UPDATE tarir SET  date='${el[0]}', idx='${el[1]}', nameCar='${el[2]}', zamer='${el[3]}', DUT='${el[4]}',litrs='${el[5]}'WHERE idx='${el[1]}' AND zamer='${el[3]}'`
+                        const postModel = `UPDATE tarir SET  date='${el[0]}', idx='${el[1]}', nameCar='${el[2]}', zamer='${el[3]}', DUT='${el[4]}',litrs='${el[5]}'WHERE idx='${el[1]}' AND zamer='${el[3]}'`
                         connection.query(postModel, function (err, results) {
                             if (err) {
                                 console.log(err)
@@ -1241,7 +1241,7 @@ module.exports.group = (idw) => {
 
 
 module.exports.summaryYestodayToBase = (data, company) => {
-    if(company.length!==0){
+    if (company.length !== 0) {
         return new Promise((resolve, reject) => {
             if (data.length === 1) {
                 try {
@@ -1258,11 +1258,11 @@ module.exports.summaryYestodayToBase = (data, company) => {
             }
             else {
                 try {
-                                   const selectBase = "SELECT * FROM summary WHERE company IN (?) AND STR_TO_DATE(data, '%Y-%m-%d') >= ? AND STR_TO_DATE(data, '%Y-%m-%d') <= ?"
+                    const selectBase = "SELECT * FROM summary WHERE company IN (?) AND STR_TO_DATE(data, '%Y-%m-%d') >= ? AND STR_TO_DATE(data, '%Y-%m-%d') <= ?"
                     const values = [company, data[0], data[1]];
                     connection.query(selectBase, values, function (err, results) {
                         if (err) console.log(err);
-                                         resolve(results);
+                        resolve(results);
                     });
                 } catch (e) {
                     console.log(e);
@@ -1272,7 +1272,7 @@ module.exports.summaryYestodayToBase = (data, company) => {
         });
 
     }
-   
+
 };
 
 
