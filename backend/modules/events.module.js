@@ -15,15 +15,15 @@ exports.eventFunction = async (arr) => {
 
 }
 
-const objCondition={
-    0:'Стоянка',
-    1:'Поездка',
-    2:'Остановка'
+const objCondition = {
+    0: 'Стоянка',
+    1: 'Поездка',
+    2: 'Остановка'
 }
 function lastMsgFunc(rt, all) {
     const itogEvents = Object.entries(rt).map(el => {
         const eventObject = el[1][1] ? Object.values(Object.values(el[1])[1])[0] : null
-            if (eventObject) {
+        if (eventObject) {
             return {
                 id: el[0],
                 time: eventObject.m,
@@ -34,7 +34,7 @@ function lastMsgFunc(rt, all) {
         return { event: null };
     }).filter(eventObj => eventObj.event !== null);
     const mass = [];
-    const condition=[]
+    const condition = []
     const nowDate = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
 
     all.forEach(e => {
@@ -42,30 +42,30 @@ function lastMsgFunc(rt, all) {
             if (parseFloat(it.id) === e[4]) {
                 const lastTime = nowDate - it.time
                 mass.push({ id: it.id, group: e[5], name: e[0].message, lastTime: lastTime, time: it.time, geo: it.geo });
-                condition.push({ id: it.id, group: e[5], name: e[0].message, condition:it.condition, time: it.time, geo: it.geo })
+                condition.push({ id: it.id, group: e[5], name: e[0].message, condition: it.condition, time: it.time, geo: it.geo })
             }
         });
     });
     mass.forEach(e => {
-            e.lastTime > 3600 ? checkSortLastTime(e.id, e.group, e.name, e.time, e.geo) : null
+        e.lastTime > 3600 ? checkSortLastTime(e.id, e.group, e.name, e.time, e.geo) : null
     })
-    condition.forEach(e=>{
-    //    checkSortCondition(e.id, e.group, e.name, e.condition,e.time, e.geo)
+    condition.forEach(e => {
+        //    checkSortCondition(e.id, e.group, e.name, e.condition,e.time, e.geo)
     })
 }
 
 async function checkSortCondition(idw, group, name, condition, time, geo) {
-       const data = [{
+    const data = [{
         event: 'Состояние',
         condition: `${condition}`
     }]
-      const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
-    console.log(time,condition,name,res)
-   }
+    const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
+    console.log(time, condition, name, res)
+}
 
 
 async function checkSortLastTime(idw, group, name, time, geo) {
-       const times = new Date(time * 1000)
+    const times = new Date(time * 1000)
     const day = times.getDate();
     const month = (times.getMonth() + 1).toString().padStart(2, '0');
     const year = times.getFullYear();
@@ -76,12 +76,12 @@ async function checkSortLastTime(idw, group, name, time, geo) {
         event: 'Потеря связи',
         lasttime: `Время последнего сообщения: ${formattedDate}`
     }]
-      const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
-  }
+    const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
+}
 
 function oilFunc(rt, all) {
     const itogEvents = Object.entries(rt).map(el => {
-         const eventObject = el[1][0].lls ?Object.values(Object.values(el[1])[0].lls)[0]:null
+        const eventObject = el[1][0].lls ? Object.values(Object.values(el[1])[0].lls)[0] : null
         const fill = eventObject ? Object.values(Object.values(el[1])[0].lls)[0].filled !== 0 ? Object.values(Object.values(el[1])[0].lls)[0].filled : null : null
         if (eventObject && fill) {
             return {
@@ -103,7 +103,7 @@ function oilFunc(rt, all) {
             }
         });
     });
-     mass.forEach(e => {
+    mass.forEach(e => {
         modalView(e.filled, e.name, e.group, e.id, e.geo, e.time)
     })
 
@@ -122,4 +122,4 @@ async function modalView(filled, name, group, idw, geo, time) {
         time: `Время: ${formattedDate}`
     }]
     const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name, filled)
-   }
+}

@@ -3,7 +3,7 @@ import { CloseBTN } from '../class/Flash.js'
 import { titleLogs } from './content.js'
 import { reverseGeocode, createMapsUniq } from './geo.js'
 import { Tooltip } from '../class/Tooltip.js'
-import {visual} from './visual.js'
+import { visual } from './visual.js'
 
 async function createPopup(array) {
     console.log(array)
@@ -47,8 +47,6 @@ async function createPopup(array) {
     setTimeout(function () {
         popup.remove();
         popy.style.display = 'none'
-        //  position = 0
-        //   popup.style.display = "none";
     }, 10000);
 
 }
@@ -56,7 +54,7 @@ async function createPopup(array) {
 let previus = 0;
 let num = 0;
 export async function logsView(array) {
-      let bool = false
+    let bool = false
     array.forEach(el => {
         el.length !== 0 ? bool = true : null
     })
@@ -64,15 +62,20 @@ export async function logsView(array) {
         return
     }
     const login = document.querySelectorAll('.log')[1].textContent
-    const arrayId = array
-        .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
-        .flat()
-        .map(it => it[4])
+    const arrayId = array.reduce((acc, el) => {
+        Object.values(el).forEach(subArray => {
+            acc.push(subArray[4]);
+        });
+        return acc;
+    }, []);
 
-    const arrayIdGroup = array
-        .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
-        .flat()
-        .map(it => [it[4], it[5]])
+    const arrayIdGroup = array.reduce((acc, el) => {
+        Object.values(el).forEach(subArray => {
+            acc.push([subArray[4], subArray[5]]);
+        });
+        return acc;
+    }, []);
+
     const param = {
         method: "POST",
         headers: {
@@ -107,6 +110,13 @@ export async function logsView(array) {
             const group = login === 'Курсор' ? 'demo' : arrayIdGroup
                 .filter(it => it[0] === id)
                 .map(it => it[1]);
+            const group2 = login === 'Курсор' ? 'demo' : arrayIdGroup.reduce((acc, it) => {
+                if (it[0] === id) {
+                    acc.push(it[1]);
+                }
+                return acc;
+            }, []);
+            console.log(group, group2)
             const time = new Date(Number(el.time) * 1000)
             const day = time.getDate();
             const month = (time.getMonth() + 1).toString().padStart(2, '0');
@@ -129,7 +139,7 @@ export async function logsView(array) {
                 mess = [{ event: event, group: `Компания: ${el.groups}`, name: `Объект: ${el.name}`, litrazh: `${content[0].litrazh}`, time: `Время слива: ${formattedDate}` }]
             }
             if (event === 'Потеря связи') {
-                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `Объект: ${el.name}`, lasttime:`${content[0].lasttime}`}]
+                mess = [{ event: event, group: `Компания: ${el.groups}`, name: `Объект: ${el.name}`, lasttime: `${content[0].lasttime}` }]
             }
             const prms = {
                 method: "POST",
@@ -165,121 +175,122 @@ export async function logsView(array) {
         previus = results.length
     }
     num++
-    const mass = Promise.all(results.map(async el => {
-        const parsedContent = JSON.parse(el.content);
-        const typeEvent = parsedContent[0].event;
-        const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
-        const geo = geoloc !== null ? geoloc.map(e => e.toFixed(5)) : 'нет данных'
-        const id = parseFloat(el.idw)
-        const group = arrayIdGroup
-            .filter(it => it[0] === id)
-            .map(it => it[1]);
-        const int = Object.values(parsedContent[0]);
-        int.shift();
-        const time = times(new Date(Number(el.time) * 1000));
-        const info = `${int.join(", ")}`;
-        return { time: time, group: typeEvent !== 'Предупреждение' ? el.groups : login === 'Курсор' ? 'demo' : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
-    }));
-    mass.then(async results => {
-        const clickLog = document.querySelector('.clickLog')
-        if (!clickLog) {
-            await createLogsTable(results);
-            const tr = document.querySelectorAll('.trEvent')
-            tr.forEach(e => {
-                e.style.cursor='default'
-                e.children[3].style.cursor = 'pointer'
-                e.children[2].style.cursor = 'pointer'
-                            const clickHandler = (event) => {
-                    event.stopPropagation();
-                    const geo = [];
-                    geo.push(parseFloat(e.lastElementChild.textContent.split(',')[0]))
-                    geo.push(parseFloat(e.lastElementChild.textContent.split(',')[1]))
-                    console.log(e)
-                    const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[2].textContent, e.lastElementChild.parentElement.children[4].textContent] }]
-                    createMapsUniq([], obj, 'log')
-                    const wrap = document.querySelector('.wrapMap')
-                    new CloseBTN(wrap)
-                };
-                e.children[3].addEventListener('click', clickHandler);
-                e.children[2].addEventListener('click', clickHandlerObject);
-            })
-            const log = document.querySelector('.logs')
-            const wrapperLogs = document.querySelector('.alllogs')
-            async function togglePopup() {
-                const grays = document.querySelectorAll('.graysEvent')
-                grays.forEach(e => {
-                    if (e.classList.contains('toogleIconEvent')) {
-                        e.classList.remove('toogleIconEvent')
-                    }
-                })
-                if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
-                    wrapperLogs.style.display = 'block'// Показываем попап
-                    wrapperLogs.classList.add('clickLog')
-                    const color = document.querySelector('.color')
-                    const evnt = document.querySelector('.evnt')
-                    evnt.style.color = 'rgba(6, 28, 71, 1)'
-                    const trEvent = document.querySelectorAll('.trEvent')
-                    trEvent.forEach(item => item.style.display = 'flex')
-                    const allobjects = document.querySelector('.allobjects')
-                    const choice = document.querySelector('.choice')
-                    choice ? choice.classList.remove('choice') : null
-                    color ? (allobjects.style.display = 'block', trEvent.forEach(item => {
-                        item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
-                    })) : (trEvent.forEach(item => { item.style.display = 'flex' }), allobjects.style.display = 'none')
-                    allobjects.addEventListener('click', chanchColor)
-                    const quantity = trEvent.length;
-                    const param = {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: (JSON.stringify({ login, quantity }))
+    const tr = document.querySelectorAll('.trEvent')
+    results.splice(0, tr.length)
+    if (results.length !== 0) {
+        const mass = results.map(el => {
+            const parsedContent = JSON.parse(el.content);
+            const typeEvent = parsedContent[0].event;
+            const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
+            const geo = geoloc !== null ? geoloc.map(e => e.toFixed(5)) : 'нет данных'
+            const id = parseFloat(el.idw)
+            const group = arrayIdGroup
+                .filter(it => it[0] === id)
+                .map(it => it[1]);
+            const int = Object.values(parsedContent[0]);
+            int.shift();
+            const time = times(new Date(Number(el.time) * 1000));
+            const info = `${int.join(", ")}`;
+            return { time: time, group: typeEvent !== 'Предупреждение' ? el.groups : login === 'Курсор' ? 'demo' : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
+        });
+        await createLogsTable(mass)
+    }
 
-                    }
-                    const res = await fetch('/api/viewLogs', param)
-                    const confirm = await res.json()
-                    const viewNum = results.length - quantity
-                    viewTableNum(viewNum)
-                } else {
-                    wrapperLogs.style.display = 'none'; // Скрываем попап
-                    wrapperLogs.classList.remove('clickLog')
-
-                }
-            }
-            const numy = document.querySelector('.num')
-            // Добавляем обработчики кликов
-            log.addEventListener('click', function (event) {
+    const clickLog = document.querySelector('.clickLog')
+    if (!clickLog) {
+        const tr = document.querySelectorAll('.trEvent')
+        tr.forEach(e => {
+            e.style.cursor = 'default'
+            e.children[3].style.cursor = 'pointer'
+            e.children[2].style.cursor = 'pointer'
+            const clickHandler = (event) => {
                 event.stopPropagation();
-                const wr = document.querySelector('.alllogs')
-                const draggable = new DraggableContainer(wr);
-                togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
-            });
-            numy.addEventListener('click', function (event) {
-                event.stopPropagation();
-                togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
-            });
+                const geo = [];
+                geo.push(parseFloat(e.lastElementChild.textContent.split(',')[0]))
+                geo.push(parseFloat(e.lastElementChild.textContent.split(',')[1]))
+                console.log(e)
+                const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[2].textContent, e.lastElementChild.parentElement.children[4].textContent] }]
+                createMapsUniq([], obj, 'log')
+                const wrap = document.querySelector('.wrapMap')
+                new CloseBTN(wrap)
+            };
+            e.children[3].addEventListener('click', clickHandler);
+            e.children[2].addEventListener('click', clickHandlerObject);
+        })
+        const log = document.querySelector('.logs')
+        const wrapperLogs = document.querySelector('.alllogs')
 
-            new CloseBTN(wrapperLogs, log, numy)
-            const allobjects = document.querySelector('.allobjects')
-            allobjects.removeEventListener('click', chanchColor)
-        }
+        const numy = document.querySelector('.num')
+        // Добавляем обработчики кликов
 
-    }).catch(error => {
-        console.error(error);
-    })
-    
+
+        new CloseBTN(wrapperLogs, log, numy)
+        const allobjects = document.querySelector('.allobjects')
+        allobjects.removeEventListener('click', chanchColor)
+    }
+
+    //  })
 }
 
-function clickHandlerObject(event){
+async function togglePopup() {
+    console.log('тут??')
+    const tr = document.querySelectorAll('.trEvent')
+    const login = document.querySelectorAll('.log')[1].textContent
+    const wrapperLogs = document.querySelector('.alllogs')
+    const grays = document.querySelectorAll('.graysEvent')
+    grays.forEach(e => {
+        if (e.classList.contains('toogleIconEvent')) {
+            e.classList.remove('toogleIconEvent')
+        }
+    })
+    if (wrapperLogs.style.display === '' || wrapperLogs.style.display === 'none') {
+        wrapperLogs.style.display = 'block'// Показываем попап
+        wrapperLogs.classList.add('clickLog')
+        const color = document.querySelector('.color')
+        const evnt = document.querySelector('.evnt')
+        evnt.style.color = 'rgba(6, 28, 71, 1)'
+        const trEvent = document.querySelectorAll('.trEvent')
+        trEvent.forEach(item => item.style.display = 'flex')
+        const allobjects = document.querySelector('.allobjects')
+        const choice = document.querySelector('.choice')
+        choice ? choice.classList.remove('choice') : null
+        color ? (allobjects.style.display = 'block', trEvent.forEach(item => {
+            item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
+        })) : (trEvent.forEach(item => { item.style.display = 'flex' }), allobjects.style.display = 'none')
+        allobjects.addEventListener('click', chanchColor)
+        const quantity = trEvent.length;
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ login, quantity }))
+
+        }
+        const res = await fetch('/api/viewLogs', param)
+        const confirm = await res.json()
+        const viewNum = tr.length - quantity
+        console.log(tr.length)
+        viewTableNum(viewNum)
+    } else {
+        wrapperLogs.style.display = 'none'; // Скрываем попап
+        wrapperLogs.classList.remove('clickLog')
+
+    }
+}
+
+
+
+function clickHandlerObject(event) {
     const allobjects = document.querySelector('.allobjects')
-  allobjects.style.display='flex'
-const element=event.target
-const id=element.parentElement.getAttribute('rel')
-const listItem=document.querySelectorAll('.listItem')
-    listItem.forEach(it=>{
-        if(it.getAttribute('rel')===id){
+    allobjects.style.display = 'flex'
+    const element = event.target
+    const id = element.parentElement.getAttribute('rel')
+    const listItem = document.querySelectorAll('.listItem')
+    listItem.forEach(it => {
+        if (it.getAttribute('rel') === id) {
             visual(it)
-            chanchColor() 
+            chanchColor()
         }
     })
 }
@@ -333,45 +344,48 @@ const objColor = {
     'Предупреждение': 'darkred',
     'Слив': 'red',
     'Потеря связи': '#28ad9e',
-    'Состояние':'#acad4c'
+    'Состояние': '#acad4c'
 }
 async function createLogsTable(mass) {
     const wrap = document.querySelector('.alllogs')
-    if (wrap) {
-        wrap.remove();
-    }
-    const body = document.getElementsByTagName('body')[0]
-    const log = document.createElement('div')
-    log.classList.add('wrapperLogs')
-    const headerlog = document.createElement('div')
-    headerlog.classList.add('header_logs')
-    const alllogs = document.createElement('div')
-    alllogs.classList.add('alllogs')
-    const spanTitle = document.createElement('p')
-    spanTitle.classList.add('spanTitle')
-    spanTitle.textContent = 'Логи событий'
-    const icon = document.createElement('i')
-    icon.classList.add('fas')
-    icon.classList.add('fa-binoculars')
-    icon.classList.add('allobjects')
-    body.appendChild(alllogs)
-    alllogs.appendChild(spanTitle)
-    alllogs.appendChild(icon)
-    alllogs.appendChild(log)
-    log.innerHTML = titleLogs
-    const evnt = document.querySelector('.evnt')
-    evnt.addEventListener('mouseenter', () => evnt.children[0].style.display = 'flex')
-    evnt.addEventListener('mouseleave', () => evnt.children[0].style.display = 'none')
-    const filterEvent = document.querySelector('.filterEvent')
-    filterEvent.addEventListener('click', eventFilter)
+    if (!wrap) {
 
-    var firstChild = log.firstChild;
-    new Tooltip(icon, ['Все объекты/Текущий']);
+        const body = document.getElementsByTagName('body')[0]
+        const log = document.createElement('div')
+        log.classList.add('wrapperLogs')
+        const headerlog = document.createElement('div')
+        headerlog.classList.add('header_logs')
+        const alllogs = document.createElement('div')
+        alllogs.classList.add('alllogs')
+        const spanTitle = document.createElement('p')
+        spanTitle.classList.add('spanTitle')
+        spanTitle.textContent = 'Логи событий'
+        const icon = document.createElement('i')
+        icon.classList.add('fas')
+        icon.classList.add('fa-binoculars')
+        icon.classList.add('allobjects')
+        body.appendChild(alllogs)
+        alllogs.appendChild(spanTitle)
+        alllogs.appendChild(icon)
+        alllogs.appendChild(log)
+        log.innerHTML = titleLogs
+        const evnt = document.querySelector('.evnt')
+        evnt.addEventListener('mouseenter', () => evnt.children[0].style.display = 'flex')
+        evnt.addEventListener('mouseleave', () => evnt.children[0].style.display = 'none')
+        const filterEvent = document.querySelector('.filterEvent')
+        filterEvent.addEventListener('click', eventFilter)
+    }
+
+
+    const wrapLogs = document.querySelector('.wrapperLogs')
+    const allobjects = document.querySelector('.allobjects')
+    const firstChild = wrapLogs.firstChild;
+    new Tooltip(allobjects, ['Все объекты/Текущий']);
     mass.forEach(el => {
         const trEvent = document.createElement('div')
         trEvent.classList.add('trEvent')
         trEvent.setAttribute('rel', `${el.id}`)
-        log.insertBefore(trEvent, firstChild.nextSibling)
+        wrapLogs.insertBefore(trEvent, firstChild.nextSibling)
         delete el.id
         for (var key in el) {
             const td = document.createElement('p')
@@ -392,6 +406,21 @@ async function createLogsTable(mass) {
         });
     });
 }
+
+
+const log = document.querySelector('.logs')
+log.addEventListener('click', function (event) {
+    event.stopPropagation();
+    const wr = document.querySelector('.alllogs')
+    const draggable = new DraggableContainer(wr);
+    togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
+});
+const numy = document.querySelector('.num')
+numy.addEventListener('click', function (event) {
+    event.stopPropagation();
+    togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
+});
+
 
 function times(time) {
     const day = time.getDate();
