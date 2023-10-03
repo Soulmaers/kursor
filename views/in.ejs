@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-  
+
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto:wght@300&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.css "
@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" type="text/css" href="/css/calendar.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
- 
+
 </head>
 
 <body>
@@ -92,12 +92,12 @@
                     src="https://static.tildacdn.com/tild3330-6536-4662-a364-386639656261/Asset_1log3_1.svg">
             </div>
             <div class="menu">
-                <a class="monitoring dash" href="#"><i class="w20 fas fa-chart-pie"></i>Дашборд</a>
-                <a class="monitoring monitor" href="#"><i class="w20 fas fa-desktop"></i>Мониторинг</a>
-                <a class="monitoring karta" href="#"><i class="w20 fas fa-map-marked-alt"></i>Карта</a>
-                <a class="monitoring char" href="#"><i class="w20 fas fa-chart-line"></i>Графики</a>
-                <a class="monitoring reports" href="#"><i class="w20 fas fa-print"></i>Отчеты</a>
-                <a class="monitoring sklad" href="#"><i class="w20 fas fa-industry"></i>Склад</a>
+                <a class="monitoring dash" rel="dash" href="#"><i class="w20 fas fa-chart-pie"></i>Дашборд</a>
+                <a class="monitoring monitor" rel="monitor" href="#"><i class="w20 fas fa-desktop"></i>Мониторинг</a>
+                <a class="monitoring karta" rel="karta" href="#"><i class="w20 fas fa-map-marked-alt"></i>Карта</a>
+                <a class="monitoring char" rel="char" href="#"><i class="w20 fas fa-chart-line"></i>Графики</a>
+                <a class="monitoring reports" rel="reports" href="#"><i class="w20 fas fa-print"></i>Отчеты</a>
+                <a class="monitoring sklad" rel="sklad" href="#"><i class="w20 fas fa-industry"></i>Склад</a>
             </div>
         </div>
         <div class="main_menu">
@@ -540,6 +540,11 @@
             <div class="content_card ex"></div>
             <div class="content_card furgon"></div>
         </div>
+        <section class="allsec globalDash">Дашборды</section>
+        <section class="allsec globalMaps">Глобальная карта</section>
+        <section class="allsec globalCharts">Графики</section>
+        <section class="allsec globalReports">Отчеты</section>
+        <section class="allsec globalSklad">Склад</section>
         <main class="main">
             <div class="update_time">
             </div>
@@ -874,7 +879,6 @@
 
     </div>
     </main>
-
     <div class="settings_users">
         <div class="header_title_settings">
             <p class="info_settings">Настройки</p>
@@ -1104,7 +1108,8 @@
                                     <td class="downSet celEven" rel="sms"><input type="checkbox"></td>
                                 </tr>
                                 <tr class="lineSet">
-                                    <td class="downSet nameSet"><i class="fab fa-soundcloud alarmF"></i>Потеря связи</td>
+                                    <td class="downSet nameSet"><i class="fab fa-soundcloud alarmF"></i>Потеря связи
+                                    </td>
                                     <td class="downSet celEven" rel="email"><input type="checkbox"></td>
                                     <td class="downSet celEven" rel="alert"><input type="checkbox"></td>
                                     <td class="downSet celEven" rel="what"><input type="checkbox"></td>
@@ -1112,7 +1117,8 @@
                                     <td class="downSet celEven" rel="sms"><input type="checkbox"></td>
                                 </tr>
                                 <tr class="lineSet">
-                                    <td class="downSet nameSet"><i class=" fas fa-wrench alarmF"></i>Техобслуживание</td>
+                                    <td class="downSet nameSet"><i class=" fas fa-wrench alarmF"></i>Техобслуживание
+                                    </td>
                                     <td class="downSet celEven" rel="email"><input type="checkbox"></td>
                                     <td class="downSet celEven" rel="alert"><input type="checkbox"></td>
                                     <td class="downSet celEven" rel="what"><input type="checkbox"></td>

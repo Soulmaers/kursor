@@ -22,19 +22,20 @@ body {
   right: 0;
   bottom: 0;
   z-index: 9999;
-background-color: rgba(6, 28, 71, 1);
+  background-color: rgba(6, 28, 71, 1);
 }
+
 .loaders-progress {
-  margin-top:10px;
+  margin-top: 10px;
   font-size: 20px;
-  color:#fff
+  color: #fff
 }
 
 
 .loaders-globe {
   width: 150px;
   height: 170px;
-    background-image: url(../image/gl1.png);
+  background-image: url(../image/gl1.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1342,8 +1343,8 @@ div.spoyler {
   display: flex;
   align-items: end;
   height: 60px;
-  margin-left:15px
-  }
+  margin-left: 15px
+}
 
 .control_panel {
   display: flex;
@@ -2134,12 +2135,13 @@ div.spoyler {
   margin-left: 30px;
 }
 
-.tooltipIcon{
-  color:rgba(6, 28, 71, 1);
-background-color: #fff;
-font-size: 0.8rem;
-font-weight: bold;
+.tooltipIcon {
+  color: rgba(6, 28, 71, 1);
+  background-color: #fff;
+  font-size: 0.8rem;
+  font-weight: bold;
 }
+
 .actoStatic {
   border: 2px solid green;
   background-color: lightcyan;
@@ -2544,24 +2546,26 @@ font-weight: bold;
   animation-iteration-count: 1;
 }
 
-.custom-marker{
-position: relative;
+.custom-marker {
+  position: relative;
 }
 
 .custom-marker.rotate {
   transform-origin: 50% 50%;
 }
-.wrapContainerArrow{
+
+.wrapContainerArrow {
   height: 78px;
   width: 30px;
-    left: -15px;
-    position: absolute;
-    top: -38px;
-    transition: transform 1s;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    }
+  left: -15px;
+  position: absolute;
+  top: -38px;
+  transition: transform 1s;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 .custom-marker-bar {
   margin-top: 60px;
   /* Измените значение на желаемое смещение вниз */
@@ -6270,9 +6274,9 @@ input[type="text"]:focus {
 
 
 .monitoring {
-  padding:8px;
-margin:0 10px;
-display: flex;
+  padding: 8px;
+  margin: 0 10px;
+  display: flex;
 }
 
 .alarmOpen {
@@ -7541,9 +7545,11 @@ display: flex;
 .w30 {
   width: 30px
 }
+
 .w20 {
-margin-right:10px;
+  margin-right: 10px;
 }
+
 .f {
   margin: 0 5px;
   width: 14px;
@@ -8174,8 +8180,25 @@ i.acEvent {
   color: rgba(6, 28, 71, 1);
 }
 
-.tablo{
+.tablo {
   background-color: #fff;
   color: rgba(6, 28, 71, 1);
   border-radius: 5px 5px 0 0;
+}
+
+
+
+.globalMaps,
+.globalCharts,
+.globalReports,
+.globalSklad,
+.globalDash {
+  display: none;
+  width: 74%;
+  background-color: #fff;
+  justify-content: center;
+  align-items: center;
+  color: rgba(6, 28, 71, 1);
+  font-size: 2rem;
+  font-weight: bold;
 }

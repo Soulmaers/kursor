@@ -22,6 +22,8 @@ import { element } from './startAllStatic.js'
 import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 import { draggable } from './filtersList.js'
 import { storTitleList } from './content.js'
+import { NavigationMenu } from './navModules/NavigatorClass.js'
+
 
 const leftFrame = document.querySelector('.leftFrame')
 const rigthFrame = document.querySelector('.rigthFrame')
@@ -61,6 +63,11 @@ viewIcon.forEach(e => {
 });
 
 
+
+// Использование класса
+const navMenu = new NavigationMenu();
+navMenu.init();
+
 const mobileItem = document.querySelectorAll('.mobile_item')
 mobileItem.forEach(el => {
 
@@ -96,17 +103,11 @@ mobileItem.forEach(el => {
                 it.style.minHeight = '550px'
                 it.style.margin = '2px'
                 if (!it.children[0]) {
-
                     it.remove();
                 }
                 else {
-                    //console.log(it.children[0].children[0].children[0])
                     it.children[0].children[0].children[0].style.width = 50 + '%'
-                    //    it.children[0].children[0].children[1].style.display = 'none'
-                    //   it.children[0].children[0].children[2].style.display = 'none'
-                    // it.children[0].children[0].children[3].style.width = 50 + '%'
                     it.children[0].children[0].style.justifyContent = 'space-around'
-                    // it.children[0].children[0].children[3].children[0].style.fontSize = '1rem'
                     it.children[0].children[1].children[0].children[0].style.width = 50 + '%'
                     it.children[0].children[1].children[0].children[3].style.width = 20 + '%'
                     it.children[0].children[1].children[0].children[3].children[1].style.right = '40px'
@@ -115,7 +116,6 @@ mobileItem.forEach(el => {
                     })
                 }
             })
-
         }
         if (el.children[0].textContent === 'Карта') {
             const color = document.querySelector('.color')
@@ -162,8 +162,15 @@ mobileItem.forEach(el => {
 
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
+    clearInterval(intervalId)
+    clearInterval(intervalId2)
+    const allsec = document.querySelectorAll('.allsec')
+    allsec.forEach(el => {
+        el.style.display = 'none';
+    })
+
     const tablo = document.querySelector('.tablo')
-    tablo? tablo.classList.remove('tablo'):null
+    tablo ? tablo.classList.remove('tablo') : null
     const pen = document.querySelectorAll('.rigthFrame')[0]
     const main = document.querySelector('.main')
     const start = document.querySelector('.start')
@@ -176,7 +183,7 @@ logo.addEventListener('click', () => {
     pen.style.display = 'flex'
     start.style.width = 100 + '%'
     sections.style.display = 'flex'
-    color.classList.remove('color')
+    color ? color.classList.remove('color') : null
 })
 const auth = document.querySelector('.settings')
 const authClear = document.querySelector('.close_settings')
@@ -303,12 +310,13 @@ iconStrela.addEventListener('click', () => {
 })
 
 let intervalId
+let intervalId2
 const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {
     const color = document.querySelector('.color')
     color ? color.classList.remove('color') : null
     const wrapMap = document.querySelector('.wrapMap')
-      if (wrapMap) {
+    if (wrapMap) {
         wrapMap.remove();
     }
     const start = document.querySelector('.start')
@@ -321,21 +329,31 @@ btnDash.addEventListener('click', () => {
     dash.style.display = 'flex'
     sections.style.display = 'none'
     main.style.display = 'none'
-    dashView()
+    const group = Array.from(document.querySelectorAll('.groups'))
+    const ids = group.reduce((acc, el) => {
+        const one = Array.from(el.children[1].children)
+        const two = one.map(it => it.id)
+        return acc.concat(two)
+    }, [])
+    dashView(ids)
     dashViewProtector()
-    getDash()
+    getDash(ids)
     protDash()
     getStat()
-    intervalId = setInterval(getDash, 10000),
-        setInterval(getStat, 10000)
+    intervalId = setInterval(getDash, 30000),
+        intervalId2 = setInterval(getStat, 30000)
 
 });
 
 
-const monitoring=document.querySelectorAll('.monitoring')
-monitoring.forEach(e=>{
-    e.addEventListener('click', ()=>{
-        monitoring.forEach(el=>{
+const monitoring = document.querySelectorAll('.monitoring')
+monitoring.forEach(e => {
+    e.addEventListener('click', () => {
+        if (!e.classList.contains('dash')) {
+            clearInterval(intervalId)
+            clearInterval(intervalId2)
+        }
+        monitoring.forEach(el => {
             el.classList.remove('tablo')
         })
         e.classList.add('tablo')
@@ -345,8 +363,8 @@ const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', mainblock)
 
 function mainblock() {
-    const rightFrame=document.querySelector('.rigthFrame')
-    rightFrame.style.display='flex'
+    const rightFrame = document.querySelector('.rigthFrame')
+    rightFrame.style.display = 'flex'
     const wrapperFull = document.querySelector('.wrapperFull')
     const lowList = document.querySelector('.low_list')
     lowList.style.height = wrapperFull.clientHeight - 20 + 'px';
@@ -733,8 +751,6 @@ export async function pr() {
 const plug = document.querySelectorAll('.plug')
 plug[2].addEventListener('click', () => {
 
-    // const twoframe = document.querySelector('.twoframe')
-    //twoframe.style.display = 'none'
     const wRight = document.querySelector('.wrapper_right')
     const wLeft = document.querySelector('.wrapper_left')
     const model = document.querySelector('.wrapper_containt')
@@ -744,15 +760,15 @@ plug[2].addEventListener('click', () => {
     const sections = document.querySelector('.sections')
     const wrapList = document.querySelector('.wrapList')
     const techInfo = document.querySelector('.techInfo')
-    const lowList=document.querySelector('.low_list')
+    const lowList = document.querySelector('.low_list')
     plug[2].classList.add('activGraf')
     wRight.style.display = 'none';
     techInfo.style.display = 'none';
     wLeft.style.display = 'none';
     grafics.style.display = 'flex';
     if (widthWind > 860) {
-     //   wrapList.style.overflow = 'auto';
-               lowList.style.height = '300px';
+        //   wrapList.style.overflow = 'auto';
+        lowList.style.height = '300px';
         model.style.zoom = '0.65'
         model.style.MozTransformOrigin = "top"
         model.style.MozTransform = "scale(0.65)"

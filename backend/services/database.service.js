@@ -1028,7 +1028,6 @@ module.exports.tyresViewToBase = (idw) => {
 }
 
 
-
 exports.barViewToBase = (idw, count) => {
     return new Promise((resolve, reject) => {
         if (count) {

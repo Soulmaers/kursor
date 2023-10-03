@@ -197,6 +197,10 @@ export async function visual(el) {
 
 }
 export function visualNone(e) {
+    const allsec = document.querySelectorAll('.allsec')
+    allsec.forEach(el => {
+        el.style.display = 'none';
+    })
     const tarir = document.querySelector('.tarir')
     tarir.style.display = 'none'
     const statusObj = document.querySelector('.status_obj')

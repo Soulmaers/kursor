@@ -21,6 +21,9 @@ exports.tyres = async (req, res) => {
     const message = await databaseService.tyresSaveToBase(nameCar, tyres, idw)
     res.json({ message: 'успех' })
 }
+
+
+
 exports.modalBar = async (req, res) => {
     const value = [req.body.arrValue];
     const message = await databaseService.modalBarSaveToBase(value)
@@ -57,7 +60,6 @@ exports.tyresView = async (req, res) => {
     const result = await databaseService.tyresViewToBase(idw)
     res.json({ result: result })
 }
-
 
 exports.barView = async (req, res) => {
     const idw = req.body.idw

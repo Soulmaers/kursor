@@ -1,13 +1,14 @@
 import { generDav } from '../content.js'
 const login = document.querySelectorAll('.log')[1].textContent
-export function dashView() {
+export function dashView(ids) {
     const group = Array.from(document.querySelectorAll('.groups'))
-    const name = group.map(el => {
-        return Array.from(el.children[1].children).map(it => [it.children[0].textContent])
-    }).flat()
-    const ids = group.map(el => {
-        return Array.from(el.children[1].children).map(it => [it.id])
-    }).flat()
+
+    const name = group.reduce((acc, el) => {
+        const childrenArray = Array.from(el.children[1].children);
+        const nestedNames = childrenArray.map(it => [it.children[0].textContent]);
+        return acc.concat(nestedNames);
+    }, []);
+
     const box = document.querySelector('.check_box')
     const listTitle = document.querySelector('.listTitle')
     if (!listTitle) {
@@ -21,11 +22,7 @@ export function dashView() {
     }
 }
 
-export async function getDash() {
-    const group = Array.from(document.querySelectorAll('.groups'))
-    const ids = group.map(el => {
-        return Array.from(el.children[1].children).map(it => it.id)
-    }).flat()
+export async function getDash(ids) {
     const result = await Promise.all(ids.map(async el => {
         return waitArr(el)
     })
@@ -85,11 +82,12 @@ async function waitArr(el) {
 }
 
 export function dashAllSort(test) {
-    const globalParams = test.map(el => {
-        return el.params.map(it => {
-            return [it[2], it[3]]
-        })
-    }).flat()
+    const globalParams = test.reduce((acc, el) => {
+        el.params.forEach(it => {
+            acc.push([it[2], it[3]]);
+        });
+        return acc;
+    }, []);
     const checkboxes = document.querySelectorAll('.input');
     const ide = document.getElementById('Все')
     let enabledSettings = []
