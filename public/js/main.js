@@ -35,17 +35,9 @@ async function init() {
 
     }
 
-    // inits();
-<<<<<<< HEAD
-=======
-=======
-<<<<<<< HEAD
-    // inits();
-=======
-    inits();
->>>>>>> d0764b420ebf550ba3d8059dcc2ef514a641ab63
->>>>>>> 7178b434e6206f2e957f504b7e2cbf9ed2857c04
->>>>>>> bc6d37de553ceb155a9b52c0fc788a85bc815630
+
+  //inits();
+
 
     const param = {
         method: "POST",
