@@ -33,9 +33,9 @@ exports.geoloc = async (req, res) => {
         allCar[5].forEach(el => {
             if (el.id === Number(idw)) {
                 if (el.pos) {
-                                  geoX = el.pos.x
+                    geoX = el.pos.x
                     geoY = el.pos.y
-                    course=el.pos.c
+                    course = el.pos.c
                 }
             }
         })
@@ -43,3 +43,15 @@ exports.geoloc = async (req, res) => {
     res.json({ resTrack: geo, resMarker: { geoX, geoY, course } })
 }
 
+exports.getGeo = async (req, res) => {
+    const arr = req.body.arrayId
+    const result = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(arr)
+    const structura = []
+    for (let key in result) {
+        if (result[key][1] !== undefined) {
+            const eventObject = Object.values(result[key][1])[0]
+            structura.push([key, [eventObject.to.y, eventObject.to.x], eventObject.course])
+        }
+    }
+    res.json(structura)
+}

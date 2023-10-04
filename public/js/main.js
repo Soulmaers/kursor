@@ -12,7 +12,7 @@ function waitForDOMLoad() {
 }
 
 async function init() {
- //   await waitForDOMLoad(); // Ожидаем загрузку всего DOM
+    //   await waitForDOMLoad(); // Ожидаем загрузку всего DOM
     //  waitAndExecute(); // Запускаем функцию после загрузки DOM
 
 
@@ -35,7 +35,7 @@ async function init() {
 
     }
 
-   // inits();
+    inits();
 
     const param = {
         method: "POST",
@@ -46,15 +46,15 @@ async function init() {
 
     }
 
-   
 
-/*
-    const res = await fetch('/api/viewLogs', param)
-    const confirm = await res.json()
-    console.log(confirm)*/
 
-    
-         zapros(login) //делаем запрос на wialon получаем объекты
+    /*
+        const res = await fetch('/api/viewLogs', param)
+        const confirm = await res.json()
+        console.log(confirm)*/
+
+
+    zapros(login) //делаем запрос на wialon получаем объекты
     liCreate()
     console.log(screen.width)
     console.log(screen.height)
@@ -68,15 +68,15 @@ async function init() {
         newCel.forEach(e => e.remove())
 
     }
-   if (screen.width >= 1366 && screen.height === 768) {
+    if (screen.width >= 1366 && screen.height === 768) {
         // document.body.style.maxWidth = '1366px';
         document.body.style.height = '768px';
         // wrapperFull.style.height = '693px'
-       // start.style.height = '98vh'
+        // start.style.height = '98vh'
     } else if (screen.width === 1920 && screen.height === 1080) {
         document.body.style.height = '1080px';
         // wrapperFull.style.height = '1005px'
-    
+
     }
 
     console.log(wrapperFull.clientHeight)

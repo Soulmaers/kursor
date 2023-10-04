@@ -133,7 +133,7 @@ export async function oil(t1, t2) {
                     interval.splice(1, 1)
                 }
             }
-            return firstOil > 5 && difference > 60 && difference >= threshold;
+            return firstOil > 5 && difference > 40 && difference >= threshold;
         });
         for (let i = 0; i < zapravkaAll.length - 1; i++) {
             if (zapravkaAll[i][1].time === zapravkaAll[i + 1][1].time) {
@@ -141,7 +141,7 @@ export async function oil(t1, t2) {
             }
         }
         console.log(zapravkaAll)
-        const zapravka = zapravkaAll.filter(e => e[0].pwr >= 16 || e[0].pwr == null);
+        const zapravka = zapravkaAll.filter(e => e[0].pwr >= 11 || e[0].pwr == null);
         const filteredZapravka = zapravka.filter(e => {
             const time0 = (e[0].time).getTime() / 1000;
             const time1 = (e[1].time).getTime() / 1000;

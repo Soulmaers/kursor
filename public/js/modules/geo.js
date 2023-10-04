@@ -22,6 +22,7 @@ export async function geoloc() {
     }
     const geoTest = await fetch('/api/geoloc', params)
     const geoCard = await geoTest.json()
+    console.log(geoCard)
     const geo = geoCard.resTrack
     const geoMarker = geoCard.resMarker
     console.log(geoMarker)
@@ -83,16 +84,16 @@ export async function createMap(geo, geoMarker) {
         var divIcon = L.divIcon({
             className: 'custom-marker-arrow',
             html: `<div class="wrapContainerArrow" style="pointer-events: none;height: 75px;transform: rotate(${geoMarker.course}deg);"><img src="../../image/arrow2.png" style="width: 20px"></div>`
-                 });
-             map.setView(center, 12);
+        });
+        map.setView(center, 12);
         map.flyTo(center, 12);
         const res = `${geoMarker.geoY}, ${geoMarker.geoX}`//await reverseGeocode(geoMarker.geoY, geoMarker.geoX)
         iss = L.marker(center, { icon: greenIcon }).bindPopup(`${nameCar}<br>${res}`).addTo(map);
-         const marker = L.marker(center, { icon: divIcon }).addTo(map);
-            console.log(geoMarker)
-    
-               iss.getPopup().options.className = 'my-popup-all';
-   
+        const marker = L.marker(center, { icon: divIcon }).addTo(map);
+        console.log(geoMarker)
+
+        iss.getPopup().options.className = 'my-popup-all';
+
         iss.on('mouseover', function (e) {
             this.openPopup();
         });
@@ -104,7 +105,7 @@ export async function createMap(geo, geoMarker) {
     map.on('zoomend', function () {
         map.panTo(center);
     });
- 
+
     isProcessing = false;
 }
 

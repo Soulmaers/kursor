@@ -363,6 +363,10 @@ const monitor = document.querySelector('.monitor')
 monitor.addEventListener('click', mainblock)
 
 function mainblock() {
+    const allsec = document.querySelectorAll('.allsec')
+    allsec.forEach(el => {
+        el.style.display = 'none';
+    })
     const rightFrame = document.querySelector('.rigthFrame')
     rightFrame.style.display = 'flex'
     const wrapperFull = document.querySelector('.wrapperFull')
