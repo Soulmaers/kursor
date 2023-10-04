@@ -1,8 +1,11 @@
 import { InitMarkers } from './class/InitMarkers.js'
 
 
+
+
+
 export async function kartaContainer(elem) {
-    let map;
+    let map
     const karta = document.getElementById('gMap')
     if (!karta) {
         const div = document.createElement('div')
@@ -10,6 +13,7 @@ export async function kartaContainer(elem) {
         div.setAttribute('id', 'gMap')
         div.style.width = '100%'
         div.style.height = '100%'
+        div.style.zIndex = 0;
         elem.appendChild(div)
 
         map = L.map('gMap').setView([59.9386, 30.3141], 9);
@@ -45,12 +49,26 @@ export async function kartaContainer(elem) {
     const result = await res.json()
     const itog = result.reduce((acc, el) => {
         const element = Array.from(list).filter(it => el[0] === it.id)
-        acc.push([...el, element[0].children[0].textContent])
+        const name = element[0].children[0].textContent
+        const group = element[0].closest('.groups').getAttribute('rel')
+        acc.push([...el, name, group])
         return acc
     }, [])
     console.log(itog)
     const initsmarkers = new InitMarkers(itog, map)
     initsmarkers.addMarkersToMap()
+    const checkMarkers = document.querySelector('.checkMarkers')
 
+
+    if (!checkMarkers.hasListener) {
+        attachMarkerListener(checkMarkers, initsmarkers);
+        checkMarkers.hasListener = true;
+    }
 }
 
+function attachMarkerListener(marker, initsmarkers) {
+    marker.addEventListener('click', () => {
+        marker.classList.toggle('checkMark')
+        initsmarkers.changeMarkersIcon()
+          })
+}

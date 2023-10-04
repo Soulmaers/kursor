@@ -17,35 +17,43 @@ export class NavigationMenu {
     }
 
     init() {
-
-        this.buttonElements.forEach(button => {
+              this.buttonElements.forEach(button => {
             button.addEventListener('click', this.handleButtonClick.bind(this));
         });
+     
+    }
+
+    handleButtonClickList() {
+                       if (this.currentTimeoutId) {
+                    clearInterval(this.currentTimeoutId);
+                    this.currentTimeoutId = null;
+                }
+                   
     }
 
     handleButtonClick(event) {
         if (this.currentTimeoutId) {
             clearInterval(this.currentTimeoutId);
+            const checkTypeMarkers = document.querySelector('.checkTypeMarkers')
+            checkTypeMarkers.style.display = 'none'
             this.currentTimeoutId = null; // очистить id таймера, так как он больше не активен
+
         }
         const start = document.querySelector('.start')
         const main = document.querySelector('.main')
+        start.style.display = 'none'
+        main.style.display = 'none'
         const color = document.querySelector('.color')
         const allsec = document.querySelectorAll('.allsec')
         allsec.forEach(el => {
             el.style.display = 'none';
         })
-
-        console.log(main)
         const buttonKey = event.target.getAttribute('rel');
         const menuItem = this.menuItems[buttonKey];
         const element = document.querySelector(`.${menuItem.elem}`)
-        console.log(element)
         if (menuItem) {
             menuItem.method(element);
-            start.style.display = 'none'
-            main.style.display = 'none'
-            color ? color.classList.remove('color') : null
+                     color ? color.classList.remove('color') : null
         }
     }
 
@@ -56,6 +64,8 @@ export class NavigationMenu {
 
     karta(elem) {
         elem.style.display = 'flex'
+        const checkTypeMarkers = document.querySelector('.checkTypeMarkers')
+        checkTypeMarkers.style.display = 'flex'
         kartaContainer(elem)
         this.currentTimeoutId = setInterval(() => {
             kartaContainer(elem)

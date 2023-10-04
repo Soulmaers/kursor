@@ -65,7 +65,7 @@ viewIcon.forEach(e => {
 
 
 // Использование класса
-const navMenu = new NavigationMenu();
+export const navMenu = new NavigationMenu();
 navMenu.init();
 
 const mobileItem = document.querySelectorAll('.mobile_item')
@@ -162,6 +162,7 @@ mobileItem.forEach(el => {
 
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
+    navMenu.handleButtonClickList()
     clearInterval(intervalId)
     clearInterval(intervalId2)
     const allsec = document.querySelectorAll('.allsec')
