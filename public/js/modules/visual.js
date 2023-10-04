@@ -22,6 +22,12 @@ let time;
 let timeIcon;
 
 export async function visual(el) {
+    const tablo = document.querySelector('.tablo')
+    tablo ? tablo.classList.remove('tablo') : null
+    const allsec = document.querySelectorAll('.allsec')
+    allsec.forEach(el => {
+        el.style.display = 'none';
+    })
     const color = document.querySelector('.color')
     color ? color.classList.remove('color') : null
     console.log(el)
@@ -197,10 +203,6 @@ export async function visual(el) {
 
 }
 export function visualNone(e) {
-    const allsec = document.querySelectorAll('.allsec')
-    allsec.forEach(el => {
-        el.style.display = 'none';
-    })
     const tarir = document.querySelector('.tarir')
     tarir.style.display = 'none'
     const statusObj = document.querySelector('.status_obj')

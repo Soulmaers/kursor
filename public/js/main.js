@@ -35,7 +35,11 @@ async function init() {
 
     }
 
+<<<<<<< HEAD
     // inits();
+=======
+    inits();
+>>>>>>> d0764b420ebf550ba3d8059dcc2ef514a641ab63
 
     const param = {
         method: "POST",

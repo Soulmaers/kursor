@@ -6,6 +6,7 @@ import { reportsContainer } from './reports.js'
 export class NavigationMenu {
     constructor() {
         this.buttonElements = document.querySelectorAll('.monitoring');
+        this.currentTimeoutId = null;
         this.menuItems = {
             dash: { method: this.dash.bind(this), elem: 'globalDash' },
             karta: { method: this.karta.bind(this), elem: 'globalMaps' },
@@ -16,14 +17,20 @@ export class NavigationMenu {
     }
 
     init() {
+
         this.buttonElements.forEach(button => {
             button.addEventListener('click', this.handleButtonClick.bind(this));
         });
     }
 
     handleButtonClick(event) {
+        if (this.currentTimeoutId) {
+            clearInterval(this.currentTimeoutId);
+            this.currentTimeoutId = null; // очистить id таймера, так как он больше не активен
+        }
         const start = document.querySelector('.start')
         const main = document.querySelector('.main')
+        const color = document.querySelector('.color')
         const allsec = document.querySelectorAll('.allsec')
         allsec.forEach(el => {
             el.style.display = 'none';
@@ -38,6 +45,7 @@ export class NavigationMenu {
             menuItem.method(element);
             start.style.display = 'none'
             main.style.display = 'none'
+            color ? color.classList.remove('color') : null
         }
     }
 
@@ -48,7 +56,10 @@ export class NavigationMenu {
 
     karta(elem) {
         elem.style.display = 'flex'
-        kartaContainer()
+        kartaContainer(elem)
+        this.currentTimeoutId = setInterval(() => {
+            kartaContainer(elem)
+        }, 30000);
     }
 
     char(elem) {

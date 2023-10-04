@@ -1409,7 +1409,26 @@ div.spoyler {
   font-size: 1rem;
 }
 
+
 .monitoring:hover .w20 {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+.monitor {
+  padding: 8px;
+  margin: 0 10px;
+  display: flex;
+  text-decoration: none;
+  font-family: Arial;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.monitor:hover .w20 {
   animation-name: wiggle;
   animation-duration: 1s;
   animation-timing-function: ease;
