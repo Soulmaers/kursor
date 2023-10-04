@@ -3372,6 +3372,19 @@ input[type="date"] {
 
 }
 
+.my-popup-markers .leaflet-popup-content-wrapper {
+  font-size: 12px;
+  background: #fff;
+  color: rgba(6, 28, 71, 1);
+  margin: 0;
+  border: 2px solid black;
+
+}
+
+.leaflet-popup-close-button {
+  display: none;
+}
+
 .my-popup-alarm .leaflet-popup-content-wrapper {
   font-size: 11px;
   background: #fff;
@@ -8220,4 +8233,42 @@ i.acEvent {
   color: rgba(6, 28, 71, 1);
   font-size: 2rem;
   font-weight: bold;
+}
+
+.globalMaps {
+  position: relative;
+}
+
+.checkTypeMarkers {
+  position: absolute;
+  left: 10px;
+  top: 100px;
+  width: 100px;
+  height: 30px;
+  background-color: #fff;
+  border: 1px solid rgba(6, 28, 71, 1);
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  font-size: 0.8rem;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkMarkers {
+  margin-right: 5px;
+  color: gray;
+  cursor: pointer;
+}
+
+.checkTypeMarkers:hover .checkMarkers {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+.checkMark {
+  color: rgba(6, 28, 71, 1);
 }

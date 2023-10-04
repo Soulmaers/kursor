@@ -1,6 +1,6 @@
 import { visual, visualNone } from './visual.js'
 //import { massivionbd } from './paramsTyresView.js';
-
+import {navMenu} from './event.js'
 export function navigator() {
     const main = document.querySelector('.main')
     const auth = document.querySelector('.auth')
@@ -38,6 +38,7 @@ export function navigator() {
     nav.forEach(el => {
         el.addEventListener('click', route)
         function route(event) {
+            navMenu.handleButtonClickList()
             if (el.classList.contains('color')) {
                 return
             }

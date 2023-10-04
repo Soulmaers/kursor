@@ -287,8 +287,11 @@ async function viewCheckedEvent() {
     console.log(viewObj)
     const celEvent = document.querySelectorAll('.celEven')
     celEvent.forEach(e => {
+        //  console.log(e)
         viewObj[e.getAttribute('rel')].forEach(it => {
+            console.log('Потеря связи' === 'Потеря связи')
             if (it === e.parentNode.firstElementChild.textContent) {
+                console.log(e)
                 e.children[0].checked = true
             }
         })

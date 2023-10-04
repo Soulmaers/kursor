@@ -151,6 +151,7 @@ export async function conturTest(testov) {
             const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModal')
             group.classList.add(`${nameGroup}`)
+            group.setAttribute('rel', `${nameGroup}`)
             group.appendChild(hiddenModal)
             const listArr = document.querySelector(`.${nameGroup}`)
             el.forEach(async elem => {
