@@ -1,37 +1,54 @@
 
-
+import { initsmarkers } from '../../navModules/karta.js'
 
 export class ToggleHiddenList {
-    constructor(){
+    constructor() {
         this.chekHiddens = document.querySelectorAll('.chekHidden')
-        this.plusS=document.querySelectorAll('.plusS')
+        this.plusS = document.querySelectorAll('.plusS')
         this.minusS = document.querySelectorAll('.minusS')
         this.filterV = document.querySelectorAll('.filterV')
         this.filterVN = document.querySelectorAll('.filterVN')
-   this.groups = document.querySelectorAll('.groups')
+        this.checkInList = document.querySelectorAll('.checkInList')
+        this.groups = document.querySelectorAll('.groups')
     }
-
-    init(){
+    init() {
         this.minusS.forEach(el => el.addEventListener('click', this.hiddenList.bind(this)))
         this.plusS.forEach(el => el.addEventListener('click', this.viewList.bind(this)))
         this.filterVN.forEach(el => el.addEventListener('click', this.sortListUp.bind(this)))
         this.filterV.forEach(el => el.addEventListener('click', this.sortListDown.bind(this)))
         this.groups.forEach(el => this.hiddenWindows.bind(this, el)())
+        this.chekHiddens.forEach(el => el.addEventListener('click', this.toggleHiddenChildList.bind(this)))
+        this.checkInList.forEach(el => el.addEventListener('click', this.toggleHiddenList.bind(this)))
     }
-    hiddenList(event){
-        const element=event.target
-                   element.style.display = 'none'
-                   element.previousElementSibling.style.display = 'flex'
+    toggleHiddenList(event) {
+        event.stopPropagation()
+        const element = event.target
+        element.classList.toggle('changeColorCheck')
+        initsmarkers.toggleMarkersIcon()
+    }
+    toggleHiddenChildList(event) {
+        const element = event.target
+        element.classList.toggle('changeColorCheck')
+        const childCheck = (element.closest('.groups').lastElementChild).parentElement.querySelectorAll('.checkInList')
+        Array.from(childCheck).forEach(el => {
+            el.classList.toggle('changeColorCheck')
+        })
+        initsmarkers.toggleMarkersIcon()
+    }
+    hiddenList(event) {
+        const element = event.target
+        element.style.display = 'none'
+        element.previousElementSibling.style.display = 'flex'
         element.closest('.groups').children[1].style.display = 'none'
-           }
+    }
     viewList(event) {
         const element = event.target
         element.style.display = 'none'
-            element.nextElementSibling.style.display = 'flex'
+        element.nextElementSibling.style.display = 'flex'
         element.closest('.groups').children[1].style.display = 'block'
 
     }
-    sortListUp(event){
+    sortListUp(event) {
         const element = event.target
         element.style.display = 'none';
         element.previousElementSibling.style.display = 'block'
@@ -43,7 +60,6 @@ export class ToggleHiddenList {
             element.parentNode.nextElementSibling.prepend(it)
         })
     }
-
     sortListDown(event) {
         const element = event.target
         element.style.display = 'none';
@@ -57,10 +73,10 @@ export class ToggleHiddenList {
         })
     }
     hiddenWindows(el) {
-           var items = el.children[1].childNodes;
+        var items = el.children[1].childNodes;
         var itemsArr = [];
         for (var i in items) {
-            if (items[i].nodeType == 1) { 
+            if (items[i].nodeType == 1) {
                 itemsArr.push(items[i]);
             }
         }

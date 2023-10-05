@@ -1,11 +1,11 @@
 import { InitMarkers } from './class/InitMarkers.js'
 
 
-
-
+export let initsmarkers;
+let map
 
 export async function kartaContainer(elem) {
-    let map
+
     const karta = document.getElementById('gMap')
     if (!karta) {
         const div = document.createElement('div')
@@ -55,7 +55,7 @@ export async function kartaContainer(elem) {
         return acc
     }, [])
     console.log(itog)
-    const initsmarkers = new InitMarkers(itog, map)
+    initsmarkers = new InitMarkers(itog, map)
     initsmarkers.addMarkersToMap()
     const checkMarkers = document.querySelector('.checkMarkers')
 
@@ -70,5 +70,5 @@ function attachMarkerListener(marker, initsmarkers) {
     marker.addEventListener('click', () => {
         marker.classList.toggle('checkMark')
         initsmarkers.changeMarkersIcon()
-          })
+    })
 }

@@ -17,18 +17,18 @@ export class NavigationMenu {
     }
 
     init() {
-              this.buttonElements.forEach(button => {
+        this.buttonElements.forEach(button => {
             button.addEventListener('click', this.handleButtonClick.bind(this));
         });
-     
+
     }
 
     handleButtonClickList() {
-                       if (this.currentTimeoutId) {
-                    clearInterval(this.currentTimeoutId);
-                    this.currentTimeoutId = null;
-                }
-                   
+        if (this.currentTimeoutId) {
+            clearInterval(this.currentTimeoutId);
+            this.currentTimeoutId = null;
+        }
+
     }
 
     handleButtonClick(event) {
@@ -53,7 +53,7 @@ export class NavigationMenu {
         const element = document.querySelector(`.${menuItem.elem}`)
         if (menuItem) {
             menuItem.method(element);
-                     color ? color.classList.remove('color') : null
+            color ? color.classList.remove('color') : null
         }
     }
 

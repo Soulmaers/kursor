@@ -8,6 +8,23 @@ export class InitMarkers {
         this.objIconsMarkers = {}
 
     }
+
+    toggleMarkersIcon() {
+        const checkInList = document.querySelectorAll('.checkInList')
+        checkInList.forEach(el => {
+            const idw = el.closest('.listItem').id
+            if (InitMarkers.markers[idw]) {
+                if (el.classList.contains('changeColorCheck')) {
+                    this.map.removeLayer(InitMarkers.markers[idw]);
+
+                }
+                else {
+                    console.log(InitMarkers.markers[idw])
+                    InitMarkers.markers[idw].addTo(this.map)
+                }
+            }
+        })
+    }
     changeMarkersIcon() {
         console.log('апдейт маркер')
         InitMarkers.iconsMode = InitMarkers.iconsMode === "normal" ? "alternate" : "normal";
@@ -40,15 +57,12 @@ export class InitMarkers {
             marker.setIcon(newIcon);
         });
     }
-
-
     addMarkersToMap() {
+        console.log('есть?')
         const uniqueElements = Array.from(new Set(this.list.map(subarr => subarr[4])));
         uniqueElements.forEach((el, index) => {
             this.objIconsMarkers[el] = `../../../image/${index + 1}.png`
         })
-        console.log(this.objIconsMarkers)
-        console.log('запуск класса')
         this.list.forEach(item => {
             const [id, coordinates, course, name, group] = item
 
