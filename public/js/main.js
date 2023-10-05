@@ -36,11 +36,7 @@ async function init() {
     }
 
 
-<<<<<<< HEAD
    // inits();
-=======
-  //inits();
->>>>>>> e73a3920147ce61284fc79656ed3a2761bce2404
 
 
     const param = {
@@ -54,10 +50,10 @@ async function init() {
 
 
 
-/*
+
     const res = await fetch('/api/viewLogs', param)
     const confirm = await res.json()
-    console.log(confirm)*/
+    console.log(confirm)
 
 
     zapros(login) //делаем запрос на wialon получаем объекты
