@@ -1340,6 +1340,7 @@ div.spoyler {
   padding-right: 15px;
 }
 
+
 .menu {
   width: 50%;
   display: flex;
@@ -3382,10 +3383,10 @@ input[type="date"] {
 
 .my-popup-markers .leaflet-popup-content-wrapper {
   font-size: 12px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.7);
   color: rgba(6, 28, 71, 1);
   margin: 0;
-  border: 2px solid black;
+  border: 2px solid rgba(6, 28, 71, 1);
 
 }
 
@@ -5145,7 +5146,6 @@ div.wrapper {
 
 .list_name {
   width: 150px;
-
 }
 
 .list_profil {
@@ -5621,7 +5621,6 @@ input[type="text"]:focus {
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  color: 1px solid rgb(51, 51, 51);
   font-family: Arial, Helvetica, sans-serif;
 }
 
