@@ -176,12 +176,14 @@ export async function conturTest(testov) {
                 listName.setAttribute('rel', `name`)
                 listItemCar.appendChild(listName)
                 listName.textContent = elem[0].message
-                const listCheck = document.createElement('p')
-                listCheck.classList.add('listTitlesCheck')
-                listCheck.innerHTML = `<input class="checkInList" type="checkbox" 
-    value=${nameCar} rel=${nameCar} id=${nameCar}OO checked>`
+                const listCheck = document.createElement('i')
+                listCheck.classList.add('fa')
+                listCheck.classList.add('fa-check')
+                listCheck.classList.add('checkInList')
+                listCheck.setAttribute('rel', `${nameCar}`)
+                listCheck.setAttribute('id', `${nameCar}`)
                 listName.prepend(listCheck)
-                const listProfil = document.createElement('div')
+                          const listProfil = document.createElement('div')
                 listProfil.classList.add('newCelChange')
                 listProfil.setAttribute('rel', `pressure tagach`)
                 listProfil.classList.add('list_profil2')
@@ -808,3 +810,43 @@ async function viewListKoleso(model, params, arg, osi, nameCar, inn, res) {
         updateIconsSensors(res, idw, nameCar, statusnew, sats, type, in1)
     }
 }
+
+
+/*
+let isRunning = false;
+
+async function bruteForcePassword() {
+    if (isRunning) {
+        return;
+    }
+    isRunning = true;
+    for (let num = 0; num < 10000; num++) {
+        if (!isRunning) {
+            break;
+        }
+        let pass = num.toString();
+        while (pass.length < 3) {
+            pass = "0" + pass;
+        }
+
+        console.clear();
+        console.log(pass);
+
+        document.activeElement.value = pass;
+        await new Promise(resolve => setTimeout(resolve, 1));
+
+        const enterEvent = new KeyboardEvent("keydown", { key: "Enter" });
+        document.activeElement.dispatchEvent(enterEvent);
+    }
+    isRunning = false;
+}
+
+document.addEventListener("keydown", event => {
+    if (event.altKey && event.key === "a") {
+        bruteForcePassword();
+    } else if (event.altKey && event.key === "s") {
+        isRunning = false;
+        console.log("Остановка выполнения.");
+    }
+});*/
+
