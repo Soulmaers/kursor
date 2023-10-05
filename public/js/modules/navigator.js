@@ -43,8 +43,6 @@ export function navigator() {
                 return
             }
             else {
-
-
                 nav.forEach(e => {
                     el.classList.remove('color')
                     visualNone(e);  //скрываем для всех кнопок левый фрейм

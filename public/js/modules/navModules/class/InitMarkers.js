@@ -1,6 +1,7 @@
 
 export class InitMarkers {
     static markers = {}; // Хранилище для маркеров
+    static markersArrow = {}//Хранилище маркеров курса
     static iconsMode = "normal";
     constructor(list, map) {
         this.list = list;
@@ -8,7 +9,6 @@ export class InitMarkers {
         this.objIconsMarkers = {}
 
     }
-
     toggleMarkersIcon() {
         const checkInList = document.querySelectorAll('.checkInList')
         checkInList.forEach(el => {
@@ -16,11 +16,11 @@ export class InitMarkers {
             if (InitMarkers.markers[idw]) {
                 if (el.classList.contains('changeColorCheck')) {
                     this.map.removeLayer(InitMarkers.markers[idw]);
-
+                    this.map.removeLayer(InitMarkers.markersArrow[idw]);
                 }
                 else {
-                    console.log(InitMarkers.markers[idw])
                     InitMarkers.markers[idw].addTo(this.map)
+                    InitMarkers.markersArrow[idw].addTo(this.map)
                 }
             }
         })
@@ -80,11 +80,16 @@ export class InitMarkers {
                 popupAnchor: [0, 0],
                 className: 'custom-markers'
             });
-
+            var divIcon = L.divIcon({
+                className: 'custom-marker-arrow',
+                html: `<div class="wrapContainerArrow" style="pointer-events: none;height: 75px;transform: rotate(${course}deg);"><img src="../../image/arrow2.png" style="width: 20px"></div>`
+            });
             if (InitMarkers.markers[id]) {  // Если маркер с таким ID уже есть, просто обновляем его координаты
                 InitMarkers.markers[id].setLatLng(coordinates);
+                InitMarkers.markersArrow[id].setLatLng(coordinates)
             } else {  // Иначе создаем новый маркер
                 const marker = L.marker(coordinates, { icon: iconCar }).addTo(this.map);
+                const markers = L.marker(coordinates, { icon: divIcon }).addTo(this.map);
                 marker.bindPopup(`Группа: ${group}<br>Объект: ${name}<br>Координаты: ${coordinates}`, { className: 'my-popup-markers' });
                 marker.group = group;
                 marker.on('mouseover', function (e) {
@@ -95,6 +100,7 @@ export class InitMarkers {
                 });
                 // Сохраняем маркер в хранилище
                 InitMarkers.markers[id] = marker;
+                InitMarkers.markersArrow[id] = markers;
             }
         });
     }
