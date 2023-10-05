@@ -1,11 +1,12 @@
 import { convert } from './helpersFunc.js'
 import { navigator } from './navigator.js'
 import { objColorFront, generDav } from './content.js'
-import { sortAll } from './sort.js'
 import { approximateValue } from './staticObject.js'
 import { convertTime, removeArrElem } from './helpersFunc.js'
 import { globalSelect } from './filtersList.js'
 import { dataspisok } from './menu.js'
+
+import { ToggleHiddenList } from './listModules/class/ToggleHiddenList.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
 simulateLoader();
@@ -130,25 +131,33 @@ export async function conturTest(testov) {
             }
 
             group.appendChild(titleModal)
-            const filterV = document.createElement('div')
+            const filterV = document.createElement('i')
+            filterV.classList.add('fas')
+            filterV.classList.add('fa-sort-amount-up')
             filterV.classList.add('filterV')
             titleModal.appendChild(filterV)
-            const filterVN = document.createElement('div')
+            const filterVN = document.createElement('i')
+            filterVN.classList.add('fas')
+            filterVN.classList.add('fa-sort-amount-down')
             filterVN.classList.add('filterVN')
             login === 'Курсор' ? (filterVN.style.display = 'none', filterV.style.display = 'none') : null
             titleModal.appendChild(filterVN)
-            const minusS = document.createElement('div')
+            const chek = document.createElement('i')
+            chek.classList.add('fa')
+            chek.classList.add('fa-check')
+            chek.classList.add('chekHidden')
+            titleModal.prepend(chek)
+            const minusS = document.createElement('i')
+            minusS.classList.add('fas')
+            minusS.classList.add('fa-toggle-on')
             minusS.classList.add('minusS')
-            const plusS = document.createElement('div')
+            const plusS = document.createElement('i') 
+            plusS.classList.add('fas')
+            plusS.classList.add('fa-toggle-off')
             plusS.classList.add('plusS')
-            titleModal.appendChild(plusS)
-            titleModal.appendChild(minusS)
-            const pAll = document.createElement('p')
-            pAll.classList.add('pAll')
-            pAll.innerHTML = `<input class="checkInListaLL" type="checkbox" rel="${nameGroup}" value="${nameGroup}" id="${nameGroup}"
-                    >Все`
-            titleModal.prepend(pAll)
-            const hiddenModal = document.createElement('div')
+                      titleModal.prepend(minusS)
+            titleModal.prepend(plusS)
+                              const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModal')
             group.classList.add(`${nameGroup}`)
             group.setAttribute('rel', `${nameGroup}`)
@@ -266,10 +275,10 @@ export async function conturTest(testov) {
     })
     finishload = true
     viewList(login)
-    hiddenWindows()
-    navigator();
-    sortAll()
-    setInterval(zaprosSpisok, 30000)
+    const toggleList = new ToggleHiddenList()
+    toggleList.init()
+       navigator();
+      setInterval(zaprosSpisok, 30000)
 
 }
 
@@ -798,167 +807,4 @@ async function viewListKoleso(model, params, arg, osi, nameCar, inn, res) {
         statusnew = sats === '' ? '-' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
         updateIconsSensors(res, idw, nameCar, statusnew, sats, type, in1)
     }
-}
-function setId(el) {
-    let num = 0;
-    Array.from(el.children).forEach(e => {
-        if (e.classList.contains('arc')) {
-            num++
-        }
-    })
-    if (el.id == 1) {
-        let k = 0;
-        num === 2 ? (el.children[0].setAttribute('id', 1), el.children[1].setAttribute('id', 4)) :
-            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
-                k++
-                e.setAttribute('id', k)
-            })
-            )
-    }
-    if (el.id == 2) {
-        let k = 4;
-        num === 2 ? (el.children[0].setAttribute('id', 5), el.children[1].setAttribute('id', 8)) :
-            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
-                k++
-                e.setAttribute('id', k)
-            })
-            )
-    }
-    if (el.id == 3) {
-        let k = 8;
-        num === 2 ? (el.children[0].setAttribute('id', 9), el.children[1].setAttribute('id', 12)) :
-            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
-                k++
-                e.setAttribute('id', k)
-            })
-            )
-    }
-    if (el.id == 4) {
-        let k = 12;
-        num === 2 ? (el.children[0].setAttribute('id', 13), el.children[1].setAttribute('id', 16)) :
-            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
-                k++
-                e.setAttribute('id', k)
-            })
-            )
-    }
-    if (el.id == 5) {
-        let k = 16;
-        num === 2 ? (el.children[0].setAttribute('id', 17), el.children[1].setAttribute('id', 20)) :
-            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
-                k++
-                e.setAttribute('id', k)
-            })
-            )
-    }
-    if (el.id == 6) {
-        let k = 20;
-        num === 2 ? (el.children[0].setAttribute('id', 21), el.children[1].setAttribute('id', 24)) :
-            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
-                k++
-                e.setAttribute('id', k)
-            })
-            )
-    }
-    if (el.id == 7) {
-        let k = 24;
-        num === 2 ? (el.children[0].setAttribute('id', 25), el.children[1].setAttribute('id', 28)) :
-            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
-                k++
-                e.setAttribute('id', k)
-            })
-            )
-    }
-    if (el.id == 8) {
-        let k = 28;
-        num === 2 ? (el.children[0].setAttribute('id', 29), el.children[1].setAttribute('id', 32)) :
-            (Array.from(el.querySelectorAll('.arc')).forEach(e => {
-                k++
-                e.setAttribute('id', k)
-            })
-            )
-    }
-}
-
-function hiddenWindows() {
-    const groups = document.querySelectorAll('.groups')
-    groups.forEach(it => {
-        var items = it.children[1].childNodes;
-        var itemsArr = [];
-        for (var i in items) {
-            if (items[i].nodeType == 1) { // get rid of the whitespace text nodes
-                itemsArr.push(items[i]);
-            }
-        }
-        itemsArr.sort(function (a, b) {
-            return a.innerHTML == b.innerHTML
-                ? 0
-                : (a.innerHTML > b.innerHTML ? 1 : -1);
-        });
-        for (i = 0; i < itemsArr.length; ++i) {
-            it.children[1].appendChild(itemsArr[i]);
-        }
-    })
-    const plusS = document.querySelectorAll('.plusS')
-    const minusS = document.querySelectorAll('.minusS')
-    plusS.forEach(el => {
-        el.addEventListener('click', () => {
-            el.style.display = 'none'
-            el.nextElementSibling.style.display = 'block'
-            el.closest('.groups').children[1].style.display = 'block'
-            el.closest('.groups').children[0].style.padding = '5px 80px'
-            el.closest('.groups').children[0].children[0].style.display = 'block'
-            el.closest('.groups').children[0].children[4].style.left = '60px'
-            // el.closest('.groups').children[0].children[1].style.left = '190px'
-            //  el.closest('.groups').children[0].children[2].style.left = '190px'
-
-        })
-    })
-    const group = document.querySelectorAll('.groups')
-    group.forEach(it => {
-        const ide = it.children[0].children[0].children[0]
-        const ideValue = it.children[0].children[0].children[0].id
-        const checkboxes = document.querySelectorAll('.checkInList');
-        let enabledSettings = []
-        if (ide.checked === true) {
-            checkboxes.forEach(el => {
-                el.checked === false ? enabledSettings.push(el) : null
-            })
-        }
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function (event) {
-                if (this.id !== ideValue) {
-                    checkbox.closest('.listItem').style.display = 'none'
-                }
-            })
-        });
-        ide.addEventListener('change', (event) => {
-            if (ide.checked) {
-                Array.from(ide.closest('.groups').children[1].children).forEach(it => {
-                    it.style.display = 'none'
-                })
-            }
-            else if (!ide.checked) {
-                Array.from(ide.closest('.groups').children[1].children).forEach(it => {
-                    it.style.display = 'flex'
-                })
-                checkboxes.forEach(e => {
-                    e.checked = true
-                })
-            }
-        })
-    })
-
-    minusS.forEach(el => {
-        el.addEventListener('click', () => {
-            el.style.display = 'none'
-            el.previousElementSibling.style.display = 'block'
-            el.closest('.groups').children[1].style.display = 'none'
-            el.closest('.groups').children[0].style.padding = '5px 40px'
-            el.closest('.groups').children[0].children[0].style.display = 'none'
-            el.closest('.groups').children[0].children[4].style.left = '5px'
-            // el.closest('.groups').children[0].children[1].style.left = '170px'
-            // el.closest('.groups').children[0].children[2].style.left = '170px'
-        })
-    })
 }
