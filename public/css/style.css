@@ -1965,8 +1965,7 @@ div.spoyler {
 .hiddenModal {
   display: block;
   width: 900px;
-  margin-left: 20px;
-}
+ }
 
 
 .chekHidden{
@@ -5616,7 +5615,7 @@ input[type="text"]:focus {
 
 .list_name2 {
   font-size: 0.8rem;
-  min-width: 120px;
+  min-width: 150px;
   display: flex;
   align-items: center;
     box-sizing: border-box;
@@ -7245,6 +7244,7 @@ i.minusS {
     width: 1200px;
     padding: 3px 0;
     position: relative;
+    padding-left:20px;
   }
 
   .headerMain {
