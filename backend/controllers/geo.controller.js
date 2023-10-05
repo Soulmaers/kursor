@@ -44,13 +44,20 @@ exports.geoloc = async (req, res) => {
 }
 
 exports.getGeo = async (req, res) => {
+    const objCondition = {
+        0: 'Стоянка',
+        1: 'Поездка',
+        2: 'Остановка'
+    }
     const arr = req.body.arrayId
     const result = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(arr)
     const structura = []
     for (let key in result) {
         if (result[key][1] !== undefined) {
             const eventObject = Object.values(result[key][1])[0]
-            structura.push([key, [eventObject.to.y, eventObject.to.x], eventObject.course])
+            const nowTime = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
+            const currentTime = nowTime - eventObject.m
+            structura.push([key, [eventObject.to.y, eventObject.to.x], eventObject.course, eventObject.curr_speed, objCondition[eventObject.state], currentTime])
         }
     }
     res.json(structura)

@@ -1,5 +1,5 @@
 import { InitMarkers } from './class/InitMarkers.js'
-
+import { convertTime } from '..//helpersFunc.js';
 
 export let initsmarkers;
 let map
@@ -46,7 +46,12 @@ export async function kartaContainer(elem) {
         body: (JSON.stringify({ arrayId }))
     }
     const res = await fetch('/api/getGeo', params)
-    const result = await res.json()
+    const results = await res.json()
+    const result = results.map(el => {
+        let newArr = [...el]
+        newArr[5] = el[5] == null ? undefined : convertTime(el[5])
+        return newArr
+    })
     console.log(result)
     const itog = result.reduce((acc, el) => {
         const element = Array.from(list).filter(it => el[0] === it.id)

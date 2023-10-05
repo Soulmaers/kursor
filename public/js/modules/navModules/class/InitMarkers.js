@@ -20,7 +20,11 @@ export class InitMarkers {
                 }
                 else {
                     InitMarkers.markers[idw].addTo(this.map)
-                    InitMarkers.markersArrow[idw].addTo(this.map)
+                    this.list.forEach(it => {
+                        if (it[0] === idw) {
+                            it[4] !== 'Стоянка' ? InitMarkers.markersArrow[idw].addTo(this.map) : this.map.removeLayer(InitMarkers.markersArrow[idw]);
+                        }
+                    })
                 }
             }
         })
@@ -51,7 +55,7 @@ export class InitMarkers {
                     iconSize: [30, 30],
                     iconAnchor: [20, 20],
                     popupAnchor: [0, 0],
-                    className: 'custom-markers'
+                    className: 'custom-markers-group'
                 });
             }
             marker.setIcon(newIcon);
@@ -59,12 +63,12 @@ export class InitMarkers {
     }
     addMarkersToMap() {
         console.log('есть?')
-        const uniqueElements = Array.from(new Set(this.list.map(subarr => subarr[4])));
+        const uniqueElements = Array.from(new Set(this.list.map(subarr => subarr[7])));
         uniqueElements.forEach((el, index) => {
             this.objIconsMarkers[el] = `../../../image/${index + 1}.png`
         })
         this.list.forEach(item => {
-            const [id, coordinates, course, name, group] = item
+            const [id, coordinates, course, speed, state, relevance, name, group] = item
 
             const LeafIcon = L.Icon.extend({
                 options: {
@@ -77,7 +81,7 @@ export class InitMarkers {
                 iconUrl: '../../image/trailer.png',
                 iconSize: [30, 22],
                 iconAnchor: [20, 20],
-                popupAnchor: [0, 0],
+                popupAnchor: [0, -10],
                 className: 'custom-markers'
             });
             var divIcon = L.divIcon({
@@ -91,11 +95,12 @@ export class InitMarkers {
                 let markerDOM = InitMarkers.markersArrow[id].getElement();
                 let wrapContainerArrow = markerDOM.getElementsByClassName('wrapContainerArrow')[0];
                 wrapContainerArrow.style.transform = `rotate(${course}deg)`;
-
+                InitMarkers.markers[id].setPopupContent(`Группа: ${group}<br>Объект: ${name}<br>Актуальность данных: ${relevance}<br>Cостояние: ${state}<br>${state === 'Поездка' ? `Скорость: ${speed} км/ч<br>` : ''}Координаты: ${coordinates}`);
             } else {  // Иначе создаем новый маркер
                 const marker = L.marker(coordinates, { icon: iconCar }).addTo(this.map);
-                const markers = L.marker(coordinates, { icon: divIcon }).addTo(this.map);
-                marker.bindPopup(`Группа: ${group}<br>Объект: ${name}<br>Координаты: ${coordinates}`, { className: 'my-popup-markers' });
+                const markers = L.marker(coordinates, { icon: divIcon })
+                state !== 'Стоянка' ? markers.addTo(this.map) : this.map.removeLayer(markers);
+                marker.bindPopup(`Группа: ${group}<br>Объект: ${name}<br>Актуальность данных: ${relevance}<br>Cостояние: ${state}<br>${state === 'Поездка' ? `Скорость: ${speed} км/ч<br>` : ''}Координаты: ${coordinates}`, { className: 'my-popup-markers' });
                 marker.group = group;
                 marker.on('mouseover', function (e) {
                     this.openPopup();
