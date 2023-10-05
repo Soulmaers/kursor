@@ -87,6 +87,11 @@ export class InitMarkers {
             if (InitMarkers.markers[id]) {  // Если маркер с таким ID уже есть, просто обновляем его координаты
                 InitMarkers.markers[id].setLatLng(coordinates);
                 InitMarkers.markersArrow[id].setLatLng(coordinates)
+
+                let markerDOM = InitMarkers.markersArrow[id].getElement();
+                let wrapContainerArrow = markerDOM.getElementsByClassName('wrapContainerArrow')[0];
+                wrapContainerArrow.style.transform = `rotate(${course}deg)`;
+
             } else {  // Иначе создаем новый маркер
                 const marker = L.marker(coordinates, { icon: iconCar }).addTo(this.map);
                 const markers = L.marker(coordinates, { icon: divIcon }).addTo(this.map);

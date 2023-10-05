@@ -47,6 +47,7 @@ export async function kartaContainer(elem) {
     }
     const res = await fetch('/api/getGeo', params)
     const result = await res.json()
+    console.log(result)
     const itog = result.reduce((acc, el) => {
         const element = Array.from(list).filter(it => el[0] === it.id)
         const name = element[0].children[0].textContent
