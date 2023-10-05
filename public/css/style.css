@@ -1335,7 +1335,8 @@ div.spoyler {
 }
 
 .checkInList {
-  background-color: gray;
+ color:rgba(6, 28, 71, 1);
+ margin:0 8px;
 }
 
 .menu {
@@ -5618,8 +5619,7 @@ input[type="text"]:focus {
   min-width: 120px;
   display: flex;
   align-items: center;
-  margin-left: 30px;
-  box-sizing: border-box;
+    box-sizing: border-box;
   color: 1px solid rgb(51, 51, 51);
   font-family: Arial, Helvetica, sans-serif;
 }

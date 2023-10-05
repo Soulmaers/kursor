@@ -36,11 +36,7 @@ async function init() {
     }
 
 
-<<<<<<< HEAD
    // inits();
-=======
-  //inits();
->>>>>>> e73a3920147ce61284fc79656ed3a2761bce2404
 
 
     const param = {
