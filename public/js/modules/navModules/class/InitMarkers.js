@@ -1,3 +1,5 @@
+import { visual } from '../../visual.js'
+
 
 export class InitMarkers {
     static markers = {}; // Хранилище для маркеров
@@ -10,8 +12,30 @@ export class InitMarkers {
         this.settings = document.querySelector('.settingsMap')
         this.container = document.querySelector('.containerSettingsMap')
         this.objIconsMarkers = {}
+        this.listObject = document.querySelectorAll('.listItem')
 
+        Object.values(InitMarkers.markers).forEach((markers) => {
+
+            if (!markers.clickEventAttached) { // Verify if a click event is already attached
+                markers.addEventListener('click', this.clickMarkers.bind(this))
+                markers.clickEventAttached = true; // Mark this marker that a click event has been attached
+            }
+        })
     }
+
+
+
+    clickMarkers(event) {
+        const marker = event.target
+        console.log(marker)
+        this.listObject.forEach(el => {
+            if (el.id === marker.id) {
+                visual(el)
+            }
+        })
+    }
+
+
 
     viewHiddenMenuMap() {
         this.settings.addEventListener('mouseenter', () => {
@@ -136,6 +160,7 @@ export class InitMarkers {
                 marker.bindPopup(`Группа: ${group}<br>Объект: ${name}<br>Актуальность данных: ${relevance}<br>Cостояние: ${state}<br>${state === 'Поездка' ? `Скорость: ${speed} км/ч<br>` : ''}Координаты: ${coordinates}`, { className: 'my-popup-markers' });
                 marker.group = group;
                 marker.name = name;
+                marker.id = id;
                 marker.on('mouseover', function (e) {
                     this.openPopup();
                 });
