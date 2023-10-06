@@ -50,6 +50,7 @@ export async function kartaContainer(elem) {
     const result = results.map(el => {
         let newArr = [...el]
         newArr[5] = el[5] == null ? undefined : convertTime(el[5])
+        newArr.push(el[5] > 3600 ? 'off' : 'on')
         return newArr
     })
     console.log(result)
@@ -64,6 +65,7 @@ export async function kartaContainer(elem) {
     initsmarkers = new InitMarkers(itog, map)
     initsmarkers.addMarkersToMap()
     initsmarkers.viewHiddenMenuMap()
+    initsmarkers.statistikaObjectCar()
     const checkMarkers = document.querySelectorAll('.checkMarkers')
 
 

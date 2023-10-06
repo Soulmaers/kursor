@@ -6,7 +6,7 @@ async function testovfn(active, t1, t2) {
     return resultt
 }
 exports.startAllStatic = async (objects) => {
-       const interval = timefn()
+    const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
     structura.datas(objects, timeNow, timeOld)
@@ -25,10 +25,10 @@ exports.startAllStatic = async (objects) => {
         //   .filter(e => e[0].message.startsWith('Sitrack'))
         .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)
         .map(e => e);
-   // console.log(array)
+    // console.log(array)
     const res = await loadValue(array, timeOld, timeNow)
     console.log(res)
-      return res.uniq
+    return res.uniq
 }
 async function loadValue(array, timeOld, timeNow) {
     const uniqObject = {};
@@ -45,8 +45,8 @@ async function loadValue(array, timeOld, timeNow) {
 
         try {
             const itog = await testovfn(idw, timeOld, timeNow)
-                 itog.forEach(el => {
-                                             const timestamp = Number(el.data);
+            itog.forEach(el => {
+                const timestamp = Number(el.data);
                 const date = new Date(timestamp * 1000);
                 const isoString = date.toISOString();
                 time.push(new Date(isoString))
@@ -57,11 +57,11 @@ async function loadValue(array, timeOld, timeNow) {
             const sensArr = itog.map(e => {
                 return JSON.parse(e.sens)
             })
-                  const allsens = itog.map(it => {
+            const allsens = itog.map(it => {
                 return { sens: JSON.parse(it.allSensParams).map(e => e[0]), params: JSON.parse(it.allSensParams).map(e => e[1]), val: JSON.parse(it.allSensParams).map(e => e[2]) }
             })
             if (allsens.length === 0) {
-                            continue
+                continue
             }
             const allArrNew = allsens.reduce((accumulator, current) => {
                 current.sens.forEach((sens, idx) => {
@@ -285,7 +285,7 @@ function moto(data) {
                 startIndex = index;
             }
         });
-            const subarray = data.time.slice(startIndex);
+        const subarray = data.time.slice(startIndex);
         const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex) };
         (data.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
         (data.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
@@ -332,11 +332,11 @@ function moto(data) {
             const timeGran = razgruzka.map(el => {
                 return [el.time[0], el.time[el.time.length - 1]]
             })
-                   const mass = [];
+            const mass = [];
             if (timeGran.length > 1) {
                 let start = 0; // начальный индекс для сравнения
                 for (let i = 0; i < timeGran.length - 1; i++) {
-                                      const diffInSeconds = (timeGran[i + 1][0].getTime() - timeGran[start][1].getTime()) / 1000;
+                    const diffInSeconds = (timeGran[i + 1][0].getTime() - timeGran[start][1].getTime()) / 1000;
                     if (diffInSeconds > 900) {
                         mass.push([timeGran[start][0], timeGran[start][1]])
                         start = i + 1; // обновляем начальный индекс
@@ -425,7 +425,7 @@ function rashodCalc(data, name, group, idw) {
         const time0 = e[0][1];
         const time1 = e[1][1];
         const initTime = time1 - time0;
-        return initTime >= 2 * 60 * 1000;
+        return initTime >= 5 * 60 * 1000;
     });
     const rash = [];
     const firstData = data.value[0];

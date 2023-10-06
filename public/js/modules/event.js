@@ -62,8 +62,10 @@ viewIcon.forEach(e => {
     new Tooltip(e, [storTitleList[lastRel]]);
 });
 
-
-
+const tableInfoCar = document.querySelector('.tableInfoCar')
+Array.from(tableInfoCar.children).forEach(e => {
+    new Tooltip(e, [e.getAttribute('rel')]);
+})
 // Использование класса
 export const navMenu = new NavigationMenu();
 navMenu.init();

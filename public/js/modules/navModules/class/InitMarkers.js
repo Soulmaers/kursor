@@ -13,8 +13,46 @@ export class InitMarkers {
         this.container = document.querySelector('.containerSettingsMap')
         this.objIconsMarkers = {}
         this.listObject = document.querySelectorAll('.listItem')
-
+        this.tableInfoCar = document.querySelector('.tableInfoCar')
     }
+
+
+    statistikaObjectCar() {
+        const arrayStatus = [];
+        const checkInList = document.querySelectorAll('.checkInList')
+        let count = checkInList.length;
+        checkInList.forEach(e => {
+            if (e.classList.contains('changeColorCheck')) {
+                count--
+            }
+        })
+        const statusCounts = Array.from(this.list).reduce((acc, el) => {
+            if (el[6] == 'off') {
+                acc.offline = (acc.offline || 0) + 1;
+            }
+            if (el[4] === 'Поездка') {
+                acc.move = (acc.move || 0) + 1;
+            }
+            if (el[4] === 'Остановка') {
+                acc.pause = (acc.pause || 0) + 1;
+            }
+            if (el[4] === 'Стоянка') {
+                acc.stop = (acc.stop || 0) + 1;
+            }
+            return acc;
+        }, {});
+        arrayStatus.push(this.listObject.length)
+        arrayStatus.push(count);
+        arrayStatus.push(statusCounts.offline);
+        arrayStatus.push(statusCounts.move);
+        arrayStatus.push(statusCounts.pause);
+        arrayStatus.push(statusCounts.stop);
+        console.log(arrayStatus)
+        Array.from(this.tableInfoCar.children).forEach((element, index) => {
+            element.textContent = arrayStatus[index]
+        });
+    }
+
     clickMarkers(event) {
         const marker = event.target
         console.log(marker)
@@ -24,9 +62,6 @@ export class InitMarkers {
             }
         })
     }
-
-
-
     viewHiddenMenuMap() {
         this.settings.addEventListener('mouseenter', () => {
             this.container.style.display = 'flex'
@@ -114,12 +149,12 @@ export class InitMarkers {
     }
     addMarkersToMap() {
         console.log('есть?')
-        const uniqueElements = Array.from(new Set(this.list.map(subarr => subarr[7])));
+        const uniqueElements = Array.from(new Set(this.list.map(subarr => subarr[8])));
         uniqueElements.forEach((el, index) => {
             this.objIconsMarkers[el] = `../../../image/${index + 1}.png`
         })
         this.list.forEach(item => {
-            const [id, coordinates, course, speed, state, relevance, name, group] = item
+            const [id, coordinates, course, speed, state, relevance, , name, group] = item
 
             const LeafIcon = L.Icon.extend({
                 options: {

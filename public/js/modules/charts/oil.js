@@ -146,7 +146,7 @@ export async function oil(t1, t2) {
             const time0 = (e[0].time).getTime() / 1000;
             const time1 = (e[1].time).getTime() / 1000;
             const initTime = time1 - time0;
-            return initTime >= 2 * 60;
+            return initTime >= 5 * 60;
         });
         const rash = [];
         const firstData = data[0].oil;

@@ -35,6 +35,8 @@ export class NavigationMenu {
         if (this.currentTimeoutId) {
             clearInterval(this.currentTimeoutId);
             const checkTypeMarkers = document.querySelector('.checkTypeMarkers')
+            const tableInfoCar = document.querySelector('.tableInfoCar')
+            tableInfoCar.style.display = 'none'
             checkTypeMarkers.style.display = 'none'
             this.currentTimeoutId = null; // очистить id таймера, так как он больше не активен
 
@@ -65,7 +67,9 @@ export class NavigationMenu {
     karta(elem) {
         elem.style.display = 'flex'
         const checkTypeMarkers = document.querySelector('.checkTypeMarkers')
+        const tableInfoCar = document.querySelector('.tableInfoCar')
         checkTypeMarkers.style.display = 'flex'
+        tableInfoCar.style.display = 'flex'
         kartaContainer(elem)
         this.currentTimeoutId = setInterval(() => {
             kartaContainer(elem)

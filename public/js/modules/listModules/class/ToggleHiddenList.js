@@ -25,6 +25,7 @@ export class ToggleHiddenList {
         const element = event.target
         element.classList.toggle('changeColorCheck')
         initsmarkers.toggleMarkersIcon()
+        initsmarkers.statistikaObjectCar()
     }
     toggleHiddenChildList(event) {
         const element = event.target
@@ -34,6 +35,7 @@ export class ToggleHiddenList {
             el.classList.toggle('changeColorCheck')
         })
         initsmarkers.toggleMarkersIcon()
+        initsmarkers.statistikaObjectCar()
     }
     hiddenList(event) {
         const element = event.target
