@@ -71,9 +71,13 @@ export async function kartaContainer(elem) {
         if (!marker.hasListener) {
             marker.addEventListener('click', () => {
                 marker.classList.toggle('checkMark');
-
                 switch (index) {
                     case 0:
+                        const checkMark = marker.classList.contains('checkMark');
+                        const siblingTextElement = marker.nextSibling; // assuming text node is next sibling
+                        if (siblingTextElement) {
+                            siblingTextElement.textContent = checkMark ? 'Группа' : 'Тип';
+                        }
                         initsmarkers.changeMarkersIcon();
                         break;
                     case 1:
