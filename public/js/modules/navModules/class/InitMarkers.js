@@ -14,17 +14,7 @@ export class InitMarkers {
         this.objIconsMarkers = {}
         this.listObject = document.querySelectorAll('.listItem')
 
-        Object.values(InitMarkers.markers).forEach((markers) => {
-
-            if (!markers.clickEventAttached) { // Verify if a click event is already attached
-                markers.addEventListener('click', this.clickMarkers.bind(this))
-                markers.clickEventAttached = true; // Mark this marker that a click event has been attached
-            }
-        })
     }
-
-
-
     clickMarkers(event) {
         const marker = event.target
         console.log(marker)
@@ -170,7 +160,12 @@ export class InitMarkers {
                 // Сохраняем маркер в хранилище
                 InitMarkers.markers[id] = marker;
                 InitMarkers.markersArrow[id] = markers;
+                if (!marker.clickEventAttached) { // Verify if a click event is already attached
+                    marker.on('click', this.clickMarkers.bind(this))
+                    marker.clickEventAttached = true; // Mark this marker that a click event has been attached
+                }
             }
+
         });
     }
 }
