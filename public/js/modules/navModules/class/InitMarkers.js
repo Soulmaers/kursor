@@ -30,9 +30,13 @@ export class InitMarkers {
     viewHiddenMenuMap() {
         this.settings.addEventListener('mouseenter', () => {
             this.container.style.display = 'flex'
+            this.settings.style.width = '165px'
+            this.settings.firstElementChild.innerHTML = `<i class="fas fa-cogs" style="padding-right:10px" ></i> Настройки`
         })
         this.settings.addEventListener('mouseleave', () => {
             this.container.style.display = 'none'
+            this.settings.style.width = '30px'
+            this.settings.firstElementChild.innerHTML = `<i class="fas fa-cogs"></i>`
         })
     }
 
