@@ -28,7 +28,7 @@ export class InitMarkers {
         console.log(InitMarkers.namesMode)
         Object.values(InitMarkers.markers).forEach(marker => {
             if (InitMarkers.namesMode !== 'normal') {
-                marker.bindTooltip(marker.name, {
+                marker.bindTooltip(InitMarkers.iconsMode === 'normal' ? marker.group : marker.name, {
                     permanent: true,    // делает тултип постоянным
                     direction: "top",  // устанавливает позицию тултипа относительно маркера
                     className: 'my-custom-tooltip',  // указываем класс тултипа для дальнейшего стилизования
@@ -80,6 +80,7 @@ export class InitMarkers {
                     popupAnchor: [0, 0],
                     className: 'custom-markers'
                 });
+                marker.setTooltipContent(marker.group)
             } else {
                 newIcon = new LeafIcon({
                     iconUrl: this.objIconsMarkers[marker.group],
@@ -88,6 +89,7 @@ export class InitMarkers {
                     popupAnchor: [0, 0],
                     className: 'custom-markers-group'
                 });
+                marker.setTooltipContent(marker.name)
             }
             marker.setIcon(newIcon);
         });
