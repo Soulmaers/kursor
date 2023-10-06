@@ -3,11 +3,42 @@ export class InitMarkers {
     static markers = {}; // Хранилище для маркеров
     static markersArrow = {}//Хранилище маркеров курса
     static iconsMode = "normal";
+    static namesMode = 'normal'
     constructor(list, map) {
         this.list = list;
         this.map = map;
+        this.settings = document.querySelector('.settingsMap')
+        this.container = document.querySelector('.containerSettingsMap')
         this.objIconsMarkers = {}
 
+    }
+
+    viewHiddenMenuMap() {
+        this.settings.addEventListener('mouseenter', () => {
+            this.container.style.display = 'flex'
+        })
+        this.settings.addEventListener('mouseleave', () => {
+            this.container.style.display = 'none'
+        })
+    }
+
+    nameObjectView() {
+        console.log(InitMarkers.namesMode)
+        InitMarkers.namesMode = InitMarkers.namesMode === 'normal' ? 'alternate' : 'normal';
+        console.log(InitMarkers.namesMode)
+        Object.values(InitMarkers.markers).forEach(marker => {
+            if (InitMarkers.namesMode !== 'normal') {
+                marker.bindTooltip(marker.name, {
+                    permanent: true,    // делает тултип постоянным
+                    direction: "top",  // устанавливает позицию тултипа относительно маркера
+                    className: 'my-custom-tooltip',  // указываем класс тултипа для дальнейшего стилизования
+                }).openTooltip();
+            }
+            else {
+                marker.unbindTooltip();
+            }
+
+        });
     }
     toggleMarkersIcon() {
         const checkInList = document.querySelectorAll('.checkInList')
@@ -102,6 +133,7 @@ export class InitMarkers {
                 state !== 'Стоянка' ? markers.addTo(this.map) : this.map.removeLayer(markers);
                 marker.bindPopup(`Группа: ${group}<br>Объект: ${name}<br>Актуальность данных: ${relevance}<br>Cостояние: ${state}<br>${state === 'Поездка' ? `Скорость: ${speed} км/ч<br>` : ''}Координаты: ${coordinates}`, { className: 'my-popup-markers' });
                 marker.group = group;
+                marker.name = name;
                 marker.on('mouseover', function (e) {
                     this.openPopup();
                 });

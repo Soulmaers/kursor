@@ -63,18 +63,31 @@ export async function kartaContainer(elem) {
     console.log(itog)
     initsmarkers = new InitMarkers(itog, map)
     initsmarkers.addMarkersToMap()
-    const checkMarkers = document.querySelector('.checkMarkers')
+    initsmarkers.viewHiddenMenuMap()
+    const checkMarkers = document.querySelectorAll('.checkMarkers')
 
 
-    if (!checkMarkers.hasListener) {
-        attachMarkerListener(checkMarkers, initsmarkers);
-        checkMarkers.hasListener = true;
-    }
+    checkMarkers.forEach((marker, index) => {
+        if (!marker.hasListener) {
+            marker.addEventListener('click', () => {
+                marker.classList.toggle('checkMark');
+
+                switch (index) {
+                    case 0:
+                        initsmarkers.changeMarkersIcon();
+                        break;
+                    case 1:
+                        initsmarkers.nameObjectView();
+                        break;
+                    case 2:
+                        //   initsmarkers.eMarkersIcon3();
+                        break;
+                    default:
+                        break;
+                }
+            });
+            marker.hasListener = true;
+        }
+    });
 }
 
-function attachMarkerListener(marker, initsmarkers) {
-    marker.addEventListener('click', () => {
-        marker.classList.toggle('checkMark')
-        initsmarkers.changeMarkersIcon()
-    })
-}
