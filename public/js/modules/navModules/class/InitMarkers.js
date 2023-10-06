@@ -91,10 +91,10 @@ export class InitMarkers {
             if (InitMarkers.markers[id]) {  // Если маркер с таким ID уже есть, просто обновляем его координаты
                 InitMarkers.markers[id].setLatLng(coordinates);
                 InitMarkers.markersArrow[id].setLatLng(coordinates)
-
                 let markerDOM = InitMarkers.markersArrow[id].getElement();
-                let wrapContainerArrow = markerDOM.getElementsByClassName('wrapContainerArrow')[0];
-                wrapContainerArrow.style.transform = `rotate(${course}deg)`;
+                if (markerDOM) {
+                    markerDOM.children[0].style.transform = `rotate(${course}deg)`
+                }
                 InitMarkers.markers[id].setPopupContent(`Группа: ${group}<br>Объект: ${name}<br>Актуальность данных: ${relevance}<br>Cостояние: ${state}<br>${state === 'Поездка' ? `Скорость: ${speed} км/ч<br>` : ''}Координаты: ${coordinates}`);
             } else {  // Иначе создаем новый маркер
                 const marker = L.marker(coordinates, { icon: iconCar }).addTo(this.map);

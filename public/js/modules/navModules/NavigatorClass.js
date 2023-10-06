@@ -69,7 +69,7 @@ export class NavigationMenu {
         kartaContainer(elem)
         this.currentTimeoutId = setInterval(() => {
             kartaContainer(elem)
-        }, 30000);
+        }, 10000);
     }
 
     char(elem) {
