@@ -27,7 +27,7 @@ export class InitMarkers {
             }
         })
         const statusCounts = Array.from(this.list).reduce((acc, el) => {
-            if (el[6] == 'off') {
+            if (el[6] === 'off') {
                 acc.offline = (acc.offline || 0) + 1;
             }
             if (el[4] === 'Поездка') {
@@ -43,10 +43,10 @@ export class InitMarkers {
         }, {});
         arrayStatus.push(this.listObject.length)
         arrayStatus.push(count);
-        arrayStatus.push(statusCounts.offline);
-        arrayStatus.push(statusCounts.move);
-        arrayStatus.push(statusCounts.pause);
-        arrayStatus.push(statusCounts.stop);
+        arrayStatus.push(statusCounts.offline !== undefined ? statusCounts.offline : 0);
+        arrayStatus.push(statusCounts.move !== undefined ? statusCounts.move : 0)
+        arrayStatus.push(statusCounts.pause !== undefined ? statusCounts.pause : 0);
+        arrayStatus.push(statusCounts.stop !== undefined ? statusCounts.stop : 0);
         console.log(arrayStatus)
         Array.from(this.tableInfoCar.children).forEach((element, index) => {
             element.textContent = arrayStatus[index]

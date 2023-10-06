@@ -5243,7 +5243,7 @@ div.wrapper {
   width: 1200px;
   padding: 5px 0;
   border-bottom: 2px solid rgba(6, 28, 71, 1);
-  padding-left: 20px;
+  padding-left: 12px;
 }
 
 .configChange {
@@ -7397,7 +7397,6 @@ i.minusS {
 
 
 .list_item_list {
-  width: 100px;
   margin: 0;
   color: rgba(6, 28, 71, 1);
 }
@@ -8351,4 +8350,9 @@ i.changeColorCheck {
   font-size: 1.5rem;
   border-radius: 5px;
   border: 1px solid rgba(6, 28, 71, 1);
+}
+
+.globalcheck {
+  padding-right: 5px;
+  cursor: pointer;
 }
