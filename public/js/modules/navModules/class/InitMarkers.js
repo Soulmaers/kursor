@@ -25,19 +25,19 @@ export class InitMarkers {
             console.log(marker)
             Object.values(InitMarkers.markers).forEach(e => {
                 e.setOpacity(0.0)
-                if (e._tooltip) { // Check if the marker has a tooltip
-                    e.closeTooltip() // Close the tooltip
+                if (e._tooltip) {
+                    e.closeTooltip()
                 }
 
             })
             Object.values(InitMarkers.markersArrow).forEach(e => {
                 e.setOpacity(0.0)
-                if (e._tooltip) { // Check if the marker has a tooltip
-                    e.closeTooltip() // Close the tooltip
+                if (e._tooltip) {
+                    e.closeTooltip()
                 }
             })
-            if (marker._tooltip) { // Check if the marker has a tooltip
-                marker.openTooltip() // Open the tooltip
+            if (marker._tooltip) {
+                marker.openTooltip()
             }
             marker.setOpacity(1)
             markerArrow.setOpacity(1)
@@ -48,8 +48,8 @@ export class InitMarkers {
     opasityMarkersBack(event) {
         Object.values(InitMarkers.markers).forEach(e => {
             e.setOpacity(1)
-            if (e._tooltip) { // Check if the marker has a tooltip
-                e.openTooltip() // Open the tooltip
+            if (e._tooltip) {
+                e.openTooltip()
             }
         })
         Object.values(InitMarkers.markersArrow).forEach(e => {
@@ -258,5 +258,17 @@ export class InitMarkers {
             }
 
         });
+    }
+    async lastTravelTrek(arrayId) {
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ arrayId }))
+        }
+        console.log(arrayId)
+        // const res = await fetch('/api/getTreks', params)
+        const results = await res.json()
     }
 }

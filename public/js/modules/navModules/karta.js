@@ -88,7 +88,7 @@ export async function kartaContainer(elem) {
                         initsmarkers.nameObjectView();
                         break;
                     case 2:
-                        //   initsmarkers.eMarkersIcon3();
+                        initsmarkers.lastTravelTrek(arrayId);
                         break;
                     default:
                         break;

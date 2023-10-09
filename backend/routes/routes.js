@@ -34,7 +34,7 @@ router.post('/api/updateSensors', controllerWialon.updateSensors)
 
 router.post('/api/geoloc', controllerGeo.geoloc)
 router.post('/api/getGeo', controllerGeo.getGeo)
-
+router.post('/api/getTreks', controllerGeo.getTreks)
 
 
 router.post('/api/alarmFind', controllerAlarm.alarmFind)

@@ -160,7 +160,12 @@ export async function iconParams() {
                     const oborotValue = document.querySelector('.oborot_value')
                     oborotValue.textContent = it[2].toFixed(0)
                 }
+
                 return
+            }
+            if (it.includes('Топливо')) {
+                const oilCard = document.querySelector('.oil_value1')
+                oilCard.textContent = it[2].toFixed(0)
             }
             /*  if (count === 0) {
                   const ignValue = document.querySelector('.ign_value')
