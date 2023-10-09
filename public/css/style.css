@@ -8379,3 +8379,7 @@ i.changeColorCheck {
   padding-right: 5px;
   cursor: pointer;
 }
+
+.changeGlobalCheck {
+  color: gray;
+}

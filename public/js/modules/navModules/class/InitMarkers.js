@@ -17,7 +17,32 @@ export class InitMarkers {
         //  this.titleInfoMap = document.querySelector('.titleInfoMap')
     }
 
-
+    opasityMarkers(event) {
+        const objectId = event.id
+        const marker = InitMarkers.markers[objectId]
+        const markerArrow = InitMarkers.markersArrow[objectId]
+        if (marker) {
+            Object.values(InitMarkers.markers).forEach(e => {
+                e.setOpacity(0.0)
+            })
+            Object.values(InitMarkers.markersArrow).forEach(e => {
+                e.setOpacity(0.0)
+            })
+            marker.setOpacity(1)
+            markerArrow.setOpacity(1)
+            const markerPosition = marker.getLatLng()
+            this.map.setView(markerPosition, 8)
+        }
+    }
+    opasityMarkersBack(event) {
+        Object.values(InitMarkers.markers).forEach(e => {
+            e.setOpacity(1)
+        })
+        Object.values(InitMarkers.markersArrow).forEach(e => {
+            e.setOpacity(1)
+        })
+        this.map.setView([59.9386, 30.3141], 9)
+    }
     statistikaObjectCar() {
         const arrayStatus = [];
         const checkInList = document.querySelectorAll('.checkInList')

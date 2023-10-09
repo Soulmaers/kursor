@@ -10,6 +10,8 @@ export class ToggleHiddenList {
         this.filterVN = document.querySelectorAll('.filterVN')
         this.checkInList = document.querySelectorAll('.checkInList')
         this.groups = document.querySelectorAll('.groups')
+        this.globalcheck = document.querySelector('.globalcheck')
+        this.listItem = document.querySelectorAll('.listItem')
     }
     init() {
         this.minusS.forEach(el => el.addEventListener('click', this.hiddenList.bind(this)))
@@ -19,6 +21,40 @@ export class ToggleHiddenList {
         this.groups.forEach(el => this.hiddenWindows.bind(this, el)())
         this.chekHiddens.forEach(el => el.addEventListener('click', this.toggleHiddenChildList.bind(this)))
         this.checkInList.forEach(el => el.addEventListener('click', this.toggleHiddenList.bind(this)))
+        this.globalcheck.addEventListener('click', this.toggleGlobalObjectMaps.bind(this))
+        this.listItem.forEach(el => el.children[0].addEventListener('mouseenter', this.opasity.bind(this)))
+        this.listItem.forEach(el => el.children[0].addEventListener('mouseleave', this.opasityBack.bind(this)))
+    }
+
+    opasity(event) {
+        console.log(event)
+        initsmarkers.opasityMarkers(event.target.parentElement)
+    }
+    opasityBack(event) {
+        initsmarkers.opasityMarkersBack(event.target.parentElement)
+    }
+
+    toggleGlobalObjectMaps(event) {
+        this.globalcheck.classList.toggle('changeGlobalCheck')
+        const changeGlobalCheck = document.querySelector('.changeGlobalCheck')
+        if (changeGlobalCheck) {
+            this.checkInList.forEach(e => {
+                e.classList.add('changeColorCheck')
+            })
+            this.chekHiddens.forEach(e => {
+                e.classList.add('changeColorCheck')
+            })
+        }
+        else {
+            this.checkInList.forEach(e => {
+                e.classList.remove('changeColorCheck')
+            })
+            this.chekHiddens.forEach(e => {
+                e.classList.remove('changeColorCheck')
+            })
+        }
+        initsmarkers.toggleMarkersIcon()
+        initsmarkers.statistikaObjectCar()
     }
     toggleHiddenList(event) {
         event.stopPropagation()
