@@ -8313,6 +8313,8 @@ i.changeColorCheck {
   padding-top: 2px;
 }
 
+
+
 .my-custom-tooltip {
   background: #fff;
   color: rgba(6, 28, 71, 1);
@@ -8327,13 +8329,18 @@ i.changeColorCheck {
   position: absolute;
   left: 10px;
   bottom: 150px;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+.containerInfoMap {
   border-radius: 5px;
   width: 300px;
   height: 40px;
   display: none;
   justify-content: space-around;
   align-items: center;
-  z-index: 1;
   padding: 5px;
 }
 
@@ -8351,6 +8358,22 @@ i.changeColorCheck {
   border-radius: 5px;
   border: 1px solid rgba(6, 28, 71, 1);
 }
+
+.titleInfoMaps {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(6, 28, 71, 1);
+  border-radius: 5px;
+  background-color: #fff;
+  color: rgba(6, 28, 71, 1);
+  font-weight: 400;
+  font-size: 1.5rem;
+  padding: 2px;
+}
+
 
 .globalcheck {
   padding-right: 5px;

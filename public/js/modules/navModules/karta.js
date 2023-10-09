@@ -65,7 +65,9 @@ export async function kartaContainer(elem) {
     initsmarkers = new InitMarkers(itog, map)
     initsmarkers.addMarkersToMap()
     initsmarkers.viewHiddenMenuMap()
+    initsmarkers.viewHiddenInfoMap()
     initsmarkers.statistikaObjectCar()
+
     const checkMarkers = document.querySelectorAll('.checkMarkers')
 
 

@@ -63,7 +63,7 @@ viewIcon.forEach(e => {
 });
 
 const tableInfoCar = document.querySelector('.tableInfoCar')
-Array.from(tableInfoCar.children).forEach(e => {
+Array.from(tableInfoCar.children[1].children).forEach(e => {
     new Tooltip(e, [e.getAttribute('rel')]);
 })
 // Использование класса

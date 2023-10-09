@@ -14,6 +14,7 @@ export class InitMarkers {
         this.objIconsMarkers = {}
         this.listObject = document.querySelectorAll('.listItem')
         this.tableInfoCar = document.querySelector('.tableInfoCar')
+        //  this.titleInfoMap = document.querySelector('.titleInfoMap')
     }
 
 
@@ -48,7 +49,7 @@ export class InitMarkers {
         arrayStatus.push(statusCounts.pause !== undefined ? statusCounts.pause : 0);
         arrayStatus.push(statusCounts.stop !== undefined ? statusCounts.stop : 0);
         console.log(arrayStatus)
-        Array.from(this.tableInfoCar.children).forEach((element, index) => {
+        Array.from(this.tableInfoCar.children[1].children).forEach((element, index) => {
             element.textContent = arrayStatus[index]
         });
     }
@@ -62,6 +63,18 @@ export class InitMarkers {
             }
         })
     }
+
+    viewHiddenInfoMap() {
+        this.tableInfoCar.addEventListener('mouseenter', () => {
+            this.tableInfoCar.children[0].style.display = 'none'
+            this.tableInfoCar.children[1].style.display = 'flex'
+        })
+        this.tableInfoCar.addEventListener('mouseleave', () => {
+            this.tableInfoCar.children[0].style.display = 'flex'
+            this.tableInfoCar.children[1].style.display = 'none'
+        })
+    }
+
     viewHiddenMenuMap() {
         this.settings.addEventListener('mouseenter', () => {
             this.container.style.display = 'flex'
