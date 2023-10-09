@@ -22,12 +22,23 @@ export class InitMarkers {
         const marker = InitMarkers.markers[objectId]
         const markerArrow = InitMarkers.markersArrow[objectId]
         if (marker) {
+            console.log(marker)
             Object.values(InitMarkers.markers).forEach(e => {
                 e.setOpacity(0.0)
+                if (e._tooltip) { // Check if the marker has a tooltip
+                    e.closeTooltip() // Close the tooltip
+                }
+
             })
             Object.values(InitMarkers.markersArrow).forEach(e => {
                 e.setOpacity(0.0)
+                if (e._tooltip) { // Check if the marker has a tooltip
+                    e.closeTooltip() // Close the tooltip
+                }
             })
+            if (marker._tooltip) { // Check if the marker has a tooltip
+                marker.openTooltip() // Open the tooltip
+            }
             marker.setOpacity(1)
             markerArrow.setOpacity(1)
             const markerPosition = marker.getLatLng()
@@ -37,6 +48,9 @@ export class InitMarkers {
     opasityMarkersBack(event) {
         Object.values(InitMarkers.markers).forEach(e => {
             e.setOpacity(1)
+            if (e._tooltip) { // Check if the marker has a tooltip
+                e.openTooltip() // Open the tooltip
+            }
         })
         Object.values(InitMarkers.markersArrow).forEach(e => {
             e.setOpacity(1)
