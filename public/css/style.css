@@ -5253,8 +5253,8 @@ div.wrapper {
 }
 
 .low_list {
-  overflow: auto;
-
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .list_item1 {
