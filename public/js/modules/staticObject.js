@@ -226,7 +226,7 @@ export async function tarirView() {
                             oilValue.textContent = '----'
                             return
                         }
-                        oilValue.textContent = znak
+                        //  oilValue.textContent = znak
                         let color = 'steelblue';
                         if (value > 30 && value < 70) {
                             color = 'yellow'
