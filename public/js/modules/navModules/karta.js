@@ -90,9 +90,6 @@ export async function kartaContainer(elem) {
                     case 1:
                         initsmarkers.nameObjectView();
                         break;
-                    case 2:
-                        initsmarkers.addPolyLine();
-                        break;
                     default:
                         break;
                 }
