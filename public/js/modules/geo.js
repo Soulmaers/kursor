@@ -3,6 +3,10 @@ import { timeConvert } from './charts/oil.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 const login = document.querySelectorAll('.log')[1].textContent
 let isProcessing = false;
+
+
+
+export let mapLocal;
 export async function geoloc() {
     if (isProcessing) {
         return;
@@ -22,10 +26,8 @@ export async function geoloc() {
     }
     const geoTest = await fetch('/api/geoloc', params)
     const geoCard = await geoTest.json()
-    console.log(geoCard)
     const geo = geoCard.resTrack
     const geoMarker = geoCard.resMarker
-    console.log(geoMarker)
     const mapss = document.getElementById('map')
     if (mapss) {
         mapss.remove();
@@ -46,21 +48,21 @@ export async function createMap(geo, geoMarker) {
     maps.style.width = '100%';
     maps.style.height = '450px';
     wrap.appendChild(maps);
-    const map = L.map('map');
-    map.attributionControl.setPrefix(false);
+    mapLocal = L.map('map');
+    mapLocal.attributionControl.setPrefix(false);
     const leaf = document.querySelector('.leaflet-control-attribution');
     leaf.style.display = 'none';
     const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-    }).addTo(map);
+    }).addTo(mapLocal);
     L.control.scale({
         imperial: ''
-    }).addTo(map);
+    }).addTo(mapLocal);
 
-    map.addLayer(layer);
+    mapLocal.addLayer(layer);
 
     const polyline = L.polyline(geo, { color: 'rgb(0, 0, 204)', weight: 2 });
-    polyline.addTo(map);
+    polyline.addTo(mapLocal);
     let iss;
 
     const nameCar = document.querySelector('.color').children[0].textContent;
@@ -85,11 +87,11 @@ export async function createMap(geo, geoMarker) {
             className: 'custom-marker-arrow',
             html: `<div class="wrapContainerArrow" style="pointer-events: none;height: 75px;transform: rotate(${geoMarker.course}deg);"><img src="../../image/arrow2.png" style="width: 20px"></div>`
         });
-        map.setView(center, 12);
-        map.flyTo(center, 12);
+        mapLocal.setView(center, 12);
+        mapLocal.flyTo(center, 12);
         const res = `${geoMarker.geoY}, ${geoMarker.geoX}`//await reverseGeocode(geoMarker.geoY, geoMarker.geoX)
-        iss = L.marker(center, { icon: greenIcon }).bindPopup(`${nameCar}<br>${res}`).addTo(map);
-        const marker = L.marker(center, { icon: divIcon }).addTo(map);
+        iss = L.marker(center, { icon: greenIcon }).bindPopup(`${nameCar}<br>${res}`).addTo(mapLocal);
+        const marker = L.marker(center, { icon: divIcon }).addTo(mapLocal);
         console.log(geoMarker)
 
         iss.getPopup().options.className = 'my-popup-all';
@@ -102,8 +104,8 @@ export async function createMap(geo, geoMarker) {
         });
     }
 
-    map.on('zoomend', function () {
-        map.panTo(center);
+    mapLocal.on('zoomend', function () {
+        mapLocal.panTo(center);
     });
 
     isProcessing = false;

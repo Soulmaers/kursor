@@ -71,7 +71,7 @@ async function init() {
     }
     if (screen.width === 1366 && screen.height === 768) {
         // document.body.style.maxWidth = '1366px';
-        //   document.body.style.height = '768px';
+        wrapperFull.style.height = '651px'
         // wrapperFull.style.height = '693px'
         // start.style.height = '98vh'
     } else if (screen.width === 1920 && screen.height === 1080) {
