@@ -62,8 +62,13 @@ viewIcon.forEach(e => {
     new Tooltip(e, [storTitleList[lastRel]]);
 });
 
+const itemInfoGlobal = document.querySelector('.itemInfoGlobal')
+itemInfoGlobal.addEventListener('click', (event) => {
+    event.target.classList.toggle('iconMapsInfoActive')
+})
+
 const tableInfoCar = document.querySelector('.tableInfoCar')
-Array.from(tableInfoCar.children[1].children).forEach(e => {
+Array.from(tableInfoCar.children[0].children).forEach(e => {
     new Tooltip(e, [e.getAttribute('rel')]);
 })
 // Использование класса

@@ -8338,13 +8338,14 @@ i.changeColorCheck {
   border-radius: 5px;
   width: 300px;
   height: 40px;
-  display: none;
-  justify-content: space-around;
+  display: flex;
+
   align-items: center;
   padding: 5px;
 }
 
-.itemInfo {
+.itemInfo,
+.itemInfoGlobal {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8357,6 +8358,14 @@ i.changeColorCheck {
   font-size: 1.5rem;
   border-radius: 5px;
   border: 1px solid rgba(6, 28, 71, 1);
+}
+
+.itemInfo {
+  display: none;
+}
+
+.itemInfoGlobal {
+  cursor: pointer;
 }
 
 .titleInfoMaps {

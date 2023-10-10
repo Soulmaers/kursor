@@ -90,7 +90,7 @@ export class InitMarkers {
         arrayStatus.push(statusCounts.pause !== undefined ? statusCounts.pause : 0);
         arrayStatus.push(statusCounts.stop !== undefined ? statusCounts.stop : 0);
         console.log(arrayStatus)
-        Array.from(this.tableInfoCar.children[1].children).forEach((element, index) => {
+        Array.from(this.tableInfoCar.children[0].children).forEach((element, index) => {
             element.textContent = arrayStatus[index]
         });
     }
@@ -107,12 +107,23 @@ export class InitMarkers {
 
     viewHiddenInfoMap() {
         this.tableInfoCar.addEventListener('mouseenter', () => {
-            this.tableInfoCar.children[0].style.display = 'none'
-            this.tableInfoCar.children[1].style.display = 'flex'
+            Array.from(this.tableInfoCar.children[0].children).forEach(el => {
+                el.style.display = 'flex'
+            })
+            this.tableInfoCar.children[0].style.justifyContent = 'space-around'
+
         })
         this.tableInfoCar.addEventListener('mouseleave', () => {
-            this.tableInfoCar.children[0].style.display = 'flex'
-            this.tableInfoCar.children[1].style.display = 'none'
+            const iconMapsInfoActive = document.querySelector('.iconMapsInfoActive')
+            if (!iconMapsInfoActive) {
+                console.log('тут?')
+                Array.from(this.tableInfoCar.children[0].children).forEach(el => {
+                    el.style.display = 'none'
+                    this.tableInfoCar.children[0].children[0].style.display = 'flex'
+                })
+                this.tableInfoCar.children[0].style.justifyContent = ''
+            }
+
         })
     }
 
