@@ -25,8 +25,7 @@ import { storTitleList } from './content.js'
 import { NavigationMenu } from './navModules/NavigatorClass.js'
 
 
-const leftFrame = document.querySelector('.leftFrame')
-const rigthFrame = document.querySelector('.rigthFrame')
+
 const sec = document.querySelector('.sections')
 const centerBlock = document.querySelector('.centerBlock')
 const start = document.querySelector('.start')
@@ -41,11 +40,10 @@ const techinfo = document.querySelector('.techInfo')
 const mainMenu = document.querySelector('.main_menu')
 const grafics = document.querySelector('.grafics')
 const viewIcon = document.querySelectorAll('.viewIcon')
-const color = document.querySelector('.color')
 
-const strR = rigthFrame.children[0]
-const strL = rigthFrame.children[1]
-new Flash(strL, strR, color ? main : start, sec)
+
+
+new Flash()
 
 
 new ResizeContainer(sec, start, secondFlash[0])

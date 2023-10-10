@@ -3,7 +3,7 @@ import { convertTime } from '..//helpersFunc.js';
 
 export let initsmarkers;
 let resultGeoTrack = {}
-let map
+export let map
 
 
 

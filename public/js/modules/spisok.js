@@ -379,10 +379,12 @@ export async function alternativa(arr) {
         const restest = await fetch('/api/updateSensors', param)
         const resulttest = await restest.json()
         updateSensor = true
+        console.log(resulttest.res)
         const updateTime = Object.entries(resulttest.res).map(el => {
             return {
                 id: parseFloat(el[0]), lastime: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.m : null,
-                speed: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.curr_speed : null
+                speed: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.curr_speed : null,
+                state: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.state : null
             }
         })
         if (result) {
@@ -411,6 +413,13 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
     let condition;
     let updatetime;
 
+
+    const objCondition = {
+        0: `<i class="fas fa-parking toogleIcon"rel="03g"></i>`,
+        1: `<i class="fas fa-arrow-alt-circle-right toogleIcon" rel="01g"></i>`,
+        2: `<i class="fas fa-pause-circle toogleIcon"rel="02g"></i>`
+    }
+    console.log(data)
     data[1].forEach(i => {
         if (i.id === elemId) {
             const nowTime = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
@@ -418,21 +427,8 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
             statusnew = currentTime > 3600 ? 'ВЫКЛ' : statusnew
             updatetime = i.lastime == null ? undefined : convertTime(currentTime)
             const speed = i.speed === -348201.3876 ? '-' : i.speed
-            if (speed > 5) {
-                condition = `<i class="fas fa-arrow-alt-circle-right toogleIcon" rel="01g"></i>`;
-            }
-            else if (speed <= 5 && in1 === 1) {
-                condition = `<i class="fas fa-pause-circle toogleIcon"rel="02g"></i>`;
-            }
-            else if (speed <= 5 && in1 === 0 || speed === '-' && in1 === 0 || !speed && in1 === 0) {
-                condition = `<i class="fas fa-parking toogleIcon"rel="03g"></i>`;
-            }
-            else if (speed === '-' && in1 === '-') {
-                condition = `<i class="fas fa-power-off></i>`;
-            }
-            else if (!speed && !in1) {
-                condition = '-';
-            }
+            condition = objCondition[i.state]
+
         }
 
     })

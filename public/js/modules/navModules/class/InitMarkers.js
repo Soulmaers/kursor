@@ -111,7 +111,7 @@ export class InitMarkers {
                 el.style.display = 'flex'
             })
             this.tableInfoCar.children[0].style.justifyContent = 'space-around'
-
+            this.tableInfoCar.children[0].style.width = '300px'
         })
         this.tableInfoCar.addEventListener('mouseleave', () => {
             const iconMapsInfoActive = document.querySelector('.iconMapsInfoActive')
@@ -122,6 +122,7 @@ export class InitMarkers {
                     this.tableInfoCar.children[0].children[0].style.display = 'flex'
                 })
                 this.tableInfoCar.children[0].style.justifyContent = ''
+                this.tableInfoCar.children[0].style.width = ''
             }
 
         })
