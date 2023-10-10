@@ -47,19 +47,13 @@ async function init() {
         body: (JSON.stringify({ login }))
 
     }
-<<<<<<< HEAD
 
 
 
-    /*
-        const res = await fetch('/api/viewLogs', param)
-        const confirm = await res.json()
-        console.log(confirm)*/
-=======
+
     const res = await fetch('/api/viewLogs', param)
     const confirm = await res.json()
     console.log(confirm)
->>>>>>> 2f98e6bb9a9997c798ca0762ba02e05bb606e7a6
 
     zapros(login) //делаем запрос на wialon получаем объекты
     liCreate()
