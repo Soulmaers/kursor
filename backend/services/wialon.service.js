@@ -143,7 +143,7 @@ exports.getDataFromWialon = async (login) => {
             });
     })
 };
-exports.geoDataFromWialon = async (time1, time2, idw, login) => {
+exports.geoDataFromWialon = async (time1, time2, idw) => {
     const prmsIdTime = {
         "itemId": idw,
         "timeFrom": time2,//1657205816,

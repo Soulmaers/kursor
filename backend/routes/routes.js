@@ -31,6 +31,10 @@ router.post('/api/lastSensors', controllerWialon.lastSensors)
 router.post('/api/viewChart', controllerWialon.viewChart)
 router.post('/api/viewStructura', controllerWialon.viewStructura)
 router.post('/api/updateSensors', controllerWialon.updateSensors)
+router.post('/api/viewChartGeo', controllerWialon.viewChartGeo)
+
+
+
 
 router.post('/api/geoloc', controllerGeo.geoloc)
 router.post('/api/getGeo', controllerGeo.getGeo)
