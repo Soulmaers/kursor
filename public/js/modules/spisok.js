@@ -5,7 +5,6 @@ import { approximateValue } from './staticObject.js'
 import { convertTime, removeArrElem } from './helpersFunc.js'
 import { globalSelect } from './filtersList.js'
 import { dataspisok } from './menu.js'
-import { lastTravelTrek } from './navModules/karta.js'
 import { ToggleHiddenList } from './listModules/class/ToggleHiddenList.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
@@ -276,7 +275,7 @@ export async function conturTest(testov) {
     })
     finishload = true
     viewList(login)
-    lastTravelTrek()
+    // lastTravelTrek()
     const toggleList = new ToggleHiddenList()
     toggleList.init()
     navigator();

@@ -4,7 +4,7 @@ import { visual } from '../../visual.js'
 export class InitMarkers {
     static markers = {}; // Хранилище для маркеров
     static markersArrow = {}//Хранилище маркеров курса
-    static poly = {}//Хранлище полилиний
+    static polyMode = {}//Хранилище полилиний
     static iconsMode = "normal";
     static namesMode = 'normal'
     static trackMode = 'normal'
@@ -17,7 +17,6 @@ export class InitMarkers {
         this.objIconsMarkers = {}
         this.listObject = document.querySelectorAll('.listItem')
         this.tableInfoCar = document.querySelector('.tableInfoCar')
-        //  this.titleInfoMap = document.querySelector('.titleInfoMap')
     }
 
     opasityMarkers(event) {
@@ -156,9 +155,12 @@ export class InitMarkers {
                 if (el.classList.contains('changeColorCheck')) {
                     this.map.removeLayer(InitMarkers.markers[idw]);
                     this.map.removeLayer(InitMarkers.markersArrow[idw]);
+                    console.log(InitMarkers.markers[idw])
+                    InitMarkers.markers[idw].isTrackActive ? InitMarkers.polyMode[idw].remove(this.map) : null
                 }
                 else {
                     InitMarkers.markers[idw].addTo(this.map)
+                    InitMarkers.markers[idw].isTrackActive ? InitMarkers.polyMode[idw].addTo(this.map) : null
                     this.list.forEach(it => {
                         if (it[0] === idw) {
                             it[4] !== 'Стоянка' ? InitMarkers.markersArrow[idw].addTo(this.map) : this.map.removeLayer(InitMarkers.markersArrow[idw]);
@@ -203,21 +205,40 @@ export class InitMarkers {
         });
     }
 
+    async lastTravelTrek(event) {
+        let nowDate = Math.round(new Date().getTime() / 1000);
+        let nDate = new Date();
+        let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
+        const idw = event.target.id;
+        const marker = InitMarkers.markers[idw];
+        marker.isTrackActive = !marker.isTrackActive;
+        console.log(marker.isTrackActive)
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ nowDate, timeFrom, idw }))
+        }
+        const geoTest = await fetch('/api/geoloc', params)
+        const geoCard = await geoTest.json();
 
-    addPolyLine() {
-        InitMarkers.trackMode = InitMarkers.trackMode === 'normal' ? 'alternate' : 'normal';
-        if (InitMarkers.trackMode === 'alternate') {
-            Object.values(InitMarkers.poly).forEach(el => {
-                el.addTo(this.map)
-            })
+        console.log(InitMarkers.polyMode[idw])
+        if (InitMarkers.polyMode[idw]) {
+            InitMarkers.polyMode[idw].setLatLngs(geoCard.resTrack);
         }
         else {
-            Object.values(InitMarkers.poly).forEach(el => {
-                el.remove(this.map)
-            })
+            const poly = L.polyline(geoCard.resTrack, { color: 'rgb(0, 0, 204)', weight: 1 });
+            console.log(poly)
+            InitMarkers.polyMode[idw] = poly
+        }
+        if (marker.isTrackActive) {
+            InitMarkers.polyMode[idw].addTo(this.map);
+        }
+        else {
+            InitMarkers.polyMode[idw].remove(this.map)
         }
     }
-
 
     addMarkersToMap() {
         console.log('есть?')
@@ -246,6 +267,7 @@ export class InitMarkers {
                 className: 'custom-marker-arrow',
                 html: `<div class="wrapContainerArrow" style="pointer-events: none;height: 75px;transform: rotate(${course}deg);"><img src="../../image/arrow2.png" style="width: 20px"></div>`
             });
+            const buttonHTML = `<button class="markerTrack" id=${id}>Подгрузить след-трек</button>`;
 
             if (InitMarkers.markers[id]) {  // Если маркер с таким ID уже есть, просто обновляем его координаты
                 InitMarkers.markers[id].setLatLng(coordinates);
@@ -254,35 +276,49 @@ export class InitMarkers {
                 if (markerDOM) {
                     markerDOM.children[0].style.transform = `rotate(${course}deg)`
                 }
-                InitMarkers.markers[id].setPopupContent(`Группа: ${group}<br>Объект: ${name}<br>Актуальность данных: ${relevance}<br>Cостояние: ${state}<br>${state === 'Поездка' ? `Скорость: ${speed} км/ч<br>` : ''}Координаты: ${coordinates}`);
+                InitMarkers.markers[id].setPopupContent(`Группа: ${group}<br>Объект: ${name}<br>Актуальность данных: ${relevance}<br>Cостояние: ${state}<br>${state === 'Поездка' ? `Скорость: ${speed} км/ч<br>` : ''}Координаты: ${coordinates},${buttonHTML}`);
             } else {  // Иначе создаем новый маркер
                 const marker = L.marker(coordinates, { icon: iconCar }).addTo(this.map);
                 const markers = L.marker(coordinates, { icon: divIcon })
-                if (this.geoTrack[id] !== undefined) {
-                    const coordTrack = this.geoTrack[id] !== undefined ? this.geoTrack[id].geo : null
-                    const poly = L.polyline(coordTrack, { color: 'rgb(0, 0, 204)', weight: 1 });
-                    InitMarkers.poly[id] = poly
-                }
                 state !== 'Стоянка' ? markers.addTo(this.map) : this.map.removeLayer(markers);
-                marker.bindPopup(`Группа: ${group}<br>Объект: ${name}<br>Актуальность данных: ${relevance}<br>Cостояние: ${state}<br>${state === 'Поездка' ? `Скорость: ${speed} км/ч<br>` : ''}Координаты: ${coordinates}`, { className: 'my-popup-markers' });
+
+                marker.bindPopup(`Группа: ${group}<br>Объект: ${name}<br>Актуальность данных: ${relevance}<br>Cостояние: ${state}<br>${state === 'Поездка' ? `Скорость: ${speed} км/ч<br>` : ''}Координаты: ${coordinates}, ${buttonHTML}`, { className: 'my-popup-markers' });
                 marker.group = group;
                 marker.name = name;
                 marker.id = id;
+                marker.isTrackActive = false;
                 marker.on('mouseover', function (e) {
                     this.openPopup();
                 });
                 marker.on('mouseout', function (e) {
-                    this.closePopup();
+                    setTimeout(() => this.closePopup(), 2000);
                 });
+
+                // Слушатель событий popupopen
+                marker.on('popupopen', (e) => {
+                    let popupContent = e.popup._contentNode;
+                    // Проверяем, было ли уже добавлено событие click
+                    if (!popupContent.clickEventAttached) {
+                        popupContent.addEventListener('click', (ev) => {
+                            if (ev.target.matches('.markerTrack')) {
+                                this.lastTravelTrek.bind(this)(ev);
+                            }
+                        });
+                        // Обозначаем, что событие click было установлено
+                        popupContent.clickEventAttached = true;
+                    }
+                });
+
                 // Сохраняем маркер в хранилище
                 InitMarkers.markers[id] = marker;
                 InitMarkers.markersArrow[id] = markers;
 
-                if (!marker.clickEventAttached) { // Verify if a click event is already attached
-                    marker.on('click', this.clickMarkers.bind(this))
-                    marker.clickEventAttached = true; // Mark this marker that a click event has been attached
+                // Проверяем, было ли добавлено событие click к маркеру
+                if (!marker.clickEventAttached) {
+                    marker.on('click', this.clickMarkers.bind(this));
+                    // Обозначаем, что событие click было установлено
+                    marker.clickEventAttached = true;
                 }
-
             }
 
         });

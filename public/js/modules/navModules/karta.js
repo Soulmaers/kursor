@@ -6,45 +6,7 @@ let resultGeoTrack = {}
 let map
 
 
-export async function lastTravelTrek() {
-    resultGeoTrack = {}
-    const list = document.querySelectorAll('.listItem')
-    const arrayId = Array.from(list).reduce((acc, el) => {
-        acc.push(el.id)
-        return acc
-    }, [])
-    let nowDate = Math.round(new Date().getTime() / 1000)
-    let nDate = new Date();
-    let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
-    const params = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ nowDate, timeFrom, arrayId }))
-    }
-    const geoTest = await fetch('/api/viewChartGeo', params)
-    const geoCard = await geoTest.json()
 
-    geoCard.forEach(item => {
-        const id = item.idw;
-        // Если объект с таким id уже есть в результирующем массиве, добавляем значения "geo", "speed" и "data" в соответствующие массивы
-        if (resultGeoTrack.hasOwnProperty(id)) {
-            resultGeoTrack[id].geo.push(JSON.parse(item.geo));
-            resultGeoTrack[id].speed.push(item.speed);
-            resultGeoTrack[id].data.push(item.data);
-        } else {
-            // Если такого объекта с id еще нет в результирующем массиве, создаем новый объект с массивами значений "geo", "speed" и "data"
-            resultGeoTrack[id] = {
-                geo: [JSON.parse(item.geo)],
-                speed: [item.speed],
-                data: [item.data]
-            };
-        }
-    });
-    console.log(resultGeoTrack)
-
-}
 
 
 export async function kartaContainer(elem) {
