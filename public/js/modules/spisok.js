@@ -5,7 +5,7 @@ import { approximateValue } from './staticObject.js'
 import { convertTime, removeArrElem } from './helpersFunc.js'
 import { globalSelect } from './filtersList.js'
 import { dataspisok } from './menu.js'
-
+import { lastTravelTrek } from './navModules/karta.js'
 import { ToggleHiddenList } from './listModules/class/ToggleHiddenList.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
@@ -63,7 +63,6 @@ function updateProgress(progress) {
 }
 
 export async function loadParamsViewList(car, el) {
-    console.log('ты работаешь?')
     const params = {
         method: "POST",
         headers: {
@@ -151,13 +150,13 @@ export async function conturTest(testov) {
             minusS.classList.add('fas')
             minusS.classList.add('fa-toggle-on')
             minusS.classList.add('minusS')
-            const plusS = document.createElement('i') 
+            const plusS = document.createElement('i')
             plusS.classList.add('fas')
             plusS.classList.add('fa-toggle-off')
             plusS.classList.add('plusS')
-                      titleModal.prepend(minusS)
+            titleModal.prepend(minusS)
             titleModal.prepend(plusS)
-                              const hiddenModal = document.createElement('div')
+            const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModal')
             group.classList.add(`${nameGroup}`)
             group.setAttribute('rel', `${nameGroup}`)
@@ -183,7 +182,7 @@ export async function conturTest(testov) {
                 listCheck.setAttribute('rel', `${nameCar}`)
                 listCheck.setAttribute('id', `${nameCar}`)
                 listName.prepend(listCheck)
-                          const listProfil = document.createElement('div')
+                const listProfil = document.createElement('div')
                 listProfil.classList.add('newCelChange')
                 listProfil.setAttribute('rel', `pressure tagach`)
                 listProfil.classList.add('list_profil2')
@@ -277,10 +276,11 @@ export async function conturTest(testov) {
     })
     finishload = true
     viewList(login)
+    lastTravelTrek()
     const toggleList = new ToggleHiddenList()
     toggleList.init()
-       navigator();
-      setInterval(zaprosSpisok, 30000)
+    navigator();
+    setInterval(zaprosSpisok, 30000)
 
 }
 

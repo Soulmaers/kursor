@@ -4,11 +4,14 @@ import { visual } from '../../visual.js'
 export class InitMarkers {
     static markers = {}; // Хранилище для маркеров
     static markersArrow = {}//Хранилище маркеров курса
+    static poly = {}//Хранлище полилиний
     static iconsMode = "normal";
     static namesMode = 'normal'
-    constructor(list, map) {
+    static trackMode = 'normal'
+    constructor(list, map, geoTrack) {
         this.list = list;
         this.map = map;
+        this.geoTrack = geoTrack;
         this.settings = document.querySelector('.settingsMap')
         this.container = document.querySelector('.containerSettingsMap')
         this.objIconsMarkers = {}
@@ -199,6 +202,23 @@ export class InitMarkers {
             marker.setIcon(newIcon);
         });
     }
+
+
+    addPolyLine() {
+        InitMarkers.trackMode = InitMarkers.trackMode === 'normal' ? 'alternate' : 'normal';
+        if (InitMarkers.trackMode === 'alternate') {
+            Object.values(InitMarkers.poly).forEach(el => {
+                el.addTo(this.map)
+            })
+        }
+        else {
+            Object.values(InitMarkers.poly).forEach(el => {
+                el.remove(this.map)
+            })
+        }
+    }
+
+
     addMarkersToMap() {
         console.log('есть?')
         const uniqueElements = Array.from(new Set(this.list.map(subarr => subarr[8])));
@@ -226,6 +246,7 @@ export class InitMarkers {
                 className: 'custom-marker-arrow',
                 html: `<div class="wrapContainerArrow" style="pointer-events: none;height: 75px;transform: rotate(${course}deg);"><img src="../../image/arrow2.png" style="width: 20px"></div>`
             });
+
             if (InitMarkers.markers[id]) {  // Если маркер с таким ID уже есть, просто обновляем его координаты
                 InitMarkers.markers[id].setLatLng(coordinates);
                 InitMarkers.markersArrow[id].setLatLng(coordinates)
@@ -237,6 +258,11 @@ export class InitMarkers {
             } else {  // Иначе создаем новый маркер
                 const marker = L.marker(coordinates, { icon: iconCar }).addTo(this.map);
                 const markers = L.marker(coordinates, { icon: divIcon })
+                if (this.geoTrack[id] !== undefined) {
+                    const coordTrack = this.geoTrack[id] !== undefined ? this.geoTrack[id].geo : null
+                    const poly = L.polyline(coordTrack, { color: 'rgb(0, 0, 204)', weight: 1 });
+                    InitMarkers.poly[id] = poly
+                }
                 state !== 'Стоянка' ? markers.addTo(this.map) : this.map.removeLayer(markers);
                 marker.bindPopup(`Группа: ${group}<br>Объект: ${name}<br>Актуальность данных: ${relevance}<br>Cостояние: ${state}<br>${state === 'Поездка' ? `Скорость: ${speed} км/ч<br>` : ''}Координаты: ${coordinates}`, { className: 'my-popup-markers' });
                 marker.group = group;
@@ -251,24 +277,15 @@ export class InitMarkers {
                 // Сохраняем маркер в хранилище
                 InitMarkers.markers[id] = marker;
                 InitMarkers.markersArrow[id] = markers;
+
                 if (!marker.clickEventAttached) { // Verify if a click event is already attached
                     marker.on('click', this.clickMarkers.bind(this))
                     marker.clickEventAttached = true; // Mark this marker that a click event has been attached
                 }
+
             }
 
         });
     }
-    async lastTravelTrek(arrayId) {
-        const params = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ arrayId }))
-        }
-        console.log(arrayId)
-        // const res = await fetch('/api/getTreks', params)
-        const results = await res.json()
-    }
+
 }

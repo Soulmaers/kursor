@@ -113,9 +113,9 @@ exports.lastSensors = async (req, res) => {
 
 exports.updateSensors = async (req, res) => {
     const arr = req.body.arr
-     try {
+    try {
         const result = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(arr)
-             res.json({ res: result });
+        res.json({ res: result });
     } catch (err) {
         console.error(err);
         res.status(500).send("Произошла ошибка");
@@ -146,8 +146,8 @@ exports.viewStructura = async (req, res) => {
     const idw = req.body.active
     const t1 = [req.body.tt1]
     const t2 = [req.body.tt2]
-        const params = await databaseService.viewStructuraToBase(idw, t1, t2)
-       res.json(params)
+    const params = await databaseService.viewStructuraToBase(idw, t1, t2)
+    res.json(params)
 }
 exports.viewChart = async (req, res) => {
     const idw = req.body.active
@@ -157,8 +157,19 @@ exports.viewChart = async (req, res) => {
     res.json(params)
 }
 
+exports.viewChartGeo = async (req, res) => {
+    const arrayId = req.body.arrayId
+    const t1 = req.body.nowDate
+    const t2 = req.body.timeFrom
+    const params = await databaseService.viewChartDataToBaseGeo(arrayId, t1, t2)
+    res.json(params)
+}
+
+
+
+
 exports.quantityLogs = async (req, res) => {
-      const login = req.body.login;
+    const login = req.body.login;
     const data = await databaseService.quantityFindToBase(login)
     res.json(data)
 }

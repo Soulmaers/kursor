@@ -241,6 +241,27 @@ exports.viewChartDataToBase = async (idw, t1, t2) => {
     });
 };
 
+exports.viewChartDataToBaseGeo = async (arrayId, t1, t2) => {
+    return new Promise((resolve, reject) => {
+        try {
+            //  const formattedArray = arrayId.map(item => `'${item}'`).join(",");
+            const formattedArray = arrayId.map(item => parseFloat(item));
+            const postModel = `SELECT idw,data, geo,speed FROM chartData WHERE data >= ${t2.toString()} AND data <= ${t1.toString()} AND idw IN (${formattedArray})`;
+            connection.query(postModel, function (err, results) {
+                if (err) console.log(err);
+                //  console.log(results)
+                resolve(results);
+            });
+        }
+        catch (e) {
+            console.log(e);
+        }
+    });
+};
+
+
+
+
 exports.lostChartDataToBase = async () => {
     return new Promise((resolve, reject) => {
         try {
