@@ -1,12 +1,10 @@
-import { geoloc } from '../modules/geo.js'
+
 import { alarmFind } from '../modules/alarmStorage.js'
-import { globalSelect } from '../modules/filtersList.js'
 import { map } from '../modules/navModules/karta.js'
-import { mapLocal } from '../modules/geo.js'
+import { mapLocal } from '../modules/objectMainModules/class/CreateMarkersEvent.js'
 export class Flash {
     constructor() {
         this.rigthFrame = document.querySelectorAll('.rigthFrame')
-
         this.rigthFrame.forEach(el => {
             console.log(el)
             el.children[1].addEventListener('click', this.handleClickOne.bind(this))
@@ -50,8 +48,6 @@ export class Flash {
         if (side[1].classList.contains('main') || side[1].classList.contains('wrapper_left')) {
             setTimeout(function () { mapLocal.invalidateSize(); }, 300);
         }
-
-
     }
     handleClickTwo(event) {
         const parent = event.target.parentNode

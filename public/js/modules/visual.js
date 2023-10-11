@@ -3,7 +3,6 @@ import { loadParamsView } from './paramsTyresView.js'
 import { findTyresInstall } from './saveBaseId.js'
 import { iconParams } from './status.js'
 import { alarmFind } from './alarmStorage.js'
-import { geoloc } from './geo.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
 import { iconFind } from './configIcons.js'
@@ -17,10 +16,11 @@ import { removeElem, clearElem } from './helpersFunc.js'
 import { convert } from './helpersFunc.js'
 import { timeIntervalStatistiks } from './detalisation.js'
 import { Flash } from '../class/Flash.js'
+import { CreateMarkersEvent } from './objectMainModules/class/CreateMarkersEvent.js'
 let start;
 let time;
 let timeIcon;
-
+let createEvent;
 export async function visual(el) {
     const tablo = document.querySelector('.tablo')
     tablo ? tablo.classList.remove('tablo') : null
@@ -157,10 +157,15 @@ export async function visual(el) {
     }
     if (!graf) {
         console.log(document.querySelector('.color'))
-        geoloc()
-        time = setInterval(geoloc, 300000)
+        //  geoloc()
+        //   time = setInterval(geoloc, 300000)
     }
     const idw = el.id
+    if (createEvent && createEvent.updateInterval) {
+        clearInterval(createEvent.updateInterval);
+    }
+    createEvent = new CreateMarkersEvent(idw)
+    createEvent.init()
     timeIntervalStatistiks();
     liCreate()
     await loadParamsView()

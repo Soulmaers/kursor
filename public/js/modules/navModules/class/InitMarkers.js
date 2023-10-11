@@ -59,42 +59,6 @@ export class InitMarkers {
         })
         this.map.setView([59.9386, 30.3141], 9)
     }
-    statistikaObjectCar() {
-        const arrayStatus = [];
-        const checkInList = document.querySelectorAll('.checkInList')
-        let count = checkInList.length;
-        checkInList.forEach(e => {
-            if (e.classList.contains('changeColorCheck')) {
-                count--
-            }
-        })
-        const statusCounts = Array.from(this.list).reduce((acc, el) => {
-            if (el[6] === 'off') {
-                acc.offline = (acc.offline || 0) + 1;
-            }
-            if (el[4] === 'Поездка') {
-                acc.move = (acc.move || 0) + 1;
-            }
-            if (el[4] === 'Остановка') {
-                acc.pause = (acc.pause || 0) + 1;
-            }
-            if (el[4] === 'Стоянка') {
-                acc.stop = (acc.stop || 0) + 1;
-            }
-            return acc;
-        }, {});
-        arrayStatus.push(this.listObject.length)
-        arrayStatus.push(count);
-        arrayStatus.push(statusCounts.offline !== undefined ? statusCounts.offline : 0);
-        arrayStatus.push(statusCounts.move !== undefined ? statusCounts.move : 0)
-        arrayStatus.push(statusCounts.pause !== undefined ? statusCounts.pause : 0);
-        arrayStatus.push(statusCounts.stop !== undefined ? statusCounts.stop : 0);
-        console.log(arrayStatus)
-        Array.from(this.tableInfoCar.children[0].children).forEach((element, index) => {
-            element.textContent = arrayStatus[index]
-        });
-    }
-
     clickMarkers(event) {
         const marker = event.target
         console.log(marker)
@@ -281,7 +245,7 @@ export class InitMarkers {
                 className: 'custom-marker-arrow',
                 html: `<div class="wrapContainerArrow" style="pointer-events: none;height: 75px;transform: rotate(${course}deg);"><img src="../../image/arrow2.png" style="width: 20px"></div>`
             });
-            const buttonHTML = `<i class="fas fa-check markerTrack" id=${id} style="margin-right:5px; cursor:pointer"></i><span class="titlePopupPoly">Подгрузить след-трек</span>`;
+            const buttonHTML = `<i class="fas fa-check markerTrack" id=${id} style="margin-right:5px; cursor:pointer"></i><span class="titlePopupPoly">Построить трек</span>`;
 
             if (InitMarkers.markers[id]) {  // Если маркер с таким ID уже есть, просто обновляем его координаты
                 InitMarkers.markers[id].setLatLng(coordinates);

@@ -18,7 +18,7 @@ exports.getAllGroupDataFromWialon = async () => {
     })
 };
 //запрос всех параметров по id объекта
-exports.getAllParamsIdDataFromWialon = async (id, login) => {
+exports.getAllParamsIdDataFromWialon = async (id) => {
     const prmsId = {
         "id": id,
         "flags": 1025
@@ -219,3 +219,50 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
     })
 };
 
+
+exports.getEventFromToDayWialon = async (id, t1, t2) => {
+    console.log(id, t1, t2)
+    const params = {
+        "itemId": id,
+        "ivalType": 1,
+        "timeFrom": t2,
+        "timeTo":
+            t1,
+        "detectors": [
+            {
+                "type": 'lls',
+                "filter1": 0
+            }, {
+                "type": 'trips',
+                "filter1": 0
+            }
+        ],
+    }
+    const paramsEvent = {
+        "selector": {
+            "type": '*',
+            //   "expr": 'trips{m<90}',
+            "timeFrom": t2,
+            "timeTo":
+                t1,
+            "detalization": 23
+        }
+    }
+    return new Promise(async function (resolve, reject) {
+        const session = await geSession.geSession();
+        session.request('events/load', params)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                session.request('events/get', paramsEvent)
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+                    .then(function (data) {
+                        resolve(data)
+                    });
+            });
+    })
+
+}

@@ -60,6 +60,16 @@ exports.getGeo = async (req, res) => {
     res.json(structura)
 }
 
+exports.getEventMarkers = async (req, res) => {
+    const id = req.body.id
+    const t1 = req.body.nowDate
+    const t2 = req.body.timeFrom
+    const result = await wialonService.getEventFromToDayWialon(id, t1, t2)
+    res.json(result)
+}
+
+
+
 exports.getTreks = async (req, res) => {
 
     const arr = req.body.arrayId

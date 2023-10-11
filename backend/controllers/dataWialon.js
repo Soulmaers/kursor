@@ -37,8 +37,7 @@ exports.datawialon = async (req, res) => {
 //запрос на wialon и получение параметров по id
 exports.parametrs = async (req, res) => {
     const idw = req.body.idw
-    const login = req.body.login
-    const params = await wialonService.getAllParamsIdDataFromWialon(idw, login)
+    const params = await wialonService.getAllParamsIdDataFromWialon(idw)
     res.json(params)
 }
 //запрос на wialon и получение сенсоров по id

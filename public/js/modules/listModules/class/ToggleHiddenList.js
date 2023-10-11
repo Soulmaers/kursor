@@ -3,6 +3,8 @@ import { initsmarkers } from '../../navModules/karta.js'
 
 export class ToggleHiddenList {
     constructor() {
+        //  this.status = status
+        //  this.final = final
         this.chekHiddens = document.querySelectorAll('.chekHidden')
         this.plusS = document.querySelectorAll('.plusS')
         this.minusS = document.querySelectorAll('.minusS')
@@ -12,6 +14,7 @@ export class ToggleHiddenList {
         this.groups = document.querySelectorAll('.groups')
         this.globalcheck = document.querySelector('.globalcheck')
         this.listItem = document.querySelectorAll('.listItem')
+        this.tableInfoCar = document.querySelector('.tableInfoCar')
     }
     init() {
         this.minusS.forEach(el => el.addEventListener('click', this.hiddenList.bind(this)))
@@ -26,8 +29,48 @@ export class ToggleHiddenList {
         this.listItem.forEach(el => el.children[0].addEventListener('mouseleave', this.opasityBack.bind(this)))
     }
 
+    statistikaObjectCar(final) {
+        const arrayStatus = [];
+        const checkInList = document.querySelectorAll('.checkInList')
+        const newCelChange = document.querySelectorAll('.newCelChange')
+        const rely = Array.from(newCelChange).reduce((acc, el) => {
+            if (el.getAttribute('rel') === 'statusnew' && !el.children[0].classList.contains('toogleIcon')) {
+                acc = acc + 1;
+            }
+            return acc;
+        }, 0);
+        let count = checkInList.length;
+        checkInList.forEach(e => {
+            if (e.classList.contains('changeColorCheck')) {
+                count--
+            }
+        })
+        const statusCounts = Object.values(final[1]).reduce((acc, el) => {
+
+            if (el.state === 1) {
+                acc.move = (acc.move || 0) + 1;
+            }
+            if (el.state === 2) {
+                acc.pause = (acc.pause || 0) + 1;
+            }
+            if (el.state === 0) {
+                acc.stop = (acc.stop || 0) + 1;
+            }
+            return acc;
+        }, {});
+        arrayStatus.push(this.listItem.length)
+        arrayStatus.push(count);
+        arrayStatus.push(rely);
+        arrayStatus.push(statusCounts.move !== undefined ? statusCounts.move : 0)
+        arrayStatus.push(statusCounts.pause !== undefined ? statusCounts.pause : 0);
+        arrayStatus.push(statusCounts.stop !== undefined ? statusCounts.stop : 0);
+        Array.from(this.tableInfoCar.children[0].children).forEach((element, index) => {
+            element.textContent = arrayStatus[index]
+        });
+    }
+
+
     opasity(event) {
-        console.log(event)
         initsmarkers.opasityMarkers(event.target.parentElement)
     }
     opasityBack(event) {

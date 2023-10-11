@@ -133,6 +133,7 @@ export async function oil(t1, t2) {
                     interval.splice(1, 1)
                 }
             }
+            console.log(firstOil, difference, threshold)
             return firstOil > 5 && difference > 40 && difference >= threshold;
         });
         for (let i = 0; i < zapravkaAll.length - 1; i++) {
@@ -146,8 +147,11 @@ export async function oil(t1, t2) {
             const time0 = (e[0].time).getTime() / 1000;
             const time1 = (e[1].time).getTime() / 1000;
             const initTime = time1 - time0;
-            return initTime >= 5 * 60;
+            console.log(initTime)
+            const diff = e[1].oil - e[0].oil
+            return initTime >= 5 * 60 && diff > 40;
         });
+        console.log(filteredZapravka)
         const rash = [];
         const firstData = data[0].oil;
         const lastData = data[data.length - 1].oil;

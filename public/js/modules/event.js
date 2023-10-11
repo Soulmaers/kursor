@@ -3,7 +3,7 @@ import { data } from './content.js'
 import { dashView, getDash } from './charts/dash.js'
 import { alarmClear, clearGraf, visual, visualNone } from './visual.js'
 import { getUsers } from './admin.js'
-import { geoloc } from './geo.js'
+//import { geoloc } from './geo.js'
 import { reqProtectorBase } from './protector.js'
 import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
@@ -398,7 +398,7 @@ function mainblock() {
     clearInterval(intervalId)
     const start = document.querySelector('.start')
     start.style.display = 'none'
-    geoloc()
+    // geoloc()
     const dash = document.querySelector('.wrapper_right_dash')
     const sections = document.querySelector('.sections')
     const main = document.querySelector('.main')

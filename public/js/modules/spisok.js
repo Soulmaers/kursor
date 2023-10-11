@@ -108,6 +108,7 @@ export async function conturTest(testov) {
     if (listItem) {
         removeArrElem(listItem)
     }
+
     testov.forEach(el => {
         if (el.length !== 0) {
             const lowList = document.querySelector('.low_list')
@@ -278,8 +279,9 @@ export async function conturTest(testov) {
     // lastTravelTrek()
     const toggleList = new ToggleHiddenList()
     toggleList.init()
+    toggleList.statistikaObjectCar(final)
     navigator();
-    setInterval(zaprosSpisok, 30000)
+    setInterval(zaprosSpisok, 30000, toggleList)
 
 }
 
@@ -379,7 +381,6 @@ export async function alternativa(arr) {
         const restest = await fetch('/api/updateSensors', param)
         const resulttest = await restest.json()
         updateSensor = true
-        console.log(resulttest.res)
         const updateTime = Object.entries(resulttest.res).map(el => {
             return {
                 id: parseFloat(el[0]), lastime: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.m : null,
@@ -419,7 +420,6 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
         1: `<i class="fas fa-arrow-alt-circle-right toogleIcon" rel="01g"></i>`,
         2: `<i class="fas fa-pause-circle toogleIcon"rel="02g"></i>`
     }
-    console.log(data)
     data[1].forEach(i => {
         if (i.id === elemId) {
             const nowTime = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
@@ -702,7 +702,7 @@ function fnPricep(arr, nameCarId) {
         .attr("r", 0.5)
         .style('fill', 'white')
 }
-export async function zaprosSpisok() {
+export async function zaprosSpisok(toggleList) {
     const list = document.querySelectorAll('.listItem')
     const arrId = Array.from(list).map(el => parseFloat(el.id))
     const res = await alternativa(arrId)
@@ -728,7 +728,7 @@ export async function zaprosSpisok() {
             }
         });
         const spisok = spisok1[0].result
-        viewListKoleso(spisok[0], spisok[1], spisok[2], spisok[3], el, inn, res)
+        viewListKoleso(spisok[0], spisok[1], spisok[2], spisok[3], el, inn, res, toggleList)
     })
     const updateTime = document.querySelector('.update_time')
     let today = new Date();
@@ -743,7 +743,7 @@ export async function zaprosSpisok() {
     const todays = today + ' ' + time
     updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
-async function viewListKoleso(model, params, arg, osi, nameCar, inn, res) {
+async function viewListKoleso(model, params, arg, osi, nameCar, inn, res, toggleList) {
     let in1;
     let statusnew;
     let sats;
@@ -804,6 +804,7 @@ async function viewListKoleso(model, params, arg, osi, nameCar, inn, res) {
         statusnew = sats === '' ? '-' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
         updateIconsSensors(res, idw, nameCar, statusnew, sats, type, in1)
     }
+    toggleList.statistikaObjectCar(res)
 }
 
 
