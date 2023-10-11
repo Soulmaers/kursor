@@ -1,7 +1,8 @@
 
-export let mapLocal, iss, marker, poly, eventMarkers;
+export let mapLocal, iss, marker, poly;
 
-
+let arrayEventMarkers = []
+import { times } from '../../popup.js'
 
 export class CreateMarkersEvent {
     constructor(id) {
@@ -68,7 +69,7 @@ export class CreateMarkersEvent {
             acc.push(el.geo)
             return acc
         }, [])
-        const maxSpeed = eventTrack.filter(el => el.speed > 90)
+        const maxSpeed = eventTrack.filter(el => el.speed > 100)
         console.log(maxSpeed)
         if (!mapLocal) {
             const wrap = document.querySelector('.wrapper_up');
@@ -88,9 +89,9 @@ export class CreateMarkersEvent {
             mapLocal.addLayer(layer);
 
         }
-        //   mapLocal.removeLayer(eventMarkers);
-        mapLocal.setView(center, 12);
-        mapLocal.flyTo(center, 12);
+        console.log(arrayEventMarkers)
+        mapLocal.setView(center, 10);
+        mapLocal.flyTo(center, 10);
 
         const nameCar = document.querySelector('.color').children[0].textContent;
         const res = `${geo[0]}, ${geo[1]}` // await reverseGeocode(geoMarker.geoY, geoMarker.geoX)
@@ -111,8 +112,8 @@ export class CreateMarkersEvent {
                 className: 'custom-marker'
             });
             const maxspeed = new LeafIcon({
-                iconUrl: '../../image/er.png',
-                iconSize: [22, 22],
+                iconUrl: '../../image/upspeed.png',
+                iconSize: [20, 20],
                 iconAnchor: [20, 20],
                 popupAnchor: [0, 0],
                 className: 'custom-marker'
@@ -125,20 +126,61 @@ export class CreateMarkersEvent {
             iss = L.marker(center, { icon: greenIcon }).bindPopup(`${nameCar}<br>${res}`).addTo(mapLocal);
             marker = L.marker(center, { icon: divIcon }).addTo(mapLocal);
             Array.from(maxSpeed).forEach(it => {
-                eventMarkers = L.marker(it.geo, { icon: maxspeed }).addTo(mapLocal);
+                const time = times(new Date(Number(it.time) * 1000));
+                const eventMarkers = L.marker(it.geo, { icon: maxspeed }).bindPopup(`Скорость: ${it.speed} км/ч<br>Время: ${time}`).addTo(mapLocal);
+                arrayEventMarkers.push(eventMarkers)
+                eventMarkers.on('mouseover', function (e) {
+                    this.openPopup();
+                });
+                eventMarkers.on('mouseout', function (e) {
+                    this.closePopup();
+                });
             })
 
 
             poly = L.polyline(geoTrack, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
             iss.getPopup().options.className = 'my-popup-all';
-
             iss.on('mouseover', function (e) {
                 this.openPopup();
             });
             iss.on('mouseout', function (e) {
                 this.closePopup();
             });
+
         } else {
+
+            arrayEventMarkers.forEach(e => {
+                console.log(e)
+                mapLocal.removeLayer(e)
+            })
+            arrayEventMarkers.length = 0
+
+            const LeafIcon = L.Icon.extend({
+                options: {
+                    iconSize: [30, 30],
+                    iconAnchor: [10, 18],
+                    popupAnchor: [0, 0]
+                }
+            });
+
+            const maxspeed = new LeafIcon({
+                iconUrl: '../../image/upspeed.png',
+                iconSize: [20, 20],
+                iconAnchor: [20, 20],
+                popupAnchor: [0, 0],
+                className: 'custom-marker'
+            });
+            Array.from(maxSpeed).forEach(it => {
+                const time = times(new Date(Number(it.time) * 1000));
+                const eventMarkers = L.marker(it.geo, { icon: maxspeed }).bindPopup(`Скорость: ${it.speed} км/ч<br>Время: ${time}`).addTo(mapLocal);
+                arrayEventMarkers.push(eventMarkers)
+                eventMarkers.on('mouseover', function (e) {
+                    this.openPopup();
+                });
+                eventMarkers.on('mouseout', function (e) {
+                    this.closePopup();
+                });
+            })
             if (poly) {
                 mapLocal.removeLayer(poly);
             }

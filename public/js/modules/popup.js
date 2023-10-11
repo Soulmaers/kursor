@@ -422,7 +422,7 @@ numy.addEventListener('click', function (event) {
 });
 
 
-function times(time) {
+export function times(time) {
     const day = time.getDate();
     const month = (time.getMonth() + 1).toString().padStart(2, '0');
     const year = time.getFullYear();
