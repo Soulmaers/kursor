@@ -16,6 +16,21 @@ export class CreateMarkersEvent {
     }
 
     async update() {
+        /*  const idw = this.id
+          let nowDate = Math.round(new Date().getTime() / 1000);
+          let nDate = new Date();
+          let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
+          const paramss = {
+              method: "POST",
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: (JSON.stringify({ nowDate, timeFrom, idw }))
+          }
+          const geoTest = await fetch('/api/geoLastInterval', paramss)
+          const geoCard = await geoTest.json();
+          console.log(geoCard)*/
+
         const eventTrack = await this.getEventObject()
         const geo = await this.getLastGeoPosition()
         this.createMapMainObject(geo, eventTrack)
@@ -171,7 +186,7 @@ export class MarkerCreator {
         this.map = map;
         this.iconUrls = {
             speed: '../../image/upspeed.png',
-            oil: '../../image/ref.png',
+            oil: '../../image/oil1.png',
             nooil: '../../image/refuel.png'
         };
         this.markers = [];
