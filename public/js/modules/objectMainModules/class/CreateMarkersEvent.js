@@ -1,21 +1,18 @@
 
 export let mapLocal, iss, marker, poly;
 
-let arrayEventMarkers = []
 import { times } from '../../popup.js'
 
 export class CreateMarkersEvent {
     constructor(id) {
         this.id = id
-
+        this.markerCreator = null;
     }
     async init() {
         this.updateInterval = setInterval(() => {
             this.update();
         }, 30000);
-        const eventTrack = await this.getEventObject()
-        const geo = await this.getLastGeoPosition()
-        this.createMapMainObject(geo, eventTrack)
+        this.update();
     }
 
     async update() {
@@ -38,13 +35,25 @@ export class CreateMarkersEvent {
         }
         const res = await fetch('api/getEventMarkers', params)
         const result = await res.json()
+        console.log(result)
         const geo = Object.values(result.trips[0]).reduce((acc, el) => {
             el.msgs.forEach(e => {
                 acc.push({ geo: [e.y, e.x], speed: e.s, time: e.tm })
             });
             return acc
         }, [])
-        return geo
+        let oilEvent;
+        if (result.lls && Object.keys(result.lls).length !== 0) {
+            oilEvent = Object.values(Object.values(result.lls)[0]).reduce((acc, e) => {
+                acc.push({
+                    geo: [e.from.y, e.from.x],
+                    [parseFloat(e.filled.toFixed(0)) > 0 ? 'oil' : 'nooil']: parseFloat(e.filled.toFixed(0)),
+                    time: e.from.t
+                });
+                return acc
+            }, [])
+        }
+        return { geo: geo, oil: oilEvent }
     }
     async getLastGeoPosition() {
         const idw = this.id
@@ -61,16 +70,19 @@ export class CreateMarkersEvent {
         return [result.item.pos.y, result.item.pos.x, result.item.pos.c]
     }
 
-
     createMapMainObject(geo, eventTrack) {
-        console.log(eventTrack)
         const center = [geo[0], geo[1]];
-        const geoTrack = eventTrack.reduce((acc, el) => {
+        const geoTrack = eventTrack.geo.reduce((acc, el) => {
             acc.push(el.geo)
             return acc
         }, [])
-        const maxSpeed = eventTrack.filter(el => el.speed > 100)
-        console.log(maxSpeed)
+        console.log(eventTrack)
+        const maxSpeed = eventTrack.geo.filter(el => el.speed > 100)
+        const oil = eventTrack.oil ? eventTrack.oil : []
+        const nooil = eventTrack.nooil ? eventTrack.nooil : []
+        const eventMarkersGlobal = []
+        eventMarkersGlobal.push(...maxSpeed, ...oil, ...nooil)
+        console.log(eventMarkersGlobal)
         if (!mapLocal) {
             const wrap = document.querySelector('.wrapper_up');
             const maps = document.createElement('div');
@@ -80,18 +92,18 @@ export class CreateMarkersEvent {
             wrap.appendChild(maps);
             mapLocal = L.map('map');
             mapLocal.attributionControl.setPrefix(false);
-
             const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
             }).addTo(mapLocal);
-
             L.control.scale({ imperial: '' }).addTo(mapLocal);
             mapLocal.addLayer(layer);
-
+            if (!this.markerCreator) {
+                this.markerCreator = new MarkerCreator(mapLocal);
+            }
+            this.markerCreator.createMarker(eventMarkersGlobal)
         }
-        console.log(arrayEventMarkers)
-        mapLocal.setView(center, 10);
-        mapLocal.flyTo(center, 10);
+        mapLocal.setView(center, 8);
+        mapLocal.flyTo(center, 8);
 
         const nameCar = document.querySelector('.color').children[0].textContent;
         const res = `${geo[0]}, ${geo[1]}` // await reverseGeocode(geoMarker.geoY, geoMarker.geoX)
@@ -111,13 +123,7 @@ export class CreateMarkersEvent {
                 popupAnchor: [0, 0],
                 className: 'custom-marker'
             });
-            const maxspeed = new LeafIcon({
-                iconUrl: '../../image/upspeed.png',
-                iconSize: [20, 20],
-                iconAnchor: [20, 20],
-                popupAnchor: [0, 0],
-                className: 'custom-marker'
-            });
+
             const divIcon = L.divIcon({
                 className: 'custom-marker-arrow',
                 html: `<div class="wrapContainerArrow" style="pointer-events: none;height: 75px;transform: rotate(${geo[2]}deg);"><img src="../../image/arrow2.png" style="width: 20px"></div>`
@@ -125,20 +131,9 @@ export class CreateMarkersEvent {
 
             iss = L.marker(center, { icon: greenIcon }).bindPopup(`${nameCar}<br>${res}`).addTo(mapLocal);
             marker = L.marker(center, { icon: divIcon }).addTo(mapLocal);
-            Array.from(maxSpeed).forEach(it => {
-                const time = times(new Date(Number(it.time) * 1000));
-                const eventMarkers = L.marker(it.geo, { icon: maxspeed }).bindPopup(`Скорость: ${it.speed} км/ч<br>Время: ${time}`).addTo(mapLocal);
-                arrayEventMarkers.push(eventMarkers)
-                eventMarkers.on('mouseover', function (e) {
-                    this.openPopup();
-                });
-                eventMarkers.on('mouseout', function (e) {
-                    this.closePopup();
-                });
-            })
-
-
+            console.log(geoTrack)
             poly = L.polyline(geoTrack, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
+            console.log(poly)
             iss.getPopup().options.className = 'my-popup-all';
             iss.on('mouseover', function (e) {
                 this.openPopup();
@@ -148,56 +143,76 @@ export class CreateMarkersEvent {
             });
 
         } else {
+            if (!this.markerCreator) {
+                this.markerCreator = new MarkerCreator(mapLocal);
+            }
+            this.markerCreator.createMarker(eventMarkersGlobal)
 
-            arrayEventMarkers.forEach(e => {
-                console.log(e)
-                mapLocal.removeLayer(e)
-            })
-            arrayEventMarkers.length = 0
-
-            const LeafIcon = L.Icon.extend({
-                options: {
-                    iconSize: [30, 30],
-                    iconAnchor: [10, 18],
-                    popupAnchor: [0, 0]
-                }
-            });
-
-            const maxspeed = new LeafIcon({
-                iconUrl: '../../image/upspeed.png',
-                iconSize: [20, 20],
-                iconAnchor: [20, 20],
-                popupAnchor: [0, 0],
-                className: 'custom-marker'
-            });
-            Array.from(maxSpeed).forEach(it => {
-                const time = times(new Date(Number(it.time) * 1000));
-                const eventMarkers = L.marker(it.geo, { icon: maxspeed }).bindPopup(`Скорость: ${it.speed} км/ч<br>Время: ${time}`).addTo(mapLocal);
-                arrayEventMarkers.push(eventMarkers)
-                eventMarkers.on('mouseover', function (e) {
-                    this.openPopup();
-                });
-                eventMarkers.on('mouseout', function (e) {
-                    this.closePopup();
-                });
-            })
             if (poly) {
                 mapLocal.removeLayer(poly);
             }
             poly = L.polyline(geoTrack, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
             iss.setLatLng(center).bindPopup(`${nameCar}<br>${res}`).update();
             marker.setLatLng(center).update();
-
             const divIconUpdated = L.divIcon({
                 className: 'custom-marker-arrow',
                 html: `<div class="wrapContainerArrow" style="pointer-events: none;height: 75px;transform: rotate(${geo[2]}deg);"><img src="../../image/arrow2.png" style="width: 20px"></div>`
             });
-
             marker.setIcon(divIconUpdated);
         }
-
         //  mapLocal.on('zoomend', function () {
         //      mapLocal.panTo(center);
         //  });
+    }
+}
+
+export class MarkerCreator {
+    constructor(map) {
+        this.map = map;
+        this.iconUrls = {
+            speed: '../../image/upspeed.png',
+            oil: '../../image/ref.png',
+            nooil: '../../image/refuel.png'
+        };
+        this.markers = [];
+    }
+
+    deleteMarkers() {
+        for (let marker of this.markers) {
+            this.map.removeLayer(marker);
+        }
+        this.markers = [];
+    }
+    contentPopup(e) {
+        return {
+            speed: `Скорость: ${e.speed} км/ч`,
+            oil: `Заправка: ${e.oil} л`,
+            nooil: `Слив: ${e.nooil} л`
+        };
+    }
+    createMarker(events) {
+        this.deleteMarkers();
+        events.forEach(e => {
+            const key = Object.keys(e)[1];
+            const iconUrl = this.iconUrls[key]
+            const icon = L.icon({
+                iconUrl: iconUrl,
+                iconSize: [20, 20],
+                iconAnchor: [20, 20],
+                popupAnchor: [0, 0],
+                className: 'custom-marker'
+            });
+            console.log(e.time)
+            const contentPopup = this.contentPopup(e)[key];
+            const time = times(new Date(Number(e.time) * 1000));
+            const eventMarkers = L.marker(e.geo, { icon }).bindPopup(`${contentPopup}<br>Время: ${time}`).addTo(this.map);
+            eventMarkers.on('mouseover', function (e) {
+                this.openPopup();
+            });
+            eventMarkers.on('mouseout', function (e) {
+                this.closePopup();
+            });
+            this.markers.push(eventMarkers);
+        })
     }
 }

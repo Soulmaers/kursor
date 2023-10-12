@@ -164,8 +164,12 @@ export async function visual(el) {
     if (createEvent && createEvent.updateInterval) {
         clearInterval(createEvent.updateInterval);
     }
+    if (createEvent && createEvent.markerCreator) {
+        createEvent.markerCreator.deleteMarkers();
+    }
     createEvent = new CreateMarkersEvent(idw)
     createEvent.init()
+
     timeIntervalStatistiks();
     liCreate()
     await loadParamsView()
