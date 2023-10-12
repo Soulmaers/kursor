@@ -72,6 +72,7 @@ const funcSortArray = (arr) => {
 
 async function viewAlarmStorage(name, stor) {
     const resultArray = funcSortArray(stor)
+    console.log(resultArray)
     function removeDuplicates(arr) {
         const result = [];
         const duplicatesIndexes = [];

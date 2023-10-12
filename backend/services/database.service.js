@@ -379,13 +379,15 @@ exports.alarmBase = async (data, tyres, alarm) => {
     dannie.pop()
     dannie.push(alarm)
     dannie.unshift(id)
+
+    let nowDate = Math.round(new Date().getTime() / 1000);
     const value = [dannie];
     try {
         const selectBase = `SELECT idw, data, name, senspressure, bar, temp ,alarm 
                     FROM alarms 
                     WHERE idw='${dannie[0]}' AND
                           data='${dannie[1]}' AND
-                          name='${dannie[2]}' AND
+                                                 name='${dannie[2]}' AND
                           senspressure='${dannie[3]}' AND
                           bar='${dannie[4]}' AND
                           temp='${dannie[5]}' AND
@@ -396,7 +398,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
 
             }
             else {
-                const sqls = `INSERT INTO alarms (idw, data, name, senspressure, bar,
+                const sqls = `INSERT INTO alarms (idw, data, unix, name, senspressure, bar,
                             temp, alarm) VALUES?`;
                 connection.query(sqls, [value], function (err, results) {
                     if (err) console.log(err);
