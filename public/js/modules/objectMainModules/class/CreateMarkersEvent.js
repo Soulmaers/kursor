@@ -39,7 +39,7 @@ export class CreateMarkersEvent {
     async init() {
         this.updateInterval = setInterval(() => {
             this.update();
-        }, 5000);
+        }, 30000);
         this.update();
     }
 
@@ -47,15 +47,41 @@ export class CreateMarkersEvent {
         const geo = await this.getLastGeoPosition()
         this.createMapMainObject(geo)
         const track = await this.getIntervalTrack()
+        const prostoy = await this.getEventProstoy()
         this.track = track.reduce((acc, el) => {
             acc.push(el.geo)
             return acc
         }, [])
-        this.eventMarkers = await this.getEventObject(track)
+        this.eventMarkers = await this.getEventObject(track, prostoy)
 
         if (!this.markerCreator) {
             this.markerCreator = new MarkerCreator(mapLocal);
         }
+    }
+
+    async getEventProstoy() {
+        const idw = this.id
+        let nowDate = Math.round(new Date().getTime() / 1000);
+        let nDate = new Date();
+        let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ nowDate, timeFrom, idw }))
+        }
+        const geoTest = await fetch('/api/logsViewId', params)
+        const geoCard = await geoTest.json();
+        const eventProstoy = geoCard.reduce((acc, el) => {
+            const parse = JSON.parse(el.content)
+            if (parse[0].event === 'Простой') {
+                acc.push({ geo: JSON.parse(el.geo), prostoy: parse[0].alarm, time: el.time })
+            }
+            return acc
+        }, [])
+
+        return eventProstoy
     }
     createTrackMap(geoTrack) {
         if (poly) {
@@ -78,12 +104,12 @@ export class CreateMarkersEvent {
         const geoTest = await fetch('/api/geoLastInterval', paramss)
         const geoCard = await geoTest.json();
         const data = geoCard.resTrack.reduce((acc, el) => {
-            acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4] })
+            acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5] })
             return acc
         }, [])
         return data
     }
-    async getEventObject(track) {
+    async getEventObject(track, prostoy) {
         const id = this.id
         let nowDate = Math.round(new Date().getTime() / 1000);
         let nDate = new Date();
@@ -110,11 +136,12 @@ export class CreateMarkersEvent {
                 return acc
             }, [])
         }
-        const maxSpeed = track.filter(el => el.speed > 100)
+        const maxSpeed = track.filter(el => el.speed > 100 && el.speed < 140)
         const oil = oilEvent.filter(el => el.oil)
         const nooil = oilEvent.filter(el => el.nooil)
         const eventMarkersGlobal = []
-        eventMarkersGlobal.push(...maxSpeed, ...oil, ...nooil)
+        eventMarkersGlobal.push(...maxSpeed, ...oil, ...nooil, ...prostoy)
+        console.log(eventMarkersGlobal)
         return eventMarkersGlobal
     }
 
@@ -211,7 +238,8 @@ export class MarkerCreator {
         this.iconUrls = {
             speed: '../../image/upspeed.png',
             oil: '../../image/oil1.png',
-            nooil: '../../image/refuel.png'
+            nooil: '../../image/refuel.png',
+            prostoy: '../../image/pr.png'
         };
         this.markers = [];
     }
@@ -227,7 +255,8 @@ export class MarkerCreator {
         return {
             speed: `Скорость: ${e.speed} км/ч`,
             oil: `Заправка: ${e.oil} л`,
-            nooil: `Слив: ${e.nooil} л`
+            nooil: `Слив: ${e.nooil} л`,
+            prostoy: `Простой: ${e.prostoy}`
         };
     }
     createMarker(events) {

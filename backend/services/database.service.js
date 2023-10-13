@@ -912,6 +912,20 @@ exports.logsFindToBase = async (id) => {
     }
 
 }
+exports.logsFindToBaseId = async (t1, t2, idw) => {
+    if (idw.length !== 0) {
+        return new Promise((resolve, reject) => {
+            const postModel = `SELECT * FROM logs WHERE time >= ${t2.toString()} AND time <= ${t1.toString()} AND idw=${idw}`;
+            connection.query(postModel, function (err, results) {
+                if (err)
+                    reject(err); // передаём ошибку в reject
+                resolve(results);
+            })
+        })
+
+    }
+
+}
 
 
 

@@ -15,7 +15,7 @@ exports.geoLastInterval = async (req, res) => {
         geo.push([]);
     }
     geo.forEach((el, index) => {
-        el.push(arr2[1][index].pos.y, arr2[1][index].pos.x, arr2[1][index].pos.c, arr2[1][index].pos.s, arr2[1][index].t);
+        el.push(arr2[1][index].pos.y, arr2[1][index].pos.x, arr2[1][index].pos.c, arr2[1][index].pos.s, arr2[1][index].t, arr2[1][index].p.sats);
     })
     res.json({ resTrack: geo })
 }
