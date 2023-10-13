@@ -36,13 +36,24 @@ export class ToggleHiddenList {
                 if (e.classList.contains('clicker')) {
                     e.classList.remove('clicker')
                     filterCondition(null, this.parent.children[index])
-                    return
                 }
-                Array.from(this.cond).forEach(el => {
-                    el.classList.remove('clicker')
+                else {
+                    Array.from(this.cond).forEach(el => {
+                        el.classList.remove('clicker')
+                    })
+                    e.classList.add('clicker')
+                    filterCondition(null, this.parent.children[index])
+                }
+                Array.from(this.listItem).forEach(e => {
+                    e.children[0].children[0].classList.remove('changeColorCheck')
                 })
-                e.classList.add('clicker')
-                filterCondition(null, this.parent.children[index])
+                Array.from(this.listItem).forEach(e => {
+                    if (e.style.display !== 'flex') {
+                        e.children[0].children[0].classList.add('changeColorCheck')
+                    }
+                })
+                initsmarkers.toggleMarkersIcon()
+                //   initsmarkers.statistikaObjectCar()
             })
         })
     }
