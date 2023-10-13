@@ -17,6 +17,7 @@ export class CreateMarkersEvent {
     }
 
     viewTrackAndMarkersEnent() {
+        console.log('нажал?')
         this.setTrack.classList.toggle('activeTrack')
         if (this.setTrack.classList.contains('activeTrack')) {
             if (this.poly) {

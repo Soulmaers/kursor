@@ -146,6 +146,7 @@ export async function visual(el) {
 
     }
     alarmClear();
+
     wrapperUp.style.display = 'flex'
     wrapperCont.style.display = 'flex'
     speedGraf.style.display = 'block'
@@ -170,21 +171,20 @@ export async function visual(el) {
         createEvent.hiddenTrackAndMarkersEnent()
 
     }
-    /*  if (createEvent && createEvent.markerCreator) {
-          createEvent.markerCreator.deleteMarkers();
-      }*/
+
     createEvent = new CreateMarkersEvent(idw)
     createEvent.init()
 
-    timeIntervalStatistiks();
+
     liCreate()
     await loadParamsView()
     console.log('загрузка')
     tooltip()
     await iconFind(idw)
     await iconParams()
-    await alarmFind()
 
+    timeIntervalStatistiks();
+    // alarmFind()
     findTyresInstall()
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
