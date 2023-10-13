@@ -201,14 +201,19 @@ export class InitMarkers {
             }
             const geoTest = await fetch('/api/geoloc', params)
             const geoCard = await geoTest.json();
+            const coordinates = geoCard.resTrack.reduce((acc, el) => {
+                acc.push([el[0], el[1]])
+                return acc
+            }, [])
             if (InitMarkers.polyMode[idw]) {
-                InitMarkers.polyMode[idw].setLatLngs(geoCard.resTrack);
+                InitMarkers.polyMode[idw].setLatLngs(coordinates);
             }
             else {
-                const poly = L.polyline(geoCard.resTrack, { color: 'rgb(0, 0, 204)', weight: 1 });
+                const poly = L.polyline(coordinates, { color: 'rgb(0, 0, 204)', weight: 1 });
                 console.log(poly)
                 InitMarkers.polyMode[idw] = poly
             }
+            console.log(InitMarkers.polyMode[idw])
             InitMarkers.polyMode[idw].addTo(this.map);
         }
 

@@ -6,11 +6,7 @@ let resultGeoTrack = {}
 export let map
 
 
-
-
-
 export async function kartaContainer(elem) {
-
     const karta = document.getElementById('gMap')
     if (!karta) {
         const div = document.createElement('div')

@@ -27,6 +27,8 @@ export class ToggleHiddenList {
         this.globalcheck.addEventListener('click', this.toggleGlobalObjectMaps.bind(this))
         this.listItem.forEach(el => el.children[0].addEventListener('mouseenter', this.opasity.bind(this)))
         this.listItem.forEach(el => el.children[0].addEventListener('mouseleave', this.opasityBack.bind(this)))
+
+
     }
 
     statistikaObjectCar(final) {
@@ -71,10 +73,10 @@ export class ToggleHiddenList {
 
 
     opasity(event) {
-        initsmarkers.opasityMarkers(event.target.parentElement)
+        initsmarkers ? initsmarkers.opasityMarkers(event.target.parentElement) : null
     }
     opasityBack(event) {
-        initsmarkers.opasityMarkersBack(event.target.parentElement)
+        initsmarkers ? initsmarkers.opasityMarkersBack(event.target.parentElement) : null
     }
 
     toggleGlobalObjectMaps(event) {

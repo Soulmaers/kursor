@@ -221,7 +221,6 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
 
 
 exports.getEventFromToDayWialon = async (id, t1, t2) => {
-    console.log(id, t1, t2)
     const params = {
         "itemId": id,
         "ivalType": 1,
