@@ -1,45 +1,92 @@
 
-export let mapLocal, iss, marker, poly;
+export let mapLocal, iss, marker;
 
 import { times } from '../../popup.js'
-
+import { Tooltip } from '../../../class/Tooltip.js';
 export class CreateMarkersEvent {
     constructor(id) {
-        this.id = id
+        this.id = id;
         this.markerCreator = null;
+        this.tool = null;
+        this.track = null;
+        this.eventMarkers = null;
+        this.poly = null;
+        this.setTrack = document.querySelector('.togTrack');
+        this.boundViewTrackAndMarkersEvent = this.viewTrackAndMarkersEnent.bind(this);
+        this.setTrack.addEventListener('click', this.boundViewTrackAndMarkersEvent);
+    }
+
+    viewTrackAndMarkersEnent() {
+        this.setTrack.classList.toggle('activeTrack')
+        if (this.setTrack.classList.contains('activeTrack')) {
+            if (this.poly) {
+                mapLocal.removeLayer(this.poly);
+            }
+            this.poly = L.polyline(this.track, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
+            this.markerCreator.createMarker(this.eventMarkers)
+        } else {
+            mapLocal.removeLayer(this.poly);
+            this.markerCreator.deleteMarkers()
+        }
+    }
+    hiddenTrackAndMarkersEnent() {
+        this.setTrack.classList.remove('activeTrack')
+        this.setTrack.removeEventListener('click', this.boundViewTrackAndMarkersEvent);
+        this.poly ? mapLocal.removeLayer(this.poly) : null
+        this.markerCreator ? this.markerCreator.deleteMarkers() : null
     }
     async init() {
         this.updateInterval = setInterval(() => {
             this.update();
-        }, 30000);
+        }, 5000);
         this.update();
     }
 
     async update() {
-        /*  const idw = this.id
-          let nowDate = Math.round(new Date().getTime() / 1000);
-          let nDate = new Date();
-          let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
-          const paramss = {
-              method: "POST",
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: (JSON.stringify({ nowDate, timeFrom, idw }))
-          }
-          const geoTest = await fetch('/api/geoLastInterval', paramss)
-          const geoCard = await geoTest.json();
-          console.log(geoCard)*/
-
-        const eventTrack = await this.getEventObject()
         const geo = await this.getLastGeoPosition()
-        this.createMapMainObject(geo, eventTrack)
+        this.createMapMainObject(geo)
+        const track = await this.getIntervalTrack()
+        this.track = track.reduce((acc, el) => {
+            acc.push(el.geo)
+            return acc
+        }, [])
+        this.eventMarkers = await this.getEventObject(track)
+
+        if (!this.markerCreator) {
+            this.markerCreator = new MarkerCreator(mapLocal);
+        }
     }
-    async getEventObject() {
+    createTrackMap(geoTrack) {
+        if (poly) {
+            mapLocal.removeLayer(poly);
+        }
+        poly = L.polyline(geoTrack, { color: 'rgb(0, 0, 204)', weight: 2 })
+    }
+    async getIntervalTrack() {
+        const idw = this.id
+        let nowDate = Math.round(new Date().getTime() / 1000);
+        let nDate = new Date();
+        let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);
+        const paramss = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ nowDate, timeFrom, idw }))
+        }
+        const geoTest = await fetch('/api/geoLastInterval', paramss)
+        const geoCard = await geoTest.json();
+        const data = geoCard.resTrack.reduce((acc, el) => {
+            acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4] })
+            return acc
+        }, [])
+        return data
+    }
+    async getEventObject(track) {
         const id = this.id
         let nowDate = Math.round(new Date().getTime() / 1000);
         let nDate = new Date();
-        let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
+        let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);
         const params = {
             method: "POST",
             headers: {
@@ -50,13 +97,7 @@ export class CreateMarkersEvent {
         }
         const res = await fetch('api/getEventMarkers', params)
         const result = await res.json()
-        console.log(result)
-        const geo = Object.values(result.trips[0]).reduce((acc, el) => {
-            el.msgs.forEach(e => {
-                acc.push({ geo: [e.y, e.x], speed: e.s, time: e.tm })
-            });
-            return acc
-        }, [])
+
         let oilEvent;
         if (result.lls && Object.keys(result.lls).length !== 0) {
             oilEvent = Object.values(Object.values(result.lls)[0]).reduce((acc, e) => {
@@ -68,8 +109,14 @@ export class CreateMarkersEvent {
                 return acc
             }, [])
         }
-        return { geo: geo, oil: oilEvent }
+        const maxSpeed = track.filter(el => el.speed > 100)
+        const oil = oilEvent.filter(el => el.oil)
+        const nooil = oilEvent.filter(el => el.nooil)
+        const eventMarkersGlobal = []
+        eventMarkersGlobal.push(...maxSpeed, ...oil, ...nooil)
+        return eventMarkersGlobal
     }
+
     async getLastGeoPosition() {
         const idw = this.id
         const params = {
@@ -85,19 +132,8 @@ export class CreateMarkersEvent {
         return [result.item.pos.y, result.item.pos.x, result.item.pos.c]
     }
 
-    createMapMainObject(geo, eventTrack) {
+    createMapMainObject(geo) {
         const center = [geo[0], geo[1]];
-        const geoTrack = eventTrack.geo.reduce((acc, el) => {
-            acc.push(el.geo)
-            return acc
-        }, [])
-        console.log(eventTrack)
-        const maxSpeed = eventTrack.geo.filter(el => el.speed > 100)
-        const oil = eventTrack.oil ? eventTrack.oil : []
-        const nooil = eventTrack.nooil ? eventTrack.nooil : []
-        const eventMarkersGlobal = []
-        eventMarkersGlobal.push(...maxSpeed, ...oil, ...nooil)
-        console.log(eventMarkersGlobal)
         if (!mapLocal) {
             const wrap = document.querySelector('.wrapper_up');
             const maps = document.createElement('div');
@@ -112,17 +148,16 @@ export class CreateMarkersEvent {
             }).addTo(mapLocal);
             L.control.scale({ imperial: '' }).addTo(mapLocal);
             mapLocal.addLayer(layer);
-            if (!this.markerCreator) {
-                this.markerCreator = new MarkerCreator(mapLocal);
-            }
-            this.markerCreator.createMarker(eventMarkersGlobal)
         }
         mapLocal.setView(center, 8);
         mapLocal.flyTo(center, 8);
-
         const nameCar = document.querySelector('.color').children[0].textContent;
         const res = `${geo[0]}, ${geo[1]}` // await reverseGeocode(geoMarker.geoY, geoMarker.geoX)
-        console.log(iss)
+        this.tool = new Tooltip(this.setTrack, [this.setTrack.getAttribute('rel')])
+        if (!this.tool) {
+            new Tooltip(this.setTrack, [this.setTrack.getAttribute('rel')])
+        }
+
         if (!iss) {
             const LeafIcon = L.Icon.extend({
                 options: {
@@ -146,9 +181,6 @@ export class CreateMarkersEvent {
 
             iss = L.marker(center, { icon: greenIcon }).bindPopup(`${nameCar}<br>${res}`).addTo(mapLocal);
             marker = L.marker(center, { icon: divIcon }).addTo(mapLocal);
-            console.log(geoTrack)
-            poly = L.polyline(geoTrack, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
-            console.log(poly)
             iss.getPopup().options.className = 'my-popup-all';
             iss.on('mouseover', function (e) {
                 this.openPopup();
@@ -158,15 +190,6 @@ export class CreateMarkersEvent {
             });
 
         } else {
-            if (!this.markerCreator) {
-                this.markerCreator = new MarkerCreator(mapLocal);
-            }
-            this.markerCreator.createMarker(eventMarkersGlobal)
-
-            if (poly) {
-                mapLocal.removeLayer(poly);
-            }
-            poly = L.polyline(geoTrack, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
             iss.setLatLng(center).bindPopup(`${nameCar}<br>${res}`).update();
             marker.setLatLng(center).update();
             const divIconUpdated = L.divIcon({
@@ -193,6 +216,7 @@ export class MarkerCreator {
     }
 
     deleteMarkers() {
+        console.log('делите?')
         for (let marker of this.markers) {
             this.map.removeLayer(marker);
         }
@@ -217,7 +241,6 @@ export class MarkerCreator {
                 popupAnchor: [0, 0],
                 className: 'custom-marker'
             });
-            console.log(e.time)
             const contentPopup = this.contentPopup(e)[key];
             const time = times(new Date(Number(e.time) * 1000));
             const eventMarkers = L.marker(e.geo, { icon }).bindPopup(`${contentPopup}<br>Время: ${time}`).addTo(this.map);

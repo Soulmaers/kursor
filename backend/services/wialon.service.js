@@ -232,9 +232,6 @@ exports.getEventFromToDayWialon = async (id, t1, t2) => {
             {
                 "type": 'lls',
                 "filter1": 0
-            }, {
-                "type": 'trips',
-                "filter1": 0
             }
         ],
     }

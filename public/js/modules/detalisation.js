@@ -66,6 +66,8 @@ export async function timeIntervalStatistiks() {
     })
     act !== 'nav4' ? eskiz(today, yestoday, week, objectRazmetka) : (document.querySelector('.intervalTitle').innerHTML = `10 дней: ${convertTime(4)}<div class="calen" rel="cal2"></div>${cal2}`)
     eventClikInterval(objectRazmetka);
+
+
     loaders(today.nextElementSibling, loader)
     await statistics(weekTo(), 'int', 4, objectRazmetka)
     await statistics(timefn(), 'today', 1, objectRazmetka)

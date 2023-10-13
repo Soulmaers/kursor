@@ -8389,3 +8389,31 @@ i.changeColorCheck {
 .changeGlobalCheck {
   color: gray;
 }
+
+.wrapper_up {
+  position: relative;
+}
+
+.settings_track {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(6, 28, 71, 1);
+  background-color: #fff;
+  position: absolute;
+  left: 10px;
+  top: 100px;
+  z-index: 1;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.togTrack {
+  color: gray
+}
+
+.activeTrack {
+  color: rgba(6, 28, 71, 1);
+}

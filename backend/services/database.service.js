@@ -378,6 +378,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
     dannie.splice(5, 3)
     dannie.pop()
     dannie.push(alarm)
+    dannie.unshift(nowDate)
     dannie.unshift(id)
 
     let nowDate = Math.round(new Date().getTime() / 1000);
@@ -398,7 +399,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
 
             }
             else {
-                const sqls = `INSERT INTO alarms (idw, data, unix, name, senspressure, bar,
+                const sqls = `INSERT INTO alarms (idw, unix, data, name, senspressure, bar,
                             temp, alarm) VALUES?`;
                 connection.query(sqls, [value], function (err, results) {
                     if (err) console.log(err);

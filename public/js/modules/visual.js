@@ -17,11 +17,15 @@ import { convert } from './helpersFunc.js'
 import { timeIntervalStatistiks } from './detalisation.js'
 import { Flash } from '../class/Flash.js'
 import { CreateMarkersEvent } from './objectMainModules/class/CreateMarkersEvent.js'
+
 let start;
 let time;
 let timeIcon;
 let createEvent;
+
+
 export async function visual(el) {
+
     const tablo = document.querySelector('.tablo')
     tablo ? tablo.classList.remove('tablo') : null
     const allsec = document.querySelectorAll('.allsec')
@@ -163,10 +167,12 @@ export async function visual(el) {
     const idw = el.id
     if (createEvent && createEvent.updateInterval) {
         clearInterval(createEvent.updateInterval);
+        createEvent.hiddenTrackAndMarkersEnent()
+
     }
-    if (createEvent && createEvent.markerCreator) {
-        createEvent.markerCreator.deleteMarkers();
-    }
+    /*  if (createEvent && createEvent.markerCreator) {
+          createEvent.markerCreator.deleteMarkers();
+      }*/
     createEvent = new CreateMarkersEvent(idw)
     createEvent.init()
 
