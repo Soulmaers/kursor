@@ -13,7 +13,7 @@ require('dotenv').config();
 
 //готовим данные и отправляем ответ на клиент который отрисовывает список
 exports.dataSpisok = async (req, res) => {
-       try {
+    try {
         let login;
         if (req && req.body && req.body.login) {
             login = req.body.login
@@ -22,41 +22,41 @@ exports.dataSpisok = async (req, res) => {
             login = 'soulmaers'
         }
         const data = await wialonService.getAllGroupDataFromWialon(login);
-              const aLLmassObject = [];
+        const aLLmassObject = [];
         const arrName = [];
         for (const elem of data.items) {
             const nameGroup = elem.nm;
             const nameObject = elem.u;
             const massObject = [];
             await Promise.all(nameObject.map(async (el, index) => {
-                        try {
+                try {
                     const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
-                                 if (!all.item) {
+                    if (!all.item) {
                         return;
                     }
                     const objects = all.item.nm;
                     const idw = all.item.id
                     arrName.push([objects, idw])
-                                     const prob = await databaseService.loadParamsViewList(objects, el);
-                                  const massObjectCar = await databaseService.dostupObject(login);
-                                               if (massObjectCar.includes(`${prob[4]}`)) {
+                    const prob = await databaseService.loadParamsViewList(objects, el);
+                    const massObjectCar = await databaseService.dostupObject(login);
+                    if (massObjectCar.includes(`${prob[4]}`)) {
                         prob.group = nameGroup;
                         massObject.push(prob);
-                                               }
-                                         
+                    }
+
                 }
                 catch (e) {
                     console.log(e)
                 }
             }));
-                             const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
+            const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
             aLLmassObject.push(objectsWithGroup);
             aLLmassObject.reverse();
         }
         if (req && req.body && req.body.login) {
             await res.json({ response: { aLLmassObject, arrName } });
         }
-                     return aLLmassObject
+        return aLLmassObject
     }
     catch (e) {
         console.log(e)
@@ -90,21 +90,21 @@ exports.test = async () => {
     const allCar = Object.entries(data)
     const now = new Date();
     const nowTime = Math.floor(now.getTime() / 1000);
-     for (const el of allCar[5][1]) {
+    for (const el of allCar[5][1]) {
         let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
         let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
         let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
         if (rr.messages.length === 0 || rez && rez.length === 0) {
-          null
+            null
         }
         else {
-                      while (rez && rr.messages.length !== rez.length) {
+            while (rez && rr.messages.length !== rez.length) {
                 rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
                 rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
                 nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
 
             }
-                    const mass = [];
+            const mass = [];
             allArray = ggg(nameSens, rez)
             rr.messages.forEach(e => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
@@ -115,9 +115,9 @@ exports.test = async () => {
             mass.forEach((el, index) => {
                 el.push(sens[index]);
                 el.push(arr)
-                         });
-                     await databaseService.saveChartDataToBase(mass);
-                 }
+            });
+            await databaseService.saveChartDataToBase(mass);
+        }
     }
 }
 
@@ -155,13 +155,21 @@ function ggg(nameSens, rez) {
 
 
 async function updateParams(data) {
-      data ? data : data = dataGlobal
+    data ? data : data = dataGlobal
     const nameCar = [];
     const allCar = Object.entries(data)
     allCar[5][1].forEach(async el => {
         const nameTable = el.nm.replace(/\s+/g, '');
         const idw = el.id;
-        const speed = el.lmsg && el.lmsg.pos && el.lmsg.pos.s ? el.lmsg.pos.s : null;// проверка на наличие свойства lmsg и свойства pos.s
+        let speed;
+        if (el.lmsg && el.lmsg.pos) {
+            speed = el.lmsg.pos.s
+        }
+        else {
+            speed = null
+        }
+        //     const speed = el.lmsg.pos ? el.lmsg.pos.s : null;// проверка на наличие свойства lmsg и свойства pos.s
+        //  console.log(el.nm, speed)
         const geo = el && el.pos && el.pos.x ? [el.pos.y, el.pos.x] : null;
         nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed, geo]);
         const model = await databaseService.modelViewToBase(idw)
@@ -192,8 +200,8 @@ async function updateParams(data) {
     });
     ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
     await zaprosSpisokb(nameCar)
-     const res = await constorller.dataSpisok()
-         const global = await statistika.startAllStatic(res)
+    const res = await constorller.dataSpisok()
+    const global = await statistika.startAllStatic(res)
     const prostoy = await statistika.popupProstoy(res)
     await events.eventFunction(res)
     const arraySummary = Object.entries(global)
@@ -207,7 +215,7 @@ async function updateParams(data) {
         const idw = el[0]
         const arrayInfo = el[1]
         const res = await databaseService.summaryToBase(idw, arrayInfo, datas)
-           })
+    })
 
 }
 
@@ -281,33 +289,30 @@ async function zaprosSpisokb(name) {
 function queryDB(sql) {
     return new Promise((resolve, reject) => {
         connection.query(sql, function (err, results) {
-            if (err)console.log(err);
+            if (err) console.log(err);
             return resolve(results);
         });
     });
 }
-
-
 function isSensorLost(el) {
     return el[6] > 5 && el[3] <= -50;
 }
-
 function isTemperatureHigh(el) {
     return el[3] > 70 && el[6] > 5;
 }
-
 function isPressureHigh(el) {
     return el[2] >= Number(el[4].kvd) && el[3] > -50 && el[6] > 5;
 }
-
 function isPressureLow(el) {
     return el[2] <= Number(el[4].knd) && el[3] > -50 && el[6] > 5;
 }
-
 function handleNewAlarmCase(data, el, alarm) {
+    console.log(data, el, alarm)
     databaseService.alarmBase(data, el, alarm);
 }
 
+
+/*
 function proverka(arr) {
     console.log('проверка');
     const time = new Date();
@@ -364,9 +369,9 @@ function proverka(arr) {
             }
         });
     });
-}
+}*/
 
-/*
+
 function proverka(arr) {
 
     const time = new Date()
@@ -492,4 +497,4 @@ function proverka(arr) {
             });
         }
     })
-}*/
+}

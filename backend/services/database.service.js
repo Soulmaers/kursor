@@ -374,6 +374,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
     }], dannie[6], dannie[8], dannie[1], dannie[1]) : 'Норма. В базу не пишем'
     console.log('Предупреждение' + ' ' + res.message)
     count++
+    const nowDate = Math.round(new Date().getTime() / 1000);
     const id = dannie[6]
     dannie.splice(5, 3)
     dannie.pop()
@@ -381,7 +382,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
     dannie.unshift(nowDate)
     dannie.unshift(id)
 
-    let nowDate = Math.round(new Date().getTime() / 1000);
+
     const value = [dannie];
     try {
         const selectBase = `SELECT idw, data, name, senspressure, bar, temp ,alarm 
