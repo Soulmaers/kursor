@@ -146,8 +146,9 @@ export function globalSelect() {
     })
 
 }
-function filterCondition(event, clickedElement) {
+export function filterCondition(event, clickedElement) {
     console.log('работаем конд?')
+
     const targetElement = clickedElement || event.target;
     const grays = document.querySelectorAll('.grays');
     grays.forEach(e => {
@@ -155,7 +156,8 @@ function filterCondition(event, clickedElement) {
             e.classList.remove('toogleIcon')
         }
     });
-    !clickedElement ? (targetElement.classList.toggle('toogleIcon'), targetElement.closest('.viewIcon').children[0].style.color = 'gray') : null
+    console.log(targetElement)
+    targetElement.classList.toggle('toogleIcon'), targetElement.closest('.viewIcon').children[0].style.color = 'gray'
     if (targetElement.classList.contains('toogleIcon')) {
         const newCelChange = document.querySelectorAll('.newCelChange')
         const list = document.querySelectorAll('.listItem')
@@ -348,7 +350,7 @@ function conditionFilter() {
     const element = document.querySelector('.conditionSort');
     const sortCondition = document.querySelector('.sortCondition')
     const grays = document.querySelectorAll('.grays')
-       element.addEventListener('mouseenter', () => {
+    element.addEventListener('mouseenter', () => {
         element.style.width = '70px'
         sortIcon.style.display = 'block'
     })

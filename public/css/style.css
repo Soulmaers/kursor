@@ -8417,3 +8417,12 @@ i.changeColorCheck {
 .activeTrack {
   color: rgba(6, 28, 71, 1);
 }
+
+.clicker,
+.iconMapsInfoActive {
+  border: 2px solid darkred
+}
+
+.cond {
+  cursor: pointer;
+}

@@ -1,6 +1,6 @@
 
 import { initsmarkers } from '../../navModules/karta.js'
-
+import { filterCondition } from '../../filtersList.js'
 export class ToggleHiddenList {
     constructor() {
         //  this.status = status
@@ -15,6 +15,9 @@ export class ToggleHiddenList {
         this.globalcheck = document.querySelector('.globalcheck')
         this.listItem = document.querySelectorAll('.listItem')
         this.tableInfoCar = document.querySelector('.tableInfoCar')
+        this.parent = document.querySelector('.sortCondition')
+        this.cond = document.querySelectorAll('.cond')
+
     }
     init() {
         this.minusS.forEach(el => el.addEventListener('click', this.hiddenList.bind(this)))
@@ -28,7 +31,20 @@ export class ToggleHiddenList {
         this.listItem.forEach(el => el.children[0].addEventListener('mouseenter', this.opasity.bind(this)))
         this.listItem.forEach(el => el.children[0].addEventListener('mouseleave', this.opasityBack.bind(this)))
 
-
+        Array.from(this.cond).forEach((e, index) => {
+            e.addEventListener('click', () => {
+                if (e.classList.contains('clicker')) {
+                    e.classList.remove('clicker')
+                    filterCondition(null, this.parent.children[index])
+                    return
+                }
+                Array.from(this.cond).forEach(el => {
+                    el.classList.remove('clicker')
+                })
+                e.classList.add('clicker')
+                filterCondition(null, this.parent.children[index])
+            })
+        })
     }
 
     statistikaObjectCar(final) {
