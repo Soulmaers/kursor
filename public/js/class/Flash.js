@@ -97,7 +97,7 @@ export class CloseBTN {
                 this.elem1.style.display = 'none';
                 this.elem3.style.display = 'block';
                 this.elem2.style.display = 'none'
-                alarmFind()
+                //  alarmFind()
             }
         }
         else {

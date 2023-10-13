@@ -1,6 +1,6 @@
 import { visual, visualNone } from './visual.js'
 //import { massivionbd } from './paramsTyresView.js';
-import {navMenu} from './event.js'
+import { navMenu } from './event.js'
 export function navigator() {
     const main = document.querySelector('.main')
     const auth = document.querySelector('.auth')

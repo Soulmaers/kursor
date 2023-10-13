@@ -11,6 +11,7 @@ import { CloseBTN } from '../class/Flash.js'
 const login = document.querySelectorAll('.log')[1].textContent
 let isProcessing = false
 export async function alarmFind() {
+    console.log('алармфайнд')
     if (isProcessing) {
         return;
     }
@@ -392,9 +393,9 @@ minus.addEventListener('click', () => {
     alarmStorage.style.display = 'none';
     plus.style.display = 'block';
     minus.style.display = 'none'
-    console.time()
-    alarmFind()
-    console.timeEnd()
+    // console.time()
+    // alarmFind()
+    //  console.timeEnd()
     const mapss = document.getElementById('mapOil')
     const wrapMap = document.querySelector('.wrapMap')
     if (wrapMap) {
