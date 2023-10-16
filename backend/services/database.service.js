@@ -926,7 +926,20 @@ exports.logsFindToBaseId = async (t1, t2, idw) => {
     }
 
 }
+exports.alarmFindToBaseId = async (t1, t2, idw) => {
+    if (idw.length !== 0) {
+        return new Promise((resolve, reject) => {
+            const postModel = `SELECT data, alarm, bar, senspressure FROM alarms WHERE unix >= ${t2} AND unix <= ${t1} AND idw=${idw}`;
+            connection.query(postModel, function (err, results) {
+                if (err)
+                    reject(err); // передаём ошибку в reject
+                resolve(results);
+            })
+        })
 
+    }
+
+}
 
 
 exports.tarirSaveToBase = async (arr) => {

@@ -47,7 +47,9 @@ export class CreateMarkersEvent {
         const geo = await this.getLastGeoPosition()
         this.createMapMainObject(geo)
         const track = await this.getIntervalTrack()
+
         const prostoy = await this.getEventProstoy()
+        const pressure = await this.getEventPressure()
         this.track = track.reduce((acc, el) => {
             acc.push(el.geo)
             return acc
@@ -109,6 +111,59 @@ export class CreateMarkersEvent {
         }, [])
         return data
     }
+    async getEventPressure() {
+        const idw = this.id
+        let nowDate = Math.round(new Date().getTime() / 1000);
+        let nDate = new Date();
+        let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ nowDate, timeFrom, idw }))
+        }
+        const pressure = await fetch('/api/alarmViewId', params)
+        const press = await pressure.json();
+        const groupedObj = {};
+        for (const item of press) {
+            const { senspressure, ...rest } = item;
+            if (!groupedObj[senspressure]) {
+                groupedObj[senspressure] = [{ senspressure, ...rest }];
+            } else {
+                groupedObj[senspressure].push({ senspressure, ...rest });
+            }
+        }
+        const results = Object.values(groupedObj);
+        console.log(results);
+        let result = [];
+        let subArray = [];
+        results.forEach(el => {
+            console.log(el)
+            for (let i = 0; i < el.length; i++) {
+                const item = el[i];
+
+                if (item.alarm === 'Норма') {
+                    if (subArray.length > 0) {
+                        result.push(subArray);
+                    }
+                    subArray = [item];
+                } else {
+                    subArray.push(item);
+                }
+            }
+
+            if (subArray.length > 0) {
+                result.push(subArray);
+            }
+
+        })
+        console.log(result)
+        console.log(subArray)
+
+    }
+
+
     async getEventObject(track, prostoy) {
         const id = this.id
         let nowDate = Math.round(new Date().getTime() / 1000);
@@ -124,7 +179,7 @@ export class CreateMarkersEvent {
         }
         const res = await fetch('api/getEventMarkers', params)
         const result = await res.json()
-
+        console.log(result)
         let oilEvent;
         if (result.lls && Object.keys(result.lls).length !== 0) {
             oilEvent = Object.values(Object.values(result.lls)[0]).reduce((acc, e) => {

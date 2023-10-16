@@ -51,6 +51,8 @@ router.post('/api/logsView', controllerAlarm.logsView)
 router.post('/api/logsViewId', controllerAlarm.logsViewId)
 router.post('/api/saveEvent', controllerAlarm.saveEvent)
 router.post('/api/viewEvent', controllerAlarm.viewEvent)
+router.post('/api/alarmViewId', controllerAlarm.alarmViewId)
+
 
 
 router.post('/api/savePr', controllerTech.savePr)
