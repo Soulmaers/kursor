@@ -165,7 +165,12 @@ export async function iconParams() {
             }
             if (it.includes('Топливо')) {
                 const oilCard = document.querySelector('.oil_value1')
-                oilCard.textContent = it[2].toFixed(0)
+                oilCard.textContent = it[2] === -348201.3876 ? '-----' : it[2].toFixed(0)
+            }
+            if (it[0].startsWith('Бортовое')) {
+                const pwr = document.querySelector('.akb_value1')
+                console.log(it[2])
+                pwr.textContent = it[2] === -348201.3876 ? '-----' : it[2].toFixed(1)
             }
             /*  if (count === 0) {
                   const ignValue = document.querySelector('.ign_value')

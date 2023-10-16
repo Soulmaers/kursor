@@ -19,16 +19,15 @@ export async function kartaContainer(elem) {
 
         map = L.map('gMap').setView([59.9386, 30.3141], 9);
         map.attributionControl.setPrefix(false);
-
         const leaf = document.querySelector('.leaflet-control-attribution');
         leaf.style.display = 'none';
         const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
         }).addTo(map);
+
         L.control.scale({
             imperial: ''
         }).addTo(map);
-
         map.addLayer(layer);
         setTimeout(() => {
             map.invalidateSize();
