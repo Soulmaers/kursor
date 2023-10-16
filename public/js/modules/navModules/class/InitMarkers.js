@@ -57,7 +57,7 @@ export class InitMarkers {
         Object.values(InitMarkers.markersArrow).forEach(e => {
             e.setOpacity(1)
         })
-        this.map.setView([59.9386, 30.3141], 9)
+        //  this.map.setView([59.9386, 30.3141], 9)
     }
     clickMarkers(event) {
         const marker = event.target

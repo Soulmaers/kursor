@@ -57,7 +57,6 @@ export class ToggleHiddenList {
             })
         })
     }
-
     statistikaObjectCar(final) {
         const arrayStatus = [];
         const checkInList = document.querySelectorAll('.checkInList')
@@ -97,8 +96,6 @@ export class ToggleHiddenList {
             element.textContent = arrayStatus[index]
         });
     }
-
-
     opasity(event) {
         initsmarkers ? initsmarkers.opasityMarkers(event.target.parentElement) : null
     }
@@ -140,7 +137,12 @@ export class ToggleHiddenList {
         element.classList.toggle('changeColorCheck')
         const childCheck = (element.closest('.groups').lastElementChild).parentElement.querySelectorAll('.checkInList')
         Array.from(childCheck).forEach(el => {
-            el.classList.toggle('changeColorCheck')
+            if (element.classList.contains('changeColorCheck')) {
+                el.classList.add('changeColorCheck')
+            }
+            else {
+                el.classList.remove('changeColorCheck')
+            }
         })
         initsmarkers.toggleMarkersIcon()
         initsmarkers.statistikaObjectCar()

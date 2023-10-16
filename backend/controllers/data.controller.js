@@ -170,7 +170,7 @@ async function updateParams(data) {
         }
         //     const speed = el.lmsg.pos ? el.lmsg.pos.s : null;// проверка на наличие свойства lmsg и свойства pos.s
         //  console.log(el.nm, speed)
-        const geo = el && el.pos && el.pos.x ? [el.pos.y, el.pos.x] : null;
+        const geo = el && el.pos && el.pos.x ? JSON.stringify([el.pos.y, el.pos.x]) : null;
         nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed, geo]);
         const model = await databaseService.modelViewToBase(idw)
         let statusTSI;

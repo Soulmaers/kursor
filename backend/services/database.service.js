@@ -366,7 +366,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
     let val;
     const allSens = await databaseService.ggg(dannie[6])
     const tyress = allSens[dannie[2]]
-    console.log(dannie)
+
     alarm !== 'Потеря связи с датчиком' ? val = dannie[3] + ' ' + 'Бар' : val = dannie[4] + '' + 't'
     const res = alarm !== 'Норма' && alarm !== 'Потеря связи с датчиком' ? await databaseService.controllerSaveToBase([{
         event: 'Предупреждение', time: `Время ${dannie[0]}`, tyres: `Колесо: ${tyress}`,
@@ -376,13 +376,13 @@ exports.alarmBase = async (data, tyres, alarm) => {
     count++
     const nowDate = Math.round(new Date().getTime() / 1000);
     const id = dannie[6]
+
     dannie.splice(5, 3)
-    dannie.pop()
+    // dannie.pop()
     dannie.push(alarm)
     dannie.unshift(nowDate)
     dannie.unshift(id)
-
-
+    console.log(dannie)
     const value = [dannie];
     try {
         const selectBase = `SELECT idw, data, name, senspressure, bar, temp ,alarm 
@@ -397,11 +397,11 @@ exports.alarmBase = async (data, tyres, alarm) => {
         connection.query(selectBase, async function (err, results) {
             console.log(err)
             if (results.length !== 0) {
-
+                null
             }
             else {
                 const sqls = `INSERT INTO alarms (idw, unix, data, name, senspressure, bar,
-                            temp, alarm) VALUES?`;
+                            temp, geo, alarm) VALUES?`;
                 connection.query(sqls, [value], function (err, results) {
                     if (err) console.log(err);
 
@@ -929,7 +929,7 @@ exports.logsFindToBaseId = async (t1, t2, idw) => {
 exports.alarmFindToBaseId = async (t1, t2, idw) => {
     if (idw.length !== 0) {
         return new Promise((resolve, reject) => {
-            const postModel = `SELECT data, alarm, bar, senspressure FROM alarms WHERE unix >= ${t2} AND unix <= ${t1} AND idw=${idw}`;
+            const postModel = `SELECT data, alarm, bar, senspressure, geo FROM alarms WHERE unix >= ${t2} AND unix <= ${t1} AND idw=${idw}`;
             connection.query(postModel, function (err, results) {
                 if (err)
                     reject(err); // передаём ошибку в reject

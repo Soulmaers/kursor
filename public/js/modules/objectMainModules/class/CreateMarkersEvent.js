@@ -135,32 +135,37 @@ export class CreateMarkersEvent {
             }
         }
         const results = Object.values(groupedObj);
-        console.log(results);
-        let result = [];
-        let subArray = [];
+        const result = [];
         results.forEach(el => {
-            console.log(el)
-            for (let i = 0; i < el.length; i++) {
-                const item = el[i];
+            let count = 0;
+            let num = 0;
+            while (count < el.length) {
+                if (el[count].alarm === 'Норма') {
+                    //   result.push(el[count]); // добавляем текущий элемент
+                    const nextIndex = count + 1;
+                    if (el[nextIndex]) {
+                        result.push(el[nextIndex]); // добавляем следующий элемент, если он существует и имеет alarm равный 'Норма'
+                        count = nextIndex + 1; // пропускаем следующий элемент
+                    } else {
+                        el[num].alarm !== 'Норма' ? result.push(el[num]) : null
+                        count = nextIndex; // просто пропускаем текущий элемент
 
-                if (item.alarm === 'Норма') {
-                    if (subArray.length > 0) {
-                        result.push(subArray);
                     }
-                    subArray = [item];
                 } else {
-                    subArray.push(item);
+                    count++;
                 }
             }
-
-            if (subArray.length > 0) {
-                result.push(subArray);
+            let bool = false;
+            el.forEach(e => {
+                if (Object.values(e).includes('Норма')) {
+                    bool = true
+                }
+            })
+            if (!bool) {
+                result.push(el[0])
             }
-
         })
         console.log(result)
-        console.log(subArray)
-
     }
 
 
