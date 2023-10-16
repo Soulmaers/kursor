@@ -179,7 +179,6 @@ export async function logsView(array) {
     results.splice(0, tr.length)
     if (results.length !== 0) {
         const mass = results.map(el => {
-            console.log(el)
             const parsedContent = JSON.parse(el.content);
             const typeEvent = parsedContent[0].event;
             const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;

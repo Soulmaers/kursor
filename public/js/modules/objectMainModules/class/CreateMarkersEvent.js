@@ -180,7 +180,6 @@ export class CreateMarkersEvent {
                 'Content-Type': 'application/json',
             },
             body: (JSON.stringify({ id, nowDate, timeFrom }))
-
         }
         const res = await fetch('api/getEventMarkers', params)
         const result = await res.json()
@@ -196,11 +195,15 @@ export class CreateMarkersEvent {
                 return acc
             }, [])
         }
+        const startTrack = {
+            geo: track[0].geo, start: track[0].speed, time: track[0].time
+        }
+        console.log(oilEvent)
         const maxSpeed = track.filter(el => el.speed > 100 && el.speed < 140)
-        const oil = oilEvent.filter(el => el.oil)
-        const nooil = oilEvent.filter(el => el.nooil)
+        const oil = oilEvent !== undefined ? oilEvent.filter(el => el.oil) : []
+        const nooil = oilEvent !== undefined ? oilEvent.filter(el => el.nooil) : []
         const eventMarkersGlobal = []
-        eventMarkersGlobal.push(...maxSpeed, ...oil, ...nooil, ...prostoy)
+        eventMarkersGlobal.push(startTrack, ...maxSpeed, ...oil, ...nooil, ...prostoy)
         console.log(eventMarkersGlobal)
         return eventMarkersGlobal
     }
@@ -299,7 +302,8 @@ export class MarkerCreator {
             speed: '../../image/upspeed.png',
             oil: '../../image/oil1.png',
             nooil: '../../image/refuel.png',
-            prostoy: '../../image/pr.png'
+            prostoy: '../../image/pr.png',
+            start: '../../image/starttrack.png'
         };
         this.markers = [];
     }
@@ -316,7 +320,9 @@ export class MarkerCreator {
             speed: `Скорость: ${e.speed} км/ч`,
             oil: `Заправка: ${e.oil} л`,
             nooil: `Слив: ${e.nooil} л`,
-            prostoy: `Простой: ${e.prostoy}`
+            prostoy: `Простой: ${e.prostoy}`,
+            start: `Начало трека`
+
         };
     }
     createMarker(events) {
