@@ -58,10 +58,9 @@ export async function zapros(login) {
         yesterdaySummary();
         yesterdaySummary('Вчера');
         yesterdaySummary('Неделя');
-
+        setInterval(() => yesterdaySummary(), 60000)
     };
     processDataAtMidnight()
-    setInterval(processDataAtMidnight, 60000)
 }
 
 
