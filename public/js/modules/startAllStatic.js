@@ -4,18 +4,6 @@ import { allObjects } from './menu.js'
 import { viewStat } from './checkObjectStart.js'
 import { fnParMessage } from './grafiks.js'
 
-async function testovfn(active, t1, t2) {
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ active, t1, t2 }))
-    }
-    const rest = await fetch('/api/viewChart', param)
-    const resultt = await rest.json()
-    return resultt
-}
 
 
 export function timesDate(dates) {
@@ -55,11 +43,11 @@ export function timefn() {
     return [timeNow, timeOld]
 }
 export async function yesterdaySummary(interval, type, element) {
-    let bool=false
-    allObjects.forEach(el=>{
-        el.length!==0?bool=true:null
+    let bool = false
+    allObjects.forEach(el => {
+        el.length !== 0 ? bool = true : null
     })
-      if(!bool){
+    if (!bool) {
         return
     }
     let int;
@@ -86,7 +74,8 @@ export async function yesterdaySummary(interval, type, element) {
     }
     const mods = await fetch('/api/summaryYestoday', params)
     const models = await mods.json()
-      const mod = type ? models.filter(el => el.type === type) : models
+    console.log(models)
+    const mod = type ? models.filter(el => el.type === type) : models
     mod.forEach(it => {
         it.rashod < 0 ? it.rashod = 0 : it.rashod
     })
@@ -166,7 +155,7 @@ export async function yesterdaySummary(interval, type, element) {
         const propOrder = ["quantityTS", "jobTS", 'probeg', "rashod", "zapravka", "dumpTrack", "moto", "prostoy", "goodJob", "medium", "oilHH"];
         Object.entries(globalInfo).forEach(it => {
             const arr = propOrder.map(prop => it[1][prop]);
-            const parentWrapper = document.querySelector(`[rel="${it[0]}"]`).children
+            const parentWrapper = document.querySelector(`[rel="Самосвал"]`).children
             arr.forEach((e, index) => {
                 let targetIndex = 1;
                 if (!interval && !type) {
