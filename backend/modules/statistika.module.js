@@ -169,7 +169,7 @@ async function loadValue(array, timeOld, timeNow) {
     return { uniq: uniqObject }
 }
 function oilHH(data) {
-
+    console.log(data)
     const arr = [];
     let currentObj = null;
     let currentArr = [];
