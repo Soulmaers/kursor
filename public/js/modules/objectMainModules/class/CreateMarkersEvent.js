@@ -11,6 +11,7 @@ export class CreateMarkersEvent {
         this.track = null;
         this.eventMarkers = null;
         this.poly = null;
+        this.startTrack = null
         this.setTrack = document.querySelector('.togTrack');
         this.boundViewTrackAndMarkersEvent = this.viewTrackAndMarkersEnent.bind(this);
         this.setTrack.addEventListener('click', this.boundViewTrackAndMarkersEvent);
@@ -22,11 +23,14 @@ export class CreateMarkersEvent {
         if (this.setTrack.classList.contains('activeTrack')) {
             if (this.poly) {
                 mapLocal.removeLayer(this.poly);
+                this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
             }
             this.poly = L.polyline(this.track, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
+            this.startTrack ? this.startTrack.addTo(mapLocal) : null
             this.markerCreator.createMarker(this.eventMarkers)
         } else {
             mapLocal.removeLayer(this.poly);
+            this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
             this.markerCreator.deleteMarkers()
         }
     }
@@ -34,12 +38,13 @@ export class CreateMarkersEvent {
         this.setTrack.classList.remove('activeTrack')
         this.setTrack.removeEventListener('click', this.boundViewTrackAndMarkersEvent);
         this.poly ? mapLocal.removeLayer(this.poly) : null
+        this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
         this.markerCreator ? this.markerCreator.deleteMarkers() : null
     }
     async init() {
         this.updateInterval = setInterval(() => {
             this.update();
-        }, 30000);
+        }, 10000);
         this.update();
     }
 
@@ -54,13 +59,45 @@ export class CreateMarkersEvent {
             acc.push(el.geo)
             return acc
         }, [])
+        console.log(track)
         this.eventMarkers = await this.getEventObject(track, prostoy)
 
         if (!this.markerCreator) {
             this.markerCreator = new MarkerCreator(mapLocal);
         }
+        if (track.length !== 0) {
+            const startTrack = {
+                geo: track[0].geo, course: track[0].course, time: track[0].time
+            }
+
+            this.getStartTrack(startTrack)
+        }
+
+
     }
 
+    async getStartTrack(startTrack) {
+        console.log(startTrack)
+        if (!this.startTrack) {
+            const divIconUpdated = L.divIcon({
+                className: 'custom-marker-arrow',
+                html: `<div class="wrapContainerArrowStart" style="pointer-events: none;transform: rotate(${startTrack.course}deg);"><img src="../../image/starttrack.png" style="width: 15px; height:15px"></div>`
+            });
+            this.startTrack = L.marker(startTrack.geo, { icon: divIconUpdated })
+
+        }
+        else {
+            this.startTrack.setLatLng(startTrack.geo).update();
+            const divIconUpdated = L.divIcon({
+                className: 'custom-marker-arrow',
+                html: `<div class="wrapContainerArrowStart" style="pointer-events: none;transform: rotate(${startTrack.course}deg);"><img src="../../image/starttrack.png" style="width: 15px; height:15px"></div>`
+            });
+            this.startTrack.setIcon(divIconUpdated);
+        }
+
+
+
+    }
     async getEventProstoy() {
         const idw = this.id
         let nowDate = Math.round(new Date().getTime() / 1000);
@@ -106,7 +143,7 @@ export class CreateMarkersEvent {
         const geoTest = await fetch('/api/geoLastInterval', paramss)
         const geoCard = await geoTest.json();
         const data = geoCard.resTrack.reduce((acc, el) => {
-            acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5] })
+            acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
             return acc
         }, [])
         return data
@@ -195,15 +232,12 @@ export class CreateMarkersEvent {
                 return acc
             }, [])
         }
-        const startTrack = {
-            geo: track[0].geo, start: track[0].speed, time: track[0].time
-        }
         console.log(oilEvent)
         const maxSpeed = track.filter(el => el.speed > 100 && el.speed < 140)
         const oil = oilEvent !== undefined ? oilEvent.filter(el => el.oil) : []
         const nooil = oilEvent !== undefined ? oilEvent.filter(el => el.nooil) : []
         const eventMarkersGlobal = []
-        eventMarkersGlobal.push(startTrack, ...maxSpeed, ...oil, ...nooil, ...prostoy)
+        eventMarkersGlobal.push(...maxSpeed, ...oil, ...nooil, ...prostoy)
         console.log(eventMarkersGlobal)
         return eventMarkersGlobal
     }
@@ -302,8 +336,7 @@ export class MarkerCreator {
             speed: '../../image/upspeed.png',
             oil: '../../image/oil1.png',
             nooil: '../../image/refuel.png',
-            prostoy: '../../image/pr.png',
-            start: '../../image/starttrack.png'
+            prostoy: '../../image/pr.png'
         };
         this.markers = [];
     }
@@ -320,8 +353,8 @@ export class MarkerCreator {
             speed: `Скорость: ${e.speed} км/ч`,
             oil: `Заправка: ${e.oil} л`,
             nooil: `Слив: ${e.nooil} л`,
-            prostoy: `Простой: ${e.prostoy}`,
-            start: `Начало трека`
+            prostoy: `Простой: ${e.prostoy}`
+
 
         };
     }
