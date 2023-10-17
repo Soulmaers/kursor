@@ -1,11 +1,354 @@
 const databaseService = require('../services/database.service');
 const wialonService = require('../services/wialon.service');
 const structura = require('./structura.module')
+
+
+class SummaryStatistiks {
+    constructor(object) {
+        this.object = object
+        this.strustura = {}
+        this.data = null
+        this.id = null
+        this.nameCar = null
+        this.probeg = null
+        this.zapravka = null
+        this.rashod = null
+    }
+
+    async testovfn(active, t1, t2) {
+        const resultt = await databaseService.viewChartDataToBase(active, t1, t2)
+        return resultt
+    }
+
+    timefn() {
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        const startOfTodayUnix = Math.floor(currentDate.getTime() / 1000);
+        const unix = Math.floor(new Date().getTime() / 1000);
+        const timeNow = unix
+        const timeOld = startOfTodayUnix
+        return [timeNow, timeOld]
+    }
+
+    async init() {
+        const idwArray = this.object
+            .map(el => Object.values(el)) // получаем массивы всех id
+            .flat()
+            .map(e => [e[4], e[0].message, e[5]])
+        for (const el of idwArray) {
+            this.id = el[0]
+            this.strustura[this.id] = this.strustura[this.id] || {}
+            this.strustura[this.id].ts = 1
+            this.strustura[this.id].nameCar = el[1]
+            this.strustura[this.id].group = el[2]
+            this.strustura[this.id].type = 'Тест'
+            this.data = await this.getSensorsAndParametrs(this.id)
+            const mileg = this.data.some(it => it.params === 'can_mileage' || it.params === 'mileage');
+            if (mileg) {
+                this.probeg = this.calculationMileage()
+                this.strustura[this.id].probeg = this.probeg
+                this.strustura[this.id].job = this.calculationJobTs()
+            }
+            else {
+                this.strustura[this.id].probeg = '-'
+                this.strustura[this.id].job = '-'
+            }
+            const oil = this.data.some(it => it.sens === 'Топливо' || it.sens === 'Топливо ДУТ');
+            if (oil) {
+                const result = this.calculationOil()
+                this.rashod = result[0]
+                this.zapravka = result[1]
+                this.strustura[this.id].rashod = this.rashod
+                this.strustura[this.id].zapravka = this.zapravka
+                this.strustura[this.id].medium = this.calculationMedium()
+
+            }
+            else {
+                this.strustura[this.id].rashod = '-'
+                this.strustura[this.id].zapravka = '-'
+                this.strustura[this.id].medium = '-'
+            }
+            const engine = this.data.some(it => it.sens.startsWith('Зажигание'));
+            if (engine) {
+                const result = this.calculationMotoAndProstoy()
+                this.moto = result[0]
+                this.prostoy = result[1]
+                this.strustura[this.id].moto = this.moto
+                this.strustura[this.id].prostoy = this.prostoy
+            }
+            else {
+                this.strustura[this.id].moto = '-'
+                this.strustura[this.id].prostoy = '-'
+            }
+        }
+        return this.strustura
+    }
+
+    calculationMedium() {
+        let medium;
+        if (this.probeg !== 0 && this.probeg !== '-') {
+            medium = Number(((this.rashod / this.probeg) * 100).toFixed(0))
+        }
+        else {
+            medium = '-'
+
+        }
+        return medium
+    }
+    calculationJobTs() {
+        if (this.probeg > 5) {
+            return 1
+        } else {
+            return 0
+        }
+    }
+
+    calculationMileage() {
+        const arrayValue = this.data.find(it => it.params === 'can_mileage' || it.params === 'mileage');
+        let probegZero = 0
+        let probegNow = 0;
+        if (Number(arrayValue.value[arrayValue.value.length - 1].toFixed(0)) === 0) {
+            for (let i = arrayValue.value.length - 1; i >= 0; i--) {
+                if (Number(arrayValue.value[i].toFixed(0)) !== 0) {
+                    probegNow = Number(arrayValue.value[i].toFixed(0));
+                    break;
+                }
+            }
+        } else {
+            probegNow = Number(arrayValue.value[arrayValue.value.length - 1].toFixed(0));
+        }
+        if (Number(arrayValue.value[0].toFixed(0)) === 0) {
+            for (let i = 0; i <= arrayValue.value.length - 1; i++) {
+                if (Number(arrayValue.value[i].toFixed(0)) !== 0) {
+                    probegZero = Number(arrayValue.value[i].toFixed(0));
+                    break;
+                }
+            }
+        } else {
+            probegZero = Number(arrayValue.value[0].toFixed(0));
+        }
+        const probegDay = probegNow - probegZero;
+        return probegDay
+    }
+
+    async getSensorsAndParametrs(el) {
+        const interval = this.timefn()
+        const timeOld = interval[1]
+        const timeNow = interval[0]
+        const itog = await this.testovfn(el, timeOld, timeNow)
+        const time = [];
+        const speed = [];
+        const sats = [];
+        const geo = [];
+        itog.forEach(el => {
+            const timestamp = Number(el.data);
+            const date = new Date(timestamp * 1000);
+            const isoString = date.toISOString();
+            time.push(new Date(isoString))
+            speed.push(el.speed)
+            sats.push(el.sats)
+            geo.push(JSON.parse(el.geo))
+        })
+        const allsens = itog.map(it => {
+            return { sens: JSON.parse(it.allSensParams).map(e => e[0]), params: JSON.parse(it.allSensParams).map(e => e[1]), val: JSON.parse(it.allSensParams).map(e => e[2]) }
+        })
+        if (allsens.length === 0) {
+            return []
+        }
+        const allArrNew = allsens.reduce((accumulator, current) => {
+            current.sens.forEach((sens, idx) => {
+                const params = current.params[idx];
+                const value = parseFloat(current.val[idx].toFixed(0));
+                const found = accumulator.find(
+                    (item) => item.sens === sens && item.params === params
+                );
+                if (found) {
+                    found.value.push(value);
+                } else {
+                    accumulator.push({ sens, params, value: [value] });
+                }
+            });
+            return accumulator;
+        }, []);
+
+        allArrNew.forEach(el => {
+            el.time = time
+            el.speed = speed
+            el.sats = sats
+            el.geo = geo
+        })
+        return allArrNew
+    }
+
+    calculationOil() {
+        const arrayValue = this.data.find(it => it.sens === 'Топливо' || it.sens === 'Топливо ДУТ');
+        let i = 0;
+        while (i < arrayValue.value.length - 1) {
+            if (arrayValue.value[i] === arrayValue.value[i + 1]) {
+                arrayValue.value.splice(i, 1);
+                arrayValue.time.splice(i, 1);
+                arrayValue.speed.splice(i, 1);
+                arrayValue.sats.splice(i, 1);
+                arrayValue.geo.splice(i, 1)
+            } else {
+                i++;
+            }
+        }
+        const increasingIntervals = [];
+        let start = 0;
+        let end = 0;
+        for (let i = 0; i < arrayValue.value.length - 1; i++) {
+            const currentObj = arrayValue.value[i];
+            const nextObj = arrayValue.value[i + 1];
+            const div = (arrayValue.time[i + 1].getTime() / 1000) - (arrayValue.time[i].getTime() / 1000)
+            if (currentObj < nextObj) {
+                if (start === end) {
+                    start = i;
+                }
+                end = i + 1;
+            } else if (currentObj > nextObj) {
+                if (start !== end) {
+                    increasingIntervals.push([[arrayValue.value[start], arrayValue.time[start], arrayValue.geo[start]], [arrayValue.value[end], arrayValue.time[end], arrayValue.geo[end]]]);
+                }
+                start = end = i + 1;
+            }
+        }
+        if (start !== end) {
+            increasingIntervals.push([[arrayValue.value[start], arrayValue.time[start], arrayValue.geo[start]], [arrayValue.value[end], arrayValue.time[end], arrayValue.geo[end]]]);
+        }
+        const zapravka = increasingIntervals.filter((interval, index) => {
+            const firstOil = interval[0][0];
+            const lastOil = interval[interval.length - 1][0];
+            const difference = lastOil - firstOil;
+            const threshold = firstOil * 0.15;
+            if (index < increasingIntervals.length - 1) {
+                const nextInterval = increasingIntervals[index + 1];
+                const currentTime = interval[interval.length - 1][1];
+                const nextTime = nextInterval[0][1];
+                const timeDifference = nextTime - currentTime;
+                if (timeDifference < 5 * 60 * 1000) {
+                    interval.push(nextInterval[nextInterval.length - 1]);
+                    interval.splice(1, 1)
+                }
+            }
+            return firstOil > 5 && difference > 60 && difference >= threshold;
+        });
+        for (let i = 0; i < zapravka.length - 1; i++) {
+            const time0 = zapravka[i][0][1]
+            const time1 = zapravka[i][1][1]
+            const initTime = time1 - time0
+            if (zapravka[i][1][1] === zapravka[i + 1][1][1]) {
+                zapravka.splice(i + 1, 1);
+            }
+        }
+        const filteredZapravka = zapravka.filter(e => {
+            const time0 = e[0][1];
+            const time1 = e[1][1];
+            const initTime = time1 - time0;
+            return initTime >= 5 * 60 * 1000;
+        });
+        const rash = [];
+        const firstData = arrayValue.value[0];
+        const lastData = arrayValue.value[arrayValue.value.length - 1];
+        if (filteredZapravka.length !== 0) {
+
+            rash.push(firstData - filteredZapravka[0][0][0]);
+            for (let i = 0; i < filteredZapravka.length - 1; i++) {
+                rash.push(filteredZapravka[i][1][0] - filteredZapravka[i + 1][0][0]);
+            }
+            rash.push(filteredZapravka[filteredZapravka.length - 1][1][0] - lastData);
+        }
+        else {
+            rash.push(firstData - lastData >= 0 ? firstData - lastData : 0)
+        }
+        const rashod = rash.reduce((el, acc) => el + acc, 0) < 0 ? '-' : rash.reduce((el, acc) => el + acc, 0)
+        const zap = [];
+        filteredZapravka.forEach(e => {
+            zap.push(e[1][0] - e[0][0])
+        })
+        const zapravleno = zap.reduce((acc, el) => acc + el, 0) < 0 ? '-' : zap.reduce((acc, el) => acc + el, 0)
+        return [rashod, zapravleno]
+    }
+
+
+    calculationMotoAndProstoy() {
+        const arrayValue = this.data.find(it => it.sens = 'Зажигание');
+        const zeros = [];
+        const ones = [];
+        const prostoy = [];
+        const korzina = [];
+        let startIndex = 0;
+        arrayValue.value.forEach((values, index) => {
+            if (values !== arrayValue.value[startIndex]) {
+                const subarray = arrayValue.time.slice(startIndex, index);
+                const speedTime = { speed: arrayValue.speed.slice(startIndex, index), time: arrayValue.time.slice(startIndex, index) };
+                (arrayValue.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
+                (arrayValue.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
+
+                startIndex = index;
+            }
+        });
+        const subarray = arrayValue.time.slice(startIndex);
+        const speedTime = { speed: arrayValue.speed.slice(startIndex), time: arrayValue.time.slice(startIndex) };
+        (arrayValue.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
+        (arrayValue.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
+
+        let totalMs = 0;
+        const filteredData = prostoy.map(obj => {
+            const thresholdIndex = obj.speed.findIndex(s => s >= 5);
+            const index = thresholdIndex === -1 ? undefined : thresholdIndex;
+            return {
+                speed: obj.speed.slice(0, index),
+                time: obj.time.slice(0, index)
+            }
+        });
+        const timeProstoy = filteredData.reduce((acc, el) => {
+            if (el.time.length !== 0) {
+                acc.push([el.time[0], el.time[el.time.length - 1]])
+            }
+            return acc
+        }, [])
+
+        const unixProstoy = timeProstoy.reduce((acc, it) => {
+            if (it[0] !== undefined) {
+                const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
+                if (diffInSeconds > 600) {
+                    acc = acc + diffInSeconds
+                }
+            }
+            return acc
+        }, 0)
+        ones.forEach(dates => {
+            const validDates = dates.filter(dateStr => dateStr !== undefined);
+            if (validDates.length === 2) {
+                const [date1, date2] = validDates.map(dateStr => new Date(dateStr));
+                const diffMs = date2.getTime() - date1.getTime(); // разница между датами в миллисекундах
+                totalMs += diffMs;
+            }
+        });
+        const motoHours = isNaN(totalMs) ? '-' : totalMs
+        return [motoHours, unixProstoy]
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 async function testovfn(active, t1, t2) {
     const resultt = await databaseService.viewChartDataToBase(active, t1, t2)
     return resultt
 }
-exports.startAllStatic = async (objects) => {
+const startAllStatic = async (objects) => {
     const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
@@ -22,12 +365,12 @@ exports.startAllStatic = async (objects) => {
         }
     });
     const array = result
-        //   .filter(e => e[0].message.startsWith('Sitrack'))
+    
         .filter(e => e[6] ? e[6].startsWith('Самосвал') : null)
         .map(e => e);
-    // console.log(array)
-    const res = await loadValue(array, timeOld, timeNow)
-    console.log(res)
+
+    const res = await loadValue(result, timeOld, timeNow)
+ 
     return res.uniq
 }
 async function loadValue(array, timeOld, timeNow) {
@@ -42,7 +385,6 @@ async function loadValue(array, timeOld, timeNow) {
         const sats = [];
         const geo = [];
         const idw = e[4];
-
         try {
             const itog = await testovfn(idw, timeOld, timeNow)
             itog.forEach(el => {
@@ -60,6 +402,9 @@ async function loadValue(array, timeOld, timeNow) {
             const allsens = itog.map(it => {
                 return { sens: JSON.parse(it.allSensParams).map(e => e[0]), params: JSON.parse(it.allSensParams).map(e => e[1]), val: JSON.parse(it.allSensParams).map(e => e[2]) }
             })
+
+
+
             if (allsens.length === 0) {
                 continue
             }
@@ -85,14 +430,17 @@ async function loadValue(array, timeOld, timeNow) {
                 el.sats = sats
                 el.geo = geo
             })
-            //  console.log(allArrNew)
+
             const oil = [];
             const hh = [];
             let probeg;
-            const found = allArrNew.some(it => it.params === 'can_mileage');
+            const found = allArrNew.some(it => it.params === 'can_mileage' || it.params === 'mileage');
             if (found) {
+
                 console.log('раз');
-                const it = allArrNew.find(it => it.params === 'can_mileage');
+                const it = allArrNew.find(it => it.params === 'can_mileage' || it.params === 'mileage');
+                console.log(name)
+                //  console.log(it.value)
                 let probegZero = 0
                 let probegNow = 0;
                 if (it.value.length !== 0) {
@@ -125,8 +473,9 @@ async function loadValue(array, timeOld, timeNow) {
                     uniqObject[idw] = { ...uniqObject[idw], quantityTSjob: 0, probeg: probegDay };
                 }
             } else {
+                continue
                 console.log('два');
-                uniqObject[idw] = { ...uniqObject[idw], quantityTSjob: 0, probeg: 0 };
+                //  uniqObject[idw] = { ...uniqObject[idw], quantityTSjob: 0, probeg: 0 };
             }
             let hasFuelSensor = false;
             allArrNew.forEach(it => {
@@ -141,9 +490,10 @@ async function loadValue(array, timeOld, timeNow) {
                     uniqObject[idw] = { ...uniqObject[idw], rashod: res[0].rashod, zapravka: res[0].zapravka };
                     hasFuelSensor = true;
                 }
-                if (!hasFuelSensor) {
-                    uniqObject[idw] = { ...uniqObject[idw], rashod: 0, zapravka: 0 };
-                }
+                 if (!hasFuelSensor) {
+                     return
+                     //   uniqObject[idw] = { ...uniqObject[idw], rashod: 0, zapravka: 0 };
+                 }
                 if (it.sens.startsWith('Подъем')) {
                     lifting = moto(it)
                 }
@@ -157,19 +507,26 @@ async function loadValue(array, timeOld, timeNow) {
             })
             hh[0].oil = oil[0] ? oil[0] : 0
             const oneArrayOil = hh.filter(el => !el.sens.startsWith('Топливо'));
-
-            prostoyHH = oneArrayOil[0].oil !== undefined && oneArrayOil[0].oil.every(item => item >= 0) ? oilHH(oneArrayOil[0]) : 0
-            console.log(prostoyHH)
+        
+            if (oneArrayOil.oil !== 0) {
+                prostoyHH = oneArrayOil[0].oil !== 0 && oneArrayOil[0].oil !== undefined && oneArrayOil[0].oil.every(item => item >= 0) ? oilHH(oneArrayOil[0]) : 0
+            }
+         
         } catch (error) {
             console.log(error);
         }
-        const medium = uniqObject[idw] && uniqObject[idw].probeg !== 0 && uniqObject[idw].rashod !== 0 ? Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2)) : 0
-        uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: e[0].result[0].type, company: e[5] }
+        let medium;
+        if (uniqObject[idw].rashod) {
+            medium = uniqObject[idw] && uniqObject[idw].probeg !== 0 && uniqObject[idw].rashod !== 0 ? Number(((uniqObject[idw].rashod / uniqObject[idw].probeg) * 100).toFixed(2)) : 0
+        }
+        else {
+            medium = 0
+        }
+             uniqObject[idw] = { ...uniqObject[idw], medium: medium, hhOil: prostoyHH, nameCar: e[0].message, type: e[0].result[0] ? e[0].result[0].type : 'Тест', company: e[5] }
     }
     return { uniq: uniqObject }
 }
 function oilHH(data) {
-    console.log(data)
     const arr = [];
     let currentObj = null;
     let currentArr = [];
@@ -233,25 +590,9 @@ function oilHH(data) {
     })
 
     const res = oilProstoy.reduce((acc, el) => acc + el, 0)
-    return 0//res > 0 ? res : 0
+    return 0
 }
-function timesDate(dates) {
-    let totalMs;
-    if (dates.length > 1) {
-        const [date1, date2] = dates.map(dateStr => dateStr);
-        const diffMs = date2 + date1; // разница между датами в миллисекундах
-        totalMs = diffMs;
-    }
-    else {
-        totalMs = dates;
-    }
-    const totalSeconds = Math.floor(totalMs / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    const motoHours = `${hours}:${minutes}`
-    return motoHours
-}
+
 function timesFormat(dates) {
     const totalSeconds = Math.floor(dates);
     const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
@@ -441,8 +782,7 @@ function rashodCalc(data, name, group, idw) {
     else {
         rash.push(firstData - lastData >= 0 ? firstData - lastData : 0)
     }
-    // console.log(rash)
-    const rashod = rash.reduce((el, acc) => el + acc, 0)
+     const rashod = rash.reduce((el, acc) => el + acc, 0)
     const zap = [];
     filteredZapravka.forEach(e => {
         zap.push(e[1][0] - e[0][0])
@@ -458,31 +798,19 @@ function timefn() {
     const timeNow = unix
     const timeOld = startOfTodayUnix
     return [timeNow, timeOld]
+}*/
+
+function timefn() {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const startOfTodayUnix = Math.floor(currentDate.getTime() / 1000);
+    const unix = Math.floor(new Date().getTime() / 1000);
+    const timeNow = unix
+    const timeOld = startOfTodayUnix
+    return [timeNow, timeOld]
 }
 
-
-async function modalView(zapravka, name, group, idw) {
-    //console.log(zapravka)
-    //console.log(zapravka[zapravka.length - 1][1][0] - zapravka[zapravka.length - 1][0][0])
-    const litrazh = parseFloat((zapravka[zapravka.length - 1][1][0] - zapravka[zapravka.length - 1][0][0]).toFixed(0))
-    console.log(litrazh)
-    const geo = zapravka[zapravka.length - 1][0][2]
-    const time = zapravka[zapravka.length - 1][0][1]
-    const day = time.getDate();
-    const month = (time.getMonth() + 1).toString().padStart(2, '0');
-    const year = time.getFullYear();
-    const hours = time.getHours().toString().padStart(2, '0');
-    const minutes = time.getMinutes().toString().padStart(2, '0');
-    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}${idw}`;
-
-    const data = [{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}` }]
-    const res = await databaseService.controllerSaveToBase(data, idw, geo, formattedDate)
-    console.log('Заправка' + ' ' + res.message)
-    //  createPopup([{ event: `Заправка`, group: `Компания: ${group}`, name: `Объект: ${name}`, litrazh: `Запралено: ${litrazh} л.`, time: `Время: ${formattedDate}`, res: `Местоположение: ${geo}` }], idw)
-}
-
-
-exports.popupProstoy = async (array) => {
+const popupProstoy = async (array) => {
     const result = array
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
@@ -630,4 +958,11 @@ function prostoy(data, tsi) {
         const timeBukl = unixProstoy[unixProstoy.length - 1]
         return timeBukl
     }
+}
+
+
+module.exports = {
+    SummaryStatistiks,
+    //  startAllStatic,
+    popupProstoy
 }

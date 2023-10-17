@@ -43,10 +43,9 @@ exports.parametrs = async (req, res) => {
 //запрос на wialon и получение сенсоров по id
 exports.sensors = async (req, res) => {
     const idw = req.body.idw
-    const login = req.body.login
     //  const timeOld = req.body.timeOld
     // const timeNow = req.body.timeNow
-    const params = await wialonService.getAllSensorsIdDataFromWialon(idw, login)
+    const params = await wialonService.getAllSensorsIdDataFromWialon(idw)
     res.json(params)
 }
 //запрос на wialon и получение сенсоров по id
@@ -54,8 +53,7 @@ exports.loadInterval = async (req, res) => {
     const idw = req.body.idw
     const timeOld = req.body.timeOld
     const timeNow = req.body.timeNow
-    const login = req.body.login
-    const params = await wialonService.loadIntervalDataFromWialon(idw, timeOld, timeNow, login)
+    const params = await wialonService.loadIntervalDataFromWialon(idw, timeOld, timeNow)
     res.json(params)
 }
 //запрос на wialon и получение сенсоров по id

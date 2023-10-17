@@ -246,6 +246,7 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         el.sats = sats
         el.geo = geo
     })
+    console.log(allArrNew)
     const engine = [...allArrNew].filter(it => it.sens === 'Зажигание' || it.sens.startsWith('Борт'));
     engine[0].pwr = engine[1].value
     engine[0].condition = [];

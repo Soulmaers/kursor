@@ -45,6 +45,8 @@ export async function zapros(login) {
     startList(arrayList)
     logsView(arrayList)
     setInterval(logsView, 60000, arrayList)
+
+
     //передаем имена объектов для отображения в панели администратора
     checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')
