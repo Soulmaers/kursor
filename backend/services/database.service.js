@@ -1234,16 +1234,16 @@ module.exports.summaryToBase = (idw, arr, data) => {
     value.push(data)
     value.push(arr.type)
     value.push(arr.nameCar)
-    value.push(arr.quantityTSjob)
+    value.push(arr.job)
     value.push(arr.probeg)
     value.push(arr.rashod)
-    value.push(arr.zapravka)
-    value.push(arr.lifting)
-    value.push(arr.motoHours)
+    value.push(arr.rashod)
+    value.push(arr.lifting ? arr.lifting : 0)
+    value.push(arr.moto)
     value.push(arr.prostoy)
     value.push(arr.medium)
-    value.push(arr.hhOil)
-    value.push(arr.company)
+    value.push(arr.hhOil ? arr.hhOil : 0)
+    value.push(arr.group)
     return new Promise((resolve, reject) => {
         try {
             const selectBase = `SELECT data, idw FROM summary WHERE idw='${idw}' AND data='${data}'`
@@ -1257,9 +1257,9 @@ module.exports.summaryToBase = (idw, arr, data) => {
                     })
                 }
                 else {
-                    const sql = `UPDATE summary SET  idw='${idw}',data='${data}', type='${arr.type}', nameCar='${arr.nameCar}', jobTS='${arr.quantityTSjob}',
-                     probeg='${arr.probeg}', rashod='${arr.rashod}',zapravka='${arr.zapravka}',dumpTrack='${arr.lifting}',moto='${arr.motoHours}',
-                     prostoy='${arr.prostoy}',medium='${arr.medium}',oilHH='${arr.hhOil}',company='${arr.company}'  WHERE  idw='${idw}' AND data='${data}'`;
+                    const sql = `UPDATE summary SET  idw='${idw}',data='${data}', type='${arr.type}', nameCar='${arr.nameCar}', jobTS='${arr.job}',
+                     probeg='${arr.probeg}', rashod='${arr.rashod}',zapravka='${arr.zapravka}',dumpTrack='${arr.lifting}',moto='${arr.moto}',
+                     prostoy='${arr.prostoy}',medium='${arr.medium}',oilHH='${arr.hhOil}',company='${arr.group}'  WHERE  idw='${idw}' AND data='${data}'`;
                     connection.query(sql, function (err, results) {
                         if (err) console.log(err)
                         else resolve({ message: 'данные обновлены' })

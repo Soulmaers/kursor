@@ -8,8 +8,9 @@ const events = require('../modules/events.module.js')
 const connection = require('../config/db')
 const { createDate, convert } = require('../helpers')
 const constorller = require('./data.controller.js')
-
+const { SummaryStatistiks } = require('../modules/statistika.module.js')
 require('dotenv').config();
+
 
 //готовим данные и отправляем ответ на клиент который отрисовывает список
 exports.dataSpisok = async (req, res) => {
@@ -168,8 +169,6 @@ async function updateParams(data) {
         else {
             speed = null
         }
-        //     const speed = el.lmsg.pos ? el.lmsg.pos.s : null;// проверка на наличие свойства lmsg и свойства pos.s
-        //  console.log(el.nm, speed)
         const geo = el && el.pos && el.pos.x ? [el.pos.y, el.pos.x] : null;
         nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed, geo]);
         const model = await databaseService.modelViewToBase(idw)
@@ -201,10 +200,13 @@ async function updateParams(data) {
     ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
     await zaprosSpisokb(nameCar)
     const res = await constorller.dataSpisok()
-    const global = await statistika.startAllStatic(res)
+    const summary = new SummaryStatistiks(res)
+    const global = await summary.init();
+    console.log(global)
     const prostoy = await statistika.popupProstoy(res)
     await events.eventFunction(res)
     const arraySummary = Object.entries(global)
+
     const now = new Date();
     const date = new Date(now);
     const year = date.getFullYear();

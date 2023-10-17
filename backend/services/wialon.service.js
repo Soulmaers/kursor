@@ -68,7 +68,7 @@ exports.getAnimalsWialon = async (login) => {
 };
 
 //запрос всех сенсоров по id объекта
-exports.getAllSensorsIdDataFromWialon = async (id, login) => {
+exports.getAllSensorsIdDataFromWialon = async (id) => {
     const prms3 = {
         "source": "",
         "indexFrom": 0,
@@ -78,9 +78,11 @@ exports.getAllSensorsIdDataFromWialon = async (id, login) => {
 
     };
     try {
-        const session = await geSession.geSession();
-        const data = await session.request('unit/calc_sensors', prms3)
-        return data
+        return new Promise(async function (resolve, reject) {
+            const session = await geSession.geSession();
+            const data = await session.request('unit/calc_sensors', prms3)
+            resolve(data)
+        })
     }
     catch (e) {
         console.log(e)
