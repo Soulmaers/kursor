@@ -1291,13 +1291,14 @@ module.exports.group = (idw) => {
 
 
 
-module.exports.summaryYestodayToBase = (data, company) => {
-    if (company.length !== 0) {
+module.exports.summaryYestodayToBase = (data, arrayId) => {
+    // console.log(arrayId)
+    if (arrayId.length !== 0) {
         return new Promise((resolve, reject) => {
             if (data.length === 1) {
                 try {
-                    const selectBase = "SELECT * FROM summary WHERE company IN (?) AND data=?";
-                    const values = [company, data];
+                    const selectBase = "SELECT * FROM summary WHERE idw IN (?) AND data=?";
+                    const values = [arrayId, data];
                     connection.query(selectBase, values, function (err, results) {
                         if (err) console.log(err)
                         resolve(results)
@@ -1309,8 +1310,8 @@ module.exports.summaryYestodayToBase = (data, company) => {
             }
             else {
                 try {
-                    const selectBase = "SELECT * FROM summary WHERE company IN (?) AND STR_TO_DATE(data, '%Y-%m-%d') >= ? AND STR_TO_DATE(data, '%Y-%m-%d') <= ?"
-                    const values = [company, data[0], data[1]];
+                    const selectBase = "SELECT * FROM summary WHERE idw IN (?) AND STR_TO_DATE(data, '%Y-%m-%d') >= ? AND STR_TO_DATE(data, '%Y-%m-%d') <= ?"
+                    const values = [arrayId, data[0], data[1]];
                     connection.query(selectBase, values, function (err, results) {
                         if (err) console.log(err);
                         resolve(results);
