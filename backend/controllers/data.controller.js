@@ -202,7 +202,7 @@ async function updateParams(data) {
     const res = await constorller.dataSpisok()
     const summary = new SummaryStatistiks(res)
     const global = await summary.init();
-    console.log(global)
+    //  console.log(global)
     const prostoy = await statistika.popupProstoy(res)
     await events.eventFunction(res)
     const arraySummary = Object.entries(global)

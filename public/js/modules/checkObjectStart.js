@@ -35,28 +35,28 @@ export function startList(object) {
             }
         })
     }
-    arrayGlobal.forEach(el => {
-        count++
-
-        const title = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').children[0].lastElementChild.children[0]
-
-        title.textContent = el[0][6]
-        const wrapper = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').children[0].lastElementChild
-        const check = document.createElement('div')
-        check.classList.add('checkInStart')
-        wrapper.appendChild(check)
-        const listAll = document.createElement('p')
-        listAll.classList.add('checkListStart')
-        listAll.innerHTML = `<input class="inputStartAll" type="checkbox"  value=${el[0][6]}checked>Все`
-        check.appendChild(listAll)
-        for (let i = 0; i < el.length; i++) {
-            const list = document.createElement('p')
-            list.classList.add('checkListStart')
-            list.innerHTML = `<input class="inputStart-${count}" type="checkbox" rel=${el[i][4]}
-    value=${el[i][4]} id=${el[i][4]}>${el[i][0].message}`
-            check.appendChild(list)
-        }
-    })
+    /* arrayGlobal.forEach(el => {
+         count++
+         console.log(el[0][6])
+         const title = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').children[0].lastElementChild.children[0]
+ 
+         title.textContent = el[0][6]
+         const wrapper = document.querySelector(`[rel="${el[0][6]}"]`).closest('.left_block').children[0].lastElementChild
+         const check = document.createElement('div')
+         check.classList.add('checkInStart')
+         wrapper.appendChild(check)
+         const listAll = document.createElement('p')
+         listAll.classList.add('checkListStart')
+         listAll.innerHTML = `<input class="inputStartAll" type="checkbox"  value=${el[0][6]}checked>Все`
+         check.appendChild(listAll)
+         for (let i = 0; i < el.length; i++) {
+             const list = document.createElement('p')
+             list.classList.add('checkListStart')
+             list.innerHTML = `<input class="inputStart-${count}" type="checkbox" rel=${el[i][4]}
+     value=${el[i][4]} id=${el[i][4]}>${el[i][0].message}`
+             check.appendChild(list)
+         }
+     })*/
     // Получаем все блоки чекбоксов
     const checkboxBlocks = document.querySelectorAll('.checkInStart');
     // Проходимся по каждому блоку

@@ -2252,7 +2252,7 @@ div.spoyler {
   width: 49%;
   height: 50%;
   box-sizing: border-box;
-  display: flex;
+  display: none;
   border: 1px solid black;
 }
 
@@ -2379,9 +2379,9 @@ div.spoyler {
   justify-content: center;
   align-items: center;
   color: black;
-  -webkit-appearance: none;
+  /*  -webkit-appearance: none;
   -moz-appearance: none;
-  appearance: none;
+  appearance: none;*/
   text-align: center;
   cursor: pointer;
 }
@@ -8432,4 +8432,88 @@ i.changeColorCheck {
 
 .cond {
   cursor: pointer;
+}
+
+
+
+/*альтернативная стартовая*/
+
+.internal_wrapper {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(6, 28, 71, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+}
+
+.statistika,
+.lower_charts {
+  width: 97%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.content_statistika,
+.content_lower_charts {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 5px;
+  height: 90%;
+}
+
+.title_statistika,
+.title_lower_charts {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.li_table {
+  margin: 5px 0;
+}
+
+.pointer_chart {
+  cursor: pointer;
+}
+
+.table_dannie,
+.title_interval {
+  color: rgba(6, 28, 71, 1);
+}
+
+.table_dannie {
+  height: 100%;
+}
+
+.pointer_chart:hover i {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+.pointer_chart:hover .description_stat {
+  color: gray;
+}
+
+.description_stat {
+  color: lightgray;
+  margin-left: 25px;
+  font-size: 0.8rem;
+  margin-left: 30px;
+}
+
+.today_value {
+  width: 10%;
+}
+
+.clickToggle {
+  border-bottom: 1px solid rgba(6, 28, 71, 1);
 }

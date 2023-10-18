@@ -309,6 +309,158 @@
             <div class="strL">&#10094</div>
         </div>
         <div class="start">
+            <div class="internal_wrapper">
+                <div class="statistika">
+                    <div class="title_statistika">Статистика</div>
+                    <div class="content_statistika">
+                        <div class="table_dannie">
+                            <div class="title_interval">
+                                <div class="tacs name_interval">Параметры</div>
+                                <div class="tac today">Сегодня</div>
+                                <div class="tac select_dannie"><select class="select_summary one">
+                                        <option class="option_sam_pr" selected value="Вчера">Вчера</option>
+                                        <option class="option_sam_pr" value="Неделя">Неделя</option>
+                                        <option class="option_sam_pr" value="Месяц">Месяц</option>
+                                        <option class="option_sam_pr cal" value="Выбрать дату">Выбрать дату</option>
+                                    </select>
+                                    <div class="calendar">
+                                        <input type="text" id="dateranges2" placeholder="Выберите диапазон дат">
+                                        <div class="btn_speedStart">
+                                            <button class="btm_formStart">Очистить</button>
+                                            <button class="btm_formStart control">Выполнить</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tac select_dannie"><select class="select_summary two">
+                                        <option class="option_sam" value="Вчера">Вчера</option>
+                                        <option class="option_sam" selected value="Неделя">Неделя</option>
+                                        <option class="option_sam" value="Месяц">Месяц</option>
+                                        <option class="option_sam cal" value="Выбрать дату">Выбрать дату</option>
+                                    </select>
+                                    <div class="calendar">
+                                        <input type="text" id="dateranges3" placeholder="Выберите диапазон дат">
+                                        <div class="btn_speedStart">
+                                            <button class="btm_formStart">Очистить</button>
+                                            <button class="btm_formStart control">Выполнить</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="table_pokazateli" rel="Самосвал">
+                                <li class="li_table">
+                                    <div class="tacs name_list"><i class="fas fa-car w30"></i> Общее количество ТС<span
+                                            class="description_stat">общее количество объектов</span></div>
+                                    <div class="tac today_value">-</div>
+                                    <div class="tac interval_value">-</div>
+                                    <div class="tac interval_value2">-</div>
+                                </li>
+                                <li class="li_table">
+                                    <div class="tacs name_list pointer_chart"><i class="fas fa-taxi w30"></i>Общее
+                                        количество ТС в работе<span class="description_stat">ТС с
+                                            пройденным расстоянием
+                                            более 5км. за выбранный период</span></div>
+                                    <div class="tac today_value">-</div>
+                                    <div class="tac interval_value">-</div>
+                                    <div class="tac interval_value2">-</div>
+                                </li>
+                                <li class="li_table">
+                                    <div class="tacs name_list pointer_chart"><i class="fas fa-running w30"></i> Общий
+                                        пробег, км.<span class="description_stat">пройденное расстояние ТС за
+                                            выбранный период</span></div>
+                                    <div class="tac today_value">-</div>
+                                    <div class="tac interval_value">-</div>
+                                    <div class="tac interval_value2">-</div>
+                                </li>
+                                <li class="li_table">
+                                    <div class="tacs name_list pointer_chart"><i
+                                            class="fas fa-calculator w30"></i>Топливо расход, л.<span
+                                            class="description_stat">расход топлива ТС за
+                                            выбранный
+                                            период</span></div>
+                                    <div class="tac today_value">-</div>
+                                    <div class="tac interval_value">-</div>
+                                    <div class="tac interval_value2">-</div>
+                                </li>
+                                <li class="li_table">
+                                    <div class="tacs name_list pointer_chart"><i class="fas fa-gas-pump w30"></i>
+                                        Топливо заправлено, л.<span class="description_stat">заправлено топлива
+                                            ТС за выбранный
+                                            период</span></div>
+                                    <div class="tac today_value">-</div>
+                                    <div class="tac interval_value">-</div>
+                                    <div class="tac interval_value2">-</div>
+                                </li>
+                                <li class="li_table">
+                                    <div class="tacs name_list pointer_chart"><i class="fas fa-truck-loading w30"></i>
+                                        Количество разгрузок<span class="description_stat">количество разгрузок за
+                                            выбранный период</span></div>
+                                    <div class="tac today_value">-</div>
+                                    <div class="tac interval_value">-</div>
+                                    <div class="tac interval_value2">-</div>
+                                </li>
+                                <li class="li_table">
+                                    <div class="tacs name_list pointer_chart"><i class="fas fa-clock w30"></i>Время
+                                        работы<span class="description_stat">общее время ТС с
+                                            включенным зажиганием</span></div>
+                                    <div class="tac today_value">-</div>
+                                    <div class="tac interval_value">-</div>
+                                    <div class="tac interval_value2">-</div>
+                                </li>
+                                <li class="li_table">
+                                    <div class="tacs name_list pointer_chart"><i class="fas fa-mug-hot w30"></i> Время
+                                        простоя на холостом ходу<span class="description_stat">общее время ТС с
+                                            включенным зажиганием без движения более 10-ти минут</span>
+                                    </div>
+                                    <div class="tac today_value">-</div>
+                                    <div class="tac interval_value">-</div>
+                                    <div class="tac interval_value2">-</div>
+                                </li>
+                                <li class="li_table">
+                                    <div class="tacs name_list pointer_chart"><i class=" fas fa-coffee w30"></i>Время
+                                        полезной работы<span class="description_stat">разница между общим временем
+                                            работы и общим временем работы на холостом ходу</span></div>
+                                    <div class="tac today_value">-</div>
+                                    <div class="tac interval_value">-</div>
+                                    <div class="tac interval_value2">-</div>
+                                </li>
+                                <li class="li_table">
+                                    <div class="tacs name_list pointer_chart"><i
+                                            class="fas fa-chart-line w30"></i>Средний расход топлива на 100км, л.<span
+                                            class="description_stat">соотношение расхода топлива и пройденного
+                                            расстояния ТС</span></div>
+                                    <div class="tac today_value">-</div>
+                                    <div class="tac interval_value">-</div>
+                                    <div class="tac interval_value2">-</div>
+                                </li>
+                                <li class="li_table">
+                                    <div class="tacs name_list pointer_chart"><i class="fas fa-fill-drip w30"></i>Расход
+                                        на холостом ходу<span class="description_stat">расход топлива ТС с
+                                            включенным зажиганием без движения более 10-ти минут</span></div>
+                                    <div class="tac today_value">-</div>
+                                    <div class="tac interval_value">-</div>
+                                    <div class="tac interval_value2">-</div>
+                                </li>
+                            </ul>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+                <div class="lower_charts">
+                    <div class="title_lower_charts">Графики</div>
+                    <div class="content_lower_charts"></div>
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <!--
             <div class="content_card samosval-pricep">
                 <div class="left_block">
                     <div class="up_block">
@@ -537,7 +689,7 @@
 
             </div>
             <div class="content_card ex"></div>
-            <div class="content_card furgon"></div>
+            <div class="content_card furgon"></div>-->
         </div>
         <section class="allsec globalDash"></section>
         <section class="allsec globalMaps">
