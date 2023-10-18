@@ -4,7 +4,7 @@ import { checkCreate } from './admin.js'
 import { yesterdaySummary } from './startAllStatic.js'
 import { startList } from './checkObjectStart.js'
 import { logsView } from './popup.js'
-
+import { SummaryViewControll } from './summaryModules/class/SummaryViewControll.js'
 
 export let dataspisok = false
 
@@ -42,7 +42,7 @@ export async function zapros(login) {
     dataspisok = true
     //startAllStati(arrayList)
     conturTest(arrayList)
-    startList(arrayList)
+    //   startList(arrayList)
     logsView(arrayList)
     setInterval(logsView, 60000, arrayList)
 
@@ -53,7 +53,7 @@ export async function zapros(login) {
     if (tiresActiv) {
         tiresActiv.remove()
     }
-
+    new SummaryViewControll()
     const processDataAtMidnight = async () => {
         yesterdaySummary();
         yesterdaySummary('Вчера');

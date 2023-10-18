@@ -44,8 +44,11 @@ class SummaryStatistiks {
             this.strustura[this.id].type = 'Тест'
             this.data = await this.getSensorsAndParametrs(this.id)
             const mileg = this.data.some(it => it.params === 'can_mileage' || it.params === 'mileage');
+
+
             if (mileg) {
                 this.probeg = this.calculationMileage()
+                //  console.log(el[1], mileg, this.probeg)
                 this.strustura[this.id].probeg = this.probeg
                 this.strustura[this.id].job = this.calculationJobTs()
             }
