@@ -74,7 +74,7 @@ export async function yesterdaySummary(interval, type, element) {
     }
     const mods = await fetch('/api/summaryYestoday', params)
     const models = await mods.json()
-    console.log(models)
+    //console.log(models)
     const mod = type ? models.filter(el => el.type === type) : models
     mod.forEach(it => {
         it.rashod < 0 ? it.rashod = 0 : it.rashod

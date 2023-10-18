@@ -53,14 +53,19 @@ export async function zapros(login) {
     if (tiresActiv) {
         tiresActiv.remove()
     }
-    new SummaryViewControll()
+
+    const result = arrayList
+        .map(el => Object.values(el)) // получаем массивы всех id
+        .flat()
+        .map(e => e[4])
+    new SummaryViewControll(result)
     const processDataAtMidnight = async () => {
         yesterdaySummary();
         yesterdaySummary('Вчера');
         yesterdaySummary('Неделя');
         setInterval(() => yesterdaySummary(), 60000)
     };
-    processDataAtMidnight()
+    // processDataAtMidnight()
 }
 
 
