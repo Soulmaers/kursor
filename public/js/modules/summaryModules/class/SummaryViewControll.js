@@ -4,14 +4,30 @@ export class SummaryViewControll {
         this.objectsId = objectsId
         this.arrayInterval = ['Сегодня', 'Вчера', 'Неделя']
         this.params = document.querySelectorAll('.name_list')
-        this.selectOne = document.querySelector('.select_summary')[0]
-        this.selectTwo = document.querySelector('.select_summary')[1]
+        this.select = document.querySelectorAll('.select_dannie')
         this.data = [];
         this.count = 2
         this.params.forEach(el => el.addEventListener('click', this.toggleClassAndParamsCollection.bind(this, el)))
+        this.select.forEach(el => el.querySelector('.toggle_list_select').addEventListener('click', this.toggleListSelect.bind(this, el)))
+        this.select.forEach(el => el.querySelectorAll('.item_type').forEach(it => it.addEventListener('click', this.toggleCheckSelect.bind(this, it))))
         this.arrayInterval.forEach(el => this.getSummaryToBase(el))
         this.startUpdatingToday()
     }
+
+
+    //выбирать и подсвечивать определенный выбранный селект
+
+    toggleCheckSelect(it) {
+        it.children[0].classList.toggle('radio_choice')
+        // event.stopPropagation();
+        console.log(it)
+    }
+    //скрывает и отображает список
+    toggleListSelect(el) {
+        el.children[1].classList.toggle('hidden_view')
+        console.log(el)
+    }
+
 
     //обновляем статистику за сегодня
     startUpdatingToday() {
