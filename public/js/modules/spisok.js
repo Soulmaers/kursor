@@ -6,6 +6,7 @@ import { convertTime, removeArrElem } from './helpersFunc.js'
 import { globalSelect } from './filtersList.js'
 import { dataspisok } from './menu.js'
 import { ToggleHiddenList } from './listModules/class/ToggleHiddenList.js'
+import { SummaryViewControll } from './summaryModules/class/SummaryViewControll.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
 simulateLoader();
@@ -275,11 +276,14 @@ export async function conturTest(testov) {
         }
     })
     finishload = true
-    viewList(login)
-    // lastTravelTrek()
+    await viewList(login)
+
+
+
     const toggleList = new ToggleHiddenList()
     toggleList.init()
     toggleList.statistikaObjectCar(final)
+    const initSummary = new SummaryViewControll(result)
     navigator();
     setInterval(zaprosSpisok, 30000, toggleList)
 

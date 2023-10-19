@@ -1,10 +1,8 @@
 
 import { conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
-import { yesterdaySummary } from './startAllStatic.js'
-import { startList } from './checkObjectStart.js'
 import { logsView } from './popup.js'
-import { SummaryViewControll } from './summaryModules/class/SummaryViewControll.js'
+
 
 export let dataspisok = false
 
@@ -15,14 +13,7 @@ cont.classList.add('container2')
 wrapContaint.appendChild(cont);
 
 export async function zapros(login) {
-    /*  const selectElement = document.querySelectorAll('.select_summary.one');
-      selectElement.forEach(el => {
-          el[0].selected = true;
-      })
-      const selectElementTwo = document.querySelectorAll('.select_summary.two');
-      selectElementTwo.forEach(el => {
-          el[1].selected = true;
-      })*/
+
     const params = {
         method: "POST",
         headers: {
@@ -41,7 +32,7 @@ export async function zapros(login) {
     allObjects = arrayList
     dataspisok = true
     //startAllStati(arrayList)
-    conturTest(arrayList)
+    await conturTest(arrayList)
     //   startList(arrayList)
     logsView(arrayList)
     setInterval(logsView, 60000, arrayList)
@@ -54,19 +45,6 @@ export async function zapros(login) {
         tiresActiv.remove()
     }
 
-    const result = arrayList
-        .map(el => Object.values(el)) // получаем массивы всех id
-        .flat()
-        .map(e => e[4])
-    const initSummary = new SummaryViewControll(result)
-
-    const processDataAtMidnight = async () => {
-        yesterdaySummary();
-        yesterdaySummary('Вчера');
-        yesterdaySummary('Неделя');
-        setInterval(() => yesterdaySummary(), 60000)
-    };
-    // processDataAtMidnight()
 }
 
 

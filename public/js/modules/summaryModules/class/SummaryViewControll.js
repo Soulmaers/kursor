@@ -16,19 +16,6 @@ export class SummaryViewControll {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     //выбирать и подсвечивать определенный выбранный селект также запуск метода для сбора и отрисовки данных в нужный слот
     async toggleCheckSelect(it) {
         console.log('тут?0')
@@ -158,12 +145,20 @@ export class SummaryViewControll {
         el.classList.toggle('clickToggle')
     }
 
+
+
+    //сверка активных объектов с данными для подсчета саммари и отображения
+
+    controllActiveObject(array) {
+        const listObject = document.querySelectorAll('.ListItem')
+        console.log(listObject)
+    }
     //основной метод . готовить интервалы, запрашивает данные из базы, считает показатели, выводит в таблицу
     async getSummaryToBase(el, slot) {
         console.log(el)
         const data = this.getIntervalDate(el)
         const result = await this.getRequestSummaryToBase(data)
-        console.log(result)
+        const cleanObject = this.controllActiveObject(result)
         let summary;
         if (el === 'Неделя' || el === 'Месяц' || el.length === 2) {
             summary = this.filterWeekSummary(result)
