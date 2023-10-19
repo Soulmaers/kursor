@@ -16,7 +16,20 @@ export class SummaryViewControll {
     }
 
 
-    //выбирать и подсвечивать определенный выбранный селект
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //выбирать и подсвечивать определенный выбранный селект также запуск метода для сбора и отрисовки данных в нужный слот
     toggleCheckSelect(it) {
         const titleList = it.closest('.select_dannie').querySelector('.titleChangeSort')
         it.children[0].classList.toggle('radio_choice')
@@ -31,9 +44,9 @@ export class SummaryViewControll {
                 e.children[0].classList.toggle('radio_choice')
             }
         })
+        const slot = it.parentElement.classList.contains('one') ? 2 : 3
+        this.getSummaryToBase(titleList.textContent, slot)
     }
-
-
 
     // скрывает список когда уходишь курсором
     hiddenListOutsideKursor(el) {
@@ -49,12 +62,11 @@ export class SummaryViewControll {
         })
     }
 
-
     //обновляем статистику за сегодня
     startUpdatingToday() {
         setInterval(() => {
             this.getSummaryToBase('Сегодня');
-        }, 60000); // Every 5 minutes
+        }, 60000);
     }
 
     //меняем тоггл класс по нажатию на параметр
@@ -67,7 +79,7 @@ export class SummaryViewControll {
     }
 
     //основной метод . готовить интервалы, запрашивает данные из базы, считает показатели, выводит в таблицу
-    async getSummaryToBase(el) {
+    async getSummaryToBase(el, slot) {
         const data = this.getIntervalDate(el)
         const result = await this.getRequestSummaryToBase(data)
         let summary;
@@ -77,7 +89,7 @@ export class SummaryViewControll {
         else {
             summary = this.calculationParametrs(result)
         }
-        el !== 'Сегодня' ? this.viewSummaryTable(summary) : this.updateViewSummaryTable(summary)
+        el !== 'Сегодня' ? this.viewSummaryTable(summary, slot) : this.updateViewSummaryTable(summary)
         console.log(summary)
     }
     //подготовка итогового саммари для неделя и месяц
@@ -131,18 +143,23 @@ export class SummaryViewControll {
         })
     }
     //выводим в таблицу вчера и неделю
-    viewSummaryTable(data) {
-        this.params.forEach((el, index) => {
-            el.parentElement.children[this.count].textContent = data[index]
-        })
-        this.count++
+    viewSummaryTable(data, slot) {
+        if (!slot) {
+            this.params.forEach((el, index) => {
+                el.parentElement.children[this.count].textContent = data[index]
+            })
+            this.count++
+        }
+        else {
+            this.params.forEach((el, index) => {
+                el.parentElement.children[slot].textContent = data[index]
+            })
+        }
     }
-
     //складываем значения
     calculateParam(data, paramName) {
         return data.reduce((acc, el) => acc + el[paramName], 0)
     }
-
     //подготовка итогового саммари для сегодня и вчера
     calculationParametrs(data) {
         const arraySummaryView = []
