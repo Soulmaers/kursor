@@ -84,6 +84,7 @@ class SummaryStatistiks {
                 this.strustura[this.id].prostoy = '-'
             }
         }
+        console.log(this.structura)
         return this.strustura
     }
 
@@ -184,7 +185,13 @@ class SummaryStatistiks {
     }
 
     calculationOil() {
-        const arrayValue = this.data.find(it => it.sens === 'Топливо' || it.sens === 'Топливо ДУТ');
+        const arrayValue = this.data.find(it => (it.sens === 'Топливо' || it.sens === 'Топливо ДУТ'))
+        if (arrayValue && Array.isArray(arrayValue.value)) {
+            arrayValue.value = arrayValue.value.map(element => {
+                return element === -348201 ? 0 : element;
+            });
+        }
+
         let i = 0;
         while (i < arrayValue.value.length - 1) {
             if (arrayValue.value[i] === arrayValue.value[i + 1]) {

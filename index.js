@@ -49,9 +49,15 @@ async function init() {
 
 
     globalstart.test()
+<<<<<<< HEAD
     globalstart.hunterTime()
     setInterval(globalstart.test, 300000)
     setInterval(globalstart.hunterTime, 50000)
+=======
+    // globalstart.hunterTime()
+    // setInterval(globalstart.test, 300000)
+    // setInterval(globalstart.hunterTime, 50000)
+>>>>>>> b1e9785bf13a75da8a0b9ed6171b00e4559ecd0c
 
     console.log('сессия открыта')
 }
