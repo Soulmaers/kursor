@@ -317,12 +317,25 @@
                             <div class="title_interval">
                                 <div class="tacs name_interval">Параметры</div>
                                 <div class="tac today">Сегодня</div>
-                                <div class="tac select_dannie"><select class="select_summary one">
-                                        <option class="option_sam_pr" selected value="Вчера">Вчера</option>
-                                        <option class="option_sam_pr" value="Неделя">Неделя</option>
-                                        <option class="option_sam_pr" value="Месяц">Месяц</option>
-                                        <option class="option_sam_pr cal" value="Выбрать дату">Выбрать дату</option>
-                                    </select>
+                                <div class="tac select_dannie">
+                                    <div class="zagolovok">
+                                        <div class="titleChangeSort">Вчера</div><i
+                                            class="fas fa-angle-down toggle_list_select"></i>
+                                    </div>
+                                    <ul class="select_summary one">
+                                        <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                            <p class="text_type">Вчера</p>
+                                        </li>
+                                        <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                            <p class="text_type">Неделя</p>
+                                        </li>
+                                        <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                            <p class="text_type">Месяц</p>
+                                        </li>
+                                        <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                            <p class="text_type">Выбрать дату</p>
+                                        </li>
+                                    </ul>
                                     <div class="calendar">
                                         <input type="text" id="dateranges2" placeholder="Выберите диапазон дат">
                                         <div class="btn_speedStart">
@@ -331,12 +344,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tac select_dannie"><select class="select_summary two">
-                                        <option class="option_sam" value="Вчера">Вчера</option>
-                                        <option class="option_sam" selected value="Неделя">Неделя</option>
-                                        <option class="option_sam" value="Месяц">Месяц</option>
-                                        <option class="option_sam cal" value="Выбрать дату">Выбрать дату</option>
-                                    </select>
+                                <div class="tac select_dannie">
+                                    <div class="zagolovok">
+                                        <div class="titleChangeSort">Неделя</div><i
+                                            class="fas fa-angle-down toggle_list_select"></i>
+                                    </div>
+                                    <ul class="select_summary two">
+                                        <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                            <p class="text_type">Вчера</p>
+                                        </li>
+                                        <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                            <p class="text_type">Неделя</p>
+                                        </li>
+                                        <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                            <p class="text_type">Месяц</p>
+                                        </li>
+                                        <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                            <p class="text_type">Выбрать дату</p>
+                                        </li>
+                                    </ul>
                                     <div class="calendar">
                                         <input type="text" id="dateranges3" placeholder="Выберите диапазон дат">
                                         <div class="btn_speedStart">
@@ -442,23 +468,13 @@
                                 </li>
                             </ul>
                         </div>
-
-
-
-
                     </div>
                 </div>
                 <div class="lower_charts">
                     <div class="title_lower_charts">Графики</div>
                     <div class="content_lower_charts"></div>
                 </div>
-
-
             </div>
-
-
-
-
 
             <!--
             <div class="content_card samosval-pricep">

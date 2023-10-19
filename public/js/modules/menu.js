@@ -15,14 +15,14 @@ cont.classList.add('container2')
 wrapContaint.appendChild(cont);
 
 export async function zapros(login) {
-    const selectElement = document.querySelectorAll('.select_summary.one');
-    selectElement.forEach(el => {
-        el[0].selected = true;
-    })
-    const selectElementTwo = document.querySelectorAll('.select_summary.two');
-    selectElementTwo.forEach(el => {
-        el[1].selected = true;
-    })
+    /*  const selectElement = document.querySelectorAll('.select_summary.one');
+      selectElement.forEach(el => {
+          el[0].selected = true;
+      })
+      const selectElementTwo = document.querySelectorAll('.select_summary.two');
+      selectElementTwo.forEach(el => {
+          el[1].selected = true;
+      })*/
     const params = {
         method: "POST",
         headers: {

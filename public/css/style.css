@@ -8507,13 +8507,58 @@ i.changeColorCheck {
   color: lightgray;
   margin-left: 25px;
   font-size: 0.7rem;
-  margin-left: 30px;
+  margin-left: 60px;
 }
 
 .today_value {
   width: 10%;
 }
 
+.tac {
+  width: 10%
+}
+
 .clickToggle {
   border-bottom: 1px solid rgba(6, 28, 71, 1);
+}
+
+.select_summary {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid rgba(6, 28, 71, 1);
+  background-color: #fff;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  width: 120px;
+  position: absolute;
+  top: 20px;
+}
+
+.fa-angle-down {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.zagolovok {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.hidden_view {
+  display: flex;
+}
+
+
+.radio_choice {
+  color: gray
+}
+
+.item_type:hover .radio_choice {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
 }

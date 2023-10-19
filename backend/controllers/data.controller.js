@@ -169,7 +169,7 @@ async function updateParams(data) {
         else {
             speed = null
         }
-        const geo = el && el.pos && el.pos.x ? [el.pos.y, el.pos.x] : null;
+        const geo = el && el.pos && el.pos.x ? JSON.stringify([el.pos.y, el.pos.x]) : null;
         nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed, geo]);
         const model = await databaseService.modelViewToBase(idw)
         let statusTSI;
@@ -375,7 +375,6 @@ function proverka(arr) {
 
 
 function proverka(arr) {
-
     const time = new Date()
     arr.forEach(el => {
         if (el[4] === undefined) {
@@ -411,6 +410,7 @@ function proverka(arr) {
                             const data = createDate()
                             alarm = 'Критически низкое давление'
                             console.log('КРАН!')
+                            console.log(el)
                             databaseService.alarmBase(data, el, alarm)
                             return
                         }
