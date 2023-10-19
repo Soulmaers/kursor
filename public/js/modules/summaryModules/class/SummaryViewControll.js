@@ -30,23 +30,103 @@ export class SummaryViewControll {
 
 
     //выбирать и подсвечивать определенный выбранный селект также запуск метода для сбора и отрисовки данных в нужный слот
-    toggleCheckSelect(it) {
+    async toggleCheckSelect(it) {
+        console.log('тут?0')
         const titleList = it.closest('.select_dannie').querySelector('.titleChangeSort')
         it.children[0].classList.toggle('radio_choice')
-        if (!it.children[0].classList.contains('radio_choice')) {
-            titleList.textContent = it.children[0].nextElementSibling.textContent
-        }
-        else {
-            titleList.textContent = it.parentElement.classList.contains('one') ? 'Вчера' : 'Неделя'
-        }
+        const slot = it.parentElement.classList.contains('one') ? 2 : 3
+
         Array.from(it.closest('.select_summary').children).forEach(e => {
             if (e !== it && !e.children[0].classList.contains('radio_choice')) {
                 e.children[0].classList.toggle('radio_choice')
             }
         })
-        const slot = it.parentElement.classList.contains('one') ? 2 : 3
-        this.getSummaryToBase(titleList.textContent, slot)
+
+        if (!it.children[0].classList.contains('radio_choice')) {
+            if (it.lastElementChild.textContent === 'Календарь') {
+                const resultDates = await this.openCalendarChoise(it)
+                titleList.textContent = `${resultDates[1][0]} - ${resultDates[1][1]}`
+                this.getSummaryToBase(resultDates[0], slot)
+
+            }
+            else {
+                titleList.textContent = it.children[0].nextElementSibling.textContent
+                this.getSummaryToBase(titleList.textContent, slot)
+            }
+        }
+        else {
+            console.log('тут?')
+            titleList.textContent = it.parentElement.classList.contains('one') ? 'Вчера' : 'Неделя'
+            this.getSummaryToBase(titleList.textContent, slot)
+        }
     }
+
+    //открываем календарь для выбора интервала из дат и возвращаем  даты в масссиве
+    async openCalendarChoise(element) {
+        const calendar = element.parentElement.nextElementSibling;
+        calendar.style.display = 'block'
+        calendar.addEventListener('mouseleave', () => {
+            calendar.style.display = 'none'
+            element.children[0].classList.add('radio_choice')
+        })
+        const interval = await this.choisIntervalDate(calendar)
+        return interval
+    }
+
+    //выбор времени
+    async choisIntervalDate(calendar) {
+        const id = `#${!calendar.children[0].children[0] ? calendar.children[0].id : calendar.children[0].children[0].id}`
+        const date = await new Promise((resolve, reject) => {
+            try {
+                const fp = flatpickr(`${id}`, {
+                    mode: "range",
+                    dateFormat: "d-m-Y",
+                    locale: "ru",
+                    static: true,
+                    "locale": {
+                        "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
+                    },
+                    onChange: function (selectedDates, dateStr, instance) {
+                        const formattedDates = selectedDates.map(date => {
+                            const year = date.getFullYear();
+                            const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
+                            const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
+                            return `${year}-${month}-${day}`;
+
+                        })
+                        formattedDates.length === 2 ? resolve(formattedDates) : null
+                    }
+                })
+            }
+            catch (e) {
+                console.log(e)
+            }
+        })
+        const btn = calendar.children[1]
+        const input = calendar.children[0].children[0]
+        return new Promise((resolve, reject) => {
+            Array.from(btn.children).forEach(elem =>
+                elem.addEventListener('click', () => {
+                    const formatString = date.map(e => {
+                        const parts = e.split('-');
+                        const formattedDate = `${parts[1].replace(/^0+/, '')}/${parts[2]}`;
+                        return formattedDate
+                    })
+                    input.value = '', elem.closest('.calendar').style.display = 'none'
+                    calendar.previousElementSibling.lastElementChild.children[0].classList.add('radio_choice')
+                    if (elem.textContent === 'Очистить') {
+                        resolve(null);
+                    }
+                    else {
+                        resolve([date, formatString]);
+                    }
+
+                })
+            )
+        });
+    }
+
+
 
     // скрывает список когда уходишь курсором
     hiddenListOutsideKursor(el) {
@@ -80,10 +160,12 @@ export class SummaryViewControll {
 
     //основной метод . готовить интервалы, запрашивает данные из базы, считает показатели, выводит в таблицу
     async getSummaryToBase(el, slot) {
+        console.log(el)
         const data = this.getIntervalDate(el)
         const result = await this.getRequestSummaryToBase(data)
+        console.log(result)
         let summary;
-        if (el === 'Неделя' || el === 'Месяц') {
+        if (el === 'Неделя' || el === 'Месяц' || el.length === 2) {
             summary = this.filterWeekSummary(result)
         }
         else {
@@ -218,6 +300,8 @@ export class SummaryViewControll {
 
     //готовим нужный интервал
     getIntervalDate(interval) {
+        console.log(interval.length)
+        const data = [];
         let int;
         if (interval === 'Неделя') {
             int = 7
@@ -231,8 +315,10 @@ export class SummaryViewControll {
         if (interval === 'Сегодня') {
             int = 0
         }
-        const data = [];
-        if (int <= 1) {
+        if (interval.length === 2) {
+            data.push(interval[0], interval[1])
+        }
+        else if (int <= 1) {
             data.push(this.convertDate(int))
         }
         else {
