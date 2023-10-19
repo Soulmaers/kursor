@@ -45,6 +45,9 @@ const initServer = () => {
 async function init() {
     await initServer()
     await wialon()
+
+
+
     globalstart.test()
     globalstart.hunterTime()
     setInterval(globalstart.test, 300000)

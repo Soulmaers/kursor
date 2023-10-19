@@ -371,7 +371,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
     const res = alarm !== 'Норма' && alarm !== 'Потеря связи с датчиком' ? await databaseService.controllerSaveToBase([{
         event: 'Предупреждение', time: `Время ${dannie[0]}`, tyres: `Колесо: ${tyress}`,
         param: `Параметр: ${val}`, alarm: `Описание: ${alarm}`
-    }], dannie[6], dannie[8], dannie[1], dannie[1]) : 'Норма. В базу не пишем'
+    }], dannie[6], JSON.parse(dannie[8]), dannie[1], dannie[1]) : 'Норма. В базу не пишем'
     console.log('Предупреждение' + ' ' + res.message)
     count++
     const nowDate = Math.round(new Date().getTime() / 1000);
