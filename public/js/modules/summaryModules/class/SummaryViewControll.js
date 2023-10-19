@@ -16,16 +16,21 @@ export class SummaryViewControll {
 
 
     //выбирать и подсвечивать определенный выбранный селект
-
     toggleCheckSelect(it) {
         it.children[0].classList.toggle('radio_choice')
-        // event.stopPropagation();
+
         console.log(it)
     }
     //скрывает и отображает список
     toggleListSelect(el) {
-        el.children[1].classList.toggle('hidden_view')
         console.log(el)
+        el.children[1].classList.toggle('hidden_view')
+        this.select.forEach(e => {
+            if (e !== el && !e.children[1].classList.contains('hidden_view')) {
+                e.children[1].classList.add('hidden_view')
+            }
+        })
+
     }
 
 
