@@ -53,7 +53,6 @@ async function init() {
     // setInterval(globalstart.test, 300000)
     // setInterval(globalstart.hunterTime, 50000)
 
-
     console.log('сессия открыта')
 }
 init()
