@@ -58,7 +58,8 @@ export async function zapros(login) {
         .map(el => Object.values(el)) // получаем массивы всех id
         .flat()
         .map(e => e[4])
-    new SummaryViewControll(result)
+    const initSummary = new SummaryViewControll(result)
+
     const processDataAtMidnight = async () => {
         yesterdaySummary();
         yesterdaySummary('Вчера');

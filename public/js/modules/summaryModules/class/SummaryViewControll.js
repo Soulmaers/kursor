@@ -7,10 +7,19 @@ export class SummaryViewControll {
         this.selectOne = document.querySelector('.select_summary')[0]
         this.selectTwo = document.querySelector('.select_summary')[1]
         this.data = [];
-
+        this.count = 2
         this.params.forEach(el => el.addEventListener('click', this.toggleClassAndParamsCollection.bind(this, el)))
         this.arrayInterval.forEach(el => this.getSummaryToBase(el))
+        this.startUpdatingToday()
     }
+
+    startUpdatingToday() {
+        setInterval(() => {
+            this.getSummaryToBase('Сегодня');
+        }, 60000); // Every 5 minutes
+    }
+
+
     //меняем тоггл класс по нажатию на параметр
     toggleClassAndParamsCollection(el) {
         this.params.forEach(e => {
@@ -24,8 +33,23 @@ export class SummaryViewControll {
         const data = this.getIntervalDate(el)
         const result = await this.getRequestSummaryToBase(data)
         const summary = this.calculationParametrs(result)
+        el !== 'Сегодня' ? this.viewSummaryTable(summary) : this.updateViewSummaryTable(summary)
         console.log(summary)
     }
+
+    updateViewSummaryTable(data) {
+        this.params.forEach((el, index) => {
+            el.parentElement.children[1].textContent = data[index]
+        })
+    }
+
+    viewSummaryTable(data) {
+        this.params.forEach((el, index) => {
+            el.parentElement.children[this.count].textContent = data[index]
+        })
+        this.count++
+    }
+
     calculateParam(data, paramName) {
         return data.reduce((acc, el) => acc + el[paramName], 0)
     }
@@ -37,12 +61,30 @@ export class SummaryViewControll {
         arraySummaryView.push(this.calculateParam(data, 'rashod'))
         arraySummaryView.push(this.calculateParam(data, 'zapravka'))
         arraySummaryView.push(this.calculateParam(data, 'dumpTrack'))
-        arraySummaryView.push(this.calculateParam(data, 'moto'))
+        arraySummaryView.push(this.calculateParam(data, 'moto') / 1000)
         arraySummaryView.push(this.calculateParam(data, 'prostoy'))
-        arraySummaryView.push(this.calculateParam(data, 'moto') - this.calculateParam(data, 'prostoy'))
+        arraySummaryView.push(this.calculateParam(data, 'moto') / 1000 - this.calculateParam(data, 'prostoy'))
         arraySummaryView.push(parseFloat((this.calculateParam(data, 'medium') / data.filter(el => el.medium > 0).length).toFixed(0)))
         arraySummaryView.push(data.filter(el => el.oilHH > 0).length === 0 ? 0 : parseFloat((this.calculateParam(data, 'oilHH') / data.filter(el => el.oilHH > 0).length).toFixed(0)))
-        return arraySummaryView
+        const structura = arraySummaryView.reduce((acc, el, index) => {
+            if (index === 6 || index === 7 || index === 8) {
+                acc.push(this.timesFormat(el));
+            } else {
+                acc.push(el);
+            }
+            return acc;
+        }, []);
+        return structura
+    }
+
+    timesFormat(dates) {
+        console.log(dates)
+        const totalSeconds = Math.floor(dates);
+        const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+        const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+        const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+        const motoHours = `${hours}:${minutes}`;
+        return motoHours;
     }
 
     async getRequestSummaryToBase(data) {
