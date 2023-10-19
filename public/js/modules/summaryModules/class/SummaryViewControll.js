@@ -9,6 +9,7 @@ export class SummaryViewControll {
         this.count = 2
         this.params.forEach(el => el.addEventListener('click', this.toggleClassAndParamsCollection.bind(this, el)))
         this.select.forEach(el => el.querySelector('.toggle_list_select').addEventListener('click', this.toggleListSelect.bind(this, el)))
+        this.select.forEach(el => el.querySelector('.select_summary').addEventListener('mouseleave', this.hiddenListOutsideKursor.bind(this, el)))
         this.select.forEach(el => el.querySelectorAll('.item_type').forEach(it => it.addEventListener('click', this.toggleCheckSelect.bind(this, it))))
         this.arrayInterval.forEach(el => this.getSummaryToBase(el))
         this.startUpdatingToday()
@@ -17,20 +18,35 @@ export class SummaryViewControll {
 
     //выбирать и подсвечивать определенный выбранный селект
     toggleCheckSelect(it) {
+        const titleList = it.closest('.select_dannie').querySelector('.titleChangeSort')
         it.children[0].classList.toggle('radio_choice')
+        if (!it.children[0].classList.contains('radio_choice')) {
+            titleList.textContent = it.children[0].nextElementSibling.textContent
+        }
+        else {
+            titleList.textContent = it.parentElement.classList.contains('one') ? 'Вчера' : 'Неделя'
+        }
+        Array.from(it.closest('.select_summary').children).forEach(e => {
+            if (e !== it && !e.children[0].classList.contains('radio_choice')) {
+                e.children[0].classList.toggle('radio_choice')
+            }
+        })
+    }
 
-        console.log(it)
+
+
+    // скрывает список когда уходишь курсором
+    hiddenListOutsideKursor(el) {
+        el.children[1].classList.remove('hidden_view')
     }
     //скрывает и отображает список
     toggleListSelect(el) {
-        console.log(el)
         el.children[1].classList.toggle('hidden_view')
         this.select.forEach(e => {
-            if (e !== el && !e.children[1].classList.contains('hidden_view')) {
-                e.children[1].classList.add('hidden_view')
+            if (e !== el && e.children[1].classList.contains('hidden_view')) {
+                e.children[1].classList.toggle('hidden_view')
             }
         })
-
     }
 
 
