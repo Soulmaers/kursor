@@ -31,3 +31,24 @@ export function convertTime(seconds) {
         return minutes + " мин.";
     }
 }
+
+export function convertDate(num) {
+    const now = new Date();
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - num)
+    const year = yesterday.getFullYear();
+    const month = String(yesterday.getMonth() + 1).padStart(2, '0');
+    const day = String(yesterday.getDate()).padStart(2, '0');
+    const data = `${year}-${month}-${day}`;
+    return data
+}
+
+export function timefn() {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const startOfTodayUnix = Math.floor(currentDate.getTime() / 1000);
+    const unix = Math.floor(new Date().getTime() / 1000);
+    const timeNow = unix
+    const timeOld = startOfTodayUnix
+    return [timeNow, timeOld]
+}

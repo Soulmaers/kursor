@@ -16,7 +16,7 @@ export class SummaryViewControll {
         this.startUpdatingToday()
     }
 
-
+    //обновляем саммари учитывая заголовки для запроса
     clickListUpdateSummary() {
         const arrayTitle = ['Сегодня']
         this.title.forEach(e => {
@@ -155,7 +155,6 @@ export class SummaryViewControll {
 
 
     //сверка активных объектов с данными для подсчета саммари и отображения
-
     controllActiveObject(array) {
         const checkObjectsId = Array.from(document.querySelectorAll('.checkInList')).reduce((acc, el) => {
             if (el.classList.contains('changeColorCheck')) {
@@ -215,7 +214,6 @@ export class SummaryViewControll {
             }
             return acc;
         }, []);
-        console.log(data)
         return structura
     }
 
@@ -238,8 +236,6 @@ export class SummaryViewControll {
     }
     //выводим в таблицу вчера и неделю
     viewSummaryTable(data, slot) {
-        console.log(data)
-        console.log(this.count)
         if (!slot) {
             this.params.forEach((el, index) => {
                 el.parentElement.children[this.count].textContent = data[index]
@@ -255,7 +251,6 @@ export class SummaryViewControll {
     //складываем значения
     calculateParam(data, paramName) {
         if (paramName === 'medium') {
-            console.log(data)
         }
         return data.reduce((acc, el) => acc + el[paramName], 0)
     }
@@ -281,13 +276,11 @@ export class SummaryViewControll {
             }
             return acc;
         }, []);
-        console.log(structura)
         return structura
     }
 
     //форматируем секунды в часыи минуты
     timesFormat(dates) {
-        console.log(dates)
         const totalSeconds = Math.floor(dates);
         const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
         const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
@@ -318,7 +311,6 @@ export class SummaryViewControll {
 
     //готовим нужный интервал
     getIntervalDate(interval) {
-        console.log(interval.length)
         const data = [];
         let int;
         if (interval === 'Неделя') {

@@ -18,7 +18,6 @@ import { getStat } from './charts/stat.js'
 
 import { conf } from './altConfig.js'
 import { viewTech } from './tech.js'
-import { element } from './startAllStatic.js'
 import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 import { draggable } from './filtersList.js'
 import { storTitleList } from './content.js'

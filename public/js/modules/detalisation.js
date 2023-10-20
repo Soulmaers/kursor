@@ -1,6 +1,6 @@
 import { testovfn } from './charts/bar.js'
 import { fnParMessage } from './grafiks.js'
-import { timefn, convertDate } from './startAllStatic.js'
+import { timefn, convertDate } from './helpersFunc.js'
 import { prostoy, dannieOilTS, dannieSortJobTS } from './detalisation/statistic.js'
 
 import { jobTSDetalisation, jobTS, oilTS, melageTS, cal2, cal3 } from './content.js'
