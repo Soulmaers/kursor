@@ -3,14 +3,22 @@ import { initSummary } from '../../spisok.js'
 
 export class ChartsViewControll {
     constructor() {
+        this.data = null
         this.elementList = document.querySelectorAll('.checkInList')
         this.params = document.querySelectorAll('.pointer_chart')
-
+        this.params.forEach(el => el.addEventListener('click', this.getTitleChart.bind(this, el)))
     }
 
+    getTitleChart(el) {
+        const titleCharts = document.querySelector('.title_lower_charts')
+        console.log(titleCharts)
+        titleCharts.textContent = el.getAttribute('data-attribute')
+        const nameChart = el.getAttribute('rel')
+        this.createChart(this.data, nameChart)
+    }
     //забираем даные за неделю и сортируем в массивы для графиков
     async getDataSummary() {
-        const data = initSummary.getIntervalDate('Неделя')
+        const data = initSummary.getIntervalDate('Месяц')
         const result = await initSummary.getRequestSummaryToBase(data)
         console.log(result)
         let datas = {};
@@ -36,13 +44,16 @@ export class ChartsViewControll {
 
         const originalData = initSummary.controllActiveObject(Object.values(datas))
         const clickParams = document.querySelector('.clickToggle').getAttribute('rel')
-        console.log(clickParams)
-        //   this.createChart(originalData, clickParams)
+        this.data = originalData
+        this.createChart(originalData, clickParams)
         console.log(originalData)
     }
 
 
     createChart(data, nameChart) {
+        console.log(data)
+        // const xDate = data.find(el => el.data.length === 7)
+        console.log(nameChart)
         const char = document.querySelector('.chart_global')
         if (char) {
             char.remove()
@@ -51,53 +62,60 @@ export class ChartsViewControll {
         const graf = document.createElement('div')
         graf.classList.add('chart_global')
         content_lower_charts.appendChild(graf)
-        // Размеры графика
-        var width = 1000;
-        var height = 400;
-
-        // Создание контейнера SVG
-        var svg = d3.select(".chart_global")
+        // Создание SVG-элемента для отображения графика
+        const svg = d3.select(".chart_global")
             .append("svg")
-            .attr("width", width)
-            .attr("height", height);
+            .attr("width", 1400)
+            .attr("height", 400);
+        // Получение всех уникальных дат из массива объектов
+        const datest = Array.from(new Set(data.flatMap(obj => obj.data))).sort(d3.ascending);
+        const dates = datest.map(date => date.substring(5));
+        const colorScale = d3.scaleOrdinal()
+            .domain(data.map(d => d.idw))
+            .range(d3.schemeCategory20)
+        // Формирование оси x с использованием дат
+        const xScale = d3.scaleBand()
+            .domain(dates)
+            .range([70, 1300])
+            .padding(0.1)
+            .paddingInner(1)
+            .paddingOuter(0)
+        //    .align(0)
+        // Формирование оси y для отображения значений probeg
+        const yScale = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d3.max(d[nameChart]))])
+            .range([350, 20]);
 
-        // Шкала x (даты)
-        var xScale = d3.scaleTime()
-            .domain([
-                d3.min(data, function (d) { return new Date(d.data); }),
-                d3.max(data, function (d) { return new Date(d.data); })
-            ])
-            .range([50, width - 50]);
-
-        // Шкала y (probeg)
-        var yScale = d3.scaleLinear()
-            .domain([0, d3.max(data, function (d) { return d.probeg; })])
-            .range([height - 50, 50]);
-
-        // Цвета линий
-        var color = d3.scaleOrdinal(d3.schemeCategory10);
-
-        // Создание линий
-        var line = d3.line()
-            .x(function (d) { return xScale(new Date(d.data)); })
-            .y(function (d) { return yScale(d.probeg); });
-
-        // Добавление линий
-        svg.selectAll(".line")
-            .data(data)
-            .enter()
-            .append("path")
-            .attr("class", "line")
-            .attr("d", function (d) { return line([d]); })
-            .style("stroke", function (d) { return color(d.id); });
-
-        // Добавление осей
+        // Отображение оси x
         svg.append("g")
-            .attr("transform", "translate(0," + (height - 50) + ")")
+            .attr("transform", `translate(0, ${yScale(0)})`)
             .call(d3.axisBottom(xScale));
 
+        // Отображение оси y
         svg.append("g")
-            .attr("transform", "translate(50,0)")
+            .attr("transform", `translate(70, 0)`)
             .call(d3.axisLeft(yScale));
+
+        // Отображение линий для значений probeg
+        data.forEach(obj => {
+            // Формирование массива пар значений (дата, probeg) для текущего объекта
+            const dataPairs = obj.data.map((date, index) => ({
+                date: date.substring(5),
+                [nameChart]: obj[nameChart][index] || 0
+            }));
+
+            // Создание линии для текущего объекта
+            const line = d3.line()
+                .x(d => xScale(d.date) + xScale.bandwidth() / 2)
+                .y(d => yScale(d[nameChart]));
+
+            // Отображение линии
+            svg.append("path")
+                .datum(dataPairs)
+                .attr("fill", "none")
+                .attr("stroke", colorScale(obj.idw))
+                .attr("stroke-width", 1)
+                .attr("d", line);
+        });
     }
 }
