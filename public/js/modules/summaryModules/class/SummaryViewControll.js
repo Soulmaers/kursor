@@ -5,6 +5,7 @@ export class SummaryViewControll {
         this.arrayInterval = ['Сегодня', 'Вчера', 'Неделя']
         this.params = document.querySelectorAll('.name_list')
         this.select = document.querySelectorAll('.select_dannie')
+        this.title = document.querySelectorAll('.titleChangeSort')
         this.data = [];
         this.count = 2
         this.params.forEach(el => el.addEventListener('click', this.toggleClassAndParamsCollection.bind(this, el)))
@@ -16,6 +17,15 @@ export class SummaryViewControll {
     }
 
 
+    clickListUpdateSummary() {
+        const arrayTitle = ['Сегодня']
+        this.title.forEach(e => {
+            arrayTitle.push(e.textContent)
+        })
+        arrayTitle.forEach(el => {
+            this.getSummaryToBase(el)
+        })
+    }
     //выбирать и подсвечивать определенный выбранный селект также запуск метода для сбора и отрисовки данных в нужный слот
     async toggleCheckSelect(it) {
         console.log('тут?0')

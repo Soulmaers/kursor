@@ -137,9 +137,10 @@ export class ToggleHiddenList {
         }
 
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
-        initSummary.getSummaryToBase('Сегодня')
-        initSummary.getSummaryToBase('Вчера')
-        initSummary.getSummaryToBase('Неделя')
+        initSummary.clickListUpdateSummary()
+        // initSummary.getSummaryToBase('Сегодня')
+        // initSummary.getSummaryToBase('Вчера')
+        // initSummary.getSummaryToBase('Неделя')
         this.statistikaObjectCar()
     }
     toggleHiddenList(event) {
@@ -149,9 +150,7 @@ export class ToggleHiddenList {
         console.log(initsmarkers)
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
         this.statistikaObjectCar()
-        initSummary.getSummaryToBase('Сегодня')
-        initSummary.getSummaryToBase('Вчера')
-        initSummary.getSummaryToBase('Неделя')
+        initSummary.clickListUpdateSummary()
     }
     toggleHiddenChildList(event) {
         const element = event.target
@@ -169,9 +168,7 @@ export class ToggleHiddenList {
         console.log(initsmarkers)
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
         this.statistikaObjectCar()
-        initSummary.getSummaryToBase('Сегодня')
-        initSummary.getSummaryToBase('Вчера')
-        initSummary.getSummaryToBase('Неделя')
+        initSummary.clickListUpdateSummary()
     }
     hiddenList(event) {
         const element = event.target
