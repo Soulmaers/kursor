@@ -34,17 +34,11 @@ export async function kartaContainer(elem) {
         }, 0);
     }
     const list = document.querySelectorAll('.listItem')
-    /* const arrayId = Array.from(list).reduce((acc, el) => {
-         acc.push(el.id)
-         return acc
-     }, [])*/
-    const arrayId = Array.from(document.querySelectorAll('.checkInList')).reduce((acc, el) => {
-        if (!el.classList.contains('changeColorCheck')) {
-            acc.push(Number(el.closest('.listItem').id))
-        }
+    const arrayId = Array.from(list).reduce((acc, el) => {
+        acc.push(el.id)
         return acc
     }, [])
-    console.log(arrayId)
+
     const params = {
         method: 'POST',
         headers: {
@@ -54,7 +48,20 @@ export async function kartaContainer(elem) {
     }
     const res = await fetch('/api/getGeo', params)
     const results = await res.json()
-    const result = results.map(el => {
+
+    const clearArray = Array.from(document.querySelectorAll('.checkInList')).reduce((acc, el) => {
+        if (!el.classList.contains('changeColorCheck')) {
+            acc.push(el.closest('.listItem').id)
+        }
+        return acc
+    }, [])
+    const originalObjectsData = results.reduce((acc, el) => {
+        if (clearArray.includes(el[0])) {
+            acc.push(el)
+        }
+        return acc
+    }, [])
+    const result = originalObjectsData.map(el => {
         let newArr = [...el]
         newArr[5] = el[5] == null ? undefined : convertTime(el[5])
         newArr.push(el[5] > 3600 ? 'off' : 'on')
@@ -67,7 +74,7 @@ export async function kartaContainer(elem) {
         acc.push([...el, name, group])
         return acc
     }, [])
-
+    console.log(itog)
     initsmarkers = new InitMarkers(itog, map, resultGeoTrack)
     initsmarkers.addMarkersToMap()
     initsmarkers.viewHiddenMenuMap()

@@ -80,6 +80,9 @@ exports.getGeo = async (req, res) => {
     res.json(structura)
 }
 
+
+
+
 exports.getEventMarkers = async (req, res) => {
     const id = req.body.id
     const t1 = req.body.nowDate
