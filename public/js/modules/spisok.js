@@ -10,7 +10,7 @@ import { SummaryViewControll } from './summaryModules/class/SummaryViewControll.
 const login = document.querySelectorAll('.log')[1].textContent
 
 simulateLoader();
-
+export let initSummary
 
 let sensorsName = false;
 let lastSensor = false;
@@ -276,14 +276,13 @@ export async function conturTest(testov) {
         }
     })
     finishload = true
+
+    initSummary = new SummaryViewControll(result)
+
     await viewList(login)
-
-
-
     const toggleList = new ToggleHiddenList()
     toggleList.init()
     toggleList.statistikaObjectCar(final)
-    const initSummary = new SummaryViewControll(result)
     navigator();
     setInterval(zaprosSpisok, 30000, toggleList)
 
