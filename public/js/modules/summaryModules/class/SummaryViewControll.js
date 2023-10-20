@@ -112,9 +112,6 @@ export class SummaryViewControll {
             )
         });
     }
-
-
-
     // скрывает список когда уходишь курсором
     hiddenListOutsideKursor(el) {
         el.children[1].classList.remove('hidden_view')
@@ -150,24 +147,33 @@ export class SummaryViewControll {
     //сверка активных объектов с данными для подсчета саммари и отображения
 
     controllActiveObject(array) {
-        const listObject = document.querySelectorAll('.ListItem')
-        console.log(listObject)
+        const checkObjectsId = Array.from(document.querySelectorAll('.checkInList')).reduce((acc, el) => {
+            if (el.classList.contains('changeColorCheck')) {
+                acc.push(Number(el.closest('.listItem').id))
+            }
+            return acc
+        }, [])
+        const originalObjectsData = array.reduce((acc, el) => {
+            if (!checkObjectsId.includes(el.idw)) {
+                acc.push(el)
+            }
+            return acc
+        }, [])
+        return originalObjectsData
     }
     //основной метод . готовить интервалы, запрашивает данные из базы, считает показатели, выводит в таблицу
     async getSummaryToBase(el, slot) {
-        console.log(el)
         const data = this.getIntervalDate(el)
         const result = await this.getRequestSummaryToBase(data)
         const cleanObject = this.controllActiveObject(result)
         let summary;
         if (el === 'Неделя' || el === 'Месяц' || el.length === 2) {
-            summary = this.filterWeekSummary(result)
+            summary = this.filterWeekSummary(cleanObject)
         }
         else {
-            summary = this.calculationParametrs(result)
+            summary = this.calculationParametrs(cleanObject)
         }
         el !== 'Сегодня' ? this.viewSummaryTable(summary, slot) : this.updateViewSummaryTable(summary)
-        console.log(summary)
     }
     //подготовка итогового саммари для неделя и месяц
     filterWeekSummary(data) {
@@ -189,7 +195,7 @@ export class SummaryViewControll {
         arraySummaryView.push(this.calculateParam(data, 'moto') / 1000)
         arraySummaryView.push(this.calculateParam(data, 'prostoy'))
         arraySummaryView.push(this.calculateParam(data, 'moto') / 1000 - this.calculateParam(data, 'prostoy'))
-        arraySummaryView.push(parseFloat((this.calculateParam(data, 'medium') / data.filter(el => el.medium > 0).length).toFixed(0)))
+        arraySummaryView.push(data.length === 0 || this.calculateParam(data, 'medium') === 0 ? 0 : parseFloat((this.calculateParam(data, 'medium') / data.filter(el => el.medium > 0).length).toFixed(0)))
         arraySummaryView.push(data.filter(el => el.oilHH > 0).length === 0 ? 0 : parseFloat((this.calculateParam(data, 'oilHH') / data.filter(el => el.oilHH > 0).length).toFixed(0)))
         const structura = arraySummaryView.reduce((acc, el, index) => {
             if (index === 6 || index === 7 || index === 8) {
@@ -199,6 +205,7 @@ export class SummaryViewControll {
             }
             return acc;
         }, []);
+        console.log(data)
         return structura
     }
 
@@ -221,11 +228,13 @@ export class SummaryViewControll {
     }
     //выводим в таблицу вчера и неделю
     viewSummaryTable(data, slot) {
+        console.log(data)
+        console.log(this.count)
         if (!slot) {
             this.params.forEach((el, index) => {
                 el.parentElement.children[this.count].textContent = data[index]
             })
-            this.count++
+            this.count === 3 ? this.count = 2 : this.count++
         }
         else {
             this.params.forEach((el, index) => {
@@ -235,6 +244,9 @@ export class SummaryViewControll {
     }
     //складываем значения
     calculateParam(data, paramName) {
+        if (paramName === 'medium') {
+            console.log(data)
+        }
         return data.reduce((acc, el) => acc + el[paramName], 0)
     }
     //подготовка итогового саммари для сегодня и вчера
@@ -249,7 +261,7 @@ export class SummaryViewControll {
         arraySummaryView.push(this.calculateParam(data, 'moto') / 1000)
         arraySummaryView.push(this.calculateParam(data, 'prostoy'))
         arraySummaryView.push(this.calculateParam(data, 'moto') / 1000 - this.calculateParam(data, 'prostoy'))
-        arraySummaryView.push(parseFloat((this.calculateParam(data, 'medium') / data.filter(el => el.medium > 0).length).toFixed(0)))
+        arraySummaryView.push(data.length === 0 || this.calculateParam(data, 'medium') === 0 ? 0 : parseFloat((this.calculateParam(data, 'medium') / data.filter(el => el.medium > 0).length).toFixed(0)))
         arraySummaryView.push(data.filter(el => el.oilHH > 0).length === 0 ? 0 : parseFloat((this.calculateParam(data, 'oilHH') / data.filter(el => el.oilHH > 0).length).toFixed(0)))
         const structura = arraySummaryView.reduce((acc, el, index) => {
             if (index === 6 || index === 7 || index === 8) {
@@ -259,6 +271,7 @@ export class SummaryViewControll {
             }
             return acc;
         }, []);
+        console.log(structura)
         return structura
     }
 

@@ -48,7 +48,7 @@ async function init() {
 
 
 
-    globalstart.test()
+    //globalstart.test()
     // globalstart.hunterTime()
     // setInterval(globalstart.test, 300000)
     // setInterval(globalstart.hunterTime, 50000)
