@@ -8475,6 +8475,10 @@ i.changeColorCheck {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.title_lower_charts {
+  font-size: 1.2rem;
+}
+
 .li_table {
   margin: 5px 0;
 }
