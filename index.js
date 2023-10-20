@@ -46,22 +46,11 @@ async function init() {
     await initServer()
     await wialon()
 
-
-
-<<<<<<< HEAD
     //globalstart.test()
-=======
-    globalstart.test()
-<<<<<<< HEAD
-    globalstart.hunterTime()
-    setInterval(globalstart.test, 300000)
-    setInterval(globalstart.hunterTime, 50000)
-=======
->>>>>>> 3143113d032cf177e91de0abcbff016b8b5f5d1f
     // globalstart.hunterTime()
     // setInterval(globalstart.test, 300000)
     // setInterval(globalstart.hunterTime, 50000)
->>>>>>> b1e9785bf13a75da8a0b9ed6171b00e4559ecd0c
+
 
     console.log('сессия открыта')
 }
