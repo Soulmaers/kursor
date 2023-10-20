@@ -34,10 +34,17 @@ export async function kartaContainer(elem) {
         }, 0);
     }
     const list = document.querySelectorAll('.listItem')
-    const arrayId = Array.from(list).reduce((acc, el) => {
-        acc.push(el.id)
+    /* const arrayId = Array.from(list).reduce((acc, el) => {
+         acc.push(el.id)
+         return acc
+     }, [])*/
+    const arrayId = Array.from(document.querySelectorAll('.checkInList')).reduce((acc, el) => {
+        if (!el.classList.contains('changeColorCheck')) {
+            acc.push(Number(el.closest('.listItem').id))
+        }
         return acc
     }, [])
+    console.log(arrayId)
     const params = {
         method: 'POST',
         headers: {
@@ -60,6 +67,7 @@ export async function kartaContainer(elem) {
         acc.push([...el, name, group])
         return acc
     }, [])
+
     initsmarkers = new InitMarkers(itog, map, resultGeoTrack)
     initsmarkers.addMarkersToMap()
     initsmarkers.viewHiddenMenuMap()

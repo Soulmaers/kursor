@@ -23,7 +23,8 @@ import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 import { draggable } from './filtersList.js'
 import { storTitleList } from './content.js'
 import { NavigationMenu } from './navModules/NavigatorClass.js'
-
+import { filterCondition } from './filtersList.js'
+import { initSummary } from './spisok.js'
 
 
 const sec = document.querySelector('.sections')
@@ -167,6 +168,21 @@ mobileItem.forEach(el => {
 
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
+    const cond = document.querySelectorAll('.cond')
+    const changeColorCheck = document.querySelectorAll('.changeColorCheck')
+    if (changeColorCheck) {
+        changeColorCheck.forEach(e => {
+            e.classList.remove('changeColorCheck');
+        })
+    }
+    const parent = document.querySelector('.sortCondition')
+    cond.forEach((el, index) => {
+        if (el.classList.contains('clicker')) {
+            filterCondition(null, parent.children[index])
+            el.classList.remove('clicker')
+        }
+    })
+
     navMenu.handleButtonClickList()
     clearInterval(intervalId)
     clearInterval(intervalId2)
@@ -190,6 +206,8 @@ logo.addEventListener('click', () => {
     start.style.width = 100 + '%'
     sections.style.display = 'flex'
     color ? color.classList.remove('color') : null
+
+    initSummary.clickListUpdateSummary()
 })
 const auth = document.querySelector('.settings')
 const authClear = document.querySelector('.close_settings')
