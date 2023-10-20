@@ -282,7 +282,7 @@ class SummaryStatistiks {
 
 
     calculationMotoAndProstoy() {
-        const arrayValue = this.data.find(it => it.sens = 'Зажигание');
+        const arrayValue = this.data.find(it => it.sens === 'Зажигание');
         const zeros = [];
         const ones = [];
         const prostoy = [];
@@ -304,6 +304,7 @@ class SummaryStatistiks {
         (arrayValue.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
 
         let totalMs = 0;
+        //   console.log(prostoy)
         const filteredData = prostoy.map(obj => {
             const thresholdIndex = obj.speed.findIndex(s => s >= 5);
             const index = thresholdIndex === -1 ? undefined : thresholdIndex;
