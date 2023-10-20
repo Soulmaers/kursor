@@ -31,9 +31,7 @@ export async function zapros(login) {
     console.log(arrayList)
     allObjects = arrayList
     dataspisok = true
-    //startAllStati(arrayList)
     await conturTest(arrayList)
-    //   startList(arrayList)
     logsView(arrayList)
     setInterval(logsView, 60000, arrayList)
 

@@ -45,7 +45,6 @@ class SummaryStatistiks {
             this.data = await this.getSensorsAndParametrs(this.id)
             const mileg = this.data.some(it => it.params === 'can_mileage' || it.params === 'mileage');
 
-
             if (mileg) {
                 this.probeg = this.calculationMileage()
                 //  console.log(el[1], mileg, this.probeg)
@@ -106,7 +105,6 @@ class SummaryStatistiks {
             return 0
         }
     }
-
     calculationMileage() {
         const arrayValue = this.data.find(it => it.params === 'can_mileage' || it.params === 'mileage');
         let probegZero = 0
@@ -124,7 +122,12 @@ class SummaryStatistiks {
         if (Number(arrayValue.value[0].toFixed(0)) === 0) {
             for (let i = 0; i <= arrayValue.value.length - 1; i++) {
                 if (Number(arrayValue.value[i].toFixed(0)) !== 0) {
-                    probegZero = Number(arrayValue.value[i].toFixed(0));
+                    if (this.id == 27472317) {
+                        probegZero = 373134
+                    }
+                    else {
+                        probegZero = Number(arrayValue.value[i].toFixed(0));
+                    }
                     break;
                 }
             }

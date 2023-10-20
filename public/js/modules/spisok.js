@@ -7,6 +7,7 @@ import { globalSelect } from './filtersList.js'
 import { dataspisok } from './menu.js'
 import { ToggleHiddenList } from './listModules/class/ToggleHiddenList.js'
 import { SummaryViewControll } from './summaryModules/class/SummaryViewControll.js'
+import { ChartsViewControll } from './summaryModules/class/ChartsViewControll.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
 simulateLoader();
@@ -276,10 +277,11 @@ export async function conturTest(testov) {
         }
     })
     finishload = true
-
-    initSummary = new SummaryViewControll(result)
-
     await viewList(login)
+    initSummary = new SummaryViewControll(result)
+    const initCharts = new ChartsViewControll()
+    initCharts.getDataSummary()
+
     const toggleList = new ToggleHiddenList()
     toggleList.init()
     toggleList.statistikaObjectCar(final)

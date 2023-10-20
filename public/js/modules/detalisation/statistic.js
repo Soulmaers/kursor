@@ -1,5 +1,5 @@
 
-import { convertDate } from '../startAllStatic.js'
+import { convertDate } from '../helpersFunc.js'
 export function prostoy(data, tsi) {
     if (data.pwr.length === 0) {
         return undefined
