@@ -127,6 +127,23 @@ export class ChartsViewControll {
             .attr("stroke", 'blue')// colorScale(obj.idw))
             .attr("stroke-width", 1)
             .attr("d", line);
-        ;
+
+        // Отображение линии
+        svg.append("path")
+            .datum(data)
+            .attr("fill", "none")
+            .attr("stroke", 'blue')// colorScale(obj.idw))
+            .attr("stroke-width", 1)
+            .attr("d", line);
+
+        // Добавление подписей значений
+        data.forEach(function (d) {
+            svg.append("text")
+                .attr("x", xScale(d.date) + xScale.bandwidth() / 2)
+                .attr("y", yScale(d[nameChart]) - 10) // сдвиг на 10 пикселей вверх, чтобы текст не пересекался с точкой данных
+                .text(d[nameChart])
+                .attr("font-size", "10px")
+                .attr("text-anchor", "middle");
+        });
     }
 }
