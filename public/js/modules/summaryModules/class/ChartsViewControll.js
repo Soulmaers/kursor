@@ -18,10 +18,11 @@ export class ChartsViewControll {
     }
     //забираем даные за неделю и сортируем в массивы для графиков
     async getDataSummary() {
+        console.log('тут уже?')
         const data = initSummary.getIntervalDate('Месяц')
-        const result = await initSummary.getRequestSummaryToBase(data)
-        console.log(result)
-        const originalData = initSummary.controllActiveObject(Object.values(result))
+        this.data = await initSummary.getRequestSummaryToBase(data)
+        console.log(this.data)
+        const originalData = initSummary.controllActiveObject(Object.values(this.data))
         console.log(originalData)
         let dataAndValue = {};
         for (let i = 0; i < originalData.length; i++) {

@@ -12,6 +12,7 @@ const login = document.querySelectorAll('.log')[1].textContent
 
 simulateLoader();
 export let initSummary
+export let initCharts
 
 let sensorsName = false;
 let lastSensor = false;
@@ -278,13 +279,15 @@ export async function conturTest(testov) {
     })
     finishload = true
     await viewList(login)
-    initSummary = new SummaryViewControll(result)
-    const initCharts = new ChartsViewControll()
-    initCharts.getDataSummary()
+
 
     const toggleList = new ToggleHiddenList()
     toggleList.init()
     toggleList.statistikaObjectCar(final)
+
+    initSummary = new SummaryViewControll(result)
+    initCharts = new ChartsViewControll()
+    initCharts.getDataSummary()
     navigator();
     setInterval(zaprosSpisok, 30000, toggleList)
 

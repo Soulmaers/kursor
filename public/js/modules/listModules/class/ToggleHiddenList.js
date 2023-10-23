@@ -2,7 +2,7 @@
 import { initsmarkers } from '../../navModules/karta.js'
 import { filterCondition } from '../../filtersList.js'
 
-import { initSummary } from '../../spisok.js'
+import { initSummary, initCharts } from '../../spisok.js'
 export class ToggleHiddenList {
     constructor() {
         //  this.status = status
@@ -138,19 +138,18 @@ export class ToggleHiddenList {
 
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
         initSummary.clickListUpdateSummary()
-        // initSummary.getSummaryToBase('Сегодня')
-        // initSummary.getSummaryToBase('Вчера')
-        // initSummary.getSummaryToBase('Неделя')
+        initCharts ? initCharts.getDataSummary() : null
         this.statistikaObjectCar()
     }
     toggleHiddenList(event) {
         event.stopPropagation()
         const element = event.target
         element.classList.toggle('changeColorCheck')
-        console.log(initsmarkers)
+        console.log(initCharts)
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
         this.statistikaObjectCar()
         initSummary.clickListUpdateSummary()
+        initCharts ? initCharts.getDataSummary() : null
     }
     toggleHiddenChildList(event) {
         const element = event.target
@@ -169,6 +168,7 @@ export class ToggleHiddenList {
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
         this.statistikaObjectCar()
         initSummary.clickListUpdateSummary()
+        initCharts ? initCharts.getDataSummary() : null
     }
     hiddenList(event) {
         const element = event.target
