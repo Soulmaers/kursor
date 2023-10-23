@@ -73,7 +73,7 @@ export class ChartsViewControll {
         const xScale = d3.scaleBand()
             .domain(data.map(function (d) { return d.date; }))
             .range([70, 1300])
-        //    .padding(0.1)
+            .padding(0.03)
         //   .paddingInner(10)
         //  .paddingOuter(0)
 
@@ -98,15 +98,16 @@ export class ChartsViewControll {
             .attr("height", d => 350 - yScale(d[nameChart])) //substract yScale from chart height to flip chart
             .attr("width", xScale.bandwidth()) //1300 / data.length)
             .attr("fill", "none")
-            .attr("stroke", "steelblue")
-            .attr("stroke-width", 0.5)
+            .attr("stroke", "rgba(6, 28, 71, 1)")
+            .attr("stroke-width", 1)
         data.forEach(function (d) {
             svg.append("text")
                 .attr("x", xScale(d.date) + xScale.bandwidth() / 2)
                 .attr("y", yScale(d[nameChart]) - 10)
                 .text(d[nameChart])
                 .attr("font-size", "10px")
-                .attr("text-anchor", "middle");
+                .attr("text-anchor", "middle")
+                .attr('fill', 'rgba(6, 28, 71, 1)')
         });
     }
 }
