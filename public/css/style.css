@@ -8523,7 +8523,8 @@ i.changeColorCheck {
 }
 
 .clickToggle {
-  border-bottom: 1px solid rgba(6, 28, 71, 1);
+  border: 1px solid rgba(6, 28, 71, 1);
+  padding: 2px;
 }
 
 .select_summary {
@@ -8565,4 +8566,8 @@ i.changeColorCheck {
   animation-duration: 1s;
   animation-timing-function: ease;
   animation-iteration-count: 1;
+}
+
+.iconm30 {
+  margin-right: 30px;
 }

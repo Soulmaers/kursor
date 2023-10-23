@@ -146,10 +146,10 @@ export class SummaryViewControll {
     //меняем тоггл класс по нажатию на параметр
     toggleClassAndParamsCollection(el) {
         this.params.forEach(e => {
-            if (e.classList.contains('clickToggle'))
-                e.classList.remove('clickToggle')
+            if (e.children[0].classList.contains('clickToggle'))
+                e.children[0].classList.remove('clickToggle')
         })
-        el.classList.toggle('clickToggle')
+        el.children[0].classList.toggle('clickToggle')
     }
 
 

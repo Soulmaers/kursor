@@ -21,34 +21,14 @@ export class ChartsViewControll {
         const data = initSummary.getIntervalDate('Месяц')
         const result = await initSummary.getRequestSummaryToBase(data)
         console.log(result)
-        let datas = {};
-        result.forEach(item => {
-            // если в нашем итоговом объекте нет ключа, совпадающего с id, создаём его
-            if (!datas[item.idw]) {
-                datas[item.idw] = {
-                    idw: item.idw,
-                    probeg: [],
-                    rashod: [],
-                    zapravka: [],
-                    data: []
-                    // добавьте все необходимые свойства 
-                };
-            }
-            // добавляем значение в соответствующий массив
-            datas[item.idw].probeg.push(item.probeg);
-            datas[item.idw].rashod.push(item.rashod);
-            datas[item.idw].zapravka.push(item.zapravka);
-            datas[item.idw].data.push(item.data);
-            // добавьте все необходимые свойства 
-        });
-
+        const originalData = initSummary.controllActiveObject(Object.values(result))
+        console.log(originalData)
         let dataAndValue = {};
-
-        for (let i = 0; i < result.length; i++) {
-            const currentDate = result[i].data;
-            const currentProbeg = result[i].probeg;
-            const currentRashod = result[i].rashod;
-            const currentZapravka = result[i].zapravka;
+        for (let i = 0; i < originalData.length; i++) {
+            const currentDate = originalData[i].data;
+            const currentProbeg = originalData[i].probeg;
+            const currentRashod = originalData[i].rashod;
+            const currentZapravka = originalData[i].zapravka;
 
             if (!dataAndValue[currentDate]) {
                 dataAndValue[currentDate] = {
@@ -58,22 +38,17 @@ export class ChartsViewControll {
                     zapravka: 0
                 };
             }
-
             dataAndValue[currentDate].probeg += currentProbeg; // суммируем текущий probeg с предыдущими значениями
             dataAndValue[currentDate].rashod += currentRashod;
             dataAndValue[currentDate].zapravka += currentZapravka
         }
-
-        // Преобразуем объект в массив
         let outputArray = Object.values(dataAndValue);
-        console.log(outputArray);
-        const originalData = initSummary.controllActiveObject(Object.values(datas))
-        const clickParams = document.querySelector('.clickToggle').getAttribute('rel')
+        console.log(outputArray)
+        const clickParams = document.querySelector('.clickToggle').parentElement.getAttribute('rel')
         this.data = outputArray
         this.createChart(outputArray, clickParams)
-        console.log(originalData)
-    }
 
+    }
 
     createChart(data, nameChart) {
         console.log(data)
