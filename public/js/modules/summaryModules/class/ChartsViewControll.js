@@ -14,7 +14,7 @@ export class ChartsViewControll {
         console.log(titleCharts)
         titleCharts.textContent = el.getAttribute('data-attribute')
         const nameChart = el.getAttribute('rel')
-        // this.createChart(this.data, nameChart)
+        this.createChart(this.data, nameChart)
     }
     //забираем даные за неделю и сортируем в массивы для графиков
     async getDataSummary() {
@@ -69,13 +69,8 @@ export class ChartsViewControll {
         console.log(outputArray);
         const originalData = initSummary.controllActiveObject(Object.values(datas))
         const clickParams = document.querySelector('.clickToggle').getAttribute('rel')
-<<<<<<< HEAD
         this.data = originalData
         //    this.createChart(originalData, clickParams)
-=======
-        this.data = outputArray
-        this.createChart(outputArray, clickParams)
->>>>>>> d4a37d29fda8baa7aa86b7277b68fb22e67f7201
         console.log(originalData)
     }
 
