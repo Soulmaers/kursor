@@ -69,8 +69,8 @@ export class ChartsViewControll {
         console.log(outputArray);
         const originalData = initSummary.controllActiveObject(Object.values(datas))
         const clickParams = document.querySelector('.clickToggle').getAttribute('rel')
-        this.data = originalData
-        //    this.createChart(originalData, clickParams)
+        this.data = outputArray
+        this.createChart(outputArray, clickParams)
         console.log(originalData)
     }
 
