@@ -3,7 +3,7 @@ export class SummaryViewControll {
     constructor(objectsId) {
         this.objectsId = objectsId
         this.arrayInterval = ['Сегодня', 'Вчера', 'Неделя']
-        this.params = document.querySelectorAll('.name_list')
+        this.params = document.querySelectorAll('.pointer_chart')
         this.select = document.querySelectorAll('.select_dannie')
         this.title = document.querySelectorAll('.titleChangeSort')
         this.data = [];
