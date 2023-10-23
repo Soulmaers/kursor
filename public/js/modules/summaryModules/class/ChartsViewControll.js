@@ -42,10 +42,35 @@ export class ChartsViewControll {
             // добавьте все необходимые свойства 
         });
 
+        let dataAndValue = {};
+
+        for (let i = 0; i < result.length; i++) {
+            const currentDate = result[i].data;
+            const currentProbeg = result[i].probeg;
+            const currentRashod = result[i].rashod;
+            const currentZapravka = result[i].zapravka;
+
+            if (!dataAndValue[currentDate]) {
+                dataAndValue[currentDate] = {
+                    date: currentDate.substring(5),
+                    probeg: 0,
+                    rashod: 0,
+                    zapravka: 0
+                };
+            }
+
+            dataAndValue[currentDate].probeg += currentProbeg; // суммируем текущий probeg с предыдущими значениями
+            dataAndValue[currentDate].rashod += currentRashod;
+            dataAndValue[currentDate].zapravka += currentZapravka
+        }
+
+        // Преобразуем объект в массив
+        let outputArray = Object.values(dataAndValue);
+        console.log(outputArray);
         const originalData = initSummary.controllActiveObject(Object.values(datas))
         const clickParams = document.querySelector('.clickToggle').getAttribute('rel')
-        this.data = originalData
-        this.createChart(originalData, clickParams)
+        this.data = outputArray
+        this.createChart(outputArray, clickParams)
         console.log(originalData)
     }
 
@@ -67,15 +92,10 @@ export class ChartsViewControll {
             .append("svg")
             .attr("width", 1400)
             .attr("height", 400);
-        // Получение всех уникальных дат из массива объектов
-        const datest = Array.from(new Set(data.flatMap(obj => obj.data))).sort(d3.ascending);
-        const dates = datest.map(date => date.substring(5));
-        const colorScale = d3.scaleOrdinal()
-            .domain(data.map(d => d.idw))
-            .range(d3.schemeCategory20)
+
         // Формирование оси x с использованием дат
         const xScale = d3.scaleBand()
-            .domain(dates)
+            .domain(data.map(function (d) { return d.date; }))
             .range([70, 1300])
             .padding(0.1)
             .paddingInner(1)
@@ -83,7 +103,7 @@ export class ChartsViewControll {
         //    .align(0)
         // Формирование оси y для отображения значений probeg
         const yScale = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d3.max(d[nameChart]))])
+            .domain([0, d3.max(data.map(function (d) { return d[nameChart]; }))])
             .range([350, 20]);
 
         // Отображение оси x
@@ -95,27 +115,18 @@ export class ChartsViewControll {
         svg.append("g")
             .attr("transform", `translate(70, 0)`)
             .call(d3.axisLeft(yScale));
+        // Создание линии для текущего объекта
+        const line = d3.line()
+            .x(d => xScale(d.date) + xScale.bandwidth() / 2)
+            .y(d => yScale(d[nameChart]));
 
-        // Отображение линий для значений probeg
-        data.forEach(obj => {
-            // Формирование массива пар значений (дата, probeg) для текущего объекта
-            const dataPairs = obj.data.map((date, index) => ({
-                date: date.substring(5),
-                [nameChart]: obj[nameChart][index] || 0
-            }));
-
-            // Создание линии для текущего объекта
-            const line = d3.line()
-                .x(d => xScale(d.date) + xScale.bandwidth() / 2)
-                .y(d => yScale(d[nameChart]));
-
-            // Отображение линии
-            svg.append("path")
-                .datum(dataPairs)
-                .attr("fill", "none")
-                .attr("stroke", colorScale(obj.idw))
-                .attr("stroke-width", 1)
-                .attr("d", line);
-        });
+        // Отображение линии
+        svg.append("path")
+            .datum(data)
+            .attr("fill", "none")
+            .attr("stroke", 'blue')// colorScale(obj.idw))
+            .attr("stroke-width", 1)
+            .attr("d", line);
+        ;
     }
 }
