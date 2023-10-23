@@ -14,11 +14,10 @@ export class ChartsViewControll {
         console.log(titleCharts)
         titleCharts.textContent = el.getAttribute('data-attribute')
         const nameChart = el.getAttribute('rel')
-        this.createChart(this.data, nameChart)
+        this.data.length !== 0 ? this.createChart(this.data, nameChart) : null
     }
     //забираем даные за неделю и сортируем в массивы для графиков
     async getDataSummary() {
-        console.log('тут уже?')
         const data = initSummary.getIntervalDate('Месяц')
         this.data = await initSummary.getRequestSummaryToBase(data)
         console.log(this.data)
@@ -30,24 +29,28 @@ export class ChartsViewControll {
             const currentProbeg = originalData[i].probeg;
             const currentRashod = originalData[i].rashod;
             const currentZapravka = originalData[i].zapravka;
-
+            const currentdumpTrack = originalData[i].dumpTrack;
             if (!dataAndValue[currentDate]) {
                 dataAndValue[currentDate] = {
                     date: currentDate.substring(5),
                     probeg: 0,
                     rashod: 0,
-                    zapravka: 0
+                    zapravka: 0,
+                    dumpTrack: 0
                 };
             }
             dataAndValue[currentDate].probeg += currentProbeg; // суммируем текущий probeg с предыдущими значениями
             dataAndValue[currentDate].rashod += currentRashod;
             dataAndValue[currentDate].zapravka += currentZapravka
+            dataAndValue[currentDate].dumpTrack += currentdumpTrack
         }
         let outputArray = Object.values(dataAndValue);
         console.log(outputArray)
         const clickParams = document.querySelector('.clickToggle').parentElement.getAttribute('rel')
         this.data = outputArray
-        this.createChart(outputArray, clickParams)
+        console.log(this.data)
+        const char = document.querySelector('.chart_global')
+        outputArray.length !== 0 ? this.createChart(outputArray, clickParams) : char.remove()
 
     }
 
