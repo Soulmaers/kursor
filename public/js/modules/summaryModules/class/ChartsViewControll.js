@@ -30,19 +30,35 @@ export class ChartsViewControll {
             const currentRashod = originalData[i].rashod;
             const currentZapravka = originalData[i].zapravka;
             const currentdumpTrack = originalData[i].dumpTrack;
+            const currentmoto = originalData[i].moto;
+            const currentmedium = originalData[i].medium;
+            const currentprostoy = originalData[i].prostoy;
             if (!dataAndValue[currentDate]) {
                 dataAndValue[currentDate] = {
                     date: currentDate.substring(5),
                     probeg: 0,
                     rashod: 0,
                     zapravka: 0,
-                    dumpTrack: 0
+                    dumpTrack: 0,
+                    moto: 0,
+                    mediumAll: 0,
+                    mediumlength: 0,
+                    madium: 0,
+                    prostoy: 0,
+                    timeJob: 0
                 };
             }
+
             dataAndValue[currentDate].probeg += currentProbeg; // суммируем текущий probeg с предыдущими значениями
             dataAndValue[currentDate].rashod += currentRashod;
             dataAndValue[currentDate].zapravka += currentZapravka
             dataAndValue[currentDate].dumpTrack += currentdumpTrack
+            dataAndValue[currentDate].moto += currentmoto / 1000
+            dataAndValue[currentDate].prostoy += currentprostoy
+            dataAndValue[currentDate].timeJob += currentmoto / 1000 - currentprostoy
+            dataAndValue[currentDate].mediumlength += currentmedium !== 0 ? 1 : 0
+            dataAndValue[currentDate].mediumAll += currentmedium
+            dataAndValue[currentDate].medium = parseFloat((dataAndValue[currentDate].mediumAll / dataAndValue[currentDate].mediumlength).toFixed(0))
         }
         let outputArray = Object.values(dataAndValue);
         console.log(outputArray)
@@ -52,6 +68,16 @@ export class ChartsViewControll {
         const char = document.querySelector('.chart_global')
         outputArray.length !== 0 ? this.createChart(outputArray, clickParams) : char.remove()
 
+    }
+
+    //форматируем секунды в часыи минуты
+    timesFormat(dates) {
+        const totalSeconds = Math.floor(dates);
+        const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+        const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+        const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+        const motoHours = `${hours}:${minutes}`;
+        return motoHours;
     }
 
     createChart(data, nameChart) {
@@ -79,7 +105,7 @@ export class ChartsViewControll {
             .padding(0.03)
         //   .paddingInner(10)
         //  .paddingOuter(0)
-
+        const self = this
         const yScale = d3.scaleLinear()
             .domain([0, d3.max(data, function (d) { return d[nameChart]; })])
             .range([350, 20]);
@@ -90,7 +116,11 @@ export class ChartsViewControll {
 
         svg.append("g")
             .attr("transform", `translate(70, 0)`)
-            .call(d3.axisLeft(yScale));
+            .call(nameChart !== 'moto' ? d3.axisLeft(yScale) : d3.axisLeft(yScale).tickFormat(function (d) {
+                return self.timesFormat(d)
+            }))
+
+
 
         // Create bar chart by adding a rectangle for each data point
         svg.selectAll('rect')
@@ -107,7 +137,7 @@ export class ChartsViewControll {
             svg.append("text")
                 .attr("x", xScale(d.date) + xScale.bandwidth() / 2)
                 .attr("y", yScale(d[nameChart]) - 10)
-                .text(d[nameChart])
+                .text(nameChart == 'moto' ? self.timesFormat(d[nameChart]) : d[nameChart])
                 .attr("font-size", "10px")
                 .attr("text-anchor", "middle")
                 .attr('fill', 'rgba(6, 28, 71, 1)')

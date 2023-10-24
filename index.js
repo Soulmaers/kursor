@@ -17,7 +17,7 @@ const globalstart = require('./backend/controllers/data.controller.js');
 const WebSocket = require('ws');
 const webpush = require('web-push');
 require('events').EventEmitter.prototype._maxListeners = 0;
-
+const sql = require('mssql');
 //const socked = require('./backend/services/database.services.js')
 
 
@@ -42,6 +42,41 @@ const initServer = () => {
         });
     });
 }
+
+/*
+const config = {
+    server: 'localhost',
+    user: 'sa',
+    password: 'Asdf2022',
+    database: 'CursorMSSQL',
+    options: {
+        trustServerCertificate: true // если используете самоподписанный сертификат SSL
+    }
+};
+
+async function importData() {
+    try {
+        await sql.connect(config);
+
+        // Здесь выполните код для создания таблиц и других структур базы данных, если требуется.
+
+        // Загрузите файл SQL и выполните его содержимое
+        const query = `USE ваша_база_данных\nGO\n\n${your_sql_file_content_here}`;
+        const result = await sql.query(query);
+
+        console.log('Импорт данных успешно завершен');
+    } catch (err) {
+        console.error('Ошибка при импорте данных', err);
+    } finally {
+        sql.close();
+    }
+}
+
+importData();*/
+
+
+
+
 async function init() {
     await initServer()
     await wialon()
