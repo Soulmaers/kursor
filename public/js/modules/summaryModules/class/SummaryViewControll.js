@@ -4,6 +4,7 @@ export class SummaryViewControll {
         this.objectsId = objectsId
         this.arrayInterval = ['Сегодня', 'Вчера', 'Неделя']
         this.params = document.querySelectorAll('.pointer_chart')
+        this.content = document.querySelectorAll('.name_list')
         this.select = document.querySelectorAll('.select_dannie')
         this.title = document.querySelectorAll('.titleChangeSort')
         this.data = [];
@@ -230,20 +231,21 @@ export class SummaryViewControll {
 
     //выводим в таблицу сегодня и обновляем ее
     updateViewSummaryTable(data) {
-        this.params.forEach((el, index) => {
+        this.content.forEach((el, index) => {
             el.parentElement.children[1].textContent = data[index]
         })
     }
     //выводим в таблицу вчера и неделю
     viewSummaryTable(data, slot) {
+        console.log(data)
         if (!slot) {
-            this.params.forEach((el, index) => {
+            this.content.forEach((el, index) => {
                 el.parentElement.children[this.count].textContent = data[index]
             })
             this.count === 3 ? this.count = 2 : this.count++
         }
         else {
-            this.params.forEach((el, index) => {
+            this.content.forEach((el, index) => {
                 el.parentElement.children[slot].textContent = data[index]
             })
         }
