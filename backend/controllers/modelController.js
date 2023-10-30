@@ -1,12 +1,14 @@
-const connection = require('../config/db')
+//const connection = require('../config/db')
+const { connection, sql } = require('../config/db')
 
-module.exports.viewStatus = (req, res) => {
+
+module.exports.viewStatus = async (req, res) => {
     try {
-        const postModel = `SELECT * FROM statusObj WHERE idw='${req.body.idw}'`
-        connection.query(postModel, function (err, results) {
-            if (err) console.log(err);
-            res.json({ result: results })
-        })
+        const pool = await connection
+        const postModel = `SELECT * FROM statusObj WHERE idw=@idw`
+        const results = await pool.request().input('idw', req.body.idw).query(postModel)
+
+        res.json({ result: results.recordset })
     }
     catch (e) {
         console.log(e)
@@ -74,13 +76,12 @@ module.exports.generate = (req, res) => {
         console.log(e)
     }
 }
-module.exports.listTyresId = (req, res) => {
+module.exports.listTyresId = async (req, res) => {
     try {
-        const selectBase = `SELECT * FROM tyresBase WHERE idw='${req.body.idw}'`
-        connection.query(selectBase, function (err, results) {
-            if (err) console.log(err)
-            res.json({ status: 200, result: results })
-        })
+        const pool = await connection
+        const selectBase = `SELECT * FROM tyresBase WHERE idw=@idw`
+        const results = await pool.request().input('idw', req.body.idw).query(selectBase)
+        res.json({ result: results.recordset })
     }
     catch (e) {
         console.log(e)

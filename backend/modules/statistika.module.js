@@ -7,12 +7,12 @@ class SummaryStatistiks {
     constructor(object) {
         this.object = object
         this.strustura = {}
-        this.data = null
-        this.id = null
-        this.nameCar = null
-        this.probeg = null
-        this.zapravka = null
-        this.rashod = null
+        this.data = '-'
+        this.id = '-'
+        this.nameCar = '-'
+        this.probeg = '-'
+        this.zapravka = '-'
+        this.rashod = '-'
     }
 
     async testovfn(active, t1, t2) {
@@ -47,7 +47,6 @@ class SummaryStatistiks {
 
             if (mileg) {
                 this.probeg = this.calculationMileage()
-                //  console.log(el[1], mileg, this.probeg)
                 this.strustura[this.id].probeg = this.probeg
                 this.strustura[this.id].job = this.calculationJobTs()
             }
@@ -73,6 +72,7 @@ class SummaryStatistiks {
             const engine = this.data.some(it => it.sens.startsWith('Зажигание'));
             if (engine) {
                 const result = this.calculationMotoAndProstoy()
+                //  console.log(result)
                 this.moto = result[0]
                 this.prostoy = result[1]
                 this.strustura[this.id].moto = this.moto
@@ -83,7 +83,7 @@ class SummaryStatistiks {
                 this.strustura[this.id].prostoy = '-'
             }
         }
-        console.log(this.structura)
+        //  console.log(this.structura)
         return this.strustura
     }
 
@@ -134,7 +134,7 @@ class SummaryStatistiks {
         } else {
             probegZero = Number(arrayValue.value[0].toFixed(0));
         }
-        const probegDay = probegNow - probegZero;
+        const probegDay = probegNow - probegZero < 0 ? 0 : probegNow - probegZero;
         return probegDay
     }
 
@@ -143,6 +143,16 @@ class SummaryStatistiks {
         const timeOld = interval[1]
         const timeNow = interval[0]
         const itog = await this.testovfn(el, timeOld, timeNow)
+        itog.sort((a, b) => {
+            if (a.time > b.time) {
+                return 1;
+            }
+            if (a.time < b.time) {
+                return -1;
+            }
+            return 0;
+        })
+        //   console.log(itog)
         const time = [];
         const speed = [];
         const sats = [];
@@ -156,6 +166,7 @@ class SummaryStatistiks {
             sats.push(el.sats)
             geo.push(JSON.parse(el.geo))
         })
+
         const allsens = itog.map(it => {
             return { sens: JSON.parse(it.allSensParams).map(e => e[0]), params: JSON.parse(it.allSensParams).map(e => e[1]), val: JSON.parse(it.allSensParams).map(e => e[2]) }
         })
@@ -292,12 +303,13 @@ class SummaryStatistiks {
         const korzina = [];
         let startIndex = 0;
         arrayValue.value.forEach((values, index) => {
+            //  console.log(index)
             if (values !== arrayValue.value[startIndex]) {
                 const subarray = arrayValue.time.slice(startIndex, index);
                 const speedTime = { speed: arrayValue.speed.slice(startIndex, index), time: arrayValue.time.slice(startIndex, index) };
                 (arrayValue.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
                 (arrayValue.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
-
+                //   console.log([subarray[0], subarray[subarray.length - 1]])
                 startIndex = index;
             }
         });
@@ -340,6 +352,7 @@ class SummaryStatistiks {
                 totalMs += diffMs;
             }
         });
+        // console.log(totalMs)
         const motoHours = isNaN(totalMs) ? '-' : totalMs
         return [motoHours, unixProstoy]
     }
@@ -897,8 +910,6 @@ const popupProstoy = async (array) => {
             if (it.sens.startsWith('Бортовое')) {
                 const res = prostoy(it, tsiControll);
                 if (res !== undefined) {
-                    console.log(res[2].getTime() / 1000)
-                    console.log(((new Date()).getTime() / 1000).toFixed(0))
                     const map = res[3]
                     const timesProstoy = timesFormat(res[0])
                     const group = e[5]

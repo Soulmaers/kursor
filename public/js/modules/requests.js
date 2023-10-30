@@ -189,6 +189,7 @@ export async function changeBase(massModel, activePost, idw, type, go, go1, goCa
     }
     const res = await fetch('/api/updateModel', param)
     const response = await res.json()
+    console.log(response)
     const controll = document.querySelector('.container_left')
     controll.style.display = 'none'
     const modalCenterOs = document.querySelector('.modalCenterOs')

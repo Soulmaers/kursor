@@ -51,7 +51,6 @@ export async function testovfn(active, t1, t2) {
     return resultt
 }
 export async function datas(t1, t2) {
-    console.log(t2)
     if (isCanceled) {
         return Promise.reject(new Error('Запрос отменен'));
     }
@@ -114,6 +113,7 @@ export async function datas(t1, t2) {
 }
 
 async function grafikStartPress(dat2) {
+    console.log(dat2)
     const model = await iconChart()
     const grafOld = document.querySelector('.infoGraf')
     // console.log(grafOld)

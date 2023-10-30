@@ -3,6 +3,7 @@ import { convertToHoursAndMinutes } from './helpers.js'
 import { createMapsUniq } from '../geo.js'
 
 export function createJobTS(data, num) {
+    console.log(data)
     // console.log(objectRazmetka)
 
     const chartStatic = document.querySelector(`.chartStatic${num}`)

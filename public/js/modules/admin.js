@@ -50,7 +50,7 @@ async function account() {
 
         const result = await fetch('/signup', params)
         const response = await result.json()
-        //  console.log(response)
+        console.log(response)
         const messaga = document.querySelector('.message')
         var options = document.querySelectorAll('opt');
 
@@ -60,7 +60,7 @@ async function account() {
             setTimeout(() => messaga.textContent = '', 2000)
         }
         else {
-            messaga.textContent = response.message.message
+            messaga.textContent = response.message
             messaga.style.color = 'red'
             setTimeout(() => messaga.textContent = '', 2000)
         }
@@ -82,19 +82,19 @@ export async function getUsers() {
         }
     }
     const data = await fetch('/users', params)
-    //console.log(data)
+    console.log(data)
     const users = await data.json()
-    // console.log(users.result)
+    console.log(users)
     const items = document.querySelectorAll('.users')
     // console.log(new Date())
-    //console.log(items)
+    //  console.log(items)
     if (items) {
         items.forEach(el => {
             el.remove()
         })
     }
     const listAccountReal = document.querySelector('.listAccountReal')
-    users.result.forEach(e => {
+    users.forEach(e => {
         const item = document.createElement('li')
         item.classList.add('users')
 
@@ -308,7 +308,7 @@ export async function deleteFn(id, log) {
 }
 
 export function checkCreate(nameCar) {
-       const ide = document.getElementById('all')
+    const ide = document.getElementById('all')
     nameCar.forEach(elem => {
         const box = document.querySelector('.check_boxs')
         const activePost = elem[0].replace(/\s+/g, '')
@@ -423,7 +423,7 @@ async function fnViewcheck(name) {
     }
     const res = await fetch('/api/viewCheckObject', param)
     const response = await res.json()
-     if (response.result.length === 0) {
+    if (response.length === 0) {
         checkboxes.forEach(el => {
             el.checked = false
             ide.checked = true
@@ -432,7 +432,7 @@ async function fnViewcheck(name) {
     else {
         checkboxes.forEach(el => {
             el.checked = false
-                 response.result.forEach(item => {
+            response.forEach(item => {
                 if (el.id === item.idw) {
                     ide.checked = false
                     el.checked = true;

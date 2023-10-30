@@ -112,6 +112,7 @@ export class CreateMarkersEvent {
         }
         const geoTest = await fetch('/api/logsViewId', params)
         const geoCard = await geoTest.json();
+        console.log(geoCard)
         const eventProstoy = geoCard.reduce((acc, el) => {
             const parse = JSON.parse(el.content)
             if (parse[0].event === 'Простой') {

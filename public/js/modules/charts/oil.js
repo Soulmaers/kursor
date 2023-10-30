@@ -25,6 +25,15 @@ export async function oil(t1, t2) {
             curse: it.curse
         }
     })
+    itogy.sort((a, b) => {
+        if (a.time > b.time) {
+            return 1;
+        }
+        if (a.time < b.time) {
+            return -1;
+        }
+        return 0;
+    })
     console.log(itogy)
     if (itogy.length === 0) {
         console.log('нуллл')
@@ -79,7 +88,6 @@ export async function oil(t1, t2) {
                 object.right = el.value
             }
         })
-        console.log(object)
         const data = object.time.map((t, i) => ({
             geo: object.geo[i],
             speed: object.speed[i],
@@ -117,7 +125,6 @@ export async function oil(t1, t2) {
             increasingIntervals.push([dat[start], dat[end]]);
         }
 
-        console.log(increasingIntervals)
         const zapravkaAll = increasingIntervals.filter((interval, index) => {
             const firstOil = interval[0].oil;
             const lastOil = interval[interval.length - 1].oil;
@@ -133,7 +140,6 @@ export async function oil(t1, t2) {
                     interval.splice(1, 1)
                 }
             }
-            console.log(firstOil, difference, threshold)
             return firstOil > 5 && difference > 40 && difference >= threshold;
         });
         for (let i = 0; i < zapravkaAll.length - 1; i++) {
@@ -141,7 +147,7 @@ export async function oil(t1, t2) {
                 zapravkaAll.splice(i + 1, 1);
             }
         }
-        console.log(zapravkaAll)
+
         const zapravka = zapravkaAll.filter(e => e[0].pwr >= 11 || e[0].pwr == null);
         const filteredZapravka = zapravka.filter(e => {
             const time0 = (e[0].time).getTime() / 1000;
@@ -167,12 +173,9 @@ export async function oil(t1, t2) {
         }
 
         const rashod = rash.reduce((el, acc) => el + acc, 0)
-        console.log(rashod);
-        console.log(filteredZapravka)
         const objOil = filteredZapravka.reduce((result, it) => {
             const oilValue = it[1].oil - it[0].oil;
-            console.log(oilValue)
-            if (oilValue > 10 && it[1].speed < 10 || it[0].speed < 10) {
+            if (oilValue > 10) {
                 const date = new Date(it[0].time);
                 const day = date.getDate();
                 const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -191,7 +194,7 @@ export async function oil(t1, t2) {
             }
             return result;
         }, []);
-
+        console.log(objOil)
         const grafOld = document.querySelector('.infoGraf')
         if (grafOld) {
             grafOld.remove()

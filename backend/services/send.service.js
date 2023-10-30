@@ -3,7 +3,7 @@ const databaseService = require('./database.service')
 const request = require("request");
 
 exports.convertMessage = (mess) => {
-        let msg;
+    let msg;
     if (mess.event === 'Заправка') {
         msg = `Событие: ${mess.event}\u2028${mess.group}\u2028Объект: ${mess.name}\u2028Заправлено: ${mess.litrazh} л.\u2028${mess.time}`
     }
@@ -24,12 +24,12 @@ exports.convertMessage = (mess) => {
 
 
 
-exports.sendEmail = async(mess, login) => {
-     const message = mess
+exports.sendEmail = async (mess, login) => {
+    const message = mess
     const msg = this.convertMessage(message)
-         const contact = await databaseService.findToBaseProfil(login)
-        if (contact.result.length !== 0) {
-            contact.result.forEach(el => {
+    const contact = await databaseService.findToBaseProfil(login)
+    if (contact.length !== 0) {
+        contact.forEach(el => {
             const email = el.email
             let smtpTransport;
             try {
@@ -63,38 +63,38 @@ exports.sendEmail = async(mess, login) => {
 
             })
         })
-        }
-        else {
-            return
-        }
-  }
+    }
+    else {
+        return
+    }
+}
 
-exports.sendWhat = async(mess,login) => {
-     const message = mess
+exports.sendWhat = async (mess, login) => {
+    const message = mess
     const msg = this.convertMessage(message)
-          const contact = await databaseService.findToBaseProfil(login)
-           if (contact.result.length !== 0) {
-            contact.result.forEach(el => {
-                const phone = parseFloat(el.phone)
-                        var options = {
-                    'method': 'POST',
-                    'url': 'https://wappi.pro/api/sync/message/send?profile_id=2c69ae90-ce24',
-                    'headers': {
-                        'Authorization': 'd1ef53ec05c096936e8e4f970a350ba44ac34dff'
-                    },
-                    body: `{ "body": "${msg}", "recipient": "${phone}" }`
-                };
-                request(options, async function (error, response) {
-                    if (error) throw new Error(error);
-                                 });
-                
+    const contact = await databaseService.findToBaseProfil(login)
+    if (contact.length !== 0) {
+        contact.forEach(el => {
+            const phone = parseFloat(el.phone)
+            var options = {
+                'method': 'POST',
+                'url': 'https://wappi.pro/api/sync/message/send?profile_id=2c69ae90-ce24',
+                'headers': {
+                    'Authorization': 'd1ef53ec05c096936e8e4f970a350ba44ac34dff'
+                },
+                body: `{ "body": "${msg}", "recipient": "${phone}" }`
+            };
+            request(options, async function (error, response) {
+                if (error) throw new Error(error);
             });
-           
 
-        }
-        else {
-            return
-        }
+        });
+
+
+    }
+    else {
+        return
+    }
 }
 
 exports.sendTeleg = (mess) => {

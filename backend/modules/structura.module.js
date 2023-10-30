@@ -2,7 +2,6 @@
 const databaseService = require('../services/database.service');
 
 exports.datas = async (objects, now, old) => {
-
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
@@ -10,7 +9,7 @@ exports.datas = async (objects, now, old) => {
         for (const e of result) {
             const params = await databaseService.tyresViewToBase(e[4])
             const osiBar = await databaseService.barViewToBase(e[4])
-            const ossParams = { osi: osiBar.result, params: params }
+            const ossParams = { osi: osiBar, params: params }
             // const now = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
             // const old = now - 7200
             const dannie = await databaseService.viewChartDataToBase(e[4], old, now)
@@ -156,6 +155,16 @@ exports.datas = async (objects, now, old) => {
                 }
                 return 0;
             });
+            dat2.forEach(e => e.val.sort((a, b) => {
+                if (a.dates > b.dates) {
+                    return 1;
+                }
+                if (a.dates < b.dates) {
+                    return -1;
+                }
+                return 0;
+            })
+            )
             const data = new Date(old * 1000)
             //  console.log(data)
             const year = data.getFullYear();

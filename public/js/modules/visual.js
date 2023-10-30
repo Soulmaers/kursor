@@ -286,6 +286,7 @@ export function view(arg) {
     })
 }
 export async function viewConfigurator(arg, params, osi) {
+    console.log(arg, params, osi)
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelector('.color')
     const allobj = await ggg(active.id)

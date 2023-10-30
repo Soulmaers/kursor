@@ -98,8 +98,9 @@ const viewProfil = async (login) => {
     }
     const vals = await fetch('/api/findProfil', param)
     const val = await vals.json()
+    console.log(val)
     const bodySet = document.querySelector('.body_set')
-    val.result.forEach(el => {
+    val.forEach(el => {
         const newList = document.createElement('li');
         newList.classList.add('item_contact_set');
         newList.setAttribute('id', el.uniqId);

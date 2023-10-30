@@ -1,5 +1,5 @@
 
-const connection = require('../config/db')
+const { connection, sql } = require('../config/db')
 const databaseService = require('./database.service');
 const wialonService = require('./wialon.service.js')
 const helpers = require('../helpers.js')
@@ -26,50 +26,40 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
         el.push(time)
     })
     try {
-        const selectBase = `SELECT name FROM params WHERE idw='${idw}'`
-        connection.query(selectBase, function (err, results) {
-            if (err) console.log(err);
-            if (results.length === 0) {
-                const sql = `INSERT INTO params(idw, nameCar, name, value, status, time) VALUES?`;
-                connection.query(sql, [param], function (err, results) {
-                    if (err) console.log(err);
-                });
+
+        const selectBase = `SELECT name FROM params WHERE idw='${String(idw)}'`
+        const pool = await connection;
+        let result = await pool.request().query(selectBase);
+        if (result.recordset.length === 0) {
+            const sql = `INSERT INTO params(idw, nameCar, name, value, status, time) VALUES ?`;
+            const pool = await connection;
+            await pool.request().query(sql, [param]);
+        }
+        else if (result.recordset.length > 0) {
+            const mas = [];
+            result.recordset.forEach(el => mas.push(el.name));
+            const paramName = [];
+            param.forEach(el => paramName.push(el[2]));
+            for (let el of param) {
+                if (mas.includes(el[2])) {
+                    const sql = `UPDATE params SET idw='${String(idw)}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='true',time='${el[5]}'  WHERE idw='${String(idw)}' AND name='${el[2]}'`;
+                    const pool = await connection;
+                    await pool.request().query(sql);
+                } else if (!mas.includes(el[2])) {
+                    const sql = `INSERT INTO params SET idw='${String(idw)}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='new',time='${el[5]}'`;
+                    const pool = await connection;
+                    await pool.request().query(sql);
+
+                }
             }
-            else if (results.length > 0) {
-                const mas = []
-                results.forEach(el => {
-                    mas.push(el.name)
-                });
-                const paramName = [];
-                param.forEach(el => {
-                    paramName.push(el[2])
-                })
-                param.forEach(el => {
-                    if (mas.includes(el[2])) {
-                        const sql = `UPDATE params SET idw='${idw}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='true',time='${el[5]}'  WHERE idw='${idw}' AND name='${el[2]}'`;
-                        connection.query(sql, function (err, results) {
-                            if (err) console.log(err);
-                        });
-                        return
-                    }
-                    if (!mas.includes(el[2])) {
-                        const sql = `INSERT INTO params SET idw='${idw}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='new',time='${el[5]}'`;
-                        connection.query(sql, function (err, results) {
-                            if (err) console.log(err);
-                        });
-                        return
-                    }
-                })
-                mas.forEach(el => {
-                    if (!paramName.includes(el)) {
-                        const sql = `UPDATE params SET  status='false' WHERE idw='${idw}' AND name='${el}'`;
-                        connection.query(sql, function (err, results) {
-                            if (err) console.log(err);
-                        });
-                    }
-                })
+            for (let el of mas) {
+                if (!paramName.includes(el)) {
+                    const sql = `UPDATE params SET  status='false' WHERE idw='${String(idw)}' AND name='${el}'`;
+                    const pool = await connection;
+                    await pool.request().query(sql);
+                }
             }
-        })
+        }
     }
     catch (e) {
         console.log(e)
@@ -77,14 +67,27 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
 };
 
 exports.saveChartDataToBase = async (mass) => {
-    //console.log(mass);
-    try {
-        const sql = `INSERT INTO chartData(idw, nameCar, data,time, speed,sats, geo, curse, sens, allSensParams) VALUES ?`;
-        connection.query(sql, [mass], function (err, results) {
-            if (err) console.log(err);
-        });
-    } catch (e) {
-        console.log(e);
+
+    const sqls = `INSERT INTO chartData(idw, nameCar, data, time, speed, sats, geo, curse, sens, allSensParams) VALUES (@idw, @nameCar, @data, @time, @speed, @sats, @geo, @curse, @sens, @allSensParams)`;
+    const pool = await connection;
+    for (let i = 0; i < mass.length; i++) {
+        try {
+            await pool.request()
+                .input('idw', sql.NVarChar, mass[i][0])
+                .input('nameCar', sql.NVarChar, mass[i][1])
+                .input('data', sql.NVarChar, mass[i][2])
+                .input('time', sql.NVarChar, (mass[i][3]))
+                .input('speed', sql.NVarChar, mass[i][4])
+                .input('sats', sql.NVarChar, mass[i][5])
+                .input('geo', sql.NVarChar, mass[i][6])
+                .input('curse', sql.NVarChar, mass[i][7])
+                .input('sens', sql.NVarChar, mass[i][8])
+                .input('allSensParams', sql.NVarChar, mass[i][9])
+                .query(sqls);
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 };
 
@@ -94,151 +97,166 @@ exports.saveStructuraToBase = async (mass) => {
     const info = mass[2]
     console.log('структура')
     try {
-        const postModel = `SELECT info FROM structura WHERE data = ? AND idw = ?`;
-        connection.query(postModel, [data, idw], function (err, results) {
-            if (err) console.log(err);
-            if (results.length === 0) {
-                const sql = `INSERT INTO structura (data, idw, info) VALUES ?`;
-                connection.query(sql, [[mass]], function (err, results) {
-                    if (err) console.log(err);
-                    console.log('запись сделана')
-                });
-            }
-            else {
-                const postModel = `UPDATE structura  SET data='${data}',idw='${idw}',info='${info}' WHERE data = ? AND idw = ?`
-                connection.query(postModel, [data, idw], function (err, results) {
-                    if (err) {
-                        console.log(err)
-
-                    }
-                    console.log('апдейт')
-                })
-            }
-        });
+        const postModel = `SELECT info FROM structura WHERE data = @data AND idw = @idw`;
+        const pool = await connection;
+        const results = await pool.request().input('data', data).input('idw', idw).query(postModel);
+        if (results.recordset.length === 0) {
+            const sql = `INSERT INTO structura (data, idw, info) VALUES (@data, @idw, @info)`;
+            await pool.request().input('data', data).input('idw', idw).input('info', info).query(sql);
+            console.log('запись сделана')
+        }
+        else {
+            const postModel = `UPDATE structura  SET data=@data,idw=@idw,info=@info WHERE data = @data AND idw = @idw`
+            await pool.request().input('data', data).input('idw', idw).input('info', info).query(postModel);
+            console.log('апдейт')
+        }
     } catch (e) {
         console.log(e);
     }
 };
 exports.eventSaveToBase = async (login, obj) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = `SELECT login FROM eventSpam WHERE login='${login}'`;
-            connection.query(postModel, function (err, results) {
-                if (err) console.log(err);
-                if (results.length === 0) {
-                    const sql = `INSERT INTO eventSpam (login, email, alert, what, teleg,  sms) VALUES ('${login}',
-                 '${obj.email}','${obj.alert}', '${obj.what}', '${obj.teleg}', '${obj.sms}')`;
-                    connection.query(sql, function (err, results) {
-                        if (err) console.log(err);
-                        resolve('запись сделана');
-                    });
-                }
-                else {
-                    const postModel = `UPDATE eventSpam SET login='${login}',email='${obj.email}',alert='${obj.alert}', what='${obj.what}',
-                teleg='${obj.teleg}', sms='${obj.sms}' WHERE login = ?`
-                    connection.query(postModel, [login], function (err, results) {
-                        if (err) {
-                            console.log(err)
-
-                        }
-                        resolve('апдейт')
-                    })
-                }
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    })
-};
-
-exports.saveListToBase = async (obj) => {
+    const pool = await connection;
 
     try {
-        const { login, statusnew, ingine, oil, type, pwr, sats, meliage, condition, tagach, pricep, lasttime } = obj;
-        const postModel = `SELECT login FROM list WHERE login='${login}'`;
-        connection.query(postModel, function (err, results) {
-            if (err) console.log(err);
-            if (results.length === 0) {
-                const sql = `INSERT INTO list (login, tagach, pricep,\`condition\`, statusnew,  oil, ingine,sats, meliage,pwr,type, lasttime) VALUES ('${login}',
-                 '${tagach}','${pricep}', '${condition}', '${statusnew}', '${oil}', '${ingine}', '${sats}', '${meliage}', '${pwr}', '${type}', '${lasttime}')`;
-                connection.query(sql, function (err, results) {
-                    if (err) console.log(err);
-                    console.log('запись сделана');
-                });
-            }
-            else {
-                const postModel = `UPDATE list SET login='${login}',tagach='${tagach}',pricep='${pricep}',\`condition\`='${condition}', statusnew='${statusnew}',
-                oil='${oil}', ingine='${ingine}',sats='${sats}',meliage='${meliage}',pwr='${pwr}',type='${type}',lasttime='${lasttime}' WHERE login = ?`
-                connection.query(postModel, [login], function (err, results) {
-                    if (err) {
-                        console.log(err)
+        const postModel = `SELECT login FROM eventSpam WHERE login=@login`;
+        const results = await pool.request().input('login', login).query(postModel)
 
-                    }
-                    console.log('апдейт')
-                })
-            }
-        });
+        if (results.recordset.length === 0) {
+            const sqls = `INSERT INTO eventSpam (login, email, alert, what, teleg,  sms) VALUES (@login,
+                 @email, @alert,@what,@teleg,@sms')`;
+            const results = await pool.request()
+                .input('login', login)
+                .input('email', obj.email)
+                .input('alert', obj.alert)
+                .input('what', obj.what)
+                .input('teleg', obj.teleg)
+                .input('sms', obj.sms)
+                .query(sqls)
+            return 'Запись сделана'
+        }
+        else {
+            const postModel = `UPDATE eventSpam SET login=@login,email=@email,alert=@alert, what=@what,
+                teleg=@teleg, sms=@sms WHERE login =@login`
+            const results = await pool.request()
+                .input('login', login)
+                .input('email', obj.email)
+                .input('alert', obj.alert)
+                .input('what', obj.what)
+                .input('teleg', obj.teleg)
+                .input('sms', obj.sms)
+                .query(postModel)
+            return 'Update'
+        }
+
+    } catch (e) {
+        console.log(e);
+    }
+
+};
+exports.saveListToBase = async (obj) => {
+    try {
+        const { login, statusnew, ingine, oil, type, pwr, sats, meliage, condition, tagach, pricep, lasttime } = obj;
+        const pool = await connection;
+        const results = await pool.request()
+            .input('login', sql.NVarChar, login)
+            .query(`SELECT login FROM list WHERE login=@login`);
+        if (results.recordset.length === 0) {
+            await pool.request()
+                .input('login', sql.NVarChar, login)
+                .input('tagach', sql.NVarChar, tagach)
+                .input('pricep', sql.NVarChar, pricep)
+                .input('condition', sql.NVarChar, condition)
+                .input('statusnew', sql.NVarChar, statusnew)
+                .input('oil', sql.NVarChar, oil)
+                .input('ingine', sql.NVarChar, ingine)
+                .input('sats', sql.NVarChar, sats)
+                .input('meliage', sql.NVarChar, meliage)
+                .input('pwr', sql.NVarChar, pwr)
+                .input('type', sql.NVarChar, type)
+                .input('lasttime', sql.NVarChar, lasttime)
+                .query(`INSERT INTO list (login, tagach, pricep, condition, statusnew, oil, ingine, sats, meliage, pwr, type, lasttime)
+                            VALUES (@login, @tagach, @pricep, @condition, @statusnew, @oil, @ingine, @sats, @meliage, @pwr, @type, @lasttime)`);
+            console.log('запись сделана');
+        }
+        else {
+            await pool.request()
+                .input('login', sql.NVarChar, login)
+                .input('tagach', sql.NVarChar, tagach)
+                .input('pricep', sql.NVarChar, pricep)
+                .input('condition', sql.NVarChar, condition)
+                .input('statusnew', sql.NVarChar, statusnew)
+                .input('oil', sql.NVarChar, oil)
+                .input('ingine', sql.NVarChar, ingine)
+                .input('sats', sql.NVarChar, sats)
+                .input('meliage', sql.NVarChar, meliage)
+                .input('pwr', sql.NVarChar, pwr)
+                .input('type', sql.NVarChar, type)
+                .input('lasttime', sql.NVarChar, lasttime)
+                .query(`UPDATE list SET tagach=@tagach, pricep=@pricep, condition=@condition, statusnew=@statusnew, oil=@oil, ingine=@ingine, sats=@sats, meliage=@meliage, pwr=@pwr, type=@type, lasttime=@lasttime
+                            WHERE login = @login`);
+            console.log('апдейт');
+        }
     } catch (e) {
         console.log(e);
     }
 };
 
 exports.viewListToBase = async (login) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = `SELECT * FROM list WHERE login=?`;
-            connection.query(postModel, [login], function (err, results) { // Массив с параметрами для подстановки
-                if (err) console.log(err);
-                resolve(results);
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    })
+    try {
+        const pool = await connection;
+        const postModel = `SELECT * FROM list WHERE login = @login`;
+        const result = await pool.request()
+            .input('login', login)
+            .query(postModel)
+        return result.recordset;
+
+    } catch (e) {
+        console.log(e);
+    }
 }
 exports.eventFindToBase = async (login) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = `SELECT * FROM eventSpam WHERE login=?`;
-            connection.query(postModel, [login], function (err, results) { // Массив с параметрами для подстановки
-                if (err) console.log(err);
-                resolve(results);
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    })
-}
+    try {
+        const pool = await connection;
+        const postModel = `SELECT * FROM eventSpam WHERE login =@login`;
+        const result = await pool.request()
+            .input('login', login)
+            .query(postModel)
+        return result.recordset;
+
+    } catch (e) {
+        console.log(e);
+    }
+};
 
 exports.viewStructuraToBase = async (idw, t1, t2) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = "SELECT * FROM structura WHERE idw=? AND data >= ? AND data <= ?";
-            connection.query(postModel, [idw, t1, t2], function (err, results) { // Массив с параметрами для подстановки
-                if (err) console.log(err);
-                resolve(results);
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    });
+    try {
+        const pool = await connection
+        const postModel = "SELECT * FROM structura WHERE idw=@idw AND data >= @t1 AND data <= @t2";
+
+        const results = await pool.request()
+            .input('idw', idw)
+            .input('t1', t1[0])
+            .input('t2', t2[0])
+            .query(postModel)
+        return results.recordset
+    } catch (e) {
+        console.log(e);
+    }
+
 };
 
 
 exports.viewChartDataToBase = async (idw, t1, t2) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = `SELECT * FROM chartData WHERE idw='${idw}' AND data >= ${t1} AND data <= ${t2}`;
-            connection.query(postModel, function (err, results) {
-                if (err) console.log(err);
-                //    const filteredResults = results.filter((_, index) => index % 10 === 1);
-                resolve(results);
-            });
-        }
-        catch (e) {
-            console.log(e);
-        }
-    });
+    const postModel = `SELECT * FROM chartData WHERE idw='${idw}' AND data >= '${t1}' AND data <= '${t2}'`;
+
+    try {
+        const pool = await connection
+        const results = await pool.query(postModel);
+        return results.recordset;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
 };
 
 exports.viewChartDataToBaseGeo = async (arrayId, t1, t2) => {
@@ -259,66 +277,58 @@ exports.viewChartDataToBaseGeo = async (arrayId, t1, t2) => {
     });
 };
 
-
-
-
 exports.lostChartDataToBase = async () => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = `SELECT data FROM chartData ORDER BY data DESC LIMIT 1`
-            connection.query(postModel, function (err, results) {
-                if (err) console.log(err);
-                resolve(results)
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    })
+    try {
+        const postModel = `SELECT TOP (1) data FROM chartData ORDER BY data DESC`
+        const pool = await connection;
+        const results = await pool.request().query(postModel);
+        return results.recordset;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
 };
 
-
-
-
 exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, status) => {
-    if (status !== undefined) {
-        const mass = [idw, activePost, todays, statusTSI, todays2, status]
-        try {
-            const postModel = `SELECT * FROM statusObj WHERE idw='${idw}'`
-            connection.query(postModel, function (err, results) {
-                if (err) console.log(err);
-                if (results.length === 0) {
-                    const selectBase = `INSERT INTO statusObj(idw, nameCar, time, status, timeIng, statusIng) VALUES?`
-                    connection.query(selectBase, [[mass]], function (err, results) {
-                        if (err) {
-                            console.log(err)
-                        };
-                    })
-                }
-                else {
-                    if (results[0].status !== statusTSI) {
-                        const postModel = `UPDATE statusObj SET time='${todays}',status='${statusTSI}' WHERE idw='${idw}'`
-                        connection.query(postModel, function (err, results) {
-                            if (err) {
-                                console.log(err)
-                            }
-                        })
-                    }
-                    if (results[0].statusIng !== status) {
-                        const postModel = `UPDATE statusObj SET timeIng='${todays2}',statusIng='${status}' WHERE idw='${idw}'`
-                        connection.query(postModel, function (err, results) {
-                            if (err) {
-                                console.log(err)
-                            }
-                        })
-                    }
-                }
-            })
+    if (!status) return; // Exit early if status is undefined
+    //  console.log(String(todays2))
+    const mass = [String(idw), activePost, todays, statusTSI, todays2, status];
+
+    try {
+        let postModel = `SELECT * FROM statusObj WHERE idw=@idw`;
+        const pool = await connection;
+        let results = await pool.request().input('idw', sql.NVarChar, String(idw)).query(postModel);
+        if (results.recordset.length === 0) {
+            const selectBase = `INSERT INTO statusObj(idw, nameCar, time, status, timeIng, statusIng) VALUES (@mass)`;
+            await pool.request().input('mass', sql.NVarChar, mass.join(', ')).query(selectBase);
         }
-        catch (e) {
-            console.log(e)
+
+        else {
+            if (results.recordset[0].status !== statusTSI) {
+                postModel = `UPDATE statusObj SET time=@todays, status=@statusTSI WHERE idw=@idw`;
+                await pool.request()
+                    .input('todays', sql.NVarChar, String(todays))
+                    .input('statusTSI', sql.NVarChar, statusTSI)
+                    .input('idw', sql.VarChar, String(idw))
+                    .query(postModel);
+            }
+
+            if (results.recordset[0].statusIng !== status) {
+                postModel = `UPDATE statusObj SET timeIng=@todays2, statusIng=@status WHERE idw=@idw`;
+                await pool.request()
+                    .input('todays2', sql.NVarChar, String(todays2))
+                    .input('status', sql.NVarChar, status)
+                    .input('idw', sql.VarChar, String(idw))
+                    .query(postModel);
+
+            }
         }
     }
-}
+    catch (e) {
+        console.log(e);
+        throw e; // To let the error be seen outside the function
+    }
+};
 
 
 
@@ -382,7 +392,6 @@ exports.alarmBase = async (data, tyres, alarm) => {
     dannie.push(alarm)
     dannie.unshift(nowDate)
     dannie.unshift(id)
-    console.log(dannie)
     const value = [dannie];
     try {
         const selectBase = `SELECT idw, data, name, senspressure, bar, temp ,alarm 
@@ -394,20 +403,27 @@ exports.alarmBase = async (data, tyres, alarm) => {
                           bar='${dannie[4]}' AND
                           temp='${dannie[5]}' AND
                           alarm='${dannie[6]}'`
-        connection.query(selectBase, async function (err, results) {
-            console.log(err)
-            if (results.length !== 0) {
-                null
-            }
-            else {
-                const sqls = `INSERT INTO alarms (idw, unix, data, name, senspressure, bar,
-                            temp, geo, alarm) VALUES?`;
-                connection.query(sqls, [value], function (err, results) {
-                    if (err) console.log(err);
-
-                });
-            }
-        })
+        const pool = await connection;
+        let result = await pool.request().query(selectBase);
+        if (result.recordset.length !== 0) {
+            null
+        }
+        else {
+            const sqls = `INSERT INTO alarms (idw, unix, data, name, senspressure, bar, temp, geo, alarm) 
+    VALUES (@idw, @unix, @data, @name, @senspressure, @bar, @temp, @geo, @alarm)`;
+            const pool = await connection;
+            await pool.request()
+                .input('idw', sql.NVarChar, String(dannie[0]))
+                .input('unix', sql.NVarChar, String(dannie[1]))
+                .input('data', sql.NVarChar, dannie[2])
+                .input('name', sql.NVarChar, dannie[3])
+                .input('senspressure', sql.NVarChar, dannie[4])
+                .input('bar', sql.NVarChar, String(dannie[5]))
+                .input('temp', sql.NVarChar, String(dannie[6]))
+                .input('geo', sql.NVarChar, dannie[7])
+                .input('alarm', sql.NVarChar, dannie[8])
+                .query(sqls);
+        }
     }
     catch (e) {
         console.log(e)
@@ -417,66 +433,55 @@ exports.alarmBase = async (data, tyres, alarm) => {
 
 exports.loadParamsViewList = async (car, el) => {
     const idw = el
-    const mod = () => {
-        return new Promise((resolve, reject) => {
-            try {
-                const selectBase = `SELECT osi, trailer,tyres, type, tsiControll FROM model WHERE idw='${idw}'`
-                connection.query(selectBase, async function (err, results) {
-                    if (err) console.log(err)
-                    resolve({ result: results, message: car })
-                })
-            }
-            catch (e) {
-                console.log(e)
-            }
-        })
+    const pool = await connection;
+
+    const mod = async () => {
+        try {
+            const selectBase = `SELECT osi, trailer, tyres, type, tsiControll FROM model WHERE idw='${idw}'`
+            const result = await pool.query(selectBase)
+            return { result: result.recordset, message: car }
+        }
+        catch (e) {
+            console.log(e)
+        }
     }
-    const tyr = () => {
-        return new Promise((resolve, reject) => {
-            try {
-                const selectBase = `SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE idw='${idw}'`
-                connection.query(selectBase, function (err, results) {
-                    if (err) console.log(err)
-                    if (results === undefined) {
-                        resolve('')
-                    }
-                    else {
-                        resolve({ result: results, message: car })
-                    }
-                })
+
+    const tyr = async () => {
+        try {
+            const selectBase = `SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE idw='${idw}'`
+            const result = await pool.query(selectBase)
+            if (result.recordset === undefined) {
+                return ''
             }
-            catch (e) {
-                console.log(e)
+            else {
+                return { result: result.recordset, message: car }
             }
-        })
+        }
+        catch (e) {
+            console.log(e)
+        }
     }
-    const dat = () => {
-        return new Promise((resolve, reject) => {
-            try {
-                const selectBase = `SELECT name, value, status FROM params WHERE idw='${idw}'`
-                connection.query(selectBase, function (err, results) {
-                    if (err) console.log(err);
-                    resolve({ result: results, message: car })
-                })
-            }
-            catch (e) {
-                console.log(e)
-            }
-        })
+
+    const dat = async () => {
+        try {
+            const selectBase = `SELECT name, value, status FROM params WHERE idw='${idw}'`
+            const result = await pool.query(selectBase)
+            return { result: result.recordset, message: car }
+        }
+        catch (e) {
+            console.log(e)
+        }
     }
-    const osis = () => {
-        return new Promise((resolve, reject) => {
-            try {
-                const selectBase = `SELECT * FROM ifBar WHERE idw='${idw}'`
-                connection.query(selectBase, function (err, results) {
-                    if (err) console.log(err)
-                    resolve({ result: results, message: car })
-                })
-            }
-            catch (e) {
-                console.log(e)
-            }
-        })
+
+    const osis = async () => {
+        try {
+            const selectBase = `SELECT * FROM ifBar WHERE idw='${idw}'`
+            const result = await pool.query(selectBase)
+            return { result: result.recordset, message: car }
+        }
+        catch (e) {
+            console.log(e)
+        }
     }
     const model = await mod();
     const models = await tyr();
@@ -491,68 +496,57 @@ exports.loadParamsViewList = async (car, el) => {
             return 0;
         }
     });
-    return [model, models, data, osi, el,]
+    return [model, models, data, osi, el]
 }
 
 
 exports.dostupObject = async (login) => {
-    return new Promise((resolve, reject) => {
-        try {
-            if (isNaN(login)) {
-                const selectBase = `SELECT idw FROM userObjects WHERE login='${login}'`
-                connection.query(selectBase, function (err, results) {
-                    if (err) console.log(err);
-                    // console.log(results)
-                    const nameCarCheck = results.map(elem => elem.idw)
-                    resolve(nameCarCheck)
-                })
-            }
-            else {
-                const selectBase = `SELECT login FROM userObjects WHERE idw='${login}'`
-                connection.query(selectBase, function (err, results) {
-                    if (err) console.log(err);
-                    const nameCarCheck = results.map(elem => elem.login)
-                    resolve(nameCarCheck)
-                })
-            }
+    try {
+        const pool = await connection;
+        if (isNaN(login)) {
+            const selectBase = `SELECT idw FROM userObjects WHERE login='${login}'`
+            const results = await pool.query(selectBase)
+            const nameCarCheck = results.recordset.map(elem => elem.idw)
+            return nameCarCheck
+        } else {
+            const selectBase = `SELECT login FROM userObjects WHERE idw='${login}'`
+            const results = await pool.query(selectBase)
+            const nameCarCheck = results.recordset.map(elem => elem.login)
+            return nameCarCheck
         }
-        catch (e) {
-            console.log(e)
-        }
-    })
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
 
 
 
 //забираем из бд параметры по id
 exports.paramsToBase = async (idw) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT nameCar, name, value, status, time FROM params WHERE idw='${idw}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) console.log(err);
-                resolve(results)
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
+    try {
+        const pool = await connection
+        const selectBase = `SELECT nameCar, name, value, status, time FROM params WHERE idw=@idw`
+        const result = await pool.request().input('idw', idw).query(selectBase)
+        return result.recordset
+    }
+    catch (e) {
+        console.log(e)
+    }
+
 }
 
 exports.iconFindtoBase = async (idw) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = `SELECT params, coef, icons FROM icon WHERE idw='${idw}'`
-            connection.query(postModel, function (err, results) {
-                if (err) console.log(err)
-                resolve(results)
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
+    try {
+        const pool = await connection
+        const postModel = `SELECT params, coef, icons FROM icon WHERE idw=@idw`
+        const result = await pool.request().input('idw', idw).query(postModel)
+        return result.recordset
+    }
+    catch (e) {
+        console.log(e)
+    }
+
 }
 
 module.exports.alarmFindtoBase = (idw, array) => {
@@ -576,73 +570,47 @@ module.exports.alarmFindtoBase = (idw, array) => {
     })
 }
 exports.quantityFindToBase = async (login, quantity) => {
-    // console.log('квантити')
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT quantity FROM viewLogs WHERE login='${login}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) {
-                    console.log(err)
-                };
-                resolve(results)
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
+    try {
+        const pool = await connection;
+        const selectBase = `SELECT quantity FROM viewLogs WHERE login='${login}'`
+        const results = await pool.query(selectBase);
+        return results.recordset
+    }
+    catch (e) {
+        console.log(e)
+    }
+
 }
 exports.quantitySaveToBase = async (login, quantity) => {
+    try {
+        const pool = await connection;
+        const selectBase = `SELECT login FROM viewLogs WHERE login='${login}'`;
+        const results = await pool.query(selectBase);
 
-    //   console.log(login, quantity)
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT login FROM viewLogs WHERE login='${login}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) {
-                    console.log(err)
-                };
-                //   console.log(results.length)
-                if (results.length === 0) {
-                    const arr = [[login, 0]]
-                    const selectBase = `INSERT INTO viewLogs(login, quantity) VALUES?`;
-                    connection.query(selectBase, [arr], function (err, results) {
-                        if (err) {
-                            console.log(err)
-                            reject(err)
-                        } else {
-                            resolve({ message: 'quntity добавлено' })
-                        }
-                    })
-                }
-                else {
-                    //  console.log('число' + quantity)
-                    if (quantity !== undefined) {
-                        const postModel = `UPDATE viewLogs SET quantity='${quantity}' WHERE login='${login}'`
-                        connection.query(postModel, function (err, results) {
-                            if (err) {
-                                console.log(err)
-                                reject(err)
-                            } else {
-                                resolve({ message: 'quntity обновлено' })
-                            }
-                        })
-                    }
-                    else {
-                        resolve({ message: 'quntity старое' })
-                    }
-                }
-            })
+        if (results.recordset.length === 0) {
+            const arr = [[login, 0]];
+            const insertQuery = `INSERT INTO viewLogs(login, quantity) VALUES ?`;
+            await pool.query(insertQuery, [arr]);
+            return { message: 'quntity добавлено' };
         }
-        catch (e) {
-            console.log(e)
+
+        if (quantity !== undefined) {
+            const updateModel = `UPDATE viewLogs SET quantity='${quantity}' WHERE login='${login}'`;
+            await pool.query(updateModel);
+            return { message: 'quntity обновлено' };
         }
-    })
+
+        return { message: 'quntity старое' };
+
+    } catch (e) {
+        console.log(e);
+        throw e; // Это прервет выполнение функции и выбросит ошибку наверх.
+    }
 }
 exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll) => {
-    //  console.log(gosp)
-    //   console.log(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll)
-    const promises = massiv.map(el => {
+
+    const pool = await connection;
+    const promises = massiv.map(async el => {
         el.push(gosp)
         el.push(gosp1)
         el.push(frontGosp)
@@ -651,117 +619,113 @@ exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontG
         el.push(tsiControll)
         el.unshift(nameCar)
         el.unshift(idw)
-        return new Promise((resolve, reject) => {
-            try {
-                const selectBase = `SELECT osi FROM model WHERE idw='${el[0]}' AND osi='${el[2]}'`
-                connection.query(selectBase, function (err, results) {
-                    if (err) {
-                        console.log(err)
-                    };
-                    if (results.length === 0) {
-                        const selectBase = `INSERT INTO model(idw, nameCar, osi, trailer, tyres, gosp, gosp1, frontGosp, frontGosp1,type, tsiControll) VALUES?`
-                        connection.query(selectBase, [[el]], function (err, results) {
-                            if (err) {
-                                console.log(err)
-                                reject(err)
-                            } else {
-                                resolve({ message: 'успех' })
-                            }
-                        })
-                    }
-                    if (results.length > 0) {
-                        const postModel = `UPDATE model SET idw='${el[0]}', nameCar='${el[1]}',  osi='${el[2]}', trailer='${el[3]}', tyres='${el[4]}',gosp='${gosp}',gosp1='${gosp1}', frontGosp='${frontGosp}', frontGosp1='${frontGosp1}', type='${type}',tsiControll='${tsiControll}' WHERE idw='${el[0]}' AND osi='${el[2]}'`
-                        connection.query(postModel, function (err, results) {
-                            if (err) {
-                                console.log(err)
-                                reject(err)
-                            } else {
-                                resolve({ message: 'успех' })
-                            }
-                        })
-                    }
-                })
+        try {
+            console.log(massiv)
+            const selectBase = `SELECT osi FROM model WHERE idw='${el[0]}' AND osi='${el[2]}'`
+            const results = await pool.query(selectBase)
+            if (results.recordset.length === 0) {
+                const selectBase = `INSERT INTO model(idw, nameCar, osi, trailer, tyres, gosp, gosp1, frontGosp, frontGosp1,type, tsiControll) VALUES(@idw,@nameCar,@osi,@trailer,@tyres,@gosp,@gosp1,@frontGosp,@frontGosp1,@type,@tsiControll)`
+                const results = await pool.request()
+                    .input('idw', idw)
+                    .input('nameCar', nameCar)
+                    .input('osi', String(massiv[2]))
+                    .input('trailer', massiv[3])
+                    .input('tyres', String(massiv[4]))
+                    .input('gosp', gosp)
+                    .input('gosp1', gosp1)
+                    .input('frontGosp', frontGosp)
+                    .input('frontGosp1', frontGosp1)
+                    .input('type', type)
+                    .input('tsiControll', tsiControll)
+                    .query(selectBase)
+                return { message: 'успех' }
+
             }
-            catch (e) {
-                console.log(e)
-                reject(e)
+            if (results.length > 0) {
+                const postModel = `UPDATE model SET idw='${el[0]}', nameCar='${el[1]}',  osi='${el[2]}', trailer='${el[3]}', tyres='${el[4]}',gosp='${gosp}',gosp1='${gosp1}', frontGosp='${frontGosp}', frontGosp1='${frontGosp1}', type='${type}',tsiControll='${tsiControll}' WHERE idw='${el[0]}' AND osi='${el[2]}'`
+                const results = await pool.request()
+                    .query(postModel)
+                return { message: 'апдейт' }
             }
-        })
+        }
+
+        catch (e) {
+            console.log(e)
+
+        }
     })
 
     return Promise.all(promises)
 }
 
-exports.tyresSaveToBase = (nameCar, tyres, idw) => {
+exports.tyresSaveToBase = async (nameCar, tyres, idw) => {
+    const pool = await connection;
     const promises = tyres.map(el => {
-        el.unshift(nameCar)
-        el.unshift(idw)
+        el.unshift(nameCar);
+        el.unshift(idw);
         return new Promise((resolve, reject) => {
             try {
-                const selectBase = `SELECT tyresdiv FROM tyres WHERE idw='${el[0]}' AND tyresdiv='${el[2]}'`
-                connection.query(selectBase, function (err, results) {
-                    if (err) {
-                        console.log(err)
-                    };
-                    if (results.length === 0) {
-                        const selectBase = `INSERT INTO tyres(idw, nameCar, tyresdiv, pressure,temp, osNumber) VALUES?`
-                        connection.query(selectBase, [[el]], function (err, results) {
-                            if (err) {
-                                console.log(err)
-                            };
-                        })
+                pool.query(
+                    `SELECT tyresdiv FROM tyres WHERE idw='${el[0]}' AND tyresdiv='${el[2]}'`,
+                    (err, results) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                        if (results.length === 0) {
+                            pool.query(
+                                'INSERT INTO tyres(idw, nameCar, tyresdiv, pressure, temp, osNumber) VALUES ?',
+                                [[el]],
+                                (err, results) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                }
+                            );
+                        }
+                        if (results.length > 0) {
+                            pool.query(
+                                `UPDATE tyres SET idw='${el[0]}', nameCar='${el[1]}', tyresdiv='${el[2]}', pressure='${el[3]}', temp='${el[4]}', osNumber='${el[5]}' WHERE idw='${el[0]}' AND tyresdiv='${el[2]}'`,
+                                (err, results) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                }
+                            );
+                        }
                     }
-                    if (results.length > 0) {
-                        const postModel = `UPDATE tyres SET idw='${el[0]}', nameCar='${el[1]}', tyresdiv='${el[2]}', pressure='${el[3]}', temp='${el[4]}', osNumber='${el[5]}' WHERE idw='${el[0]}' AND tyresdiv='${el[2]}'`
-                        connection.query(postModel, function (err, results) {
-                            if (err) {
-                                console.log(err)
-                            }
-                        })
-                    }
-                })
-                resolve({ message: 'Успех' })
-
+                );
+                resolve({ message: 'Успех' });
+            } catch (e) {
+                console.log(e);
             }
-            catch (e) {
-                console.log(e)
-            }
-        })
-    })
-    return Promise.all(promises)
+        });
+    });
+    return Promise.all(promises);
+};
 
+
+exports.deleteModelToBase = async (idw) => {
+    try {
+        const pool = await connection;
+        const postModel = `DELETE FROM model WHERE idw='${idw}'`
+        await pool.query(postModel)
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
 
+exports.deleteTyresToBase = async (idw) => {
 
-exports.deleteModelToBase = (idw) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = `DELETE FROM model WHERE idw='${idw}'`
-            connection.query(postModel, function (err, results) {
-                if (err) console.log(err);
-                resolve(results)
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
+    try {
+        const pool = await connection;
+        const postModel = `DELETE FROM tyres WHERE idw='${idw}'`
+        await pool.query(postModel)
+    }
+    catch (e) {
+        console.log(e)
+    }
 
-    })
-}
-
-exports.deleteTyresToBase = (idw) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = `DELETE FROM tyres WHERE idw='${idw}'`
-            connection.query(postModel, function (err, results) {
-                if (err) console.log(err);
-                resolve(results)
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
 }
 
 
@@ -816,6 +780,7 @@ exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
     const newdata = JSON.stringify(arr)
     const geoLoc = JSON.stringify(geo)
     const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, group, name, start)
+    // console.log(res)
     if (res.message === 'Событие уже существует в базе логов') {
         null
     }
@@ -859,7 +824,8 @@ exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
 }
 
 exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
-    return new Promise((resolve, reject) => {
+    try {
+        const pool = await connection;
         let checkExistQuery;
         if (start) {
             checkExistQuery = `SELECT * FROM logs WHERE litragh='${start}' AND idw='${idw}'`
@@ -868,77 +834,68 @@ exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
             checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'AND idw='${idw}'`
         }
 
-        connection.query(checkExistQuery, function (err, results) {
-            if (err) {
-                console.log(err)
-                reject(err)
-            } else if (results.length > 0) {
-                resolve({ message: 'Событие уже существует в базе логов' })
-            } else {
-                let postModel;
-                if (start) {
-                    postModel = `INSERT INTO logs(idw, time, content, geo, litragh, groups, name) VALUES(${idw}, ${time}, '${arr}','${geo}','${start}','${group}','${name}')`
-                }
-                else {
-                    postModel = `INSERT INTO logs(idw, time, content, geo,groups, name) VALUES(${idw}, ${time}, '${arr}','${geo}','${group}','${name}')`
-                }
+        const checkResults = await pool.request().query(checkExistQuery);
 
-                connection.query(postModel, function (err, results) {
-                    if (err) {
-                        console.log(err)
-                        reject(err)
-                    } else {
-                        resolve({ message: 'Событие сохранено в базу логов' })
-                    }
-                })
+        if (checkResults.recordset.length > 0) {
+            return { message: 'Событие уже существует в базе логов' };
+        } else {
+            let postModel;
+            if (start) {
+                postModel = `INSERT INTO logs(idw, time, content, geo, litragh, groups, name) VALUES(${idw}, ${time}, '${arr}','${geo}','${start}','${group}','${name}')`
             }
-        })
-    })
+            else {
+                postModel = `INSERT INTO logs(idw, time, content, geo,groups, name) VALUES(${idw}, ${time}, '${arr}','${geo}','${group}','${name}')`
+            }
+
+            await pool.request().query(postModel);
+            return { message: 'Событие сохранено в базу логов' };
+        }
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
 }
 
 
 
 exports.logsFindToBase = async (id) => {
     if (id.length !== 0) {
-        return new Promise((resolve, reject) => {
-            const postModel = `SELECT * FROM logs WHERE idw IN (${id.join(',')})`;
-            connection.query(postModel, function (err, results) {
-                if (err)
-                    reject(err); // передаём ошибку в reject
-                resolve(results);
-            })
-        })
-
+        const postModel = `SELECT * FROM logs WHERE idw IN (${id.join(',')})`;
+        try {
+            const pool = await connection
+            const result = await pool.query(postModel);
+            return result.recordset;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
     }
-
 }
 exports.logsFindToBaseId = async (t1, t2, idw) => {
     if (idw.length !== 0) {
-        return new Promise((resolve, reject) => {
-            const postModel = `SELECT * FROM logs WHERE time >= ${t2.toString()} AND time <= ${t1.toString()} AND idw=${idw}`;
-            connection.query(postModel, function (err, results) {
-                if (err)
-                    reject(err); // передаём ошибку в reject
-                resolve(results);
-            })
-        })
-
+        const postModel = `SELECT * FROM logs WHERE time >= ${t2.toString()} AND time <= ${t1.toString()} AND idw=${String(idw)}`;
+        try {
+            const pool = await connection
+            const result = await pool.query(postModel);
+            return result.recordset
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
     }
-
 }
 exports.alarmFindToBaseId = async (t1, t2, idw) => {
     if (idw.length !== 0) {
-        return new Promise((resolve, reject) => {
-            const postModel = `SELECT data, alarm, bar, senspressure, geo FROM alarms WHERE unix >= ${t2} AND unix <= ${t1} AND idw=${idw}`;
-            connection.query(postModel, function (err, results) {
-                if (err)
-                    reject(err); // передаём ошибку в reject
-                resolve(results);
-            })
-        })
-
+        const postModel = `SELECT data, alarm, bar, senspressure, geo FROM alarms WHERE unix >= ${t2} AND unix <= ${t1} AND idw=${String(idw)}`;
+        try {
+            const pool = await connection
+            const result = await pool.query(postModel);
+            return result.recordset;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
     }
-
 }
 
 
@@ -977,258 +934,205 @@ exports.tarirSaveToBase = async (arr) => {
 }
 
 module.exports.saveToBaseProfil = async (mass) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = `INSERT INTO profil (uniqId, login, role, email, phone) VALUES (?)`;
-            connection.query(postModel, [mass], function (err, results) {
-                if (err) console.log(err);
-                resolve({ result: results });
-            });
-        }
-        catch (e) {
-            console.log(e);
-        }
-    });
-}
+    try {
+        const pool = await connection;
+        const postModel = `INSERT INTO profil (uniqId, login, role, email, phone) VALUES (@uniqId,@login,@role,@email,@phone)`;
+        const results = await pool.request()
+            .input('uniqId', mass[0])
+            .input('login', mass[1])
+            .input('role', mass[2])
+            .input('email', mass[3])
+            .input('phone', mass[4])
+            .query(postModel);
+        return { result: results };
+    } catch (err) {
+        console.log(err);
+    }
+};
 module.exports.deleteToBaseProfil = async (uniqId) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `DELETE FROM profil WHERE uniqId = '${uniqId}'`;
-            connection.query(selectBase, function (err, results) {
-                resolve({ status: 200, result: results, message: `Пользователь удален` })
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    });
+    const pool = await connection;
+    try {
+        const selectBase = `DELETE FROM profil WHERE uniqId =@uniqId`;
+        const results = await pool.request().input('uniqId', uniqId).query(selectBase);
+        return ({ status: 200, result: results.recordset, message: `Пользователь удален` })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
 }
 
 
 module.exports.findToBaseProfil = async (login) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = `SELECT * FROM profil WHERE login='${login}'`
-            connection.query(postModel, function (err, results) {
-                if (err) console.log(err);
-                resolve({ result: results })
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
+    try {
+        const postModel = `SELECT * FROM profil WHERE login='${login}'`
+        const pool = await connection
+        const results = await pool.request().query(postModel)
+        return results.recordset
+
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
 
 
 
 
 module.exports.tarirViewToBase = async (idw) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const postModel = `SELECT * FROM tarir WHERE idx='${idw}'`
-            connection.query(postModel, function (err, results) {
-                if (err) console.log(err);
-                resolve({ result: results })
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
+    try {
+        const pool = await connection;
+        const postModel = `SELECT * FROM tarir WHERE idx=@idw`
+        const results = await pool.request().input('idw', idw).query(postModel)
+        return results.recordset
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
 
 
-exports.modelViewToBase = (idw) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT idw, nameCar, osi, trailer,tyres, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll FROM model WHERE  idw ='${idw}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) console.log(err)
-                if (results === undefined) {
-                    resolve(results)
-                }
-                else {
-                    resolve(results)
-                }
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
+exports.modelViewToBase = async (idw) => {
+    try {
+        const selectBase = `SELECT idw, nameCar, osi, trailer,tyres, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll FROM model WHERE  idw = @idw`;
+        const pool = await connection;
+        const results = await pool.request().input('idw', sql.VarChar, String(idw)).query(selectBase)
+        return results.recordset;
+    }
+    catch (err) {
+        console.error(err);
+        throw err; // Чтобы ошибка была видна извне функции
+    }
 }
 
-module.exports.tyresViewToBase = (idw) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT tyresdiv, pressure,temp, osNumber FROM tyres WHERE idw='${idw}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) console.log(err)
-                if (results === undefined) {
-                    resolve(results)
-                }
-                else {
-                    resolve(results)
-                }
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
-}
+exports.tyresViewToBase = async (idw) => {
+    try {
+        const selectBase = `SELECT tyresdiv, pressure,temp, osNumber FROM tyres WHERE idw=@idw`;
+        const pool = await connection;
+        const results = await pool.request().input('idw', sql.Int, idw).query(selectBase);
+        return results.recordset;
+    } catch (err) {
+        console.error(err);
+        throw err; // Чтобы ошибка была видна извне функции
+    }
+};
 
-
-exports.barViewToBase = (idw, count) => {
-    return new Promise((resolve, reject) => {
+exports.barViewToBase = async (idw, count) => {
+    try {
+        const pool = await connection;
+        let selectBase;
         if (count) {
-            try {
-                const selectBase = `SELECT * FROM ifBar WHERE  idw='${idw}' AND idOs='${count}'`
-                connection.query(selectBase, function (err, results) {
-                    if (err) console.log(err)
-                    resolve({ result: results })
-                })
-            }
-            catch (e) {
-                console.log(e)
-            }
+            selectBase = `SELECT * FROM ifBar WHERE  idw = @idw AND idOs = @count`
+            const results = await pool.request().input('idw', sql.Int, idw).input('count', sql.Int, count).query(selectBase);
+            return results.recordset;
         }
         else {
-            try {
-                const selectBase = `SELECT * FROM ifBar WHERE  idw='${idw}'`
-                connection.query(selectBase, function (err, results) {
-                    if (err) console.log(err)
-                    resolve({ result: results })
-                })
-            }
-            catch (e) {
-                console.log(e)
-            }
+            selectBase = `SELECT * FROM ifBar WHERE  idw = @idw`
+            const results = await pool.request().input('idw', sql.Int, idw).query(selectBase);
+            return results.recordset;
         }
-    })
+    }
+    catch (err) {
+        console.error(err);
+        throw err; // Чтобы ошибка была видна извне функции
+    }
 }
 
-module.exports.iconSaveToBase = (activePost, param, coef, id, idw) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT icons FROM icon WHERE idw='${idw}' AND icons='${id}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) console.log(err);
-                if (results.length === 0) {
-                    const postModel = `INSERT INTO icon(idw, nameCar, params, coef, icons) VALUES('${idw}', '${activePost}','${param}','${coef}','${id}')`
-                    connection.query(postModel, function (err, results) {
-                        if (err) console.log(err + 'ошибка26')
-                        resolve(results)
-                    })
-                }
-                else {
-                    const sql = `UPDATE icon SET  idw='${idw}', nameCar='${activePost}', params='${param}', coef='${coef}', icons='${id}'WHERE  idw='${idw}' AND icons='${id}'`;
-                    connection.query(sql, function (err, results) {
-                        if (err) console.log(err)
-                        else resolve(results)
-                    });
-                }
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
-}
+exports.iconSaveToBase = async (activePost, param, coef, id, idw) => {
+    try {
+        const selectBase = `SELECT icons FROM icon WHERE idw=@idw AND icons=@icons`;
+        const pool = await connection;
+        let results = await pool.request()
+            .input('idw', sql.Int, idw)
+            .input('icons', sql.VarChar, id)
+            .query(selectBase);
 
-
-module.exports.saveTechToBase = async (value, add) => {
-    return new Promise((resolve, reject) => {
-        if (add) {
-            try {
-                console.log('дата есть')
-                const sql = `INSERT INTO  tyresBase(idw, dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka,
-            model,
-            psi,
-            changeBar,
-            probegNow,
-            dateInstall,
-            probegPass,
-            dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`;
-                connection.query(sql, [value], function (err, results) {
-                    if (err) console.log(err);
-                    resolve('Данные добавлены')
-                });
-            }
-            catch (e) {
-                console.log(e)
-            }
+        if (results.recordset.length === 0) {
+            const postModel = `INSERT INTO icon(idw, nameCar, params, coef, icons) 
+                               VALUES(@idw, @activePost, @param, @coef, @icons)`;
+            results = await pool.request()
+                .input('idw', sql.Int, idw)
+                .input('activePost', sql.VarChar, activePost)
+                .input('param', sql.VarChar, param)
+                .input('coef', sql.VarChar, coef)
+                .input('icons', sql.VarChar, id)
+                .query(postModel);
         }
         else {
-            try {
-                console.log('даты нет')
-                const sql = `INSERT INTO  tyresBase(idw, identificator, nameCar, typeOs, numberOs, idTyres, marka,
-            model,
-            psi,
-            changeBar,
-            probegNow,
-            dateInstall,
-            probegPass,
-            dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`;
-                connection.query(sql, [value], function (err, results) {
-                    if (err) console.log(err);
-                    resolve('Данные добавлены')
-                });
-            }
-            catch (e) {
-                console.log(e)
-            }
+            const sqlUpdate = `UPDATE icon SET  idw=@idw, nameCar=@activePost, params=@param,
+                              coef=@coef, icons=@icons WHERE  idw=@idw AND icons=@icons`;
+            results = await pool.request()
+                .input('idw', sql.Int, idw)
+                .input('activePost', sql.VarChar, activePost)
+                .input('param', sql.VarChar, param)
+                .input('coef', sql.VarChar, coef)
+                .input('icons', sql.VarChar, id)
+                .query(sqlUpdate);
         }
-    })
+        return results;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+};
+
+exports.saveTechToBase = async (value, add) => {
+    try {
+        const pool = await connection;
+        console.log(add ? 'дата есть' : 'даты нет');
+        const sql = add
+            ? `INSERT INTO  tyresBase(idw, dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka,
+                model,
+                psi,
+                changeBar,
+                probegNow,
+                dateInstall,
+                probegPass,
+                dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`
+            : `INSERT INTO  tyresBase(idw, identificator, nameCar, typeOs, numberOs, idTyres, marka,
+                model,
+                psi,
+                changeBar,
+                probegNow,
+                dateInstall,
+                probegPass,
+                dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`;
+        const results = await pool.request()
+            .input('value', sql.TVP, value)
+            .query(sql);
+        return 'Данные добавлены';
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+};
+
+exports.techViewToBase = async (nameCar, count, idw) => {
+    try {
+        const selectBase = `SELECT marka, model, identificator, psi, changeBar, probegNow, dateInstall, probegPass, dateZamer, N1, N2, N3, N4, maxMM FROM tyresBase WHERE idw=@idw AND idTyres=@count`
+        const pool = await connection
+        const results = await pool.request().input('idw', sql.Int, idw).input('count', sql.Int, count).query(selectBase)
+        return results.recordset
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
 }
 
-exports.techViewToBase = (nameCar, count, idw) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT marka,
-        model,
-        identificator,
-        psi,
-        changeBar,
-        probegNow,
-        dateInstall,
-        probegPass,
-        dateZamer,
-        N1,
-        N2,
-        N3,
-        N4,
-        maxMM FROM tyresBase WHERE idw='${idw}' AND idTyres='${count}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) console.log(err)
-                resolve(results)
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
+
+exports.techViewAllToBase = async (idw) => {
+    try {
+        const selectBase = `SELECT * FROM tyresBase WHERE idw=@idw`
+        const pool = await connection
+        const results = await pool.request().input('idw', sql.Int, idw).query(selectBase)
+        return results.recordset
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
 }
 
-
-
-module.exports.techViewAllToBase = (idw) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT * FROM tyresBase WHERE idw='${idw}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) console.log(err)
-                resolve(results)
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
-}
-
-module.exports.summaryToBase = (idw, arr, data) => {
+exports.summaryToBase = async (idw, arr, data) => {
     const value = []
     value.push(idw)
     value.push(data)
@@ -1244,122 +1148,127 @@ module.exports.summaryToBase = (idw, arr, data) => {
     value.push(arr.medium)
     value.push(arr.hhOil ? arr.hhOil : 0)
     value.push(arr.group)
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT data, idw FROM summary WHERE idw='${idw}' AND data='${data}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) console.log(err);
-                if (results.length === 0) {
-                    const sql = `INSERT INTO  summary(idw, data, type, nameCar, jobTS, probeg, rashod, zapravka, dumpTrack,moto, prostoy, medium, oilHH, company) VALUES?`;
-                    connection.query(sql, [[value]], function (err, results) {
-                        if (err) console.log(err)
-                        resolve({ message: 'данные добавлены' })
-                    })
-                }
-                else {
-                    const sql = `UPDATE summary SET  idw='${idw}',data='${data}', type='${arr.type}', nameCar='${arr.nameCar}', jobTS='${arr.job}',
-                     probeg='${arr.probeg}', rashod='${arr.rashod}',zapravka='${arr.zapravka}',dumpTrack='${arr.lifting}',moto='${arr.moto}',
-                     prostoy='${arr.prostoy}',medium='${arr.medium}',oilHH='${arr.hhOil}',company='${arr.group}'  WHERE  idw='${idw}' AND data='${data}'`;
-                    connection.query(sql, function (err, results) {
-                        if (err) console.log(err)
-                        else resolve({ message: 'данные обновлены' })
-                    });
-                }
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
-}
-
-
-module.exports.group = (idw) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT company FROM summary WHERE idw=${idw}`;
-            connection.query(selectBase, function (err, results) {
-                if (err) console.log(err)
-                resolve(results)
-            });
-        } catch (e) {
-            console.log(e)
-        }
-    })
-}
-
-
-
-
-module.exports.summaryYestodayToBase = (data, arrayId) => {
-    // console.log(arrayId)
-    if (arrayId.length !== 0) {
-        return new Promise((resolve, reject) => {
-            if (data.length === 1) {
-                try {
-                    const selectBase = "SELECT * FROM summary WHERE idw IN (?) AND data=?";
-                    const values = [arrayId, data];
-                    connection.query(selectBase, values, function (err, results) {
-                        if (err) console.log(err)
-                        resolve(results)
-                    });
-                } catch (e) {
-                    console.log(e)
-                }
-
-            }
-            else {
-                try {
-                    const selectBase = "SELECT * FROM summary WHERE idw IN (?) AND STR_TO_DATE(data, '%Y-%m-%d') >= ? AND STR_TO_DATE(data, '%Y-%m-%d') <= ?"
-                    const values = [arrayId, data[0], data[1]];
-                    connection.query(selectBase, values, function (err, results) {
-                        if (err) console.log(err);
-                        resolve(results);
-                    });
-                } catch (e) {
-                    console.log(e);
-                }
-            }
-
-        });
-
-    }
-
-};
-
-
-
-module.exports.sumIdwToBase = (data, idw) => {
-    return new Promise((resolve, reject) => {
-        if (data.length === 1) {
-            try {
-                const selectBase = "SELECT * FROM summary WHERE idw IN (?) AND data=?";
-                const values = [idw, data];
-                connection.query(selectBase, values, function (err, results) {
-                    if (err) console.log(err);
-                    resolve(results);
-                });
-            } catch (e) {
-                console.log(e);
-                reject(e);
-            }
+    //  console.log(arr)
+    try {
+        const selectBase = `SELECT data, idw FROM summary WHERE idw=@idw AND data=@data`
+        const pool = await connection
+        const results = await pool.request().input('idw', sql.Int, idw).input('data', sql.NVarChar, data).query(selectBase)
+        if (results.recordset.length === 0) {
+            const sqls = `INSERT INTO  summary(idw, data, type, nameCar, jobTS, probeg, rashod, zapravka, dumpTrack,moto, prostoy, medium, oilHH, company) VALUES (@idw, @data, @type, @nameCar, @jobTS, @probeg, @rashod, @zapravka, @dumpTrack, @moto, @prostoy, @medium, @oilHH, @company)`;
+            await pool.request()
+                .input('idw', idw)
+                .input('data', data)
+                .input('type', arr.type)
+                .input('nameCar', arr.nameCar)
+                .input('jobTS', arr.job)
+                .input('probeg', arr.probeg)
+                .input('rashod', arr.rashod)
+                .input('zapravka', arr.zapravka)
+                .input('dumpTrack', arr.lifting)
+                .input('moto', arr.moto)
+                .input('prostoy', arr.prostoy)
+                .input('medium', arr.medium)
+                .input('oilHH', arr.hhOil)
+                .input('company', arr.group)
+                .query(sqls)
+            return { message: 'данные добавлены' }
         }
         else {
-            try {
-                const selectBase = "SELECT * FROM summary WHERE idw IN (?) AND STR_TO_DATE(data, '%Y-%m-%d') >= ? AND STR_TO_DATE(data, '%Y-%m-%d') <= ?"
-                const values = [idw, data[0], data[1]];
-                connection.query(selectBase, values, function (err, results) {
-                    if (err) console.log(err);
-                    //   console.log(results)
-                    resolve(results);
-                });
-            } catch (e) {
-                console.log(e);
-            }
-        }
-    });
+            const sqls = `UPDATE summary SET  idw='${idw}',data='${data}', type='${arr.type}', nameCar='${arr.nameCar}', jobTS='${arr.job}',
+                     probeg='${arr.probeg}', rashod='${arr.rashod}',zapravka='${arr.zapravka}',dumpTrack='${arr.lifting}',moto='${arr.moto}',
+                     prostoy='${arr.prostoy}',medium='${arr.medium}',oilHH='${arr.hhOil}',company='${arr.group}'  WHERE  idw='${idw}' AND data='${data}'`;
 
+            await pool.request().query(sqls)
+            return { message: 'данные обновлены' }
+        }
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+
+exports.group = async (idw) => {
+    try {
+        const selectBase = `SELECT company FROM summary WHERE idw=@idw`
+        const pool = await connection
+        const results = await pool.request().input('idw', sql.Int, idw).query(selectBase)
+        return results.recordset
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+
+module.exports.summaryYestodayToBase = async (data, arrayId) => {
+    if (!arrayId.length) {
+        return;
+    }
+    const pool = await connection
+    if (data.length === 1) {
+        try {
+            // Создание строки с placeholder'ами для каждого id из arrayId
+            const placeholders = arrayId.map((_, i) => '@id' + i).join(',');
+            const selectBase = `SELECT * FROM summary WHERE idw IN (${placeholders}) AND data=@data`;
+            const request = pool.request();
+            // Добавляем данные для каждого элемента из arrayId
+            arrayId.forEach((id, i) => request.input('id' + i, sql.Int, id));
+            // Добавляем данные для @data
+            request.input('data', sql.VarChar, data[0]);
+            const results = await request.query(selectBase);
+            //  console.log(results.recordset)
+            return results.recordset;
+        } catch (e) {
+            console.error(e);
+        }
+    } else {
+        try {
+            const placeholders = arrayId.map((_, i) => '@id' + i).join(',');
+            const selectBase = `SELECT * FROM summary WHERE idw IN (${placeholders}) AND CAST(data AS DATE) >= @start AND CAST(data AS DATE) <= @end`;
+            const request = pool.request();
+            arrayId.forEach((id, i) => request.input('id' + i, sql.Int, id));
+            request.input('start', sql.NVarChar, data[0])
+            request.input('end', sql.NVarChar, data[1])
+            const results = await request.query(selectBase);
+            return results.recordset;
+        } catch (e) {
+            console.error(e);
+        }
+    }
 };
+
+module.exports.sumIdwToBase = async (data, idw) => {
+    const pool = await connection
+    if (data.length === 1) {
+        try {
+            const selectBase = "SELECT * FROM summary WHERE idw=@idw AND data=@data";
+            const results = await pool.request()
+                .input('idw', idw)
+                .input('data', data[0])
+                .query(selectBase)
+            return results.recordset
+        } catch (e) {
+            console.log(e);
+
+        }
+    }
+    else {
+        try {
+            const selectBase = "SELECT * FROM summary WHERE idw=@idw AND CAST(data AS DATE) >= @start AND CAST(data AS DATE) <= @end"
+            const results = await pool.request()
+                .input('idw', idw)
+                .input('start', data[0])
+                .input('end', data[1])
+                .query(selectBase)
+            return results.recordset
+        } catch (e) {
+            console.log(e);
+        }
+    }
+};
+
+
 
 
 

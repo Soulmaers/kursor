@@ -188,7 +188,7 @@ export class SummaryViewControll {
     //подготовка итогового саммари для неделя и месяц
     filterWeekSummary(data) {
         const jobElementTs = data.reduce((acc, el) => {
-            if (el.jobTS === 1) {
+            if (Number(el.jobTS) === 1) {
                 acc.push(el)
             }
             return acc
@@ -215,6 +215,7 @@ export class SummaryViewControll {
             }
             return acc;
         }, []);
+        console.log(structura)
         return structura
     }
 
@@ -254,7 +255,7 @@ export class SummaryViewControll {
     calculateParam(data, paramName) {
         if (paramName === 'medium') {
         }
-        return data.reduce((acc, el) => acc + el[paramName], 0)
+        return data.reduce((acc, el) => acc + (isNaN(Number(el[paramName])) ? 0 : Number(el[paramName])), 0)
     }
     //подготовка итогового саммари для сегодня и вчера
     calculationParametrs(data) {
@@ -304,6 +305,15 @@ export class SummaryViewControll {
         try {
             const mods = await fetch('/api/summaryYestoday', params)
             const models = await mods.json()
+            models.sort((a, b) => {
+                if (a.data > b.data) {
+                    return 1;
+                }
+                if (a.data < b.data) {
+                    return -1;
+                }
+                return 0;
+            })
             return models
         }
         catch (e) {

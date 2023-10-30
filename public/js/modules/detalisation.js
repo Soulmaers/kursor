@@ -76,8 +76,8 @@ export async function timeIntervalStatistiks() {
     await statistics(yesTo(), 'yestoday', 2, objectRazmetka)
     loader.style.display = 'none'
     //  loaders(week.nextElementSibling, loader)
-    //  await statistics(weekTo(), 'week', 3, objectRazmetka)
-    //  loader.style.display = 'none'
+    // await statistics(weekTo(), 'week', 3, objectRazmetka)
+    // loader.style.display = 'none'
 }
 function loaders(elem, loader) {
     loader.style.display = 'flex'

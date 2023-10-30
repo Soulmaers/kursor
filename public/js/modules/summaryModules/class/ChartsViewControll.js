@@ -26,13 +26,13 @@ export class ChartsViewControll {
         let dataAndValue = {};
         for (let i = 0; i < originalData.length; i++) {
             const currentDate = originalData[i].data;
-            const currentProbeg = originalData[i].probeg;
-            const currentRashod = originalData[i].rashod;
-            const currentZapravka = originalData[i].zapravka;
-            const currentdumpTrack = originalData[i].dumpTrack;
-            const currentmoto = originalData[i].moto;
-            const currentmedium = originalData[i].medium;
-            const currentprostoy = originalData[i].prostoy;
+            const currentProbeg = originalData[i].probeg !== '-' ? Number(originalData[i].probeg) : 0;
+            const currentRashod = originalData[i].rashod !== '-' ? Number(originalData[i].rashod) : 0;
+            const currentZapravka = originalData[i].zapravka !== '-' ? Number(originalData[i].zapravka) : 0;
+            const currentdumpTrack = originalData[i].dumpTrack ? Number(originalData[i].dumpTrack) : 0;
+            const currentmoto = originalData[i].moto !== '-' ? Number(originalData[i].moto) : 0;
+            const currentmedium = originalData[i].medium !== '-' ? Number(originalData[i].medium) : 0;
+            const currentprostoy = originalData[i].prostoy !== '-' ? Number(originalData[i].prostoy) : 0;
             if (!dataAndValue[currentDate]) {
                 dataAndValue[currentDate] = {
                     date: currentDate.substring(5),
@@ -48,7 +48,6 @@ export class ChartsViewControll {
                     timeJob: 0
                 };
             }
-
             dataAndValue[currentDate].probeg += currentProbeg; // суммируем текущий probeg с предыдущими значениями
             dataAndValue[currentDate].rashod += currentRashod;
             dataAndValue[currentDate].zapravka += currentZapravka

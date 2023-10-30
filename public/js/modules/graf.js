@@ -92,10 +92,11 @@ export async function dataSelect() {
     const selectSpeed = document.querySelector('.select_speed')
     const activeMenuGraf = document.querySelector('.activMenuGraf')
     let timeFrom;
+    console.log(selectSpeed.value)
     switch (selectSpeed.value) {
         case '0': {
             timeFrom = Math.round(nDate.setHours(nDate.getHours() - 24) / 1000);
-            activeMenuGraf.textContent === 'Топливо' ? graftest(timeFrom, nowDate) : graftest(nowDate, nowDate)
+            activeMenuGraf.textContent === 'Топливо' ? graftest(timeFrom, nowDate) : graftest(timeFrom, nowDate)
         }
             break;
         case '1': {

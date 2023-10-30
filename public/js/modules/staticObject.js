@@ -39,6 +39,8 @@ function createListFnview(e) {
         })
     }
     const createList = document.querySelector('.createList')
+    console.log(createList.value)
+    console.log(e)
     createList.value = e.length
     let count = e.length;
     let countId = 0;
@@ -183,11 +185,11 @@ export async function tarirView() {
     }
     const res = await fetch('/api/tarirView', param)
     const response = await res.json()
-    createListFnview(response.result)
+    createListFnview(response)
     const x = [];
     const y = [];
     const points = []
-    response.result.forEach(el => {
+    response.forEach(el => {
         const point = []
         x.push(Number(el.DUT))
         y.push(Number(el.litrs))

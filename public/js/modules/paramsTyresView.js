@@ -35,6 +35,7 @@ export async function loadParamsView() {
     }
     const mod = await fetch('/api/modelView', params)
     const model = await mod.json()
+    console.log(model)
     if (model.result && model.result.length > 0) {
         createViewModel(model.result);
     }
@@ -255,12 +256,13 @@ export async function viewPokasateli() {
         const data = await datas.json()
         const os = await fetch('/api/barView', param)
         const osi = await os.json()
+        console.log(osi)
         data.sort((prev, next) => {
             if (prev.name < next.name) return -1;
             if (prev.name < next.name) return 1;
         })
         view(data)
-        viewConfigurator(data, params.result, osi.result)
+        viewConfigurator(data, params.result, osi)
 
     }
 }

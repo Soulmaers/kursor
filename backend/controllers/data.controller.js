@@ -5,12 +5,12 @@ const wialonModule = require('../modules/wialon.module');
 const statistika = require('../modules/statistika.module');
 const structura = require('../modules/structura.module.js')
 const events = require('../modules/events.module.js')
-const connection = require('../config/db')
+//const connection = require('../config/db')
 const { createDate, convert } = require('../helpers')
 const constorller = require('./data.controller.js')
 const { SummaryStatistiks } = require('../modules/statistika.module.js')
 require('dotenv').config();
-
+const { connection, sql } = require('../config/db')
 
 //готовим данные и отправляем ответ на клиент который отрисовывает список
 exports.dataSpisok = async (req, res) => {
@@ -87,6 +87,7 @@ exports.test = async () => {
     updateParams(data)
     //  const data = dataSensToBase;
     const timeBase = await databaseService.lostChartDataToBase()
+
     const oldTime = Number(timeBase[0].data)
     const allCar = Object.entries(data)
     const now = new Date();
@@ -109,7 +110,7 @@ exports.test = async () => {
             allArray = ggg(nameSens, rez)
             rr.messages.forEach(e => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
-                mass.push([el.id, el.nm.replace(/\s+/g, ''), e.t, new Date(e.t * 1000), e.pos.s, e.p.sats, geo, e.pos.c]);
+                mass.push([String(el.id), el.nm.replace(/\s+/g, ''), String(e.t), String(new Date(e.t * 1000)), String(e.pos.s), String(e.p.sats), geo, String(e.pos.c)]);
             });
             const sens = rez.map(e => JSON.stringify(e));
             const arr = JSON.stringify(allArray)
@@ -188,7 +189,7 @@ async function updateParams(data) {
         const todays = Math.floor(currentDate.getTime() / 1000);
         const activePost = el.nm.replace(/\s+/g, '');
         const resSaveStatus = await databaseService.saveStatusToBase(activePost, idw, todays, statusTSI, todays, status);
-
+        //  console.log(resSaveStatus)
         if (el.lmsg) {
             const sensor = Object.entries(el.lmsg.p);
             const time = new Date()
@@ -202,7 +203,7 @@ async function updateParams(data) {
     const res = await constorller.dataSpisok()
     const summary = new SummaryStatistiks(res)
     const global = await summary.init();
-    //  console.log(global)
+    // console.log(global)
     const prostoy = await statistika.popupProstoy(res)
     await events.eventFunction(res)
     const arraySummary = Object.entries(global)
@@ -217,6 +218,7 @@ async function updateParams(data) {
         const idw = el[0]
         const arrayInfo = el[1]
         const res = await databaseService.summaryToBase(idw, arrayInfo, datas)
+        // console.log(res)
     })
 
 }
@@ -287,15 +289,16 @@ async function zaprosSpisokb(name) {
     }
     proverka(massItog);
 }
-
-function queryDB(sql) {
-    return new Promise((resolve, reject) => {
-        connection.query(sql, function (err, results) {
-            if (err) console.log(err);
-            return resolve(results);
-        });
-    });
-}
+const queryDB = async (sql) => {
+    try {
+        const pool = await connection;
+        const results = await pool.request().query(sql);
+        return results.recordset;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+};
 function isSensorLost(el) {
     return el[6] > 5 && el[3] <= -50;
 }
@@ -376,127 +379,124 @@ function proverka(arr) {
 
 function proverka(arr) {
     const time = new Date()
-    arr.forEach(el => {
+    arr.forEach(async el => {
         if (el[4] === undefined) {
             return
         }
         else {
             let alarm;
-            const sqls1 = `SELECT * FROM alarms WHERE idw=${el[5]} AND senspressure='${el[1]}'`
-            connection.query(sqls1, function (err, results) {
-                if (err) console.log(err);
-
-                if (results.length === 0) {
-                    //  console.log('КРАН!')
-                    //  console.log(el[0], el[2], 'таблицу не видит')
-                    if (el[6] > 5 && el[3] <= -50) {
-                        //     console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
+            const pool = await connection;
+            const sqls1 = `SELECT * FROM alarms WHERE idw=${el[5]} AND senspressure='${el[1]}'`;
+            let results = await pool.request().query(sqls1);
+            if (results.recordset.length === 0) {
+                //  console.log('КРАН!')
+                //  console.log(el[0], el[2], 'таблицу не видит')
+                if (el[6] > 5 && el[3] <= -50) {
+                    //     console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
+                    const data = createDate()
+                    alarm = 'Потеря связи с датчиком'
+                    //записываем данные в бд
+                    databaseService.alarmBase(data, el, alarm)
+                    return
+                }
+                else {
+                    if (el[3] > 70) {
+                        //   console.log(el + ' ' + 'таблица нет, аларм есть/ Критически низкое давление' + ' ' + time)
                         const data = createDate()
-                        alarm = 'Потеря связи с датчиком'
-                        //записываем данные в бд
+                        alarm = 'Критически высокая температура'
+                        databaseService.alarmBase(data, el, alarm)
+                        return
+                    }
+                    if (el[2] <= Number(el[4].knd) && el[3] > -50) {
+                        //   console.log(el + ' ' + 'таблица нет, аларм есть/ Критически низкое давление' + ' ' + time)
+                        const data = createDate()
+                        alarm = 'Критически низкое давление'
+                        console.log('КРАН!')
+                        console.log(el)
+                        databaseService.alarmBase(data, el, alarm)
+                        return
+                    }
+                    if (el[2] >= Number(el[4].kvd) && el[3] > -50) {
+                        //    console.log(el + ' ' + 'таблица нет, аларм есть/ Критически высокое давление' + ' ' + time)
+                        const data = createDate()
+                        alarm = 'Критически высокое давление'
                         databaseService.alarmBase(data, el, alarm)
                         return
                     }
                     else {
-                        if (el[3] > 70) {
-                            //   console.log(el + ' ' + 'таблица нет, аларм есть/ Критически низкое давление' + ' ' + time)
-                            const data = createDate()
-                            alarm = 'Критически высокая температура'
-                            databaseService.alarmBase(data, el, alarm)
-                            return
-                        }
-                        if (el[2] <= Number(el[4].knd) && el[3] > -50) {
-                            //   console.log(el + ' ' + 'таблица нет, аларм есть/ Критически низкое давление' + ' ' + time)
-                            const data = createDate()
-                            alarm = 'Критически низкое давление'
-                            console.log('КРАН!')
-                            console.log(el)
-                            databaseService.alarmBase(data, el, alarm)
-                            return
-                        }
-                        if (el[2] >= Number(el[4].kvd) && el[3] > -50) {
-                            //    console.log(el + ' ' + 'таблица нет, аларм есть/ Критически высокое давление' + ' ' + time)
-                            const data = createDate()
-                            alarm = 'Критически высокое давление'
-                            databaseService.alarmBase(data, el, alarm)
-                            return
-                        }
-                        else {
-                            //     console.log(el + ' ' + 'таблицы нет, аларма нет' + ' ' + time)
-                            return
-                        }
+                        //     console.log(el + ' ' + 'таблицы нет, аларма нет' + ' ' + time)
+                        return
                     }
                 }
-                else if (results.length !== 0) {
-                    //  console.log(el[0], el[1], el[2], 'таблицу видит')
-                    if (el[6] > 5 && el[3] <= -50) {
-                        if (results[results.length - 1].alarm == 'Потеря связи с датчиком') {
-                            //    console.log('-3')
-                            //   console.log(el + ' ' + 'таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
+            }
+            else if (results.recordset.length !== 0) {
+                //  console.log(el[0], el[1], el[2], 'таблицу видит')
+                if (el[6] > 5 && el[3] <= -50) {
+                    if (results.recordset[results.recordset.length - 1].alarm == 'Потеря связи с датчиком') {
+                        //    console.log('-3')
+                        //   console.log(el + ' ' + 'таблица есть, аларм есть, потеря связи с датчиком, повторные данные')
+                        return
+                    } else {
+                        //   console.log('-2')
+                        //  console.log(el + ' ' + 'таблица есть, изменение аларма,потеря связи с датчиком ')
+                        const data = createDate()
+                        alarm = 'Потеря связи с датчиком'
+                        databaseService.alarmBase(data, el, alarm)
+                    }
+                    return
+                }
+                else {
+                    //    console.log('-11')
+                    if (el[2] <= Number(el[4].knd) && el[3] > -50) {
+                        //     console.log('-22')
+                        if (results.recordset[results.recordset.length - 1].bar === String(el[2]) && results.recordset[results.recordset.length - 1].alarm !== 'Потеря связи с датчиком') {
+                            //   console.log('равно')
+                            //    console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные N' + ' ' + time)
                             return
                         } else {
-                            //   console.log('-2')
-                            //  console.log(el + ' ' + 'таблица есть, изменение аларма,потеря связи с датчиком ')
+                            //   console.log('-33')
+                            //  console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
                             const data = createDate()
-                            alarm = 'Потеря связи с датчиком'
+                            alarm = 'Критически низкое давление'
                             databaseService.alarmBase(data, el, alarm)
+                            //    return
                         }
                         return
                     }
-                    else {
-                        //    console.log('-11')
-                        if (el[2] <= Number(el[4].knd) && el[3] > -50) {
-                            //     console.log('-22')
-                            if (results[results.length - 1].bar === String(el[2]) && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                                //   console.log('равно')
-                                //    console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные N' + ' ' + time)
-                                return
-                            } else {
-                                //   console.log('-33')
-                                //  console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
-                                const data = createDate()
-                                alarm = 'Критически низкое давление'
-                                databaseService.alarmBase(data, el, alarm)
-                                //    return
-                            }
+                    if (el[2] >= Number(el[4].kvd) && el[3] > -50) {
+                        // console.log(results[results.length - 1].bar)
+                        //   console.log('-4')
+                        //   console.log(typeof el[2])
+                        //   console.log(typeof results[results.length - 1].bar)
+                        if (results.recordset[results.recordset.length - 1].bar === String(el[2]) && results.recordset[results.recordset.length - 1].alarm !== 'Потеря связи с датчиком') {
+                            //   console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные V' + ' ' + time)
                             return
+                        } else {
+                            //   console.log('-5')
+                            //  console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
+                            const data = createDate()
+                            alarm = 'Критически высокое давление'
+                            databaseService.alarmBase(data, el, alarm)
+                            // return
                         }
-                        if (el[2] >= Number(el[4].kvd) && el[3] > -50) {
-                            // console.log(results[results.length - 1].bar)
-                            //   console.log('-4')
-                            //   console.log(typeof el[2])
-                            //   console.log(typeof results[results.length - 1].bar)
-                            if (results[results.length - 1].bar === String(el[2]) && results[results.length - 1].alarm !== 'Потеря связи с датчиком') {
-                                //   console.log(el + ' ' + 'таблица есть, аларм есть, повторные данные V' + ' ' + time)
-                                return
-                            } else {
-                                //   console.log('-5')
-                                //  console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
-                                const data = createDate()
-                                alarm = 'Критически высокое давление'
-                                databaseService.alarmBase(data, el, alarm)
-                                // return
-                            }
+                        return
+                    }
+                    else if (el[2] > Number(el[4].knd) && el[3] > -50 || el[2] < Number(el[4].kvd) && el[3] > -50) {
+                        if (results.recordset[results.recordset.length - 1].alarm === 'Норма') {
+                            //  console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
+                            //  console.log('норма есть уже в базе')
                             return
-                        }
-                        else if (el[2] > Number(el[4].knd) && el[3] > -50 || el[2] < Number(el[4].kvd) && el[3] > -50) {
-                            // console.log(el)
-                            if (results[results.length - 1].alarm === 'Норма') {
-                                //  console.log(el + ' ' + 'таблица есть, аларма нет, повторные данные' + ' ' + time)
-                                //  console.log('норма есть уже в базе')
-                                return
-                            } else {
-                                // console.log(el + ' ' + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
-                                //console.log('добавляем норму')
-                                const data = createDate()
-                                alarm = 'Норма'
-                                databaseService.alarmBase(data, el, alarm)
-                                //return
-                            }
+                        } else {
+                            // console.log(el + ' ' + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
+                            //console.log('добавляем норму')
+                            const data = createDate()
+                            alarm = 'Норма'
+                            databaseService.alarmBase(data, el, alarm)
+                            //return
                         }
                     }
                 }
-            });
+            }
         }
     })
 }

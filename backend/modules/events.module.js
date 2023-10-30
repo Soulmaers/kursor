@@ -60,7 +60,6 @@ async function checkSortCondition(idw, group, name, condition, time, geo) {
         condition: `${condition}`
     }]
     const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
-    console.log(time, condition, name, res)
 }
 
 

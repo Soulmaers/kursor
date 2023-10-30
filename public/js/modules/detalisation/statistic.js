@@ -82,7 +82,6 @@ export async function dannieOilTS(idw, num, interval) {
     };
     const mods = await fetch('/api/summaryIdwToBase', params);
     const models = await mods.json();
-
     let obj = {}
     if (num === 4) {
         obj = models.map(it => {
@@ -116,6 +115,7 @@ export function dannieSortJobTS(datas, ele, num) {
     let start;
     let end;
     let currentCondition;
+    console.log(data)
     for (let i = 0; i < data.length; i++) {
         const current = data[i];
 
@@ -140,6 +140,6 @@ export function dannieSortJobTS(datas, ele, num) {
         const diff = (end.getTime() / 1000) - (start.getTime() / 1000)
         return diff
     }
+    console.log(obj)
     return obj
-
 }
