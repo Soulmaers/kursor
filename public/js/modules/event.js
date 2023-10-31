@@ -23,7 +23,7 @@ import { draggable } from './filtersList.js'
 import { storTitleList } from './content.js'
 import { NavigationMenu } from './navModules/NavigatorClass.js'
 import { filterCondition } from './filtersList.js'
-import { initSummary } from './spisok.js'
+import { initCharts, initSummary } from './spisok.js'
 
 
 const sec = document.querySelector('.sections')
@@ -207,6 +207,7 @@ logo.addEventListener('click', () => {
     color ? color.classList.remove('color') : null
 
     initSummary.clickListUpdateSummary()
+    initCharts.getDataSummary()
 })
 const auth = document.querySelector('.settings')
 const authClear = document.querySelector('.close_settings')

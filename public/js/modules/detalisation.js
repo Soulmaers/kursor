@@ -179,6 +179,15 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     const t1 = !isNaN(num) ? interval[1] : interval[0][2]
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
     const itog = await testovfn(idw, t1, t2)
+    itog.sort((a, b) => {
+        if (a.time > b.time) {
+            return 1;
+        }
+        if (a.time < b.time) {
+            return -1;
+        }
+        return 0;
+    })
     const nameArr = itog[itog.length - 1] !== undefined ? itog[itog.length - 1].allSensParams ? JSON.parse(itog[itog.length - 1].allSensParams) : [] : []
     const time = [];
     const speed = [];

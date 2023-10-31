@@ -82,6 +82,16 @@ export async function dannieOilTS(idw, num, interval) {
     };
     const mods = await fetch('/api/summaryIdwToBase', params);
     const models = await mods.json();
+    models.sort((a, b) => {
+        if (a.data > b.data) {
+            return 1;
+        }
+        if (a.data < b.data) {
+            return -1;
+        }
+        return 0;
+    })
+    console.log(models)
     let obj = {}
     if (num === 4) {
         obj = models.map(it => {
