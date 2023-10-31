@@ -28,7 +28,6 @@ module.exports.update = async (req, res) => {
 }
 
 module.exports.delete = async (req, res) => {
-
     const pool = await connection;
     try {
 
@@ -84,7 +83,6 @@ exports.deleteProfil = async (req, res) => {
 
 module.exports.signup = async function (req, res) {
     const { login, pass, role, idx } = req.body;
-
     try {
         const pool = await connection
         const sqlS = `SELECT * FROM users WHERE name = @name`;
@@ -99,7 +97,6 @@ module.exports.signup = async function (req, res) {
         else {
             const salt = bcrypt.genSaltSync(10);
             const hashedPassword = bcrypt.hashSync(pass, salt);
-
             const sqls = 'INSERT INTO users (idx, name, password, role) VALUES (@idx, @login,@password,@role)';
             const result = await pool.request()
                 .input('idx', idx)
@@ -133,15 +130,12 @@ module.exports.sing = async function (req, res) {
         const pool = await connection
         const result = await pool.query(`SELECT id, name, password FROM users WHERE name='${req.body.username}'`);
         const rows = result.recordset;
-
         if (rows.length <= 0) {
             res.render('form.ejs', { message: 'Пользователь не найден!' });
             return;
         }
-
         const row = rows[0];
         const resulty = bcrypt.compareSync(req.body.password, row.password);
-
         if (!resulty) {
             res.render('form.ejs', { message: 'Неверный пароль!' });
             return;
@@ -187,7 +181,6 @@ const fs = require('fs');
 
 // Функция для записи логов
 function logLogin(username, ip, platform, device) {
-
     // Получение текущей даты и времени
     const currentDate = new Date();
     // Формирование строки с данными для записи
@@ -212,7 +205,6 @@ module.exports.logout = async function (req, res, next) {
 
 module.exports.checkObject = async (req, res) => {
     const { login, role, objects } = req.body;
-
     try {
         const pool = await connection;
         const selectBase = `SELECT id FROM userObjects`;
@@ -233,8 +225,6 @@ module.exports.checkObject = async (req, res) => {
                 const postModel = `INSERT INTO userObjects(login, role, object, idw) VALUES('${login}','${role}','${el[0]}','${el[1]}')`;
                 await pool.query(postModel);
             }
-
-            //  await pool.commit();
         }
 
         res.json({ message: 'Объекты добавлены' })

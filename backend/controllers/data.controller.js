@@ -141,7 +141,6 @@ function ggg(nameSens, rez) {
         nameSenz.forEach(el => {
             arrNameSens.push([el[1].n, el[1].p])
         })
-        //  console.log(rez)
         const valueSens = Object.values(rez[rez.length - 1])
         const allArr = [];
         arrNameSens.forEach((e, index) => {
@@ -152,7 +151,6 @@ function ggg(nameSens, rez) {
     else {
         return
     }
-
 }
 
 
@@ -388,6 +386,15 @@ function proverka(arr) {
             const pool = await connection;
             const sqls1 = `SELECT * FROM alarms WHERE idw=${el[5]} AND senspressure='${el[1]}'`;
             let results = await pool.request().query(sqls1);
+            results.recordset.sort((a, b) => {
+                if (a.unix > b.unix) {
+                    return 1
+                }
+                if (a.unix < b.unix) {
+                    return -1
+                }
+                return 0;
+            })
             if (results.recordset.length === 0) {
                 //  console.log('КРАН!')
                 //  console.log(el[0], el[2], 'таблицу не видит')

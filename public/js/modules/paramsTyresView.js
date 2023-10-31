@@ -52,10 +52,9 @@ export async function loadParamsView() {
 
 export let tsiparam;
 function createViewModel(model) {
-    console.log(model)
     const tsiControll = document.querySelector('.tsiControll')
     tsiControll.value = model[0].tsiControll
-    tsiparam = model[0].tsiControll
+    tsiparam = Number(model[0].tsiControll)
     const type = model[0].type
     console.log(type)
 
@@ -78,8 +77,8 @@ function createViewModel(model) {
     }
 
 
-    console.log(model)
-    if (model.length > 1) {
+    console.log(model.length)
+    if (model.length > 0) {
         const containerAll = document.querySelector('.containerAll')
         if (containerAll) {
             containerAll.remove()
@@ -102,6 +101,7 @@ function createViewModel(model) {
         model.sort((a, b) => a.osi - b.osi)
         for (let i = 0; i < model.length; i++) {
             const item = model[i];
+            console.log(item)
             const container = item.trailer === 'Тягач' ? containerTagach : containerPricep;
             item.trailer === 'Прицеп' ? containerPricep.style.border = '2px solid darkblue' : containerPricep.style.border = 'none'
             container.innerHTML += `<div class=" osiTest">

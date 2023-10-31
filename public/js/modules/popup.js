@@ -85,6 +85,16 @@ export async function logsView(array) {
     }
     const ress = await fetch('/api/logsView', param)
     const results = await ress.json()
+    results.sort((a, b) => {
+        if (a.time > b.time) {
+            return 1;
+        }
+        if (a.time < b.time) {
+            return -1;
+        }
+        return 0;
+    })
+    console.log(results)
     const paramLog = {
         method: "POST",
         headers: {

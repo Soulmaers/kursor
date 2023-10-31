@@ -18,7 +18,6 @@ export class CreateMarkersEvent {
     }
 
     viewTrackAndMarkersEnent() {
-        console.log('нажал?')
         this.setTrack.classList.toggle('activeTrack')
         if (this.setTrack.classList.contains('activeTrack')) {
             if (this.poly) {
@@ -52,16 +51,13 @@ export class CreateMarkersEvent {
         const geo = await this.getLastGeoPosition()
         this.createMapMainObject(geo)
         const track = await this.getIntervalTrack()
-
         const prostoy = await this.getEventProstoy()
         const pressure = await this.getEventPressure()
         this.track = track.reduce((acc, el) => {
             acc.push(el.geo)
             return acc
         }, [])
-        console.log(track)
         this.eventMarkers = await this.getEventObject(track, prostoy)
-
         if (!this.markerCreator) {
             this.markerCreator = new MarkerCreator(mapLocal);
         }
@@ -69,15 +65,11 @@ export class CreateMarkersEvent {
             const startTrack = {
                 geo: track[0].geo, course: track[0].course, time: track[0].time
             }
-
             this.getStartTrack(startTrack)
         }
-
-
     }
 
     async getStartTrack(startTrack) {
-        console.log(startTrack)
         if (!this.startTrack) {
             const divIconUpdated = L.divIcon({
                 className: 'custom-marker-arrow',
@@ -94,10 +86,8 @@ export class CreateMarkersEvent {
             });
             this.startTrack.setIcon(divIconUpdated);
         }
-
-
-
     }
+
     async getEventProstoy() {
         const idw = this.id
         let nowDate = Math.round(new Date().getTime() / 1000);
@@ -112,7 +102,6 @@ export class CreateMarkersEvent {
         }
         const geoTest = await fetch('/api/logsViewId', params)
         const geoCard = await geoTest.json();
-        console.log(geoCard)
         const eventProstoy = geoCard.reduce((acc, el) => {
             const parse = JSON.parse(el.content)
             if (parse[0].event === 'Простой') {
@@ -123,12 +112,14 @@ export class CreateMarkersEvent {
 
         return eventProstoy
     }
+
     createTrackMap(geoTrack) {
         if (poly) {
             mapLocal.removeLayer(poly);
         }
         poly = L.polyline(geoTrack, { color: 'rgb(0, 0, 204)', weight: 2 })
     }
+
     async getIntervalTrack() {
         const idw = this.id
         let nowDate = Math.round(new Date().getTime() / 1000);
@@ -149,6 +140,7 @@ export class CreateMarkersEvent {
         }, [])
         return data
     }
+
     async getEventPressure() {
         const idw = this.id
         let nowDate = Math.round(new Date().getTime() / 1000);
@@ -203,9 +195,7 @@ export class CreateMarkersEvent {
                 result.push(el[0])
             }
         })
-        console.log(result)
     }
-
 
     async getEventObject(track, prostoy) {
         const id = this.id
@@ -221,7 +211,6 @@ export class CreateMarkersEvent {
         }
         const res = await fetch('api/getEventMarkers', params)
         const result = await res.json()
-        console.log(result)
         let oilEvent;
         if (result.lls && Object.keys(result.lls).length !== 0) {
             oilEvent = Object.values(Object.values(result.lls)[0]).reduce((acc, e) => {
@@ -233,13 +222,11 @@ export class CreateMarkersEvent {
                 return acc
             }, [])
         }
-        console.log(oilEvent)
         const maxSpeed = track.filter(el => el.speed > 100 && el.speed < 140)
         const oil = oilEvent !== undefined ? oilEvent.filter(el => el.oil) : []
         const nooil = oilEvent !== undefined ? oilEvent.filter(el => el.nooil) : []
         const eventMarkersGlobal = []
         eventMarkersGlobal.push(...maxSpeed, ...oil, ...nooil, ...prostoy)
-        console.log(eventMarkersGlobal)
         return eventMarkersGlobal
     }
 
@@ -254,7 +241,6 @@ export class CreateMarkersEvent {
         }
         const res = await fetch('api/parametrs', params)
         const result = await res.json()
-
         return [result.item.pos.y, result.item.pos.x, result.item.pos.c]
     }
 
@@ -283,7 +269,6 @@ export class CreateMarkersEvent {
         if (!this.tool) {
             new Tooltip(this.setTrack, [this.setTrack.getAttribute('rel')])
         }
-
         if (!iss) {
             const LeafIcon = L.Icon.extend({
                 options: {
@@ -299,7 +284,6 @@ export class CreateMarkersEvent {
                 popupAnchor: [0, 0],
                 className: 'custom-marker'
             });
-
             const divIcon = L.divIcon({
                 className: 'custom-marker-arrow',
                 html: `<div class="wrapContainerArrow" style="pointer-events: none;height: 75px;transform: rotate(${geo[2]}deg);"><img src="../../image/arrow2.png" style="width: 20px"></div>`
@@ -343,7 +327,6 @@ export class MarkerCreator {
     }
 
     deleteMarkers() {
-        console.log('делите?')
         for (let marker of this.markers) {
             this.map.removeLayer(marker);
         }

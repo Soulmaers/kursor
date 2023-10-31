@@ -154,13 +154,15 @@ exports.viewChart = async (req, res) => {
     res.json(params)
 }
 
+
+/*
 exports.viewChartGeo = async (req, res) => {
     const arrayId = req.body.arrayId
     const t1 = req.body.nowDate
     const t2 = req.body.timeFrom
     const params = await databaseService.viewChartDataToBaseGeo(arrayId, t1, t2)
     res.json(params)
-}
+}*/
 
 
 

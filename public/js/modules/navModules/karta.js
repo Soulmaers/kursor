@@ -50,9 +50,9 @@ export async function kartaContainer(elem) {
     const results = await res.json()
 
     const clearArray = Array.from(document.querySelectorAll('.checkInList')).reduce((acc, el) => {
-        if (!el.classList.contains('changeColorCheck')) {
-            acc.push(el.closest('.listItem').id)
-        }
+        //  if (!el.classList.contains('changeColorCheck')) {
+        acc.push(el.closest('.listItem').id)
+        //   }
         return acc
     }, [])
     const originalObjectsData = results.reduce((acc, el) => {
@@ -79,6 +79,7 @@ export async function kartaContainer(elem) {
     initsmarkers.addMarkersToMap()
     initsmarkers.viewHiddenMenuMap()
     initsmarkers.viewHiddenInfoMap()
+    initsmarkers.toggleMarkersIcon()
 
     const checkMarkers = document.querySelectorAll('.checkMarkers')
 

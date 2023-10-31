@@ -2,6 +2,7 @@
 import { alarmFind } from '../modules/alarmStorage.js'
 import { map } from '../modules/navModules/karta.js'
 import { mapLocal } from '../modules/objectMainModules/class/CreateMarkersEvent.js'
+import { initCharts } from '../modules/spisok.js'
 export class Flash {
     constructor() {
         this.rigthFrame = document.querySelectorAll('.rigthFrame')
@@ -44,10 +45,12 @@ export class Flash {
         side[1].style.transition = 'width 0.3s ease-in-out';
         if (side[1].classList.contains('globalMaps')) {
             setTimeout(function () { map.invalidateSize(); }, 300);
+
         }
         if (side[1].classList.contains('main') || side[1].classList.contains('wrapper_left')) {
             setTimeout(function () { mapLocal.invalidateSize(); }, 300);
         }
+
     }
     handleClickTwo(event) {
         const parent = event.target.parentNode
@@ -65,6 +68,7 @@ export class Flash {
         if (side[1].classList.contains('main') || side[1].classList.contains('wrapper_left')) {
             setTimeout(function () { mapLocal.invalidateSize(); }, 300);
         }
+
     }
 }
 
@@ -144,6 +148,7 @@ export class ResizeContainer {
             return;
         }
         this.resizeHandle.style.transform = `translateX(${dx}px)`;
+
     }
     stopResize(event) {
         if (!this.isResizing) {
@@ -157,6 +162,7 @@ export class ResizeContainer {
         this.isResizing = false;
         this.initialX = null;
         this.resizeHandle.style.transform = 'translateX(0)';
+        setTimeout(function () { initCharts.createChart(); }, 300);
     }
 }
 

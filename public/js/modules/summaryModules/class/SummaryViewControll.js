@@ -29,7 +29,6 @@ export class SummaryViewControll {
     }
     //выбирать и подсвечивать определенный выбранный селект также запуск метода для сбора и отрисовки данных в нужный слот
     async toggleCheckSelect(it) {
-        console.log('тут?0')
         const titleList = it.closest('.select_dannie').querySelector('.titleChangeSort')
         it.children[0].classList.toggle('radio_choice')
         const slot = it.parentElement.classList.contains('one') ? 2 : 3
@@ -53,7 +52,6 @@ export class SummaryViewControll {
             }
         }
         else {
-            console.log('тут?')
             titleList.textContent = it.parentElement.classList.contains('one') ? 'Вчера' : 'Неделя'
             this.getSummaryToBase(titleList.textContent, slot)
         }
@@ -215,7 +213,6 @@ export class SummaryViewControll {
             }
             return acc;
         }, []);
-        console.log(structura)
         return structura
     }
 
@@ -238,7 +235,6 @@ export class SummaryViewControll {
     }
     //выводим в таблицу вчера и неделю
     viewSummaryTable(data, slot) {
-        console.log(data)
         if (!slot) {
             this.content.forEach((el, index) => {
                 el.parentElement.children[this.count].textContent = data[index]

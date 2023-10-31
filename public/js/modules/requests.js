@@ -1,22 +1,23 @@
-import { loadParamsView } from './paramsTyresView.js'
+import { clearConfig } from './altConfig.js'
 
 const login = document.querySelectorAll('.log')[1].textContent
-export function postTyres(tyres) {
+export async function postTyres(tyres) {
     console.log('ченчбэйстайрес')
     console.log(tyres)
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
     const name = active[0].textContent.replace(/\s+/g, '')
     const idw = document.querySelector('.color').id
-    fetch('/api/tyres', {
+    const params = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ tyres, activePost, idw }),
-    })
-        .then((res) => res.json())
-        .then(res => console.log(res))
+        body: JSON.stringify({ tyres, activePost, idw })
+    }
+    const results = await fetch('/api/tyres', params)
+    const res = results.json()
+    console.log(res)
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Датчики добавлены'
     messaga.style.color = 'green'
@@ -79,15 +80,10 @@ export const paramsDelete = async (idw) => {
 }
 
 export async function reqModalBar(arr, id) {
-    let activePost;
-    const active = document.querySelectorAll('.color')
-    if (active[0] == undefined) {
-        const listItem = document.querySelectorAll('.link_menu')[0]
-        activePost = listItem.textContent.replace(/\s+/g, '')
-    }
-    else {
-        activePost = active[0].textContent.replace(/\s+/g, '')
-    }
+
+    const active = document.querySelector('.color')
+    const activePost = active.children[0].textContent
+    console.log(activePost)
     const idw = document.querySelector('.color').id
     const arrValue = [];
     const divFinal = document.querySelectorAll('.divfinal')
@@ -99,8 +95,6 @@ export async function reqModalBar(arr, id) {
     divFinal.forEach(el => {
         arrValue.push(el.textContent)
     })
-
-    console.log(arrValue)
     const bar = await fetch('/api/modalBar', {
         method: "POST",
         headers: {
@@ -109,19 +103,13 @@ export async function reqModalBar(arr, id) {
         body: JSON.stringify({ id, arr, arrValue, idw }),
     })
     const result = await bar.json();
-    console.log(result)
 }
+
+
 export async function viewBar(id) {
-    console.log(id)
-    let activePost;
-    const active = document.querySelectorAll('.color')
-    if (active[0] == undefined) {
-        const listItem = document.querySelectorAll('.link_menu')[0]
-        activePost = listItem.textContent.replace(/\s+/g, '')
-    }
-    else {
-        activePost = active[0].textContent.replace(/\s+/g, '')
-    }
+
+    const active = document.querySelector('.color')
+    const activePost = active.children[0].textContent
     const idw = document.querySelector('.color').id
     const bar = await fetch('/api/barView', {
         method: "POST",
@@ -131,19 +119,19 @@ export async function viewBar(id) {
         body: JSON.stringify({ id, activePost, idw })
     })
     const barValue = await bar.json();
-    console.log(barValue)
+
     const keys = [];
-    if (barValue.result.length) {
-        for (let key in barValue.result[0]) {
+    if (barValue.length) {
+        for (let key in barValue) {
             keys.push(key);
         }
+        console.log(Object.entries(barValue[0]))
+        const nval = (Object.entries(barValue[0]))
 
-        const nval = (Object.entries(barValue.result[0]))
-        console.log(nval)
         nval.shift()
         nval.shift()
         nval.shift()
-        nval.shift()
+        nval.pop()
         const divfinal = document.querySelectorAll('.divfinal')
         const inpfinal = document.querySelectorAll('.inpfinal')
         const normal = document.querySelector('.normal')
@@ -195,16 +183,20 @@ export async function changeBase(massModel, activePost, idw, type, go, go1, goCa
     const modalCenterOs = document.querySelector('.modalCenterOs')
     modalCenterOs.style.display = 'none'
     console.log(response)
-    const par = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ idw }))
-    }
-    const zapuskUp = await fetch('/api/up', par)
-    console.log(zapuskUp)
-    zapros(login);
+    const checkAlt = document.getElementById('check_Title')
+    checkAlt.checked = false
+    clearConfig()
+    //  loadParamsView()
+    /*   const par = {
+           method: "POST",
+           headers: {
+               'Content-Type': 'application/json',
+           },
+           body: (JSON.stringify({ idw }))
+       }
+       const zapuskUp = await fetch('/api/up', par)
+       console.log(zapuskUp)*/
+    //  zapros(login);
 
 }
 

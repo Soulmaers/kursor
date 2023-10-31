@@ -127,7 +127,9 @@ export class InitMarkers {
         const checkInList = document.querySelectorAll('.checkInList')
         checkInList.forEach(el => {
             const idw = el.closest('.listItem').id
+
             if (InitMarkers.markers[idw]) {
+                console.log(el)
                 if (el.classList.contains('changeColorCheck')) {
                     this.map.removeLayer(InitMarkers.markers[idw]);
                     this.map.removeLayer(InitMarkers.markersArrow[idw]);
@@ -135,6 +137,7 @@ export class InitMarkers {
                     InitMarkers.markers[idw].isTrackActive ? InitMarkers.polyMode[idw].remove(this.map) : null
                 }
                 else {
+                    console.log(InitMarkers.markers[idw])
                     InitMarkers.markers[idw].addTo(this.map)
                     InitMarkers.markers[idw].isTrackActive ? InitMarkers.polyMode[idw].addTo(this.map) : null
                     this.list.forEach(it => {

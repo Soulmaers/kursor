@@ -118,7 +118,7 @@ export function createConfig(selectOld) {
     listenerNum()
 }
 
-function clearConfig() {
+export function clearConfig() {
     const wrapRight = document.querySelector('.wrapper_right')
     const sensors = document.querySelector('.sensors')
     const msg = document.querySelectorAll('.msg')

@@ -168,12 +168,12 @@ mobileItem.forEach(el => {
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
     const cond = document.querySelectorAll('.cond')
-    const changeColorCheck = document.querySelectorAll('.changeColorCheck')
-    if (changeColorCheck) {
-        changeColorCheck.forEach(e => {
-            e.classList.remove('changeColorCheck');
-        })
-    }
+    /* const changeColorCheck = document.querySelectorAll('.changeColorCheck')
+     if (changeColorCheck) {
+         changeColorCheck.forEach(e => {
+             e.classList.remove('changeColorCheck');
+         })
+     }*/
     const parent = document.querySelector('.sortCondition')
     cond.forEach((el, index) => {
         if (el.classList.contains('clicker')) {
@@ -701,8 +701,6 @@ const buttOnConfig = document.querySelectorAll('.buttOnConfig')
 otmena.addEventListener('click', () => {
     buttOnConfig[0].style.display = 'none'
 })
-
-
 
 
 export function fnsortTest(el) {

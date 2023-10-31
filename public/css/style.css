@@ -8571,3 +8571,9 @@ i.changeColorCheck {
 .iconm30 {
   margin-right: 30px;
 }
+
+.content_lower_charts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -135,7 +135,7 @@ export class ToggleHiddenList {
                 e.classList.remove('changeColorCheck')
             })
         }
-
+        console.log(initsmarkers)
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
         initSummary.clickListUpdateSummary()
         initCharts ? initCharts.getDataSummary() : null
@@ -145,7 +145,6 @@ export class ToggleHiddenList {
         event.stopPropagation()
         const element = event.target
         element.classList.toggle('changeColorCheck')
-        console.log(initCharts)
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
         this.statistikaObjectCar()
         initSummary.clickListUpdateSummary()
@@ -153,7 +152,7 @@ export class ToggleHiddenList {
     }
     toggleHiddenChildList(event) {
         const element = event.target
-        console.log(element)
+
         element.classList.toggle('changeColorCheck')
         const childCheck = (element.closest('.groups').lastElementChild).parentElement.querySelectorAll('.checkInList')
         Array.from(childCheck).forEach(el => {
@@ -164,7 +163,6 @@ export class ToggleHiddenList {
                 el.classList.remove('changeColorCheck')
             }
         })
-        console.log(initsmarkers)
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
         this.statistikaObjectCar()
         initSummary.clickListUpdateSummary()

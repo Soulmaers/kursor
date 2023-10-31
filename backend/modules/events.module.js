@@ -115,7 +115,6 @@ async function modalView(filled, name, group, idw, geo, time) {
     const hours = times.getHours().toString().padStart(2, '0');
     const minutes = times.getMinutes().toString().padStart(2, '0');
     const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
-
     const data = [{
         event: filled > 0 ? `Заправка` : 'Слив', litrazh: filled > 0 ? `Запралено: ${filled} л.` : `Слив: ${filled - (filled * 2)} л.`,
         time: `Время: ${formattedDate}`

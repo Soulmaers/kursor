@@ -22,7 +22,6 @@ module.exports = function (passport) {
                 const post = `SELECT id, name, role FROM users WHERE id='${payload.userId}'`
                 const result = await pool.request().query(post);
                 const user = result.recordset[0];
-                console.log(user)
                 if (user.name) {
                     done(null, user);
                 } else {
