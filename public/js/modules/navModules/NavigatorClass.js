@@ -11,7 +11,6 @@ export class NavigationMenu {
             dash: { method: this.dash.bind(this), elem: 'globalDash' },
             karta: { method: this.karta.bind(this), elem: 'globalMaps' },
             reports: { method: this.reports.bind(this), elem: 'globalReports' },
-            char: { method: this.char.bind(this), elem: 'globalCharts' },
             sklad: { method: this.sklad.bind(this), elem: 'globalSklad' }
         };
     }
@@ -70,16 +69,13 @@ export class NavigationMenu {
         const tableInfoCar = document.querySelector('.tableInfoCar')
         checkTypeMarkers.style.display = 'flex'
         tableInfoCar.style.display = 'flex'
-        kartaContainer(elem)
+        const wrap = document.querySelector('.globalMaps').children[0]
+        kartaContainer(wrap)
         this.currentTimeoutId = setInterval(() => {
-            kartaContainer(elem)
+            kartaContainer(wrap)
         }, 30000);
     }
 
-    char(elem) {
-        elem.style.display = 'flex'
-        charContainer()
-    }
     reports(elem) {
         elem.style.display = 'flex'
         reportsContainer()

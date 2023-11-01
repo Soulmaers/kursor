@@ -40,8 +40,8 @@ const techinfo = document.querySelector('.techInfo')
 const mainMenu = document.querySelector('.main_menu')
 const grafics = document.querySelector('.grafics')
 const viewIcon = document.querySelectorAll('.viewIcon')
-
-
+const role=document.querySelector('.role')
+const logout = document.querySelector('.logoutIcon')
 
 new Flash()
 
@@ -54,6 +54,8 @@ mainMenu.addEventListener('click', (event) => {
 })
 
 draggable()
+new Tooltip(role, [role.getAttribute('rel')]);
+new Tooltip(logout, [logout.getAttribute('rel')]);
 viewIcon.forEach(e => {
     const relValues = e.getAttribute('rel').split(' ');
     const lastRel = relValues[relValues.length - 1];
@@ -216,14 +218,14 @@ const account = document.querySelector('.settings_users')
 
 if (auth) {
     auth.addEventListener('click', (event) => {
-        const role = document.querySelectorAll('.log')[0].textContent
+        const role = document.querySelectorAll('.log')[0].getAttribute('rel')
         event.stopPropagation();
         const pop = document.querySelector('.popup-background')
         pop.style.display = 'block'
         account.style.display = 'flex'
         const setOne = document.querySelector('.set_one')
         const setTwo = document.querySelector('.set_two')
-        if (role === 'Пользователь') {
+                if (role === 'Пользователь') {
             const account = document.querySelector('.account')
             setOne.remove();
             account.remove();

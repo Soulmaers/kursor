@@ -129,15 +129,12 @@ export class InitMarkers {
             const idw = el.closest('.listItem').id
 
             if (InitMarkers.markers[idw]) {
-                console.log(el)
                 if (el.classList.contains('changeColorCheck')) {
                     this.map.removeLayer(InitMarkers.markers[idw]);
                     this.map.removeLayer(InitMarkers.markersArrow[idw]);
-                    console.log(InitMarkers.markers[idw])
                     InitMarkers.markers[idw].isTrackActive ? InitMarkers.polyMode[idw].remove(this.map) : null
                 }
                 else {
-                    console.log(InitMarkers.markers[idw])
                     InitMarkers.markers[idw].addTo(this.map)
                     InitMarkers.markers[idw].isTrackActive ? InitMarkers.polyMode[idw].addTo(this.map) : null
                     this.list.forEach(it => {
@@ -150,7 +147,6 @@ export class InitMarkers {
         })
     }
     changeMarkersIcon() {
-        console.log('апдейт маркер')
         InitMarkers.iconsMode = InitMarkers.iconsMode === "normal" ? "alternate" : "normal";
         Object.values(InitMarkers.markers).forEach(marker => {
             let newIcon;
@@ -194,7 +190,6 @@ export class InitMarkers {
 
         if (marker.isTrackActive) {
             event.target.style.color = 'rgba(6, 28, 71, 1)'
-            console.log(marker.isTrackActive)
             const params = {
                 method: "POST",
                 headers: {
@@ -213,10 +208,8 @@ export class InitMarkers {
             }
             else {
                 const poly = L.polyline(coordinates, { color: 'rgb(0, 0, 204)', weight: 1 });
-                console.log(poly)
                 InitMarkers.polyMode[idw] = poly
             }
-            console.log(InitMarkers.polyMode[idw])
             InitMarkers.polyMode[idw].addTo(this.map);
         }
 
@@ -227,7 +220,6 @@ export class InitMarkers {
     }
 
     addMarkersToMap() {
-        console.log('есть?')
         const uniqueElements = Array.from(new Set(this.list.map(subarr => subarr[8])));
         uniqueElements.forEach((el, index) => {
             this.objIconsMarkers[el] = `../../../image/${index + 1}.png`

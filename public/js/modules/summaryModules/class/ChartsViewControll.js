@@ -63,7 +63,6 @@ export class ChartsViewControll {
             dataAndValue[currentDate].medium = parseFloat((dataAndValue[currentDate].mediumAll / dataAndValue[currentDate].mediumlength).toFixed(0))
             dataAndValue[currentDate].jobTS += currentjobTS
         }
-        console.log(dataAndValue)
         let outputArray = Object.values(dataAndValue);
         const clickParams = document.querySelector('.clickToggle').parentElement.getAttribute('rel')
         this.data = outputArray
@@ -112,8 +111,6 @@ export class ChartsViewControll {
     createChart() {
         const nameChart = this.nameChart
         const data = this.data
-        console.log(nameChart)
-        console.log(data)
         const char = document.querySelector('.chart_global')
         if (char) {
             char.remove()
@@ -121,7 +118,6 @@ export class ChartsViewControll {
         const content_lower_charts = document.querySelector('.content_lower_charts')
         const graf = document.createElement('div')
         graf.classList.add('chart_global')
-        console.log(content_lower_charts.clientWidth)
         content_lower_charts.appendChild(graf)
         const svg = d3.select(".chart_global")
             .append("svg")
@@ -195,7 +191,6 @@ export class ChartsViewControll {
                         .text('TOP 3');
 
                     for (let i = 0; i < 3; i++) {
-                        console.log(titleTop[i][nameChart])
                         tooltip.append('text')
                             .attr('fill', 'rgba(6, 28, 71, 1)')
                             .attr('x', xScale(d.date) + xScale.bandwidth() / 2)

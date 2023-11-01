@@ -1,9 +1,13 @@
 <div class="container_flash">
-    <div class="well">
-        <p class="log"><%=role%></p>
-            <p class="log"><%=user%></p>
-    </div>
-    <div class="page-header text-center">
-        <a href="/logout" class="logout">Выход</a>
-    </div>
+   
+        <p class="log role"  rel="<%=role%>"><% if (role==='Администратор' ) { %>
+        <i class="settings fas fa-user-cog"></i>
+            <% } else { %>
+        <i class="settings fas fa-user"></i>
+                <% } %></p>
+            <p class="log us"><%=user%></p>
+            <div class="page-header text-center">
+                <a href="/logout" class="logout"><i class="logoutIcon fas fa-sign-in-alt"  rel="Выход"></i></a>
+            </div>
+    
 </div>

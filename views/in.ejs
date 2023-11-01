@@ -95,7 +95,6 @@
                 <a class="monitoring dash" rel="dash" href="#"><i class="w20 fas fa-chart-pie"></i>Дашборд</a>
                 <a class="monitor" href="#"><i class="w20 fas fa-desktop"></i>Мониторинг</a>
                 <a class="monitoring karta" rel="karta" href="#"><i class="w20 fas fa-map-marked-alt"></i>Карта</a>
-                <a class="monitoring char" rel="char" href="#"><i class="w20 fas fa-chart-line"></i>Графики</a>
                 <a class="monitoring reports" rel="reports" href="#"><i class="w20 fas fa-print"></i>Отчеты</a>
                 <a class="monitoring sklad" rel="sklad" href="#"><i class="w20 fas fa-industry"></i>Склад</a>
             </div>
@@ -107,11 +106,6 @@
         </div>
 
         <div class="headerAdmin">
-            <div class="control_panel">
-                <a class="settings"></a>
-                <a class="configs">Конфигуратор</a>
-
-            </div>
             <div class="logs">
                 <div class="num"></div>
             </div>
@@ -491,27 +485,99 @@
         </div>
         <section class="allsec globalDash"></section>
         <section class="allsec globalMaps">
-            <div class="settingsMap">
-                <div class="titleSettingsMap"><i class="fas fa-cogs"></i></div>
-                <div class="containerSettingsMap">
-                    <div class="checkTypeMarkers"><i class="fas fa-check checkMarkers"></i><span>Тип</span></div>
-                    <div class="checkTypeMarkers"><i class="fas fa-check checkMarkers"></i>Подпись</div>
+            <div class="wraaper">
+                <div class="settingsMap">
+                    <div class="titleSettingsMap"><i class="fas fa-cogs"></i></div>
+                    <div class="containerSettingsMap">
+                        <div class="checkTypeMarkers"><i class="fas fa-check checkMarkers"></i><span>Тип</span></div>
+                        <div class="checkTypeMarkers"><i class="fas fa-check checkMarkers"></i>Подпись</div>
 
+                    </div>
                 </div>
-            </div>
-            <div class="tableInfoCar">
-                <div class="containerInfoMap">
-                    <div class="itemInfoGlobal allCar" rel="Всего объектов"></div>
-                    <div class="itemInfo activeObjectMap" rel="Маркер на карте"></div>
-                    <div class="itemInfo onlineCar" rel="Нет связи с ТС"></div>
-                    <div class="itemInfo moveCar cond" rel="Движется"></div>
-                    <div class="itemInfo pauseCar cond" rel="Остановка"></div>
-                    <div class="itemInfo stopCar cond" rel="Стоянка"></div>
+                <div class="tableInfoCar">
+                    <div class="containerInfoMap">
+                        <div class="itemInfoGlobal allCar" rel="Всего объектов"></div>
+                        <div class="itemInfo activeObjectMap" rel="Маркер на карте"></div>
+                        <div class="itemInfo onlineCar" rel="Нет связи с ТС"></div>
+                        <div class="itemInfo moveCar cond" rel="Движется"></div>
+                        <div class="itemInfo pauseCar cond" rel="Остановка"></div>
+                        <div class="itemInfo stopCar cond" rel="Стоянка"></div>
+                    </div>
                 </div>
             </div>
         </section>
-        <section class="allsec globalCharts">Графики</section>
-        <section class="allsec globalReports">Отчеты</section>
+        <section class="allsec globalReports">
+            <div class="wraaper">
+                <div class="up_block">
+                    <div class="up_title">Отчеты</div>
+                    <div class="up_content">
+                        <div class="wrapper_shablon">
+                            <div class="title_result_reports">Шаблоны</div>
+                            <div class="wrapper_preferens">
+                                <div class="up_shablons">
+                                    <div class="shablons">
+                                        <div class="select_list">
+                                            <div class="titleChange_list">
+                                                <div class="titleChange_list_name">Выбор отчета</div><i
+                                                    class="fas fa-angle-down toggle_reports"></i>
+                                            </div>
+                                            <ul class="select_summary two">
+                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                                    <p class="text_type">Вчера</p>
+                                                </li>
+                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                                    <p class="text_type">Неделя</p>
+                                                </li>
+                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                                    <p class="text_type">Месяц</p>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="object">
+                                        <div class="select_list">
+                                            <div class="titleChange_list">
+                                                <div class="titleChange_list_name">Выбор объекта</div><i
+                                                    class="fas fa-angle-down toggle_reports"></i>
+                                            </div>
+                                            <ul class="select_summary two">
+                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                                    <p class="text_type">Вчера</p>
+                                                </li>
+                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                                    <p class="text_type">Неделя</p>
+                                                </li>
+                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
+                                                    <p class="text_type">Месяц</p>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="down_calendar"></div>
+                            </div>
+                        </div>
+                        <div class="wrapper_result">
+                            <div class="title_result_reports">Заголовки отчетов</div>
+                            <div class="list_reports"></div>
+                        </div>
+                        <div class="wrapper_reports_map">
+                            <div class="title_result_reports">Карта</div>
+                            <div class="reports_maps"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="down_block">
+                    <div class="down_title">Детализация</div>
+                    <div class="down_content">
+                        <div class="wrapper_reports"></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
         <section class="allsec globalSklad">Склад</section>
         <main class="main">
             <div class="update_time">

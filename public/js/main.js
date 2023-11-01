@@ -36,7 +36,7 @@ async function init() {
     }
 
 
-    // inits();
+    inits();
 
 
     const param = {
@@ -47,8 +47,6 @@ async function init() {
         body: (JSON.stringify({ login }))
 
     }
-
-
 
 
     const res = await fetch('/api/viewLogs', param)
@@ -94,7 +92,7 @@ init();
 
 function inits() {
     wialon.core.Session.getInstance().initSession("https://hst-api.wialon.com");
-    wialon.core.Session.getInstance().loginToken("0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178", "", // try to login
+    wialon.core.Session.getInstance().loginToken("0f481b03d94e32db858c7bf2d8415204977173E354D49AA7AFA37B01431539AEAC5DAD5E", "", // try to login
         function (code) {
             if (code) {
                 return;
@@ -106,8 +104,96 @@ function inits() {
 
 
 function zapross() {
+
+    const paramy = {
+        "itemId":
+            24937438,
+        "col": [1],
+        "flags": 0x0
+
+    }
+
+    const test = wialon.core.Remote.getInstance();
+    test.remoteCall('report/get_report_data', paramy,
+        function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+
+
+        })
+
+
+    const paramysss = {
+        "reportResourceId": 25383830,
+        "reportTemplateId": 4,
+        "reportObjectId": 25766831,
+        'reportObjectSecId': 0,
+        'reportObjectIdList': [],
+        "interval": {
+            "from": 1698613200 + 10800,
+            "to": 1698699600 + 10799,
+            "flags": 0x00
+        }
+    }
+
+    const test2 = wialon.core.Remote.getInstance();
+    test2.remoteCall('report/exec_report', paramysss,
+        function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+            const p = {
+                "tableIndex": 1,
+                "indexFrom": 0,
+                "indexTo": 44
+            }
+            const table = wialon.core.Remote.getInstance();
+            table.remoteCall('report/get_result_rows', p,
+                function (code, result) {
+                    if (code) {
+                        console.log(wialon.core.Errors.getErrorText(code));
+                    }
+                    console.log(result)
+
+
+                })
+        })
+
+
+
+    const tesOarams = {
+        "spec": {
+            "itemsType": "avl_resource",
+            "propName": "reporttemplates",
+            "propValueMask": "*",
+            "sortType": ""
+        },
+        "force": 1,
+        "flags": 0x00002001,
+        "from": 0,
+        "to": 0,
+
+    };
+
+    const test1 = wialon.core.Remote.getInstance();
+    test1.remoteCall('core/search_items', tesOarams,
+        function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+
+
+        })
+
+
+
+
     const params11 = {
-        "itemId": 26936623,
+        "itemId": 25399425,
         "ivalType": 1,
         "timeFrom": 1697105896 - 100000,
         "timeTo":
@@ -137,7 +223,7 @@ function zapross() {
             const params112 = {
                 "selector": {
                     "type": '*',
-                    //   "expr": 'trips{m<90}',
+                    //   "expr": 'trips{m < 90}',
                     "timeFrom": 1697105896 - 100000,
                     "timeTo":
                         1697105896,
