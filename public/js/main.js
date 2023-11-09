@@ -36,7 +36,7 @@ async function init() {
     }
 
 
-    inits();
+    // inits();
 
 
     const param = {
@@ -104,26 +104,19 @@ function inits() {
 
 
 function zapross() {
+    const param = {
+        'tzOffset': 0,
+        "language": 'ru',
+    };
 
-    const paramy = {
-        "itemId":
-            24937438,
-        "col": [1],
-        "flags": 0x0
-
-    }
-
-    const test = wialon.core.Remote.getInstance();
-    test.remoteCall('report/get_report_data', paramy,
+    const local = wialon.core.Remote.getInstance();
+    local.remoteCall('render/set_locale', param,
         function (code, result) {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
             console.log(result)
-
-
         })
-
 
     const paramysss = {
         "reportResourceId": 25383830,
@@ -145,22 +138,61 @@ function zapross() {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
             console.log(result)
-            const p = {
-                "tableIndex": 1,
-                "indexFrom": 0,
-                "indexTo": 44
-            }
-            const table = wialon.core.Remote.getInstance();
-            table.remoteCall('report/get_result_rows', p,
-                function (code, result) {
-                    if (code) {
-                        console.log(wialon.core.Errors.getErrorText(code));
-                    }
-                    console.log(result)
+            /* const file = wialon.core.Remote.getInstance();
+             file.remoteCall('report/export_result', { "format": 2, "compress": 0 },
+                 function (code, result) {
+                     if (code) {
+                         console.log(code)
+                         console.log(wialon.core.Errors.getErrorText(code));
+                     }
+                     const file = new Blob([result], { type: 'application/pdf' }); // Создаем объект Blob, который представляет файл с данными
+                     const fileURL = URL.createObjectURL(file); // Создаем ссылку на файл, используя метод createObjectURL
+ 
+                     const link = document.createElement('a'); // Создаем элемент <a>, который будет использоваться для загрузки файла
+                     link.href = fileURL; // Устанавливаем значение атрибута href равным ссылке на файл
+                     link.download = 'report.pdf'; // Устанавливаем значение атрибута download для определения имени файла при загрузке
+                     link.click(); // Запускаем загрузку файла, вызывая метод click() на элементе <a>
+                     //  console.log(result)
+ 
+                 })*/
 
-
-                })
         })
+
+
+
+
+
+
+    /*https://hst-api.wialon.com/wialon/ajax.html?svc=report/export_result&params={"format"2}&sid=02c1af974d1a5bf8d5631b0dc34aab71*/
+
+
+
+
+
+
+    /*
+                const form = {
+                     "format": 8,
+                "pageWidth": 0,
+                "pageOrientation": "landscap",
+                "headings": 1,
+                "compress": 0,
+                "attachMap": 0,
+                "pageSize": "a4",
+                "coding": "utf8",
+                "hideMapBasis": 0,
+                "delimiter": "semicolon",
+                "outputFileName": "Online"
+                }
+                const testfile = wialon.core.Remote.getInstance();
+                testfile.remoteCall('report/export_result', form,
+                    function (code, result) {
+                        if (code) {
+                            console.log(wialon.core.Errors.getErrorText(code));
+                        }
+                        console.log(result)
+    
+                    })*/
 
 
 
@@ -185,139 +217,6 @@ function zapross() {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
             console.log(result)
-
-
         })
-
-
-
-
-    const params11 = {
-        "itemId": 25399425,
-        "ivalType": 1,
-        "timeFrom": 1697105896 - 100000,
-        "timeTo":
-            1697105896,
-        "detectors": [
-            {
-                "type": 'sensors',
-                "filter1": 0
-            }, {
-                "type": 'lls',
-                "filter1": 0
-            }, {
-                "type": 'trips',
-                "filter1": 0
-            }
-        ],
-    }
-    const remote122 = wialon.core.Remote.getInstance();
-    remote122.remoteCall('events/load', params11,
-        function (code, result) {
-            if (code) {
-                console.log(wialon.core.Errors.getErrorText(code));
-            }
-            console.log(result)
-
-
-            const params112 = {
-                "selector": {
-                    "type": '*',
-                    //   "expr": 'trips{m < 90}',
-                    "timeFrom": 1697105896 - 100000,
-                    "timeTo":
-                        1697105896,
-                    "detalization": 23
-                }
-            }
-            const remote1221 = wialon.core.Remote.getInstance();
-            remote1221.remoteCall('events/get', params112,
-                function (code, result) {
-                    if (code) {
-                        console.log(wialon.core.Errors.getErrorText(code));
-                    }
-                    console.log(result)
-
-                });
-        });
-
-
-    const prmsId = {
-        "id": 26702383,
-        "flags": 0x0010000000
-    };
-    const flagsAllGroup = '0x3FFFFFFFFFFFFFF'// 0x0100000000000	// + 1024//4096
-    const prmsAllGoup = {
-        "spec": {
-            "itemsType": "avl_resource",
-            "propName": "trailers",
-            "propType": 'propitemname',
-            "propValueMask": "*",
-            "sortType": "trailers"
-        },
-        "force": 1,
-        "flags": flagsAllGroup,
-        "from": 0,
-        "to": 0xffffffff,
-        //  "rand": Math.random() // Добавляем рандомный параметр rand
-    };
-
-    const remote122144 = wialon.core.Remote.getInstance();
-    remote122144.remoteCall('core/search_items', prmsAllGoup,
-        function (code, result) {
-            if (code) {
-                console.log(wialon.core.Errors.getErrorText(code));
-            }
-            console.log(result)
-
-        });
-    console.log('запрос!!')
-    const params = {
-        "mode": "add",
-        "units": [
-            {
-                "id": 26936623,
-                "detect":
-                {
-                    "ignition": 0,
-                    "sensors": 0,
-                    'trips': 0,
-                    'lls': 0,
-                    "counters": 0
-                }
-            },
-        ]
-    }
-
-    const remote111 = wialon.core.Remote.getInstance();
-    remote111.remoteCall('events/update_units', params,
-        function (code, result) {
-            if (code) {
-                console.log(wialon.core.Errors.getErrorText(code));
-            }
-            console.log(result)
-
-            const prms = {
-                //   "lang": 'ru',
-                //   "measure": 0,
-                "detalization": 3
-            }
-
-
-
-            const remote1 = wialon.core.Remote.getInstance();
-            remote1.remoteCall('events/check_updates&params', prms,
-                function (code, result) {
-                    if (code) {
-                        console.log(wialon.core.Errors.getErrorText(code));
-                    }
-                    console.log(result)
-
-                });
-
-        });
-
-
-
 
 }

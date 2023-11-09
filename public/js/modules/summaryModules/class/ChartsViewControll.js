@@ -151,8 +151,8 @@ export class ChartsViewControll {
             .attr("y", d => yScale(d[nameChart]))
             .attr("height", d => 350 - yScale(d[nameChart]))
             .attr("width", xScale.bandwidth())
-            .attr("fill", "#fff")
-            .attr("stroke", "rgba(6, 28, 71, 1)")
+            .attr("fill", "#336699")
+            .attr("stroke", "#fff")
             .attr("stroke-width", 1)
             .on('mouseenter', function (d) {
                 if (nameChart !== 'jobTS') {

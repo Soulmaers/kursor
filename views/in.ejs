@@ -507,7 +507,7 @@
             </div>
         </section>
         <section class="allsec globalReports">
-            <div class="wraaper">
+            <div class="wraaper reports_module">
                 <div class="up_block">
                     <div class="up_title">Отчеты</div>
                     <div class="up_content">
@@ -518,19 +518,10 @@
                                     <div class="shablons">
                                         <div class="select_list">
                                             <div class="titleChange_list">
-                                                <div class="titleChange_list_name">Выбор отчета</div><i
-                                                    class="fas fa-angle-down toggle_reports"></i>
+                                                <div class="titleChange_list_name" rel="Выбор отчета">Выбор отчета
+                                                </div><i class="fas fa-angle-down toggle_reports"></i>
                                             </div>
-                                            <ul class="select_summary two">
-                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
-                                                    <p class="text_type">Вчера</p>
-                                                </li>
-                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
-                                                    <p class="text_type">Неделя</p>
-                                                </li>
-                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
-                                                    <p class="text_type">Месяц</p>
-                                                </li>
+                                            <ul class="header_select">
 
                                             </ul>
                                         </div>
@@ -538,30 +529,57 @@
                                     <div class="object">
                                         <div class="select_list">
                                             <div class="titleChange_list">
-                                                <div class="titleChange_list_name">Выбор объекта</div><i
-                                                    class="fas fa-angle-down toggle_reports"></i>
+                                                <div class="titleChange_list_name" rel="Выбор объекта">Выбор объекта
+                                                </div><i class="fas fa-angle-down toggle_reports"></i>
                                             </div>
-                                            <ul class="select_summary two">
-                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
-                                                    <p class="text_type">Вчера</p>
-                                                </li>
-                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
-                                                    <p class="text_type">Неделя</p>
-                                                </li>
-                                                <li class="item_type"><i class="fas fa-power-off radio_choice"></i>
-                                                    <p class="text_type">Месяц</p>
-                                                </li>
-
+                                            <ul class="header_select">
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="down_calendar"></div>
+                                <div class="down_calendar">
+                                    <div class="calendarReports">
+                                        <div class="interval_reports">
+                                            <div class="select_list">
+                                                <div class="titleChange_list">
+                                                    <div class="titleChange_list_name" rel="Выбор интервала">Выбор
+                                                        интервала
+                                                    </div><i class="fas fa-angle-down toggle_reports"></i>
+                                                </div>
+                                                <ul class="header_select body_interval">
+                                                    <li class="item_type"><i class="fa fa-check radio_choice"></i>
+                                                        <p class="text_type">Сегодня</p>
+                                                    </li>
+                                                    <li class="item_type"><i class="fa fa-check radio_choice"></i>
+                                                        <p class="text_type">Вчера</p>
+                                                    </li>
+                                                    <li class="item_type"><i class="fa fa-check radio_choice"></i>
+                                                        <p class="text_type">Неделя</p>
+                                                    </li>
+                                                    <li class="item_type"><i class="fa fa-check radio_choice"></i>
+                                                        <p class="text_type">Месяц</p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <input class="input_data" type="text" id="dateranges5"
+                                            placeholder="Выберите диапазон дат">
+                                        <div class="btn_speedStart_reports">
+                                            <button class="clear_report btm_formStart">Очистить</button>
+                                            <button class="complite btm_formStart control">Выполнить</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="wrapper_result">
                             <div class="title_result_reports">Заголовки отчетов</div>
-                            <div class="list_reports"></div>
+                            <ul class="list_reports">
+                                <div class="loaders_report">
+                                    <div class="loaders-globe-report"></div>
+                                </div>
+
+                            </ul>
                         </div>
                         <div class="wrapper_reports_map">
                             <div class="title_result_reports">Карта</div>
@@ -570,9 +588,29 @@
                     </div>
                 </div>
                 <div class="down_block">
-                    <div class="down_title">Детализация</div>
+
+                    <div class="down_title" rel="Детализация">Детализация</div>
                     <div class="down_content">
                         <div class="wrapper_reports"></div>
+                    </div>
+                    <div class="wrapper_file">
+                        <div class="file">
+                            <div class="titleChange_list">
+                                <div class="titleChange_list_name title_file" rel="'Экспорт'">Экспорт
+
+                                </div><i class="fas fa-angle-down toggle_reports toggle_file"></i>
+                            </div>
+                            <ul class="list_file">
+                                <li class="item_type_file" rel="8" data-attribute="xlsx"><i
+                                        class="fas fa-file-excel type_file"></i>
+                                    <p class="text_type text_file">XLSX</p>
+                                </li>
+                                <li class="item_type_file" rel="2" data-attribute="pdf"><i
+                                        class="fas fa-file-pdf type_file"></i>
+                                    <p class="text_type text_file">PDF</p>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 

@@ -26,9 +26,16 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
         const pool = await connection;
         let result = await pool.request().query(selectBase);
         if (result.recordset.length === 0) {
-            const sql = `INSERT INTO params(idw, nameCar, name, value, status, time) VALUES ?`;
+            const sqls = `INSERT INTO params(idw, nameCar, name, value, status, time) VALUES (@idw, @nameCar, @name, @value, @status, @time)`;
             const pool = await connection;
-            await pool.request().query(sql, [param]);
+            await pool.request()
+                .input('idw', String(param[0]))
+                .input('nameCar', String(param[1]))
+                .input('name', String(param[2]))
+                .input('value', String(param[3]))
+                .input('status', String(param[4]))
+                .input('time', String(param[5]))
+                .query(sqls);
         }
         else if (result.recordset.length > 0) {
             const mas = [];
@@ -283,14 +290,22 @@ exports.lostChartDataToBase = async () => {
 
 exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, status) => {
     if (!status) return;
-    const mass = [String(idw), activePost, todays, statusTSI, todays2, status];
+
     try {
         let postModel = `SELECT * FROM statusObj WHERE idw=@idw`;
         const pool = await connection;
         let results = await pool.request().input('idw', sql.NVarChar, String(idw)).query(postModel);
+        // console.log(results.recordset)
         if (results.recordset.length === 0) {
-            const selectBase = `INSERT INTO statusObj(idw, nameCar, time, status, timeIng, statusIng) VALUES (@mass)`;
-            await pool.request().input('mass', sql.NVarChar, mass.join(', ')).query(selectBase);
+            const selectBase = `INSERT INTO statusObj(idw, nameCar, time, status, timeIng, statusIng) VALUES (@idw, @nameCar, @time, @status, @timeIng, @statusIng)`;
+            await pool.request()
+                .input('idw', String(idw))
+                .input('nameCar', activePost)
+                .input('time', todays)
+                .input('status', statusTSI)
+                .input('timeIng', todays2)
+                .input('statusIng', status)
+                .query(selectBase);
         }
         else {
             if (results.recordset[0].status !== statusTSI) {

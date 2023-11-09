@@ -8,6 +8,7 @@ import { dataspisok } from './menu.js'
 import { ToggleHiddenList } from './listModules/class/ToggleHiddenList.js'
 import { SummaryViewControll } from './summaryModules/class/SummaryViewControll.js'
 import { ChartsViewControll } from './summaryModules/class/ChartsViewControll.js'
+//import { SelectObjectsView } from './reportsModules/class/SelectObjectsView.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
 simulateLoader();
@@ -195,8 +196,6 @@ export async function conturTest(testov) {
                 listTrail.setAttribute('rel', `pressure pricep`)
                 listTrail.classList.add('list_trail2')
                 listItemCar.appendChild(listTrail)
-
-
                 let in1;
                 let statusnew;
                 let sats;
@@ -288,6 +287,8 @@ export async function conturTest(testov) {
     initSummary = new SummaryViewControll(result)
     initCharts = new ChartsViewControll()
     initCharts.getDataSummary()
+
+    //new SelectObjectsView()
     navigator();
     setInterval(zaprosSpisok, 30000, toggleList)
 

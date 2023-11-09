@@ -113,6 +113,9 @@ export async function createMapsUniq(geoTrack, geo, num) {
         map.on('zoomend', function () {
             map.panTo(center);
         });
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 0);
         const res = await reverseGeocode(center[0], center[1])
         if (res) {
             const updatedContent = `${popupContent}<br>Адрес: ${res}`;

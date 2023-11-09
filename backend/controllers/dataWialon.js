@@ -164,8 +164,18 @@ exports.viewChartGeo = async (req, res) => {
     res.json(params)
 }*/
 
-
-
+exports.shablons = async (req, res) => {
+    const data = await wialonService.getAllShablonsToWialon()
+    res.json(data)
+}
+exports.titleShablon = async (req, res) => {
+    const idResourse = req.body.idResourse
+    const idShablon = req.body.idShablon
+    const idObject = req.body.idObject
+    const interval = req.body.interval
+    const data = await wialonService.getTitleShablonToWialon(idResourse, idShablon, idObject, interval)
+    res.json(data)
+}
 
 exports.quantityLogs = async (req, res) => {
     const login = req.body.login;
@@ -173,5 +183,15 @@ exports.quantityLogs = async (req, res) => {
     res.json(data)
 }
 
-
+// В контроллере:
+exports.file = async (req, res) => {
+    const format = req.body.format
+    const formatToWialon = req.body.formatToWialon
+    const fs = require('fs');
+    const data = await wialonService.getFileReportsToWialon(format, formatToWialon) // это путь к PDF файлу
+    const file = fs.createReadStream(data)
+    res.setHeader('Content-Type', `application/${format}`);
+    res.setHeader('Content-Disposition', `attachment; filename=filename.${format}`);
+    file.pipe(res);
+}
 

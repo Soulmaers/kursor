@@ -186,8 +186,8 @@ async function updateParams(data) {
         const currentDate = new Date();
         const todays = Math.floor(currentDate.getTime() / 1000);
         const activePost = el.nm.replace(/\s+/g, '');
+
         const resSaveStatus = await databaseService.saveStatusToBase(activePost, idw, todays, statusTSI, todays, status);
-        //  console.log(resSaveStatus)
         if (el.lmsg) {
             const sensor = Object.entries(el.lmsg.p);
             const time = new Date()

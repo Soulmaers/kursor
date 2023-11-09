@@ -1,20 +1,14 @@
-const mysql = require('mysql')
+
 require('dotenv').config();
-/*const connection = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME
-})*/
+
 const sql = require('mssql');
 
 
-
 const config = {
-    user: 'sa', // ваше имя пользователя
-    password: 'Asdf2022', // ваш пароль
-    server: 'localhost', // имя вашего сервера
-    database: 'CursorMSSQL', // имя вашей базы данных
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    server: process.env.DB_HOST,
+    database: process.env.DB_NAME,
     options: {
         trustServerCertificate: true // если используете самоподписанный сертификат SSL
     }

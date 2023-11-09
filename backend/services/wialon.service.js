@@ -2,8 +2,126 @@
 const { prms, prmsAllGoup } = require('../params')
 const { getSess, getSessiont } = require('../controllers/data.controller.js')
 const geSession = require('../../index.js')
-
+const fs = require('fs');
 //запрос всех  групп объектов  с виалона
+
+
+
+
+
+exports.getTitleShablonToWialon = async (idResourse, idShablon, idObject, interval) => {
+    const params = {
+        "reportResourceId": idResourse,
+        "reportTemplateId": idShablon,
+        "reportObjectId": idObject,
+        'reportObjectSecId': 0,
+        'reportObjectIdList': [],
+        "interval": {
+            "from": interval[0] + 10800,
+            "to": interval[1] + 10800,
+            "flags": 0
+        }
+    }
+
+    return new Promise(async function (resolve, reject) {
+        const session = await geSession.geSession();
+        session.request('report/exec_report', params)
+            .then(async function (data) {
+                const promises = data.reportResult.tables.map((el, index) => {
+                    const p = {
+                        "tableIndex": index,
+                        "indexFrom": 0,
+                        "indexTo": el.rows
+                    };
+                    return session.request('report/get_result_rows', p);
+                });
+                const rows = await Promise.all(promises);
+                resolve({ data: data, rows: rows });
+
+            })
+            .catch(function (err) {
+                console.log(err);
+                reject(err);
+            })
+
+
+    });
+
+};
+
+
+
+
+exports.getFileReportsToWialon = async (format, formatToWialon) => {
+    const session = await geSession.geSession();
+    const eid = session._session.eid;
+    const headers = {
+        'Accept': 'application/pdf',
+        'Content-Type': 'application/x-www-form-urlencoded'
+    };
+
+    const axios = require('axios');
+    const fs = require('fs');
+    const path = require('path');
+    const filePath = path.join(__dirname, `rep.${format}`);
+    console.log(filePath)
+    const writeStream = fs.createWriteStream(filePath);
+
+    const response = await axios.post(
+        `https://hst-api.wialon.com/wialon/ajax.html?svc=report/export_result&params={"format":${formatToWialon},"compress":0}&sid=${eid}`,
+        {},
+        { responseType: 'stream', headers: headers }
+    );
+    response.data.pipe(writeStream);
+    return new Promise((resolve, reject) => {
+        writeStream.on('finish', () => {
+            console.log('Файл успешно сохранен:', filePath);
+            resolve(filePath);
+        });
+
+        writeStream.on('error', (error) => {
+            console.error('Произошла ошибка:', error);
+            reject(error);
+        });
+    });
+};
+/* session.request('report/cleanup_result', params)
+                  .catch(function (err) {
+                      console.log(err);
+                  })
+                  .then(function (data) {
+                      resolve(data)
+                  });*/
+exports.getAllShablonsToWialon = async () => {
+    const params = {
+        "spec": {
+            "itemsType": "avl_resource",
+            "propName": "reporttemplates",
+            "propValueMask": "*",
+            "sortType": ""
+        },
+        "force": 1,
+        "flags": 0x00002001,
+        "from": 0,
+        "to": 0,
+
+    };
+
+    return new Promise(async function (resolve, reject) {
+        const session = await geSession.geSession();
+        session.request('core/search_items', params)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                resolve(data)
+            });
+        //}
+    })
+};
+
+
+
 exports.getAllGroupDataFromWialon = async () => {
     return new Promise(async function (resolve, reject) {
         const session = await geSession.geSession();

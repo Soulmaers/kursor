@@ -58,11 +58,24 @@ async function init() {
 }
 init()
 
+
 let session;
 async function wialon() {
     const token = process.env.TOKEN// await getTokenFromDB(login)
     console.log(token)
     session = await wialonModule.login(token);
+
+    const params = {
+        'tzOffset': 0,
+        "language": 'ru',
+    }
+    session.request('render/set_locale', params)
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function (data) {
+            console.log(data)
+        });
 }
 exports.geSession = async () => {
     return new Promise(async (resolve, reject) => {

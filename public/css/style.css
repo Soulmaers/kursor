@@ -9,6 +9,15 @@ body {
 
 
 
+.loaders_report {
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(6, 28, 71, 1);
+}
 
 .loaders {
   display: flex;
@@ -39,6 +48,16 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  animation: spin-horizontal 2s infinite linear;
+}
+
+.loaders-globe-report {
+  width: 100px;
+  height: 130px;
+  background-image: url(../image/gl1.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
   animation: spin-horizontal 2s infinite linear;
 }
 
@@ -2232,6 +2251,7 @@ div.spoyler {
   flex-wrap: wrap;
   padding: 5px;
   background-color: #fff;
+  border-top: 3px solid rgba(6, 28, 71, 1);
 }
 
 .content_card {
@@ -2401,6 +2421,7 @@ div.spoyler {
   padding: 5px;
   background: #fff;
 }
+
 
 .select_type {
   border: none;
@@ -5274,7 +5295,6 @@ div.wrapper {
 .wrapperFull {
   display: flex;
   position: relative;
-  border-top: 5px solid rgba(6, 28, 71, 1);
 }
 
 .osi_list {
@@ -8108,14 +8128,18 @@ i.tOn {
   color: gray;
 }
 
-.item_type {
+.item_type,
+.item_type_file {
   width: 100%;
   display: flex;
-
   align-items: center;
   list-style-type: none;
   border-bottom: 1px solid rgba(6, 28, 71, 1);
+  cursor: pointer;
 }
+
+
+
 
 .item_type:hover .fa-check {
   animation-name: wiggle;
@@ -8224,6 +8248,7 @@ i.acEvent {
   color: rgba(6, 28, 71, 1);
   font-size: 2rem;
   font-weight: bold;
+  border-top: 3px solid rgba(6, 28, 71, 1);
 }
 
 .globalMaps {
@@ -8460,6 +8485,7 @@ i.changeColorCheck {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  position: relative;
 }
 
 .content_statistika,
@@ -8470,6 +8496,7 @@ i.changeColorCheck {
   background-color: #fff;
   border-radius: 5px;
   height: 90%;
+  box-sizing: border-box;
 }
 
 .up_title,
@@ -8479,6 +8506,25 @@ i.changeColorCheck {
   font-weight: bold;
   font-family: Arial, Helvetica, sans-serif;
 
+}
+
+
+
+.wrapper_file {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.file {
+  padding: 2px 5px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border: 1px solid #fff;
+  border-radius: 5px;
 }
 
 .title_statistika,
@@ -8566,9 +8612,7 @@ i.changeColorCheck {
   position: relative;
 }
 
-.hidden_view {
-  display: flex;
-}
+
 
 
 .radio_choice {
@@ -8600,8 +8644,7 @@ i.changeColorCheck {
 
 .wraaper {
   width: 100%;
-  height: 98%;
-  padding: 10px;
+  height: 100%;
   background-color: rgba(6, 28, 71, 1);
   display: flex;
   flex-direction: column;
@@ -8664,20 +8707,15 @@ i.changeColorCheck {
   display: flex;
 }
 
-.wrapper_reports {
-  width: 100%;
-  border-radius: 5px;
-  border: 2px solid rgba(6, 28, 71, 1)
-}
 
 
 .wrapper_preferens {
   width: 100%;
-  height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
+  margin-top: 20px;
 }
 
 .up_shablons {
@@ -8693,9 +8731,11 @@ i.changeColorCheck {
 
 .down_calendar {
   width: 100%;
-  height: 58%;
+  height: 78%;
   border-radius: 5px;
   box-sizing: border-box;
+  margin-top: 20px;
+  padding: 10px;
 }
 
 .title_left_reports {
@@ -8707,7 +8747,7 @@ i.changeColorCheck {
 .titleChange_list {
   display: flex;
   align-items: center;
-  position: relative;
+
 }
 
 .select_list {
@@ -8716,6 +8756,7 @@ i.changeColorCheck {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .titleChange_list_name {
@@ -8725,4 +8766,186 @@ i.changeColorCheck {
 
 .toggle_reports {
   font-size: 1.2rem;
+}
+
+
+.header_select {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(6, 28, 71, 1);
+  background-color: #fff;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  position: absolute;
+  top: 10px;
+  padding: 0 5px;
+  width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1;
+}
+
+.list_file {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(6, 28, 71, 1);
+  background-color: #fff;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  position: absolute;
+  top: 20px;
+  padding: 2px 5px;
+  z-index: 1;
+}
+
+.hidden_view {
+  display: flex;
+}
+
+
+.interval_reports {
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.calendarReports {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  background: #fff;
+}
+
+.btn_speedStart_reports {
+  margin-top: 20px;
+  display: flex;
+}
+
+.input_data {
+  margin-top: 20px;
+  border-radius: 5px;
+  border: 1px solid rgba(6, 28, 71, 1);
+  text-align: center;
+  padding: 3px 0
+}
+
+.complite {
+  margin-left: 5px;
+  background-color: rgba(6, 28, 71, 1);
+}
+
+.clear_report {
+  background-color: #fff;
+  color: rgba(6, 28, 71, 1);
+  border: 1px solid rgba(6, 28, 71, 1)
+}
+
+.btm_formStart {
+  border-radius: 5px;
+}
+
+.body_interval {
+  width: 100px;
+}
+
+.list_reports {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 5px;
+
+}
+
+.titleNameReport {
+  width: 100%;
+  font-size: 1rem;
+  list-style-type: none;
+  border-bottom: 1px solid rgba(6, 28, 71, 1);
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  padding: 4px 0;
+  width: 100%;
+  cursor: pointer;
+}
+
+.miniMapsReports {
+  width: 100%;
+  height: 100%;
+}
+
+.reports_maps {
+  width: 100%;
+  height: 100%;
+}
+
+.titleNameReport:active {
+  background-color: rgba(6, 28, 71, 1);
+  color: #fff
+}
+
+.titleNameReport:hover {
+  border-bottom: 2px dashed rgba(6, 28, 71, 1);
+}
+
+.complite:active {
+  background-color: #fff;
+  color: rgba(6, 28, 71, 1);
+}
+
+.activeTitleReports {
+  background-color: rgba(6, 28, 71, 1);
+  color: #fff
+}
+
+.cell_params {
+  font-size: 0.8rem;
+  font-weight: 400;
+  border-spacing: 0;
+
+}
+
+
+.header_table_reports {
+  font-weight: bold;
+  font-size: 0.75rem;
+  padding: 2px 5px;
+  border: 1px solid rgba(6, 28, 71, 1);
+}
+
+.wrapper_reports {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  border: 2px solid rgba(6, 28, 71, 1);
+  text-align: center;
+  overflow-y: scroll;
+
+}
+
+
+.headersRow {
+  width: 100%;
+  background-color: #fff;
+}
+
+.title_file,
+.toggle_file {
+  color: #fff
+}
+
+
+
+
+
+.item_type_file:hover .type_file {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
 }
