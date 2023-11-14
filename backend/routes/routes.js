@@ -35,6 +35,10 @@ router.post('/api/updateSensors', controllerWialon.updateSensors)
 router.get('/api/shablons', controllerWialon.shablons)
 router.post('/api/titleShablon', controllerWialon.titleShablon)
 router.post('/api/file', controllerWialon.file)
+router.post('/api/chartData', controllerWialon.chartData)
+
+
+
 
 router.post('/api/geoloc', controllerGeo.geoloc)
 router.post('/api/getGeo', controllerGeo.getGeo)

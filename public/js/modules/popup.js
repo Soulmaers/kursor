@@ -75,25 +75,18 @@ export async function logsView(array) {
         });
         return acc;
     }, []);
-
+    const tr = document.querySelectorAll('.trEvent').length
+    // results.splice(0, tr.length)
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ arrayId }))
+        body: (JSON.stringify({ arrayId, tr }))
     }
     const ress = await fetch('/api/logsView', param)
-    const results = await ress.json()
-    results.sort((a, b) => {
-        if (a.time > b.time) {
-            return 1;
-        }
-        if (a.time < b.time) {
-            return -1;
-        }
-        return 0;
-    })
+    const value = await ress.json()
+    const results = value.itog
     console.log(results)
     const paramLog = {
         method: "POST",
@@ -104,15 +97,15 @@ export async function logsView(array) {
     }
     const resLog = await fetch('/api/quantityLogs', paramLog)
     const resultsLog = await resLog.json()
-    const viewNum = results.length - resultsLog[0].quantity
+    const viewNum = value.quant - resultsLog[0].quantity
     viewTableNum(viewNum)
     if (num === 0) {
-        previus = results.length
+        previus = value.quant
     }
-    if (previus !== results.length && num !== 0) {
-        const num = results.length - previus
+    if (previus !== value.quant && num !== 0) {
+        const num = value.quant - previus
         const arrayPopup = results.slice(-num)
-        previus = results.length
+        previus = value.quant
         arrayPopup.forEach(async el => {
             const content = JSON.parse(el.content)
             const event = content[0].event
@@ -185,8 +178,8 @@ export async function logsView(array) {
         previus = results.length
     }
     num++
-    const tr = document.querySelectorAll('.trEvent')
-    results.splice(0, tr.length)
+    // const tr = document.querySelectorAll('.trEvent')
+    // results.splice(0, tr.length)
     if (results.length !== 0) {
         const mass = results.map(el => {
             const parsedContent = JSON.parse(el.content);

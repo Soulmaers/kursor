@@ -95,6 +95,7 @@ export async function loadParamsViewList(car, el) {
 }
 
 export async function conturTest(testov) {
+    console.log(testov)
     const result = testov
         .map(el => Object.values(el)) // получаем массивы всех id
         .flat()
@@ -120,6 +121,7 @@ export async function conturTest(testov) {
             group.classList.add('groups')
             const nameGroup = el[0][5].replace(/\s/g, '_');
             group.classList.add(`${nameGroup}`)
+            group.setAttribute('id', el[0][6])
             group.style.display = 'flex',
                 group.style.flexDirection = 'column'
             group.style.width = 100 + '%',

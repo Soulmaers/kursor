@@ -40,7 +40,7 @@ const techinfo = document.querySelector('.techInfo')
 const mainMenu = document.querySelector('.main_menu')
 const grafics = document.querySelector('.grafics')
 const viewIcon = document.querySelectorAll('.viewIcon')
-const role=document.querySelector('.role')
+const role = document.querySelector('.role')
 const logout = document.querySelector('.logoutIcon')
 
 new Flash()
@@ -225,7 +225,7 @@ if (auth) {
         account.style.display = 'flex'
         const setOne = document.querySelector('.set_one')
         const setTwo = document.querySelector('.set_two')
-                if (role === 'Пользователь') {
+        if (role === 'Пользователь') {
             const account = document.querySelector('.account')
             setOne.remove();
             account.remove();
@@ -397,7 +397,7 @@ function mainblock() {
     rightFrame.style.display = 'flex'
     const wrapperFull = document.querySelector('.wrapperFull')
     const lowList = document.querySelector('.low_list')
-    lowList.style.height = wrapperFull.clientHeight - 20 + 'px';
+    lowList.style.height = wrapperFull.clientHeight - 30 + 'px';
     const wrapMap = document.querySelector('.wrapMap')
     if (wrapMap) {
         wrapMap.remove();

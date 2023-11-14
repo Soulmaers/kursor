@@ -49,7 +49,7 @@ async function init() {
     await initServer()
     await wialon()
 
-    globalstart.test()
+        / globalstart.test()
     globalstart.hunterTime()
     setInterval(globalstart.test, 300000)
     setInterval(globalstart.hunterTime, 50000)
@@ -64,9 +64,8 @@ async function wialon() {
     const token = process.env.TOKEN// await getTokenFromDB(login)
     console.log(token)
     session = await wialonModule.login(token);
-
     const params = {
-        'tzOffset': 0,
+        'tzOffset': 10800,
         "language": 'ru',
     }
     session.request('render/set_locale', params)

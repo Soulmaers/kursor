@@ -17,13 +17,21 @@ exports.getTitleShablonToWialon = async (idResourse, idShablon, idObject, interv
         'reportObjectSecId': 0,
         'reportObjectIdList': [],
         "interval": {
-            "from": interval[0] + 10800,
-            "to": interval[1] + 10800,
+            "from": interval[0],
+            "to": interval[1],
             "flags": 0
         }
     }
 
     return new Promise(async function (resolve, reject) {
+        /* const session = await geSession.geSession();
+         session.request('report/cleanup_result', params)
+             .catch(function (err) {
+                 console.log(err);
+             })
+             .then(function (data) {
+                 console.log(data)
+             });*/
         const session = await geSession.geSession();
         session.request('report/exec_report', params)
             .then(async function (data) {
@@ -43,12 +51,33 @@ exports.getTitleShablonToWialon = async (idResourse, idShablon, idObject, interv
                 console.log(err);
                 reject(err);
             })
-
-
     });
 
 };
 
+exports.getChartDatatToWialon = async (interval) => {
+    console.log(interval)
+    return new Promise(async function (resolve, reject) {
+        const session = await geSession.geSession();
+        const params = {
+            "attachmentIndex": 0,
+            "width": 1000000,// 100000,
+            "useCrop": 1,
+            'cropBegin': interval[0],
+            'cropEnd': interval[1]
+        }
+        session.request('report/render_json', params)
+            .then(async function (dataJson) {
+                resolve(dataJson)
+
+            })
+            .catch(function (err) {
+                console.log(err);
+                reject(err);
+            })
+    })
+
+}
 
 
 
@@ -68,7 +97,7 @@ exports.getFileReportsToWialon = async (format, formatToWialon) => {
     const writeStream = fs.createWriteStream(filePath);
 
     const response = await axios.post(
-        `https://hst-api.wialon.com/wialon/ajax.html?svc=report/export_result&params={"format":${formatToWialon},"compress":0}&sid=${eid}`,
+        `https://hst-api.wialon.com/wialon/ajax.html?svc=report/export_result&params={"format":${formatToWialon},"attachMap":1,"compress":0}&sid=${eid}`,
         {},
         { responseType: 'stream', headers: headers }
     );
@@ -85,13 +114,7 @@ exports.getFileReportsToWialon = async (format, formatToWialon) => {
         });
     });
 };
-/* session.request('report/cleanup_result', params)
-                  .catch(function (err) {
-                      console.log(err);
-                  })
-                  .then(function (data) {
-                      resolve(data)
-                  });*/
+
 exports.getAllShablonsToWialon = async () => {
     const params = {
         "spec": {

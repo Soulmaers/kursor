@@ -841,9 +841,9 @@ const popupProstoy = async (array) => {
     const result = array
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
-    const arrays = result.filter(e => e[6] && !e[6].startsWith('Цистерна')).map(e => e);
-    const interval = timefn()
 
+    const arrays = result.filter(e => e[0].message && !e[0].message.startsWith('Цистерна')).map(e => e);
+    const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
     for (const e of arrays) {
@@ -853,8 +853,7 @@ const popupProstoy = async (array) => {
         const geo = [];
         const idw = e[4];
         const model = await databaseService.modelViewToBase(idw)
-
-        let tsiControll = model.length !== 0 || model[0].tsiControll && model[0].tsiControll !== '' ? Number(model[0].tsiControll) : null;
+        let tsiControll = model.length !== 0 && model[0].tsiControll && model[0].tsiControll !== '' ? Number(model[0].tsiControll) : null;
         tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
 
         if (tsiControll === null || tsiControll === undefined) {
@@ -862,6 +861,8 @@ const popupProstoy = async (array) => {
         }
 
         const itog = await testovfn(idw, timeOld, timeNow)
+
+
         itog.forEach(el => {
             const timestamp = Number(el.data);
             const date = new Date(timestamp * 1000);
@@ -932,6 +933,20 @@ const popupProstoy = async (array) => {
             }
         })
     }
+}
+
+function timesFormat(dates) {
+    const totalSeconds = Math.floor(dates);
+    const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+    const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+    const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+    const motoHours = `${hours}:${minutes}`;
+    return motoHours;
+}
+
+async function testovfn(active, t1, t2) {
+    const resultt = await databaseService.viewChartDataToBase(active, t1, t2)
+    return resultt
 }
 
 function prostoy(data, tsi) {

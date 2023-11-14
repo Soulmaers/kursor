@@ -38,27 +38,35 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
                 .query(sqls);
         }
         else if (result.recordset.length > 0) {
+
             const mas = [];
             result.recordset.forEach(el => mas.push(el.name));
             const paramName = [];
+            // console.log(param)
             param.forEach(el => paramName.push(el[2]));
             for (let el of param) {
                 if (mas.includes(el[2])) {
-                    const sql = `UPDATE params SET idw='${String(idw)}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='true',time='${el[5]}'  WHERE idw='${String(idw)}' AND name='${el[2]}'`;
+                    const sqlUpdate = `UPDATE params SET idw='${String(idw)}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='true',time='${el[5]}'  WHERE idw='${String(idw)}' AND name='${el[2]}'`;
                     const pool = await connection;
-                    await pool.request().query(sql);
+                    await pool.request().query(sqlUpdate);
                 } else if (!mas.includes(el[2])) {
-                    const sql = `INSERT INTO params SET idw='${String(idw)}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='new',time='${el[5]}'`;
+                    const sqlInsert = `INSERT INTO params(idw, nameCar, name, value, status, time) VALUES (@idw, @nameCar, @name, @value, @status, @time)`;
                     const pool = await connection;
-                    await pool.request().query(sql);
-
+                    await pool.request()
+                        .input('idw', String(idw))
+                        .input('nameCar', String(name))
+                        .input('name', String(el[2]))
+                        .input('value', String(el[3]))
+                        .input('status', 'new')
+                        .input('time', String(el[5]))
+                        .query(sqlInsert);
                 }
             }
             for (let el of mas) {
                 if (!paramName.includes(el)) {
-                    const sql = `UPDATE params SET  status='false' WHERE idw='${String(idw)}' AND name='${el}'`;
+                    const sqlUpdateStatus = `UPDATE params SET  status='false' WHERE idw='${String(idw)}' AND name='${el}'`;
                     const pool = await connection;
-                    await pool.request().query(sql);
+                    await pool.request().query(sqlUpdateStatus);
                 }
             }
         }

@@ -3386,7 +3386,14 @@ input[type="date"] {
   color: black;
   margin: 0;
   border: 2px solid black;
+}
 
+.reports_popup .leaflet-popup-content-wrapper {
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  color: rgba(6, 28, 71, 1);
+  margin: 0;
+  border: 1px solid rgba(6, 28, 71, 1);
 }
 
 .my-popup-markers .leaflet-popup-content-wrapper {
@@ -8939,13 +8946,146 @@ i.changeColorCheck {
   color: #fff
 }
 
-
-
-
-
 .item_type_file:hover .type_file {
   animation-name: wiggle;
   animation-duration: 1s;
   animation-timing-function: ease;
   animation-iteration-count: 1;
+}
+
+.pointer_cell {
+  cursor: pointer;
+}
+
+.pointer_cell:hover {
+  background-color: #f5f2f2;
+  border: 1px dashed rgba(6, 28, 71, 1);
+}
+
+.active_cell {
+  background-color: #f5f2f2;
+  border: 1px dashed rgba(6, 28, 71, 1);
+}
+
+.object {
+  display: none;
+}
+
+.inform {
+  color: red;
+  margin: 0 auto;
+  font-size: 1rem;
+  font-weight: 500;
+
+}
+
+.legenda_navi {
+  height: 390px;
+  width: 18%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border: 2px solid rgba(6, 28, 71, 1);
+  border-radius: 5px;
+}
+
+.markers,
+.area,
+.line {
+  padding: 2px;
+  max-height: 130px;
+  overflow-y: auto;
+  width: 96%
+}
+
+.checkAll,
+.galka {
+  color: rgba(6, 28, 71, 1);
+  cursor: pointer;
+}
+
+.markers_image {
+  width: 22px;
+  height: 22px;
+  padding: 1px;
+  border: 1px solid rgba(6, 28, 71, 1);
+  cursor: pointer;
+  margin: 2px;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+}
+
+.chart_to_wialon {
+  width: 80%
+}
+
+.item_type_p {
+  width: 95%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: rgba(6, 28, 71, 1);
+  border-bottom: 1px solid rgba(6, 28, 71, 1);
+}
+
+.text_type_p {
+  margin: 5px;
+}
+
+.item_type_lineANDarea {
+  width: 98%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: rgba(6, 28, 71, 1);
+  margin: 2px 0;
+}
+
+.markers_container {
+  width: 98%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.area_line_container {
+  width: 98%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.fon {
+  width: 30px;
+  height: 15px;
+}
+
+
+.fonAndArea,
+.small_discription,
+.fon,
+.line_color {
+  margin: 0 5px;
+}
+
+.line_color {
+  height: 3px;
+}
+
+
+
+
+.noactiveCheckAll {
+  color: gray
+}
+
+.noactive {
+  opacity: 0.4;
 }

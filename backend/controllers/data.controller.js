@@ -27,6 +27,7 @@ exports.dataSpisok = async (req, res) => {
         const arrName = [];
         for (const elem of data.items) {
             const nameGroup = elem.nm;
+            const idGroup = elem.id
             const nameObject = elem.u;
             const massObject = [];
             await Promise.all(nameObject.map(async (el, index) => {
@@ -50,7 +51,7 @@ exports.dataSpisok = async (req, res) => {
                     console.log(e)
                 }
             }));
-            const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup })));
+            const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup, idGroup: idGroup })));
             aLLmassObject.push(objectsWithGroup);
             aLLmassObject.reverse();
         }
