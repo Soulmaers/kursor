@@ -19,6 +19,8 @@ export class SelectObjectsView {
         this.tablesReports = null
         this.rows = null
         this.attachments = null
+        this.backgroundRegions = null
+        this.markers = null
         this.requestParams = {
             idResourse: null,
             idShablon: null,
@@ -256,11 +258,14 @@ export class SelectObjectsView {
         datasets.forEach(dataset => {
             svg.append('path')
                 .datum(dataset.data)
+                .attr('class', 'linezoom')
+                .attr("clip-path", "url(#clip)")
                 .attr('d', dataset.line)
                 .attr('rel', `${dataset.uniq}`)
                 .attr('stroke', `#${dataset.color}`)
                 .attr('stroke-width', 1.5)
-                .attr('fill', 'none');
+                .attr('fill', 'none')
+
         });
     }
 
@@ -271,6 +276,8 @@ export class SelectObjectsView {
             svg.append('rect')
                 .attr('x', xScaleStart(new Date(Math.round(region[0] * 1000)))) // начало интервала в формате даты
                 .attr('y', 20) // отступ сверху
+                .attr('class', 'areazoom')
+                .attr("clip-path", "url(#clip)")
                 .attr('width', xScaleStart(new Date(Math.round(region[1] * 1000))) - xScaleStart(new Date(Math.round(region[0] * 1000)))) // ширина от начала до конца интервала в пикселях
                 .attr('height', 340) // высота
                 .attr('rel', `${set.id}`)
@@ -293,6 +300,8 @@ export class SelectObjectsView {
             .data(markers)
             .enter()
             .append("image")
+            .attr('class', 'markerszoom')
+            .attr("clip-path", "url(#clip)")
             .attr("x", d => xScaleStart(new Date(d.time * 1000)))
             .attr('rel', function (d) { return d.type })
             .attr("xlink:href", function (d) { return markersIcon[d.type] })
@@ -455,11 +464,23 @@ export class SelectObjectsView {
         conteiner.style.alignItems = 'center'
 
         this.createLegendaNavi(leg, chartData)
+
+
+
+
+
         const svg = d3.select(".chart_to_wialon")
             .append("svg")
             .attr("width", conteiner.clientWidth - 300)
-            .attr("height", 390);
+            .attr("height", 390)
 
+        svg.append("defs").append("clipPath")
+            .attr("id", "clip")
+            .append("rect")
+            .attr("width", conteiner.clientWidth - 480) // or the width of your chart area
+            .attr("height", 390)// or the height of your chart area
+            .attr('x', 70)
+            .attr('y', 0)
         const xScaleStart = d3.scaleTime()
             .domain(d3.extent(chartData.possitions.time, x => new Date(x * 1000)))
             .range([70, conteiner.clientWidth - 410]);
@@ -467,11 +488,11 @@ export class SelectObjectsView {
         const datasets = this.createOsiFormat(chartData, conteiner, svg)
 
         if (chartData.background_regions) {
-            const backgroundRegions = chartData.background_regions.reduce((acc, el) => {
+            this.backgroundRegions = chartData.background_regions.reduce((acc, el) => {
                 acc.push({ name: el.name, id: el.id, priority: el.priority, interval: el.regions, color: el.color.toString(16) })
                 return acc
             }, [])
-            backgroundRegions.forEach(set => {
+            this.backgroundRegions.forEach(set => {
                 this.createArea(set, svg, xScaleStart)
             })
         }
@@ -480,17 +501,18 @@ export class SelectObjectsView {
         }
 
         if (chartData.markers !== undefined) {
-            const markers = chartData.markers.flatMap(e =>
+            this.markers = chartData.markers.flatMap(e =>
                 e.x.map(el => ({
                     name: e.sensor,
                     time: el,
                     type: e.type,
                 }))
             );
-            this.createMarkers(markers, svg, xScaleStart)
+            this.createMarkers(this.markers, svg, xScaleStart)
         }
         svg.append("g")
             .attr("transform", `translate(0, 360)`)
+            .attr('class', 'os1')
             .call(d3.axisBottom(xScaleStart)
                 //  .ticks(d3.timeHour.every(1))
                 .ticks(10)
@@ -501,6 +523,7 @@ export class SelectObjectsView {
 
         svg.append("g")
             .attr("transform", `translate(0, 370)`)
+            .attr('class', 'os2')
             .call(d3.axisBottom(xScaleStart)
                 //   .ticks(d3.timeHour.every(1))
                 .ticks(10)
@@ -514,9 +537,11 @@ export class SelectObjectsView {
 
         svg.append("g")
             .attr("transform", `translate(70, 0)`)
+            .attr('class', 'osy1')
             .call(d3.axisLeft(datasets[0].yScale).ticks(10));
         svg.append("g")
             .attr("transform", `translate(${(conteiner.clientWidth - 410)}, 0)`) // Сдвигаем ось вправо
+            .attr('class', 'osy2')
             .call(d3.axisRight(datasets[1].yScale))
             .selectAll("text")
             .attr("dx", "5") // Сдвигаем текст оси вправо
@@ -542,8 +567,54 @@ export class SelectObjectsView {
             .style('font-weight', 400)
             .text(`${titleOsisY[1]}`);
 
+
         new NaviChartLegenda()
+        // Добавляем слушатель события прокрутки колеса мыши
+        svg.call(d3.zoom().on("zoom", this.zoomed.bind(this, datasets, xScaleStart, svg)))
+
+
     }
+
+    zoomed(datasets, xScaleStart, svg) {
+        const transform = d3.event.transform;
+        // Масштабируем оси с помощью текущего масштабного коэффициента
+        const new_xScale = transform.rescaleX(xScaleStart);
+        // Обновляем шкалю x для каждого датасета
+        datasets.forEach(dataset => {
+            dataset.xScale = transform.rescaleX(xScaleStart);
+            dataset.line = dataset.line.x(d => dataset.xScale(d.x));
+        });
+
+
+        // Обновляем оси с новыми масштабами
+        svg.select(".os1").call(d3.axisBottom(xScaleStart)
+            .ticks(10)
+            .tickFormat(function (d) {
+                return d3.timeFormat("%H:%M")(d);
+            })
+            .scale(new_xScale));
+        svg.select(".os2").call(d3.axisBottom(xScaleStart)
+            .ticks(10)
+            .tickFormat(function (d) {
+                return d3.timeFormat("%d.%m")(d);
+            })
+            .scale(new_xScale));
+
+        svg.selectAll(".linezoom")
+            .data(datasets)
+            .attr("d", d => d.line(d.data))
+
+        this.backgroundRegions.forEach(set => {
+            svg.selectAll(`[rel='${set.id}']`)
+                .data(set.interval) // Привязываем данные
+                .attr('x', d => new_xScale(new Date(Math.round(d[0] * 1000)))) // Начало интервала в формате даты
+                .attr('width', d => new_xScale(new Date(Math.round(d[1] * 1000))) - new_xScale(new Date(Math.round(d[0] * 1000))))
+        })
+        svg.selectAll(".markerszoom")
+            .data(this.markers)
+            .attr("x", d => new_xScale(new Date(d.time * 1000)))
+    }
+
 
     hiddenMarkerToMap() {
         this.map.removeLayer(this.marker)
