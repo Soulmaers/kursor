@@ -48,7 +48,7 @@ export function navigator() {
                     visualNone(e);  //скрываем для всех кнопок левый фрейм
                     // massivionbd.length = 0;
                 })
-                const ide = el.children[0].children[0].children[0]
+                const ide = el.children[0].children[0]
                 console.log(ide)
                 if (event.target !== ide) {
                     visual(el)

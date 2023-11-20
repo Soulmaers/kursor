@@ -170,12 +170,15 @@ mobileItem.forEach(el => {
 const logo = document.querySelector('.logo')
 logo.addEventListener('click', () => {
     const cond = document.querySelectorAll('.cond')
-    /* const changeColorCheck = document.querySelectorAll('.changeColorCheck')
-     if (changeColorCheck) {
-         changeColorCheck.forEach(e => {
-             e.classList.remove('changeColorCheck');
-         })
-     }*/
+    const groups = document.querySelectorAll('.groups')
+    groups.forEach(e => {
+        e.querySelector('.chekHidden').style.opacity = 1
+    })
+
+    const list = document.querySelectorAll('.listItem')
+    list.forEach(e => {
+        e.querySelector('.checkInList').style.opacity = 1
+    })
     const parent = document.querySelector('.sortCondition')
     cond.forEach((el, index) => {
         if (el.classList.contains('clicker')) {

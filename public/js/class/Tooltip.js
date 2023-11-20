@@ -10,7 +10,6 @@ export class Tooltip {
         this.element.addEventListener("mouseenter", this.handleMouseEnter);
         this.element.addEventListener("mouseleave", this.handleMouseLeave);
         this.element.addEventListener("mousemove", this.handleMouseMove);
-        console.log(element)
     }
     handleMouseEnter() {
         const tool = document.querySelectorAll('.tool')

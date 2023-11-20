@@ -3,6 +3,7 @@ import { initsmarkers } from '../../navModules/karta.js'
 import { filterCondition } from '../../filtersList.js'
 
 import { initSummary, initCharts } from '../../spisok.js'
+import { classReports } from '../../navModules/reports.js'
 export class ToggleHiddenList {
     constructor() {
         //  this.status = status
@@ -144,29 +145,58 @@ export class ToggleHiddenList {
     toggleHiddenList(event) {
         event.stopPropagation()
         const element = event.target
-        element.classList.toggle('changeColorCheck')
-        initsmarkers ? initsmarkers.toggleMarkersIcon() : null
-        this.statistikaObjectCar()
-        initSummary.clickListUpdateSummary()
-        initCharts ? initCharts.getDataSummary() : null
+        const tablo = document.querySelector('.tablo')
+        if (tablo && tablo.getAttribute('rel') === 'reports') {
+
+            console.log('теперь тут?')
+            this.checkInList.forEach(e => {
+                e.classList.add('changeColorCheck')
+            })
+            element.classList.remove('changeColorCheck')
+            classReports ? classReports.createListObjectsSelect(element) : null
+        }
+        else {
+            element.classList.toggle('changeColorCheck')
+            console.log(element)
+
+            initsmarkers ? initsmarkers.toggleMarkersIcon() : null
+            this.statistikaObjectCar()
+            initSummary.clickListUpdateSummary()
+            initCharts ? initCharts.getDataSummary() : null
+        }
+
     }
     toggleHiddenChildList(event) {
-        const element = event.target
 
-        element.classList.toggle('changeColorCheck')
+        const element = event.target
         const childCheck = (element.closest('.groups').lastElementChild).parentElement.querySelectorAll('.checkInList')
-        Array.from(childCheck).forEach(el => {
-            if (element.classList.contains('changeColorCheck')) {
-                el.classList.add('changeColorCheck')
-            }
-            else {
-                el.classList.remove('changeColorCheck')
-            }
-        })
-        initsmarkers ? initsmarkers.toggleMarkersIcon() : null
-        this.statistikaObjectCar()
-        initSummary.clickListUpdateSummary()
-        initCharts ? initCharts.getDataSummary() : null
+
+        const tablo = document.querySelector('.tablo')
+        if (tablo && tablo.getAttribute('rel') === 'reports') {
+            this.chekHiddens.forEach(e => {
+                e.classList.add('changeColorCheck')
+            })
+            element.classList.remove('changeColorCheck')
+            classReports ? classReports.createListGroupSelect(element) : null
+        }
+        else {
+            element.classList.toggle('changeColorCheck')
+            Array.from(childCheck).forEach(el => {
+                if (element.classList.contains('changeColorCheck')) {
+                    el.classList.add('changeColorCheck')
+                }
+                else {
+                    el.classList.remove('changeColorCheck')
+                }
+            })
+            initsmarkers ? initsmarkers.toggleMarkersIcon() : null
+            this.statistikaObjectCar()
+            initSummary.clickListUpdateSummary()
+            initCharts ? initCharts.getDataSummary() : null
+        }
+
+
+
     }
     hiddenList(event) {
         const element = event.target

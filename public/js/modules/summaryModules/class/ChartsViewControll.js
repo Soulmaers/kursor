@@ -67,6 +67,7 @@ export class ChartsViewControll {
         const clickParams = document.querySelector('.clickToggle').parentElement.getAttribute('rel')
         this.data = outputArray
         const char = document.querySelector('.chart_global')
+
         outputArray.length !== 0 ? this.createChart(outputArray, clickParams) : char.remove()
 
     }
@@ -108,14 +109,24 @@ export class ChartsViewControll {
         return topThree
     }
 
-    createChart() {
-        const nameChart = this.nameChart
-        const data = this.data
+    createChart(datas, nameCharts) {
+        let nameChart;
+        let data;
+        if (datas && nameCharts) {
+            nameChart = nameCharts
+            data = datas
+        }
+        else {
+            nameChart = this.nameChart
+            data = this.data
+        }
         const char = document.querySelector('.chart_global')
         if (char) {
             char.remove()
         }
+        console.log(nameChart, data)
         const content_lower_charts = document.querySelector('.content_lower_charts')
+
         const graf = document.createElement('div')
         graf.classList.add('chart_global')
         content_lower_charts.appendChild(graf)
@@ -133,7 +144,7 @@ export class ChartsViewControll {
         const self = this
         const yScale = d3.scaleLinear()
             .domain([0, d3.max(data, function (d) { return d[nameChart]; })])
-            .range([(content_lower_charts.clientHeight - 20), 20]);
+            .range([(content_lower_charts.clientHeight - 10), 20]);
 
         svg.append("g")
             .attr("transform", `translate(0, ${yScale(0)})`)
@@ -144,11 +155,12 @@ export class ChartsViewControll {
             .call(nameChart !== 'moto' && nameChart !== 'prostoy' && nameChart !== 'timeJob' ? d3.axisLeft(yScale) : d3.axisLeft(yScale).tickFormat(function (d) {
                 return self.timesFormat(d)
             }))
+        console.log(content_lower_charts.clientHeight)
         svg.selectAll('rect')
             .data(data)
             .enter().append('rect')
             .attr("x", d => xScale(d.date))
-            .attr("y", d => yScale(d[nameChart]))
+            .attr("y", d => yScale(d[nameChart]) + 10)
             .attr("height", d => (content_lower_charts.clientHeight - 20) - yScale(d[nameChart]))
             .attr("width", xScale.bandwidth())
             .attr("fill", "#336699")
@@ -156,10 +168,6 @@ export class ChartsViewControll {
             .attr("stroke-width", 1)
             .on('mouseenter', function (d) {
                 if (nameChart !== 'jobTS') {
-
-
-
-
                     var maxCar = data.reduce((max, current) => current[nameChart] > max[nameChart] ? current : max);
                     const titleTop = self.findTop(d.date, nameChart)
                     var tooltip = svg.append('g')
@@ -209,7 +217,7 @@ export class ChartsViewControll {
         data.forEach(function (d) {
             svg.append("text")
                 .attr("x", xScale(d.date) + xScale.bandwidth() / 2)
-                .attr("y", yScale(d[nameChart]) - 10)
+                .attr("y", yScale(d[nameChart]))
                 .text(nameChart === 'moto' || nameChart === 'prostoy' || nameChart === 'timeJob' ? self.timesFormat(d[nameChart]) : d[nameChart])
                 .attr("font-size", "10px")
                 .attr("text-anchor", "middle")

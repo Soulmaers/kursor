@@ -30,7 +30,6 @@ export class SelectObjectsView {
         this.createMap()
         this.createListShablons()
         this.createCalendar()
-
         this.checkObjects = this.object.querySelector('.toggle_reports')
         this.checkShablons = this.shablons.querySelector('.toggle_reports')
         this.checkInterval = this.interval.querySelector('.toggle_reports')
@@ -40,13 +39,10 @@ export class SelectObjectsView {
         this.selectinterval = this.interval.children[0].lastElementChild
         this.selectTypeFile = this.file.lastElementChild
         this.checkShablons.addEventListener('click', this.hiddenView.bind(this))
-        this.checkObjects.addEventListener('click', this.hiddenView.bind(this))
         this.checkInterval.addEventListener('click', this.hiddenView.bind(this))
-
         this.checkTypeFile.addEventListener('click', this.hiddenView.bind(this))
         this.file.querySelectorAll('.item_type_file').forEach(el => el.addEventListener('click', this.changeTitleRequestFile.bind(this, el)))
         this.interval.querySelectorAll('.item_type').forEach(el => el.addEventListener('click', this.checkChoice.bind(this, el)))
-        this.selectObjects.addEventListener('mouseleave', this.hiddenListOutsideKursor.bind(this))
         this.selectShablons.addEventListener('mouseleave', this.hiddenListOutsideKursor.bind(this))
         this.selectinterval.addEventListener('mouseleave', this.hiddenListOutsideKursor.bind(this))
         this.selectTypeFile.addEventListener('mouseleave', this.hiddenListOutsideKursor.bind(this))
@@ -58,7 +54,6 @@ export class SelectObjectsView {
         const calendar = this.interval.nextElementSibling
         console.log(this.interval.nextElementSibling)
         const id = `#${!calendar.children[0] ? calendar.id : calendar.children[0].id}`
-
 
         const fp = flatpickr(`${id}`, {
             mode: "range",
@@ -223,7 +218,7 @@ export class SelectObjectsView {
 
     createOsiFormat(chartData, conteiner, svg) {
         const datasets = Object.values(chartData.datasets).map(dataset => {
-            // create scales for each dataset
+
             const xScale = d3.scaleTime()
                 .domain(d3.extent(dataset.data.x, x => new Date(x * 1000)))
                 .range([70, conteiner.clientWidth - 410]);
@@ -266,7 +261,6 @@ export class SelectObjectsView {
 
         });
     }
-
 
     createArea(set, svg, xScaleStart) {
         console.log(set)
@@ -349,10 +343,7 @@ export class SelectObjectsView {
                 image.style.backgroundImage = `url(${markersIcon[el.type]})`
                 image.setAttribute('rel', el.type)
                 divfpoo.appendChild(image)
-
-
             })
-
         }
         if (chartData.background_regions) {
             const div = document.createElement('div')
@@ -569,30 +560,47 @@ export class SelectObjectsView {
         // Добавляем слушатель события прокрутки колеса мыши
         svg.call(d3.zoom().on("zoom", this.zoomed.bind(this, datasets, xScaleStart, svg)))
 
-        this.createTooltip(svg, datasets, chartData, xScaleStart)
+        this.createTooltip(svg, datasets, chartData, xScaleStart, conteiner)
 
     }
 
-    createTooltip(svg, datasets, chartData, xScaleStart) {
+    createTooltip(svg, datasets, chartData, xScaleStart, conteiner) {
         console.log(svg)
-
         const tool = document.querySelector('.chart-tooltip')
         if (tool) {
             tool.remove()
         }
 
-
         const body = document.querySelector('.chart_to_wialon');
         const tooltip = document.createElement('div');
         tooltip.classList.add('chart-tooltip');
         body.appendChild(tooltip);
+
+
+
         svg
-            .on('mouseout', () => tooltip.style.display = 'none')
+            .on('mouseout', () => {
+                tooltip.style.display = 'none'
+                //  tooltipLine.style('display', 'none');  // Hide tooltip line
+            })
             .on('mousemove', handleMouseMove);
 
-
         function handleMouseMove() {
+
+
+
+
+            const line = document.querySelector('.line')
+            const noactive = Array.from(line.querySelectorAll('.noactive')).reduce((acc, el) => {
+                acc.push(el.getAttribute('rel'))
+                return acc
+            }, [])
             const [xPosition, yPosition] = d3.mouse(this);
+
+
+
+
+
             const dataIndex = datasets.map(dataset => {
                 const closestIndex = findClosestDataIndex(xPosition, dataset.data);
                 // Добавить проверку индекса
@@ -602,18 +610,30 @@ export class SelectObjectsView {
 
                 return closestIndex;
             });
-            console.log(dataIndex)
-            const tooltipData = dataIndex.map((index, i) => {
+
+            const tooltipData = dataIndex.reduce((acc, index, i) => {
                 const nameParts = datasets[i].name.split(' ');
                 const unit = nameParts.pop();
+                if (noactive.length !== 0) {
+                    const filteredNoActive = noactive.filter(el => Number(el) !== datasets[i].uniq);
+                    if (filteredNoActive.length === noactive.length) {
+                        acc.push(createTooltipObject(datasets[i], nameParts, index, unit));
+                    }
+                } else {
+                    acc.push(createTooltipObject(datasets[i], nameParts, index, unit));
+                }
+                return acc
+            }, []);
 
-                return {   // явный return для возврата объекта из функции map
-                    color: datasets[i].color,
+            function createTooltipObject(dataset, nameParts, index, unit) {
+                return {
+                    color: dataset.color,
                     name: nameParts.join(' '),
-                    value: parseFloat(datasets[i].data[index[1]].y.toFixed(2)),
-                    val: unit
+                    value: parseFloat(dataset.data[index[1]].y.toFixed(2)),
+                    val: unit,
+                    uniq: dataset.uniq
                 };
-            });
+            }
             const unix = Math.floor(new Date(dataIndex[0][0]).getTime() / 1000)
             const date = new Date(unix * 1000);
             const day = date.getDate().toString().padStart(2, '0'); // Добавляем ведущий ноль для дня
@@ -624,29 +644,23 @@ export class SelectObjectsView {
             const seconds = date.getSeconds().toString().padStart(2, '0'); // Добавляем ведущий ноль для секунд
 
             const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
-            console.log(tooltipData);
-
-
-
 
             tooltip.innerHTML = `<div class="title_tooltip">${formattedDate}</div>
             <div class="body_tooltip">${tooltipData.map(data => `<div class="all_list_tooltip"><div class="color_tooltip" style="width: 20px; height: 2px; background: #${data.color}"></div>
-<div class="list_tooltip">${data.name}  ${data.value} ${data.val}</div></div>`).join('')}</div>`
+<div class="list_tooltip" rel=${data.uniq}>${data.name}  ${data.value} ${data.val}</div></div>`).join('')}</div>`
             tooltip.style.left = xPosition + 30 + 'px';
             tooltip.style.top = yPosition + 10 + 'px';
             tooltip.style.display = 'block';
         }
 
+
         function findClosestDataIndex(xPosition, data) {
             const x0 = xScaleStart.invert(xPosition);
             const times = data.map((d, i) => { return d.x });
             const index = d3.bisect(times, x0);
-
-            // Добавить условие для проверки индекса
             if (index < 0) {
-                return -1; // или любое другое значение, которое показывает отсутствие данных
+                return -1;
             }
-
             return [x0, index];
         }
 
@@ -895,9 +909,9 @@ export class SelectObjectsView {
             }
             this.object.querySelectorAll('.item_type').forEach(el => el.addEventListener('click', this.checkChoice.bind(this, el)))
         }
-        if (el.parentNode.parentNode.parentNode.classList.contains('object')) {
-            this.requestParams.idObject = el.getAttribute('rel')
-        }
+        // if (el.parentNode.parentNode.parentNode.classList.contains('object')) {
+        //  this.requestParams.idObject = el.getAttribute('rel')
+        //  }
         if (el.parentNode.parentNode.parentNode.classList.contains('interval_reports')) {
             const time = this.getTimeInterval(el.lastElementChild.textContent)
             this.requestParams.timeInterval = time
@@ -912,10 +926,10 @@ export class SelectObjectsView {
             this.requestParams.idShablon = null
             this.object.style.display = 'none'
         }
-        if (el.parentNode.parentNode.parentNode.classList.contains('object')) {
-            this.requestParams.idObject = null
+        // if (el.parentNode.parentNode.parentNode.classList.contains('object')) {
+        //    this.requestParams.idObject = null
 
-        }
+        // }
         if (el.parentNode.parentNode.parentNode.classList.contains('interval_reports')) {
             this.requestParams.timeInterval = null
         }
@@ -973,42 +987,35 @@ export class SelectObjectsView {
         container.classList.toggle('hidden_view')
     }
 
-
+    createListGroupSelect(elem) {
+        console.log(elem)
+        this.object.querySelector('.titleChange_list_name').textContent = elem.closest('.groups').getAttribute('rel')
+        this.requestParams.idObject = elem.closest('.groups').id
+    }
     createListGroup() {
-        const container = this.object.children[0].lastElementChild
+        Array.from(this.listObjects).forEach(e => {
+            e.querySelector('.checkInList').style.opacity = 0
+        })
         Array.from(this.groups).forEach(e => {
-            const li = document.createElement('li')
-            li.classList.add('item_type')
-            container.appendChild(li)
-            const i = document.createElement('i')
-            i.classList.add('fa')
-            i.classList.add('fa-check')
-            i.classList.add('radio_choice')
-            li.appendChild(i)
-            const p = document.createElement('p')
-            p.classList.add('text_type')
-            li.appendChild(p)
-            p.textContent = e.getAttribute('rel')
-            li.setAttribute('rel', e.id)
-        });
+            e.querySelector('.chekHidden').classList.add('changeColorCheck')
+            e.querySelector('.chekHidden').style.opacity = 1
+        })
+
+    }
+
+    createListObjectsSelect(elem) {
+        console.log(elem)
+        this.object.querySelector('.titleChange_list_name').textContent = elem.getAttribute('rel')
+        this.requestParams.idObject = elem.closest('.listItem').id
     }
     createListObjects() {
-        const container = this.object.children[0].lastElementChild
+        Array.from(this.groups).forEach(e => {
+            e.querySelector('.chekHidden').style.opacity = 0
+        })
         Array.from(this.listObjects).forEach(e => {
-            const li = document.createElement('li')
-            li.classList.add('item_type')
-            container.appendChild(li)
-            const i = document.createElement('i')
-            i.classList.add('fa')
-            i.classList.add('fa-check')
-            i.classList.add('radio_choice')
-            li.appendChild(i)
-            const p = document.createElement('p')
-            p.classList.add('text_type')
-            li.appendChild(p)
-            p.textContent = e.children[0].textContent
-            li.setAttribute('rel', e.id)
-        });
+            e.querySelector('.checkInList').classList.add('changeColorCheck')
+            e.querySelector('.checkInList').style.opacity = 1
+        })
 
     }
 

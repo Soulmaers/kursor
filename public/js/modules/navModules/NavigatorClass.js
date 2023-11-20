@@ -31,6 +31,16 @@ export class NavigationMenu {
     }
 
     handleButtonClick(event) {
+        const groups = document.querySelectorAll('.groups')
+        groups.forEach(e => {
+            e.querySelector('.chekHidden').style.opacity = 1
+        })
+
+        const list = document.querySelectorAll('.listItem')
+        list.forEach(e => {
+            e.querySelector('.checkInList').style.opacity = 1
+        })
+
         if (this.currentTimeoutId) {
             clearInterval(this.currentTimeoutId);
             const checkTypeMarkers = document.querySelector('.checkTypeMarkers')
