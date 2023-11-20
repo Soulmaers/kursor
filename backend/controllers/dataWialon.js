@@ -174,6 +174,7 @@ exports.titleShablon = async (req, res) => {
     const idObject = req.body.idObject
     const interval = req.body.interval
     const data = await wialonService.getTitleShablonToWialon(idResourse, idShablon, idObject, interval)
+
     res.json(data)
 }
 

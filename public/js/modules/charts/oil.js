@@ -861,8 +861,11 @@ export async function oil(t1, t2) {
             // Определяем координаты курсора в отношении svg
             const [xPosition, yPosition] = d3.mouse(this);
             // Определяем ближайшую точку на графике
+
             const bisect = d3.bisector(d => d.time).right;
+
             const x0 = x.invert(xPosition);
+            console.log(x0)
             const i = bisect(data, x0, 1);
             const d0 = data[i - 1];
             const d1 = data[i];

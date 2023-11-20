@@ -22,7 +22,7 @@ exports.dataSpisok = async (req, res) => {
         else {
             login = 'soulmaers'
         }
-        const data = await wialonService.getAllGroupDataFromWialon(login);
+        const data = await wialonService.getAllGroupDataFromWialon();
         const aLLmassObject = [];
         const arrName = [];
         for (const elem of data.items) {
@@ -224,23 +224,27 @@ async function updateParams(data) {
 
 async function engine(idw) {
     const resSensor = await wialonService.getAllNameSensorsIdDataFromWialon(idw, 'i');
-    const nameSens = Object.entries(resSensor.item.sens)
-    const arrNameSens = [];
-    nameSens.forEach(el => {
-        arrNameSens.push([el[1].n, el[1].p])
-    })
-    const res = await wialonService.getLastAllSensorsIdDataFromWialon(idw, 'i');
-    if (res) {
-        const valueSens = [];
-        Object.entries(res).forEach(e => {
-            valueSens.push(e[1])
+    //  console.log(resSensor)
+    if (resSensor !== undefined) {
+        const nameSens = Object.entries(resSensor.item.sens)
+        const arrNameSens = [];
+        nameSens.forEach(el => {
+            arrNameSens.push([el[1].n, el[1].p])
         })
-        const allArr = [];
-        arrNameSens.forEach((e, index) => {
-            allArr.push([...e, valueSens[index]])
-        })
-        return allArr
+        const res = await wialonService.getLastAllSensorsIdDataFromWialon(idw, 'i');
+        if (res) {
+            const valueSens = [];
+            Object.entries(res).forEach(e => {
+                valueSens.push(e[1])
+            })
+            const allArr = [];
+            arrNameSens.forEach((e, index) => {
+                allArr.push([...e, valueSens[index]])
+            })
+            return allArr
+        }
     }
+
 }
 
 async function zaprosSpisokb(name) {

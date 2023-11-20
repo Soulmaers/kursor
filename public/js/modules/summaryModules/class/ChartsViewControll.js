@@ -122,7 +122,7 @@ export class ChartsViewControll {
         const svg = d3.select(".chart_global")
             .append("svg")
             .attr("width", content_lower_charts.clientWidth)
-            .attr("height", 390);
+            .attr("height", (content_lower_charts.clientHeight));
 
         const xScale = d3.scaleBand()
             .domain(data.map(function (d) { return d.date; }))
@@ -133,7 +133,7 @@ export class ChartsViewControll {
         const self = this
         const yScale = d3.scaleLinear()
             .domain([0, d3.max(data, function (d) { return d[nameChart]; })])
-            .range([350, 20]);
+            .range([(content_lower_charts.clientHeight - 20), 20]);
 
         svg.append("g")
             .attr("transform", `translate(0, ${yScale(0)})`)
@@ -149,7 +149,7 @@ export class ChartsViewControll {
             .enter().append('rect')
             .attr("x", d => xScale(d.date))
             .attr("y", d => yScale(d[nameChart]))
-            .attr("height", d => 350 - yScale(d[nameChart]))
+            .attr("height", d => (content_lower_charts.clientHeight - 20) - yScale(d[nameChart]))
             .attr("width", xScale.bandwidth())
             .attr("fill", "#336699")
             .attr("stroke", "#fff")

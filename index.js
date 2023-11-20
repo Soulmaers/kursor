@@ -49,7 +49,7 @@ async function init() {
     await initServer()
     await wialon()
 
-        / globalstart.test()
+    globalstart.test()
     globalstart.hunterTime()
     setInterval(globalstart.test, 300000)
     setInterval(globalstart.hunterTime, 50000)
@@ -57,13 +57,15 @@ async function init() {
     console.log('сессия открыта')
 }
 init()
-
-
+//0f481b03d94e32db858c7bf2d8415204977173E354D49AA7AFA37B01431539AEAC5DAD5E
+//0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178
+//0f481b03d94e32db858c7bf2d8415204616F1C781302A0F13D8C8C61B8B8CCBCEB8D19EB
 let session;
 async function wialon() {
     const token = process.env.TOKEN// await getTokenFromDB(login)
     console.log(token)
     session = await wialonModule.login(token);
+    // console.log(session)
     const params = {
         'tzOffset': 10800,
         "language": 'ru',

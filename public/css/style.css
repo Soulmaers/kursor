@@ -8504,6 +8504,7 @@ i.changeColorCheck {
   border-radius: 5px;
   height: 90%;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .up_title,
@@ -8722,7 +8723,7 @@ i.changeColorCheck {
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  margin-top: 20px;
+  /*margin-top: 20px;*/
 }
 
 .up_shablons {
@@ -8742,7 +8743,7 @@ i.changeColorCheck {
   border-radius: 5px;
   box-sizing: border-box;
   margin-top: 20px;
-  padding: 10px;
+  /*padding: 10px;*/
 }
 
 .title_left_reports {
@@ -8788,7 +8789,8 @@ i.changeColorCheck {
   top: 10px;
   padding: 0 5px;
   width: 200px;
-  max-height: 300px;
+  max-height: 140px;
+  /*300px;*/
   overflow-y: auto;
   z-index: 1;
 }
@@ -8876,7 +8878,7 @@ i.changeColorCheck {
   display: flex;
   justify-content: center;
   align-content: center;
-  padding: 4px 0;
+  padding: 1px 0;
   width: 100%;
   cursor: pointer;
 }
@@ -8932,7 +8934,7 @@ i.changeColorCheck {
   border: 2px solid rgba(6, 28, 71, 1);
   text-align: center;
   overflow-y: scroll;
-
+  position: relative;
 }
 
 
@@ -9018,8 +9020,11 @@ i.changeColorCheck {
 }
 
 .chart_to_wialon {
-  width: 80%
+  width: 80%;
+  position: relative;
 }
+
+
 
 .item_type_p {
   width: 95%;
@@ -9088,4 +9093,36 @@ i.changeColorCheck {
 
 .noactive {
   opacity: 0.4;
+}
+
+
+.chart-tooltip {
+  font-size: 0.9rem;
+  padding: 5px;
+  border: 1px solid rgba(6, 28, 71, 1);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.title_tooltip {
+  border-bottom: 2px solid gray
+}
+
+.all_list_tooltip {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.body_tooltip {
+  display: flex;
+  flex-direction: column;
+}
+
+.color_tooltip {
+  margin-right: 10px;
 }

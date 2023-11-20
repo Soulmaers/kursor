@@ -221,8 +221,6 @@ export class SelectObjectsView {
         this.createChartToWialon(chartData)
     }
 
-
-
     createOsiFormat(chartData, conteiner, svg) {
         const datasets = Object.values(chartData.datasets).map(dataset => {
             // create scales for each dataset
@@ -242,6 +240,7 @@ export class SelectObjectsView {
                     x: new Date(value * 1000),
                     y: dataset.data.y[i]
                 })),
+                name: dataset.name,
                 color: dataset.color.toString(16),
                 uniq: dataset.y_axis,
                 xScale: xScale,
@@ -252,7 +251,6 @@ export class SelectObjectsView {
 
         return datasets
     }
-
 
     createLine(datasets, svg) {
         datasets.forEach(dataset => {
@@ -465,10 +463,6 @@ export class SelectObjectsView {
 
         this.createLegendaNavi(leg, chartData)
 
-
-
-
-
         const svg = d3.select(".chart_to_wialon")
             .append("svg")
             .attr("width", conteiner.clientWidth - 300)
@@ -477,6 +471,7 @@ export class SelectObjectsView {
         svg.append("defs").append("clipPath")
             .attr("id", "clip")
             .append("rect")
+            .attr("class", "clipart")
             .attr("width", conteiner.clientWidth - 480) // or the width of your chart area
             .attr("height", 390)// or the height of your chart area
             .attr('x', 70)
@@ -513,6 +508,7 @@ export class SelectObjectsView {
         svg.append("g")
             .attr("transform", `translate(0, 360)`)
             .attr('class', 'os1')
+            .attr("clip-path", "url(#clip)")
             .call(d3.axisBottom(xScaleStart)
                 //  .ticks(d3.timeHour.every(1))
                 .ticks(10)
@@ -524,6 +520,7 @@ export class SelectObjectsView {
         svg.append("g")
             .attr("transform", `translate(0, 370)`)
             .attr('class', 'os2')
+            .attr("clip-path", "url(#clip)")
             .call(d3.axisBottom(xScaleStart)
                 //   .ticks(d3.timeHour.every(1))
                 .ticks(10)
@@ -532,7 +529,6 @@ export class SelectObjectsView {
                 })
             )
             .style("stroke-width", 0)
-
 
 
         svg.append("g")
@@ -569,13 +565,94 @@ export class SelectObjectsView {
 
 
         new NaviChartLegenda()
+
         // Добавляем слушатель события прокрутки колеса мыши
         svg.call(d3.zoom().on("zoom", this.zoomed.bind(this, datasets, xScaleStart, svg)))
 
+        this.createTooltip(svg, datasets, chartData, xScaleStart)
 
     }
 
-    zoomed(datasets, xScaleStart, svg) {
+    createTooltip(svg, datasets, chartData, xScaleStart) {
+        console.log(svg)
+
+        const tool = document.querySelector('.chart-tooltip')
+        if (tool) {
+            tool.remove()
+        }
+
+
+        const body = document.querySelector('.chart_to_wialon');
+        const tooltip = document.createElement('div');
+        tooltip.classList.add('chart-tooltip');
+        body.appendChild(tooltip);
+        svg
+            .on('mouseout', () => tooltip.style.display = 'none')
+            .on('mousemove', handleMouseMove);
+
+
+        function handleMouseMove() {
+            const [xPosition, yPosition] = d3.mouse(this);
+            const dataIndex = datasets.map(dataset => {
+                const closestIndex = findClosestDataIndex(xPosition, dataset.data);
+                // Добавить проверку индекса
+                if (closestIndex[1] <= 0) {
+                    return -1; // или любое другое значение, которое показывает отсутствие данных
+                }
+
+                return closestIndex;
+            });
+            console.log(dataIndex)
+            const tooltipData = dataIndex.map((index, i) => {
+                const nameParts = datasets[i].name.split(' ');
+                const unit = nameParts.pop();
+
+                return {   // явный return для возврата объекта из функции map
+                    color: datasets[i].color,
+                    name: nameParts.join(' '),
+                    value: parseFloat(datasets[i].data[index[1]].y.toFixed(2)),
+                    val: unit
+                };
+            });
+            const unix = Math.floor(new Date(dataIndex[0][0]).getTime() / 1000)
+            const date = new Date(unix * 1000);
+            const day = date.getDate().toString().padStart(2, '0'); // Добавляем ведущий ноль для дня
+            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Добавляем ведущий ноль для месяца
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, '0'); // Добавляем ведущий ноль для часов
+            const minutes = date.getMinutes().toString().padStart(2, '0'); // Добавляем ведущий ноль для минут
+            const seconds = date.getSeconds().toString().padStart(2, '0'); // Добавляем ведущий ноль для секунд
+
+            const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
+            console.log(tooltipData);
+
+
+
+
+            tooltip.innerHTML = `<div class="title_tooltip">${formattedDate}</div>
+            <div class="body_tooltip">${tooltipData.map(data => `<div class="all_list_tooltip"><div class="color_tooltip" style="width: 20px; height: 2px; background: #${data.color}"></div>
+<div class="list_tooltip">${data.name}  ${data.value} ${data.val}</div></div>`).join('')}</div>`
+            tooltip.style.left = xPosition + 30 + 'px';
+            tooltip.style.top = yPosition + 10 + 'px';
+            tooltip.style.display = 'block';
+        }
+
+        function findClosestDataIndex(xPosition, data) {
+            const x0 = xScaleStart.invert(xPosition);
+            const times = data.map((d, i) => { return d.x });
+            const index = d3.bisect(times, x0);
+
+            // Добавить условие для проверки индекса
+            if (index < 0) {
+                return -1; // или любое другое значение, которое показывает отсутствие данных
+            }
+
+            return [x0, index];
+        }
+
+    }
+
+    zoomed(datasets, xScaleStart, svg, chartData) {
         const transform = d3.event.transform;
         // Масштабируем оси с помощью текущего масштабного коэффициента
         const new_xScale = transform.rescaleX(xScaleStart);
@@ -605,7 +682,7 @@ export class SelectObjectsView {
             .attr("d", d => d.line(d.data))
 
         this.backgroundRegions.forEach(set => {
-            svg.selectAll(`[rel='${set.id}']`)
+            svg.selectAll(`[rel = '${set.id}']`)
                 .data(set.interval) // Привязываем данные
                 .attr('x', d => new_xScale(new Date(Math.round(d[0] * 1000)))) // Начало интервала в формате даты
                 .attr('width', d => new_xScale(new Date(Math.round(d[1] * 1000))) - new_xScale(new Date(Math.round(d[0] * 1000))))
@@ -613,6 +690,8 @@ export class SelectObjectsView {
         svg.selectAll(".markerszoom")
             .data(this.markers)
             .attr("x", d => new_xScale(new Date(d.time * 1000)))
+
+        this.createTooltip(svg, datasets, chartData, new_xScale)
     }
 
 

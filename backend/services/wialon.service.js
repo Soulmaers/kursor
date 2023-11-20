@@ -35,6 +35,7 @@ exports.getTitleShablonToWialon = async (idResourse, idShablon, idObject, interv
         const session = await geSession.geSession();
         session.request('report/exec_report', params)
             .then(async function (data) {
+                //  console.log(data)
                 const promises = data.reportResult.tables.map((el, index) => {
                     const p = {
                         "tableIndex": index,
@@ -43,7 +44,9 @@ exports.getTitleShablonToWialon = async (idResourse, idShablon, idObject, interv
                     };
                     return session.request('report/get_result_rows', p);
                 });
+
                 const rows = await Promise.all(promises);
+                //  console.log({ data: data, rows: rows })
                 resolve({ data: data, rows: rows });
 
             })
