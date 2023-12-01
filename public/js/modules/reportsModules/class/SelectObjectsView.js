@@ -1,4 +1,6 @@
 import { NaviChartLegenda } from "./NaviChartLegends.js"
+import { initSummary } from "../../spisok.js"
+import { Tooltip } from "../../../class/Tooltip.js"
 
 export class SelectObjectsView {
 
@@ -13,6 +15,9 @@ export class SelectObjectsView {
         this.titleReports = document.querySelector('.list_reports')
         this.mapContainer = document.querySelector('.reports_maps')
         this.reports_module = document.querySelector('.reports_module')
+        this.globalChartData = null
+        this.svg = null;
+        this.xScaleStart = null;
         this.marker = null;
         this.map = null;
         this.stats = null
@@ -79,9 +84,19 @@ export class SelectObjectsView {
     changeTitleRequestFile(el) {
         const title = el.closest('.file').querySelector('.titleChange_list_name')
         title.textContent = el.lastElementChild.textContent
-        this.downloadFileReports(el)
+        if (this.requestParams.idResourse === 'cursor') {
+            this.convertPDF(this.globalChartData)
+        }
+        else {
+            this.downloadFileReports(el)
+        }
+
     }
 
+    convertPDF(data) {
+        console.log(data)
+
+    }
     async downloadFileReports(el) {
         const object = (this.object.querySelector('.titleChange_list_name').textContent).replace(/\s+/g, '_')
         const shablons = (this.shablons.querySelector('.titleChange_list_name').textContent).replace(/\s+/g, '_')
@@ -119,9 +134,33 @@ export class SelectObjectsView {
         let minutes = ("0" + date.getMinutes()).slice(-2);
         let seconds = ("0" + date.getSeconds()).slice(-2);
 
-        let formattedTime = `${year}-${month}-${day}(${hours}-${minutes}-${seconds})`;
+        let formattedTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         return formattedTime
     }
+    converterTimesTooltip(data) {
+        let date = new Date(data * 1000); // Преобразование в миллисекунды
+        let year = date.getFullYear();
+        let month = ("0" + (date.getMonth() + 1)).slice(-2); // Месяцы начинаются с 0
+        let day = ("0" + date.getDate()).slice(-2);
+        let hours = ("0" + date.getHours()).slice(-2);
+        let minutes = ("0" + date.getMinutes()).slice(-2);
+        let seconds = ("0" + date.getSeconds()).slice(-2);
+
+        let formattedTime = `${day}.${month} ${hours}:${minutes}`;
+        return formattedTime
+    }
+    formatTime(num) {
+        var hours = Math.floor(num / 3600);
+        var minutes = Math.floor((num % 3600) / 60);
+        var seconds = num % 60;
+
+        var formattedTime = hours.toString().padStart(2, '0') + ':' +
+            minutes.toString().padStart(2, '0') + ':' +
+            seconds.toString().padStart(2, '0');
+
+        return formattedTime;
+    }
+
     async requestDataTitleReport() {
         const titleNameReport = document.querySelectorAll('.titleNameReport')
         if (titleNameReport) {
@@ -145,23 +184,39 @@ export class SelectObjectsView {
         const idShablon = this.requestParams.idShablon
         const idObject = this.requestParams.idObject
         const interval = this.requestParams.timeInterval
-        const res = await fetch('/api/titleShablon', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ idResourse, idShablon, idObject, interval })
-        })
-        const result = await res.json()
-        console.log(result)
-        this.tablesReports = result.data.reportResult.tables
-        this.stats = result.data.reportResult.stats
-        this.rows = result.rows
-        this.attachments = result.data.reportResult.attachments
-        this.clearTable()
-        this.createListTitleReports(this.tablesReports, this.stats, this.attachments)
-        loaders.style.display = 'none'
 
+        if (idResourse === 'cursor') {
+            const globalChartData = await this.requestData(idShablon, idObject, interval)
+            this.globalChartData = globalChartData
+            this.stats = globalChartData.stats
+            this.attachments = globalChartData.attachments
+            this.tablesReports = globalChartData.tables
+            this.rows = globalChartData.row
+            this.clearTable()
+            this.createListTitleReports(this.tablesReports, this.stats, this.attachments)
+            loaders.style.display = 'none'
+            console.log(idShablon)
+        }
+        else {
+
+            const res = await fetch('/api/titleShablon', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idResourse, idShablon, idObject, interval })
+            })
+            const result = await res.json()
+            console.log(result)
+            this.tablesReports = result.data.reportResult.tables
+            this.stats = result.data.reportResult.stats
+            this.rows = result.rows
+            this.attachments = result.data.reportResult.attachments
+
+            this.clearTable()
+            this.createListTitleReports(this.tablesReports, this.stats, this.attachments)
+            loaders.style.display = 'none'
+        }
         if (this.stats.length !== 0) {
             const li = document.createElement('li')
             li.classList.add('titleNameReport')
@@ -182,9 +237,12 @@ export class SelectObjectsView {
             this.reports_module.lastElementChild.children[0].textContent = titleNameReports[0].textContent
             titleNameReports.forEach(el => el.addEventListener('click', this.createMetaTable.bind(this, el)))
         }
+
+
     }
 
     createMetaTable(el) {
+        console.log(el)
         this.clearTable()
         this.marker ? this.hiddenMarkerToMap() : null
         const titleNameReport = document.querySelectorAll('.titleNameReport')
@@ -195,7 +253,8 @@ export class SelectObjectsView {
             this.createStatsTable(this.stats)
         }
         else if (el.id === 'chart') {
-            this.requestChartData()
+            this.requestParams.idResourse === 'cursor' ? this.createChartToWialon(this.globalChartData) :
+                this.requestChartData(el.getAttribute('rel'))
         }
         else {
             this.createTable(this.tablesReports, this.rows, el.id)
@@ -203,47 +262,50 @@ export class SelectObjectsView {
         }
     }
 
-    async requestChartData() {
+    async requestChartData(att) {
         const interval = this.requestParams.timeInterval
         const res = await fetch('/api/chartData', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ interval })
+            body: JSON.stringify({ interval, att })
         })
         const chartData = await res.json()
+        console.log(chartData)
         this.createChartToWialon(chartData)
     }
 
-    createOsiFormat(chartData, conteiner, svg) {
-        const datasets = Object.values(chartData.datasets).map(dataset => {
 
+    createOsiFormat(chartData, conteiner, svg) {
+        console.log(chartData.datasets)
+        const datasets = Object.values(chartData.datasets).map(dataset => {
             const xScale = d3.scaleTime()
                 .domain(d3.extent(dataset.data.x, x => new Date(x * 1000)))
                 .range([70, conteiner.clientWidth - 410]);
 
             const yScale = d3.scaleLinear()
-                .domain(d3.extent(dataset.data.y, y => y))
-                .range([360, 20]);
+                .domain([0, d3.max(dataset.data.y, y => parseFloat(y))])
+                .range([(conteiner.clientHeight - 30), 35]);
 
             const line = d3.line()
                 .x(d => xScale(d.x))
-                .y(d => yScale(d.y));
+                .y(d => yScale(parseFloat(d.y)))
+            //   .curve(d3.curveStep)
             return {
                 data: dataset.data.x.map((value, i) => ({
                     x: new Date(value * 1000),
-                    y: dataset.data.y[i]
+                    y: parseFloat(dataset.data.y[i]) < -100 ? parseFloat(dataset.data.y[i - 1]) : parseFloat(dataset.data.y[i])
                 })),
                 name: dataset.name,
-                color: dataset.color.toString(16),
+                color: typeof dataset.color === 'number' ? dataset.color.toString(16) : dataset.color,
                 uniq: dataset.y_axis,
                 xScale: xScale,
                 yScale: yScale,
                 line: line
             }
         });
-
+        console.log(datasets)
         return datasets
     }
 
@@ -254,7 +316,7 @@ export class SelectObjectsView {
                 .attr('class', 'linezoom')
                 .attr("clip-path", "url(#clip)")
                 .attr('d', dataset.line)
-                .attr('rel', `${dataset.uniq}`)
+                .attr('rel', `${dataset.color}`)
                 .attr('stroke', `#${dataset.color}`)
                 .attr('stroke-width', 1.5)
                 .attr('fill', 'none')
@@ -262,22 +324,20 @@ export class SelectObjectsView {
         });
     }
 
-    createArea(set, svg, xScaleStart) {
-        console.log(set)
+    createArea(set, svg, xScaleStart, conteiner) {
         set.interval.forEach((region) => {
             svg.append('rect')
-                .attr('x', xScaleStart(new Date(Math.round(region[0] * 1000)))) // начало интервала в формате даты
-                .attr('y', 20) // отступ сверху
+                .attr('x', xScaleStart(new Date(Math.round(region[0][0] ? region[0][0] * 1000 : region[0] * 1000)))) // начало интервала в формате даты
+                .attr('y', 35) // отступ сверху
                 .attr('class', 'areazoom')
                 .attr("clip-path", "url(#clip)")
-                .attr('width', xScaleStart(new Date(Math.round(region[1] * 1000))) - xScaleStart(new Date(Math.round(region[0] * 1000)))) // ширина от начала до конца интервала в пикселях
-                .attr('height', 340) // высота
+                .attr('width', xScaleStart(new Date(Math.round(region[1][0] ? region[1][0] * 1000 : region[1] * 1000))) - xScaleStart(new Date(Math.round(region[0][0] ? region[0][0] * 1000 : region[0] * 1000)))) // ширина от начала до конца интервала в пикселях
+                .attr('height', (conteiner.clientHeight - 65)) // высота
                 .attr('rel', `${set.id}`)
                 .attr('fill', `#${set.color}`) // цвет фона
                 .attr('stroke', 'none'); // без рамки
         });
     }
-
     createMarkers(markers, svg, xScaleStart) {
         console.log(markers)
         const markersIcon = {
@@ -286,7 +346,10 @@ export class SelectObjectsView {
             256: "../../../image/sliv.png",
             128: "../../../image/stop.png",
             64: "../../../image/maxspeed.png",
-            4: "../../../image/er.png"
+            4: "../../../image/er.png",
+            10: "../../../image/tah.png",
+            11: "../../../image/prst.png",
+            12: "../../../image/drain.png"
         }
         svg.selectAll("image")
             .data(markers)
@@ -294,29 +357,36 @@ export class SelectObjectsView {
             .append("image")
             .attr('class', 'markerszoom')
             .attr("clip-path", "url(#clip)")
-            .attr("x", d => xScaleStart(new Date(d.time * 1000)))
+            .attr("x", d => xScaleStart(new Date(d.time.x * 1000)))
             .attr('rel', function (d) { return d.type })
             .attr("xlink:href", function (d) { return markersIcon[d.type] })
             .attr("width", 16)
             .attr("height", 16)
             .style("opacity", 1)
-            .attr("transform", "translate(-8,0)")
+            .attr("transform", "translate(-8,10)")
+            .each(function (d, i, nodes) {
+                console.log(d)
+                console.log(nodes[i])
+                new Tooltip(nodes[i], d.type !== 8 ? [[`${d.tool}: ${d.time.str}`], [`Длительность: ${d.time.duration}`]] :
+                    [[`${d.name}: ${d.time.start}`], [`${d.tool}: ${d.time.value} л.`]]); //чтобы работали тултипы на виалоновских маркерах надо везде указать  название маркера
+
+            });
     }
 
-
     createLegendaNavi(leg, chartData) {
-        console.log(chartData)
         const markersIcon = {
             8: "../../../image/ref.png",
             32: "../../../image/parking.png",
             256: "../../../image/sliv.png",
             128: "../../../image/stop.png",
             64: "../../../image/maxspeed.png",
-            4: "../../../image/er.png"
+            4: "../../../image/er.png",
+            10: "../../../image/tah.png",
+            11: "../../../image/prst.png",
+            12: "../../../image/drain.png"
         }
 
         if (chartData.markers) {
-            console.log(chartData.markers)
             const div = document.createElement('div')
             div.classList.add('markers')
             leg.appendChild(div)
@@ -336,13 +406,17 @@ export class SelectObjectsView {
             divMarkers.classList.add('markers_container')
             div.appendChild(divMarkers)
             chartData.markers.forEach(el => {
+                console.log(el.sensor)
+                console.log(el)
                 const divfpoo = document.createElement('div')
+                divfpoo.classList.add('wrapper_marker')
                 divMarkers.appendChild(divfpoo)
                 const image = document.createElement('div')
                 image.classList.add('markers_image')
                 image.style.backgroundImage = `url(${markersIcon[el.type]})`
                 image.setAttribute('rel', el.type)
                 divfpoo.appendChild(image)
+                new Tooltip(image, [el.sensor])
             })
         }
         if (chartData.background_regions) {
@@ -414,7 +488,7 @@ export class SelectObjectsView {
                 const i = document.createElement('i')
                 i.classList.add('fa')
                 i.classList.add('fa-check')
-                i.setAttribute('rel', el.y_axis)
+                i.setAttribute('rel', typeof el.color === 'number' ? el.color.toString(16) : el.color)
                 i.classList.add('galka')
                 divItem.appendChild(i)
                 const middleDiv = document.createElement('div')
@@ -440,37 +514,44 @@ export class SelectObjectsView {
         if (legenda) {
             legenda.remove()
         }
+
+        const conteiner = this.reports_module.lastElementChild.children[1].children[0]
+        console.log(conteiner)
         const leg = document.createElement('div')
         leg.classList.add('legenda_navi')
+        leg.style.height = (conteiner.clientHeight - 20) + 'px'
         this.reports_module.lastElementChild.children[1].children[0].appendChild(leg)
         const graf = document.createElement('div')
         graf.classList.add('chart_to_wialon')
         this.reports_module.lastElementChild.children[1].children[0].appendChild(graf)
+
         const titleOsisY = this.attachments[0].axis_y
-        const conteiner = this.reports_module.lastElementChild.children[1].children[0]
+
         conteiner.style.display = 'flex'
         conteiner.style.justifyContent = 'space-around'
         conteiner.style.alignItems = 'center'
+
 
         this.createLegendaNavi(leg, chartData)
 
         const svg = d3.select(".chart_to_wialon")
             .append("svg")
+            .attr('class', 'chart_reports')
             .attr("width", conteiner.clientWidth - 300)
-            .attr("height", 390)
-
+            .attr("height", conteiner.clientHeight)//390)
+        this.svg = svg
         svg.append("defs").append("clipPath")
             .attr("id", "clip")
             .append("rect")
             .attr("class", "clipart")
             .attr("width", conteiner.clientWidth - 480) // or the width of your chart area
-            .attr("height", 390)// or the height of your chart area
+            .attr("height", conteiner.clientHeight)//390)// or the height of your chart area
             .attr('x', 70)
             .attr('y', 0)
         const xScaleStart = d3.scaleTime()
             .domain(d3.extent(chartData.possitions.time, x => new Date(x * 1000)))
             .range([70, conteiner.clientWidth - 410]);
-
+        this.xScaleStart = xScaleStart
         const datasets = this.createOsiFormat(chartData, conteiner, svg)
 
         if (chartData.background_regions) {
@@ -479,7 +560,7 @@ export class SelectObjectsView {
                 return acc
             }, [])
             this.backgroundRegions.forEach(set => {
-                this.createArea(set, svg, xScaleStart)
+                this.createArea(set, svg, xScaleStart, conteiner)
             })
         }
         if (chartData.datasets) {
@@ -487,17 +568,20 @@ export class SelectObjectsView {
         }
 
         if (chartData.markers !== undefined) {
+
             this.markers = chartData.markers.flatMap(e =>
                 e.x.map(el => ({
                     name: e.sensor,
                     time: el,
                     type: e.type,
+                    tool: e.tool
                 }))
             );
+            console.log(this.markers)
             this.createMarkers(this.markers, svg, xScaleStart)
         }
         svg.append("g")
-            .attr("transform", `translate(0, 360)`)
+            .attr("transform", `translate(0, ${(conteiner.clientHeight - 30)})`)
             .attr('class', 'os1')
             .attr("clip-path", "url(#clip)")
             .call(d3.axisBottom(xScaleStart)
@@ -509,7 +593,7 @@ export class SelectObjectsView {
             )
 
         svg.append("g")
-            .attr("transform", `translate(0, 370)`)
+            .attr("transform", `translate(0, ${(conteiner.clientHeight - 20)})`)
             .attr('class', 'os2')
             .attr("clip-path", "url(#clip)")
             .call(d3.axisBottom(xScaleStart)
@@ -521,9 +605,8 @@ export class SelectObjectsView {
             )
             .style("stroke-width", 0)
 
-
         svg.append("g")
-            .attr("transform", `translate(70, 0)`)
+            .attr("transform", `translate(70,0)`)
             .attr('class', 'osy1')
             .call(d3.axisLeft(datasets[0].yScale).ticks(10));
         svg.append("g")
@@ -544,6 +627,7 @@ export class SelectObjectsView {
             .style('font-size', '1rem')
             .style('font-weight', 400)
             .text(`${titleOsisY[0]}`);
+        console.log()
         svg.append("text")
             .attr("y", (conteiner.clientWidth - 350))
             .attr("x", -190)
@@ -556,112 +640,101 @@ export class SelectObjectsView {
 
 
         new NaviChartLegenda()
-
         // Добавляем слушатель события прокрутки колеса мыши
         svg.call(d3.zoom().on("zoom", this.zoomed.bind(this, datasets, xScaleStart, svg)))
-
         this.createTooltip(svg, datasets, chartData, xScaleStart, conteiner)
 
     }
 
     createTooltip(svg, datasets, chartData, xScaleStart, conteiner) {
-        console.log(svg)
         const tool = document.querySelector('.chart-tooltip')
         if (tool) {
             tool.remove()
         }
-
         const body = document.querySelector('.chart_to_wialon');
         const tooltip = document.createElement('div');
         tooltip.classList.add('chart-tooltip');
         body.appendChild(tooltip);
 
-
-
         svg
             .on('mouseout', () => {
                 tooltip.style.display = 'none'
-                //  tooltipLine.style('display', 'none');  // Hide tooltip line
             })
             .on('mousemove', handleMouseMove);
 
         function handleMouseMove() {
-
-
-
-
             const line = document.querySelector('.line')
             const noactive = Array.from(line.querySelectorAll('.noactive')).reduce((acc, el) => {
                 acc.push(el.getAttribute('rel'))
                 return acc
             }, [])
             const [xPosition, yPosition] = d3.mouse(this);
+            console.log(xPosition)
+            if (yPosition < 30 || yPosition > 425) {
+                tooltip.style.display = 'none'
+            }
+            else {
+                const dataIndex = datasets.map(dataset => {
+                    const closestIndex = findClosestDataIndex(xPosition, dataset.data);
+                    // Добавить проверку индекса
+                    if (closestIndex[1] <= 0) {
+                        return -1; // или любое другое значение, которое показывает отсутствие данных
+                    }
+                    return closestIndex;
+                });
 
+                const tooltipData = dataIndex.reduce((acc, index, i) => {
+                    const nameParts = datasets[i].name.split(' ');
+                    const unit = nameParts.pop();
+                    if (noactive.length !== 0) {
 
-
-
-
-            const dataIndex = datasets.map(dataset => {
-                const closestIndex = findClosestDataIndex(xPosition, dataset.data);
-                // Добавить проверку индекса
-                if (closestIndex[1] <= 0) {
-                    return -1; // или любое другое значение, которое показывает отсутствие данных
-                }
-
-                return closestIndex;
-            });
-
-            const tooltipData = dataIndex.reduce((acc, index, i) => {
-                const nameParts = datasets[i].name.split(' ');
-                const unit = nameParts.pop();
-                if (noactive.length !== 0) {
-                    const filteredNoActive = noactive.filter(el => Number(el) !== datasets[i].uniq);
-                    if (filteredNoActive.length === noactive.length) {
+                        const filteredNoActive = noactive.filter(el => el !== datasets[i].color);
+                        if (filteredNoActive.length === noactive.length) {
+                            acc.push(createTooltipObject(datasets[i], nameParts, index, unit));
+                        }
+                    } else {
                         acc.push(createTooltipObject(datasets[i], nameParts, index, unit));
                     }
-                } else {
-                    acc.push(createTooltipObject(datasets[i], nameParts, index, unit));
+                    return acc
+                }, []);
+
+                function createTooltipObject(dataset, nameParts, index, unit) {
+                    return {
+                        color: dataset.color,
+                        name: nameParts.join(' '),
+                        value: parseFloat(dataset.data[index[1]].y === 'number' ? dataset.data[index[1]].y.toFixed(2) : dataset.data[index[1]].y),
+                        val: unit,
+                        uniq: dataset.color
+                    };
                 }
-                return acc
-            }, []);
+                const unix = Math.floor(new Date(dataIndex[0][0]).getTime() / 1000)
+                const date = new Date(unix * 1000);
+                const day = date.getDate().toString().padStart(2, '0'); // Добавляем ведущий ноль для дня
+                const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Добавляем ведущий ноль для месяца
+                const year = date.getFullYear();
+                const hours = date.getHours().toString().padStart(2, '0'); // Добавляем ведущий ноль для часов
+                const minutes = date.getMinutes().toString().padStart(2, '0'); // Добавляем ведущий ноль для минут
+                const seconds = date.getSeconds().toString().padStart(2, '0'); // Добавляем ведущий ноль для секунд
 
-            function createTooltipObject(dataset, nameParts, index, unit) {
-                return {
-                    color: dataset.color,
-                    name: nameParts.join(' '),
-                    value: parseFloat(dataset.data[index[1]].y.toFixed(2)),
-                    val: unit,
-                    uniq: dataset.uniq
-                };
-            }
-            const unix = Math.floor(new Date(dataIndex[0][0]).getTime() / 1000)
-            const date = new Date(unix * 1000);
-            const day = date.getDate().toString().padStart(2, '0'); // Добавляем ведущий ноль для дня
-            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Добавляем ведущий ноль для месяца
-            const year = date.getFullYear();
-            const hours = date.getHours().toString().padStart(2, '0'); // Добавляем ведущий ноль для часов
-            const minutes = date.getMinutes().toString().padStart(2, '0'); // Добавляем ведущий ноль для минут
-            const seconds = date.getSeconds().toString().padStart(2, '0'); // Добавляем ведущий ноль для секунд
+                const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
 
-            const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
-
-            tooltip.innerHTML = `<div class="title_tooltip">${formattedDate}</div>
+                tooltip.innerHTML = `<div class="title_tooltip">${formattedDate}</div>
             <div class="body_tooltip">${tooltipData.map(data => `<div class="all_list_tooltip"><div class="color_tooltip" style="width: 20px; height: 2px; background: #${data.color}"></div>
 <div class="list_tooltip" rel=${data.uniq}>${data.name}  ${data.value} ${data.val}</div></div>`).join('')}</div>`
-            tooltip.style.left = xPosition + 30 + 'px';
-            tooltip.style.top = yPosition + 10 + 'px';
-            tooltip.style.display = 'block';
-        }
-
-
-        function findClosestDataIndex(xPosition, data) {
-            const x0 = xScaleStart.invert(xPosition);
-            const times = data.map((d, i) => { return d.x });
-            const index = d3.bisect(times, x0);
-            if (index < 0) {
-                return -1;
+                tooltip.style.left = xPosition <= 460 ? (xPosition + 30 + 'px') : (xPosition - 250 + 'px');
+                tooltip.style.top = yPosition <= 320 ? (yPosition + 10 + 'px') : (yPosition - 60 + 'px');
+                tooltip.style.display = 'block';
             }
-            return [x0, index];
+
+            function findClosestDataIndex(xPosition, data) {
+                const x0 = xScaleStart.invert(xPosition);
+                const times = data.map((d, i) => { return d.x });
+                const index = d3.bisect(times, x0);
+                if (index < 0) {
+                    return -1;
+                }
+                return [x0, index];
+            }
         }
 
     }
@@ -694,16 +767,16 @@ export class SelectObjectsView {
         svg.selectAll(".linezoom")
             .data(datasets)
             .attr("d", d => d.line(d.data))
-
+        console.log(this.backgroundRegions)
         this.backgroundRegions.forEach(set => {
             svg.selectAll(`[rel = '${set.id}']`)
                 .data(set.interval) // Привязываем данные
-                .attr('x', d => new_xScale(new Date(Math.round(d[0] * 1000)))) // Начало интервала в формате даты
-                .attr('width', d => new_xScale(new Date(Math.round(d[1] * 1000))) - new_xScale(new Date(Math.round(d[0] * 1000))))
+                .attr('x', d => new_xScale(new Date(Math.round(d[0][0] ? d[0][0] * 1000 : d[0] * 1000)))) // Начало интервала в формате даты
+                .attr('width', d => new_xScale(new Date(Math.round(d[1][0] ? d[1][0] * 1000 : d[1] * 1000))) - new_xScale(new Date(Math.round(d[0][0] ? d[0][0] * 1000 : d[0] * 1000))))
         })
         svg.selectAll(".markerszoom")
             .data(this.markers)
-            .attr("x", d => new_xScale(new Date(d.time * 1000)))
+            .attr("x", d => new_xScale(new Date(d.time.x * 1000)))
 
         this.createTooltip(svg, datasets, chartData, new_xScale)
     }
@@ -715,6 +788,7 @@ export class SelectObjectsView {
 
     checkPointerToMaps() {
         const pointer = document.querySelectorAll('.pointer_cell')
+        console.log(pointer)
         pointer.forEach(el => el.addEventListener('click', () => {
             pointer.forEach(e => {
                 e.classList.remove('active_cell')
@@ -754,6 +828,10 @@ export class SelectObjectsView {
     }
 
     createTable(tables, rows, id) {
+        console.log(rows)
+        if (rows.length === 0) {
+            // return
+        }
         const uniqTable = tables.filter((e, index) => index === Number(id))
         const uniqRows = rows.filter((e, index) => index === Number(id))
         const cellRows = uniqRows[0].reduce((acc, el) => {
@@ -782,7 +860,7 @@ export class SelectObjectsView {
             uniqTable[0].total.forEach(it => {
                 const header = document.createElement('th');
                 header.classList.add('header_table_reports')
-                header.textContent = it.replace(/Total/g, 'Итого').replace(/l/g, 'л').replace(/h/g, 'ч').replace(/km/g, 'км').replace(/days/g, 'д.');
+                header.textContent = it
                 headerRow2.appendChild(header);
             })
         }
@@ -814,6 +892,9 @@ export class SelectObjectsView {
 
     createStatsTable(stats) {
         console.log(stats)
+        if (stats.length === 0) {
+            return
+        }
         const table = document.createElement('table');
         table.classList.add('cell_params')
         for (var i = 0; i < stats.length; i++) {
@@ -821,7 +902,7 @@ export class SelectObjectsView {
             const cell1 = document.createElement('td');
             const cell2 = document.createElement('td');
             cell1.textContent = stats[i][0];
-            cell2.textContent = stats[i][1].replace(/l/g, 'л').replace(/h/g, 'ч').replace(/km/g, 'км').replace(/days/g, 'д.');
+            cell2.textContent = stats[i][1];
             row.appendChild(cell1);
             row.appendChild(cell2);
             table.appendChild(row);
@@ -858,12 +939,18 @@ export class SelectObjectsView {
             li.textContent = el.label
             this.titleReports.appendChild(li)
         })
+        console.log(this.attachments)
         if (this.attachments.length !== 0) {
-            const li = document.createElement('li')
-            li.classList.add('titleNameReport')
-            li.setAttribute('id', 'chart')
-            li.textContent = this.attachments[0].name
-            this.titleReports.appendChild(li)
+            this.attachments.forEach((e, i) => {
+                console.log(e)
+                const li = document.createElement('li')
+                li.classList.add('titleNameReport')
+                li.setAttribute('id', 'chart')
+                li.setAttribute('rel', `${i}`)
+                li.textContent = e.name
+                this.titleReports.appendChild(li)
+            })
+
         }
 
     }
@@ -892,6 +979,13 @@ export class SelectObjectsView {
     }
     pushParams(el) {
         if (el.parentNode.parentNode.parentNode.classList.contains('shablons')) {
+            // const reports = document.querySelector('.reports')
+            // reports.classList.add('hovering')
+            const titleListObjects = document.querySelector('.list_item1')
+            titleListObjects.style.color = 'red'
+            setTimeout(() => {
+                titleListObjects.style.color = ''
+            }, 3000)
             this.requestParams.idObject = null
             this.requestParams.idResourse = el.getAttribute('rel')
             this.requestParams.idShablon = el.getAttribute('data-attribute')
@@ -909,9 +1003,6 @@ export class SelectObjectsView {
             }
             this.object.querySelectorAll('.item_type').forEach(el => el.addEventListener('click', this.checkChoice.bind(this, el)))
         }
-        // if (el.parentNode.parentNode.parentNode.classList.contains('object')) {
-        //  this.requestParams.idObject = el.getAttribute('rel')
-        //  }
         if (el.parentNode.parentNode.parentNode.classList.contains('interval_reports')) {
             const time = this.getTimeInterval(el.lastElementChild.textContent)
             this.requestParams.timeInterval = time
@@ -926,10 +1017,7 @@ export class SelectObjectsView {
             this.requestParams.idShablon = null
             this.object.style.display = 'none'
         }
-        // if (el.parentNode.parentNode.parentNode.classList.contains('object')) {
-        //    this.requestParams.idObject = null
 
-        // }
         if (el.parentNode.parentNode.parentNode.classList.contains('interval_reports')) {
             this.requestParams.timeInterval = null
         }
@@ -1021,6 +1109,23 @@ export class SelectObjectsView {
 
     createShablonsObjects(resurse) {
         const container = this.shablons.children[0].lastElementChild
+        console.log(resurse)
+        const li = document.createElement('li')
+        li.classList.add('item_type')
+        container.appendChild(li)
+        const i = document.createElement('i')
+        i.classList.add('fa')
+        i.classList.add('fa-check')
+        i.classList.add('radio_choice')
+        li.appendChild(i)
+        const p = document.createElement('p')
+        p.classList.add('text_type')
+        li.appendChild(p)
+        p.textContent = 'Основной отчет Курсор'
+        //  li.setAttribute('id', 'moto')
+        li.setAttribute('rel', 'cursor')
+        li.setAttribute('data-attribute', 'moto')
+        li.setAttribute('data-ct', "avl_unit")
         resurse.forEach(e => {
             const obj = Object.values(e)[0]
             for (let key in obj) {
@@ -1041,6 +1146,7 @@ export class SelectObjectsView {
                 li.setAttribute('data-ct', obj[key].ct)
             }
         })
+
     }
 
 
@@ -1092,6 +1198,599 @@ export class SelectObjectsView {
             }, 0);
 
         }
+    }
+
+    convertUnixTime(unix) {
+        const dt = new Date(unix * 1000);
+        const year = dt.getFullYear();
+        const month = String(dt.getMonth() + 1).padStart(2, '0');
+        const day = String(dt.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
+        return dateStr
+    }
+
+    async requestData(idShablon, idObject, interval) {
+        const idw = idObject
+        const ifPwr = await this.requstModel(idw)
+
+        const [t1, t2] = interval
+        const active = String(idObject)
+
+
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ active, t1, t2 }))
+        }
+        const rest = await fetch('/api/viewChart', param)
+        const resultt = await rest.json()
+        resultt.sort((a, b) => {
+            if (a.data > b.data) {
+                return 1;
+            }
+            if (a.data < b.data) {
+                return -1;
+            }
+            return 0;
+        })
+
+        console.log(resultt)
+        const extractData = (params) => {
+            let prevVal = null;
+            return resultt.flatMap(el => {
+                return JSON.parse(el.allSensParams).reduce((acc, e, i) => {
+                    if (params !== 'Топливо' ? e[0].startsWith(params) : e[0] === params) {
+                        const val = e[2] < -10 ? (prevVal !== null ? prevVal - i : e[2] - i) : e[2];
+                        prevVal = val;
+                        acc.push({ x: Number(el.data), y: e[2] !== null ? parseFloat(prevVal.toFixed(2)) : 0, geo: JSON.parse(el.geo), speed: el.speed, sats: el.sats });
+                    }
+                    return acc;
+                }, []);
+            });
+        }
+        const speed = resultt.flatMap(el => {
+            return { x: Number(el.data), y: el.speed, geo: JSON.parse(el.geo) }
+        })
+        const sats = resultt.flatMap(el => {
+            return { x: Number(el.data), y: el.sats }
+        })
+
+        const engine = extractData('Зажигание')
+        const pwr = extractData('Бортовое')
+        const oil = extractData('Топливо')
+        const meliage = extractData('Пробег')
+        //  const otval = extractData('Работа')
+        console.log(meliage)
+        const datas = [
+            { oil: oil },
+            { pwr: pwr },
+            { engine: engine },
+            { speed: speed },
+            { sats: sats },
+            { meliage: meliage }
+
+        ]
+        console.log(datas)
+        const minLength = Math.min(...datas.map(item => Object.values(item)[0].length)); // определяем минимальную длину массива
+        const shortestArrays = datas.filter(item => Object.values(item)[0].length === minLength)
+        const optim = Object.values(Object.values(shortestArrays)[0])[0].reduce((acc, el, i) => {
+            const obj = {}
+            datas.forEach(it => {
+                const matchedObject = Object.values(it)[0].find(obj => obj.x === el.x)
+                obj[Object.keys(it)[0]] = matchedObject.y
+
+            })
+            acc.push({ x: el.x, ...obj, geo: el.geo, speed: el.speed, sats: el.sats })
+            return acc
+        }, [])
+
+        console.log(optim)
+        const gasStations = this.calculateOilUp(optim)
+        const fuelDrain = this.calculateOilSliv(optim)
+        console.log(gasStations)
+        const svodka = this.calculate(optim, ifPwr, 'Моточасы')
+        const svodka1 = this.calculate(optim, ifPwr, 'Простои')
+        const svodka2 = this.calculate(optim, ifPwr, 'Зажигание')
+        const travel = this.calculate(optim, ifPwr, 'Скорость')
+
+        console.log(travel)
+
+        const motoAll = svodka.length !== 0 ? this.diff(svodka) : 0
+        const prostoyAll = svodka1.length !== 0 ? this.diff(svodka1) : 0
+        const oilAllRashod = svodka1.length !== 0 ? this.diff(svodka1, 1) : 0
+
+        const ItogSummaryTravel = travel.reduce((acc, e) => {
+            acc.distance += parseFloat((e[2].distance.toFixed(2)));
+            acc.oil += parseFloat((e[2].rashod.toFixed(2)))
+            acc.duration += (e[1][0] - e[0][0])
+            acc.maxSpeed = Math.max(acc.maxSpeed, e[2].maxSpeed)
+            acc.averageSpeed += e[2].averageSpeed;
+            acc.count++;
+            return acc;
+        }, { duration: 0, distance: 0, oil: 0, maxSpeed: 0, averageSpeed: 0, count: 0 });
+        ItogSummaryTravel.averageSpeed = ItogSummaryTravel.averageSpeed / ItogSummaryTravel.count
+        //   ItogSummaryTravel.duration = this.formatTime(travel[travel.length - 1][1][0] - travel[0][0][0])
+        ItogSummaryTravel.averageRashod = parseFloat(((ItogSummaryTravel.oil / ItogSummaryTravel.distance) * 100).toFixed(1))
+        console.log(ItogSummaryTravel)
+
+
+
+        const workingTime = motoAll - prostoyAll
+        console.log(workingTime)
+        const xtime = { type: 10, tool: 'Работа двигателя', sensor: 'Начало работы двигателя', x: svodka.length !== 0 ? this.xtimes(svodka) : [] }
+        const xtimep = { type: 11, tool: 'Простой', sensor: 'Начало простоя на холостом ходу', x: svodka1.length !== 0 ? this.xtimes(svodka1) : [] }
+        const xtimepOil = { type: 8, tool: 'Топливо', sensor: 'Заправка', x: gasStations.length !== 0 ? this.xtimesOil(gasStations) : [] }
+        const xtimepDrain = { type: 12, tool: 'Топливо', sensor: 'Слив', x: fuelDrain.length !== 0 ? this.xtimesOil(fuelDrain) : [] }
+
+        const time = resultt.map(el => Number(el.data))
+
+        const datasetObject = {
+            oil: ['Топливо, л.', '410c96'],
+            pwr: ['Бортовое питание, В', 'd90b9e'],
+            //  engine: ['Зажигание, Вкл/Выкл', 'f01616'],
+            speed: ['Скорость, км/ч', '0eab5f'],
+            sats: ['Спутники, шт.', '8f751a']
+        }
+
+        const updatedData = datas.filter(item => !item.hasOwnProperty('engine') && !item.hasOwnProperty('meliage'));
+
+        const rows = svodka.map(el => {
+            const moto = el[1][0] - el[0][0]
+            return {
+                c: [{ t: this.converterTimes(el[0][0]), y: el[0][1][0], x: el[0][1][1] }, el[0][1].join(''),
+                { t: this.converterTimes(el[1][0]), y: el[1][1][0], x: el[1][1][1] }, el[1][1].join(''),
+                this.formatTime(moto)]
+            }
+        })
+        const rows1 = svodka1.map(el => {
+            const diff = parseFloat(el[0][2] - el[1][2]).toFixed(1)
+            return {
+                c: [{ t: this.converterTimes(el[0][0]), y: el[0][1][0], x: el[0][1][1] }, el[0][1].join(''),
+                { t: this.converterTimes(el[1][0]), y: el[1][1][0], x: el[1][1][1] }, el[1][1].join(''),
+                this.formatTime(el[1][0] - el[0][0]), diff > 0 ? `${diff} л.` : '-']
+            }
+        })
+
+        const rowsOil = gasStations.map(el => {
+            return {
+                c: [{ t: this.converterTimes(el.timeStart), y: el.geo[0], x: el.geo[1] },
+                { t: this.converterTimes(el.timeFinish), y: el.geo[0], x: el.geo[1] }, el.geo.join(''),
+                `${el.startOilValue} л.`, `${el.finishOilValue} л.`, `${el.valueOil} л.`]
+            }
+        })
+        const rowsOilDrain = fuelDrain.map(el => {
+            return {
+                c: [{ t: this.converterTimes(el.timeStart), y: el.geo[0], x: el.geo[1] },
+                { t: this.converterTimes(el.timeFinish), y: el.geo[0], x: el.geo[1] }, el.geo.join(''),
+                `${el.startOilValue} л.`, `${el.finishOilValue} л.`, `${el.valueOil} л.`]
+            }
+        })
+        const rowsTravel = travel.map(el => {
+            const averageRashod = ((el[2].rashod / el[2].distance) * 100).toFixed(1)
+            return {
+                c: [{ t: this.converterTimes(el[0][0]), y: el[0][1][0], x: el[0][1][1] }, el[0][1].join(''),
+                { t: this.converterTimes(el[1][0]), y: el[1][1][0], x: el[1][1][1] }, el[1][1].join(''), el[2].duration, `${el[2].distance} км.`,
+                `${el[2].averageSpeed} км.ч`, `${el[2].maxSpeed} км/ч`, `${el[2].rashod.toFixed(1)} л.`, `${averageRashod} л.`
+                ]
+            }
+        })
+        const ShablonName = this.shablons.querySelector('.titleChange_list_name').textContent
+        const ObjectName = this.object.querySelector('.titleChange_list_name').textContent
+        const globalChartData = {
+            background_regions: [],
+            datasets: {},
+            markers: [],
+            possitions: {
+                time: time,
+                lat: resultt.map(el => JSON.parse(el.geo)[0]),
+                lon: resultt.map(el => JSON.parse(el.geo)[1])
+            },
+            attachments: [{ name: 'График', axis_y: [datasetObject.oil[0], datasetObject.pwr[0]] }],
+            stats: [['Отчет', ShablonName],
+            ['Объект', ObjectName],
+            ['Начало интервала', this.converterTimes(this.requestParams.timeInterval[0])],
+            ['Конец интервала', this.converterTimes(this.requestParams.timeInterval[1])]],
+            tables: [],
+            row: []
+        }
+
+
+        globalChartData.background_regions.push({ color: 'f2a974', id: 'chart_engine', name: 'Зажигание', regions: svodka2 })
+        if (travel.length !== 0) {
+            globalChartData.tables.push({
+                name: 'unit_travel',
+                label: 'Поездки',
+                header: ['Начало', 'Местоположение', 'Конец', 'Местоположение', 'Длительность', 'Пробег', 'Ср. скорость', 'Макс. скорость', 'Расход', 'Ср. расход на 100км'],
+                total: [this.converterTimes(travel[0][0][0]), travel[0][0][1], this.converterTimes(travel[travel.length - 1][1][0]), travel[travel.length - 1][1][1],
+                this.formatTime(ItogSummaryTravel.duration),
+                `${ItogSummaryTravel.distance.toFixed(2)} км.`,
+                `${ItogSummaryTravel.averageSpeed.toFixed(0)} км.ч`,
+                `${ItogSummaryTravel.maxSpeed} км/ч`,
+                `${ItogSummaryTravel.oil.toFixed(0)} л.`,
+                `${ItogSummaryTravel.averageRashod.toFixed(1)} л.`]
+            });
+            globalChartData.row.push(rowsTravel)
+            globalChartData.stats.push(['Пробег в поездках', `${ItogSummaryTravel.distance.toFixed(2)} км.`])
+            globalChartData.stats.push(['Расход в поездках', `${ItogSummaryTravel.oil.toFixed(1)} л.`])
+            globalChartData.stats.push(['Средний расход в поездках на 100км', `${ItogSummaryTravel.averageRashod} л.`])
+            //   globalChartData.markers.push(xtimep)
+            globalChartData.background_regions.push({ color: 'f7f488', id: 'chart_travel', name: 'Поездки', regions: travel })
+        }
+
+        if (svodka.length !== 0) {
+            globalChartData.tables.push({
+                name: 'unit_moto', label: 'Моточасы', header: ['Начало', 'Местоположение', 'Конец', 'Местоположение', 'Моточасы'],
+                total: [this.converterTimes(svodka[0][0][0]), svodka[0][0][1],
+                this.converterTimes(svodka[svodka.length - 1][1][0]), svodka[svodka.length - 1][1][1],
+                this.formatTime(motoAll)]
+            });
+            globalChartData.row.push(rows)
+            globalChartData.stats.push(['Моточасы', this.formatTime(motoAll)])
+            globalChartData.stats.push(['Время полезной работы', this.formatTime(workingTime)])
+            globalChartData.markers.push(xtime)
+            globalChartData.background_regions.push({ color: '94f2a4', id: 'chart_moto', name: 'Моточасы', regions: svodka })
+        }
+        if (svodka1.length !== 0) {
+            globalChartData.tables.push({
+                name: 'unit_prostoy',
+                label: 'Простои',
+                header: ['Начало', 'Местоположение', 'Конец', 'Местоположение', 'Время простоя на холостом ходу', 'Расход на холостом ходу'],
+                total: [this.converterTimes(svodka1[0][0][0]), svodka1[0][0][1], this.converterTimes(svodka1[svodka1.length - 1][1][0]), svodka1[svodka1.length - 1][1][1], this.formatTime(prostoyAll), `${oilAllRashod} л.`]
+            });
+            globalChartData.row.push(rows1)
+            globalChartData.stats.push(['Простои', this.formatTime(prostoyAll)])
+            globalChartData.stats.push(['Расход на холостом ходу', `${oilAllRashod} л.`])
+            globalChartData.markers.push(xtimep)
+            globalChartData.background_regions.push({ color: '90c1f0', id: 'chart_prostoy', name: 'Простои', regions: svodka1 })
+        }
+
+        console.log(xtimepOil)
+        if (gasStations.length !== 0) {
+            const allOil = gasStations.reduce((acc, el) => {
+                acc += el.valueOil
+                console.log(acc)
+                return acc
+            }, 0)
+            globalChartData.tables.push({
+                name: 'unit_gasStation',
+                label: 'Заправки',
+                header: ['Начало', 'Конец', 'Местоположение', 'Нач. уровень', 'Кон. уровень', 'Заправлено'],
+                total: ['---', '---', '---', `${gasStations[0].startOilValue} л.`, `${gasStations[gasStations.length - 1].finishOilValue} л.`, `${allOil} л.`]
+            });
+            globalChartData.row.push(rowsOil)
+            globalChartData.stats.push(['Заправки', `${allOil} л.`])
+            globalChartData.markers.push(xtimepOil)
+        }
+        if (fuelDrain.length !== 0) {
+            const allOil = fuelDrain.reduce((acc, el) => {
+                acc += el.valueOil
+                console.log(acc)
+                return acc
+            }, 0)
+            globalChartData.tables.push({
+                name: 'unit_fuelDrain',
+                label: 'Сливы',
+                header: ['Начало', 'Конец', 'Местоположение', 'Нач. уровень', 'Кон. уровень', 'Слито'],
+                total: ['---', '---', '---', `${fuelDrain[0].startOilValue} л.`, `${fuelDrain[fuelDrain.length - 1].finishOilValue} л.`, `${allOil} л.`]
+            });
+            globalChartData.row.push(rowsOilDrain)
+            globalChartData.stats.push(['Сливы', `${allOil} л.`])
+            globalChartData.markers.push(xtimepDrain)
+        }
+
+
+        updatedData.forEach((el, i) => {
+            const y = Object.values(el)[0].reduce((acc, e) => {
+                acc.push(e.y)
+                return acc
+            }, [])
+            globalChartData.datasets = { ...globalChartData.datasets, [i]: { name: datasetObject[Object.keys(el)[0]][0], y_axis: i, color: datasetObject[Object.keys(el)[0]][1], data: { x: time, y: y } } }
+        })
+        console.log(globalChartData)
+
+        return globalChartData
+    }
+
+
+    xtimesOil(data) {
+        const res = data.reduce((acc, e) => {
+            const diff = e.valueOil
+            acc.push({ x: e.timeStart, start: this.converterTimesTooltip(e.timeStart), value: diff })
+            return acc
+        }, [])
+
+        return res
+    }
+    xtimes(data) {
+        const res = data.reduce((acc, e) => {
+            const diff = this.formatTime(e[1][0] - e[0][0])
+            const start = this.converterTimesTooltip(e[0][0])
+            const finish = this.converterTimesTooltip(e[1][0])
+            acc.push({ x: e[0][0], duration: diff, str: `${start} - ${finish}` })
+            return acc
+        }, [])
+
+        return res
+    }
+
+    diff(data, num) {
+        let res;
+        if (!num) {
+            res = data.reduce((acc, el) => {
+                const diff = el[1][0] - el[0][0]
+                acc = acc + diff
+                return acc
+            }, 0)
+        }
+        else {
+            res = data.reduce((acc, el) => {
+                const diff = el[0][2] - el[1][2]
+                acc = acc + (diff > 0 ? diff : 0)
+                return parseFloat(acc.toFixed(1))
+            }, 0)
+        }
+
+        return res
+    }
+    calculate(data, ifPwr, nameReports) {
+        let res = []
+        if (!ifPwr) {
+            return res
+        }
+        else {
+
+            if (nameReports === 'Моточасы') {
+                res = data.reduce((acc, e) => {
+                    if (e.pwr > ifPwr) {
+                        if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0 && acc[acc.length - 1][0].pwr > ifPwr) {
+                            acc[acc.length - 1].push(e);
+                        } else {
+                            acc.push([e]);
+                        }
+                    } else if (e.pwr <= ifPwr && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
+                        acc.push([]);
+                    }
+                    return acc;
+                }, []).filter(el => el.length > 0).reduce((acc, el) => {
+                    if (el[el.length - 1].x - el[0].x > 0) {
+                        acc.push([[el[0].x, el[0].geo, el[0].oil], [el[el.length - 1].x, el[el.length - 1].geo, el[el.length - 1].oil]])
+                    }
+
+                    return acc
+                }, [])
+            }
+            if (nameReports === 'Зажигание') {
+                res = data.reduce((acc, e) => {
+                    if (e.engine === 1) {
+                        if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0 && acc[acc.length - 1][0].engine === 1) {
+                            acc[acc.length - 1].push(e);
+                        } else {
+                            acc.push([e]);
+                        }
+                    } else if (e.engine === 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
+                        acc.push([]);
+                    }
+                    return acc;
+                }, []).filter(el => el.length > 0).reduce((acc, el) => {
+                    acc.push([[el[0].x, el[0].geo], [el[el.length - 1].x, el[el.length - 1].geo]])
+                    return acc
+                }, [])
+            }
+            if (nameReports === 'Скорость') {
+
+                //расчет расстояния по координатам
+                function calculateDistance(lat1, lon1, lat2, lon2) {
+                    const R = 6371; // радиус Земли в километрах
+                    const dLat = toRadians(lat2 - lat1);
+                    const dLon = toRadians(lon2 - lon1);
+
+                    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+                    const distance = R * c; // расстояние между точками в километрах
+                    return distance;
+                }
+
+                function toRadians(degrees) {
+                    return degrees * (Math.PI / 180);
+                }
+                const uniqueData = Array.from(new Set(data.map(item => item.x))).map(x => data.find(item => item.x === x));
+                const rr = [];
+                console.log(uniqueData)
+                let num = 0;
+                for (let i = 0; i < uniqueData.length - 1; i++) {
+                    // Вычисляем расстояние между координатами geo[i] и geo[i+1]
+                    const distance = calculateDistance(data[i].geo[0], data[i].geo[1], data[i + 1].geo[0], data[i + 1].geo[1]);
+                    if (uniqueData[i].speed !== 0 && uniqueData[i].sats > 4 && uniqueData[i].pwr > ifPwr) {
+                        uniqueData[i].distance = num
+                        if (Array.isArray(rr[rr.length - 1]) && rr[rr.length - 1].length > 0) {
+                            // Добавляем текущий элемент data[i] в последний массив в rr
+                            rr[rr.length - 1].push(uniqueData[i]);
+                            num += distance
+                        } else {
+                            // Создаем новый массив в rr с текущим элементом data[i]
+                            rr.push([uniqueData[i]]);
+                        }
+                    } else if (uniqueData[i].speed === 0 && uniqueData[i].sats > 4) {
+                        // Если расстояние равно 0, добавляем пустой массив в rr
+                        rr.push([]);
+                        num = 0
+                    }
+                }
+                const rest = rr.filter(el => el.length > 0)
+                res = rest.reduce((acc, el) => {
+                    const maxSpeed = el.reduce((max, current) => {
+                        return Math.max(max, current.speed);
+                    }, 0);
+
+                    const totalSpeed = el.reduce((sum, current) => {
+                        return sum + current.speed;
+                    }, 0);
+
+                    const averageSpeed = totalSpeed / el.length;
+                    const duration = this.formatTime(el[el.length - 1].x - el[0].x)
+                    const distance = el.length > 1 ? (el[el.length - 1].distance - el[0].distance) : el[0].distance
+                    const diff = el[el.length - 1].x - el[0].x
+                    const deltaOil = el[0].oil - el[el.length - 1].oil
+                    const rashod = deltaOil < 0 ? 0 : deltaOil
+
+                    if (diff > 90 && distance > 0.15) {
+                        acc.push([[el[0].x, el[0].geo, el[0].oil], [el[el.length - 1].x, el[el.length - 1].geo, el[el.length - 1].oil], {
+                            distance: parseFloat(distance.toFixed(2)),
+                            maxSpeed: maxSpeed, averageSpeed: parseFloat(averageSpeed.toFixed(0)), duration: duration, rashod: rashod
+                        }])
+                    }
+                    return acc
+                }, [])
+                console.log(res)
+            }
+            if (nameReports === 'Простои') {
+                res = data.reduce((acc, e) => {
+                    if (e.pwr > ifPwr && e.speed === 0 && e.sats > 4) {
+                        if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
+                            && acc[acc.length - 1][0].pwr > ifPwr && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
+                            acc[acc.length - 1].push(e);
+                        } else {
+                            acc.push([e]);
+                        }
+                    } else if (e.pwr <= ifPwr && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
+                        || e.speed > 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
+                        || e.sats > 4 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
+                        acc.push([]);
+                    }
+                    return acc;
+                }, []).filter(el => el.length > 0).reduce((acc, el) => {
+                    if (el[el.length - 1].x - el[0].x > 600) {
+                        acc.push([[el[0].x, el[0].geo, el[0].oil], [el[el.length - 1].x, el[el.length - 1].geo, el[el.length - 1].oil]])
+                    }
+
+                    return acc
+                }, [])
+            }
+            return res
+        }
+    }
+
+    async requstModel(idw) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw }))
+        }
+        const mod = await fetch('/api/modelView', params)
+        const model = await mod.json()
+        const ifPwr = model.result[0] && model.result[0].tsiControll ? model.result[0].tsiControll : false
+        return ifPwr
+    }
+
+
+
+    calculateOilUp(data) {
+        const increasingIntervals = [];
+        let start = 0;
+        let end = 0;
+        for (let i = 0; i < data.length - 1; i++) {
+            const currentObj = data[i];
+            const nextObj = data[i + 1];
+            if (currentObj.oil < nextObj.oil) {
+                if (start === end) {
+                    start = i;
+                }
+                end = i + 1;
+            } else if (currentObj.oil > nextObj.oil) {
+                if (start !== end) {
+                    increasingIntervals.push([data[start], data[end]]);
+                }
+                start = end = i + 1;
+            }
+        }
+        if (start !== end) {
+            increasingIntervals.push([data[start], data[end]]);
+        }
+
+        const zapravkaAll = increasingIntervals.filter((interval, index) => {
+            const firstOil = interval[0].oil;
+            const lastOil = interval[interval.length - 1].oil;
+            const difference = lastOil - firstOil;
+            const threshold = firstOil * 0.15;
+            if (index < increasingIntervals.length - 1) {
+                const nextInterval = increasingIntervals[index + 1];
+                const currentTime = interval[interval.length - 1].x;
+                const nextTime = nextInterval[0].x;
+                const timeDifference = nextTime - currentTime;
+                if (timeDifference < 5 * 60 * 1000) {
+                    interval.push(nextInterval[nextInterval.length - 1]);
+                    interval.splice(1, 1)
+                }
+            }
+            return firstOil > 5 && difference > 40 && difference >= threshold;
+        });
+        console.log(zapravkaAll)
+
+        const oilUpArray = zapravkaAll.reduce((acc, el) => {
+            const diff = el[1].oil - el[0].oil
+            acc.push({ timeStart: el[0].x, timeFinish: el[1].x, geo: el[0].geo, startOilValue: parseFloat(el[0].oil.toFixed(0)), finishOilValue: parseFloat(el[1].oil.toFixed(0)), valueOil: parseFloat(diff.toFixed(0)) })
+            return acc
+        }, [])
+
+        return oilUpArray
+    }
+
+
+    calculateOilSliv(data) {
+        const increasingIntervals = [];
+        let start = 0;
+        let end = 0;
+        for (let i = 0; i < data.length - 1; i++) {
+            const currentObj = data[i];
+            const nextObj = data[i + 1];
+            if (currentObj.oil > nextObj.oil) {
+                if (start === end) {
+                    start = i;
+                }
+                end = i + 1;
+            } else if (currentObj.oil < nextObj.oil) {
+                if (start !== end) {
+                    increasingIntervals.push([data[start], data[end]]);
+                }
+                start = end = i + 1;
+            }
+        }
+        if (start !== end) {
+            increasingIntervals.push([data[start], data[end]]);
+        }
+
+        console.log(increasingIntervals)
+        const slivAll = increasingIntervals.filter((interval, index) => {
+            const firstOil = interval[0].oil;
+            const lastOil = interval[interval.length - 1].oil;
+            const difference = firstOil - lastOil;
+            const threshold = firstOil * 0.15;
+            if (index < increasingIntervals.length - 1) {
+                const nextInterval = increasingIntervals[index + 1];
+                const currentTime = interval[interval.length - 1].x;
+                const nextTime = nextInterval[0].x;
+                const timeDifference = nextTime - currentTime;
+                if (timeDifference < 5 * 60) {
+                    interval.push(nextInterval[nextInterval.length - 1]);
+                    interval.splice(1, 1)
+                }
+            }
+            const timeDifference = interval[interval.length - 1].x - interval[0].x;
+            return timeDifference < 300 && lastOil > 5 && difference > 40 && difference >= threshold;
+        });
+        const oilUpArray = slivAll.reduce((acc, el) => {
+            const diff = el[0].oil - el[1].oil
+            acc.push({ timeStart: el[0].x, timeFinish: el[1].x, geo: el[0].geo, startOilValue: parseFloat(el[0].oil.toFixed(0)), finishOilValue: parseFloat(el[1].oil.toFixed(0)), valueOil: parseFloat(diff.toFixed(0)) })
+            return acc
+        }, [])
+        return oilUpArray
     }
 }
 

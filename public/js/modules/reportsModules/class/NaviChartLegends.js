@@ -4,23 +4,23 @@ export class NaviChartLegenda {
         this.mark = document.querySelector('.markers')
         this.are = document.querySelector('.area')
         this.lin = document.querySelector('.line')
-        this.checkMarkers = this.mark ? this.mark.querySelector('.checkAll') : null
-        this.checkAres = this.are ? this.are.querySelector('.checkAll') : null
-        this.checkLine = this.lin ? this.lin.querySelector('.checkAll') : null
-        this.markers = document.querySelectorAll('.markers_image')
-        this.area = this.are ? this.are.querySelectorAll('.galka') : null
-        this.line = this.lin ? this.lin.querySelectorAll('.galka') : null
+        this.checkMarkers = this.mark ? this.mark.querySelector('.item_type_p') : null
+        this.checkAres = this.are ? this.are.querySelector('.item_type_p') : null
+        this.checkLine = this.lin ? this.lin.querySelector('.item_type_p') : null
+        this.markers = document.querySelectorAll('.wrapper_marker')
+        this.area = this.are ? this.are.querySelectorAll('.item_type_lineANDarea') : null
+        this.line = this.lin ? this.lin.querySelectorAll('.item_type_lineANDarea') : null
 
         this.markers ? this.markers.forEach(el => el.addEventListener('click', this.toogleClickLegends.bind(this, el))) : null
         this.area ? this.area.forEach(el => el.addEventListener('click', this.toogleClickLegends.bind(this, el))) : null
         this.line ? this.line.forEach(el => el.addEventListener('click', this.toogleClickLegends.bind(this, el))) : null
 
-        this.checkMarkers ? this.checkMarkers.addEventListener('click', this.toogleClickLegendsAndCheckAll.bind(this)) : null
-        this.checkAres ? this.checkAres.addEventListener('click', this.toogleClickLegendsAndCheckAll.bind(this)) : null
-        this.checkLine ? this.checkLine.addEventListener('click', this.toogleClickLegendsAndCheckAll.bind(this)) : null
+        this.checkMarkers ? this.checkMarkers.addEventListener('click', () => this.toogleClickLegendsAndCheckAll(this.checkMarkers)) : null
+        this.checkAres ? this.checkAres.addEventListener('click', () => this.toogleClickLegendsAndCheckAll(this.checkAres)) : null
+        this.checkLine ? this.checkLine.addEventListener('click', () => this.toogleClickLegendsAndCheckAll(this.checkLine)) : null
     }
-    toogleClickLegendsAndCheckAll(event) {
-        const element = event.target
+    toogleClickLegendsAndCheckAll(el) {
+        const element = el.children[0]
         const checkinElements = element.parentNode.nextElementSibling.children
         element.classList.toggle('noactiveCheckAll')
         Array.from(checkinElements).forEach(el => {
@@ -31,8 +31,10 @@ export class NaviChartLegenda {
 
     }
     toogleClickLegends(el) {
-        el.classList.toggle('noactive')
-        this.controllVisualElementsToCharts(el.getAttribute('rel'))
+        console.log(el)
+        el.children[0].classList.toggle('noactive')
+        console.log(el)
+        this.controllVisualElementsToCharts(el.children[0].getAttribute('rel'))
     }
 
     controllVisualElementsToCharts(type, global) {

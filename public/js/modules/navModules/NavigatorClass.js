@@ -41,6 +41,11 @@ export class NavigationMenu {
             e.querySelector('.checkInList').style.opacity = 1
         })
 
+        /*  const titleChange_list_name = document.querySelectorAll('.titleChange_list_name')
+          titleChange_list_name.forEach(e => e.textContent = e.getAttribute('rel'))
+          document.querySelector('.object').style.display = 'none'*/
+
+
         if (this.currentTimeoutId) {
             clearInterval(this.currentTimeoutId);
             const checkTypeMarkers = document.querySelector('.checkTypeMarkers')

@@ -10,8 +10,6 @@ exports.datas = async (objects, now, old) => {
             const params = await databaseService.tyresViewToBase(e[4])
             const osiBar = await databaseService.barViewToBase(e[4])
             const ossParams = { osi: osiBar, params: params }
-            // const now = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
-            // const old = now - 7200
             const dannie = await databaseService.viewChartDataToBase(e[4], old, now)
             const itogy = dannie.map(it => {
                 return {

@@ -35,11 +35,17 @@ export function navigator() {
         document.querySelector('.mobile_spisok').classList.add('mobile_active')
         //  rigthFrame.style.display = 'none';
     }
+
+    /* || !event.target.classList.contains('checkInList')
+                || !event.target.classList.contains('map_unit')
+                || !event.target.classList.contains('report_unit')*/
     nav.forEach(el => {
         el.addEventListener('click', route)
         function route(event) {
             navMenu.handleButtonClickList()
-            if (el.classList.contains('color')) {
+            if (el.classList.contains('color') || event.target.classList.contains('checkInList')
+                || event.target.classList.contains('map_unit')
+                || event.target.classList.contains('report_unit')) {
                 return
             }
             else {
@@ -51,7 +57,9 @@ export function navigator() {
                 const ide = el.children[0].children[0]
                 console.log(ide)
                 if (event.target !== ide) {
+                    //const report = document.querySelector('.reports')
                     visual(el)
+                    // !report.classList.contains('hovering') ? visual(el) : null
                     if (widthWind <= 860) {
                         const cblock = document.querySelector('.centerBlock')
                         cblock.style.width = 100 + '%'

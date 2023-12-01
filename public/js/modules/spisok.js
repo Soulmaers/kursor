@@ -8,6 +8,7 @@ import { dataspisok } from './menu.js'
 import { ToggleHiddenList } from './listModules/class/ToggleHiddenList.js'
 import { SummaryViewControll } from './summaryModules/class/SummaryViewControll.js'
 import { ChartsViewControll } from './summaryModules/class/ChartsViewControll.js'
+import { Tooltip } from '../class/Tooltip.js'
 //import { SelectObjectsView } from './reportsModules/class/SelectObjectsView.js'
 const login = document.querySelectorAll('.log')[1].textContent
 
@@ -181,6 +182,29 @@ export async function conturTest(testov) {
                 listName.setAttribute('rel', `name`)
                 listItemCar.appendChild(listName)
                 listName.textContent = elem[0].message
+
+
+                const listReport = document.createElement('i')
+                listReport.classList.add('fas')
+                listReport.classList.add('fa-print')
+                listReport.classList.add('report_map_InList')
+                listReport.classList.add('report_unit')
+                listReport.setAttribute('rel', `${nameCar}`)
+                listReport.setAttribute('id', `${nameCar}`)
+                listName.prepend(listReport)
+
+                new Tooltip(listReport, ['Перейти в отчеты'])
+
+                const listMap = document.createElement('i')
+                listMap.classList.add('fas')
+                listMap.classList.add('fa-map-marker-alt')
+                listMap.classList.add('report_map_InList')
+                listMap.classList.add('map_unit')
+                listMap.setAttribute('rel', `${nameCar}`)
+                listMap.setAttribute('id', `${nameCar}`)
+                listName.prepend(listMap)
+                new Tooltip(listMap, ['Перейти на карту'])
+
                 const listCheck = document.createElement('i')
                 listCheck.classList.add('fa')
                 listCheck.classList.add('fa-check')
@@ -188,6 +212,10 @@ export async function conturTest(testov) {
                 listCheck.setAttribute('rel', `${nameCar}`)
                 listCheck.setAttribute('id', `${nameCar}`)
                 listName.prepend(listCheck)
+
+
+
+
                 const listProfil = document.createElement('div')
                 listProfil.classList.add('newCelChange')
                 listProfil.setAttribute('rel', `pressure tagach`)

@@ -57,6 +57,7 @@
     "nohup": "^0.1.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
+    "pdfjs": "^2.5.2",
     "uuid": "^9.0.0",
     "web-push": "^3.6.6",
     "webpack": "^5.74.0",

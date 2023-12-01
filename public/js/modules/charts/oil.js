@@ -10,7 +10,7 @@ export async function oil(t1, t2) {
     const active = document.querySelector('.color').id
     const nameCar = document.querySelector('.color').children[0].textContent
     console.log(nameCar)
-
+    console.log(active, t1, t2)
     const ttt = await testovfn(active, t1, t2)
 
     const nameArr = JSON.parse(ttt[ttt.length - 1].allSensParams) //await fnParMessage(active)
@@ -865,7 +865,6 @@ export async function oil(t1, t2) {
             const bisect = d3.bisector(d => d.time).right;
 
             const x0 = x.invert(xPosition);
-            console.log(x0)
             const i = bisect(data, x0, 1);
             const d0 = data[i - 1];
             const d1 = data[i];

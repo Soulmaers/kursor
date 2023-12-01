@@ -100,6 +100,31 @@ exports.saveChartDataToBase = async (mass) => {
     }
 };
 
+exports.saveSortDataToBase = async (mass) => {
+    const sqls = `INSERT INTO sortData(idw, nameCar, time, geo,speed, sats, curse, oil, pwr, engine, meliage) VALUES (@idw, @nameCar, @time,  @geo, @speed, @sats, @curse, @oil, @pwr, @engine, @meliage)`;
+    const pool = await connection;
+    for (let i = 0; i < mass.length; i++) {
+        try {
+            await pool.request()
+                .input('idw', sql.Int, mass[i][0])
+                .input('nameCar', sql.NVarChar, mass[i][1])
+                .input('time', sql.NVarChar, (mass[i][2]))
+                .input('geo', sql.NVarChar, mass[i][3])
+                .input('speed', sql.Int, mass[i][4])
+                .input('sats', sql.Int, mass[i][5])
+                .input('curse', sql.Int, mass[i][6])
+                .input('oil', sql.Int, mass[i][7])
+                .input('pwr', sql.Int, mass[i][8])
+                .input('engine', sql.Int, mass[i][9])
+                .input('meliage', sql.Int, mass[i][10])
+                .query(sqls);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+};
+
 exports.saveStructuraToBase = async (mass) => {
     const data = mass[0];
     const idw = mass[1];
@@ -284,9 +309,9 @@ exports.viewChartDataToBaseGeo = async (arrayId, t1, t2) => {
     });
 };*/
 
-exports.lostChartDataToBase = async () => {
+exports.lostChartDataToBase = async (idw) => {
     try {
-        const postModel = `SELECT TOP (1) data FROM chartData ORDER BY data DESC`
+        const postModel = `SELECT TOP (1) data FROM chartData WHERE idw = ${idw} ORDER BY data DESC`
         const pool = await connection;
         const results = await pool.request().query(postModel);
         return results.recordset;
@@ -1161,6 +1186,7 @@ exports.group = async (idw) => {
 
 
 module.exports.summaryYestodayToBase = async (data, arrayId) => {
+    // console.log(data, arrayId)
     if (!arrayId.length) {
         return;
     }
@@ -1190,6 +1216,7 @@ module.exports.summaryYestodayToBase = async (data, arrayId) => {
             request.input('start', sql.NVarChar, data[0])
             request.input('end', sql.NVarChar, data[1])
             const results = await request.query(selectBase);
+            //  console.log(results.recordset)
             return results.recordset;
         } catch (e) {
             console.error(e);

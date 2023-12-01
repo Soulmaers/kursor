@@ -58,12 +58,12 @@ exports.getTitleShablonToWialon = async (idResourse, idShablon, idObject, interv
 
 };
 
-exports.getChartDatatToWialon = async (interval) => {
+exports.getChartDatatToWialon = async (interval, idChart) => {
     console.log(interval)
     return new Promise(async function (resolve, reject) {
         const session = await geSession.geSession();
         const params = {
-            "attachmentIndex": 0,
+            "attachmentIndex": idChart,
             "width": 1000000,// 100000,
             "useCrop": 1,
             'cropBegin': interval[0],

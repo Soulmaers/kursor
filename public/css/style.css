@@ -5272,7 +5272,7 @@ div.wrapper {
 }
 
 .list_item1 {
-  min-width: 150px;
+  min-width: 230px;
   display: flex;
   justify-content: center;
   font-family: Arial;
@@ -5632,7 +5632,7 @@ input[type="text"]:focus {
 
 .list_name2 {
   font-size: 0.8rem;
-  min-width: 150px;
+  min-width: 230px;
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -7256,7 +7256,7 @@ i.minusS {
 
   .listItem {
     width: 1200px;
-    padding: 3px 0;
+    margin: 3px 0;
     position: relative;
     padding-left: 20px;
   }
@@ -8238,6 +8238,8 @@ i.acEvent {
 .tablo {
   background-color: #fff;
   color: rgba(6, 28, 71, 1);
+  border-bottom: 2px solid rgba(6, 28, 71, 1);
+  box-sizing: border-box;
 }
 
 
@@ -8982,7 +8984,6 @@ i.changeColorCheck {
 }
 
 .legenda_navi {
-  height: 390px;
   width: 19%;
   display: flex;
   flex-direction: column;
@@ -9022,8 +9023,8 @@ i.changeColorCheck {
 .chart_to_wialon {
   width: 80%;
   position: relative;
-}
 
+}
 
 
 .item_type_p {
@@ -9125,4 +9126,15 @@ i.changeColorCheck {
 
 .color_tooltip {
   margin-right: 10px;
+}
+
+.item_type_lineANDarea,
+.item_type_p {
+  cursor: pointer;
+}
+
+.report_map_InList {
+  color: gray;
+  font-size: 0.7rem;
+  padding: 0 5px;
 }

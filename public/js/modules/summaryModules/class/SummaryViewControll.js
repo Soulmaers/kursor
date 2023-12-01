@@ -151,8 +151,6 @@ export class SummaryViewControll {
         el.children[0].classList.toggle('clickToggle')
     }
 
-
-
     //сверка активных объектов с данными для подсчета саммари и отображения
     controllActiveObject(array) {
         const checkObjectsId = Array.from(document.querySelectorAll('.checkInList')).reduce((acc, el) => {
@@ -181,6 +179,7 @@ export class SummaryViewControll {
         else {
             summary = this.calculationParametrs(cleanObject)
         }
+
         el !== 'Сегодня' ? this.viewSummaryTable(summary, slot) : this.updateViewSummaryTable(summary)
     }
     //подготовка итогового саммари для неделя и месяц
@@ -291,6 +290,7 @@ export class SummaryViewControll {
     //забираем из бд данные
     async getRequestSummaryToBase(data) {
         const arrayId = this.objectsId
+        console.log(arrayId, data)
         const params = {
             method: "POST",
             headers: {

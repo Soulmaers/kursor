@@ -198,6 +198,7 @@ exports.file = async (req, res) => {
 
 exports.chartData = async (req, res) => {
     const interval = req.body.interval
-    const data = await wialonService.getChartDatatToWialon(interval)
+    const idChart = req.body.att
+    const data = await wialonService.getChartDatatToWialon(interval, idChart)
     res.json(data)
 }

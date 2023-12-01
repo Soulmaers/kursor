@@ -87,16 +87,22 @@ exports.test = async () => {
     dataGlobal = data;
     updateParams(data)
     //  const data = dataSensToBase;
-    const timeBase = await databaseService.lostChartDataToBase()
 
-    const oldTime = Number(timeBase[0].data)
+
     const allCar = Object.entries(data)
     const now = new Date();
     const nowTime = Math.floor(now.getTime() / 1000);
     for (const el of allCar[5][1]) {
+        const timeBase = await databaseService.lostChartDataToBase(el.id)
+        // console.log(timeBase)
+        const oldTime = timeBase.length !== 0 ? Number(timeBase[0].data) : nowTime - 1
+        // console.log(oldTime)
         let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
+
         let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
         let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
+
+
         if (rr.messages.length === 0 || rez && rez.length === 0) {
             null
         }
@@ -108,22 +114,58 @@ exports.test = async () => {
 
             }
             const mass = [];
-            allArray = ggg(nameSens, rez)
-            rr.messages.forEach(e => {
+            const sort = [];
+            const allArray = ggg(nameSens, rez, el.id)
+            rr.messages.forEach((e, index) => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
                 mass.push([String(el.id), el.nm.replace(/\s+/g, ''), String(e.t), String(new Date(e.t * 1000)), String(e.pos.s), String(e.p.sats), geo, String(e.pos.c)]);
+
+                const oil = detaly(allArray[index], 'Топливо')
+                const pwr = detaly(allArray[index], 'Бортовое питание')
+                const engine = detaly(allArray[index], 'Зажигание')
+                const meliage = detaly(allArray[index], 'Одометр', 'Пробег')
+                //console.log(oil, pwr, engine, meliage)
+                sort.push([el.id, el.nm.replace(/\s+/g, ''), String(e.t), geo, e.pos.s, e.p.sats, e.pos.c, oil, pwr, engine, meliage]);
             });
             const sens = rez.map(e => JSON.stringify(e));
-            const arr = JSON.stringify(allArray)
+            const arr = allArray.map(e => JSON.stringify(e));
+
             mass.forEach((el, index) => {
                 el.push(sens[index]);
-                el.push(arr)
+                el.push(arr[index])
             });
+            //console.log(sort)
             await databaseService.saveChartDataToBase(mass);
+            await databaseService.saveSortDataToBase(sort);
         }
     }
 }
 
+function detaly(data, str, str2) {
+    if (!str2) {
+        const res = data.reduce((acc, e) => {
+            if (e[0] === str) {
+                acc = e[2]
+            }
+            return acc
+        }, 0)
+        return res
+    }
+    else {
+        const res = data.reduce((acc, e) => {
+            if (e[0] === str && e.includes(str2) || e[0] === str && !e.includes(str2)) { // Проверяем содержание str в элементе с индексом 0
+                acc = e[2]; // Присваиваем значение элемента с индексом 2 в acc
+            }
+            else if (e[0] === str2 && !e.includes(str)) {
+                acc = e[2]
+            }
+            return acc;
+        }, 0);
+
+        return res
+    }
+
+}
 exports.hunterTime = async () => {
     const now = new Date();
     if (now.getHours() === 0 && now.getMinutes() === 0) { // если время 0 часов и 0 минут
@@ -135,17 +177,18 @@ exports.hunterTime = async () => {
     }
 };
 
-function ggg(nameSens, rez) {
+function ggg(nameSens, rez, id) {
     if (rez) {
         const nameSenz = Object.entries(nameSens.item.sens)
         const arrNameSens = [];
         nameSenz.forEach(el => {
             arrNameSens.push([el[1].n, el[1].p])
         })
-        const valueSens = Object.values(rez[rez.length - 1])
-        const allArr = [];
-        arrNameSens.forEach((e, index) => {
-            allArr.push([...e, valueSens[index]])
+        const allArr = rez.map((el) => {
+            return arrNameSens.reduce((acc, it, index) => {
+                acc.push([...it, Object.values(el)[index]])
+                return acc
+            }, [])
         })
         return allArr
     }
@@ -209,6 +252,7 @@ async function updateParams(data) {
 
     const now = new Date();
     const date = new Date(now);
+
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');

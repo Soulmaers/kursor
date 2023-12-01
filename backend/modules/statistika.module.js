@@ -168,15 +168,18 @@ class SummaryStatistiks {
         })
 
         const allsens = itog.map(it => {
-            return { sens: JSON.parse(it.allSensParams).map(e => e[0]), params: JSON.parse(it.allSensParams).map(e => e[1]), val: JSON.parse(it.allSensParams).map(e => e[2]) }
+            const parse = JSON.parse(it.allSensParams)
+
+            return { sens: parse.map(e => e[0]), params: parse.map(e => e[1]), val: parse.map(e => e[2]) }
         })
         if (allsens.length === 0) {
             return []
         }
+        //  console.log(allsens)
         const allArrNew = allsens.reduce((accumulator, current) => {
             current.sens.forEach((sens, idx) => {
                 const params = current.params[idx];
-                const value = parseFloat(current.val[idx].toFixed(0));
+                const value = current.val[idx] !== null ? parseFloat(current.val[idx].toFixed(0)) : 0;
                 const found = accumulator.find(
                     (item) => item.sens === sens && item.params === params
                 );
