@@ -27,11 +27,21 @@ export class CreateNewGroup {
 
 
     async enter() {
-
         const prefix = this.field_modal.getAttribute('rel')
         if (this.field_modal.getAttribute('rel') === 'group' || this.field_modal.getAttribute('rel') === 'sub') {
-            this.edition(prefix)
+            await this.edition(prefix)
             console.log('логика записи редактирования')
+            const mores = document.querySelector('.mores')
+            const ones = document.querySelector('.ones')
+            mores.classList.remove('toggle_list')
+            ones.classList.remove('toggle_list')
+            ones.classList.add('toggle_list')
+            const createObject = document.querySelector('.create_object')
+            const parentElement = document.querySelector('.list_item1')
+            new Tooltip(createObject, ['Добавить новый объект'])
+            console.log(parentElement.lastElementChild)
+            parentElement.lastElementChild.textContent = 'Список объектов';
+            await zapros(this.login)
         }
         else {
             const idg = await this.generationId()
@@ -69,7 +79,7 @@ export class CreateNewGroup {
                 this.modal.style.display = 'none';
                 this.modal.style.zIndex = 0
                 this.field_modal.value = ''
-                //  await zapros(this.login)
+                await zapros(this.login)
                 const mores = document.querySelector('.mores')
                 const ones = document.querySelector('.ones')
                 mores.classList.remove('toggle_list')
@@ -109,11 +119,12 @@ export class CreateNewGroup {
         else {
             const mess = await this.updateGroup(prefix, object)
             console.log(object)
+            //   await zapros(this.login)
             this.pop.style.display = 'none'
             this.modal.style.display = 'none';
             this.modal.style.zIndex = 0
             this.field_modal.value = ''
-            await zapros(this.login)
+
         }
 
 

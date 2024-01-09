@@ -13,7 +13,26 @@ cont.classList.add('container2')
 wrapContaint.appendChild(cont);
 
 export async function zapros(login) {
+    const [wialonData, kursorData] = await Promise.all([zaprosWialon(login), zaprosKursor(login)])
+    dataspisok = true
+    const arrayList = wialonData.response.aLLmassObject
+    const nameCarCheck = wialonData.response.arrName
+    //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
+    allObjects = wialonData
+    const data = kursorData.concat(arrayList)
+    console.log(kursorData.concat(arrayList))
+    await conturTest(data)
+    logsView(arrayList)
+    setInterval(logsView, 60000, arrayList)
+    //передаем имена объектов для отображения в панели администратора
+    checkCreate(nameCarCheck)
+    const tiresActiv = document.querySelector('.tiresActiv')
+    if (tiresActiv) {
+        tiresActiv.remove()
+    }
+}
 
+export async function zaprosWialon(login) {
     const params = {
         method: "POST",
         headers: {
@@ -24,33 +43,8 @@ export async function zapros(login) {
     }
     const mods = await fetch('/api/dataSpisok', params)
     const models = await mods.json()
-
-    const arrayList = models.response.aLLmassObject
-    const nameCarCheck = models.response.arrName
-    //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
-    console.log(arrayList)
-    allObjects = arrayList
-
-    console.log(models)
-    const kursorData = await zaprosKursor(login)
-    dataspisok = true
-    const data = kursorData.concat(arrayList)
-    console.log(kursorData.concat(arrayList))
-    await conturTest(data)
-    logsView(arrayList)
-    setInterval(logsView, 60000, arrayList)
-
-
-    //передаем имена объектов для отображения в панели администратора
-    checkCreate(nameCarCheck)
-    const tiresActiv = document.querySelector('.tiresActiv')
-    if (tiresActiv) {
-        tiresActiv.remove()
-    }
-
+    return models
 }
-
-
 
 export async function zaprosKursor(login) {
     const params = {
@@ -60,14 +54,9 @@ export async function zaprosKursor(login) {
         },
         body: JSON.stringify({ login })
     }
-    console.log(login)
     const res = await fetch('/api/getKursorObjects', params)
     const objects = await res.json()
-
     const arrayList = objects.result
-    console.log(arrayList)
-
-    // await conturTest(arrayList, 'kursor')
     return arrayList
 }
 

@@ -38,6 +38,7 @@ export class ChartsViewControll {
             if (!dataAndValue[currentDate]) {
                 dataAndValue[currentDate] = {
                     date: currentDate.substring(5),
+                    alldate: currentDate,
                     probeg: 0,
                     rashod: 0,
                     zapravka: 0,
@@ -82,11 +83,8 @@ export class ChartsViewControll {
     }
 
     findTop(date, nameChart) {
-        const currentDate = new Date();
-        const currentYear = currentDate.getFullYear();
-        const dateFindObject = `${currentYear}-` + date;
         const objects = this.originalData.reduce((acc, e) => {
-            if (e.data === dateFindObject && e[nameChart] !== '-') {
+            if (e.data === date && e[nameChart] !== '-') {
                 const clone = Object.assign({}, e); // Создаем поверхностную копию объекта e
                 if (nameChart !== 'timeJob') {
                     clone[nameChart] = nameChart !== 'moto' ? Number(clone[nameChart]) : Number(clone[nameChart]) / 1000;
@@ -98,6 +96,7 @@ export class ChartsViewControll {
             }
             return acc;
         }, []);
+
         const sortedObjects = objects.sort((a, b) => b[nameChart] - a[nameChart]); // Sort objects in descending order based on e[nameChart]
         const topThree = sortedObjects.slice(0, 3).map(el => {
             return {
@@ -106,6 +105,7 @@ export class ChartsViewControll {
                 [nameChart]: el[nameChart]
             }
         });
+
         return topThree
     }
 
@@ -124,9 +124,7 @@ export class ChartsViewControll {
         if (char) {
             char.remove()
         }
-        console.log(nameChart, data)
         const content_lower_charts = document.querySelector('.content_lower_charts')
-
         const graf = document.createElement('div')
         graf.classList.add('chart_global')
         content_lower_charts.appendChild(graf)
@@ -169,7 +167,7 @@ export class ChartsViewControll {
             .on('mouseenter', function (d) {
                 if (nameChart !== 'jobTS') {
                     var maxCar = data.reduce((max, current) => current[nameChart] > max[nameChart] ? current : max);
-                    const titleTop = self.findTop(d.date, nameChart)
+                    const titleTop = self.findTop(d.alldate, nameChart)
                     var tooltip = svg.append('g')
                         .attr('id', 'tooltip')
                         .style('position', 'absolute')

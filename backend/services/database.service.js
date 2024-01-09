@@ -530,25 +530,23 @@ exports.deleteIdToRows = async (id, login) => {
 
 exports.updateGroup = async (object, prefix) => {
     try {
+        console.log(object)
+        console.log(prefix)
         const pool = await connection;
         const result = await databaseService.getIdToRows(object.id, object.login)
-
+        console.log('1')
         console.log(result)
-        // удаляем строки с подгруппами
+
         object.arraySubg.forEach(async el => {
-            result.forEach(async elem => {
-                if (elem.id_sub_g !== null) {
-                    await databaseService.deleteIdToRows(elem.id, object.login)
-                }
-            })
-            //ище все строки по id подгрупп которые должны быть добавлены
+            //ищем все строки по id подгрупп которые должны быть добавлены
             const results = await databaseService.getIdToRows(el.id_sub_g, object.login)
             const objectsToSub = results.map(e => {
                 return { idObject: e.idObject, nameObject: e.nameObject }
             })
+            console.log(results)
             if (results[0].idg === el.id_sub_g) {
                 const updateModel = `UPDATE groups SET data = @data, idg = @idg, name_g=@name_g, id_sub_g=@id_sub_g, name_sub_g=@name_sub_g WHERE login = @login AND idg = @id_sub_g`;
-                const result = await pool.request()
+                const res = await pool.request()
                     .input('login', object.login)
                     .input('data', object.data)
                     .input('idg', object.id)
@@ -561,8 +559,8 @@ exports.updateGroup = async (object, prefix) => {
             if (results[0].id_sub_g === el.id_sub_g) {
                 [...new Set(objectsToSub.map(JSON.stringify))].map(JSON.parse).map(async e => {
                     const query = `INSERT INTO groups (login, data, idg, name_g, id_sub_g,name_sub_g,idObject, nameObject)
-        VALUES(@login, @data, @idg, @name_g,@id_sub_g, @name_sub_g,@idObject, @nameObject)`;
-                    const result = await pool.request()
+            VALUES(@login, @data, @idg, @name_g,@id_sub_g, @name_sub_g,@idObject, @nameObject)`;
+                    const res = await pool.request()
                         .input('login', object.login)
                         .input('data', object.data)
                         .input('idg', object.id)
@@ -601,6 +599,10 @@ exports.updateGroup = async (object, prefix) => {
             if (e.id_sub_g === null) {
                 await databaseService.deleteIdToRows(idkey, object.login)
             }
+        })
+        // удаляем старые строки
+        result.forEach(async elem => {
+            await databaseService.deleteIdToRows(elem.id, object.login)
         })
         return 'Группа изменена';
     } catch (e) {

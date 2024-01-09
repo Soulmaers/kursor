@@ -251,7 +251,7 @@ function ggg(nameSens, rez, id) {
 
 
 async function updateParams(data) {
-    console.time()
+    console.time('updatedata')
     //  data ? data : data = dataGlobal
     const allCar = Object.entries(data)
     const nameCar = allCar[5][1].map(el => {
@@ -272,14 +272,17 @@ async function updateParams(data) {
     };
 
     await Promise.all(databasePromises);
-
     ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
     zaprosSpisokb(nameCar)
+    console.time('датасписок')
     const res = await constorller.dataSpisok()
+    console.timeEnd('датасписок')
     statistika.popupProstoy(res)
     events.eventFunction(res)
     const summary = new SummaryStatistiks(res)
+    console.time('саммари')
     const global = await summary.init();
+    console.timeEnd('саммари')
     const arraySummary = Object.entries(global)
     const now = new Date();
     const date = new Date(now);
@@ -290,9 +293,7 @@ async function updateParams(data) {
     await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
         databaseService.summaryToBase(idw, arrayInfo, datas)
     ));
-
-    console.log('ап')
-    console.timeEnd()
+    console.timeEnd('updatedata')
     return 'updateData end'
 }
 
@@ -314,11 +315,9 @@ async function engine(idw) {
             arrNameSens.forEach((e, index) => {
                 allArr.push([...e, valueSens[index]])
             })
-
             return allArr
         }
     }
-
 }
 
 async function zaprosSpisokb(name) {
