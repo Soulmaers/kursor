@@ -33,7 +33,7 @@ export class SelectObjectsView {
             timeInterval: null,
         }
         this.createMap()
-        this.createListShablons()
+        //  this.createListShablons()
         this.createCalendar()
         this.checkObjects = this.object.querySelector('.toggle_reports')
         this.checkShablons = this.shablons.querySelector('.toggle_reports')
@@ -57,7 +57,6 @@ export class SelectObjectsView {
 
     async createCalendar() {
         const calendar = this.interval.nextElementSibling
-        console.log(this.interval.nextElementSibling)
         const id = `#${!calendar.children[0] ? calendar.id : calendar.children[0].id}`
 
         const fp = flatpickr(`${id}`, {
@@ -73,13 +72,10 @@ export class SelectObjectsView {
                     const unix = Math.floor(date.getTime() / 1000)
                     return unix;
                 })
-                console.log(unixTime)
                 unixTime.length === 2 ? this.requestParams.timeInterval = unixTime : null
             }
         })
     }
-
-
 
     changeTitleRequestFile(el) {
         const title = el.closest('.file').querySelector('.titleChange_list_name')
@@ -93,8 +89,32 @@ export class SelectObjectsView {
 
     }
 
-    convertPDF(data) {
+    async convertPDF(data) {
         console.log(data)
+        const titleNameReports = Array.from(document.querySelectorAll('.titleNameReport')).reduce((acc, el) => {
+            acc.push(el.textContent)
+            return acc
+        }, [])
+        console.log(titleNameReports)
+        const stats = data.stats
+        const tables = data.tables
+        const rows = data.row
+        console.log(rows)
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ stats, titleNameReports, tables, rows })
+        }
+
+        const resfile = await fetch('/api/fileDown', params)
+        console.log(resfile)
+        const blob = await resfile.blob()
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob)
+        link.download = `report.pdf`
+        link.click()
 
     }
     async downloadFileReports(el) {
@@ -102,7 +122,6 @@ export class SelectObjectsView {
         const shablons = (this.shablons.querySelector('.titleChange_list_name').textContent).replace(/\s+/g, '_')
         const format = el.getAttribute('data-attribute')
         const formatToWialon = el.getAttribute('rel')
-        console.log(this.requestParams)
         const time = this.requestParams.timeInterval.reduce((acc, el) => {
             acc.push(this.converterTimes(el))
             return acc
@@ -119,7 +138,6 @@ export class SelectObjectsView {
         const resfile = await fetch('/api/file', params)
         const blob = await resfile.blob()
         const link = document.createElement('a')
-        console.log(blob)
         link.href = URL.createObjectURL(blob)
         link.download = `${shablons}.${object}.${time[0]}_по_${time[1]}.${format}`
         link.click()
@@ -166,9 +184,7 @@ export class SelectObjectsView {
         if (titleNameReport) {
             titleNameReport.forEach(e => e.remove())
         }
-
         let bool = true;
-        console.log(this.requestParams)
         for (let key in this.requestParams) {
             this.requestParams[key] == null ? bool = false : null
         }
@@ -195,7 +211,6 @@ export class SelectObjectsView {
             this.clearTable()
             this.createListTitleReports(this.tablesReports, this.stats, this.attachments)
             loaders.style.display = 'none'
-            console.log(idShablon)
         }
         else {
 
@@ -207,7 +222,6 @@ export class SelectObjectsView {
                 body: JSON.stringify({ idResourse, idShablon, idObject, interval })
             })
             const result = await res.json()
-            console.log(result)
             this.tablesReports = result.data.reportResult.tables
             this.stats = result.data.reportResult.stats
             this.rows = result.rows
@@ -230,7 +244,6 @@ export class SelectObjectsView {
         }
         else {
             const titleNameReports = document.querySelectorAll('.titleNameReport')
-            console.log(titleNameReports)
             titleNameReports[0].classList.add('activeTitleReports')
             this.tablesReports.length !== 0 ? this.createTable(this.tablesReports, this.rows, titleNameReports[0].id) : null
             this.checkPointerToMaps()
@@ -242,7 +255,6 @@ export class SelectObjectsView {
     }
 
     createMetaTable(el) {
-        console.log(el)
         this.clearTable()
         this.marker ? this.hiddenMarkerToMap() : null
         const titleNameReport = document.querySelectorAll('.titleNameReport')
@@ -272,13 +284,11 @@ export class SelectObjectsView {
             body: JSON.stringify({ interval, att })
         })
         const chartData = await res.json()
-        console.log(chartData)
         this.createChartToWialon(chartData)
     }
 
 
     createOsiFormat(chartData, conteiner, svg) {
-        console.log(chartData.datasets)
         const datasets = Object.values(chartData.datasets).map(dataset => {
             const xScale = d3.scaleTime()
                 .domain(d3.extent(dataset.data.x, x => new Date(x * 1000)))
@@ -305,7 +315,6 @@ export class SelectObjectsView {
                 line: line
             }
         });
-        console.log(datasets)
         return datasets
     }
 
@@ -339,7 +348,6 @@ export class SelectObjectsView {
         });
     }
     createMarkers(markers, svg, xScaleStart) {
-        console.log(markers)
         const markersIcon = {
             8: "../../../image/ref.png",
             32: "../../../image/parking.png",
@@ -365,8 +373,6 @@ export class SelectObjectsView {
             .style("opacity", 1)
             .attr("transform", "translate(-8,10)")
             .each(function (d, i, nodes) {
-                console.log(d)
-                console.log(nodes[i])
                 new Tooltip(nodes[i], d.type !== 8 ? [[`${d.tool}: ${d.time.str}`], [`Длительность: ${d.time.duration}`]] :
                     [[`${d.name}: ${d.time.start}`], [`${d.tool}: ${d.time.value} л.`]]); //чтобы работали тултипы на виалоновских маркерах надо везде указать  название маркера
 
@@ -406,8 +412,6 @@ export class SelectObjectsView {
             divMarkers.classList.add('markers_container')
             div.appendChild(divMarkers)
             chartData.markers.forEach(el => {
-                console.log(el.sensor)
-                console.log(el)
                 const divfpoo = document.createElement('div')
                 divfpoo.classList.add('wrapper_marker')
                 divMarkers.appendChild(divfpoo)
@@ -514,9 +518,7 @@ export class SelectObjectsView {
         if (legenda) {
             legenda.remove()
         }
-
         const conteiner = this.reports_module.lastElementChild.children[1].children[0]
-        console.log(conteiner)
         const leg = document.createElement('div')
         leg.classList.add('legenda_navi')
         leg.style.height = (conteiner.clientHeight - 20) + 'px'
@@ -524,9 +526,7 @@ export class SelectObjectsView {
         const graf = document.createElement('div')
         graf.classList.add('chart_to_wialon')
         this.reports_module.lastElementChild.children[1].children[0].appendChild(graf)
-
         const titleOsisY = this.attachments[0].axis_y
-
         conteiner.style.display = 'flex'
         conteiner.style.justifyContent = 'space-around'
         conteiner.style.alignItems = 'center'
@@ -577,7 +577,6 @@ export class SelectObjectsView {
                     tool: e.tool
                 }))
             );
-            console.log(this.markers)
             this.createMarkers(this.markers, svg, xScaleStart)
         }
         svg.append("g")
@@ -627,7 +626,6 @@ export class SelectObjectsView {
             .style('font-size', '1rem')
             .style('font-weight', 400)
             .text(`${titleOsisY[0]}`);
-        console.log()
         svg.append("text")
             .attr("y", (conteiner.clientWidth - 350))
             .attr("x", -190)
@@ -669,7 +667,6 @@ export class SelectObjectsView {
                 return acc
             }, [])
             const [xPosition, yPosition] = d3.mouse(this);
-            console.log(xPosition)
             if (yPosition < 30 || yPosition > 425) {
                 tooltip.style.display = 'none'
             }
@@ -767,7 +764,6 @@ export class SelectObjectsView {
         svg.selectAll(".linezoom")
             .data(datasets)
             .attr("d", d => d.line(d.data))
-        console.log(this.backgroundRegions)
         this.backgroundRegions.forEach(set => {
             svg.selectAll(`[rel = '${set.id}']`)
                 .data(set.interval) // Привязываем данные
@@ -788,7 +784,6 @@ export class SelectObjectsView {
 
     checkPointerToMaps() {
         const pointer = document.querySelectorAll('.pointer_cell')
-        console.log(pointer)
         pointer.forEach(el => el.addEventListener('click', () => {
             pointer.forEach(e => {
                 e.classList.remove('active_cell')
@@ -828,7 +823,6 @@ export class SelectObjectsView {
     }
 
     createTable(tables, rows, id) {
-        console.log(rows)
         if (rows.length === 0) {
             // return
         }
@@ -891,7 +885,6 @@ export class SelectObjectsView {
     }
 
     createStatsTable(stats) {
-        console.log(stats)
         if (stats.length === 0) {
             return
         }
@@ -911,7 +904,6 @@ export class SelectObjectsView {
     }
 
     clearTable() {
-        console.log('тут?????')
         const cell_params = document.querySelector('.cell_params')
         if (cell_params) {
             cell_params.remove()
@@ -939,10 +931,8 @@ export class SelectObjectsView {
             li.textContent = el.label
             this.titleReports.appendChild(li)
         })
-        console.log(this.attachments)
         if (this.attachments.length !== 0) {
             this.attachments.forEach((e, i) => {
-                console.log(e)
                 const li = document.createElement('li')
                 li.classList.add('titleNameReport')
                 li.setAttribute('id', 'chart')
@@ -986,14 +976,14 @@ export class SelectObjectsView {
             setTimeout(() => {
                 titleListObjects.style.color = ''
             }, 3000)
-            this.requestParams.idObject = null
+            //    this.requestParams.idObject = null
             this.requestParams.idResourse = el.getAttribute('rel')
             this.requestParams.idShablon = el.getAttribute('data-attribute')
             const unitsAndGroup = el.getAttribute('data-ct')
             this.object.style.display = 'block'
             const container = this.object.children[0].lastElementChild
-            const title = this.object.querySelector('.titleChange_list_name')
-            title.textContent = title.getAttribute('rel')
+            //   const title = this.object.querySelector('.titleChange_list_name')
+            //  title.textContent = title.getAttribute('rel')
             Array.from(container.children).forEach(t => t.remove())
             if (unitsAndGroup === 'avl_unit') {
                 this.createListObjects()
@@ -1010,9 +1000,7 @@ export class SelectObjectsView {
         }
     }
     clearParams(el) {
-        console.log(el)
         if (el.parentNode.parentNode.parentNode.classList.contains('shablons')) {
-            console.log('тут веджь?')
             this.requestParams.idResourse = null
             this.requestParams.idShablon = null
             this.object.style.display = 'none'
@@ -1076,7 +1064,6 @@ export class SelectObjectsView {
     }
 
     createListGroupSelect(elem) {
-        console.log(elem)
         this.object.querySelector('.titleChange_list_name').textContent = elem.closest('.groups').getAttribute('rel')
         this.requestParams.idObject = elem.closest('.groups').id
     }
@@ -1092,7 +1079,6 @@ export class SelectObjectsView {
     }
 
     createListObjectsSelect(elem) {
-        console.log(elem)
         this.object.querySelector('.titleChange_list_name').textContent = elem.getAttribute('rel')
         this.requestParams.idObject = elem.closest('.listItem').id
     }
@@ -1109,7 +1095,11 @@ export class SelectObjectsView {
 
     createShablonsObjects(resurse) {
         const container = this.shablons.children[0].lastElementChild
-        console.log(resurse)
+        if (container.children.length > 0) {
+            Array.from(container.children).forEach(e => {
+                e.remove()
+            })
+        }
         const li = document.createElement('li')
         li.classList.add('item_type')
         container.appendChild(li)
@@ -1126,6 +1116,7 @@ export class SelectObjectsView {
         li.setAttribute('rel', 'cursor')
         li.setAttribute('data-attribute', 'moto')
         li.setAttribute('data-ct', "avl_unit")
+
         resurse.forEach(e => {
             const obj = Object.values(e)[0]
             for (let key in obj) {
@@ -1146,15 +1137,31 @@ export class SelectObjectsView {
                 li.setAttribute('data-ct', obj[key].ct)
             }
         })
-
     }
 
 
-    async createListShablons() {
+    async createListShablons(avl) {
         const resurse = await this.requestAllShablons()
-        this.createShablonsObjects(resurse)
-        console.log(this.shablons)
-        this.shablons.querySelectorAll('.item_type').forEach(el => el.addEventListener('click', this.checkChoice.bind(this, el)))
+        if (avl) {
+            const resurseUnit = Object.values(resurse).reduce((acc, obj) => {
+                const filteredValues = Object.values(Object.values(obj)[0]).reduce((acc, e, i) => { if (e.ct === avl) { acc[i] = e } return acc }, {});
+                if (Object.values(filteredValues).length > 0) {
+                    const newObj = { [Object.keys(obj)[0]]: filteredValues };
+                    acc.push(newObj);
+                }
+                return acc;
+            }, []);
+            this.createShablonsObjects(resurseUnit)
+            this.shablons.querySelectorAll('.item_type').forEach(el => el.addEventListener('click', this.checkChoice.bind(this, el)))
+            const actModules = document.querySelector('.act_modules').parentNode.children[0]
+            this.createListObjectsSelect(actModules)
+        }
+        else {
+            this.createShablonsObjects(resurse)
+            this.shablons.querySelectorAll('.item_type').forEach(el => el.addEventListener('click', this.checkChoice.bind(this, el)))
+        }
+
+
     }
 
     async requestAllShablons() {
@@ -1192,11 +1199,9 @@ export class SelectObjectsView {
             const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
             L.control.scale({ imperial: '' }).addTo(this.map);
             this.map.addLayer(layer);
-
             setTimeout(() => {
                 this.map.invalidateSize();
             }, 0);
-
         }
     }
 
@@ -1212,10 +1217,8 @@ export class SelectObjectsView {
     async requestData(idShablon, idObject, interval) {
         const idw = idObject
         const ifPwr = await this.requstModel(idw)
-
         const [t1, t2] = interval
         const active = String(idObject)
-
 
         const param = {
             method: "POST",
@@ -1235,8 +1238,6 @@ export class SelectObjectsView {
             }
             return 0;
         })
-
-        console.log(resultt)
         const extractData = (params) => {
             let prevVal = null;
             return resultt.flatMap(el => {
@@ -1261,8 +1262,7 @@ export class SelectObjectsView {
         const pwr = extractData('Бортовое')
         const oil = extractData('Топливо')
         const meliage = extractData('Пробег')
-        //  const otval = extractData('Работа')
-        console.log(meliage)
+
         const datas = [
             { oil: oil },
             { pwr: pwr },
@@ -1270,9 +1270,7 @@ export class SelectObjectsView {
             { speed: speed },
             { sats: sats },
             { meliage: meliage }
-
         ]
-        console.log(datas)
         const minLength = Math.min(...datas.map(item => Object.values(item)[0].length)); // определяем минимальную длину массива
         const shortestArrays = datas.filter(item => Object.values(item)[0].length === minLength)
         const optim = Object.values(Object.values(shortestArrays)[0])[0].reduce((acc, el, i) => {
@@ -1285,22 +1283,15 @@ export class SelectObjectsView {
             acc.push({ x: el.x, ...obj, geo: el.geo, speed: el.speed, sats: el.sats })
             return acc
         }, [])
-
-        console.log(optim)
         const gasStations = this.calculateOilUp(optim)
         const fuelDrain = this.calculateOilSliv(optim)
-        console.log(gasStations)
-        const svodka = this.calculate(optim, ifPwr, 'Моточасы')
-        const svodka1 = this.calculate(optim, ifPwr, 'Простои')
-        const svodka2 = this.calculate(optim, ifPwr, 'Зажигание')
+        const motohours = this.calculate(optim, ifPwr, 'Моточасы')
+        const prostoy = this.calculate(optim, ifPwr, 'Простои')
+        const engin = this.calculate(optim, ifPwr, 'Зажигание')
         const travel = this.calculate(optim, ifPwr, 'Скорость')
-
-        console.log(travel)
-
-        const motoAll = svodka.length !== 0 ? this.diff(svodka) : 0
-        const prostoyAll = svodka1.length !== 0 ? this.diff(svodka1) : 0
-        const oilAllRashod = svodka1.length !== 0 ? this.diff(svodka1, 1) : 0
-
+        const motoAll = motohours.length !== 0 ? this.diff(motohours) : 0
+        const prostoyAll = prostoy.length !== 0 ? this.diff(prostoy) : 0
+        const oilAllRashod = prostoy.length !== 0 ? this.diff(prostoy, 1) : 0
         const ItogSummaryTravel = travel.reduce((acc, e) => {
             acc.distance += parseFloat((e[2].distance.toFixed(2)));
             acc.oil += parseFloat((e[2].rashod.toFixed(2)))
@@ -1311,16 +1302,13 @@ export class SelectObjectsView {
             return acc;
         }, { duration: 0, distance: 0, oil: 0, maxSpeed: 0, averageSpeed: 0, count: 0 });
         ItogSummaryTravel.averageSpeed = ItogSummaryTravel.averageSpeed / ItogSummaryTravel.count
-        //   ItogSummaryTravel.duration = this.formatTime(travel[travel.length - 1][1][0] - travel[0][0][0])
         ItogSummaryTravel.averageRashod = parseFloat(((ItogSummaryTravel.oil / ItogSummaryTravel.distance) * 100).toFixed(1))
         console.log(ItogSummaryTravel)
 
-
-
         const workingTime = motoAll - prostoyAll
-        console.log(workingTime)
-        const xtime = { type: 10, tool: 'Работа двигателя', sensor: 'Начало работы двигателя', x: svodka.length !== 0 ? this.xtimes(svodka) : [] }
-        const xtimep = { type: 11, tool: 'Простой', sensor: 'Начало простоя на холостом ходу', x: svodka1.length !== 0 ? this.xtimes(svodka1) : [] }
+
+        const xtimeMoto = { type: 10, tool: 'Работа двигателя', sensor: 'Начало работы двигателя', x: motohours.length !== 0 ? this.xtimes(motohours) : [] }
+        const xtimeProstoy = { type: 11, tool: 'Простой', sensor: 'Начало простоя на холостом ходу', x: prostoy.length !== 0 ? this.xtimes(prostoy) : [] }
         const xtimepOil = { type: 8, tool: 'Топливо', sensor: 'Заправка', x: gasStations.length !== 0 ? this.xtimesOil(gasStations) : [] }
         const xtimepDrain = { type: 12, tool: 'Топливо', sensor: 'Слив', x: fuelDrain.length !== 0 ? this.xtimesOil(fuelDrain) : [] }
 
@@ -1329,14 +1317,13 @@ export class SelectObjectsView {
         const datasetObject = {
             oil: ['Топливо, л.', '410c96'],
             pwr: ['Бортовое питание, В', 'd90b9e'],
-            //  engine: ['Зажигание, Вкл/Выкл', 'f01616'],
             speed: ['Скорость, км/ч', '0eab5f'],
             sats: ['Спутники, шт.', '8f751a']
         }
 
         const updatedData = datas.filter(item => !item.hasOwnProperty('engine') && !item.hasOwnProperty('meliage'));
 
-        const rows = svodka.map(el => {
+        const rowsMoto = motohours.map(el => {
             const moto = el[1][0] - el[0][0]
             return {
                 c: [{ t: this.converterTimes(el[0][0]), y: el[0][1][0], x: el[0][1][1] }, el[0][1].join(''),
@@ -1344,7 +1331,7 @@ export class SelectObjectsView {
                 this.formatTime(moto)]
             }
         })
-        const rows1 = svodka1.map(el => {
+        const rowsProstoy = prostoy.map(el => {
             const diff = parseFloat(el[0][2] - el[1][2]).toFixed(1)
             return {
                 c: [{ t: this.converterTimes(el[0][0]), y: el[0][1][0], x: el[0][1][1] }, el[0][1].join(''),
@@ -1352,7 +1339,6 @@ export class SelectObjectsView {
                 this.formatTime(el[1][0] - el[0][0]), diff > 0 ? `${diff} л.` : '-']
             }
         })
-
         const rowsOil = gasStations.map(el => {
             return {
                 c: [{ t: this.converterTimes(el.timeStart), y: el.geo[0], x: el.geo[1] },
@@ -1396,8 +1382,7 @@ export class SelectObjectsView {
             row: []
         }
 
-
-        globalChartData.background_regions.push({ color: 'f2a974', id: 'chart_engine', name: 'Зажигание', regions: svodka2 })
+        globalChartData.background_regions.push({ color: 'f2a974', id: 'chart_engine', name: 'Зажигание', regions: engin })
         if (travel.length !== 0) {
             globalChartData.tables.push({
                 name: 'unit_travel',
@@ -1415,42 +1400,37 @@ export class SelectObjectsView {
             globalChartData.stats.push(['Пробег в поездках', `${ItogSummaryTravel.distance.toFixed(2)} км.`])
             globalChartData.stats.push(['Расход в поездках', `${ItogSummaryTravel.oil.toFixed(1)} л.`])
             globalChartData.stats.push(['Средний расход в поездках на 100км', `${ItogSummaryTravel.averageRashod} л.`])
-            //   globalChartData.markers.push(xtimep)
             globalChartData.background_regions.push({ color: 'f7f488', id: 'chart_travel', name: 'Поездки', regions: travel })
         }
-
-        if (svodka.length !== 0) {
+        if (motohours.length !== 0) {
             globalChartData.tables.push({
                 name: 'unit_moto', label: 'Моточасы', header: ['Начало', 'Местоположение', 'Конец', 'Местоположение', 'Моточасы'],
-                total: [this.converterTimes(svodka[0][0][0]), svodka[0][0][1],
-                this.converterTimes(svodka[svodka.length - 1][1][0]), svodka[svodka.length - 1][1][1],
+                total: [this.converterTimes(motohours[0][0][0]), motohours[0][0][1],
+                this.converterTimes(motohours[motohours.length - 1][1][0]), motohours[motohours.length - 1][1][1],
                 this.formatTime(motoAll)]
             });
-            globalChartData.row.push(rows)
+            globalChartData.row.push(rowsMoto)
             globalChartData.stats.push(['Моточасы', this.formatTime(motoAll)])
             globalChartData.stats.push(['Время полезной работы', this.formatTime(workingTime)])
-            globalChartData.markers.push(xtime)
-            globalChartData.background_regions.push({ color: '94f2a4', id: 'chart_moto', name: 'Моточасы', regions: svodka })
+            globalChartData.markers.push(xtimeMoto)
+            globalChartData.background_regions.push({ color: '94f2a4', id: 'chart_moto', name: 'Моточасы', regions: motohours })
         }
-        if (svodka1.length !== 0) {
+        if (prostoy.length !== 0) {
             globalChartData.tables.push({
                 name: 'unit_prostoy',
                 label: 'Простои',
                 header: ['Начало', 'Местоположение', 'Конец', 'Местоположение', 'Время простоя на холостом ходу', 'Расход на холостом ходу'],
-                total: [this.converterTimes(svodka1[0][0][0]), svodka1[0][0][1], this.converterTimes(svodka1[svodka1.length - 1][1][0]), svodka1[svodka1.length - 1][1][1], this.formatTime(prostoyAll), `${oilAllRashod} л.`]
+                total: [this.converterTimes(prostoy[0][0][0]), prostoy[0][0][1], this.converterTimes(prostoy[prostoy.length - 1][1][0]), prostoy[prostoy.length - 1][1][1], this.formatTime(prostoyAll), `${oilAllRashod} л.`]
             });
-            globalChartData.row.push(rows1)
+            globalChartData.row.push(rowsProstoy)
             globalChartData.stats.push(['Простои', this.formatTime(prostoyAll)])
             globalChartData.stats.push(['Расход на холостом ходу', `${oilAllRashod} л.`])
-            globalChartData.markers.push(xtimep)
-            globalChartData.background_regions.push({ color: '90c1f0', id: 'chart_prostoy', name: 'Простои', regions: svodka1 })
+            globalChartData.markers.push(xtimeProstoy)
+            globalChartData.background_regions.push({ color: '90c1f0', id: 'chart_prostoy', name: 'Простои', regions: prostoy })
         }
-
-        console.log(xtimepOil)
         if (gasStations.length !== 0) {
             const allOil = gasStations.reduce((acc, el) => {
                 acc += el.valueOil
-                console.log(acc)
                 return acc
             }, 0)
             globalChartData.tables.push({
@@ -1466,7 +1446,6 @@ export class SelectObjectsView {
         if (fuelDrain.length !== 0) {
             const allOil = fuelDrain.reduce((acc, el) => {
                 acc += el.valueOil
-                console.log(acc)
                 return acc
             }, 0)
             globalChartData.tables.push({
@@ -1479,8 +1458,6 @@ export class SelectObjectsView {
             globalChartData.stats.push(['Сливы', `${allOil} л.`])
             globalChartData.markers.push(xtimepDrain)
         }
-
-
         updatedData.forEach((el, i) => {
             const y = Object.values(el)[0].reduce((acc, e) => {
                 acc.push(e.y)
@@ -1492,7 +1469,6 @@ export class SelectObjectsView {
 
         return globalChartData
     }
-
 
     xtimesOil(data) {
         const res = data.reduce((acc, e) => {
@@ -1511,7 +1487,6 @@ export class SelectObjectsView {
             acc.push({ x: e[0][0], duration: diff, str: `${start} - ${finish}` })
             return acc
         }, [])
-
         return res
     }
 
@@ -1531,7 +1506,6 @@ export class SelectObjectsView {
                 return parseFloat(acc.toFixed(1))
             }, 0)
         }
-
         return res
     }
     calculate(data, ifPwr, nameReports) {
@@ -1540,7 +1514,6 @@ export class SelectObjectsView {
             return res
         }
         else {
-
             if (nameReports === 'Моточасы') {
                 res = data.reduce((acc, e) => {
                     if (e.pwr > ifPwr) {
@@ -1579,44 +1552,20 @@ export class SelectObjectsView {
                 }, [])
             }
             if (nameReports === 'Скорость') {
-
-                //расчет расстояния по координатам
-                function calculateDistance(lat1, lon1, lat2, lon2) {
-                    const R = 6371; // радиус Земли в километрах
-                    const dLat = toRadians(lat2 - lat1);
-                    const dLon = toRadians(lon2 - lon1);
-
-                    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-                    const distance = R * c; // расстояние между точками в километрах
-                    return distance;
-                }
-
-                function toRadians(degrees) {
-                    return degrees * (Math.PI / 180);
-                }
                 const uniqueData = Array.from(new Set(data.map(item => item.x))).map(x => data.find(item => item.x === x));
                 const rr = [];
-                console.log(uniqueData)
                 let num = 0;
                 for (let i = 0; i < uniqueData.length - 1; i++) {
-                    // Вычисляем расстояние между координатами geo[i] и geo[i+1]
-                    const distance = calculateDistance(data[i].geo[0], data[i].geo[1], data[i + 1].geo[0], data[i + 1].geo[1]);
+                    const distance = this.calculateDistance(data[i].geo[0], data[i].geo[1], data[i + 1].geo[0], data[i + 1].geo[1]);
                     if (uniqueData[i].speed !== 0 && uniqueData[i].sats > 4 && uniqueData[i].pwr > ifPwr) {
                         uniqueData[i].distance = num
                         if (Array.isArray(rr[rr.length - 1]) && rr[rr.length - 1].length > 0) {
-                            // Добавляем текущий элемент data[i] в последний массив в rr
                             rr[rr.length - 1].push(uniqueData[i]);
                             num += distance
                         } else {
-                            // Создаем новый массив в rr с текущим элементом data[i]
                             rr.push([uniqueData[i]]);
                         }
                     } else if (uniqueData[i].speed === 0 && uniqueData[i].sats > 4) {
-                        // Если расстояние равно 0, добавляем пустой массив в rr
                         rr.push([]);
                         num = 0
                     }
@@ -1626,11 +1575,9 @@ export class SelectObjectsView {
                     const maxSpeed = el.reduce((max, current) => {
                         return Math.max(max, current.speed);
                     }, 0);
-
                     const totalSpeed = el.reduce((sum, current) => {
                         return sum + current.speed;
                     }, 0);
-
                     const averageSpeed = totalSpeed / el.length;
                     const duration = this.formatTime(el[el.length - 1].x - el[0].x)
                     const distance = el.length > 1 ? (el[el.length - 1].distance - el[0].distance) : el[0].distance
@@ -1646,7 +1593,6 @@ export class SelectObjectsView {
                     }
                     return acc
                 }, [])
-                console.log(res)
             }
             if (nameReports === 'Простои') {
                 res = data.reduce((acc, e) => {
@@ -1667,12 +1613,26 @@ export class SelectObjectsView {
                     if (el[el.length - 1].x - el[0].x > 600) {
                         acc.push([[el[0].x, el[0].geo, el[0].oil], [el[el.length - 1].x, el[el.length - 1].geo, el[el.length - 1].oil]])
                     }
-
                     return acc
                 }, [])
             }
             return res
         }
+    }
+
+    calculateDistance(lat1, lon1, lat2, lon2) {
+        function toRadians(degrees) {
+            return degrees * (Math.PI / 180);
+        }
+        const R = 6371; // радиус Земли в километрах
+        const dLat = toRadians(lat2 - lat1);
+        const dLon = toRadians(lon2 - lon1);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c; // расстояние между точками в километрах
+        return distance;
     }
 
     async requstModel(idw) {
@@ -1731,8 +1691,6 @@ export class SelectObjectsView {
             }
             return firstOil > 5 && difference > 40 && difference >= threshold;
         });
-        console.log(zapravkaAll)
-
         const oilUpArray = zapravkaAll.reduce((acc, el) => {
             const diff = el[1].oil - el[0].oil
             acc.push({ timeStart: el[0].x, timeFinish: el[1].x, geo: el[0].geo, startOilValue: parseFloat(el[0].oil.toFixed(0)), finishOilValue: parseFloat(el[1].oil.toFixed(0)), valueOil: parseFloat(diff.toFixed(0)) })
@@ -1765,8 +1723,6 @@ export class SelectObjectsView {
         if (start !== end) {
             increasingIntervals.push([data[start], data[end]]);
         }
-
-        console.log(increasingIntervals)
         const slivAll = increasingIntervals.filter((interval, index) => {
             const firstOil = interval[0].oil;
             const lastOil = interval[interval.length - 1].oil;

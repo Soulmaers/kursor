@@ -275,7 +275,7 @@ exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
 
 
 //запрос данных на виалон по объекту и получение параметров
-exports.getDataFromWialon = async (login) => {
+exports.getDataFromWialon = async () => {
     return new Promise(async function (resolve, reject) {
         const session = await geSession.geSession();
         //  console.log(sessions)

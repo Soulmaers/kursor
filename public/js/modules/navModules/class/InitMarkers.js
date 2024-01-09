@@ -124,6 +124,7 @@ export class InitMarkers {
         });
     }
     toggleMarkersIcon() {
+        console.log('здесь?')
         const checkInList = document.querySelectorAll('.checkInList')
         checkInList.forEach(el => {
             const idw = el.closest('.listItem').id

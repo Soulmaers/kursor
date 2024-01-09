@@ -69,3 +69,96 @@ exports.barView = async (req, res) => {
 }
 
 
+exports.lastIdObject = async (req, res) => {
+    //   const login = req.body.login
+    const result = await databaseService.lastIdObject()
+    res.json(result)
+}
+
+exports.lastIdGroup = async (req, res) => {
+    //   const login = req.body.login
+    const result = await databaseService.lastIdGroup()
+    res.json(result)
+}
+
+exports.saveObject = async (req, res) => {
+    const object = req.body.object
+    const result = await databaseService.saveObject(object)
+    res.json(result)
+}
+exports.setGroup = async (req, res) => {
+    const object = req.body.object
+    const result = await databaseService.setGroup(object)
+    res.json(result)
+}
+
+exports.deleteObject = async (req, res) => {
+    const idObject = req.body.id
+    const login = req.body.login
+    const result = await databaseService.deleteObject(login, idObject)
+    res.json(result)
+}
+exports.deleteObjectInGroups = async (req, res) => {
+    const idObject = req.body.id
+    const login = req.body.login
+    const result = await databaseService.deleteObjectInGroup(login, idObject)
+    res.json(result)
+}
+exports.deleteGroupToBaseGroups = async (req, res) => {
+    const id = req.body.id
+    const login = req.body.login
+    const result = await databaseService.deleteGroupToBaseGroups(login, id)
+    res.json(result)
+}
+
+
+
+exports.uniqImeiAndPhone = async (req, res) => {
+    const col = req.body.col
+    const value = req.body.value
+    const table = req.body.table
+    const login = req.body.login
+    //  const nameObject = req.body.nameObject
+    const result = await databaseService.uniqImeiAndPhone(col, value, table, login)
+    res.json(result)
+}
+exports.validationCloneGroupName = async (req, res) => {
+    const id = req.body.id
+    const name = req.body.name
+    const login = req.body.login
+    const result = await databaseService.validationCloneGroupName(id, name, login)
+    res.json(result)
+}
+
+exports.updateGroup = async (req, res) => {
+    const object = req.body.object
+    const prefix = req.body.prefix
+    const result = await databaseService.updateGroup(object, prefix)
+    res.json(result)
+}
+
+
+
+exports.getObjects = async (req, res) => {
+    const login = req.body.login
+    const result = await databaseService.getObjects(login)
+    res.json(result)
+}
+exports.getGroups = async (req, res) => {
+    const login = req.body.login
+    const result = await databaseService.getGroups(login)
+    res.json(result)
+}
+exports.getIdGroup = async (req, res) => {
+    const login = req.body.login
+    const id = req.body.id
+    const result = await databaseService.getIdGroup(id, login)
+    res.json(result)
+}
+
+exports.setSubGroups = async (req, res) => {
+    const subgroups = req.body.subgroups
+    const object = req.body.object
+    const result = await databaseService.setSubGroups(subgroups, object)
+    res.json(result)
+}

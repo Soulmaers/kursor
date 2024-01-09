@@ -30,8 +30,13 @@ export async function zapros(login) {
     //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
     console.log(arrayList)
     allObjects = arrayList
+
+    console.log(models)
+    const kursorData = await zaprosKursor(login)
     dataspisok = true
-    await conturTest(arrayList)
+    const data = kursorData.concat(arrayList)
+    console.log(kursorData.concat(arrayList))
+    await conturTest(data)
     logsView(arrayList)
     setInterval(logsView, 60000, arrayList)
 
@@ -43,6 +48,27 @@ export async function zapros(login) {
         tiresActiv.remove()
     }
 
+}
+
+
+
+export async function zaprosKursor(login) {
+    const params = {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({ login })
+    }
+    console.log(login)
+    const res = await fetch('/api/getKursorObjects', params)
+    const objects = await res.json()
+
+    const arrayList = objects.result
+    console.log(arrayList)
+
+    // await conturTest(arrayList, 'kursor')
+    return arrayList
 }
 
 

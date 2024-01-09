@@ -1,5 +1,5 @@
 
-import { zapros } from './modules/menu.js'
+import { zapros, zaprosKursor } from './modules/menu.js'
 import { btnDel } from './modules/event.js'
 import { liCreate } from './modules/visual.js'
 
@@ -54,6 +54,7 @@ async function init() {
     console.log(confirm)
 
     zapros(login) //делаем запрос на wialon получаем объекты
+    // zaprosKursor(login)
     liCreate()
     console.log(screen.width)
     console.log(screen.height)

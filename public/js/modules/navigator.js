@@ -45,7 +45,8 @@ export function navigator() {
             navMenu.handleButtonClickList()
             if (el.classList.contains('color') || event.target.classList.contains('checkInList')
                 || event.target.classList.contains('map_unit')
-                || event.target.classList.contains('report_unit')) {
+                || event.target.classList.contains('report_unit')
+                || event.target.classList.contains('deleteObject')) {
                 return
             }
             else {

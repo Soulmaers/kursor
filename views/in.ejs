@@ -87,16 +87,17 @@
 
     <header class="header">
         <div class="headerLogoMenu">
-            <div class="logotip">
+            <div class="logotip add_navi">
                 <img class="logo"
                     src="https://static.tildacdn.com/tild3330-6536-4662-a364-386639656261/Asset_1log3_1.svg">
             </div>
             <div class="menu">
-                <a class="monitoring dash" rel="dash" href="#"><i class="w20 fas fa-chart-pie"></i>Дашборд</a>
-                <a class="monitor" href="#"><i class="w20 fas fa-desktop"></i>Мониторинг</a>
-                <a class="monitoring karta" rel="karta" href="#"><i class="w20 fas fa-map-marked-alt"></i>Карта</a>
-                <a class="monitoring reports" rel="reports" href="#"><i class="w20 fas fa-print"></i>Отчеты</a>
-                <a class="monitoring sklad" rel="sklad" href="#"><i class="w20 fas fa-industry"></i>Склад</a>
+                <a class="monitoring dash add_navi" rel="dash" href="#"><i class="w20 fas fa-chart-pie"></i>Дашборд</a>
+                <a class="monitor add_navi" href="#"><i class="w20 fas fa-desktop"></i>Мониторинг</a>
+                <a class="monitoring karta add_navi" rel="karta" href="#"><i
+                        class="w20 fas fa-map-marked-alt"></i>Карта</a>
+                <a class="monitoring reports add_navi" rel="reports" href="#"><i class="w20 fas fa-print"></i>Отчеты</a>
+                <a class="monitoring sklad add_navi" rel="sklad" href="#"><i class="w20 fas fa-industry"></i>Склад</a>
             </div>
         </div>
         <div class="main_menu">
@@ -161,8 +162,12 @@
             <div class="leftFrame">
                 <div class="wrapList">
                     <div class="list_att">
-                        <div class="list_item_list list_item1"><i class="fa fa-check globalcheck"></i>Список объектов
+                        <div class="list_item_list list_item1"><i class="fas fa-plus-circle  create_object"></i><i
+                                class="fa fa-check globalcheck"></i><i class="fas fa-cubes  mores"></i><i
+                                class="fas fa-cube ones toggle_list"></i><span class="discription_list">Список
+                                объектов</span>
                         </div>
+                        <!-- <i class=" fas fa-plus-circle create_object"></i>-->
                         <div class="viewIcon title_list_global list_item_list newColumn iconOpacity" rel="statusnew"><i
                                 class="dzin fas fa-satellite-dish"></i>
                             <div class="tipe"><i class="mleft tOff fas fa-toggle-off"></i><i
@@ -246,8 +251,8 @@
                             <div class="tipe"><i class="mleft tOff fas fa-toggle-off"></i><i
                                     class="mleft tOn fas fa-toggle-on"></i></div>
                         </div>
-                        <div class="viewIcon title_list_global list_item_list newColumn list_item2" rel="lasttime"><i
-                                class="dzin fas fa-history"></i>
+                        <div class="viewIcon title_list_global list_item_list newColumn list_item2" rel="lasttime">
+                            <i class="dzin fas fa-history"></i>
                             <div class="tipe"><i class="mleft tOff fas fa-toggle-off"></i><i
                                     class="mleft tOn fas fa-toggle-on"></i></div>
                         </div>
@@ -668,15 +673,6 @@
                         <div class="icon_card to_card" id="to-card" rel="Осталось до ТО">
                             <p class="card_value to_value"></p>
                         </div>
-                        <!--
-                        <div class="icon_card pl">
-                            <div class="card_img pl_card" id="pll2-card"></div>
-                            <p class="card_value"></p>
-                        </div>
-                        <div class="icon_card pl">
-                            <div class="card_img pl_card" id="pll3-card"></div>
-                            <p class="card_value"></p>
-                        </div>-->
                     </div>
                     <div class="config">
                         <div class="container_left">
@@ -694,8 +690,6 @@
 
                             <div class="side">
                                 <div class="itemSide">L</div>
-
-
                                 <div class="checkAlt">
                                     <input type="checkbox" name="checkbox_name" value="checkbox_value" id="check_Title">
                                     <label for="check_Title">Конфигуратор</label>
@@ -731,13 +725,8 @@
                             <div class="tarir">
                                 <div class="foto">
                                     <div class="bochka"></div>
-                                    <!--<div class="shkala"></div>-->
                                 </div>
-                                <!--  <div class="chartTarir"></div>-->
                             </div>
-
-
-
                             <div class="modalCenterOs">
                                 <div class="modalTitle">
                                     <div class="titlePropOs">
@@ -1210,8 +1199,97 @@
             </div>
         </div>
     </div>
+    <div class="create_object_modal">
+        <div class="header_modal">
+            <p class="title_modales">Новый объект</p><i class="fas fa fa-times closes"></i>
+        </div>
+        <div class="body_modal">
+            <ul class="list_modal">
+                <li class="item_modal">
+                    <p class="property_modal">Имя объекта*</p><input rel="nameObject" class="field_modal"
+                        placeholder="введите имя объекта">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">Тип объекта</p><input rel="typeObject" class="field_modal"
+                        placeholder="введите тип объекта">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">Тип устройства*</p><input rel="typeDevice" class="field_modal"
+                        placeholder="введите тип устройства">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">Адрес сервера*</p><input rel="adress" class="field_modal"
+                        placeholder="введите адрес сервера">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">Уникальный ID устройства*</p><input rel="imei" class="field_modal"
+                        placeholder="введите ID устройства">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">Телефонный номер</p><input rel="number" class="field_modal"
+                        placeholder="введите телефонный номер">
+                </li>
+            </ul>
+            <div class="footer_modal">
+                <div class="validation_message"></div>
+                <div class="button_modal">
+                    <div class="btn_modal cancel">Отмена</div>
+                    <div class="btn_modal ok_modal">ОК</div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="create_group_modal">
+        <div class="header_modal">
+            <p class="title_modales">Новая группа</p><i class="fas fa fa-times closes"></i>
+        </div>
+        <div class="body_modal">
+            <ul class="list_modal">
+                <li class="item_modal">
+                    <p class="property_modal">Имя группы*</p><input class="field_modal" rel='t'
+                        placeholder="введите имя группы">
+                </li>
+            </ul>
+            <div class="middle_level">
+                <div class="container_middle_level">
+                    <div class="header_middle_level">Добавить объект</div>
+                    <div class="body_middle_level objects_list">
 
+                    </div>
+                </div>
+                <div class="container_middle_level">
+                    <div class="header_middle_level">Добавить группу</div>
+                    <div class="body_middle_level pod_group">
+                    </div>
+                </div>
+                <div class="element_to_controll">
+                    <i class=" fas fa-angle-double-right add"></i>
+                    <i class="fas fa-angle-double-left remove">
+                    </i>
+                </div>
+                <div class="container_middle_level">
+                    <div class="header_middle_level">Состав группы</div>
+                    <div class="body_middle_level sostav_group">
+                    </div>
+                </div>
+            </div>
+            <div class="footer_modal">
+                <div class="validation_message"></div>
+                <div class="button_modal">
+                    <div class="btn_modal cancel">Отмена</div>
+                    <div class="btn_modal ok_modal">ОК</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal_confirm">
+        <div class="text_confirm"></div>
+        <div class="body_confirm"></div>
+        <div class="button_controll">
+            <div class="btn_modal cancel">Отмена</div>
+            <div class="btn_modal ok_modal">ОК</div>
+        </div>
+    </div>
     <footer class="footer">
         <div class="mobile_nav">
             <ul class="mobile_list">

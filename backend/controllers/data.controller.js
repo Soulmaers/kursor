@@ -6,7 +6,8 @@ const statistika = require('../modules/statistika.module');
 const structura = require('../modules/structura.module.js')
 const events = require('../modules/events.module.js')
 //const connection = require('../config/db')
-const { createDate, convert } = require('../helpers')
+const geSession = require('../../index.js')
+const { createDate, convert, sortData } = require('../helpers')
 const constorller = require('./data.controller.js')
 const { SummaryStatistiks } = require('../modules/statistika.module.js')
 require('dotenv').config();
@@ -22,38 +23,31 @@ exports.dataSpisok = async (req, res) => {
         else {
             login = 'soulmaers'
         }
-        const data = await wialonService.getAllGroupDataFromWialon();
+        const datas = await databaseService.getWialonObjects()
+        const ress = sortData(datas)
+        const massObjectCar = await databaseService.dostupObject(login);
         const aLLmassObject = [];
-        const arrName = [];
-        for (const elem of data.items) {
-            const nameGroup = elem.nm;
-            const idGroup = elem.id
-            const nameObject = elem.u;
+        const arrName = []
+        for (const elem of ress) {
             const massObject = [];
-            await Promise.all(nameObject.map(async (el, index) => {
-                try {
-                    const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
-                    if (!all.item) {
-                        return;
-                    }
-                    const objects = all.item.nm;
-                    const idw = all.item.id
-                    arrName.push([objects, idw])
-                    const prob = await databaseService.loadParamsViewList(objects, el);
-                    const massObjectCar = await databaseService.dostupObject(login);
-                    if (massObjectCar.includes(`${prob[4]}`)) {
-                        prob.group = nameGroup;
-                        massObject.push(prob);
-                    }
+            const nameGroup = elem.name_g;
+            const idGroup = elem.idg
+            let promises;
+            promises = elem.objects.map(async el => {
+                arrName.push([el.nameObject, el.idObject])
+                return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject));
 
+            });
+            const dataObjectGroup = await Promise.all(promises)
+            dataObjectGroup.forEach(e => {
+                if (massObjectCar.includes(`${e[4]}`)) {
+                    e.group = nameGroup;
+                    e.idGroup = idGroup;
+                    massObject.push(e);
                 }
-                catch (e) {
-                    console.log(e)
-                }
-            }));
+            })
             const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup, idGroup: idGroup })));
             aLLmassObject.push(objectsWithGroup);
-            aLLmassObject.reverse();
         }
         if (req && req.body && req.body.login) {
             await res.json({ response: { aLLmassObject, arrName } });
@@ -66,11 +60,43 @@ exports.dataSpisok = async (req, res) => {
 }
 
 
+const getWialonSetToBaseObject = async (login) => {
+    console.log('login', login)
+    const objects = await getWialon(login)
+    const mess = await databaseService.setObjectGroupWialon(objects)
+    console.log(mess)
+}
+
+const getWialon = async (login) => {
+    const data = await wialonService.getAllGroupDataFromWialon();
+    const time = Math.floor(new Date().getTime() / 1000)
+    const wialonObjects = []
+    for (const elem of data.items) {
+        const nameGroup = elem.nm;
+        const idGroup = elem.id
+        const nameObject = elem.u;
+        await Promise.all(nameObject.map(async el => {
+            try {
+                const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
+                // console.log(all)
+                if (!all.item) {
+                    return;
+                }
+                wialonObjects.push({ login: login, data: String(time), idg: String(idGroup), name_g: nameGroup, idObject: String(all.item.id), nameObject: all.item.nm })
+            }
+            catch (e) {
+                console.log(e)
+            }
+        }))
+
+
+    }
+    return wialonObjects
+}
 exports.up = async (req, res) => {
     updateParams()
     res.json({ message: 'ок' })
 }
-
 
 exports.viewLogs = async (req, res) => {
     const login = req.body.login;
@@ -80,38 +106,47 @@ exports.viewLogs = async (req, res) => {
 }
 
 
-let dataGlobal;
-exports.test = async () => {
-    // console.log('rr' + login)
-    const data = await wialonService.getDataFromWialon('i')
-    dataGlobal = data;
-    updateParams(data)
-    //  const data = dataSensToBase;
+//let dataGlobal;
 
-
+exports.start = async (session) => {
+    await getWialonSetToBaseObject(session._session.au) //обновляем объекты с виалона в нашей базе
+    const data = await wialonService.getDataFromWialon()
     const allCar = Object.entries(data)
+
+    const promises = allCar[5][1].map(async (el) => {
+        const res = await engine(el.id);
+        await saveStatus(res, el)
+        await databaseService.setSensorsWialonToBase(session._session.au, el.id, res);
+
+    })
+    // Запускаем все функции параллельно
+    await Promise.all([promises, updateParams(data), saveSensorsToBase(allCar)])
+    // dataGlobal = data;
+}
+
+async function saveSensorsToBase(allCar) {
+    console.time(1)
     const now = new Date();
     const nowTime = Math.floor(now.getTime() / 1000);
     for (const el of allCar[5][1]) {
         const timeBase = await databaseService.lostChartDataToBase(el.id)
-        // console.log(timeBase)
-        const oldTime = timeBase.length !== 0 ? Number(timeBase[0].data) : nowTime - 1
-        // console.log(oldTime)
-        let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
-
-        let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
-        let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
-
-
+        const oldTime = timeBase.length !== 0 ? Number(timeBase[0].data) : nowTime - 1;
+        // Запускаем загрузку данных сообщений и данные датчиков параллельно
+        let [rr, rez, nameSens] = await Promise.all([
+            await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i'),
+            await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i'),
+            await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
+        ]);
         if (rr.messages.length === 0 || rez && rez.length === 0) {
             null
         }
         else {
             while (rez && rr.messages.length !== rez.length) {
-                rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
-                rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
-                nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
-
+                [rr, rez, nameSens] = await Promise.all([
+                    await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i'),
+                    await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i'),
+                    await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
+                ]);
             }
             const mass = [];
             const sort = [];
@@ -119,12 +154,10 @@ exports.test = async () => {
             rr.messages.forEach((e, index) => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
                 mass.push([String(el.id), el.nm.replace(/\s+/g, ''), String(e.t), String(new Date(e.t * 1000)), String(e.pos.s), String(e.p.sats), geo, String(e.pos.c)]);
-
                 const oil = detaly(allArray[index], 'Топливо')
                 const pwr = detaly(allArray[index], 'Бортовое питание')
                 const engine = detaly(allArray[index], 'Зажигание')
                 const meliage = detaly(allArray[index], 'Одометр', 'Пробег')
-                //console.log(oil, pwr, engine, meliage)
                 sort.push([el.id, el.nm.replace(/\s+/g, ''), String(e.t), geo, e.pos.s, e.p.sats, e.pos.c, oil, pwr, engine, meliage]);
             });
             const sens = rez.map(e => JSON.stringify(e));
@@ -134,13 +167,32 @@ exports.test = async () => {
                 el.push(sens[index]);
                 el.push(arr[index])
             });
-            //console.log(sort)
-            await databaseService.saveChartDataToBase(mass);
-            await databaseService.saveSortDataToBase(sort);
+            await Promise.all([databaseService.saveChartDataToBase(mass), databaseService.saveSortDataToBase(sort)])
         }
     }
+    console.log('sav')
+    console.timeEnd(1)
+    return 'saveSensorsToBase end'
 }
-
+async function saveStatus(res, el) {
+    const idw = el.id
+    const model = await databaseService.modelViewToBase(idw)
+    let statusTSI;
+    if (model[0] && model[0].tsiControll) {
+        statusTSI = el.lmsg.p.pwr_ext > Number(model[0].tsiControll) ? 'ВКЛ' : 'ВЫКЛ';
+    } else {
+        statusTSI = '-';
+    }
+    let status;
+    res.forEach(e => {
+        if (e.includes('Зажигание'))
+            status = e[2] === 1 ? 'ВКЛ' : 'ВЫКЛ'
+    })
+    const currentDate = new Date();
+    const todays = Math.floor(currentDate.getTime() / 1000);
+    const activePost = el.nm.replace(/\s+/g, '');
+    await databaseService.saveStatusToBase(activePost, idw, todays, statusTSI, todays, status);
+}
 function detaly(data, str, str2) {
     if (!str2) {
         const res = data.reduce((acc, e) => {
@@ -199,76 +251,53 @@ function ggg(nameSens, rez, id) {
 
 
 async function updateParams(data) {
-    data ? data : data = dataGlobal
-    const nameCar = [];
+    console.time()
+    //  data ? data : data = dataGlobal
     const allCar = Object.entries(data)
-    allCar[5][1].forEach(async el => {
+    const nameCar = allCar[5][1].map(el => {
         const nameTable = el.nm.replace(/\s+/g, '');
         const idw = el.id;
-        let speed;
-        if (el.lmsg && el.lmsg.pos) {
-            speed = el.lmsg.pos.s
-        }
-        else {
-            speed = null
-        }
-        const geo = el && el.pos && el.pos.x ? JSON.stringify([el.pos.y, el.pos.x]) : null;
-        nameCar.push([el.nm.replace(/\s+/g, ''), idw, speed, geo]);
-        const model = await databaseService.modelViewToBase(idw)
-        let statusTSI;
-        if (model[0] && model[0].tsiControll) {
-            statusTSI = el.lmsg.p.pwr_ext > Number(model[0].tsiControll) ? 'ВКЛ' : 'ВЫКЛ';
-        } else {
-            statusTSI = '-';
-        }
-        const res = await engine(idw)
-        let status;
-        res.forEach(e => {
-            if (e.includes('Зажигание'))
-                status = e[2] === 1 ? 'ВКЛ' : 'ВЫКЛ'
-        })
-        const currentDate = new Date();
-        const todays = Math.floor(currentDate.getTime() / 1000);
-        const activePost = el.nm.replace(/\s+/g, '');
-
-        const resSaveStatus = await databaseService.saveStatusToBase(activePost, idw, todays, statusTSI, todays, status);
-        if (el.lmsg) {
-            const sensor = Object.entries(el.lmsg.p);
-            const time = new Date()
-            //сохраняем параметры в бд
-            const resSave = await databaseService.saveDataToDatabase(nameTable, el.id, sensor, time);
-        }
-
+        const speed = el.lmsg?.pos?.s || null;
+        const geo = el.pos?.x ? JSON.stringify([el.pos.y, el.pos.x]) : null;
+        return [nameTable, idw, speed, geo];
     });
+    const currentTime = new Date(); // Assume the current time is the same for all elements in this context.
+    const databasePromises = [];
+    for (const el of allCar[5][1]) {
+        if (el.lmsg) {
+            const nameTable = el.nm.replace(/\s+/g, '');
+            const sensor = Object.entries(el.lmsg.p);
+            databasePromises.push(databaseService.saveDataToDatabase(nameTable, el.id, sensor, currentTime));
+        }
+    };
+
+    await Promise.all(databasePromises);
+
     ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
-    await zaprosSpisokb(nameCar)
+    zaprosSpisokb(nameCar)
     const res = await constorller.dataSpisok()
+    statistika.popupProstoy(res)
+    events.eventFunction(res)
     const summary = new SummaryStatistiks(res)
     const global = await summary.init();
-    // console.log(global)
-    const prostoy = await statistika.popupProstoy(res)
-    await events.eventFunction(res)
     const arraySummary = Object.entries(global)
-
     const now = new Date();
     const date = new Date(now);
-
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     const datas = `${year}-${month}-${day}`;
-    arraySummary.forEach(async el => {
-        const idw = el[0]
-        const arrayInfo = el[1]
-        const res = await databaseService.summaryToBase(idw, arrayInfo, datas)
-        // console.log(res)
-    })
+    await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
+        databaseService.summaryToBase(idw, arrayInfo, datas)
+    ));
 
+    console.log('ап')
+    console.timeEnd()
+    return 'updateData end'
 }
 
 async function engine(idw) {
     const resSensor = await wialonService.getAllNameSensorsIdDataFromWialon(idw, 'i');
-    //  console.log(resSensor)
     if (resSensor !== undefined) {
         const nameSens = Object.entries(resSensor.item.sens)
         const arrNameSens = [];
@@ -285,6 +314,7 @@ async function engine(idw) {
             arrNameSens.forEach((e, index) => {
                 allArr.push([...e, valueSens[index]])
             })
+
             return allArr
         }
     }
@@ -556,3 +586,48 @@ function proverka(arr) {
         }
     })
 }
+
+
+
+
+// console.log(massObject)
+
+//   console.log(aLLmassObject2)
+//new
+
+/*
+const data = await wialonService.getAllGroupDataFromWialon();
+const aLLmassObject = [];
+const arrName = [];
+for (const elem of data.items) {
+    const nameGroup = elem.nm;
+    const idGroup = elem.id
+    const nameObject = elem.u;
+    const massObject = [];
+    await Promise.all(nameObject.map(async el => {
+        try {
+            const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
+            //  console.log(all)
+            if (!all.item) {
+                return;
+            }
+            const objects = all.item.nm;
+            const idw = all.item.id
+            arrName.push([objects, idw])
+            const prob = await databaseService.loadParamsViewList(objects, el);
+            const massObjectCar = await databaseService.dostupObject(login);
+            if (massObjectCar.includes(`${prob[4]}`)) {
+                prob.group = nameGroup;
+
+                massObject.push(prob);
+            }
+
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }));
+    const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup, idGroup: idGroup })));
+    aLLmassObject.push(objectsWithGroup);
+    aLLmassObject.reverse();
+}*/

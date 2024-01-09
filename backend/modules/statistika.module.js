@@ -35,56 +35,55 @@ class SummaryStatistiks {
             .map(el => Object.values(el)) // получаем массивы всех id
             .flat()
             .map(e => [e[4], e[0].message, e[5]])
-        for (const el of idwArray) {
-            this.id = el[0]
-            this.strustura[this.id] = this.strustura[this.id] || {}
-            this.strustura[this.id].ts = 1
-            this.strustura[this.id].nameCar = el[1]
-            this.strustura[this.id].group = el[2]
-            this.strustura[this.id].type = 'Тест'
-            this.data = await this.getSensorsAndParametrs(this.id)
-            const mileg = this.data.some(it => it.params === 'can_mileage' || it.params === 'mileage');
+        // Запускаем все асинхронные операции одновременно и ждем их завершения
+        const dataPromises = idwArray.map(el => this.getSensorsAndParametrs(el[0]));
+        const dataResults = await Promise.all(dataPromises);
+        // Обрабатываем результаты асинхронных операций
+        for (let i = 0; i < idwArray.length; i++) {
+            const id = idwArray[i][0];
+            const message = idwArray[i][1];
+            const group = idwArray[i][2];
+            this.strustura[id] = {
+                ts: 1,
+                nameCar: message,
+                group: group,
+                type: 'Тест',
+                // По умолчанию ставим заполнители
+                probeg: '-',
+                job: '-',
+                rashod: '-',
+                zapravka: '-',
+                medium: '-',
+                moto: '-',
+                prostoy: '-'
+            };
 
+            this.data = dataResults[i];
+
+            const mileg = this.data.some(it => it.params === 'can_mileage' || it.params === 'mileage');
             if (mileg) {
-                this.probeg = this.calculationMileage()
-                this.strustura[this.id].probeg = this.probeg
-                this.strustura[this.id].job = this.calculationJobTs()
+                this.probeg = this.calculationMileage();
+                this.strustura[id].probeg = this.probeg;
+                this.strustura[id].job = this.calculationJobTs();
             }
-            else {
-                this.strustura[this.id].probeg = '-'
-                this.strustura[this.id].job = '-'
-            }
+
             const oil = this.data.some(it => it.sens === 'Топливо' || it.sens === 'Топливо ДУТ');
             if (oil) {
-                const result = this.calculationOil()
-                this.rashod = result[0]
-                this.zapravka = result[1]
-                this.strustura[this.id].rashod = this.rashod
-                this.strustura[this.id].zapravka = this.zapravka
-                this.strustura[this.id].medium = this.calculationMedium()
+                const [rashod, zapravka] = this.calculationOil();
+                this.strustura[id].rashod = rashod;
+                this.strustura[id].zapravka = zapravka;
+                this.strustura[id].medium = this.calculationMedium();
+            }
 
-            }
-            else {
-                this.strustura[this.id].rashod = '-'
-                this.strustura[this.id].zapravka = '-'
-                this.strustura[this.id].medium = '-'
-            }
             const engine = this.data.some(it => it.sens.startsWith('Зажигание'));
             if (engine) {
-                const result = this.calculationMotoAndProstoy()
-                //  console.log(result)
-                this.moto = result[0]
-                this.prostoy = result[1]
-                this.strustura[this.id].moto = this.moto
-                this.strustura[this.id].prostoy = this.prostoy
-            }
-            else {
-                this.strustura[this.id].moto = '-'
-                this.strustura[this.id].prostoy = '-'
+                const [moto, prostoy] = this.calculationMotoAndProstoy();
+                this.strustura[id].moto = moto;
+                this.strustura[id].prostoy = prostoy;
             }
         }
-        //  console.log(this.structura)
-        return this.strustura
+
+        return this.strustura;
     }
 
     calculationMedium() {

@@ -9,7 +9,7 @@ import { ToggleHiddenList } from './listModules/class/ToggleHiddenList.js'
 import { SummaryViewControll } from './summaryModules/class/SummaryViewControll.js'
 import { ChartsViewControll } from './summaryModules/class/ChartsViewControll.js'
 import { Tooltip } from '../class/Tooltip.js'
-//import { SelectObjectsView } from './reportsModules/class/SelectObjectsView.js'
+
 const login = document.querySelectorAll('.log')[1].textContent
 
 simulateLoader();
@@ -95,31 +95,30 @@ export async function loadParamsViewList(car, el) {
     return [model, models, data, osi, el]
 }
 
-export async function conturTest(testov) {
-    console.log(testov)
+export async function conturTest(testov, kursor) {
+    //  console.log(testov)
     const result = testov
         .map(el => Object.values(el)) // получаем массивы всех id
         .flat()
-        .map(e => e[4])
-
+        .map(e => e[e.length - 1] !== 'kursor' ? e[4] : null)
+        .filter(e => e !== null);
+    console.log(result)
     const final = await alternativa(result)
 
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         removeArrElem(groups)
     }
-    //const preloader = document.querySelector('.preloader') /* находим блок Preloader */
-    // preloader.classList.add('preloader_hidden') /* добавляем ему класс для скрытия */
     const listItem = document.querySelectorAll('.listItem')
     if (listItem) {
         removeArrElem(listItem)
     }
-
     testov.forEach(el => {
         if (el.length !== 0) {
             const lowList = document.querySelector('.low_list')
             const group = document.createElement('div')
             group.classList.add('groups')
+            el[el.length - 1] !== 'kursor' ? group.classList.add('wialongroups') : group.classList.add('kursorgroups')
             const nameGroup = el[0][5].replace(/\s/g, '_');
             group.classList.add(`${nameGroup}`)
             group.setAttribute('id', el[0][6])
@@ -135,7 +134,6 @@ export async function conturTest(testov) {
             else {
                 titleModal.textContent = `${nameGroup}` + ' ' + '(' + `${el.length}` + ')'
             }
-
             group.appendChild(titleModal)
             const filterV = document.createElement('i')
             filterV.classList.add('fas')
@@ -163,150 +161,276 @@ export async function conturTest(testov) {
             plusS.classList.add('plusS')
             titleModal.prepend(minusS)
             titleModal.prepend(plusS)
+            const del = document.createElement('i')
+            del.classList.add('fas')
+            del.classList.add('fa-times')
+            del.classList.add('deleteGroup')
+            const sett = document.createElement('i')
+            sett.classList.add('fas')
+            sett.classList.add('fa-wrench')
+            sett.classList.add('settingsGroup')
+            titleModal.appendChild(del)
+            titleModal.appendChild(sett)
+
+            let sub = false
+            if (el[0].length > 7 && el[0][7].sub.length !== 0) {
+                sub = true
+                const subgroupAll = document.createElement('div');
+                subgroupAll.classList.add('subgroupAll');
+                group.appendChild(subgroupAll)
+                console.log(el[0][7].sub)
+                el[0][7].sub.forEach(item => {
+                    const nameSubGroup = item[0][5]
+                    const subgroup = document.createElement('div');
+                    subgroup.classList.add('subgroup');
+                    subgroup.classList.add(`${nameSubGroup}`)
+                    subgroup.setAttribute('rel', `${nameSubGroup}`)
+                    subgroup.setAttribute('id', item[0][6])
+                    subgroup.style.display = 'flex',
+                        subgroup.style.flexDirection = 'column'
+                    subgroup.style.alignItems = 'start'
+                    subgroup.style.width = 100 + '%'
+                    subgroupAll.appendChild(subgroup)
+                    const subTitle = document.createElement('div');
+                    subTitle.classList.add('subTitle');
+                    subTitle.innerHTML = `<i class="fa fa-check chekHidden subcheck"></i> 
+                    ${item[0][5]} (${item.length})
+                     <i class="fas fa-times deleteGroup"></i>
+                      <i class="fas fa-wrench settingsGroup"></i>
+                      <i class="fas fa-sort-amount-up filterV"></i>
+                      <i class="fas fa-sort-amount-down filterVN"></i>`
+                    subgroup.appendChild(subTitle);
+                    const hiddenModal = document.createElement('div')
+                    hiddenModal.classList.add('hiddenSubModal')
+                    subgroup.appendChild(hiddenModal);
+                    const listArr = document.querySelector(`.${nameGroup}`).querySelector(`.${nameSubGroup}`)
+                    item.forEach(async elem => {
+                        if (Object.values(elem[0]).length !== 0) {
+                            const nameCar = elem[0].message.replace(/\s+/g, '')
+                            const listItemCar = document.createElement('div')
+                            listItemCar.classList.add('listItem')
+                            listItemCar.classList.add('kursor')
+                            listItemCar.classList.add(`${elem[4]}`)
+                            listItemCar.setAttribute('rel', `${elem[4]}`)
+                            listItemCar.setAttribute('id', `${elem[4]}`)
+                            listArr.lastChild.appendChild(listItemCar)
+                            const listName = document.createElement('div')
+                            listName.classList.add('list_name2')
+                            listName.setAttribute('rel', `name`)
+                            listItemCar.appendChild(listName)
+                            listName.textContent = elem[0].message
+
+
+                            const listReport = document.createElement('i')
+                            listReport.classList.add('fas')
+                            listReport.classList.add('fa-print')
+                            listReport.classList.add('report_map_InList')
+                            listReport.classList.add('report_unit')
+                            listReport.setAttribute('rel', `${nameCar}`)
+                            listReport.setAttribute('id', `${nameCar}`)
+                            listName.prepend(listReport)
+
+                            new Tooltip(listReport, ['Перейти в отчеты'])
+
+                            const listMap = document.createElement('i')
+                            listMap.classList.add('fas')
+                            listMap.classList.add('fa-map-marker-alt')
+                            listMap.classList.add('report_map_InList')
+                            listMap.classList.add('map_unit')
+                            listMap.setAttribute('rel', `${nameCar}`)
+                            listMap.setAttribute('id', `${nameCar}`)
+                            listName.prepend(listMap)
+                            new Tooltip(listMap, ['Перейти на карту'])
+
+                            const listCheck = document.createElement('i')
+                            listCheck.classList.add('fa')
+                            listCheck.classList.add('fa-check')
+                            listCheck.classList.add('checkInList')
+                            listCheck.style.marginLeft = '10px'
+                            listCheck.setAttribute('rel', `${nameCar}`)
+                            listCheck.setAttribute('id', `${nameCar}`)
+                            listName.prepend(listCheck)
+
+                            const listDelete = document.createElement('i')
+                            listDelete.classList.add('fas')
+                            listDelete.classList.add('fa-times')
+                            listDelete.classList.add('deleteObject')
+                            listDelete.setAttribute('rel', `${nameCar}`)
+                            listDelete.setAttribute('id', `${nameCar}`)
+                            listName.prepend(listDelete)
+                            new Tooltip(listDelete, ['Удалить объект'])
+                        }
+                    })
+
+                })
+            }
+
             const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModal')
             group.classList.add(`${nameGroup}`)
             group.setAttribute('rel', `${nameGroup}`)
             group.appendChild(hiddenModal)
+
             const listArr = document.querySelector(`.${nameGroup}`)
             el.forEach(async elem => {
-                const nameCar = elem[0].message.replace(/\s+/g, '')
-                const listItemCar = document.createElement('div')
-                listItemCar.classList.add('listItem')
-                listItemCar.classList.add(`${elem[4]}`)
-                listItemCar.setAttribute('rel', `${elem[4]}`)
-                listItemCar.setAttribute('id', `${elem[4]}`)
-                listArr.children[1].appendChild(listItemCar)
-                const listName = document.createElement('div')
-                listName.classList.add('list_name2')
-                listName.setAttribute('rel', `name`)
-                listItemCar.appendChild(listName)
-                listName.textContent = elem[0].message
+                if (Object.values(elem[0]).length !== 0) {
+                    const nameCar = elem[0].message.replace(/\s+/g, '')
+                    const listItemCar = document.createElement('div')
+                    listItemCar.classList.add('listItem')
 
 
-                const listReport = document.createElement('i')
-                listReport.classList.add('fas')
-                listReport.classList.add('fa-print')
-                listReport.classList.add('report_map_InList')
-                listReport.classList.add('report_unit')
-                listReport.setAttribute('rel', `${nameCar}`)
-                listReport.setAttribute('id', `${nameCar}`)
-                listName.prepend(listReport)
-
-                new Tooltip(listReport, ['Перейти в отчеты'])
-
-                const listMap = document.createElement('i')
-                listMap.classList.add('fas')
-                listMap.classList.add('fa-map-marker-alt')
-                listMap.classList.add('report_map_InList')
-                listMap.classList.add('map_unit')
-                listMap.setAttribute('rel', `${nameCar}`)
-                listMap.setAttribute('id', `${nameCar}`)
-                listName.prepend(listMap)
-                new Tooltip(listMap, ['Перейти на карту'])
-
-                const listCheck = document.createElement('i')
-                listCheck.classList.add('fa')
-                listCheck.classList.add('fa-check')
-                listCheck.classList.add('checkInList')
-                listCheck.setAttribute('rel', `${nameCar}`)
-                listCheck.setAttribute('id', `${nameCar}`)
-                listName.prepend(listCheck)
+                    listItemCar.classList.add(`${elem[4]}`)
+                    listItemCar.setAttribute('rel', `${elem[4]}`)
+                    listItemCar.setAttribute('id', `${elem[4]}`)
+                    listArr.lastChild.appendChild(listItemCar)
+                    const listName = document.createElement('div')
+                    listName.classList.add('list_name2')
+                    listName.setAttribute('rel', `name`)
+                    listItemCar.appendChild(listName)
+                    listName.textContent = elem[0].message
 
 
+                    const listReport = document.createElement('i')
+                    listReport.classList.add('fas')
+                    listReport.classList.add('fa-print')
+                    listReport.classList.add('report_map_InList')
+                    listReport.classList.add('report_unit')
+                    listReport.setAttribute('rel', `${nameCar}`)
+                    listReport.setAttribute('id', `${nameCar}`)
+                    listName.prepend(listReport)
 
+                    new Tooltip(listReport, ['Перейти в отчеты'])
 
-                const listProfil = document.createElement('div')
-                listProfil.classList.add('newCelChange')
-                listProfil.setAttribute('rel', `pressure tagach`)
-                listProfil.classList.add('list_profil2')
-                listItemCar.appendChild(listProfil)
-                const listTrail = document.createElement('div')
-                listTrail.classList.add('newCelChange')
-                listTrail.setAttribute('rel', `pressure pricep`)
-                listTrail.classList.add('list_trail2')
-                listItemCar.appendChild(listTrail)
-                let in1;
-                let statusnew;
-                let sats;
-                let type;
-                final[0].forEach(i => {
-                    if (i[0] === 'Зажигание' && i[2] === elem[4]) {
-                        in1 = i[3] === -348201.3876 ? '-' : i[3]
+                    const listMap = document.createElement('i')
+                    listMap.classList.add('fas')
+                    listMap.classList.add('fa-map-marker-alt')
+                    listMap.classList.add('report_map_InList')
+                    listMap.classList.add('map_unit')
+                    listMap.setAttribute('rel', `${nameCar}`)
+                    listMap.setAttribute('id', `${nameCar}`)
+                    listName.prepend(listMap)
+                    new Tooltip(listMap, ['Перейти на карту'])
+
+                    const listCheck = document.createElement('i')
+                    listCheck.classList.add('fa')
+                    listCheck.classList.add('fa-check')
+                    listCheck.classList.add('checkInList')
+                    listCheck.setAttribute('rel', `${nameCar}`)
+                    listCheck.setAttribute('id', `${nameCar}`)
+                    listName.prepend(listCheck)
+
+                    if (elem[elem.length - 1] === 'kursor') {
+                        listItemCar.classList.add('kursor')
+                        const listDelete = document.createElement('i')
+                        listDelete.classList.add('fas')
+                        listDelete.classList.add('fa-times')
+                        listDelete.classList.add('deleteObject')
+                        listDelete.setAttribute('rel', `${nameCar}`)
+                        listDelete.setAttribute('id', `${nameCar}`)
+                        listName.prepend(listDelete)
+                        new Tooltip(listDelete, ['Удалить объект'])
                     }
-                })
-                if (elem[0].result) {
-                    const modelUniq = convert(elem[0].result)
-                    modelUniq.forEach(os => {
-                        type = os.type
-                        const osi = document.createElement('div')
-                        osi.classList.add('osi_list')
-                        if (os.trailer !== 'Прицеп' && os.tyres === '2' || os.trailer !== 'Прицеп' && os.tyres === '4') {
-                            fnTagach(os, elem[4])
-                        }
-                        if (os.trailer === 'Прицеп' && os.tyres === '2' || os.trailer == 'Прицеп' && os.tyres === '4') {
-                            fnPricep(os, elem[4])
-                        }
-                    })
-                }
-                const listItem = document.getElementById(`${elem[4]}`)
-                const shina = listItem.querySelectorAll('.arc');
-                let num = 0;
-                shina.forEach(e => {
-                    num++
-                    e.setAttribute('id', num)
-                })
-                const r = [];
-                let integer;
-                if (elem[1].result) {
-                    const modelUniqValues = convert(elem[1].result)
-                    modelUniqValues.forEach(el => {
-                        r.push(el.tyresdiv)
-                    })
-                    elem[2].result.forEach((el) => {
-                        if (el.name === 'sats') {
-                            sats = el.value
-                        }
-                        modelUniqValues.forEach((item) => {
-                            if (el.name == item.pressure) {
+                    else {
+                        listItemCar.classList.add('wialon')
+                    }
 
-                                shina.forEach(e => {
-                                    if (e.id == item.tyresdiv) {
-                                        // console.log(elem[4], el.status, in1)
-                                        if (el.status === 'false' && in1 === 1) {
-                                            e.children[0].style.fill = 'gray'
-                                            return
-                                        }
-                                        if (in1 === 0 || in1 === '-') {
-                                            e.children[0].style.fill = '#000'
-                                            return
-                                        }
-                                        if (nameCar == 'А652УА198') {
-                                            integer = parseFloat((el.value / 10).toFixed(1))
-                                        }
-                                        else {
-                                            integer = el.value
-                                        }
-                                        elem[3].result.forEach(it => {
-                                            if (it.idOs == item.osNumber) {
-                                                e.children[0].style.fill = objColorFront[generDav(integer, it)]
-                                            }
-                                        })
-                                    }
-                                })
+                    const listProfil = document.createElement('div')
+                    listProfil.classList.add('newCelChange')
+                    listProfil.setAttribute('rel', `pressure tagach`)
+                    listProfil.classList.add('list_profil2')
+                    listItemCar.appendChild(listProfil)
+                    const listTrail = document.createElement('div')
+                    listTrail.classList.add('newCelChange')
+                    listTrail.setAttribute('rel', `pressure pricep`)
+                    listTrail.classList.add('list_trail2')
+                    listItemCar.appendChild(listTrail)
+
+
+                    let in1;
+                    let statusnew;
+                    let sats;
+                    let type;
+
+                    final[0].forEach(i => {
+                        if (i[0] === 'Зажигание' && i[2] === elem[4]) {
+                            in1 = i[3] === -348201.3876 ? '-' : i[3]
+                        }
+                    })
+                    if (elem[0].result) {
+                        const modelUniq = convert(elem[0].result)
+                        modelUniq.forEach(os => {
+                            type = os.type
+                            const osi = document.createElement('div')
+                            osi.classList.add('osi_list')
+                            if (os.trailer !== 'Прицеп' && os.tyres === '2' || os.trailer !== 'Прицеп' && os.tyres === '4') {
+                                fnTagach(os, elem[4])
+                            }
+                            if (os.trailer === 'Прицеп' && os.tyres === '2' || os.trailer == 'Прицеп' && os.tyres === '4') {
+                                fnPricep(os, elem[4])
                             }
                         })
+                    }
+                    const listItem = document.getElementById(`${elem[4]}`)
+                    const shina = listItem.querySelectorAll('.arc');
+                    let num = 0;
+                    shina.forEach(e => {
+                        num++
+                        e.setAttribute('id', num)
                     })
-                    statusnew = sats === '' ? '-' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
+                    const r = [];
+                    let integer;
+                    if (elem[1].result) {
+                        const modelUniqValues = convert(elem[1].result)
+                        modelUniqValues.forEach(el => {
+                            r.push(el.tyresdiv)
+                        })
+                        elem[2].result.forEach((el) => {
+                            if (el.name === 'sats') {
+                                sats = el.value
+                            }
+                            modelUniqValues.forEach((item) => {
+                                if (el.name == item.pressure) {
 
+                                    shina.forEach(e => {
+                                        if (e.id == item.tyresdiv) {
+                                            // console.log(elem[4], el.status, in1)
+                                            if (el.status === 'false' && in1 === 1) {
+                                                e.children[0].style.fill = 'gray'
+                                                return
+                                            }
+                                            if (in1 === 0 || in1 === '-') {
+                                                e.children[0].style.fill = '#000'
+                                                return
+                                            }
+                                            if (nameCar == 'А652УА198') {
+                                                integer = parseFloat((el.value / 10).toFixed(1))
+                                            }
+                                            else {
+                                                integer = el.value
+                                            }
+                                            elem[3].result.forEach(it => {
+                                                if (it.idOs == item.osNumber) {
+                                                    e.children[0].style.fill = objColorFront[generDav(integer, it)]
+                                                }
+                                            })
+                                        }
+                                    })
+                                }
+                            })
+                        })
+                        statusnew = sats === '' ? '-' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
+
+                    }
+
+                    updateIconsSensors(final, elem[4], listItemCar, statusnew, sats, type, in1)
+                    listItemCar.insertBefore(listTrail, listItemCar.children[6])
+                    listItemCar.insertBefore(listProfil, listItemCar.children[5])
                 }
-                updateIconsSensors(final, elem[4], listItemCar, statusnew, sats, type, in1)
-                listItemCar.insertBefore(listTrail, listItemCar.children[6])
-                listItemCar.insertBefore(listProfil, listItemCar.children[5])
             })
         }
     })
-    finishload = true
+    updateSensor = true
+
     await viewList(login)
 
 
@@ -317,10 +441,11 @@ export async function conturTest(testov) {
     initSummary = new SummaryViewControll(result)
     initCharts = new ChartsViewControll()
     initCharts.getDataSummary()
-
+    finishload = true
     //new SelectObjectsView()
     navigator();
     setInterval(zaprosSpisok, 30000, toggleList)
+
 
 }
 
@@ -386,6 +511,7 @@ export const viewList = async (login) => {
 }
 export async function alternativa(arr) {
     return new Promise(async function (resolve, reject) {
+        sensorsName = true
         const param = {
             method: "POST",
             headers: {
@@ -393,33 +519,18 @@ export async function alternativa(arr) {
             },
             body: (JSON.stringify({ arr }))
         }
+        const sens = await fetch('/api/getSensorsWialonToBase', param)
+        const Allsens = await sens.json()
+        const itog = Allsens.map(e => {
+            return [e.sens_name, e.param_name, Number(e.idw), Number(e.value)]
+        })
+        console.log(itog)
         console.log('делаем обновление по трем запросам')
-        const ress = await fetch('/api/sensorsName', param)
-        const results = await ress.json()
 
-        if (!results) {
-            ggg(id)
-        }
-        const arrNameSens = [];
-        const nameSens = results.res.map(e => {
-            return { sens: Object.entries(e.result.item.sens), id: e.idw }
-        })
-        nameSens.forEach(el => {
-            const arrName = [];
-            el.sens.forEach(it => {
-                arrName.push([it[1].n, it[1].p, el.id])
-
-            })
-            arrNameSens.push(arrName)
-        })
-        sensorsName = true
-        const res = await fetch('/api/lastSensors', param)
-        const result = await res.json()
-        lastSensor = true
 
         const restest = await fetch('/api/updateSensors', param)
         const resulttest = await restest.json()
-        updateSensor = true
+        lastSensor = true
         const updateTime = Object.entries(resulttest.res).map(el => {
             return {
                 id: parseFloat(el[0]), lastime: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.m : null,
@@ -427,22 +538,9 @@ export async function alternativa(arr) {
                 state: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.state : null
             }
         })
-        if (result) {
-            const valueSens = [];
-            result.res.forEach(e => {
-                valueSens.push(Object.values(e.result))
-            })
-            const allArr = [];
-            arrNameSens.forEach((e, index) => {
-                for (let i = 0; i < e.length; i++) {
-                    allArr.push([...e[i], valueSens[index][i]])
-                }
-            })
-            resolve([allArr, updateTime])
-            //   allArr.splice(0, allArr.length);
-            arrNameSens.splice(0, arrNameSens.length);
-            // updateTime.splice(0, arrNameSens.length);
-        }
+
+        resolve([itog, updateTime])
+
     });
 }
 function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in1) {
@@ -741,10 +839,12 @@ function fnPricep(arr, nameCarId) {
         .attr("r", 0.5)
         .style('fill', 'white')
 }
-export async function zaprosSpisok(toggleList) {
-    const list = document.querySelectorAll('.listItem')
+async function zaprosSpisok(toggleList) {
+    console.log('работает?')
+    const list = document.querySelectorAll('.wialon')
     const arrId = Array.from(list).map(el => parseFloat(el.id))
     const res = await alternativa(arrId)
+
     const param = {
         method: "POST",
         headers: {

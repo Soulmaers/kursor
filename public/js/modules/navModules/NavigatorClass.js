@@ -35,16 +35,10 @@ export class NavigationMenu {
         groups.forEach(e => {
             e.querySelector('.chekHidden').style.opacity = 1
         })
-
         const list = document.querySelectorAll('.listItem')
         list.forEach(e => {
             e.querySelector('.checkInList').style.opacity = 1
         })
-
-        /*  const titleChange_list_name = document.querySelectorAll('.titleChange_list_name')
-          titleChange_list_name.forEach(e => e.textContent = e.getAttribute('rel'))
-          document.querySelector('.object').style.display = 'none'*/
-
 
         if (this.currentTimeoutId) {
             clearInterval(this.currentTimeoutId);
@@ -84,6 +78,8 @@ export class NavigationMenu {
         const tableInfoCar = document.querySelector('.tableInfoCar')
         checkTypeMarkers.style.display = 'flex'
         tableInfoCar.style.display = 'flex'
+        const unitMap = document.querySelectorAll('.map_unit')
+        unitMap.forEach(el => el.style.display = 'none')
         const wrap = document.querySelector('.globalMaps').children[0]
         kartaContainer(wrap)
         this.currentTimeoutId = setInterval(() => {
@@ -91,9 +87,9 @@ export class NavigationMenu {
         }, 30000);
     }
 
-    reports(elem) {
+    reports(elem, avl) {
         elem.style.display = 'flex'
-        reportsContainer()
+        reportsContainer(avl)
     }
 
     sklad(elem) {

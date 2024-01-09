@@ -56,6 +56,12 @@ exports.loadInterval = async (req, res) => {
     const params = await wialonService.loadIntervalDataFromWialon(idw, timeOld, timeNow)
     res.json(params)
 }
+exports.getSensorsWialonToBase = async (req, res) => {
+    const arr = req.body.arr
+    const params = await databaseService.getSensorsWialonToBase(arr)
+    res.json(params)
+}
+
 //запрос на wialon и получение сенсоров по id
 exports.sensorsName = async (req, res) => {
     const idw = req.body.idw
@@ -155,14 +161,158 @@ exports.viewChart = async (req, res) => {
 }
 
 
-/*
-exports.viewChartGeo = async (req, res) => {
-    const arrayId = req.body.arrayId
-    const t1 = req.body.nowDate
-    const t2 = req.body.timeFrom
-    const params = await databaseService.viewChartDataToBaseGeo(arrayId, t1, t2)
-    res.json(params)
-}*/
+
+
+exports.fileDown = async (req, res) => {
+    const pdfmake = require('pdfmake/build/pdfmake');
+    const vfsFonts = require('pdfmake/build/vfs_fonts');
+    const fs = require('fs')
+    const path = require('path'); // Подключаем модуль path
+
+    const data = req.body.stats
+    const titleReports = req.body.titleNameReports
+    const tables = req.body.tables
+    const rows = req.body.rows
+    const tabl = tables.reduce((acc, e, i) => {
+        const row = rows[i].reduce((acc, it) => {
+            acc.push(it.c.map(el => {
+                return el.t ? el.t : el
+            }))
+            return acc
+        }, [])
+        const arr = []
+        arr.push(e.header)
+        arr.push(...row)
+        arr.push(e.total)
+        acc.push({ table: arr, label: e.label })
+        return acc
+    }, [])
+    const nameReport = data[0][1]
+    pdfmake.vfs = vfsFonts.pdfMake.vfs;
+
+    const imagePath = path.join(__dirname, 'g1.png'); // Создаем абсолютный путь к файлу
+    const createPDF = (data, filePath) => {
+        const docDefinition = {
+            pageSize: {
+                width: 600, // ширина страницы в пикселях (A4 размер)
+                height: 842 // высота страницы в пикселях (A4 размер)
+            },
+            pageMargins: [20, 20, 20, 20], // отступы со всех сторон (левый, верхний, правый, нижний)
+            content: [
+                {
+                    canvas: [
+                        {
+                            type: 'rect',
+                            x: 0,
+                            y: 0,
+                            w: 560,//pageSize.width - 200,
+                            h: 46,
+                            color: '#061c47',  // устанавливаем цвет фона
+                        }
+                    ]
+                },
+                {
+                    image: `data:image/png;base64,${fs.readFileSync(imagePath, 'base64')}`,
+                    width: 30,
+                    style: 'images',
+                },
+                { text: nameReport, style: 'reportName', alignment: 'center' },
+                ...titleReports.map((e, index) => ({ text: e, linkToPage: 2, margin: index === 0 ? [0, 30, 0, 0] : [0, 2, 0, 0], fontSize: 10, color: '#061c47', width: 50 })),
+            ],
+            styles: {
+                header: {
+                    fontSize: 15,
+                    margin: [0, 40, 0, 10],
+                    color: '#061c47'
+                },
+                tables: {
+                    margin: [180, 0, 80, 0],
+                },
+                images: {
+                    margin: [10, -40, 0, 0],
+                },
+                reportName: {
+                    fontSize: 17,
+                    bold: true,
+                    margin: [0, -30, 0, 0],
+                    color: '#fff'
+                }
+            },
+            footer: (currentPage, pageCount) => {
+                return {
+                    text: `Page ${currentPage} of ${pageCount}`,
+                    alignment: 'center',
+                    fontSize: 10
+                };
+            },
+        };
+
+        docDefinition.content.push({ text: 'Статистика', style: 'header', alignment: 'center' },
+            {
+                columns: [
+                    { width: '*', text: '' },
+                    {
+                        width: 'auto',
+                        table: {
+                            body: data,
+                            fontSize: 2,
+                            alignment: "center"
+                        }
+                    },
+                    { width: '*', text: '' },
+                ]
+            })
+
+        tabl.forEach(e => {
+            const count = e.table[0].length;
+            const width = e.table[0].map((e, i) => {
+                if (count > 6) {
+                    return i === 1 || i === 3 ? 60 : 45;
+                } else {
+                    return 500 / count;
+                }
+            });
+
+            docDefinition.content.push({ text: e.label, alignment: 'center', margin: [0, 30, 0, 10] });
+            docDefinition.content.push({
+                columns: [
+                    { width: '*', text: '' },
+                    {
+                        width: 'auto',
+                        table: {
+                            widths: [...width],
+                            body: e.table.map((row, i) => row.map(cell => ({
+                                text: cell, fontSize: 9, alignment: 'center',
+                                fillColor: i == 0 ? '#061c47' : (i == e.table.length - 1 ? '#ede6e6' : null),
+                                bold: i === 0 ? true : false,
+                                color: i == 0 ? '#fff' : null
+                            }))),
+                            headerRows: 1,
+                            verticalAlignment: 'start',
+                            alignment: 'center',
+                        },
+                    },
+                    { width: '*', text: '' },
+                ],
+            });
+        });
+
+
+        const pdfDoc = pdfmake.createPdf(docDefinition);
+        pdfDoc.getBase64((data) => {
+            const buffer = Buffer.from(data, 'base64');
+            // Сохранение файла PDF
+            require('fs').writeFileSync(filePath, buffer);
+        });
+    };
+    const filePath = path.join(__dirname, `rep.pdf`);
+    createPDF(data, filePath);
+    console.log(filePath)
+    const file = fs.createReadStream(filePath)
+    res.setHeader('Content-Type', `application/pdf`);
+    res.setHeader('Content-Disposition', `attachment; filename=filename.pdf`);
+    file.pipe(res);
+};
 
 exports.shablons = async (req, res) => {
     const data = await wialonService.getAllShablonsToWialon()

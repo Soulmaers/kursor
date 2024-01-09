@@ -290,7 +290,6 @@ export class SummaryViewControll {
     //забираем из бд данные
     async getRequestSummaryToBase(data) {
         const arrayId = this.objectsId
-        console.log(arrayId, data)
         const params = {
             method: "POST",
             headers: {

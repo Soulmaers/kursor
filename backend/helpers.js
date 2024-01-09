@@ -45,3 +45,39 @@ exports.processing = async (arr, timez, idw, geoLoc, group, name, start) => {
     }
     return { msg: mess, logins: res }
 }
+
+
+exports.sortData = (datas) => {
+    const res = Object.values(datas.reduce((acc, elem) => {
+        if (!acc[elem.idg]) {
+            acc[elem.idg] = {
+                idg: elem.idg,
+                name_g: elem.name_g,
+                sub: [],
+                objects: []
+            };
+        }
+        if (elem.id_sub_g !== null) {
+            const subExists = acc[elem.idg].sub.some(item => item.id_sub_g === elem.id_sub_g);
+            if (!subExists) {
+                acc[elem.idg].sub.push({
+                    id_sub_g: elem.id_sub_g,
+                    name_sub_g: elem.name_sub_g,
+                    objects: []
+                })
+            }
+            acc[elem.idg].sub.find(item => item.id_sub_g === elem.id_sub_g).objects.push({
+                idObject: elem.idObject,
+                nameObject: elem.nameObject,
+            })
+        }
+        else {
+            acc[elem.idg].objects.push({
+                idObject: elem.idObject,
+                nameObject: elem.nameObject,
+            })
+        }
+        return acc;
+    }, {}));
+    return res
+}

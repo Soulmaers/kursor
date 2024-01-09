@@ -21,6 +21,8 @@ router.post('/api/viewLogs', controllerData.viewLogs)
 router.post('/api/quantityLogs', controllerWialon.quantityLogs)
 
 
+router.post('/api/getSensorsWialonToBase', controllerWialon.getSensorsWialonToBase)
+
 router.post('/api/wialon', controllerWialon.datawialon)
 router.post('/api/wialonAll', controllerWialon.datawialonAll)
 router.post('/api/parametrs', controllerWialon.parametrs)
@@ -36,7 +38,7 @@ router.get('/api/shablons', controllerWialon.shablons)
 router.post('/api/titleShablon', controllerWialon.titleShablon)
 router.post('/api/file', controllerWialon.file)
 router.post('/api/chartData', controllerWialon.chartData)
-
+router.post('/api/fileDown', controllerWialon.fileDown)
 
 
 

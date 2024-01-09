@@ -4,8 +4,9 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const passport = require('passport')
 const routes = require('./backend/routes/routes')
-const userRoutes = require('./backend/routes/userRoutes')
+const userRoutes = require('./backend/routes/userRoutes.js')
 const configRoutes = require('./backend/routes/configRoutes')
+const kursorRoutes = require('./backend/routes/kursorRoutes')
 //const isToken = require('./middleware/auth.js')
 const morgan = require('morgan');
 const fs = require('fs');
@@ -31,9 +32,11 @@ app.use(express.static(__dirname + '/public'));
 app.use(routes)
 app.use(userRoutes)
 app.use(configRoutes)
+app.use(kursorRoutes)
 
 require('dotenv').config();
 const port = process.env.PORT
+
 const initServer = () => {
     return new Promise((resolve) => {
         app.listen(port, () => {
@@ -43,15 +46,15 @@ const initServer = () => {
     });
 }
 
-
-
+let session;
 async function init() {
     await initServer()
     await wialon()
-
-    globalstart.test()
     globalstart.hunterTime()
-    setInterval(globalstart.test, 300000)
+    // console.time()
+    await globalstart.start(session)
+    // console.timeEnd()
+    setInterval(globalstart.start, 300000, session)
     setInterval(globalstart.hunterTime, 50000)
 
     console.log('сессия открыта')
@@ -60,12 +63,15 @@ init()
 //0f481b03d94e32db858c7bf2d8415204977173E354D49AA7AFA37B01431539AEAC5DAD5E
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178
 //0f481b03d94e32db858c7bf2d8415204616F1C781302A0F13D8C8C61B8B8CCBCEB8D19EB
-let session;
+
+//0f481b03d94e32db858c7bf2d841520483AA3DFA6B70F0D652D0D81E1837E52CB73B4320
+
+//0f481b03d94e32db858c7bf2d8415204053B81B65B49F2370AA9ABEC5A05DCE9EA16B835
+
 async function wialon() {
     const token = process.env.TOKEN// await getTokenFromDB(login)
     console.log(token)
     session = await wialonModule.login(token);
-    // console.log(session)
     const params = {
         'tzOffset': 10800,
         "language": 'ru',
@@ -96,225 +102,53 @@ exports.geSession = async () => {
 
 
 
+const net = require('net');
 
+class ListenPortTP {
+    constructor(port) {
+        this.port = port
+        this.createServer(this.port)
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*//oldBase
-const mysql = require('mysql')
-require('dotenv').config();
-
-
-
-
-//newBase
-const sql = require('mssql');
-
-
-
-
-
-
-
-
-async function importToSqlServer(tablename, columns, row) {
-    //   console.log(tablename, columns)
-    try {
-        let pool = await sql.connect({
-            server: 'localhost',
-            user: 'sa',
-            password: 'Asdf2022',
-            database: 'CursorMSSQL', //'CursorMSSQL',
-            options: {
-                trustServerCertificate: true // если используете самоподписанный сертификат SSL
-            }
+    createServer(port) {
+        const tcpServer = net.createServer((socket) => {
+            console.log('TCP Client connected');
+            new ChartServerTerminal(socket)
+            new SendingCommandToTerminal(socket)
         });
-
-        // Создание строки для описания колонок таблицы
-        let columnsString = '';
-        for (const column of columns) {
-            let type = column.type;
-            if (column.type === 'int(255)') {
-                type = 'int'
-            }
-            if (column.type === 'mediumtext' || column.type === 'longtext') {
-                type = 'varchar(MAX)'
-            }
-
-            columnsString += `${column.field} ${type}, `;
-        }
-        columnsString = columnsString.slice(0, -2); // Удаление последней запятой и пробела
-        console.log(tablename)
-
-        let result = await pool.request()
-            // Создание команды SQL для создания таблицы
-            .query(`CREATE TABLE ${tablename} (${columnsString})`)
-
-
-    } catch (err) {
-        console.error('Error on import', err);
-    }
-}
-
-async function importData() {
-    try {
-        const pool = mysql.createPool({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASS,
-            database: process.env.DB_NAME,
-            supportBigNumbers: true,
-            bigNumberStrings: true
-        })
-        pool.query('SHOW TABLES', (error, results, fields) => {
-            if (error) throw error;
-            results.forEach((row) => {
-                const tableName = row[Object.keys(row)[0]];
-                if (tableName !== 'chartData') {
-
-                    pool.query(`DESCRIBE ${tableName}`, (error, results, fields) => {
-                        if (error) throw error;
-
-                        const columns = results.reduce((acc, column) => {
-                            const columnName = column.Field;
-                            const columnType = column.Type;
-                            acc.push({ field: columnName, type: columnType })
-                            return acc
-                        }, []);
-                        importToSqlServer(tableName, columns);
-                        importRowsData(tableName)
-                    });
-                }
-                else {
-                    return
-                    pool.query(`DESCRIBE ${tableName}`, (error, results, fields) => {
-                        if (error) throw error;
-
-                        const columns = results.reduce((acc, column) => {
-                            const columnName = column.Field;
-                            const columnType = column.Type;
-                            acc.push({ field: columnName, type: columnType })
-                            return acc
-                        }, []);
-                        // importToSqlServer(tableName, columns);
-                        importRowsDataBig(tableName)
-                    });
-                }
-            });
-        })
-
-    }
-    catch (err) {
-        console.error(err);
-    }
-
-}
-
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    supportBigNumbers: true,
-    bigNumberStrings: true
-})
-
-async function importRowsData(tableNames) {
-    try {
-        pool.query(`SELECT * FROM ${tableNames}`, function (err, result, fields) {
-            if (err) throw err;
-
-            const row = result
-            importToSqlServerRows(tableNames, row);
+        tcpServer.listen(port, () => {
+            console.log(`TCP протокол слушаем порт ${port}`);
         });
-
-    }
-    catch (err) {
-        console.error(err);
     }
 }
 
-async function importRowsDataBig(tableNames) {
-    try {
-        let offset = 0;
-        const limit = 50000;
-        let hasMoreData = true;
-
-        while (hasMoreData) {
-            const query = `SELECT * FROM ${tableNames} LIMIT ${limit} OFFSET ${offset}`;
-
-            // Делаем запрос и ожидаем результат
-            const result = await new Promise((resolve, reject) => {
-                pool.query(query, function (err, result, fields) {
-                    if (err) {
-                        reject(err)
-                    }
-                    else {
-                        resolve(result);
-                    }
-                });
-            });
-            // Если в результате нет строк, устанавливаем hasMoreData в false и выходим из цикла
-            if (result.length === 0) {
-                hasMoreData = false;
-            }
-            else {
-                // console.log(result)
-                // Импортируем данные и увеличиваем смещение
-                await importToSqlServerRows(tableNames, result);
-                offset += limit;
-                console.log(offset);
-            }
-
-            // Ждем 1 секунду перед следующим запросом
-            await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-    }
-    catch (err) {
-        console.error(err);
-    }
-}
+const ChartServerTerminal = require('./backend/modules/navtelecom/ChatServerTerminal.js')
+const SendingCommandToTerminal = require('./backend/modules/navtelecom/SendingCommandToTerminal.js')
+new ListenPortTP(21626)
 
 
-async function importToSqlServerRows(tableName, data) {
-    let pool = await sql.connect({
-        server: 'localhost',
-        user: 'sa',
-        password: 'Asdf2022',
-        database: 'CursorMSSQL', //'CursorMSSQL',
-        options: {
-            trustServerCertificate: true // если используете самоподписанный сертификат SSL
-        }
-    });
-    for (const row of data) {
-        const columns = Object.keys(row).join(', ');
 
-        const values = Object.keys(row).map((key) => `'${row[key]}'`).join(', ');
 
-        let result = await pool.request()
-            .query(`INSERT INTO ${tableName} (${columns}) VALUES (${values})`);
-    }
-    console.log("Import successful");
-}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

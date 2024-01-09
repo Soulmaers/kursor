@@ -24,7 +24,8 @@ import { storTitleList } from './content.js'
 import { NavigationMenu } from './navModules/NavigatorClass.js'
 import { filterCondition } from './filtersList.js'
 import { initCharts, initSummary } from './spisok.js'
-
+import { CreateNewObject } from './propertyObjectModules/class/CreateNewObject.js'
+import { CreateNewGroup } from './propertyObjectModules/class/CreateNewGroup.js'
 
 const sec = document.querySelector('.sections')
 const centerBlock = document.querySelector('.centerBlock')
@@ -42,7 +43,7 @@ const grafics = document.querySelector('.grafics')
 const viewIcon = document.querySelectorAll('.viewIcon')
 const role = document.querySelector('.role')
 const logout = document.querySelector('.logoutIcon')
-
+const create = document.querySelector('.create_object')
 new Flash()
 
 
@@ -56,6 +57,9 @@ mainMenu.addEventListener('click', (event) => {
 draggable()
 new Tooltip(role, [role.getAttribute('rel')]);
 new Tooltip(logout, [logout.getAttribute('rel')]);
+new Tooltip(create, ['Добавить новый объект']);
+new CreateNewObject(create)
+export const sett = new CreateNewGroup(create)
 viewIcon.forEach(e => {
     const relValues = e.getAttribute('rel').split(' ');
     const lastRel = relValues[relValues.length - 1];
@@ -373,6 +377,30 @@ btnDash.addEventListener('click', () => {
         intervalId2 = setInterval(getStat, 30000)
 
 });
+
+
+const addNavi = document.querySelectorAll('.add_navi')
+addNavi.forEach(it => {
+    it.addEventListener('click', () => {
+        const iconsToggle = document.querySelectorAll('.report_map_InList')
+        const mapUnit = document.querySelectorAll('.map_unit')
+        const reportUnit = document.querySelectorAll('.report_unit')
+        if (it.classList.contains('karta')) {
+            mapUnit.forEach(e => { e.style.display = 'none', e.classList.remove('act_modules') })
+            reportUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
+        }
+        else if (it.classList.contains('reports')) {
+            reportUnit.forEach(e => { e.style.display = 'none', e.classList.remove('act_modules') })
+            mapUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
+        }
+        else {
+            iconsToggle.forEach(e => {
+                e.classList.remove('act_modules')
+                e.style.display = 'block'
+            })
+        }
+    })
+})
 
 
 const monitoring = document.querySelectorAll('.monitoring')

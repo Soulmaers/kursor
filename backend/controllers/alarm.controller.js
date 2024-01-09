@@ -39,6 +39,8 @@ module.exports.logsView = async (req, res) => {
     const tr = req.body.tr
     const itog = await databaseService.logsFindToBase(idw)
     const quant = itog.length
+    //  console.log(tr)
+    //   console.log(itog.length)
     itog.sort((a, b) => {
         if (a.time > b.time) {
             return 1;
@@ -49,6 +51,7 @@ module.exports.logsView = async (req, res) => {
         return 0;
     })
     itog.splice(0, tr)
+    // console.log(itog.length)
     res.json({ itog: itog, quant: quant })
 }
 module.exports.logsViewId = async (req, res) => {

@@ -67,8 +67,8 @@ export class ChartsViewControll {
         const clickParams = document.querySelector('.clickToggle').parentElement.getAttribute('rel')
         this.data = outputArray
         const char = document.querySelector('.chart_global')
-
-        outputArray.length !== 0 ? this.createChart(outputArray, clickParams) : char.remove()
+        console.log(char)
+        outputArray.length !== 0 ? this.createChart(outputArray, clickParams) : char ? char.remove() : null
 
     }
     //форматируем секунды в часыи минуты
