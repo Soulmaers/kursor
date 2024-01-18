@@ -48,13 +48,14 @@ let session;
 async function init() {
     await initServer()
     await wialon()
+    console.log('сессия открыта')
     globalstart.hunterTime()
 
     await globalstart.start(session)
     setInterval(globalstart.start, 120000, session)
     setInterval(globalstart.hunterTime, 50000)
 
-    console.log('сессия открыта')
+
 }
 init()
 //0f481b03d94e32db858c7bf2d8415204BC9192516432699D521630B59B32E63DE759A503
