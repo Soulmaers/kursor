@@ -9,7 +9,6 @@ exports.eventFunction = async (arr) => {
         .flat()
     //   console.log(all)
     const rt = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(result)
-    // console.log(rt)
     oilFunc(rt, all)
     lastMsgFunc(rt, all)
 

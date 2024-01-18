@@ -12,6 +12,7 @@ export class CreateMarkersEvent {
         this.eventMarkers = null;
         this.poly = null;
         this.startTrack = null
+        this.imei = null;
         this.setTrack = document.querySelector('.togTrack');
         this.boundViewTrackAndMarkersEvent = this.viewTrackAndMarkersEnent.bind(this);
         this.setTrack.addEventListener('click', this.boundViewTrackAndMarkersEvent);
@@ -121,23 +122,44 @@ export class CreateMarkersEvent {
     }
 
     async getIntervalTrack() {
+        const category = document.querySelector('.color')
         const idw = this.id
         let nowDate = Math.round(new Date().getTime() / 1000);
         let nDate = new Date();
         let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);
-        const paramss = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ nowDate, timeFrom, idw }))
+        let data;
+        if (!category.classList.contains('kursor')) {
+            const paramss = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: (JSON.stringify({ nowDate, timeFrom, idw }))
+            }
+            const geoTest = await fetch('/api/geoLastInterval', paramss)
+            const geoCard = await geoTest.json();
+            console.log(geoCard)
+            data = geoCard.resTrack.reduce((acc, el) => {
+                acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
+                return acc
+            }, [])
         }
-        const geoTest = await fetch('/api/geoLastInterval', paramss)
-        const geoCard = await geoTest.json();
-        const data = geoCard.resTrack.reduce((acc, el) => {
-            acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
-            return acc
-        }, [])
+        else {
+            const paramss = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: (JSON.stringify({ nowDate, timeFrom, idw }))
+            }
+            const geoTest = await fetch('/api/geoLastIntervalKursor', paramss)
+            const geoCard = await geoTest.json();
+            console.log(geoCard)
+            data = geoCard.resTrack.reduce((acc, el) => {
+                acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
+                return acc
+            }, [])
+        }
         return data
     }
 
@@ -231,7 +253,9 @@ export class CreateMarkersEvent {
     }
 
     async getLastGeoPosition() {
+        const category = document.querySelector('.color')
         const idw = this.id
+        let y, x, c;
         const params = {
             method: "POST",
             headers: {
@@ -239,9 +263,21 @@ export class CreateMarkersEvent {
             },
             body: (JSON.stringify({ idw }))
         }
-        const res = await fetch('api/parametrs', params)
-        const result = await res.json()
-        return [result.item.pos.y, result.item.pos.x, result.item.pos.c]
+        if (!category.classList.contains('kursor')) {
+            const res = await fetch('api/parametrs', params)
+            const result = await res.json()
+            y = result.item.pos.y
+            x = result.item.pos.x
+            c = result.item.pos.c
+        }
+        else {
+            const parametrs = await fetch('api/getParamsKursor', params)
+            const lastParams = await parametrs.json()
+            y = lastParams[0].lat
+            x = lastParams[0].lon
+            c = lastParams[0].course
+        }
+        return [y, x, c]
     }
 
     createMapMainObject(geo) {

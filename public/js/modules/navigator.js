@@ -55,9 +55,11 @@ export function navigator() {
                     visualNone(e);  //скрываем для всех кнопок левый фрейм
                     // massivionbd.length = 0;
                 })
-                const ide = el.children[0].children[0]
-                console.log(ide)
-                if (event.target !== ide) {
+                const ide3 = el.children[0].children[2]
+                const ide2 = el.children[0].children[1]
+                const ide1 = el.children[0].children[0]
+
+                if (event.target !== ide1 && event.target !== ide2 && event.target !== ide3) {
                     //const report = document.querySelector('.reports')
                     visual(el)
                     // !report.classList.contains('hovering') ? visual(el) : null

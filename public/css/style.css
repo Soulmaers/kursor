@@ -1937,7 +1937,9 @@ div.spoyler {
   align-items: center;
 }
 
-
+.list_item_list {
+  color: rgba(6, 28, 71, 1);
+}
 
 .tires_link {
   position: relative;
@@ -1960,6 +1962,7 @@ div.spoyler {
   display: flex;
   align-items: center;
   color: rgba(6, 28, 71, 1);
+  padding-left: 40px;
 }
 
 .pAll {
@@ -5264,7 +5267,6 @@ div.wrapper {
   width: 1200px;
   padding: 5px 0;
   border-bottom: 2px solid rgba(6, 28, 71, 1);
-  padding-left: 12px;
 }
 
 .configChange {
@@ -5278,8 +5280,12 @@ div.wrapper {
   overflow-x: hidden;
 }
 
+.titlekursor {
+  padding-left: 40px;
+}
+
 .list_item1 {
-  min-width: 235px;
+  width: 320px;
   display: flex;
   justify-content: center;
   font-family: Arial;
@@ -5639,11 +5645,12 @@ input[type="text"]:focus {
 
 .list_name2 {
   font-size: 0.8rem;
-  min-width: 230px;
+  width: 300px;
   display: flex;
   align-items: center;
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
+  padding-left: 33px;
 }
 
 
@@ -7407,20 +7414,6 @@ i.minusS {
 
 
 
-
-
-
-
-
-
-
-
-.list_item_list {
-  margin: 0;
-  color: rgba(6, 28, 71, 1);
-}
-
-.list_name2,
 .list_profil2,
 .list_trail2 {
   width: 100px;
@@ -7943,6 +7936,13 @@ input:focus {
 }
 
 .fa-times:hover {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+.pref:hover {
   animation-name: wiggle;
   animation-duration: 1s;
   animation-timing-function: ease;
@@ -9411,7 +9411,7 @@ i.toggle_list {
 }
 
 .subcheck {
-  padding-left: 28px;
+  padding-left: 64px;
 }
 
 .deleteObject {
@@ -9492,4 +9492,23 @@ i.settingsGroup {
   top: 7px;
   right: 30px;
   display: none;
+}
+
+.rightLine {
+  justify-content: end;
+}
+
+.kursor_name {
+  margin: 0 10px;
+  padding: 0
+}
+
+.pref {
+  font-size: 0.75rem;
+  color: rgba(6, 28, 71, 1);
+  margin: 0 10px;
+}
+
+.kursor {
+  padding-left: 2px;
 }

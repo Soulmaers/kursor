@@ -41,7 +41,7 @@ export class CreateNewGroup {
             new Tooltip(createObject, ['Добавить новый объект'])
             console.log(parentElement.lastElementChild)
             parentElement.lastElementChild.textContent = 'Список объектов';
-            await zapros(this.login)
+            // await zapros(this.login)
         }
         else {
             const idg = await this.generationId()
@@ -119,12 +119,11 @@ export class CreateNewGroup {
         else {
             const mess = await this.updateGroup(prefix, object)
             console.log(object)
-            //   await zapros(this.login)
             this.pop.style.display = 'none'
             this.modal.style.display = 'none';
             this.modal.style.zIndex = 0
             this.field_modal.value = ''
-
+            await zapros(this.login)
         }
 
 
@@ -176,7 +175,7 @@ export class CreateNewGroup {
         const res = await fetch('/api/lastIdGroup', params)
         const lastId = await res.json()
         console.log(lastId)
-        const id = lastId.length === 0 ? 1000 : Number(lastId[0].idg) + 1
+        const id = lastId.length === 0 ? 1000 : lastId + 1
         console.log(id)
         return id
 

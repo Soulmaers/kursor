@@ -86,6 +86,13 @@ exports.saveObject = async (req, res) => {
     const result = await databaseService.saveObject(object)
     res.json(result)
 }
+exports.updateObject = async (req, res) => {
+    const object = req.body.object
+    const result = await databaseService.updateObject(object)
+    res.json(result)
+}
+
+
 exports.setGroup = async (req, res) => {
     const object = req.body.object
     const result = await databaseService.setGroup(object)
@@ -118,8 +125,9 @@ exports.uniqImeiAndPhone = async (req, res) => {
     const value = req.body.value
     const table = req.body.table
     const login = req.body.login
+    const id = req.body.id
     //  const nameObject = req.body.nameObject
-    const result = await databaseService.uniqImeiAndPhone(col, value, table, login)
+    const result = await databaseService.uniqImeiAndPhone(col, value, table, login, id)
     res.json(result)
 }
 exports.validationCloneGroupName = async (req, res) => {

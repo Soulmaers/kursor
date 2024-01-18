@@ -25,7 +25,8 @@ export function modalOs() {
             })
             const centerOsActiv = document.querySelector('.centerOsActiv')
             const modalNumberOs = document.querySelector('.modalNumberOs')
-            if (e.parentElement.classList.contains('pricep')) {
+            console.log(e)
+            if (e.parentElement.classList.contains('pricepT')) {
                 modalNumberOs.textContent = centerOsActiv.id + '-' + 'Прицеп'
             }
             else {

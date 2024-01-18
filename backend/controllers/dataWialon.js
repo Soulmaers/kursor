@@ -58,7 +58,13 @@ exports.loadInterval = async (req, res) => {
 }
 exports.getSensorsWialonToBase = async (req, res) => {
     const arr = req.body.arr
-    const params = await databaseService.getSensorsWialonToBase(arr)
+    const login = req.body.login
+    const params = await databaseService.getSensorsWialonToBase(arr, login)
+    res.json(params)
+}
+exports.getSensorsWialonToBaseId = async (req, res) => {
+    const idw = req.body.idw
+    const params = await databaseService.getSensorsWialonToBaseId(idw)
     res.json(params)
 }
 
@@ -160,7 +166,13 @@ exports.viewChart = async (req, res) => {
     res.json(params)
 }
 
-
+exports.viewSortChart = async (req, res) => {
+    const idw = req.body.active
+    const t1 = req.body.t1
+    const t2 = req.body.t2
+    const params = await databaseService.viewSortDataToBase(idw, t1, t2)
+    res.json(params)
+}
 
 
 exports.fileDown = async (req, res) => {

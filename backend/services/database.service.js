@@ -3,7 +3,8 @@ const { connection, sql } = require('../config/db')
 const databaseService = require('./database.service');
 const wialonService = require('./wialon.service.js')
 const helpers = require('../helpers.js')
-const send = require('./send.service.js')
+const send = require('./send.service.js');
+const { y } = require('pdfkit');
 
 
 exports.createIndexDataToDatabase = async () => {
@@ -22,10 +23,12 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
         el.push('new')
         el.push(time)
     })
+    //console.log(param)
     try {
         const selectBase = `SELECT name FROM params WHERE idw='${String(idw)}'`
         const pool = await connection;
         let result = await pool.request().query(selectBase);
+        //console.log(result)
         if (result.recordset.length === 0) {
             for (let el of param) {
                 const sqls = `INSERT INTO params(idw, nameCar, name, value, status, time) VALUES (@idw, @nameCar, @name, @value, @status, @time)`;
@@ -253,7 +256,14 @@ exports.viewListToBase = async (login) => {
 exports.getObjects = async (login) => {
     try {
         const pool = await connection
-        const postModel = `SELECT idObject, nameObject FROM objects WHERE login=@login`
+        let postModel;
+        if (login) {
+            postModel = `SELECT idObject, nameObject,imei FROM objects WHERE login=@login`
+        }
+        else {
+            postModel = `SELECT idObject, nameObject,imei FROM objects`
+        }
+
         const result = await pool.request()
             .input('login', login)
             .query(postModel)
@@ -265,6 +275,83 @@ exports.getObjects = async (login) => {
 
 }
 
+exports.objectId = async (idw) => {
+    try {
+        const pool = await connection
+        postModel = `SELECT * FROM objects WHERE idObject=@idw`
+        const result = await pool.request()
+            .input('idw', idw)
+            .query(postModel)
+
+        return result.recordset
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+exports.objectsImei = async (imei) => {
+    try {
+        const pool = await connection
+        postModel = `SELECT idObject FROM objects WHERE imei=@imei`
+        const result = await pool.request()
+            .input('imei', imei)
+            .query(postModel)
+
+        return result.recordset
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
+exports.getParamsKursor = async (idObject) => {
+    try {
+        const pool = await connection
+        const postModel = `SELECT TOP 1 * FROM navtelecom WHERE idObject=@idObject ORDER BY id DESC`
+        const result = await pool.request()
+            .input('idObject', idObject)
+            .query(postModel)
+        const record = result.recordset[0];
+        if (record !== undefined) {
+            const params = Object.keys(record).reduce((acc, key) => {
+                if (record[key] !== null) {
+                    acc[key] = record[key]
+                }
+                return acc
+            }, {});
+            return [params];
+        }
+
+    } catch (e) {
+        console.log(e);
+        throw e;
+    }
+};
+
+
+
+exports.objects = async (arr) => {
+    try {
+        const pool = await connection
+        if (typeof arr === 'string') {
+            const postModel = `SELECT * FROM objects WHERE idObject = @idw`
+            const result = await pool.request()
+                .input('idw', arr)
+                .query(postModel)
+            return result.recordset
+        }
+        else {
+            const postModel = `SELECT * FROM objects WHERE idObject IN (${arr.map(id => `'${id}'`).join(',')})`;
+            const result = await pool.request()
+                .query(postModel)
+            return result.recordset
+        }
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 exports.getKursorObjects = async (login) => {
     try {
         const pool = await connection
@@ -277,6 +364,24 @@ exports.getKursorObjects = async (login) => {
     catch (e) {
         console.log(e)
     }
+}
+
+
+exports.geoLastIntervalKursor = async (time1, time2, idObject) => {
+    try {
+        const pool = await connection
+        const postModel = `SELECT * FROM navtelecom WHERE idObject=@idObject AND time >= @time2 AND time <= @time1 `
+        const result = await pool.request()
+            .input('idObject', idObject)
+            .input('time2', time2)
+            .input('time1', time1)
+            .query(postModel)
+        return result.recordset
+    }
+    catch (e) {
+        console.log(e)
+    }
+
 }
 exports.getWialonObjects = async (login) => {
     try {
@@ -292,7 +397,6 @@ exports.getWialonObjects = async (login) => {
     }
 }
 exports.getIdGroup = async (id, login) => {
-    console.log(id)
     try {
         const pool = await connection;
         const post = `SELECT * FROM groups WHERE login=@login AND id_sub_g=@id OR login=@login AND idg=@id`
@@ -310,7 +414,6 @@ exports.getIdGroup = async (id, login) => {
 }
 
 exports.getGroups = async (login) => {
-
     try {
         const pool = await connection;
         const postModel = `
@@ -351,7 +454,7 @@ exports.setObjectGroupWialon = async (objects) => {
             return !result.recordset.some(record => record.idObject === object.idObject);
         }).map(object => object.idObject);
 
-        console.log(missingValues);
+        //  console.log(missingValues);
         missingValues.forEach(async elem => {
             const postDEL = `DELETE wialon_groups WHERE login=@login AND idObject =@idObject`
             const result = await pool.request()
@@ -360,14 +463,17 @@ exports.setObjectGroupWialon = async (objects) => {
                 .query(postDEL)
         })
         objects.forEach(async el => {
+            // console.log(el)
             const post = `SELECT idObject FROM wialon_groups WHERE login=@login AND idObject=@idObject`
             const result = await pool.request()
                 .input('login', el.login)
                 .input('idObject', el.idObject)
                 .query(post)
             if (result.recordset.length === 0) {
-                const post = `INSERT INTO wialon_groups  (login, data, idg, name_g, id_sub_g, name_sub_g,idObject, nameObject)
-        VALUES(@login, @data, @idg, @name_g, @id_sub_g, @name_sub_g, @idObject, @nameObject)`;
+                const post = `
+    INSERT INTO wialon_groups (login, data, idg, name_g, id_sub_g, name_sub_g, idObject, nameObject)
+    VALUES (@login, @data, @idg, @name_g, @id_sub_g, @name_sub_g, @idObject, @nameObject)
+`;
                 const result = await pool.request()
                     .input('login', el.login)
                     .input('data', el.data)
@@ -380,6 +486,7 @@ exports.setObjectGroupWialon = async (objects) => {
                     .query(post);
             }
             else {
+                // console.log(el.name_g, el.nameObject)
                 const post = `UPDATE wialon_groups  SET login=@login, data = @data, idg = @idg, name_g=@name_g, idObject=@idObject, nameObject=@nameObject 
             WHERE login = @login AND idObject = @idObject`;
                 const result = await pool.request()
@@ -393,71 +500,99 @@ exports.setObjectGroupWialon = async (objects) => {
             }
 
         })
-        return 'ок'
+        return 'объекты обновлены'
     }
     catch (e) {
         console.log(e)
     }
 
 }
-exports.getSensorsWialonToBase = async (arr) => {
+exports.getSensorsWialonToBase = async (arr, login) => {
+    console.log(login)
+    console.log(arr.length)
     try {
         const pool = await connection;
-        const post = `SELECT sens_name, param_name,idw, value FROM wialon_sensors WHERE idw IN (${arr.map(id => `'${id}'`).join(',')})`;
+        if (arr.length > 0) {
+            const post = `SELECT sens_name, param_name,idw, value, data FROM wialon_sensors WHERE idw IN (${arr.map(id => `'${id}'`).join(',')})`;
+            //console.log(post)
+            const result = await pool.request()
+                .query(post);
+            return result.recordset
+        }
+        else {
+            console.log('массив пуст')
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+exports.getSensorsWialonToBaseId = async (idw) => {
+    try {
+        const pool = await connection;
+        const post = `SELECT sens_name, param_name,idw, value FROM wialon_sensors WHERE idw=@idw`;
         const result = await pool.request()
+            .input('idw', idw)
             .query(post);
         return result.recordset
     } catch (error) {
         console.log(error)
     }
-
-
 }
 
+
 exports.setSensorsWialonToBase = async (login, idw, arr) => {
+
     const data = Math.floor(new Date().getTime() / 1000)
     try {
         const pool = await connection;
-        for (const entry of arr) {
-            const [sens_name, param_name, value] = entry;
-            const post = `SELECT * FROM wialon_sensors WHERE login=@login AND idw=@idw AND sens_name=@sens_name`
-            const res = await pool.request()
-                .input('sens_name', sens_name)
-                .input('login', login)
-                .input('idw', String(idw))
-                .query(post);
-            if (res.recordset.length === 0) {
-                const insertQuery = `INSERT INTO wialon_sensors (data,sens_name, param_name, value, idw, login) VALUES (@data, @sens_name, @param_name, @value, @idw,@login)`;
+        if (arr.length > 0) {
+            for (const entry of arr) {
+                const [sens_name, param_name, value] = entry;
+                const post = `SELECT * FROM wialon_sensors WHERE login=@login AND idw=@idw AND sens_name=@sens_name`
                 const res = await pool.request()
                     .input('sens_name', sens_name)
-                    .input('param_name', param_name)
-                    .input('value', value)
                     .input('login', login)
                     .input('idw', String(idw))
-                    .input('data', data)
-                    .query(insertQuery);
-            }
-            else {
-                const updateQuery = `UPDATE wialon_sensors SET data=@data, sens_name=@sens_name, param_name=@param_name, value=@value WHERE login=@login AND idw=@idw AND sens_name=@sens_name`;
-                const res = await pool.request()
-                    .input('sens_name', sens_name)
-                    .input('param_name', param_name)
-                    .input('value', value)
-                    .input('login', login)
-                    .input('idw', String(idw))
-                    .input('data', data)
-                    .query(updateQuery);
-            }
+                    .query(post);
+                if (res.recordset.length === 0) {
+                    const insertQuery = `INSERT INTO wialon_sensors (data,sens_name, param_name, value, idw, login) VALUES (@data, @sens_name, @param_name, @value, @idw,@login)`;
+                    const res = await pool.request()
+                        .input('sens_name', sens_name)
+                        .input('param_name', param_name)
+                        .input('value', value)
+                        .input('login', login)
+                        .input('idw', String(idw))
+                        .input('data', data)
+                        .query(insertQuery);
+                }
+                else {
+                    const updateQuery = `UPDATE wialon_sensors SET data=@data, sens_name=@sens_name, param_name=@param_name, value=@value WHERE login=@login AND idw=@idw AND sens_name=@sens_name`;
+                    const res = await pool.request()
+                        .input('sens_name', sens_name)
+                        .input('param_name', param_name)
+                        .input('value', value)
+                        .input('login', login)
+                        .input('idw', String(idw))
+                        .input('data', data)
+                        .query(updateQuery);
+                }
 
+            }
+            return 'выполнено'
         }
-        return 'выполнено'
+        else {
+            return 'массив для записи пуст'
+        }
+
     }
     catch (e) {
         console.log(e)
     }
 }
 
-exports.uniqImeiAndPhone = async (col, value, table, login) => {
+exports.uniqImeiAndPhone = async (col, value, table, login, id) => {
+    console.log('тут')
     console.log(col, value)
     try {
         const pool = await connection;
@@ -468,11 +603,12 @@ exports.uniqImeiAndPhone = async (col, value, table, login) => {
                     ELSE NULL
                 END AS matched_column
             FROM ${table}
-            WHERE ${col} = @${col} AND login=@login
+            WHERE ${col} = @${col} AND login = @login AND id <> @id
         `;
         const result = await pool.request()
             .input(`${col}`, value)
             .input('login', login)
+            .input('id', id)
             .query(query);
 
         return result.recordset;
@@ -518,34 +654,81 @@ exports.getIdToRows = async (id, login) => {
     return result.recordset
 }
 
-exports.deleteIdToRows = async (id, login) => {
+
+exports.deleteIdToRowsTime = async (data, id, login) => {
+    console.log(id, login, data)
     const pool = await connection;
-    const postDEL = `DELETE groups WHERE login=@login AND id =@idKey`
+    const postDEL = `DELETE groups WHERE login=@login AND idg =@idKey AND data!=@data OR login=@login AND id_sub_g =@idKey AND data!=@data `
     const result = await pool.request()
         .input('idKey', id)
         .input('login', login)
+        .input('data', data)
         .query(postDEL)
     return result.recordset
 }
 
+
+exports.updateObject = async (object) => {
+    console.log(object)
+    try {
+        const pool = await connection;
+        const updateModel = `UPDATE objects SET data = @data, login = @login,idObject=@idObject,typeDevice=@typeDevice,imei=@imei,adress=@adress,number=@number,nameObject=@nameObject,
+         typeObject=@typeObject WHERE login = @login AND idObject = @idObject`;
+        const result = await pool.request()
+            .input('data', object.data)
+            .input('login', object.login)
+            .input('idObject', object.idObject)
+            .input('imei', object.imei)
+            .input('adress', object.adress)
+            .input('number', object.number)
+            .input('nameObject', object.nameObject)
+            .input('typeObject', object.typeObject)
+            .input('typeDevice', object.typeDevice)
+            .query(updateModel)
+
+        if (result) {
+            await databaseService.updateObjectToGroups(object)
+            return 'объект обновлен'
+        }
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+
+exports.updateObjectToGroups = async (object) => {
+    console.log(object)
+    try {
+        const pool = await connection;
+        const updateModel = `UPDATE groups SET idObject=@idObject,nameObject=@nameObject WHERE  idObject = @idObject`;
+        const result = await pool.request()
+            .input('idObject', object.idObject)
+            .input('nameObject', object.nameObject)
+            .query(updateModel)
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+
+
 exports.updateGroup = async (object, prefix) => {
     try {
-        console.log(object)
-        console.log(prefix)
         const pool = await connection;
-        const result = await databaseService.getIdToRows(object.id, object.login)
-        console.log('1')
-        console.log(result)
+        const query = `INSERT INTO groups (login, data, idg, name_g, id_sub_g,name_sub_g,idObject, nameObject)
+            VALUES(@login, @data, @idg, @name_g,@id_sub_g, @name_sub_g,@idObject, @nameObject)`;
+        const updateModel = `UPDATE groups SET data = @data, idg = @idg, name_g=@name_g, id_sub_g=@id_sub_g, name_sub_g=@name_sub_g WHERE login = @login AND idg = @id_sub_g`;
 
+        const result = await databaseService.getIdToRows(object.id, object.login)
         object.arraySubg.forEach(async el => {
             //ищем все строки по id подгрупп которые должны быть добавлены
             const results = await databaseService.getIdToRows(el.id_sub_g, object.login)
             const objectsToSub = results.map(e => {
                 return { idObject: e.idObject, nameObject: e.nameObject }
             })
-            console.log(results)
             if (results[0].idg === el.id_sub_g) {
-                const updateModel = `UPDATE groups SET data = @data, idg = @idg, name_g=@name_g, id_sub_g=@id_sub_g, name_sub_g=@name_sub_g WHERE login = @login AND idg = @id_sub_g`;
                 const res = await pool.request()
                     .input('login', object.login)
                     .input('data', object.data)
@@ -558,8 +741,6 @@ exports.updateGroup = async (object, prefix) => {
             //получаем уникальные строки с объектами которые есть в подгруппах
             if (results[0].id_sub_g === el.id_sub_g) {
                 [...new Set(objectsToSub.map(JSON.stringify))].map(JSON.parse).map(async e => {
-                    const query = `INSERT INTO groups (login, data, idg, name_g, id_sub_g,name_sub_g,idObject, nameObject)
-            VALUES(@login, @data, @idg, @name_g,@id_sub_g, @name_sub_g,@idObject, @nameObject)`;
                     const res = await pool.request()
                         .input('login', object.login)
                         .input('data', object.data)
@@ -573,11 +754,8 @@ exports.updateGroup = async (object, prefix) => {
                 })
             }
         })
-        const querys = `INSERT INTO groups (login, data, idg, name_g, id_sub_g,name_sub_g,idObject, nameObject)
-        VALUES(@login, @data, @idg, @name_g,@id_sub_g, @name_sub_g,@idObject, @nameObject)`
         let idg;
         result.forEach(async e => {
-            const idkey = e.id
             if (idg !== e.idg) {
                 object.arrayObjects.forEach(async it => {
                     const result = await pool.request()
@@ -589,20 +767,48 @@ exports.updateGroup = async (object, prefix) => {
                         .input('name_sub_g', prefix === 'sub' ? object.name : null)//e.name_sub_g)
                         .input('idObject', it.idObject)
                         .input('nameObject', it.nameObject)
-                        .query(querys);
+                        .query(query);
                 })
                 idg = e.idg
             }
             else {
                 null
             }
-            if (e.id_sub_g === null) {
-                await databaseService.deleteIdToRows(idkey, object.login)
-            }
         })
-        // удаляем старые строки
-        result.forEach(async elem => {
-            await databaseService.deleteIdToRows(elem.id, object.login)
+        const twoDimensionalArray = Array.from(
+            result.reduce((map, obj) => {
+                if (obj.id_sub_g !== null) {
+                    const existingSubg = map.get(obj.id_sub_g);
+                    if (!existingSubg) {
+                        map.set(obj.id_sub_g, {
+                            id_sub_g: obj.id_sub_g,
+                            name_sub_g: obj.name_sub_g,
+                            objects: [],
+                        });
+                    }
+                    map.get(obj.id_sub_g).objects.push(obj);
+                }
+                return map;
+            }, new Map()).values()
+        );
+        await databaseService.deleteIdToRowsTime(object.data, object.id, object.login)
+        twoDimensionalArray.forEach(async item => {
+            const res = await databaseService.getIdToRows(item.id_sub_g, object.login)
+            console.log(res)
+            if (res.length === 0) {
+                item.objects.forEach(async e => {
+                    const res = await pool.request()
+                        .input('login', object.login)
+                        .input('data', object.data)
+                        .input('idg', item.id_sub_g)
+                        .input('name_g', item.name_sub_g)
+                        .input('id_sub_g', null)
+                        .input('name_sub_g', null)
+                        .input('idObject', e.idObject)
+                        .input('nameObject', e.nameObject)
+                        .query(query);
+                })
+            }
         })
         return 'Группа изменена';
     } catch (e) {
@@ -631,7 +837,15 @@ exports.lastIdGroup = async () => {
         const postModel = `SELECT TOP 1 idg FROM groups ORDER BY idg DESC`
         const result = await pool.request()
             .query(postModel)
-        return result.recordset;
+
+        const postModel2 = `SELECT TOP 1 id_sub_g FROM groups ORDER BY id_sub_g DESC`
+        const res = await pool.request()
+            .query(postModel2)
+
+        const id = Math.max(Number(result.recordset[0].idg), Number(res.recordset[0].id_sub_g))
+        console.log(result)
+        console.log(res)
+        return id;
     }
     catch (e) {
         console.log(e)
@@ -851,6 +1065,20 @@ exports.viewChartDataToBase = async (idw, t1, t2) => {
         const pool = await connection
         const results = await pool.query(postModel);
         return results.recordset;
+
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+};
+
+exports.viewSortDataToBase = async (idw, t1, t2) => {
+
+    const postModel = `SELECT * FROM sortData WHERE idw='${idw}' AND time >= '${t1}' AND time <= '${t2}'`;
+    try {
+        const pool = await connection
+        const results = await pool.query(postModel);
+        return results.recordset;
     } catch (err) {
         console.log(err);
         throw err;
@@ -1025,14 +1253,20 @@ exports.alarmBase = async (data, tyres, alarm) => {
 }
 
 
-exports.loadParamsViewList = async (car, el) => {
+exports.loadParamsViewList = async (car, el, kursor) => {
     const idw = el
     const pool = await connection;
     const mod = async () => {
         try {
             const selectBase = `SELECT osi, trailer, tyres, type, tsiControll FROM model WHERE idw='${idw}'`
             const result = await pool.query(selectBase)
-            return { result: result.recordset, message: car }
+            if (kursor) {
+                const datas = (await databaseService.objects(String(el))).map(e => e.imei)[0]
+                return { result: result.recordset, message: car, imei: datas }
+            }
+            else {
+                return { result: result.recordset, message: car }
+            }
         }
         catch (e) {
             console.log(e)
@@ -1088,6 +1322,7 @@ exports.loadParamsViewList = async (car, el) => {
         }
     });
     return [model, models, data, osi, el]
+
 }
 
 exports.dostupObject = async (login) => {

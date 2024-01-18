@@ -22,6 +22,8 @@ router.post('/api/quantityLogs', controllerWialon.quantityLogs)
 
 
 router.post('/api/getSensorsWialonToBase', controllerWialon.getSensorsWialonToBase)
+router.post('/api/getSensorsWialonToBaseId', controllerWialon.getSensorsWialonToBaseId)
+
 
 router.post('/api/wialon', controllerWialon.datawialon)
 router.post('/api/wialonAll', controllerWialon.datawialonAll)
@@ -31,6 +33,7 @@ router.post('/api/sensorsName', controllerWialon.sensorsName)
 router.post('/api/loadInterval', controllerWialon.loadInterval)
 router.post('/api/lastSensors', controllerWialon.lastSensors)
 router.post('/api/viewChart', controllerWialon.viewChart)
+router.post('/api/viewSortChart', controllerWialon.viewSortChart)
 router.post('/api/viewStructura', controllerWialon.viewStructura)
 router.post('/api/updateSensors', controllerWialon.updateSensors)
 //router.post('/api/viewChartGeo', controllerWialon.viewChartGeo)

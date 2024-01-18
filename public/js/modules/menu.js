@@ -100,6 +100,7 @@ export async function ggg(id) {
                 allobj[it[1]] = it[0]
             })
         }
+        console.log(allobj)
         resolve(allobj)
     });
 }

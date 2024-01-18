@@ -59,7 +59,6 @@ exports.getTitleShablonToWialon = async (idResourse, idShablon, idObject, interv
 };
 
 exports.getChartDatatToWialon = async (interval, idChart) => {
-    console.log(interval)
     return new Promise(async function (resolve, reject) {
         const session = await geSession.geSession();
         const params = {
@@ -278,7 +277,7 @@ exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
 exports.getDataFromWialon = async () => {
     return new Promise(async function (resolve, reject) {
         const session = await geSession.geSession();
-        //  console.log(sessions)
+        //  console.log(session)
         //  const session = await getSessiont('i');
         session.request('core/search_items', prms)
             .catch(function (err) {
@@ -331,10 +330,12 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
 };
 
 
+
 exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
+    const array = Array.isArray(arr) ? arr : [arr]
     const prms = {
         "mode": "add",
-        "units": arr.map(id => ({
+        "units": array.map(id => ({
             "id": id,
             "detect": {
                 'trips': 0,
@@ -346,7 +347,6 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
     const prmsUp = {
         "detalization": 3
     }
-
     return new Promise(async function (resolve, reject) {
         const session = await geSession.geSession();
         session.request('events/update_units', prms)
@@ -360,10 +360,13 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
                     })
                     .then(function (data) {
                         resolve(data)
-                    });
+                    })
             });
     })
-};
+}
+
+
+
 
 
 exports.getEventFromToDayWialon = async (id, t1, t2) => {

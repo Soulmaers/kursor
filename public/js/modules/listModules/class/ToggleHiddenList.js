@@ -6,7 +6,7 @@ import { classReports } from '../../navModules/reports.js'
 import { NavigationMenu } from '../../navModules/NavigatorClass.js'
 import { Tooltip } from '../../../class/Tooltip.js'
 import { zapros } from '../../menu.js'
-import { sett } from '../../event.js'
+import { sett, obj } from '../../event.js'
 export class ToggleHiddenList {
     constructor() {
         //  this.status = status
@@ -31,6 +31,7 @@ export class ToggleHiddenList {
         this.delete = document.querySelectorAll('.deleteObject')
         this.deleteGroup = document.querySelectorAll('.deleteGroup')
         this.settingGroups = document.querySelectorAll('.settingsGroup')
+        this.prefs = document.querySelectorAll('.pref')
 
     }
     init() {
@@ -51,6 +52,7 @@ export class ToggleHiddenList {
         this.mores.addEventListener('click', this.toggleMoresOnes.bind(this))
         this.ones.addEventListener('click', this.toggleMoresOnes.bind(this))
         this.settingGroups.forEach(el => el.addEventListener('click', this.edit.bind(this, el)))
+        this.prefs.forEach(el => el.addEventListener('click', this.editObject.bind(this, el)))
         Array.from(this.cond).forEach((e, index) => {
             e.addEventListener('click', () => {
                 if (e.classList.contains('clicker')) {
@@ -78,7 +80,12 @@ export class ToggleHiddenList {
         })
     }
 
+    editObject(el) {
+        const id = el.parentElement.parentElement.id
+        obj.viewObjects(id)
+    }
     async edit(el) {
+
         const id = el.parentElement.parentElement.id
         const nameGroup = el.parentElement.parentElement.getAttribute('rel')
         const modal = document.querySelector('.create_group_modal')
@@ -115,11 +122,9 @@ export class ToggleHiddenList {
 
             })
         })
-
-
-
     }
     confirmation(el, num) {
+        console.log(el)
         const modal = document.querySelector('.modal_confirm')
         const popup = document.querySelector('.popup-background')
         popup.style.display = 'block'
@@ -163,6 +168,7 @@ export class ToggleHiddenList {
     }
 
     async deleteObjectToBase(el) {
+
         console.log(el.closest('.listItem'))
         const id = el.closest('.listItem').id
         const login = this.login
@@ -328,6 +334,7 @@ export class ToggleHiddenList {
         else {
             const arrayStatus = [];
             const newCelChange = document.querySelectorAll('.newCelChange')
+
             const rely = Array.from(newCelChange).reduce((acc, el) => {
                 if (el.getAttribute('rel') === 'statusnew' && !el.children[0].classList.contains('toogleIcon')) {
                     acc = acc + 1;
@@ -470,22 +477,26 @@ export class ToggleHiddenList {
     }
 
     viewAndHidden(del, sett, num) {
-        if (!num) {
-            del.forEach(e => {
-                e.style.display = 'block'
-            })
-            sett.forEach(e => {
-                e.style.display = 'block'
-            })
+        const role = document.querySelector('.role').getAttribute('rel')
+        if (role === 'Администратор') {
+            if (!num) {
+                del.forEach(e => {
+                    e.style.display = 'block'
+                })
+                sett.forEach(e => {
+                    e.style.display = 'block'
+                })
+            }
+            else {
+                del.forEach(e => {
+                    e.style.display = 'none'
+                })
+                sett.forEach(e => {
+                    e.style.display = 'none'
+                })
+            }
         }
-        else {
-            del.forEach(e => {
-                e.style.display = 'none'
-            })
-            sett.forEach(e => {
-                e.style.display = 'none'
-            })
-        }
+
     }
     viewList(event) {
         const element = event.target

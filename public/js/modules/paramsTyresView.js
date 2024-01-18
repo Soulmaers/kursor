@@ -256,7 +256,6 @@ export async function viewPokasateli() {
         const data = await datas.json()
         const os = await fetch('/api/barView', param)
         const osi = await os.json()
-        console.log(osi)
         data.sort((prev, next) => {
             if (prev.name < next.name) return -1;
             if (prev.name < next.name) return 1;

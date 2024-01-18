@@ -18,6 +18,7 @@ export async function iconParams() {
     }
     const resParams = await fetch('/api/parametrs', param)
     const resultParams = await resParams.json()
+    console.log(resultParams)
     const speed = resultParams.item.pos && resultParams.item.pos.s ? (resultParams.item.pos.s).toFixed(0) : '-';
     const strateValue = document.querySelector('.speed_value')
     strateValue.textContent = speed

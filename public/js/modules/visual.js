@@ -9,7 +9,8 @@ import { iconFind } from './configIcons.js'
 import { tarirView } from './staticObject.js'
 import { tooltip } from './cursorTooltip.js'
 import { ggg } from './menu.js'
-import { gg } from './spisok.js'
+import { gg, alternativa } from './spisok.js'
+
 import { Tooltip } from '../class/Tooltip.js'
 import { click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
@@ -272,7 +273,7 @@ export function clearGraf() {
 //создаем список под параметры
 export async function liCreate() {
     const obo = document.querySelector('.obo')
-    const count = 150;
+    const count = 250;
     for (let i = 0; i < count; i++) {
         let li = document.createElement('li');
         li.className = "msg";
@@ -286,30 +287,19 @@ export function view(arg) {
     })
 }
 export async function viewConfigurator(arg, params, osi) {
-    console.log(arg, params, osi)
     const role = document.querySelectorAll('.log')[0].textContent
     const active = document.querySelector('.color')
-    const allobj = await ggg(active.id)
-    const res = await gg(active.id)
+    const idw = active.id
 
-    let in1;
-    res.forEach(i => {
-        if (i[0] === 'Зажигание') {
-            in1 = i[2]
-        }
-    })
+    const res = !active.classList.contains('kursor') ? await wialonData(idw) : await kursorData(arg);
+    const in1 = res.in1
+    const allobj = res.allobj
+    console.log(allobj)
     if (params) {
         const parametrs = convert(params)
         const alerts = [];
         const tiresLink = document.querySelectorAll('.tires_link_test')
-        let activePost;
-        if (active[0] == undefined) {
-            const listItem = document.querySelectorAll('.listItem')[0]
-            activePost = listItem.textContent.replace(/\s+/g, '')
-        }
-        else {
-            activePost = active[0].textContent.replace(/\s+/g, '')
-        }
+
         const par = [];
         arg.forEach(el => {
             par.push(el.name)
@@ -424,6 +414,45 @@ export async function viewConfigurator(arg, params, osi) {
             })
         })
     }
+}
+
+async function wialonData(idw) {
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ idw }))
+    }
+    const sens = await fetch('/api/getSensorsWialonToBaseId', param)
+    const allsens = await sens.json()
+
+    let in1;
+    allsens.forEach(i => {
+        if (i.sens_name === 'Зажигание') {
+            in1 = i.value
+        }
+    })
+    const allobj = allsens.reduce((acc, el) => {
+        acc[el.param_name] = el.sens_name
+        return acc
+    }, {})
+    return { in1: in1, allobj: allobj }
+
+}
+
+async function kursorData(arg) {
+    let in1
+    arg.forEach(e => {
+        if (e.name === 'in1') {
+            in1 = e.value === 'Вход IN1(датчик в нормальном состоянии)' ? 1 : 0
+        }
+    })
+    const allobj = arg.reduce((acc, el) => {
+        acc[el.name] = el.name
+        return acc
+    }, {})
+    return { in1: in1, allobj: allobj }
 }
 
 function getHoursDiff(startDate, nowDate) {

@@ -37,29 +37,27 @@ app.use(kursorRoutes)
 require('dotenv').config();
 const port = process.env.PORT
 
-const initServer = () => {
-    return new Promise((resolve) => {
-        app.listen(port, () => {
-            console.log(`Сервер запущен, порт:${port}`);
-            resolve();
-        });
+const initServer = async () => {
+    app.listen(port, () => {
+        console.log(`Сервер запущен, порт:${port}`);
     });
-}
+
+};
 
 let session;
 async function init() {
     await initServer()
     await wialon()
     globalstart.hunterTime()
-    // console.time()
+
     await globalstart.start(session)
-    // console.timeEnd()
-    setInterval(globalstart.start, 300000, session)
+    setInterval(globalstart.start, 120000, session)
     setInterval(globalstart.hunterTime, 50000)
 
     console.log('сессия открыта')
 }
 init()
+//0f481b03d94e32db858c7bf2d8415204BC9192516432699D521630B59B32E63DE759A503
 //0f481b03d94e32db858c7bf2d8415204977173E354D49AA7AFA37B01431539AEAC5DAD5E
 //0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178
 //0f481b03d94e32db858c7bf2d8415204616F1C781302A0F13D8C8C61B8B8CCBCEB8D19EB
@@ -67,7 +65,7 @@ init()
 //0f481b03d94e32db858c7bf2d841520483AA3DFA6B70F0D652D0D81E1837E52CB73B4320
 
 //0f481b03d94e32db858c7bf2d8415204053B81B65B49F2370AA9ABEC5A05DCE9EA16B835
-
+//0f481b03d94e32db858c7bf2d8415204DEEDFF25A757DC4510358300A187F0A9537446D0
 async function wialon() {
     const token = process.env.TOKEN// await getTokenFromDB(login)
     console.log(token)
@@ -100,8 +98,6 @@ exports.geSession = async () => {
     });
 }
 
-
-
 const net = require('net');
 
 class ListenPortTP {
@@ -113,6 +109,7 @@ class ListenPortTP {
     createServer(port) {
         const tcpServer = net.createServer((socket) => {
             console.log('TCP Client connected');
+            // console.log(socket)
             new ChartServerTerminal(socket)
             new SendingCommandToTerminal(socket)
         });

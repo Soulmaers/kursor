@@ -24,6 +24,7 @@ export class ChartsViewControll {
         this.data = await initSummary.getRequestSummaryToBase(data)
         const originalData = initSummary.controllActiveObject(Object.values(this.data))
         this.originalData = originalData
+        console.log(this.originalData)
         let dataAndValue = {};
         for (let i = 0; i < originalData.length; i++) {
             const currentDate = originalData[i].data;
@@ -110,6 +111,7 @@ export class ChartsViewControll {
     }
 
     createChart(datas, nameCharts) {
+        //    console.log(datas)
         let nameChart;
         let data;
         if (datas && nameCharts) {

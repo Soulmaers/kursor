@@ -16,7 +16,8 @@ class ChartServerTerminal {
     }
 
     socketOn() {
-        this.socket.on('data', (data) => {
+        this.socket.on('data', async (data) => {
+            // console.log(data)
             this.data = data;
             const str = data.toString()
             if (str.startsWith('@')) {
@@ -26,6 +27,8 @@ class ChartServerTerminal {
                 const bodyString = data.slice(16, data.length - 1).toString()
                 if (bodyString.startsWith('*>S')) {
                     this.imei = Number((data.slice(20, data.length)).toString())
+                    //   const valid=await validation()
+                    console.log(this.imei)
                     const msg = '*<S'
                     this.handshake(preamble, receiver, sender, msg)
                 }
@@ -55,7 +58,7 @@ class ChartServerTerminal {
                 if (type === '~A' || type === '~C') {
                     let count = type === '~A' ? buf.readUInt8() : 1
                     this.telemetrationFields(buf, type, count)
-                    WriteFile.writeDataFile(this.globalArrayMSG)
+                    WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
                     this.globalArrayMSG = []
                     const response = Buffer.alloc(type === '~A' ? 3 : 2);
                     response.write(type, 'ascii');
@@ -68,7 +71,7 @@ class ChartServerTerminal {
                     const eventindex = buf.readUInt32LE()
                     buf = buf.slice(3)
                     this.telemetrationFields(buf, type, 1)
-                    WriteFile.writeDataFile(this.globalArrayMSG)
+                    WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
                     this.globalArrayMSG = []
                     const response = Buffer.alloc(6);
                     response.write(type, 'ascii');
@@ -275,7 +278,7 @@ class ChartServerTerminal {
                         break;
                     case 19:
                         val = buf.readUInt16LE()
-                        global.pwr_ext = val
+                        global.pwr_ext = val * 0.001
                         buf = buf.slice(2)
                         break;
                     case 20:

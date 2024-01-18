@@ -1,4 +1,4 @@
-
+import { zapros } from '../../menu.js'
 
 export class CreateNewObject {
     constructor(element) {
@@ -15,15 +15,17 @@ export class CreateNewObject {
         this.pop = document.querySelector('.popup-background')
         this.cancel.addEventListener('click', this.hiddenModal.bind(this))
         this.ok.addEventListener('click', this.enter.bind(this))
+        this.idPref = null
     }
 
     async enter() {
+        console.log(this.idPref)
         const idObject = await this.generationId(this.login)
         const time = Math.floor(new Date().getTime() / 1000)
         const object = {
             login: this.login,
             data: time,
-            idObject: idObject,
+            idObject: this.idPref ? this.idPref : idObject,
             nameObject: null,
             typeObject: null,
             typeDevice: null,
@@ -42,7 +44,7 @@ export class CreateNewObject {
         else {
             //сохраняем данные по объекту в базе
             console.log(object)
-            const mess = await this.saveObject(object)
+            const mess = !this.idPref ? await this.saveObject(object) : await this.updateObject(object)
             console.log(mess)
             this.pop.style.display = 'none'
             this.modal.style.display = 'none';
@@ -50,11 +52,13 @@ export class CreateNewObject {
             this.field_modal.forEach(e => {
                 e.value = ''
             })
+            await zapros(this.login)
         }
 
     }
 
     async validation(object) {
+        console.log(object)
         const requiredFields = Array.from(this.field_modal).filter((e, i) => i === 0 || (i > 1 && i < 5));
         const emptyFields = requiredFields.filter(e => e.value === '');
         if (emptyFields.length !== 0) {
@@ -73,7 +77,7 @@ export class CreateNewObject {
                 { col: 'number', value: object.number }]
 
                 const table = 'objects'
-                const promises = columns.map(el => this.uniqImeiAndPhone(el.col, el.value, table));
+                const promises = columns.map(el => this.uniqImeiAndPhone(el.col, el.value, table, object.id));
                 const mergedArray = await Promise.all(promises);
                 const uniq = mergedArray.flat().filter(e => e.length !== 0);
                 console.log(uniq)
@@ -156,6 +160,21 @@ export class CreateNewObject {
         const mess = res.json()
         return mess
     }
+
+
+    async updateObject(object) {
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ object })
+        }
+        const res = await fetch('/api/updateObject', params)
+        const mess = res.json()
+        return mess
+
+    }
     async generationId() {
         const params = {
             method: 'GET',
@@ -171,7 +190,6 @@ export class CreateNewObject {
 
     }
     viewModal() {
-        console.log(this.element)
         if (this.element.classList.contains('gr')) {
             return
         }
@@ -182,7 +200,39 @@ export class CreateNewObject {
         }
     }
 
+    async viewObjects(idw) {
+        const titleModales = this.modal.querySelector('.title_modales')
+        titleModales.textContent = 'Редактирование объекта'
+        if (this.element.classList.contains('gr')) {
+            return
+        }
+        else {
+            const params = {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ idw })
+            }
+            const res = await fetch('/api/objectId', params)
+            const result = await res.json()
+            const data = result.reduce((acc, el) => {
+                acc.push(el.nameObject, el.typeObject, el.typeDevice, el.adress, el.imei, el.number)
+                return acc
+            }, [])
+            data.forEach((e, index) => {
+                this.field_modal[index].value = e
+            })
+            this.idPref = result[0].idObject
+            this.pop.style.display = 'block'
+            this.modal.style.display = 'flex';
+            this.modal.style.zIndex = 2
+        }
+    }
+
     hiddenModal() {
+        const titleModales = this.modal.querySelector('.title_modales')
+        titleModales.textContent = 'Новый объект'
         this.pop.style.display = 'none'
         this.modal.style.display = 'none';
         this.modal.style.zIndex = 0

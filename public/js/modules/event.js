@@ -58,7 +58,8 @@ draggable()
 new Tooltip(role, [role.getAttribute('rel')]);
 new Tooltip(logout, [logout.getAttribute('rel')]);
 new Tooltip(create, ['Добавить новый объект']);
-new CreateNewObject(create)
+
+export const obj = new CreateNewObject(create)
 export const sett = new CreateNewGroup(create)
 viewIcon.forEach(e => {
     const relValues = e.getAttribute('rel').split(' ');

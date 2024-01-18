@@ -32,3 +32,5 @@ router.post('/api/deleteObject', controllerConfigurator.deleteObject)
 router.post('/api/deleteObjectInGroups', controllerConfigurator.deleteObjectInGroups)
 router.post('/api/deleteGroupToBaseGroups', controllerConfigurator.deleteGroupToBaseGroups)
 router.post('/api/updateGroup', controllerConfigurator.updateGroup)
+router.post('/api/updateObject', controllerConfigurator.updateObject)
+

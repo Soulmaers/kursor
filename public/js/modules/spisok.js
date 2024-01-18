@@ -95,16 +95,21 @@ export async function loadParamsViewList(car, el) {
     return [model, models, data, osi, el]
 }
 
-export async function conturTest(testov, kursor) {
+export async function conturTest(testov) {
     //  console.log(testov)
+    const resultImei = testov
+        .map(el => Object.values(el)) // получаем массивы всех id
+        .flat()
+        .map(e => e[e.length - 1] !== 'kursor' ? { id: e[4], imei: null } : { id: e[4], imei: e[0].imei })//e[e.length - 1] !== 'kursor' ? e[4] : null)
+        .filter(e => e !== null);
     const result = testov
         .map(el => Object.values(el)) // получаем массивы всех id
         .flat()
-        .map(e => e[e.length - 1] !== 'kursor' ? e[4] : null)
+        .map(e => e[4])
         .filter(e => e !== null);
     console.log(result)
-    const final = await alternativa(result)
-
+    const final = await alternativa(resultImei)
+    console.log(final)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         removeArrElem(groups)
@@ -115,10 +120,11 @@ export async function conturTest(testov, kursor) {
     }
     testov.forEach(el => {
         if (el.length !== 0) {
+
             const lowList = document.querySelector('.low_list')
             const group = document.createElement('div')
             group.classList.add('groups')
-            el[el.length - 1] !== 'kursor' ? group.classList.add('wialongroups') : group.classList.add('kursorgroups')
+            el[0][el[0].length - 1] === 'kursor' ? group.classList.add('kursorgroups') : group.classList.add('wialongroups')
             const nameGroup = el[0][5].replace(/\s/g, '_');
             group.classList.add(`${nameGroup}`)
             group.setAttribute('id', el[0][6])
@@ -128,6 +134,7 @@ export async function conturTest(testov, kursor) {
                 lowList.appendChild(group)
             const titleModal = document.createElement('div')
             titleModal.classList.add('titleModal')
+            el[0][el[0].length - 1] !== 'kursor' ? titleModal.classList.add('titlewialon') : titleModal.classList.add('titlekursor')
             if (login === 'Курсор') {
                 titleModal.textContent = `${'Компания...'}` + ' ' + '(' + `${el.length}` + ')'
             }
@@ -193,6 +200,7 @@ export async function conturTest(testov, kursor) {
                     subgroupAll.appendChild(subgroup)
                     const subTitle = document.createElement('div');
                     subTitle.classList.add('subTitle');
+                    subTitle.classList.add('titlekursor');
                     subTitle.innerHTML = `<i class="fa fa-check chekHidden subcheck"></i> 
                     ${item[0][5]} (${item.length})
                      <i class="fas fa-times deleteGroup"></i>
@@ -210,37 +218,20 @@ export async function conturTest(testov, kursor) {
                             const listItemCar = document.createElement('div')
                             listItemCar.classList.add('listItem')
                             listItemCar.classList.add('kursor')
+                            listItemCar.classList.add('sub')
                             listItemCar.classList.add(`${elem[4]}`)
                             listItemCar.setAttribute('rel', `${elem[4]}`)
                             listItemCar.setAttribute('id', `${elem[4]}`)
+                            listItemCar.setAttribute('data-att', `${elem[0].imei}`)
                             listArr.lastChild.appendChild(listItemCar)
                             const listName = document.createElement('div')
                             listName.classList.add('list_name2')
                             listName.setAttribute('rel', `name`)
+                            listName.classList.add('kursor_name')
                             listItemCar.appendChild(listName)
                             listName.textContent = elem[0].message
 
-
-                            const listReport = document.createElement('i')
-                            listReport.classList.add('fas')
-                            listReport.classList.add('fa-print')
-                            listReport.classList.add('report_map_InList')
-                            listReport.classList.add('report_unit')
-                            listReport.setAttribute('rel', `${nameCar}`)
-                            listReport.setAttribute('id', `${nameCar}`)
-                            listName.prepend(listReport)
-
-                            new Tooltip(listReport, ['Перейти в отчеты'])
-
-                            const listMap = document.createElement('i')
-                            listMap.classList.add('fas')
-                            listMap.classList.add('fa-map-marker-alt')
-                            listMap.classList.add('report_map_InList')
-                            listMap.classList.add('map_unit')
-                            listMap.setAttribute('rel', `${nameCar}`)
-                            listMap.setAttribute('id', `${nameCar}`)
-                            listName.prepend(listMap)
-                            new Tooltip(listMap, ['Перейти на карту'])
+                            const typeOss = createElements(listName, nameCar, listItemCar)
 
                             const listCheck = document.createElement('i')
                             listCheck.classList.add('fa')
@@ -251,6 +242,7 @@ export async function conturTest(testov, kursor) {
                             listCheck.setAttribute('id', `${nameCar}`)
                             listName.prepend(listCheck)
 
+
                             const listDelete = document.createElement('i')
                             listDelete.classList.add('fas')
                             listDelete.classList.add('fa-times')
@@ -259,12 +251,107 @@ export async function conturTest(testov, kursor) {
                             listDelete.setAttribute('id', `${nameCar}`)
                             listName.prepend(listDelete)
                             new Tooltip(listDelete, ['Удалить объект'])
+
+                            const pref = document.createElement('i')
+                            pref.classList.add('fas')
+                            pref.classList.add('fa-wrench')
+                            pref.classList.add('pref')
+                            listName.prepend(pref)
+                            new Tooltip(pref, ['Редактировать объект'])
+
+                            let in1;
+                            let statusnew;
+                            let sats;
+                            let type;
+                            console.log(final)
+                            final[0].forEach(i => {
+                                //console.log(i)
+                                if (i[0] === 'Зажигание' && i[2] === elem[4] || i[0] === 'in1' && i[2] === elem[4]) {
+                                    in1 = i[3] === -348201.3876 ? '-' : Number(i[3])
+                                }
+                            })
+
+                            if (elem[0].result) {
+                                const modelUniq = convert(elem[0].result)
+                                modelUniq.forEach(os => {
+                                    type = os.type
+                                    const osi = document.createElement('div')
+                                    osi.classList.add('osi_list')
+                                    if (os.trailer !== 'Прицеп' && os.tyres === '2' || os.trailer !== 'Прицеп' && os.tyres === '4') {
+                                        fnTagach(os, elem[4], nameGroup)
+                                    }
+                                    if (os.trailer === 'Прицеп' && os.tyres === '2' || os.trailer == 'Прицеп' && os.tyres === '4') {
+                                        fnPricep(os, elem[4], nameGroup)
+                                    }
+                                })
+                            }
+
+                            const groups = document.querySelector(`.${nameGroup}`)
+                            const listRel = Array.from(groups.lastElementChild.querySelectorAll('.listItem')).filter(it => it.getAttribute('rel') === `${String(elem[4])}`)
+                            listRel.forEach(e => {
+                                const shina = e.querySelectorAll('.arc');
+                                let num = 0;
+                                shina.forEach(e => {
+                                    num++
+                                    e.setAttribute('id', num)
+                                })
+                                const r = [];
+                                let integer;
+                                if (elem[1].result) {
+                                    const modelUniqValues = convert(elem[1].result)
+                                    modelUniqValues.forEach(el => {
+                                        r.push(el.tyresdiv)
+                                    })
+                                    elem[2].result.forEach((el) => {
+                                        if (el.name === 'sats') {
+                                            sats = el.value
+                                        }
+                                        modelUniqValues.forEach((item) => {
+                                            if (el.name == item.pressure) {
+
+                                                shina.forEach(e => {
+                                                    if (e.id == item.tyresdiv) {
+                                                        // console.log(elem[4], el.status, in1)
+                                                        if (el.status === 'false' && in1 === 1) {
+                                                            e.children[0].style.fill = 'gray'
+                                                            return
+                                                        }
+                                                        if (in1 === 0 || in1 === '-') {
+                                                            e.children[0].style.fill = '#000'
+                                                            return
+                                                        }
+                                                        if (nameCar == 'А652УА198') {
+                                                            integer = parseFloat((el.value / 10).toFixed(1))
+                                                        }
+                                                        else {
+                                                            integer = el.value
+                                                        }
+                                                        elem[3].result.forEach(it => {
+                                                            if (it.idOs == item.osNumber) {
+                                                                e.children[0].style.fill = objColorFront[generDav(integer, it)]
+                                                            }
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    })
+                                    statusnew = sats === '' ? '-' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
+
+                                }
+                            })
+
+                            console.log('sub')
+                            console.log(final, elem[4], listItemCar)
+                            updateIconsSensors(final, elem[4], listItemCar, statusnew, sats, type, in1)
+                            listItemCar.insertBefore(typeOss[1], listItemCar.children[6])
+                            listItemCar.insertBefore(typeOss[0], listItemCar.children[5])
                         }
+
                     })
 
                 })
             }
-
             const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModal')
             group.classList.add(`${nameGroup}`)
@@ -277,11 +364,11 @@ export async function conturTest(testov, kursor) {
                     const nameCar = elem[0].message.replace(/\s+/g, '')
                     const listItemCar = document.createElement('div')
                     listItemCar.classList.add('listItem')
-
-
+                    listItemCar.classList.add('master')
                     listItemCar.classList.add(`${elem[4]}`)
                     listItemCar.setAttribute('rel', `${elem[4]}`)
                     listItemCar.setAttribute('id', `${elem[4]}`)
+                    el[el.length - 1] !== 'kursor' ? listItemCar.setAttribute('data-att', `${elem[0].imei}`) : null
                     listArr.lastChild.appendChild(listItemCar)
                     const listName = document.createElement('div')
                     listName.classList.add('list_name2')
@@ -289,27 +376,7 @@ export async function conturTest(testov, kursor) {
                     listItemCar.appendChild(listName)
                     listName.textContent = elem[0].message
 
-
-                    const listReport = document.createElement('i')
-                    listReport.classList.add('fas')
-                    listReport.classList.add('fa-print')
-                    listReport.classList.add('report_map_InList')
-                    listReport.classList.add('report_unit')
-                    listReport.setAttribute('rel', `${nameCar}`)
-                    listReport.setAttribute('id', `${nameCar}`)
-                    listName.prepend(listReport)
-
-                    new Tooltip(listReport, ['Перейти в отчеты'])
-
-                    const listMap = document.createElement('i')
-                    listMap.classList.add('fas')
-                    listMap.classList.add('fa-map-marker-alt')
-                    listMap.classList.add('report_map_InList')
-                    listMap.classList.add('map_unit')
-                    listMap.setAttribute('rel', `${nameCar}`)
-                    listMap.setAttribute('id', `${nameCar}`)
-                    listName.prepend(listMap)
-                    new Tooltip(listMap, ['Перейти на карту'])
+                    const typeOss = createElements(listName, nameCar, listItemCar)
 
                     const listCheck = document.createElement('i')
                     listCheck.classList.add('fa')
@@ -319,8 +386,11 @@ export async function conturTest(testov, kursor) {
                     listCheck.setAttribute('id', `${nameCar}`)
                     listName.prepend(listCheck)
 
+
+
                     if (elem[elem.length - 1] === 'kursor') {
                         listItemCar.classList.add('kursor')
+                        listName.classList.add('kursor_name')
                         const listDelete = document.createElement('i')
                         listDelete.classList.add('fas')
                         listDelete.classList.add('fa-times')
@@ -329,22 +399,17 @@ export async function conturTest(testov, kursor) {
                         listDelete.setAttribute('id', `${nameCar}`)
                         listName.prepend(listDelete)
                         new Tooltip(listDelete, ['Удалить объект'])
+
+                        const pref = document.createElement('i')
+                        pref.classList.add('fas')
+                        pref.classList.add('fa-wrench')
+                        pref.classList.add('pref')
+                        listName.prepend(pref)
+                        new Tooltip(pref, ['Редактировать объект'])
                     }
                     else {
                         listItemCar.classList.add('wialon')
                     }
-
-                    const listProfil = document.createElement('div')
-                    listProfil.classList.add('newCelChange')
-                    listProfil.setAttribute('rel', `pressure tagach`)
-                    listProfil.classList.add('list_profil2')
-                    listItemCar.appendChild(listProfil)
-                    const listTrail = document.createElement('div')
-                    listTrail.classList.add('newCelChange')
-                    listTrail.setAttribute('rel', `pressure pricep`)
-                    listTrail.classList.add('list_trail2')
-                    listItemCar.appendChild(listTrail)
-
 
                     let in1;
                     let statusnew;
@@ -352,8 +417,8 @@ export async function conturTest(testov, kursor) {
                     let type;
 
                     final[0].forEach(i => {
-                        if (i[0] === 'Зажигание' && i[2] === elem[4]) {
-                            in1 = i[3] === -348201.3876 ? '-' : i[3]
+                        if (i[0] === 'Зажигание' && i[2] === elem[4] || i[0] === 'in1' && i[2] === elem[4]) {
+                            in1 = i[3] === -348201.3876 ? '-' : Number(i[3])
                         }
                     })
                     if (elem[0].result) {
@@ -363,92 +428,165 @@ export async function conturTest(testov, kursor) {
                             const osi = document.createElement('div')
                             osi.classList.add('osi_list')
                             if (os.trailer !== 'Прицеп' && os.tyres === '2' || os.trailer !== 'Прицеп' && os.tyres === '4') {
-                                fnTagach(os, elem[4])
+                                fnTagach(os, elem[4], nameGroup)
                             }
                             if (os.trailer === 'Прицеп' && os.tyres === '2' || os.trailer == 'Прицеп' && os.tyres === '4') {
-                                fnPricep(os, elem[4])
+                                fnPricep(os, elem[4], nameGroup)
                             }
                         })
                     }
-                    const listItem = document.getElementById(`${elem[4]}`)
-                    const shina = listItem.querySelectorAll('.arc');
-                    let num = 0;
-                    shina.forEach(e => {
-                        num++
-                        e.setAttribute('id', num)
-                    })
-                    const r = [];
-                    let integer;
-                    if (elem[1].result) {
-                        const modelUniqValues = convert(elem[1].result)
-                        modelUniqValues.forEach(el => {
-                            r.push(el.tyresdiv)
+                    const groups = document.querySelector(`.${nameGroup}`)
+                    const listRel = Array.from(groups.lastElementChild.querySelectorAll('.listItem')).filter(it => it.getAttribute('rel') === `${String(elem[4])}`)
+                    listRel.forEach(e => {
+                        const shina = e.querySelectorAll('.arc');
+                        let num = 0;
+                        shina.forEach(e => {
+                            num++
+                            e.setAttribute('id', num)
                         })
-                        elem[2].result.forEach((el) => {
-                            if (el.name === 'sats') {
-                                sats = el.value
-                            }
-                            modelUniqValues.forEach((item) => {
-                                if (el.name == item.pressure) {
-
-                                    shina.forEach(e => {
-                                        if (e.id == item.tyresdiv) {
-                                            // console.log(elem[4], el.status, in1)
-                                            if (el.status === 'false' && in1 === 1) {
-                                                e.children[0].style.fill = 'gray'
-                                                return
-                                            }
-                                            if (in1 === 0 || in1 === '-') {
-                                                e.children[0].style.fill = '#000'
-                                                return
-                                            }
-                                            if (nameCar == 'А652УА198') {
-                                                integer = parseFloat((el.value / 10).toFixed(1))
-                                            }
-                                            else {
-                                                integer = el.value
-                                            }
-                                            elem[3].result.forEach(it => {
-                                                if (it.idOs == item.osNumber) {
-                                                    e.children[0].style.fill = objColorFront[generDav(integer, it)]
-                                                }
-                                            })
-                                        }
-                                    })
-                                }
+                        const r = [];
+                        let integer;
+                        if (elem[1].result) {
+                            const modelUniqValues = convert(elem[1].result)
+                            modelUniqValues.forEach(el => {
+                                r.push(el.tyresdiv)
                             })
-                        })
-                        statusnew = sats === '' ? '-' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
+                            elem[2].result.forEach((el) => {
+                                if (el.name === 'sats') {
+                                    sats = el.value
+                                }
+                                modelUniqValues.forEach((item) => {
+                                    if (el.name == item.pressure) {
 
-                    }
+                                        shina.forEach(e => {
+                                            if (e.id == item.tyresdiv) {
+                                                // console.log(elem[4], el.status, in1)
+                                                if (el.status === 'false' && in1 === 1) {
+                                                    e.children[0].style.fill = 'gray'
+                                                    return
+                                                }
+                                                if (in1 === 0 || in1 === '-') {
+                                                    e.children[0].style.fill = '#000'
+                                                    return
+                                                }
+                                                if (nameCar == 'А652УА198') {
+                                                    integer = parseFloat((el.value / 10).toFixed(1))
+                                                }
+                                                else {
+                                                    integer = el.value
+                                                }
+                                                elem[3].result.forEach(it => {
+                                                    if (it.idOs == item.osNumber) {
+                                                        e.children[0].style.fill = objColorFront[generDav(integer, it)]
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                })
+                            })
+                            statusnew = sats === '' ? '-' : sats > 4 && in1 === 1 ? 'ВКЛ' : 'ВЫКЛ';
+
+                        }
+
+                    })
 
                     updateIconsSensors(final, elem[4], listItemCar, statusnew, sats, type, in1)
-                    listItemCar.insertBefore(listTrail, listItemCar.children[6])
-                    listItemCar.insertBefore(listProfil, listItemCar.children[5])
+                    listItemCar.insertBefore(typeOss[1], listItemCar.children[6])
+                    listItemCar.insertBefore(typeOss[0], listItemCar.children[5])
                 }
             })
         }
     })
+
     updateSensor = true
-
     await viewList(login)
-
 
     const toggleList = new ToggleHiddenList()
     toggleList.init()
     toggleList.statistikaObjectCar(final)
-
     initSummary = new SummaryViewControll(result)
     initCharts = new ChartsViewControll()
     initCharts.getDataSummary()
     finishload = true
-    //new SelectObjectsView()
+    validRole()
     navigator();
-    setInterval(zaprosSpisok, 30000, toggleList)
+    setInterval(zaprosSpisok, 120000, toggleList)
 
 
 }
 
+function validRole() {
+    const role = document.querySelector('.role').getAttribute('rel')
+    const pref = document.querySelectorAll('.pref')
+    const deleteObject = document.querySelectorAll('.deleteObject')
+    const deleteGroup = document.querySelectorAll('.deleteGroup')
+    const settingsGroups = document.querySelectorAll('.settingsGroup')
+    const createObject = document.querySelector('.create_object')
+    const chekAlt = document.querySelector('.checkAlt')
+    const titleModal = document.querySelectorAll('.titleModal')
+    const list = document.querySelector('.list_item1')
+    if (role === 'Пользователь') {
+        list.style.width = '220px'
+        list.style.marginLeft = '30px'
+        list.style.marginRight = '70px'
+        titleModal.forEach(e => {
+            e.style.paddingLeft = '20px'
+        })
+        chekAlt.style.display = 'none';
+        createObject.style.display = 'none';
+        pref.forEach(e => {
+            e.style.display = 'none'
+        })
+        deleteObject.forEach(e => {
+            e.style.display = 'none'
+        })
+        deleteGroup.forEach(e => {
+            e.style.display = 'none'
+        })
+        settingsGroups.forEach(e => {
+            e.style.display = 'none'
+        })
+    }
+}
+
+
+function createElements(listName, nameCar, listItemCar) {
+    const listReport = document.createElement('i')
+    listReport.classList.add('fas')
+    listReport.classList.add('fa-print')
+    listReport.classList.add('report_map_InList')
+    listReport.classList.add('report_unit')
+    listReport.setAttribute('rel', `${nameCar}`)
+    listReport.setAttribute('id', `${nameCar}`)
+    listName.prepend(listReport)
+
+    new Tooltip(listReport, ['Перейти в отчеты'])
+
+    const listMap = document.createElement('i')
+    listMap.classList.add('fas')
+    listMap.classList.add('fa-map-marker-alt')
+    listMap.classList.add('report_map_InList')
+    listMap.classList.add('map_unit')
+    listMap.setAttribute('rel', `${nameCar}`)
+    listMap.setAttribute('id', `${nameCar}`)
+    listName.prepend(listMap)
+    new Tooltip(listMap, ['Перейти на карту'])
+
+    const listProfil = document.createElement('div')
+    listProfil.classList.add('newCelChange')
+    listProfil.setAttribute('rel', `pressure tagach`)
+    listProfil.classList.add('list_profil2')
+    listItemCar.appendChild(listProfil)
+    const listTrail = document.createElement('div')
+    listTrail.classList.add('newCelChange')
+    listTrail.setAttribute('rel', `pressure pricep`)
+    listTrail.classList.add('list_trail2')
+    listItemCar.appendChild(listTrail)
+
+
+    return [listProfil, listTrail]
+}
 export const viewList = async (login) => {
     const param = {
         method: "POST",
@@ -509,40 +647,92 @@ export const viewList = async (login) => {
         globalSelect()
     }
 }
-export async function alternativa(arr) {
+export async function alternativa(data) {
+    const arr = data.filter(e => e.imei === null).map(e => e.id)
     return new Promise(async function (resolve, reject) {
         sensorsName = true
+        const login = document.querySelectorAll('.log')[1].textContent
+        console.log(login)
         const param = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ arr }))
+            body: (JSON.stringify({ arr, login }))
         }
         const sens = await fetch('/api/getSensorsWialonToBase', param)
-        const Allsens = await sens.json()
-        const itog = Allsens.map(e => {
+        const allsens = await sens.json()
+        const itog = allsens.map(e => {
             return [e.sens_name, e.param_name, Number(e.idw), Number(e.value)]
         })
         console.log(itog)
-        console.log('делаем обновление по трем запросам')
-
-
-        const restest = await fetch('/api/updateSensors', param)
-        const resulttest = await restest.json()
+        /*   const restest = await fetch('/api/updateSensors', param)
+           const resulttest = await restest.json()
+       
+   
+           const updateTime = Object.entries(resulttest.res).map(el => {
+               return {
+                   id: parseFloat(el[0]), lastime: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.m : null,
+                   speed: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.curr_speed : null,
+                   state: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.state : null
+               }
+           })
+   
+           console.log(updateTime)*/
         lastSensor = true
-        const updateTime = Object.entries(resulttest.res).map(el => {
-            return {
-                id: parseFloat(el[0]), lastime: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.m : null,
-                speed: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.curr_speed : null,
-                state: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.state : null
-            }
-        })
-
-        resolve([itog, updateTime])
+        const sesnorsKursor = await getParamsKursorSensors(data)
+        const result = itog.concat(sesnorsKursor[0])
+        // const update = updateTime.concat(sesnorsKursor[1])
+        resolve([result, sesnorsKursor[1]])
 
     });
 }
+
+async function getParamsKursorSensors(data) {
+    const id = data.filter(e => e.imei !== null && e.imei.length > 10).map(e => e.id);
+    const dat = data.filter(e => e.imei !== null && e.imei.length > 10)
+    const last = id.map(async idw => {
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw }))
+        }
+        const parametrs = await fetch('api/getParamsKursor', param)
+        const lastParams = await parametrs.json()
+
+        const itog = lastParams.flatMap(el => {
+            const results = [];
+            const updateKursor = []
+            dat.map(e => {
+                if (el.imei === e.imei) {
+                    Object.entries(el).forEach(([key, value]) => {
+                        results.push([key, key, Number(e.id), el[key]]);
+                    });
+                    updateKursor.push({ id: Number(e.id), lastime: Number(el.time), speed: el.speed, state: 0 })
+                }
+            });
+            return [results, updateKursor];
+        });
+
+        return itog
+    })
+    const lastParams = await Promise.allSettled(last)
+    const fulfilledPromises = lastParams
+        .filter(promise => promise.status === 'fulfilled')
+        .map(promise => promise.value);
+    if (fulfilledPromises.length !== 0) {
+        const itog = fulfilledPromises.reduce((accumulator, currentArray) => {
+            return [accumulator[0].concat(currentArray[0]), accumulator[1].concat(currentArray[1])];
+        }, [[], []])
+        return itog
+    }
+    else {
+        return [[], []]
+    }
+}
+
 function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in1) {
     const countElem = document.querySelectorAll('.newColumn')
     let oil;
@@ -550,7 +740,6 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
     let meliage;
     let condition;
     let updatetime;
-
 
     const objCondition = {
         0: `<i class="fas fa-parking toogleIcon"rel="03g"></i>`,
@@ -571,13 +760,13 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
     })
     data[0].forEach(i => {
         if (i[0] === 'Топливо' && i[2] === elemId) {
-            oil = i[3] === -348201.3876 ? '-' : `${i[3].toFixed(0)} л.`
+            oil = i[3] === -348201 ? '-' : `${i[3].toFixed(0)} л.`
         }
-        if (i[0].startsWith('Бортовое') && i[2] === elemId) {
-            pwr = i[3] === -348201.3876 ? '-' : parseFloat(i[3].toFixed(1))
+        if (i[0].startsWith('Бортовое') && i[2] === elemId || i[0].startsWith('pwr_ex') && i[2] === elemId) {
+            pwr = i[3] === -348201 ? '-' : parseFloat(Number(i[3]).toFixed(1))
         }
-        if (i[0].startsWith('Одом') && i[2] === elemId) {
-            meliage = i[3] === -348201.3876 ? '-' : `${i[3].toFixed(0)} км.`
+        if (i[0].startsWith('Одом') && i[2] === elemId || i[0].startsWith('Пробег') && i[2] === elemId || i[0].startsWith('meliage') && i[2] === elemId) {
+            meliage = i[3] === -348201 ? '-' : `${Number(i[3]).toFixed(0)} км.`
         }
     })
     const iconValues = {
@@ -594,6 +783,7 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
     for (let i = 0; i < countElem.length; i++) {
         const newClass = countElem[i].getAttribute('rel')
         const existingCel = listItemCar.querySelector(`.newCel[rel="${newClass}"]`);
+
         if (!existingCel) {
             const newCel = document.createElement('div')
             newCel.classList.add('newCel')
@@ -601,6 +791,7 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
             newCel.setAttribute('rel', `${newClass}`)
             newClass === 'type' || newClass === 'meliage' ? newCel.classList.add('newCelTextType') : null
             newClass === 'lasttime' ? newCel.classList.add('newCelTimeType') : null
+            newClass === 'meliage' ? newCel.classList.add('rightLine') : null
             newCel.innerHTML = iconValues[newClass][1]
             iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
             newClass === 'statusnew' && iconValues[newClass][0] === 'ВКЛ' ? newCel.children[0].classList.add('toogleIcon') : newClass === 'statusnew' && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
@@ -657,194 +848,146 @@ export async function gg(id) {
     });
 }
 
-async function fnStaticObjectOil(idw) {
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ idw }))
-    }
+function fnTagach(arr, nameCarId, group) {
+    const groups = document.querySelector(`.${group}`)
+    const listRel = Array.from(groups.lastElementChild.querySelectorAll('.listItem')).filter(it => it.getAttribute('rel') === `${String(nameCarId)}`)
+    listRel.forEach(e => {
+        const obj = [];
+        let counts = 0
+        for (let i = 0; i < arr.tyres; i++) {
+            counts++
+            const ob = {}
+            ob.tyres = counts
+            ob.rate = 100 / arr.tyres
+            obj.push(ob)
+        }
+        const svg = d3.select(e).select(".list_profil2").append("svg")
+            .attr("class", "axis2")
+            .attr("width", 18)
+            .attr("height", 18)
+            .style('margin', '0 1px')
+            .append("g")
+            .attr('class', 'gOs')
+            .attr('id', arr.osi)
+            .attr("transform",
+                "translate(" + (9) + "," + (9) + ")");
+        // задаем радиус
+        const radius = 4;
+        const rr = (Math.PI / 180);
+        // создаем элемент арки с радиусом
+        const arc = d3.arc()
+            .outerRadius(radius)
+            .innerRadius(8)
+            .startAngle(function (d) { return d.startAngle + Math.PI })
+            .endAngle(function (d) { return d.endAngle + Math.PI });
+        const pie = d3.pie()
+            .sort(null)
+            .value(function (d) { return d.rate; });
+        const g = svg.selectAll(".arc")
+            .data(pie(obj))
+            .enter()
+            .append("g")
+            .attr("class", "arc")
+        g.append("path")
+            .attr("d", arc)
+            .style('fill', 'white')
+            .style("stroke", 'black');
+        const g1 = svg.append("g")
+            .attr("transform", function (d, i) {
+                return "translate(0,0)";
+            });
+        g1.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 4)
+            .style('fill', 'black')
+            .style('stroke', 'gray')
+        const g2 = svg.append("g")
+            .attr("transform", function (d, i) {
+                return "translate(0,0)";
+            });
+        g2.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 0.5)
+            .style('fill', 'white')
 
-    const res = await fetch('/api/tarirView', param)
-    const response = await res.json()
-    const x = [];
-    const y = [];
-    const points = []
-    response.result.forEach(el => {
-        const point = []
-        x.push(Number(el.DUT))
-        y.push(Number(el.litrs))
-        point.push(Number(el.DUT))
-        point.push(Number(el.litrs))
-        points.push(point)
     })
-    const argy = await fetch('/api/wialon', param)
-    const arg = await argy.json()
-    const parFind = await fetch('/api/iconFind', param)
-    const paramssyFind = await parFind.json()
-    arg.forEach(el => {
-        paramssyFind.result.forEach(it => {
-            if (el.name === it.params) {
-                if (it.icons === 'oil-card') {
-                    const val = el.value
-                    let degree;
-                    if (x.length < 3) {
-                        degree = 1
-                    }
-                    if (x.length >= 3) {
-                        degree = 6
-                    }
-                    const approximated = approximateValue(val, x, y, degree);
-                    const znak = (approximated[0] * 0.9987).toFixed(0)
-                    const progressBarText = document.querySelector('.progressBarText')
-                    const progressBar = document.querySelector('.progressBar')
-                    const value = znak * 100 / y[y.length - 1]
-                    progressBarText.textContent = znak + ' ' + 'л.'
-                    progressBar.style.width = value + '%'
-                    if (value > 30 && value < 70) {
-                        progressBar.style.background = 'yellow'
-                    }
-                    if (value < 20) {
-                        progressBar.style.background = 'red'
-                        progressBar.style.fontSize = '0.8rem'
-                        progressBar.style.color = 'black'
-                    }
-                }
-            }
-        })
-    })
-}
 
-function fnTagach(arr, nameCarId) {
-    const listItem = document.getElementById(`${nameCarId}`)
-    const obj = [];
-    let counts = 0
-    for (let i = 0; i < arr.tyres; i++) {
-        counts++
-        const ob = {}
-        ob.tyres = counts
-        ob.rate = 100 / arr.tyres
-        obj.push(ob)
-    }
-    const svg = d3.select(listItem).select(".list_profil2").append("svg")
-        .attr("class", "axis2")
-        .attr("width", 18)
-        .attr("height", 18)
-        .style('margin', '0 1px')
-        .append("g")
-        .attr('class', 'gOs')
-        .attr('id', arr.osi)
-        .attr("transform",
-            "translate(" + (9) + "," + (9) + ")");
-    // задаем радиус
-    const radius = 4;
-    const rr = (Math.PI / 180);
-    // создаем элемент арки с радиусом
-    const arc = d3.arc()
-        .outerRadius(radius)
-        .innerRadius(8)
-        .startAngle(function (d) { return d.startAngle + Math.PI })
-        .endAngle(function (d) { return d.endAngle + Math.PI });
-    const pie = d3.pie()
-        .sort(null)
-        .value(function (d) { return d.rate; });
-    const g = svg.selectAll(".arc")
-        .data(pie(obj))
-        .enter()
-        .append("g")
-        .attr("class", "arc")
-    g.append("path")
-        .attr("d", arc)
-        .style('fill', 'white')
-        .style("stroke", 'black');
-    const g1 = svg.append("g")
-        .attr("transform", function (d, i) {
-            return "translate(0,0)";
-        });
-    g1.append("circle")
-        .attr("cx", 0)
-        .attr("cy", 0)
-        .attr("r", 4)
-        .style('fill', 'black')
-        .style('stroke', 'gray')
-    const g2 = svg.append("g")
-        .attr("transform", function (d, i) {
-            return "translate(0,0)";
-        });
-    g2.append("circle")
-        .attr("cx", 0)
-        .attr("cy", 0)
-        .attr("r", 0.5)
-        .style('fill', 'white')
 }
-function fnPricep(arr, nameCarId) {
-    const listItem = document.getElementById(`${nameCarId}`)
-    // задаем радиус
-    const obj = [];
-    let counts = 0
-    for (let i = 0; i < arr.tyres; i++) {
-        counts++
-        const ob = {}
-        ob.tyres = counts
-        ob.rate = 100 / arr.tyres
-        obj.push(ob)
-    }
-    const svg = d3.select(listItem).select(".list_trail2").append("svg")
-        .attr("class", "axis2")
-        .attr("width", 18)
-        .attr("height", 18)
-        .style('margin', '0 0.5px')
-        .append("g")
-        .attr('class', 'gOs')
-        .attr('id', arr.osi)
-        .attr("transform",
-            "translate(" + (9) + "," + (9) + ")");
-    // задаем радиус
-    const radius = 4;
-    // создаем элемент арки с радиусом
-    const arc = d3.arc()
-        .outerRadius(radius)
-        .innerRadius(8)
-        .startAngle(function (d) { return d.startAngle + Math.PI })
-        .endAngle(function (d) { return d.endAngle + Math.PI });
-    const pie = d3.pie()
-        .sort(null)
-        .value(function (d) { return d.rate; });
-    const g = svg.selectAll(".arc")
-        .data(pie(obj))
-        .enter().append("g")
-        .attr("class", "arc")
-    g.append("path")
-        .attr("d", arc)
-        .style('fill', 'white')
-        .style("stroke", 'black');
-    const g1 = svg.append("g")
-        .attr("transform", function (d, i) {
-            return "translate(0,0)";
-        });
-    g1.append("circle")
-        .attr("cx", 0)
-        .attr("cy", 0)
-        .attr("r", 4)
-        .style('fill', 'black')
-        .style('stroke', 'gray')
-    const g2 = svg.append("g")
-        .attr("transform", function (d, i) {
-            return "translate(0,0)";
-        });
-    g2.append("circle")
-        .attr("cx", 0)
-        .attr("cy", 0)
-        .attr("r", 0.5)
-        .style('fill', 'white')
+function fnPricep(arr, nameCarId, group) {
+    const groups = document.querySelector(`.${group}`)
+    const listRel = Array.from(groups.lastElementChild.querySelectorAll('.listItem')).filter(it => it.getAttribute('rel') === `${String(nameCarId)}`)
+    listRel.forEach(e => {
+        // задаем радиус
+        const obj = [];
+        let counts = 0
+        for (let i = 0; i < arr.tyres; i++) {
+            counts++
+            const ob = {}
+            ob.tyres = counts
+            ob.rate = 100 / arr.tyres
+            obj.push(ob)
+        }
+        const svg = d3.select(e).select(".list_trail2").append("svg")
+            .attr("class", "axis2")
+            .attr("width", 18)
+            .attr("height", 18)
+            .style('margin', '0 0.5px')
+            .append("g")
+            .attr('class', 'gOs')
+            .attr('id', arr.osi)
+            .attr("transform",
+                "translate(" + (9) + "," + (9) + ")");
+        // задаем радиус
+        const radius = 4;
+        // создаем элемент арки с радиусом
+        const arc = d3.arc()
+            .outerRadius(radius)
+            .innerRadius(8)
+            .startAngle(function (d) { return d.startAngle + Math.PI })
+            .endAngle(function (d) { return d.endAngle + Math.PI });
+        const pie = d3.pie()
+            .sort(null)
+            .value(function (d) { return d.rate; });
+        const g = svg.selectAll(".arc")
+            .data(pie(obj))
+            .enter().append("g")
+            .attr("class", "arc")
+        g.append("path")
+            .attr("d", arc)
+            .style('fill', 'white')
+            .style("stroke", 'black');
+        const g1 = svg.append("g")
+            .attr("transform", function (d, i) {
+                return "translate(0,0)";
+            });
+        g1.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 4)
+            .style('fill', 'black')
+            .style('stroke', 'gray')
+        const g2 = svg.append("g")
+            .attr("transform", function (d, i) {
+                return "translate(0,0)";
+            });
+        g2.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 0.5)
+            .style('fill', 'white')
+    })
 }
 async function zaprosSpisok(toggleList) {
     console.log('работает?')
-    const list = document.querySelectorAll('.wialon')
-    const arrId = Array.from(list).map(el => parseFloat(el.id))
-    const res = await alternativa(arrId)
-
+    const list = document.querySelectorAll('.listItem')
+    const arrId = Array.from(list).map(el => Number(el.id))
+    const data = Array.from(list).map(el => {
+        return el.classList.contains('wialon') ? { id: el.id, imei: null } : { id: el.id, imei: el.getAttribute('data-att') }
+    })
+    const uniqData = [...new Set(data.map(JSON.stringify))].map(JSON.parse)
+    const res = await alternativa(uniqData)
     const param = {
         method: "POST",
         headers: {
@@ -883,6 +1026,7 @@ async function zaprosSpisok(toggleList) {
     updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
 async function viewListKoleso(model, params, arg, osi, nameCar, inn, res, toggleList) {
+    // console.log(model, params, arg, osi, nameCar, inn, res, toggleList)
     let in1;
     let statusnew;
     let sats;
@@ -897,7 +1041,7 @@ async function viewListKoleso(model, params, arg, osi, nameCar, inn, res, toggle
         const activePost = nameCar.children[0].textContent.replace(/\s+/g, '')
         let integer;
         inn.forEach(i => {
-            if (i[0] === 'Зажигание') {
+            if (i[0] === 'Зажигание' || i[0] === 'in1') {
                 in1 = i[3]
             }
         })
@@ -985,3 +1129,64 @@ document.addEventListener("keydown", event => {
     }
 });*/
 
+
+
+
+async function fnStaticObjectOil(idw) {
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ idw }))
+    }
+
+    const res = await fetch('/api/tarirView', param)
+    const response = await res.json()
+    const x = [];
+    const y = [];
+    const points = []
+    response.result.forEach(el => {
+        const point = []
+        x.push(Number(el.DUT))
+        y.push(Number(el.litrs))
+        point.push(Number(el.DUT))
+        point.push(Number(el.litrs))
+        points.push(point)
+    })
+    const argy = await fetch('/api/wialon', param)
+    const arg = await argy.json()
+    const parFind = await fetch('/api/iconFind', param)
+    const paramssyFind = await parFind.json()
+    arg.forEach(el => {
+        paramssyFind.result.forEach(it => {
+            if (el.name === it.params) {
+                if (it.icons === 'oil-card') {
+                    const val = el.value
+                    let degree;
+                    if (x.length < 3) {
+                        degree = 1
+                    }
+                    if (x.length >= 3) {
+                        degree = 6
+                    }
+                    const approximated = approximateValue(val, x, y, degree);
+                    const znak = (approximated[0] * 0.9987).toFixed(0)
+                    const progressBarText = document.querySelector('.progressBarText')
+                    const progressBar = document.querySelector('.progressBar')
+                    const value = znak * 100 / y[y.length - 1]
+                    progressBarText.textContent = znak + ' ' + 'л.'
+                    progressBar.style.width = value + '%'
+                    if (value > 30 && value < 70) {
+                        progressBar.style.background = 'yellow'
+                    }
+                    if (value < 20) {
+                        progressBar.style.background = 'red'
+                        progressBar.style.fontSize = '0.8rem'
+                        progressBar.style.color = 'black'
+                    }
+                }
+            }
+        })
+    })
+}

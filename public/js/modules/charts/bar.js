@@ -50,6 +50,20 @@ export async function testovfn(active, t1, t2) {
     const resultt = await rest.json()
     return resultt
 }
+
+export async function testovfnNew(active, t1, t2) {
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ active, t1, t2 }))
+    }
+    const rest = await fetch('/api/viewSortChart', param)
+    const resultt = await rest.json()
+    return resultt
+}
+
 export async function datas(t1, t2) {
     if (isCanceled) {
         return Promise.reject(new Error('Запрос отменен'));

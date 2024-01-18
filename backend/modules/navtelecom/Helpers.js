@@ -1,4 +1,4 @@
-
+const databaseService = require('../../services/database.service');
 const fs = require('fs');
 
 
@@ -62,25 +62,29 @@ class BitsCount {
 
 class WriteFile {
 
-    static writeDataFile(globalArrayMSG) {
-        const obj = new JobToBase()
-        obj.createTable()
-        const writeStream = fs.createWriteStream('./backend/modules/navtelecom/data.txt', { flags: 'w' });
-        globalArrayMSG.forEach(async msg => {
-            await obj.fillingTableColumns(msg)
-            obj.fillingTableRows(msg)
-            let content = '';
-            for (let key in msg) {
-                if (msg.hasOwnProperty(key)) {
-                    content += `${key}: ${msg[key]}\n`;
+    static async writeDataFile(globalArrayMSG, imei) {
+        console.log(imei)
+        const res = await databaseService.objectsImei(String(imei))
+        globalArrayMSG.map(e => {
+            e.idObject = res[0].idObject
+        })
+        if (res) {
+            const obj = new JobToBase()
+            obj.createTable()
+            const writeStream = fs.createWriteStream('./backend/modules/navtelecom/data.txt', { flags: 'w' });
+            globalArrayMSG.forEach(async msg => {
+                await obj.fillingTableColumns(msg)
+                obj.fillingTableRows(msg)
+                let content = '';
+                for (let key in msg) {
+                    if (msg.hasOwnProperty(key)) {
+                        content += `${key}: ${msg[key]}\n`;
+                    }
                 }
-            }
-            content += `\n`
-            writeStream.write(content)
-        });
-
-
-
+                content += `\n`
+                writeStream.write(content)
+            });
+        }
     }
 }
 

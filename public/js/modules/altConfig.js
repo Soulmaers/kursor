@@ -233,6 +233,7 @@ function forTyres() {
               if (actBTN) {
                   actBTN.classList.remove('actBTN')
               }*/
+            console.log(e)
             const tact = document.querySelector('.tiresActivt')
             tact ? obo.style.display = 'flex' : obo.style.display = 'none'
 
@@ -294,7 +295,6 @@ function allparamsTyres(btnsens) {
             }
             if (btnsens[1].classList.contains('actBTN')) {
                 arrSpreed.forEach(el => {
-                    console.log(el)
                     if (el === ':') {
                         tiresActivt.children[1].setAttribute('rel', arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                         prmsT.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
