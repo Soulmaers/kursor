@@ -287,12 +287,12 @@ export function view(arg) {
     })
 }
 export async function viewConfigurator(arg, params, osi) {
-    const role = document.querySelectorAll('.log')[0].textContent
+    const role = document.querySelector('.role').getAttribute('rel')
     const active = document.querySelector('.color')
     const idw = active.id
 
     const res = !active.classList.contains('kursor') ? await wialonData(idw) : await kursorData(arg);
-    const in1 = res.in1
+    const in1 = Number(res.in1)
     const allobj = res.allobj
     console.log(allobj)
     if (params) {
@@ -344,9 +344,11 @@ export async function viewConfigurator(arg, params, osi) {
                                 }
                             })
                             const ign = document.querySelector('.ign_value').textContent
+                            console.log(el.status, in1)
                             if (el.status === 'false' && in1 === 1) {
                                 e.children[0].style.background = 'lightgray';
                                 e.children[0].style.color = '#000'
+                                console.log(e.children[0])
                                 return
                             }
                             if (in1 === 0) {

@@ -107,9 +107,7 @@ export async function conturTest(testov) {
         .flat()
         .map(e => e[4])
         .filter(e => e !== null);
-    console.log(result)
     const final = await alternativa(resultImei)
-    console.log(final)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         removeArrElem(groups)
@@ -263,9 +261,7 @@ export async function conturTest(testov) {
                             let statusnew;
                             let sats;
                             let type;
-                            console.log(final)
-                            final[0].forEach(i => {
-                                //console.log(i)
+                            final.forEach(i => {
                                 if (i[0] === 'Зажигание' && i[2] === elem[4] || i[0] === 'in1' && i[2] === elem[4]) {
                                     in1 = i[3] === -348201.3876 ? '-' : Number(i[3])
                                 }
@@ -311,7 +307,6 @@ export async function conturTest(testov) {
 
                                                 shina.forEach(e => {
                                                     if (e.id == item.tyresdiv) {
-                                                        // console.log(elem[4], el.status, in1)
                                                         if (el.status === 'false' && in1 === 1) {
                                                             e.children[0].style.fill = 'gray'
                                                             return
@@ -341,8 +336,6 @@ export async function conturTest(testov) {
                                 }
                             })
 
-                            console.log('sub')
-                            console.log(final, elem[4], listItemCar)
                             updateIconsSensors(final, elem[4], listItemCar, statusnew, sats, type, in1)
                             listItemCar.insertBefore(typeOss[1], listItemCar.children[6])
                             listItemCar.insertBefore(typeOss[0], listItemCar.children[5])
@@ -416,7 +409,7 @@ export async function conturTest(testov) {
                     let sats;
                     let type;
 
-                    final[0].forEach(i => {
+                    final.forEach(i => {
                         if (i[0] === 'Зажигание' && i[2] === elem[4] || i[0] === 'in1' && i[2] === elem[4]) {
                             in1 = i[3] === -348201.3876 ? '-' : Number(i[3])
                         }
@@ -457,10 +450,8 @@ export async function conturTest(testov) {
                                 }
                                 modelUniqValues.forEach((item) => {
                                     if (el.name == item.pressure) {
-
                                         shina.forEach(e => {
                                             if (e.id == item.tyresdiv) {
-                                                // console.log(elem[4], el.status, in1)
                                                 if (el.status === 'false' && in1 === 1) {
                                                     e.children[0].style.fill = 'gray'
                                                     return
@@ -511,7 +502,7 @@ export async function conturTest(testov) {
     finishload = true
     validRole()
     navigator();
-    setInterval(zaprosSpisok, 120000, toggleList)
+    setInterval(zaprosSpisok, 60000, toggleList)
 
 
 }
@@ -597,8 +588,6 @@ export const viewList = async (login) => {
     }
     const ress = await fetch('/api/viewList', param)
     const results = await ress.json()
-    console.log(results)
-
     if (results.res.length === 0) {
         globalSelect()
         return
@@ -652,7 +641,6 @@ export async function alternativa(data) {
     return new Promise(async function (resolve, reject) {
         sensorsName = true
         const login = document.querySelectorAll('.log')[1].textContent
-        console.log(login)
         const param = {
             method: "POST",
             headers: {
@@ -665,25 +653,10 @@ export async function alternativa(data) {
         const itog = allsens.map(e => {
             return [e.sens_name, e.param_name, Number(e.idw), Number(e.value)]
         })
-        console.log(itog)
-        /*   const restest = await fetch('/api/updateSensors', param)
-           const resulttest = await restest.json()
-       
-   
-           const updateTime = Object.entries(resulttest.res).map(el => {
-               return {
-                   id: parseFloat(el[0]), lastime: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.m : null,
-                   speed: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.curr_speed : null,
-                   state: Object.values(el[1])[1] && Object.values(el[1])[1].trips && Object.values(el[1])[1].trips.length !== 0 ? Object.values(el[1])[1].trips.state : null
-               }
-           })
-   
-           console.log(updateTime)*/
         lastSensor = true
         const sesnorsKursor = await getParamsKursorSensors(data)
         const result = itog.concat(sesnorsKursor[0])
-        // const update = updateTime.concat(sesnorsKursor[1])
-        resolve([result, sesnorsKursor[1]])
+        resolve(result)
 
     });
 }
@@ -704,16 +677,16 @@ async function getParamsKursorSensors(data) {
 
         const itog = lastParams.flatMap(el => {
             const results = [];
-            const updateKursor = []
             dat.map(e => {
                 if (el.imei === e.imei) {
                     Object.entries(el).forEach(([key, value]) => {
                         results.push([key, key, Number(e.id), el[key]]);
                     });
-                    updateKursor.push({ id: Number(e.id), lastime: Number(el.time), speed: el.speed, state: 0 })
                 }
             });
-            return [results, updateKursor];
+            results.push(['state', 'state', Number(el.idObject), 0])
+            results.push(['lasttime', 'listtime', Number(el.idObject), Number(el.time)])
+            return results
         });
 
         return itog
@@ -724,7 +697,7 @@ async function getParamsKursorSensors(data) {
         .map(promise => promise.value);
     if (fulfilledPromises.length !== 0) {
         const itog = fulfilledPromises.reduce((accumulator, currentArray) => {
-            return [accumulator[0].concat(currentArray[0]), accumulator[1].concat(currentArray[1])];
+            return [accumulator[0].concat(currentArray)];
         }, [[], []])
         return itog
     }
@@ -746,27 +719,28 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
         1: `<i class="fas fa-arrow-alt-circle-right toogleIcon" rel="01g"></i>`,
         2: `<i class="fas fa-pause-circle toogleIcon"rel="02g"></i>`
     }
-    data[1].forEach(i => {
-        if (i.id === elemId) {
-            const nowTime = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
-            const currentTime = nowTime - i.lastime
-            statusnew = currentTime > 3600 ? 'ВЫКЛ' : statusnew
-            updatetime = i.lastime == null ? undefined : convertTime(currentTime)
-            const speed = i.speed === -348201.3876 ? '-' : i.speed
-            condition = objCondition[i.state]
 
-        }
+    data.forEach(i => {
+        if (i[2] === elemId) {
+            if (i[0] === 'Топливо') {
+                oil = i[3] === -348201 ? '-' : `${i[3].toFixed(0)} л.`
+            }
+            if (i[0].startsWith('Бортовое') || i[0].startsWith('pwr_ex')) {
+                pwr = i[3] === -348201 ? '-' : parseFloat(Number(i[3]).toFixed(1))
+            }
+            if (i[0].startsWith('Одом') || i[0].startsWith('Пробег') || i[0].startsWith('meliage')) {
+                meliage = i[3] === -348201 ? '-' : `${Number(i[3]).toFixed(0)} км.`
+            }
+            if (i[0] === 'lasttime') {
+                const nowTime = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
+                const currentTime = nowTime - i[3]
+                statusnew = currentTime > 3600 ? 'ВЫКЛ' : statusnew
+                updatetime = i[3] == null ? undefined : convertTime(currentTime)
+            }
+            if (i[0] === 'state') {
+                condition = objCondition[i[3]]
+            }
 
-    })
-    data[0].forEach(i => {
-        if (i[0] === 'Топливо' && i[2] === elemId) {
-            oil = i[3] === -348201 ? '-' : `${i[3].toFixed(0)} л.`
-        }
-        if (i[0].startsWith('Бортовое') && i[2] === elemId || i[0].startsWith('pwr_ex') && i[2] === elemId) {
-            pwr = i[3] === -348201 ? '-' : parseFloat(Number(i[3]).toFixed(1))
-        }
-        if (i[0].startsWith('Одом') && i[2] === elemId || i[0].startsWith('Пробег') && i[2] === elemId || i[0].startsWith('meliage') && i[2] === elemId) {
-            meliage = i[3] === -348201 ? '-' : `${Number(i[3]).toFixed(0)} км.`
         }
     })
     const iconValues = {
@@ -837,7 +811,6 @@ export async function gg(id) {
             Object.entries(result).forEach(e => {
                 valueSens.push(e[1])
             })
-            //    console.log(valueSens)
             const allArr = [];
             arrNameSens.forEach((e, index) => {
                 allArr.push([...e, valueSens[index]])
@@ -980,7 +953,6 @@ function fnPricep(arr, nameCarId, group) {
     })
 }
 async function zaprosSpisok(toggleList) {
-    console.log('работает?')
     const list = document.querySelectorAll('.listItem')
     const arrId = Array.from(list).map(el => Number(el.id))
     const data = Array.from(list).map(el => {
@@ -999,7 +971,7 @@ async function zaprosSpisok(toggleList) {
     const spisoks = await listsr.json()
     list.forEach(async el => {
         const idw = el.id
-        const inn = res[0].filter(e => {
+        const inn = res.filter(e => {
             if (e[2] === parseFloat(idw)) {
                 return e;
             }
@@ -1026,7 +998,7 @@ async function zaprosSpisok(toggleList) {
     updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
 async function viewListKoleso(model, params, arg, osi, nameCar, inn, res, toggleList) {
-    // console.log(model, params, arg, osi, nameCar, inn, res, toggleList)
+    //console.log(inn)
     let in1;
     let statusnew;
     let sats;
@@ -1054,6 +1026,7 @@ async function viewListKoleso(model, params, arg, osi, nameCar, inn, res, toggle
                 if (el.name == item.pressure) {
                     shina.forEach(e => {
                         if (e.id == item.tyresdiv) {
+                            //  console.log(in1)
                             if (el.status === 'false' && in1 === 1) {
                                 e.children[0].style.fill = 'gray'
                                 return
@@ -1089,48 +1062,6 @@ async function viewListKoleso(model, params, arg, osi, nameCar, inn, res, toggle
     }
     toggleList.statistikaObjectCar(res)
 }
-
-
-/*
-let isRunning = false;
-
-async function bruteForcePassword() {
-    if (isRunning) {
-        return;
-    }
-    isRunning = true;
-    for (let num = 0; num < 10000; num++) {
-        if (!isRunning) {
-            break;
-        }
-        let pass = num.toString();
-        while (pass.length < 3) {
-            pass = "0" + pass;
-        }
-
-        console.clear();
-        console.log(pass);
-
-        document.activeElement.value = pass;
-        await new Promise(resolve => setTimeout(resolve, 1));
-
-        const enterEvent = new KeyboardEvent("keydown", { key: "Enter" });
-        document.activeElement.dispatchEvent(enterEvent);
-    }
-    isRunning = false;
-}
-
-document.addEventListener("keydown", event => {
-    if (event.altKey && event.key === "a") {
-        bruteForcePassword();
-    } else if (event.altKey && event.key === "s") {
-        isRunning = false;
-        console.log("Остановка выполнения.");
-    }
-});*/
-
-
-
 
 async function fnStaticObjectOil(idw) {
     const param = {

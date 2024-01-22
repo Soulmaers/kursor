@@ -118,6 +118,7 @@ export function createJobTS(data, num) {
         });
 }
 export function createChart(data, num) {
+    console.log(data)
     if (data.length === 0) {
         return
     }

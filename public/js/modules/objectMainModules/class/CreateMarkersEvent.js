@@ -233,6 +233,7 @@ export class CreateMarkersEvent {
         }
         const res = await fetch('api/getEventMarkers', params)
         const result = await res.json()
+        console.log(result)
         let oilEvent;
         if (result.lls && Object.keys(result.lls).length !== 0) {
             oilEvent = Object.values(Object.values(result.lls)[0]).reduce((acc, e) => {

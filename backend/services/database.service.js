@@ -454,7 +454,6 @@ exports.setObjectGroupWialon = async (objects) => {
             return !result.recordset.some(record => record.idObject === object.idObject);
         }).map(object => object.idObject);
 
-        //  console.log(missingValues);
         missingValues.forEach(async elem => {
             const postDEL = `DELETE wialon_groups WHERE login=@login AND idObject =@idObject`
             const result = await pool.request()
@@ -1060,16 +1059,16 @@ exports.viewStructuraToBase = async (idw, t1, t2) => {
 
 
 exports.viewChartDataToBase = async (idw, t1, t2) => {
-    const postModel = `SELECT * FROM chartData WHERE idw='${idw}' AND data >= '${t1}' AND data <= '${t2}'`;
-    try {
-        const pool = await connection
-        const results = await pool.query(postModel);
-        return results.recordset;
-
-    } catch (err) {
-        console.log(err);
-        throw err;
-    }
+    /*  const postModel = `SELECT * FROM chartData WHERE idw='${idw}' AND data >= '${t1}' AND data <= '${t2}'`;
+      try {
+          const pool = await connection
+          const results = await pool.query(postModel);
+          return results.recordset;
+  
+      } catch (err) {
+          console.log(err);
+          throw err;
+      }*/
 };
 
 exports.viewSortDataToBase = async (idw, t1, t2) => {
@@ -1575,6 +1574,8 @@ exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
     const time = (date.getTime() / 1000).toFixed(0)
     const newdata = JSON.stringify(arr)
     const geoLoc = JSON.stringify(geo)
+
+
     const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, group, name, start)
     if (res.message === 'Событие уже существует в базе логов') {
         null
@@ -1622,15 +1623,18 @@ exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
     try {
         const pool = await connection;
         let checkExistQuery;
+        const event = JSON.parse(arr)[0].event
         if (start) {
             checkExistQuery = `SELECT * FROM logs WHERE litragh='${start}' AND idw='${idw}'`
         }
+        else if (event === 'Простой') {
+            checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'AND idw='${idw}'`
+        }
         else {
-            //    console.log(arr, name)
             checkExistQuery = `SELECT * FROM logs WHERE content='${arr}'AND idw='${idw}'`
         }
         const checkResults = await pool.request().query(checkExistQuery);
-        //  console.log(checkResults.recordset)
+
         if (checkResults.recordset.length > 0) {
             return { message: 'Событие уже существует в базе логов' };
         } else {

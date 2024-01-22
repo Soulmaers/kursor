@@ -206,7 +206,7 @@ i.choice {
 
 
 
-.trLogs,
+
 .trEvent {
   display: flex;
   align-items: center;
@@ -226,10 +226,9 @@ i.choice {
 }
 
 
-.trLogs {
-  font-family: Arial;
-  cursor: default;
-}
+
+
+
 
 .tdEvent {
   font-size: 0.7rem;
@@ -5632,7 +5631,7 @@ input[type="text"]:focus {
 .sections {
   display: flex;
   /* min-width: 450px;*/
-  width: 40%
+  width: 35%
 }
 
 .list_arr2 {
@@ -9511,4 +9510,29 @@ i.settingsGroup {
 
 .kursor {
   padding-left: 2px;
+}
+
+
+.enterRows {
+  position: absolute;
+  top: 30px;
+  left: 10px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #fff;
+  color: #fff;
+  width: 50px;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.trLogs {
+  display: flex;
+  align-items: center;
+  width: 870px;
+  font-size: 0.8rem;
+  padding: 2px;
+  margin: 2px;
+  text-align: center;
+  box-sizing: border-box;
 }

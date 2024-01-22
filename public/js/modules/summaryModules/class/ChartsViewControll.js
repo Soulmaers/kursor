@@ -84,6 +84,7 @@ export class ChartsViewControll {
     }
 
     findTop(date, nameChart) {
+        const login = document.querySelectorAll('.log')[1].textContent
         const objects = this.originalData.reduce((acc, e) => {
             if (e.data === date && e[nameChart] !== '-') {
                 const clone = Object.assign({}, e); // Создаем поверхностную копию объекта e
@@ -101,7 +102,7 @@ export class ChartsViewControll {
         const sortedObjects = objects.sort((a, b) => b[nameChart] - a[nameChart]); // Sort objects in descending order based on e[nameChart]
         const topThree = sortedObjects.slice(0, 3).map(el => {
             return {
-                company: el.company,
+                company: login !== 'Курсор' ? el.company : 'Комания',
                 nameCar: el.nameCar,
                 [nameChart]: el[nameChart]
             }
@@ -122,6 +123,7 @@ export class ChartsViewControll {
             nameChart = this.nameChart
             data = this.data
         }
+
         const char = document.querySelector('.chart_global')
         if (char) {
             char.remove()
@@ -155,7 +157,6 @@ export class ChartsViewControll {
             .call(nameChart !== 'moto' && nameChart !== 'prostoy' && nameChart !== 'timeJob' ? d3.axisLeft(yScale) : d3.axisLeft(yScale).tickFormat(function (d) {
                 return self.timesFormat(d)
             }))
-        console.log(content_lower_charts.clientHeight)
         svg.selectAll('rect')
             .data(data)
             .enter().append('rect')
@@ -218,7 +219,7 @@ export class ChartsViewControll {
             svg.append("text")
                 .attr("x", xScale(d.date) + xScale.bandwidth() / 2)
                 .attr("y", yScale(d[nameChart]))
-                .text(nameChart === 'moto' || nameChart === 'prostoy' || nameChart === 'timeJob' ? self.timesFormat(d[nameChart]) : d[nameChart])
+                .text(nameChart === 'moto' || nameChart === 'prostoy' || nameChart === 'timeJob' ? self.timesFormat(d[nameChart]) : d[nameChart] !== 0 ? d[nameChart] : null)
                 .attr("font-size", "10px")
                 .attr("text-anchor", "middle")
                 .attr('fill', 'rgba(6, 28, 71, 1)')

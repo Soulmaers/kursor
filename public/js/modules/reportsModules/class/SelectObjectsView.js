@@ -1616,6 +1616,7 @@ export class SelectObjectsView {
                     return acc
                 }, [])
             }
+
             return res
         }
     }

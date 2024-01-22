@@ -10,19 +10,23 @@
             </div>
             <div class="wrap_cont">
 
-                <h3 class="title_form">Датчики давления</h3>
+                <h3 class="title_form">Спутниковый мониторинг объектов</h3>
                 <% if (message.length> 0) { %>
                     <div class="alert alert-danger" style=" color: red">
                         <%= message %>
                     </div>
                     <% } %>
+                        <form class="demo_form" action="/" method="post">
+                            <input type="hidden" id="username" name="username">
+                            <input type="hidden" name="password">
+                            <button class="demo_button" type="submit">Демо доступ</button>
+                        </form>
                         <form class="auth_form" action="/" method="post">
                             <input class="inp" id="username" type="text" name="username" placeholder="Введите логин"
                                 required>
                             <input class="inp" type="password" name="password" placeholder="Введите пароль" required>
                             <button class="btn" type="submit" name="form_auth_submit">Войти</button>
                         </form>
-
                         <div class="footer_form">
                             <span class="infos">Телефон: +7 906 256-54-62</span>
                             <span class="infos">e-mail: m.trofimov@cursor-gps.ru</span>
@@ -31,3 +35,21 @@
         </div>
     </div>
     <%- include('layout-end') %>
+
+
+        <script>
+            // Получение элементов формы по их id
+            var form = document.querySelector('.demo_form');
+            var usernameInput = document.querySelector('[name="username"]');
+            var passwordInput = document.querySelector('[name="password"]');
+            // Обработчик события нажатия на кнопку "Войти"
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Отменяем стандартное поведение формы
+                // Заполнение значений скрытых полей ввода
+                usernameInput.value = 'Курсор';
+                passwordInput.value = '123456';
+
+                // Отправка формы
+                form.submit();
+            })
+        </script>

@@ -53,14 +53,6 @@ function lastMsgFunc(rt, all) {
     })
 }
 
-async function checkSortCondition(idw, group, name, condition, time, geo) {
-    const data = [{
-        event: 'Состояние',
-        condition: `${condition}`
-    }]
-    const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
-}
-
 
 async function checkSortLastTime(idw, group, name, time, geo) {
     const times = new Date(time * 1000)
@@ -74,7 +66,7 @@ async function checkSortLastTime(idw, group, name, time, geo) {
         event: 'Потеря связи',
         lasttime: `Время последнего сообщения: ${formattedDate}`
     }]
-    const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
+    // const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
 }
 
 function oilFunc(rt, all) {

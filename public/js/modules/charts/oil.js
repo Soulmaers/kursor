@@ -5,10 +5,7 @@ import { createMapsUniq } from '../geo.js'
 
 export async function oil(t1, t2) {
     console.log(t1, t2)
-    const noGraf = document.querySelector('.noGraf')
     const active = document.querySelector('.color').id
-    const nameCar = document.querySelector('.color').children[0].textContent
-
     const tttNew = await testovfnNew(active, t1, t2)
     console.log(tttNew)
     const itogyNew = tttNew.map(it => {
@@ -25,6 +22,7 @@ export async function oil(t1, t2) {
             curse: it.curse
         }
     })
+    console.log(itogyNew)
     itogyNew.sort((a, b) => {
         if (a.time > b.time) {
             return 1;

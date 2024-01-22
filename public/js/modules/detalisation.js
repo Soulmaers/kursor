@@ -1,7 +1,6 @@
-import { testovfn } from './charts/bar.js'
-import { fnParMessage } from './grafiks.js'
-import { timefn, convertDate } from './helpersFunc.js'
-import { prostoy, dannieOilTS, dannieSortJobTS } from './detalisation/statistic.js'
+import { testovfnNew } from './charts/bar.js'
+import { timefn } from './helpersFunc.js'
+import { prostoyNew, dannieOilTS, dannieSortJobTS } from './detalisation/statistic.js'
 
 import { jobTSDetalisation, jobTS, oilTS, melageTS, cal2, cal3 } from './content.js'
 import { eskiz, convertTime, updateHTML, yesTo, weekTo, convertToHoursAndMinutes } from './detalisation/helpers.js'
@@ -75,9 +74,9 @@ export async function timeIntervalStatistiks() {
     loaders(yestoday.nextElementSibling, loader)
     await statistics(yesTo(), 'yestoday', 2, objectRazmetka)
     loader.style.display = 'none'
-    // loaders(week.nextElementSibling, loader)
-    // await statistics(weekTo(), 'week', 3, objectRazmetka)
-    // loader.style.display = 'none'
+    loaders(week.nextElementSibling, loader)
+    await statistics(weekTo(), 'week', 3, objectRazmetka)
+    loader.style.display = 'none'
 }
 function loaders(elem, loader) {
     loader.style.display = 'flex'
@@ -178,9 +177,25 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
     const t1 = !isNaN(num) ? interval[1] : interval[0][2]
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
-    const itog = await testovfn(idw, t1, t2)
-    //  console.log(itog)
-    itog.sort((a, b) => {
+
+    const active = document.querySelector('.color').id
+    const newData = await testovfnNew(active, t1, t2)
+    const newGlobal = newData.map(it => {
+        return {
+            id: it.idw,
+            nameCar: it.nameCar,
+            time: new Date(it.time * 1000),
+            speed: it.speed,
+            geo: JSON.parse(it.geo),
+            oil: it.oil,
+            pwr: it.pwr,
+            engine: it.engine,
+            meliage: it.meliage,
+            curse: it.curse,
+            sats: it.sats
+        }
+    })
+    newGlobal.sort((a, b) => {
         if (a.time > b.time) {
             return 1;
         }
@@ -189,115 +204,33 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         }
         return 0;
     })
-    const nameArr = itog[itog.length - 1] !== undefined ? itog[itog.length - 1].allSensParams ? JSON.parse(itog[itog.length - 1].allSensParams) : [] : []
-    const time = [];
-    const speed = [];
-    const sats = [];
-    const geo = [];
-    itog.forEach(el => {
-        const timestamp = Number(el.data);
-        const date = new Date(timestamp * 1000);
-        const isoString = date.toISOString();
-        time.push(new Date(isoString))
-        speed.push(el.speed)
-        sats.push(el.sats)
-        geo.push(JSON.parse(el.geo))
-    })
-    const sensArr = itog.map(e => {
-        return JSON.parse(e.allSensParams)
-    })
-    const nameSens = [];
-    nameArr.forEach(el => {
-        if (el[0] === 'Зажигание' || el[0].startsWith('Бортовое')) {
-            nameSens.push([el[0], el[1]])
-        }
 
-    })
-    const allArrNew = [];
-    nameSens.forEach((item) => {
-        allArrNew.push({ sens: item[0], params: item[1], value: [] })
-    })
-    if (sensArr.length === 0) {
-        if (isNaN(num)) {
-            objectRazmetka['nav1'].data.splice(num === 'cal2' ? 1 : 2, 1, []);
-            objectRazmetka['nav2'].data.splice(num === 'cal2' ? 1 : 2, 1, dannieSortJobTS([]));
-            objectRazmetka['nav3'].data.splice(num === 'cal2' ? 1 : 2, 1, await dannieOilTS(idw, num, interval));
-            const act = document.querySelector('.activStatic').id
-            objectRazmetka[act].fn(objectRazmetka[act].data[num === 'cal2' ? 1 : 2], num === 'cal2' ? 2 : 3)
+    for (let i = 0; i < newGlobal.length; i++) {
+        if (newGlobal[i].speed > 5) {
+            newGlobal[i].condition = 'Движется';
+        }
+        else if (newGlobal[i].speed === 0 && newGlobal[i].engine === 1) {
+            newGlobal[i].condition = 'Повернут ключ зажигания';
         }
         else {
-            objectRazmetka['nav1'].data.push([]);
-            objectRazmetka['nav2'].data.push(dannieSortJobTS([]));
-            objectRazmetka['nav3'].data.push(await dannieOilTS(idw, num));
-            const act = document.querySelector('.activStatic').id
-            objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)
-        }
-        return
-    }
-    sensArr.forEach(el => {
-        if (el.length === 0) {
-            return; // Пропускаем текущую итерацию, если sensArr пустой
-        }
-        else {
-            el.forEach(it => {
-                if (it[0] === 'Зажигание') {
-                    allArrNew[0].value.push(Number(Object.values(it)[2].toFixed(0)))
-                }
-                if (it[0].startsWith('Бортовое')) {
-                    allArrNew[1].value.push(Number(Object.values(it)[2].toFixed(0)))
-                }
-            })
-        }
-
-    });
-    allArrNew.forEach(el => {
-        el.time = time
-        el.speed = speed
-        el.sats = sats
-        el.geo = geo
-    })
-    console.log(allArrNew)
-    const engine = [...allArrNew].filter(it => it.sens === 'Зажигание' || it.sens.startsWith('Борт'));
-    engine[0].pwr = engine[1].value
-    engine[0].condition = [];
-    const dannie = []
-    dannie.push(engine[0])
-    for (let i = 0; i < dannie[0].value.length; i++) {
-        if (dannie[0].speed[i] > 5) {
-            dannie[0].condition[i] = 'Движется';
-        }
-        else if (dannie[0].speed[i] === 0 && dannie[0].value[i] === 1) {
-            dannie[0].condition[i] = 'Повернут ключ зажигания';
-        }
-        else {
-            dannie[0].condition[i] = 'Парковка';
+            newGlobal[i].condition = 'Парковка';
         }
     }
-    const intStop = prostoy(dannie[0], tsiControll)
-    if (intStop) {
-        const startIndex = dannie[0].time.findIndex(time => time === intStop[1]);
-        const endIndex = dannie[0].time.findIndex(time => time === intStop[2]);
-        if (startIndex !== -1 && endIndex !== -1) {
-            // Обновить значения в свойстве condition
-            for (let i = startIndex; i <= endIndex; i++) {
-                dannie[0].condition[i] = 'Работа на холостом ходу';
+    const intStopNew = prostoyNew(tsiControll, newGlobal)
+    if (intStopNew) {
+        intStopNew.forEach(el => {
+            const startIndex = newGlobal.findIndex(x => x.time === el[0][0]);
+            const endIndex = newGlobal.findIndex(x => x.time === el[1][0]);
+            if (startIndex !== -1 && endIndex !== -1) {
+                // Обновить значения в свойстве condition
+                for (let i = startIndex; i <= endIndex; i++) {
+                    newGlobal[i].condition = 'Работа на холостом ходу';
+                }
             }
-        }
+        })
     }
-    delete dannie[0].params
-    delete dannie[0].sens
-    const data = dannie.flatMap(item =>
-        item.value.map((cValue, index) => ({
-            value: cValue,
-            condition: item.condition[index],
-            pwr: item.pwr[index],
-            geo: item.geo[index],
-            speed: item.speed[index],
-            sats: item.sats[index],
-            time: item.time[index],
-        }))
-    );
-    const datas = data.map((item, index, arr) => {
+
+    const datas = newGlobal.map((item, index, arr) => {
         if (index === 0 || item.condition !== arr[index - 1].condition) {
             const conditionGroup = arr.slice(index).findIndex(el => el.condition !== item.condition);
             const endIndex = conditionGroup === -1 ? arr.length : index + conditionGroup;
@@ -307,16 +240,17 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         }
         return item;
     });
+    console.log(datas)
     if (isNaN(num)) {
-        objectRazmetka['nav1'].data.splice(num === 'cal2' ? 1 : 2, 1, datas);
-        objectRazmetka['nav2'].data.splice(num === 'cal2' ? 1 : 2, 1, dannieSortJobTS(datas));
+        objectRazmetka['nav1'].data.splice(num === 'cal2' ? 1 : 2, 1, tsiControll === null ? [] : datas);
+        objectRazmetka['nav2'].data.splice(num === 'cal2' ? 1 : 2, 1, dannieSortJobTS(tsiControll === null ? [] : datas));
         objectRazmetka['nav3'].data.splice(num === 'cal2' ? 1 : 2, 1, await dannieOilTS(idw, num, interval));
         const act = document.querySelector('.activStatic').id
         objectRazmetka[act].fn(objectRazmetka[act].data[num === 'cal2' ? 1 : 2], num === 'cal2' ? 2 : 3)
     }
     else {
-        objectRazmetka['nav1'].data.push(datas);
-        objectRazmetka['nav2'].data.push(dannieSortJobTS(datas));
+        objectRazmetka['nav1'].data.push(tsiControll === null ? [] : datas);
+        objectRazmetka['nav2'].data.push(dannieSortJobTS(tsiControll === null ? [] : datas));
         objectRazmetka['nav3'].data.push(await dannieOilTS(idw, num));
         const act = document.querySelector('.activStatic').id
         objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)

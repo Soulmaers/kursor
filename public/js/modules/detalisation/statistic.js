@@ -1,52 +1,36 @@
 
 import { convertDate } from '../helpersFunc.js'
-export function prostoy(data, tsi) {
-    if (data.pwr.length === 0) {
+
+
+export function prostoyNew(tsi, newdata) {
+    if (newdata.length === 0) {
         return undefined
     }
     else {
-        const prostoy = [];
-        const korzina = [];
-        let startIndex = 0;
-        data.pwr.forEach((values, index) => {
-            if (values !== data.pwr[startIndex]) {
-                const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index), geo: data.geo.slice(startIndex, index) };
-                (data.pwr[startIndex] <= tsi ? korzina : prostoy).push(speedTime);
-                startIndex = index;
-            }
-        });
-        const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex), geo: data.geo.slice(startIndex) };
-        (data.pwr[startIndex] <= tsi ? korzina : prostoy).push(speedTime);
-        const filteredData = prostoy.map(obj => {
-            const newS = [];
-            const timet = [];
-            const geo = []
-            for (let i = 0; i < obj.speed.length; i++) {
-                if (obj.speed[i] < 5) {
-                    newS.push(obj.speed[i]);
-                    timet.push(obj.time[i])
-                    geo.push(obj.geo[i])
+        const res = newdata.reduce((acc, e) => {
+            if (e.pwr >= tsi && e.speed === 0 && e.sats > 4) {
+                if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
+                    && acc[acc.length - 1][0].pwr >= tsi && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
+                    acc[acc.length - 1].push(e);
                 } else {
-                    break;
+                    acc.push([e]);
                 }
+            } else if (e.pwr < tsi && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
+                || e.speed > 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
+                || e.sats <= 4 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
+                acc.push([]);
             }
-            return { speed: newS, time: timet, geo: geo };
-        });
-        const timeProstoy = filteredData.map(el => {
-            return [el.time[0], el.time[el.time.length - 1], el.geo[0]]
-        })
-        const unixProstoy = [];
-        timeProstoy.forEach(it => {
-            if (it[0] !== undefined) {
-                const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
-                if (diffInSeconds > 1200 && data.value[data.value.length - 1] <= tsi || diffInSeconds > 1200 && data.speed[data.speed.length - 1] >= 5) {
-                    unixProstoy.push([diffInSeconds, it[0], it[1], it[2]])
-                }
+
+            return acc;
+        }, []).filter(el => el.length > 0).reduce((acc, el) => {
+            if (((el[el.length - 1].time.getTime()) / 1000) - ((el[0].time.getTime()) / 1000) > 600) {
+                acc.push([[el[0].time, el[0].geo, el[0].oil], [el[el.length - 1].time, el[el.length - 1].geo, el[el.length - 1].oil]])
             }
-        })
-        const timeBukl = unixProstoy[unixProstoy.length - 1]
-        return timeBukl
+            return acc
+        }, [])
+        return res
     }
+
 }
 
 export async function dannieOilTS(idw, num, interval) {
@@ -100,8 +84,8 @@ export async function dannieOilTS(idw, num, interval) {
         return obj
     }
     else {
-        let zap = models.reduce((acc, el) => el.zapravka + acc, 0)
-        let ras = models.reduce((acc, el) => el.rashod + acc, 0)
+        let zap = models.reduce((acc, el) => Number(el.zapravka) + acc, 0)
+        let ras = models.reduce((acc, el) => Number(el.rashod) + acc, 0)
         zap !== 0 ? obj['Заправлено'] = zap : null
         ras !== 0 ? obj['Израсходовано'] = ras : null
         return obj

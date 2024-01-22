@@ -15,10 +15,6 @@ class SummaryStatistiks {
         this.rashod = '-'
     }
 
-    async testovfn(active, t1, t2) {
-        const resultt = await databaseService.viewChartDataToBase(active, t1, t2)
-        return resultt
-    }
     async testovfnNew(active, t1, t2) {
         const resultt = await databaseService.viewSortDataToBase(active, t1, t2)
         return resultt
@@ -403,16 +399,11 @@ const popupProstoy = async (array) => {
     const result = array
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
-
     const arrays = result.filter(e => e[0].message && !e[0].message.startsWith('Цистерна')).map(e => e);
     const interval = timefn()
     const timeOld = interval[1]
     const timeNow = interval[0]
     for (const e of arrays) {
-        const time = [];
-        const speed = [];
-        const sats = [];
-        const geo = [];
         const idw = e[4];
         const model = await databaseService.modelViewToBase(idw)
         let tsiControll = model.length !== 0 && model[0].tsiControll && model[0].tsiControll !== '' ? Number(model[0].tsiControll) : null;
@@ -421,82 +412,48 @@ const popupProstoy = async (array) => {
         if (tsiControll === null || tsiControll === undefined) {
             continue
         }
-
-        const itog = await testovfn(idw, timeOld, timeNow)
-
-
-        itog.forEach(el => {
-            const timestamp = Number(el.data);
-            const date = new Date(timestamp * 1000);
-            const isoString = date.toISOString();
-            time.push(new Date(isoString))
-            speed.push(el.speed)
-            sats.push(el.sats)
-            geo.push(JSON.parse(el.geo))
-        })
-        const sensArr = itog.map(e => {
-            return JSON.parse(e.sens)
-        })
-        const res = await wialonService.getAllNameSensorsIdDataFromWialon(idw)
-        if (res) {
-
-            const nameSens = [];
-            Object.entries(res.item.sens).forEach(el => {
-                nameSens.push([el[1].n, el[1].p])
-            })
-            const allArrNew = [];
-            if (sensArr[0] && nameSens.length === sensArr[0].length) {
-                nameSens.forEach((item) => {
-                    allArrNew.push({ sens: item[0], params: item[1], value: [] })
-                })
+        const active = idw
+        const newGlobal = await testovfnNew(active, timeOld, timeNow)
+        newGlobal.sort((a, b) => {
+            if (a.time > b.time) {
+                return 1;
             }
-            nameSens.pop()
-            nameSens.forEach((item) => {
-                allArrNew.push({ sens: item[0], params: item[1], value: [] })
-            })
-            if (sensArr.length === 0) {
-                return
+            if (a.time < b.time) {
+                return -1;
             }
-            sensArr.forEach(el => {
-                if (el.length === 0) {
-                    return // Пропускаем текущую итерацию, если sensArr пустой
+            return 0;
+        })
+        const resnew = await prostoyNew(tsiControll, newGlobal)
+        /// console.log(e[0].message)
+        // console.log(resnew)
+        if (resnew) {
+            resnew.forEach(async el => {
+                const map = JSON.parse(el[1][1])
+                const timesProstoy = timesFormat(Number(el[1][0]) - Number(el[0][0]))
+                const group = e[5]
+                const name = e[0].message
+                const time = new Date(Number(el[0][0]) * 1000)
+                const day = time.getDate();
+                const month = (time.getMonth() + 1).toString().padStart(2, '0');
+                const year = time.getFullYear();
+                const hours = time.getHours().toString().padStart(2, '0');
+                const minutes = time.getMinutes().toString().padStart(2, '0');
+                const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+                const data = [{
+                    event: `Простой`, group: `Компания: ${group}`,
+                    name: `Объект: ${name}`,
+                    time: `Дата начала простоя: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`
+                }]
+                const newTime = Math.floor(new Date().getTime() / 1000)
+                const delta = newTime - Number(el[1][0])
+                if (delta > 900) {
+                    const resu = await databaseService.controllerSaveToBase(data, idw, map, group, name)
+                    console.log('Простой' + ' ' + resu.message)
                 }
-                for (let i = 0; i < allArrNew.length; i++) {
-                    allArrNew[i].value.push(Number(Object.values(el)[i].toFixed(0)))
-                }
-            });
-            allArrNew.forEach(el => {
-                el.time = time
-                el.speed = speed
-                el.sats = sats
-                el.geo = geo
-            })
-            allArrNew.forEach(async it => {
-                if (it.sens.startsWith('Бортовое')) {
-                    const res = prostoy(it, tsiControll);
-                    if (res !== undefined) {
-                        const map = res[3]
-                        const timesProstoy = timesFormat(res[0])
-                        const group = e[5]
-                        const name = e[0].message
-                        const time = res[1]
-                        const day = time.getDate();
-                        const month = (time.getMonth() + 1).toString().padStart(2, '0');
-                        const year = time.getFullYear();
-                        const hours = time.getHours().toString().padStart(2, '0');
-                        const minutes = time.getMinutes().toString().padStart(2, '0');
-                        const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-                        const data = [{
-                            event: `Простой`, group: `Компания: ${group}`,
-                            name: `Объект: ${name}`,
-                            time: `Дата начала простоя: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`
-                        }]
-                        const resu = await databaseService.controllerSaveToBase(data, idw, map, group, name)
-                        console.log('Простой' + ' ' + resu.message)
-                    }
-                }
+
             })
         }
+
     }
 }
 
@@ -509,62 +466,44 @@ function timesFormat(dates) {
     return motoHours;
 }
 
-async function testovfn(active, t1, t2) {
-    const resultt = await databaseService.viewChartDataToBase(active, t1, t2)
+
+async function testovfnNew(active, t1, t2) {
+    const resultt = await databaseService.viewSortDataToBase(active, t1, t2)
     return resultt
 }
 
-function prostoy(data, tsi) {
-    if (data.value.length === 0) {
+async function prostoyNew(tsi, newdata) {
+    // console.log(newdata)
+    if (newdata.length === 0) {
         return undefined
     }
     else {
-        const prostoy = [];
-        const korzina = [];
-        let startIndex = 0;
-        data.value.forEach((values, index) => {
-            if (values !== data.value[startIndex]) {
-                const speedTime = { speed: data.speed.slice(startIndex, index), time: data.time.slice(startIndex, index), geo: data.geo.slice(startIndex, index) };
-                (data.value[startIndex] <= tsi ? korzina : prostoy).push(speedTime);
-                startIndex = index;
-            }
-        });
-        const speedTime = { speed: data.speed.slice(startIndex), time: data.time.slice(startIndex), geo: data.geo.slice(startIndex) };
-        (data.value[startIndex] <= tsi ? korzina : prostoy).push(speedTime);
-        const filteredData = prostoy.map(obj => {
-            const newS = [];
-            const timet = [];
-            const geo = []
-            for (let i = 0; i < obj.speed.length; i++) {
-                if (obj.speed[i] < 5) {
-                    newS.push(obj.speed[i]);
-                    timet.push(obj.time[i])
-                    geo.push(obj.geo[i])
+        const res = newdata.reduce((acc, e) => {
+            if (e.pwr >= tsi && e.speed === 0 && e.sats > 4) {
+                if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
+                    && acc[acc.length - 1][0].pwr >= tsi && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
+                    acc[acc.length - 1].push(e);
                 } else {
-                    break;
+                    acc.push([e]);
                 }
+            } else if (e.pwr < tsi && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
+                || e.speed > 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
+                || e.sats <= 4 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
+                acc.push([]);
             }
 
-            return { speed: newS, time: timet, geo: geo };
-        });
-
-        const timeProstoy = filteredData.map(el => {
-            return [el.time[0], el.time[el.time.length - 1], el.geo[0]]
-        })
-        const unixProstoy = [];
-        timeProstoy.forEach(it => {
-            if (it[0] !== undefined) {
-                const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
-                if (diffInSeconds > 1200 && data.value[data.value.length - 1] <= tsi || diffInSeconds > 1200 && data.speed[data.speed.length - 1] >= 5) {
-                    unixProstoy.push([diffInSeconds, it[0], it[1], it[2]])
-                }
+            return acc;
+        }, []).filter(el => el.length > 0).reduce((acc, el) => {
+            if (Number(el[el.length - 1].time) - Number(el[0].time) > 1200) {
+                acc.push([[el[0].time, el[0].geo, el[0].oil], [el[el.length - 1].time, el[el.length - 1].geo, el[el.length - 1].oil]])
             }
-        })
-        const timeBukl = unixProstoy[unixProstoy.length - 1]
-        return timeBukl
+            return acc
+        }, [])
+        //  console.log(res)
+        return res
     }
-}
 
+}
 
 module.exports = {
     SummaryStatistiks,

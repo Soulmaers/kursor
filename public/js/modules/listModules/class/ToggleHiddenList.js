@@ -53,6 +53,7 @@ export class ToggleHiddenList {
         this.ones.addEventListener('click', this.toggleMoresOnes.bind(this))
         this.settingGroups.forEach(el => el.addEventListener('click', this.edit.bind(this, el)))
         this.prefs.forEach(el => el.addEventListener('click', this.editObject.bind(this, el)))
+
         Array.from(this.cond).forEach((e, index) => {
             e.addEventListener('click', () => {
                 if (e.classList.contains('clicker')) {
@@ -96,7 +97,6 @@ export class ToggleHiddenList {
         field_modal.setAttribute('rel', prefix)
         await sett.viewModal()
         const resSostav = await sett.getIdGroup(id)
-        console.log(resSostav)
         const sostavGroup = document.querySelectorAll('.sostav_group')
         const objectList = document.querySelectorAll('.objects_list')
         const podGroup = document.querySelectorAll('.pod_group')
@@ -124,7 +124,6 @@ export class ToggleHiddenList {
         })
     }
     confirmation(el, num) {
-        console.log(el)
         const modal = document.querySelector('.modal_confirm')
         const popup = document.querySelector('.popup-background')
         popup.style.display = 'block'
@@ -132,10 +131,8 @@ export class ToggleHiddenList {
         const cancel = modal.querySelector('.cancel')
         const ok = modal.querySelector('.ok_modal')
         const nameObject = num === 1 ? el.closest('.listItem').firstChild.textContent : el.parentNode.parentNode.getAttribute('rel')
-        console.log(nameObject)
         modal.children[1].textContent = nameObject
         num === 1 ? modal.children[0].textContent = 'Удалить объект?' : modal.children[0].textContent = 'Удалить группу?'
-
         cancel.addEventListener('click', () => {
             modal.style.display = 'none'
             popup.style.display = 'none'
@@ -143,17 +140,14 @@ export class ToggleHiddenList {
         ok.addEventListener('click', async () => {
             modal.style.display = 'none'
             popup.style.display = 'none'
-            console.log(num)
+
             if (num === 1) {
                 await this.deleteObjectToBase(el)
                 await this.deleteObjectToBaseGroups(el)
-                console.log('удаляем объект из базы')
                 await zapros(this.login)
             }
             if (num === 2) {
-                console.log(el.parentNode.parentNode)
                 const id = el.parentNode.parentNode.id
-                console.log('удаляем группу из базы')
                 await this.deleteGroupToBaseGroups(id)
                 await zapros(this.login)
                 const createObject = document.querySelector('.create_object')
@@ -168,8 +162,6 @@ export class ToggleHiddenList {
     }
 
     async deleteObjectToBase(el) {
-
-        console.log(el.closest('.listItem'))
         const id = el.closest('.listItem').id
         const login = this.login
         const params = {
@@ -195,7 +187,6 @@ export class ToggleHiddenList {
         const mess = res.json()
     }
     async deleteObjectToBaseGroups(el) {
-        console.log(el.closest('.listItem'))
         const id = el.closest('.listItem').id
         const login = this.login
         const params = {
@@ -213,7 +204,6 @@ export class ToggleHiddenList {
         this.mores.classList.remove('toggle_list')
         this.ones.classList.remove('toggle_list')
         icon.classList.add('toggle_list')
-        console.log(event.target)
         const parentElement = icon.parentElement;
         const createObject = document.querySelector('.create_object')
         const del = document.querySelectorAll('.deleteGroup')
@@ -255,7 +245,6 @@ export class ToggleHiddenList {
             el.nextElementSibling.style.display = 'flex'
             if (el.closest('.groups').children[2]) {
                 Array.from(el.closest('.groups').children[1].children).forEach(el => {
-                    console.log(el)
                     el.lastElementChild.style.display = 'block'
                 })
                 el.closest('.groups').children[2].style.display = 'block'
@@ -263,7 +252,6 @@ export class ToggleHiddenList {
             else {
                 el.closest('.groups').children[1].style.display = 'block'
             }
-
         })
         this.viewAndHidden(del, sett, 'num')
     }
@@ -316,9 +304,7 @@ export class ToggleHiddenList {
             reports.classList.add('tablo')
             karta.classList.remove('tablo')
             click.reports(element, 'avl_unit')
-            //  classReports ? classReports.createListShablons('avl_unit') : null
         }
-
     }
     statistikaObjectCar(final) {
         const checkInList = document.querySelectorAll('.checkInList')
@@ -347,15 +333,14 @@ export class ToggleHiddenList {
                     count--
                 }
             })
-            const statusCounts = Object.values(final[1]).reduce((acc, el) => {
-
-                if (el.state === 1) {
+            const statusCounts = final.reduce((acc, el) => {
+                if (el[0] === 'state' && el[3] === 1) {
                     acc.move = (acc.move || 0) + 1;
                 }
-                if (el.state === 2) {
+                if (el[0] === 'state' && el[3] === 2) {
                     acc.pause = (acc.pause || 0) + 1;
                 }
-                if (el.state === 0) {
+                if (el[0] === 'state' && el[3] === 0) {
                     acc.stop = (acc.stop || 0) + 1;
                 }
                 return acc;
@@ -397,7 +382,6 @@ export class ToggleHiddenList {
                 e.classList.remove('changeColorCheck')
             })
         }
-        console.log(initsmarkers)
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
         initSummary.clickListUpdateSummary()
         initCharts ? initCharts.getDataSummary() : null
@@ -408,8 +392,6 @@ export class ToggleHiddenList {
         const element = event.target
         const tablo = document.querySelector('.tablo')
         if (tablo && tablo.getAttribute('rel') === 'reports') {
-
-            console.log('теперь тут?')
             this.checkInList.forEach(e => {
                 e.classList.add('changeColorCheck')
             })
@@ -418,8 +400,6 @@ export class ToggleHiddenList {
         }
         else {
             element.classList.toggle('changeColorCheck')
-            console.log(element)
-
             initsmarkers ? initsmarkers.toggleMarkersIcon() : null
             this.statistikaObjectCar()
             initSummary.clickListUpdateSummary()
@@ -428,10 +408,8 @@ export class ToggleHiddenList {
 
     }
     toggleHiddenChildList(event) {
-
         const element = event.target
         const childCheck = (element.closest('.groups').lastElementChild).parentElement.querySelectorAll('.checkInList')
-
         const tablo = document.querySelector('.tablo')
         if (tablo && tablo.getAttribute('rel') === 'reports') {
             this.chekHiddens.forEach(e => {
@@ -465,7 +443,6 @@ export class ToggleHiddenList {
         element.previousElementSibling.style.display = 'flex'
         if (element.closest('.groups').children[2]) {
             Array.from(element.closest('.groups').children[1].children).forEach(el => {
-                console.log(el)
                 el.lastElementChild.style.display = 'none'
             })
             element.closest('.groups').children[2].style.display = 'none'
@@ -504,7 +481,6 @@ export class ToggleHiddenList {
         element.nextElementSibling.style.display = 'flex'
         if (element.closest('.groups').children[2]) {
             Array.from(element.closest('.groups').children[1].children).forEach(el => {
-                console.log(el)
                 el.lastElementChild.style.display = 'block'
             })
             element.closest('.groups').children[2].style.display = 'block'

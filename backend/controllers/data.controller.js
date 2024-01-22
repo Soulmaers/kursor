@@ -72,7 +72,6 @@ const getWialonSetToBaseObject = async (login) => {
 const getWialon = async (login) => {
     const data = await wialonService.getAllGroupDataFromWialon();
     const time = Math.floor(new Date().getTime() / 1000);
-
     if (data) {
         const promises = data.items.flatMap((elem) => {
             const nameGroup = elem.nm;
@@ -114,7 +113,6 @@ exports.up = async (req, res) => {
 
 exports.viewLogs = async (req, res) => {
     const login = req.body.login;
-    //   console.log(login)
     const data = req.body.quantity ? await databaseService.quantitySaveToBase(login, req.body.quantity) : await databaseService.quantitySaveToBase(login)
     res.json(data)
 }
@@ -130,31 +128,32 @@ exports.start = async (session) => {
     console.timeEnd('data')
     if (data) {
         const allCar = Object.entries(data)
-
-        allCar[5][1].forEach(async (el) => {
-            const lasEvent = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(el.id)
-            console.log(lasEvent)
-            const event = [['speed', 'speed', Object.values(lasEvent)[1] && Object.values(lasEvent)[1].trips && Object.values(lasEvent)[1].trips.length !== 0 ? Object.values(lasEvent)[1].trips.curr_speed : null],
-            ['state', 'state', Object.values(lasEvent)[1] && Object.values(lasEvent)[1].trips && Object.values(lasEvent)[1].trips.length !== 0 ? Object.values(lasEvent)[1].trips.state : null]]
-            console.log(event)
-        })
-
-
+        const arr = allCar[5][1].map(it => it.id)
+        const resa = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(arr)
+        const event = Object.entries(resa).map(([key, value]) => {
+            return {
+                [key]: [
+                    ['speed', 'speed', value[1] && value[1].trips && value[1].trips.length !== 0 ? value[1].trips.curr_speed : null],
+                    ['state', 'state', value[1] && value[1].trips && value[1].trips.length !== 0 ? value[1].trips.state : null],
+                    ['lasttime', 'listtime', value[1] && value[1].trips && value[1].trips.length !== 0 ? value[1].trips.m : null]
+                ]
+            };
+        });
         const promises = allCar[5][1].map(async (el) => {
             const res = await engines(el.id);
             if (res) {
                 await saveStatus(res, el)
-                await databaseService.setSensorsWialonToBase(session._session.au, el.id, res);
+                const foundObject = event.find(obj => obj.hasOwnProperty(el.id));
+                const all = res.concat(...Object.values(foundObject))
+                await databaseService.setSensorsWialonToBase(session._session.au, el.id, all);
             }
-
         })
-
 
         const dataKursor = await databaseService.getObjects()
         const validKursorData = dataKursor.filter(e => [...e.imei].length > 10)
         console.log(validKursorData)
         // Запускаем все функции параллельно
-        await Promise.all([promises, await updateParams(data, validKursorData), saveSensorsToBase(allCar)])
+        await Promise.all([promises, updateParams(data, validKursorData), saveSensorsToBase(allCar)])
     }
 
 }

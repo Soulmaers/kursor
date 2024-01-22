@@ -53,6 +53,9 @@ async function createPopup(array) {
 
 let previus = 0;
 let num = 0;
+let quantity = 0;
+
+let data;
 export async function logsView(array) {
     let bool = false
     array.forEach(el => {
@@ -75,19 +78,18 @@ export async function logsView(array) {
         });
         return acc;
     }, []);
-    const tr = document.querySelectorAll('.trEvent').length
-    // results.splice(0, tr.length)
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ arrayId, tr }))
+        body: (JSON.stringify({ arrayId, quantity }))
     }
+    // console.log(arrayId, quantity)
     const ress = await fetch('/api/logsView', param)
     const value = await ress.json()
     const results = value.itog
-    console.log(results)
+    quantity = results.length
     const paramLog = {
         method: "POST",
         headers: {
@@ -97,6 +99,8 @@ export async function logsView(array) {
     }
     const resLog = await fetch('/api/quantityLogs', paramLog)
     const resultsLog = await resLog.json()
+    console.log(value.quant)
+    console.log(resultsLog[0].quantity)
     const viewNum = value.quant - resultsLog[0].quantity
     viewTableNum(viewNum)
     if (num === 0) {
@@ -119,7 +123,6 @@ export async function logsView(array) {
                 }
                 return acc;
             }, []);
-            console.log(group, group2)
             const time = new Date(Number(el.time) * 1000)
             const day = time.getDate();
             const month = (time.getMonth() + 1).toString().padStart(2, '0');
@@ -169,7 +172,6 @@ export async function logsView(array) {
                 viewObj.alert.forEach(e => {
                     e === event ? createPopup(mess) : null; // Это изменено
                 });
-
             }
             else {
                 console.log('нет данных')
@@ -178,8 +180,7 @@ export async function logsView(array) {
         previus = results.length
     }
     num++
-    // const tr = document.querySelectorAll('.trEvent')
-    // results.splice(0, tr.length)
+    const clickLog = document.querySelector('.clickLog')
     if (results.length !== 0) {
         const mass = results.map(el => {
             const parsedContent = JSON.parse(el.content);
@@ -196,10 +197,10 @@ export async function logsView(array) {
             const info = `${int.join(", ")}`;
             return { time: time, group: typeEvent !== 'Предупреждение' ? el.groups : login === 'Курсор' ? 'demo' : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
         });
-        await createLogsTable(mass)
+        data = mass
+        !clickLog ? await createLogsTable(mass) : null
     }
 
-    const clickLog = document.querySelector('.clickLog')
     if (!clickLog) {
         const tr = document.querySelectorAll('.trEvent')
         tr.forEach(e => {
@@ -222,22 +223,18 @@ export async function logsView(array) {
         })
         const log = document.querySelector('.logs')
         const wrapperLogs = document.querySelector('.alllogs')
-
         const numy = document.querySelector('.num')
         // Добавляем обработчики кликов
-
-
         new CloseBTN(wrapperLogs, log, numy)
         const allobjects = document.querySelector('.allobjects')
         allobjects.removeEventListener('click', chanchColor)
     }
 
-    //  })
 }
 
 async function togglePopup() {
     console.log('тут??')
-    const tr = document.querySelectorAll('.trEvent')
+    // const tr = document.querySelectorAll('.trEvent')
     const login = document.querySelectorAll('.log')[1].textContent
     const wrapperLogs = document.querySelector('.alllogs')
     const grays = document.querySelectorAll('.graysEvent')
@@ -261,7 +258,6 @@ async function togglePopup() {
             item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
         })) : (trEvent.forEach(item => { item.style.display = 'flex' }), allobjects.style.display = 'none')
         allobjects.addEventListener('click', chanchColor)
-        const quantity = trEvent.length;
         const param = {
             method: "POST",
             headers: {
@@ -272,14 +268,45 @@ async function togglePopup() {
         }
         const res = await fetch('/api/viewLogs', param)
         const confirm = await res.json()
-        const viewNum = tr.length - quantity
-        console.log(tr.length)
-        viewTableNum(viewNum)
+
+        viewTableNum(0)
+        updateRows()
+
     } else {
         wrapperLogs.style.display = 'none'; // Скрываем попап
         wrapperLogs.classList.remove('clickLog')
 
     }
+}
+function updateRows() {
+    const enterRows = document.querySelector('.enterRows')
+    enterRows.addEventListener('input', function (event) {
+        const row = Number(event.target.value)
+        createLogsTable(data, row)
+
+        const evgentElement = document.querySelector('.toogleIconEvent')
+        filterEventLogs(evgentElement)
+
+        const tr = document.querySelectorAll('.trEvent')
+        tr.forEach(e => {
+            e.style.cursor = 'default'
+            e.children[3].style.cursor = 'pointer'
+            e.children[2].style.cursor = 'pointer'
+            const clickHandler = (event) => {
+                event.stopPropagation();
+                const geo = [];
+                geo.push(parseFloat(e.lastElementChild.textContent.split(',')[0]))
+                geo.push(parseFloat(e.lastElementChild.textContent.split(',')[1]))
+                console.log(e)
+                const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[2].textContent, e.lastElementChild.parentElement.children[4].textContent] }]
+                createMapsUniq([], obj, 'log')
+                const wrap = document.querySelector('.wrapMap')
+                new CloseBTN(wrap)
+            };
+            e.children[3].addEventListener('click', clickHandler);
+            e.children[2].addEventListener('click', clickHandlerObject);
+        })
+    });
 }
 
 
@@ -294,6 +321,8 @@ function clickHandlerObject(event) {
         if (it.getAttribute('rel') === id) {
             visual(it)
             chanchColor()
+            const evgentElement = document.querySelector('.toogleIconEvent')
+            filterEventLogs(evgentElement)
         }
     })
 }
@@ -311,7 +340,7 @@ function chanchColor() {
     const color = document.querySelector('.color')
     const trEvent = document.querySelectorAll('.trEvent')
     const choice = document.querySelector('.choice')
-    if (choice) {
+    if (!choice) {
         trEvent.forEach(e => {
             if (e.getAttribute('rel') !== color.id) {
                 e.style.display = 'none';
@@ -349,10 +378,9 @@ const objColor = {
     'Потеря связи': '#28ad9e',
     'Состояние': '#acad4c'
 }
-async function createLogsTable(mass) {
+async function createLogsTable(mass, pag) {
     const wrap = document.querySelector('.alllogs')
     if (!wrap) {
-
         const body = document.getElementsByTagName('body')[0]
         const log = document.createElement('div')
         log.classList.add('wrapperLogs')
@@ -363,12 +391,16 @@ async function createLogsTable(mass) {
         const spanTitle = document.createElement('p')
         spanTitle.classList.add('spanTitle')
         spanTitle.textContent = 'Логи событий'
+        const enterRows = document.createElement('input')
+        enterRows.classList.add('enterRows')
+        enterRows.value = 300
         const icon = document.createElement('i')
         icon.classList.add('fas')
         icon.classList.add('fa-binoculars')
         icon.classList.add('allobjects')
         body.appendChild(alllogs)
         alllogs.appendChild(spanTitle)
+        alllogs.appendChild(enterRows)
         alllogs.appendChild(icon)
         alllogs.appendChild(log)
         log.innerHTML = titleLogs
@@ -377,27 +409,41 @@ async function createLogsTable(mass) {
         evnt.addEventListener('mouseleave', () => evnt.children[0].style.display = 'none')
         const filterEvent = document.querySelector('.filterEvent')
         filterEvent.addEventListener('click', eventFilter)
+
     }
-
-
     const wrapLogs = document.querySelector('.wrapperLogs')
     const allobjects = document.querySelector('.allobjects')
     const firstChild = wrapLogs.firstChild;
     new Tooltip(allobjects, ['Все объекты/Текущий']);
-    mass.forEach(el => {
+
+    const trEvents = document.querySelectorAll('.trEvent')
+    trEvents.forEach(e => {
+        e.remove()
+    })
+    console.log(mass)
+    const contentLogs = mass.slice(mass.length - (pag ? pag : 300));
+    console.log(contentLogs)
+
+
+    contentLogs.forEach(el => {
         const trEvent = document.createElement('div')
         trEvent.classList.add('trEvent')
         trEvent.setAttribute('rel', `${el.id}`)
         wrapLogs.insertBefore(trEvent, firstChild.nextSibling)
-        delete el.id
+        //  delete el.id
         for (var key in el) {
-            const td = document.createElement('p')
-            td.classList.add('tdEvent')
-            td.textContent = el[key]
-            trEvent.appendChild(td)
-            td.style.color = objColor[td.textContent]
+            if (key !== 'id') {
+                const td = document.createElement('p')
+                td.classList.add('tdEvent')
+                td.textContent = el[key]
+                trEvent.appendChild(td)
+                td.style.color = objColor[td.textContent]
+            }
+
         }
+
     })
+
     const trEvent = document.querySelectorAll('.trEvent')
     trEvent.forEach(el => {
         el.setAttribute('tabindex', '0');
@@ -450,7 +496,12 @@ function eventFilter() {
 
 function filterEventLogs(event) {
     const choice = document.querySelector('.choice')
-    event.target.classList.toggle('toogleIconEvent')
+    if (event.isTrusted) {
+        event.target.classList.toggle('toogleIconEvent');
+    }
+    else {
+        event.classList.add('toogleIconEvent');
+    }
     console.log('клик по эвент?')
     const grays = document.querySelectorAll('.graysEvent')
     const trEvent = document.querySelectorAll('.trEvent')
@@ -466,7 +517,7 @@ function filterEventLogs(event) {
                     }
                 }
                 else {
-                    if (!choice) {
+                    if (choice) {
                         if (it.children[3].textContent === el.nextElementSibling.textContent && color.id === it.getAttribute('rel')) {
                             it.style.display = 'flex'
                         }
@@ -489,5 +540,5 @@ function filterEventLogs(event) {
         }
     })
     !check ? evnt.style.color = 'rgba(6, 28, 71, 1)' : evnt.style.color = 'gray'
-    !check ? choice || !color ? trEvent.forEach(e => e.style.display = 'flex') : trEvent.forEach(e => { if (color.id === e.getAttribute('rel')) { e.style.display = 'flex' } }) : null
+    !check ? !choice || !color ? trEvent.forEach(e => e.style.display = 'flex') : trEvent.forEach(e => { if (color.id === e.getAttribute('rel')) { e.style.display = 'flex' } }) : null
 }
