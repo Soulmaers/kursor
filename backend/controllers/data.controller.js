@@ -198,7 +198,6 @@ async function saveSensorsToBase(allCar) {
             });
             const sens = rez.map(e => JSON.stringify(e));
             const arr = allArray.map(e => JSON.stringify(e));
-
             mass.forEach((el, index) => {
                 el.push(sens[index]);
                 el.push(arr[index])
@@ -265,7 +264,6 @@ exports.hunterTime = async () => {
 };
 
 function ggg(nameSens, rez, id) {
-
     if (rez && nameSens) {
         const nameSenz = Object.entries(nameSens.item.sens)
         const arrNameSens = [];

@@ -1219,7 +1219,7 @@ export class SelectObjectsView {
         const ifPwr = await this.requstModel(idw)
         const [t1, t2] = interval
         const active = String(idObject)
-
+        console.log(active, t1, t2)
         const param = {
             method: "POST",
             headers: {
@@ -1229,6 +1229,7 @@ export class SelectObjectsView {
         }
         const rest = await fetch('/api/viewChart', param)
         const resultt = await rest.json()
+        console.log(resultt)
         resultt.sort((a, b) => {
             if (a.data > b.data) {
                 return 1;

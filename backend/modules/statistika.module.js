@@ -424,8 +424,6 @@ const popupProstoy = async (array) => {
             return 0;
         })
         const resnew = await prostoyNew(tsiControll, newGlobal)
-        /// console.log(e[0].message)
-        // console.log(resnew)
         if (resnew) {
             resnew.forEach(async el => {
                 const map = JSON.parse(el[1][1])

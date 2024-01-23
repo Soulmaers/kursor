@@ -54,25 +54,29 @@ async function createPopup(array) {
 let previus = 0;
 let num = 0;
 let quantity = 0;
-
+let count = 300;
+let arrayObjects;
 let data;
 export async function logsView(array) {
     let bool = false
-    array.forEach(el => {
+    if (array) {
+        arrayObjects = array
+    }
+    arrayObjects.forEach(el => {
         el.length !== 0 ? bool = true : null
     })
     if (!bool) {
         return
     }
     const login = document.querySelectorAll('.log')[1].textContent
-    const arrayId = array.reduce((acc, el) => {
+    const arrayId = arrayObjects.reduce((acc, el) => {
         Object.values(el).forEach(subArray => {
             acc.push(subArray[4]);
         });
         return acc;
     }, []);
 
-    const arrayIdGroup = array.reduce((acc, el) => {
+    const arrayIdGroup = arrayObjects.reduce((acc, el) => {
         Object.values(el).forEach(subArray => {
             acc.push([subArray[4], subArray[5]]);
         });
@@ -83,13 +87,13 @@ export async function logsView(array) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ arrayId, quantity }))
+        body: (JSON.stringify({ arrayId, quantity, count }))
     }
-    // console.log(arrayId, quantity)
     const ress = await fetch('/api/logsView', param)
     const value = await ress.json()
+    console.log(value)
     const results = value.itog
-    quantity = results.length
+    quantity = results
     const paramLog = {
         method: "POST",
         headers: {
@@ -99,9 +103,8 @@ export async function logsView(array) {
     }
     const resLog = await fetch('/api/quantityLogs', paramLog)
     const resultsLog = await resLog.json()
-    console.log(value.quant)
-    console.log(resultsLog[0].quantity)
     const viewNum = value.quant - resultsLog[0].quantity
+    console.log(value.quant, resultsLog[0].quantity)
     viewTableNum(viewNum)
     if (num === 0) {
         previus = value.quant
@@ -181,8 +184,8 @@ export async function logsView(array) {
     }
     num++
     const clickLog = document.querySelector('.clickLog')
-    if (results.length !== 0) {
-        const mass = results.map(el => {
+    if (value.view.length !== 0) {
+        const mass = value.view.map(el => {
             const parsedContent = JSON.parse(el.content);
             const typeEvent = parsedContent[0].event;
             const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
@@ -280,12 +283,15 @@ async function togglePopup() {
 }
 function updateRows() {
     const enterRows = document.querySelector('.enterRows')
-    enterRows.addEventListener('input', function (event) {
+    enterRows.addEventListener('input', async function (event) {
         const row = Number(event.target.value)
-        createLogsTable(data, row)
+        count = row
+        await logsView()
+        createLogsTable(data)
 
         const evgentElement = document.querySelector('.toogleIconEvent')
-        filterEventLogs(evgentElement)
+        console.log(evgentElement)
+        evgentElement ? filterEventLogs(evgentElement) : null
 
         const tr = document.querySelectorAll('.trEvent')
         tr.forEach(e => {
@@ -378,7 +384,7 @@ const objColor = {
     'Потеря связи': '#28ad9e',
     'Состояние': '#acad4c'
 }
-async function createLogsTable(mass, pag) {
+async function createLogsTable(mass) {
     const wrap = document.querySelector('.alllogs')
     if (!wrap) {
         const body = document.getElementsByTagName('body')[0]
@@ -421,11 +427,11 @@ async function createLogsTable(mass, pag) {
         e.remove()
     })
     console.log(mass)
-    const contentLogs = mass.slice(mass.length - (pag ? pag : 300));
-    console.log(contentLogs)
+    //  const contentLogs = mass.slice(mass.length - (pag ? pag : 300));
+    //  console.log(contentLogs)
 
 
-    contentLogs.forEach(el => {
+    mass.forEach(el => {
         const trEvent = document.createElement('div')
         trEvent.classList.add('trEvent')
         trEvent.setAttribute('rel', `${el.id}`)
@@ -495,6 +501,7 @@ function eventFilter() {
 }
 
 function filterEventLogs(event) {
+    console.log(event)
     const choice = document.querySelector('.choice')
     if (event.isTrusted) {
         event.target.classList.toggle('toogleIconEvent');

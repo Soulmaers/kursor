@@ -1059,16 +1059,16 @@ exports.viewStructuraToBase = async (idw, t1, t2) => {
 
 
 exports.viewChartDataToBase = async (idw, t1, t2) => {
-    /*  const postModel = `SELECT * FROM chartData WHERE idw='${idw}' AND data >= '${t1}' AND data <= '${t2}'`;
-      try {
-          const pool = await connection
-          const results = await pool.query(postModel);
-          return results.recordset;
-  
-      } catch (err) {
-          console.log(err);
-          throw err;
-      }*/
+    const postModel = `SELECT * FROM chartData WHERE idw='${idw}' AND data >= '${t1}' AND data <= '${t2}'`;
+    try {
+        const pool = await connection
+        const results = await pool.query(postModel);
+        return results.recordset;
+
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
 };
 
 exports.viewSortDataToBase = async (idw, t1, t2) => {

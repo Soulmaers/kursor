@@ -7,6 +7,7 @@ export function prostoyNew(tsi, newdata) {
         return undefined
     }
     else {
+        console.log(newdata)
         const res = newdata.reduce((acc, e) => {
             if (e.pwr >= tsi && e.speed === 0 && e.sats > 4) {
                 if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
@@ -100,7 +101,6 @@ export function dannieSortJobTS(datas, ele, num) {
         geo: el.geo,
         sats: el.sats,
         pwr: el.pwr,
-        value: el.value,
         time: el.time,
         speed: el.speed,
         condition: el.condition === 'Повернут ключ зажигания' ? 'Парковка' : el.condition

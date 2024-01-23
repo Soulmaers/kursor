@@ -177,6 +177,7 @@ exports.viewSortChart = async (req, res) => {
 
 exports.fileDown = async (req, res) => {
     const pdfmake = require('pdfmake/build/pdfmake');
+    // const { PdfMakeWrapper } = require('pdfmake-wrapper');
     const vfsFonts = require('pdfmake/build/vfs_fonts');
     const fs = require('fs')
     const path = require('path'); // Подключаем модуль path
@@ -228,8 +229,6 @@ exports.fileDown = async (req, res) => {
                     width: 30,
                     style: 'images',
                 },
-                { text: nameReport, style: 'reportName', alignment: 'center' },
-                ...titleReports.map((e, index) => ({ text: e, linkToPage: 2, margin: index === 0 ? [0, 30, 0, 0] : [0, 2, 0, 0], fontSize: 10, color: '#061c47', width: 50 })),
             ],
             styles: {
                 header: {
@@ -259,6 +258,10 @@ exports.fileDown = async (req, res) => {
             },
         };
 
+        docDefinition.content.push({ text: nameReport, style: 'reportName', alignment: 'center' })
+        titleReports.forEach((e, index,) => {
+            docDefinition.content.push({ text: e, linkToPage: 2, margin: index === 0 ? [0, 30, 0, 0] : [0, 2, 0, 0], fontSize: 10, color: '#061c47', width: 50 })
+        })
         docDefinition.content.push({ text: 'Статистика', style: 'header', alignment: 'center' },
             {
                 columns: [
@@ -284,7 +287,6 @@ exports.fileDown = async (req, res) => {
                     return 500 / count;
                 }
             });
-
             docDefinition.content.push({ text: e.label, alignment: 'center', margin: [0, 30, 0, 10] });
             docDefinition.content.push({
                 columns: [
@@ -309,10 +311,10 @@ exports.fileDown = async (req, res) => {
             });
         });
 
-
         const pdfDoc = pdfmake.createPdf(docDefinition);
         pdfDoc.getBase64((data) => {
             const buffer = Buffer.from(data, 'base64');
+            //  console.log(buffer.toString('base64'));
             // Сохранение файла PDF
             require('fs').writeFileSync(filePath, buffer);
         });
@@ -321,6 +323,7 @@ exports.fileDown = async (req, res) => {
     createPDF(data, filePath);
     console.log(filePath)
     const file = fs.createReadStream(filePath)
+
     res.setHeader('Content-Type', `application/pdf`);
     res.setHeader('Content-Disposition', `attachment; filename=filename.pdf`);
     file.pipe(res);
