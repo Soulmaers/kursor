@@ -22,8 +22,8 @@ export async function zapros(login) {
     const data = kursorData.concat(arrayList)
     console.log(kursorData.concat(arrayList))
     await conturTest(data)
-    logsView(arrayList)
-    setInterval(logsView, 60000, arrayList)
+    logsView(data)
+    setInterval(logsView, 60000, data)
     //передаем имена объектов для отображения в панели администратора
     checkCreate(nameCarCheck)
     const tiresActiv = document.querySelector('.tiresActiv')

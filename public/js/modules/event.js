@@ -3,11 +3,9 @@ import { data } from './content.js'
 import { dashView, getDash } from './charts/dash.js'
 import { alarmClear, clearGraf, visual, visualNone } from './visual.js'
 import { getUsers } from './admin.js'
-//import { geoloc } from './geo.js'
 import { reqProtectorBase } from './protector.js'
 import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
-import { iconParamsz, iconParamszWindows, deleteWinParams } from './configIcons.js'
 import { dataInput, dataSelect, times, click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
@@ -883,56 +881,6 @@ menuGraf.forEach(el => {
         }
     })
 })
-const card = document.querySelectorAll('.icon_card')
-card.forEach(elem => {
-    const changeParams = document.querySelector('.changeParams')
-    const sensors = document.querySelector('.sensors')
-    const btnsens = document.querySelectorAll('.btnsens')
-    const titleSens = document.querySelector('.title_sens')
-    const obo = document.querySelector('.obo')
-    const wRight = document.querySelector('.wrapper_right')
-    elem.addEventListener('click', () => {
-        const tiresActivt = document.querySelector('.tiresActivt')
-        tiresActivt ? tiresActivt.classList.remove('tiresActivt') : null
-        const tiresActiv = document.querySelector('.tiresActiv')
-        tiresActiv ? tiresActiv.classList.remove('tiresActiv') : null
-        const msg = document.querySelectorAll('.msg')
-        msg.forEach(el => {
-            el.style.fontWeight = '300'
-            el.style.color = 'rgba(6, 28, 71, 1)'
-        }
-        )
-
-        if (elem.classList.contains('acto')) {
-            elem.classList.remove('acto')
-            sensors.style.display = 'none'
-            btnsens[2].style.display = 'none'
-            const actBTN = document.querySelector('.actBTN')
-            actBTN ? actBTN.classList.remove('actBTN') : null
-            wRight.style.zIndex = 0,
-                document.querySelector('.popup-background').style.display = 'none'
-            return
-        }
-        card.forEach(el => {
-            el.classList.remove('acto')
-
-        })
-        changeParams.value = '1';
-        iconParamsz()
-        const checkAlt = document.getElementById('check_Title')
-        if (checkAlt.checked === true) {
-            elem.classList.add('acto')
-        }
-        const checkConfig = document.getElementById('check_Title')
-        checkConfig.checked ? (sensors.style.display = 'flex', new DraggableContainer(sensors), wRight.style.zIndex = 2,
-            document.querySelector('.popup-background').style.display = 'block') : sensors.style.display = 'none'
-        btnsens[0].style.display = 'none'
-        btnsens[1].style.display = 'none'
-        btnsens[2].style.display = 'flex'
-        const engineEvent = document.querySelector('.engineEvent')
-        elem.id === 'tsi-card' ? engineEvent.style.display = 'flex' : engineEvent.style.display = 'none'
-    })
-})
 
 const closeIconConfig = document.querySelector('.closeIconConfig')
 closeIconConfig.addEventListener('click', () => {
@@ -942,7 +890,8 @@ closeIconConfig.addEventListener('click', () => {
     tiresActiv ? tiresActiv.classList.remove('tiresActiv') : null
     const sensors = document.querySelector('.sensors')
     const wright = document.querySelector('.wrapper_right')
-    document.querySelector('.acto') ? document.querySelector('.acto').classList.remove('acto') : null
+    const acto = document.querySelector('.acto')
+    acto ? acto.classList.remove('acto') : null
     document.querySelector('.actBTN') ? document.querySelector('.actBTN').classList.remove('actBTN') : null
     sensors.style.display = 'none'
     wright.style.zIndex = 0,
@@ -968,63 +917,6 @@ tsiControll.addEventListener('input', () => {
     // Обновляем значение инпута
     tsiControll.value = value;
 });
-
-
-const valueStatic = document.querySelectorAll('.valueStatic')
-valueStatic.forEach(elem => {
-    const changeParams = document.querySelector('.changeParams')
-    const sensors = document.querySelector('.sensors')
-    const btnsens = document.querySelectorAll('.btnsens')
-    const titleSens = document.querySelector('.title_sens')
-    const obo = document.querySelector('.obo')
-    const role = document.querySelectorAll('.log')[0].textContent
-    elem.addEventListener('click', () => {
-        if (elem.classList.contains('actoStatic')) {
-            elem.classList.remove('actoStatic')
-            sensors.style.display = 'none'
-            btnsens[2].style.display = 'none'
-            return
-        }
-        valueStatic.forEach(el => {
-            el.classList.remove('actoStatic')
-        })
-        changeParams.value = '1';
-        role !== 'Пользователь' ? elem.classList.add('actoStatic') : null
-        iconParamszWindows()
-        sensors.style.display = 'flex'
-        btnsens[0].style.display = 'none'
-        btnsens[1].style.display = 'none'
-        btnsens[2].style.display = 'flex'
-        //   obo.style.display = 'none'
-        //  titleSens.style.display = 'none'
-    })
-})
-const delIcon = document.querySelectorAll('.delIcon')
-delIcon.forEach(el => {
-    el.addEventListener('click', () => {
-        delIcon.forEach(el => {
-            el.classList.remove('del')
-        })
-        el.classList.add('del')
-        const clearConfirmWin = document.querySelector('.clearConfirmWin')
-        clearConfirmWin.style.display = 'flex'
-        const y = document.querySelector('.y')
-        const n = document.querySelector('.n')
-        n.addEventListener('click', () => {
-            clearConfirmWin.style.display = 'none'
-        })
-        y.addEventListener('click', () => {
-            const id = el.previousElementSibling.id
-            el.previousElementSibling.textContent = ''
-            el.closest('.itemStatic').children[0].value = ''
-            clearConfirmWin.style.display = 'none'
-            el.style.display = 'none'
-            deleteWinParams(id)
-        })
-    })
-});
-
-
 
 
 //отрисовываем список под параметры

@@ -205,12 +205,20 @@ exports.fileDown = async (req, res) => {
 
     const imagePath = path.join(__dirname, 'g1.png'); // Создаем абсолютный путь к файлу
     const createPDF = (data, filePath) => {
+
         const docDefinition = {
             pageSize: {
                 width: 600, // ширина страницы в пикселях (A4 размер)
                 height: 842 // высота страницы в пикселях (A4 размер)
             },
             pageMargins: [20, 20, 20, 20], // отступы со всех сторон (левый, верхний, правый, нижний)
+            headers: (currentPage, pageCount) => {
+                return {
+                    text: currentPage,
+                    alignment: 'center',
+                    fontSize: 10
+                };
+            },
             content: [
                 {
                     canvas: [
@@ -249,6 +257,7 @@ exports.fileDown = async (req, res) => {
                     color: '#fff'
                 }
             },
+
             footer: (currentPage, pageCount) => {
                 return {
                     text: `Page ${currentPage} of ${pageCount}`,
@@ -257,7 +266,7 @@ exports.fileDown = async (req, res) => {
                 };
             },
         };
-
+        docDefinition.pageNumber = {}
         docDefinition.content.push({ text: nameReport, style: 'reportName', alignment: 'center' })
         titleReports.forEach((e, index,) => {
             docDefinition.content.push({ text: e, linkToPage: 2, margin: index === 0 ? [0, 30, 0, 0] : [0, 2, 0, 0], fontSize: 10, color: '#061c47', width: 50 })
@@ -277,7 +286,7 @@ exports.fileDown = async (req, res) => {
                     { width: '*', text: '' },
                 ]
             })
-
+        //background: (currentPage, pageCount) => { console.log(currentPage) }
         tabl.forEach(e => {
             const count = e.table[0].length;
             const width = e.table[0].map((e, i) => {
@@ -287,7 +296,9 @@ exports.fileDown = async (req, res) => {
                     return 500 / count;
                 }
             });
-            docDefinition.content.push({ text: e.label, alignment: 'center', margin: [0, 30, 0, 10] });
+
+            //   docDefinition.background = (currentPage, pageCount) => { console.log(e) }
+            docDefinition.content.push({ text: e.label, alignment: 'center', margin: [0, 30, 0, 10], pageBreak: 'before' });
             docDefinition.content.push({
                 columns: [
                     { width: '*', text: '' },
@@ -310,11 +321,9 @@ exports.fileDown = async (req, res) => {
                 ],
             });
         });
-
         const pdfDoc = pdfmake.createPdf(docDefinition);
         pdfDoc.getBase64((data) => {
             const buffer = Buffer.from(data, 'base64');
-            //  console.log(buffer.toString('base64'));
             // Сохранение файла PDF
             require('fs').writeFileSync(filePath, buffer);
         });
@@ -323,7 +332,6 @@ exports.fileDown = async (req, res) => {
     createPDF(data, filePath);
     console.log(filePath)
     const file = fs.createReadStream(filePath)
-
     res.setHeader('Content-Type', `application/pdf`);
     res.setHeader('Content-Disposition', `attachment; filename=filename.pdf`);
     file.pipe(res);
@@ -339,7 +347,6 @@ exports.titleShablon = async (req, res) => {
     const idObject = req.body.idObject
     const interval = req.body.interval
     const data = await wialonService.getTitleShablonToWialon(idResourse, idShablon, idObject, interval)
-
     res.json(data)
 }
 

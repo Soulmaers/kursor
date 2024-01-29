@@ -3,7 +3,7 @@
 const databaseService = require('../services/database.service');
 const { sortData } = require('../helpers')
 exports.getKursorObjects = async (req, res) => {
-    const login = req.body.login
+    const login = req && req.body && req.body.login ? req.body.login : null
     const data = await databaseService.getKursorObjects(login)
     // console.log(data)
     const ress = sortData(data)
@@ -41,7 +41,13 @@ exports.getKursorObjects = async (req, res) => {
         //   console.log(result)
         massObject.push(result)
     }
-    res.json({ result: massObject })
+    if (login) {
+        res.json({ result: massObject })
+    }
+    else {
+        return massObject
+    }
+
 }
 
 
@@ -62,6 +68,30 @@ exports.getParamsKursor = async (req, res) => {
     const result = await databaseService.getParamsKursor(idObject)
     res.json(result)
 }
+exports.getGeoKursor = async (req, res) => {
+    const idObject = req.body.getGeoKursor
+    const result = await databaseService.getGeoKursor(idObject)
+    res.json(result)
+}
+
+exports.getParamsKursorIntervalController = async (req, res) => {
+    const t1 = req.body.t1
+    const t2 = req.body.t2
+    const idObject = req.body.active
+    const result = await databaseService.getParamsKursorInterval(idObject, t1, t2)
+    const strukturaKursor = result.map(el => {
+        return {
+            idw: idObject, time: el.time, geo: JSON.stringify([Number(el.lat), Number(el.lon)]), speed: Number(Number(el.speed).toFixed(0)),
+            sats: Number(Number(el.sats).toFixed(0)), curse: Number(Number(el.course).toFixed(0)), oil: 0, pwr: Number(Number(el.pwr_ext).toFixed(1)),
+            engine: el.in1 === 'Вход IN1(датчик сработал)' ? 1 : 0, meliage: Number(Number(el.meliage).toFixed(0))
+        }
+    })
+    res.json(strukturaKursor)
+}
+
+
+
+
 
 exports.geoLastIntervalKursor = async (req, res) => {
     const time1 = req.body.nowDate

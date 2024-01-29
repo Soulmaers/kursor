@@ -312,6 +312,7 @@ exports.getParamsKursor = async (idObject) => {
         const result = await pool.request()
             .input('idObject', idObject)
             .query(postModel)
+        // console.log(result)
         const record = result.recordset[0];
         if (record !== undefined) {
             const params = Object.keys(record).reduce((acc, key) => {
@@ -329,6 +330,53 @@ exports.getParamsKursor = async (idObject) => {
     }
 };
 
+
+exports.getGeoKursor = async (arr) => {
+    try {
+        const pool = await connection
+        const postModel = `SELECT lat, lon FROM navtelecom WHERE idObject=@idObject`
+        const result = await pool.request()
+            .input('idObject', idObject)
+            .query(postModel)
+        const record = result.recordset;
+
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+exports.getParamsKursorInterval = async (idObject, t1, t2) => {
+    try {
+        const pool = await connection
+        const postModel = `SELECT * FROM navtelecom WHERE idObject=@idObject AND time >= '${t1}' AND time <= '${t2}'`
+
+        const result = await pool.request()
+            .input('idObject', idObject)
+            .query(postModel)
+        const record = result.recordset;
+        if (record.length !== 0) {
+            const params = record.map(el => {
+                //  console.log(el)
+                return Object.keys(el).reduce((acc, key) => {
+                    if (el[key] !== null) {
+                        acc[key] = el[key]
+                    }
+                    return acc
+                }, {})
+            })
+            // console.log(params)
+            return params
+        }
+        else {
+            return []
+        }
+
+    } catch (e) {
+        console.log(e);
+        throw e;
+    }
+};
 
 
 exports.objects = async (arr) => {
@@ -355,7 +403,7 @@ exports.objects = async (arr) => {
 exports.getKursorObjects = async (login) => {
     try {
         const pool = await connection
-        const postModel = `SELECT * FROM groups WHERE login=@login`
+        const postModel = login ? `SELECT * FROM groups WHERE login=@login` : `SELECT * FROM groups`
         const result = await pool.request()
             .input('login', login)
             .query(postModel)
@@ -507,8 +555,6 @@ exports.setObjectGroupWialon = async (objects) => {
 
 }
 exports.getSensorsWialonToBase = async (arr, login) => {
-    console.log(login)
-    console.log(arr.length)
     try {
         const pool = await connection;
         if (arr.length > 0) {
@@ -541,7 +587,6 @@ exports.getSensorsWialonToBaseId = async (idw) => {
 
 
 exports.setSensorsWialonToBase = async (login, idw, arr) => {
-
     const data = Math.floor(new Date().getTime() / 1000)
     try {
         const pool = await connection;

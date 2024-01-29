@@ -17,7 +17,7 @@ class ChartServerTerminal {
 
     socketOn() {
         this.socket.on('data', async (data) => {
-            // console.log(data)
+
             this.data = data;
             const str = data.toString()
             if (str.startsWith('@')) {
@@ -55,7 +55,9 @@ class ChartServerTerminal {
                 let buf = this.data.slice(2)
                 const type = this.data.slice(0, 2).toString();
                 this.type = type
+
                 if (type === '~A' || type === '~C') {
+                    console.log(buf)
                     let count = type === '~A' ? buf.readUInt8() : 1
                     this.telemetrationFields(buf, type, count)
                     WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
@@ -130,7 +132,8 @@ class ChartServerTerminal {
             global.protocol = this.protocolV
             global.msg_type = this.type[1]
             global.timeRagistration = timeRagistration
-
+            //  console.log(buf.length)
+            //   console.log(i)
             for (let j = 0; j < this.bits.length; j++) {
                 let val;
                 switch (this.bits[j]) {
@@ -151,6 +154,7 @@ class ChartServerTerminal {
                         break;
                     case 4:
                         val = buf.readUInt8()
+
                         global.status1 = BitsCount.check(val, 0) ? 'Тестовый режим' : 'Рабочий режим'
                         global.status2 = BitsCount.check(val, 1) ? 'Оповещение о тревоге(включено)' : 'Оповещение о тревоге(выключено)'
                         global.status3 = BitsCount.check(val, 2) ? 'Тревога(включена)' : 'Тревога(выключена)'
@@ -160,6 +164,7 @@ class ChartServerTerminal {
                         const stat = ['Наблюдение', 'Охрана', 'До.охрана', 'Сервис']
                         global.status4 = stat[BitsCount.between(val, 3, 4)]
                         buf = buf.slice(1)
+
                         break;
                     case 5:
                         val = buf.readUInt8()
@@ -1212,6 +1217,7 @@ class ChartServerTerminal {
                 }
             }
             this.globalArrayMSG.push(global)
+            //   console.log(this.globalArrayMSG.length)
             function funct2(buf, index) {
                 let val = buf.readUInt8()
                 global[`p_count${index}`] = val !== 255 ? val : 0

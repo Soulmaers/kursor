@@ -7,7 +7,6 @@ export function prostoyNew(tsi, newdata) {
         return undefined
     }
     else {
-        console.log(newdata)
         const res = newdata.reduce((acc, e) => {
             if (e.pwr >= tsi && e.speed === 0 && e.sats > 4) {
                 if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
@@ -76,7 +75,6 @@ export async function dannieOilTS(idw, num, interval) {
         }
         return 0;
     })
-    console.log(models)
     let obj = {}
     if (num === 4) {
         obj = models.map(it => {
@@ -109,7 +107,6 @@ export function dannieSortJobTS(datas, ele, num) {
     let start;
     let end;
     let currentCondition;
-    console.log(data)
     for (let i = 0; i < data.length; i++) {
         const current = data[i];
 
@@ -134,6 +131,5 @@ export function dannieSortJobTS(datas, ele, num) {
         const diff = (end.getTime() / 1000) - (start.getTime() / 1000)
         return diff
     }
-    console.log(obj)
     return obj
 }

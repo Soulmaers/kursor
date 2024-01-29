@@ -15,8 +15,9 @@ class SummaryStatistiks {
         this.rashod = '-'
     }
 
-    async testovfnNew(active, t1, t2) {
-        const resultt = await databaseService.viewSortDataToBase(active, t1, t2)
+    async testovfnNew(active, t1, t2, pref) {
+        const resultt = pref !== 'kursor' ? await databaseService.viewSortDataToBase(active, t1, t2) : await databaseService.getParamsKursorInterval(active, t1, t2)
+        // const resultt = await databaseService.viewSortDataToBase(active, t1, t2)
         return resultt
     }
     timefn() {
@@ -30,13 +31,20 @@ class SummaryStatistiks {
     }
 
     async init() {
+        //  console.log(this.object)
         const idwArray = this.object
             .map(el => Object.values(el)) // получаем массивы всех id
             .flat()
-            .map(e => [e[4], e[0].message, e[5]])
+            .map(e => [e[4], e[0].message, e[5], e[e.length - 1]])
+        //  console.log(idwArray)
         // Запускаем все асинхронные операции одновременно и ждем их завершения
-        const dataPromises = idwArray.map(el => this.getSensorsAndParametrs(el[0]));
-        const dataResults = await Promise.all(dataPromises);
+        const dataPromises = idwArray.map(el => this.getSensorsAndParametrs(el[0], el[el.length - 1]));
+        const dataResults = await Promise.allSettled(dataPromises);
+        //  console.log(dataResults)
+        const fulfilledPromises = dataResults
+            .filter(promise => promise.status === 'fulfilled')
+            .map(promise => promise.value);
+        //  console.log(fulfilledPromises)
         // Обрабатываем результаты асинхронных операций
         for (let i = 0; i < idwArray.length; i++) {
             const id = idwArray[i][0];
@@ -56,30 +64,50 @@ class SummaryStatistiks {
                 moto: '-',
                 prostoy: '-'
             };
+            //   console.log(id)
+            this.data = fulfilledPromises[i];
 
-            this.data = dataResults[i];
-            //  console.log(this.data)
-            const mileg = this.data.some(it => it.params === 'mileage');// const mileg = this.data.some(it => it.params === 'can_mileage' || it.params === 'mileage');
-            if (mileg) {
-                this.probeg = this.calculationMileage();
-                this.strustura[id].probeg = this.probeg;
-                this.strustura[id].job = this.calculationJobTs();
+            if (this.data) {
+                const mileg = this.data.some(it => it.params === 'mileage' && it.value.length !== 0);// const mileg = this.data.some(it => it.params === 'can_mileage' || it.params === 'mileage');
+                if (mileg) {
+                    this.probeg = this.calculationMileage();
+                    this.strustura[id].probeg = this.probeg;
+                    this.strustura[id].job = this.calculationJobTs();
+                }
+
+                const oil = this.data.some(it => it.sens === 'Топливо');// const oil = this.data.some(it => it.sens === 'Топливо' || it.sens === 'Топливо ДУТ');
+                if (oil) {
+                    const [rashod, zapravka] = this.calculationOil();
+                    this.strustura[id].rashod = rashod;
+                    this.strustura[id].zapravka = zapravka;
+
+                    this.strustura[id].medium = this.calculationMedium();
+                }
+
+                const pwr = this.data.some(it => it.sens.startsWith('Бортовое'))
+
+                if (pwr) {
+
+                    const idw = id
+                    const model = await databaseService.modelViewToBase(idw)
+                    let tsiControll = model.length !== 0 && model[0].tsiControll && model[0].tsiControll !== '' ? Number(model[0].tsiControll) : null;
+                    if (tsiControll === null) {
+                        this.strustura[id].moto = 0
+                        this.strustura[id].prostoy = 0
+                    }
+                    else {
+                        const pwr = this.data.filter(it => it.sens.startsWith('Бортовое')).map(it => it);
+                        const prostoys = this.calkulateProstoy(tsiControll, pwr);
+                        this.strustura[id].prostoy = prostoys !== undefined ? prostoys : 0;
+                        const motos = this.calkulateMotos(tsiControll, pwr);
+                        this.strustura[id].moto = motos !== undefined ? motos : 0;
+                    }
+
+                }
+
+
             }
 
-            const oil = this.data.some(it => it.sens === 'Топливо');// const oil = this.data.some(it => it.sens === 'Топливо' || it.sens === 'Топливо ДУТ');
-            if (oil) {
-                const [rashod, zapravka] = this.calculationOil();
-                this.strustura[id].rashod = rashod;
-                this.strustura[id].zapravka = zapravka;
-                this.strustura[id].medium = this.calculationMedium();
-            }
-
-            const engine = this.data.some(it => it.sens.startsWith('Зажигание'));
-            if (engine) {
-                const [moto, prostoy] = this.calculationMotoAndProstoy();
-                this.strustura[id].moto = moto;
-                this.strustura[id].prostoy = prostoy;
-            }
         }
 
         return this.strustura;
@@ -107,9 +135,6 @@ class SummaryStatistiks {
         const arrayValue = this.data.find(it => it.params === 'can_mileage' || it.params === 'mileage');
         let probegZero = 0
         let probegNow = 0;
-        //  if (el == 27697145) {
-        //  console.log(arrayValue.value)
-        //  }
         if (arrayValue.value.length !== 0) {
             if (Number(arrayValue.value[arrayValue.value.length - 1].toFixed(0)) === 0) {
                 for (let i = arrayValue.value.length - 1; i >= 0; i--) {
@@ -143,7 +168,7 @@ class SummaryStatistiks {
     }
 
 
-    quickly(data) {
+    quickly(data, pref) {
         data.sort((a, b) => {
             if (a.time > b.time) {
                 return 1;
@@ -162,18 +187,19 @@ class SummaryStatistiks {
         const meliage = [];
         const engine = [];
         const pwr = [];
+
         data.forEach(el => {
             const timestamp = Number(el.time);
             const date = new Date(timestamp * 1000);
             const isoString = date.toISOString();
             time.push(new Date(isoString))
-            speed.push(el.speed)
-            sats.push(el.sats)
-            geo.push(JSON.parse(el.geo))
-            oil.push(el.oil)
-            meliage.push(el.meliage)
-            engine.push(el.engine)
-            pwr.push(el.pwr)
+            speed.push(pref !== 'kursor' ? el.speed : Number(Number(el.speed).toFixed(0)))
+            sats.push(Number(el.sats))
+            geo.push(pref !== 'kursor' ? JSON.parse(el.geo) : [el.lat, el.lon])
+            oil.push(pref !== 'kursor' ? el.oil : 0)
+            meliage.push(pref !== 'kursor' ? el.meliage : Number(Number(el.meliage).toFixed(0)))
+            engine.push(pref !== 'kursor' ? el.engine : el.in1 === 'Вход IN1(датчик сработал)' ? 1 : 0)
+            pwr.push(pref !== 'kursor' ? el.pwr : Number(Number(el.pwr_ext).toFixed(1)))
         })
 
         const allsens = [{
@@ -209,17 +235,14 @@ class SummaryStatistiks {
             params: 'pwr',
             value: pwr
         }]
-
         return allsens
     }
-    async getSensorsAndParametrs(el) {
+    async getSensorsAndParametrs(el, pref) {
         const interval = this.timefn()
         const timeOld = interval[1]
         const timeNow = interval[0]
-
-        const itognew = await this.testovfnNew(el, timeOld, timeNow)
-        const alt = this.quickly(itognew)
-
+        const itognew = await this.testovfnNew(el, timeOld, timeNow, pref)
+        const alt = this.quickly(itognew, pref)
         return alt
     }
 
@@ -230,15 +253,16 @@ class SummaryStatistiks {
                 return element === -348201 ? 0 : element;
             });
         }
-
         let i = 0;
-        while (i < arrayValue.value.length - 1) {
-            if (arrayValue.value[i] === arrayValue.value[i + 1]) {
-                arrayValue.value.splice(i, 1);
-                arrayValue.time.splice(i, 1);
-                arrayValue.speed.splice(i, 1);
-                arrayValue.sats.splice(i, 1);
-                arrayValue.geo.splice(i, 1)
+        //  console.log(arrayValue)
+        const newData = JSON.parse(JSON.stringify(arrayValue));
+        while (i < newData.value.length - 1) {
+            if (newData.value[i] === newData.value[i + 1]) {
+                newData.value.splice(i, 1);
+                newData.time.splice(i, 1);
+                newData.speed.splice(i, 1);
+                newData.sats.splice(i, 1);
+                newData.geo.splice(i, 1)
             } else {
                 i++;
             }
@@ -316,71 +340,104 @@ class SummaryStatistiks {
             zap.push(e[1][0] - e[0][0])
         })
         const zapravleno = zap.reduce((acc, el) => acc + el, 0) < 0 ? '-' : zap.reduce((acc, el) => acc + el, 0)
+
         return [rashod, zapravleno]
     }
 
-
-    calculationMotoAndProstoy() {
-        const arrayValue = this.data.find(it => it.sens === 'Зажигание');
-        const zeros = [];
-        const ones = [];
-        const prostoy = [];
-        const korzina = [];
-        let startIndex = 0;
-        arrayValue.value.forEach((values, index) => {
-            //  console.log(index)
-            if (values !== arrayValue.value[startIndex]) {
-                const subarray = arrayValue.time.slice(startIndex, index);
-                const speedTime = { speed: arrayValue.speed.slice(startIndex, index), time: arrayValue.time.slice(startIndex, index) };
-                (arrayValue.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
-                (arrayValue.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
-                //   console.log([subarray[0], subarray[subarray.length - 1]])
-                startIndex = index;
-            }
-        });
-        const subarray = arrayValue.time.slice(startIndex);
-        const speedTime = { speed: arrayValue.speed.slice(startIndex), time: arrayValue.time.slice(startIndex) };
-        (arrayValue.value[startIndex] === 0 ? zeros : ones).push([subarray[0], subarray[subarray.length - 1]]);
-        (arrayValue.value[startIndex] === 0 ? korzina : prostoy).push(speedTime);
-
-        let totalMs = 0;
-        //   console.log(prostoy)
-        const filteredData = prostoy.map(obj => {
-            const thresholdIndex = obj.speed.findIndex(s => s >= 5);
-            const index = thresholdIndex === -1 ? undefined : thresholdIndex;
-            return {
-                speed: obj.speed.slice(0, index),
-                time: obj.time.slice(0, index)
-            }
-        });
-        const timeProstoy = filteredData.reduce((acc, el) => {
-            if (el.time.length !== 0) {
-                acc.push([el.time[0], el.time[el.time.length - 1]])
-            }
-            return acc
-        }, [])
-
-        const unixProstoy = timeProstoy.reduce((acc, it) => {
-            if (it[0] !== undefined) {
-                const diffInSeconds = (it[1].getTime() - it[0].getTime()) / 1000;
-                if (diffInSeconds > 600) {
-                    acc = acc + diffInSeconds
+    calkulateProstoy(tsi, newdata) {
+        const newStruktura = []
+        for (let i = 0; i < newdata[0].value.length; i++) {
+            const obj = {
+                time: newdata[0].time[i],
+                speed: newdata[0].speed[i],
+                sats: newdata[0].sats[i],
+                geo: newdata[0].geo[i],
+                sens: 'Бортовое питание',
+                params: 'pwr',
+                value: newdata[0].value[i],
+            };
+            newStruktura.push(obj);
+        }
+        if (newStruktura.length === 0) {
+            return undefined
+        }
+        else {
+            const res = newStruktura.reduce((acc, e) => {
+                if (e.value >= tsi && e.speed === 0 && e.sats > 4) {
+                    if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
+                        && acc[acc.length - 1][0].value >= tsi && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
+                        acc[acc.length - 1].push(e);
+                    } else {
+                        acc.push([e]);
+                    }
+                } else if (e.value < tsi && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
+                    || e.speed > 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
+                    || e.sats <= 4 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
+                    acc.push([]);
                 }
-            }
-            return acc
-        }, 0)
-        ones.forEach(dates => {
-            const validDates = dates.filter(dateStr => dateStr !== undefined);
-            if (validDates.length === 2) {
-                const [date1, date2] = validDates.map(dateStr => new Date(dateStr));
-                const diffMs = date2.getTime() - date1.getTime(); // разница между датами в миллисекундах
-                totalMs += diffMs;
-            }
-        });
-        // console.log(totalMs)
-        const motoHours = isNaN(totalMs) ? '-' : totalMs
-        return [motoHours, unixProstoy]
+
+                return acc;
+            }, []).filter(el => el.length > 0).reduce((acc, el) => {
+                if ((Number(el[el.length - 1].time) - Number(el[0].time)) / 1000 > 1200) {
+                    acc.push([[el[0].time, el[0].geo], [el[el.length - 1].time, el[el.length - 1].geo]])
+                }
+                return acc
+            }, [])
+            const prostoys = res.reduce((acc, el) => {
+                acc = acc + (Number(el[1][0]) - Number(el[0][0])) / 1000
+                return acc
+            }, 0)
+            return prostoys
+        }
+
     }
+
+    calkulateMotos(tsi, newdata) {
+        const newStruktura = []
+        for (let i = 0; i < newdata[0].value.length; i++) {
+            const obj = {
+                time: newdata[0].time[i],
+                speed: newdata[0].speed[i],
+                sats: newdata[0].sats[i],
+                geo: newdata[0].geo[i],
+                sens: 'Бортовое питание',
+                params: 'pwr',
+                value: newdata[0].value[i],
+            };
+            newStruktura.push(obj);
+        }
+        if (newStruktura.length === 0) {
+            return undefined
+        }
+        else {
+            const res = newStruktura.reduce((acc, e) => {
+                if (e.value >= tsi) {
+                    if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
+                        && acc[acc.length - 1][0].value >= tsi) {
+                        acc[acc.length - 1].push(e);
+                    } else {
+                        acc.push([e]);
+                    }
+                } else if (e.value < tsi && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
+                    acc.push([]);
+                }
+
+                return acc;
+            }, []).filter(el => el.length > 0).reduce((acc, el) => {
+                if ((Number(el[el.length - 1].time) - Number(el[0].time)) / 1000 > 1200) {
+                    acc.push([[el[0].time, el[0].geo], [el[el.length - 1].time, el[el.length - 1].geo]])
+                }
+                return acc
+            }, [])
+            const motos = res.reduce((acc, el) => {
+                acc = acc + (Number(el[1][0]) - Number(el[0][0]))
+                return acc
+            }, 0)
+            return motos
+        }
+
+    }
+
 }
 
 
@@ -404,6 +461,7 @@ const popupProstoy = async (array) => {
     const timeOld = interval[1]
     const timeNow = interval[0]
     for (const e of arrays) {
+        const pref = e[e.length - 1]
         const idw = e[4];
         const model = await databaseService.modelViewToBase(idw)
         let tsiControll = model.length !== 0 && model[0].tsiControll && model[0].tsiControll !== '' ? Number(model[0].tsiControll) : null;
@@ -413,7 +471,20 @@ const popupProstoy = async (array) => {
             continue
         }
         const active = idw
-        const newGlobal = await testovfnNew(active, timeOld, timeNow)
+        let newGlobal;
+        if (pref !== 'kursor') {
+            newGlobal = await testovfnNew(active, timeOld, timeNow)
+        }
+        else {
+            const res = await databaseService.getParamsKursorInterval(active, timeOld, timeNow)
+            newGlobal = res.map(el => {
+                return {
+                    idw: active, nameCar: e[0].message, time: el.time, geo: JSON.stringify([el.lat, el.lon]), speed: Number(Number(el.speed).toFixed(0)),
+                    sats: Number(Number(el.sats).toFixed(0)), curse: Number(Number(el.course).toFixed(0)), oil: 0, pwr: Number(Number(el.pwr_ext).toFixed(1)),
+                    engine: el.in1 === 'Вход IN1(датчик сработал)' ? 1 : 0, meliage: Number(Number(el.meliage).toFixed(0))
+                }
+            })
+        }
         newGlobal.sort((a, b) => {
             if (a.time > b.time) {
                 return 1;
@@ -444,9 +515,10 @@ const popupProstoy = async (array) => {
                 }]
                 const newTime = Math.floor(new Date().getTime() / 1000)
                 const delta = newTime - Number(el[1][0])
+
                 if (delta > 900) {
                     const resu = await databaseService.controllerSaveToBase(data, idw, map, group, name)
-                    console.log('Простой' + ' ' + resu.message)
+                    // console.log('Простой' + ' ' + resu.message)
                 }
 
             })
@@ -471,7 +543,6 @@ async function testovfnNew(active, t1, t2) {
 }
 
 async function prostoyNew(tsi, newdata) {
-    // console.log(newdata)
     if (newdata.length === 0) {
         return undefined
     }

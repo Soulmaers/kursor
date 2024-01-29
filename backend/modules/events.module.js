@@ -7,7 +7,6 @@ exports.eventFunction = async (arr) => {
     const all = arr
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
-    //   console.log(all)
     const rt = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(result)
     oilFunc(rt, all)
     lastMsgFunc(rt, all)
@@ -66,7 +65,7 @@ async function checkSortLastTime(idw, group, name, time, geo) {
         event: 'Потеря связи',
         lasttime: `Время последнего сообщения: ${formattedDate}`
     }]
-    // const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
+    const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
 }
 
 function oilFunc(rt, all) {

@@ -13,9 +13,11 @@ export class CreateMarkersEvent {
         this.poly = null;
         this.startTrack = null
         this.imei = null;
+        this.pref = document.querySelector('.color').classList.contains('wialon') ? 'wialon' : 'kursor'
         this.setTrack = document.querySelector('.togTrack');
         this.boundViewTrackAndMarkersEvent = this.viewTrackAndMarkersEnent.bind(this);
-        this.setTrack.addEventListener('click', this.boundViewTrackAndMarkersEvent);
+        // this.pref === 'wialon' ? this.setTrack.addEventListener('click', this.boundViewTrackAndMarkersEvent) : null
+        this.setTrack.addEventListener('click', this.boundViewTrackAndMarkersEvent)
     }
 
     viewTrackAndMarkersEnent() {
@@ -27,7 +29,7 @@ export class CreateMarkersEvent {
             }
             this.poly = L.polyline(this.track, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
             this.startTrack ? this.startTrack.addTo(mapLocal) : null
-            this.markerCreator.createMarker(this.eventMarkers)
+            this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers) : null
         } else {
             mapLocal.removeLayer(this.poly);
             this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
@@ -53,12 +55,14 @@ export class CreateMarkersEvent {
         this.createMapMainObject(geo)
         const track = await this.getIntervalTrack()
         const prostoy = await this.getEventProstoy()
-        const pressure = await this.getEventPressure()
+        //  const pressure = await this.getEventPressure()
         this.track = track.reduce((acc, el) => {
             acc.push(el.geo)
             return acc
         }, [])
+        //  this.eventMarkers = null;
         this.eventMarkers = await this.getEventObject(track, prostoy)
+        console.log(this.eventMarkers)
         if (!this.markerCreator) {
             this.markerCreator = new MarkerCreator(mapLocal);
         }
@@ -110,7 +114,6 @@ export class CreateMarkersEvent {
             }
             return acc
         }, [])
-
         return eventProstoy
     }
 
@@ -138,7 +141,6 @@ export class CreateMarkersEvent {
             }
             const geoTest = await fetch('/api/geoLastInterval', paramss)
             const geoCard = await geoTest.json();
-            console.log(geoCard)
             data = geoCard.resTrack.reduce((acc, el) => {
                 acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
                 return acc
@@ -154,7 +156,6 @@ export class CreateMarkersEvent {
             }
             const geoTest = await fetch('/api/geoLastIntervalKursor', paramss)
             const geoCard = await geoTest.json();
-            console.log(geoCard)
             data = geoCard.resTrack.reduce((acc, el) => {
                 acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
                 return acc
@@ -224,31 +225,35 @@ export class CreateMarkersEvent {
         let nowDate = Math.round(new Date().getTime() / 1000);
         let nDate = new Date();
         let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);
-        const params = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ id, nowDate, timeFrom }))
-        }
-        const res = await fetch('api/getEventMarkers', params)
-        const result = await res.json()
-        console.log(result)
         let oilEvent;
-        if (result.lls && Object.keys(result.lls).length !== 0) {
-            oilEvent = Object.values(Object.values(result.lls)[0]).reduce((acc, e) => {
-                acc.push({
-                    geo: [e.from.y, e.from.x],
-                    [parseFloat(e.filled.toFixed(0)) > 0 ? 'oil' : 'nooil']: parseFloat(e.filled.toFixed(0)),
-                    time: e.from.t
-                });
-                return acc
-            }, [])
+        if (this.pref !== 'kursor') {
+            const params = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: (JSON.stringify({ id, nowDate, timeFrom }))
+            }
+            const res = await fetch('api/getEventMarkers', params)
+            const result = await res.json()
+            console.log(id, result)
+
+            if (result.lls && Object.keys(result.lls).length !== 0) {
+                oilEvent = Object.values(Object.values(result.lls)[0]).reduce((acc, e) => {
+                    acc.push({
+                        geo: [e.from.y, e.from.x],
+                        [parseFloat(e.filled.toFixed(0)) > 0 ? 'oil' : 'nooil']: parseFloat(e.filled.toFixed(0)),
+                        time: e.from.t
+                    });
+                    return acc
+                }, [])
+            }
         }
         const maxSpeed = track.filter(el => el.speed > 100 && el.speed < 140)
         const oil = oilEvent !== undefined ? oilEvent.filter(el => el.oil) : []
         const nooil = oilEvent !== undefined ? oilEvent.filter(el => el.nooil) : []
         const eventMarkersGlobal = []
+
         eventMarkersGlobal.push(...maxSpeed, ...oil, ...nooil, ...prostoy)
         return eventMarkersGlobal
     }

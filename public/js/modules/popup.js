@@ -75,7 +75,6 @@ export async function logsView(array) {
         });
         return acc;
     }, []);
-
     const arrayIdGroup = arrayObjects.reduce((acc, el) => {
         Object.values(el).forEach(subArray => {
             acc.push([subArray[4], subArray[5]]);
@@ -92,6 +91,7 @@ export async function logsView(array) {
     const ress = await fetch('/api/logsView', param)
     const value = await ress.json()
     console.log(value)
+    console.log(data)
     const results = value.itog
     quantity = results
     const paramLog = {
@@ -106,14 +106,24 @@ export async function logsView(array) {
     const viewNum = value.quant - resultsLog[0].quantity
     console.log(value.quant, resultsLog[0].quantity)
     viewTableNum(viewNum)
+
+
+
+
     if (num === 0) {
         previus = value.quant
     }
     if (previus !== value.quant && num !== 0) {
         const num = value.quant - previus
-        const arrayPopup = results.slice(-num)
+        // const arrayPopup = value.view.slice(-num)
         previus = value.quant
-        arrayPopup.forEach(async el => {
+        var arraypop = value.view.filter(function (objB) {
+            return !data.some(function (objA) {
+                return objA.data === objB.time;
+            });
+        });
+        console.log(arraypop)
+        arraypop.forEach(async el => {
             const content = JSON.parse(el.content)
             const event = content[0].event
             const id = Number(el.idw)
@@ -189,7 +199,7 @@ export async function logsView(array) {
             const parsedContent = JSON.parse(el.content);
             const typeEvent = parsedContent[0].event;
             const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
-            const geo = geoloc !== null ? geoloc.map(e => e.toFixed(5)) : 'нет данных'
+            const geo = geoloc !== null ? geoloc.map(e => Number(e).toFixed(5)) : 'нет данных'
             const id = parseFloat(el.idw)
             const group = arrayIdGroup
                 .filter(it => it[0] === id)
@@ -198,7 +208,7 @@ export async function logsView(array) {
             int.shift();
             const time = times(new Date(Number(el.time) * 1000));
             const info = `${int.join(", ")}`;
-            return { time: time, group: typeEvent !== 'Предупреждение' ? el.groups : login === 'Курсор' ? 'demo' : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
+            return { data: el.time, time: time, group: typeEvent !== 'Предупреждение' ? el.groups : login === 'Курсор' ? 'demo' : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
         });
         data = mass
         !clickLog ? await createLogsTable(mass) : null
@@ -385,6 +395,7 @@ const objColor = {
     'Состояние': '#acad4c'
 }
 async function createLogsTable(mass) {
+    console.log(mass)
     const wrap = document.querySelector('.alllogs')
     if (!wrap) {
         const body = document.getElementsByTagName('body')[0]
@@ -426,11 +437,6 @@ async function createLogsTable(mass) {
     trEvents.forEach(e => {
         e.remove()
     })
-    console.log(mass)
-    //  const contentLogs = mass.slice(mass.length - (pag ? pag : 300));
-    //  console.log(contentLogs)
-
-
     mass.forEach(el => {
         const trEvent = document.createElement('div')
         trEvent.classList.add('trEvent')
@@ -438,7 +444,7 @@ async function createLogsTable(mass) {
         wrapLogs.insertBefore(trEvent, firstChild.nextSibling)
         //  delete el.id
         for (var key in el) {
-            if (key !== 'id') {
+            if (key !== 'id' && key !== 'data') {
                 const td = document.createElement('p')
                 td.classList.add('tdEvent')
                 td.textContent = el[key]
@@ -449,7 +455,6 @@ async function createLogsTable(mass) {
         }
 
     })
-
     const trEvent = document.querySelectorAll('.trEvent')
     trEvent.forEach(el => {
         el.setAttribute('tabindex', '0');

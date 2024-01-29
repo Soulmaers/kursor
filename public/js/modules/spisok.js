@@ -502,6 +502,7 @@ export async function conturTest(testov) {
     finishload = true
     validRole()
     navigator();
+
     setInterval(zaprosSpisok, 60000, toggleList)
 
 
@@ -656,6 +657,7 @@ export async function alternativa(data) {
         lastSensor = true
         const sesnorsKursor = await getParamsKursorSensors(data)
         const result = itog.concat(sesnorsKursor[0])
+        console.log(result)
         resolve(result)
 
     });
@@ -676,15 +678,19 @@ async function getParamsKursorSensors(data) {
         const lastParams = await parametrs.json()
 
         const itog = lastParams.flatMap(el => {
+            let speed;
             const results = [];
             dat.map(e => {
                 if (el.imei === e.imei) {
                     Object.entries(el).forEach(([key, value]) => {
+                        if (key === 'speed') {
+                            speed = Number(Number(el[key]).toFixed(0))
+                        }
                         results.push([key, key, Number(e.id), el[key]]);
                     });
                 }
             });
-            results.push(['state', 'state', Number(el.idObject), 0])
+            results.push(['state', 'state', Number(el.idObject), speed === 0 ? 0 : 1])
             results.push(['lasttime', 'listtime', Number(el.idObject), Number(el.time)])
             return results
         });
@@ -702,7 +708,7 @@ async function getParamsKursorSensors(data) {
         return itog
     }
     else {
-        return [[], []]
+        return [[]]
     }
 }
 

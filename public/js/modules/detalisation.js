@@ -9,7 +9,6 @@ import { createChart, createJobTS, createOilTS, createMelagiTS } from './detalis
 
 export async function timeIntervalStatistiks() {
 
-    console.log('загрузка графиков')
     const objectRazmetka = {
         'nav1': { html: jobTSDetalisation, data: [], fn: createChart, title: { to: null, yes: null, week: null } },
         'nav2': { html: jobTS, data: [], fn: createJobTS, title: { to: null, yes: null, week: null } },
@@ -20,7 +19,6 @@ export async function timeIntervalStatistiks() {
     loader.classList.add('loading')
     loader.textContent = 'Загрузка...'
     const act = document.querySelector('.activStatic').id
-    console.log(objectRazmetka)
     const navstat = document.querySelectorAll('.navstat')
     const windowStatistic = document.querySelector('.windowStatistic')
     windowStatistic.insertAdjacentHTML('beforeend', ` ${objectRazmetka[act].html}`);
@@ -177,9 +175,8 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
     const t1 = !isNaN(num) ? interval[1] : interval[0][2]
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
-
     const active = document.querySelector('.color').id
-    const newData = await testovfnNew(active, t1, t2)
+    const newData = document.querySelector('.color').classList.contains('wialon') ? await testovfnNew(active, t1, t2) : await kursorfnNew(active, t1, t2)
     const newGlobal = newData.map(it => {
         return {
             id: it.idw,
@@ -240,7 +237,6 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         }
         return item;
     });
-    console.log(datas)
     if (isNaN(num)) {
         objectRazmetka['nav1'].data.splice(num === 'cal2' ? 1 : 2, 1, tsiControll === null ? [] : datas);
         objectRazmetka['nav2'].data.splice(num === 'cal2' ? 1 : 2, 1, dannieSortJobTS(tsiControll === null ? [] : datas));
@@ -256,4 +252,18 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)
     }
     objectRazmetka = null;
+}
+
+
+async function kursorfnNew(active, t1, t2) {
+    const params = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ active, t1, t2 }))
+    }
+    const res = await fetch('/api/getParamsKursorIntervalController', params)
+    const result = await res.json()
+    return result
 }

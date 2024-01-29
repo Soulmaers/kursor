@@ -34,28 +34,63 @@ export async function kartaContainer(elem) {
         }, 0);
     }
     const list = document.querySelectorAll('.listItem')
-    const arrayId = Array.from(list).reduce((acc, el) => {
-        acc.push(el.id)
-        return acc
-    }, [])
 
-    const params = {
+    const arrayId = [];
+    const arrayIdKursor = [];
+
+    Array.from(list).reduce((acc, el) => {
+        if (el.classList.contains('wialon')) {
+            arrayId.push(el.id);
+        }
+        if (el.classList.contains('kursor')) {
+            arrayIdKursor.push(el.id);
+        }
+        return acc;
+    }, []);
+
+    const paramsW = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ arrayId }))
-    }
-    const res = await fetch('/api/getGeo', params)
-    const results = await res.json()
+        body: JSON.stringify({ arrayId }),
+    };
 
+
+    const resW = await fetch('/api/getGeo', paramsW);
+    const resultsW = await resW.json();
+
+    const promises = arrayIdKursor.map(async el => {
+        const idw = el
+        const paramsK = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idw }),
+        };
+        const resK = await fetch('/api/getParamsKursor', paramsK);
+        const resultsK = await resK.json();
+        const res = resultsK.reduce((acc, e) => {
+            const geo = [e.lat, e.lon]
+            const status = Number(e.speed) === 0 ? 'Стоянка' : 'Поездка'
+            const meliage = Number(Number(e.meliage).toFixed(2))
+            const speed = Number(Number(e.speed).toFixed(0))
+            acc.push(e.idObject, geo, Number(e.course), speed, status, meliage)
+            return acc
+        }, [])
+        return res
+    })
+    const res = await Promise.allSettled(promises)
+    const resultsK = res
+        .filter(promise => promise.status === 'fulfilled')
+        .map(promise => promise.value);
+    const allData = resultsW.concat(resultsK)
     const clearArray = Array.from(document.querySelectorAll('.checkInList')).reduce((acc, el) => {
-        //  if (!el.classList.contains('changeColorCheck')) {
         acc.push(el.closest('.listItem').id)
-        //   }
         return acc
     }, [])
-    const originalObjectsData = results.reduce((acc, el) => {
+    const originalObjectsData = allData.reduce((acc, el) => {
         if (clearArray.includes(el[0])) {
             acc.push(el)
         }

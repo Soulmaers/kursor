@@ -1,6 +1,7 @@
 
 const wialonService = require('../services/wialon.service.js')
 const databaseService = require('../services/database.service');
+const kursorService = require('./kursor.js')
 const wialonModule = require('../modules/wialon.module');
 const statistika = require('../modules/statistika.module');
 const structura = require('../modules/structura.module.js')
@@ -21,11 +22,11 @@ exports.dataSpisok = async (req, res) => {
             login = req.body.login
         }
         else {
-            login = 'soulmaers'
+            login = null
         }
         const datas = await databaseService.getWialonObjects()
         const ress = sortData(datas)
-        const massObjectCar = await databaseService.dostupObject(login);
+        const massObjectCar = login ? await databaseService.dostupObject(login) : null
         const aLLmassObject = [];
         const arrName = []
         for (const elem of ress) {
@@ -40,11 +41,19 @@ exports.dataSpisok = async (req, res) => {
             });
             const dataObjectGroup = await Promise.all(promises)
             dataObjectGroup.forEach(e => {
-                if (massObjectCar.includes(`${e[4]}`)) {
+                if (login) {
+                    if (massObjectCar.includes(`${e[4]}`)) {
+                        e.group = nameGroup;
+                        e.idGroup = idGroup;
+                        massObject.push(e);
+                    }
+                }
+                else {
                     e.group = nameGroup;
                     e.idGroup = idGroup;
                     massObject.push(e);
                 }
+
             })
             const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup, idGroup: idGroup })));
             aLLmassObject.push(objectsWithGroup);
@@ -140,11 +149,14 @@ exports.start = async (session) => {
             };
         });
         const promises = allCar[5][1].map(async (el) => {
+            const sats = el.lmsg && el.lmsg.p && el.lmsg.p.sats ? el.lmsg.p.sats : '-'
             const res = await engines(el.id);
             if (res) {
                 await saveStatus(res, el)
                 const foundObject = event.find(obj => obj.hasOwnProperty(el.id));
                 const all = res.concat(...Object.values(foundObject))
+                all.push(['Спутники', 'sats', sats])
+
                 await databaseService.setSensorsWialonToBase(session._session.au, el.id, all);
             }
         })
@@ -328,11 +340,16 @@ async function updateParams(data, kursor) {
     ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
     zaprosSpisokb(nameCar)
     const res = await constorller.dataSpisok()
+    const kursorObjects = await kursorService.getKursorObjects()
+
+    const dataAll = res.concat(kursorObjects)
+    // console.log(dataAll)
     if (res) {
-        statistika.popupProstoy(res)
-        events.eventFunction(res)
-        const summary = new SummaryStatistiks(res)
+        statistika.popupProstoy(dataAll) //ловим простои
+        events.eventFunction(res) //ловим через вилаон заправки/сливы+потеря связи
+        const summary = new SummaryStatistiks(dataAll)
         const global = await summary.init();
+        //  console.log(global)
         const arraySummary = Object.entries(global)
         const now = new Date();
         const date = new Date(now);

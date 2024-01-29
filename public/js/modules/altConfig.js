@@ -234,7 +234,7 @@ function forTyres() {
                   actBTN.classList.remove('actBTN')
               }*/
             console.log(e)
-            const tact = document.querySelector('.tiresActivt')
+            const tact = document.querySelector('.tiresActiv')
             tact ? obo.style.display = 'flex' : obo.style.display = 'none'
 
             tyres.forEach(e => {
@@ -243,9 +243,9 @@ function forTyres() {
                     el.style.color = 'rgba(6, 28, 71, 1)';
                     el.classList.remove('act')
                 })
-                e.classList.remove('tiresActivt')
+                e.classList.remove('tiresActiv')
             });
-            e.classList.add('tiresActivt')
+            e.classList.add('tiresActiv')
             sensors.style.display = 'flex';
             btnsens[0].style.display = 'flex'
             btnsens[1].style.display = 'flex'
@@ -261,7 +261,7 @@ function allparamsTyres(btnsens) {
     let prmsT = [];
     msg.forEach(el => {
         el.addEventListener('click', () => {
-            const tiresActivt = document.querySelector('.tiresActivt')
+            const tiresActiv = document.querySelector('.tiresActiv')
             msg.forEach(e => {
                 e.style.color = 'rgba(6, 28, 71, 1)'
             })
@@ -277,7 +277,7 @@ function allparamsTyres(btnsens) {
             if (btnsens[0].classList.contains('actBTN')) {
                 arrSpreed.forEach(el => {
                     if (el === ':') {
-                        tiresActivt.children[0].setAttribute('rel', arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
+                        tiresActiv.children[0].setAttribute('rel', arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                         prmsD.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                     }
                 })
@@ -289,24 +289,24 @@ function allparamsTyres(btnsens) {
                 }
                 const valJob = value
                 valJob.length > 10 ?
-                    tiresActivt.children[0].textContent = '-' :
-                    tiresActivt.children[0].textContent = valJob + '\nБар'
-                tiresActivt.children[0].style.color = objColor[generFront(valJob)];
+                    tiresActiv.children[0].textContent = '-' :
+                    tiresActiv.children[0].textContent = valJob + '\nБар'
+                tiresActiv.children[0].style.color = objColor[generFront(valJob)];
             }
             if (btnsens[1].classList.contains('actBTN')) {
                 arrSpreed.forEach(el => {
                     if (el === ':') {
-                        tiresActivt.children[1].setAttribute('rel', arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
+                        tiresActiv.children[1].setAttribute('rel', arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                         prmsT.push(arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
                     }
                 })
                 if (value === '-128' || value === '-51' || value === '-50' || value.length > 10) {
                     value = 'err'
-                    tiresActivt.children[1].textContent = value
+                    tiresActiv.children[1].textContent = value
                 }
                 else {
-                    tiresActivt.children[1].textContent = value + '°'
-                    tiresActivt.children[1].style.color = objColor[generT(value)];
+                    tiresActiv.children[1].textContent = value + '°'
+                    tiresActiv.children[1].style.color = objColor[generT(value)];
                 }
             }
         })

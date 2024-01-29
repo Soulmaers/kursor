@@ -3,9 +3,6 @@ import { convertToHoursAndMinutes } from './helpers.js'
 import { createMapsUniq } from '../geo.js'
 
 export function createJobTS(data, num) {
-    console.log(data)
-    // console.log(objectRazmetka)
-
     const chartStatic = document.querySelector(`.chartStatic${num}`)
     if (chartStatic) {
         chartStatic.remove();
@@ -118,7 +115,6 @@ export function createJobTS(data, num) {
         });
 }
 export function createChart(data, num) {
-    console.log(data)
     if (data.length === 0) {
         return
     }
@@ -129,7 +125,6 @@ export function createChart(data, num) {
 
     const jobTSDetalisationGraf = document.querySelector('.jobTSDetalisationGraf ')
     const widthInPx = jobTSDetalisationGraf.offsetWidth;
-    console.log(widthInPx)
     // Функция для объединения смежных интервалов с одинаковым статусом
     function combineIntervals(data) {
         const combinedData = [];
@@ -154,7 +149,6 @@ export function createChart(data, num) {
     const svgHeight = 80; // Высота SVG элемента
     const margin = { top: 10, right: 20, bottom: 10, left: 50 };
     const height = svgHeight - margin.top - margin.bottom;
-    console.log(width)
     const objColor = {
         'Движется': ' #8fd14f',
         'Парковка': '#3399ff',
@@ -247,7 +241,6 @@ export function createChart(data, num) {
                 const map = document.getElementById('mapOil');
                 const wrapMap = document.querySelector('.wrapMap')
                 if (wrapMap && !wrapMap.contains(targetElement)) {
-                    console.log('удаляем карту?')
                     wrapMap.remove();
                 }
             });
@@ -299,8 +292,6 @@ export function createMelagiTS(data, num) {
         1: 'intervalChart',
 
     }
-    console.log(data.length)
-    //   var width = data.length * 50;
     var height = 250;
     var svg = d3.select(`.${obj[num]}`)
         .append("svg")
@@ -413,7 +404,6 @@ export function createMelagiTS(data, num) {
 
 }
 export function createOilTS(data, num) {
-    //   console.log(objectRazmetka)
     const jobTSDetalisationChartsLegenda = document.querySelector('.jobTSDetalisationCharts_legenda')
     const legendaButton = document.querySelectorAll('.legendaButton')
     jobTSDetalisationChartsLegenda.style.justifyContent = 'center'

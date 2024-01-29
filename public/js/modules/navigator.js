@@ -1,6 +1,7 @@
 import { visual, visualNone } from './visual.js'
 //import { massivionbd } from './paramsTyresView.js';
 import { navMenu } from './event.js'
+import { IconStatus } from './iconModules/class/IconStatus.js'
 export function navigator() {
     const main = document.querySelector('.main')
     const auth = document.querySelector('.auth')
@@ -12,6 +13,7 @@ export function navigator() {
     const start = document.querySelector('.start')
     start.style.display = 'flex';
     const nav = document.querySelectorAll('.listItem')
+    new IconStatus(nav)
     // const rigthFrame = document.querySelectorAll('.rigthFrame')
     // nav[0].classList.add('color')
     const headerAdmin = document.querySelector('.headerAdmin')

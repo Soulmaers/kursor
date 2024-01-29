@@ -1,25 +1,18 @@
 import { objColor, generT, generDav } from './content.js'
 import { loadParamsView } from './paramsTyresView.js'
 import { findTyresInstall } from './saveBaseId.js'
-import { iconParams } from './status.js'
-import { alarmFind } from './alarmStorage.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
-import { iconFind } from './configIcons.js'
 import { tarirView } from './staticObject.js'
 import { tooltip } from './cursorTooltip.js'
-import { ggg } from './menu.js'
-import { gg, alternativa } from './spisok.js'
-
 import { Tooltip } from '../class/Tooltip.js'
 import { click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { convert } from './helpersFunc.js'
 import { timeIntervalStatistiks } from './detalisation.js'
-import { Flash } from '../class/Flash.js'
 import { CreateMarkersEvent } from './objectMainModules/class/CreateMarkersEvent.js'
 
-let start;
+
 let time;
 let timeIcon;
 let createEvent;
@@ -181,11 +174,8 @@ export async function visual(el) {
     await loadParamsView()
     console.log('загрузка')
     tooltip()
-    await iconFind(idw)
-    await iconParams()
-
     timeIntervalStatistiks();
-    // alarmFind()
+
     findTyresInstall()
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
@@ -292,6 +282,7 @@ export async function viewConfigurator(arg, params, osi) {
     const idw = active.id
 
     const res = !active.classList.contains('kursor') ? await wialonData(idw) : await kursorData(arg);
+    console.log(res)
     const in1 = Number(res.in1)
     const allobj = res.allobj
     console.log(allobj)
@@ -344,11 +335,9 @@ export async function viewConfigurator(arg, params, osi) {
                                 }
                             })
                             const ign = document.querySelector('.ign_value').textContent
-                            console.log(el.status, in1)
                             if (el.status === 'false' && in1 === 1) {
                                 e.children[0].style.background = 'lightgray';
                                 e.children[0].style.color = '#000'
-                                console.log(e.children[0])
                                 return
                             }
                             if (in1 === 0) {
@@ -447,7 +436,7 @@ async function kursorData(arg) {
     let in1
     arg.forEach(e => {
         if (e.name === 'in1') {
-            in1 = e.value === 'Вход IN1(датчик в нормальном состоянии)' ? 1 : 0
+            in1 = e.value === 'Вход IN1(датчик сработал)' ? 1 : 0
         }
     })
     const allobj = arg.reduce((acc, el) => {

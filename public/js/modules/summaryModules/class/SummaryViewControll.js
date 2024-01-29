@@ -13,19 +13,20 @@ export class SummaryViewControll {
         this.select.forEach(el => el.querySelector('.toggle_list_select').addEventListener('click', this.toggleListSelect.bind(this, el)))
         this.select.forEach(el => el.querySelector('.select_summary').addEventListener('mouseleave', this.hiddenListOutsideKursor.bind(this, el)))
         this.select.forEach(el => el.querySelectorAll('.item_type').forEach(it => it.addEventListener('click', this.toggleCheckSelect.bind(this, it))))
-        this.arrayInterval.forEach(el => this.getSummaryToBase(el))
+
         this.startUpdatingToday()
     }
 
     //обновляем саммари учитывая заголовки для запроса
-    clickListUpdateSummary() {
+    async clickListUpdateSummary() {
         const arrayTitle = ['Сегодня']
         this.title.forEach(e => {
             arrayTitle.push(e.textContent)
         })
-        arrayTitle.forEach(el => {
-            this.getSummaryToBase(el)
-        })
+        for (let el of arrayTitle) {
+            await this.getSummaryToBase(el)
+        }
+
     }
     //выбирать и подсвечивать определенный выбранный селект также запуск метода для сбора и отрисовки данных в нужный слот
     async toggleCheckSelect(it) {
@@ -136,7 +137,10 @@ export class SummaryViewControll {
     }
 
     //обновляем статистику за сегодня
-    startUpdatingToday() {
+    async startUpdatingToday() {
+        for (const el of this.arrayInterval) {
+            await this.getSummaryToBase(el);
+        }
         setInterval(() => {
             this.getSummaryToBase('Сегодня');
         }, 60000);
@@ -179,7 +183,6 @@ export class SummaryViewControll {
         else {
             summary = this.calculationParametrs(cleanObject)
         }
-
         el !== 'Сегодня' ? this.viewSummaryTable(summary, slot) : this.updateViewSummaryTable(summary)
     }
     //подготовка итогового саммари для неделя и месяц
