@@ -1,11 +1,11 @@
 port: 21626
 imei: 866854050240228
 protocol: Flex 3.0
-msg_type: C
-timeRagistration: 1706532345
-msg_number: 0
-event_code: 65280
-time: 1706532343
+msg_type: A
+timeRagistration: 1706532464
+msg_number: 4361
+event_code: 5899
+time: 1706532459
 status1: Рабочий режим
 status2: Оповещение о тревоге(выключено)
 status3: Тревога(выключена)
@@ -32,20 +32,20 @@ gsm: -109..-53 Дб/м
 nav_rcvr_state: Навигационный приемник включен
 valid_nav: Валидная навигация
 sats: 13
-last_valid_time: 1706532342
-lat: 59.84608000000001
-lon: 30.342573333333334
-altitude: 7
+last_valid_time: 1706532459
+lat: 59.84603833333334
+lon: 30.34254333333333
+altitude: 5.800000000000001
 speed: 0
-course: 347
-meliage: 620.0038452148438
-inter_mileage: 0
-positions_count: 0
-mileage_time: 0
-pwr_ext: 21.506
-pwr_int: 2093
-adc1: 21510
-adc2: 43
+course: 348
+meliage: 620.037109375
+inter_mileage: 0.08759893476963043
+positions_count: 360
+mileage_time: 360
+pwr_ext: 21.504
+pwr_int: 2116
+adc1: 21506
+adc2: 38
 adc3: 19
 in1: Вход IN1(датчик сработал)
 in2: Вход IN2(датчик в нормальном состоянии)
@@ -75,7 +75,7 @@ imp_counter1: 0
 imp_counter2: 0
 freq1: 0
 freq2: 0
-engine_hours: 1397132
+engine_hours: 1397246
 rs485fuel_level1: 65531
 rs485fuel_level2: 65531
 rs485fuel_level3: 65531
@@ -102,7 +102,7 @@ rs485fuel_temp3: 0
 rs485fuel_temp4: 0
 rs485fuel_temp5: 0
 rs485fuel_temp6: 0
-time_shift: 24340
+time_shift: 36000
 acc_x: 0
 acc_y: 0
 acc_z: 0
@@ -117,12 +117,12 @@ modules_st31: Выключен
 modules_st32: Выключен
 modules_st33: Используется основной
 connection_st1: 2G
-connection_st4: Подключен
+connection_st4: Не подключен
 connection_st5: Не подключен
 connection_st6: Не подключен
 connection_st7: Не подключен
 connection_st8: Не подключен
-imp_counter3: 9
+imp_counter3: 1
 freq3: 0
 accel_st1: Датчик в нормальном состоянии
 accel_st2: Датчик в нормальном состоянии
