@@ -8,7 +8,6 @@ import { createChart, createJobTS, createOilTS, createMelagiTS } from './detalis
 
 
 export async function timeIntervalStatistiks() {
-
     const objectRazmetka = {
         'nav1': { html: jobTSDetalisation, data: [], fn: createChart, title: { to: null, yes: null, week: null } },
         'nav2': { html: jobTS, data: [], fn: createJobTS, title: { to: null, yes: null, week: null } },
@@ -255,7 +254,7 @@ export async function statistics(interval, ele, num, objectRazmetka) {
 }
 
 
-async function kursorfnNew(active, t1, t2) {
+export async function kursorfnNew(active, t1, t2) {
     const params = {
         method: "POST",
         headers: {

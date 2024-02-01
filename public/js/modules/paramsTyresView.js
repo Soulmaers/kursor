@@ -76,8 +76,9 @@ function createViewModel(model) {
         selectType.selectedIndex = 0;
     }
 
-
-    console.log(model.length)
+    if (model.length === 1 && model[0].osi === '-') {
+        return
+    }
     if (model.length > 0) {
         const containerAll = document.querySelector('.containerAll')
         if (containerAll) {

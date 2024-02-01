@@ -2055,8 +2055,6 @@ div.spoyler {
   background-size: contain;
   background-position: center center;
   cursor: pointer;
-
-
 }
 
 .yestodayTitle {
@@ -2187,6 +2185,23 @@ div.spoyler {
 .actoStatic {
   border: 2px solid green;
   background-color: lightcyan;
+}
+
+
+.icon_graf {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  width: 20px;
+  height: 20px;
+  background-image: url(../image/cal.png);
+  background-size: contain;
+  background-position: center center;
+  cursor: pointer;
+}
+
+.grafics {
+  position: relative;
 }
 
 .place {
@@ -2418,6 +2433,21 @@ div.spoyler {
 .loading {
   margin: 5px 0;
   font-weight: bold;
+}
+
+.calendar_graf {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  right: 10px;
+  top: 30px;
+  border: 1px solid black;
+  padding: 5px;
+  background: #fff;
+  position: absolute;
+  left: 20px;
+  top: 50px;
+  width: 200px;
 }
 
 .calendar {

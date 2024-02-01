@@ -93,7 +93,8 @@
             </div>
             <div class="menu">
                 <a class="monitoring dash add_navi" rel="dash" href="#"><i class="w20 fas fa-chart-pie"></i>Дашборд</a>
-                <a class="monitor add_navi" href="#"><i class="w20 fas fa-desktop"></i>Мониторинг</a>
+                <a class="monitoring  stat_start add_navi" rel="statistika" href="#"><i
+                        class="w20 fas fa-desktop"></i>Мониторинг</a>
                 <a class="monitoring karta add_navi" rel="karta" href="#"><i
                         class="w20 fas fa-map-marked-alt"></i>Карта</a>
                 <a class="monitoring reports add_navi" rel="reports" href="#"><i class="w20 fas fa-print"></i>Отчеты</a>
@@ -261,45 +262,6 @@
                     <div class="low_list">
                     </div>
 
-                </div>
-
-                <div class="visualGrafics">
-                    <div class="blockRigth">
-                        <ul class="legend">
-                            <h4 class="titleLegend">Легенда графиков</h4>
-                            <li class="itemsLegend"></li>
-                            <li class="itemsLegend"></li>
-                            <li class="itemsLegend"></li>
-                            <li class="itemsLegend"></li>
-                            <li class="itemsLegend"></li>
-                            <li class="itemsLegend"></li>
-                            <li class="itemsLegend"></li>
-                            <li class="itemsLegend"></li>
-                            <li class="itemsLegend"></li>
-                            <li class="itemsLegend"></li>
-                            <li class="itemsLegend"></li>
-                            <li class="itemsLegend"></li>
-                        </ul>
-                        <div class="speedGraf">
-                            <div class="form_speed">
-                                <label>Интервал
-                                    <select class="select_speed">
-                                        <option disabled selected value="0">Указанный интервал</option>
-                                        <option class="option_int" value="1">За вчера</option>
-                                        <option class="option_int" value="2">За неделю</option>
-                                        <option class="option_int" value="3">За месяц</option>
-                                    </select>
-                                </label>
-                                <label>Календарь
-                                    <input type="text" id="daterange" placeholder="Выберите диапазон дат">
-                                </label>
-                                <div class="btn_speedStart">
-                                    <button class="btm_form">Очистить</button>
-                                    <button class="btm_form control">Выполнить</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -649,7 +611,7 @@
                     </div>
 
                     <div class="headerTitle">
-                        <div class="plug">Графики</div>
+                        <div class="plug grafik_button">Графики</div>
                     </div>
 
                 </div>
@@ -933,13 +895,19 @@
             </div>
             <div class="grafics">
                 <div class="nav_graf">
-                    <div class="menu_graf">Давление</div>
-                    <div class="menu_graf">Топливо</div>
-                    <div class="menu_graf">Скорость</div>
+                    <div class="menu_graf" rel="pressure">Давление</div>
+                    <div class="menu_graf" rel="oil">Топливо</div>
+                    <div class="menu_graf" rel="speed">Скорость</div>
                 </div>
-
-                <!--   <div class="im1"></div>-->
-                <div class="noGraf">Нет данных за последние 24 часа</div>
+                <div class="icon_graf" rel="calen_graf"></div>
+                <div class="calendar_graf">
+                    <input type="text" id="dateranges222" placeholder="Выберите диапазон дат">
+                    <div class="btn_speedStart">
+                        <button class="btm_formStart">Очистить</button>
+                        <button class="btm_formStart control">Выполнить</button>
+                    </div>
+                </div>
+                <div class="noGraf">Нет данных</div>
                 <div class="loader">Загрузка...</div>
             </div>
 

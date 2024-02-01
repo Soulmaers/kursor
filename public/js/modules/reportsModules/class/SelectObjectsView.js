@@ -1,7 +1,8 @@
 import { NaviChartLegenda } from "./NaviChartLegends.js"
 import { initSummary } from "../../spisok.js"
 import { Tooltip } from "../../../class/Tooltip.js"
-
+import { kursorfnNew } from '../../detalisation.js'
+import { testovfnNew } from '../../charts/bar.js'
 export class SelectObjectsView {
 
     constructor() {
@@ -90,16 +91,13 @@ export class SelectObjectsView {
     }
 
     async convertPDF(data) {
-        console.log(data)
         const titleNameReports = Array.from(document.querySelectorAll('.titleNameReport')).reduce((acc, el) => {
             acc.push(el.textContent)
             return acc
         }, [])
-        console.log(titleNameReports)
         const stats = data.stats
         const tables = data.tables
         const rows = data.row
-        console.log(rows)
         const params = {
             method: "POST",
             headers: {
@@ -107,9 +105,7 @@ export class SelectObjectsView {
             },
             body: JSON.stringify({ stats, titleNameReports, tables, rows })
         }
-
         const resfile = await fetch('/api/fileDown', params)
-        console.log(resfile)
         const blob = await resfile.blob()
         const link = document.createElement('a')
         link.href = URL.createObjectURL(blob)
@@ -202,7 +198,9 @@ export class SelectObjectsView {
         const interval = this.requestParams.timeInterval
 
         if (idResourse === 'cursor') {
+            console.time('рек')
             const globalChartData = await this.requestData(idShablon, idObject, interval)
+            console.timeEnd('рек')
             this.globalChartData = globalChartData
             this.stats = globalChartData.stats
             this.attachments = globalChartData.attachments
@@ -213,7 +211,6 @@ export class SelectObjectsView {
             loaders.style.display = 'none'
         }
         else {
-
             const res = await fetch('/api/titleShablon', {
                 method: "POST",
                 headers: {
@@ -226,7 +223,6 @@ export class SelectObjectsView {
             this.stats = result.data.reportResult.stats
             this.rows = result.rows
             this.attachments = result.data.reportResult.attachments
-
             this.clearTable()
             this.createListTitleReports(this.tablesReports, this.stats, this.attachments)
             loaders.style.display = 'none'
@@ -1219,71 +1215,63 @@ export class SelectObjectsView {
         const ifPwr = await this.requstModel(idw)
         const [t1, t2] = interval
         const active = String(idObject)
-        console.log(active, t1, t2)
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ active, t1, t2 }))
-        }
-        const rest = await fetch('/api/viewChart', param)
-        const resultt = await rest.json()
-        console.log(resultt)
-        resultt.sort((a, b) => {
-            if (a.data > b.data) {
+
+        let object;
+        this.listObjects.forEach(e => {
+            if (e.id === active) {
+                object = e
+            }
+        })
+        const newData = object.classList.contains('wialon') ? await testovfnNew(active, t1, t2) : await kursorfnNew(active, t1, t2)
+        const newGlobal = newData.map(it => {
+            return {
+                id: it.idw,
+                nameCar: it.nameCar,
+                time: new Date(it.time * 1000),
+                speed: it.speed,
+                geo: JSON.parse(it.geo),
+                oil: it.oil,
+                pwr: it.pwr,
+                engine: it.engine,
+                meliage: it.meliage,
+                curse: it.curse,
+                sats: it.sats
+            }
+        })
+        newGlobal.sort((a, b) => {
+            if (a.time > b.time) {
                 return 1;
             }
-            if (a.data < b.data) {
+            if (a.time < b.time) {
                 return -1;
             }
             return 0;
         })
-        const extractData = (params) => {
-            let prevVal = null;
-            return resultt.flatMap(el => {
-                return JSON.parse(el.allSensParams).reduce((acc, e, i) => {
-                    if (params !== 'Топливо' ? e[0].startsWith(params) : e[0] === params) {
-                        const val = e[2] < -10 ? (prevVal !== null ? prevVal - i : e[2] - i) : e[2];
-                        prevVal = val;
-                        acc.push({ x: Number(el.data), y: e[2] !== null ? parseFloat(prevVal.toFixed(2)) : 0, geo: JSON.parse(el.geo), speed: el.speed, sats: el.sats });
-                    }
-                    return acc;
-                }, []);
-            });
-        }
-        const speed = resultt.flatMap(el => {
-            return { x: Number(el.data), y: el.speed, geo: JSON.parse(el.geo) }
-        })
-        const sats = resultt.flatMap(el => {
-            return { x: Number(el.data), y: el.sats }
-        })
+        const properties = ['speed', 'sats', 'engine', 'pwr', 'oil', 'meliage'];
+        const datas = properties.map(property => {
+            const items = newGlobal.map(el => ({
+                x: Number(el.time / 1000),
+                y: el[property],
+                geo: el.geo,
+                speed: el.speed,
+                sats: el.sats
+            }));
 
-        const engine = extractData('Зажигание')
-        const pwr = extractData('Бортовое')
-        const oil = extractData('Топливо')
-        const meliage = extractData('Пробег')
+            return { [property]: items };
+        });
 
-        const datas = [
-            { oil: oil },
-            { pwr: pwr },
-            { engine: engine },
-            { speed: speed },
-            { sats: sats },
-            { meliage: meliage }
-        ]
         const minLength = Math.min(...datas.map(item => Object.values(item)[0].length)); // определяем минимальную длину массива
         const shortestArrays = datas.filter(item => Object.values(item)[0].length === minLength)
-        const optim = Object.values(Object.values(shortestArrays)[0])[0].reduce((acc, el, i) => {
+        const firstArray = Object.values(Object.values(shortestArrays)[0])[0];
+        const optim = firstArray.reduce((acc, el, i) => {
             const obj = {}
             datas.forEach(it => {
-                const matchedObject = Object.values(it)[0].find(obj => obj.x === el.x)
-                obj[Object.keys(it)[0]] = matchedObject.y
-
+                const matchedObject = Object.values(it)[0][i];
+                obj[Object.keys(it)[0]] = matchedObject ? matchedObject.y : undefined;
             })
-            acc.push({ x: el.x, ...obj, geo: el.geo, speed: el.speed, sats: el.sats })
-            return acc
-        }, [])
+            acc.push({ ...el, ...obj });
+            return acc;
+        }, []);
         const gasStations = this.calculateOilUp(optim)
         const fuelDrain = this.calculateOilSliv(optim)
         const motohours = this.calculate(optim, ifPwr, 'Моточасы')
@@ -1304,7 +1292,6 @@ export class SelectObjectsView {
         }, { duration: 0, distance: 0, oil: 0, maxSpeed: 0, averageSpeed: 0, count: 0 });
         ItogSummaryTravel.averageSpeed = ItogSummaryTravel.averageSpeed / ItogSummaryTravel.count
         ItogSummaryTravel.averageRashod = parseFloat(((ItogSummaryTravel.oil / ItogSummaryTravel.distance) * 100).toFixed(1))
-        console.log(ItogSummaryTravel)
 
         const workingTime = motoAll - prostoyAll
 
@@ -1313,7 +1300,7 @@ export class SelectObjectsView {
         const xtimepOil = { type: 8, tool: 'Топливо', sensor: 'Заправка', x: gasStations.length !== 0 ? this.xtimesOil(gasStations) : [] }
         const xtimepDrain = { type: 12, tool: 'Топливо', sensor: 'Слив', x: fuelDrain.length !== 0 ? this.xtimesOil(fuelDrain) : [] }
 
-        const time = resultt.map(el => Number(el.data))
+        const time = newGlobal.map(el => Number(el.time / 1000))
 
         const datasetObject = {
             oil: ['Топливо, л.', '410c96'],
@@ -1371,8 +1358,8 @@ export class SelectObjectsView {
             markers: [],
             possitions: {
                 time: time,
-                lat: resultt.map(el => JSON.parse(el.geo)[0]),
-                lon: resultt.map(el => JSON.parse(el.geo)[1])
+                lat: newGlobal.map(el => el.geo[0]),
+                lon: newGlobal.map(el => el.geo[1])
             },
             attachments: [{ name: 'График', axis_y: [datasetObject.oil[0], datasetObject.pwr[0]] }],
             stats: [['Отчет', ShablonName],
@@ -1466,8 +1453,6 @@ export class SelectObjectsView {
             }, [])
             globalChartData.datasets = { ...globalChartData.datasets, [i]: { name: datasetObject[Object.keys(el)[0]][0], y_axis: i, color: datasetObject[Object.keys(el)[0]][1], data: { x: time, y: y } } }
         })
-        console.log(globalChartData)
-
         return globalChartData
     }
 

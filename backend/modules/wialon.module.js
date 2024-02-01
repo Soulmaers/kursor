@@ -6,10 +6,11 @@ exports.login = async (token) => {
     const session = wialon().session;
     try {
         await session.start({ token: token });
-        // console.log(session)
         return session;
     } catch (error) {
+
         console.error('Ошибка входа:', error);
+        return 'ошибка'
         throw error; // Пробрасываем ошибку дальше для обработки
     }
 

@@ -47,14 +47,16 @@ const initServer = async () => {
 let session;
 async function init() {
     await initServer()
-    await wialon()
-    console.log('сессия открыта')
-    globalstart.hunterTime()
+    const res = await wialon()
+    console.log(res)
+    if (res !== 'ошибка') {
+        console.log('сессия открыта')
+        globalstart.hunterTime()
 
-    await globalstart.start(session)
-    setInterval(globalstart.start, 120000, session)
-    setInterval(globalstart.hunterTime, 50000)
-
+        //  await globalstart.start(session)
+        //  setInterval(globalstart.start, 120000, session)
+        setInterval(globalstart.hunterTime, 50000)
+    }
 
 }
 init()
@@ -75,13 +77,21 @@ async function wialon() {
         'tzOffset': 10800,
         "language": 'ru',
     }
-    session.request('render/set_locale', params)
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function (data) {
-            console.log(data)
-        });
+    if (session !== 'ошибка') {
+        session.request('render/set_locale', params)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                console.log(data)
+            });
+        return 'ok'
+    }
+    else {
+        return 'ошибка'
+    }
+
+
 }
 exports.geSession = async () => {
     return new Promise(async (resolve, reject) => {

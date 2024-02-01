@@ -1,13 +1,12 @@
 import { postTyres, reqDelete, paramsDelete, barDelete, changeBase } from './requests.js'
 import { data } from './content.js'
 import { dashView, getDash } from './charts/dash.js'
-import { alarmClear, clearGraf, visual, visualNone } from './visual.js'
+import { alarmClear, visual, visualNone } from './visual.js'
 import { getUsers } from './admin.js'
 import { reqProtectorBase } from './protector.js'
 import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
 import { rotate, zbor } from './rotate.js'
-import { dataInput, dataSelect, times, click } from './graf.js'
-import { removeElem, clearElem } from './helpersFunc.js'
+import { clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { Flash, CloseBTN, ResizeContainer } from '../class/Flash.js'
@@ -19,7 +18,6 @@ import { viewTech } from './tech.js'
 import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 import { draggable } from './filtersList.js'
 import { storTitleList } from './content.js'
-import { NavigationMenu } from './navModules/NavigatorClass.js'
 import { filterCondition } from './filtersList.js'
 import { initCharts, initSummary } from './spisok.js'
 import { CreateNewObject } from './propertyObjectModules/class/CreateNewObject.js'
@@ -74,13 +72,9 @@ const tableInfoCar = document.querySelector('.tableInfoCar')
 Array.from(tableInfoCar.children[0].children).forEach(e => {
     new Tooltip(e, [e.getAttribute('rel')]);
 })
-// Использование класса
-export const navMenu = new NavigationMenu();
-navMenu.init();
 
 const mobileItem = document.querySelectorAll('.mobile_item')
 mobileItem.forEach(el => {
-
     el.addEventListener('click', () => {
         mobileItem.forEach(el => {
             el.classList.remove('mobile_active')
@@ -190,7 +184,7 @@ logo.addEventListener('click', () => {
         }
     })
 
-    navMenu.handleButtonClickList()
+    // navMenu.handleButtonClickList()
     clearInterval(intervalId)
     clearInterval(intervalId2)
     const allsec = document.querySelectorAll('.allsec')
@@ -377,54 +371,13 @@ btnDash.addEventListener('click', () => {
 
 });
 
-
-const addNavi = document.querySelectorAll('.add_navi')
-addNavi.forEach(it => {
-    it.addEventListener('click', () => {
-        const iconsToggle = document.querySelectorAll('.report_map_InList')
-        const mapUnit = document.querySelectorAll('.map_unit')
-        const reportUnit = document.querySelectorAll('.report_unit')
-        if (it.classList.contains('karta')) {
-            mapUnit.forEach(e => { e.style.display = 'none', e.classList.remove('act_modules') })
-            reportUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
-        }
-        else if (it.classList.contains('reports')) {
-            reportUnit.forEach(e => { e.style.display = 'none', e.classList.remove('act_modules') })
-            mapUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
-        }
-        else {
-            iconsToggle.forEach(e => {
-                e.classList.remove('act_modules')
-                e.style.display = 'block'
-            })
-        }
-    })
-})
-
-
-const monitoring = document.querySelectorAll('.monitoring')
-monitoring.forEach(e => {
-    e.addEventListener('click', () => {
-        if (!e.classList.contains('dash')) {
-            clearInterval(intervalId)
-            clearInterval(intervalId2)
-        }
-        monitoring.forEach(el => {
-            el.classList.remove('tablo')
-        })
-        e.classList.add('tablo')
-    })
-})
-const monitor = document.querySelector('.monitor')
-monitor.addEventListener('click', mainblock)
-
 function mainblock() {
     const allsec = document.querySelectorAll('.allsec')
     allsec.forEach(el => {
         el.style.display = 'none';
     })
-    const rightFrame = document.querySelector('.rigthFrame')
-    rightFrame.style.display = 'flex'
+    const rightFrame = document.querySelectorAll('.rigthFrame')
+    rightFrame.forEach(e => e.style.display = 'flex')
     const wrapperFull = document.querySelector('.wrapperFull')
     const lowList = document.querySelector('.low_list')
     lowList.style.height = wrapperFull.clientHeight - 30 + 'px';
@@ -444,11 +397,9 @@ function mainblock() {
         sections.style.display = 'flex'
         return
     }
-    console.log('клеар')
     clearInterval(intervalId)
     const start = document.querySelector('.start')
     start.style.display = 'none'
-    // geoloc()
     const dash = document.querySelector('.wrapper_right_dash')
     const sections = document.querySelector('.sections')
     const main = document.querySelector('.main')
@@ -457,9 +408,7 @@ function mainblock() {
     main.style.display = 'flex'
     const wRight = document.querySelector('.wrapper_right')
     const wLeft = document.querySelector('.wrapper_left')
-    const model = document.querySelector('.wrapper_containt')
     const grafics = document.querySelector('.grafics')
-    const visualGrafics = document.querySelector('.visualGrafics')
     const wrapList = document.querySelector('.wrapList')
     const techInfo = document.querySelector('.techInfo')
     const plug = document.querySelectorAll('.plug')
@@ -470,13 +419,6 @@ function mainblock() {
     grafics.style.display = 'none';
     config.style.display = 'flex';
     techInfo.style.display = 'none';
-    visualGrafics.style.display = 'none';
-    main.style.flexDirection = 'row'
-    model.style.zoom = '1'
-    model.style.width = '100%'
-    model.style.maxHeight = "none"
-    model.style.MozTransform = "scale(1)"
-    config.appendChild(model);
     wrapList.style.overflowY = 'visible';
     wrapList.style.height = 'none';
     wrapList.style.height = 'auto'
@@ -595,6 +537,7 @@ if (dropdown) {
 const btnShina = document.querySelectorAll('.modals')
 btnShina.forEach(el => {
     el.addEventListener('click', () => {
+        main.style.flexDirection = 'row'
         btnShina.forEach(el => {
             el.classList.remove('active')
         })
@@ -603,6 +546,7 @@ btnShina.forEach(el => {
         visualNone(e);
         visual(e)
         const activGraf = document.querySelector('.activGraf')
+        console.log(activGraf)
         if (activGraf) {
             mainblock()
         }
@@ -807,51 +751,39 @@ export async function pr() {
 
 
 const plug = document.querySelectorAll('.plug')
+console.log(plug[2])
 plug[2].addEventListener('click', () => {
-
     const wRight = document.querySelector('.wrapper_right')
     const wLeft = document.querySelector('.wrapper_left')
-    const model = document.querySelector('.wrapper_containt')
-    const visualGrafics = document.querySelector('.visualGrafics')
     const grafics = document.querySelector('.grafics')
     const main = document.querySelector('.main')
-    const sections = document.querySelector('.sections')
-    const wrapList = document.querySelector('.wrapList')
     const techInfo = document.querySelector('.techInfo')
-    const lowList = document.querySelector('.low_list')
+    const secondFlash = document.querySelectorAll('.secondFlash')[1]
     plug[2].classList.add('activGraf')
     wRight.style.display = 'none';
     techInfo.style.display = 'none';
     wLeft.style.display = 'none';
     grafics.style.display = 'flex';
     if (widthWind > 860) {
-        //   wrapList.style.overflow = 'auto';
-        lowList.style.height = '300px';
-        model.style.zoom = '0.65'
-        model.style.MozTransformOrigin = "top"
-        model.style.MozTransform = "scale(0.65)"
-        model.style.maxHeight = "550px"
         wRight.style.display = 'none';
         techInfo.style.display = 'none';
         wLeft.style.display = 'none';
         grafics.style.display = 'flex';
-        visualGrafics.style.display = 'flex';
+        secondFlash.style.display = 'none'
         main.style.flexDirection = 'column'
-        model.style.width = '50%'
-        model.style.marginLeft = '0'
-        sections.style.width = '40%'
 
-        visualGrafics.prepend(model);
     }
-
     const wrapMap = document.querySelector('wrapMap')
     if (wrapMap) {
         wrapMap.remove();
     }
-    click()
-
-    clearGraf()
+    //  calendarFormat()
+    // click()
+    // clearGraf()
 })
+
+
+/*
 const menuGraf = document.querySelectorAll('.menu_graf')
 menuGraf.forEach(el => {
     el.addEventListener('click', () => {
@@ -868,19 +800,19 @@ menuGraf.forEach(el => {
         })
         el.classList.add('activMenuGraf')
         if (times.length !== 0) {
-            const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+            const preloaderGraf = document.querySelector('.loader')
             preloaderGraf.style.opacity = 1;
             preloaderGraf.style.display = 'flex'
             dataInput() //фунции выбора интервала графика скорости
         }
         if (times.length === 0) {
-            const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
+            const preloaderGraf = document.querySelector('.loader')
             preloaderGraf.style.opacity = 1;
             preloaderGraf.style.display = 'flex'
             dataSelect() //фунции выбора интервала графика скорости
         }
     })
-})
+})*/
 
 const closeIconConfig = document.querySelector('.closeIconConfig')
 closeIconConfig.addEventListener('click', () => {

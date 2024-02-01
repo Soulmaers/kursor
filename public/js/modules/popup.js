@@ -1,10 +1,10 @@
 import { DraggableContainer } from '../class/Dragdown.js'
 import { CloseBTN } from '../class/Flash.js'
 import { titleLogs } from './content.js'
-import { reverseGeocode, createMapsUniq } from './geo.js'
+import { createMapsUniq } from './geo.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { visual } from './visual.js'
-
+import { iconStatusClick } from './navigator.js'
 async function createPopup(array) {
     console.log(array)
     const arr = Object.values(array[0]);
@@ -335,6 +335,7 @@ function clickHandlerObject(event) {
     const listItem = document.querySelectorAll('.listItem')
     listItem.forEach(it => {
         if (it.getAttribute('rel') === id) {
+            iconStatusClick.listeModalWindow(it)
             visual(it)
             chanchColor()
             const evgentElement = document.querySelector('.toogleIconEvent')

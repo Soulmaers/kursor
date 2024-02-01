@@ -183,7 +183,6 @@ export async function conturTest(testov) {
                 const subgroupAll = document.createElement('div');
                 subgroupAll.classList.add('subgroupAll');
                 group.appendChild(subgroupAll)
-                console.log(el[0][7].sub)
                 el[0][7].sub.forEach(item => {
                     const nameSubGroup = item[0][5]
                     const subgroup = document.createElement('div');
@@ -657,7 +656,6 @@ export async function alternativa(data) {
         lastSensor = true
         const sesnorsKursor = await getParamsKursorSensors(data)
         const result = itog.concat(sesnorsKursor[0])
-        console.log(result)
         resolve(result)
 
     });
@@ -789,6 +787,8 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
     }
 
 }
+
+/*
 export async function gg(id) {
     return new Promise(async function (resolve, reject) {
         const idw = id
@@ -825,7 +825,7 @@ export async function gg(id) {
         }
 
     });
-}
+}*/
 
 function fnTagach(arr, nameCarId, group) {
     const groups = document.querySelector(`.${group}`)

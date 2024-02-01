@@ -1,32 +1,8 @@
-import { fnParMessage } from '../grafiks.js'
+
 import { Tooltip } from '../../class/Tooltip.js'
 import { createMapsUniq } from '../geo.js'
-import { CloseBTN } from '../../class/Flash.js'
-
-async function fn() {
-    const active = document.querySelectorAll('.color')
-    const activePost = active[0].children[0].textContent.replace(/\s+/g, '')
-    const idw = document.querySelector('.color').id
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ activePost, idw }))
-    }
-    const paramsss = await fetch('/api/tyresView', param)
-    const paramm = await paramsss.json()
-    const params = paramm.result
-    const os = await fetch('/api/barView', param)
-    const osis = await os.json()
-    const osi = osis.result
-    return { osi, params }
-}
-
 
 let isCanceled = false;
-
-
 
 export function convertTineAll(t) {
     const date = new Date(t * 1000);
@@ -84,6 +60,19 @@ export async function datas(t1, t2) {
         const rest = await fetch('/api/viewStructura', param)
         const resultt = await rest.json()
         console.log(resultt)
+        if (resultt.length === 0) {
+            document.querySelector('.noGraf').style.display = 'block'
+            const grafOld = document.querySelector('.infoGraf')
+            if (grafOld) {
+                grafOld.remove()
+            }
+            const preloaderGraf = document.querySelector('.loader')
+            preloaderGraf.style.opacity = 0;
+            preloaderGraf.style.display = 'none'
+            isCanceled = false;
+            return
+        }
+        document.querySelector('.noGraf').style.display = 'none'
         //  const dat = resultt.map(e => JSON.parse(e.info))
 
         function parseInfo(data) {
@@ -118,6 +107,9 @@ export async function datas(t1, t2) {
             };
         });
         await grafikStartPress(dat2)
+        const preloaderGraf = document.querySelector('.loader')
+        preloaderGraf.style.opacity = 0;
+        preloaderGraf.style.display = 'none'
         isCanceled = false;
         // }
     }
@@ -824,7 +816,6 @@ async function grafikStartPress(dat2) {
     })
     function globalTooltip(time) {
         const objTool = []
-        console.log(dat2)
         dat2.forEach(e => {
             e.val.forEach(el => {
                 if (el.dates.getTime() === time.getTime()) {
@@ -832,7 +823,6 @@ async function grafikStartPress(dat2) {
                 }
             })
         })
-        //console.log('Количество элементов, соответствующих условию:', counter);
         const chart = document.querySelectorAll('.chart')
         char[char.length - 1].children[2].classList.add('last')
         char[char.length - 1].children[3].classList.add('last')

@@ -6,12 +6,16 @@ import { reportsContainer } from './reports.js'
 export class NavigationMenu {
     constructor() {
         this.buttonElements = document.querySelectorAll('.monitoring');
+        this.iconsToggle = document.querySelectorAll('.report_map_InList')
+        this.mapUnit = document.querySelectorAll('.map_unit')
+        this.reportUnit = document.querySelectorAll('.report_unit')
         this.currentTimeoutId = null;
         this.menuItems = {
             dash: { method: this.dash.bind(this), elem: 'globalDash' },
             karta: { method: this.karta.bind(this), elem: 'globalMaps' },
             reports: { method: this.reports.bind(this), elem: 'globalReports' },
-            sklad: { method: this.sklad.bind(this), elem: 'globalSklad' }
+            sklad: { method: this.sklad.bind(this), elem: 'globalSklad' },
+            statistika: { method: this.statistika.bind(this), elem: 'start' }
         };
     }
 
@@ -31,6 +35,8 @@ export class NavigationMenu {
     }
 
     handleButtonClick(event) {
+        this.buttonElements.forEach(e => e.classList.remove('tablo'))
+        event.target.classList.add('tablo')
         const groups = document.querySelectorAll('.groups')
         groups.forEach(e => {
             e.querySelector('.chekHidden').style.opacity = 1
@@ -68,11 +74,20 @@ export class NavigationMenu {
     }
 
     dash(elem) {
+
+        elem.style.display = 'flex'
+        //   dashContainer()
+    }
+
+    statistika(elem) {
+        this.reportUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
+        this.mapUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
         elem.style.display = 'flex'
         //   dashContainer()
     }
 
     karta(elem) {
+
         elem.style.display = 'flex'
         const checkTypeMarkers = document.querySelector('.checkTypeMarkers')
         const tableInfoCar = document.querySelector('.tableInfoCar')
@@ -80,14 +95,18 @@ export class NavigationMenu {
         tableInfoCar.style.display = 'flex'
         const unitMap = document.querySelectorAll('.map_unit')
         unitMap.forEach(el => el.style.display = 'none')
+        this.mapUnit.forEach(e => { e.style.display = 'none', e.classList.remove('act_modules') })
+        this.reportUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
         const wrap = document.querySelector('.globalMaps').children[0]
         kartaContainer(wrap)
         this.currentTimeoutId = setInterval(() => {
             kartaContainer(wrap)
-        }, 30000);
+        }, 60000);
     }
 
     reports(elem, avl) {
+        this.reportUnit.forEach(e => { e.style.display = 'none', e.classList.remove('act_modules') })
+        this.mapUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
         elem.style.display = 'flex'
         reportsContainer(avl)
     }

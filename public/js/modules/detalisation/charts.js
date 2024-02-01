@@ -145,7 +145,10 @@ export function createChart(data, num) {
     const windowStatistic = document.querySelector('.windowStatistic')
     var widthWind = document.querySelector('body').offsetWidth;
     const combinedData = combineIntervals(data);
-    const width = widthWind < 860 ? widthWind - 15 : windowStatistic.clientWidth - 40//widthInPx; // Ширина графика
+    console.log(windowStatistic.clientWidth)
+    const win = windowStatistic.clientWidth == 0 ? 707 : windowStatistic.clientWidth
+    let width = widthWind < 860 ? widthWind - 15 : win - 40//widthInPx; // Ширина графика
+    //  width < 0 ? 0 : width
     const svgHeight = 80; // Высота SVG элемента
     const margin = { top: 10, right: 20, bottom: 10, left: 50 };
     const height = svgHeight - margin.top - margin.bottom;

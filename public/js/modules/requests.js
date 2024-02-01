@@ -1,9 +1,7 @@
 import { clearConfig } from './altConfig.js'
 
-const login = document.querySelectorAll('.log')[1].textContent
+
 export async function postTyres(tyres) {
-    console.log('ченчбэйстайрес')
-    console.log(tyres)
     const active = document.querySelectorAll('.color')
     const activePost = active[0].textContent.replace(/\s+/g, '')
     const name = active[0].textContent.replace(/\s+/g, '')
@@ -17,7 +15,6 @@ export async function postTyres(tyres) {
     }
     const results = await fetch('/api/tyres', params)
     const res = results.json()
-    console.log(res)
     const messaga = document.querySelector('.messageId')
     messaga.textContent = 'Датчики добавлены'
     messaga.style.color = 'green'

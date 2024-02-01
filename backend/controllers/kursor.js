@@ -99,12 +99,15 @@ exports.geoLastIntervalKursor = async (req, res) => {
     const idObject = req.body.idw
     const geoloc = await databaseService.geoLastIntervalKursor(time1, time2, idObject)
     const geo = [];
-    var rows = geoloc.length;
-    for (var i = 0; i < rows; i++) {
-        geo.push([]);
+    if (geoloc) {
+        var rows = geoloc.length;
+        for (var i = 0; i < rows; i++) {
+            geo.push([]);
+        }
+        geo.forEach((el, index) => {
+            el.push(geoloc[index].lat, geoloc[index].lon, geoloc[index].course, geoloc[index].speed, geoloc[index].time, geoloc[index].sats);
+        })
     }
-    geo.forEach((el, index) => {
-        el.push(geoloc[index].lat, geoloc[index].lon, geoloc[index].course, geoloc[index].speed, geoloc[index].time, geoloc[index].sats);
-    })
+
     res.json({ resTrack: geo })
 }

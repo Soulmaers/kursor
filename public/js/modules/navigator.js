@@ -1,7 +1,10 @@
 import { visual, visualNone } from './visual.js'
-//import { massivionbd } from './paramsTyresView.js';
-import { navMenu } from './event.js'
+import { NavigationMenu } from './navModules/NavigatorClass.js'
 import { IconStatus } from './iconModules/class/IconStatus.js'
+import { GrafikView } from './grafikModules/class/GrafikView.js'
+
+export let iconStatusClick;
+export let grafClick;
 export function navigator() {
     const main = document.querySelector('.main')
     const auth = document.querySelector('.auth')
@@ -13,18 +16,18 @@ export function navigator() {
     const start = document.querySelector('.start')
     start.style.display = 'flex';
     const nav = document.querySelectorAll('.listItem')
-    new IconStatus(nav)
-    // const rigthFrame = document.querySelectorAll('.rigthFrame')
-    // nav[0].classList.add('color')
-    const headerAdmin = document.querySelector('.headerAdmin')
+    const statStart = document.querySelector('.stat_start').classList.add('tablo')
+    iconStatusClick = new IconStatus(nav)
+    grafClick = new GrafikView(nav)
+    const navMenu = new NavigationMenu();
+    navMenu.init();
+
     const menuGraf = document.querySelectorAll('.menu_graf')
     menuGraf[0].classList.add('activMenuGraf')
-    //  visual(nav[0])
     var widthWind = document.querySelector('body').offsetWidth;
     if (widthWind > 860 && widthWind <= 1200) {
         const wrapperLeft = document.querySelector('.wrapper_left')
         wrapperLeft.style.display = 'none'
-        // menu.style.display = 'flex'
     }
     if (widthWind <= 860) {
         start.style.display = 'none';
@@ -33,14 +36,8 @@ export function navigator() {
         if (auth) {
             menu.appendChild(auth)
         }
-
         document.querySelector('.mobile_spisok').classList.add('mobile_active')
-        //  rigthFrame.style.display = 'none';
     }
-
-    /* || !event.target.classList.contains('checkInList')
-                || !event.target.classList.contains('map_unit')
-                || !event.target.classList.contains('report_unit')*/
     nav.forEach(el => {
         el.addEventListener('click', route)
         function route(event) {
@@ -55,16 +52,13 @@ export function navigator() {
                 nav.forEach(e => {
                     el.classList.remove('color')
                     visualNone(e);  //скрываем для всех кнопок левый фрейм
-                    // massivionbd.length = 0;
                 })
                 const ide3 = el.children[0].children[2]
                 const ide2 = el.children[0].children[1]
                 const ide1 = el.children[0].children[0]
 
                 if (event.target !== ide1 && event.target !== ide2 && event.target !== ide3) {
-                    //const report = document.querySelector('.reports')
                     visual(el)
-                    // !report.classList.contains('hovering') ? visual(el) : null
                     if (widthWind <= 860) {
                         const cblock = document.querySelector('.centerBlock')
                         cblock.style.width = 100 + '%'

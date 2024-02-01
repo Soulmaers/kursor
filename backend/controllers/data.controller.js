@@ -107,7 +107,6 @@ const getWialon = async (login) => {
                 }
             });
         });
-        //   console.log(promises)
         const results = await Promise.all(promises);
         return results.filter(Boolean);
     }
@@ -163,7 +162,6 @@ exports.start = async (session) => {
 
         const dataKursor = await databaseService.getObjects()
         const validKursorData = dataKursor.filter(e => [...e.imei].length > 10)
-        console.log(validKursorData)
         // Запускаем все функции параллельно
         await Promise.all([promises, updateParams(data, validKursorData), saveSensorsToBase(allCar)])
     }

@@ -256,6 +256,8 @@ export class ToggleHiddenList {
         this.viewAndHidden(del, sett, 'num')
     }
     naviToggle(el) {
+        const monitoring = document.querySelectorAll('.monitoring')
+        monitoring.forEach(e => e.classList.remove('tablo'))
         const start = document.querySelector('.start')
         const main = document.querySelector('.main')
         start.style.display = 'none'
@@ -275,6 +277,7 @@ export class ToggleHiddenList {
         const reports = document.querySelector('.reports')
         el.classList.add('act_modules')
         const click = new NavigationMenu()
+        console.log(el)
         if (el.classList.contains('map_unit')) {
             this.reportUnit.forEach(e => {
                 e.style.display = 'block'

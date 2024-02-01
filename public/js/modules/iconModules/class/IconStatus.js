@@ -12,11 +12,9 @@ export class IconStatus {
         this.id = null
         this.targetElement = null
         this.targetCard = null
+        this.intervalId = null
         this.list.forEach(el => el.addEventListener('click', this.listeModalWindow.bind(this, el)))
-        console.log(this.card)
         this.card.forEach(el => el.addEventListener('click', this.toogleModalWindow.bind(this, el)))
-        //  console.log(this.msg)
-        //  this.msg.forEach(el => el.addEventListener('click', this.viewValueToSaveBase.bind(this, el)))
     }
 
     async listeModalWindow(elem) {
@@ -24,11 +22,11 @@ export class IconStatus {
         this.id = elem.id
         this.nameObject = elem.children[0].textContent.replace(/\s+/g, '')
         await this.displayIconValues(this.id)
-        setInterval(() => this.displayIconValues, 60000, this.id)
+        clearInterval(this.intervalId)
+        this.intervalId = setInterval(() => this.displayIconValues(this.id), 60000)
     }
     //навешиваем значнеие кликнутого параметра на иконку и запускаем метод сохранения даных в бд
     async viewValueToSaveBase(element) {
-        console.log(element)
         element.style.color = 'green'
         element.style.fontWeight = 'bold'
         const arrSpreed = [...element.textContent]
@@ -49,7 +47,6 @@ export class IconStatus {
     //вывод и скрытие модального окна
     toogleModalWindow(element) {
         this.targetCard = element
-        console.log(this.id)
         const sensors = document.querySelector('.sensors')
         const btnsens = document.querySelectorAll('.btnsens')
         const wRight = document.querySelector('.wrapper_right')
@@ -71,8 +68,7 @@ export class IconStatus {
         })
         this.changeParams.value = '1';
         const checkConfig = document.getElementById('check_Title')
-        console.log(checkConfig.checked)
-        checkConfig.checked ? (element.classList.add('acto'), console.log('тута'), sensors.style.display = 'flex', new DraggableContainer(sensors), wRight.style.zIndex = 2,
+        checkConfig.checked ? (element.classList.add('acto'), sensors.style.display = 'flex', new DraggableContainer(sensors), wRight.style.zIndex = 2,
             document.querySelector('.popup-background').style.display = 'block',
             this.msg = document.querySelectorAll('.msg'),
             this.msg.forEach(el => el.addEventListener('click', this.viewValueToSaveBase.bind(this, el))))
@@ -102,6 +98,7 @@ export class IconStatus {
 
     //отображение значений иконок
     async displayIconValues(idw) {
+        console.log('дисплэй?')
         const param = {
             method: "POST",
             headers: {
@@ -121,7 +118,6 @@ export class IconStatus {
 
     pushObjectProperty(params, editParams) {
         this.card.forEach(e => this.valueparamsObject[e.id] = '---')
-        console.log(editParams)
         params.forEach(el => {
             switch (el[1]) {
                 case 'speed':
@@ -133,7 +129,6 @@ export class IconStatus {
 
             }
         })
-        console.log(this.valueparamsObject)
         editParams.result.forEach(item => {
             params.forEach(e => {
                 if (e[1] === item.params) {
@@ -142,18 +137,16 @@ export class IconStatus {
             })
         })
         const engine = this.valueparamsObject['ign-card']
-        console.log(engine)
         this.valueparamsObject['ign-card'] = engine === 'Вход IN1(датчик сработал)' || engine === 1 ? 'ВКЛ' : 'ВЫКЛ'
     }
     // запрос параметров (params)
     async iconFindParams(param) {
-
+        console.log(this.targetElement)
         const pref = this.targetElement.classList.contains('kursor')
         let result;
         if (!pref) {
             const res = await fetch('/api/getSensorsWialonToBaseId', param)
             const data = await res.json()
-            console.log(data)
             result = data.map(e => {
                 return [e.sens_name, e.param_name, Number(e.idw), Number(e.value)]
             })
@@ -161,7 +154,6 @@ export class IconStatus {
         else {
             const res = await fetch('api/getParamsKursor', param)
             const data = await res.json()
-            console.log(data)
             const results = [];
             let speed;
             Object.entries(data[0]).forEach(([key, value]) => {
@@ -188,16 +180,14 @@ export class IconStatus {
     async statusTSI(param) {
         const mod = await fetch('/api/modelView', param)
         const model = await mod.json()
-        let tsiControll = model.result.length !== 0 || model.result[0] && model.result[0].tsiControll && model.result[0].tsiControll !== '' ? Number(model.result[0].tsiControll) : null;
-        tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
-        this.valueparamsObject['tsi-card'] = Number(this.valueparamsObject['akb-card']) > tsiControll ? 'ВКЛ' : 'ВЫКЛ'
+        let tsiControll = model.result.length !== 0 || model.result[0] && model.result[0].tsiControll && model.result[0].tsiControll !== '' ? Number(model.result[0].tsiControll) : '';
+        tsiControll === 0 ? tsiControll = '' : tsiControll = tsiControll
+        this.valueparamsObject['tsi-card'] = tsiControll !== '' ? Number(this.valueparamsObject['akb-card']) > tsiControll ? 'ВКЛ' : 'ВЫКЛ' : 'ВЫКЛ'
 
 
         const vals = await fetch('/api/viewStatus', param)
         const val = await vals.json()
-        console.log(val)
         if (val.result.length !== 0) {
-
             const startDate = val.result[0].time
             const startDateIng = val.result[0].timeIng
             const techdate = new Date();
@@ -217,7 +207,6 @@ export class IconStatus {
                 day === 0 ? dayS = '' : dayS = days + 'д ';
                 hour === 0 ? hourS = '' : hourS = hour + 'ч ';
                 const mess = `${dayS} ${hourS} ${minut} мин`
-                console.log(mess)
                 return mess;
             }
             let statName;
@@ -273,24 +262,25 @@ export class IconStatus {
     //вывод значений в дом элементы
     viewValueElement() {
         this.card.forEach(elem => {
+            const parametrs = this.valueparamsObject[elem.id] === -348201 ? '---' : this.valueparamsObject[elem.id]
             switch (elem.id) {
                 case 'odom-card':
-                    elem.children[0].textContent = this.valueparamsObject[elem.id] !== '---' ? this.addZero(8, this.valueparamsObject[elem.id].toFixed(0)) : '---'
+                    elem.children[0].textContent = parametrs !== '---' ? this.addZero(8, parametrs.toFixed(0)) : '---'
                     break;
                 case 'tsi-card':
-                    elem.children[0].textContent = this.valueparamsObject[elem.id]
+                    elem.children[0].textContent = parametrs
                     break;
                 case 'ign-card':
-                    elem.children[0].textContent = this.valueparamsObject[elem.id]
+                    elem.children[0].textContent = parametrs
                     break;
                 case 'akb-card':
-                    elem.children[0].textContent = this.valueparamsObject[elem.id] !== '---' ? this.valueparamsObject[elem.id].toFixed(1) : '---'
+                    elem.children[0].textContent = parametrs !== '---' ? parametrs.toFixed(1) : '---'
                     break;
                 case 'oil-card':
-                    elem.children[0].textContent = this.valueparamsObject[elem.id] !== '---' ? this.valueparamsObject[elem.id].toFixed(0) : '---'
+                    elem.children[0].textContent = parametrs !== '---' ? parametrs.toFixed(0) : '---'
                     break;
                 default:
-                    elem.children[0].textContent = this.valueparamsObject[elem.id] !== '---' ? this.valueparamsObject[elem.id] : "---"
+                    elem.children[0].textContent = parametrs !== '---' ? parametrs : "---"
             }
         })
 

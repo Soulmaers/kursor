@@ -54,6 +54,7 @@ export class CreateMarkersEvent {
         const geo = await this.getLastGeoPosition()
         this.createMapMainObject(geo)
         const track = await this.getIntervalTrack()
+        console.log(track)
         const prostoy = await this.getEventProstoy()
         //  const pressure = await this.getEventPressure()
         this.track = track.reduce((acc, el) => {
@@ -156,6 +157,7 @@ export class CreateMarkersEvent {
             }
             const geoTest = await fetch('/api/geoLastIntervalKursor', paramss)
             const geoCard = await geoTest.json();
+            console.log(geoCard)
             data = geoCard.resTrack.reduce((acc, el) => {
                 acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
                 return acc

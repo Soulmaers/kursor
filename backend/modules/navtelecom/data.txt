@@ -1,11 +1,11 @@
 port: 21626
-imei: 866854050240228
+imei: 866795035938925
 protocol: Flex 3.0
 msg_type: A
-timeRagistration: 1706532464
-msg_number: 4361
-event_code: 5899
-time: 1706532459
+timeRagistration: 1706792377
+msg_number: 11323
+event_code: 5898
+time: 1706792374
 status1: Рабочий режим
 status2: Оповещение о тревоге(выключено)
 status3: Тревога(выключена)
@@ -25,28 +25,22 @@ modules_st21: Нет глушения GSM
 modules_st23: Нет глушения GNSS
 modules_st24: Усреднение координат GNSS(нет)
 modules_st25: Статус акселерометра (штатная работа)
-modules_st26: Статус модуля Bluetooth(выключен)
+modules_st26: Статус модуля Bluetooth(включен)
 modules_st27: Статус модуля Wi-Fi(выключен)
-modules_st28: Тип генератора для RTC:(внутренний генератор процессора)
+modules_st28: Тип генератора для RTC:(внешний часовой кварцевый генератор)
 gsm: -109..-53 Дб/м
 nav_rcvr_state: Навигационный приемник включен
 valid_nav: Валидная навигация
-sats: 13
-last_valid_time: 1706532459
-lat: 59.84603833333334
-lon: 30.34254333333333
-altitude: 5.800000000000001
+sats: 14
+last_valid_time: 1706792374
+lat: 59.84605333333334
+lon: 30.34249833333333
+altitude: 13.8
 speed: 0
-course: 348
-meliage: 620.037109375
-inter_mileage: 0.08759893476963043
-positions_count: 360
-mileage_time: 360
-pwr_ext: 21.504
-pwr_int: 2116
-adc1: 21506
-adc2: 38
-adc3: 19
+course: 349
+meliage: 132.6734619140625
+pwr_ext: 21.606
+pwr_int: 2161
 in1: Вход IN1(датчик сработал)
 in2: Вход IN2(датчик в нормальном состоянии)
 in3: Вход IN3(датчик в нормальном состоянии)
@@ -55,14 +49,6 @@ in5: Вход IN5/AIN3(датчик в нормальном состоянии)
 in6: Вход IN6/SH1(датчик в нормальном состоянии)
 in7: Вход IN7/SH2(датчик в нормальном состоянии)
 in8: Вход IN8/SH3-SH4(датчик в нормальном состоянии)
-in9: Вход IN9(датчик в нормальном состоянии)
-in10: Вход IN10(датчик в нормальном состоянии)
-in11: Вход IN11(датчик в нормальном состоянии)
-in12: Вход IN12(датчик в нормальном состоянии)
-in13: Вход IN13(датчик в нормальном состоянии)
-in14: Вход IN14(датчик в нормальном состоянии)
-in15: Вход IN15(датчик в нормальном состоянии)
-in16: Вход IN16(датчик в нормальном состоянии)
 out1: Выход O1(выключен)
 out2: Выход O2(выключен)
 out3: Выход O3(выключен)
@@ -71,45 +57,21 @@ out5: Выход O5(выключен)
 out6: Выход O6(выключен)
 out7: Выход O7(выключен)
 out8: Выход O8(выключен)
-imp_counter1: 0
-imp_counter2: 0
-freq1: 0
-freq2: 0
-engine_hours: 1397246
-rs485fuel_level1: 65531
-rs485fuel_level2: 65531
-rs485fuel_level3: 65531
-rs485fuel_level4: 65531
-rs485fuel_level5: 65531
-rs485fuel_level6: 65531
-temp1: -128
-temp2: -128
-temp3: -128
-temp4: -128
-sats_gl: 5
-sats_gps: 8
-sats_gal: 0
-sats_comp: 0
-sats_beid: 0
-sats_dor: 0
-sats_irnss: 0
-sats_qzss: 0
+engine_hours: 0
 hdop: 70
-pdop: 100
-rs485fuel_temp1: 34
-rs485fuel_temp2: 0
-rs485fuel_temp3: 0
-rs485fuel_temp4: 0
-rs485fuel_temp5: 0
-rs485fuel_temp6: 0
-time_shift: 36000
-acc_x: 0
-acc_y: 0
-acc_z: 0
-thld_duration: 0
-wln_accel_max: 0
-wln_brk_max: 0
-wln_crn_max: 0
+pdop: 110
+tyres_number_3: 1
+tpms_pressure_3: 1.6
+tpms_temp_3: 25
+tyres_number_4: 2
+tpms_pressure_4: 1.6
+tpms_temp_4: 24
+tyres_number_5: 4
+tpms_pressure_5: 1.5
+tpms_temp_5: 23
+tyres_number_6: 5
+tpms_pressure_6: 1.6
+tpms_temp_6: 25
 status21: в норме
 status22: Контроль не производится
 status23: Нет программы
@@ -122,52 +84,11 @@ connection_st5: Не подключен
 connection_st6: Не подключен
 connection_st7: Не подключен
 connection_st8: Не подключен
-imp_counter3: 1
-freq3: 0
 accel_st1: Датчик в нормальном состоянии
 accel_st2: Датчик в нормальном состоянии
 accel_st3: Датчик в нормальном состоянии
 accel_st4: Датчик в нормальном состоянии
 accel_st5: Датчик в нормальном состоянии
-int_tilt_sens_local: 4
-int_tilt_sens_pitch: 0
-int_tilt_sens_roll: 0
-ext_tilt_sens_x: 0
-ext_tilt_sens_y: 0
-ext_tilt_sens_z: 0
-wln_vert_max: 0
-wln_spd_max: 0
-thld_spd_st1: Датчик в нормальном состоянии
-thld_spd_st2: Датчик в нормальном состоянии
-thld_spd_st3: Датчик в нормальном состоянии
-thld_spd_st4: Датчик в нормальном состоянии
-thld_spd_st5: Датчик в нормальном состоянии
-thld_brk_st5: Датчик в нормальном состоянии
-thld_brk_st6: Датчик в нормальном состоянии
-thld_brk_st7: Датчик в нормальном состоянии
-thld_brk_st8: Датчик в нормальном состоянии
-thld_right_crn_st5: Датчик в нормальном состоянии
-thld_right_crn_st6: Датчик в нормальном состоянии
-thld_right_crn_st7: Датчик в нормальном состоянии
-thld_right_crn_st8: Датчик в нормальном состоянии
-thld_vert_st1: Датчик в нормальном состоянии
-thld_vert_st2: Датчик в нормальном состоянии
-thld_vert_st3: Датчик в нормальном состоянии
-thld_vert_st4: Датчик в нормальном состоянии
-rs485fuel_freq1: 0
-rs485fuel_freq2: 0
-rs485fuel_freq3: 0
-rs485fuel_freq4: 0
-rs485fuel_freq5: 0
-rs485fuel_freq6: 0
-hp_temp1: 0
-hp_temp2: 6.4
-hp_temp3: 6.4
-hp_temp4: 6.4
-hp_humidity5: 64
-hp_humidity6: Нет данных
-hp_humidity7: Нет данных
-hp_humidity8: Нет данных
-diag: 14079
-idObject: 1016
+diag: 54
+idObject: 1017
 

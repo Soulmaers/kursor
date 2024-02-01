@@ -1,13 +1,26 @@
 import { Tooltip } from '../../class/Tooltip.js'
-import { testovfn, testovfnNew } from './bar.js'
+import { testovfnNew } from './bar.js'
 import { createMapsUniq } from '../geo.js'
 //import { dostupObject } from '../../../../backend/services/database.service.js'
 
 export async function oil(t1, t2) {
-    console.log(t1, t2)
     const active = document.querySelector('.color').id
+    console.log(active, t1, t2)
     const tttNew = await testovfnNew(active, t1, t2)
     console.log(tttNew)
+    if (tttNew.length === 0) {
+        document.querySelector('.noGraf').style.display = 'block'
+        const grafOld = document.querySelector('.infoGraf')
+        if (grafOld) {
+            grafOld.remove()
+        }
+        return
+    }
+    document.querySelector('.noGraf').style.display = 'none'
+    const grafOld = document.querySelector('.infoGraf')
+    if (grafOld) {
+        grafOld.remove()
+    }
     const itogyNew = tttNew.map(it => {
         return {
             id: it.idw,
@@ -22,7 +35,6 @@ export async function oil(t1, t2) {
             curse: it.curse
         }
     })
-    console.log(itogyNew)
     itogyNew.sort((a, b) => {
         if (a.time > b.time) {
             return 1;
@@ -97,7 +109,6 @@ export async function oil(t1, t2) {
         const diff = e[1].oil - e[0].oil
         return initTime >= 5 * 60 && diff > 40;
     });
-    console.log(filteredZapravka)
     const rash = [];
     const firstData = data[0].oil;
     const lastData = data[data.length - 1].oil;
@@ -135,10 +146,7 @@ export async function oil(t1, t2) {
         return result;
     }, []);
     console.log(objOil)
-    const grafOld = document.querySelector('.infoGraf')
-    if (grafOld) {
-        grafOld.remove()
-    }
+
     const graf = document.createElement('div')
     const grafics = document.querySelector('.grafics')
     graf.classList.add('infoGraf')
@@ -146,6 +154,9 @@ export async function oil(t1, t2) {
     const info = document.createElement('div')
     info.classList.add('infos')
     graf.prepend(info)
+
+
+    console.log(document.querySelector('.infoGraf').parentNode)
     var widthWind = document.querySelector('body').offsetWidth;
     // устанавливаем размеры контейнера
     const margin = { top: 10, right: 60, bottom: 50, left: 60 },
@@ -157,6 +168,8 @@ export async function oil(t1, t2) {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
     const titleGraf = document.createElement('div')
     titleGraf.classList.add('titleGraf')
     const infoGraf = document.querySelector('.infoGraf')

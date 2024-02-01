@@ -421,8 +421,8 @@ exports.geoLastIntervalKursor = async (time1, time2, idObject) => {
         const postModel = `SELECT * FROM navtelecom WHERE idObject=@idObject AND time >= @time2 AND time <= @time1 `
         const result = await pool.request()
             .input('idObject', idObject)
-            .input('time2', time2)
-            .input('time1', time1)
+            .input('time2', String(time2))
+            .input('time1', String(time1))
             .query(postModel)
         return result.recordset
     }
@@ -1117,11 +1117,23 @@ exports.viewChartDataToBase = async (idw, t1, t2) => {
 };
 
 exports.viewSortDataToBase = async (idw, t1, t2) => {
-
-    const postModel = `SELECT * FROM sortData WHERE idw='${idw}' AND time >= '${t1}' AND time <= '${t2}'`;
+    //  console.log(idw, t1, t2)
+    /*if (idw === '27695838 ') {
+        console.log('хово')
+        console.log(Number(idw), t1, t2)
+    }*/
+    const postModel = `SELECT * FROM sortData WHERE idw=@idw AND time >=@t1 AND time <=@t2`;
     try {
         const pool = await connection
-        const results = await pool.query(postModel);
+        const results = await pool.request()
+            .input('idw', Number(idw))
+            .input('t1', t1)
+            .input('t2', t2)
+            .query(postModel);
+
+        /* if (idw == 27695838) {
+             console.log(results.recordset)
+         }*/
         return results.recordset;
     } catch (err) {
         console.log(err);

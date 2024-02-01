@@ -6,12 +6,11 @@ import { kranParams } from './strelaKran.js'
 import { tarirView } from './staticObject.js'
 import { tooltip } from './cursorTooltip.js'
 import { Tooltip } from '../class/Tooltip.js'
-import { click } from './graf.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { convert } from './helpersFunc.js'
 import { timeIntervalStatistiks } from './detalisation.js'
 import { CreateMarkersEvent } from './objectMainModules/class/CreateMarkersEvent.js'
-
+import { grafClick } from './navigator.js'
 
 let time;
 let timeIcon;
@@ -19,7 +18,7 @@ let createEvent;
 
 
 export async function visual(el) {
-
+    console.log('визуал')
     const tablo = document.querySelector('.tablo')
     tablo ? tablo.classList.remove('tablo') : null
     const allsec = document.querySelectorAll('.allsec')
@@ -140,24 +139,14 @@ export async function visual(el) {
 
     }
     alarmClear();
-
     wrapperUp.style.display = 'flex'
     wrapperCont.style.display = 'flex'
-    speedGraf.style.display = 'block'
-
     if (titleCar) {
         titleCar.textContent = el.children[0].textContent
     }
     const graf = document.querySelector('.activGraf')
-    console.log(graf)
     if (graf) {
-        console.log('клик')
-        setTimeout(click, 700)
-    }
-    if (!graf) {
-        console.log(document.querySelector('.color'))
-        //  geoloc()
-        //   time = setInterval(geoloc, 300000)
+        grafClick.controllerMethodCharts();
     }
     const idw = el.id
     if (createEvent && createEvent.updateInterval) {
@@ -165,14 +154,11 @@ export async function visual(el) {
         createEvent.hiddenTrackAndMarkersEnent()
 
     }
-
     createEvent = new CreateMarkersEvent(idw)
     createEvent.init()
 
-
     liCreate()
     await loadParamsView()
-    console.log('загрузка')
     tooltip()
     timeIntervalStatistiks();
 
@@ -185,19 +171,11 @@ export async function visual(el) {
     tarirView();
     setInterval(tarirView, 300000)
 
-    const grafOld = document.querySelector('.infoGraf')
-    if (grafOld) {
-        removeElem(grafOld)
-    }
     const btnShina = document.querySelectorAll('.modals')
     console.log(btnShina)
     if (btnShina[1].classList.contains('active')) {
         styleShinaActive(btnShina[1])
     }
-    const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
-    preloaderGraf.style.opacity = 1;
-    preloaderGraf.style.display = 'flex'
-
     const zamer = document.querySelectorAll('.zamer')
     const createList = document.querySelector('.createList')
     clearElem(createList.value)
@@ -228,12 +206,6 @@ export function visualNone(e) {
     card.forEach(el => {
         el.classList.remove('acto')
     })
-    const valueStatic = document.querySelectorAll('.valueStatic')
-    valueStatic.forEach(el => {
-        clearElem(el.textContent)
-        clearElem(el.previousElementSibling.value)
-        el.classList.remove('actoStatic')
-    })
     const newBoad = document.querySelector('.speed')
     if (newBoad) {
         removeElem(newBoad)
@@ -244,7 +216,6 @@ export function visualNone(e) {
     techInfo.style.display = 'none'
     modalCenterOs.style.display = 'none'
     wrapperUp.style.display = 'none'
-    speedGraf.style.display = 'none'
     e.classList.remove('color')
     const tr = document.querySelectorAll('.tr')
     tr.forEach(it => {
