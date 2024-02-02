@@ -120,7 +120,7 @@ class ListenPortTP {
     createServer(port) {
         const tcpServer = net.createServer((socket) => {
             console.log('TCP Client connected');
-            // console.log(socket)
+            //  console.log(socket)
             new ChartServerTerminal(socket)
             new SendingCommandToTerminal(socket)
         });
