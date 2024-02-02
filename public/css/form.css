@@ -13,6 +13,8 @@
     position: relative;
 }
 
+
+
 .container_start::after {
     content: "";
     background-color: #000;

@@ -2599,7 +2599,7 @@ div.spoyler {
 }
 
 .wrap_alarm {
-
+  margin-top: 15px;
   width: 170px;
   display: flex;
   flex-direction: column;
@@ -6648,7 +6648,7 @@ i.minusS {
   }
 
   .headerTitle {
-    width: 25%;
+    width: 33%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7248,7 +7248,7 @@ i.minusS {
 }
 
 .headerTitle {
-  width: 25%;
+  width: 33%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7398,7 +7398,7 @@ i.minusS {
   }
 
   .headerTitle {
-    width: 25%;
+    width: 33%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7432,7 +7432,7 @@ i.minusS {
   }
 
   .state {
-    width: 25%
+    width: 33%
   }
 
   .headerTitle :hover {
@@ -8500,6 +8500,9 @@ i.changeColorCheck {
 .activeTrack {
   color: rgba(6, 28, 71, 1);
 }
+
+
+
 
 .clicker,
 .iconMapsInfoActive {
@@ -9587,4 +9590,9 @@ i.settingsGroup {
   margin: 2px;
   text-align: center;
   box-sizing: border-box;
+}
+
+.clickNavi {
+  background-color: #fff;
+  color: rgba(6, 28, 71, 1);
 }
