@@ -751,11 +751,13 @@ export async function pr() {
 
 
 const plug = document.querySelectorAll('.plug')
-
+plug[0].classList.add('clickNavi')
+plug[0].parentNode.style.background = 'rgba(6, 28, 71, 1)'
 plug.forEach(e => {
     e.addEventListener('click', () => {
-        plug.forEach(e => e.classList.remove('clickNavi'))
+        plug.forEach(e => { e.parentNode.style.background = '#fff', e.classList.remove('clickNavi') })
         e.classList.add('clickNavi')
+        e.parentNode.style.background = 'rgba(6, 28, 71, 1)'
 
     })
 })

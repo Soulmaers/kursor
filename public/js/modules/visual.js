@@ -120,6 +120,10 @@ export async function visual(el) {
     })
     const tableTarir = document.querySelector('.tableTarir')
     tableTarir.style.display = 'none'
+
+    /* plug.forEach(e => { e.parentNode.style.background = '#fff', e.classList.remove('clickNavi') })
+     plug[0].classList.add('clickNavi')
+     plug[0].parentNode.style.background = 'rgba(6, 28, 71, 1)'*/
     tiresLink.forEach(e => {
         if (e.classList.contains('tiresActiv')) {
             grafics.style.display = 'flex'
@@ -450,7 +454,7 @@ function styleShinaActive(arg) {
     const tyresT = document.querySelectorAll('.tiresT')
     const main = document.querySelector('.main')
     main.style.display = 'flex'
-    arg.style.fontSize = '0.65rem'
+    //arg.style.fontSize = '0.65rem'
     tyresD.forEach(e => {
         e.style.Border = 'none'
     })
