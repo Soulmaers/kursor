@@ -66,9 +66,8 @@ export async function datas(t1, t2) {
             if (grafOld) {
                 grafOld.remove()
             }
-            const preloaderGraf = document.querySelector('.loader')
-            preloaderGraf.style.opacity = 0;
-            preloaderGraf.style.display = 'none'
+            const loaders = document.querySelector('.loaders_charts')
+            loaders.style.display = 'none';
             isCanceled = false;
             return
         }
@@ -107,10 +106,11 @@ export async function datas(t1, t2) {
             };
         });
         await grafikStartPress(dat2)
-        const preloaderGraf = document.querySelector('.loader')
-        preloaderGraf.style.opacity = 0;
-        preloaderGraf.style.display = 'none'
+        const loaders = document.querySelector('.loaders_charts')
+        loaders.style.display = 'none';
         isCanceled = false;
+
+
         // }
     }
     catch (e) {
@@ -121,11 +121,6 @@ export async function datas(t1, t2) {
 async function grafikStartPress(dat2) {
     console.log(dat2)
     const model = await iconChart()
-    const grafOld = document.querySelector('.infoGraf')
-    // console.log(grafOld)
-    if (grafOld) {
-        grafOld.remove()
-    }
     const graf = document.createElement('div')
     const grafics = document.querySelector('.grafics')
     graf.classList.add('infoGraf')
@@ -142,7 +137,7 @@ async function grafikStartPress(dat2) {
         .attr('class', 'chart');
     const margin = { top: 100, right: 10, bottom: 30, left: 10 }
     var widthWind = document.querySelector('body').offsetWidth;
-    const width = widthWind >= 860 ? 700 - margin.left - margin.right : widthWind - 80
+    const width = widthWind >= 860 ? 800 - margin.left - margin.right : widthWind - 80
     const height = 50;
     const count = charts.size()
     let he;

@@ -173,18 +173,14 @@ function createViewModel(model) {
 
 export function viewMenuParams() {
     const kolesos = [];
-    const speedGraf = document.querySelector('.speedGraf')
-    const titleSens = document.querySelector('.title_sens')
     const sensors = document.querySelector('.sensors')
     const wrapperMap = document.querySelector('.wrapper_left')
-    const obo = document.querySelector('.obo')
     const tiresLink = document.querySelectorAll('.tires_link_test')
     const techInfo = document.querySelector('.techInfo')
     const grafics = document.querySelector('.grafics')
     const plug = document.querySelectorAll('.plug')
     const tableTarir = document.querySelector('.tableTarir')
     const idbaseTyres = document.querySelector('.idbaseTyres')
-    const sections = document.querySelector('.sections')
     const wright = document.querySelector('.wrapper_right')
     var widthWind = document.querySelector('body').offsetWidth;
     idbaseTyres.textContent = ''
@@ -205,7 +201,6 @@ export function viewMenuParams() {
                 return
             }
             kolesos.push(e)
-            speedGraf.style.display = 'none';
             tiresLink.forEach(e => {
                 tableTarir.style.display = 'none'
                 e.classList.remove('tiresActiv')
@@ -216,7 +211,6 @@ export function viewMenuParams() {
                 wright.style.zIndex = 2,
                 document.querySelector('.popup-background').style.display = 'block') : null
             techInfo.style.display = 'block'
-            speedGraf.style.display = 'block';
             wrapperMap.style.display = 'none'
             grafics.style.display = 'none';
             tableTarir.style.display = 'none'

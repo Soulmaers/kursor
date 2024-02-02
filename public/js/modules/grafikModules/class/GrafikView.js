@@ -1,6 +1,6 @@
 import { datas } from '../../charts/bar.js'
 import { oil } from '../../charts/oil.js'
-import { speed } from '../../charts/speed.js'
+import { Tooltip } from '../../../class/Tooltip.js'
 export class GrafikView {
     constructor(nav) {
         this.list = nav
@@ -9,7 +9,6 @@ export class GrafikView {
         this.objectMethod = {
             'pressure': datas,
             'oil': oil,
-            'speed': speed
 
         }
         this.grafik = document.querySelector('.grafik_button')
@@ -73,7 +72,8 @@ export class GrafikView {
             }
         })
     }
-    init(event) {
+    init() {
+        new Tooltip(this.iconGraf, ['Календарь']);
         this.menuGrafik[0].classList.add('activMenuGraf')
         this.activeGrafiks = this.menuGrafik[0].getAttribute('rel')
         this.installTime()
@@ -99,13 +99,14 @@ export class GrafikView {
             console.log(this.activeGrafiks)
             const fn = this.objectMethod[this.activeGrafiks]
             fn(this.time[0], this.time[1])
-            const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
-            preloaderGraf.style.opacity = 1;
-            preloaderGraf.style.display = 'flex'
             const grafOld = document.querySelector('.infoGraf')
             if (grafOld) {
                 grafOld.remove()
             }
+            const loaders = document.querySelector('.loaders_charts')
+            loaders.style.display = 'flex';
+
+
         }
 
     }

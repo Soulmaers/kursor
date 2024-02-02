@@ -5,7 +5,6 @@ exports.datas = async (objects, now, old) => {
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
-    console.log(result, now, old)
     try {
         for (const e of result) {
             const params = await databaseService.tyresViewToBase(e[4])

@@ -27,6 +27,14 @@
                             <input class="inp" type="password" name="password" placeholder="Введите пароль" required>
                             <button class="btn" type="submit" name="form_auth_submit">Войти</button>
                         </form>
+                        <div class="info">
+                            <div class="title_text">Внимание вы подключаетесь к программе в демонстрационном режиме
+                            </div>
+                            <div class="navi">
+                                <button class="demo_button_cancel" type="submit">Вернуться</button>
+                                <button class="demo_button_ok" type="submit">Продолжить</button>
+                            </div>
+                        </div>
                         <div class="footer_form">
                             <span class="infos">Телефон: +7 906 256-54-62</span>
                             <span class="infos">e-mail: m.trofimov@cursor-gps.ru</span>
@@ -39,17 +47,29 @@
 
         <script>
             // Получение элементов формы по их id
-            var form = document.querySelector('.demo_form');
-            var usernameInput = document.querySelector('[name="username"]');
-            var passwordInput = document.querySelector('[name="password"]');
+            const form = document.querySelector('.demo_form');
+            const auth = document.querySelector('.auth_form');
+            const info = document.querySelector('.info');
+            const cancel = info.querySelector('.demo_button_cancel')
+            const ok = info.querySelector('.demo_button_ok')
+            const usernameInput = document.querySelector('[name="username"]');
+            const passwordInput = document.querySelector('[name="password"]');
             // Обработчик события нажатия на кнопку "Войти"
             form.addEventListener('submit', function (event) {
+                auth.style.display = 'none'
+                info.style.display = 'flex'
                 event.preventDefault(); // Отменяем стандартное поведение формы
                 // Заполнение значений скрытых полей ввода
                 usernameInput.value = 'Курсор';
                 passwordInput.value = '123456';
-
+                cancel.addEventListener('click', () => {
+                    auth.style.display = 'flex'
+                    info.style.display = 'none'
+                })
+                ok.addEventListener('click', () => {
+                    form.submit();
+                })
                 // Отправка формы
-                form.submit();
+                // form.submit();
             })
         </script>

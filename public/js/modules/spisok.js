@@ -767,9 +767,13 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
             newCel.classList.add('newCel')
             newCel.classList.add('newCelChange')
             newCel.setAttribute('rel', `${newClass}`)
+            console.log(newClass)
             newClass === 'type' || newClass === 'meliage' ? newCel.classList.add('newCelTextType') : null
+            const classes = ['meliage', 'pwr', 'oil', 'lasttime'];
+            if (classes.includes(newClass)) {
+                newCel.classList.add('rightLine');
+            }
             newClass === 'lasttime' ? newCel.classList.add('newCelTimeType') : null
-            newClass === 'meliage' ? newCel.classList.add('rightLine') : null
             newCel.innerHTML = iconValues[newClass][1]
             iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null
             newClass === 'statusnew' && iconValues[newClass][0] === 'ВКЛ' ? newCel.children[0].classList.add('toogleIcon') : newClass === 'statusnew' && iconValues[newClass][0] === undefined ? newCel.innerHTML = '-' : null

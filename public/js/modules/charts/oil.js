@@ -158,9 +158,11 @@ export async function oil(t1, t2) {
 
     console.log(document.querySelector('.infoGraf').parentNode)
     var widthWind = document.querySelector('body').offsetWidth;
+    const wrapper = grafics.offsetWidth
+    console.log(wrapper)
     // устанавливаем размеры контейнера
     const margin = { top: 10, right: 60, bottom: 50, left: 60 },
-        width = widthWind >= 860 ? 800 - margin.left - margin.right : widthWind - 80,
+        width = widthWind >= 860 ? wrapper - 250 : widthWind - 80,
         height = 500 - margin.top - margin.bottom;
     // создаем svg контейнер
     const svg = d3.select(".infoGraf").append("svg")
@@ -342,7 +344,7 @@ export async function oil(t1, t2) {
     svg.append("text")
         .attr("class", 'napr')
         .attr("x", -100)
-        .attr("y", 730)
+        .attr("y", width + 50)
         .attr("transform", "rotate(-90)")
         .attr("text-anchor", "end")
         .text("Напряжение, В")
@@ -394,14 +396,11 @@ export async function oil(t1, t2) {
             const graph = document.querySelector('.infoGraf')
             graph.addEventListener('click', function (event) {
                 event.stopPropagation(); // Остановка всплытия события, чтобы клик на графике не вызывал обработчик события click на document
-                //  createMapsUniq([], d, 'oil')
             });
             createMapsUniq([], d, 'oil')
         })
 
         .on("mousemove", function (d) {
-            // d3.select(this).style("opacity", 1);
-            //  const tooltipOil = d3.select('.tooltipOil');
             d3.select('.tooltip')
                 .style("opacity", 0)
             tooltipOil.transition()
@@ -414,15 +413,13 @@ export async function oil(t1, t2) {
 
         })
         .on("mouseout", function (d) {
-            //  d3.select(this).style("opacity", 0.5);
             tooltipOil.transition()
                 .duration(200)
                 .style("opacity", 0);
         });
 
-    const preloaderGraf = document.querySelector('.loader') /* находим блок Preloader */
-    preloaderGraf.style.opacity = 0;
-    preloaderGraf.style.display = 'none'
+    const loaders = document.querySelector('.loaders_charts')
+    loaders.style.display = 'none';
 
     // Add brushing
     var brush = d3.brushX()                   // Add the brush feature using the d3.brush function

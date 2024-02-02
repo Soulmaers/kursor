@@ -51,11 +51,11 @@ async function init() {
     console.log(res)
     if (res !== 'ошибка') {
         console.log('сессия открыта')
-        globalstart.hunterTime()
+        // globalstart.hunterTime()
 
-        //  await globalstart.start(session)
-        //  setInterval(globalstart.start, 120000, session)
-        setInterval(globalstart.hunterTime, 50000)
+        await globalstart.start(session)
+        setInterval(globalstart.start, 120000, session)
+        // setInterval(globalstart.hunterTime, 50000)
     }
 
 }

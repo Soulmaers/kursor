@@ -50,6 +50,21 @@ div.wrapper {
     background-repeat: no-repeat;
 }
 
+
+.demo_button_cancel,
+.demo_button_ok {
+    margin-top: 10px;
+    cursor: pointer;
+    width: 178px;
+    background-color: rgba(6, 28, 71, 1);
+    color: #fff;
+    font-family: Arial;
+    font-size: 1rem;
+    padding: 8px 0;
+    border-radius: 3px;
+    text-align: center;
+}
+
 .demo_button {
     margin-top: 30px;
     cursor: pointer;
@@ -72,6 +87,21 @@ div.wrapper {
     border-radius: 3px
 }
 
+.demo_button_cancel:active {
+    background-color: #fff;
+    border: 2px solid rgba(6, 28, 71, 1);
+    color: rgba(6, 28, 71, 1);
+    border: none;
+    border-radius: 3px
+}
+
+.demo_button_ok:active {
+    background-color: #fff;
+    border: 2px solid rgba(6, 28, 71, 1);
+    color: rgba(6, 28, 71, 1);
+    border: none;
+    border-radius: 3px
+}
 
 .btn:active {
     background-color: #fff;
@@ -100,6 +130,10 @@ div.wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.wrap_cont {
+    position: relative;
 }
 
 .auth_form {
@@ -155,4 +189,28 @@ div.wrapper {
     list-style-type: none;
     display: flex;
 
+}
+
+.info {
+    width: 250px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    position: absolute;
+    background-color: rgba(6, 28, 71, 1);
+}
+
+.title_text {
+    width: 250px;
+    margin-top: 40px;
+    color: beige;
+    font-family: Arial;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.navi {
+    display: flex;
+    flex-direction: column;
 }

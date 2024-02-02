@@ -193,6 +193,10 @@ async function saveSensorsToBase(allCar) {
                     await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
                 ]);
             }
+            /* if (el.id === 27697145) {
+                 console.log(rr.messages[0].p)
+             }*/
+
             const mass = [];
             const sort = [];
             const allArray = ggg(nameSens, rez, el.id)
@@ -262,16 +266,7 @@ function detaly(data, str, str2) {
     }
 
 }
-exports.hunterTime = async () => {
-    const now = new Date();
-    if (now.getHours() === 0 && now.getMinutes() === 0) { // если время 0 часов и 0 минут
-        const nowUnix = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime() / 1000);
-        const previousDayUnix = nowUnix - 3600 * 24;
-        const previousDayEndUnix = nowUnix - 1;
-        const res = await constorller.dataSpisok()
-        structura.datas(res, previousDayEndUnix, previousDayUnix)
-    }
-};
+
 
 function ggg(nameSens, rez, id) {
     if (rez && nameSens) {
@@ -358,11 +353,25 @@ async function updateParams(data, kursor) {
         await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
             databaseService.summaryToBase(idw, arrayInfo, datas)
         ));
+        hunterTime()
     }
 
     console.timeEnd('updatedata')
     return 'updateData end'
 }
+
+
+const hunterTime = async () => {
+    const now = new Date();
+    //   if (now.getHours() === 0 && now.getMinutes() === 0) { // если время 0 часов и 0 минут
+    const nowUnix = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime() / 1000);
+    const previousDayUnix = nowUnix;
+    const previousDayEndUnix = Math.floor(new Date(now).getTime() / 1000);
+    const res = await constorller.dataSpisok()
+    structura.datas(res, previousDayEndUnix, previousDayUnix)
+    //   }
+};
+
 
 async function engines(idw) {
     const resSensor = await wialonService.getAllNameSensorsIdDataFromWialon(idw, 'i');

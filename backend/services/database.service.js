@@ -134,7 +134,7 @@ exports.saveStructuraToBase = async (mass) => {
     const data = mass[0];
     const idw = mass[1];
     const info = mass[2]
-    console.log('структура')
+    //  console.log('структура')
     try {
         const postModel = `SELECT info FROM structura WHERE data = @data AND idw = @idw`;
         const pool = await connection;
@@ -142,12 +142,12 @@ exports.saveStructuraToBase = async (mass) => {
         if (results.recordset.length === 0) {
             const sql = `INSERT INTO structura (data, idw, info) VALUES (@data, @idw, @info)`;
             await pool.request().input('data', data).input('idw', idw).input('info', info).query(sql);
-            console.log('запись сделана')
+            // console.log('запись сделана')
         }
         else {
             const postModel = `UPDATE structura  SET data=@data,idw=@idw,info=@info WHERE data = @data AND idw = @idw`
             await pool.request().input('data', data).input('idw', idw).input('info', info).query(postModel);
-            console.log('апдейт')
+            //  console.log('апдейт')
         }
     } catch (e) {
         console.log(e);
