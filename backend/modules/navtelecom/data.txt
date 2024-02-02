@@ -2,10 +2,10 @@ port: 21626
 imei: 866795035938925
 protocol: Flex 3.0
 msg_type: A
-timeRagistration: 1706862929
-msg_number: 12150
+timeRagistration: 1706879926
+msg_number: 12447
 event_code: 5899
-time: 1706862920
+time: 1706879925
 status1: Рабочий режим
 status2: Оповещение о тревоге(выключено)
 status3: Тревога(выключена)
@@ -31,16 +31,16 @@ modules_st28: Тип генератора для RTC:(внешний часов�
 gsm: -109..-53 Дб/м
 nav_rcvr_state: Навигационный приемник включен
 valid_nav: Валидная навигация
-sats: 16
-last_valid_time: 1706862920
-lat: 59.845976666666665
-lon: 30.34253166666667
-altitude: 18.8
-speed: 0
-course: 181
-meliage: 145.62759399414062
-pwr_ext: 21.605
-pwr_int: 2082
+sats: 11
+last_valid_time: 1706879925
+lat: 59.845715000000006
+lon: 30.342468333333333
+altitude: -19.3
+speed: 1.5556799173355103
+course: 9
+meliage: 149.74795532226562
+pwr_ext: 21.604
+pwr_int: 2109
 in1: Вход IN1(датчик сработал)
 in2: Вход IN2(датчик в нормальном состоянии)
 in3: Вход IN3(датчик в нормальном состоянии)
@@ -58,20 +58,20 @@ out6: Выход O6(выключен)
 out7: Выход O7(выключен)
 out8: Выход O8(выключен)
 engine_hours: 0
-hdop: 60
-pdop: 90
+hdop: 110
+pdop: 140
 tyres_number_3: 1
-tpms_pressure_3: 0.8
-tpms_temp_3: 22
+tpms_pressure_3: 0.6
+tpms_temp_3: 20
 tyres_number_4: 2
-tpms_pressure_4: 0.8
-tpms_temp_4: 22
+tpms_pressure_4: 0.6
+tpms_temp_4: 20
 tyres_number_5: 4
-tpms_pressure_5: 0.7
-tpms_temp_5: 21
+tpms_pressure_5: 0.5
+tpms_temp_5: 18
 tyres_number_6: 5
-tpms_pressure_6: 0.7
-tpms_temp_6: 23
+tpms_pressure_6: 0.6
+tpms_temp_6: 21
 status21: в норме
 status22: Контроль не производится
 status23: Нет программы
@@ -79,7 +79,7 @@ modules_st31: Выключен
 modules_st32: Выключен
 modules_st33: Используется основной
 connection_st1: 2G
-connection_st4: Не подключен
+connection_st4: Подключен
 connection_st5: Не подключен
 connection_st6: Не подключен
 connection_st7: Не подключен
