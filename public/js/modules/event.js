@@ -751,6 +751,14 @@ export async function pr() {
 
 
 const plug = document.querySelectorAll('.plug')
+
+plug.forEach(e => {
+    e.addEventListener('click', () => {
+        plug.forEach(e => e.classList.remove('clickNavi'))
+        e.classList.add('clickNavi')
+
+    })
+})
 console.log(plug[2])
 plug[2].addEventListener('click', () => {
     const wRight = document.querySelector('.wrapper_right')
