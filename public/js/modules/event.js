@@ -381,7 +381,7 @@ function mainblock() {
     rightFrame.forEach(e => e.style.display = 'flex')
     const wrapperFull = document.querySelector('.wrapperFull')
     const lowList = document.querySelector('.low_list')
-    lowList.style.height = wrapperFull.clientHeight - 30 + 'px';
+    lowList.style.height = wrapperFull.clientHeight - 65 + 'px';
     const wrapMap = document.querySelector('.wrapMap')
     if (wrapMap) {
         wrapMap.remove();
