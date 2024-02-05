@@ -536,7 +536,7 @@ exports.setObjectGroupWialon = async (objects) => {
             }
             else {
                 // console.log(el.name_g, el.nameObject)
-                const post = `UPDATE wialon_groups  SET login=@login, data = @data, idg = @idg, name_g=@name_g, idObject=@idObject, nameObject=@nameObject 
+                const post = `UPDATE wialon_groups  SET login=@login, data = @data, idg = @idg, name_g=@name_g, idObject=@idObject, nameObject=@nameObject,imei=@imei,phone=@phone
             WHERE login = @login AND idObject = @idObject`;
                 const result = await pool.request()
                     .input('login', el.login)
@@ -545,6 +545,8 @@ exports.setObjectGroupWialon = async (objects) => {
                     .input('name_g', el.name_g)
                     .input('idObject', el.idObject)
                     .input('nameObject', el.nameObject)
+                    .input('imei', el.imei)
+                    .input('phone', el.phone)
                     .query(post);
             }
 
@@ -560,7 +562,7 @@ exports.getSensorsWialonToBase = async (arr, login) => {
     try {
         const pool = await connection;
         if (arr.length > 0) {
-            const post = `SELECT sens_name, param_name,idw, value, data FROM wialon_sensors WHERE idw IN (${arr.map(id => `'${id}'`).join(',')})`;
+            const post = `SELECT sens_name, param_name,idw, value, data FROM wialon_sensors WHERE idw IN (${arr.map(id => `'${id.id}'`).join(',')})`;
             //console.log(post)
             const result = await pool.request()
                 .query(post);

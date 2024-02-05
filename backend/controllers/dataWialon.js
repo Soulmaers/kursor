@@ -7,10 +7,8 @@ exports.spisok = async (req, res) => {
     const idw = req.body.idw
     const arr = req.body.arrId
     const datas = req.body.uniqData
-    console.log('ты')
-    console.log(datas)
     if (arr) {
-        const promises = arr.map(async (idw) => {
+        const promises = datas.map(async (idw) => {
             const nameSensors = await databaseService.loadParamsViewList(idw.nameCar, idw.id, idw);
             return { result: nameSensors, idw };
         });

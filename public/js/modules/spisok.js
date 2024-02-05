@@ -505,10 +505,11 @@ export async function conturTest(testov) {
     validRole()
     navigator();
 
-    // setInterval(zaprosSpisok, 60000, toggleList)
+    setInterval(zaprosSpisok, 10000, toggleList)
 
 
 }
+
 
 function validRole() {
     const role = document.querySelector('.role').getAttribute('rel')
@@ -640,7 +641,7 @@ export const viewList = async (login) => {
     }
 }
 export async function alternativa(data) {
-    const arr = data.filter(e => e.imei === null).map(e => e.id)
+    const arr = data.filter(e => e.id)
     return new Promise(async function (resolve, reject) {
         sensorsName = true
         const login = document.querySelectorAll('.log')[1].textContent
@@ -657,7 +658,7 @@ export async function alternativa(data) {
             return [e.sens_name, e.param_name, Number(e.idw), Number(e.value)]
         })
         lastSensor = true
-        const sesnorsKursor = await getParamsKursorSensors(data)
+        const sesnorsKursor = await getParamsKursorSensors(arr)
         const result = itog.concat(sesnorsKursor[0])
         resolve(result)
 
@@ -970,11 +971,12 @@ async function zaprosSpisok(toggleList) {
     const data = Array.from(list).map(el => {
         return { nameCar: el.children[0].textContent, id: el.id, imei: el.getAttribute('data-att'), phone: el.getAttribute('data-phone') }
     })
-    console.log('список')
-    console.log(data)
-    const uniqData = [...new Set(data.map(JSON.stringify))].map(JSON.parse)
 
+    const uniqData = [...new Set(data.map(JSON.stringify))].map(JSON.parse)
+    console.log('список')
+    console.log(uniqData)
     const res = await alternativa(uniqData)
+
     const param = {
         method: "POST",
         headers: {

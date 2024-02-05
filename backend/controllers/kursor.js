@@ -5,7 +5,6 @@ const { sortData } = require('../helpers')
 exports.getKursorObjects = async (req, res) => {
     const login = req && req.body && req.body.login ? req.body.login : null
     const data = await databaseService.getKursorObjects(login)
-    // console.log(data)
     const ress = sortData(data)
     const massObject = [];
     for (const elem of ress) {
@@ -18,7 +17,7 @@ exports.getKursorObjects = async (req, res) => {
         const massSub = []
         for (const sub of elem.sub) {
             promises = sub.objects.map(async el => {
-                return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), 'kursor');
+                return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), el, 'kursor');
             });
             const dataObjectSub = await Promise.all(promises)
             sub.objects = dataObjectSub
