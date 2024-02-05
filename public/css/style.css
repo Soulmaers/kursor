@@ -6096,7 +6096,7 @@ input[type="text"]:focus {
   background-color: rgba(6, 28, 71, 1);
   position: absolute;
   top: 35px;
-  left: -300px;
+  left: -350px;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   cursor: move

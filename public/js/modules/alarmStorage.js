@@ -108,48 +108,61 @@ async function viewAlarmStorage(name, stor) {
         'Если нажать красный маркер карты, то на карте отразится место события с переданными туда данными']);
 
     const active = document.querySelector('.color')
-    const allobj = await ggg(active.id)
+
+    const arr = [active.id]
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ arr }))
+    }
+    const sens = await fetch('/api/getSensorsWialonToBase', param)
+    const allsens = await sens.json()
+
+
     result.forEach(el => {
-        let count = 0;
         el.forEach(it => {
-            if (!allobj.hasOwnProperty(it.senspressure)) {
-                return
+            const sensName = allsens.find(obj => obj.param_name === it.senspressure);
+            if (!sensName) {
+                return;
             }
-            it.senspressure = allobj[it.senspressure]
-            count++
-            const tr = document.createElement('div')
-            tr.classList.add('tr')
-            tr.classList.add('trnone')
-            tr.setAttribute('rel', `${name}`)
-            tbody.appendChild(tr)
+            it.senspressure = sensName.sens_name;
+
+            const tr = document.createElement('div');
+            tr.classList.add('tr');
+            tr.classList.add('trnone');
+            tr.setAttribute('rel', `${name}`);
+            tbody.appendChild(tr);
 
             const toSearch = "Норма";
-            if (count == 1) {
-                tr.classList.add('views')
+            const count = el.indexOf(it) + 1;
+            tr.classList.toggle('views', count == 1);
+            tr.classList.toggle('norma', it.alarm == toSearch);
+
+            Object.values(it).forEach(value => {
+                const td = document.createElement('p');
+                td.classList.add('td');
+                td.textContent = value;
+                tr.appendChild(td);
+            });
+        });
+
+        const t = document.querySelectorAll('.tr');
+        t.forEach((tr, i) => {
+            const nextTr = t[i + 1];
+            const alarmValue = tr.children[4].textContent;
+
+            if (alarmValue == 'Норма' && nextTr) {
+                nextTr.classList.add('views');
             }
-            if (it.alarm == toSearch) {
-                tr.classList.add('norma')
+
+            if (nextTr && tr.classList.contains('views') && !nextTr.classList.contains('views') && !nextTr.classList.contains('norma')) {
+                tr.classList.add('best');
             }
-            // console.log(it)
-            for (var key in it) {
-                const td = document.createElement('p')
-                td.classList.add('td')
-                td.textContent = it[key]
-                tr.appendChild(td)
-            }
-            const t = document.querySelectorAll('.tr')
-            for (let i = 0; i < t.length; i++) {
-                if (t[i].children[4].textContent == 'Норма' && t[i + 1] !== undefined) {
-                    t[i + 1].classList.add('views')
-                }
-                if (t[i].nextSibling !== null) {
-                    if (t[i].classList.contains('views') && !t[i].nextSibling.classList.contains('views') && !t[i].nextSibling.classList.contains('norma')) {
-                        t[i].classList.add('best')
-                    }
-                }
-            }
-        })
-    })
+        });
+    });
+
     const t = document.querySelectorAll('.tr')
     if (t.length === 1) {
         return
@@ -205,6 +218,7 @@ async function viewAlarmStorage(name, stor) {
             }
         }
     })
+
     if (t[0] && t[0].children[5]) {
         t[0].children[5].textContent = 'Время аларма'
         const best = document.querySelectorAll('.best')
@@ -324,13 +338,13 @@ async function viewAlarmStorage(name, stor) {
         return itog
     }
     // tbody.style.height = '50vh'
-    const arr = [];
+    const array = [];
     vieList.forEach(el => {
         el.style.position = 'relative'
         const mapIcon = document.createElement('div')
         mapIcon.classList.add('mapIcon')
         el.appendChild(mapIcon)
-        arr.push(el)
+        array.push(el)
     })
     spoyler.forEach(e => {
         e.style.position = 'relative'
@@ -338,10 +352,10 @@ async function viewAlarmStorage(name, stor) {
         mapIcon.classList.add('mapIcon')
         e.appendChild(mapIcon)
     })
-    arr.sort(function (a, b) {
+    array.sort(function (a, b) {
         return parseFloat(fntinesort(b.children[0].textContent)) - parseFloat(fntinesort(a.children[0].textContent))
     });
-    arr.forEach(it => {
+    array.forEach(it => {
         tbody.appendChild(it)
     })
 
@@ -379,7 +393,6 @@ async function geoMarker(time, idw, tr) {
             geo: JSON.parse(e.geo)
         };
     });
-    console.log(geoCard);
     const trackAlarm = geoCard.map(it => {
         return it.geo
     })

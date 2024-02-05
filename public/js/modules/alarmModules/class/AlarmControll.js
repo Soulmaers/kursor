@@ -1,12 +1,12 @@
 
 import { DraggableContainer } from '../../../class/Dragdown.js'
 import { CloseBTN } from '../../../class/Flash.js'
-
 export class AlarmControll {
     constructor(nav) {
         this.list = nav
         this.mainAlarm = document.querySelector('.mainAlarm')
         this.alarmStorage = document.querySelector('.alarmStorage')
+        this.wrapMap = document.querySelector('.wrapMap')
         this.mainAlarm.addEventListener('click', this.toggleCheck.bind(this))
 
     }
@@ -18,11 +18,11 @@ export class AlarmControll {
             this.alarmStorage.style.display = 'block';
             new DraggableContainer(this.alarmStorage)
             event.stopPropagation();
+
             document.addEventListener('click', function (event) {
                 const targetElement = event.target;
-                const wrapMap = document.querySelector('.wrapMap')
-                if (wrapMap && !wrapMap.contains(targetElement)) {
-                    wrapMap.remove();
+                if (this.wrapMap && !this.wrapMap.contains(targetElement)) {
+                    this.wrapMap.remove();
                 }
             });
             new CloseBTN(this.alarmStorage, this.mainAlarm)

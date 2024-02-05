@@ -121,9 +121,6 @@ export async function visual(el) {
     const tableTarir = document.querySelector('.tableTarir')
     tableTarir.style.display = 'none'
 
-    /* plug.forEach(e => { e.parentNode.style.background = '#fff', e.classList.remove('clickNavi') })
-     plug[0].classList.add('clickNavi')
-     plug[0].parentNode.style.background = 'rgba(6, 28, 71, 1)'*/
     tiresLink.forEach(e => {
         if (e.classList.contains('tiresActiv')) {
             grafics.style.display = 'flex'
@@ -143,6 +140,9 @@ export async function visual(el) {
 
     }
     alarmClear();
+
+    const alarm = document.querySelector('.wrap_alarm')
+    new Tooltip(alarm, ['События по давлению'])
     wrapperUp.style.display = 'flex'
     wrapperCont.style.display = 'flex'
     if (titleCar) {
