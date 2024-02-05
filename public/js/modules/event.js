@@ -338,6 +338,8 @@ iconStrela.addEventListener('click', () => {
 
 let intervalId
 let intervalId2
+
+/*
 const btnDash = document.querySelector('.dash')
 btnDash.addEventListener('click', () => {
     const color = document.querySelector('.color')
@@ -370,7 +372,7 @@ btnDash.addEventListener('click', () => {
     intervalId = setInterval(getDash, 30000),
         intervalId2 = setInterval(getStat, 30000)
 
-});
+});*/
 
 function mainblock() {
     const allsec = document.querySelectorAll('.allsec')
