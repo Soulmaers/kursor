@@ -160,7 +160,6 @@ export async function visual(el) {
     }
     createEvent = new CreateMarkersEvent(idw)
     createEvent.init()
-    alarmFind()
     liCreate()
     await loadParamsView()
     tooltip()
@@ -174,7 +173,7 @@ export async function visual(el) {
     setInterval(kranParams, 300000)
     tarirView();
     setInterval(tarirView, 300000)
-
+    alarmFind()
     const btnShina = document.querySelectorAll('.modals')
     console.log(btnShina)
     if (btnShina[1].classList.contains('active')) {
