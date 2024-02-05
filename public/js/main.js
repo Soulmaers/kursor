@@ -1,21 +1,12 @@
 
-import { zapros, zaprosKursor } from './modules/menu.js'
+import { zapros } from './modules/menu.js'
 import { btnDel } from './modules/event.js'
 import { liCreate } from './modules/visual.js'
 
 
 
-function waitForDOMLoad() {
-    return new Promise((resolve) => {
-        document.addEventListener('DOMContentLoaded', resolve);
-    });
-}
 
 async function init() {
-    //   await waitForDOMLoad(); // Ожидаем загрузку всего DOM
-    //  waitAndExecute(); // Запускаем функцию после загрузки DOM
-
-
     const role = document.querySelector('.role').getAttribute('rel')
     const login = document.querySelectorAll('.log')[1].textContent
     const radioVal = document.querySelector('.radioVal')
@@ -104,46 +95,18 @@ function inits() {
 function zapross() {
 
 
-    const paramysss = {
-        "reportResourceId": 25383830,//26936615,//24937438,
-        "reportTemplateId": 5,//2,//1,
-        "reportObjectId": 25399437,
-        'reportObjectSecId': 0,
-        'reportObjectIdList': [],
-        "interval": {
-            "from":
-                1699736400,
-            "to":
-                1699822799,
-            "flags": 0x00
-        }
-    }
+    const prmsId = {
+        "id": 26936623,
+        "flags": 0x00000100
+    };
 
     const test2 = wialon.core.Remote.getInstance();
-    test2.remoteCall('report/exec_report', paramysss,
+    test2.remoteCall('core/search_item', prmsId,
         function (code, result) {
             if (code) {
                 console.log(wialon.core.Errors.getErrorText(code));
             }
             console.log(result)
 
-            const param = {
-                "attachmentIndex": 0,
-                "width": 100,
-                "useCrop": 0,
-                'cropBegin': 1699736400,
-                'cropEnd': 1699822799
-            }
-
-            const chart = wialon.core.Remote.getInstance();
-            chart.remoteCall('report/render_json', param,
-                function (code, result) {
-                    if (code) {
-                        console.log(wialon.core.Errors.getErrorText(code));
-                    }
-                    console.log(result)
-                })
         })
-
-    /*https://hst-api.wialon.com/wialon/ajax.html?svc=report/export_result&params={"format"2}&sid=02c1af974d1a5bf8d5631b0dc34aab71*/
 }

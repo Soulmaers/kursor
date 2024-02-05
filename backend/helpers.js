@@ -69,12 +69,16 @@ exports.sortData = (datas) => {
             acc[elem.idg].sub.find(item => item.id_sub_g === elem.id_sub_g).objects.push({
                 idObject: elem.idObject,
                 nameObject: elem.nameObject,
+                imei: elem.imei,
+                phone: elem.phone
             })
         }
         else {
             acc[elem.idg].objects.push({
                 idObject: elem.idObject,
                 nameObject: elem.nameObject,
+                imei: elem.imei,
+                phone: elem.phone
             })
         }
         return acc;

@@ -11,7 +11,7 @@ exports.getKursorObjects = async (req, res) => {
     for (const elem of ress) {
         let promises;
         promises = elem.objects.map(async el => {
-            return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), 'kursor');
+            return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), el, 'kursor');
         });
         const dataObjectGroup = await Promise.all(promises)
         elem.objects = dataObjectGroup

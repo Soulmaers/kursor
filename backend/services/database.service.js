@@ -518,8 +518,8 @@ exports.setObjectGroupWialon = async (objects) => {
                 .query(post)
             if (result.recordset.length === 0) {
                 const post = `
-    INSERT INTO wialon_groups (login, data, idg, name_g, id_sub_g, name_sub_g, idObject, nameObject)
-    VALUES (@login, @data, @idg, @name_g, @id_sub_g, @name_sub_g, @idObject, @nameObject)
+    INSERT INTO wialon_groups (login, data, idg, name_g, id_sub_g, name_sub_g, idObject, nameObject, imei,phone)
+    VALUES (@login, @data, @idg, @name_g, @id_sub_g, @name_sub_g, @idObject, @nameObject,@imei, @phone)
 `;
                 const result = await pool.request()
                     .input('login', el.login)
@@ -530,6 +530,8 @@ exports.setObjectGroupWialon = async (objects) => {
                     .input('name_sub_g', null)
                     .input('idObject', el.idObject)
                     .input('nameObject', el.nameObject)
+                    .input('imei', el.imei)
+                    .input('phone', el.phone)
                     .query(post);
             }
             else {
@@ -1309,19 +1311,20 @@ exports.alarmBase = async (data, tyres, alarm) => {
 }
 
 
-exports.loadParamsViewList = async (car, el, kursor) => {
+exports.loadParamsViewList = async (car, el, object, kursor) => {
     const idw = el
     const pool = await connection;
+    //  console.log(car, el, object, kursor)
     const mod = async () => {
         try {
             const selectBase = `SELECT osi, trailer, tyres, type, tsiControll FROM model WHERE idw='${idw}'`
             const result = await pool.query(selectBase)
             if (kursor) {
                 const datas = (await databaseService.objects(String(el))).map(e => e.imei)[0]
-                return { result: result.recordset, message: car, imei: datas }
+                return { result: result.recordset, message: car, imei: datas, phone: 'null' }
             }
             else {
-                return { result: result.recordset, message: car }
+                return { result: result.recordset, message: car, imei: object.imei, phone: object.phone }
             }
         }
         catch (e) {

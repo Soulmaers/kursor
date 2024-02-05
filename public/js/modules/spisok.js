@@ -220,6 +220,7 @@ export async function conturTest(testov) {
                             listItemCar.setAttribute('rel', `${elem[4]}`)
                             listItemCar.setAttribute('id', `${elem[4]}`)
                             listItemCar.setAttribute('data-att', `${elem[0].imei}`)
+                            listItemCar.setAttribute('data-phone', `${elem[0].phone}`)
                             listArr.lastChild.appendChild(listItemCar)
                             const listName = document.createElement('div')
                             listName.classList.add('list_name2')
@@ -360,7 +361,9 @@ export async function conturTest(testov) {
                     listItemCar.classList.add(`${elem[4]}`)
                     listItemCar.setAttribute('rel', `${elem[4]}`)
                     listItemCar.setAttribute('id', `${elem[4]}`)
-                    el[el.length - 1] !== 'kursor' ? listItemCar.setAttribute('data-att', `${elem[0].imei}`) : null
+                    //  el[el.length - 1] !== 'kursor' ? listItemCar.setAttribute('data-att', `${elem[0].imei}`) : null
+                    listItemCar.setAttribute('data-att', `${elem[0].imei}`)
+                    listItemCar.setAttribute('data-phone', `${elem[0].phone}`)
                     listArr.lastChild.appendChild(listItemCar)
                     const listName = document.createElement('div')
                     listName.classList.add('list_name2')
@@ -502,7 +505,7 @@ export async function conturTest(testov) {
     validRole()
     navigator();
 
-    setInterval(zaprosSpisok, 60000, toggleList)
+    // setInterval(zaprosSpisok, 60000, toggleList)
 
 
 }
@@ -965,16 +968,19 @@ async function zaprosSpisok(toggleList) {
     const list = document.querySelectorAll('.listItem')
     const arrId = Array.from(list).map(el => Number(el.id))
     const data = Array.from(list).map(el => {
-        return el.classList.contains('wialon') ? { id: el.id, imei: null } : { id: el.id, imei: el.getAttribute('data-att') }
+        return { nameCar: el.children[0].textContent, id: el.id, imei: el.getAttribute('data-att'), phone: el.getAttribute('data-phone') }
     })
+    console.log('список')
+    console.log(data)
     const uniqData = [...new Set(data.map(JSON.stringify))].map(JSON.parse)
+
     const res = await alternativa(uniqData)
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ arrId }))
+        body: (JSON.stringify({ uniqData, arrId }))
     }
     const listsr = await fetch('/api/spisokList', param)
     const spisoks = await listsr.json()

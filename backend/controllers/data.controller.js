@@ -30,13 +30,14 @@ exports.dataSpisok = async (req, res) => {
         const aLLmassObject = [];
         const arrName = []
         for (const elem of ress) {
+
             const massObject = [];
             const nameGroup = elem.name_g;
             const idGroup = elem.idg
             let promises;
             promises = elem.objects.map(async el => {
                 arrName.push([el.nameObject, el.idObject])
-                return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject));
+                return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), el);
 
             });
             const dataObjectGroup = await Promise.all(promises)
@@ -89,7 +90,8 @@ const getWialon = async (login) => {
 
             return nameObject.map(async (el) => {
                 try {
-                    const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
+                    const all = await wialonService.getAllParamsIdDataFromWialon(el);
+                    const phone = await wialonService.getUniqImeiAndPhoneIdDataFromWialon(el);
                     if (!all.item) {
                         return;
                     }
@@ -99,7 +101,9 @@ const getWialon = async (login) => {
                         idg: String(idGroup),
                         name_g: nameGroup,
                         idObject: String(all.item.id),
-                        nameObject: String(all.item.nm)
+                        nameObject: String(all.item.nm),
+                        imei: phone.item.uid ? String(phone.item.uid) : null,
+                        phone: phone.item.ph ? String(phone.item.ph) : null
                     };
                 } catch (error) {
                     console.error(error);

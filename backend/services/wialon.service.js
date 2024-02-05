@@ -183,6 +183,28 @@ exports.getAllParamsIdDataFromWialon = async (id) => {
         }
     });
 };
+exports.getUniqImeiAndPhoneIdDataFromWialon = async (id) => {
+    const prmsId = {
+        "id": id,
+        "flags": 0x00000100
+    };
+    return new Promise(async function (resolve, reject) {
+        try {
+            const session = await geSession.geSession();
+            const data = await session.request('core/search_item', prmsId);
+            // Обработка успешного ответа
+            resolve(data);
+        } catch (err) {
+            if (err.code === 7) {
+                // Запрашиваемый ресурс не найден или не доступен
+                resolve({});
+                return;
+            }
+            resolve({});
+            reject(err);
+        }
+    });
+};
 
 
 exports.getAnimalsWialon = async (login) => {
