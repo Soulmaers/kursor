@@ -9546,3 +9546,21 @@ i.settingsGroup {
   cursor: pointer;
   background-image: url(../image/alarmpressure.png);
 }
+
+.search_list {
+  margin: 5px;
+  position: relative;
+}
+
+.loop_find {
+  color: gray;
+  font-weight: 300;
+  font-size: 0.7rem;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+
+.search_input {
+  padding: 2px 25px;
+}

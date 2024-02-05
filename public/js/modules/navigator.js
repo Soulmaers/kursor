@@ -3,6 +3,8 @@ import { NavigationMenu } from './navModules/NavigatorClass.js'
 import { IconStatus } from './iconModules/class/IconStatus.js'
 import { GrafikView } from './grafikModules/class/GrafikView.js'
 import { AlarmControll } from './alarmModules/class/AlarmControll.js'
+import { DropDownList } from '../class/DropdownList.js'
+
 export let iconStatusClick;
 export let grafClick;
 export function navigator() {
@@ -16,10 +18,12 @@ export function navigator() {
     const start = document.querySelector('.start')
     start.style.display = 'flex';
     const nav = document.querySelectorAll('.listItem')
+    const searchInput = document.querySelector('.search_input')
     const statStart = document.querySelector('.stat_start').classList.add('tablo')
     iconStatusClick = new IconStatus(nav)
     grafClick = new GrafikView(nav)
 
+    new DropDownList(searchInput)
     new AlarmControll(nav)
     const navMenu = new NavigationMenu();
     navMenu.init();

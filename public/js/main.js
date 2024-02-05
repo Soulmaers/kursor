@@ -78,7 +78,7 @@ async function init() {
 
     console.log(wrapperFull.clientHeight)
     // wrapperFull.style.height = screen.height - 80 + 'px'
-    lowList.style.height = wrapperFull.clientHeight - 30 + 'px';
+    lowList.style.height = wrapperFull.clientHeight - 65 + 'px';
     console.log(lowList.style.height)
 }
 

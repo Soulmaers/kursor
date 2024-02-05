@@ -40,6 +40,7 @@ const viewIcon = document.querySelectorAll('.viewIcon')
 const role = document.querySelector('.role')
 const logout = document.querySelector('.logoutIcon')
 const create = document.querySelector('.create_object')
+const search = document.querySelector('.loop_find')
 new Flash()
 
 
@@ -54,7 +55,7 @@ draggable()
 new Tooltip(role, [role.getAttribute('rel')]);
 new Tooltip(logout, [logout.getAttribute('rel')]);
 new Tooltip(create, ['Добавить новый объект']);
-
+new Tooltip(search, ['Поиск объектов по имени, ID, имени группы'])
 export const obj = new CreateNewObject(create)
 export const sett = new CreateNewGroup(create)
 viewIcon.forEach(e => {
@@ -787,42 +788,8 @@ plug[2].addEventListener('click', () => {
     if (wrapMap) {
         wrapMap.remove();
     }
-    //  calendarFormat()
-    // click()
-    // clearGraf()
 })
 
-
-/*
-const menuGraf = document.querySelectorAll('.menu_graf')
-menuGraf.forEach(el => {
-    el.addEventListener('click', () => {
-        const wrapMap = document.querySelector('.wrapMap')
-        if (wrapMap) {
-            wrapMap.remove();
-        }
-        const grafOld = document.querySelector('.infoGraf')
-        if (grafOld) {
-            removeElem(grafOld)
-        }
-        menuGraf.forEach(e => {
-            e.classList.remove('activMenuGraf')
-        })
-        el.classList.add('activMenuGraf')
-        if (times.length !== 0) {
-            const preloaderGraf = document.querySelector('.loader')
-            preloaderGraf.style.opacity = 1;
-            preloaderGraf.style.display = 'flex'
-            dataInput() //фунции выбора интервала графика скорости
-        }
-        if (times.length === 0) {
-            const preloaderGraf = document.querySelector('.loader')
-            preloaderGraf.style.opacity = 1;
-            preloaderGraf.style.display = 'flex'
-            dataSelect() //фунции выбора интервала графика скорости
-        }
-    })
-})*/
 
 const closeIconConfig = document.querySelector('.closeIconConfig')
 closeIconConfig.addEventListener('click', () => {
@@ -869,13 +836,9 @@ btnsens.forEach(e => {
     e.addEventListener('click', () => {
         if (e.classList.contains('actBTN')) {
             e.classList.remove('actBTN')
-            //   obo.style.display = 'none';
-            //  titleSens.style.display = 'none';
             return
         }
         btnsens.forEach(el => {
-            //  obo.style.display = 'none';
-            // titleSens.style.display = 'none';
             el.classList.remove('actBTN')
         })
         e.classList.add('actBTN')

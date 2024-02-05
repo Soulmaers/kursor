@@ -45,9 +45,7 @@ export async function visual(el) {
     const tsiControll = document.querySelector('.tsiControll')
     tsiControll.value = '';
     el.classList.add('color')
-    /* trEventLogs.forEach(item => {
-         item.getAttribute('rel') !== el.id ? item.style.display = 'none' : null
-     })*/
+
     const msg = document.querySelectorAll('.msg')
     if (msg) {
         msg.forEach(e => {
@@ -103,7 +101,6 @@ export async function visual(el) {
     clearInterval(time)
     clearInterval(timeIcon)
     const wrapperUp = document.querySelector('.wrapper_up')
-    const speedGraf = document.querySelector('.speedGraf')
     const wrapperCont = document.querySelector('.wrapper_containt')
     const wrapperLeft = document.querySelector('.wrapper_left')
     const titleCar = document.querySelector('.title_two')
@@ -139,7 +136,7 @@ export async function visual(el) {
         }
 
     }
-    alarmClear();
+    // alarmClear();
 
     const alarm = document.querySelector('.wrap_alarm')
     new Tooltip(alarm, ['События по давлению'])
@@ -196,13 +193,9 @@ export function visualNone(e) {
     clearElem(statusObj.textContent)
     statusObj.style.color = 'gray'
     const wrapperUp = document.querySelector('.wrapper_up')
-    const speedGraf = document.querySelector('.speedGraf')
     const techInfo = document.querySelector('.techInfo')
     const modalCenterOs = document.querySelector('.modalCenterOs')
-    const plus = document.querySelector('.plus')
-    const minus = document.querySelector('.minus')
     const alarmStorage = document.querySelector('.alarmStorage')
-
     const contKran = document.querySelector('.contKran')
     contKran.style.display = 'none'
     const card = document.querySelectorAll('.cardClick')
@@ -213,8 +206,6 @@ export function visualNone(e) {
     if (newBoad) {
         removeElem(newBoad)
     }
-    //  plus.style.display = 'block'
-    //minus.style.display = 'none'
     alarmStorage.style.display = 'none'
     techInfo.style.display = 'none'
     modalCenterOs.style.display = 'none'
@@ -225,6 +216,8 @@ export function visualNone(e) {
         removeElem(it)
     })
 }
+
+/*
 //стираем выбранные значения графика скорости
 export function clearGraf() {
     const selectSpeed = document.querySelector('.select_speed')
@@ -233,7 +226,7 @@ export function clearGraf() {
     inputDate.forEach(e => {
         clearElem(e.value)
     })
-}
+}*/
 //создаем список под параметры
 export async function liCreate() {
     const obo = document.querySelector('.obo')
@@ -346,7 +339,6 @@ export async function viewConfigurator(arg, params, osi) {
                                             return
                                         }
                                         if (in1 === 0) {
-                                            //  e.children[0].style.background = 'lightgray';
                                             e.children[1].style.color = 'lightgray'
                                             return
                                         }
@@ -363,11 +355,9 @@ export async function viewConfigurator(arg, params, osi) {
                                             return
                                         }
                                         if (in1 === 0) {
-                                            //  e.children[0].style.background = 'lightgray';
                                             e.children[1].style.color = 'lightgray'
                                             return
                                         }
-                                        //   e.children[1].style.background = '#000';
                                         e.children[1].style.background = 'none'
                                         e.children[1].style.color = objColor[generT(el.value)];
                                     }
@@ -440,6 +430,7 @@ export function alarmClear() {
     // const ogon = document.querySelector('.ogon')
     //  ogon.style.display = 'none'
     const alarmCheck = document.querySelectorAll('.alarmCheck')
+    console.log(alarmCheck)
     alarmCheck.forEach(e => {
         e.style.borderTopLeftRadius = 'none'
         e.style.border = 'none'
