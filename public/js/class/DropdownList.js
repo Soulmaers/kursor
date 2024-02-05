@@ -13,12 +13,12 @@ export class DropDownList {
     pushData() {
         this.list.forEach(e => this.globalArrayData.push(e.children[0].textContent))
         this.list.forEach(e => this.globalArrayData.push(e.getAttribute('rel')))
+        this.list.forEach(e => e.getAttribute('data-att') !== 'null' ? this.globalArrayData.push(e.getAttribute('data-att')) : null)
+        this.list.forEach(e => e.getAttribute('data-phone') !== 'null' ? this.globalArrayData.push(e.getAttribute('data-phone')) : null)
         this.group.forEach(e => this.globalArrayData.push(e.getAttribute('rel')))
-        console.log(this.globalArrayData)
     }
 
     onElementInput({ target }) {
-        console.log(target.value)
         this.removeList();
         if (!target.value) {
             this.openAllList()
@@ -27,9 +27,9 @@ export class DropDownList {
     }
 
     createList(data) {
-        console.log(data)
         this.list.forEach(e => {
-            if (data.includes(e.children[0].textContent) || data.includes(e.getAttribute('rel')) || data.includes(e.closest('.groups').getAttribute('rel'))) {
+            if (data.includes(e.children[0].textContent) || data.includes(e.getAttribute('rel')) || data.includes(e.closest('.groups').getAttribute('rel'))
+                || data.includes(e.getAttribute('data-att')) || data.includes(e.getAttribute('data-phone'))) {
                 e.style.display = 'flex'
                 e.closest('.groups').style.display = 'flex'
             }

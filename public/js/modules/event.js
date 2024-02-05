@@ -55,7 +55,7 @@ draggable()
 new Tooltip(role, [role.getAttribute('rel')]);
 new Tooltip(logout, [logout.getAttribute('rel')]);
 new Tooltip(create, ['Добавить новый объект']);
-new Tooltip(search, ['Поиск объектов по имени, ID, имени группы'])
+new Tooltip(search, [['Поиск объектов по имени, ID, имени группы,'], ['уникальному IMEI, телефону']])
 export const obj = new CreateNewObject(create)
 export const sett = new CreateNewGroup(create)
 viewIcon.forEach(e => {

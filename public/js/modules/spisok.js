@@ -986,6 +986,7 @@ async function zaprosSpisok(toggleList) {
     }
     const listsr = await fetch('/api/spisokList', param)
     const spisoks = await listsr.json()
+    console.log(spisoks)
     list.forEach(async el => {
         const idw = el.id
         const inn = res.filter(e => {
@@ -994,11 +995,13 @@ async function zaprosSpisok(toggleList) {
             }
         });
         const spisok1 = spisoks.res.filter(e => {
-            if (e.idw === parseFloat(idw)) {
+            if (e.idw.id === idw) {
                 return e.result
             }
         });
+
         const spisok = spisok1[0].result
+        console.log(spisok)
         viewListKoleso(spisok[0], spisok[1], spisok[2], spisok[3], el, inn, res, toggleList)
     })
     const updateTime = document.querySelector('.update_time')

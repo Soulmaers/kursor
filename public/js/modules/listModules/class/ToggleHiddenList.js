@@ -501,6 +501,7 @@ export class ToggleHiddenList {
         Array.from(element.parentNode.nextElementSibling.children).forEach(el => {
             arr.push(el)
         })
+        console.log(Array.from(element.parentNode.nextElementSibling.children))
         arr.forEach(it => {
             element.parentNode.nextElementSibling.prepend(it)
         })
