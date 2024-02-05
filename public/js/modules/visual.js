@@ -11,7 +11,7 @@ import { convert } from './helpersFunc.js'
 import { timeIntervalStatistiks } from './detalisation.js'
 import { CreateMarkersEvent } from './objectMainModules/class/CreateMarkersEvent.js'
 import { grafClick } from './navigator.js'
-
+import { alarmFind } from './alarmStorage.js'
 let time;
 let timeIcon;
 let createEvent;
@@ -160,7 +160,7 @@ export async function visual(el) {
     }
     createEvent = new CreateMarkersEvent(idw)
     createEvent.init()
-
+    alarmFind()
     liCreate()
     await loadParamsView()
     tooltip()

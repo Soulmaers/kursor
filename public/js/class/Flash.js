@@ -75,13 +75,11 @@ export class Flash {
 
 
 export class CloseBTN {
-    constructor(elem1, elem2, elem3, elem4) {
+    constructor(elem1, elem2, elem3) {
         this.elem1 = elem1,
             this.elem2 = elem2
         this.elem3 = elem3
-        this.elem4 = elem4
-        this.handleClickOutside = this.handleClickOutside.bind(this)
-        document.addEventListener('click', this.handleClickOutside)
+        document.addEventListener('click', this.handleClickOutside.bind(this))
     }
 
     handleClickOutside(event) {
@@ -94,20 +92,19 @@ export class CloseBTN {
                 this.elem1.classList.remove('clickLog')
             }
         }
-        if (this.elem4) {
-            const isClickedOnElem1 = this.elem1.contains(event.target);
-            const isClickedOnElem2 = this.elem2.contains(event.target);
-            if (!isClickedOnElem1 && !isClickedOnElem2) {
-                this.elem1.style.display = 'none';
-                this.elem3.style.display = 'block';
-                this.elem2.style.display = 'none'
-                //  alarmFind()
-            }
-        }
         else {
             const isClickedOnElem1 = this.elem1.contains(event.target);
             if (!isClickedOnElem1) {
                 this.elem1.style.display = 'none';
+                if (this.elem1.classList.contains('alarmStorage')) {
+                    this.elem2.classList.remove('check_alarm')
+                    const wrapMap = document.querySelector('.wrapMap')
+                    if (wrapMap) {
+                        wrapMap.remove();
+                    }
+                    alarmFind()
+                }
+
             }
         }
 

@@ -1,4 +1,7 @@
 
+import { DraggableContainer } from '../../../class/Dragdown.js'
+import { CloseBTN } from '../../../class/Flash.js'
+
 export class AlarmControll {
     constructor(nav) {
         this.list = nav
@@ -9,23 +12,20 @@ export class AlarmControll {
     }
 
 
-    toggleCheck() {
+    toggleCheck(event) {
         this.mainAlarm.classList.toggle('check_alarm')
-
         if (this.mainAlarm.classList.contains('check_alarm')) {
             this.alarmStorage.style.display = 'block';
-            // new DraggableContainer(alarmStorage)
-
-            /*  document.addEventListener('click', function (event) {
-                  const targetElement = event.target;
-                  const map = document.getElementById('mapOil');
-                  const wrapMap = document.querySelector('.wrapMap')
-                  if (wrapMap && !wrapMap.contains(targetElement)) {
-                      console.log('удаляем карту?')
-                      wrapMap.remove();
-                  }
-              });
-              new CloseBTN(alarmStorage, minus, plus, 'alarm')*/
+            new DraggableContainer(this.alarmStorage)
+            event.stopPropagation();
+            document.addEventListener('click', function (event) {
+                const targetElement = event.target;
+                const wrapMap = document.querySelector('.wrapMap')
+                if (wrapMap && !wrapMap.contains(targetElement)) {
+                    wrapMap.remove();
+                }
+            });
+            new CloseBTN(this.alarmStorage, this.mainAlarm)
         }
         else {
             this.alarmStorage.style.display = 'none';

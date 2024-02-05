@@ -344,7 +344,7 @@ async function viewAlarmStorage(name, stor) {
     arr.forEach(it => {
         tbody.appendChild(it)
     })
-    alarmFire()
+
     const mess = document.querySelectorAll('.mapIcon')
     mess.forEach(icons => {
         icons.addEventListener('click', () => {
@@ -354,11 +354,7 @@ async function viewAlarmStorage(name, stor) {
         })
     })
 }
-function alarmFire() {
-    const alarmStorage = document.querySelectorAll('.alarmFire')
-    const ogon = document.querySelector('.ogon')
-    alarmStorage ? ogon.style.display = 'block' : ogon.style.display = 'none'
-}
+
 function nextAll(elem) {
     var next = false;
     return [].filter.call(elem.parentNode.children, function (child) {
@@ -366,42 +362,6 @@ function nextAll(elem) {
         return next && child !== elem
     })
 };
-const plus = document.querySelector('.plus')
-const minus = document.querySelector('.minus')
-const alarmStorage = document.querySelector('.alarmStorage')
-
-/*plus.addEventListener('click', (event) => {
-    console.log('блок?')
-    alarmStorage.style.display = 'block';
-    new DraggableContainer(alarmStorage)
-
-    plus.style.display = 'none';
-    minus.style.display = 'block'
-    event.stopPropagation();
-    document.addEventListener('click', function (event) {
-        const targetElement = event.target;
-        const map = document.getElementById('mapOil');
-        const wrapMap = document.querySelector('.wrapMap')
-        if (wrapMap && !wrapMap.contains(targetElement)) {
-            console.log('удаляем карту?')
-            wrapMap.remove();
-        }
-    });
-    new CloseBTN(alarmStorage, minus, plus, 'alarm')
-})
-minus.addEventListener('click', () => {
-    alarmStorage.style.display = 'none';
-    plus.style.display = 'block';
-    minus.style.display = 'none'
-    // console.time()
-    // alarmFind()
-    //  console.timeEnd()
-    const mapss = document.getElementById('mapOil')
-    const wrapMap = document.querySelector('.wrapMap')
-    if (wrapMap) {
-        wrapMap.remove();
-    }
-})*/
 
 async function geoMarker(time, idw, tr) {
     const dateString = time;
