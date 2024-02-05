@@ -370,7 +370,7 @@ const plus = document.querySelector('.plus')
 const minus = document.querySelector('.minus')
 const alarmStorage = document.querySelector('.alarmStorage')
 
-plus.addEventListener('click', (event) => {
+/*plus.addEventListener('click', (event) => {
     console.log('блок?')
     alarmStorage.style.display = 'block';
     new DraggableContainer(alarmStorage)
@@ -401,7 +401,7 @@ minus.addEventListener('click', () => {
     if (wrapMap) {
         wrapMap.remove();
     }
-})
+})*/
 
 async function geoMarker(time, idw, tr) {
     const dateString = time;

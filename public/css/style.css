@@ -2598,18 +2598,7 @@ div.spoyler {
   cursor: pointer;
 }
 
-.wrap_alarm {
-  margin-top: 15px;
-  width: 170px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid gray;
-  padding: 2px 15px;
-  box-sizing: border-box;
-  text-align: center;
-  position: relative;
-}
+
 
 .headerTitle {
   width: 170px;
@@ -6172,10 +6161,6 @@ input[type="text"]:focus {
   width: 50px;
 }
 
-
-
-
-.mainAlarm,
 .plug {
   width: 164px;
   border: 1px solid gray;
@@ -6190,6 +6175,7 @@ input[type="text"]:focus {
   cursor: pointer;
 
 }
+
 
 
 .plus {
@@ -6968,17 +6954,7 @@ i.minusS {
     font-size: 0.7rem;
   }
 
-  .wrap_alarm {
-    width: 25%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid gray;
-    padding: 2px 3px;
-    box-sizing: border-box;
-    text-align: center;
-    position: relative;
-  }
+
 
   .centerBlock {
     display: flex;
@@ -6994,11 +6970,6 @@ i.minusS {
     width: 100%;
   }
 
-  .mainAlarm {
-    font-size: 0.8rem;
-    width: 100%;
-    padding: 5px 0;
-  }
 
   .techInfo {
     width: 100%;
@@ -7195,17 +7166,7 @@ i.minusS {
     height: 32px;
   }
 
-  .wrap_alarm {
-    width: 37%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid gray;
-    padding: 2px 2px;
-    box-sizing: border-box;
-    text-align: center;
-    position: relative;
-  }
+
 
   .centerBlock {
     display: flex;
@@ -7220,11 +7181,6 @@ i.minusS {
     width: 100%;
   }
 
-  .mainAlarm {
-    font-size: 0.7rem;
-    width: 100%;
-    padding: 5px 0;
-  }
 
   .plus {
     width: 15px;
@@ -7349,17 +7305,6 @@ i.minusS {
 
 
 
-  .wrap_alarm {
-    width: 25%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid gray;
-    padding: 2px 2px;
-    box-sizing: border-box;
-    text-align: center;
-    position: relative;
-  }
 
 
 
@@ -7370,11 +7315,7 @@ i.minusS {
     width: 100%;
   }
 
-  .mainAlarm {
-    font-size: 0.7rem;
-    width: 100%;
-    padding: 5px 0;
-  }
+
 
   .plus {
     width: 15px;
@@ -9595,4 +9536,13 @@ i.settingsGroup {
 .clickNavi {
   background-color: #fff;
   color: rgba(6, 28, 71, 1);
+}
+
+
+.mainAlarm {
+  margin-top: 15px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background-image: url(../image/alarmpressure.png);
 }

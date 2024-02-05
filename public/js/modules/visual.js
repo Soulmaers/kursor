@@ -214,8 +214,8 @@ export function visualNone(e) {
     if (newBoad) {
         removeElem(newBoad)
     }
-    plus.style.display = 'block'
-    minus.style.display = 'none'
+    //  plus.style.display = 'block'
+    //minus.style.display = 'none'
     alarmStorage.style.display = 'none'
     techInfo.style.display = 'none'
     modalCenterOs.style.display = 'none'
@@ -438,8 +438,8 @@ function getHoursDiff(startDate, nowDate) {
 }
 
 export function alarmClear() {
-    const ogon = document.querySelector('.ogon')
-    ogon.style.display = 'none'
+    // const ogon = document.querySelector('.ogon')
+    //  ogon.style.display = 'none'
     const alarmCheck = document.querySelectorAll('.alarmCheck')
     alarmCheck.forEach(e => {
         e.style.borderTopLeftRadius = 'none'
