@@ -2,7 +2,7 @@ import { visual, visualNone } from './visual.js'
 import { NavigationMenu } from './navModules/NavigatorClass.js'
 import { IconStatus } from './iconModules/class/IconStatus.js'
 import { GrafikView } from './grafikModules/class/GrafikView.js'
-
+import { AlarmControll } from './alarmModules/class/AlarmControll.js'
 export let iconStatusClick;
 export let grafClick;
 export function navigator() {
@@ -19,6 +19,8 @@ export function navigator() {
     const statStart = document.querySelector('.stat_start').classList.add('tablo')
     iconStatusClick = new IconStatus(nav)
     grafClick = new GrafikView(nav)
+
+    new AlarmControll(nav)
     const navMenu = new NavigationMenu();
     navMenu.init();
 

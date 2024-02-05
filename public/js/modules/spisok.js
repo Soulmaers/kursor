@@ -767,7 +767,6 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
             newCel.classList.add('newCel')
             newCel.classList.add('newCelChange')
             newCel.setAttribute('rel', `${newClass}`)
-            console.log(newClass)
             newClass === 'type' || newClass === 'meliage' ? newCel.classList.add('newCelTextType') : null
             const classes = ['meliage', 'pwr', 'oil', 'lasttime'];
             if (classes.includes(newClass)) {
