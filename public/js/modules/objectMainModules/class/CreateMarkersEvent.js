@@ -27,6 +27,7 @@ export class CreateMarkersEvent {
                 this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
             }
             this.poly = L.polyline(this.track, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
+
             this.startTrack ? this.startTrack.addTo(mapLocal) : null
             this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers) : null
         } else {
