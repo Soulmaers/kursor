@@ -1141,11 +1141,7 @@ exports.viewChartDataToBase = async (idw, t1, t2) => {
 };
 
 exports.viewSortDataToBase = async (idw, t1, t2) => {
-    //  console.log(idw, t1, t2)
-    /*if (idw === '27695838 ') {
-        console.log('хово')
-        console.log(Number(idw), t1, t2)
-    }*/
+
     const postModel = `SELECT * FROM sortData WHERE idw=@idw AND time >=@t1 AND time <=@t2`;
     try {
         const pool = await connection
@@ -1154,35 +1150,12 @@ exports.viewSortDataToBase = async (idw, t1, t2) => {
             .input('t1', t1)
             .input('t2', t2)
             .query(postModel);
-
-        /* if (idw == 27695838) {
-             console.log(results.recordset)
-         }*/
         return results.recordset;
     } catch (err) {
         console.log(err);
         throw err;
     }
 };
-
-/*
-exports.viewChartDataToBaseGeo = async (arrayId, t1, t2) => {
-    return new Promise((resolve, reject) => {
-        try {
-            //  const formattedArray = arrayId.map(item => `'${item}'`).join(",");
-            const formattedArray = arrayId.map(item => parseFloat(item));
-            const postModel = `SELECT idw,data, geo,speed FROM chartData WHERE data >= ${t2.toString()} AND data <= ${t1.toString()} AND idw IN (${formattedArray})`;
-            connection.query(postModel, function (err, results) {
-                if (err) console.log(err);
-                //  console.log(results)
-                resolve(results);
-            });
-        }
-        catch (e) {
-            console.log(e);
-        }
-    });
-};*/
 
 exports.lostChartDataToBase = async (idw) => {
     try {

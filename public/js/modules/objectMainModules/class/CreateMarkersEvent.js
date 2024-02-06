@@ -52,6 +52,7 @@ export class CreateMarkersEvent {
 
     async update() {
         const geo = await this.getLastGeoPosition()
+        console.log(geo)
         this.createMapMainObject(geo)
         const track = await this.getIntervalTrack()
         console.log(track)
@@ -133,17 +134,20 @@ export class CreateMarkersEvent {
         let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);
         let data;
         if (!category.classList.contains('kursor')) {
-            const paramss = {
+            const t1 = timeFrom
+            const t2 = nowDate
+            const active = idw
+            const param = {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: (JSON.stringify({ nowDate, timeFrom, idw }))
+                body: (JSON.stringify({ active, t1, t2 }))
             }
-            const geoTest = await fetch('/api/geoLastInterval', paramss)
-            const geoCard = await geoTest.json();
-            data = geoCard.resTrack.reduce((acc, el) => {
-                acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
+            const rest = await fetch('/api/viewSortChart', param)
+            const resultt = await rest.json()
+            data = resultt.reduce((acc, el) => {
+                acc.push({ geo: [JSON.parse(el.geo)[0], JSON.parse(el.geo)[1]], speed: el.speed, time: el.time, sats: el.sats, course: el.curse })
                 return acc
             }, [])
         }
@@ -157,12 +161,12 @@ export class CreateMarkersEvent {
             }
             const geoTest = await fetch('/api/geoLastIntervalKursor', paramss)
             const geoCard = await geoTest.json();
-            console.log(geoCard)
             data = geoCard.resTrack.reduce((acc, el) => {
                 acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
                 return acc
             }, [])
         }
+        console.log(data)
         return data
     }
 
@@ -274,6 +278,7 @@ export class CreateMarkersEvent {
         if (!category.classList.contains('kursor')) {
             const res = await fetch('api/parametrs', params)
             const result = await res.json()
+            console.log(result)
             y = result.item.pos.y
             x = result.item.pos.x
             c = result.item.pos.c
