@@ -697,10 +697,12 @@ async function getParamsKursorSensors(data) {
 
         return itog
     })
+
     const lastParams = await Promise.allSettled(last)
     const fulfilledPromises = lastParams
         .filter(promise => promise.status === 'fulfilled')
         .map(promise => promise.value);
+
     if (fulfilledPromises.length !== 0) {
         const itog = fulfilledPromises.reduce((accumulator, currentArray) => {
             return [accumulator[0].concat(currentArray)];

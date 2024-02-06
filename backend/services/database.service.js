@@ -312,8 +312,8 @@ exports.getParamsKursor = async (idObject) => {
         const result = await pool.request()
             .input('idObject', idObject)
             .query(postModel)
-        // console.log(result)
         const record = result.recordset[0];
+
         if (record !== undefined) {
             const params = Object.keys(record).reduce((acc, key) => {
                 if (record[key] !== null) {
@@ -322,6 +322,9 @@ exports.getParamsKursor = async (idObject) => {
                 return acc
             }, {});
             return [params];
+        }
+        else {
+            return []
         }
 
     } catch (e) {

@@ -18,21 +18,26 @@ export class DropDownList {
             e.classList.contains('wialon') ? null : kursorArrayId.push(e.getAttribute('rel'))
         })
         const idw = [...new Set(kursorArrayId)]
-        const params = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({ idw })
+        console.log(idw)
+
+        if (idw.length !== 0) {
+            const params = {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ idw })
+            }
+            const res = await fetch('/api/objects', params)
+            const result = await res.json()
+            result.forEach(e => {
+                e.idObject !== '' && this.globalArrayDatas.push(String(e.idObject));
+                e.nameObject !== '' && this.globalArrayDatas.push(e.nameObject);
+                e.imei !== '' && this.globalArrayDatas.push(e.imei);
+                e.number !== '' && this.globalArrayDatas.push(e.number);
+            });
         }
-        const res = await fetch('/api/objects', params)
-        const result = await res.json()
-        result.forEach(e => {
-            e.idObject !== '' && this.globalArrayDatas.push(String(e.idObject));
-            e.nameObject !== '' && this.globalArrayDatas.push(e.nameObject);
-            e.imei !== '' && this.globalArrayDatas.push(e.imei);
-            e.number !== '' && this.globalArrayDatas.push(e.number);
-        });
+
         const param = {
             method: 'GET',
             headers: {
