@@ -187,6 +187,7 @@ export async function visual(el) {
 
 }
 export function visualNone(e) {
+    console.log('кликер!!!!')
     const tarir = document.querySelector('.tarir')
     tarir.style.display = 'none'
     const statusObj = document.querySelector('.status_obj')
