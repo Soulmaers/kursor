@@ -431,12 +431,12 @@ exports.geoLastIntervalKursor = async (time1, time2, idObject) => {
     }
 
 }
-exports.getWialonObjects = async (login) => {
+exports.getWialonObjects = async () => {
+
     try {
         const pool = await connection
         const postModel = `SELECT * FROM wialon_groups`
         const result = await pool.request()
-            .input('login', login)
             .query(postModel)
         return result.recordset
     }
@@ -444,6 +444,8 @@ exports.getWialonObjects = async (login) => {
         console.log(e)
     }
 }
+
+
 exports.getIdGroup = async (id, login) => {
     try {
         const pool = await connection;

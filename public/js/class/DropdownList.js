@@ -3,6 +3,7 @@ export class DropDownList {
     constructor(element) {
         this.element = element;
         this.globalArrayData = []
+        this.globalArrayDatas = []
         this.list = document.querySelectorAll('.listItem')
         this.group = document.querySelectorAll('.groups')
         this.element.addEventListener(`input`, this.onElementInput.bind(this));
@@ -10,12 +11,42 @@ export class DropDownList {
 
     }
 
-    pushData() {
-        this.list.forEach(e => this.globalArrayData.push(e.children[0].textContent))
-        this.list.forEach(e => this.globalArrayData.push(e.getAttribute('rel')))
-        this.list.forEach(e => e.getAttribute('data-att') !== 'null' ? this.globalArrayData.push(e.getAttribute('data-att')) : null)
-        this.list.forEach(e => e.getAttribute('data-phone') !== 'null' ? this.globalArrayData.push(e.getAttribute('data-phone')) : null)
-        this.group.forEach(e => this.globalArrayData.push(e.getAttribute('rel')))
+    async pushData() {
+        this.group.forEach(e => this.globalArrayDatas.push(e.getAttribute('rel')))
+        const kursorArrayId = [];
+        this.list.forEach(e => {
+            e.classList.contains('wialon') ? null : kursorArrayId.push(e.getAttribute('rel'))
+        })
+        const idw = [...new Set(kursorArrayId)]
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ idw })
+        }
+        const res = await fetch('/api/objects', params)
+        const result = await res.json()
+        result.forEach(e => {
+            e.idObject !== '' && this.globalArrayDatas.push(String(e.idObject));
+            e.nameObject !== '' && this.globalArrayDatas.push(e.nameObject);
+            e.imei !== '' && this.globalArrayDatas.push(e.imei);
+            e.number !== '' && this.globalArrayDatas.push(e.number);
+        });
+        const param = {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }
+        const resW = await fetch('/api/wialonObjects', param)
+        const resultW = await resW.json()
+        resultW.forEach(e => {
+            e.idObject !== '' && this.globalArrayDatas.push(String(e.idObject));
+            e.nameObject !== '' && this.globalArrayDatas.push(e.nameObject);
+            e.imei !== '' && this.globalArrayDatas.push(e.imei);
+            e.phone !== '' || e.phone !== null && this.globalArrayDatas.push(e.phone);
+        });
     }
 
     onElementInput({ target }) {
@@ -23,7 +54,7 @@ export class DropDownList {
         if (!target.value) {
             this.openAllList()
         }
-        this.createList(this.globalArrayData.filter(it => it.toLowerCase().indexOf(target.value.toLowerCase()) !== -1));
+        this.createList(this.globalArrayDatas.filter(it => it.toLowerCase().indexOf(target.value.toLowerCase()) !== -1));
     }
 
     createList(data) {
