@@ -562,7 +562,7 @@ exports.getSensorsWialonToBase = async (arr, login) => {
     try {
         const pool = await connection;
         if (arr.length > 0) {
-            const post = `SELECT sens_name, param_name,idw, value, data FROM wialon_sensors WHERE idw IN (${arr.map(id => `'${id.id}'`).join(',')})`;
+            const post = `SELECT sens_name, param_name,idw, value, data FROM wialon_sensors WHERE idw IN (${arr.map(id => `'${id.id ? id.id : id}'`).join(',')})`;
             //console.log(post)
             const result = await pool.request()
                 .query(post);
@@ -1316,7 +1316,6 @@ exports.alarmBase = async (data, tyres, alarm) => {
 exports.loadParamsViewList = async (car, el, object, kursor) => {
     const idw = el
     const pool = await connection;
-    //  console.log(car, el, object, kursor)
     const mod = async () => {
         try {
             const selectBase = `SELECT osi, trailer, tyres, type, tsiControll FROM model WHERE idw='${idw}'`
@@ -1326,7 +1325,7 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
                 return { result: result.recordset, message: car, imei: datas, phone: 'null' }
             }
             else {
-                return { result: result.recordset, message: car, imei: object.imei, phone: object.phone }
+                return { result: result.recordset, message: car, imei: object ? object.imei : null, phone: object ? object.phone : null }
             }
         }
         catch (e) {

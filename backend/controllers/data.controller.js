@@ -92,7 +92,7 @@ const getWialon = async (login) => {
                 try {
                     const all = await wialonService.getAllParamsIdDataFromWialon(el);
                     const phone = await wialonService.getUniqImeiAndPhoneIdDataFromWialon(el);
-                    if (!all.item) {
+                    if (!all.item || !phone.item) {
                         return;
                     }
                     return {

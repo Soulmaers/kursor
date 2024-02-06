@@ -120,7 +120,7 @@ async function viewAlarmStorage(name, stor) {
     const sens = await fetch('/api/getSensorsWialonToBase', param)
     const allsens = await sens.json()
 
-
+    console.log(allsens)
     result.forEach(el => {
         el.forEach(it => {
             const sensName = allsens.find(obj => obj.param_name === it.senspressure);

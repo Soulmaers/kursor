@@ -504,10 +504,7 @@ export async function conturTest(testov) {
     finishload = true
     validRole()
     navigator();
-
-    setInterval(zaprosSpisok, 10000, toggleList)
-
-
+    setInterval(zaprosSpisok, 60000, toggleList)
 }
 
 
@@ -1001,7 +998,6 @@ async function zaprosSpisok(toggleList) {
         });
 
         const spisok = spisok1[0].result
-        console.log(spisok)
         viewListKoleso(spisok[0], spisok[1], spisok[2], spisok[3], el, inn, res, toggleList)
     })
     const updateTime = document.querySelector('.update_time')
