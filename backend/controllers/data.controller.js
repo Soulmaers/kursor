@@ -166,8 +166,8 @@ exports.start = async (session) => {
         const dataKursor = await databaseService.getObjects()
         const validKursorData = dataKursor.filter(e => [...e.imei].length > 10)
         // Запускаем все функции параллельно
-        await Promise.all([promises, updateParams(data, validKursorData)])
-        await saveSensorsToBase(allCar)
+        await Promise.all([promises, updateParams(data, validKursorData), saveSensorsToBase(allCar)])
+
     }
 
 }

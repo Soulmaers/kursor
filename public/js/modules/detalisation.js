@@ -176,6 +176,7 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
     const active = document.querySelector('.color').id
     const newData = document.querySelector('.color').classList.contains('wialon') ? await testovfnNew(active, t1, t2) : await kursorfnNew(active, t1, t2)
+    console.log(newData)
     const newGlobal = newData.map(it => {
         return {
             id: it.idw,

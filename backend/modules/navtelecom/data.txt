@@ -2,198 +2,10 @@ port: 21626
 imei: 866795035938925
 protocol: Flex 3.0
 msg_type: A
-timeRagistration: 1707229162
-msg_number: 23012
-event_code: 9508
-time: 1707229119
-status1: Рабочий режим
-status2: Оповещение о тревоге(выключено)
-status3: Тревога(выключена)
-status6: Эвакуация(незафиксирована)
-status7: Режим Энергосбережения(да)
-status8: Калибровка акселерометра(откалиброван)
-status4: Наблюдение
-modules_st1: GSM включен
-modules_st2: USB выключен
-modules_st3: Дополнительный высокоточный навигационный приемник включен
-modules_st4: Часы не синхронизированы по GPS
-modules_st5: Работает первая SIM-карта
-modules_st6: Регистрации в сотовой сети
-modules_st7: Роуминг
-modules_st8: Двигатель (генератор) выключен
-modules_st21: Нет глушения GSM
-modules_st23: Нет глушения GNSS
-modules_st24: Усреднение координат GNSS(нет)
-modules_st25: Статус акселерометра (штатная работа)
-modules_st26: Статус модуля Bluetooth(включен)
-modules_st27: Статус модуля Wi-Fi(выключен)
-modules_st28: Тип генератора для RTC:(внешний часовой кварцевый генератор)
-gsm: -109..-53 Дб/м
-nav_rcvr_state: Навигационный приемник включен
-valid_nav: Валидная навигация
-sats: 11
-last_valid_time: 1707229119
-lat: 59.846111666666665
-lon: 30.342466666666667
-altitude: 37.5
-speed: 0
-course: 335
-meliage: 314.4002685546875
-pwr_ext: 21.602
-pwr_int: 2118
-in1: Вход IN1(датчик сработал)
-in2: Вход IN2(датчик в нормальном состоянии)
-in3: Вход IN3(датчик в нормальном состоянии)
-in4: Вход IN4/AIN1/AIN2(датчик в нормальном состоянии)
-in5: Вход IN5/AIN3(датчик в нормальном состоянии)
-in6: Вход IN6/SH1(датчик в нормальном состоянии)
-in7: Вход IN7/SH2(датчик в нормальном состоянии)
-in8: Вход IN8/SH3-SH4(датчик в нормальном состоянии)
-out1: Выход O1(выключен)
-out2: Выход O2(выключен)
-out3: Выход O3(выключен)
-out4: Выход O4(выключен)
-out5: Выход O5(выключен)
-out6: Выход O6(выключен)
-out7: Выход O7(выключен)
-out8: Выход O8(выключен)
-engine_hours: 0
-hdop: 90
-pdop: 120
-tyres_number_3: 1
-tpms_pressure_3: 0.6
-tpms_temp_3: 23
-tyres_number_4: 2
-tpms_pressure_4: 0.5
-tpms_temp_4: 23
-tyres_number_5: 5
-tpms_pressure_5: 0.6
-tpms_temp_5: 23
-tyres_number_6: 225
-tpms_pressure_6: 0
-tpms_temp_6: -50
-status21: в норме
-status22: Контроль не производится
-status23: Нет программы
-modules_st31: Выключен
-modules_st32: Выключен
-modules_st33: Используется основной
-connection_st1: 2G
-connection_st4: Подключен
-connection_st5: Не подключен
-connection_st6: Не подключен
-connection_st7: Не подключен
-connection_st8: Не подключен
-accel_st1: Датчик в нормальном состоянии
-accel_st2: Датчик в нормальном состоянии
-accel_st3: Датчик в нормальном состоянии
-accel_st4: Датчик в нормальном состоянии
-accel_st5: Датчик в нормальном состоянии
-diag: 54
-idObject: 1017
-
-port: 21626
-imei: 866795035938925
-protocol: Flex 3.0
-msg_type: A
-timeRagistration: 1707229162
-msg_number: 23013
-event_code: 9508
-time: 1707229119
-status1: Рабочий режим
-status2: Оповещение о тревоге(выключено)
-status3: Тревога(выключена)
-status6: Эвакуация(незафиксирована)
-status7: Режим Энергосбережения(да)
-status8: Калибровка акселерометра(откалиброван)
-status4: Наблюдение
-modules_st1: GSM включен
-modules_st2: USB выключен
-modules_st3: Дополнительный высокоточный навигационный приемник включен
-modules_st4: Часы не синхронизированы по GPS
-modules_st5: Работает первая SIM-карта
-modules_st6: Регистрации в сотовой сети
-modules_st7: Роуминг
-modules_st8: Двигатель (генератор) выключен
-modules_st21: Нет глушения GSM
-modules_st23: Нет глушения GNSS
-modules_st24: Усреднение координат GNSS(нет)
-modules_st25: Статус акселерометра (штатная работа)
-modules_st26: Статус модуля Bluetooth(включен)
-modules_st27: Статус модуля Wi-Fi(выключен)
-modules_st28: Тип генератора для RTC:(внешний часовой кварцевый генератор)
-gsm: -109..-53 Дб/м
-nav_rcvr_state: Навигационный приемник включен
-valid_nav: Валидная навигация
-sats: 11
-last_valid_time: 1707229119
-lat: 59.846111666666665
-lon: 30.342466666666667
-altitude: 37.5
-speed: 0
-course: 335
-meliage: 314.4002685546875
-pwr_ext: 21.602
-pwr_int: 2118
-in1: Вход IN1(датчик сработал)
-in2: Вход IN2(датчик в нормальном состоянии)
-in3: Вход IN3(датчик в нормальном состоянии)
-in4: Вход IN4/AIN1/AIN2(датчик в нормальном состоянии)
-in5: Вход IN5/AIN3(датчик в нормальном состоянии)
-in6: Вход IN6/SH1(датчик в нормальном состоянии)
-in7: Вход IN7/SH2(датчик в нормальном состоянии)
-in8: Вход IN8/SH3-SH4(датчик в нормальном состоянии)
-out1: Выход O1(выключен)
-out2: Выход O2(выключен)
-out3: Выход O3(выключен)
-out4: Выход O4(выключен)
-out5: Выход O5(выключен)
-out6: Выход O6(выключен)
-out7: Выход O7(выключен)
-out8: Выход O8(выключен)
-engine_hours: 0
-hdop: 90
-pdop: 120
-tyres_number_3: 1
-tpms_pressure_3: 0.6
-tpms_temp_3: 23
-tyres_number_4: 2
-tpms_pressure_4: 0.5
-tpms_temp_4: 23
-tyres_number_5: 4
-tpms_pressure_5: 0.6
-tpms_temp_5: 21
-tyres_number_6: 5
-tpms_pressure_6: 0.6
-tpms_temp_6: 23
-status21: в норме
-status22: Контроль не производится
-status23: Нет программы
-modules_st31: Выключен
-modules_st32: Выключен
-modules_st33: Используется основной
-connection_st1: 2G
-connection_st4: Подключен
-connection_st5: Не подключен
-connection_st6: Не подключен
-connection_st7: Не подключен
-connection_st8: Не подключен
-accel_st1: Датчик в нормальном состоянии
-accel_st2: Датчик в нормальном состоянии
-accel_st3: Датчик в нормальном состоянии
-accel_st4: Датчик в нормальном состоянии
-accel_st5: Датчик в нормальном состоянии
-diag: 54
-idObject: 1017
-
-port: 21626
-imei: 866795035938925
-protocol: Flex 3.0
-msg_type: A
-timeRagistration: 1707229162
-msg_number: 23014
-event_code: 5898
-time: 1707229129
+timeRagistration: 1707230906
+msg_number: 23021
+event_code: 5899
+time: 1707230903
 status1: Рабочий режим
 status2: Оповещение о тревоге(выключено)
 status3: Тревога(выключена)
@@ -220,15 +32,15 @@ gsm: -109..-53 Дб/м
 nav_rcvr_state: Навигационный приемник включен
 valid_nav: Валидная навигация
 sats: 10
-last_valid_time: 1707229129
-lat: 59.846111666666665
-lon: 30.342466666666667
-altitude: 37.5
+last_valid_time: 1707230903
+lat: 59.84606833333334
+lon: 30.342478333333336
+altitude: 37.2
 speed: 0
-course: 335
-meliage: 314.4024353027344
-pwr_ext: 21.603
-pwr_int: 2105
+course: 348
+meliage: 314.6968078613281
+pwr_ext: 21.605
+pwr_int: 2165
 in1: Вход IN1(датчик сработал)
 in2: Вход IN2(датчик в нормальном состоянии)
 in3: Вход IN3(датчик в нормальном состоянии)
@@ -246,19 +58,19 @@ out6: Выход O6(выключен)
 out7: Выход O7(выключен)
 out8: Выход O8(выключен)
 engine_hours: 0
-hdop: 90
-pdop: 130
+hdop: 130
+pdop: 160
 tyres_number_3: 1
-tpms_pressure_3: 0.6
+tpms_pressure_3: 0.5
 tpms_temp_3: 23
 tyres_number_4: 2
 tpms_pressure_4: 0.5
 tpms_temp_4: 23
 tyres_number_5: 4
-tpms_pressure_5: 0.6
-tpms_temp_5: 21
+tpms_pressure_5: 0.5
+tpms_temp_5: 22
 tyres_number_6: 5
-tpms_pressure_6: 0.6
+tpms_pressure_6: 0.5
 tpms_temp_6: 23
 status21: в норме
 status22: Контроль не производится
@@ -267,7 +79,7 @@ modules_st31: Выключен
 modules_st32: Выключен
 modules_st33: Используется основной
 connection_st1: 2G
-connection_st4: Подключен
+connection_st4: Не подключен
 connection_st5: Не подключен
 connection_st6: Не подключен
 connection_st7: Не подключен
