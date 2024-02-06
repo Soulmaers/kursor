@@ -200,30 +200,43 @@ export class CreateNewObject {
         }
     }
 
-    async viewObjects(idw) {
+    async viewObjects(el) {
+        const idw = el.parentElement.parentElement.id
+        const element = el.parentElement.parentElement
+        const prefix = element.classList.contains('wialon') ? 'wialon' : 'kursor'
         const titleModales = this.modal.querySelector('.title_modales')
         titleModales.textContent = 'Редактирование объекта'
         if (this.element.classList.contains('gr')) {
             return
         }
         else {
-            const params = {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({ idw })
+            let data;
+            console.log(prefix)
+            if (prefix === 'kursor') {
+                const params = {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify({ idw })
+                }
+                const res = await fetch('/api/objectId', params)
+                const result = await res.json()
+                console.log(result)
+                data = result.reduce((acc, el) => {
+                    acc.push(el.nameObject, el.typeObject, el.typeDevice, el.adress, el.imei, el.number)
+                    return acc
+                }, [])
+                this.idPref = result[0].idObject
             }
-            const res = await fetch('/api/objectId', params)
-            const result = await res.json()
-            const data = result.reduce((acc, el) => {
-                acc.push(el.nameObject, el.typeObject, el.typeDevice, el.adress, el.imei, el.number)
-                return acc
-            }, [])
+            else {
+                data = [element.children[0].textContent, '-', '-', '-', element.getAttribute('data-att'), element.getAttribute('data-phone')]
+                this.idPref = idw
+            }
             data.forEach((e, index) => {
                 this.field_modal[index].value = e
             })
-            this.idPref = result[0].idObject
+
             this.pop.style.display = 'block'
             this.modal.style.display = 'flex';
             this.modal.style.zIndex = 2

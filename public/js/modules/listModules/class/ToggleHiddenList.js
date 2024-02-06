@@ -82,8 +82,7 @@ export class ToggleHiddenList {
     }
 
     editObject(el) {
-        const id = el.parentElement.parentElement.id
-        obj.viewObjects(id)
+        obj.viewObjects(el)
     }
     async edit(el) {
 
