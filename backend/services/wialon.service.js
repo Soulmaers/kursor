@@ -160,6 +160,31 @@ exports.getAllGroupDataFromWialon = async () => {
         //}
     })
 };
+
+exports.getClearLoadIntervalWialon = async (id) => {
+    console.log(id)
+    const prmsId = {
+        //     "id": id,
+    };
+    return new Promise(async function (resolve, reject) {
+        try {
+            const session = await geSession.geSession();
+            const data = await session.request('messages/unload', prmsId);
+            // Обработка успешного ответа
+            console.log(data)
+            resolve(data);
+        } catch (err) {
+            if (err.code === 7) {
+                // Запрашиваемый ресурс не найден или не доступен
+                resolve('ошибка');
+                return;
+            }
+            resolve('ошибка');
+            reject(err);
+        }
+    });
+};
+
 //запрос всех параметров по id объекта
 exports.getAllParamsIdDataFromWialon = async (id) => {
     const prmsId = {

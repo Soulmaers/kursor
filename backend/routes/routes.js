@@ -51,7 +51,7 @@ router.post('/api/geoloc', controllerGeo.geoloc)
 router.post('/api/getGeo', controllerGeo.getGeo)
 router.post('/api/getTreks', controllerGeo.getTreks)
 router.post('/api/getEventMarkers', controllerGeo.getEventMarkers)
-router.post('/api/geoLastInterval', controllerGeo.geoLastInterval)
+//router.post('/api/geoLastInterval', controllerGeo.geoLastInterval)
 
 
 

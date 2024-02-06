@@ -1159,7 +1159,7 @@ exports.viewSortDataToBase = async (idw, t1, t2) => {
 
 exports.lostChartDataToBase = async (idw) => {
     try {
-        const postModel = `SELECT TOP (1) data FROM chartData WHERE idw = ${idw} ORDER BY data DESC`
+        const postModel = `SELECT TOP (1) time FROM sortData WHERE idw = ${idw} ORDER BY time DESC`
         const pool = await connection;
         const results = await pool.request().query(postModel);
         return results.recordset;

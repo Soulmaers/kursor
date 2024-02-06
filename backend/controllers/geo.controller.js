@@ -3,7 +3,7 @@ const wialonService = require('../services/wialon.service.js')
 
 
 
-exports.geoLastInterval = async (req, res) => {
+/*exports.geoLastInterval = async (req, res) => {
     const time1 = req.body.nowDate
     const time2 = req.body.timeFrom
     const idw = req.body.idw
@@ -18,7 +18,7 @@ exports.geoLastInterval = async (req, res) => {
         el.push(arr2[1][index].pos.y, arr2[1][index].pos.x, arr2[1][index].pos.c, arr2[1][index].pos.s, arr2[1][index].t, arr2[1][index].p.sats);
     })
     res.json({ resTrack: geo })
-}
+}*/
 //получаем запрос с интервалом времени и id
 //делаем запрос на wialon и получаем параметры где берем координаты геопозиции
 exports.geoloc = async (req, res) => {
