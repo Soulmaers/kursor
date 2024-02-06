@@ -51,8 +51,8 @@ async function init() {
     console.log(res)
     if (res !== 'ошибка') {
         console.log('сессия открыта')
-        await globalstart.start(session)
-        setInterval(globalstart.start, 120000, session)
+        //  await globalstart.start(session)
+        //  setInterval(globalstart.start, 120000, session)
 
     }
 
@@ -130,7 +130,7 @@ class ListenPortTP {
 
 const ChartServerTerminal = require('./backend/modules/navtelecom/ChatServerTerminal.js')
 const SendingCommandToTerminal = require('./backend/modules/navtelecom/SendingCommandToTerminal.js')
-new ListenPortTP(21626)
+//new ListenPortTP(21626)
 
 
 

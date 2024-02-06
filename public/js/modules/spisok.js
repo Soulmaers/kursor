@@ -382,25 +382,24 @@ export async function conturTest(testov) {
                     listName.prepend(listCheck)
 
 
+                    const listDelete = document.createElement('i')
+                    listDelete.classList.add('fas')
+                    listDelete.classList.add('fa-times')
+                    listDelete.classList.add('deleteObject')
+                    listDelete.setAttribute('rel', `${nameCar}`)
+                    listDelete.setAttribute('id', `${nameCar}`)
+                    listName.prepend(listDelete)
+                    new Tooltip(listDelete, ['Удалить объект'])
 
+                    const pref = document.createElement('i')
+                    pref.classList.add('fas')
+                    pref.classList.add('fa-wrench')
+                    pref.classList.add('pref')
+                    listName.prepend(pref)
+                    new Tooltip(pref, ['Редактировать объект'])
                     if (elem[elem.length - 1] === 'kursor') {
                         listItemCar.classList.add('kursor')
                         listName.classList.add('kursor_name')
-                        const listDelete = document.createElement('i')
-                        listDelete.classList.add('fas')
-                        listDelete.classList.add('fa-times')
-                        listDelete.classList.add('deleteObject')
-                        listDelete.setAttribute('rel', `${nameCar}`)
-                        listDelete.setAttribute('id', `${nameCar}`)
-                        listName.prepend(listDelete)
-                        new Tooltip(listDelete, ['Удалить объект'])
-
-                        const pref = document.createElement('i')
-                        pref.classList.add('fas')
-                        pref.classList.add('fa-wrench')
-                        pref.classList.add('pref')
-                        listName.prepend(pref)
-                        new Tooltip(pref, ['Редактировать объект'])
                     }
                     else {
                         listItemCar.classList.add('wialon')

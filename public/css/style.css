@@ -5693,7 +5693,8 @@ input[type="text"]:focus {
   align-items: center;
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
-  padding-left: 33px;
+  padding: 0;
+  margin: 0 10px;
 }
 
 
@@ -7279,7 +7280,7 @@ i.minusS {
     width: 1200px;
     margin: 3px 0;
     position: relative;
-    padding-left: 20px;
+
   }
 
   .headerMain {
@@ -9493,10 +9494,6 @@ i.settingsGroup {
   justify-content: end;
 }
 
-.kursor_name {
-  margin: 0 10px;
-  padding: 0
-}
 
 .pref {
   font-size: 0.75rem;
