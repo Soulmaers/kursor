@@ -16,7 +16,6 @@ export class CreateMarkersEvent {
         this.pref = document.querySelector('.color').classList.contains('wialon') ? 'wialon' : 'kursor'
         this.setTrack = document.querySelector('.togTrack');
         this.boundViewTrackAndMarkersEvent = this.viewTrackAndMarkersEnent.bind(this);
-        // this.pref === 'wialon' ? this.setTrack.addEventListener('click', this.boundViewTrackAndMarkersEvent) : null
         this.setTrack.addEventListener('click', this.boundViewTrackAndMarkersEvent)
     }
 
@@ -51,11 +50,9 @@ export class CreateMarkersEvent {
     }
 
     async update() {
-        const geo = await this.getLastGeoPosition()
-        console.log(geo)
-        this.createMapMainObject(geo)
         const track = await this.getIntervalTrack()
-        console.log(track)
+        const geo = [track[track.length - 1].geo[0], track[track.length - 1].geo[1], track[track.length - 1].course]
+        this.createMapMainObject(geo)
         const prostoy = await this.getEventProstoy()
         //  const pressure = await this.getEventPressure()
         this.track = track.reduce((acc, el) => {
@@ -64,7 +61,6 @@ export class CreateMarkersEvent {
         }, [])
         //  this.eventMarkers = null;
         this.eventMarkers = await this.getEventObject(track, prostoy)
-        console.log(this.eventMarkers)
         if (!this.markerCreator) {
             this.markerCreator = new MarkerCreator(mapLocal);
         }
@@ -262,35 +258,6 @@ export class CreateMarkersEvent {
 
         eventMarkersGlobal.push(...maxSpeed, ...oil, ...nooil, ...prostoy)
         return eventMarkersGlobal
-    }
-
-    async getLastGeoPosition() {
-        const category = document.querySelector('.color')
-        const idw = this.id
-        let y, x, c;
-        const params = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ idw }))
-        }
-        if (!category.classList.contains('kursor')) {
-            const res = await fetch('api/parametrs', params)
-            const result = await res.json()
-            console.log(result)
-            y = result.item.pos.y
-            x = result.item.pos.x
-            c = result.item.pos.c
-        }
-        else {
-            const parametrs = await fetch('api/getParamsKursor', params)
-            const lastParams = await parametrs.json()
-            y = lastParams[0].lat
-            x = lastParams[0].lon
-            c = lastParams[0].course
-        }
-        return [y, x, c]
     }
 
     createMapMainObject(geo) {

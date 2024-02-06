@@ -51,6 +51,7 @@ function fnCanvas(arg) {
         removeArrElem(dan)
     }
     const tiresLink = document.querySelectorAll('.tires_link_test')
+    console.log(tiresLink)
     arg.forEach(el => {
         const massProtector = [];
         const protec = [];
@@ -93,7 +94,7 @@ function fnCanvas(arg) {
     });
 }
 function viewPicture(arr, id, elem, mm) {
-    //  console.log(arr, id, elem, mm)
+    console.log(arr, id, elem, mm)
     const conts = document.querySelectorAll(`.contBar${id}`)
     console.log(conts)
     conts.forEach(el => {
