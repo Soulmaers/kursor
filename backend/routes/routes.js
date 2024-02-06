@@ -24,7 +24,7 @@ router.post('/api/quantityLogs', controllerWialon.quantityLogs)
 router.post('/api/getSensorsWialonToBase', controllerWialon.getSensorsWialonToBase)
 router.post('/api/getSensorsWialonToBaseId', controllerWialon.getSensorsWialonToBaseId)
 router.get('/api/wialonObjects', controllerWialon.wialonObjects)
-
+router.post('/api/wialonObjectsId', controllerWialon.wialonObjectsId)
 
 
 router.post('/api/wialon', controllerWialon.datawialon)

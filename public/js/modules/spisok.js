@@ -100,7 +100,7 @@ export async function conturTest(testov) {
     const resultImei = testov
         .map(el => Object.values(el)) // получаем массивы всех id
         .flat()
-        .map(e => e[e.length - 1] !== 'kursor' ? { id: e[4], imei: null } : { id: e[4], imei: e[0].imei })//e[e.length - 1] !== 'kursor' ? e[4] : null)
+        .map(e => ({ id: e[4], imei: e[0].imei }))
         .filter(e => e !== null);
     const result = testov
         .map(el => Object.values(el)) // получаем массивы всех id
@@ -638,6 +638,7 @@ export const viewList = async (login) => {
 }
 export async function alternativa(data) {
     const arr = data.filter(e => e.id)
+    console.log(data)
     return new Promise(async function (resolve, reject) {
         sensorsName = true
         const login = document.querySelectorAll('.log')[1].textContent
@@ -662,8 +663,9 @@ export async function alternativa(data) {
 }
 
 async function getParamsKursorSensors(data) {
-    const id = data.filter(e => e.imei !== null && e.imei.length > 10).map(e => e.id);
-    const dat = data.filter(e => e.imei !== null && e.imei.length > 10)
+    console.log(data)
+    const id = data.map(e => e.id);
+    //  const dat = data.filter(e => e.imei !== null && e.imei.length > 10)
     const last = id.map(async idw => {
         const param = {
             method: "POST",
@@ -678,8 +680,8 @@ async function getParamsKursorSensors(data) {
         const itog = lastParams.flatMap(el => {
             let speed;
             const results = [];
-            dat.map(e => {
-                if (el.imei === e.imei) {
+            id.map(e => {
+                if (el.idObject === e.id) {
                     Object.entries(el).forEach(([key, value]) => {
                         if (key === 'speed') {
                             speed = Number(Number(el[key]).toFixed(0))
@@ -790,45 +792,6 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, in
     }
 
 }
-
-/*
-export async function gg(id) {
-    return new Promise(async function (resolve, reject) {
-        const idw = id
-        const allobj = {};
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ idw, login }))
-        }
-        const ress = await fetch('/api/sensorsName', param)
-        const results = await ress.json()
-        if (!results) {
-            ggg(id)
-        }
-        const nameSens = Object.entries(results.item.sens)
-        const arrNameSens = [];
-        nameSens.forEach(el => {
-            arrNameSens.push([el[1].n, el[1].p])
-        })
-        const res = await fetch('/api/lastSensors', param)
-        const result = await res.json()
-        if (result) {
-            const valueSens = [];
-            Object.entries(result).forEach(e => {
-                valueSens.push(e[1])
-            })
-            const allArr = [];
-            arrNameSens.forEach((e, index) => {
-                allArr.push([...e, valueSens[index]])
-            })
-            resolve(allArr)
-        }
-
-    });
-}*/
 
 function fnTagach(arr, nameCarId, group) {
     const groups = document.querySelector(`.${group}`)
@@ -963,16 +926,9 @@ function fnPricep(arr, nameCarId, group) {
 }
 async function zaprosSpisok(toggleList) {
     const list = document.querySelectorAll('.listItem')
-    const arrId = Array.from(list).map(el => Number(el.id))
-    const data = Array.from(list).map(el => {
-        return { nameCar: el.children[0].textContent, id: el.id, imei: el.getAttribute('data-att'), phone: el.getAttribute('data-phone') }
-    })
-
-    const uniqData = [...new Set(data.map(JSON.stringify))].map(JSON.parse)
-    console.log('список')
-    console.log(uniqData)
+    const arrId = Array.from(list).map(el => ({ id: Number(el.id) }))
+    const uniqData = [...new Set(arrId.map(JSON.stringify))].map(JSON.parse)
     const res = await alternativa(uniqData)
-
     const param = {
         method: "POST",
         headers: {
@@ -982,7 +938,6 @@ async function zaprosSpisok(toggleList) {
     }
     const listsr = await fetch('/api/spisokList', param)
     const spisoks = await listsr.json()
-    console.log(spisoks)
     list.forEach(async el => {
         const idw = el.id
         const inn = res.filter(e => {
@@ -991,11 +946,10 @@ async function zaprosSpisok(toggleList) {
             }
         });
         const spisok1 = spisoks.res.filter(e => {
-            if (e.idw.id === idw) {
+            if (e.idw.id === Number(idw)) {
                 return e.result
             }
         });
-
         const spisok = spisok1[0].result
         viewListKoleso(spisok[0], spisok[1], spisok[2], spisok[3], el, inn, res, toggleList)
     })

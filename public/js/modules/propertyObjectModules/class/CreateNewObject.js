@@ -211,7 +211,6 @@ export class CreateNewObject {
         }
         else {
             let data;
-            console.log(prefix)
             if (prefix === 'kursor') {
                 const params = {
                     method: 'POST',
@@ -222,7 +221,6 @@ export class CreateNewObject {
                 }
                 const res = await fetch('/api/objectId', params)
                 const result = await res.json()
-                console.log(result)
                 data = result.reduce((acc, el) => {
                     acc.push(el.nameObject, el.typeObject, el.typeDevice, el.adress, el.imei, el.number)
                     return acc
@@ -230,7 +228,16 @@ export class CreateNewObject {
                 this.idPref = result[0].idObject
             }
             else {
-                data = [element.children[0].textContent, '-', '-', '-', element.getAttribute('data-att'), element.getAttribute('data-phone')]
+                const param = {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify({ idw })
+                }
+                const res = await fetch('/api/wialonObjectsId', param)
+                const result = await res.json()
+                data = [element.children[0].textContent, '-', '-', '-', result[0].imei, result[0].phone]
                 this.idPref = idw
             }
             data.forEach((e, index) => {

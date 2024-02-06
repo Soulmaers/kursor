@@ -444,6 +444,21 @@ exports.getWialonObjects = async () => {
         console.log(e)
     }
 }
+exports.getWialonObjectsId = async (idw) => {
+    console.log(idw)
+    try {
+        const pool = await connection
+        const postModel = `SELECT * FROM wialon_groups WHERE idObject=@idw`
+        const result = await pool.request()
+            .input('idw', idw)
+            .query(postModel)
+        return result.recordset
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
 
 
 exports.getIdGroup = async (id, login) => {
@@ -1334,7 +1349,6 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
             console.log(e)
         }
     }
-
     const tyr = async () => {
         try {
             const selectBase = `SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE idw='${idw}'`
