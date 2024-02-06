@@ -96,7 +96,6 @@ export async function loadParamsViewList(car, el) {
 }
 
 export async function conturTest(testov) {
-    //  console.log(testov)
     const resultImei = testov
         .map(el => Object.values(el)) // получаем массивы всех id
         .flat()
@@ -638,7 +637,6 @@ export const viewList = async (login) => {
 }
 export async function alternativa(data) {
     const arr = data.filter(e => e.id)
-    console.log(data)
     return new Promise(async function (resolve, reject) {
         sensorsName = true
         const login = document.querySelectorAll('.log')[1].textContent
@@ -663,9 +661,7 @@ export async function alternativa(data) {
 }
 
 async function getParamsKursorSensors(data) {
-    console.log(data)
     const id = data.map(e => e.id);
-    //  const dat = data.filter(e => e.imei !== null && e.imei.length > 10)
     const last = id.map(async idw => {
         const param = {
             method: "POST",
@@ -969,7 +965,6 @@ async function zaprosSpisok(toggleList) {
     updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
 async function viewListKoleso(model, params, arg, osi, nameCar, inn, res, toggleList) {
-    //console.log(inn)
     let in1;
     let statusnew;
     let sats;
@@ -997,7 +992,6 @@ async function viewListKoleso(model, params, arg, osi, nameCar, inn, res, toggle
                 if (el.name == item.pressure) {
                     shina.forEach(e => {
                         if (e.id == item.tyresdiv) {
-                            //  console.log(in1)
                             if (el.status === 'false' && in1 === 1) {
                                 e.children[0].style.fill = 'gray'
                                 return

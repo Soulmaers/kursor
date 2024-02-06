@@ -39,8 +39,6 @@ function createListFnview(e) {
         })
     }
     const createList = document.querySelector('.createList')
-    console.log(createList.value)
-    console.log(e)
     createList.value = e.length
     let count = e.length;
     let countId = 0;
@@ -142,7 +140,6 @@ buttOnTarirDisk.addEventListener('click', async () => {
         const AllarrayTarir = [];
         const active = document.querySelector('.color').children[0]
         const idx = document.querySelector('.color').id
-        console.log(active)
         const activePost = active.textContent.replace(/\s+/g, '')
         const titleZamer = document.querySelectorAll('.titleZamer')
         Array.from(titleZamer).forEach(el => {
@@ -156,7 +153,6 @@ buttOnTarirDisk.addEventListener('click', async () => {
             arrayTarir.push(el.nextElementSibling.children[1].value)
             AllarrayTarir.push(arrayTarir)
         })
-        console.log(AllarrayTarir)
         const param = {
             method: "POST",
             headers: {
@@ -166,7 +162,6 @@ buttOnTarirDisk.addEventListener('click', async () => {
         }
         const res = await fetch('/api/tarirSave', param)
         const response = await res.json()
-        console.log(response)
         tarirView();
         buttOnTarir.style.display = 'none'
     })
@@ -207,7 +202,6 @@ export async function tarirView() {
             if (el.name === it.params) {
                 if (it.icons === 'oil-card') {
                     const val = el.value
-                    console.log(val)
                     let degree;
                     if (x.length < 3) {
                         degree = 1
@@ -216,13 +210,10 @@ export async function tarirView() {
                         degree = 6
                     }
                     const approximated = approximateValue(val, x, y, degree);
-                    console.log(approximated)
                     const znak = Number((approximated[0] * 0.9987).toFixed(0))
 
                     const value = znak * 100 / y[y.length - 1]
                     const oilValue = document.querySelector('.oil_value1')
-                    console.log(znak)
-                    console.log(value)
                     if (!isNaN(znak)) {
                         if (znak < 0) {
                             oilValue.textContent = '----'

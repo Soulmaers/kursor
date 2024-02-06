@@ -6,7 +6,6 @@ import { Tooltip } from '../class/Tooltip.js'
 import { visual } from './visual.js'
 import { iconStatusClick } from './navigator.js'
 async function createPopup(array) {
-    console.log(array)
     const arr = Object.values(array[0]);
     const body = document.getElementsByTagName('body')[0]
     const pop = document.createElement('div')
@@ -90,8 +89,6 @@ export async function logsView(array) {
     }
     const ress = await fetch('/api/logsView', param)
     const value = await ress.json()
-    console.log(value)
-    console.log(data)
     const results = value.itog
     quantity = results
     const paramLog = {
@@ -104,7 +101,6 @@ export async function logsView(array) {
     const resLog = await fetch('/api/quantityLogs', paramLog)
     const resultsLog = await resLog.json()
     const viewNum = value.quant - resultsLog[0].quantity
-    console.log(value.quant, resultsLog[0].quantity)
     viewTableNum(viewNum)
 
 
@@ -122,7 +118,6 @@ export async function logsView(array) {
                 return objA.data === objB.time;
             });
         });
-        console.log(arraypop)
         arraypop.forEach(async el => {
             const content = JSON.parse(el.content)
             const event = content[0].event
@@ -144,7 +139,6 @@ export async function logsView(array) {
             const minutes = time.getMinutes().toString().padStart(2, '0');
             const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
             let mess;
-            console.log(el)
             if (event === 'Заправка') {
                 mess = [{ event: event, group: `Компания: ${el.groups}`, name: `Объект: ${el.name}`, litrazh: `${content[0].litrazh}`, time: `Время заправки: ${formattedDate}` }]
             }
@@ -225,7 +219,6 @@ export async function logsView(array) {
                 const geo = [];
                 geo.push(parseFloat(e.lastElementChild.textContent.split(',')[0]))
                 geo.push(parseFloat(e.lastElementChild.textContent.split(',')[1]))
-                console.log(e)
                 const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[2].textContent, e.lastElementChild.parentElement.children[4].textContent] }]
                 createMapsUniq([], obj, 'log')
                 const wrap = document.querySelector('.wrapMap')
@@ -246,8 +239,6 @@ export async function logsView(array) {
 }
 
 async function togglePopup() {
-    console.log('тут??')
-    // const tr = document.querySelectorAll('.trEvent')
     const login = document.querySelectorAll('.log')[1].textContent
     const wrapperLogs = document.querySelector('.alllogs')
     const grays = document.querySelectorAll('.graysEvent')
@@ -298,11 +289,8 @@ function updateRows() {
         count = row
         await logsView()
         createLogsTable(data)
-
         const evgentElement = document.querySelector('.toogleIconEvent')
-        console.log(evgentElement)
         evgentElement ? filterEventLogs(evgentElement) : null
-
         const tr = document.querySelectorAll('.trEvent')
         tr.forEach(e => {
             e.style.cursor = 'default'
@@ -313,7 +301,6 @@ function updateRows() {
                 const geo = [];
                 geo.push(parseFloat(e.lastElementChild.textContent.split(',')[0]))
                 geo.push(parseFloat(e.lastElementChild.textContent.split(',')[1]))
-                console.log(e)
                 const obj = [{ geo: geo, logs: [e.lastElementChild.parentElement.children[0].textContent, e.lastElementChild.parentElement.children[2].textContent, e.lastElementChild.parentElement.children[4].textContent] }]
                 createMapsUniq([], obj, 'log')
                 const wrap = document.querySelector('.wrapMap')
@@ -346,7 +333,6 @@ function clickHandlerObject(event) {
 function chanchColor() {
     const grays = document.querySelectorAll('.graysEvent')
     const allobjects = document.querySelector('.allobjects')
-    console.log('джойс')
     let check = false
     grays.forEach(el => {
         if (el.classList.contains('toogleIconEvent')) {
@@ -382,7 +368,6 @@ function chanchColor() {
     allobjects.classList.toggle('choice')
 }
 function viewTableNum(num) {
-    console.log(num)
     const nums = document.querySelector('.num')
     nums.textContent = num
 }
@@ -396,7 +381,6 @@ const objColor = {
     'Состояние': '#acad4c'
 }
 async function createLogsTable(mass) {
-    console.log(mass)
     const wrap = document.querySelector('.alllogs')
     if (!wrap) {
         const body = document.getElementsByTagName('body')[0]
@@ -507,7 +491,6 @@ function eventFilter() {
 }
 
 function filterEventLogs(event) {
-    console.log(event)
     const choice = document.querySelector('.choice')
     if (event.isTrusted) {
         event.target.classList.toggle('toogleIconEvent');
@@ -515,7 +498,6 @@ function filterEventLogs(event) {
     else {
         event.classList.add('toogleIconEvent');
     }
-    console.log('клик по эвент?')
     const grays = document.querySelectorAll('.graysEvent')
     const trEvent = document.querySelectorAll('.trEvent')
     trEvent.forEach(e => e.style.display = 'none')

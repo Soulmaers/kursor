@@ -1141,7 +1141,6 @@ exports.viewChartDataToBase = async (idw, t1, t2) => {
 };
 
 exports.viewSortDataToBase = async (idw, t1, t2) => {
-
     const postModel = `SELECT * FROM sortData WHERE idw=@idw AND time >=@t1 AND time <=@t2`;
     try {
         const pool = await connection
