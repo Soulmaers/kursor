@@ -24,7 +24,7 @@ async function init() {
     }
 
 
-    //  inits();
+
 
 
     const param = {
@@ -79,34 +79,67 @@ init();
 
 
 
-function inits() {
+export function inits(data) {
     wialon.core.Session.getInstance().initSession("https://hst-api.wialon.com");
     wialon.core.Session.getInstance().loginToken("0f481b03d94e32db858c7bf2d8415204977173E354D49AA7AFA37B01431539AEAC5DAD5E", "", // try to login
         function (code) {
             if (code) {
                 return;
             }
-            //  zapross()
+            console.log(data)
+            const result = data
+                .map(el => Object.values(el)) // получаем массивы всех id
+                .flat()
+                .map(e => e[4])
+                .filter(e => e !== null);
+            zapross(result)
         });
 };
 
 
 
-function zapross() {
+function zapross(data) {
+    console.log(data)
+    //   const arr = [27695838, 27697145, 25766831]
+    data.forEach(e => {
+        const prmsId = {
+            "itemId": e,
+            "timeFrom": 1707291796,
+            "timeTo": 1707295146,
+            "flags": 1,
+            "flagsMask": 1,
+            "loadCount": 180000
+        }
+        const test2 = wialon.core.Remote.getInstance();
+        test2.remoteCall('messages/load_interval', prmsId,
+            function (code, result) {
+                if (code) {
+                    console.log(wialon.core.Errors.getErrorText(code));
+                }
+                console.log(result)
+
+            })
 
 
-    const prmsId = {
-        "id": 26936623,
-        "flags": 0x00000100
-    };
+    })
 
-    const test2 = wialon.core.Remote.getInstance();
-    test2.remoteCall('core/search_item', prmsId,
-        function (code, result) {
-            if (code) {
-                console.log(wialon.core.Errors.getErrorText(code));
-            }
-            console.log(result)
 
-        })
+
+
+
+    /*
+        const prmsId = {
+            "id": 26936623,
+            "flags": 0x00000100
+        };
+    
+        const test2 = wialon.core.Remote.getInstance();
+        test2.remoteCall('core/search_item', prmsId,
+            function (code, result) {
+                if (code) {
+                    console.log(wialon.core.Errors.getErrorText(code));
+                }
+                console.log(result)
+    
+            })*/
 }

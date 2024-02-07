@@ -132,6 +132,35 @@ exports.viewLogs = async (req, res) => {
 //let dataGlobal;
 
 exports.start = async (session) => {
+
+    /* const http = require('http');
+     var name = 'cheetah';
+     const options = {
+         hostname: 'api.api-ninjas.com',
+         headers: { 'X-Api-Key': 'ODwEv6iXyBY1SR+/fnI5Lg==Ma2i6eAjXurgGQql' },
+         path: 'https://api.api-ninjas.com/v1/animals?name=' + name,
+         method: 'GET'
+     };
+ 
+     const req = http.request(options, (res) => {
+         let data = '';
+         res.on('data', (chunk) => {
+             console.log(chunk)
+             data += chunk;
+         });
+ 
+         res.on('end', () => {
+             console.log(data);
+         });
+     });
+ 
+     req.on('error', (error) => {
+         console.error(error);
+     });
+ 
+     req.end();*/
+
+
     console.log('старт')
     await getWialonSetToBaseObject(session._session.au) //обновляем объекты с виалона в нашей базе
     console.time('data')
@@ -153,7 +182,7 @@ exports.start = async (session) => {
         const promises = allCar[5][1].map(async (el) => {
             const sats = el.lmsg && el.lmsg.p && el.lmsg.p.sats ? el.lmsg.p.sats : '-'
             const res = await engines(el.id);
-            if (res) {
+            if (res && resa) {
                 await saveStatus(res, el)
                 const foundObject = event.find(obj => obj.hasOwnProperty(el.id));
                 const all = res.concat(...Object.values(foundObject))
@@ -166,10 +195,13 @@ exports.start = async (session) => {
         const dataKursor = await databaseService.getObjects()
         const validKursorData = dataKursor.filter(e => [...e.imei].length > 10)
         // Запускаем все функции параллельно
-        await Promise.all([promises, updateParams(data, validKursorData), saveSensorsToBase(allCar)])
+        await Promise.all([promises, updateParams(data, validKursorData)])
+        console.log('выполнено')
+        //  await Promise.all([promises, updateParams(data, validKursorData), saveSensorsToBase(allCar)])
+
 
     }
-
+    // start(session)
 }
 
 async function saveSensorsToBase(allCar) {
@@ -178,31 +210,35 @@ async function saveSensorsToBase(allCar) {
     const now = new Date();
     const nowTime = Math.floor(now.getTime() / 1000);
     for (const el of allCar[5][1]) {
-        let rr, rez, nameSens;
         const timeBase = await databaseService.lostChartDataToBase(el.id)
-        const oldTime = timeBase.length !== 0 ? Number(timeBase[0].time) : nowTime - 1;
-        // Запускаем загрузку данных сообщений и данные датчиков 
-        rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
-        rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
-        nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i');
-        //  const val = await wialonService.getClearLoadIntervalWialon(el.id)
+        const oldTime = timeBase.length !== 0 ? Number(timeBase[0].data) : nowTime - 1;
+        // Запускаем загрузку данных сообщений и данные датчиков параллельно
+        let [rr, rez, nameSens] = await Promise.all([
+            await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i'),
+            await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i'),
+            await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
+        ]);
+        // console.log(el.nm, rr.length, rez.length)
         if (!rr || rr.messages.length === 0 || rez && rez.length === 0) {
             null
         }
         else {
             while (rez && rr.messages.length !== rez.length) {
-                rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i');
-                rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i');
-                nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i');
-                //  const val = await wialonService.getClearLoadIntervalWialon(el.id)
+                console.log('повторно')
+                [rr, rez, nameSens] = await Promise.all([
+                    await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i'),
+                    await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i'),
+                    await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
+                ]);
             }
+            /* if (el.id === 27697145) {
+                 console.log(rr.messages[0].p)
+             }*/
+
             const mass = [];
             const sort = [];
             const allArray = ggg(nameSens, rez, el.id)
-            if (!allArray) {
-                console.log('контин')
-                continue
-            }
+
             rr.messages.forEach((e, index) => {
                 const geo = JSON.stringify([e.pos.y, e.pos.x]);
                 mass.push([String(el.id), el.nm.replace(/\s+/g, ''), String(e.t), String(new Date(e.t * 1000)), String(e.pos.s), String(e.p.sats), geo, String(e.pos.c)]);
