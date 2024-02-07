@@ -20,16 +20,17 @@ export class CreateMarkersEvent {
     }
 
     viewTrackAndMarkersEnent() {
+        const track = this.track.map(e => e.geo)
         this.setTrack.classList.toggle('activeTrack')
         if (this.setTrack.classList.contains('activeTrack')) {
             if (this.poly) {
                 mapLocal.removeLayer(this.poly);
                 this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
             }
-            this.poly = L.polyline(this.track, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
+            this.poly = L.polyline(track, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
 
             this.startTrack ? this.startTrack.addTo(mapLocal) : null
-            this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers) : null
+            this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
         } else {
             mapLocal.removeLayer(this.poly);
             this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
@@ -57,10 +58,11 @@ export class CreateMarkersEvent {
         this.createMapMainObject(geo)
         const prostoy = await this.getEventProstoy()
         //  const pressure = await this.getEventPressure()
-        this.track = track.reduce((acc, el) => {
-            acc.push(el.geo)
-            return acc
-        }, [])
+        this.track = track
+        /* this.track = track.reduce((acc, el) => {
+             acc.push(el.geo)
+             return acc
+         }, [])*/
         //  this.eventMarkers = null;
         this.eventMarkers = await this.getEventObject(track, prostoy)
         if (!this.markerCreator) {
@@ -144,7 +146,7 @@ export class CreateMarkersEvent {
             }
             const rest = await fetch('/api/viewSortChart', param)
             const resultt = await rest.json()
-            console.log(resultt)
+            // console.log(resultt)
             resultt.sort((a, b) => Number(a.time) - Number(b.time));
             data = resultt.reduce((acc, el) => {
                 acc.push({ geo: [JSON.parse(el.geo)[0], JSON.parse(el.geo)[1]], speed: el.speed, time: el.time, sats: el.sats, course: el.curse })
@@ -166,7 +168,7 @@ export class CreateMarkersEvent {
                 return acc
             }, [])
         }
-        console.log(data)
+        //  console.log(data)
         return data
     }
 
@@ -362,8 +364,27 @@ export class MarkerCreator {
 
         };
     }
-    createMarker(events) {
+    createMarker(events, track) {
         this.deleteMarkers();
+        // console.log(track)
+        track.forEach(it => {
+            const icon = L.icon({
+                iconUrl: '../../image/arrow2.png',
+                iconSize: [5, 5],
+                iconAnchor: [5, 5],
+                popupAnchor: [0, 0],
+                className: 'custom-marker'
+            });
+            const time = times(new Date(Number(it.time) * 1000));
+            const eventMarkers = L.marker(it.geo, { icon }).bindPopup(`Время: ${time}<br>Скорость:${it.speed} км/ч`).addTo(this.map);
+            eventMarkers.setOpacity(0);
+            eventMarkers.on('mouseover', function (e) {
+                this.openPopup();
+            });
+            eventMarkers.on('mouseout', function (e) {
+                this.closePopup();
+            });
+        })
         events.forEach(e => {
             const key = Object.keys(e)[1];
             const iconUrl = this.iconUrls[key]
