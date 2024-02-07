@@ -8,11 +8,11 @@ export async function reverseGeocode(geoY, geoX) {
     const API_URL = `https://api.opencagedata.com/geocode/v1/json`
     var lat = geoY; // Ваша широта
     var lng = geoX; // Ваша долгота
-
+    console.log(lat, lng)
     try {
         const responses = await fetch(`${API_URL}?q=${lat},${lng}&key=${API_KEY}&no_annotations=1&language=ru`);
         const data = await responses.json();
-        console.log(data.results.length)
+        console.log(data.results)
         if (!responses.ok) {
             if (responses.status === 402) {
 
@@ -40,6 +40,7 @@ export async function reverseGeocode(geoY, geoX) {
 
 
 }
+reverseGeocode(60.0838733333, 30.3614666667)
 export async function createMapsUniq(geoTrack, geo, num) {
     const mapss = document.querySelector('.wrapMap')
     if (mapss) {

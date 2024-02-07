@@ -161,8 +161,7 @@ exports.getAllGroupDataFromWialon = async () => {
     })
 };
 
-exports.getClearLoadIntervalWialon = async (id) => {
-    console.log(id)
+exports.getClearLoadIntervalWialon = async () => {
     const prmsId = {
         //     "id": id,
     };
@@ -196,6 +195,7 @@ exports.getAllParamsIdDataFromWialon = async (id) => {
             const session = await geSession.geSession();
             const data = await session.request('core/search_item', prmsId);
             // Обработка успешного ответа
+            //   console.log(data)
             resolve(data);
         } catch (err) {
             if (err.code === 7) {

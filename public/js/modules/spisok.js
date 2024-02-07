@@ -96,6 +96,7 @@ export async function loadParamsViewList(car, el) {
 }
 
 export async function conturTest(testov) {
+    console.log(testov)
     const resultImei = testov
         .map(el => Object.values(el)) // получаем массивы всех id
         .flat()

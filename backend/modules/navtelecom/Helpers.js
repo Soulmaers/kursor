@@ -63,7 +63,7 @@ class BitsCount {
 class WriteFile {
 
     static async writeDataFile(globalArrayMSG, imei) {
-        console.log(imei)
+        //  console.log(imei)
         const res = await databaseService.objectsImei(String(imei))
         globalArrayMSG.map(e => {
             e.idObject = res[0].idObject

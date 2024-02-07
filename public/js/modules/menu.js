@@ -2,7 +2,7 @@
 import { conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
 import { logsView } from './popup.js'
-
+import { inits } from '../main.js'
 
 export let dataspisok = false
 
@@ -19,6 +19,7 @@ export async function zapros(login) {
     const nameCarCheck = wialonData.response.arrName
     //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
     allObjects = wialonData
+    // inits(arrayList);
     const data = kursorData.concat(arrayList)
     console.log(kursorData.concat(arrayList))
     await conturTest(data)

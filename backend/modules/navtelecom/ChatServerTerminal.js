@@ -27,7 +27,7 @@ class ChartServerTerminal {
                 if (bodyString.startsWith('*>S')) {
                     this.imei = Number((data.slice(20, data.length)).toString())
                     //   const valid=await validation()
-                    console.log(this.imei)
+                    // console.log(this.imei)
                     const msg = '*<S'
                     this.handshake(preamble, receiver, sender, msg)
                 }
@@ -55,7 +55,7 @@ class ChartServerTerminal {
                 this.type = type
 
                 if (type === '~A' || type === '~C') {
-                    console.log(buf)
+                    //  console.log(buf)
                     let count = type === '~A' ? buf.readUInt8() : 1
                     this.telemetrationFields(buf, type, count)
                     WriteFile.writeDataFile(this.globalArrayMSG, this.imei)

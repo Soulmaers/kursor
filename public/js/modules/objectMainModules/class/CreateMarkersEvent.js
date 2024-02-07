@@ -53,7 +53,7 @@ export class CreateMarkersEvent {
     async update() {
         const track = await this.getIntervalTrack()
         console.log(track)
-        const geo = [track[track.length - 1].geo[0], track[track.length - 1].geo[1], track[track.length - 1].course]
+        const geo = track.length !== 0 ? [track[track.length - 1].geo[0], track[track.length - 1].geo[1], track[track.length - 1].course] : []
         this.createMapMainObject(geo)
         const prostoy = await this.getEventProstoy()
         //  const pressure = await this.getEventPressure()
@@ -144,6 +144,7 @@ export class CreateMarkersEvent {
             }
             const rest = await fetch('/api/viewSortChart', param)
             const resultt = await rest.json()
+            console.log(resultt)
             resultt.sort((a, b) => Number(a.time) - Number(b.time));
             data = resultt.reduce((acc, el) => {
                 acc.push({ geo: [JSON.parse(el.geo)[0], JSON.parse(el.geo)[1]], speed: el.speed, time: el.time, sats: el.sats, course: el.curse })
