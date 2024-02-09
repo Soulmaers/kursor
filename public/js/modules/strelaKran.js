@@ -16,6 +16,7 @@ export async function kranParams() {
         }
         const res = await fetch('/api/parametrs', param)
         const response = await res.json()
+        console.log(response)
         loadKran(response);
     }
 }

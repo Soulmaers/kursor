@@ -1457,9 +1457,13 @@ exports.quantitySaveToBase = async (login, quantity) => {
         const selectBase = `SELECT login FROM viewLogs WHERE login='${login}'`;
         const results = await pool.query(selectBase);
         if (results.recordset.length === 0) {
-            const arr = [[login, 0]];
-            const insertQuery = `INSERT INTO viewLogs(login, quantity) VALUES ?`;
-            await pool.query(insertQuery, [arr]);
+            const arr = [login, 0];
+            const insertQuery = `INSERT INTO viewLogs(login, quantity) VALUES(@login,@quantity)`;
+
+            const results = await pool.request()
+                .input('login', arr[0])
+                .input('quantity', arr[1])
+                .query(insertQuery);
             return { message: 'quntity добавлено' };
         }
         if (quantity !== undefined) {

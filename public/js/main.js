@@ -10,7 +10,7 @@ async function init() {
     const role = document.querySelector('.role').getAttribute('rel')
     const login = document.querySelectorAll('.log')[1].textContent
     const radioVal = document.querySelector('.radioVal')
-
+    console.log(login)
     role === 'Пользователь' ? dis() : btnDel()
     function dis() {
         const delIcon = document.querySelectorAll('.delIcon')
@@ -23,10 +23,6 @@ async function init() {
         radioVal.style.display = 'none'
     }
 
-
-
-
-
     const param = {
         method: "POST",
         headers: {
@@ -35,8 +31,7 @@ async function init() {
         body: (JSON.stringify({ login }))
 
     }
-
-
+    console.log(login + 'log')
     const res = await fetch('/api/viewLogs', param)
     const confirm = await res.json()
     console.log(confirm)
@@ -98,33 +93,135 @@ export function inits(data) {
 
 
 
-function zapross(data) {
-    console.log(data)
+async function zapross() {
+    console.time('ggg')
     //   const arr = [27695838, 27697145, 25766831]
-    data.forEach(e => {
-        const prmsId = {
-            "itemId": e,
-            "timeFrom": 1707291796,
-            "timeTo": 1707295146,
-            "flags": 1,
-            "flagsMask": 1,
-            "loadCount": 180000
-        }
-        const test2 = wialon.core.Remote.getInstance();
-        test2.remoteCall('messages/load_interval', prmsId,
-            function (code, result) {
-                if (code) {
-                    console.log(wialon.core.Errors.getErrorText(code));
+    const flagsAllGroup = 1 + 1024// + 1024//4096
+    const prmsAllGoup = {
+        "spec": {
+            "itemsType": "avl_unit_group",
+            "propName": "sys_name",
+            "propValueMask": "*",
+            "sortType": "sys_name"
+        },
+        "force": 1,
+        "flags": flagsAllGroup,
+        "from": 0,
+        "to": 0xffffffff,
+        "rand": Math.random() // Добавляем рандомный параметр rand
+    };
+
+    const test2 = wialon.core.Remote.getInstance();
+    const r = await test2.remoteCall('core/search_items', prmsAllGoup,
+        function (code, result) {
+            if (code) {
+                console.log(wialon.core.Errors.getErrorText(code));
+            }
+            console.log(result)
+        })
+    console.log(r)
+    /*
+                const promises = data.items.flatMap((elem) => {
+                    const nameGroup = elem.nm;
+                    const idGroup = elem.id;
+                    const nameObject = elem.u;
+                    return nameObject.map(async (el) => {
+                        try {
+                            const all = await wialonService.getAllParamsIdDataFromWialon(el);
+                            const phone = await wialonService.getUniqImeiAndPhoneIdDataFromWialon(el);
+                            if (!all.item || !phone.item) {
+                                return;
+                            }
+                            return {
+                                login: login,
+                                data: String(time),
+                                idg: String(idGroup),
+                                name_g: nameGroup,
+                                idObject: String(all.item.id),
+                                nameObject: String(all.item.nm),
+                                imei: phone.item.uid ? String(phone.item.uid) : null,
+                                phone: phone.item.ph ? String(phone.item.ph) : null
+                            };
+                        } catch (error) {
+                            console.error(error);
+                            return;
+                        }
+                    });
+    
+                });
+                const results = await Promise.all(promises);
+                return results.filter(Boolean);
+                const res = []
+                for (let el of result.items) {
+                    const nameGroup = el.nm;
+                    const idGroup = el.id;
+                    const nameObject = el.u;
+                    for (let it of nameObject) {
+                        const prmsId = {
+                            "id": it,
+                            "flags": 1
+                        };
+                        const test2 = wialon.core.Remote.getInstance();
+                        test2.remoteCall('core/search_item', prmsAllGoup,
+                            function (code, result) {
+                                if (code) {
+                                    console.log(wialon.core.Errors.getErrorText(code));
+                                }
+                                res.push({
+                                    idg: String(idGroup),
+                                    name_g: nameGroup,
+                                    idObject: String(result.item.id),
+                                    nameObject: String(result.item.nm),
+    
+                                })
+                            })
+                    }
+    
+    
                 }
-                console.log(result)
-
+                console.log(res)
+    
             })
-
-
-    })
-
-
-
+        console.timeEnd('ggg')
+    */
+    //session.request('core/search_items', prmsAllGoup)
+    /*
+        for (let el of data) {
+            const prmsId = {
+                "itemId": el,
+                "timeFrom": 1707201796,
+                "timeTo": 1707295146,
+                "flags": 1,
+                "flagsMask": 1,
+                "loadCount": 180000
+            }
+            const test2 = wialon.core.Remote.getInstance();
+            test2.remoteCall('messages/load_interval', prmsId,
+                function (code, result) {
+                    if (code) {
+                        console.log(wialon.core.Errors.getErrorText(code));
+                    }
+                    console.log(result)
+    
+                })
+            const prms3 = {
+                "source": "",
+                "indexFrom": 0,
+                "indexTo": 180000,
+                "unitId": el,
+                "sensorId": 0
+    
+            };
+            const test3 = wialon.core.Remote.getInstance();
+            test3.remoteCall('unit/calc_sensors', prms3,
+                function (code, result) {
+                    if (code) {
+                        console.log(wialon.core.Errors.getErrorText(code));
+                    }
+                    console.log(result)
+                })
+    
+        }*/
 
 
     /*
@@ -142,4 +239,5 @@ function zapross(data) {
                 console.log(result)
     
             })*/
+
 }

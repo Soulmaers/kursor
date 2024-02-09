@@ -108,6 +108,8 @@ export class IconStatus {
         }
         const params = await this.iconFindParams(param)
         const editParams = await this.iconFindParamsEdit(param)
+        console.log(params)
+        console.log(editParams)
         this.pushObjectProperty(params, editParams)
         await this.statusTSI(param)
 

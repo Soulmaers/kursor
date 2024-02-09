@@ -41,7 +41,24 @@ const initServer = async () => {
     app.listen(port, () => {
         console.log(`Сервер запущен, порт:${port}`);
     });
-
+    process.on('uncaughtException', (err) => {
+        if (err.code === 'ETIMEDOUT') {
+            console.log(new Date(), 'Ошибка подключения к серверу: истекло время ожидания');
+            // Перезапуск сервера
+            setTimeout(async () => {
+                //  await globalstart.start(session)
+                // process.exit(1) // Перезапуск сервера через 1 секунду
+                // initServer()
+            }, 3000);
+        } else {
+            console.log(new Date(), 'Необработанная ошибка:', err.message);
+            setTimeout(async () => {
+                // await globalstart.start(session)
+                // process.exit(1) // Перезапуск сервера через 1 секунду
+                // initServer()
+            }, 3000);
+        }
+    });
 };
 
 let session;
@@ -51,8 +68,8 @@ async function init() {
     console.log(res)
     if (res !== 'ошибка') {
         console.log('сессия открыта')
-        //  await globalstart.start(session)
-        // setInterval(globalstart.start, 40000, session)
+        await globalstart.start(session)
+        setInterval(globalstart.start, 120000, session)
 
     }
 
@@ -130,7 +147,7 @@ class ListenPortTP {
 
 const ChartServerTerminal = require('./backend/modules/navtelecom/ChatServerTerminal.js')
 const SendingCommandToTerminal = require('./backend/modules/navtelecom/SendingCommandToTerminal.js')
-//new ListenPortTP(21626)
+new ListenPortTP(21626)
 
 
 

@@ -14,15 +14,23 @@ wrapContaint.appendChild(cont);
 
 export async function zapros(login) {
     const [wialonData, kursorData] = await Promise.all([zaprosWialon(login), zaprosKursor(login)])
+
     dataspisok = true
     const arrayList = wialonData.response.aLLmassObject
     const nameCarCheck = wialonData.response.arrName
     //получаем готовые данные с сервера и передаем в функцию для отрисовки списка
     allObjects = wialonData
-    // inits(arrayList);
+    //inits(arrayList);
     const data = kursorData.concat(arrayList)
     console.log(kursorData.concat(arrayList))
+    console.log(data.flat())
+    if (data.flat().length === 0) {
+        const loaders = document.querySelector('.loaders');
+        loaders.style.display = 'none'
+        //  return
+    }
     await conturTest(data)
+
     logsView(data)
     setInterval(logsView, 60000, data)
     //передаем имена объектов для отображения в панели администратора

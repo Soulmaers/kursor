@@ -62,7 +62,6 @@ exports.dataSpisok = async (req, res) => {
         if (req && req.body && req.body.login) {
             await res.json({ response: { aLLmassObject, arrName } });
         }
-        //  console.log(aLLmassObject)
         return aLLmassObject
     }
     catch (e) {
@@ -76,9 +75,12 @@ const getWialonSetToBaseObject = async (login) => {
     console.time('getWialon')
     const objects = await getWialon(login)
     console.timeEnd('getWialon')
+    console.time('save')
     const mess = await databaseService.setObjectGroupWialon(objects)
+    console.timeEnd('save')
     console.log(mess)
 }
+
 const getWialon = async (login) => {
     const data = await wialonService.getAllGroupDataFromWialon();
     const time = Math.floor(new Date().getTime() / 1000);
@@ -109,6 +111,7 @@ const getWialon = async (login) => {
                     return;
                 }
             });
+
         });
         const results = await Promise.all(promises);
         return results.filter(Boolean);
@@ -129,38 +132,8 @@ exports.viewLogs = async (req, res) => {
 }
 
 
-//let dataGlobal;
 
 exports.start = async (session) => {
-
-    /* const http = require('http');
-     var name = 'cheetah';
-     const options = {
-         hostname: 'api.api-ninjas.com',
-         headers: { 'X-Api-Key': 'ODwEv6iXyBY1SR+/fnI5Lg==Ma2i6eAjXurgGQql' },
-         path: 'https://api.api-ninjas.com/v1/animals?name=' + name,
-         method: 'GET'
-     };
- 
-     const req = http.request(options, (res) => {
-         let data = '';
-         res.on('data', (chunk) => {
-             console.log(chunk)
-             data += chunk;
-         });
- 
-         res.on('end', () => {
-             console.log(data);
-         });
-     });
- 
-     req.on('error', (error) => {
-         console.error(error);
-     });
- 
-     req.end();*/
-
-
     console.log('старт')
     await getWialonSetToBaseObject(session._session.au) //обновляем объекты с виалона в нашей базе
     console.time('data')
@@ -195,30 +168,42 @@ exports.start = async (session) => {
         const dataKursor = await databaseService.getObjects()
         const validKursorData = dataKursor.filter(e => [...e.imei].length > 10)
         // Запускаем все функции параллельно
-        await Promise.all([promises, updateParams(data, validKursorData)])
+        await Promise.all([promises, updateParams(data, validKursorData), saveSensorsToBase(allCar, session)])
         console.log('выполнено')
-        //  await Promise.all([promises, updateParams(data, validKursorData), saveSensorsToBase(allCar)])
-
-
     }
-    // start(session)
+
 }
 
-async function saveSensorsToBase(allCar) {
+async function saveSensorsToBase(allCar, session) {
     console.log('тут')
     console.time('write')
     const now = new Date();
     const nowTime = Math.floor(now.getTime() / 1000);
+
     for (const el of allCar[5][1]) {
         const timeBase = await databaseService.lostChartDataToBase(el.id)
+        // console.log(el.nm, timeBase)
         const oldTime = timeBase.length !== 0 ? Number(timeBase[0].data) : nowTime - 1;
         // Запускаем загрузку данных сообщений и данные датчиков параллельно
-        let [rr, rez, nameSens] = await Promise.all([
-            await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i'),
-            await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i'),
-            await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
-        ]);
-        // console.log(el.nm, rr.length, rez.length)
+        //let [rr, rez, nameSens] = await Promise.all([
+
+        let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i')
+        if (rr === undefined) {
+            rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i')
+        }
+        // console.log(new Date(), el.nm, rr.messages.length)
+        let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i')
+        if (rez === undefined) {
+            rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i')
+        }
+        //  console.log(new Date(), el.nm, rez.length)
+        let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
+        if (nameSens === undefined) {
+            nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
+        }
+        //  console.log(new Date(), el.nm, nameSens.item.flags)
+        //  ]);
+
         if (!rr || rr.messages.length === 0 || rez && rez.length === 0) {
             null
         }
@@ -231,9 +216,6 @@ async function saveSensorsToBase(allCar) {
                     await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
                 ]);
             }
-            /* if (el.id === 27697145) {
-                 console.log(rr.messages[0].p)
-             }*/
 
             const mass = [];
             const sort = [];
