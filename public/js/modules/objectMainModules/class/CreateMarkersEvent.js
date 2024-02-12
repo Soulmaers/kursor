@@ -13,6 +13,7 @@ export class CreateMarkersEvent {
         this.poly = null;
         this.startTrack = null
         this.imei = null;
+        this.trackMarkers = {}
         this.pref = document.querySelector('.color').classList.contains('wialon') ? 'wialon' : 'kursor'
         this.setTrack = document.querySelector('.togTrack');
         this.boundViewTrackAndMarkersEvent = this.viewTrackAndMarkersEnent.bind(this);
@@ -31,13 +32,76 @@ export class CreateMarkersEvent {
 
             this.startTrack ? this.startTrack.addTo(mapLocal) : null
             this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
+            this.track.forEach((it, i) => {
+                const icon = L.icon({
+                    iconUrl: '../../image/starttrack.png',
+                    iconSize: [10, 10],
+                    iconAnchor: [10, 10],
+                    popupAnchor: [0, 0],
+                    className: 'custom-marker'
+                });
+                if (i % 10 === 0) {
+                    const time = times(new Date(Number(it.time) * 1000));
+                    const eventMarkers = L.marker(it.geo, { icon }).addTo(mapLocal)
+                    eventMarkers.bindTooltip(`Время: ${time}<br>Скорость: ${it.speed} км/ч`,
+                        { 'className': 'custom-tooltip' })
+                    eventMarkers.setOpacity(0);
+                    this.trackMarkers[i] = { marker: eventMarkers, tooltipText: `${time}<br>${it.speed} км/ч` };
+                }
+            });
+            this.zoomToggleView()
+
         } else {
+            Object.values(this.trackMarkers).forEach(e => {
+                mapLocal.removeLayer(e.marker);
+                e.marker.unbindTooltip();
+            })
             mapLocal.removeLayer(this.poly);
             this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
             this.markerCreator.deleteMarkers()
         }
+
+    }
+    zoomToggleView() {
+        console.log(Object.values(this.trackMarkers).length)
+        // Проверка масштаба карты
+        if (mapLocal.getZoom() >= 12) {
+            Object.values(this.trackMarkers).forEach(e => {
+                e.marker.setOpacity(1);
+                e.marker.unbindTooltip(),
+                    e.marker.bindTooltip(e.tooltipText, { 'className': 'custom-tooltip' }).openTooltip()
+                //  e.bindTooltip({ permanent: true });
+            });
+        } else {
+            Object.values(this.trackMarkers).forEach(e => {
+                e.marker.setOpacity(0);
+                e.marker.unbindTooltip();
+            });
+        }
+        let self = this
+        // Проверка масштаба карты
+        mapLocal.on('zoomend', function () {
+            if (mapLocal.getZoom() >= 12) {
+                self.trackMarkers ? Object.values(self.trackMarkers).forEach(e => {
+                    e.marker.setOpacity(1),
+                        e.marker.unbindTooltip(),
+                        e.marker.bindTooltip(e.tooltipText, { 'className': 'custom-tooltip' }).openTooltip()
+                }) : null;
+                console.log(self.trackMarkers)
+            }
+            else {
+                self.trackMarkers ? Object.values(self.trackMarkers).forEach(e => {
+                    e.marker.setOpacity(0),
+                        e.marker.unbindTooltip()
+                }) : null;
+
+            }
+        })
     }
     hiddenTrackAndMarkersEnent() {
+        Object.values(this.trackMarkers).forEach(e => {
+            mapLocal.removeLayer(e);
+        })
         this.setTrack.classList.remove('activeTrack')
         this.setTrack.removeEventListener('click', this.boundViewTrackAndMarkersEvent);
         this.poly ? mapLocal.removeLayer(this.poly) : null
@@ -47,7 +111,7 @@ export class CreateMarkersEvent {
     async init() {
         this.updateInterval = setInterval(() => {
             this.update();
-        }, 60000);
+        }, 120000);
         this.update();
     }
 
@@ -59,11 +123,6 @@ export class CreateMarkersEvent {
         const prostoy = await this.getEventProstoy()
         //  const pressure = await this.getEventPressure()
         this.track = track
-        /* this.track = track.reduce((acc, el) => {
-             acc.push(el.geo)
-             return acc
-         }, [])*/
-        //  this.eventMarkers = null;
         this.eventMarkers = await this.getEventObject(track, prostoy)
         if (!this.markerCreator) {
             this.markerCreator = new MarkerCreator(mapLocal);
@@ -74,6 +133,7 @@ export class CreateMarkersEvent {
             }
             this.getStartTrack(startTrack)
         }
+        // this.zoomToggleView()
     }
 
     async getStartTrack(startTrack) {
@@ -321,6 +381,9 @@ export class CreateMarkersEvent {
                 this.closePopup();
             });
 
+
+
+
         } else {
             iss.setLatLng(center).bindPopup(`${nameCar}<br>${res}`).update();
             marker.setLatLng(center).update();
@@ -330,6 +393,7 @@ export class CreateMarkersEvent {
             });
             marker.setIcon(divIconUpdated);
         }
+
         //  mapLocal.on('zoomend', function () {
         //      mapLocal.panTo(center);
         //  });
@@ -367,24 +431,7 @@ export class MarkerCreator {
     createMarker(events, track) {
         this.deleteMarkers();
         // console.log(track)
-        track.forEach(it => {
-            const icon = L.icon({
-                iconUrl: '../../image/arrow2.png',
-                iconSize: [5, 5],
-                iconAnchor: [5, 5],
-                popupAnchor: [0, 0],
-                className: 'custom-marker'
-            });
-            const time = times(new Date(Number(it.time) * 1000));
-            const eventMarkers = L.marker(it.geo, { icon }).bindPopup(`Время: ${time}<br>Скорость:${it.speed} км/ч`).addTo(this.map);
-            eventMarkers.setOpacity(0);
-            eventMarkers.on('mouseover', function (e) {
-                this.openPopup();
-            });
-            eventMarkers.on('mouseout', function (e) {
-                this.closePopup();
-            });
-        })
+
         events.forEach(e => {
             const key = Object.keys(e)[1];
             const iconUrl = this.iconUrls[key]
