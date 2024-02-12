@@ -44,7 +44,7 @@ export class CreateMarkersEvent {
                     const time = times(new Date(Number(it.time) * 1000));
                     const eventMarkers = L.marker(it.geo, { icon }).addTo(mapLocal)
                     eventMarkers.bindTooltip(`Время: ${time}<br>Скорость: ${it.speed} км/ч`,
-                        { 'className': 'custom-tooltip' })
+                        { 'className': 'custom-tooltip' },)
                     eventMarkers.setOpacity(0);
                     this.trackMarkers[i] = { marker: eventMarkers, tooltipText: `${time}<br>${it.speed} км/ч` };
                 }
@@ -70,7 +70,6 @@ export class CreateMarkersEvent {
                 e.marker.setOpacity(1);
                 e.marker.unbindTooltip(),
                     e.marker.bindTooltip(e.tooltipText, { 'className': 'custom-tooltip' }).openTooltip()
-                //  e.bindTooltip({ permanent: true });
             });
         } else {
             Object.values(this.trackMarkers).forEach(e => {
