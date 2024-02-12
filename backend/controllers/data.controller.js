@@ -168,7 +168,7 @@ exports.start = async (session) => {
         const dataKursor = await databaseService.getObjects()
         const validKursorData = dataKursor.filter(e => [...e.imei].length > 10)
         // Запускаем все функции параллельно
-        await Promise.all([promises, updateParams(data, validKursorData), saveSensorsToBase(allCar, session)])
+        await Promise.all([promises, await updateParams(data, validKursorData), saveSensorsToBase(allCar, session)])
         console.log('выполнено')
     }
 
@@ -181,8 +181,10 @@ async function saveSensorsToBase(allCar, session) {
     const nowTime = Math.floor(now.getTime() / 1000);
 
     for (const el of allCar[5][1]) {
+        //   if (el.id === 25766831) {
+
         const timeBase = await databaseService.lostChartDataToBase(el.id)
-        // console.log(el.nm, timeBase)
+        console.log(el.nm, timeBase)
         const oldTime = timeBase.length !== 0 ? Number(timeBase[0].data) : nowTime - 1;
         // Запускаем загрузку данных сообщений и данные датчиков параллельно
         //let [rr, rez, nameSens] = await Promise.all([
@@ -191,17 +193,17 @@ async function saveSensorsToBase(allCar, session) {
         if (rr === undefined) {
             rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i')
         }
-        // console.log(new Date(), el.nm, rr.messages.length)
+        console.log(new Date(), el.nm, rr.messages.length)
         let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i')
         if (rez === undefined) {
             rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i')
         }
-        //  console.log(new Date(), el.nm, rez.length)
+        console.log(new Date(), el.nm, rez.length)
         let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
         if (nameSens === undefined) {
             nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
         }
-        //  console.log(new Date(), el.nm, nameSens.item.flags)
+        console.log(new Date(), el.nm, nameSens.item.flags)
         //  ]);
 
         if (!rr || rr.messages.length === 0 || rez && rez.length === 0) {
@@ -238,6 +240,7 @@ async function saveSensorsToBase(allCar, session) {
             });
             await Promise.all([databaseService.saveChartDataToBase(mass), databaseService.saveSortDataToBase(sort)])
         }
+        //  }
     }
     console.timeEnd('write')
     console.log('saveSensorsToBase end')
@@ -362,7 +365,7 @@ async function updateParams(data, kursor) {
         events.eventFunction(res) //ловим через вилаон заправки/сливы+потеря связи
         const summary = new SummaryStatistiks(dataAll)
         const global = await summary.init();
-        //  console.log(global)
+        //console.log(global)
         const arraySummary = Object.entries(global)
         const now = new Date();
         const date = new Date(now);
