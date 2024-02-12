@@ -106,7 +106,7 @@ export class InitMarkers {
     }
 
     nameObjectView() {
-        console.log(InitMarkers.namesMode)
+        console.log(InitMarkers.markers)
         InitMarkers.namesMode = InitMarkers.namesMode === 'normal' ? 'alternate' : 'normal';
         console.log(InitMarkers.namesMode)
         Object.values(InitMarkers.markers).forEach(marker => {
@@ -294,7 +294,6 @@ export class InitMarkers {
                 // Сохраняем маркер в хранилище
                 InitMarkers.markers[id] = marker;
                 InitMarkers.markersArrow[id] = markers;
-
                 // Проверяем, было ли добавлено событие click к маркеру
                 if (!marker.clickEventAttached) {
                     marker.on('click', this.clickMarkers.bind(this));

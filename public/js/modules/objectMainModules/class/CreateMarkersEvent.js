@@ -32,6 +32,7 @@ export class CreateMarkersEvent {
 
             this.startTrack ? this.startTrack.addTo(mapLocal) : null
             this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
+
             this.track.forEach((it, i) => {
                 const icon = L.icon({
                     iconUrl: '../../image/starttrack.png',
@@ -40,11 +41,12 @@ export class CreateMarkersEvent {
                     popupAnchor: [0, 0],
                     className: 'custom-marker'
                 });
-                if (i % 10 === 0) {
+                if (i % 15 === 0) {
                     const time = times(new Date(Number(it.time) * 1000));
                     const eventMarkers = L.marker(it.geo, { icon }).addTo(mapLocal)
                     eventMarkers.bindTooltip(`Время: ${time}<br>Скорость: ${it.speed} км/ч`,
-                        { 'className': 'custom-tooltip' },)
+                        { 'className': 'custom-tooltip' }, { permanent: true })
+                    // eventMarkers.openTooltip()
                     eventMarkers.setOpacity(0);
                     this.trackMarkers[i] = { marker: eventMarkers, tooltipText: `${time}<br>${it.speed} км/ч` };
                 }
@@ -67,14 +69,13 @@ export class CreateMarkersEvent {
         // Проверка масштаба карты
         if (mapLocal.getZoom() >= 12) {
             Object.values(this.trackMarkers).forEach(e => {
-                e.marker.setOpacity(1);
-                e.marker.unbindTooltip(),
-                    e.marker.bindTooltip(e.tooltipText, { 'className': 'custom-tooltip' }).openTooltip()
+                e.marker.setOpacity(1)
+                e.marker.openTooltip()
             });
         } else {
             Object.values(this.trackMarkers).forEach(e => {
                 e.marker.setOpacity(0);
-                e.marker.unbindTooltip();
+                e.marker.closeTooltip()
             });
         }
         let self = this
@@ -82,16 +83,15 @@ export class CreateMarkersEvent {
         mapLocal.on('zoomend', function () {
             if (mapLocal.getZoom() >= 12) {
                 self.trackMarkers ? Object.values(self.trackMarkers).forEach(e => {
-                    e.marker.setOpacity(1),
-                        e.marker.unbindTooltip(),
-                        e.marker.bindTooltip(e.tooltipText, { 'className': 'custom-tooltip' }).openTooltip()
+                    e.marker.setOpacity(1)
+                        / e.marker.openTooltip()
                 }) : null;
                 console.log(self.trackMarkers)
             }
             else {
                 self.trackMarkers ? Object.values(self.trackMarkers).forEach(e => {
-                    e.marker.setOpacity(0),
-                        e.marker.unbindTooltip()
+                    e.marker.setOpacity(0)
+                    e.marker.closeTooltip()
                 }) : null;
 
             }
