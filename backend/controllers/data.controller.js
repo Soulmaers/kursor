@@ -182,9 +182,8 @@ async function saveSensorsToBase(allCar, session) {
 
     for (const el of allCar[5][1]) {
         //   if (el.id === 25766831) {
-
         const timeBase = await databaseService.lostChartDataToBase(el.id)
-        console.log(el.nm, timeBase)
+        //  console.log(el.nm, timeBase)
         const oldTime = timeBase.length !== 0 ? Number(timeBase[0].data) : nowTime - 1;
         // Запускаем загрузку данных сообщений и данные датчиков параллельно
         //let [rr, rez, nameSens] = await Promise.all([
@@ -193,17 +192,17 @@ async function saveSensorsToBase(allCar, session) {
         if (rr === undefined) {
             rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i')
         }
-        console.log(new Date(), el.nm, rr.messages.length)
+        //    console.log(new Date(), el.nm, rr.messages.length)
         let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i')
         if (rez === undefined) {
             rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i')
         }
-        console.log(new Date(), el.nm, rez.length)
+        //  console.log(new Date(), el.nm, rez.length)
         let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
         if (nameSens === undefined) {
             nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
         }
-        console.log(new Date(), el.nm, nameSens.item.flags)
+        // console.log(new Date(), el.nm, nameSens.item.flags)
         //  ]);
 
         if (!rr || rr.messages.length === 0 || rez && rez.length === 0) {

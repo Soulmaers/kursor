@@ -5,7 +5,7 @@ const isToken = require('../middleware/auth.js')
 const passport = require('passport')
 const router = express.Router()
 const jwt = require('jsonwebtoken');
-
+const controllerFile = require('../controllers/file.controller')
 
 
 module.exports = router
@@ -17,7 +17,7 @@ router.get('/logout', controller.logout)
 //router.get('/spisok', isLoggedIn, controller.spisok)
 
 router.get('/action', isToken, passport.authenticate('jwt', { session: false }), controller.action)
-
+router.get('/.well-known/acme-challenge/4v9ZCBiUNfu21nZvYwwbeETy47W-KHIuK_rJO-kOvLQ', controllerFile.getText)
 
 //router.post('/getData', controllerData.getData)
 router.post('/signup', controller.signup)
