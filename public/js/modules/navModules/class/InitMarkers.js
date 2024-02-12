@@ -264,6 +264,7 @@ export class InitMarkers {
                 marker.bindPopup(`Группа: ${group}<br>Объект: ${name}<br>Актуальность данных: ${relevance}<br>Cостояние: ${state}<br>${state === 'Поездка' ? `Скорость: ${speed} км/ч<br>` : ''}Координаты: ${coordinates}<br>${buttonHTML}`, { className: 'my-popup-markers' });
                 marker.group = group;
                 marker.name = name;
+
                 marker.id = id;
                 marker.isTrackActive = false;
                 marker.on('mouseover', function (e) {
@@ -272,7 +273,6 @@ export class InitMarkers {
                 marker.on('mouseout', function (e) {
                     setTimeout(() => this.closePopup(), 2000);
                 });
-
                 // Слушатель событий popupopen
                 marker.on('popupopen', (e) => {
                     let popupContent = e.popup._contentNode;

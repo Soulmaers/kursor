@@ -9578,3 +9578,13 @@ i.settingsGroup {
 .search_input {
   padding: 2px 25px;
 }
+
+.custom-tooltip {
+  background-color: rgba(6, 28, 71, 0.8);
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 5px;
+  font-size: 9px;
+  padding: 2px;
+  line-height: 1.2;
+}
