@@ -8,10 +8,14 @@ const controllerAlarm = require('../controllers/alarm.controller')
 const controllerTarir = require('../controllers/tarir.controller')
 const controllerTech = require('../controllers/tech.controller')
 const controllerData = require('../controllers/data.controller')
+
 const router = express.Router()
 
 
 module.exports = router
+
+
+
 
 
 router.post('/api/dataSpisok', controllerData.dataSpisok)
