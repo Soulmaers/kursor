@@ -68,8 +68,13 @@ async function init() {
     console.log(res)
     if (res !== 'ошибка') {
         console.log('сессия открыта')
+<<<<<<< HEAD
         await globalstart.start(session)
         setInterval(globalstart.start, 300000, session)
+=======
+        // await globalstart.start(session)
+        // setInterval(globalstart.start, 300000, session)
+>>>>>>> d6180351a778a4b63c27fcf9c7cb8f4015b428ce
 
     }
 

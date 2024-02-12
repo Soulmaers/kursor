@@ -100,7 +100,7 @@ export class CreateMarkersEvent {
     }
     hiddenTrackAndMarkersEnent() {
         Object.values(this.trackMarkers).forEach(e => {
-            mapLocal.removeLayer(e);
+            mapLocal.removeLayer(e.marker);
         })
         this.setTrack.classList.remove('activeTrack')
         this.setTrack.removeEventListener('click', this.boundViewTrackAndMarkersEvent);
@@ -111,7 +111,7 @@ export class CreateMarkersEvent {
     async init() {
         this.updateInterval = setInterval(() => {
             this.update();
-        }, 120000);
+        }, 10000);
         this.update();
     }
 
@@ -342,6 +342,8 @@ export class CreateMarkersEvent {
             }).addTo(mapLocal);
             L.control.scale({ imperial: '' }).addTo(mapLocal);
             mapLocal.addLayer(layer);
+            //  mapLocal.setView(center, 8);
+            //  mapLocal.flyTo(center, 8);
         }
         mapLocal.setView(center, 8);
         mapLocal.flyTo(center, 8);
@@ -382,9 +384,8 @@ export class CreateMarkersEvent {
             });
 
 
-
-
         } else {
+            console.log('здесь?')
             iss.setLatLng(center).bindPopup(`${nameCar}<br>${res}`).update();
             marker.setLatLng(center).update();
             const divIconUpdated = L.divIcon({
