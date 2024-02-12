@@ -111,7 +111,7 @@ export class CreateMarkersEvent {
     async init() {
         this.updateInterval = setInterval(() => {
             this.update();
-        }, 10000);
+        }, 120000);
         this.update();
     }
 
