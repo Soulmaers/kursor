@@ -342,11 +342,15 @@ export class CreateMarkersEvent {
             }).addTo(mapLocal);
             L.control.scale({ imperial: '' }).addTo(mapLocal);
             mapLocal.addLayer(layer);
-            //  mapLocal.setView(center, 8);
-            //  mapLocal.flyTo(center, 8);
+            mapLocal.setView(center, 8);
+            mapLocal.flyTo(center, 8);
         }
-        mapLocal.setView(center, 8);
-        mapLocal.flyTo(center, 8);
+        else {
+            var currentZoom = mapLocal.getZoom();
+            mapLocal.setView(center, currentZoom);
+            //   mapLocal.flyTo(center, 8);
+        }
+
         const nameCar = document.querySelector('.color').children[0].textContent;
         const res = `${geo[0]}, ${geo[1]}` // await reverseGeocode(geoMarker.geoY, geoMarker.geoX)
         this.tool = new Tooltip(this.setTrack, [this.setTrack.getAttribute('rel')])
