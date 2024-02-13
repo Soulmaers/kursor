@@ -1,6 +1,7 @@
 
 export let mapLocal, iss, marker;
 
+import { GetDataTime } from '../../../class/GetDataTime.js'
 import { times } from '../../popup.js'
 import { Tooltip } from '../../../class/Tooltip.js';
 export class CreateMarkersEvent {
@@ -32,6 +33,9 @@ export class CreateMarkersEvent {
         element.classList.toggle('activeTrack')
         if (element.classList.contains('activeTrack')) {
             this.calendar.style.display = 'flex'
+            //  const getTime = new GetDataTime()
+            //   const res = await getTime.getTimeInterval(this.calendar)
+            //   console.log(res)
             await this.getTimeInterval()
         }
         else {
@@ -46,6 +50,7 @@ export class CreateMarkersEvent {
         }
     }
     async getTimeInterval() {
+
         const ide = `#${!this.calendar.children[0].children[0] ? this.calendar.children[0].id : this.calendar.children[0].children[0].id}`
         const fp = flatpickr(ide, {
             mode: "range",
@@ -191,6 +196,7 @@ export class CreateMarkersEvent {
         this.markerCreator ? this.markerCreator.deleteMarkers() : null
     }
     async init() {
+        this.time = null
         this.updateInterval = setInterval(() => {
             this.update();
         }, 120000);
@@ -215,7 +221,6 @@ export class CreateMarkersEvent {
             }
             this.getStartTrack(startTrack)
         }
-        // this.zoomToggleView()
     }
 
     async getStartTrack(startTrack) {
@@ -270,7 +275,7 @@ export class CreateMarkersEvent {
 
     async getIntervalTrack() {
         const category = document.querySelector('.color')
-        const idw = this.id
+        const idw = category.id
         let nowDate = Math.round(new Date().getTime() / 1000);
         let nDate = new Date();
         let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 1) / 1000);

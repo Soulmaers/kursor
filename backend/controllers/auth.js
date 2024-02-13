@@ -127,7 +127,7 @@ module.exports.page = async function (req, res) {
 module.exports.sing = async function (req, res) {
     try {
         const pool = await connection
-        const result = await pool.query(`SELECT id, name, password FROM users WHERE name='${req.body.username}'`);
+        const result = await pool.query(`SELECT idx, name, password FROM users WHERE name='${req.body.username}'`);
         const rows = result.recordset;
         if (rows.length <= 0) {
             res.render('form.ejs', { message: 'Пользователь не найден!' });
@@ -141,7 +141,7 @@ module.exports.sing = async function (req, res) {
         }
 
         const token = jwt.sign({
-            userId: row.id,
+            userId: row.idx,
             user: row.name
         }, 'jwt-key', { expiresIn: '300d' });
 
