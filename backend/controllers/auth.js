@@ -122,7 +122,6 @@ module.exports.signup = async function (req, res) {
 
 module.exports.page = async function (req, res) {
     res.render('form.ejs', { message: '' });
-
 }
 
 module.exports.sing = async function (req, res) {

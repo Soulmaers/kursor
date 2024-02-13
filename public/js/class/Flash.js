@@ -3,6 +3,7 @@ import { alarmFind } from '../modules/alarmStorage.js'
 import { map } from '../modules/navModules/karta.js'
 import { mapLocal } from '../modules/objectMainModules/class/CreateMarkersEvent.js'
 import { initCharts } from '../modules/spisok.js'
+import { load } from '../modules/detalisation.js'
 export class Flash {
     constructor() {
         this.rigthFrame = document.querySelectorAll('.rigthFrame')
@@ -158,6 +159,10 @@ export class ResizeContainer {
         this.isResizing = false;
         this.initialX = null;
         this.resizeHandle.style.transform = 'translateX(0)';
+        const act = document.querySelector('.activStatic').id
+        load(act, 0, 1)
+        load(act, 1, 2)
+        load(act, 2, 3)
         setTimeout(function () { initCharts.createChart(); }, 300);
     }
 }

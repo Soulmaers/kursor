@@ -125,6 +125,7 @@ export function createChart(data, num) {
 
     const jobTSDetalisationGraf = document.querySelector('.jobTSDetalisationGraf ')
     const widthInPx = jobTSDetalisationGraf.offsetWidth;
+    console.log(jobTSDetalisationGraf.offsetWidth)
     // Функция для объединения смежных интервалов с одинаковым статусом
     function combineIntervals(data) {
         const combinedData = [];

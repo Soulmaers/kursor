@@ -8,6 +8,7 @@ const userRoutes = require('./backend/routes/userRoutes.js')
 const configRoutes = require('./backend/routes/configRoutes')
 const kursorRoutes = require('./backend/routes/kursorRoutes')
 //const isToken = require('./middleware/auth.js')
+const https = require('https');
 const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
@@ -37,12 +38,17 @@ app.use(kursorRoutes)
 require('dotenv').config();
 const port = process.env.PORT
 
-
-
+const options = {
+    key: fs.readFileSync('./cursor-gps.ru/privkey1.pem'),
+    cert: fs.readFileSync('./cursor-gps.ru/cert1.pem'),
+};
+//  https.createServer(options, app)
 const initServer = async () => {
     app.listen(port, () => {
         console.log(`Сервер запущен, порт:${port}`);
     });
+
+
     process.on('uncaughtException', (err) => {
         if (err.code === 'ETIMEDOUT') {
             console.log(new Date(), 'Ошибка подключения к серверу: истекло время ожидания');

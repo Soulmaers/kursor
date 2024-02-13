@@ -6,9 +6,9 @@ import { jobTSDetalisation, jobTS, oilTS, melageTS, cal2, cal3 } from './content
 import { eskiz, convertTime, updateHTML, yesTo, weekTo, convertToHoursAndMinutes } from './detalisation/helpers.js'
 import { createChart, createJobTS, createOilTS, createMelagiTS } from './detalisation/charts.js'
 
-
+export let objectRazmetka
 export async function timeIntervalStatistiks() {
-    const objectRazmetka = {
+    objectRazmetka = {
         'nav1': { html: jobTSDetalisation, data: [], fn: createChart, title: { to: null, yes: null, week: null } },
         'nav2': { html: jobTS, data: [], fn: createJobTS, title: { to: null, yes: null, week: null } },
         'nav3': { html: oilTS, data: [], fn: createOilTS, title: { to: null, yes: null, week: null } },
@@ -55,13 +55,12 @@ export async function timeIntervalStatistiks() {
                 await load(act, 1, 2)
                 await load(act, 2, 3)
             }
-            async function load(act, el, num) {
-                objectRazmetka[act].fn(objectRazmetka[act].data[el], num)
-            }
+
         })
     })
     act !== 'nav4' ? eskiz(today, yestoday, week, objectRazmetka) : (document.querySelector('.intervalTitle').innerHTML = `10 дней: ${convertTime(4)}<div class="calen" rel="cal2"></div>${cal2}`)
     eventClikInterval(objectRazmetka);
+
 
 
     loaders(today.nextElementSibling, loader)
@@ -74,6 +73,9 @@ export async function timeIntervalStatistiks() {
     loaders(week.nextElementSibling, loader)
     await statistics(weekTo(), 'week', 3, objectRazmetka)
     loader.style.display = 'none'
+}
+export async function load(act, el, num) {
+    objectRazmetka[act].fn(objectRazmetka[act].data[el], num)
 }
 function loaders(elem, loader) {
     loader.style.display = 'flex'

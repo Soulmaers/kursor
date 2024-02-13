@@ -32,7 +32,7 @@ export class CreateMarkersEvent {
 
             this.startTrack ? this.startTrack.addTo(mapLocal) : null
             this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
-
+            console.log(this.track)
             this.track.forEach((it, i) => {
                 const icon = L.icon({
                     iconUrl: '../../image/starttrack.png',
@@ -41,14 +41,36 @@ export class CreateMarkersEvent {
                     popupAnchor: [0, 0],
                     className: 'custom-marker'
                 });
-                if (i % 15 === 0) {
+                if (i % 20 === 0) {
                     const time = times(new Date(Number(it.time) * 1000));
-                    const eventMarkers = L.marker(it.geo, { icon }).addTo(mapLocal)
-                    eventMarkers.bindTooltip(`Время: ${time}<br>Скорость: ${it.speed} км/ч`, {
+
+                    const divIconUpdated = L.divIcon({
+                        className: 'custom-marker-arrow',
+                        html: `<div class="wrapContainerArrowStart" style="pointer-events: none;transform: rotate(${it.course}deg);"><img src="../../image/arr.png" style="width: 15px; height:15px"></div>`
+                    });
+
+                    let direction;
+                    let offset;
+                    if (it.course >= 315 || it.course < 45) {
+                        direction = "right";
+                        offset = [15, 0]
+                    } else if (it.course >= 45 && it.course < 135) {
+                        direction = "bottom";
+                        offset = [0, 15]
+                    } else if (it.course >= 135 && it.course < 225) {
+                        direction = "left";
+                        offset = [-15, 0]
+
+                    } else if (it.course >= 225 && it.course < 315) {
+                        direction = "top";
+                        offset = [0, -15]
+                    }
+                    const eventMarkers = L.marker(it.geo, { icon: divIconUpdated }).addTo(mapLocal)
+                    eventMarkers.bindTooltip(`${time}<br>${it.speed} км/ч`, {
                         permanent: true,    // делает тултип постоянным
-                        //   direction: "top",  // устанавливает позицию тултипа относительно маркера
+                        direction: direction,
+                        offset: offset,
                         className: 'custom-tooltip',  // указываем класс тултипа для дальнейшего стилизования
-                        offset: [15, -10]
                     })
                     eventMarkers.setOpacity(0);
                     this.trackMarkers[i] = { marker: eventMarkers, tooltipText: `${time}<br>${it.speed} км/ч` };
@@ -339,6 +361,8 @@ export class CreateMarkersEvent {
             wrap.appendChild(maps);
             mapLocal = L.map('map');
             mapLocal.attributionControl.setPrefix(false);
+            const leaf = document.querySelector('.leaflet-control-attribution');
+            leaf.style.display = 'none';
             const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
             }).addTo(mapLocal);
