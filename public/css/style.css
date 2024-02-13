@@ -2471,7 +2471,7 @@ div.spoyler {
   position: absolute;
   left: 30px;
   top: 60px;
-  width: 200px;
+  width: 180px;
   z-index: 1
 }
 
@@ -8511,7 +8511,6 @@ i.changeColorCheck {
   border-radius: 5px;
   height: 90%;
   box-sizing: border-box;
-  overflow-y: auto;
 }
 
 .up_title,

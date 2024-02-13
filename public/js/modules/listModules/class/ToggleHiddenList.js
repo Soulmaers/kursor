@@ -271,10 +271,12 @@ export class ToggleHiddenList {
         this.chekHiddens.forEach(e => {
             e.classList.add('changeColorCheck')
         })
-        el.parentNode.children[0].classList.remove('changeColorCheck')
+        el.parentNode.children[2].classList.remove('changeColorCheck')
         const karta = document.querySelector('.karta')
         const reports = document.querySelector('.reports')
         el.classList.add('act_modules')
+        console.log(document.querySelector('.act_modules'))
+
         const click = new NavigationMenu()
         console.log(el)
         if (el.classList.contains('map_unit')) {
@@ -305,7 +307,7 @@ export class ToggleHiddenList {
             const element = document.querySelector(`.${menuItem.elem}`)
             reports.classList.add('tablo')
             karta.classList.remove('tablo')
-            click.reports(element, 'avl_unit')
+            click.reports(element, 'avl_unit', el)
         }
     }
     statistikaObjectCar(final) {

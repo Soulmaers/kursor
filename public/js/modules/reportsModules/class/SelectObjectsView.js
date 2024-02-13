@@ -1075,6 +1075,7 @@ export class SelectObjectsView {
     }
 
     createListObjectsSelect(elem) {
+        console.log(this.object.querySelector('.titleChange_list_name'))
         this.object.querySelector('.titleChange_list_name').textContent = elem.getAttribute('rel')
         this.requestParams.idObject = elem.closest('.listItem').id
     }
@@ -1137,6 +1138,7 @@ export class SelectObjectsView {
 
 
     async createListShablons(avl) {
+        console.log(avl)
         const resurse = await this.requestAllShablons()
         if (avl) {
             const resurseUnit = Object.values(resurse).reduce((acc, obj) => {
@@ -1149,7 +1151,8 @@ export class SelectObjectsView {
             }, []);
             this.createShablonsObjects(resurseUnit)
             this.shablons.querySelectorAll('.item_type').forEach(el => el.addEventListener('click', this.checkChoice.bind(this, el)))
-            const actModules = document.querySelector('.act_modules').parentNode.children[0]
+            console.log(document.querySelector('.act_modules'))
+            const actModules = document.querySelector('.act_modules').parentNode.children[2]
             this.createListObjectsSelect(actModules)
         }
         else {

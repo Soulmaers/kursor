@@ -104,9 +104,14 @@ export class NavigationMenu {
         }, 60000);
     }
 
-    reports(elem, avl) {
+    reports(elem, avl, num) {
+        console.log(elem, avl, num)
+
         this.reportUnit.forEach(e => { e.style.display = 'none', e.classList.remove('act_modules') })
         this.mapUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
+        if (num) {
+            num.classList.add('act_modules')
+        }
         elem.style.display = 'flex'
         reportsContainer(avl)
     }
