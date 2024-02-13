@@ -589,7 +589,7 @@ exports.getSensorsWialonToBase = async (arr, login) => {
             return result.recordset
         }
         else {
-            console.log('массив пуст')
+            return []
         }
     } catch (error) {
         console.log(error)

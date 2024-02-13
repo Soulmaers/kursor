@@ -66,6 +66,7 @@ export async function zaprosKursor(login) {
     const res = await fetch('/api/getKursorObjects', params)
     const objects = await res.json()
     const arrayList = objects.result
+    console.log(arrayList)
     return arrayList
 }
 
