@@ -2458,7 +2458,8 @@ div.spoyler {
   font-weight: bold;
 }
 
-.calendar_graf {
+.calendar_graf,
+.calendar_track {
   display: none;
   flex-direction: column;
   position: absolute;

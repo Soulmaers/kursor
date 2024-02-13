@@ -19,6 +19,10 @@ let createEvent;
 
 export async function visual(el) {
     console.log('визуал')
+    const calendarTrack = document.querySelector('.calendar_track')
+    const calendarGraf = document.querySelector('.calendar_graf')
+    calendarTrack.style.display = 'none'
+    calendarGraf.style.display = 'none'
     const tablo = document.querySelector('.tablo')
     tablo ? tablo.classList.remove('tablo') : null
     const allsec = document.querySelectorAll('.allsec')
@@ -155,8 +159,14 @@ export async function visual(el) {
         createEvent.hiddenTrackAndMarkersEnent()
 
     }
-    createEvent = new CreateMarkersEvent(idw)
-    createEvent.init()
+    if (!createEvent) {
+        createEvent = new CreateMarkersEvent(idw)
+        createEvent.init()
+    }
+    else {
+        createEvent.init()
+    }
+
     liCreate()
     await loadParamsView()
     tooltip()

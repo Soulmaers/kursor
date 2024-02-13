@@ -13,72 +13,29 @@ export class CreateMarkersEvent {
         this.poly = null;
         this.startTrack = null
         this.imei = null;
+        this.time = null
         this.trackMarkers = {}
         this.pref = document.querySelector('.color').classList.contains('wialon') ? 'wialon' : 'kursor'
         this.setTrack = document.querySelector('.togTrack');
-        this.boundViewTrackAndMarkersEvent = this.viewTrackAndMarkersEnent.bind(this);
-        this.setTrack.addEventListener('click', this.boundViewTrackAndMarkersEvent)
+        this.calendar = document.querySelector('.calendar_track')
+        this.button = this.calendar.querySelectorAll('.btm_formStart')
+        this.button[0].addEventListener('click', this.clear.bind(this))
+        this.button[1].addEventListener('click', this.ok.bind(this))
+        //this.boundViewTrackAndMarkersEvent = this.viewTrackAndMarkersEnent.bind(this);
+        //this.setTrack.addEventListener('click', this.boundViewTrackAndMarkersEvent)
+        this.setTrack.addEventListener('click', this.toggleCalendar.bind(this))
     }
 
-    viewTrackAndMarkersEnent() {
-        const track = this.track.map(e => e.geo)
-        this.setTrack.classList.toggle('activeTrack')
-        if (this.setTrack.classList.contains('activeTrack')) {
-            if (this.poly) {
-                mapLocal.removeLayer(this.poly);
-                this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
-            }
-            this.poly = L.polyline(track, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
-
-            this.startTrack ? this.startTrack.addTo(mapLocal) : null
-            this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
-            console.log(this.track)
-            this.track.forEach((it, i) => {
-                const icon = L.icon({
-                    iconUrl: '../../image/starttrack.png',
-                    iconSize: [10, 10],
-                    iconAnchor: [10, 10],
-                    popupAnchor: [0, 0],
-                    className: 'custom-marker'
-                });
-                if (i % 20 === 0) {
-                    const time = times(new Date(Number(it.time) * 1000));
-
-                    const divIconUpdated = L.divIcon({
-                        className: 'custom-marker-arrow',
-                        html: `<div class="wrapContainerArrowStart" style="pointer-events: none;transform: rotate(${it.course}deg);"><img src="../../image/arr.png" style="width: 15px; height:15px"></div>`
-                    });
-
-                    let direction;
-                    let offset;
-                    if (it.course >= 315 || it.course < 45) {
-                        direction = "right";
-                        offset = [15, 0]
-                    } else if (it.course >= 45 && it.course < 135) {
-                        direction = "bottom";
-                        offset = [0, 15]
-                    } else if (it.course >= 135 && it.course < 225) {
-                        direction = "left";
-                        offset = [-15, 0]
-
-                    } else if (it.course >= 225 && it.course < 315) {
-                        direction = "top";
-                        offset = [0, -15]
-                    }
-                    const eventMarkers = L.marker(it.geo, { icon: divIconUpdated }).addTo(mapLocal)
-                    eventMarkers.bindTooltip(`${time}<br>${it.speed} км/ч`, {
-                        permanent: true,    // делает тултип постоянным
-                        direction: direction,
-                        offset: offset,
-                        className: 'custom-tooltip',  // указываем класс тултипа для дальнейшего стилизования
-                    })
-                    eventMarkers.setOpacity(0);
-                    this.trackMarkers[i] = { marker: eventMarkers, tooltipText: `${time}<br>${it.speed} км/ч` };
-                }
-            });
-            this.zoomToggleView()
-
-        } else {
+    async toggleCalendar(event) {
+        const element = event.target
+        console.log(element)
+        element.classList.toggle('activeTrack')
+        if (element.classList.contains('activeTrack')) {
+            this.calendar.style.display = 'flex'
+            await this.getTimeInterval()
+        }
+        else {
+            this.calendar.style.display = 'none'
             Object.values(this.trackMarkers).forEach(e => {
                 mapLocal.removeLayer(e.marker);
                 e.marker.closeTooltip()
@@ -87,10 +44,111 @@ export class CreateMarkersEvent {
             this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
             this.markerCreator.deleteMarkers()
         }
+    }
+    async getTimeInterval() {
+        const ide = `#${!this.calendar.children[0].children[0] ? this.calendar.children[0].id : this.calendar.children[0].children[0].id}`
+        const fp = flatpickr(ide, {
+            mode: "range",
+            dateFormat: "d-m-Y",
+            locale: "ru",
+            static: true,
+            "locale": {
+                "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
+            },
+            onChange: (selectedDates, dateStr, instance) => {
+                const formattedDates = selectedDates.map(date => {
+                    const year = date.getFullYear();
+                    const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
+                    const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
+                    return [`${year}-${month}-${day}`, `${day}.${month}.${year}`, date.getTime() / 1000];
+                });
+
+                this.time = formattedDates.map(el => el[el.length - 1])
+                console.log(this.time)
+                return
+            }
+        })
+    }
+
+    ok() {
+        console.log(this.time)
+        if (this.time) {
+            this.calendar.style.display = 'none'
+            //  this.calendar.previousElementSibling.classList.remove('clickUp')
+            this.calendar.children[0].children[0].value = ''
+            this.viewTrackAndMarkersEnent()
+        } else {
+            this.calendar.children[0].children[0].value = 'выберите дату'
+        }
+    }
+    clear() {
+        console.log('здесь')
+        this.calendar.style.display = 'none'
+        this.calendar.previousElementSibling.classList.remove('activeTrack')
+        this.calendar.children[0].children[0].value = ''
+    }
+
+
+    async viewTrackAndMarkersEnent() {
+        const tracks = await this.getIntervalTrack()
+        this.track = tracks
+        const track = this.track.map(e => e.geo)
+        if (this.poly) {
+            mapLocal.removeLayer(this.poly);
+            this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
+        }
+        this.poly = L.polyline(track, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
+
+        this.startTrack ? this.startTrack.addTo(mapLocal) : null
+        this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
+        console.log(this.track)
+        this.track.forEach((it, i) => {
+            const icon = L.icon({
+                iconUrl: '../../image/starttrack.png',
+                iconSize: [10, 10],
+                iconAnchor: [10, 10],
+                popupAnchor: [0, 0],
+                className: 'custom-marker'
+            });
+            if (i % 20 === 0) {
+                const time = times(new Date(Number(it.time) * 1000));
+
+                const divIconUpdated = L.divIcon({
+                    className: 'custom-marker-arrow',
+                    html: `<div class="wrapContainerArrowStart" style="pointer-events: none;transform: rotate(${it.course}deg);"><img src="../../image/arr.png" style="width: 15px; height:15px"></div>`
+                });
+
+                let direction;
+                let offset;
+                if (it.course >= 315 || it.course < 45) {
+                    direction = "right";
+                    offset = [15, 0]
+                } else if (it.course >= 45 && it.course < 135) {
+                    direction = "bottom";
+                    offset = [0, 15]
+                } else if (it.course >= 135 && it.course < 225) {
+                    direction = "left";
+                    offset = [-15, 0]
+
+                } else if (it.course >= 225 && it.course < 315) {
+                    direction = "top";
+                    offset = [0, -15]
+                }
+                const eventMarkers = L.marker(it.geo, { icon: divIconUpdated }).addTo(mapLocal)
+                eventMarkers.bindTooltip(`${time}<br>${it.speed} км/ч`, {
+                    permanent: true,    // делает тултип постоянным
+                    direction: direction,
+                    offset: offset,
+                    className: 'custom-tooltip',  // указываем класс тултипа для дальнейшего стилизования
+                })
+                eventMarkers.setOpacity(0);
+                this.trackMarkers[i] = { marker: eventMarkers, tooltipText: `${time}<br>${it.speed} км/ч` };
+            }
+        });
+        this.zoomToggleView()
 
     }
     zoomToggleView() {
-
         // Проверка масштаба карты
         if (mapLocal.getZoom() >= 12) {
             Object.values(this.trackMarkers).forEach(e => {
@@ -146,7 +204,7 @@ export class CreateMarkersEvent {
         this.createMapMainObject(geo)
         const prostoy = await this.getEventProstoy()
         //  const pressure = await this.getEventPressure()
-        this.track = track
+        //  this.track = track
         this.eventMarkers = await this.getEventObject(track, prostoy)
         if (!this.markerCreator) {
             this.markerCreator = new MarkerCreator(mapLocal);
@@ -215,11 +273,12 @@ export class CreateMarkersEvent {
         const idw = this.id
         let nowDate = Math.round(new Date().getTime() / 1000);
         let nDate = new Date();
-        let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);
+        let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 1) / 1000);
         let data;
         if (!category.classList.contains('kursor')) {
-            const t1 = timeFrom
-            const t2 = nowDate
+            const t1 = !this.time ? timeFrom : this.time[0]
+            const t2 = !this.time ? nowDate : this.time[1] === this.time[0] ? this.time[1] + 86399 : this.time[1]
+            console.log(t1, t2)
             const active = idw
             const param = {
                 method: "POST",
