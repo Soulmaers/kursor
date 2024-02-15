@@ -18,6 +18,7 @@ module.exports = function (passport) {
     passport.use(
         new JwtStrategy(opts, async (payload, done) => {
             try {
+                //  console.log(payload)
                 const pool = await connection;
                 const post = `SELECT idx, name, role FROM users WHERE idx='${payload.userId}'`
                 const result = await pool.request().query(post);

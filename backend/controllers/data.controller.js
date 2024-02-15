@@ -364,7 +364,7 @@ async function updateParams(data, kursor) {
         events.eventFunction(res) //ловим через вилаон заправки/сливы+потеря связи
         const summary = new SummaryStatistiks(dataAll)
         const global = await summary.init();
-        //console.log(global)
+        console.log(global)
         const arraySummary = Object.entries(global)
         const now = new Date();
         const date = new Date(now);
