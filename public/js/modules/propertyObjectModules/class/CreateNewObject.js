@@ -29,6 +29,7 @@ export class CreateNewObject {
             nameObject: null,
             typeObject: null,
             typeDevice: null,
+            port: null,
             adress: null,
             imei: null,
             number: null
@@ -65,7 +66,7 @@ export class CreateNewObject {
             this.handleValidationResult('Заполните обязательные поля', 'red', 'bold', emptyFields);
             return false;
         } else {   //проверяем номер телефона
-            const phoneNumberField = Array.from(this.field_modal)[5];
+            const phoneNumberField = Array.from(this.field_modal)[6];
             const regex = /^\+[7]\d{10}$/;
             const isPhoneNumberValid = phoneNumberField.value === '' || regex.test(phoneNumberField.value);
             if (!isPhoneNumberValid) {
@@ -82,7 +83,7 @@ export class CreateNewObject {
                 const uniq = mergedArray.flat().filter(e => e.length !== 0);
                 console.log(uniq)
                 if (uniq.length !== 0) {
-                    const imei = Array.from(this.field_modal)[4];
+                    const imei = Array.from(this.field_modal)[5];
                     const nameObject = Array.from(this.field_modal)[0];
                     console.log(uniq)
                     this.checkDuplicates(uniq, imei, nameObject, phoneNumberField);
@@ -222,7 +223,7 @@ export class CreateNewObject {
                 const res = await fetch('/api/objectId', params)
                 const result = await res.json()
                 data = result.reduce((acc, el) => {
-                    acc.push(el.nameObject, el.typeObject, el.typeDevice, el.adress, el.imei, el.number)
+                    acc.push(el.nameObject, el.typeObject, el.typeDevice, el.port, el.adress, el.imei, el.number)
                     return acc
                 }, [])
                 this.idPref = result[0].idObject

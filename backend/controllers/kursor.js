@@ -64,7 +64,8 @@ exports.objects = async (req, res) => {
 
 exports.getParamsKursor = async (req, res) => {
     const idObject = req.body.idw
-    const result = await databaseService.getParamsKursor(idObject)
+    const port = req.body.port
+    const result = await databaseService.getParamsKursor(idObject, port)
     res.json(result)
 }
 exports.getGeoKursor = async (req, res) => {
@@ -76,8 +77,9 @@ exports.getGeoKursor = async (req, res) => {
 exports.getParamsKursorIntervalController = async (req, res) => {
     const t1 = req.body.t1
     const t2 = req.body.t2
+    const port = req.body.port
     const idObject = req.body.active
-    const result = await databaseService.getParamsKursorInterval(idObject, t1, t2)
+    const result = await databaseService.getParamsKursorInterval(idObject, port, t1, t2)
     const strukturaKursor = result.map(el => {
         return {
             idw: idObject, time: el.time, geo: JSON.stringify([Number(el.lat), Number(el.lon)]), speed: Number(Number(el.speed).toFixed(0)),

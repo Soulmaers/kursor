@@ -12,9 +12,9 @@ class JobToBase {
         //поиск данных по id Объекта
     }
 
-    async createTable(object) {
+    async createTable(table) {
 
-        const tableName = 'navtelecom'; // Имя таблицы, которую нужно создать
+        const tableName = table; // Имя таблицы, которую нужно создать
         const createTableQuery = `IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = '${tableName}')  CREATE TABLE ${tableName} (id int IDENTITY(1, 1) PRIMARY KEY)`
         const pool = await connection;
         try {
@@ -26,11 +26,10 @@ class JobToBase {
     }
 
 
-    async fillingTableColumns(object) {
-        const tableName = 'navtelecom';
+    async fillingTableColumns(object, table) {
+        const tableName = table;
         const columnsQuery = `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '${tableName}'`;
         const pool = await connection;
-
         try {
             const result = await pool.request().query(columnsQuery);
             const columns = result.recordset;
@@ -51,8 +50,8 @@ class JobToBase {
         }
     }
 
-    async fillingTableRows(object) {
-        const tableName = 'navtelecom';
+    async fillingTableRows(object, table) {
+        const tableName = table;
         const columns = Object.keys(object).join(', ');
         const values = Object.values(object).map(value => `'${value}'`).join(', ');
         try {

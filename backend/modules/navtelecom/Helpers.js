@@ -2,6 +2,9 @@ const databaseService = require('../../services/database.service');
 const fs = require('fs');
 
 
+
+
+
 const JobToBase = require('./JobToBase')
 class NavtelecomResponceData {
 
@@ -69,12 +72,13 @@ class WriteFile {
             e.idObject = res[0].idObject
         })
         if (res) {
+            const table = 'navtelecom'
             const obj = new JobToBase()
-            obj.createTable()
+            obj.createTable(table)
             const writeStream = fs.createWriteStream('./backend/modules/navtelecom/data.txt', { flags: 'w' });
             globalArrayMSG.forEach(async msg => {
-                await obj.fillingTableColumns(msg)
-                obj.fillingTableRows(msg)
+                await obj.fillingTableColumns(msg, table)
+                obj.fillingTableRows(msg, table)
                 let content = '';
                 for (let key in msg) {
                     if (msg.hasOwnProperty(key)) {

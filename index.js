@@ -49,29 +49,38 @@ const initServer = async () => {
     });
 
 
-    process.on('uncaughtException', (err) => {
-        if (err.code === 'ETIMEDOUT') {
-            console.log(new Date(), 'Ошибка подключения к серверу: истекло время ожидания');
-            // Перезапуск сервера
-            setTimeout(async () => {
-                //  await globalstart.start(session)
-                // process.exit(1) // Перезапуск сервера через 1 секунду
-                // initServer()
-            }, 3000);
-        } else {
-            console.log(new Date(), 'Необработанная ошибка:', err.message);
-            setTimeout(async () => {
-                await globalstart.start(session)
-                // process.exit(1) // Перезапуск сервера через 1 секунду
-                // initServer()
-            }, 3000);
-        }
-    });
+    /* process.on('uncaughtException', (err) => {
+         if (err.code === 'ETIMEDOUT') {
+             console.log(new Date(), 'Ошибка подключения к серверу: истекло время ожидания');
+             // Перезапуск сервера
+             setTimeout(async () => {
+                 //  await globalstart.start(session)
+                 // process.exit(1) // Перезапуск сервера через 1 секунду
+                 // initServer()
+             }, 3000);
+         } else {
+             console.log(new Date(), 'Необработанная ошибка:', err.message);
+             setTimeout(async () => {
+                 await globalstart.start(session)
+                 // process.exit(1) // Перезапуск сервера через 1 секунду
+                 // initServer()
+             }, 3000);
+         }
+     });*/
 };
 
 let session;
 async function init() {
     await initServer()
+<<<<<<< HEAD
+    //  const res = await wialon()
+    //  console.log(res)
+    // if (res !== 'ошибка') {
+    //   console.log('сессия открыта')
+    //  await globalstart.start(session)
+    // setInterval(globalstart.start, 300000, session)
+    //  }
+=======
     const res = await wialon()
     console.log(res)
     if (res !== 'ошибка') {
@@ -80,6 +89,7 @@ async function init() {
         setInterval(globalstart.start, 300000, session)
 
     }
+>>>>>>> cb7a480ad05ca0d5e86bc617d5e5bd10b6582a47
 
 }
 init()
@@ -132,8 +142,13 @@ exports.geSession = async () => {
     });
 }
 
-const net = require('net');
+exports.net = require('net');
 
+<<<<<<< HEAD
+const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js')
+const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
+new ListenPortTP(21626)
+=======
 class ListenPortTP {
     constructor(port) {
         this.port = port
@@ -161,7 +176,13 @@ class ListenPortTP {
 const ChartServerTerminal = require('./backend/modules/navtelecom/ChatServerTerminal.js')
 const SendingCommandToTerminal = require('./backend/modules/navtelecom/SendingCommandToTerminal.js')
 //new ListenPortTP(21626)
+<<<<<<< HEAD
 
+=======
+>>>>>>> cb7a480ad05ca0d5e86bc617d5e5bd10b6582a47
+new ListenPortTPNew(20163)
+>>>>>>> e9f22440f82388095a6a4be73f5a1302fd11e4fd
+>>>>>>> 4465721f56ec073a1349c508cc41519177c40ec3
 
 
 

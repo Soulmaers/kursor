@@ -1,6 +1,28 @@
 
 const { NavtelecomResponceData, CheckSumm, BitsCount, WriteFile } = require('./Helpers');
 const SendingCommandToTerminal = require('./SendingCommandToTerminal')
+const { net } = require('../../../index')
+
+class ListenPortTP {
+    constructor(port) {
+        this.port = port
+        this.createServer(this.port)
+    }
+
+    createServer(port) {
+        const tcpServer = net.createServer((socket) => {
+            console.log('TCP Client connected');
+            //  console.log(socket)
+            new ChartServerTerminal(socket)
+            new SendingCommandToTerminal(socket)
+        });
+        tcpServer.listen(port, () => {
+            console.log(`TCP протокол слушаем порт ${port}`);
+        });
+    }
+}
+
+
 class ChartServerTerminal {
     constructor(socket) {
         this.socket = socket
@@ -1243,4 +1265,4 @@ class ChartServerTerminal {
 
 }
 
-module.exports = ChartServerTerminal
+module.exports = ListenPortTP
