@@ -671,27 +671,34 @@ async function getParamsKursorSensors(data) {
             },
             body: (JSON.stringify({ idw }))
         }
-        const parametrs = await fetch('api/getParamsKursor', param)
+        const res = await fetch('api/objectId', param)
+        const object = await res.json()
+        const port = object[0].port
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw, port }))
+        }
+        const parametrs = await fetch('api/getParamsKursor', params)
         const lastParams = await parametrs.json()
-
         const itog = lastParams.flatMap(el => {
             let speed;
-            const results = [];
-            id.map(e => {
-                if (el.idObject === e.id) {
-                    Object.entries(el).forEach(([key, value]) => {
-                        if (key === 'speed') {
-                            speed = Number(Number(el[key]).toFixed(0))
-                        }
-                        results.push([key, key, Number(e.id), el[key]]);
-                    });
-                }
-            });
-            results.push(['state', 'state', Number(el.idObject), speed === 0 ? 0 : 1])
-            results.push(['lasttime', 'listtime', Number(el.idObject), Number(el.time)])
-            return results
+            const bool = id.includes(Number(el.idObject));
+            if (bool) {
+                return Object.entries(el).map(([key, value]) => {
+                    if (key === 'speed') {
+                        speed = Number(Number(el[key]).toFixed(0))
+                    }
+                    return [key, key, Number(el.idObject), el[key]];
+                }).concat(
+                    [['state', 'state', Number(el.idObject), speed === 0 ? 0 : 1],
+                    ['lasttime', 'listtime', Number(el.idObject), Number(el.time)]]
+                )
+            }
+            return []; // Возвращаем пустой массив, если условие не выполнено
         });
-
         return itog
     })
 

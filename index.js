@@ -49,36 +49,36 @@ const initServer = async () => {
     });
 
 
-    process.on('uncaughtException', (err) => {
-        if (err.code === 'ETIMEDOUT') {
-            console.log(new Date(), 'Ошибка подключения к серверу: истекло время ожидания');
-            // Перезапуск сервера
-            setTimeout(async () => {
-                //  await globalstart.start(session)
-                // process.exit(1) // Перезапуск сервера через 1 секунду
-                // initServer()
-            }, 3000);
-        } else {
-            console.log(new Date(), 'Необработанная ошибка:', err.message);
-            setTimeout(async () => {
-                await globalstart.start(session)
-                // process.exit(1) // Перезапуск сервера через 1 секунду
-                // initServer()
-            }, 3000);
-        }
-    });
+    /* process.on('uncaughtException', (err) => {
+         if (err.code === 'ETIMEDOUT') {
+             console.log(new Date(), 'Ошибка подключения к серверу: истекло время ожидания');
+             // Перезапуск сервера
+             setTimeout(async () => {
+                 //  await globalstart.start(session)
+                 // process.exit(1) // Перезапуск сервера через 1 секунду
+                 // initServer()
+             }, 3000);
+         } else {
+             console.log(new Date(), 'Необработанная ошибка:', err.message);
+             setTimeout(async () => {
+                 await globalstart.start(session)
+                 // process.exit(1) // Перезапуск сервера через 1 секунду
+                 // initServer()
+             }, 3000);
+         }
+     });*/
 };
 
 let session;
 async function init() {
     await initServer()
-    const res = await wialon()
-    console.log(res)
-    if (res !== 'ошибка') {
-        console.log('сессия открыта')
-        //  await globalstart.start(session)
-        // setInterval(globalstart.start, 300000, session)
-    }
+    //  const res = await wialon()
+    //  console.log(res)
+    // if (res !== 'ошибка') {
+    //   console.log('сессия открыта')
+    //  await globalstart.start(session)
+    // setInterval(globalstart.start, 300000, session)
+    //  }
 
 }
 init()
@@ -131,120 +131,11 @@ exports.geSession = async () => {
     });
 }
 
-const net = require('net');
+exports.net = require('net');
 
-class ListenPortTP {
-    constructor(port) {
-        this.port = port
-        this.createServer(this.port)
-    }
-
-    createServer(port) {
-        const tcpServer = net.createServer((socket) => {
-            console.log('TCP Client connected');
-            //  console.log(socket)
-            new ChartServerTerminal(socket)
-            new SendingCommandToTerminal(socket)
-        });
-        tcpServer.listen(port, () => {
-            console.log(`TCP протокол слушаем порт ${port}`);
-        });
-    }
-}
-
-class ListenPortTPNew {
-    constructor(port) {
-        this.port = port
-        this.createServer(this.port)
-    }
-
-    createServer(port) {
-        console.log(port)
-        const tcpServer = net.createServer((socket) => {
-            console.log('TCP Client connected new');
-            //  console.log(socket)
-
-            socket.on('data', async (data) => {
-                //  console.log(data)
-                let buf = data
-                const size = buf.readInt32LE()
-                buf = buf.slice(4)
-                const imei = buf.slice(0, 15).toString()
-                buf = buf.slice(16)
-                const time = buf.readUInt32BE()
-                buf = buf.slice(4)
-                const mask = buf.readUInt32BE()
-                buf = buf.slice(4)
-                const res = parse()
-                const res1 = parse()
-                res1.nameBlock = buf.slice(0, 8).toString()
-                buf = buf.slice(9)
-                res1.value = buf.slice(0, 1).toString()
-                buf = buf.slice(2)
-                const res2 = parse()
-                res2.nameBlock = buf.slice(0, 5).toString()
-                buf = buf.slice(6)
-                res2.value = buf.slice(0, 7).toString()
-                buf = buf.slice(8)
-                const res3 = parse()
-                res3.nameBlock = buf.slice(0, 10).toString()
-                buf = buf.slice(11)
-                res3.value = Number(buf.readBigInt64BE())
-                buf = buf.slice(8)
-                const res4 = parse()
-                const res5 = parse()
-                const res6 = parse()
-                const res7 = parse()
-                const res8 = parse()
-                const res9 = parse()
-                // const res10 = parse()
-                res9.nameBlock = buf.slice(0, 15).toString()
-                buf = buf.slice(16)
-                res9.value = Number(buf.readBigInt64BE())
-                buf = buf.slice(8)
-                const res10 = parse()
-                const res11 = parse()
-                const res12 = parse()
-                const res13 = parse()
-                console.log(buf)
-                console.log(res3, res8, res9, res10, res11, res12)
-
-                function parse() {
-                    const blockLine = buf.readUInt16BE()
-                    buf = buf.slice(2)
-                    const sizeBlock = buf.readUInt32BE()
-                    buf = buf.slice(4)
-                    const atributeHidden = buf.readUInt8()
-                    buf = buf.slice(1)
-                    const typeBlock = buf.readUInt8()
-                    buf = buf.slice(1)
-                    let nameBlock;
-                    let value;
-                    switch (typeBlock) {
-                        case 3:
-                            nameBlock = buf.slice(0, (sizeBlock - 7)).toString()
-                            buf = buf.slice((sizeBlock - 6))
-                            value = buf.readUInt32BE()
-                            buf = buf.slice(4)
-
-                    }
-                    return ({ blockLine: blockLine, sizeBlock: sizeBlock, atributeHidden: atributeHidden, typeBlock: typeBlock, nameBlock: nameBlock, value: value })
-                }
-            })
-        })
-
-        tcpServer.listen(port, () => {
-            console.log(`TCP протокол слушаем порт ${port}`);
-        });
-    }
-
-
-}
-
-
-const ChartServerTerminal = require('./backend/modules/navtelecom/ChatServerTerminal.js')
-const SendingCommandToTerminal = require('./backend/modules/navtelecom/SendingCommandToTerminal.js')
-//new ListenPortTP(21626)
+const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js')
+const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
+new ListenPortTP(21626)
 new ListenPortTPNew(20163)
 
 

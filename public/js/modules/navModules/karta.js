@@ -59,18 +59,29 @@ export async function kartaContainer(elem) {
 
     const resW = await fetch('/api/getGeo', paramsW);
     const resultsW = await resW.json();
-
+    console.log(resultsW)
     const promises = arrayIdKursor.map(async el => {
         const idw = el
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw }))
+        }
+        const ress = await fetch('api/objectId', param)
+        const object = await ress.json()
+        const port = object[0].port
         const paramsK = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ idw }),
+            body: JSON.stringify({ idw, port }),
         };
         const resK = await fetch('/api/getParamsKursor', paramsK);
         const resultsK = await resK.json();
+        console.log(resultsK)
         const res = resultsK.reduce((acc, e) => {
             const geo = [e.lat, e.lon]
             const status = Number(e.speed) === 0 ? 'Стоянка' : 'Поездка'

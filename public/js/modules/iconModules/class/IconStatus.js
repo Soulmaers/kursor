@@ -154,19 +154,44 @@ export class IconStatus {
             })
         }
         else {
-            const res = await fetch('api/getParamsKursor', param)
-            const data = await res.json()
+            const param = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: (JSON.stringify({ idw }))
+            }
+            const res = await fetch('api/objectId', param)
+            const object = await res.json()
+            const port = object[0].port
+            const params = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: (JSON.stringify({ idw, port }))
+            }
+            const ress = await fetch('api/getParamsKursor', params)
+            const data = await ress.json()
+
             const results = [];
             let speed;
-            Object.entries(data[0]).forEach(([key, value]) => {
-                if (key === 'speed') {
-                    speed = Number(Number(data[0][key]).toFixed(0))
-                }
-                results.push([key, key, Number(data[0].idObject), data[0][key]]);
-            });
-            results.push(['state', 'state', Number(data[0].idObject), speed === 0 ? 0 : 1])
-            results.push(['lasttime', 'listtime', Number(data[0].idObject), Number(data[0].time)])
-            result = results
+            console.log(data)
+            if (data.length !== 0) {
+                Object.entries(data[0]).forEach(([key, value]) => {
+                    if (key === 'speed') {
+                        speed = Number(Number(data[0][key]).toFixed(0))
+                    }
+                    results.push([key, key, Number(data[0].idObject), data[0][key]]);
+                });
+                results.push(['state', 'state', Number(data[0].idObject), speed === 0 ? 0 : 1])
+                results.push(['lasttime', 'listtime', Number(data[0].idObject), Number(data[0].time)])
+                result = results
+            }
+            else {
+                result = []
+            }
+
         }
         return result
     }

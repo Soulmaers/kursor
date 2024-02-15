@@ -305,15 +305,22 @@ exports.objectsImei = async (imei) => {
 }
 
 
-exports.getParamsKursor = async (idObject) => {
+exports.getParamsKursor = async (idObject, port) => {
+
+    let table;
+    if (port === '20163') {
+        table = 'wialon_retranslation'
+    }
+    if (port === '21626') {
+        table = 'navtelecom'
+    }
     try {
         const pool = await connection
-        const postModel = `SELECT TOP 1 * FROM navtelecom WHERE idObject=@idObject ORDER BY id DESC`
+        const postModel = `SELECT TOP 1 * FROM ${table} WHERE idObject=@idObject ORDER BY id DESC`
         const result = await pool.request()
-            .input('idObject', idObject)
+            .input('idObject', String(idObject))
             .query(postModel)
         const record = result.recordset[0];
-
         if (record !== undefined) {
             const params = Object.keys(record).reduce((acc, key) => {
                 if (record[key] !== null) {
@@ -323,6 +330,7 @@ exports.getParamsKursor = async (idObject) => {
             }, {});
             return [params];
         }
+
         else {
             return []
         }
@@ -349,10 +357,17 @@ exports.getGeoKursor = async (arr) => {
     }
 
 }
-exports.getParamsKursorInterval = async (idObject, t1, t2) => {
+exports.getParamsKursorInterval = async (idObject, port, t1, t2) => {
+    let table;
+    if (port === '20163') {
+        table = 'wialon_retranslation'
+    }
+    if (port === '21626') {
+        table = 'navtelecom'
+    }
     try {
         const pool = await connection
-        const postModel = `SELECT * FROM navtelecom WHERE idObject=@idObject AND time >= '${t1}' AND time <= '${t2}'`
+        const postModel = `SELECT * FROM ${table} WHERE idObject=@idObject AND time >= '${t1}' AND time <= '${t2}'`
 
         const result = await pool.request()
             .input('idObject', idObject)
@@ -724,7 +739,6 @@ exports.getIdToRows = async (id, login) => {
 
 
 exports.deleteIdToRowsTime = async (data, id, login) => {
-    console.log(id, login, data)
     const pool = await connection;
     const postDEL = `DELETE groups WHERE login=@login AND idg =@idKey AND data!=@data OR login=@login AND id_sub_g =@idKey AND data!=@data `
     const result = await pool.request()
@@ -737,10 +751,9 @@ exports.deleteIdToRowsTime = async (data, id, login) => {
 
 
 exports.updateObject = async (object) => {
-    console.log(object)
     try {
         const pool = await connection;
-        const updateModel = `UPDATE objects SET data = @data, login = @login,idObject=@idObject,typeDevice=@typeDevice,imei=@imei,adress=@adress,number=@number,nameObject=@nameObject,
+        const updateModel = `UPDATE objects SET data = @data, login = @login,idObject=@idObject,port=@port,typeDevice=@typeDevice,imei=@imei,adress=@adress,number=@number,nameObject=@nameObject,
          typeObject=@typeObject WHERE login = @login AND idObject = @idObject`;
         const result = await pool.request()
             .input('data', object.data)
@@ -751,6 +764,7 @@ exports.updateObject = async (object) => {
             .input('number', object.number)
             .input('nameObject', object.nameObject)
             .input('typeObject', object.typeObject)
+            .input('port', object.port)
             .input('typeDevice', object.typeDevice)
             .query(updateModel)
 
@@ -1027,8 +1041,8 @@ exports.saveObject = async (object) => {
     try {
         const pool = await connection
         const postModel = `
-            INSERT INTO objects (adress, data, idObject, imei, login, nameObject, number, typeDevice, typeObject)
-            VALUES (@adress, @data, @idObject, @imei, @login, @nameObject, @number, @typeDevice, @typeObject)
+            INSERT INTO objects (adress, data, idObject, imei, login, nameObject, number, port, typeDevice, typeObject)
+            VALUES (@adress, @data, @idObject, @imei, @login, @nameObject, @number, @port, @typeDevice, @typeObject)
         `;
 
         const result = await pool.request()
@@ -1040,6 +1054,7 @@ exports.saveObject = async (object) => {
             .input('nameObject', object.nameObject)
             .input('number', object.number)
             .input('typeDevice', object.typeDevice)
+            .input('port', object.port)
             .input('typeObject', object.typeObject)
             .query(postModel);
         return 'Объект создан'
