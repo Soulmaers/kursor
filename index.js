@@ -47,26 +47,6 @@ const initServer = async () => {
     app.listen(port, () => {
         console.log(`Сервер запущен, порт:${port}`);
     });
-
-
-    /* process.on('uncaughtException', (err) => {
-         if (err.code === 'ETIMEDOUT') {
-             console.log(new Date(), 'Ошибка подключения к серверу: истекло время ожидания');
-             // Перезапуск сервера
-             setTimeout(async () => {
-                 //  await globalstart.start(session)
-                 // process.exit(1) // Перезапуск сервера через 1 секунду
-                 // initServer()
-             }, 3000);
-         } else {
-             console.log(new Date(), 'Необработанная ошибка:', err.message);
-             setTimeout(async () => {
-                 await globalstart.start(session)
-                 // process.exit(1) // Перезапуск сервера через 1 секунду
-                 // initServer()
-             }, 3000);
-         }
-     });*/
 };
 
 let session;
@@ -85,9 +65,14 @@ async function init() {
     console.log(res)
     if (res !== 'ошибка') {
         console.log('сессия открыта')
+<<<<<<< HEAD
         //  await globalstart.start(session)
         // setInterval(globalstart.start, 300000, session)
 
+=======
+        await globalstart.start(session)
+        setInterval(globalstart.start, 300000, session)
+>>>>>>> 942fd87797faa67d6d6d70b96994b184a4304ea0
     }
 
 }
@@ -143,11 +128,19 @@ exports.geSession = async () => {
 
 exports.net = require('net');
 
+<<<<<<< HEAD
 const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js')
 const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
 new ListenPortTP(21626)
 new ListenPortTPNew(20163)
 
+=======
+
+const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js')
+const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
+//new ListenPortTP(21626)
+//new ListenPortTPNew(20163)
+>>>>>>> 942fd87797faa67d6d6d70b96994b184a4304ea0
 
 
 

@@ -288,8 +288,6 @@ function detaly(data, str, str2) {
     }
 
 }
-
-
 function ggg(nameSens, rez, id) {
     if (rez && nameSens) {
         const nameSenz = Object.entries(nameSens.item.sens)
@@ -310,7 +308,6 @@ function ggg(nameSens, rez, id) {
     }
 }
 
-
 async function updateParams(data, kursor) {
     console.time('updatedata')
 
@@ -318,7 +315,7 @@ async function updateParams(data, kursor) {
     const dataKursor = await Promise.allSettled(kursor.map(async (e) => {
         const res = await databaseService.getParamsKursor(e.idObject);
         if (res.length !== 0) {
-            return { id: e.idObject, name: e.nameObject, params: res.map(obj => Object.entries(obj)).flat() };
+            return { id: e.idObject, port: res[0].port, name: e.nameObject, params: res.map(obj => Object.entries(obj)).flat() };
         } else {
             return null;
         }
@@ -331,16 +328,17 @@ async function updateParams(data, kursor) {
     const dataKursorPromises = [];
 
     for (const el of kursorParams) {
-        dataKursorPromises.push(databaseService.saveDataToDatabase(el.name, el.id, el.params, currentTime));
+        dataKursorPromises.push(databaseService.saveDataToDatabase(el.name, el.id, el.port, el.params, currentTime));
     };
 
     const allCar = Object.entries(data)
     const nameCar = allCar[5][1].map(el => {
         const nameTable = el.nm.replace(/\s+/g, '');
         const idw = el.id;
+        const port = 'wialon';
         const speed = el.lmsg?.pos?.s || null;
         const geo = el.pos?.x ? JSON.stringify([el.pos.y, el.pos.x]) : null;
-        return [nameTable, idw, speed, geo];
+        return [nameTable, idw, speed, geo, port];
     });
 
     const databasePromises = [];
@@ -348,23 +346,21 @@ async function updateParams(data, kursor) {
         if (el.lmsg) {
             const nameTable = el.nm.replace(/\s+/g, '');
             const sensor = Object.entries(el.lmsg.p);
-            databasePromises.push(databaseService.saveDataToDatabase(nameTable, el.id, sensor, currentTime));
+            databasePromises.push(databaseService.saveDataToDatabase(nameTable, el.id, 'wialon', sensor, currentTime));
         }
     };
     await Promise.all([databasePromises, dataKursorPromises]);
-    ///передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
-    zaprosSpisokb(nameCar)
+    // передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
+    await zaprosSpisokb(nameCar)
     const res = await constorller.dataSpisok()
     const kursorObjects = await kursorService.getKursorObjects()
-
     const dataAll = res.concat(kursorObjects)
-    // console.log(dataAll)
+
     if (res) {
-        statistika.popupProstoy(dataAll) //ловим простои
-        events.eventFunction(res) //ловим через вилаон заправки/сливы+потеря связи
+        await statistika.popupProstoy(dataAll) //ловим простои
+        await events.eventFunction(res) //ловим через вилаон заправки/сливы+потеря связи
         const summary = new SummaryStatistiks(dataAll)
         const global = await summary.init();
-        //console.log(global)
         const arraySummary = Object.entries(global)
         const now = new Date();
         const date = new Date(now);
@@ -434,7 +430,8 @@ async function zaprosSpisokb(name) {
         }
         const params = tyreRes;
         const modelUniqValues = convert(params);
-        const selectBase2 = `SELECT name, value FROM params WHERE idw='${name[i][1]}'`;
+
+        const selectBase2 = `SELECT name, value FROM params WHERE idw='${name[i][1]}' AND port='${name[i][4]}' `;
         let paramsRes = await queryDB(selectBase2);
         let integer;
         let osiBar;

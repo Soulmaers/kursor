@@ -257,23 +257,13 @@ export async function statistics(interval, ele, num, objectRazmetka) {
 
 
 export async function kursorfnNew(active, t1, t2) {
-    const idw = active
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ idw }))
-    }
-    const ress = await fetch('api/objectId', param)
-    const object = await ress.json()
-    const port = object[0].port
+
     const params = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ active, port, t1, t2 }))
+        body: (JSON.stringify({ active, t1, t2 }))
     }
     const res = await fetch('/api/getParamsKursorIntervalController', params)
     const result = await res.json()
