@@ -664,22 +664,12 @@ export async function alternativa(data) {
 async function getParamsKursorSensors(data) {
     const id = data.map(e => e.id);
     const last = id.map(async idw => {
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ idw }))
-        }
-        const res = await fetch('api/objectId', param)
-        const object = await res.json()
-        const port = object[0].port
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idw, port }))
+            body: (JSON.stringify({ idw }))
         }
         const parametrs = await fetch('api/getParamsKursor', params)
         const lastParams = await parametrs.json()

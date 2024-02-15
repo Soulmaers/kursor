@@ -15,23 +15,22 @@ exports.createIndexDataToDatabase = async () => {
 }
 
 //сохраняем в базу параметры и обновляем их
-exports.saveDataToDatabase = async (name, idw, param, time) => {
+exports.saveDataToDatabase = async (name, idw, port, param, time) => {
     //  console.log(name, idw, param, time)
     param.forEach(el => {
         el.unshift(name)
         el.unshift(idw)
         el.push('new')
         el.push(time)
+        el.push(port)
     })
-    //console.log(param)
     try {
-        const selectBase = `SELECT name FROM params WHERE idw='${String(idw)}'`
+        const selectBase = `SELECT name FROM params WHERE idw='${String(idw)}' AND port='${String(port)}'`
         const pool = await connection;
         let result = await pool.request().query(selectBase);
-        //console.log(result)
         if (result.recordset.length === 0) {
             for (let el of param) {
-                const sqls = `INSERT INTO params(idw, nameCar, name, value, status, time) VALUES (@idw, @nameCar, @name, @value, @status, @time)`;
+                const sqls = `INSERT INTO params(idw, nameCar, name, value, status, time, port) VALUES (@idw, @nameCar, @name,  @value, @status, @time,@port)`;
                 const pool = await connection;
                 await pool.request()
                     .input('idw', String(el[0]))
@@ -40,6 +39,7 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
                     .input('value', String(el[3]))
                     .input('status', String(el[4]))
                     .input('time', String(el[5]))
+                    .input('port', String(el[6]))
                     .query(sqls);
             }
         }
@@ -47,29 +47,36 @@ exports.saveDataToDatabase = async (name, idw, param, time) => {
             const mas = [];
             result.recordset.forEach(el => mas.push(el.name));
             const paramName = [];
-            // console.log(param)
             param.forEach(el => paramName.push(el[2]));
             for (let el of param) {
                 if (mas.includes(el[2])) {
-                    const sqlUpdate = `UPDATE params SET idw='${String(idw)}', nameCar='${name}',name='${el[2]}', value='${el[3]}', status='true',time='${el[5]}'  WHERE idw='${String(idw)}' AND name='${el[2]}'`;
+                    const sqlUpdate = `UPDATE params SET idw='${String(idw)}', nameCar='${name}', port='${String(port)}',name='${el[2]}',
+                    value='${el[3]}', status='true',time='${el[5]}'  WHERE idw='${String(idw)}' AND name='${el[2]}' AND port='${String(port)}'`;
                     const pool = await connection;
                     await pool.request().query(sqlUpdate);
+
+
                 } else if (!mas.includes(el[2])) {
-                    const sqlInsert = `INSERT INTO params(idw, nameCar, name, value, status, time) VALUES (@idw, @nameCar, @name, @value, @status, @time)`;
-                    const pool = await connection;
-                    await pool.request()
-                        .input('idw', String(idw))
-                        .input('nameCar', String(name))
-                        .input('name', String(el[2]))
-                        .input('value', String(el[3]))
-                        .input('status', 'new')
-                        .input('time', String(el[5]))
-                        .query(sqlInsert);
+                    try {
+                        const sqlInsert = `INSERT INTO params(idw, nameCar, name, value, status, time, port) VALUES (@idw, @nameCar, @name, @value, @status, @time, @port)`;
+                        const pool = await connection;
+                        await pool.request()
+                            .input('idw', String(idw))
+                            .input('nameCar', String(name))
+                            .input('name', String(el[2]))
+                            .input('value', String(el[3]))
+                            .input('status', 'new')
+                            .input('time', String(el[5]))
+                            .input('port', String(el[6]))
+                            .query(sqlInsert);
+                    } catch (e) {
+                        console.log(el)
+                    }
                 }
             }
             for (let el of mas) {
                 if (!paramName.includes(el)) {
-                    const sqlUpdateStatus = `UPDATE params SET  status='false' WHERE idw='${String(idw)}' AND name='${el}'`;
+                    const sqlUpdateStatus = `UPDATE params SET  status='false' WHERE idw='${String(idw)}' AND name='${el}' AND port='${String(port)}'`;
                     const pool = await connection;
                     await pool.request().query(sqlUpdateStatus);
                 }
@@ -305,15 +312,21 @@ exports.objectsImei = async (imei) => {
 }
 
 
-exports.getParamsKursor = async (idObject, port) => {
+exports.getParamsKursor = async (idObject) => {
+    const data = await databaseService.objectId(idObject)
 
+    if (data.length === 0) {
+        return
+    }
+    const port = data[0].port
     let table;
     if (port === '20163') {
         table = 'wialon_retranslation'
     }
-    if (port === '21626') {
+    if (port === '21626' || !port) {
         table = 'navtelecom'
     }
+
     try {
         const pool = await connection
         const postModel = `SELECT TOP 1 * FROM ${table} WHERE idObject=@idObject ORDER BY id DESC`
@@ -357,7 +370,12 @@ exports.getGeoKursor = async (arr) => {
     }
 
 }
-exports.getParamsKursorInterval = async (idObject, port, t1, t2) => {
+exports.getParamsKursorInterval = async (idObject, t1, t2) => {
+    const data = await databaseService.objectId(idObject)
+    if (data.length === 0 || data[0].port === null) {
+        return
+    }
+    const port = data[0].port
     let table;
     if (port === '20163') {
         table = 'wialon_retranslation'
@@ -383,7 +401,7 @@ exports.getParamsKursorInterval = async (idObject, port, t1, t2) => {
                     return acc
                 }, {})
             })
-            // console.log(params)
+
             return params
         }
         else {
@@ -1356,7 +1374,16 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
     }
     const dat = async () => {
         try {
-            const selectBase = `SELECT name, value, status FROM params WHERE idw='${idw}'`
+            const data = await databaseService.objectId(idw)
+            let port;
+            if (data.length === 0) {
+                port = 'wialon'
+            }
+            else {
+                port = data[0].port
+            }
+
+            const selectBase = `SELECT name, value, status FROM params WHERE idw='${idw}' AND port='${port}'`
             const result = await pool.query(selectBase)
             return { result: result.recordset, message: car }
         }
@@ -1413,10 +1440,19 @@ exports.dostupObject = async (login) => {
 
 //забираем из бд параметры по id
 exports.paramsToBase = async (idw) => {
+    const data = await databaseService.objectId(idw)
+    let port;
+    if (data.length === 0) {
+        port = 'wialon'
+    }
+    else {
+        port = data[0].port
+    }
+
     try {
         const pool = await connection
-        const selectBase = `SELECT nameCar, name, value, status, time FROM params WHERE idw=@idw`
-        const result = await pool.request().input('idw', idw).query(selectBase)
+        const selectBase = `SELECT nameCar, name, value, status, time FROM params WHERE idw=@idw AND port=@port`
+        const result = await pool.request().input('idw', idw).input('port', port).query(selectBase)
         return result.recordset
     }
     catch (e) {

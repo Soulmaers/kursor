@@ -41,6 +41,7 @@ class ParseBuffer {
         this.socket.on('end', () => {
             console.log('энд')
             this.buf = Buffer.concat(this.buffer);
+            console.log(this.buf)
             let buf = this.buf
             this.allData['port'] = this.port
             const size = buf.readInt32LE()

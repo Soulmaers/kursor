@@ -18,6 +18,7 @@ class SummaryStatistiks {
     async testovfnNew(active, t1, t2, pref) {
         const resultt = pref !== 'kursor' ? await databaseService.viewSortDataToBase(active, t1, t2) : await databaseService.getParamsKursorInterval(active, t1, t2)
         // const resultt = await databaseService.viewSortDataToBase(active, t1, t2)
+
         return resultt
     }
     timefn() {
@@ -31,20 +32,20 @@ class SummaryStatistiks {
     }
 
     async init() {
-        //  console.log(this.object)
         const idwArray = this.object
             .map(el => Object.values(el)) // получаем массивы всех id
             .flat()
             .map(e => [e[4], e[0].message, e[5], e[e.length - 1]])
-        //  console.log(idwArray)
+
         // Запускаем все асинхронные операции одновременно и ждем их завершения
         const dataPromises = idwArray.map(el => this.getSensorsAndParametrs(el[0], el[el.length - 1]));
         const dataResults = await Promise.allSettled(dataPromises);
-        //  console.log(dataResults)
+
         const fulfilledPromises = dataResults
             .filter(promise => promise.status === 'fulfilled')
             .map(promise => promise.value);
         //  console.log(fulfilledPromises)
+
         // Обрабатываем результаты асинхронных операций
         for (let i = 0; i < idwArray.length; i++) {
             const id = idwArray[i][0];

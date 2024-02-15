@@ -154,22 +154,12 @@ export class IconStatus {
             })
         }
         else {
-            const param = {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: (JSON.stringify({ idw }))
-            }
-            const res = await fetch('api/objectId', param)
-            const object = await res.json()
-            const port = object[0].port
             const params = {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: (JSON.stringify({ idw, port }))
+                body: (JSON.stringify({ idw }))
             }
             const ress = await fetch('api/getParamsKursor', params)
             const data = await ress.json()

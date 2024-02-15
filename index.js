@@ -47,49 +47,18 @@ const initServer = async () => {
     app.listen(port, () => {
         console.log(`Сервер запущен, порт:${port}`);
     });
-
-
-    /* process.on('uncaughtException', (err) => {
-         if (err.code === 'ETIMEDOUT') {
-             console.log(new Date(), 'Ошибка подключения к серверу: истекло время ожидания');
-             // Перезапуск сервера
-             setTimeout(async () => {
-                 //  await globalstart.start(session)
-                 // process.exit(1) // Перезапуск сервера через 1 секунду
-                 // initServer()
-             }, 3000);
-         } else {
-             console.log(new Date(), 'Необработанная ошибка:', err.message);
-             setTimeout(async () => {
-                 await globalstart.start(session)
-                 // process.exit(1) // Перезапуск сервера через 1 секунду
-                 // initServer()
-             }, 3000);
-         }
-     });*/
 };
 
 let session;
 async function init() {
     await initServer()
-<<<<<<< HEAD
-    //  const res = await wialon()
-    //  console.log(res)
-    // if (res !== 'ошибка') {
-    //   console.log('сессия открыта')
-    //  await globalstart.start(session)
-    // setInterval(globalstart.start, 300000, session)
-    //  }
-=======
     const res = await wialon()
     console.log(res)
     if (res !== 'ошибка') {
         console.log('сессия открыта')
         await globalstart.start(session)
         setInterval(globalstart.start, 300000, session)
-
     }
->>>>>>> cb7a480ad05ca0d5e86bc617d5e5bd10b6582a47
 
 }
 init()
@@ -144,45 +113,16 @@ exports.geSession = async () => {
 
 exports.net = require('net');
 
-<<<<<<< HEAD
+
 const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js')
 const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
-new ListenPortTP(21626)
-=======
-class ListenPortTP {
-    constructor(port) {
-        this.port = port
-        this.createServer(this.port)
-    }
-
-    createServer(port) {
-        const tcpServer = net.createServer((socket) => {
-            console.log('TCP Client connected');
-            //  console.log(socket)
-            new ChartServerTerminal(socket)
-            new SendingCommandToTerminal(socket)
-        });
-        tcpServer.listen(port, () => {
-            console.log(`TCP протокол слушаем порт ${port}`);
-        });
-    }
-}
-
-
-
-
-
-
-const ChartServerTerminal = require('./backend/modules/navtelecom/ChatServerTerminal.js')
-const SendingCommandToTerminal = require('./backend/modules/navtelecom/SendingCommandToTerminal.js')
 //new ListenPortTP(21626)
-<<<<<<< HEAD
+//new ListenPortTPNew(20163)
 
-=======
->>>>>>> cb7a480ad05ca0d5e86bc617d5e5bd10b6582a47
-new ListenPortTPNew(20163)
->>>>>>> e9f22440f82388095a6a4be73f5a1302fd11e4fd
->>>>>>> 4465721f56ec073a1349c508cc41519177c40ec3
+
+
+
+
 
 
 
