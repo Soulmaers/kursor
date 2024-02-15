@@ -72,7 +72,7 @@ const initServer = async () => {
 let session;
 async function init() {
     await initServer()
-<<<<<<< HEAD
+
     //  const res = await wialon()
     //  console.log(res)
     // if (res !== 'ошибка') {
@@ -80,21 +80,15 @@ async function init() {
     //  await globalstart.start(session)
     // setInterval(globalstart.start, 300000, session)
     //  }
-=======
+
     const res = await wialon()
     console.log(res)
     if (res !== 'ошибка') {
         console.log('сессия открыта')
-<<<<<<< HEAD
-        await globalstart.start(session)
-        setInterval(globalstart.start, 300000, session)
-
-=======
         //  await globalstart.start(session)
         // setInterval(globalstart.start, 300000, session)
->>>>>>> e9f22440f82388095a6a4be73f5a1302fd11e4fd
+
     }
->>>>>>> cb7a480ad05ca0d5e86bc617d5e5bd10b6582a47
 
 }
 init()
@@ -149,130 +143,16 @@ exports.geSession = async () => {
 
 exports.net = require('net');
 
-<<<<<<< HEAD
 const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js')
 const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
 new ListenPortTP(21626)
-=======
-class ListenPortTP {
-    constructor(port) {
-        this.port = port
-        this.createServer(this.port)
-    }
-
-    createServer(port) {
-        const tcpServer = net.createServer((socket) => {
-            console.log('TCP Client connected');
-            //  console.log(socket)
-            new ChartServerTerminal(socket)
-            new SendingCommandToTerminal(socket)
-        });
-        tcpServer.listen(port, () => {
-            console.log(`TCP протокол слушаем порт ${port}`);
-        });
-    }
-}
-
-class ListenPortTPNew {
-    constructor(port) {
-        this.port = port
-        this.createServer(this.port)
-    }
-
-    createServer(port) {
-        console.log(port)
-        const tcpServer = net.createServer((socket) => {
-            console.log('TCP Client connected new');
-            //  console.log(socket)
-
-            socket.on('data', async (data) => {
-                //  console.log(data)
-                let buf = data
-                const size = buf.readInt32LE()
-                buf = buf.slice(4)
-                const imei = buf.slice(0, 15).toString()
-                buf = buf.slice(16)
-                const time = buf.readUInt32BE()
-                buf = buf.slice(4)
-                const mask = buf.readUInt32BE()
-                buf = buf.slice(4)
-                const res = parse()
-                const res1 = parse()
-                res1.nameBlock = buf.slice(0, 8).toString()
-                buf = buf.slice(9)
-                res1.value = buf.slice(0, 1).toString()
-                buf = buf.slice(2)
-                const res2 = parse()
-                res2.nameBlock = buf.slice(0, 5).toString()
-                buf = buf.slice(6)
-                res2.value = buf.slice(0, 7).toString()
-                buf = buf.slice(8)
-                const res3 = parse()
-                res3.nameBlock = buf.slice(0, 10).toString()
-                buf = buf.slice(11)
-                res3.value = Number(buf.readBigInt64BE())
-                buf = buf.slice(8)
-                const res4 = parse()
-                const res5 = parse()
-                const res6 = parse()
-                const res7 = parse()
-                const res8 = parse()
-                const res9 = parse()
-                // const res10 = parse()
-                res9.nameBlock = buf.slice(0, 15).toString()
-                buf = buf.slice(16)
-                res9.value = Number(buf.readBigInt64BE())
-                buf = buf.slice(8)
-                const res10 = parse()
-                const res11 = parse()
-                const res12 = parse()
-                const res13 = parse()
-                console.log(buf)
-                console.log(res3, res8, res9, res10, res11, res12)
-
-                function parse() {
-                    const blockLine = buf.readUInt16BE()
-                    buf = buf.slice(2)
-                    const sizeBlock = buf.readUInt32BE()
-                    buf = buf.slice(4)
-                    const atributeHidden = buf.readUInt8()
-                    buf = buf.slice(1)
-                    const typeBlock = buf.readUInt8()
-                    buf = buf.slice(1)
-                    let nameBlock;
-                    let value;
-                    switch (typeBlock) {
-                        case 3:
-                            nameBlock = buf.slice(0, (sizeBlock - 7)).toString()
-                            buf = buf.slice((sizeBlock - 6))
-                            value = buf.readUInt32BE()
-                            buf = buf.slice(4)
-
-                    }
-                    return ({ blockLine: blockLine, sizeBlock: sizeBlock, atributeHidden: atributeHidden, typeBlock: typeBlock, nameBlock: nameBlock, value: value })
-                }
-            })
-        })
-
-        tcpServer.listen(port, () => {
-            console.log(`TCP протокол слушаем порт ${port}`);
-        });
-    }
-
-
-}
-
-
-const ChartServerTerminal = require('./backend/modules/navtelecom/ChatServerTerminal.js')
-const SendingCommandToTerminal = require('./backend/modules/navtelecom/SendingCommandToTerminal.js')
-<<<<<<< HEAD
-new ListenPortTP(21626)
-
-=======
-//new ListenPortTP(21626)
->>>>>>> cb7a480ad05ca0d5e86bc617d5e5bd10b6582a47
 new ListenPortTPNew(20163)
->>>>>>> e9f22440f82388095a6a4be73f5a1302fd11e4fd
+
+
+
+
+
+
 
 
 
