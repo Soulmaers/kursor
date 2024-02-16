@@ -206,23 +206,23 @@ export class CreateMarkersEvent {
     async update() {
         const track = await this.getIntervalTrack()
         console.log(track)
-        if (track.length !== 0) {
-            const geo = track.length !== 0 ? [track[track.length - 1].geo[0], track[track.length - 1].geo[1], track[track.length - 1].course] : []
-            this.createMapMainObject(geo)
-            const prostoy = await this.getEventProstoy()
-            //  const pressure = await this.getEventPressure()
-            //  this.track = track
-            this.eventMarkers = await this.getEventObject(track, prostoy)
-            if (!this.markerCreator) {
-                this.markerCreator = new MarkerCreator(mapLocal);
-            }
-            if (track.length !== 0) {
-                const startTrack = {
-                    geo: track[0].geo, course: track[0].course, time: track[0].time
-                }
-                this.getStartTrack(startTrack)
-            }
+        //  if (track.length !== 0) {
+        const geo = track.length !== 0 ? [track[track.length - 1].geo[0], track[track.length - 1].geo[1], track[track.length - 1].course] : []
+        this.createMapMainObject(geo)
+        const prostoy = await this.getEventProstoy()
+        //  const pressure = await this.getEventPressure()
+        //  this.track = track
+        this.eventMarkers = await this.getEventObject(track, prostoy)
+        if (!this.markerCreator) {
+            this.markerCreator = new MarkerCreator(mapLocal);
         }
+        if (track.length !== 0) {
+            const startTrack = {
+                geo: track[0].geo, course: track[0].course, time: track[0].time
+            }
+            this.getStartTrack(startTrack)
+        }
+        //  }
 
     }
 

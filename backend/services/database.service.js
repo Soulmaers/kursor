@@ -405,7 +405,8 @@ exports.getParamsKursorInterval = async (idObject, t1, t2) => {
             return params
         }
         else {
-            return []
+            const last = await databaseService.getParamsKursor(idObject)
+            return last.length !== 0 ? last : []
         }
 
     } catch (e) {
@@ -452,15 +453,35 @@ exports.getKursorObjects = async (login) => {
 
 
 exports.geoLastIntervalKursor = async (time1, time2, idObject) => {
+    const data = await databaseService.objectId(idObject)
+
+    if (data.length === 0) {
+        return
+    }
+    const port = data[0].port
+    let table;
+    if (port === '20163') {
+        table = 'wialon_retranslation'
+    }
+    if (port === '21626' || !port) {
+        table = 'navtelecom'
+    }
     try {
         const pool = await connection
-        const postModel = `SELECT * FROM navtelecom WHERE idObject=@idObject AND time >= @time2 AND time <= @time1 `
+        const postModel = `SELECT * FROM ${table} WHERE idObject=@idObject AND time >= @time2 AND time <= @time1 `
         const result = await pool.request()
             .input('idObject', idObject)
             .input('time2', String(time2))
             .input('time1', String(time1))
             .query(postModel)
-        return result.recordset
+        if (result.recordset.length === 0) {
+            const last = await databaseService.getParamsKursor(idObject)
+            return last.length !== 0 ? last : []
+        }
+        else {
+            return result.recordset
+        }
+
     }
     catch (e) {
         console.log(e)
@@ -1182,9 +1203,28 @@ exports.viewSortDataToBase = async (idw, t1, t2) => {
             .input('t1', t1)
             .input('t2', t2)
             .query(postModel);
-        return results.recordset;
+        if (results.recordset.length === 0) {
+            const last = await databaseService.lostSortChartDataToBase(idw)
+            return last.length !== 0 ? last : []
+        }
+        else {
+            return results.recordset;
+        }
+
     } catch (err) {
         console.log(err);
+        throw err;
+    }
+};
+
+exports.lostSortChartDataToBase = async (idw) => {
+    try {
+        const postModel = `SELECT TOP (1) * FROM sortData WHERE idw = ${idw} ORDER BY time DESC`
+        const pool = await connection;
+        const results = await pool.request().query(postModel);
+        return results.recordset;
+    } catch (err) {
+        console.error(err);
         throw err;
     }
 };

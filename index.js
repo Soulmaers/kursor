@@ -61,20 +61,6 @@ async function init() {
     // setInterval(globalstart.start, 300000, session)
     //  }
 
-    const res = await wialon()
-    console.log(res)
-    if (res !== 'ошибка') {
-        console.log('сессия открыта')
-<<<<<<< HEAD
-        //  await globalstart.start(session)
-        // setInterval(globalstart.start, 300000, session)
-
-=======
-        await globalstart.start(session)
-        setInterval(globalstart.start, 300000, session)
->>>>>>> 942fd87797faa67d6d6d70b96994b184a4304ea0
-    }
-
 }
 init()
 //0f481b03d94e32db858c7bf2d8415204BC9192516432699D521630B59B32E63DE759A503
@@ -128,19 +114,13 @@ exports.geSession = async () => {
 
 exports.net = require('net');
 
-<<<<<<< HEAD
 const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js')
 const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
+const ListenPortIPS = require('./backend/modules/wialonIPS/ParseBuffer.js')
 new ListenPortTP(21626)
 new ListenPortTPNew(20163)
+new ListenPortIPS(20332)
 
-=======
-
-const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js')
-const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
-//new ListenPortTP(21626)
-//new ListenPortTPNew(20163)
->>>>>>> 942fd87797faa67d6d6d70b96994b184a4304ea0
 
 
 

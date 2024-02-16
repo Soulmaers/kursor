@@ -40,9 +40,8 @@ class ParseBuffer {
         })
         this.socket.on('end', () => {
             console.log('энд')
-            this.buf = Buffer.concat(this.buffer);
-            console.log(this.buf)
-            let buf = this.buf
+            const data = Buffer.concat(this.buffer);
+            let buf = data
             this.allData['port'] = this.port
             const size = buf.readInt32LE()
             buf = buf.slice(4)
@@ -75,6 +74,7 @@ class ParseBuffer {
         }
     }
     parse(buf) {
+        console.log(buf)
         if (buf.length === 0) {
             return
         }
@@ -88,6 +88,7 @@ class ParseBuffer {
         buf = buf.slice(1)
         let nameBlock;
         let value;
+        console.log(typeBlock)
         switch (typeBlock) {
             case 1:
                 const result = buf.slice(0, (sizeBlock - 3)).toString().split('\x00');

@@ -145,6 +145,7 @@ export class IconStatus {
     async iconFindParams(param) {
         console.log(this.targetElement)
         const pref = this.targetElement.classList.contains('kursor')
+        const idw = this.targetElement.id
         let result;
         if (!pref) {
             const res = await fetch('/api/getSensorsWialonToBaseId', param)

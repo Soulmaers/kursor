@@ -77,17 +77,27 @@ exports.getGeoKursor = async (req, res) => {
 exports.getParamsKursorIntervalController = async (req, res) => {
     const t1 = req.body.t1
     const t2 = req.body.t2
-    const port = req.body.port
     const idObject = req.body.active
-    const result = await databaseService.getParamsKursorInterval(idObject, port, t1, t2)
-    const strukturaKursor = result.map(el => {
-        return {
-            idw: idObject, time: el.time, geo: JSON.stringify([Number(el.lat), Number(el.lon)]), speed: Number(Number(el.speed).toFixed(0)),
-            sats: Number(Number(el.sats).toFixed(0)), curse: Number(Number(el.course).toFixed(0)), oil: 0, pwr: Number(Number(el.pwr_ext).toFixed(1)),
-            engine: el.in1 === 'Вход IN1(датчик сработал)' ? 1 : 0, meliage: Number(Number(el.meliage).toFixed(0))
-        }
-    })
-    res.json(strukturaKursor)
+    const result = await databaseService.getParamsKursorInterval(idObject, t1, t2)
+    if (result.length === 1) {
+        const strukturaKursor =
+            [{
+                idw: result[0].idObject, time: result[0].time, geo: JSON.stringify([Number(result[0].lat), Number(result[0].lon)]), speed: Number(Number(result[0].speed).toFixed(0)),
+                sats: Number(Number(result[0].sats).toFixed(0)), curse: Number(Number(result[0].course).toFixed(0)), oil: 0, pwr: Number(Number(result[0].pwr_ext).toFixed(1)),
+                engine: result[0].in1 === 'Вход IN1(датчик сработал)' ? 1 : 0, meliage: Number(Number(result[0].mileage).toFixed(0))
+            }]
+        res.json(strukturaKursor)
+    }
+    else {
+        const strukturaKursor = result.map(el => {
+            return {
+                idw: idObject, time: el.time, geo: JSON.stringify([Number(el.lat), Number(el.lon)]), speed: Number(Number(el.speed).toFixed(0)),
+                sats: Number(Number(el.sats).toFixed(0)), curse: Number(Number(el.course).toFixed(0)), oil: 0, pwr: Number(Number(el.pwr_ext).toFixed(1)),
+                engine: el.in1 === 'Вход IN1(датчик сработал)' ? 1 : 0, meliage: Number(Number(el.meliage).toFixed(0))
+            }
+        })
+        res.json(strukturaKursor)
+    }
 }
 
 
