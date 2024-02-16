@@ -359,18 +359,18 @@ async function updateParams(data, kursor) {
     if (res) {
         await statistika.popupProstoy(dataAll) //ловим простои
         await events.eventFunction(res) //ловим через вилаон заправки/сливы+потеря связи
-        const summary = new SummaryStatistiks(dataAll)
-        const global = await summary.init();
-        const arraySummary = Object.entries(global)
+        //  const summary = new SummaryStatistiks(dataAll)
+        //  const global = await summary.init();
+        //  const arraySummary = Object.entries(global)
         const now = new Date();
         const date = new Date(now);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const datas = `${year}-${month}-${day}`;
-        await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
-            databaseService.summaryToBase(idw, arrayInfo, datas)
-        ));
+        //  await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
+        //     databaseService.summaryToBase(idw, arrayInfo, datas)
+        //  ));
         hunterTime()
     }
 
