@@ -314,7 +314,6 @@ exports.objectsImei = async (imei) => {
 
 exports.getParamsKursor = async (idObject) => {
     const data = await databaseService.objectId(idObject)
-
     if (data.length === 0) {
         return
     }
@@ -325,6 +324,9 @@ exports.getParamsKursor = async (idObject) => {
     }
     if (port === '21626' || !port) {
         table = 'navtelecom'
+    }
+    else {
+        return []
     }
 
     try {
@@ -382,6 +384,9 @@ exports.getParamsKursorInterval = async (idObject, t1, t2) => {
     }
     if (port === '21626') {
         table = 'navtelecom'
+    }
+    else {
+        return []
     }
     try {
         const pool = await connection
@@ -465,6 +470,9 @@ exports.geoLastIntervalKursor = async (time1, time2, idObject) => {
     }
     if (port === '21626' || !port) {
         table = 'navtelecom'
+    }
+    else {
+        return []
     }
     try {
         const pool = await connection

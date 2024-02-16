@@ -25,43 +25,60 @@ class ParseBuffer {
         this.socket = socket
         this.port = port
         this.buffer = [];
+        this.allData = {}
         this.socketOn()
         this.buf = null
         this.imei = null
-        this.allData = {}
+
     }
 
+    create(messageType, messageBody) {
+        switch (messageType) {
+            case 'L':
+                const paramsFromMessage = messageBody.split(';');
 
+                this.allData['imei'] = paramsFromMessage[0]
+                this.allData['password'] = paramsFromMessage[1]
+                const responce = `^#${messageType}#1\r\n`
+                console.log(responce)
+                this.socket.write(responce);
+                //  console.log(this.allData)
+                break;
+            default:
+                break;
+        }
+    }
     socketOn() {
         this.socket.on('data', async (data) => {
+
             console.log('датаIPS')
-            this.buffer.push(data);
-        })
-        this.socket.on('end', () => {
-            console.log('энд')
-            let data = Buffer.concat(this.buffer);
+            //  let data = Buffer.concat(this.buffer);
             console.log(data)
             let buf = data
-            buf = buf.slice(1)
-            console.log(buf)
-            const packetType = buf.slice(0, 1).toString()
-            console.log(packetType)
-            buf = buf.slice(2)
-            const delimiterIndex = buf.indexOf(0x3b);
-            const imei = buf.slice(0, delimiterIndex).toString()
-            buf = buf.slice(delimiterIndex);
-            console.log(imei)
-            console.log(buf)
-            //  let count = 0
-            //  const proto = buf.slice(count, count + 1).toString() !== ';' ? (count++, buf.slice(count, count + 1).toString()) : buf.slice(0, count)
-            //  buf.slice(count)
-            //  console.log(proto)
-            console.log(buf)
+            //  console.log(buf.setEncoding('utf-8'))
+            const message = buf.toString()
+            /*   const validateReqExp = /^#(?<type>L|D|P|SD|B|M|I)#(?<message>.*)/g;
+   
+               let messageType, messageBody;
+   
+               const validate = [...message.matchAll(validateReqExp)];
+               messageType = validate[0]['groups']['type'];
+               messageBody = validate[0]['groups']['message'];
+   
+               console.log(messageType)
+               console.log(messageBody)
+               this.create(messageType, messageBody)*/
+
+
+            this.socket.on('end', () => {
+                console.log('энд')
+
+                this.socket.end();
+
+            })
+
         })
-        this.socket.end();
     }
-
 }
-
 
 module.exports = ListenPortIPS
