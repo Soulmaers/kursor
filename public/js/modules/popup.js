@@ -57,6 +57,7 @@ let count = 300;
 let arrayObjects;
 let data;
 export async function logsView(array) {
+    console.log(array)
     let bool = false
     if (array) {
         arrayObjects = array
@@ -188,6 +189,7 @@ export async function logsView(array) {
     }
     num++
     const clickLog = document.querySelector('.clickLog')
+    console.log(clickLog)
     if (value.view.length !== 0) {
         const mass = value.view.map(el => {
             const parsedContent = JSON.parse(el.content);
@@ -205,7 +207,10 @@ export async function logsView(array) {
             return { data: el.time, time: time, group: typeEvent !== 'Предупреждение' ? el.groups : login === 'Курсор' ? 'demo' : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
         });
         data = mass
+        console.log('здесб?')
         !clickLog ? await createLogsTable(mass) : null
+    } else {
+        !clickLog ? await createLogsTable([]) : null
     }
 
     if (!clickLog) {
@@ -233,6 +238,7 @@ export async function logsView(array) {
         // Добавляем обработчики кликов
         new CloseBTN(wrapperLogs, log, numy)
         const allobjects = document.querySelector('.allobjects')
+        console.log(allobjects)
         allobjects.removeEventListener('click', chanchColor)
     }
 
@@ -261,6 +267,7 @@ async function togglePopup() {
         color ? (allobjects.style.display = 'block', trEvent.forEach(item => {
             item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
         })) : (trEvent.forEach(item => { item.style.display = 'flex' }), allobjects.style.display = 'none')
+        console.log('клик??')
         allobjects.addEventListener('click', chanchColor)
         const param = {
             method: "POST",
@@ -382,6 +389,7 @@ const objColor = {
 }
 async function createLogsTable(mass) {
     const wrap = document.querySelector('.alllogs')
+    console.log(wrap)
     if (!wrap) {
         const body = document.getElementsByTagName('body')[0]
         const log = document.createElement('div')
