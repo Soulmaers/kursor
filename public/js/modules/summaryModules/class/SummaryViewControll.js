@@ -1,3 +1,4 @@
+import { GetDataTime } from '../../../class/GetDataTime.js'
 
 export class SummaryViewControll {
     constructor(objectsId) {
@@ -72,33 +73,16 @@ export class SummaryViewControll {
 
     //выбор времени
     async choisIntervalDate(calendar) {
-        const id = `#${!calendar.children[0].children[0] ? calendar.children[0].id : calendar.children[0].children[0].id}`
-        const date = await new Promise((resolve, reject) => {
-            try {
-                const fp = flatpickr(`${id}`, {
-                    mode: "range",
-                    dateFormat: "d-m-Y",
-                    locale: "ru",
-                    static: true,
-                    "locale": {
-                        "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
-                    },
-                    onChange: function (selectedDates, dateStr, instance) {
-                        const formattedDates = selectedDates.map(date => {
-                            const year = date.getFullYear();
-                            const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
-                            const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
-                            return `${year}-${month}-${day}`;
-
-                        })
-                        formattedDates.length === 2 ? resolve(formattedDates) : null
-                    }
-                })
-            }
-            catch (e) {
-                console.log(e)
-            }
+        const getTime = new GetDataTime()
+        const time = await getTime.getTimeInterval(calendar)
+        const date = time.map(el => {
+            const date = new Date(el * 1000);
+            const year = date.getFullYear();
+            const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
+            const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
+            return `${year}-${month}-${day}`;
         })
+
         const btn = calendar.children[1]
         const input = calendar.children[0].children[0]
         return new Promise((resolve, reject) => {

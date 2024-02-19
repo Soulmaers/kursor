@@ -119,7 +119,7 @@ const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuff
 const ListenPortIPS = require('./backend/modules/wialonIPS/ParseBuffer.js')
 //new ListenPortTP(21626)
 //new ListenPortTPNew(20163)
-new ListenPortIPS(20332)
+//new ListenPortIPS(20332)
 
 
 

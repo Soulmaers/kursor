@@ -477,7 +477,6 @@ exports.geoLastIntervalKursor = async (time1, time2, idObject) => {
         return []
     }
     try {
-        console.log(port, table)
         const pool = await connection
         const postModel = `SELECT * FROM ${table} WHERE idObject=@idObject AND time >= @time2 AND time <= @time1 `
         const result = await pool.request()
