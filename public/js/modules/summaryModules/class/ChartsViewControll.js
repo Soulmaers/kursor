@@ -28,7 +28,7 @@ export class ChartsViewControll {
         let dataAndValue = {};
         for (let i = 0; i < originalData.length; i++) {
             const currentDate = originalData[i].data;
-            const currentProbeg = originalData[i].probeg !== '-' ? Number(originalData[i].probeg) : 0;
+            const currentProbeg = originalData[i].probeg !== '-' && !isNaN(originalData[i].probeg) ? Number(originalData[i].probeg) : 0;
             const currentRashod = originalData[i].rashod !== '-' ? Number(originalData[i].rashod) : 0;
             const currentZapravka = originalData[i].zapravka !== '-' ? Number(originalData[i].zapravka) : 0;
             const currentdumpTrack = originalData[i].dumpTrack !== '-' ? Number(originalData[i].dumpTrack) : 0;
@@ -68,6 +68,7 @@ export class ChartsViewControll {
         let outputArray = Object.values(dataAndValue);
         const clickParams = document.querySelector('.clickToggle').parentElement.getAttribute('rel')
         this.data = outputArray
+        console.log(this.data)
         const char = document.querySelector('.chart_global')
         console.log(char)
         outputArray.length !== 0 ? this.createChart(outputArray, clickParams) : char ? char.remove() : null
@@ -112,7 +113,7 @@ export class ChartsViewControll {
     }
 
     createChart(datas, nameCharts) {
-        //    console.log(datas)
+        console.log(datas)
         let nameChart;
         let data;
         if (datas && nameCharts) {
@@ -135,7 +136,7 @@ export class ChartsViewControll {
         const svg = d3.select(".chart_global")
             .append("svg")
             .attr("width", content_lower_charts.clientWidth)
-            .attr("height", (content_lower_charts.clientHeight));
+            .attr("height", (content_lower_charts.clientHeight + 10));
 
         const xScale = d3.scaleBand()
             .domain(data.map(function (d) { return d.date; }))
