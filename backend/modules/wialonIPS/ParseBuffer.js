@@ -45,7 +45,6 @@ class ParseBuffer {
             let data = Buffer.concat(this.buffer);
             let buf = data.toString()
             const message = buf.toString()
-
             const validateReqExp1 = /.*(\r\n|\n)/g;
             const bool = validateReqExp1.test(message); //проверка на конец строки
             if (bool) {
@@ -97,7 +96,7 @@ class ParseBuffer {
     async setValidationImeiToBase() {
         const res = await databaseService.objectsImei(String(this.imei))
         const nowTime = Math.floor(new Date().getTime() / 1000)
-        console.log(nowTime)
+        console.log(this.arrayData)
         if (res) {
             this.arrayData.map(e => {
                 e['idObject'] = res[0].idObject
@@ -182,7 +181,6 @@ class ParseBuffer {
         allData['outputs'] = this.reverseBinaryArray(data[12])[0]
         data[13] !== 'NA' ? allData['adc'] = data[13].split(',').map((el) => parseFloat(el)) : null
         data[14] !== 'NA' ? allData['ibutton'] = data[14] : null
-
         const splits = data[15].split(',');
         splits.forEach((el) => {
             const splitedParam = el.split(':');

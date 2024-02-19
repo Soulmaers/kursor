@@ -313,10 +313,6 @@ exports.objectsImei = async (imei) => {
 
 
 exports.getParamsKursor = async (idObject) => {
-<<<<<<< HEAD
-
-=======
->>>>>>> 490a22d34bf951e94240afc63c3fdca7432aae76
     const data = await databaseService.objectId(idObject)
     if (data.length === 0) {
         return
