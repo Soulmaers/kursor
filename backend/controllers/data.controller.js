@@ -155,6 +155,13 @@ exports.start = async (session) => {
         const promises = allCar[5][1].map(async (el) => {
             const sats = el.lmsg && el.lmsg.p && el.lmsg.p.sats ? el.lmsg.p.sats : '-'
             const res = await engines(el.id);
+            if (el.lmsg && el.lmsg.p && res) {
+                Object.keys(el.lmsg.p).forEach(key => {
+                    if (!res.some(([k, v]) => v === key)) {
+                        res.push([key, key, el.lmsg.p[key]]);
+                    }
+                });
+            }
             if (res && resa) {
                 await saveStatus(res, el)
                 const foundObject = event.find(obj => obj.hasOwnProperty(el.id));
