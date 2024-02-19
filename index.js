@@ -53,13 +53,13 @@ let session;
 async function init() {
     await initServer()
 
-    const res = await wialon()
-    console.log(res)
-    if (res !== 'ошибка') {
-        console.log('сессия открыта')
-        await globalstart.start(session)
-        setInterval(globalstart.start, 300000, session)
-    }
+    //   const res = await wialon()
+    //   console.log(res)
+    //  if (res !== 'ошибка') {
+    //    console.log('сессия открыта')
+    //  await globalstart.start(session)
+    // setInterval(globalstart.start, 300000, session)
+    //   }
 
 }
 init()
@@ -119,7 +119,7 @@ const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuff
 const ListenPortIPS = require('./backend/modules/wialonIPS/ParseBuffer.js')
 //new ListenPortTP(21626)
 //new ListenPortTPNew(20163)
-//new ListenPortIPS(20332)
+new ListenPortIPS(20332)
 
 
 
