@@ -117,15 +117,9 @@ exports.net = require('net');
 const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js')
 const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
 const ListenPortIPS = require('./backend/modules/wialonIPS/ParseBuffer.js')
-<<<<<<< HEAD
 new ListenPortTP(21626)
 new ListenPortTPNew(20163)
 new ListenPortIPS(20332)
-=======
-//new ListenPortTP(21626)
-//new ListenPortTPNew(20163)
-//new ListenPortIPS(20332)
->>>>>>> 0dc085a50682b14f3ad89f4adb80a1804d0af2e6
 
 
 

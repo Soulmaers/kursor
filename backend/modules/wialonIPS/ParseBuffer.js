@@ -96,7 +96,7 @@ class ParseBuffer {
     async setValidationImeiToBase() {
         const res = await databaseService.objectsImei(String(this.imei))
         const nowTime = Math.floor(new Date().getTime() / 1000)
-        console.log(this.arrayData)
+        //   console.log(this.arrayData)
         if (res) {
             this.arrayData.map(e => {
                 e['idObject'] = res[0].idObject
