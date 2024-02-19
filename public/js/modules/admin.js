@@ -203,6 +203,7 @@ function updateFn() {
             <select class="sel" id="select">
                 <option class="opt" selected disabled>Укажите права доступа</option>
                 <option class="opt" value="Пользователь" name="role">Пользователь</option>
+                          <option class="opt" value="Дежурный" name="role">Дежурный</option>
                 <option class="opt" value="Администратор" name="role">Администратор</option>
             </select>
             </div>
@@ -229,6 +230,7 @@ function updateFn() {
                 <select class="sel" id="select">
                     <option class="opt" selected disabled>Укажите права доступа</option>
                     <option class="opt" value="Пользователь" name="role">Пользователь</option>
+                        <option class="opt" value="Дежурный" name="role">Дежурный</option>
                     <option class="opt" value="Администратор" name="role">Администратор</option>
                 </select>
             </div>

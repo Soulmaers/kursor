@@ -39,8 +39,8 @@ module.exports.delete = async (req, res) => {
         console.log(e)
     }
     try {
-        const selectBase = `DELETE FROM userObjects WHERE login = @login'`;
-        await pool.input('login', req.body.log).query(selectBase)
+        const selectBase = `DELETE FROM userObjects WHERE login = @login`;
+        await pool.request().input('login', req.body.log).query(selectBase)
     }
     catch (e) {
         console.log(e)

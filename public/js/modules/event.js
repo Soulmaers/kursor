@@ -81,7 +81,6 @@ mobileItem.forEach(el => {
             el.classList.remove('mobile_active')
         })
         el.classList.toggle('mobile_active');
-        console.log(el.children[0].textContent)
         if (el.children[0].textContent === 'Список') {
             const sections = document.querySelector('.sections')
             const centerBlock = document.querySelector('.centerBlock')
@@ -92,7 +91,6 @@ mobileItem.forEach(el => {
             main.style.display = 'none'
         }
         if (el.children[0].textContent === 'Статистика') {
-            console.log('нажал')
             const wrapFull = document.querySelector('.wrapperFull')
             const contentCard = document.querySelectorAll('.content_card')
             comeback.style.display = 'none'
@@ -129,13 +127,10 @@ mobileItem.forEach(el => {
                 document.querySelector('.engineTS').textContent = 'Зажигание ВКЛ'
                 document.querySelector('.jobHHTS').textContent = 'Холостой ход'
                 document.getElementById('map').style.height = ''
-                console.log('картиа же')
-                console.log(color)
                 sections.style.display = 'none'
                 start.style.display = 'none'
                 main.style.display = 'flex'
                 centerBlock.style.display = 'none'
-                console.log(techinfo)
                 techinfo.style.display = 'none'
                 grafics.style.display = 'none'
                 wrapleft.style.display = 'block'
@@ -226,7 +221,7 @@ if (auth) {
         account.style.display = 'flex'
         const setOne = document.querySelector('.set_one')
         const setTwo = document.querySelector('.set_two')
-        if (role === 'Пользователь') {
+        if (role === 'Пользователь' || role === 'Дежурный') {
             const account = document.querySelector('.account')
             setOne.remove();
             account.remove();
