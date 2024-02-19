@@ -313,7 +313,6 @@ exports.objectsImei = async (imei) => {
 
 
 exports.getParamsKursor = async (idObject) => {
-    console.log(idObject)
     const data = await databaseService.objectId(idObject)
     if (data.length === 0) {
         return
@@ -321,10 +320,11 @@ exports.getParamsKursor = async (idObject) => {
     const port = data[0].port
     let table;
     if (port === '20163') {
-        table = 'wialon_retranslation'
-    }
-    if (port === '21626' || !port) {
-        table = 'navtelecom'
+        table = 'wialon_retranslation';
+    } else if (port === '20332') {
+        table = 'wialon_ips';
+    } else if (port === '21626' || !port) {
+        table = 'navtelecom';
     }
     else {
         return []
@@ -381,10 +381,11 @@ exports.getParamsKursorInterval = async (idObject, t1, t2) => {
     const port = data[0].port
     let table;
     if (port === '20163') {
-        table = 'wialon_retranslation'
-    }
-    if (port === '21626') {
-        table = 'navtelecom'
+        table = 'wialon_retranslation';
+    } else if (port === '20332') {
+        table = 'wialon_ips';
+    } else if (port === '21626' || !port) {
+        table = 'navtelecom';
     }
     else {
         return []
@@ -460,22 +461,23 @@ exports.getKursorObjects = async (login) => {
 
 exports.geoLastIntervalKursor = async (time1, time2, idObject) => {
     const data = await databaseService.objectId(idObject)
-
     if (data.length === 0) {
         return
     }
     const port = data[0].port
     let table;
     if (port === '20163') {
-        table = 'wialon_retranslation'
-    }
-    if (port === '21626' || !port) {
-        table = 'navtelecom'
+        table = 'wialon_retranslation';
+    } else if (port === '20332') {
+        table = 'wialon_ips';
+    } else if (port === '21626' || !port) {
+        table = 'navtelecom';
     }
     else {
         return []
     }
     try {
+        console.log(port, table)
         const pool = await connection
         const postModel = `SELECT * FROM ${table} WHERE idObject=@idObject AND time >= @time2 AND time <= @time1 `
         const result = await pool.request()
@@ -483,6 +485,7 @@ exports.geoLastIntervalKursor = async (time1, time2, idObject) => {
             .input('time2', String(time2))
             .input('time1', String(time1))
             .query(postModel)
+
         if (result.recordset.length === 0) {
             const last = await databaseService.getParamsKursor(idObject)
             return last.length !== 0 ? last : []
@@ -511,7 +514,6 @@ exports.getWialonObjects = async () => {
     }
 }
 exports.getWialonObjectsId = async (idw) => {
-    console.log(idw)
     try {
         const pool = await connection
         const postModel = `SELECT * FROM wialon_groups WHERE idObject=@idw`
@@ -723,8 +725,6 @@ exports.setSensorsWialonToBase = async (login, idw, arr) => {
 }
 
 exports.uniqImeiAndPhone = async (col, value, table, login, id) => {
-    console.log('тут')
-    console.log(col, value)
     try {
         const pool = await connection;
         const query = `
@@ -751,7 +751,6 @@ exports.uniqImeiAndPhone = async (col, value, table, login, id) => {
 
 
 exports.validationCloneGroupName = async (id, name, login) => {
-    console.log(id, name, login)
     try {
         const pool = await connection;
         const query = `
@@ -828,7 +827,6 @@ exports.updateObject = async (object) => {
 }
 
 exports.updateObjectToGroups = async (object) => {
-    console.log(object)
     try {
         const pool = await connection;
         const updateModel = `UPDATE groups SET idObject=@idObject,nameObject=@nameObject WHERE  idObject = @idObject`;
@@ -924,7 +922,6 @@ exports.updateGroup = async (object, prefix) => {
         await databaseService.deleteIdToRowsTime(object.data, object.id, object.login)
         twoDimensionalArray.forEach(async item => {
             const res = await databaseService.getIdToRows(item.id_sub_g, object.login)
-            console.log(res)
             if (res.length === 0) {
                 item.objects.forEach(async e => {
                     const res = await pool.request()
@@ -971,10 +968,7 @@ exports.lastIdGroup = async () => {
         const postModel2 = `SELECT TOP 1 id_sub_g FROM groups ORDER BY id_sub_g DESC`
         const res = await pool.request()
             .query(postModel2)
-
         const id = Math.max(Number(result.recordset[0].idg), Number(res.recordset[0].id_sub_g))
-        console.log(result)
-        console.log(res)
         return id;
     }
     catch (e) {
@@ -1010,7 +1004,6 @@ exports.setGroup = async (object) => {
     }
 };
 exports.setSubGroups = async (subgroups, object) => {
-    console.log(subgroups)
     const login = object.login
     const time = object.data
     const idg = object.idg
@@ -1031,8 +1024,6 @@ exports.setSubGroups = async (subgroups, object) => {
             const objectsToSub = checkResult.recordset.map(e => {
                 return { idObject: e.idObject, nameObject: e.nameObject }
             })
-            console.log(checkResult.recordset)
-            console.log(objectsToSub)
             if (checkResult.recordset[0].idg === el.id_sub_g) {
                 console.log('обновляем запись')
                 const updateModel = `
@@ -1113,7 +1104,6 @@ exports.saveObject = async (object) => {
 
 
 exports.deleteObject = async (login, idObject) => {
-    console.log(Number(idObject))
     try {
         const pool = await connection
         const post = `DELETE objects WHERE login=@login AND idObject = @idObject`

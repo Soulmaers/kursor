@@ -41,7 +41,6 @@ exports.wialonObjects = async (req, res) => {
 }
 exports.wialonObjectsId = async (req, res) => {
     const idw = req.body.idw
-    console.log(idw)
     const params = await databaseService.getWialonObjectsId(idw)
     res.json(params)
 }
