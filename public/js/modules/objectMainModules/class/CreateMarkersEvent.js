@@ -33,10 +33,8 @@ export class CreateMarkersEvent {
         element.classList.toggle('activeTrack')
         if (element.classList.contains('activeTrack')) {
             this.calendar.style.display = 'flex'
-            //  const getTime = new GetDataTime()
-            //   const res = await getTime.getTimeInterval(this.calendar)
-            //   console.log(res)
-            await this.getTimeInterval()
+            const getTime = new GetDataTime()
+            this.time = await getTime.getTimeInterval(this.calendar)
         }
         else {
             this.calendar.style.display = 'none'
@@ -48,31 +46,6 @@ export class CreateMarkersEvent {
             this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
             this.markerCreator.deleteMarkers()
         }
-    }
-    async getTimeInterval() {
-
-        const ide = `#${!this.calendar.children[0].children[0] ? this.calendar.children[0].id : this.calendar.children[0].children[0].id}`
-        const fp = flatpickr(ide, {
-            mode: "range",
-            dateFormat: "d-m-Y",
-            locale: "ru",
-            static: true,
-            "locale": {
-                "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
-            },
-            onChange: (selectedDates, dateStr, instance) => {
-                const formattedDates = selectedDates.map(date => {
-                    const year = date.getFullYear();
-                    const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
-                    const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
-                    return [`${year}-${month}-${day}`, `${day}.${month}.${year}`, date.getTime() / 1000];
-                });
-
-                this.time = formattedDates.map(el => el[el.length - 1])
-                console.log(this.time)
-                return
-            }
-        })
     }
 
     ok() {

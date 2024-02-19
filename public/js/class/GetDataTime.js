@@ -24,8 +24,10 @@ export class GetDataTime {
                     const day = ("0" + date.getDate()).slice(-2);
                     return [`${year}-${month}-${day}`, `${day}.${month}.${year}`, date.getTime() / 1000];
                 });
+                console.log(formattedDates)
                 const result = formattedDates.map(el => el[el.length - 1])
-                console.log(result)
+                // console.log(result)
+                formattedDates.length === 2 ? resolve(result) : null
                 //resolve(formattedDates);
             });
         });

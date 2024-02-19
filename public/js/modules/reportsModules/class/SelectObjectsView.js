@@ -74,6 +74,7 @@ export class SelectObjectsView {
                     return unix;
                 })
                 unixTime.length === 2 ? this.requestParams.timeInterval = unixTime : null
+                console.log(this.requestParams.timeInterval)
             }
         })
     }
