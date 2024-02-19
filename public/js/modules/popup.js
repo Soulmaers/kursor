@@ -204,8 +204,7 @@ export async function logsView(array) {
             int.shift();
             const time = times(new Date(Number(el.time) * 1000));
             const info = `${int.join(", ")}`;
-            console.log(login, typeEvent, el.groups, group)
-            return { data: el.time, time: time, group: login === 'Курсор' ? 'demo' : typeEvent !== 'Предупреждение' ? el.group : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
+            return { data: el.time, time: time, group: login === 'Курсор' ? 'demo' : typeEvent !== 'Предупреждение' ? el.groups : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
         });
         console.log(mass)
         data = mass
