@@ -125,7 +125,6 @@ export function createChart(data, num) {
 
     const jobTSDetalisationGraf = document.querySelector('.jobTSDetalisationGraf ')
     const widthInPx = jobTSDetalisationGraf.offsetWidth;
-    console.log(jobTSDetalisationGraf.offsetWidth)
     // Функция для объединения смежных интервалов с одинаковым статусом
     function combineIntervals(data) {
         const combinedData = [];
@@ -146,7 +145,6 @@ export function createChart(data, num) {
     const windowStatistic = document.querySelector('.windowStatistic')
     var widthWind = document.querySelector('body').offsetWidth;
     const combinedData = combineIntervals(data);
-    console.log(windowStatistic.clientWidth)
     const win = windowStatistic.clientWidth == 0 ? 707 : windowStatistic.clientWidth
     let width = widthWind < 860 ? widthWind - 15 : win - 40//widthInPx; // Ширина графика
     //  width < 0 ? 0 : width

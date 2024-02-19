@@ -143,6 +143,7 @@ exports.start = async (session) => {
         const allCar = Object.entries(data)
         const arr = allCar[5][1].map(it => it.id)
         const resa = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(arr)
+        console.log(resa)
         const event = Object.entries(resa).map(([key, value]) => {
             return {
                 [key]: [

@@ -150,6 +150,7 @@ export class IconStatus {
         if (!pref) {
             const res = await fetch('/api/getSensorsWialonToBaseId', param)
             const data = await res.json()
+            console.log(data)
             result = data.map(e => {
                 return [e.sens_name, e.param_name, Number(e.idw), Number(e.value)]
             })
