@@ -1,6 +1,7 @@
 import { datas } from '../../charts/bar.js'
 import { oil } from '../../charts/oil.js'
 import { Tooltip } from '../../../class/Tooltip.js'
+import { GetDataTime } from '../../../class/GetDataTime.js'
 export class GrafikView {
     constructor(nav) {
         this.list = nav
@@ -50,27 +51,8 @@ export class GrafikView {
 
     async getTimeInterval() {
         const ide = `#${!this.calendar.children[0].children[0] ? this.calendar.children[0].id : this.calendar.children[0].children[0].id}`
-        const fp = flatpickr(ide, {
-            mode: "range",
-            dateFormat: "d-m-Y",
-            locale: "ru",
-            static: true,
-            "locale": {
-                "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
-            },
-            onChange: (selectedDates, dateStr, instance) => {
-                const formattedDates = selectedDates.map(date => {
-                    const year = date.getFullYear();
-                    const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
-                    const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
-                    return [`${year}-${month}-${day}`, `${day}.${month}.${year}`, date.getTime() / 1000];
-                });
-
-                this.time = formattedDates.map(el => el[el.length - 1])
-                console.log(this.time)
-                return
-            }
-        })
+        const getTime = new GetDataTime()
+        this.time = await getTime.getTimeInterval(this.calendar, ide)
     }
     init() {
         new Tooltip(this.iconGraf, ['Календарь']);

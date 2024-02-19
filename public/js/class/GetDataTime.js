@@ -4,8 +4,8 @@ export class GetDataTime {
     constructor() {
         this.time = null
     }
-    async getTimeInterval(calendar) {
-        const ide = `#${!calendar.children[0].children[0] ? calendar.children[0].id : calendar.children[0].children[0].id}`;
+    async getTimeInterval(calendar, id) {
+        const ide = !id ? `#${!calendar.children[0].children[0] ? calendar.children[0].id : calendar.children[0].children[0].id}` : id;
         const fp = flatpickr(ide, {
             mode: "range",
             dateFormat: "d-m-Y",

@@ -1,5 +1,5 @@
 import { NaviChartLegenda } from "./NaviChartLegends.js"
-import { initSummary } from "../../spisok.js"
+import { GetDataTime } from '../../../class/GetDataTime.js'
 import { Tooltip } from "../../../class/Tooltip.js"
 import { kursorfnNew } from '../../detalisation.js'
 import { testovfnNew } from '../../charts/bar.js'
@@ -59,24 +59,8 @@ export class SelectObjectsView {
     async createCalendar() {
         const calendar = this.interval.nextElementSibling
         const id = `#${!calendar.children[0] ? calendar.id : calendar.children[0].id}`
-
-        const fp = flatpickr(`${id}`, {
-            mode: "range",
-            dateFormat: "d-m-Y",
-            locale: "ru",
-            static: true,
-            "locale": {
-                "firstDayOfWeek": 1 // устанавливаем первым днем недели понедельник
-            },
-            onChange: (selectedDates, dateStr, instance) => {
-                const unixTime = selectedDates.map(date => {
-                    const unix = Math.floor(date.getTime() / 1000)
-                    return unix;
-                })
-                unixTime.length === 2 ? this.requestParams.timeInterval = unixTime : null
-                console.log(this.requestParams.timeInterval)
-            }
-        })
+        const getTime = new GetDataTime()
+        this.requestParams.timeInterval = await getTime.getTimeInterval(calendar, id)
     }
 
     changeTitleRequestFile(el) {
