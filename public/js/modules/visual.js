@@ -4,7 +4,6 @@ import { findTyresInstall } from './saveBaseId.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
 import { tarirView } from './staticObject.js'
-import { tooltip } from './cursorTooltip.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { convert } from './helpersFunc.js'
@@ -169,7 +168,6 @@ export async function visual(el) {
 
     liCreate()
     await loadParamsView()
-    tooltip()
     timeIntervalStatistiks();
 
     findTyresInstall()

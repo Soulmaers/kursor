@@ -109,9 +109,6 @@ export async function datas(t1, t2) {
         const loaders = document.querySelector('.loaders_charts')
         loaders.style.display = 'none';
         isCanceled = false;
-
-
-        // }
     }
     catch (e) {
         isCanceled = false;

@@ -13,6 +13,7 @@ export class IconStatus {
         this.targetElement = null
         this.targetCard = null
         this.intervalId = null
+        this.params = null
         this.list.forEach(el => el.addEventListener('click', this.listeModalWindow.bind(this, el)))
         this.card.forEach(el => el.addEventListener('click', this.toogleModalWindow.bind(this, el)))
     }
@@ -193,6 +194,7 @@ export class IconStatus {
     async iconFindParamsEdit(param) {
         const res = await fetch('/api/iconFind', param)
         const result = await res.json()
+        this.params = result
         return result
     }
     //расчет  работы двигателя
@@ -280,8 +282,15 @@ export class IconStatus {
 
     //вывод значений в дом элементы
     viewValueElement() {
+        const role = document.querySelector('.role').getAttribute('rel')
         this.card.forEach(elem => {
+            this.params.result.forEach(it => {
+                if (it.icons === elem.id) {
+                    role === 'Администратор' ? new Tooltip(elem, [elem.getAttribute('rel'), it.params]) : new Tooltip(elem, [elem.getAttribute('rel')]);
+                }
+            })
             const parametrs = this.valueparamsObject[elem.id] === -348201 ? '---' : this.valueparamsObject[elem.id]
+            console.log(parametrs)
             switch (elem.id) {
                 case 'odom-card':
                     elem.children[0].textContent = parametrs !== '---' ? this.addZero(8, parametrs.toFixed(0)) : '---'
@@ -301,6 +310,8 @@ export class IconStatus {
                 default:
                     elem.children[0].textContent = parametrs !== '---' ? parametrs : "---"
             }
+
+
         })
 
     }
