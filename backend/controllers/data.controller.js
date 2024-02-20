@@ -143,7 +143,6 @@ exports.start = async (session) => {
         const allCar = Object.entries(data)
         const arr = allCar[5][1].map(it => it.id)
         const resa = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(arr)
-        console.log(resa)
         const event = Object.entries(resa).map(([key, value]) => {
             return {
                 [key]: [
@@ -333,9 +332,17 @@ async function updateParams(data, kursor) {
         .filter(promise => promise.status === 'fulfilled')
         .map(promise => promise.value);
     const kursorParams = fulfilledPromises;
+    const nameCarK = kursorParams.map(el => {
+        if (el) {
+            const speed = el.params.find(it => it[0] === 'speed')[1];
+            const lat = el.params.find(it => it[0] === 'lat')[1];
+            const lon = el.params.find(it => it[0] === 'lon')[1];
+            const geo = JSON.stringify([parseFloat(lat), parseFloat(lon)]);
+            return [el.name, el.id, speed, geo, el.port];
+        }
+    });
     const dataKursorPromises = [];
     for (const el of kursorParams) {
-        //   console.log(el.name)
         el ? dataKursorPromises.push(databaseService.saveDataToDatabase(el.name, el.id, el.port, el.params, currentTime)) : null;
     };
 
@@ -348,7 +355,6 @@ async function updateParams(data, kursor) {
         const geo = el.pos?.x ? JSON.stringify([el.pos.y, el.pos.x]) : null;
         return [nameTable, idw, speed, geo, port];
     });
-
     const databasePromises = [];
     for (const el of allCar[5][1]) {
         if (el.lmsg) {
@@ -359,6 +365,8 @@ async function updateParams(data, kursor) {
     };
     await Promise.all([databasePromises, dataKursorPromises]);
     // передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
+    const allData = nameCarK.concat(nameCar)
+    // console.log(allData)
     await zaprosSpisokb(nameCar)
     const res = await constorller.dataSpisok()
     const kursorObjects = await kursorService.getKursorObjects()
@@ -463,7 +471,7 @@ async function zaprosSpisokb(name) {
                     for (let y = 0; y < paramsRes.length; y++) {
                         if (paramsRes[y].name === modelUniqValues[k].temp) {
                             //   console.log(name)
-                            massItog.push([name[i][0], modelUniqValues[k].pressure, parseFloat(integer), parseFloat(paramsRes[y].value), osiBar, name[i][1], name[i][2], name[i][3]]);
+                            massItog.push([name[i][0], modelUniqValues[k].pressure, parseFloat(integer), parseFloat(paramsRes[y].value), osiBar, name[i][1], name[i][2], name[i][3], name[i][4]]);
                         }
                     }
                 }

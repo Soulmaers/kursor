@@ -1359,7 +1359,6 @@ div.spoyler {
   align-items: center;
   justify-content: space-between;
   background-color: rgba(6, 28, 71, 1);
-  border-bottom: 5px solid #fff;
 }
 
 .checkInList {
@@ -2257,6 +2256,7 @@ div.spoyler {
   box-sizing: border-box;
   border: 1px solid lightgray;
   background-color: #fff;
+  z-index: 1;
 }
 
 .wrapper_up {

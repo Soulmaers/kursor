@@ -1,4 +1,4 @@
-import { charContainer } from './char.js'
+import { initCharts } from '../spisok.js'
 import { skladContainer } from './sklad.js'
 import { kartaContainer } from './karta.js'
 import { reportsContainer } from './reports.js'
@@ -83,11 +83,12 @@ export class NavigationMenu {
         this.reportUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
         this.mapUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
         elem.style.display = 'flex'
+        elem.style.width = 98 + '%'
+        setTimeout(function () { initCharts.createChart(); }, 300);
         //   dashContainer()
     }
 
     karta(elem) {
-
         elem.style.display = 'flex'
         const checkTypeMarkers = document.querySelector('.checkTypeMarkers')
         const tableInfoCar = document.querySelector('.tableInfoCar')
@@ -105,8 +106,6 @@ export class NavigationMenu {
     }
 
     reports(elem, avl, num) {
-        console.log(elem, avl, num)
-
         this.reportUnit.forEach(e => { e.style.display = 'none', e.classList.remove('act_modules') })
         this.mapUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
         if (num) {

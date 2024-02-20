@@ -40,16 +40,38 @@ export class Flash {
         console.log(side)
         parent.children[1].style.display = 'none'
         parent.children[0].style.display = 'block'
+
+
         side[0].style.width = '10px';
-        side[0].style.transition = 'width 0.3s ease-in-out';
+        side[0].style.transition = 'width 0.2s ease-in-out';
         side[1].style.width = '98%'
-        side[1].style.transition = 'width 0.3s ease-in-out';
+        side[1].style.transition = 'width 0.2s ease-in-out';
         if (side[1].classList.contains('globalMaps')) {
             setTimeout(function () { map.invalidateSize(); }, 300);
 
         }
         if (side[1].classList.contains('main') || side[1].classList.contains('wrapper_left')) {
             setTimeout(function () { mapLocal.invalidateSize(); }, 300);
+        }
+        const act = document.querySelector('.activStatic').id
+        const color = document.querySelector('.color')
+        if (color) {
+            const num = [1, 2, 3]
+            num.forEach(e => {
+                const chartStatic = document.querySelector(`.chartStatic${e}`)
+                if (chartStatic) {
+                    chartStatic.remove();
+                }
+            })
+
+            setTimeout(function () {
+                Promise.all([
+                    load(act, 0, 1),
+                    load(act, 1, 2),
+                    load(act, 2, 3)
+                ])
+
+            }, 500)
         }
 
     }
@@ -59,15 +81,37 @@ export class Flash {
         console.log(side)
         parent.children[0].style.display = 'none'
         parent.children[1].style.display = 'block'
+
+
         side[0].style.width = '550px';
-        side[0].style.transition = 'width 0.3s ease-in-out';
+        side[0].style.transition = 'width 0.2s ease-in-out';
         side[1].style.width = '74%'
-        side[1].style.transition = 'width 0.3s ease-in-out';
+        side[1].style.transition = 'width 0.2s ease-in-out';
         if (side[1].classList.contains('globalMaps')) {
             setTimeout(function () { map.invalidateSize(); }, 300);
         }
         if (side[1].classList.contains('main') || side[1].classList.contains('wrapper_left')) {
             setTimeout(function () { mapLocal.invalidateSize(); }, 300);
+        }
+        const color = document.querySelector('.color')
+        const act = document.querySelector('.activStatic').id
+        if (color) {
+            const num = [1, 2, 3]
+            num.forEach(e => {
+                const chartStatic = document.querySelector(`.chartStatic${e}`)
+                if (chartStatic) {
+                    chartStatic.remove();
+                }
+            })
+
+            setTimeout(function () {
+                Promise.all([
+                    load(act, 0, 1),
+                    load(act, 1, 2),
+                    load(act, 2, 3)
+                ])
+
+            }, 500)
         }
 
     }
@@ -140,7 +184,7 @@ export class ResizeContainer {
         const minContainerWidth = 50; // Set the minimum width (pixels) for containers
         const newLeftWidth = this.originalLeftContainerWidth + dx;
         const newRightWidth = this.originalRightContainerWidth - dx;
-
+        console.log(newRightWidth)
         if (newLeftWidth < minContainerWidth || newRightWidth < minContainerWidth) {
             return;
         }
@@ -156,13 +200,23 @@ export class ResizeContainer {
         const newRightWidth = this.originalRightContainerWidth - dx;
         this.leftContainer.style.width = `${newLeftWidth}px`;
         this.rightContainer.style.width = `${newRightWidth}px`;
+        console.log(this.rightContainer)
         this.isResizing = false;
         this.initialX = null;
         this.resizeHandle.style.transform = 'translateX(0)';
+        console.log('дубль!!!')
+        const color = document.querySelector('.color')
         const act = document.querySelector('.activStatic').id
-        load(act, 0, 1)
-        load(act, 1, 2)
-        load(act, 2, 3)
+        if (color) {
+            setTimeout(function () {
+                Promise.all([
+                    load(act, 0, 1),
+                    load(act, 1, 2),
+                    load(act, 2, 3)
+                ])
+
+            }, 500)
+        }
         setTimeout(function () { initCharts.createChart(); }, 300);
     }
 }

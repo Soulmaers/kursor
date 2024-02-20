@@ -143,7 +143,9 @@ export function createChart(data, num) {
 
     }
     const windowStatistic = document.querySelector('.windowStatistic')
+
     var widthWind = document.querySelector('body').offsetWidth;
+    console.log(windowStatistic.clientWidth)
     const combinedData = combineIntervals(data);
     const win = windowStatistic.clientWidth == 0 ? 707 : windowStatistic.clientWidth
     let width = widthWind < 860 ? widthWind - 15 : win - 40//widthInPx; // Ширина графика

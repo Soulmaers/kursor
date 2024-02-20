@@ -1320,8 +1320,15 @@ exports.alarmBase = async (data, tyres, alarm) => {
     console.log('данные по алармам')
     const dannie = data.concat(tyres)
     let val;
-    const allSens = await databaseService.ggg(dannie[6])
-    const tyress = allSens[dannie[2]]
+    console.log(dannie)
+    let tyress;
+    if (dannie[9] === 'wialon') {
+        const allSens = await databaseService.ggg(dannie[6])
+        tyress = allSens[dannie[2]]
+    }
+    else {
+        tyress = dannie[2]
+    }
 
     alarm !== 'Потеря связи с датчиком' ? val = dannie[3] + ' ' + 'Бар' : val = dannie[4] + '' + 't'
     const res = alarm !== 'Норма' && alarm !== 'Потеря связи с датчиком' ? await databaseService.controllerSaveToBase([{
