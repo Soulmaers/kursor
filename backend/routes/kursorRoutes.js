@@ -15,3 +15,5 @@ router.post('/api/geoLastIntervalKursor', controllerKursor.geoLastIntervalKursor
 router.post('/api/objectId', controllerKursor.objectId)
 router.post('/api/getGeoKursor', controllerKursor.getGeoKursor)
 router.post('/api/getParamsKursorIntervalController', controllerKursor.getParamsKursorIntervalController)
+router.post('/api/getMetas', controllerKursor.getMetas)
+

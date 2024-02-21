@@ -68,10 +68,11 @@ class WriteFile {
     static async writeDataFile(globalArrayMSG, imei) {
         //  console.log(imei)
         const res = await databaseService.objectsImei(String(imei))
-        globalArrayMSG.map(e => {
-            e.idObject = res[0].idObject
-        })
-        if (res) {
+        console.log(res)
+        if (res.length !== 0) {
+            globalArrayMSG.map(e => {
+                e.idObject = res[0].idObject
+            })
             const table = 'navtelecom'
             const obj = new JobToBase()
             obj.createTable(table)

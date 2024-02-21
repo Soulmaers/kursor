@@ -51,6 +51,7 @@ mainMenu.addEventListener('click', (event) => {
     menu.style.display = 'flex'
 })
 
+
 draggable()
 new Tooltip(role, [role.getAttribute('rel')]);
 new Tooltip(logout, [logout.getAttribute('rel')]);

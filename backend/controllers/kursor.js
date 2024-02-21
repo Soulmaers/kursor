@@ -50,6 +50,12 @@ exports.getKursorObjects = async (req, res) => {
 }
 
 
+
+exports.getMetas = async (req, res) => {
+    const idw = req.body.idw
+    const result = await databaseService.getMeta(idw)
+    res.json(result)
+}
 exports.objectId = async (req, res) => {
     const idw = req.body.idw
     const result = await databaseService.objectId(idw)

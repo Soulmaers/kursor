@@ -9,7 +9,9 @@ export class CreateNewObject {
         this.noValidation = this.modal.querySelector('.validation_message')
         this.closes = this.modal.querySelector('.closes')
         this.cancel = this.modal.querySelector('.cancel')
+        this.updateMeta = this.modal.querySelector('.update_meta')
         this.ok = this.modal.querySelector('.ok_modal')
+        this.buttonModal = document.querySelector('.button_modal')
         this.navi = document.querySelector('.navi_object')
         this.configParams = document.querySelector('.config_params')
         this.listModal = document.querySelector('.list_modal')
@@ -35,6 +37,8 @@ export class CreateNewObject {
             this.modal.lastElementChild.style.width = '850px'
             this.modal.lastElementChild.style.height = '650px'
             this.modal.lastElementChild.lastElementChild.style.width = '850px'
+            this.updateMeta.style.display = 'block'
+
         } else {
             this.listModal.style.display = 'block';
             this.configParams.style.display = 'none';
@@ -43,45 +47,56 @@ export class CreateNewObject {
             this.modal.lastElementChild.style.width = '650px'
             this.modal.lastElementChild.style.height = '450px'
             this.modal.lastElementChild.lastElementChild.style.width = '650px'
+            this.updateMeta.style.display = 'none'
         }
     }
     async enter() {
         console.log(this.idPref)
-        const idObject = await this.generationId(this.login)
-        const time = Math.floor(new Date().getTime() / 1000)
-        const object = {
-            login: this.login,
-            data: time,
-            idObject: this.idPref ? this.idPref : idObject,
-            nameObject: null,
-            typeObject: null,
-            typeDevice: null,
-            port: null,
-            adress: null,
-            imei: null,
-            number: null
-        }
-        Array.from(this.field_modal).forEach(e => {
-            object[e.getAttribute('rel')] = e.value
-        })
-        const valid = await this.validation(object)
-        console.log(valid)
-        if (!valid) {
-            return
+        const activeButton = document.querySelector('.toogleModalNavi')
+        if (activeButton.classList.contains('title_configurator')) {
+            console.log('сохраняем')
         }
         else {
-            //сохраняем данные по объекту в базе
+
+            const idObject = await this.generationId(this.login)
+            const time = Math.floor(new Date().getTime() / 1000)
+            const object = {
+                login: this.login,
+                data: time,
+                idObject: this.idPref ? this.idPref : idObject,
+                nameObject: null,
+                typeObject: null,
+                typeDevice: null,
+                port: null,
+                adress: null,
+                imei: null,
+                number: null
+            }
+            Array.from(this.field_modal).forEach(e => {
+                object[e.getAttribute('rel')] = e.value
+            })
             console.log(object)
-            const mess = !this.idPref ? await this.saveObject(object) : await this.updateObject(object)
-            console.log(mess)
-            new ConfiguratorParams(object.idObject, object.port)
-            // this.pop.style.display = 'none'
-            // this.modal.style.display = 'none';
-            // this.modal.style.zIndex = 0
-            // this.field_modal.forEach(e => {
-            //  e.value = ''
-            // })
-            //  await zapros(this.login)
+            const valid = await this.validation(object)
+            console.log(valid)
+            if (!valid) {
+                console.log('тута1?')
+                return
+            }
+            else {
+                console.log('тута2?')
+                //сохраняем данные по объекту в базе
+                console.log(object)
+                const mess = !this.idPref ? await this.saveObject(object) : await this.updateObject(object)
+                console.log(mess)
+                new ConfiguratorParams(object.idObject, object.port)
+                // this.pop.style.display = 'none'
+                // this.modal.style.display = 'none';
+                // this.modal.style.zIndex = 0
+                // this.field_modal.forEach(e => {
+                // e.value = ''
+                //  })
+                // await zapros(this.login)
+            }
         }
 
     }
@@ -155,6 +170,7 @@ export class CreateNewObject {
 
     async uniqImeiAndPhone(col, value, table) {
         const login = this.login
+        console.log(col, value, table, login)
         const params = {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },

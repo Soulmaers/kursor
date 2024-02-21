@@ -55,11 +55,34 @@ export class ConfiguratorParams {
         { 'sensor': 't° Прицеп 2 Ось П', 'parametr': 'tpms_temp_41' },
         ]
         this.listMeta = document.querySelector('.list_meta')
+        this.listOldData = document.querySelector('.list_old_data')
+        this.updateMeta = document.querySelector('.update_meta')
+        this.updateMeta.addEventListener('click', this.createListMeta.bind(this))
         console.log(id, port)
+        this.createListParams()
         this.createListMeta()
-        this.getMetaParams()
+
     }
-    //866795038079578
+    //868184064811311
+
+
+    async createListMeta() {
+        const data = await this.getMetaParams()
+        console.log(data)
+        const meta = data.filter((element) => element !== 'id' && element !== 'port' && element !== 'idObject');
+        const list = document.querySelectorAll('.item_meta')
+        if (list) {
+            list.forEach(e => e.remove())
+        }
+        meta.forEach(e => {
+            const li = document.createElement('li')
+            li.classList.add('item_meta')
+            li.textContent = e
+            this.listOldData.appendChild(li)
+        })
+
+    }
+
     async getMetaParams() {
         const idw = this.id
         const params = {
@@ -69,11 +92,12 @@ export class ConfiguratorParams {
             },
             body: (JSON.stringify({ idw }))
         }
-        const parametrs = await fetch('api/getParamsKursor', params)
+        const parametrs = await fetch('api/getMetas', params)
         const lastParams = await parametrs.json()
-        console.log(lastParams)
+        return lastParams
     }
-    createListMeta() {
+
+    createListParams() {
         console.log(this.storageMeta.length)
         this.storageMeta.forEach(e => {
             const li = document.createElement('li')

@@ -311,6 +311,35 @@ exports.objectsImei = async (imei) => {
     }
 }
 
+exports.getMeta = async (idObject) => {
+    const data = await databaseService.objectId(idObject);
+    if (data.length === 0) {
+        return [];
+    }
+
+    const port = data[0].port;
+    let table;
+    if (port === '20163') {
+        table = 'wialon_retranslation';
+    } else if (port === '20332') {
+        table = 'wialon_ips';
+    } else if (port === '21626' || !port) {
+        table = 'navtelecom';
+    } else {
+        return [];
+    }
+
+    try {
+        const pool = await connection;
+        const columnsQuery = `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '${table}'`;
+        const columnsResult = await pool.request().query(columnsQuery);
+        const columns = columnsResult.recordset.map(row => row.COLUMN_NAME);
+        return columns;
+    } catch (e) {
+        console.log(e);
+        return [];
+    }
+}
 
 exports.getParamsKursor = async (idObject) => {
     const data = await databaseService.objectId(idObject)
@@ -724,6 +753,7 @@ exports.setSensorsWialonToBase = async (login, idw, arr) => {
 }
 
 exports.uniqImeiAndPhone = async (col, value, table, login, id) => {
+    console.log(col, value, table, login, id)
     try {
         const pool = await connection;
         const query = `
@@ -733,12 +763,12 @@ exports.uniqImeiAndPhone = async (col, value, table, login, id) => {
                     ELSE NULL
                 END AS matched_column
             FROM ${table}
-            WHERE ${col} = @${col} AND login = @login AND id <> @id
-        `;
+            WHERE ${col} = @${col} AND login = @login
+        `; // AND id <> @id
         const result = await pool.request()
             .input(`${col}`, value)
             .input('login', login)
-            .input('id', id)
+            //  .input('id', id)
             .query(query);
 
         return result.recordset;
@@ -1320,7 +1350,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
     console.log('данные по алармам')
     const dannie = data.concat(tyres)
     let val;
-    console.log(dannie)
+    // console.log(dannie)
     let tyress;
     if (dannie[9] === 'wialon') {
         const allSens = await databaseService.ggg(dannie[6])

@@ -471,7 +471,7 @@ async function zaprosSpisokb(name) {
                     for (let y = 0; y < paramsRes.length; y++) {
                         if (paramsRes[y].name === modelUniqValues[k].temp) {
                             //   console.log(name)
-                            massItog.push([name[i][0], modelUniqValues[k].pressure, parseFloat(integer), parseFloat(paramsRes[y].value), osiBar, name[i][1], name[i][2], name[i][3], name[i][4]]);
+                            massItog.push([name[i][0], modelUniqValues[k].pressure, parseFloat(integer), parseFloat(paramsRes[y].value), osiBar, name[i][1], name[i][2], name[i][3]]);
                         }
                     }
                 }

@@ -8546,39 +8546,74 @@ i.changeColorCheck {
 .listStorMeta {
   width: 54%;
   border: 1px solid rgba(6, 28, 71, 1);
-  height: 580px;
+  height: 576px;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  overflow-y: scroll;
+
 }
 
 .listDataOldParams {
   width: 44%;
   border: 1px solid rgba(6, 28, 71, 1);
-  height: 580px;
+  height: 576px;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+}
+
+.list_old_data::-webkit-scrollbar {
+  width: 0.1em;
+  /* Ширина полосы прокрутки */
+  background-color: rgba(0, 0, 0, 0);
+  /* Цвет фона полосы прокрутки (невидимый) */
+}
+
+.list_meta::-webkit-scrollbar {
+  width: 0.1em;
+  /* Ширина полосы прокрутки */
+  background-color: rgba(0, 0, 0, 0);
+  /* Цвет фона полосы прокрутки (невидимый) */
+}
+
+.list_old_data {
+  width: 98%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  height: 570px;
+  overflow-y: auto;
 }
 
 .list_meta {
   width: 98%;
   margin: 0;
   padding: 0;
+  overflow-y: auto;
 }
 
-.item_stor {
+.item_stor,
+.item_meta {
   border-bottom: 1px solid rgba(6, 28, 71, 1);
   margin: 2px 0;
   list-style-type: none;
   display: flex;
   align-items: center;
   justify-content: space-around;
+}
+
+.item_meta {
+  width: 48%;
+  color: rgba(6, 28, 71, 1);
+  font-size: 0.8rem;
+  margin: 0 2px;
+  cursor: pointer;
 }
 
 .sensor_stor,
@@ -8625,12 +8660,12 @@ i.changeColorCheck {
   color: #fff;
   width: 100%;
   font-weight: bold;
-  padding: 2px;
   background-color: rgba(6, 28, 71, 1);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2px 0;
+  font-size: 0.8rem;
 
 }
 
@@ -8643,7 +8678,6 @@ i.changeColorCheck {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 2px 0;
   list-style-type: none;
 }
 
@@ -9351,25 +9385,28 @@ i.changeColorCheck {
 
 .button_modal {
   display: flex;
-  width: 200px;
-  justify-content: space-between;
 }
+
+
 
 .btn_modal {
   height: 20px;
-  width: 45%;
   font-size: 1rem;
   color: #fff;
   cursor: pointer;
-  padding: 2px;
+  padding: 2px 5px;
   border-radius: 5px;
   border: 2px solid rgba(6, 28, 71, 1);
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgba(6, 28, 71, 1);
-  ;
+  margin: 2px 5px;
 
+}
+
+.update_meta {
+  display: none;
 }
 
 .list_modal {
@@ -9591,7 +9628,6 @@ i.toggle_list {
   width: 100%;
   display: flex;
   justify-content: space-around;
-  align-items: center;
 }
 
 
