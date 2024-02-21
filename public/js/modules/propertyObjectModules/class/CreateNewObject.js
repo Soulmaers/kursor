@@ -1,4 +1,6 @@
 import { zapros } from '../../menu.js'
+import { ConfiguratorParams } from '../../configuratorModules/class/ConfiguratorParams.js'
+
 
 export class CreateNewObject {
     constructor(element) {
@@ -8,6 +10,9 @@ export class CreateNewObject {
         this.closes = this.modal.querySelector('.closes')
         this.cancel = this.modal.querySelector('.cancel')
         this.ok = this.modal.querySelector('.ok_modal')
+        this.navi = document.querySelector('.navi_object')
+        this.configParams = document.querySelector('.config_params')
+        this.listModal = document.querySelector('.list_modal')
         this.login = document.querySelectorAll('.log')[1].textContent
         this.field_modal = this.modal.querySelectorAll('.field_modal')
         this.element.addEventListener('click', this.viewModal.bind(this))
@@ -15,9 +20,31 @@ export class CreateNewObject {
         this.pop = document.querySelector('.popup-background')
         this.cancel.addEventListener('click', this.hiddenModal.bind(this))
         this.ok.addEventListener('click', this.enter.bind(this))
+        Array.from(this.navi.children).forEach(e => { e.addEventListener('click', this.toogleModal.bind(this, e)) })
         this.idPref = null
     }
 
+    toogleModal(e) {
+        Array.from(this.navi.children).forEach(e => e.classList.remove('toogleModalNavi'))
+        e.classList.add('toogleModalNavi')
+        if (e.classList.contains('title_configurator')) {
+            this.listModal.style.display = 'none';
+            this.configParams.style.display = 'flex';
+            this.modal.style.width = '900px'
+            this.modal.style.height = '700px'
+            this.modal.lastElementChild.style.width = '850px'
+            this.modal.lastElementChild.style.height = '650px'
+            this.modal.lastElementChild.lastElementChild.style.width = '850px'
+        } else {
+            this.listModal.style.display = 'block';
+            this.configParams.style.display = 'none';
+            this.modal.style.width = '700px'
+            this.modal.style.height = '500px'
+            this.modal.lastElementChild.style.width = '650px'
+            this.modal.lastElementChild.style.height = '450px'
+            this.modal.lastElementChild.lastElementChild.style.width = '650px'
+        }
+    }
     async enter() {
         console.log(this.idPref)
         const idObject = await this.generationId(this.login)
@@ -47,13 +74,14 @@ export class CreateNewObject {
             console.log(object)
             const mess = !this.idPref ? await this.saveObject(object) : await this.updateObject(object)
             console.log(mess)
-            this.pop.style.display = 'none'
-            this.modal.style.display = 'none';
-            this.modal.style.zIndex = 0
-            this.field_modal.forEach(e => {
-                e.value = ''
-            })
-            await zapros(this.login)
+            new ConfiguratorParams(object.idObject, object.port)
+            // this.pop.style.display = 'none'
+            // this.modal.style.display = 'none';
+            // this.modal.style.zIndex = 0
+            // this.field_modal.forEach(e => {
+            //  e.value = ''
+            // })
+            //  await zapros(this.login)
         }
 
     }
@@ -198,6 +226,8 @@ export class CreateNewObject {
             this.pop.style.display = 'block'
             this.modal.style.display = 'flex';
             this.modal.style.zIndex = 2
+            Array.from(this.navi.children).forEach(e => e.classList.remove('toogleModalNavi'))
+            Array.from(this.navi.children)[0].classList.add('toogleModalNavi')
         }
     }
 
@@ -206,7 +236,7 @@ export class CreateNewObject {
         const element = el.parentElement.parentElement
         const prefix = element.classList.contains('wialon') ? 'wialon' : 'kursor'
         const titleModales = this.modal.querySelector('.title_modales')
-        titleModales.textContent = 'Редактирование объекта'
+        titleModales.textContent = 'Объект'
         if (this.element.classList.contains('gr')) {
             return
         }
@@ -238,7 +268,7 @@ export class CreateNewObject {
                 }
                 const res = await fetch('/api/wialonObjectsId', param)
                 const result = await res.json()
-                data = [element.children[0].textContent, '-', '-', '-', result[0].imei, result[0].phone]
+                data = [element.children[0].textContent, '-', '-', 'wialon', '-', result[0].imei, result[0].phone]
                 this.idPref = idw
             }
             data.forEach((e, index) => {
@@ -248,12 +278,14 @@ export class CreateNewObject {
             this.pop.style.display = 'block'
             this.modal.style.display = 'flex';
             this.modal.style.zIndex = 2
+            Array.from(this.navi.children).forEach(e => e.classList.remove('toogleModalNavi'))
+            Array.from(this.navi.children)[0].classList.add('toogleModalNavi')
         }
     }
 
     hiddenModal() {
         const titleModales = this.modal.querySelector('.title_modales')
-        titleModales.textContent = 'Новый объект'
+        titleModales.textContent = 'Объект'
         this.pop.style.display = 'none'
         this.modal.style.display = 'none';
         this.modal.style.zIndex = 0

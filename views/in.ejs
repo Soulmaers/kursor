@@ -1181,9 +1181,28 @@
     </div>
     <div class="create_object_modal">
         <div class="header_modal">
-            <p class="title_modales" rel="o">Новый объект</p><i class="fas fa fa-times closes"></i>
+            <div class="navi_object">
+                <p class="title_modales toogleModalNavi" rel="o">Объект</p>
+                <p class="title_configurator" rel="config_params">Конфигуратор параметров</p>
+            </div><i class="fas fa fa-times closes"></i>
         </div>
         <div class="body_modal">
+            <div class="config_params">
+                <div class="listStorMeta">
+                    <ul class="list_meta">
+                        <li class="item_stor_title">
+                            <div class="sensor_stor_name">Название датчика</div>
+                            <div class="param_stor_name">Параметр</div>
+                            <div class="param_meta_name">Входящий параметр</div>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="listDataOldParams">
+                    <div class="title_stor_meta">Выбрать параметр</div>
+                    <ul class="list_old_data"></ul>
+                </div>
+            </div>
             <ul class="list_modal">
                 <li class="item_modal">
                     <p class="property_modal">Имя объекта*</p><input rel="nameObject" class="field_modal"
@@ -1217,10 +1236,11 @@
                 <div class="validation_message"></div>
                 <div class="button_modal">
                     <div class="btn_modal cancel">Отмена</div>
-                    <div class="btn_modal ok_modal">ОК</div>
+                    <div class="btn_modal ok_modal">Сохранить</div>
                 </div>
             </div>
         </div>
+
     </div>
     <div class="create_group_modal">
         <div class="header_modal">
