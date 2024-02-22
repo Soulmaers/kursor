@@ -41,7 +41,7 @@ export class CreateNewGroup {
             new Tooltip(createObject, ['Добавить новый объект'])
             console.log(parentElement.lastElementChild)
             parentElement.lastElementChild.textContent = 'Список объектов';
-            // await zapros(this.login)
+            await zapros(this.login)
         }
         else {
             const idg = await this.generationId()

@@ -63,7 +63,7 @@ class ParseBuffer {
 
     async setValidationImeiToBase() {
         const res = await databaseService.objectsImei(String(this.imei))
-        if (res) {
+        if (res.length !== 0) {
             this.allData['idObject'] = res[0].idObject
             const table = 'wialon_retranslation'
             const base = new JobToBase()

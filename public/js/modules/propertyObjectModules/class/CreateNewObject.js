@@ -24,6 +24,7 @@ export class CreateNewObject {
         this.ok.addEventListener('click', this.enter.bind(this))
         Array.from(this.navi.children).forEach(e => { e.addEventListener('click', this.toogleModal.bind(this, e)) })
         this.idPref = null
+        this.id = null
     }
 
     toogleModal(e) {
@@ -37,7 +38,8 @@ export class CreateNewObject {
             this.modal.lastElementChild.style.width = '850px'
             this.modal.lastElementChild.style.height = '650px'
             this.modal.lastElementChild.lastElementChild.style.width = '850px'
-            this.updateMeta.style.display = 'block'
+            this.id ? this.updateMeta.style.display = 'block' : 'none'
+            //  this.updateMeta.style.display = 'block'
 
         } else {
             this.listModal.style.display = 'block';
@@ -72,6 +74,7 @@ export class CreateNewObject {
                 imei: null,
                 number: null
             }
+            this.id = object.idObject
             Array.from(this.field_modal).forEach(e => {
                 object[e.getAttribute('rel')] = e.value
             })
@@ -95,7 +98,7 @@ export class CreateNewObject {
                 // this.field_modal.forEach(e => {
                 // e.value = ''
                 //  })
-                // await zapros(this.login)
+                await zapros(this.login)
             }
         }
 
@@ -239,6 +242,14 @@ export class CreateNewObject {
             return
         }
         else {
+            const list = document.querySelectorAll('.item_meta')
+            if (list) {
+                list.forEach(e => e.remove())
+            }
+            const stor = document.querySelectorAll('.item_stor')
+            if (stor) {
+                stor.forEach(e => e.remove())
+            }
             this.pop.style.display = 'block'
             this.modal.style.display = 'flex';
             this.modal.style.zIndex = 2
@@ -308,5 +319,14 @@ export class CreateNewObject {
         this.field_modal.forEach(e => {
             e.value = ''
         })
+        this.listModal.style.display = 'block';
+        this.configParams.style.display = 'none';
+        this.modal.style.width = '700px'
+        this.modal.style.height = '500px'
+        this.modal.lastElementChild.style.width = '650px'
+        this.modal.lastElementChild.style.height = '450px'
+        this.modal.lastElementChild.lastElementChild.style.width = '650px'
+        this.updateMeta.style.display = 'none'
+        this.id = null
     }
 }

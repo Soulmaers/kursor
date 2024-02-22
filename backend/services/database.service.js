@@ -704,12 +704,14 @@ exports.getSensorsWialonToBaseId = async (idw) => {
 
 
 exports.setSensorsWialonToBase = async (login, idw, arr) => {
+    // console.log(login, idw, arr)
     const data = Math.floor(new Date().getTime() / 1000)
     try {
         const pool = await connection;
         if (arr.length > 0) {
             for (const entry of arr) {
                 const [sens_name, param_name, value] = entry;
+
                 const post = `SELECT * FROM wialon_sensors WHERE login=@login AND idw=@idw AND sens_name=@sens_name`
                 const res = await pool.request()
                     .input('sens_name', sens_name)
@@ -728,11 +730,15 @@ exports.setSensorsWialonToBase = async (login, idw, arr) => {
                         .query(insertQuery);
                 }
                 else {
+                    //ALTER TABLE products ALTER COLUMN description VARCHAR(255);
+                    // console.log(idw, sens_name, param_name, value)
+                    // console.log('здесь')
+                    //  console.log(idw)
                     const updateQuery = `UPDATE wialon_sensors SET data=@data, sens_name=@sens_name, param_name=@param_name, value=@value WHERE login=@login AND idw=@idw AND sens_name=@sens_name`;
                     const res = await pool.request()
                         .input('sens_name', sens_name)
                         .input('param_name', param_name)
-                        .input('value', value)
+                        .input('value', String(value))
                         .input('login', login)
                         .input('idw', String(idw))
                         .input('data', data)
@@ -1345,7 +1351,7 @@ exports.ggg = async (id) => {
     });
 }
 
-//сохраняем в базу алармы
+//сохраняем в базу
 exports.alarmBase = async (data, tyres, alarm) => {
     console.log('данные по алармам')
     const dannie = data.concat(tyres)

@@ -16,6 +16,7 @@ export class ConfiguratorParams {
         { 'sensor': 'Спутники', 'parametr': 'sats' },
         { 'sensor': 'Широта', 'parametr': 'lat' },
         { 'sensor': 'Долгота', 'parametr': 'lon' },
+        { 'sensor': 'Время последнего сообщения', 'parametr': 'last_valid_time' },
         { 'sensor': '% нагрузки двигателя', 'parametr': 'engine_load' },
         { 'sensor': 'Рулевое левое', 'parametr': 'tpms_pressure_2' },
         { 'sensor': 'Рулевое правое', 'parametr': 'tpms_pressure_1' },
@@ -57,20 +58,32 @@ export class ConfiguratorParams {
         this.listMeta = document.querySelector('.list_meta')
         this.listOldData = document.querySelector('.list_old_data')
         this.updateMeta = document.querySelector('.update_meta')
+        this.itemMeta = null;
+        this.itemStor = null;
         this.updateMeta.addEventListener('click', this.createListMeta.bind(this))
         console.log(id, port)
-        this.createListParams()
-        this.createListMeta()
+        this.init()
+
+
+    }
+
+
+    collectingData() {
 
     }
     //868184064811311
-
+    async init() {
+        await this.createListParams() //создаем элементы из stora
+        await this.createListMeta() //создаем элементы из meta
+        //   this.collectingData()
+    }
 
     async createListMeta() {
         const data = await this.getMetaParams()
         console.log(data)
         const meta = data.filter((element) => element !== 'id' && element !== 'port' && element !== 'idObject');
         const list = document.querySelectorAll('.item_meta')
+        console.log(list)
         if (list) {
             list.forEach(e => e.remove())
         }
@@ -80,9 +93,24 @@ export class ConfiguratorParams {
             li.textContent = e
             this.listOldData.appendChild(li)
         })
-
+        this.itemMeta = [...document.querySelectorAll('.item_meta')];
+        this.itemMeta.forEach(el => { el.addEventListener('click', this.metaToggle.bind(this, el)) })
+        this.controllFlashBorder()
+        // this.id = null
     }
 
+    controllFlashBorder() {
+        const arrayStor = this.itemStor.filter(it => it.children[2].textContent).map(e => e.children[2].textContent)
+        const clickElement = document.querySelector('.clickStor')
+        this.itemMeta.forEach(el => {
+            el.style.borderLeft = 'none'
+            arrayStor.includes(el.textContent) ? el.classList.add('clickMeta') : null
+            if (clickElement && clickElement.children[2].textContent === el.textContent) {
+                el.style.borderLeft = '5px solid green'
+            }
+        })
+
+    }
     async getMetaParams() {
         const idw = this.id
         const params = {
@@ -97,8 +125,7 @@ export class ConfiguratorParams {
         return lastParams
     }
 
-    createListParams() {
-        console.log(this.storageMeta.length)
+    async createListParams() {
         this.storageMeta.forEach(e => {
             const li = document.createElement('li')
             li.classList.add('item_stor')
@@ -113,8 +140,30 @@ export class ConfiguratorParams {
             li.appendChild(param)
             const oldParam = document.createElement('div')
             oldParam.classList.add('param_meta')
-            //  oldParam.textContent = 'metaparams'
             li.appendChild(oldParam)
+            const i = document.createElement('i')
+            i.classList.add('fas')
+            i.classList.add('fa-times')
+            i.classList.add('clear_params')
+            li.appendChild(i)
         })
+        this.itemStor = [...document.querySelectorAll('.item_stor')];
+        this.itemStor.forEach(el => { el.addEventListener('click', this.storToggle.bind(this, el)) })
+    }
+
+    storToggle(el) {
+        const clickElement = document.querySelector('.clickStor')
+        clickElement ? clickElement.classList.remove('clickStor') : null
+        el.classList.add('clickStor')
+        this.controllFlashBorder()
+    }
+    metaToggle(el) {
+        const clickStor = document.querySelector('.clickStor')
+        if (clickStor) {
+            !el.classList.contains('clickMeta') ? el.classList.add('clickMeta') : null
+            clickStor.children[2].textContent = el.textContent
+            this.itemMeta.forEach(el => { el.classList.remove('clickMeta') })
+            this.controllFlashBorder()
+        }
     }
 }

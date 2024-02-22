@@ -68,7 +68,6 @@ class WriteFile {
     static async writeDataFile(globalArrayMSG, imei) {
         //  console.log(imei)
         const res = await databaseService.objectsImei(String(imei))
-        console.log(res)
         if (res.length !== 0) {
             globalArrayMSG.map(e => {
                 e.idObject = res[0].idObject

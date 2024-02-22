@@ -167,7 +167,6 @@ exports.start = async (session) => {
                 const foundObject = event.find(obj => obj.hasOwnProperty(el.id));
                 const all = res.concat(...Object.values(foundObject))
                 all.push(['Спутники', 'sats', sats])
-
                 await databaseService.setSensorsWialonToBase(session._session.au, el.id, all);
             }
         })

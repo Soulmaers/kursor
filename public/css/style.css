@@ -8586,7 +8586,6 @@ i.changeColorCheck {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   height: 570px;
   overflow-y: auto;
 }
@@ -8606,14 +8605,20 @@ i.changeColorCheck {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  cursor: pointer;
 }
 
 .item_meta {
-  width: 48%;
+  width: 48.6%;
   color: rgba(6, 28, 71, 1);
   font-size: 0.8rem;
   margin: 0 2px;
-  cursor: pointer;
+  box-sizing: border-box;
+
+}
+
+.item_meta:hover {
+  font-weight: bold;
 }
 
 .sensor_stor,
@@ -8640,15 +8645,24 @@ i.changeColorCheck {
 .sensor_stor {
   width: 37%;
   border: none;
+  background: none;
+  cursor: pointer;
 }
 
 .sensor_stor_name {
   width: 37%;
 }
 
-.param_stor_name,
-.param_stor {
+.param_stor_name {
   width: 31%;
+}
+
+.param_meta {
+  width: 29%;
+}
+
+.item_stor:hover {
+  font-weight: bold;
 }
 
 .param_meta_name,
@@ -9582,7 +9596,8 @@ i.toggle_list {
   padding-left: 64px;
 }
 
-.deleteObject {
+.deleteObject,
+.clear_params {
   cursor: pointer;
   font-size: 0.7rem;
   color: #8f170e
@@ -9630,6 +9645,16 @@ i.toggle_list {
   justify-content: space-around;
 }
 
+.clickStor {
+  border-bottom: 2px solid green;
+  font-weight: bold;
+}
+
+.clickMeta {
+  color: green;
+  font-weight: bold;
+
+}
 
 .settingsGroup:hover {
   animation-name: wiggle;
