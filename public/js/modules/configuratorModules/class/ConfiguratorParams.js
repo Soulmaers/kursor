@@ -1,9 +1,11 @@
 
 
 export class ConfiguratorParams {
-    constructor(id, port) {
+    constructor(id, port, imei, dat) {
         this.id = id
         this.port = port
+        this.imei = imei
+        this.dat = dat
         this.storageMeta = [{ 'sensor': 'Зажигание', 'parametr': 'engine' },
         { 'sensor': 'Бортовое питание', 'parametr': 'pwr' },
         { 'sensor': 'Топливо', 'parametr': 'oil' },
@@ -16,7 +18,7 @@ export class ConfiguratorParams {
         { 'sensor': 'Спутники', 'parametr': 'sats' },
         { 'sensor': 'Широта', 'parametr': 'lat' },
         { 'sensor': 'Долгота', 'parametr': 'lon' },
-        { 'sensor': 'Время последнего сообщения', 'parametr': 'last_valid_time' },
+        { 'sensor': 'Время посл. сообщения', 'parametr': 'last_valid_time' },
         { 'sensor': '% нагрузки двигателя', 'parametr': 'engine_load' },
         { 'sensor': 'Рулевое левое', 'parametr': 'tpms_pressure_2' },
         { 'sensor': 'Рулевое правое', 'parametr': 'tpms_pressure_1' },
@@ -58,24 +60,33 @@ export class ConfiguratorParams {
         this.listMeta = document.querySelector('.list_meta')
         this.listOldData = document.querySelector('.list_old_data')
         this.updateMeta = document.querySelector('.update_meta')
+        this.clearParams = null
         this.itemMeta = null;
         this.itemStor = null;
         this.updateMeta.addEventListener('click', this.createListMeta.bind(this))
-        console.log(id, port)
         this.init()
 
 
     }
 
-
-    collectingData() {
-
+    clearMetaParams(el) {
+        if (el.classList.contains('clear_params')) {
+            console.log('клик?')
+            this.itemMeta.forEach(elem => {
+                if (el.previousElementSibling.textContent === elem.textContent) {
+                    elem.style.borderLeft = 'none'
+                    elem.classList.remove('clickMeta')
+                }
+            })
+            el.previousElementSibling.textContent = ''
+        }
     }
+
     //868184064811311
     async init() {
-        await this.createListParams() //создаем элементы из stora
+        console.log(this.dat)
+        this.createListParams() //создаем элементы из stora
         await this.createListMeta() //создаем элементы из meta
-        //   this.collectingData()
     }
 
     async createListMeta() {
@@ -83,7 +94,6 @@ export class ConfiguratorParams {
         console.log(data)
         const meta = data.filter((element) => element !== 'id' && element !== 'port' && element !== 'idObject');
         const list = document.querySelectorAll('.item_meta')
-        console.log(list)
         if (list) {
             list.forEach(e => e.remove())
         }
@@ -100,6 +110,17 @@ export class ConfiguratorParams {
     }
 
     controllFlashBorder() {
+        console.log(this.dat)
+        if (this.dat) {
+            this.itemStor.map(e =>
+                this.dat.forEach(it => {
+                    if (it.params === e.children[1].textContent) {
+                        e.children[2].textContent = it.meta
+                    }
+                })
+            )
+        }
+        console.log('дальше')
         const arrayStor = this.itemStor.filter(it => it.children[2].textContent).map(e => e.children[2].textContent)
         const clickElement = document.querySelector('.clickStor')
         this.itemMeta.forEach(el => {
@@ -111,21 +132,55 @@ export class ConfiguratorParams {
         })
 
     }
-    async getMetaParams() {
-        const idw = this.id
+
+
+    async setToBaseSensStorMeta() {
+        const login = document.querySelectorAll('.log')[1].textContent
+        const id = this.id
+
+        const data = this.itemStor.filter(e => e.children[2].textContent).map(el => ({
+            id: this.id, port: this.port,
+            sens: el.children[0].value ? el.children[0].value : el.children[0].placeholder,
+            params: el.children[1].textContent, meta: el.children[2].textContent,
+            value: null,
+            status: null,
+            time: Math.floor(new Date().getTime() / 1000),
+            login: login,
+            data: null,
+            imei: this.imei
+        }))
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idw }))
+            body: (JSON.stringify({ data }))
+        }
+        const res = await fetch('api/setSensStorMeta', params)
+        const message = await res.json()
+        return message
+        //   console.log(message)
+    }
+    async getMetaParams() {
+        const idw = this.id
+        const port = this.port
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw, port }))
         }
         const parametrs = await fetch('api/getMetas', params)
         const lastParams = await parametrs.json()
         return lastParams
     }
 
-    async createListParams() {
+    createListParams() {
+        const list = document.querySelectorAll('.item_stor')
+        if (list) {
+            list.forEach(e => e.remove())
+        }
         this.storageMeta.forEach(e => {
             const li = document.createElement('li')
             li.classList.add('item_stor')
@@ -148,7 +203,9 @@ export class ConfiguratorParams {
             li.appendChild(i)
         })
         this.itemStor = [...document.querySelectorAll('.item_stor')];
+        this.clearParams = [...document.querySelectorAll('.clear_params')];
         this.itemStor.forEach(el => { el.addEventListener('click', this.storToggle.bind(this, el)) })
+        this.clearParams.forEach(el => el.addEventListener('click', this.clearMetaParams.bind(this, el)))
     }
 
     storToggle(el) {
@@ -163,6 +220,7 @@ export class ConfiguratorParams {
             !el.classList.contains('clickMeta') ? el.classList.add('clickMeta') : null
             clickStor.children[2].textContent = el.textContent
             this.itemMeta.forEach(el => { el.classList.remove('clickMeta') })
+            this.dat = null
             this.controllFlashBorder()
         }
     }

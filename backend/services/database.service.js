@@ -310,14 +310,27 @@ exports.objectsImei = async (imei) => {
         console.log(e)
     }
 }
+exports.objectsWialonImei = async (imei) => {
+    try {
+        const pool = await connection
+        postModel = `SELECT idObject FROM wialon_groups WHERE imei=@imei`
+        const result = await pool.request()
+            .input('imei', imei)
+            .query(postModel)
 
-exports.getMeta = async (idObject) => {
-    const data = await databaseService.objectId(idObject);
-    if (data.length === 0) {
-        return [];
+        return result.recordset
     }
+    catch (e) {
+        console.log(e)
+    }
+}
 
-    const port = data[0].port;
+exports.getMeta = async (idObject, port) => {
+    //const data = await databaseService.objectId(idObject);
+    // if (data.length === 0) {
+    // return [];
+    //   }
+    // const port = data[0].port;
     let table;
     if (port === '20163') {
         table = 'wialon_retranslation';
@@ -325,6 +338,8 @@ exports.getMeta = async (idObject) => {
         table = 'wialon_ips';
     } else if (port === '21626' || !port) {
         table = 'navtelecom';
+    } else if (port === 'wialon' || !port) {
+        table = 'wialon_origin';
     } else {
         return [];
     }
@@ -340,6 +355,36 @@ exports.getMeta = async (idObject) => {
         return [];
     }
 }
+
+
+
+exports.getWialonOrigin = async (idw) => {
+    try {
+        const pool = await connection
+        const postModel = `SELECT TOP (1) time_reg FROM wialon_origin WHERE idObject = ${idw} ORDER BY time_reg DESC`
+        const result = await pool.request()
+            .input('idObject', String(idw))
+            .query(postModel)
+        const record = result.recordset[0];
+        if (record !== undefined) {
+            const params = Object.keys(record).reduce((acc, key) => {
+                if (record[key] !== null) {
+                    acc[key] = record[key]
+                }
+                return acc
+            }, {});
+            return [params];
+        }
+
+        else {
+            return []
+        }
+
+    } catch (e) {
+        console.log(e);
+        throw e;
+    }
+};
 
 exports.getParamsKursor = async (idObject) => {
     const data = await databaseService.objectId(idObject)
@@ -701,6 +746,125 @@ exports.getSensorsWialonToBaseId = async (idw) => {
         console.log(error)
     }
 }
+exports.getSensStorMeta = async (idw) => {
+    try {
+        const pool = await connection;
+        const post = `SELECT params,meta FROM sens_stor_meta WHERE idw=@idw`;
+        const result = await pool.request()
+            .input('idw', String(idw))
+            .query(post);
+        return result.recordset
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
+    const now = new Date();
+    const nowTime = Math.floor(now.getTime() / 1000);
+    try {
+        const pool = await connection;
+        for (let i of data) {
+            const updateQuery = `UPDATE sens_stor_meta SET value=@value, data=@data, status= @status WHERE imei=@imei AND port=@port AND meta=@meta`;
+            const res = await pool.request()
+                .input('port', String(port))
+                .input('imei', imei)
+                .input('value', sql.VarChar, i.value)
+                .input('meta', sql.VarChar, i.key)
+                .input('data', String(nowTime))
+                .input('status', sql.VarChar, i.status)
+                .query(updateQuery);
+        }
+        return 'таблица обновлена'
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+exports.getSensStorMetaFilter = async (imei, port) => {
+    try {
+        const pool = await connection;
+        const post = `SELECT meta, value FROM sens_stor_meta WHERE imei=@imei AND port=@port`;
+        const result = await pool.request()
+            .input('imei', String(imei))
+            .input('port', String(port))
+            .query(post);
+        return result.recordset
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
+exports.setSensStorMeta = async (data) => {
+
+    const pool = await connection;
+    if (data.length !== 0) {
+
+        // Получаем уникальные params из массива data
+        const uniqueParams = Array.from(new Set(data.map(entry => entry.params)));
+
+        // Выбираем все params из sens_stor_meta
+        const selectParamsQuery = `SELECT DISTINCT params FROM sens_stor_meta WHERE idw=@idw`;
+        const paramsRes = await pool.request().input('idw', String(data[0].id)).query(selectParamsQuery);
+        const existingParams = paramsRes.recordset.map(row => row.params);
+
+        // Удаляем строки с params, которых нет в data
+        const paramsToDelete = existingParams.filter(param => !uniqueParams.includes(param));
+        for (const param of paramsToDelete) {
+            const deleteQuery = `DELETE FROM sens_stor_meta WHERE params=@params`;
+            await pool.request().input('params', param).query(deleteQuery);
+        }
+
+        for (const entry of data) {
+            const { id, port, sens, params, meta, value, status, time, login, data, imei } = entry;
+            const post = `SELECT * FROM sens_stor_meta WHERE idw=@idw AND params=@params`
+            const res = await pool.request()
+                .input('idw', String(id))
+                .input('params', params)
+                .query(post);
+            if (res.recordset.length === 0) {
+                const insertQuery = `INSERT INTO sens_stor_meta (idw,port, sens, params, meta, time, login, imei) VALUES (@idw,@port, @sens, @params, @meta, @time, @login, @imei)`;
+                const res = await pool.request()
+                    .input('idw', String(id))
+                    .input('port', port)
+                    .input('sens', sens)
+                    .input('params', params)
+                    .input('meta', meta)
+                    .input('time', time)
+                    .input('login', login)
+                    .input('imei', imei)
+                    .query(insertQuery);
+            }
+            else {
+                const updateQuery = `UPDATE sens_stor_meta SET idw=@idw, port=@port, sens=@sens, value=@value,data=@data, status=@status,params=@params, meta=@meta, time=@time,login=@login, imei=@imei 
+            WHERE idw=@idw AND params=@params`;
+                const res = await pool.request()
+                    .input('idw', String(id))
+                    .input('port', port)
+                    .input('sens', sens)
+                    .input('params', params)
+                    .input('meta', meta)
+                    .input('value', value)
+                    .input('time', time)
+                    .input('login', login)
+                    .input('imei', imei)
+                    .input('status', status)
+                    .input('data', data)
+                    .query(updateQuery);
+            }
+        }
+        return 'Выполнено'
+
+    }
+    else {
+        return 'Массив пуст'
+    }
+}
 
 
 exports.setSensorsWialonToBase = async (login, idw, arr) => {
@@ -730,10 +894,6 @@ exports.setSensorsWialonToBase = async (login, idw, arr) => {
                         .query(insertQuery);
                 }
                 else {
-                    //ALTER TABLE products ALTER COLUMN description VARCHAR(255);
-                    // console.log(idw, sens_name, param_name, value)
-                    // console.log('здесь')
-                    //  console.log(idw)
                     const updateQuery = `UPDATE wialon_sensors SET data=@data, sens_name=@sens_name, param_name=@param_name, value=@value WHERE login=@login AND idw=@idw AND sens_name=@sens_name`;
                     const res = await pool.request()
                         .input('sens_name', sens_name)
@@ -769,12 +929,12 @@ exports.uniqImeiAndPhone = async (col, value, table, login, id) => {
                     ELSE NULL
                 END AS matched_column
             FROM ${table}
-            WHERE ${col} = @${col} AND login = @login
-        `; // AND id <> @id
+            WHERE ${col} = @${col} AND login = @login AND idObject <> @id
+        `;
         const result = await pool.request()
             .input(`${col}`, value)
             .input('login', login)
-            //  .input('id', id)
+            .input('id', id)
             .query(query);
 
         return result.recordset;
@@ -852,13 +1012,12 @@ exports.updateObject = async (object) => {
 
         if (result) {
             await databaseService.updateObjectToGroups(object)
-            return 'объект обновлен'
+            return 'Объект обновлен'
         }
     }
     catch (e) {
         console.log(e)
     }
-
 }
 
 exports.updateObjectToGroups = async (object) => {

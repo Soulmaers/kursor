@@ -57,6 +57,10 @@ async function init() {
     console.log(res)
     if (res !== 'ошибка') {
         console.log('сессия открыта')
+        new WialonOrigin(session);
+        setInterval(() => {
+            new WialonOrigin(session);
+        }, 300000);
         await globalstart.start(session)
         setInterval(globalstart.start, 300000, session)
     }
@@ -117,6 +121,7 @@ exports.net = require('net');
 const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js')
 const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
 const ListenPortIPS = require('./backend/modules/wialonIPS/ParseBuffer.js')
+const WialonOrigin = require('./backend/modules/wialon/WialonOrigin.js')
 new ListenPortTP(21626)
 new ListenPortTPNew(20163)
 new ListenPortIPS(20332)

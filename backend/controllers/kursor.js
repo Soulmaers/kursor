@@ -53,9 +53,24 @@ exports.getKursorObjects = async (req, res) => {
 
 exports.getMetas = async (req, res) => {
     const idw = req.body.idw
-    const result = await databaseService.getMeta(idw)
+    const port = req.body.port
+    const result = await databaseService.getMeta(idw, port)
     res.json(result)
 }
+
+exports.setSensStorMeta = async (req, res) => {
+    const data = req.body.data
+    const result = await databaseService.setSensStorMeta(data)
+    res.json(result)
+}
+
+exports.getSensStorMeta = async (req, res) => {
+    const idw = req.body.idw
+    const result = await databaseService.getSensStorMeta(idw)
+    res.json(result)
+}
+
+
 exports.objectId = async (req, res) => {
     const idw = req.body.idw
     const result = await databaseService.objectId(idw)

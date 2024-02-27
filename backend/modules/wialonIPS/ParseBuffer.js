@@ -93,8 +93,25 @@ class ParseBuffer {
     }
 
     async setValidationImeiToBase() {
-        const res = await databaseService.objectsImei(String(this.imei))
         const nowTime = Math.floor(new Date().getTime() / 1000)
+        console.log(this.imei, this.port)
+        const data = await databaseService.getSensStorMetaFilter(this.imei, this.port)
+        console.log(data)
+        if (data) {
+            const lastObject = this.arrayData[this.arrayData.length - 1]
+            const value = data.map(el => {
+                if (lastObject.hasOwnProperty(el.meta)) {
+                    return lastObject[el.meta] !== null ? { key: el.meta, value: String(lastObject[el.meta]), status: 'true' } : { key: el.meta, value: null, status: 'false' }
+                }
+                else {
+                    return { key: el.meta, value: null, status: 'false' }
+                }
+            })
+            await databaseService.setUpdateValueSensStorMeta(this.imei, this.port, value)
+        }
+
+
+        const res = await databaseService.objectsImei(String(this.imei))
         if (res.length !== 0) {
             this.arrayData.map(e => {
                 e['idObject'] = res[0].idObject

@@ -62,6 +62,22 @@ class ParseBuffer {
 
 
     async setValidationImeiToBase() {
+        const data = await databaseService.getSensStorMetaFilter(this.imei, this.port)
+        if (data) {
+            const lastObject = this.allData
+            const value = data.map(el => {
+                if (lastObject.hasOwnProperty(el.meta)) {
+                    return lastObject[el.meta] !== null ? { key: el.meta, value: String(lastObject[el.meta]), status: 'true' } : { key: el.meta, value: null, status: 'false' }
+                }
+                else {
+                    return { key: el.meta, value: null, status: 'false' }
+                }
+            })
+            await databaseService.setUpdateValueSensStorMeta(this.imei, this.port, value)
+        }
+
+
+
         const res = await databaseService.objectsImei(String(this.imei))
         if (res.length !== 0) {
             this.allData['idObject'] = res[0].idObject
@@ -74,7 +90,7 @@ class ParseBuffer {
         }
     }
     parse(buf) {
-        console.log(buf)
+        // console.log(buf)
         if (buf.length === 0) {
             return
         }
@@ -88,7 +104,7 @@ class ParseBuffer {
         buf = buf.slice(1)
         let nameBlock;
         let value;
-        console.log(typeBlock)
+        // console.log(typeBlock)
         switch (typeBlock) {
             case 1:
                 const result = buf.slice(0, (sizeBlock - 3)).toString().split('\x00');

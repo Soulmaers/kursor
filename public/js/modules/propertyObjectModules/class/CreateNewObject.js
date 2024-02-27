@@ -5,6 +5,7 @@ import { ConfiguratorParams } from '../../configuratorModules/class/Configurator
 export class CreateNewObject {
     constructor(element) {
         this.element = element
+        this.instance = null
         this.modal = document.querySelector('.create_object_modal')
         this.noValidation = this.modal.querySelector('.validation_message')
         this.closes = this.modal.querySelector('.closes')
@@ -38,7 +39,8 @@ export class CreateNewObject {
             this.modal.lastElementChild.style.width = '850px'
             this.modal.lastElementChild.style.height = '650px'
             this.modal.lastElementChild.lastElementChild.style.width = '850px'
-            this.id ? this.updateMeta.style.display = 'block' : 'none'
+            console.log(this.id)
+            this.id || this.idPref ? this.updateMeta.style.display = 'block' : 'none'
             //  this.updateMeta.style.display = 'block'
 
         } else {
@@ -53,13 +55,13 @@ export class CreateNewObject {
         }
     }
     async enter() {
-        console.log(this.idPref)
         const activeButton = document.querySelector('.toogleModalNavi')
         if (activeButton.classList.contains('title_configurator')) {
             console.log('сохраняем')
+            const mess = await this.instance.setToBaseSensStorMeta()
+            this.handleValidationResult(mess, 'green', 'bold');
         }
         else {
-
             const idObject = await this.generationId(this.login)
             const time = Math.floor(new Date().getTime() / 1000)
             const object = {
@@ -78,20 +80,17 @@ export class CreateNewObject {
             Array.from(this.field_modal).forEach(e => {
                 object[e.getAttribute('rel')] = e.value
             })
-            console.log(object)
+            console.log(this.idPref)
             const valid = await this.validation(object)
-            console.log(valid)
             if (!valid) {
-                console.log('тута1?')
                 return
             }
             else {
-                console.log('тута2?')
                 //сохраняем данные по объекту в базе
-                console.log(object)
+                console.log(this.idPref)
                 const mess = !this.idPref ? await this.saveObject(object) : await this.updateObject(object)
-                console.log(mess)
-                new ConfiguratorParams(object.idObject, object.port)
+                this.handleValidationResult(mess, 'green', 'bold');
+                this.instance = new ConfiguratorParams(object.idObject, object.port, object.imei)
                 // this.pop.style.display = 'none'
                 // this.modal.style.display = 'none';
                 // this.modal.style.zIndex = 0
@@ -124,7 +123,7 @@ export class CreateNewObject {
                 { col: 'number', value: object.number }]
 
                 const table = 'objects'
-                const promises = columns.map(el => this.uniqImeiAndPhone(el.col, el.value, table, object.id));
+                const promises = columns.map(el => this.uniqImeiAndPhone(el.col, el.value, table, object.idObject));
                 const mergedArray = await Promise.all(promises);
                 const uniq = mergedArray.flat().filter(e => e.length !== 0);
                 console.log(uniq)
@@ -171,13 +170,13 @@ export class CreateNewObject {
 
 
 
-    async uniqImeiAndPhone(col, value, table) {
+    async uniqImeiAndPhone(col, value, table, id) {
         const login = this.login
         console.log(col, value, table, login)
         const params = {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify({ col, value, table, login })
+            body: JSON.stringify({ col, value, table, login, id })
         }
         const res = await fetch('/api/uniqImeiAndPhone', params)
         let bool = await res.json()
@@ -188,13 +187,21 @@ export class CreateNewObject {
         this.noValidation.textContent = message;
         this.noValidation.style.color = color;
         this.noValidation.style.fontWeight = fontWeight;
-        fields.forEach(e => {
-            e.style.border = '1px solid red';
+        if (fields) {
+            fields.forEach(e => {
+                e.style.border = '1px solid red';
+                setTimeout(() => {
+                    this.noValidation.textContent = '';
+                    e.style.border = 'none';
+                }, 4000);
+            });
+        }
+        else {
             setTimeout(() => {
                 this.noValidation.textContent = '';
-                e.style.border = 'none';
-            }, 3000);
-        });
+            }, 4000);
+        }
+
     }
     async saveObject(object) {
         const params = {
@@ -283,9 +290,6 @@ export class CreateNewObject {
                     acc.push(el.nameObject, el.typeObject, el.typeDevice, el.port, el.adress, el.imei, el.number)
                     return acc
                 }, [])
-                this.idPref = result[0].idObject
-            }
-            else {
                 const param = {
                     method: 'POST',
                     headers: {
@@ -293,10 +297,34 @@ export class CreateNewObject {
                     },
                     body: JSON.stringify({ idw })
                 }
-                const res = await fetch('/api/wialonObjectsId', param)
+                const rr = await fetch('/api/getSensStorMeta', param)
+                const dat = await rr.json()
+                this.idPref = result[0].idObject
+                this.instance = new ConfiguratorParams(this.idPref, result[0].port, result[0].imei, dat)
+
+            }
+            else {
+                const params = {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify({ idw })
+                }
+                const res = await fetch('/api/wialonObjectsId', params)
                 const result = await res.json()
                 data = [element.children[0].textContent, '-', '-', 'wialon', '-', result[0].imei, result[0].phone]
+                const param = {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify({ idw })
+                }
+                const rr = await fetch('/api/getSensStorMeta', param)
+                const dat = await rr.json()
                 this.idPref = idw
+                this.instance = new ConfiguratorParams(this.idPref, 'wialon', result[0].imei, dat)
             }
             data.forEach((e, index) => {
                 this.field_modal[index].value = e
@@ -328,5 +356,8 @@ export class CreateNewObject {
         this.modal.lastElementChild.lastElementChild.style.width = '650px'
         this.updateMeta.style.display = 'none'
         this.id = null
+        this.instance.itemMeta.forEach(e => e.remove())
+        this.instance.itemStor.forEach(e => e.remove())
+        // console.log(this.instance.itemMeta)
     }
 }

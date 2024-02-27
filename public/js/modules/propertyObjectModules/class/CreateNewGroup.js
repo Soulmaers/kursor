@@ -38,6 +38,7 @@ export class CreateNewGroup {
             ones.classList.add('toggle_list')
             const createObject = document.querySelector('.create_object')
             const parentElement = document.querySelector('.list_item1')
+            createObject.classList.remove('gr')
             new Tooltip(createObject, ['Добавить новый объект'])
             console.log(parentElement.lastElementChild)
             parentElement.lastElementChild.textContent = 'Список объектов';
@@ -90,8 +91,10 @@ export class CreateNewGroup {
                 new Tooltip(createObject, ['Добавить новый объект'])
                 console.log(parentElement.lastElementChild)
                 parentElement.lastElementChild.textContent = 'Список объектов';
+                createObject.classList.remove('gr')
             }
         }
+
         this.field_modal.setAttribute('rel', 't')
     }
 
