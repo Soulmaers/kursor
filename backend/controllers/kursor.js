@@ -1,6 +1,9 @@
 
 
 const databaseService = require('../services/database.service');
+//const ips = require('../../index');
+
+
 const { sortData } = require('../helpers')
 exports.getKursorObjects = async (req, res) => {
     const login = req && req.body && req.body.login ? req.body.login : null
@@ -52,6 +55,7 @@ exports.getKursorObjects = async (req, res) => {
 
 
 exports.getMetas = async (req, res) => {
+    //  console.log(ips.ips.object);
     const idw = req.body.idw
     const port = req.body.port
     const result = await databaseService.getMeta(idw, port)

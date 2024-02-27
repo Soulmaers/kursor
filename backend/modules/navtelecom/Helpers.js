@@ -64,28 +64,7 @@ class BitsCount {
 }
 
 class WriteFile {
-
     static async writeDataFile(globalArrayMSG, imei) {
-        const port = globalArrayMSG[0].port
-        console.log(imei, port)
-        const nowTime = Math.floor(new Date().getTime() / 1000)
-        const data = await databaseService.getSensStorMetaFilter(imei, port)
-        console.log(data)
-        if (data) {
-            const lastObject = globalArrayMSG[globalArrayMSG.length - 1]
-            const value = data.map(el => {
-                if (lastObject.hasOwnProperty(el.meta)) {
-                    return lastObject[el.meta] !== null ? { key: el.meta, value: String(lastObject[el.meta]), status: 'true' } : { key: el.meta, value: null, status: 'false' }
-                }
-                else {
-                    return { key: el.meta, value: null, status: 'false' }
-                }
-            })
-            console.log(value)
-            // await databaseService.setUpdateValueSensStorMeta(imei, port, value)
-        }
-
-
         const res = await databaseService.objectsImei(String(imei))
         if (res.length !== 0) {
             globalArrayMSG.map(e => {

@@ -85,3 +85,51 @@ exports.sortData = (datas) => {
     }, {}));
     return res
 }
+
+
+
+exports.setDataToBase = async (imei, port, info, object) => {
+    const data = await databaseService.getSensStorMetaFilter(imei, port)
+    if (data.length !== 0) {
+        const lastObject = !object ? info[info.length - 1] : info
+        const value = data.map(el => {
+            if (lastObject.hasOwnProperty(el.meta)) {
+                return lastObject[el.meta] !== null ? { key: el.meta, params: el.params, value: String(lastObject[el.meta]), status: 'true' } : { key: el.meta, params: el.params, value: null, status: 'false' }
+            }
+            else {
+                return { key: el.meta, params: el.params, value: null, status: 'false' }
+            }
+        })
+        await databaseService.setUpdateValueSensStorMeta(imei, port, value)
+
+        const tcpObject = !object ? info : [info]
+        //  console.log(tcpObject.length)
+        //  console.log(tcpObject)
+        for (let elem of tcpObject) {
+            const value = data.map(el => {
+                if (elem.hasOwnProperty(el.meta)) {
+                    return elem[el.meta] !== null ? { key: el.meta, params: el.params, value: String(elem[el.meta]), status: 'true' } : { key: el.meta, params: el.params, value: el.value, status: 'false' }
+                }
+                else {
+                    return { key: el.meta, params: el.params, value: el.value, status: 'false' }
+                }
+            })
+
+            if (value.length !== 0) {
+                const obj = {}
+                const nowTime = Math.floor(new Date().getTime() / 1000)
+                obj['idw'] = data[0].idw
+                obj['imei'] = imei
+                obj['port'] = port
+                obj['data'] = String(nowTime)
+                obj['time'] = String(elem.time)
+
+                value.forEach(e => {
+                    obj[e.params] = e.value
+                })
+                await databaseService.setAddDataToGlobalBase(obj)
+            }
+        }
+
+    }
+}

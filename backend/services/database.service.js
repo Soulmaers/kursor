@@ -358,27 +358,14 @@ exports.getMeta = async (idObject, port) => {
 
 
 
-exports.getWialonOrigin = async (idw) => {
+exports.getLastTimeMessage = async (idw) => {
     try {
         const pool = await connection
-        const postModel = `SELECT TOP (1) time_reg FROM wialon_origin WHERE idObject = ${idw} ORDER BY time_reg DESC`
+        const postModel = `SELECT TOP (1) data FROM globalStor WHERE idw = ${idw} ORDER BY data DESC`
         const result = await pool.request()
-            .input('idObject', String(idw))
+            .input('idw', String(idw))
             .query(postModel)
-        const record = result.recordset[0];
-        if (record !== undefined) {
-            const params = Object.keys(record).reduce((acc, key) => {
-                if (record[key] !== null) {
-                    acc[key] = record[key]
-                }
-                return acc
-            }, {});
-            return [params];
-        }
-
-        else {
-            return []
-        }
+        return result.recordset;
 
     } catch (e) {
         console.log(e);
@@ -749,7 +736,7 @@ exports.getSensorsWialonToBaseId = async (idw) => {
 exports.getSensStorMeta = async (idw) => {
     try {
         const pool = await connection;
-        const post = `SELECT params,meta FROM sens_stor_meta WHERE idw=@idw`;
+        const post = `SELECT sens,params,meta FROM sens_stor_meta WHERE idw=@idw`;
         const result = await pool.request()
             .input('idw', String(idw))
             .query(post);
@@ -787,7 +774,7 @@ exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
 exports.getSensStorMetaFilter = async (imei, port) => {
     try {
         const pool = await connection;
-        const post = `SELECT meta, value FROM sens_stor_meta WHERE imei=@imei AND port=@port`;
+        const post = `SELECT idw,imei,port,params,meta, value FROM sens_stor_meta WHERE imei=@imei AND port=@port`;
         const result = await pool.request()
             .input('imei', String(imei))
             .input('port', String(port))
@@ -797,8 +784,22 @@ exports.getSensStorMetaFilter = async (imei, port) => {
         console.log(error)
     }
 }
-
-
+exports.setAddDataToGlobalBase = async (obj) => {
+    try {
+        const pool = await connection;
+        const columns = Object.keys(obj).filter((column) => obj[column] !== null);
+        const values = Object.values(obj)
+            .filter(value => value !== null)
+            .map(value => `'${value}'`)
+            .join(', ');
+        const post = `INSERT INTO globalStor (${columns.join(', ')}) VALUES (${String(values)})`;
+        const result = await pool.request()
+            .query(post);
+        return result.recordset
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 exports.setSensStorMeta = async (data) => {
 
@@ -1641,10 +1642,21 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
             console.log(e)
         }
     }
+    const saves = async () => {
+        try {
+            const selectBase = `SELECT * FROM sens_stor_meta WHERE idw='${idw}'`
+            const result = await pool.query(selectBase)
+            return { result: result.recordset, message: car }
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
     const model = await mod();
     const models = await tyr();
     const data = await dat();
     const osi = await osis();
+    const save = await saves();
     model.result.sort((a, b) => {
         if (a.osi > b.osi) {
             return 1;
@@ -1654,7 +1666,8 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
             return 0;
         }
     });
-    return [model, models, data, osi, el]
+    const params = save.result.length !== 0 ? true : false
+    return [model, models, data, osi, el, params,]
 
 }
 
@@ -1693,6 +1706,19 @@ exports.paramsToBase = async (idw) => {
         const pool = await connection
         const selectBase = `SELECT nameCar, name, value, status, time FROM params WHERE idw=@idw AND port=@port`
         const result = await pool.request().input('idw', idw).input('port', port).query(selectBase)
+        return result.recordset
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+
+exports.paramsToBaseNew = async (idw) => {
+    try {
+        const pool = await connection
+        const selectBase = `SELECT idw,port,imei,sens,params,value,status FROM sens_stor_meta WHERE idw=@idw`
+        const result = await pool.request().input('idw', idw).query(selectBase)
         return result.recordset
     }
     catch (e) {

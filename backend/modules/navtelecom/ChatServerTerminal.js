@@ -1,6 +1,7 @@
 
 const { NavtelecomResponceData, CheckSumm, BitsCount, WriteFile } = require('./Helpers');
 const SendingCommandToTerminal = require('./SendingCommandToTerminal')
+const helpers = require('../../helpers');
 const { net } = require('../../../index')
 
 class ListenPortTP {
@@ -80,6 +81,7 @@ class ChartServerTerminal {
                     //  console.log(buf)
                     let count = type === '~A' ? buf.readUInt8() : 1
                     this.telemetrationFields(buf, type, count)
+                    this.setData(this.imei, this.port)
                     WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
                     this.globalArrayMSG = []
                     const response = Buffer.alloc(type === '~A' ? 3 : 2);
@@ -93,6 +95,7 @@ class ChartServerTerminal {
                     const eventindex = buf.readUInt32LE()
                     buf = buf.slice(3)
                     this.telemetrationFields(buf, type, 1)
+                    this.setData(this.imei, this.port)
                     WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
                     this.globalArrayMSG = []
                     const response = Buffer.alloc(6);
@@ -105,6 +108,11 @@ class ChartServerTerminal {
             }
         });
     }
+
+    async setData(imei, port) {
+        await helpers.setDataToBase(imei, port, this.globalArrayMSG)
+    }
+
 
     responces(msg) {
         const writeSuccessful = this.socket.write(this.responce);

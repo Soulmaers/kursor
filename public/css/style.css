@@ -8586,7 +8586,6 @@ i.changeColorCheck {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  height: 570px;
   overflow-y: auto;
 }
 
@@ -9761,6 +9760,10 @@ i.settingsGroup {
   position: relative;
 }
 
+.search_list_meta {
+  position: relative;
+}
+
 .loop_find {
   color: gray;
   font-weight: 300;
@@ -9770,8 +9773,23 @@ i.settingsGroup {
   top: 5px;
 }
 
+.loop_find_meta {
+  color: gray;
+  font-weight: 300;
+  font-size: 0.7rem;
+  position: absolute;
+  left: 65px;
+  top: 4px;
+}
+
 .search_input {
   padding: 2px 25px;
+}
+
+.search_input_meta {
+  width: 100px;
+  margin-left: 60px;
+  padding-left: 35px;
 }
 
 .custom-tooltip {

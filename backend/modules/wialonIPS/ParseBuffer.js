@@ -1,12 +1,17 @@
 const { net } = require('../../../index')
 const databaseService = require('../../services/database.service');
+const helpers = require('../../helpers');
 const JobToBase = require('../navtelecom/JobToBase')
 
 
 class ListenPortIPS {
+
     constructor(port) {
         this.port = port
         this.createServer(this.port)
+        //  this.object = {}
+
+
     }
     createServer(port) {
         console.log(port)
@@ -31,7 +36,7 @@ class ParseBuffer {
         this.socketOn()
         this.buf = null
         this.imei = null
-
+        //   this.listenPortIPS = listenPortIPS
     }
 
     socketOn() {
@@ -53,6 +58,7 @@ class ParseBuffer {
                     const messageType = match.groups['type']
                     const messageBody = match.groups['message']
                     const allData = {}
+
                     switch (messageType) {
                         case 'L':
                             const paramsFromMessage = messageBody.split(';');
@@ -85,37 +91,24 @@ class ParseBuffer {
                             break;
                     }
                     Object.values(allData).length !== 0 ? this.arrayData.push(allData) : null
+                    //  this.listenPortIPS.object = allData
                 }
+                this.setData(this.imei, this.port)
                 this.setValidationImeiToBase()
+
             }
         })
         this.socket.end();
     }
-
+    async setData(imei, port) {
+        await helpers.setDataToBase(imei, port, this.arrayData)
+    }
     async setValidationImeiToBase() {
-        const nowTime = Math.floor(new Date().getTime() / 1000)
-        console.log(this.imei, this.port)
-        const data = await databaseService.getSensStorMetaFilter(this.imei, this.port)
-        console.log(data)
-        if (data) {
-            const lastObject = this.arrayData[this.arrayData.length - 1]
-            const value = data.map(el => {
-                if (lastObject.hasOwnProperty(el.meta)) {
-                    return lastObject[el.meta] !== null ? { key: el.meta, value: String(lastObject[el.meta]), status: 'true' } : { key: el.meta, value: null, status: 'false' }
-                }
-                else {
-                    return { key: el.meta, value: null, status: 'false' }
-                }
-            })
-            await databaseService.setUpdateValueSensStorMeta(this.imei, this.port, value)
-        }
-
-
         const res = await databaseService.objectsImei(String(this.imei))
         if (res.length !== 0) {
             this.arrayData.map(e => {
                 e['idObject'] = res[0].idObject
-                e['time_reg'] = nowTime
+                // e['time_reg'] = nowTime
             })
             const table = 'wialon_ips'
             const base = new JobToBase()
@@ -168,6 +161,8 @@ class ParseBuffer {
     }
 
     createObjectDataShort(data, allData) {
+        const nowTime = Math.floor(new Date().getTime() / 1000)
+        allData['time_reg'] = nowTime
         allData['imei'] = this.imei;
         allData['port'] = this.port
         allData['date'] = data[0];
@@ -181,6 +176,8 @@ class ParseBuffer {
     }
 
     createObjectDataLong(data, allData) {
+        const nowTime = Math.floor(new Date().getTime() / 1000)
+        allData['time_reg'] = nowTime
         allData['imei'] = this.imei;
         allData['port'] = this.port
         allData['date'] = data[0];
@@ -213,6 +210,5 @@ class ParseBuffer {
         });
     }
 }
-
 
 module.exports = ListenPortIPS

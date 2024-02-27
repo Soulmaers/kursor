@@ -123,7 +123,7 @@ export async function conturTest(testov) {
             const group = document.createElement('div')
             group.classList.add('groups')
             el[0][el[0].length - 1] === 'kursor' ? group.classList.add('kursorgroups') : group.classList.add('wialongroups')
-            const nameGroup = el[0][5].replace(/\s/g, '_');
+            const nameGroup = el[0][6].replace(/\s/g, '_');
             group.classList.add(`${nameGroup}`)
             group.setAttribute('id', el[0][6])
             group.style.display = 'flex',
@@ -178,18 +178,18 @@ export async function conturTest(testov) {
             titleModal.appendChild(sett)
 
             let sub = false
-            if (el[0].length > 7 && el[0][7].sub.length !== 0) {
+            if (el[0].length > 8 && el[0][8].sub.length !== 0) {
                 sub = true
                 const subgroupAll = document.createElement('div');
                 subgroupAll.classList.add('subgroupAll');
                 group.appendChild(subgroupAll)
-                el[0][7].sub.forEach(item => {
-                    const nameSubGroup = item[0][5]
+                el[0][8].sub.forEach(item => {
+                    const nameSubGroup = item[0][6]
                     const subgroup = document.createElement('div');
                     subgroup.classList.add('subgroup');
                     subgroup.classList.add(`${nameSubGroup}`)
                     subgroup.setAttribute('rel', `${nameSubGroup}`)
-                    subgroup.setAttribute('id', item[0][6])
+                    subgroup.setAttribute('id', item[0][7])
                     subgroup.style.display = 'flex',
                         subgroup.style.flexDirection = 'column'
                     subgroup.style.alignItems = 'start'
@@ -199,7 +199,7 @@ export async function conturTest(testov) {
                     subTitle.classList.add('subTitle');
                     subTitle.classList.add('titlekursor');
                     subTitle.innerHTML = `<i class="fa fa-check chekHidden subcheck"></i> 
-                    ${item[0][5]} (${item.length})
+                    ${item[0][6]} (${item.length})
                      <i class="fas fa-times deleteGroup"></i>
                       <i class="fas fa-wrench settingsGroup"></i>
                       <i class="fas fa-sort-amount-up filterV"></i>
@@ -219,8 +219,6 @@ export async function conturTest(testov) {
                             listItemCar.classList.add(`${elem[4]}`)
                             listItemCar.setAttribute('rel', `${elem[4]}`)
                             listItemCar.setAttribute('id', `${elem[4]}`)
-                            // listItemCar.setAttribute('data-att', `${elem[0].imei}`)
-                            // listItemCar.setAttribute('data-phone', `${elem[0].phone}`)
                             listArr.lastChild.appendChild(listItemCar)
                             const listName = document.createElement('div')
                             listName.classList.add('list_name2')
@@ -361,9 +359,6 @@ export async function conturTest(testov) {
                     listItemCar.classList.add(`${elem[4]}`)
                     listItemCar.setAttribute('rel', `${elem[4]}`)
                     listItemCar.setAttribute('id', `${elem[4]}`)
-                    //  el[el.length - 1] !== 'kursor' ? listItemCar.setAttribute('data-att', `${elem[0].imei}`) : null
-                    // listItemCar.setAttribute('data-att', `${elem[0].imei}`)
-                    // listItemCar.setAttribute('data-phone', `${elem[0].phone}`)
                     listArr.lastChild.appendChild(listItemCar)
                     const listName = document.createElement('div')
                     listName.classList.add('list_name2')
@@ -391,10 +386,12 @@ export async function conturTest(testov) {
                     listName.prepend(listDelete)
                     new Tooltip(listDelete, ['Удалить объект'])
 
+                    console.log(elem)
                     const pref = document.createElement('i')
                     pref.classList.add('fas')
                     pref.classList.add('fa-wrench')
                     pref.classList.add('pref')
+                    pref.style.color = elem[5] === true ? 'rgba(6, 28, 71, 1)' : 'red'
                     listName.prepend(pref)
                     new Tooltip(pref, ['Редактировать объект'])
                     if (elem[elem.length - 1] === 'kursor') {

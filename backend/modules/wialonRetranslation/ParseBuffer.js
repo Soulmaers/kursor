@@ -1,5 +1,6 @@
 const { net } = require('../../../index')
 const databaseService = require('../../services/database.service');
+const helpers = require('../../helpers');
 const JobToBase = require('../navtelecom/JobToBase')
 class ListenPortTPNew {
     constructor(port) {
@@ -55,26 +56,29 @@ class ParseBuffer {
             const mask = buf.readUInt32BE()
             buf = buf.slice(4)
             this.parse(buf)
+            this.setData(this.imei, this.port)
             this.setValidationImeiToBase()
         })
         this.socket.end();
     }
 
-
+    async setData(imei, port) {
+        await helpers.setDataToBase(imei, port, this.allData, 'object')
+    }
     async setValidationImeiToBase() {
-        const data = await databaseService.getSensStorMetaFilter(this.imei, this.port)
-        if (data) {
-            const lastObject = this.allData
-            const value = data.map(el => {
-                if (lastObject.hasOwnProperty(el.meta)) {
-                    return lastObject[el.meta] !== null ? { key: el.meta, value: String(lastObject[el.meta]), status: 'true' } : { key: el.meta, value: null, status: 'false' }
-                }
-                else {
-                    return { key: el.meta, value: null, status: 'false' }
-                }
-            })
-            await databaseService.setUpdateValueSensStorMeta(this.imei, this.port, value)
-        }
+        /* const data = await databaseService.getSensStorMetaFilter(this.imei, this.port)
+         if (data) {
+             const lastObject = this.allData
+             const value = data.map(el => {
+                 if (lastObject.hasOwnProperty(el.meta)) {
+                     return lastObject[el.meta] !== null ? { key: el.meta, value: String(lastObject[el.meta]), status: 'true' } : { key: el.meta, value: null, status: 'false' }
+                 }
+                 else {
+                     return { key: el.meta, value: null, status: 'false' }
+                 }
+             })
+             await databaseService.setUpdateValueSensStorMeta(this.imei, this.port, value)
+         }*/
 
 
 

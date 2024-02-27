@@ -60,6 +60,7 @@ export class CreateNewObject {
             console.log('сохраняем')
             const mess = await this.instance.setToBaseSensStorMeta()
             this.handleValidationResult(mess, 'green', 'bold');
+            await zapros(this.login)
         }
         else {
             const idObject = await this.generationId(this.login)

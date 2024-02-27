@@ -124,7 +124,7 @@ const ListenPortIPS = require('./backend/modules/wialonIPS/ParseBuffer.js')
 const WialonOrigin = require('./backend/modules/wialon/WialonOrigin.js')
 new ListenPortTP(21626)
 new ListenPortTPNew(20163)
-new ListenPortIPS(20332)
+exports.ips = new ListenPortIPS(20332)
 
 
 

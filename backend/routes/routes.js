@@ -31,6 +31,7 @@ router.get('/api/wialonObjects', controllerWialon.wialonObjects)
 router.post('/api/wialonObjectsId', controllerWialon.wialonObjectsId)
 
 
+router.post('/api/wialonNew', controllerWialon.datawialonNew)
 router.post('/api/wialon', controllerWialon.datawialon)
 router.post('/api/wialonAll', controllerWialon.datawialonAll)
 router.post('/api/parametrs', controllerWialon.parametrs)

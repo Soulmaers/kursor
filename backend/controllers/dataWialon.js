@@ -34,6 +34,11 @@ exports.datawialon = async (req, res) => {
     const params = await databaseService.paramsToBase(idw)
     res.json(params)
 }
+exports.datawialonNew = async (req, res) => {
+    const idw = req.body.idw
+    const params = await databaseService.paramsToBaseNew(idw)
+    res.json(params)
+}
 
 exports.wialonObjects = async (req, res) => {
     const params = await databaseService.getWialonObjects()

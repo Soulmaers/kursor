@@ -195,18 +195,21 @@ async function saveSensorsToBase(allCar, session) {
         //let [rr, rez, nameSens] = await Promise.all([
 
         let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i')
+
         if (rr === undefined) {
             rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i')
         }
         //    console.log(new Date(), el.nm, rr.messages.length)
-        let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i')
+        let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id)
+        // console.log(rez)
         if (rez === undefined) {
-            rez = await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i')
+            rez = await wialonService.getAllSensorsIdDataFromWialon(el.id)
         }
         //  console.log(new Date(), el.nm, rez.length)
-        let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
+        let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id)
+        //   console.log(nameSens)
         if (nameSens === undefined) {
-            nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
+            nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id)
         }
         // console.log(new Date(), el.nm, nameSens.item.flags)
         //  ]);

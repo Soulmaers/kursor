@@ -1,4 +1,4 @@
-
+import { Findmeta } from '../../../class/FindMeta.js'
 
 export class ConfiguratorParams {
     constructor(id, port, imei, dat) {
@@ -6,56 +6,63 @@ export class ConfiguratorParams {
         this.port = port
         this.imei = imei
         this.dat = dat
-        this.storageMeta = [{ 'sensor': 'Зажигание', 'parametr': 'engine' },
-        { 'sensor': 'Бортовое питание', 'parametr': 'pwr' },
-        { 'sensor': 'Топливо', 'parametr': 'oil' },
-        { 'sensor': 'Подъём кузова', 'parametr': 'lift' },
-        { 'sensor': 'Обороты двигателя', 'parametr': 'engine_rpm' },
-        { 'sensor': 't° охлаждающей жидкости', 'parametr': 'engine_coolant_temp' },
-        { 'sensor': 'Пробег', 'parametr': 'mileage' },
-        { 'sensor': 'Скорость', 'parametr': 'speed' },
-        { 'sensor': 'Курс', 'parametr': 'course' },
-        { 'sensor': 'Спутники', 'parametr': 'sats' },
-        { 'sensor': 'Широта', 'parametr': 'lat' },
-        { 'sensor': 'Долгота', 'parametr': 'lon' },
-        { 'sensor': 'Время посл. сообщения', 'parametr': 'last_valid_time' },
-        { 'sensor': '% нагрузки двигателя', 'parametr': 'engine_load' },
-        { 'sensor': 'Рулевое левое', 'parametr': 'tpms_pressure_2' },
-        { 'sensor': 'Рулевое правое', 'parametr': 'tpms_pressure_1' },
-        { 'sensor': 'Тягач Ведущее Лев Внеш', 'parametr': 'tpms_pressure_6' },
-        { 'sensor': 'Тягач Ведущее Лев Внут', 'parametr': 'tpms_pressure_5' },
-        { 'sensor': 'Тягач Ведущее Прав Внут', 'parametr': 'tpms_pressure_4' },
-        { 'sensor': 'Тягач Ведущее Прав Внеш', 'parametr': 'tpms_pressure_3' },
-        { 'sensor': '3 Ось Лев Внеш', 'parametr': 'tpms_pressure_10' },
-        { 'sensor': '3 Ось Лев Внут', 'parametr': 'tpms_pressure_9' },
-        { 'sensor': '3 Ось Прав Внут', 'parametr': 'tpms_pressure_8' },
-        { 'sensor': '3 Ось Прав Внеш', 'parametr': 'tpms_pressure_7' },
-        { 'sensor': '4 Ось Лев Внеш', 'parametr': 'tpms_pressure_36' },
-        { 'sensor': '4 Ось Лев Внут', 'parametr': 'tpms_pressure_35' },
-        { 'sensor': '4 Ось Прав Внут', 'parametr': 'tpms_pressure_34' },
-        { 'sensor': '4 Ось Прав Внеш', 'parametr': 'tpms_pressure_33' },
-        { 'sensor': 'Прицеп 1 Ось Л', 'parametr': 'tpms_pressure_40' },
-        { 'sensor': 'Прицеп 1 Ось П', 'parametr': 'tpms_pressure_37' },
-        { 'sensor': 'Прицеп 2 Ось Л', 'parametr': 'tpms_pressure_44' },
-        { 'sensor': 'Прицеп 2 Ось П', 'parametr': 'tpms_pressure_41' },
-        { 'sensor': 't° Рулевое левое', 'parametr': 'tpms_temp_2' },
-        { 'sensor': 't° Рулевое правое', 'parametr': 'tpms_temp_1' },
-        { 'sensor': 't° Тягач Ведущее Лев Внеш', 'parametr': 'tpms_temp_6' },
-        { 'sensor': 't° Тягач Ведущее Лев Внут', 'parametr': 'tpms_temp_5' },
-        { 'sensor': 't° Тягач Ведущее Прав Внут', 'parametr': 'tpms_temp_4' },
-        { 'sensor': 't° Тягач Ведущее Прав Внеш', 'parametr': 'tpms_temp_3' },
-        { 'sensor': 't° 3 Ось Лев Внеш', 'parametr': 'tpms_temp_10' },
-        { 'sensor': 't° 3 Ось Лев Внут', 'parametr': 'tpms_temp_9' },
-        { 'sensor': 't° 3 Ось Прав Внут', 'parametr': 'tpms_temp_8' },
-        { 'sensor': 't° 3 Ось Прав Внеш', 'parametr': 'tpms_temp_7' },
-        { 'sensor': 't° 4 Ось Лев Внеш', 'parametr': 'tpms_temp_36' },
-        { 'sensor': 't° 4 Ось Лев Внут', 'parametr': 'tpms_temp_35' },
-        { 'sensor': 't° 4 Ось Прав Внут', 'parametr': 'tpms_temp_34' },
-        { 'sensor': 't° 4 Ось Прав Внеш', 'parametr': 'tpms_temp_33' },
-        { 'sensor': 't° Прицеп 1 Ось Л', 'parametr': 'tpms_temp_40' },
-        { 'sensor': 't° Прицеп 1 Ось П', 'parametr': 'tpms_temp_37' },
-        { 'sensor': 't° Прицеп 2 Ось Л', 'parametr': 'tpms_temp_44' },
-        { 'sensor': 't° Прицеп 2 Ось П', 'parametr': 'tpms_temp_41' },
+        this.element = document.querySelector('.search_input_meta')
+        this.storageMeta = [
+            { 'id': 1, 'sensor': 'Скорость', 'parametr': 'speed' },
+            { 'id': 2, 'sensor': 'Курс', 'parametr': 'course' },
+            { 'id': 3, 'sensor': 'Спутники', 'parametr': 'sats' },
+            { 'id': 4, 'sensor': 'Широта', 'parametr': 'lat' },
+            { 'id': 5, 'sensor': 'Долгота', 'parametr': 'lon' },
+            { 'id': 6, 'sensor': 'Время посл. сообщения', 'parametr': 'last_valid_time' },
+            { 'id': 7, 'sensor': 'Зажигание', 'parametr': 'engine' },
+            { 'id': 8, 'sensor': 'Бортовое питание', 'parametr': 'pwr' },
+            { 'id': 9, 'sensor': 'Топливо', 'parametr': 'oil' },
+            { 'id': 10, 'sensor': 't° топлива в баке', 'parametr': 'oiltemp' },
+            { 'id': 11, 'sensor': 'Подъём кузова', 'parametr': 'lift' },
+            { 'id': 12, 'sensor': 'Обороты двигателя', 'parametr': 'engine_rpm' },
+            { 'id': 13, 'sensor': 't° охлаждающей жидкости', 'parametr': 'engine_coolant_temp' },
+            { 'id': 14, 'sensor': 'Пробег', 'parametr': 'mileage' },
+            { 'id': 15, 'sensor': '% нагрузки двигателя', 'parametr': 'engine_load' },
+            { 'id': 16, 'sensor': 'Рулевое левое', 'parametr': 'tpms_pressure_2' },
+            { 'id': 17, 'sensor': 'Рулевое правое', 'parametr': 'tpms_pressure_1' },
+            { 'id': 18, 'sensor': 'Тягач Ведущее Лев Внеш', 'parametr': 'tpms_pressure_6' },
+            { 'id': 19, 'sensor': 'Тягач Ведущее Лев Внут', 'parametr': 'tpms_pressure_5' },
+            { 'id': 20, 'sensor': 'Тягач Ведущее Прав Внут', 'parametr': 'tpms_pressure_4' },
+            { 'id': 21, 'sensor': 'Тягач Ведущее Прав Внеш', 'parametr': 'tpms_pressure_3' },
+            { 'id': 22, 'sensor': '3 Ось Лев Внеш', 'parametr': 'tpms_pressure_10' },
+            { 'id': 23, 'sensor': '3 Ось Лев Внут', 'parametr': 'tpms_pressure_9' },
+            { 'id': 24, 'sensor': '3 Ось Прав Внут', 'parametr': 'tpms_pressure_8' },
+            { 'id': 25, 'sensor': '3 Ось Прав Внеш', 'parametr': 'tpms_pressure_7' },
+            { 'id': 26, 'sensor': '4 Ось Лев Внеш', 'parametr': 'tpms_pressure_36' },
+            { 'id': 27, 'sensor': '4 Ось Лев Внут', 'parametr': 'tpms_pressure_35' },
+            { 'id': 28, 'sensor': '4 Ось Прав Внут', 'parametr': 'tpms_pressure_34' },
+            { 'id': 29, 'sensor': '4 Ось Прав Внеш', 'parametr': 'tpms_pressure_33' },
+            { 'id': 30, 'sensor': 'Прицеп 1 Ось Л', 'parametr': 'tpms_pressure_40' },
+            { 'id': 31, 'sensor': 'Прицеп 1 Ось П', 'parametr': 'tpms_pressure_37' },
+            { 'id': 32, 'sensor': 'Прицеп 2 Ось Л', 'parametr': 'tpms_pressure_44' },
+            { 'id': 33, 'sensor': 'Прицеп 2 Ось П', 'parametr': 'tpms_pressure_41' },
+            { 'id': 34, 'sensor': 'Прицеп 3 Ось Л', 'parametr': 'tpms_pressure_39' },
+            { 'id': 35, 'sensor': 'Прицеп 3 Ось П', 'parametr': 'tpms_pressure_38' },
+            { 'id': 36, 'sensor': 't° Рулевое левое', 'parametr': 'tpms_temp_2' },
+            { 'id': 37, 'sensor': 't° Рулевое правое', 'parametr': 'tpms_temp_1' },
+            { 'id': 38, 'sensor': 't° Тягач Ведущее Лев Внеш', 'parametr': 'tpms_temp_6' },
+            { 'id': 39, 'sensor': 't° Тягач Ведущее Лев Внут', 'parametr': 'tpms_temp_5' },
+            { 'id': 40, 'sensor': 't° Тягач Ведущее Прав Внут', 'parametr': 'tpms_temp_4' },
+            { 'id': 41, 'sensor': 't° Тягач Ведущее Прав Внеш', 'parametr': 'tpms_temp_3' },
+            { 'id': 42, 'sensor': 't° 3 Ось Лев Внеш', 'parametr': 'tpms_temp_10' },
+            { 'id': 43, 'sensor': 't° 3 Ось Лев Внут', 'parametr': 'tpms_temp_9' },
+            { 'id': 44, 'sensor': 't° 3 Ось Прав Внут', 'parametr': 'tpms_temp_8' },
+            { 'id': 45, 'sensor': 't° 3 Ось Прав Внеш', 'parametr': 'tpms_temp_7' },
+            { 'id': 46, 'sensor': 't° 4 Ось Лев Внеш', 'parametr': 'tpms_temp_36' },
+            { 'id': 47, 'sensor': 't° 4 Ось Лев Внут', 'parametr': 'tpms_temp_35' },
+            { 'id': 48, 'sensor': 't° 4 Ось Прав Внут', 'parametr': 'tpms_temp_34' },
+            { 'id': 49, 'sensor': 't° 4 Ось Прав Внеш', 'parametr': 'tpms_temp_33' },
+            { 'id': 50, 'sensor': 't° Прицеп 1 Ось Л', 'parametr': 'tpms_temp_40' },
+            { 'id': 51, 'sensor': 't° Прицеп 1 Ось П', 'parametr': 'tpms_temp_37' },
+            { 'id': 52, 'sensor': 't° Прицеп 2 Ось Л', 'parametr': 'tpms_temp_44' },
+            { 'id': 53, 'sensor': 't° Прицеп 2 Ось П', 'parametr': 'tpms_temp_41' },
+            { 'id': 54, 'sensor': 't° Прицеп 3 Ось Л', 'parametr': 'tpms_temp_39' },
+            { 'id': 55, 'sensor': 't° Прицеп 3 Ось П', 'parametr': 'tpms_temp_38' },
         ]
         this.listMeta = document.querySelector('.list_meta')
         this.listOldData = document.querySelector('.list_old_data')
@@ -103,6 +110,7 @@ export class ConfiguratorParams {
             li.textContent = e
             this.listOldData.appendChild(li)
         })
+        new Findmeta(this.element)
         this.itemMeta = [...document.querySelectorAll('.item_meta')];
         this.itemMeta.forEach(el => { el.addEventListener('click', this.metaToggle.bind(this, el)) })
         this.controllFlashBorder()
@@ -116,6 +124,8 @@ export class ConfiguratorParams {
                 this.dat.forEach(it => {
                     if (it.params === e.children[1].textContent) {
                         e.children[2].textContent = it.meta
+                        e.children[0].value = it.sens
+                        e.children[0].style.color = 'gray'
                     }
                 })
             )
@@ -182,12 +192,14 @@ export class ConfiguratorParams {
             list.forEach(e => e.remove())
         }
         this.storageMeta.forEach(e => {
+
             const li = document.createElement('li')
             li.classList.add('item_stor')
             this.listMeta.appendChild(li)
             const sens = document.createElement('input')
             sens.classList.add('sensor_stor')
             sens.placeholder = e.sensor
+            sens.setAttribute('contenteditable', 'true');
             li.appendChild(sens)
             const param = document.createElement('div')
             param.classList.add('param_stor')
@@ -196,11 +208,17 @@ export class ConfiguratorParams {
             const oldParam = document.createElement('div')
             oldParam.classList.add('param_meta')
             li.appendChild(oldParam)
-            const i = document.createElement('i')
-            i.classList.add('fas')
-            i.classList.add('fa-times')
-            i.classList.add('clear_params')
-            li.appendChild(i)
+            if (e.id < 7) {
+                //  li.style.display = 'none'
+                oldParam.textContent = e.parametr
+            }
+            else {
+                const i = document.createElement('i')
+                i.classList.add('fas')
+                i.classList.add('fa-times')
+                i.classList.add('clear_params')
+                li.appendChild(i)
+            }
         })
         this.itemStor = [...document.querySelectorAll('.item_stor')];
         this.clearParams = [...document.querySelectorAll('.clear_params')];

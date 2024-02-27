@@ -258,13 +258,13 @@ exports.getAnimalsWialon = async (login) => {
 };
 
 //запрос всех сенсоров по id объекта
-exports.getAllSensorsIdDataFromWialon = async (id) => {
+exports.getAllSensorsIdDataFromWialon = async (id, sens) => {
     const prms3 = {
         "source": "",
         "indexFrom": 0,
         "indexTo": 180000,
         "unitId": id,
-        "sensorId": 0
+        "sensorId": sens ? sens : 0
 
     };
     try {
