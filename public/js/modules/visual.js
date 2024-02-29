@@ -226,16 +226,7 @@ export function visualNone(e) {
     })
 }
 
-/*
-//стираем выбранные значения графика скорости
-export function clearGraf() {
-    const selectSpeed = document.querySelector('.select_speed')
-    const inputDate = document.querySelectorAll('.input_date')
-    selectSpeed.value = 0;
-    inputDate.forEach(e => {
-        clearElem(e.value)
-    })
-}*/
+
 //создаем список под параметры
 export async function liCreate() {
     const obo = document.querySelector('.obo')
@@ -249,7 +240,7 @@ export async function liCreate() {
 export function view(arg) {
     const msg = document.querySelectorAll('.msg')
     arg.forEach((el, index) => {
-        msg[index].textContent = `${el.name}:${el.value}`
+        msg[index].textContent = `${el.name}:${el.value !== null ? el.value : '-'}`
     })
 }
 export async function viewConfigurator(arg, params, osi) {
@@ -262,15 +253,12 @@ export async function viewConfigurator(arg, params, osi) {
     const in1 = Number(res.in1)
     const allobj = res.allobj
     console.log(allobj)
+    console.log(arg)
     if (params) {
         const parametrs = convert(params)
-        const alerts = [];
+        //  const alerts = [];
         const tiresLink = document.querySelectorAll('.tires_link_test')
 
-        const par = [];
-        arg.forEach(el => {
-            par.push(el.name)
-        })
         parametrs.forEach(item => {
             let signal;
             let done;
@@ -278,13 +266,16 @@ export async function viewConfigurator(arg, params, osi) {
                 if (e.id == item.tyresdiv) {
                     arg.forEach((el) => {
                         if (el.name === item.pressure) {
+                            console.log(el.value, el.params, el.status)
+
+
                             if (active.id === '26702383') {
                                 done = parseFloat((el.value / 10).toFixed(1))
                             }
                             else {
-                                done = parseFloat(el.value)
+                                done = el.value !== null ? parseFloat(el.value) : '-'
                             }
-                            alerts.push(done)
+                            //   alerts.push(done)
                             e.children[0].style.position = 'relative'
                             e.children[0].style.border = 'none'
                             e.children[0].style.borderRadius = '30% 30% 0 0'
@@ -333,42 +324,40 @@ export async function viewConfigurator(arg, params, osi) {
                         if (el.name === item.temp) {
                             tiresLink.forEach(e => {
                                 if (e.id == item.tyresdiv) {
-                                    if (el.value === '-128' || el.value === '-50' || el.value === '-51') {
-                                        el.value = 'err'
-                                        e.children[1].style.color = 'red'
-                                        e.children[1].textContent = el.value
-                                        e.children[1].style.border = 'none'
-                                        e.children[1].style.borderRadius = '0 0 30% 30%'
-                                        const ign = document.querySelector('.ign_value').textContent
-                                        if (el.status === 'false' && in1 === 1) {
-                                            e.children[1].style.background = 'lightgray';
-                                            e.children[1].style.color = '#000'
-                                            e.children[1].style.border = 'none'
-                                            e.children[1].style.borderRadius = '0 0 30% 30%'
-                                            return
-                                        }
-                                        if (in1 === 0) {
-                                            e.children[1].style.color = 'lightgray'
-                                            return
-                                        }
-                                    }
-                                    if (el.value >= -51 && el.value <= 70 || el.value === 'err') {
-                                        e.children[1].style.border = 'none'
-                                        e.children[1].textContent = el.value !== 'err' ? el.value + '°C' : 'err'
-                                        e.children[1].setAttribute('rel', `${item.temp}`)
-                                        if (el.status === 'false' && in1 === 1) {
-                                            e.children[1].style.background = 'lightgray';
-                                            e.children[1].style.border = 'none'
-                                            e.children[1].style.borderRadius = '0 0 30% 30%'
-                                            e.children[1].style.color = '#000'
-                                            return
-                                        }
-                                        if (in1 === 0) {
-                                            e.children[1].style.color = 'lightgray'
-                                            return
-                                        }
-                                        e.children[1].style.background = 'none'
-                                        e.children[1].style.color = objColor[generT(el.value)];
+                                    e.children[1].style.border = 'none'
+                                    e.children[1].style.borderRadius = '0 0 30% 30%'
+                                    switch (el.value) {
+                                        case '-128':
+                                        case '-50':
+                                        case '-51':
+                                            e.children[1].style.color = 'red'
+                                            e.children[1].textContent = 'err'
+                                            if (el.status === 'false') {
+                                                e.children[1].style.background = 'lightgray';
+                                                e.children[1].style.color = '#000'
+                                            }
+                                            break;
+                                        case null:
+                                            e.children[1].textContent = '-' + '°C'
+                                            e.children[1].setAttribute('rel', `${item.temp}`)
+                                            if (el.status === 'false') {
+                                                e.children[1].style.background = 'lightgray';
+                                                e.children[1].style.color = '#000'
+                                            }
+                                            break;
+                                        default:
+                                            if (parseFloat(el.value) > -50 && parseFloat(el.value) <= 70) {
+                                                e.children[1].textContent = el.value + '°C'
+                                                e.children[1].setAttribute('rel', `${item.temp}`)
+                                                if (el.status === 'false') {
+                                                    e.children[1].style.background = 'lightgray';
+                                                    e.children[1].style.color = '#000'
+                                                }
+                                                else {
+                                                    e.children[1].style.background = 'none'
+                                                    e.children[1].style.color = objColor[generT(el.value)];
+                                                }
+                                            }
                                     }
                                 }
                             })
