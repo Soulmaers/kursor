@@ -56,9 +56,10 @@ exports.getKursorObjects = async (req, res) => {
 
 exports.getMetas = async (req, res) => {
     //  console.log(ips.ips.object);
-    const idw = req.body.idw
+    const idObject = req.body.idw
     const port = req.body.port
-    const result = await databaseService.getMeta(idw, port)
+    const imei = req.body.imei
+    const result = await databaseService.getMeta(idObject, port, imei)
     res.json(result)
 }
 

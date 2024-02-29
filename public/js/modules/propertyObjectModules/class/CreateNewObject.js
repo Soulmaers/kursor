@@ -357,8 +357,10 @@ export class CreateNewObject {
         this.modal.lastElementChild.lastElementChild.style.width = '650px'
         this.updateMeta.style.display = 'none'
         this.id = null
-        this.instance.itemMeta.forEach(e => e.remove())
-        this.instance.itemStor.forEach(e => e.remove())
+        this.instance.itemMeta ? this.instance.itemMeta.forEach(e => e.remove()) : null
+        this.instance.itemStor ? this.instance.itemStor.forEach(e => e.remove()) : null
+
+
         // console.log(this.instance.itemMeta)
     }
 }

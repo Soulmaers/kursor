@@ -99,7 +99,9 @@ export class ConfiguratorParams {
     async createListMeta() {
         const data = await this.getMetaParams()
         console.log(data)
-        const meta = data.filter((element) => element !== 'id' && element !== 'port' && element !== 'idObject');
+        if (data.length === 0) { return }
+        const meta = Object.entries(data[0]).filter((element) => element[0] !== 'nameCar' && element[0] !== 'imei' && element[0] !== 'id' && element[0] !== 'port' && element[0] !== 'idObject');
+        console.log(meta)
         const list = document.querySelectorAll('.item_meta')
         if (list) {
             list.forEach(e => e.remove())
@@ -107,8 +109,15 @@ export class ConfiguratorParams {
         meta.forEach(e => {
             const li = document.createElement('li')
             li.classList.add('item_meta')
-            li.textContent = e
             this.listOldData.appendChild(li)
+            const name = document.createElement('div')
+            name.classList.add('item_meta_name')
+            name.textContent = e[0]
+            li.appendChild(name)
+            const value = document.createElement('div')
+            value.classList.add('item_meta_value')
+            value.textContent = ` :${e[1]}`
+            li.appendChild(value)
         })
         new Findmeta(this.element)
         this.itemMeta = [...document.querySelectorAll('.item_meta')];
@@ -135,8 +144,8 @@ export class ConfiguratorParams {
         const clickElement = document.querySelector('.clickStor')
         this.itemMeta.forEach(el => {
             el.style.borderLeft = 'none'
-            arrayStor.includes(el.textContent) ? el.classList.add('clickMeta') : null
-            if (clickElement && clickElement.children[2].textContent === el.textContent) {
+            arrayStor.includes(el.children[0].textContent) ? el.children[0].classList.add('clickMeta') : null
+            if (clickElement && clickElement.children[2].textContent === el.children[0].textContent) {
                 el.style.borderLeft = '5px solid green'
             }
         })
@@ -174,15 +183,17 @@ export class ConfiguratorParams {
     async getMetaParams() {
         const idw = this.id
         const port = this.port
+        const imei = this.imei
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idw, port }))
+            body: (JSON.stringify({ idw, port, imei }))
         }
         const parametrs = await fetch('api/getMetas', params)
         const lastParams = await parametrs.json()
+        console.log(lastParams)
         return lastParams
     }
 
@@ -192,7 +203,6 @@ export class ConfiguratorParams {
             list.forEach(e => e.remove())
         }
         this.storageMeta.forEach(e => {
-
             const li = document.createElement('li')
             li.classList.add('item_stor')
             this.listMeta.appendChild(li)
@@ -235,9 +245,9 @@ export class ConfiguratorParams {
     metaToggle(el) {
         const clickStor = document.querySelector('.clickStor')
         if (clickStor) {
-            !el.classList.contains('clickMeta') ? el.classList.add('clickMeta') : null
-            clickStor.children[2].textContent = el.textContent
-            this.itemMeta.forEach(el => { el.classList.remove('clickMeta') })
+            !el.classList.contains('clickMeta') ? el.children[0].classList.add('clickMeta') : null
+            clickStor.children[2].textContent = el.children[0].textContent
+            this.itemMeta.forEach(el => { el.children[0].classList.remove('clickMeta') })
             this.dat = null
             this.controllFlashBorder()
         }

@@ -325,7 +325,7 @@ exports.objectsWialonImei = async (imei) => {
     }
 }
 
-exports.getMeta = async (idObject, port) => {
+exports.getMeta = async (idObject, port, imei) => {
     //const data = await databaseService.objectId(idObject);
     // if (data.length === 0) {
     // return [];
@@ -343,13 +343,22 @@ exports.getMeta = async (idObject, port) => {
     } else {
         return [];
     }
-
     try {
         const pool = await connection;
-        const columnsQuery = `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '${table}'`;
-        const columnsResult = await pool.request().query(columnsQuery);
-        const columns = columnsResult.recordset.map(row => row.COLUMN_NAME);
-        return columns;
+        const postModel = `SELECT TOP (1) * FROM ${table} WHERE idObject = ${idObject} AND imei=${imei} ORDER BY id DESC`
+        const result = await pool.request()
+            .input('idw', String(idObject))
+            .query(postModel)
+        const res = result.recordset.map(obj => {
+            const newObj = {};
+            for (const key in obj) {
+                if (obj[key] !== null) {
+                    newObj[key] = obj[key];
+                }
+            }
+            return newObj;
+        });
+        return res;
     } catch (e) {
         console.log(e);
         return [];
@@ -361,7 +370,7 @@ exports.getMeta = async (idObject, port) => {
 exports.getLastTimeMessage = async (idw) => {
     try {
         const pool = await connection
-        const postModel = `SELECT TOP (1) data FROM globalStor WHERE idw = ${idw} ORDER BY data DESC`
+        const postModel = `SELECT TOP (1) data FROM sens_stor_meta WHERE idw = ${idw} ORDER BY data DESC`
         const result = await pool.request()
             .input('idw', String(idw))
             .query(postModel)
@@ -842,7 +851,7 @@ exports.setSensStorMeta = async (data) => {
                     .query(insertQuery);
             }
             else {
-                const updateQuery = `UPDATE sens_stor_meta SET idw=@idw, port=@port, sens=@sens, value=@value,data=@data, status=@status,params=@params, meta=@meta, time=@time,login=@login, imei=@imei 
+                const updateQuery = `UPDATE sens_stor_meta SET idw=@idw, port=@port, sens=@sens, data=@data, params=@params, meta=@meta, login=@login, imei=@imei 
             WHERE idw=@idw AND params=@params`;
                 const res = await pool.request()
                     .input('idw', String(id))

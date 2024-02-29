@@ -35,7 +35,7 @@ class WialonOrigin {
                         }
                     });
 
-                    let valueOil;
+                    let valueOil = null
                     if (oil.length !== 0) {
                         valueOil = await wialonService.getAllSensorsIdDataFromWialon(el.id, oil[0][1].id)
                     }
@@ -56,10 +56,27 @@ class WialonOrigin {
                             for (let key in e.p) {
                                 allObject[key] = el.lmsg.p[key];
                             }
-                            valueOil ? allObject[`${oil[0][1].p}`] = (valueOil[index][`${oil[0][1].id}`]) : null
+                            valueOil && valueOil.length !== 0 ? allObject[`${oil[0][1].p}`] = parseFloat(valueOil[index][`${oil[0][1].id}`].toFixed(1)) : null
                         }
+                        if (e.i !== 0) {
+                            let binary = e.i.toString(2)
+                            binary = binary.split("").reverse();
+                            for (let i = 0; i < binary.length; i++) {
+                                allObject[`in${i + 1}`] = binary[i]
+                            }
+                        }
+                        if (e.o) {
+                            let binaryo = e.o.toString(2)
+                            binaryo = binaryo.split("").reverse();
+                            for (let i = 0; i < binaryo.length; i++) {
+                                allObject[`out${i + 1}`] = binaryo[i]
+                            }
+                        }
+
+
                         const nowTime = Math.floor(new Date().getTime() / 1000)
                         allObject['time_reg'] = nowTime
+
                         allArrayData.push(allObject)
                     })
                     this.setData(allArrayData[0].imei, allArrayData[0].port, allArrayData)

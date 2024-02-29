@@ -8599,19 +8599,18 @@ i.changeColorCheck {
 .item_stor,
 .item_meta {
   border-bottom: 1px solid rgba(6, 28, 71, 1);
-  margin: 2px 0;
+  padding: 2px 0;
   list-style-type: none;
   display: flex;
   align-items: center;
-  justify-content: space-around;
   cursor: pointer;
 }
+
 
 .item_meta {
   width: 48.6%;
   color: rgba(6, 28, 71, 1);
   font-size: 0.8rem;
-  margin: 0 2px;
   box-sizing: border-box;
 
 }
@@ -9652,7 +9651,7 @@ i.toggle_list {
 .clickMeta {
   color: green;
   font-weight: bold;
-
+  padding-left: 2px;
 }
 
 .settingsGroup:hover {

@@ -89,22 +89,21 @@ exports.sortData = (datas) => {
 
 
 exports.setDataToBase = async (imei, port, info, object) => {
+    console.log(imei, port)
     const data = await databaseService.getSensStorMetaFilter(imei, port)
     if (data.length !== 0) {
         const lastObject = !object ? info[info.length - 1] : info
         const value = data.map(el => {
             if (lastObject.hasOwnProperty(el.meta)) {
-                return lastObject[el.meta] !== null ? { key: el.meta, params: el.params, value: String(lastObject[el.meta]), status: 'true' } : { key: el.meta, params: el.params, value: null, status: 'false' }
+                return lastObject[el.meta] !== null ? { key: el.meta, params: el.params, value: String(lastObject[el.meta]), status: 'true' } : { key: el.meta, params: el.params, value: el.value, status: 'false' }
             }
             else {
-                return { key: el.meta, params: el.params, value: null, status: 'false' }
+                return { key: el.meta, params: el.params, value: el.value, status: 'false' }
             }
         })
         await databaseService.setUpdateValueSensStorMeta(imei, port, value)
 
         const tcpObject = !object ? info : [info]
-        //  console.log(tcpObject.length)
-        //  console.log(tcpObject)
         for (let elem of tcpObject) {
             const value = data.map(el => {
                 if (elem.hasOwnProperty(el.meta)) {

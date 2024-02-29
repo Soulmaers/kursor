@@ -386,7 +386,6 @@ export async function conturTest(testov) {
                     listName.prepend(listDelete)
                     new Tooltip(listDelete, ['Удалить объект'])
 
-                    console.log(elem)
                     const pref = document.createElement('i')
                     pref.classList.add('fas')
                     pref.classList.add('fa-wrench')
