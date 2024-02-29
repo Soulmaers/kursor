@@ -248,7 +248,7 @@ export async function viewPokasateli() {
         const paramsss = await fetch('/api/tyresView', param)
         const params = await paramsss.json()
         console.log(idw)
-        const datas = await fetch('/api/wialon', param)
+        const datas = await fetch('/api/wialonNew', param)
         const data = await datas.json()
         console.log(data)
 

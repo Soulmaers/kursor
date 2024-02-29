@@ -92,13 +92,17 @@ exports.setDataToBase = async (imei, port, info, object) => {
     console.log(imei, port)
     const data = await databaseService.getSensStorMetaFilter(imei, port)
     if (data.length !== 0) {
+        console.log(data)
+        const now = new Date();
+        const nowTime = Math.floor(now.getTime() / 1000);
+
         const lastObject = !object ? info[info.length - 1] : info
         const value = data.map(el => {
             if (lastObject.hasOwnProperty(el.meta)) {
-                return lastObject[el.meta] !== null ? { key: el.meta, params: el.params, value: String(lastObject[el.meta]), status: 'true' } : { key: el.meta, params: el.params, value: el.value, status: 'false' }
+                return lastObject[el.meta] !== null ? { key: el.meta, params: el.params, value: String(lastObject[el.meta]), status: 'true', data: nowTime } : { key: el.meta, params: el.params, value: el.value, status: 'false', data: el.data }
             }
             else {
-                return { key: el.meta, params: el.params, value: el.value, status: 'false' }
+                return { key: el.meta, params: el.params, value: el.value, status: 'false', data: el.data }
             }
         })
         await databaseService.setUpdateValueSensStorMeta(imei, port, value)

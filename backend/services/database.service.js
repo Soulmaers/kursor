@@ -768,7 +768,7 @@ exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
                 .input('imei', imei)
                 .input('value', sql.VarChar, i.value)
                 .input('meta', sql.VarChar, i.key)
-                .input('data', String(nowTime))
+                .input('data', i.data)
                 .input('status', sql.VarChar, i.status)
                 .query(updateQuery);
         }
@@ -1726,7 +1726,7 @@ exports.paramsToBase = async (idw) => {
 exports.paramsToBaseNew = async (idw) => {
     try {
         const pool = await connection
-        const selectBase = `SELECT idw,port,imei,sens,params,value,status FROM sens_stor_meta WHERE idw=@idw`
+        const selectBase = `SELECT idw,port,imei,sens,params,value,status, data FROM sens_stor_meta WHERE idw=@idw`
         const result = await pool.request().input('idw', idw).query(selectBase)
         return result.recordset
     }

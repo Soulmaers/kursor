@@ -240,7 +240,7 @@ export async function liCreate() {
 export function view(arg) {
     const msg = document.querySelectorAll('.msg')
     arg.forEach((el, index) => {
-        msg[index].textContent = `${el.name}:${el.value !== null ? el.value : '-'}`
+        msg[index].textContent = `${el.params}:${el.value !== null ? el.value : '-'}`
     })
 }
 export async function viewConfigurator(arg, params, osi) {
@@ -256,46 +256,31 @@ export async function viewConfigurator(arg, params, osi) {
     console.log(arg)
     if (params) {
         const parametrs = convert(params)
-        //  const alerts = [];
+        console.log(params)
         const tiresLink = document.querySelectorAll('.tires_link_test')
-
         parametrs.forEach(item => {
             let signal;
             let done;
+
             tiresLink.forEach(e => {
                 if (e.id == item.tyresdiv) {
+                    let pressure;
+                    let temp;
                     arg.forEach((el) => {
-                        if (el.name === item.pressure) {
-                            console.log(el.value, el.params, el.status)
-
-
-                            if (active.id === '26702383') {
-                                done = parseFloat((el.value / 10).toFixed(1))
-                            }
-                            else {
-                                done = el.value !== null ? parseFloat(el.value) : '-'
-                            }
-                            //   alerts.push(done)
+                        if (el.params === item.pressure) {
+                            pressure = el
+                            console.log('тута??????')
+                            done = active.id === '26702383' ? parseFloat((el.value / 10).toFixed(1)) : el.value !== null ? parseFloat(el.value) : '-'
                             e.children[0].style.position = 'relative'
                             e.children[0].style.border = 'none'
                             e.children[0].style.borderRadius = '30% 30% 0 0'
-                            e.children[0].innerHTML = `${done}\n<div class="ppp">Bar</div>`
+                            e.children[0].innerHTML = `${done}\n<div class="span_bar">Bar</div>`
                             e.children[0].setAttribute('rel', `${item.pressure}`)
-                            const ppp = document.querySelectorAll('.ppp')
-                            ppp.forEach(el => {
+                            const spanBar = document.querySelectorAll('.span_bar')
+                            spanBar.forEach(el => {
                                 el.style.position = 'absolute'
                                 el.style.bottom = 0
                             })
-                            const nowTime = new Date()
-                            const nowDate = Math.floor(nowTime.getTime() / 1000);
-                            const oldDate = Math.floor(new Date(el.time).getTime() / 1000);
-                            const timeStor = getHoursDiff(oldDate, nowDate)
-                            if (role === 'Администратор') {
-                                new Tooltip(e, [allobj[item.pressure] + '(' + item.pressure + ')', allobj[item.temp] + '(' + item.temp + ')', 'Актуальность данных:' + timeStor]);
-                            }
-                            else {
-                                new Tooltip(e, [allobj[item.pressure], allobj[item.temp], 'Актуальность данных:' + timeStor]);
-                            }
                             osi.forEach(element => {
                                 if (element.idOs == item.osNumber) {
                                     signal = objColor[generDav(done, element)]
@@ -321,7 +306,8 @@ export async function viewConfigurator(arg, params, osi) {
                                 e.parentElement.style.border = '1px solid #fff';
                             }
                         }
-                        if (el.name === item.temp) {
+                        if (el.params === item.temp) {
+                            temp = el
                             tiresLink.forEach(e => {
                                 if (e.id == item.tyresdiv) {
                                     e.children[1].style.border = 'none'
@@ -363,8 +349,18 @@ export async function viewConfigurator(arg, params, osi) {
                             })
                         }
                     })
+                    const nowTime = new Date()
+                    const nowDate = Math.floor(nowTime.getTime() / 1000);
+                    const timeStor = getHoursDiff(parseInt(pressure.data), nowDate)
+                    if (role === 'Администратор') {
+                        new Tooltip(e, [pressure.sens + '(' + pressure.params + ')', temp.sens + '(' + temp.params + ')', 'Актуальность данных:' + timeStor]);
+                    }
+                    else {
+                        new Tooltip(e, [pressure.sens, pressure.temp, 'Актуальность данных:' + timeStor]);
+                    }
                 }
             })
+
         })
     }
 }
