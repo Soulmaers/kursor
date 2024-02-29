@@ -330,7 +330,6 @@ class ChartServerTerminal {
                             break;
                         case 29:
                             val = buf.readUInt8()
-<<<<<<< HEAD
                             global.in1 = BitsCount.check(val, 0) ? 1 : 0//'Вход IN1(датчик сработал)' : 'Вход IN1(датчик в нормальном состоянии)'
                             global.in2 = BitsCount.check(val, 1) ? 1 : 0//'Вход IN2(датчик сработал)' : 'Вход IN2(датчик в нормальном состоянии)'
                             global.in3 = BitsCount.check(val, 2) ? 1 : 0//'Вход IN3(датчик сработал)' : 'Вход IN3(датчик в нормальном состоянии)'
@@ -339,16 +338,6 @@ class ChartServerTerminal {
                             global.in6 = BitsCount.check(val, 5) ? 1 : 0//'Вход IN6/SH1(датчик сработал)' : 'Вход IN6/SH1(датчик в нормальном состоянии)'
                             global.in7 = BitsCount.check(val, 6) ? 1 : 0//'Вход IN7/SH2(датчик сработал)' : 'Вход IN7/SH2(датчик в нормальном состоянии)'
                             global.in8 = BitsCount.check(val, 7) ? 1 : 0//'Вход IN8/SH3-SH4(датчик сработал)' : 'Вход IN8/SH3-SH4(датчик в нормальном состоянии)'
-=======
-                            global.in1 = BitsCount.check(val, 0) ? 1 : 0 //'Вход IN1(датчик сработал)' : 'Вход IN1(датчик в нормальном состоянии)'
-                            global.in2 = BitsCount.check(val, 1) ? 1 : 0 //'Вход IN2(датчик сработал)' : 'Вход IN2(датчик в нормальном состоянии)'
-                            global.in3 = BitsCount.check(val, 2) ? 1 : 0 //'Вход IN3(датчик сработал)' : 'Вход IN3(датчик в нормальном состоянии)'
-                            global.in4 = BitsCount.check(val, 3) ? 1 : 0 //'Вход IN4/AIN1/AIN2(датчик сработал)' : 'Вход IN4/AIN1/AIN2(датчик в нормальном состоянии)'
-                            global.in5 = BitsCount.check(val, 4) ? 1 : 0 //'Вход IN5/AIN3(датчик сработал)' : 'Вход IN5/AIN3(датчик в нормальном состоянии)'
-                            global.in6 = BitsCount.check(val, 5) ? 1 : 0 //'Вход IN6/SH1(датчик сработал)' : 'Вход IN6/SH1(датчик в нормальном состоянии)'
-                            global.in7 = BitsCount.check(val, 6) ? 1 : 0 //'Вход IN7/SH2(датчик сработал)' : 'Вход IN7/SH2(датчик в нормальном состоянии)'
-                            global.in8 = BitsCount.check(val, 7) ? 1 : 0 //'Вход IN8/SH3-SH4(датчик сработал)' : 'Вход IN8/SH3-SH4(датчик в нормальном состоянии)'
->>>>>>> e5d58c3d79874a1f8c0119900f3f2bdbf0e52e04
                             buf = buf.slice(1)
                             break;
                         case 30:

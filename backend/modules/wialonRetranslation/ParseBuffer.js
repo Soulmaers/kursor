@@ -31,6 +31,7 @@ class ParseBuffer {
         this.buf = null
         this.imei = null
         this.allData = {}
+        this.arrayData = []
     }
 
 
@@ -63,6 +64,7 @@ class ParseBuffer {
     }
 
     async setData(imei, port) {
+        console.log('длинна' + this.arrayData.length)
         await helpers.setDataToBase(imei, port, this.allData, 'object')
     }
     async setValidationImeiToBase() {
@@ -81,10 +83,14 @@ class ParseBuffer {
         console.log('до')
         console.log(buf)
         if (buf.length === 0) {
+            this.arrayData.push(this.allData)
             return
         }
+
         const blockLine = buf.readUInt16BE()
-        buf = buf.slice(2)
+        console.log(blockLine)
+        blockLine === 3003 ? buf = buf.slice(2) : (this.arrayData.push(this.allData), buf = buf.slice(30))
+
         const sizeBlock = buf.readUInt32BE()
         buf = buf.slice(4)
         const atributeHidden = buf.readUInt8()
