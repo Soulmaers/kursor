@@ -573,6 +573,7 @@ function proverka(arr) {
 function proverka(arr) {
     const time = new Date()
     arr.forEach(async el => {
+        console.log(el)
         if (el[4] === undefined) {
             return
         }

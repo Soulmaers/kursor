@@ -246,162 +246,84 @@ export function view(arg) {
 export async function viewConfigurator(arg, params, osi) {
     const role = document.querySelector('.role').getAttribute('rel')
     const active = document.querySelector('.color')
-    const idw = active.id
 
-    const res = !active.classList.contains('kursor') ? await wialonData(idw) : await kursorData(arg);
-    console.log(res)
-    const in1 = Number(res.in1)
-    const allobj = res.allobj
-    console.log(allobj)
-    console.log(arg)
     if (params) {
         const parametrs = convert(params)
-        console.log(params)
         const tiresLink = document.querySelectorAll('.tires_link_test')
         parametrs.forEach(item => {
-            let signal;
-            let done;
+            const pressure = arg.find(element => element.params === item.pressure);
+            const temp = arg.find(element => element.params === item.temp);
+            const element = osi.find(element => element.idOs === item.osNumber);
+            const tireLink = Array.from(tiresLink).find(e => e.id == item.tyresdiv);
 
-            tiresLink.forEach(e => {
-                if (e.id == item.tyresdiv) {
-                    let pressure;
-                    let temp;
-                    arg.forEach((el) => {
-                        if (el.params === item.pressure) {
-                            pressure = el
-                            console.log('тута??????')
-                            done = active.id === '26702383' ? parseFloat((el.value / 10).toFixed(1)) : el.value !== null ? parseFloat(el.value) : '-'
-                            e.children[0].style.position = 'relative'
-                            e.children[0].style.border = 'none'
-                            e.children[0].style.borderRadius = '30% 30% 0 0'
-                            e.children[0].innerHTML = `${done}\n<div class="span_bar">Bar</div>`
-                            e.children[0].setAttribute('rel', `${item.pressure}`)
-                            const spanBar = document.querySelectorAll('.span_bar')
-                            spanBar.forEach(el => {
-                                el.style.position = 'absolute'
-                                el.style.bottom = 0
-                            })
-                            osi.forEach(element => {
-                                if (element.idOs == item.osNumber) {
-                                    signal = objColor[generDav(done, element)]
-                                }
-                            })
-                            const ign = document.querySelector('.ign_value').textContent
-                            if (el.status === 'false' && in1 === 1) {
-                                e.children[0].style.background = 'lightgray';
-                                e.children[0].style.color = '#000'
-                                return
-                            }
-                            if (in1 === 0) {
-                                e.children[0].style.color = 'lightgray'
-                                return
-                            }
-                            e.children[0].style.background = 'none'
-                            e.children[0].style.color = signal;
-                            if (signal === '#FF0000') {
-                                e.parentElement.style.border = `1px solid ${signal}`;
-                                e.parentElement.style.borderRadius = '15px'
-                            }
-                            else {
-                                e.parentElement.style.border = '1px solid #fff';
-                            }
-                        }
-                        if (el.params === item.temp) {
-                            temp = el
-                            tiresLink.forEach(e => {
-                                if (e.id == item.tyresdiv) {
-                                    e.children[1].style.border = 'none'
-                                    e.children[1].style.borderRadius = '0 0 30% 30%'
-                                    switch (el.value) {
-                                        case '-128':
-                                        case '-50':
-                                        case '-51':
-                                            e.children[1].style.color = 'red'
-                                            e.children[1].textContent = 'err'
-                                            if (el.status === 'false') {
-                                                e.children[1].style.background = 'lightgray';
-                                                e.children[1].style.color = '#000'
-                                            }
-                                            break;
-                                        case null:
-                                            e.children[1].textContent = '-' + '°C'
-                                            e.children[1].setAttribute('rel', `${item.temp}`)
-                                            if (el.status === 'false') {
-                                                e.children[1].style.background = 'lightgray';
-                                                e.children[1].style.color = '#000'
-                                            }
-                                            break;
-                                        default:
-                                            if (parseFloat(el.value) > -50 && parseFloat(el.value) <= 70) {
-                                                e.children[1].textContent = el.value + '°C'
-                                                e.children[1].setAttribute('rel', `${item.temp}`)
-                                                if (el.status === 'false') {
-                                                    e.children[1].style.background = 'lightgray';
-                                                    e.children[1].style.color = '#000'
-                                                }
-                                                else {
-                                                    e.children[1].style.background = 'none'
-                                                    e.children[1].style.color = objColor[generT(el.value)];
-                                                }
-                                            }
-                                    }
-                                }
-                            })
-                        }
-                    })
-                    const nowTime = new Date()
-                    const nowDate = Math.floor(nowTime.getTime() / 1000);
-                    const timeStor = getHoursDiff(parseInt(pressure.data), nowDate)
-                    console.log(pressure.data)
-                    if (role === 'Администратор') {
-                        new Tooltip(e, [pressure.sens + '(' + pressure.params + ')', temp.sens + '(' + temp.params + ')', 'Актуальность данных:' + (pressure.data ? timeStor : '-')]);
-                    }
-                    else {
-                        new Tooltip(e, [pressure.sens, pressure.temp, 'Актуальность данных:' + (pressure.data ? timeStor : '-')]);
-                    }
+            if (pressure && temp && tireLink) {
+                const done = active.id === '26702383' ? parseFloat((pressure.value / 10).toFixed(1)) : pressure.value !== null ? parseFloat(pressure.value) : '-';
+                const signal = element ? objColor[generDav(done, element)] : null;
+                tireLink.children[0].style.position = 'relative';
+                tireLink.children[0].style.border = 'none';
+                tireLink.children[0].style.borderRadius = '30% 30% 0 0';
+                tireLink.children[0].innerHTML = `${done}\n<div class="span_bar">Bar</div>`;
+                tireLink.children[0].setAttribute('rel', `${item.pressure}`);
+                const spanBar = tireLink.querySelector('.span_bar');
+                spanBar.style.position = 'absolute';
+                spanBar.style.bottom = 0;
+
+                const backgroundStyle = pressure.status === 'false' ? 'lightgray' : 'none';
+                const colorStyle = pressure.status === 'false' ? '#000' : signal;
+                const borderStyle = signal === '#FF0000' ? `1px solid ${signal}` : '1px solid #fff';
+
+                tireLink.children[0].style.background = backgroundStyle;
+                tireLink.children[0].style.color = colorStyle;
+                tireLink.parentElement.style.border = borderStyle;
+
+                if (signal === '#FF0000') {
+                    tireLink.parentElement.style.borderRadius = '15px';
                 }
-            })
+                switch (temp.value) {
+                    case '-128':
+                    case '-50':
+                    case '-51':
+                        tireLink.children[1].style.color = 'red';
+                        tireLink.children[1].textContent = 'err';
+                        if (temp.status === 'false') {
+                            tireLink.children[1].style.background = 'lightgray';
+                            tireLink.children[1].style.color = '#000';
+                        }
+                        break;
+                    case null:
+                        tireLink.children[1].textContent = '-' + '°C';
+                        tireLink.children[1].setAttribute('rel', `${item.temp}`);
+                        if (temp.status === 'false') {
+                            tireLink.children[1].style.background = 'lightgray';
+                            tireLink.children[1].style.color = '#000';
+                        }
+                        break;
+                    default:
+                        if (parseFloat(temp.value) > -50 && parseFloat(temp.value) <= 70) {
+                            tireLink.children[1].textContent = temp.value + '°C';
+                            tireLink.children[1].setAttribute('rel', `${item.temp}`);
+                            if (temp.status === 'false') {
+                                tireLink.children[1].style.background = 'lightgray';
+                                tireLink.children[1].style.color = '#000';
+                            } else {
+                                tireLink.children[1].style.background = 'none';
+                                tireLink.children[1].style.color = objColor[generT(temp.value)];
+                            }
+                        }
+                }
+                const nowTime = new Date();
+                const nowDate = Math.floor(nowTime.getTime() / 1000);
+                const timeStor = pressure.data ? getHoursDiff(parseInt(pressure.data), nowDate) : '-'
+                if (role === 'Администратор') {
+                    new Tooltip(tireLink, [pressure.sens + '(' + pressure.params + ')', temp.sens + '(' + temp.params + ')', 'Актуальность данных:' + timeStor]);
+                }
+                else {
+                    new Tooltip(tireLink, [pressure.sens, pressure.temp, 'Актуальность данных:' + timeStor]);
+                }
+            }
+
         })
     }
-}
-
-async function wialonData(idw) {
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ idw }))
-    }
-    const sens = await fetch('/api/getSensorsWialonToBaseId', param)
-    const allsens = await sens.json()
-
-    let in1;
-    allsens.forEach(i => {
-        if (i.sens_name === 'Зажигание') {
-            in1 = i.value
-        }
-    })
-    const allobj = allsens.reduce((acc, el) => {
-        acc[el.param_name] = el.sens_name
-        return acc
-    }, {})
-    return { in1: in1, allobj: allobj }
-
-}
-
-async function kursorData(arg) {
-    let in1
-    arg.forEach(e => {
-        if (e.name === 'in1') {
-            in1 = e.value === 'Вход IN1(датчик сработал)' ? 1 : 0
-        }
-    })
-    const allobj = arg.reduce((acc, el) => {
-        acc[el.name] = el.name
-        return acc
-    }, {})
-    return { in1: in1, allobj: allobj }
 }
 
 function getHoursDiff(startDate, nowDate) {
