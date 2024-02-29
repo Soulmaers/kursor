@@ -783,7 +783,7 @@ exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
 exports.getSensStorMetaFilter = async (imei, port) => {
     try {
         const pool = await connection;
-        const post = `SELECT idw,imei,port,params,meta, value FROM sens_stor_meta WHERE imei=@imei AND port=@port`;
+        const post = `SELECT idw,imei,port,params,meta, value, data FROM sens_stor_meta WHERE imei=@imei AND port=@port`;
         const result = await pool.request()
             .input('imei', String(imei))
             .input('port', String(port))

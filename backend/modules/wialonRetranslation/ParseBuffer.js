@@ -64,8 +64,7 @@ class ParseBuffer {
     }
 
     async setData(imei, port) {
-        console.log('длинна' + this.arrayData.length)
-        await helpers.setDataToBase(imei, port, this.allData, 'object')
+        await helpers.setDataToBase(imei, port, this.arrayData)
     }
     async setValidationImeiToBase() {
         const res = await databaseService.objectsImei(String(this.imei))
@@ -80,17 +79,12 @@ class ParseBuffer {
         }
     }
     parse(buf) {
-        console.log('до')
-        console.log(buf)
         if (buf.length === 0) {
             this.arrayData.push(this.allData)
             return
         }
-
         const blockLine = buf.readUInt16BE()
-        console.log(blockLine)
         blockLine === 3003 ? buf = buf.slice(2) : (this.arrayData.push(this.allData), buf = buf.slice(30))
-
         const sizeBlock = buf.readUInt32BE()
         buf = buf.slice(4)
         const atributeHidden = buf.readUInt8()
@@ -99,9 +93,6 @@ class ParseBuffer {
         buf = buf.slice(1)
         let nameBlock;
         let value;
-        console.log('после')
-        console.log(buf)
-        console.log(typeBlock)
         switch (typeBlock) {
             case 1:
                 const result = buf.slice(0, (sizeBlock - 3)).toString().split('\x00');

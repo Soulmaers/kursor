@@ -352,15 +352,15 @@ export async function viewConfigurator(arg, params, osi) {
                     const nowTime = new Date()
                     const nowDate = Math.floor(nowTime.getTime() / 1000);
                     const timeStor = getHoursDiff(parseInt(pressure.data), nowDate)
+                    console.log(pressure.data)
                     if (role === 'Администратор') {
-                        new Tooltip(e, [pressure.sens + '(' + pressure.params + ')', temp.sens + '(' + temp.params + ')', 'Актуальность данных:' + timeStor]);
+                        new Tooltip(e, [pressure.sens + '(' + pressure.params + ')', temp.sens + '(' + temp.params + ')', 'Актуальность данных:' + (pressure.data ? timeStor : '-')]);
                     }
                     else {
-                        new Tooltip(e, [pressure.sens, pressure.temp, 'Актуальность данных:' + timeStor]);
+                        new Tooltip(e, [pressure.sens, pressure.temp, 'Актуальность данных:' + (pressure.data ? timeStor : '-')]);
                     }
                 }
             })
-
         })
     }
 }

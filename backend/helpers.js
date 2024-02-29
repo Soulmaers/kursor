@@ -88,15 +88,14 @@ exports.sortData = (datas) => {
 
 
 
-exports.setDataToBase = async (imei, port, info, object) => {
+exports.setDataToBase = async (imei, port, info) => {
     console.log(imei, port)
     const data = await databaseService.getSensStorMetaFilter(imei, port)
     if (data.length !== 0) {
-        console.log(data)
         const now = new Date();
         const nowTime = Math.floor(now.getTime() / 1000);
 
-        const lastObject = !object ? info[info.length - 1] : info
+        const lastObject = info[info.length - 1]
         const value = data.map(el => {
             if (lastObject.hasOwnProperty(el.meta)) {
                 return lastObject[el.meta] !== null ? { key: el.meta, params: el.params, value: String(lastObject[el.meta]), status: 'true', data: nowTime } : { key: el.meta, params: el.params, value: el.value, status: 'false', data: el.data }
@@ -107,7 +106,7 @@ exports.setDataToBase = async (imei, port, info, object) => {
         })
         await databaseService.setUpdateValueSensStorMeta(imei, port, value)
 
-        const tcpObject = !object ? info : [info]
+        const tcpObject = info
         for (let elem of tcpObject) {
             const value = data.map(el => {
                 if (elem.hasOwnProperty(el.meta)) {
