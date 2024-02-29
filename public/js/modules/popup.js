@@ -77,10 +77,11 @@ export async function logsView(array) {
     }, []);
     const arrayIdGroup = arrayObjects.reduce((acc, el) => {
         Object.values(el).forEach(subArray => {
-            acc.push([subArray[4], subArray[5]]);
+            acc.push([subArray[4], subArray[6]]);
         });
         return acc;
     }, []);
+    console.log(arrayIdGroup)
     const param = {
         method: "POST",
         headers: {
@@ -104,9 +105,6 @@ export async function logsView(array) {
     const viewNum = value.quant - resultsLog[0].quantity
     viewTableNum(viewNum)
 
-
-
-
     if (num === 0) {
         previus = value.quant
     }
@@ -126,12 +124,7 @@ export async function logsView(array) {
             const group = login === 'Курсор' ? 'demo' : arrayIdGroup
                 .filter(it => it[0] === id)
                 .map(it => it[1]);
-            const group2 = login === 'Курсор' ? 'demo' : arrayIdGroup.reduce((acc, it) => {
-                if (it[0] === id) {
-                    acc.push(it[1]);
-                }
-                return acc;
-            }, []);
+            console.log(group)
             const time = new Date(Number(el.time) * 1000)
             const day = time.getDate();
             const month = (time.getMonth() + 1).toString().padStart(2, '0');
@@ -200,6 +193,7 @@ export async function logsView(array) {
             const group = arrayIdGroup
                 .filter(it => it[0] === id)
                 .map(it => it[1]);
+            console.log(group)
             const int = Object.values(parsedContent[0]);
             int.shift();
             const time = times(new Date(Number(el.time) * 1000));
