@@ -5,11 +5,10 @@ const databaseService = require('../services/database.service');
 
 exports.spisok = async (req, res) => {
     const idw = req.body.idw
-    const arr = req.body.arrId
     const datas = req.body.uniqData
     if (datas) {
         const promises = datas.map(async (idw) => {
-            const nameSensors = await databaseService.loadParamsViewList(idw.nameCar, idw.id, idw);
+            const nameSensors = await databaseService.loadParamsViewList(idw.nameCar, Number(idw), idw);
             return { result: nameSensors, idw };
         });
         // Дождаться завершения всех промисов и вернуть результат
@@ -34,11 +33,7 @@ exports.datawialon = async (req, res) => {
     const params = await databaseService.paramsToBase(idw)
     res.json(params)
 }
-exports.datawialonNew = async (req, res) => {
-    const idw = req.body.idw
-    const params = await databaseService.paramsToBaseNew(idw)
-    res.json(params)
-}
+
 
 exports.wialonObjects = async (req, res) => {
     const params = await databaseService.getWialonObjects()
@@ -74,7 +69,7 @@ exports.loadInterval = async (req, res) => {
     res.json(params)
 }
 exports.getSensorsWialonToBase = async (req, res) => {
-    const arr = req.body.arr
+    const arr = req.body.data
     const login = req.body.login
     const params = await databaseService.getSensorsWialonToBase(arr, login)
     res.json(params)

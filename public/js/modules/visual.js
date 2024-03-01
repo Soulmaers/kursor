@@ -250,6 +250,8 @@ export async function viewConfigurator(arg, params, osi) {
     if (params) {
         const parametrs = convert(params)
         const tiresLink = document.querySelectorAll('.tires_link_test')
+        let engine = arg.find(element => element.params === 'engine');
+        engine = engine ? engine.value : 0
         parametrs.forEach(item => {
             const pressure = arg.find(element => element.params === item.pressure);
             const temp = arg.find(element => element.params === item.temp);
@@ -268,8 +270,8 @@ export async function viewConfigurator(arg, params, osi) {
                 spanBar.style.position = 'absolute';
                 spanBar.style.bottom = 0;
 
-                const backgroundStyle = pressure.status === 'false' ? 'lightgray' : 'none';
-                const colorStyle = pressure.status === 'false' ? '#000' : signal;
+                const backgroundStyle = engine === '0' ? 'none' : pressure.status === 'false' ? 'lightgray' : 'none'
+                const colorStyle = engine === '0' ? 'lightgray' : pressure.status === 'false' ? '#000' : signal
                 const borderStyle = signal === '#FF0000' ? `1px solid ${signal}` : '1px solid #fff';
 
                 tireLink.children[0].style.background = backgroundStyle;
@@ -279,37 +281,25 @@ export async function viewConfigurator(arg, params, osi) {
                 if (signal === '#FF0000') {
                     tireLink.parentElement.style.borderRadius = '15px';
                 }
+                const backgroundStyleTemp = engine === '0' ? 'none' : temp.status === 'false' ? 'lightgray' : 'none'
+                const colorStyleTemp = engine === '0' ? 'lightgray' : temp.status === 'false' ? '#000' : objColor[generT(parseFloat(temp.value))];
+                tireLink.children[1].style.background = backgroundStyleTemp;
+                tireLink.children[1].style.color = colorStyleTemp;
+
                 switch (temp.value) {
                     case '-128':
                     case '-50':
                     case '-51':
                         tireLink.children[1].style.color = 'red';
                         tireLink.children[1].textContent = 'err';
-                        if (temp.status === 'false') {
-                            tireLink.children[1].style.background = 'lightgray';
-                            tireLink.children[1].style.color = '#000';
-                        }
                         break;
                     case null:
                         tireLink.children[1].textContent = '-' + '°C';
                         tireLink.children[1].setAttribute('rel', `${item.temp}`);
-                        if (temp.status === 'false') {
-                            tireLink.children[1].style.background = 'lightgray';
-                            tireLink.children[1].style.color = '#000';
-                        }
                         break;
                     default:
-                        if (parseFloat(temp.value) > -50 && parseFloat(temp.value) <= 70) {
-                            tireLink.children[1].textContent = temp.value + '°C';
-                            tireLink.children[1].setAttribute('rel', `${item.temp}`);
-                            if (temp.status === 'false') {
-                                tireLink.children[1].style.background = 'lightgray';
-                                tireLink.children[1].style.color = '#000';
-                            } else {
-                                tireLink.children[1].style.background = 'none';
-                                tireLink.children[1].style.color = objColor[generT(temp.value)];
-                            }
-                        }
+                        tireLink.children[1].textContent = temp.value + '°C';
+                        tireLink.children[1].setAttribute('rel', `${item.temp}`);
                 }
                 const nowTime = new Date();
                 const nowDate = Math.floor(nowTime.getTime() / 1000);

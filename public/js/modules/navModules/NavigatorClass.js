@@ -89,6 +89,7 @@ export class NavigationMenu {
     }
 
     karta(elem) {
+        console.log('карта')
         elem.style.display = 'flex'
         const checkTypeMarkers = document.querySelector('.checkTypeMarkers')
         const tableInfoCar = document.querySelector('.tableInfoCar')

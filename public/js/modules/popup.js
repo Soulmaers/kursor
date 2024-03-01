@@ -7,6 +7,7 @@ import { visual } from './visual.js'
 import { iconStatusClick } from './navigator.js'
 async function createPopup(array) {
     const arr = Object.values(array[0]);
+    console.log(arr)
     const body = document.getElementsByTagName('body')[0]
     const pop = document.createElement('div')
     pop.classList.add('popup')
@@ -57,7 +58,6 @@ let count = 300;
 let arrayObjects;
 let data;
 export async function logsView(array) {
-    console.log(array)
     let bool = false
     if (array) {
         arrayObjects = array
@@ -81,7 +81,6 @@ export async function logsView(array) {
         });
         return acc;
     }, []);
-    console.log(arrayIdGroup)
     const param = {
         method: "POST",
         headers: {
@@ -124,7 +123,6 @@ export async function logsView(array) {
             const group = login === 'Курсор' ? 'demo' : arrayIdGroup
                 .filter(it => it[0] === id)
                 .map(it => it[1]);
-            console.log(group)
             const time = new Date(Number(el.time) * 1000)
             const day = time.getDate();
             const month = (time.getMonth() + 1).toString().padStart(2, '0');
@@ -182,7 +180,6 @@ export async function logsView(array) {
     }
     num++
     const clickLog = document.querySelector('.clickLog')
-    console.log(clickLog)
     if (value.view.length !== 0) {
         const mass = value.view.map(el => {
             const parsedContent = JSON.parse(el.content);
@@ -193,16 +190,13 @@ export async function logsView(array) {
             const group = arrayIdGroup
                 .filter(it => it[0] === id)
                 .map(it => it[1]);
-            console.log(group)
             const int = Object.values(parsedContent[0]);
             int.shift();
             const time = times(new Date(Number(el.time) * 1000));
             const info = `${int.join(", ")}`;
             return { data: el.time, time: time, group: login === 'Курсор' ? 'demo' : typeEvent !== 'Предупреждение' ? el.groups : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
         });
-        console.log(mass)
         data = mass
-        console.log('здесб?')
         !clickLog ? await createLogsTable(mass) : null
     } else {
         !clickLog ? await createLogsTable([]) : null
@@ -233,7 +227,6 @@ export async function logsView(array) {
         // Добавляем обработчики кликов
         new CloseBTN(wrapperLogs, log, numy)
         const allobjects = document.querySelector('.allobjects')
-        console.log(allobjects)
         allobjects.removeEventListener('click', chanchColor)
     }
 
@@ -262,7 +255,6 @@ async function togglePopup() {
         color ? (allobjects.style.display = 'block', trEvent.forEach(item => {
             item.getAttribute('rel') !== color.id ? item.style.display = 'none' : null
         })) : (trEvent.forEach(item => { item.style.display = 'flex' }), allobjects.style.display = 'none')
-        console.log('клик??')
         allobjects.addEventListener('click', chanchColor)
         const param = {
             method: "POST",
@@ -384,7 +376,6 @@ const objColor = {
 }
 async function createLogsTable(mass) {
     const wrap = document.querySelector('.alllogs')
-    console.log(wrap)
     if (!wrap) {
         const body = document.getElementsByTagName('body')[0]
         const log = document.createElement('div')

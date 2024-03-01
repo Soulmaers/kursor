@@ -383,6 +383,7 @@ exports.getLastTimeMessage = async (idw) => {
 };
 
 exports.getParamsKursor = async (idObject) => {
+
     const data = await databaseService.objectId(idObject)
     if (data.length === 0) {
         return
@@ -713,6 +714,7 @@ exports.setObjectGroupWialon = async (objects) => {
 
 }
 exports.getSensorsWialonToBase = async (arr, login) => {
+    console.log(arr)
     try {
         const pool = await connection;
         if (arr.length > 0) {
@@ -720,6 +722,7 @@ exports.getSensorsWialonToBase = async (arr, login) => {
             //console.log(post)
             const result = await pool.request()
                 .query(post);
+            //  console.log(result.recordset)
             return result.recordset
         }
         else {
@@ -729,6 +732,7 @@ exports.getSensorsWialonToBase = async (arr, login) => {
         console.log(error)
     }
 }
+
 
 exports.getSensorsWialonToBaseId = async (idw) => {
     try {
@@ -1338,6 +1342,7 @@ exports.deleteObjectInGroup = async (login, idObject) => {
 }
 
 exports.deleteGroupToBaseGroups = async (login, id) => {
+    console.log(login, id)
     try {
         const pool = await connection
         const post = `DELETE groups WHERE login=@login AND idg =@id OR login=@LOGIN AND id_sub_g=@id`
@@ -1723,7 +1728,7 @@ exports.paramsToBase = async (idw) => {
 
 }
 
-exports.paramsToBaseNew = async (idw) => {
+exports.paramsToBaseSens = async (idw) => {
     try {
         const pool = await connection
         const selectBase = `SELECT idw,port,imei,sens,params,value,status, data FROM sens_stor_meta WHERE idw=@idw`
@@ -1733,7 +1738,23 @@ exports.paramsToBaseNew = async (idw) => {
     catch (e) {
         console.log(e)
     }
+}
 
+exports.paramsToBaseSensAll = async (arr) => {
+    try {
+        const pool = await connection;
+        if (arr.length > 0) {
+            const post = `SELECT * FROM sens_stor_meta WHERE idw IN (${arr.map(id => `'${id.id ? id.id : id}'`).join(',')})`;
+            const result = await pool.request()
+                .query(post);
+            return result.recordset
+        }
+        else {
+            return []
+        }
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 exports.iconFindtoBase = async (idw) => {

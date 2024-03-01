@@ -123,6 +123,7 @@ export class ToggleHiddenList {
         })
     }
     confirmation(el, num) {
+        console.log(el, num)
         const modal = document.querySelector('.modal_confirm')
         const popup = document.querySelector('.popup-background')
         popup.style.display = 'block'

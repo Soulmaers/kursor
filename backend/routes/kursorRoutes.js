@@ -18,4 +18,5 @@ router.post('/api/getParamsKursorIntervalController', controllerKursor.getParams
 router.post('/api/getMetas', controllerKursor.getMetas)
 router.post('/api/setSensStorMeta', controllerKursor.setSensStorMeta)
 router.post('/api/getSensStorMeta', controllerKursor.getSensStorMeta)
-
+router.post('/api/getSens', controllerKursor.getSens)
+router.post('/api/getSensAll', controllerKursor.getSensAll)

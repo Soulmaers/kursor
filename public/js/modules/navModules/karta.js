@@ -48,6 +48,7 @@ export async function kartaContainer(elem) {
         return acc;
     }, []);
 
+    console.log(arrayId)
     const paramsW = {
         method: 'POST',
         headers: {

@@ -90,14 +90,26 @@ exports.objects = async (req, res) => {
 
 exports.getParamsKursor = async (req, res) => {
     const idObject = req.body.idw
-    const port = req.body.port
-    const result = await databaseService.getParamsKursor(idObject, port)
+    // const port = req.body.port
+    const result = await databaseService.getParamsKursor(idObject)
     res.json(result)
 }
 exports.getGeoKursor = async (req, res) => {
     const idObject = req.body.getGeoKursor
     const result = await databaseService.getGeoKursor(idObject)
     res.json(result)
+}
+
+
+exports.getSens = async (req, res) => {
+    const idw = req.body.idw
+    const params = await databaseService.paramsToBaseSens(idw)
+    res.json(params)
+}
+exports.getSensAll = async (req, res) => {
+    const arr = req.body.data
+    const params = await databaseService.paramsToBaseSensAll(arr)
+    res.json(params)
 }
 
 exports.getParamsKursorIntervalController = async (req, res) => {

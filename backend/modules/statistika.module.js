@@ -500,7 +500,7 @@ const popupProstoy = async (array) => {
             resnew.forEach(async el => {
                 const map = JSON.parse(el[1][1])
                 const timesProstoy = timesFormat(Number(el[1][0]) - Number(el[0][0]))
-                const group = e[5]
+                const group = e[6]
                 const name = e[0].message
                 const time = new Date(Number(el[0][0]) * 1000)
                 const day = time.getDate();

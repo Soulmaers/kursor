@@ -211,7 +211,7 @@ export function generFront(el) {
 
 export function generT(el) {
     let generatedValue;
-    if (el <= 70)
+    if (el > - 50 && el <= 70)
         generatedValue = 5;
     else {
         generatedValue = 1;

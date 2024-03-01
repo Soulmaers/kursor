@@ -108,14 +108,13 @@ async function viewAlarmStorage(name, stor) {
         'Если нажать красный маркер карты, то на карте отразится место события с переданными туда данными']);
 
     const active = document.querySelector('.color')
-
-    const arr = [active.id]
+    const data = [active.id]
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ arr }))
+        body: (JSON.stringify({ data }))
     }
     const sens = await fetch('/api/getSensorsWialonToBase', param)
     const allsens = await sens.json()
