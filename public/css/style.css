@@ -8618,6 +8618,10 @@ i.changeColorCheck {
   overflow-y: auto;
 }
 
+.sortType {
+  width: 150px;
+}
+
 .list_meta {
   width: 98%;
   margin: 0;
