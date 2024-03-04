@@ -70,8 +70,7 @@ exports.loadInterval = async (req, res) => {
 }
 exports.getSensorsWialonToBase = async (req, res) => {
     const arr = req.body.data
-    const login = req.body.login
-    const params = await databaseService.getSensorsWialonToBase(arr, login)
+    const params = await databaseService.getSensorsWialonToBase(arr)
     res.json(params)
 }
 exports.getSensorsWialonToBaseId = async (req, res) => {

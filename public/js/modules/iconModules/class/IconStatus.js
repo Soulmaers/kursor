@@ -289,7 +289,7 @@ export class IconStatus {
                     role === 'Администратор' ? new Tooltip(elem, [elem.getAttribute('rel'), it.params]) : new Tooltip(elem, [elem.getAttribute('rel')]);
                 }
             })
-            const parametrs = this.valueparamsObject[elem.id] === -348201 ? '---' : this.valueparamsObject[elem.id]
+            const parametrs = this.valueparamsObject[elem.id] === -348201.3876 ? '---' : this.valueparamsObject[elem.id]
             console.log(parametrs)
             switch (elem.id) {
                 case 'odom-card':

@@ -277,6 +277,7 @@ export class CreateNewObject {
         }
         else {
             let data;
+            console.log(el, prefix)
             if (prefix === 'kursor') {
                 const params = {
                     method: 'POST',
@@ -301,7 +302,17 @@ export class CreateNewObject {
                 const rr = await fetch('/api/getSensStorMeta', param)
                 const dat = await rr.json()
                 this.idPref = result[0].idObject
-                this.instance = new ConfiguratorParams(this.idPref, result[0].port, result[0].imei, dat)
+                if (this.instance) {
+                    this.instance.id = this.idPref
+                    this.instance.port = result[0].port,
+                        this.instance.imei = result[0].imei
+                    this.instance.dat = dat
+                    this.instance.init()
+                }
+                else {
+                    this.instance = new ConfiguratorParams(this.idPref, result[0].port, result[0].imei, dat)
+                }
+
 
             }
             else {
@@ -325,7 +336,17 @@ export class CreateNewObject {
                 const rr = await fetch('/api/getSensStorMeta', param)
                 const dat = await rr.json()
                 this.idPref = idw
-                this.instance = new ConfiguratorParams(this.idPref, 'wialon', result[0].imei, dat)
+                if (this.instance) {
+                    this.instance.id = this.idPref
+                    this.instance.port = 'wialon'
+                    this.instance.imei = result[0].imei
+                    this.instance.dat = dat
+                    this.instance.init()
+                }
+                else {
+                    this.instance = new ConfiguratorParams(this.idPref, 'wialon', result[0].imei, dat)
+                }
+
             }
             data.forEach((e, index) => {
                 this.field_modal[index].value = e

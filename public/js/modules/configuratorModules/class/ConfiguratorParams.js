@@ -72,13 +72,12 @@ export class ConfiguratorParams {
         this.itemStor = null;
         this.updateMeta.addEventListener('click', this.createListMeta.bind(this))
         this.init()
-
-
     }
 
-    clearMetaParams(el) {
+
+    clearMetaParams(el, event) {
+        event.stopPropagation();
         if (el.classList.contains('clear_params')) {
-            console.log('клик?')
             this.itemMeta.forEach(elem => {
                 if (el.previousElementSibling.textContent === elem.textContent) {
                     elem.style.borderLeft = 'none'
@@ -86,7 +85,29 @@ export class ConfiguratorParams {
                 }
             })
             el.previousElementSibling.textContent = ''
+            const wrap = document.querySelectorAll('.wrapper_add_value_fixed')
+            wrap ? wrap.forEach(e => e.style.display = 'none') : null
+            const param = el.parentNode.children[1].textContent
+            if (param === 'pwr') {
+                el.parentNode.children[4].style.color = 'rgba(6, 28, 71, 1)'
+                this.deleteParams(this.id, param)
+            }
+            if (param === 'engine') {
+                el.parentNode.children[4].style.display = 'none'
+                this.deleteParams(this.id, param)
+            }
         }
+    }
+    async deleteParams(id, param) {
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ id, param })
+        }
+        const res = await fetch('/api/deleteParams', params)
+        const result = await res.json()
     }
 
     //868184064811311
@@ -98,10 +119,8 @@ export class ConfiguratorParams {
 
     async createListMeta() {
         const data = await this.getMetaParams()
-        console.log(data)
         if (data.length === 0) { return }
         const meta = Object.entries(data[0]).filter((element) => element[0] !== 'nameCar' && element[0] !== 'imei' && element[0] !== 'id' && element[0] !== 'port' && element[0] !== 'idObject');
-        console.log(meta)
         const list = document.querySelectorAll('.item_meta')
         if (list) {
             list.forEach(e => e.remove())
@@ -123,23 +142,25 @@ export class ConfiguratorParams {
         this.itemMeta = [...document.querySelectorAll('.item_meta')];
         this.itemMeta.forEach(el => { el.addEventListener('click', this.metaToggle.bind(this, el)) })
         this.controllFlashBorder()
-        // this.id = null
     }
 
     controllFlashBorder() {
         console.log(this.dat)
         if (this.dat) {
-            this.itemStor.map(e =>
-                this.dat.forEach(it => {
-                    if (it.params === e.children[1].textContent) {
-                        e.children[2].textContent = it.meta
-                        e.children[0].value = it.sens
-                        e.children[0].style.color = 'gray'
+            this.itemStor.forEach(e => {
+                const matchingItem = this.dat.find(it => it.params === e.children[1].textContent);
+                if (matchingItem) {
+                    e.children[2].textContent = matchingItem.meta;
+                    e.children[0].value = matchingItem.sens;
+                    e.children[0].style.color = 'gray';
+                    if (matchingItem.params == 'pwr' || matchingItem.params == 'engine') {
+                        matchingItem.meta == 'pwr_ext' ? e.children[4].style.display = 'block' : e.children[4].style.display = 'none'
+
                     }
-                })
-            )
+
+                }
+            });
         }
-        console.log('дальше')
         const arrayStor = this.itemStor.filter(it => it.children[2].textContent).map(e => e.children[2].textContent)
         const clickElement = document.querySelector('.clickStor')
         this.itemMeta.forEach(el => {
@@ -152,11 +173,9 @@ export class ConfiguratorParams {
 
     }
 
-
     async setToBaseSensStorMeta() {
         const login = document.querySelectorAll('.log')[1].textContent
         const id = this.id
-
         const data = this.itemStor.filter(e => e.children[2].textContent).map(el => ({
             id: this.id, port: this.port,
             sens: el.children[0].value ? el.children[0].value : el.children[0].placeholder,
@@ -168,6 +187,7 @@ export class ConfiguratorParams {
             data: null,
             imei: this.imei
         }))
+
         const params = {
             method: "POST",
             headers: {
@@ -178,12 +198,13 @@ export class ConfiguratorParams {
         const res = await fetch('api/setSensStorMeta', params)
         const message = await res.json()
         return message
-        //   console.log(message)
     }
+
     async getMetaParams() {
         const idw = this.id
         const port = this.port
         const imei = this.imei
+        console.log(idw, port, imei)
         const params = {
             method: "POST",
             headers: {
@@ -202,13 +223,14 @@ export class ConfiguratorParams {
         if (list) {
             list.forEach(e => e.remove())
         }
-        this.storageMeta.forEach(e => {
+        this.storageMeta.forEach(async e => {
             const li = document.createElement('li')
             li.classList.add('item_stor')
             this.listMeta.appendChild(li)
             const sens = document.createElement('input')
             sens.classList.add('sensor_stor')
-            sens.placeholder = e.sensor
+            sens.style.color = 'gray'
+            sens.value = e.sensor
             sens.setAttribute('contenteditable', 'true');
             li.appendChild(sens)
             const param = document.createElement('div')
@@ -219,7 +241,6 @@ export class ConfiguratorParams {
             oldParam.classList.add('param_meta')
             li.appendChild(oldParam)
             if (e.id < 7) {
-                //  li.style.display = 'none'
                 oldParam.textContent = e.parametr
             }
             else {
@@ -228,25 +249,157 @@ export class ConfiguratorParams {
                 i.classList.add('fa-times')
                 i.classList.add('clear_params')
                 li.appendChild(i)
+                if (e.parametr === 'pwr' || e.parametr === 'engine') {
+                    let val = await this.getValueToBase(li)
+                    console.log(val)
+                    val = val ? val[0].value : ''
+                    const i = document.createElement('i')
+                    i.classList.add('fas')
+                    i.classList.add('fa-info-circle')
+                    i.classList.add(`add_${e.parametr}`)
+                    i.style.display = 'none'
+                    if (val !== '') {
+                        i.style.color = 'green'
+                    }
+                    li.appendChild(i)
+                    i.addEventListener('click', this.addValueFixed.bind(this, i, val))
+                }
             }
+
         })
         this.itemStor = [...document.querySelectorAll('.item_stor')];
+        console.log(this.itemStor)
         this.clearParams = [...document.querySelectorAll('.clear_params')];
         this.itemStor.forEach(el => { el.addEventListener('click', this.storToggle.bind(this, el)) })
+        console.log(this.clearParams)
         this.clearParams.forEach(el => el.addEventListener('click', this.clearMetaParams.bind(this, el)))
     }
 
+
+    async getValueToBase(parent) {
+        const param = parent.children[1].textContent
+        const id = this.id
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ id, param })
+        }
+        const res = await fetch('api/getValuePWR', params)
+        const result = await res.json()
+        return result
+    }
+    async addValueFixed(i, val, event) {
+        console.log(i)
+        console.log(val)
+        event.stopPropagation();
+        const wrap = document.querySelectorAll('.wrapper_add_value_fixed')
+        wrap ? wrap.forEach(e => e.style.display = 'none') : null
+        const wrapModal = i.parentNode.querySelector('.wrapper_add_value_fixed')
+        console.log(wrapModal)
+        //  wrapModal ? wrapModal.remove() : null
+        if (!wrapModal) {
+            const parent = i.parentNode
+            const div = document.createElement('div')
+            div.classList.add('wrapper_add_value_fixed')
+            parent.appendChild(div)
+            const input = document.createElement('input')
+            input.classList.add('input_add_value_fixed')
+            input.value = val
+            div.appendChild(input)
+            const ok = document.createElement('i')
+            ok.classList.add('fa')
+            ok.classList.add('fa-check')
+            ok.classList.add('save_ok')
+            div.appendChild(ok)
+            const cancel = document.createElement('i')
+            cancel.classList.add('fas')
+            cancel.classList.add('fa-times')
+            cancel.classList.add('save_cancel')
+            div.appendChild(cancel)
+            this.validationInput(input)
+            ok.addEventListener('click', this.ok.bind(this, ok))
+            cancel.addEventListener('click', this.cancel.bind(this, cancel))
+        }
+        else {
+            wrapModal.style.display = 'flex'
+        }
+    }
+
+
+    validationInput(input) {
+        input.addEventListener('input', () => {
+            let value = input.value;
+            // Заменяем запятую на точку
+            value = value.replace(',', '.');
+            // Удаляем все символы, кроме цифр и точек
+            value = value.replace(/[^0-9.]/g, '');
+            // Проверяем количество символов после точки
+            const dotIndex = value.indexOf('.');
+            if (dotIndex !== -1) {
+                const decimalPart = value.substr(dotIndex + 1);
+                if (decimalPart.length > 2) {
+                    // Обрезаем количество символов после точки до 2
+                    value = value.substr(0, dotIndex + 3);
+                }
+            }
+            // Обновляем значение инпута
+            input.value = value;
+        });
+    }
+    ok(el, event) {
+        event.stopPropagation();
+        const id = this.id
+        const params = el.parentNode.parentNode.children[1].textContent
+        const value = el.parentNode.children[0].value
+        el.parentNode.parentNode.children[4].style.color = value !== '' ? 'green' : 'rgba(6, 28, 71, 1)'
+        this.saveValueToBase(id, params, value)
+        el.parentNode.style.display = 'none'
+    }
+    cancel(el, event) {
+        event.stopPropagation();
+        console.log(el)
+        el.parentNode.style.display = 'none'
+    }
+    async saveValueToBase(id, params, value) {
+        const param = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ id, params, value })
+        }
+        const res = await fetch('api/saveValuePWR', param)
+        const result = await res.json()
+    }
+
+
     storToggle(el) {
+        const wrap = document.querySelectorAll('.wrapper_add_value_fixed')
+        wrap ? wrap.forEach(e => e.style.display = 'none') : null
+        el.children[2].textContent === 'pwr_ext' && el.querySelector('.wrapper_add_value_fixed') ? el.querySelector('.wrapper_add_value_fixed').style.display = 'flex' : null
         const clickElement = document.querySelector('.clickStor')
         clickElement ? clickElement.classList.remove('clickStor') : null
         el.classList.add('clickStor')
-        this.controllFlashBorder()
+        // this.controllFlashBorder()
     }
     metaToggle(el) {
+        const wrap = document.querySelectorAll('.wrapper_add_value_fixed')
+        wrap ? wrap.forEach(e => e.style.display = 'none') : null
         const clickStor = document.querySelector('.clickStor')
         if (clickStor) {
             !el.classList.contains('clickMeta') ? el.children[0].classList.add('clickMeta') : null
             clickStor.children[2].textContent = el.children[0].textContent
+
+            if (clickStor.children[1].textContent === 'engine' && clickStor.children[2].textContent === 'pwr_ext' ||
+                clickStor.children[1].textContent === 'pwr' && clickStor.children[2].textContent === 'pwr_ext') {
+                clickStor.children[4].style.display = 'block'
+            }
+            else {
+                clickStor.children[4].style.display = 'none'
+            }
+
             this.itemMeta.forEach(el => { el.children[0].classList.remove('clickMeta') })
             this.dat = null
             this.controllFlashBorder()

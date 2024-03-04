@@ -22,9 +22,10 @@ class WialonOrigin {
                 const now = new Date();
                 const nowTime = Math.floor(now.getTime() / 1000);
                 const timeBase = await databaseService.getLastTimeMessage(idw)
-                const oldTime = timeBase.length !== 0 ? Number(timeBase[0].data) : nowTime - 1;
+                const oldTime = timeBase.length !== 0 ? Number(timeBase[0].time_reg) : nowTime - 1;
                 const result = await wialonService.loadIntervalDataFromWialon(idw, oldTime + 1, nowTime, 'i')
                 const nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
+
                 if (result.count !== 0) {
                     const oil = Object.entries(nameSens.item.sens).filter(el => {
                         if (el[1].n.indexOf('Топли') !== -1) {
@@ -56,27 +57,30 @@ class WialonOrigin {
                             for (let key in e.p) {
                                 allObject[key] = el.lmsg.p[key];
                             }
-                            valueOil && valueOil.length !== 0 ? allObject[`${oil[0][1].p}`] = parseFloat(valueOil[index][`${oil[0][1].id}`].toFixed(1)) : null
+                            try {
+                                valueOil && valueOil.length !== 0 ? allObject[`${oil[0][1].p}`] = parseFloat(valueOil[index][`${oil[0][1].id}`].toFixed(1)) : null
+                            }
+                            catch (e) {
+                                console.log(e)
+                                console.log(el.id)
+                            }
                         }
-                        if (e.i !== 0) {
+                        if (e.i !== undefined) {
                             let binary = e.i.toString(2)
                             binary = binary.split("").reverse();
                             for (let i = 0; i < binary.length; i++) {
                                 allObject[`in${i + 1}`] = binary[i]
                             }
                         }
-                        if (e.o) {
+                        if (e.o !== undefined) {
                             let binaryo = e.o.toString(2)
                             binaryo = binaryo.split("").reverse();
                             for (let i = 0; i < binaryo.length; i++) {
                                 allObject[`out${i + 1}`] = binaryo[i]
                             }
                         }
-
-
                         const nowTime = Math.floor(new Date().getTime() / 1000)
                         allObject['time_reg'] = nowTime
-
                         allArrayData.push(allObject)
                     })
                     this.setData(allArrayData[0].imei, allArrayData[0].port, allArrayData)

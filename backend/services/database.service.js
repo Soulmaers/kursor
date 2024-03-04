@@ -326,6 +326,8 @@ exports.objectsWialonImei = async (imei) => {
 }
 
 exports.getMeta = async (idObject, port, imei) => {
+    console.log(idObject, port, imei)
+    console.log('дата')
     //const data = await databaseService.objectId(idObject);
     // if (data.length === 0) {
     // return [];
@@ -349,6 +351,7 @@ exports.getMeta = async (idObject, port, imei) => {
         const result = await pool.request()
             .input('idw', String(idObject))
             .query(postModel)
+        //  console.log(result.recordset)
         const res = result.recordset.map(obj => {
             const newObj = {};
             for (const key in obj) {
@@ -370,9 +373,9 @@ exports.getMeta = async (idObject, port, imei) => {
 exports.getLastTimeMessage = async (idw) => {
     try {
         const pool = await connection
-        const postModel = `SELECT TOP (1) data FROM sens_stor_meta WHERE idw = ${idw} ORDER BY data DESC`
+        const postModel = `SELECT TOP (1) time_reg FROM wialon_origin WHERE idObject = ${idw} ORDER BY time_reg DESC`
         const result = await pool.request()
-            .input('idw', String(idw))
+            .input('idObject', String(idw))
             .query(postModel)
         return result.recordset;
 
@@ -713,11 +716,10 @@ exports.setObjectGroupWialon = async (objects) => {
     }
 
 }
-exports.getSensorsWialonToBase = async (arr, login) => {
-    console.log(arr)
+exports.getSensorsWialonToBase = async (arr) => {
     try {
         const pool = await connection;
-        if (arr.length > 0) {
+        if (arr && arr.length > 0) {
             const post = `SELECT sens_name, param_name,idw, value, data FROM wialon_sensors WHERE idw IN (${arr.map(id => `'${id.id ? id.id : id}'`).join(',')})`;
             //console.log(post)
             const result = await pool.request()
@@ -813,6 +815,77 @@ exports.setAddDataToGlobalBase = async (obj) => {
         console.log(error)
     }
 }
+
+
+exports.getValuePWRToBase = async (idw, param) => {
+    const pool = await connection;
+    try {
+        const post = `SELECT * FROM coef WHERE idw=@idw AND params=@params`
+        const res = await pool.request()
+            .input('idw', String(idw))
+            .input('params', param)
+            .query(post);
+        if (res.recordset.length !== 0) {
+            return res.recordset
+        } else {
+            return ''
+        }
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+exports.deleteParamsToBase = async (idw, param) => {
+    console.log(idw, param)
+    const pool = await connection;
+    try {
+        const post = `DELETE FROM coef WHERE idw=@idw AND params=@params`
+        const res = await pool.request()
+            .input('idw', String(idw))
+            .input('params', param)
+            .query(post);
+        return 'данные удалены'
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+exports.saveValuePWRToBase = async (idw, params, value) => {
+    const pool = await connection;
+    try {
+        const post = `SELECT * FROM coef WHERE idw=@idw AND params=@params`
+        const res = await pool.request()
+            .input('idw', String(idw))
+            .input('params', params)
+            .query(post);
+        if (res.recordset.length === 0) {
+            const insertQuery = `INSERT INTO coef (idw,params, value) VALUES (@idw,@params, @value)`;
+            const res = await pool.request()
+                .input('idw', String(idw))
+                .input('params', params)
+                .input('value', value)
+                .query(insertQuery);
+        }
+        else {
+            const updateQuery = `UPDATE coef SET idw=@idw, params=@params, value=@value WHERE idw=@idw AND params=@params`;
+            const res = await pool.request()
+                .input('idw', String(idw))
+                .input('params', params)
+                .input('value', value)
+                .query(updateQuery);
+        }
+        return 'ok'
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
+
+
+
 
 exports.setSensStorMeta = async (data) => {
 

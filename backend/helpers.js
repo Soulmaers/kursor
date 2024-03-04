@@ -91,7 +91,9 @@ exports.sortData = (datas) => {
 exports.setDataToBase = async (imei, port, info) => {
     console.log(imei, port)
     const data = await databaseService.getSensStorMetaFilter(imei, port)
+
     if (data.length !== 0) {
+        const idw = data[0].idw
         const now = new Date();
         const nowTime = Math.floor(now.getTime() / 1000);
 
@@ -106,9 +108,13 @@ exports.setDataToBase = async (imei, port, info) => {
         })
         await databaseService.setUpdateValueSensStorMeta(imei, port, value)
 
+        const coefEngine = await databaseService.getValuePWRToBase(idw, 'engine')
+        const coefPWR = await databaseService.getValuePWRToBase(idw, 'pwr')
+        console.log(idw, coefEngine, coefPWR)
         const tcpObject = info
         for (let elem of tcpObject) {
             const value = data.map(el => {
+                //   console.log(el)
                 if (elem.hasOwnProperty(el.meta)) {
                     return elem[el.meta] !== null ? { key: el.meta, params: el.params, value: String(elem[el.meta]), status: 'true' } : { key: el.meta, params: el.params, value: el.value, status: 'false' }
                 }
@@ -129,6 +135,26 @@ exports.setDataToBase = async (imei, port, info) => {
                 value.forEach(e => {
                     obj[e.params] = e.value
                 })
+                if (coefEngine) {
+                    data.forEach(el => {
+                        if (el.params === 'engine') {
+                            console.log(Number(el.value), Number(coefPWR[0].value))
+                            obj['engine'] = Number(el.value) > Number(coefEngine[0].value) ? '1' : '0'
+                        }
+                    });
+                }
+                if (coefPWR) {
+                    data.forEach(el => {
+                        if (el.params === 'pwr') {
+                            console.log(Number(el.value), Number(coefPWR[0].value))
+                            obj['engineOn'] = obj['engine'] === 1 && Number(el.value) > Number(coefPWR[0].value) ? '1' : '0'
+                        }
+                    });
+                }
+                if (idw === '26936623') {
+                    console.log(obj)
+                }
+
                 await databaseService.setAddDataToGlobalBase(obj)
             }
         }

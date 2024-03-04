@@ -8197,6 +8197,14 @@ i.filterEvent {
 
 }
 
+.add_pwr,
+.add_engine {
+  font-size: 0.6rem;
+  cursor: pointer;
+  position: absolute;
+  right: 15px;
+  top: 6px;
+}
 
 i.acEvent {
   color: gray;
@@ -8272,6 +8280,27 @@ i.acEvent {
   margin-right: 5px;
   color: gray;
   cursor: pointer;
+}
+
+
+.input_pwr {
+  position: absolute;
+  right: 15px;
+  width: 30px;
+}
+
+.add_pwr:hover .add_pwr {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+.add_engine:hover .add_engine {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
 }
 
 .checkTypeMarkers:hover .checkMarkers {
@@ -8606,6 +8635,9 @@ i.changeColorCheck {
   cursor: pointer;
 }
 
+.item_stor {
+  position: relative;
+}
 
 .item_meta {
   width: 48.6%;
@@ -9691,9 +9723,11 @@ i.settingsGroup {
 
 .pref {
   font-size: 0.75rem;
-  color: rgba(6, 28, 71, 1);
+
   margin: 0 10px;
 }
+
+
 
 .kursor {
   padding-left: 2px;
@@ -9800,4 +9834,36 @@ i.settingsGroup {
   padding: 2px;
   line-height: 1.2;
   margin: 5px;
+}
+
+.wrapper_add_value_fixed {
+  background-color: #fff;
+  position: absolute;
+  right: 0px;
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.input_add_value_fixed {
+  width: 30px;
+  border: none;
+  border-bottom: 1px solid rgba(6, 28, 71, 0.8)
+}
+
+.save_ok {
+  font-size: 0.6rem;
+}
+
+.save_ok:hover {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+.save_cancel {
+  color: darkred;
+  font-size: 0.6rem;
 }

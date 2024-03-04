@@ -121,7 +121,10 @@ export async function conturTest(testov) {
     if (listItem) {
         removeArrElem(listItem)
     }
-    testov.forEach(el => {
+    for (let el of testov) {
+
+        //   }
+        // testov.forEach(el => {
         if (el.length !== 0) {
             const lowList = document.querySelector('.low_list')
             const group = document.createElement('div')
@@ -213,11 +216,13 @@ export async function conturTest(testov) {
                     hiddenModal.classList.add('hiddenSubModal')
                     subgroup.appendChild(hiddenModal);
                     const listArr = document.querySelector(`.${nameGroup}`).querySelector(`.${nameSubGroup}`)
-                    item.forEach(async elem => {
+                    for (let elem of item) {
                         if (Object.values(elem[0]).length !== 0) {
                             createIconsAndLeftSpisok(elem, final, listArr, nameGroup, 'kursor')
                         }
-                    })
+                    }
+
+
                 })
             }
             const hiddenModal = document.createElement('div')
@@ -226,13 +231,19 @@ export async function conturTest(testov) {
             group.setAttribute('rel', `${nameGroup}`)
             group.appendChild(hiddenModal)
             const listArr = document.querySelector(`.${nameGroup}`)
-            el.forEach(async elem => {
+            if (nameGroup === 'Загород') {
+                console.log(el)
+            }
+
+            for (let elem of el) {
                 if (Object.values(elem[0]).length !== 0) {
                     createIconsAndLeftSpisok(elem, final, listArr, nameGroup, 'master')
                 }
-            })
+            }
         }
-    })
+        // })
+    }
+
     updateSensor = true
     await viewList(login)
 
@@ -411,7 +422,7 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, en
     const oil = oilValue ? oilValue[3] === -348201 ? '-' : `${oilValue[3].toFixed(0)} л.` : '-';
     const pwrValue = data.find(i => i[1] === 'pwr' && i[2] === elemId);
     const pwr = pwrValue ? parseFloat(Number(pwrValue[3]).toFixed(1)) : '-';
-    const meliageValue = data.find(i => i[1] === 'pwr' && i[2] === elemId);
+    const meliageValue = data.find(i => i[1] === 'mileage' && i[2] === elemId);
     const meliage = meliageValue ? `${Number(meliageValue[3]).toFixed(0)} км.` : '-';
     const speedValue = data.find(i => i[1] === 'speed' && i[2] === elemId);
     const speed = speedValue ? parseInt((speedValue[3]).toFixed(0)) : '-';
@@ -715,15 +726,18 @@ async function createIconsAndLeftSpisok(elem, data, listArr, nameGroup, prefix) 
     pref.classList.add('fas')
     pref.classList.add('fa-wrench')
     pref.classList.add('pref')
-    pref.style.color = elem[5] === true ? 'rgba(6, 28, 71, 1)' : 'red'
+    pref.style.color = elem[5] === false ? 'red' : 'darkblue'
     listName.prepend(pref)
     new Tooltip(pref, ['Редактировать объект'])
-    if (elem[elem.length - 1] === 'kursor') {
-        listItemCar.classList.add('kursor')
-        listName.classList.add('kursor_name')
-    }
-    else {
-        listItemCar.classList.add('wialon')
+
+    if (prefix === 'master') {
+        if (elem[elem.length - 1] === 'kursor') {
+            listItemCar.classList.add('kursor')
+            listName.classList.add('kursor_name')
+        }
+        else {
+            listItemCar.classList.add('wialon')
+        }
     }
 
     let type;

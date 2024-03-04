@@ -53,6 +53,31 @@ exports.getKursorObjects = async (req, res) => {
 }
 
 
+exports.saveValuePWR = async (req, res) => {
+    //  console.log(ips.ips.object);
+    const idw = req.body.id
+    const params = req.body.params
+    const value = req.body.value
+    const result = await databaseService.saveValuePWRToBase(idw, params, value)
+    res.json(result)
+}
+exports.getValueToBase = async (req, res) => {
+    const idw = req.body.id
+    const param = req.body.param
+    console.log(idw, param)
+    const result = await databaseService.getValuePWRToBase(idw, param)
+    res.json(result)
+}
+exports.deleteParams = async (req, res) => {
+    const idw = req.body.id
+    const param = req.body.param
+    console.log('туту?')
+    console.log(idw, param)
+    const result = await databaseService.deleteParamsToBase(idw, param)
+    res.json(result)
+}
+
+
 
 exports.getMetas = async (req, res) => {
     //  console.log(ips.ips.object);
