@@ -64,10 +64,14 @@ exports.saveValuePWR = async (req, res) => {
 exports.getValueToBase = async (req, res) => {
     const idw = req.body.id
     const param = req.body.param
-    console.log(idw, param)
-    const result = await databaseService.getValuePWRToBase(idw, param)
+    const result = param ? await databaseService.getValuePWRToBase(idw, param) : await databaseService.getValuePWRToBase(idw)
     res.json(result)
 }
+
+
+
+
+
 exports.deleteParams = async (req, res) => {
     const idw = req.body.id
     const param = req.body.param

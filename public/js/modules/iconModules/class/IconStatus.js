@@ -14,6 +14,7 @@ export class IconStatus {
         this.targetCard = null
         this.intervalId = null
         this.params = null
+        this.coefficient = null
         this.list.forEach(el => el.addEventListener('click', this.listeModalWindow.bind(this, el)))
         this.card.forEach(el => el.addEventListener('click', this.toogleModalWindow.bind(this, el)))
     }
@@ -111,6 +112,7 @@ export class IconStatus {
         const editParams = await this.iconFindParamsEdit(param)
         console.log(params)
         console.log(editParams)
+        this.coefficient = await this.validationIngition(idw)
         this.pushObjectProperty(params, editParams)
         await this.statusTSI(param)
 
@@ -119,17 +121,17 @@ export class IconStatus {
     }
 
 
-    pushObjectProperty(params, editParams) {
+    async pushObjectProperty(params, editParams) {
         this.card.forEach(e => this.valueparamsObject[e.id] = '---')
         params.forEach(el => {
             switch (el[1]) {
                 case 'speed':
                     this.valueparamsObject['speed-card'] = Number(Number(el[3]).toFixed(0))
                     break;
-                case 'in1':
+                case 'engine':
+                    console.log(el[3])
                     this.valueparamsObject['ign-card'] = el[3]
                     break;
-
             }
         })
         editParams.result.forEach(item => {
@@ -140,56 +142,44 @@ export class IconStatus {
             })
         })
         const engine = this.valueparamsObject['ign-card']
-        this.valueparamsObject['ign-card'] = engine === 'Вход IN1(датчик сработал)' || engine === 1 ? 'ВКЛ' : 'ВЫКЛ'
+        if (this.valueparamsObject['ign-card'] > 1) {
+            this.getValue('engine')
+            console.log(this.getValue('engine'))
+            this.valueparamsObject['ign-card'] = this.getValue('engine') ? engine > Number(this.getValue('engine')) ? 'ВКЛ' : 'ВЫКЛ' : '-'
+        }
+        else {
+            this.valueparamsObject['ign-card'] = engine === 1 ? 'ВКЛ' : 'ВЫКЛ'
+        }
+    }
+
+    getValue(params) {
+        let res;
+        const value = this.coefficient.find(e => e.params === params)
+        value ? res = value.value : false
+        return res
+    }
+    async validationIngition(id) {
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ id })
+        }
+        const res = await fetch('/api/getValuePWR', params)
+        const result = await res.json()
+        return result
     }
     // запрос параметров (params)
     async iconFindParams(param) {
-        console.log(this.targetElement)
-        const pref = this.targetElement.classList.contains('kursor')
-        const idw = this.targetElement.id
         let result;
-        if (!pref) {
-            const res = await fetch('/api/getSensorsWialonToBaseId', param)
-            const data = await res.json()
-            console.log(data)
-            result = data.map(e => {
-                return [e.sens_name, e.param_name, Number(e.idw), Number(e.value)]
-            })
-        }
-        else {
-            const params = {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: (JSON.stringify({ idw }))
-            }
-            const ress = await fetch('api/getParamsKursor', params)
-            const data = await ress.json()
-
-            const results = [];
-            let speed;
-            console.log(data)
-            if (data.length !== 0) {
-                Object.entries(data[0]).forEach(([key, value]) => {
-                    if (key === 'speed') {
-                        speed = Number(Number(data[0][key]).toFixed(0))
-                    }
-                    results.push([key, key, Number(data[0].idObject), data[0][key]]);
-                });
-                results.push(['state', 'state', Number(data[0].idObject), speed === 0 ? 0 : 1])
-                results.push(['lasttime', 'listtime', Number(data[0].idObject), Number(data[0].time)])
-                result = results
-            }
-            else {
-                result = []
-            }
-
-        }
+        const res = await fetch('/api/getSens', param)
+        const data = await res.json()
+        result = data.map(e => {
+            return [e.sens, e.params, Number(e.idw), Number(e.value)]
+        })
         return result
     }
-
-
     // запрос назначенных параметров и коэффициента
     async iconFindParamsEdit(param) {
         const res = await fetch('/api/iconFind', param)
@@ -199,52 +189,48 @@ export class IconStatus {
     }
     //расчет  работы двигателя
     async statusTSI(param) {
-        const mod = await fetch('/api/modelView', param)
-        const model = await mod.json()
-        let tsiControll = model.result.length !== 0 || model.result[0] && model.result[0].tsiControll && model.result[0].tsiControll !== '' ? Number(model.result[0].tsiControll) : '';
-        tsiControll === 0 ? tsiControll = '' : tsiControll = tsiControll
-        this.valueparamsObject['tsi-card'] = tsiControll !== '' ? Number(this.valueparamsObject['akb-card']) > tsiControll ? 'ВКЛ' : 'ВЫКЛ' : 'ВЫКЛ'
+        this.getValue('pwr')
+        this.valueparamsObject['tsi-card'] = this.getValue('pwr') ? Number(this.valueparamsObject['akb-card']) > Number(this.getValue('pwr')) && this.valueparamsObject['ign-card'] === 'ВКЛ' ?
+            'ВКЛ' : 'ВЫКЛ' : '-'
 
+        /* const vals = await fetch('/api/viewStatus', param)
+         const val = await vals.json()
+         if (val.result.length !== 0) {
+             const startDate = val.result[0].time
+             const startDateIng = val.result[0].timeIng
+             const techdate = new Date();
+             const nowDate = Math.floor(techdate.getTime() / 1000);
+             const timeStor = getHoursDiff(startDate, nowDate)
+             const timeStorIng = getHoursDiff(startDateIng, nowDate)
+             function getHoursDiff(startDate, nowDate) {
+                 var diff = nowDate - startDate;
+                 let dayS;
+                 let hourS;
+                 const minutes = Math.floor(diff / 60)
+                 const hours = Math.floor(minutes / 60);
+                 const days = Math.floor(hours / 24);
+                 const day = days % 60;
+                 const hour = hours % 24;
+                 const minut = minutes % 60;
+                 day === 0 ? dayS = '' : dayS = days + 'д ';
+                 hour === 0 ? hourS = '' : hourS = hour + 'ч ';
+                 const mess = `${dayS} ${hourS} ${minut} мин`
+                 return mess;
+             }*/
+        let statName;
+        let statNameIng;
+        this.valueparamsObject['tsi-card'] === 'ВКЛ' ? statName = 'Включен' : this.valueparamsObject['tsi-card'] === '-' ? statName = '-' : statName = 'Выключен'
+        this.valueparamsObject['ign-card'] === 'ВКЛ' ? statNameIng = 'Включено' : statNameIng = 'Выключено'
 
-        const vals = await fetch('/api/viewStatus', param)
-        const val = await vals.json()
-        if (val.result.length !== 0) {
-            const startDate = val.result[0].time
-            const startDateIng = val.result[0].timeIng
-            const techdate = new Date();
-            const nowDate = Math.floor(techdate.getTime() / 1000);
-            const timeStor = getHoursDiff(startDate, nowDate)
-            const timeStorIng = getHoursDiff(startDateIng, nowDate)
-            function getHoursDiff(startDate, nowDate) {
-                var diff = nowDate - startDate;
-                let dayS;
-                let hourS;
-                const minutes = Math.floor(diff / 60)
-                const hours = Math.floor(minutes / 60);
-                const days = Math.floor(hours / 24);
-                const day = days % 60;
-                const hour = hours % 24;
-                const minut = minutes % 60;
-                day === 0 ? dayS = '' : dayS = days + 'д ';
-                hour === 0 ? hourS = '' : hourS = hour + 'ч ';
-                const mess = `${dayS} ${hourS} ${minut} мин`
-                return mess;
-            }
-            let statName;
-            let statNameIng;
-            val.result[0].status === 'ВКЛ' ? statName = 'Включен' : val.result[0].status === '-' ? statName = '-' : statName = 'Выключен'
-            val.result[0].statusIng === 'ВКЛ' ? statNameIng = 'Включено' : statNameIng = 'Выключено'
-            //  tsiValue.textContent = val.result[0].status
-            // ignValue.textContent = val.result[0].statusIng
-            const message = val.result[0].status === '-' ? null : `${statName} ${timeStor}`
-            const messageIng = `${statNameIng} ${timeStorIng}`
+        const message = this.valueparamsObject['tsi-card'] === '-' ? null : `${statName}`// ${timeStor}
+        const messageIng = `${statNameIng}`// ${timeStorIng}
 
-            const tsi_card = document.querySelector('.tsi_card')
-            const ign_card = document.querySelector('.ign_card')
-            new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
-            new Tooltip(ign_card, [ign_card.getAttribute('rel'), messageIng]);
-        }
+        const tsi_card = document.querySelector('.tsi_card')
+        const ign_card = document.querySelector('.ign_card')
+        new Tooltip(tsi_card, [tsi_card.getAttribute('rel'), message]);
+        new Tooltip(ign_card, [ign_card.getAttribute('rel'), messageIng]);
     }
+
 
     //расчет статуса объекта
     async status(data) {

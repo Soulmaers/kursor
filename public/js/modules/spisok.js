@@ -95,24 +95,10 @@ export async function loadParamsViewList(car, el) {
     return [model, models, data, osi, el]
 }
 
-export async function conturTest(testov) {
-    //  console.log(testov)
-    const group = testov
-        .map(el => Object.values(el)) // получаем массивы всех id
-        .flat()
-        .map(e => e[4])
-        .filter(e => e !== null);
+export async function conturTest(data) {
 
-    const sub = testov.map(el => Object.values(el)).flat().map(e => {
-        if (e.length === 10 && e[8].sub.length !== 0) {
-            const subId = Object.values(e[8].sub).flat().map(it => it[4])
-            return subId
-        }
-    }).filter(e => e !== null);
-    const uniqSub = [...new Set(sub[0])]
-
-    const allId = uniqSub.concat(group)
-    const final = await alternativa(allId)
+    const allId = format(data, 0)
+    const final = format(data, 1)
     const groups = document.querySelectorAll('.groups')
     if (groups) {
         removeArrElem(groups)
@@ -121,10 +107,7 @@ export async function conturTest(testov) {
     if (listItem) {
         removeArrElem(listItem)
     }
-    for (let el of testov) {
-
-        //   }
-        // testov.forEach(el => {
+    for (let el of data) {
         if (el.length !== 0) {
             const lowList = document.querySelector('.low_list')
             const group = document.createElement('div')
@@ -231,31 +214,26 @@ export async function conturTest(testov) {
             group.setAttribute('rel', `${nameGroup}`)
             group.appendChild(hiddenModal)
             const listArr = document.querySelector(`.${nameGroup}`)
-            if (nameGroup === 'Загород') {
-                console.log(el)
-            }
-
             for (let elem of el) {
                 if (Object.values(elem[0]).length !== 0) {
                     createIconsAndLeftSpisok(elem, final, listArr, nameGroup, 'master')
                 }
             }
         }
-        // })
     }
-
-    updateSensor = true
+    sensorsName = true
     await viewList(login)
-
     const toggleList = new ToggleHiddenList()
     toggleList.init()
     toggleList.statistikaObjectCar(final)
+    lastSensor = true
     initSummary = new SummaryViewControll(allId)
     initCharts = new ChartsViewControll()
     initCharts.getDataSummary()
-    finishload = true
+    updateSensor = true
     validRole()
     navigator();
+    finishload = true
     setInterval(zaprosSpisok, 10000, toggleList)
 }
 
@@ -388,6 +366,35 @@ export const viewList = async (login) => {
         globalSelect()
     }
 }
+
+function format(data, num) {
+    if (num === 1) {
+        const resultData = data.flat().flatMap(el => {
+            let res = el[2].result.filter(e => e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status]).filter(arr => arr.length > 0)
+            if (el.length === 10 && el[8].sub.length !== 0) {
+                return Object.values(el[8].sub).flat().flatMap(it => it[2].result.filter(e => e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status]).filter(arr => arr.length > 0));
+            }
+            return res;
+        })
+        const uniqueArr = Array.from(new Set(resultData.map(subArr => JSON.stringify(subArr)))).map(str => JSON.parse(str));
+        return uniqueArr
+    }
+    else {
+        const subArray = []
+        const resultData = data.flat().flatMap(el => {
+            let res = el[4];
+            if (el.length === 10 && el[8].sub.length !== 0) {
+                subArray.push(Object.values(el[8].sub).flat().map(it => it[4]))
+            }
+            return res;
+        });
+        const uniqueArr = [...new Set(resultData.concat(subArray.flat()))];
+        return uniqueArr
+    }
+
+}
+
+
 export async function alternativa(data) {
     return new Promise(async function (resolve, reject) {
         sensorsName = true
@@ -431,7 +438,7 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, en
         const nowTime = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
         const currentTime = nowTime - Number(lastTimeValue[3])
         statusnew = currentTime > 3600 ? 'ВЫКЛ' : statusnew
-        updatetime = lastTimeValue[3] == null ? undefined : convertTime(currentTime)
+        updatetime = convertTime(currentTime)
     }
     if (speed && speed !== '-') {
         if (speed && speed !== '-') {
@@ -620,7 +627,6 @@ async function zaprosSpisok(toggleList) {
     const list = document.querySelectorAll('.listItem')
     const arrId = Array.from(list).map(el => (el.id))
     const uniqData = [...new Set(arrId.map(JSON.stringify))].map(JSON.parse).map(id => Number(id));
-    const res = await alternativa(uniqData)
     const param = {
         method: "POST",
         headers: {
@@ -632,33 +638,17 @@ async function zaprosSpisok(toggleList) {
     const spisoks = await listsr.json()
     list.forEach(async el => {
         const idw = el.id
-        const data = res.filter(e => {
-            if (e[2] === parseFloat(idw)) {
-                return e;
-            }
-        });
         const spisok1 = spisoks.res.filter(e => {
             if (e.idw === Number(idw)) {
                 return e.result
             }
         });
         const spisok = spisok1[0].result
-        viewListKoleso(spisok[0], spisok[1], spisok[2], spisok[3], el, data, res, toggleList)
+        const data = Object.values(spisok[2])[0].filter(e => e.idw === idw && e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status]);
+        viewListKoleso(spisok[0], spisok[1], spisok[2], spisok[3], el, data, toggleList)
     })
-    const updateTime = document.querySelector('.update_time')
-    let today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
-    const day = today.getDate() < 10 ? '0' + today.getDate() : today.getDate();
-    today = day + '.' + month + '.' + year;
-    let time = new Date();
-    const hour = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
-    const minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
-    time = hour + ':' + minutes
-    const todays = today + ' ' + time
-    updateTime.textContent = 'Актуальность данных' + ' ' + todays
 }
-async function viewListKoleso(model, params, arg, osi, nameCar, data, res, toggleList) {
+async function viewListKoleso(model, params, arg, osi, nameCar, data, toggleList) {
     const idw = parseFloat(nameCar.id)
     const engineValue = data.find(i => i[1] === 'engine' && i[2] === idw);
     const engine = engineValue ? Number(engineValue[3]) : null;
@@ -668,15 +658,15 @@ async function viewListKoleso(model, params, arg, osi, nameCar, data, res, toggl
     const type = model.result && model.result.length !== 0 ? model.result[0].type : undefined
     const shina = nameCar.querySelectorAll('.arc');
     coloring(shina, nameCar, params, arg, osi, engine)
-    updateIconsSensors(res, idw, nameCar, statusnew, sats, type, engine)
-    toggleList.statistikaObjectCar(res)
+    updateIconsSensors(data, idw, nameCar, statusnew, sats, type, engine)
+    toggleList.statistikaObjectCar(data)
 }
 
 function coloring(shina, nameCar, params, arg, osi, engine) {
     if (params.result) {
         const modelUniqValues = convert(params.result)
         arg.result.forEach((el) => {
-            const matchingItem = modelUniqValues.find(item => el.name == item.pressure);
+            const matchingItem = modelUniqValues.find(item => el.params == item.pressure);
             if (matchingItem) {
                 const matchingTyre = [...shina].find(e => e.id == matchingItem.tyresdiv);
                 if (matchingTyre) {

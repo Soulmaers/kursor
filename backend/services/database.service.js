@@ -820,16 +820,30 @@ exports.setAddDataToGlobalBase = async (obj) => {
 exports.getValuePWRToBase = async (idw, param) => {
     const pool = await connection;
     try {
-        const post = `SELECT * FROM coef WHERE idw=@idw AND params=@params`
-        const res = await pool.request()
-            .input('idw', String(idw))
-            .input('params', param)
-            .query(post);
-        if (res.recordset.length !== 0) {
-            return res.recordset
-        } else {
-            return ''
+        if (param) {
+            const post = `SELECT * FROM coef WHERE idw=@idw AND params=@params`
+            const res = await pool.request()
+                .input('idw', String(idw))
+                .input('params', param)
+                .query(post);
+            if (res.recordset.length !== 0) {
+                return res.recordset
+            } else {
+                return ''
+            }
         }
+        else {
+            const post = `SELECT * FROM coef WHERE idw=@idw`
+            const res = await pool.request()
+                .input('idw', String(idw))
+                .query(post);
+            if (res.recordset.length !== 0) {
+                return res.recordset
+            } else {
+                return ''
+            }
+        }
+
     }
     catch (e) {
         console.log(e)
@@ -1710,8 +1724,8 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
             else {
                 port = data[0].port
             }
-
-            const selectBase = `SELECT name, value, status FROM params WHERE idw='${idw}' AND port='${port}'`
+            const selectBase = `SELECT * FROM sens_stor_meta WHERE idw='${idw}' AND port='${port}'`
+            //  const selectBase = `SELECT name, value, status FROM params WHERE idw='${idw}' AND port='${port}'`
             const result = await pool.query(selectBase)
             return { result: result.recordset, message: car }
         }
@@ -1754,7 +1768,7 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
         }
     });
     const params = save.result.length !== 0 ? true : false
-    return [model, models, data, osi, el, params,]
+    return [model, models, data, osi, el, params]
 
 }
 

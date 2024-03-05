@@ -169,7 +169,6 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     const model = await mod.json()
     let tsiControll = model.result.length !== 0 || model.result[0] && model.result[0].tsiControll && model.result[0].tsiControll !== '' ? Number(model.result[0].tsiControll) : null;
     tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
-    console.log(interval, ele, num)
     const t1 = !isNaN(num) ? interval[1] : interval[0][2]
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
     const active = document.querySelector('.color').id
