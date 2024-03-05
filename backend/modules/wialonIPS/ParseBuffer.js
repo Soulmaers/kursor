@@ -191,8 +191,11 @@ class ParseBuffer {
         allData['hdop'] = data[10];
         allData['inputs'] = this.reverseBinaryArray(data[11])[0]
         allData['outputs'] = this.reverseBinaryArray(data[12])[0]
-        data[13] !== 'NA' ? allData['adc'] = data[13].split(',').map((el) => parseFloat(el)) : null
-        data[14] !== 'NA' ? allData['ibutton'] = data[14] : null
+
+        for (let i = 0; i < data[13].split(',').length; i++) {
+            allData[`adc${i + 1}`] = data[13].split(',')[i] !== 'NA' ? parseFloat(data[13].split(',')[i]) : data[13].split(',')[i]
+        }
+        allData['ibutton'] = data[14]
         const splits = data[15].split(',');
         splits.forEach((el) => {
             const splitedParam = el.split(':');

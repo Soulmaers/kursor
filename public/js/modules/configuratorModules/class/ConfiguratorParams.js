@@ -118,6 +118,8 @@ export class ConfiguratorParams {
     }
 
     async createListMeta() {
+        const arrayNameParams = ['engine_hours', 'mileage', 'can_mileage', 'inter_mileage', 'pwr_int', 'rs485fuel_level',
+            'rs485fuel_temp', 'rs485fuel_level1', 'rs485fuel_temp1', 'rs485fuel_level2', 'rs485fuel_temp2']
         const data = await this.getMetaParams()
         if (data.length === 0) { return }
         const meta = Object.entries(data[0]).filter((element) => element[0] !== 'nameCar' && element[0] !== 'imei' && element[0] !== 'id' && element[0] !== 'port' && element[0] !== 'idObject');
@@ -135,7 +137,7 @@ export class ConfiguratorParams {
             li.appendChild(name)
             const value = document.createElement('div')
             value.classList.add('item_meta_value')
-            value.textContent = ` :${e[1]}`
+            value.textContent = arrayNameParams.includes(e[0]) ? ` :${parseFloat(Number(e[1]).toFixed(2))}` : ` :${e[1]}`
             li.appendChild(value)
         })
         new Findmeta(this.element)
@@ -268,10 +270,8 @@ export class ConfiguratorParams {
 
         })
         this.itemStor = [...document.querySelectorAll('.item_stor')];
-        console.log(this.itemStor)
         this.clearParams = [...document.querySelectorAll('.clear_params')];
         this.itemStor.forEach(el => { el.addEventListener('click', this.storToggle.bind(this, el)) })
-        console.log(this.clearParams)
         this.clearParams.forEach(el => el.addEventListener('click', this.clearMetaParams.bind(this, el)))
     }
 
@@ -291,14 +291,10 @@ export class ConfiguratorParams {
         return result
     }
     async addValueFixed(i, val, event) {
-        console.log(i)
-        console.log(val)
         event.stopPropagation();
         const wrap = document.querySelectorAll('.wrapper_add_value_fixed')
         wrap ? wrap.forEach(e => e.style.display = 'none') : null
         const wrapModal = i.parentNode.querySelector('.wrapper_add_value_fixed')
-        console.log(wrapModal)
-        //  wrapModal ? wrapModal.remove() : null
         if (!wrapModal) {
             const parent = i.parentNode
             const div = document.createElement('div')

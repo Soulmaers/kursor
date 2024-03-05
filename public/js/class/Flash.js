@@ -161,49 +161,50 @@ export class ResizeContainer {
     constructor(leftContainer, rightContainer, resizeHandle) {
         this.leftContainer = leftContainer;
         this.rightContainer = rightContainer;
-        this.resizeHandle = resizeHandle;
+        this.sliderBar = resizeHandle;
+        this.currentX = 0;
         this.isResizing = false;
-        this.initialX = null;
-        // Add event listeners
-        this.resizeHandle.addEventListener('mousedown', this.startResize.bind(this));
+
+        this.sliderBar.addEventListener('mousedown', this.startResize.bind(this));
         document.addEventListener('mousemove', this.resize.bind(this));
         document.addEventListener('mouseup', this.stopResize.bind(this));
+        window.addEventListener('resize', this.handleResize.bind(this));
     }
     startResize(event) {
-        event.preventDefault()
         this.isResizing = true;
-        this.initialX = event.clientX;
-        this.originalLeftContainerWidth = this.leftContainer.offsetWidth;
-        this.originalRightContainerWidth = this.rightContainer.offsetWidth;
+        this.currentX = event.clientX;
+        this.sliderBar.style.userSelect = 'none';
     }
     resize(event) {
-        if (!this.isResizing) {
-            return;
-        }
-        const dx = event.clientX - this.initialX;
-        const minContainerWidth = 50; // Set the minimum width (pixels) for containers
-        const newLeftWidth = this.originalLeftContainerWidth + dx;
-        const newRightWidth = this.originalRightContainerWidth - dx;
-        console.log(newRightWidth)
-        if (newLeftWidth < minContainerWidth || newRightWidth < minContainerWidth) {
-            return;
-        }
-        this.resizeHandle.style.transform = `translateX(${dx}px)`;
+        if (!this.isResizing) return;
 
-    }
-    stopResize(event) {
-        if (!this.isResizing) {
+        const deltaX = event.clientX - this.currentX;
+        const newWidth = this.leftContainer.offsetWidth + deltaX;
+
+        if (newWidth < 330 || newWidth > 1200) {
+            this.stopResize();
             return;
         }
-        const dx = event.clientX - this.initialX;
-        const newLeftWidth = this.originalLeftContainerWidth + dx;
-        const newRightWidth = this.originalRightContainerWidth - dx;
-        this.leftContainer.style.width = `${newLeftWidth}px`;
-        this.rightContainer.style.width = `${newRightWidth}px`;
-        console.log(this.rightContainer)
+        this.leftContainer.style.width = newWidth + 'px';
+        this.rightContainer.style.width = `calc(100% - ${newWidth}px)`;
+        this.currentX = event.clientX;
+    }
+    handleResize() {
+        const newWidth = this.leftContainer.offsetWidth;
+
+        if (newWidth < 100) {
+            this.leftContainer.style.width = '100px';
+            this.rightContainer.style.width = `calc(100% - 100px)`;
+        } else if (newWidth > 900) {
+            this.leftContainer.style.width = '900px';
+            this.rightContainer.style.width = `calc(100% - 900px)`;
+        }
+    }
+
+    stopResize(event) {
+        if (!this.isResizing) return; // добавляем проверку
         this.isResizing = false;
-        this.initialX = null;
-        this.resizeHandle.style.transform = 'translateX(0)';
+        this.sliderBar.style.removeProperty('user-select');
         console.log('дубль!!!')
         const color = document.querySelector('.color')
         const act = document.querySelector('.activStatic').id

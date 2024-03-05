@@ -10,7 +10,7 @@ class WialonOrigin {
     }
     async init() {
         const data = await wialonService.getDataFromWialon()
-        await this.getObjectData(data)
+        data ? await this.getObjectData(data) : this.init()
     }
     async getObjectData(data) {
         const dataArray = Object.entries(data)[5][1];

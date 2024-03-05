@@ -138,7 +138,6 @@ exports.setDataToBase = async (imei, port, info) => {
                 if (coefEngine) {
                     data.forEach(el => {
                         if (el.params === 'engine') {
-                            console.log(Number(el.value), Number(coefPWR[0].value))
                             obj['engine'] = Number(el.value) > Number(coefEngine[0].value) ? '1' : '0'
                         }
                     });
@@ -146,14 +145,15 @@ exports.setDataToBase = async (imei, port, info) => {
                 if (coefPWR) {
                     data.forEach(el => {
                         if (el.params === 'pwr') {
-                            console.log(Number(el.value), Number(coefPWR[0].value))
-                            obj['engineOn'] = obj['engine'] === 1 && Number(el.value) > Number(coefPWR[0].value) ? '1' : '0'
+                            obj['engineOn'] = obj['engine'] === '1' && Number(el.value) > Number(coefPWR[0].value) ? '1' : '0'
                         }
                     });
                 }
-                if (idw === '26936623') {
-                    console.log(obj)
-                }
+                /* if (idw === '26936623') {
+                     console.log(obj['engine'])
+                     console.log(obj['engineOn'])
+                     console.log(obj)
+                 }*/
 
                 await databaseService.setAddDataToGlobalBase(obj)
             }

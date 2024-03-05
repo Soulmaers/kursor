@@ -246,7 +246,6 @@ export function view(arg) {
 export async function viewConfigurator(arg, params, osi) {
     const role = document.querySelector('.role').getAttribute('rel')
     const active = document.querySelector('.color')
-
     if (params) {
         const parametrs = convert(params)
         const tiresLink = document.querySelectorAll('.tires_link_test')
@@ -257,8 +256,8 @@ export async function viewConfigurator(arg, params, osi) {
             const temp = arg.find(element => element.params === item.temp);
             const element = osi.find(element => element.idOs === item.osNumber);
             const tireLink = Array.from(tiresLink).find(e => e.id == item.tyresdiv);
+            if (pressure && tireLink || temp && tireLink) {
 
-            if (pressure && temp && tireLink) {
                 const done = active.id === '26702383' ? parseFloat((pressure.value / 10).toFixed(1)) : pressure.value !== null ? parseFloat(pressure.value) : '-';
                 const signal = element ? objColor[generDav(done, element)] : null;
                 tireLink.children[0].style.position = 'relative';

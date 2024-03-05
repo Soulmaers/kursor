@@ -9405,7 +9405,6 @@ i.changeColorCheck {
 .header_modal {
   background-color: rgba(6, 28, 71, 1);
   width: 100%;
-  height: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -342,38 +342,38 @@ class ChartServerTerminal {
                             break;
                         case 30:
                             val = buf.readUInt8()
-                            global.in9 = BitsCount.check(val, 0) ? 'Вход IN9(датчик сработал)' : 'Вход IN9(датчик в нормальном состоянии)'
-                            global.in10 = BitsCount.check(val, 1) ? 'Вход IN10(датчик сработал)' : 'Вход IN10(датчик в нормальном состоянии)'
-                            global.in11 = BitsCount.check(val, 2) ? 'Вход IN11(датчик сработал)' : 'Вход IN11(датчик в нормальном состоянии)'
-                            global.in12 = BitsCount.check(val, 3) ? 'Вход IN12(датчик сработал)' : 'Вход IN12(датчик в нормальном состоянии)'
-                            global.in13 = BitsCount.check(val, 4) ? 'Вход IN13(датчик сработал)' : 'Вход IN13(датчик в нормальном состоянии)'
-                            global.in14 = BitsCount.check(val, 5) ? 'Вход IN14(датчик сработал)' : 'Вход IN14(датчик в нормальном состоянии)'
-                            global.in15 = BitsCount.check(val, 6) ? 'Вход IN15(датчик сработал)' : 'Вход IN15(датчик в нормальном состоянии)'
-                            global.in16 = BitsCount.check(val, 7) ? 'Вход IN16(датчик сработал)' : 'Вход IN16(датчик в нормальном состоянии)'
+                            global.in9 = BitsCount.check(val, 0) ? 1 : 0//'Вход IN9(датчик сработал)' : 'Вход IN9(датчик в нормальном состоянии)'
+                            global.in10 = BitsCount.check(val, 1) ? 1 : 0//'Вход IN10(датчик сработал)' : 'Вход IN10(датчик в нормальном состоянии)'
+                            global.in11 = BitsCount.check(val, 2) ? 1 : 0//'Вход IN11(датчик сработал)' : 'Вход IN11(датчик в нормальном состоянии)'
+                            global.in12 = BitsCount.check(val, 3) ? 1 : 0//'Вход IN12(датчик сработал)' : 'Вход IN12(датчик в нормальном состоянии)'
+                            global.in13 = BitsCount.check(val, 4) ? 1 : 0//'Вход IN13(датчик сработал)' : 'Вход IN13(датчик в нормальном состоянии)'
+                            global.in14 = BitsCount.check(val, 5) ? 1 : 0//'Вход IN14(датчик сработал)' : 'Вход IN14(датчик в нормальном состоянии)'
+                            global.in15 = BitsCount.check(val, 6) ? 1 : 0//'Вход IN15(датчик сработал)' : 'Вход IN15(датчик в нормальном состоянии)'
+                            global.in16 = BitsCount.check(val, 7) ? 1 : 0//'Вход IN16(датчик сработал)' : 'Вход IN16(датчик в нормальном состоянии)'
                             buf = buf.slice(1)
                             break;
                         case 31:
                             val = buf.readUInt8()
-                            global.out1 = BitsCount.check(val, 0) ? 'Выход O1(включен)' : 'Выход O1(выключен)'
-                            global.out2 = BitsCount.check(val, 1) ? 'Выход O2(включен)' : 'Выход O2(выключен)'
-                            global.out3 = BitsCount.check(val, 2) ? 'Выход O3(включен)' : 'Выход O3(выключен)'
-                            global.out4 = BitsCount.check(val, 3) ? 'Выход O4(включен)' : 'Выход O4(выключен)'
-                            global.out5 = BitsCount.check(val, 4) ? 'Выход O5(включен)' : 'Выход O5(выключен)'
-                            global.out6 = BitsCount.check(val, 5) ? 'Выход O6(включен)' : 'Выход O6(выключен)'
-                            global.out7 = BitsCount.check(val, 6) ? 'Выход O7(включен)' : 'Выход O7(выключен)'
-                            global.out8 = BitsCount.check(val, 7) ? 'Выход O8(включен)' : 'Выход O8(выключен)'
+                            global.out1 = BitsCount.check(val, 0) ? 1 : 0// 'Выход O1(включен)' : 'Выход O1(выключен)'
+                            global.out2 = BitsCount.check(val, 1) ? 1 : 0//'Выход O2(включен)' : 'Выход O2(выключен)'
+                            global.out3 = BitsCount.check(val, 2) ? 1 : 0//'Выход O3(включен)' : 'Выход O3(выключен)'
+                            global.out4 = BitsCount.check(val, 3) ? 1 : 0//'Выход O4(включен)' : 'Выход O4(выключен)'
+                            global.out5 = BitsCount.check(val, 4) ? 1 : 0//'Выход O5(включен)' : 'Выход O5(выключен)'
+                            global.out6 = BitsCount.check(val, 5) ? 1 : 0//'Выход O6(включен)' : 'Выход O6(выключен)'
+                            global.out7 = BitsCount.check(val, 6) ? 1 : 0// 'Выход O7(включен)' : 'Выход O7(выключен)'
+                            global.out8 = BitsCount.check(val, 7) ? 1 : 0//'Выход O8(включен)' : 'Выход O8(выключен)'
                             buf = buf.slice(1)
                             break;
                         case 32:
                             val = buf.readUInt8()
-                            global.out9 = BitsCount.check(val, 0) ? 'Выход O9(включен)' : 'Выход O9(выключен)'
-                            global.out10 = BitsCount.check(val, 1) ? 'Выход 10(включен)' : 'Выход 10(выключен)'
-                            global.out11 = BitsCount.check(val, 2) ? 'Выход 11(включен)' : 'Выход 11(выключен)'
-                            global.out12 = BitsCount.check(val, 3) ? 'Выход 12(включен)' : 'Выход 12(выключен)'
-                            global.out13 = BitsCount.check(val, 4) ? 'Выход 13(включен)' : 'Выход 13(выключен)'
-                            global.out14 = BitsCount.check(val, 5) ? 'Выход 14(включен)' : 'Выход 14(выключен)'
-                            global.out15 = BitsCount.check(val, 6) ? 'Выход 15(включен)' : 'Выход 15(выключен)'
-                            global.out16 = BitsCount.check(val, 7) ? 'Выход 16(включен)' : 'Выход 16(выключен)'
+                            global.out9 = BitsCount.check(val, 0) ? 1 : 0//'Выход O9(включен)' : 'Выход O9(выключен)'
+                            global.out10 = BitsCount.check(val, 1) ? 1 : 0//'Выход 10(включен)' : 'Выход 10(выключен)'
+                            global.out11 = BitsCount.check(val, 2) ? 1 : 0//'Выход 11(включен)' : 'Выход 11(выключен)'
+                            global.out12 = BitsCount.check(val, 3) ? 1 : 0//'Выход 12(включен)' : 'Выход 12(выключен)'
+                            global.out13 = BitsCount.check(val, 4) ? 1 : 0//'Выход 13(включен)' : 'Выход 13(выключен)'
+                            global.out14 = BitsCount.check(val, 5) ? 1 : 0//'Выход 14(включен)' : 'Выход 14(выключен)'
+                            global.out15 = BitsCount.check(val, 6) ? 1 : 0//'Выход 15(включен)' : 'Выход 15(выключен)'
+                            global.out16 = BitsCount.check(val, 7) ? 1 : 0//'Выход 16(включен)' : 'Выход 16(выключен)'
                             buf = buf.slice(1)
                             break;
                         case 33:
@@ -543,8 +543,8 @@ class ChartServerTerminal {
                             break;
                         case 72:
                             val = buf.readUInt8()
-                            global.prec_info = BitsCount.check(val, 0) ? 'Навигационная информация в fixed point' : 'Навигационная информация в float point'
-                            global.prec_info = BitsCount.check(val, 1) ? 'Приёмник работает в режиме RTK (навигация достоверна)' : 'Приёмник не работает в режиме RTK'
+                            global.prec_info = BitsCount.check(val, 0) ? 'fixed' : 'float'//Навигационная информация в fixed point' : 'Навигационная информация в float point'
+                            global.prec_info = BitsCount.check(val, 1) ? 1 : 0//'Приёмник работает в режиме RTK (навигация достоверна)' : 'Приёмник не работает в режиме RTK'
                             global.prec_sats = BitsCount.from(val, 2)
                             buf = buf.slice(1)
                             break;
@@ -687,12 +687,12 @@ class ChartServerTerminal {
                             break;
                         case 100:
                             val = buf.readUInt16LE()
-                            global.tacho_state1 = BitsCount.check(val, 0) ? 'Зажигание:(включено)' : 'Зажигание:(выключено)'
-                            global.tacho_state2 = BitsCount.check(val, 1) ? 'Масса отключена:(да)' : 'Масса отключена:(нет)'
-                            global.tacho_state3 = BitsCount.check(val, 2) ? 'Режим «Паром/Поезд»:(включен)' : 'Режим «Паром/Поезд»:(выключен)'
-                            global.tacho_state4 = BitsCount.check(val, 3) ? 'Режим «Неприменимо»:(включен)' : 'Режим «Неприменимо»:(выключен)'
-                            global.tacho_state5 = BitsCount.check(val, 4) ? 'Подсветка:(включена)' : 'Подсветка:(выключена)'
-                            global.tacho_state6 = BitsCount.check(val, 5) ? 'Ошибка связи с тахографом:(да)' : 'Ошибка связи с тахографом:(нет)'
+                            global.tacho_state1 = BitsCount.check(val, 0) ? 1 : 0  //'Зажигание:(включено)' : 'Зажигание:(выключено)'
+                            global.tacho_state2 = BitsCount.check(val, 1) ? 1 : 0  //'Масса отключена:(да)' : 'Масса отключена:(нет)'
+                            global.tacho_state3 = BitsCount.check(val, 2) ? 1 : 0  //'Режим «Паром/Поезд»:(включен)' : 'Режим «Паром/Поезд»:(выключен)'
+                            global.tacho_state4 = BitsCount.check(val, 3) ? 1 : 0  //'Режим «Неприменимо»:(включен)' : 'Режим «Неприменимо»:(выключен)'
+                            global.tacho_state5 = BitsCount.check(val, 4) ? 1 : 0  //'Подсветка:(включена)' : 'Подсветка:(выключена)'
+                            global.tacho_state6 = BitsCount.check(val, 5) ? 1 : 0 /// 'Ошибка связи с тахографом:(да)' : 'Ошибка связи с тахографом:(нет)'
                             const tachoArray = ['Не обнаружено предупреждений по временным нормативам', 'Ограничение #1: 15 мин перед наступлением 4,5 ч. непрерывного вождения',
                                 'Ограничение #2: превышение 4,5 ч. непрерывного вождения', ' Ограничение #3: 15 мин до дополнительного Предупреждения 1 ',
                                 'Ограничение #4: произошло Предупреждение 1', 'ограничение #5: 15 мин до дополнительного Предупреждения 2',
@@ -795,13 +795,13 @@ class ChartServerTerminal {
                             break;
                         case 118:
                             val = buf.readUInt8()
-                            global.autoinf_status1 = BitsCount.check(val, 0) ? 'Автоинформатор включен' : 'Автоинформатор выключен'
-                            global.autoinf_status2 = BitsCount.check(val, 1) ? 'Объект в геозоне' : 'Объект вне геозоны'
-                            global.autoinf_status3 = BitsCount.check(val, 2) ? 'Геозона соотвествует маршруту ' : 'Геозона не соотвествует маршруту '
-                            global.autoinf_status4 = BitsCount.check(val, 3) ? 'Ошибка на маршруте' : 'Нет ошибок'
-                            global.autoinf_status5 = BitsCount.check(val, 4) ? 'Ошибка при работе с SD-картой' : 'Нет ошибок'
-                            global.autoinf_status6 = BitsCount.check(val, 5) ? 'Нарушение режима движения' : 'Нет нарушения'
-                            global.autoinf_status7 = BitsCount.check(val, 6) ? 'Ручной режим' : 'Автоматический режим'
+                            global.autoinf_status1 = BitsCount.check(val, 0) ? 1 : 0 //'Автоинформатор включен' : 'Автоинформатор выключен'
+                            global.autoinf_status2 = BitsCount.check(val, 1) ? 1 : 0 //'Объект в геозоне' : 'Объект вне геозоны'
+                            global.autoinf_status3 = BitsCount.check(val, 2) ? 1 : 0 //'Геозона соотвествует маршруту ' : 'Геозона не соотвествует маршруту '
+                            global.autoinf_status4 = BitsCount.check(val, 3) ? 1 : 0 //'Ошибка на маршруте' : 'Нет ошибок'
+                            global.autoinf_status5 = BitsCount.check(val, 4) ? 1 : 0 //'Ошибка при работе с SD-картой' : 'Нет ошибок'
+                            global.autoinf_status6 = BitsCount.check(val, 5) ? 1 : 0 //'Нарушение режима движения' : 'Нет нарушения'
+                            global.autoinf_status7 = BitsCount.check(val, 6) ? 1 : 0 //'Ручной режим' : 'Автоматический режим'
                             global.autoinf_status = BitsCount.check(val, 7) ? 'Резерв' : null
                             buf = buf.slice(1)
                             break;
@@ -822,10 +822,10 @@ class ChartServerTerminal {
                             break;
                         case 122:
                             val = buf.readUInt8()
-                            global.camera_status1 = BitsCount.check(val, 0) ? 'Камера доступна' : 'Камера не доступна'
-                            global.camera_status2 = BitsCount.check(val, 1) ? 'Автоматическая съёмка включена' : 'Автоматическая съёмка выключена'
-                            global.camera_status3 = BitsCount.check(val, 2) ? 'Кол-во хранимых снимков превысило максимум' : 'Штатный режим работы'
-                            global.camera_status4 = BitsCount.check(val, 3) ? 'Ошибка при работе с SD-картой' : 'Нет ошибок'
+                            global.camera_status1 = BitsCount.check(val, 0) ? 1 : 0 //'Камера доступна' : 'Камера не доступна'
+                            global.camera_status2 = BitsCount.check(val, 1) ? 1 : 0 //'Автоматическая съёмка включена' : 'Автоматическая съёмка выключена'
+                            global.camera_status3 = BitsCount.check(val, 2) ? 1 : 0 //'Кол-во хранимых снимков превысило максимум' : 'Штатный режим работы'
+                            global.camera_status4 = BitsCount.check(val, 3) ? 1 : 0 //'Ошибка при работе с SD-картой' : 'Нет ошибок'
                             for (let i = 4; i <= 7; i++) {
                                 global.camera_status = BitsCount.check(val, i) ? 'Резерв' : null;
                             }
@@ -833,7 +833,7 @@ class ChartServerTerminal {
                             break;
                         case 123: //flex 3.0
                             val = buf.readUInt8()
-                            global.status21 = BitsCount.check(val, 0) ? 'корпус вскрыт' : 'в норме';
+                            global.status21 = BitsCount.check(val, 0) ? 1 : 0 //'корпус вскрыт' : 'в норме';
                             const st12 = ['Контроль не производится', 'Перегрузка', 'Не подключена', 'Норма']
                             global.status22 = st12[BitsCount.between(val, 1, 2)]
                             const st35 = ['Нет программы', 'Ошибка', 'Остановлена', 'резерв', 'На паузе', 'Исполняется', 'Резерв', 'Резерв']
@@ -845,9 +845,9 @@ class ChartServerTerminal {
                             break;
                         case 124:
                             val = buf.readUInt8()
-                            global.modules_st31 = BitsCount.check(val, 0) ? 'Включен' : 'Выключен';
-                            global.modules_st32 = BitsCount.check(val, 1) ? 'Включен' : 'Выключен';
-                            global.modules_st33 = BitsCount.check(val, 2) ? 'Используется дополнительный' : 'Используется основной';
+                            global.modules_st31 = BitsCount.check(val, 0) ? 1 : 0 //'Включен' : 'Выключен';
+                            global.modules_st32 = BitsCount.check(val, 1) ? 1 : 0 //'Включен' : 'Выключен';
+                            global.modules_st33 = BitsCount.check(val, 2) ? 1 : 0 //'Используется дополнительный' : 'Используется основной';
                             // for (i = 3; i <= 7; i++) {
                             // global.modules_st30 = BitsCount.check(val, i) ? 'Резерв' : null;
                             //   }
@@ -858,14 +858,14 @@ class ChartServerTerminal {
                             const st = ['Отсутствует', '2G', '3G', '4G', 'резерв', 'резерв', 'резерв', 'резерв']
                             global.connection_st1 = st[BitsCount.between(val, 0, 2)]
                             for (let i = 4; i <= 8; i++) {
-                                global[`connection_st${i}`] = BitsCount.check(val, i - 1) ? 'Подключен' : 'Не подключен';
+                                global[`connection_st${i}`] = BitsCount.check(val, i - 1) ? 1 : 0 //'Подключен' : 'Не подключен';
                             }
                             buf = buf.slice(1)
                             break;
                         case 126:
                             val = buf.readUInt8()
                             for (let i = 0; i <= 7; i++) {
-                                global[`in${i + 17}`] = BitsCount.check(val, i) ? 'Датчик сработал' : 'Датчик в нормальном состоянии';
+                                global[`in${i + 17}`] = BitsCount.check(val, i) ? 1 : 0 // 'Датчик сработал' : 'Датчик в нормальном состоянии';
                             }
                             buf = buf.slice(1)
                             break;
@@ -892,7 +892,7 @@ class ChartServerTerminal {
                         case 139:
                             val = buf.readUInt8()
                             for (let i = 1; i <= 5; i++) {
-                                global[`accel_st${i}`] = BitsCount.check(val, i - 1) ? 'Датчик сработал' : 'Датчик в нормальном состоянии';
+                                global[`accel_st${i}`] = BitsCount.check(val, i - 1) ? 1 : 0 //'Датчик сработал' : 'Датчик в нормальном состоянии';
                             }
                             //  for (i = 6; i <= 7; i++) {
                             // global.accel_st = BitsCount.check(val, i) ? 'Резерв' : null;
@@ -936,7 +936,7 @@ class ChartServerTerminal {
                         case 145:
                             val = buf.readUInt8()
                             for (let i = 1; i <= 5; i++) {
-                                global[`thld_spd_st${i}`] = BitsCount.check(val, i - 1) ? 'Датчик сработал' : 'Датчик в нормальном состоянии';
+                                global[`thld_spd_st${i}`] = BitsCount.check(val, i - 1) ? 1 : 0 //'Датчик сработал' : 'Датчик в нормальном состоянии';
                             }
                             //  for (i = 6; i <= 7; i++) {
                             //global.thld_spd_st = BitsCount.check(val, i) ? 'Резерв' : null;
@@ -946,17 +946,17 @@ class ChartServerTerminal {
                         case 146:
                             val = buf.readUInt8()
                             for (let i = 0; i <= 7; i++) {
-                                i < 4 ? global[`thld_accel_st${i + 1}`] : global[`thld_brk_st${i + 1}`] = BitsCount.check(val, 0) ? 'Датчик сработал' : 'Датчик в нормальном состоянии'
+                                i < 4 ? global[`thld_accel_st${i + 1}`] : global[`thld_brk_st${i + 1}`] = BitsCount.check(val, 0) ? 1 : 0 //'Датчик сработал' : 'Датчик в нормальном состоянии'
                             }
                             buf = buf.slice(1)
                             val = buf.readUInt8()
                             for (let i = 0; i <= 7; i++) {
-                                i < 4 ? global[`thld_left_crn_st${i + 1}`] : global[`thld_right_crn_st${i + 1}`] = BitsCount.check(val, 0) ? 'Датчик сработал' : 'Датчик в нормальном состоянии'
+                                i < 4 ? global[`thld_left_crn_st${i + 1}`] : global[`thld_right_crn_st${i + 1}`] = BitsCount.check(val, 0) ? 1 : 0 //'Датчик сработал' : 'Датчик в нормальном состоянии'
                             }
                             buf = buf.slice(1)
                             val = buf.readUInt8()
                             for (let i = 0; i <= 7; i++) {
-                                i < 4 ? global[`thld_vert_st${i + 1}`] = BitsCount.check(val, 0) ? 'Датчик сработал' : 'Датчик в нормальном состоянии' :
+                                i < 4 ? global[`thld_vert_st${i + 1}`] = BitsCount.check(val, 0) ? 1 : 0 /* 'Датчик сработал' : 'Датчик в нормальном состоянии'*/ :
                                     null // global.thld_vert_st = BitsCount.check(val, 0) ? 'Резерв' :
                             }
                             buf = buf.slice(1)
@@ -1062,8 +1062,8 @@ class ChartServerTerminal {
                             break;
                         case 182:
                             val = buf.readUInt8()
-                            global.fridge_connect = BitsCount.check(val, 0) ? 'На связи' : 'Отсутствует'
-                            global.fridge_door = BitsCount.check(val, 1) ? 'Открыта' : 'Закрыта'
+                            global.fridge_connect = BitsCount.check(val, 0) ? 1 : 0 //'На связи' : 'Отсутствует'
+                            global.fridge_door = BitsCount.check(val, 1) ? 1 : 0 //'Открыта' : 'Закрыта'
                             const msgs = ['неизвестная', 'ThermoKing серии SLX', 'Carrier Standard32', 'Zanotti', 'ThermalMaster', 'Carrier NDP33LN6FB']
                             global.fridge_type = msgs[BitsCount.between(val, 2, 4)]
                             buf = buf.slice(1)
@@ -1161,7 +1161,7 @@ class ChartServerTerminal {
                         case 200:
                             val = buf.readUInt16LE()
                             for (let i = 0; i < 10; i++) {
-                                global[`geo_st${i + 1}`] = BitsCount.check(val, i) ? 'В геозоне' : 'Вне геозоны'
+                                global[`geo_st${i + 1}`] = BitsCount.check(val, i) ? 1 : 0//'В геозоне' : 'Вне геозоны'
                             }
 
                             buf = buf.slice(2)

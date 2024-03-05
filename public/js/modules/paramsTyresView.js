@@ -102,7 +102,6 @@ function createViewModel(model) {
         model.sort((a, b) => a.osi - b.osi)
         for (let i = 0; i < model.length; i++) {
             const item = model[i];
-            console.log(item)
             const container = item.trailer === 'Тягач' ? containerTagach : containerPricep;
             item.trailer === 'Прицеп' ? containerPricep.style.border = '2px solid darkblue' : containerPricep.style.border = 'none'
             container.innerHTML += `<div class=" osiTest">
