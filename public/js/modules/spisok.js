@@ -66,37 +66,9 @@ function updateProgress(progress) {
     return progress;
 }
 
-export async function loadParamsViewList(car, el) {
-    const params = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ car, el }))
-    }
-    const mod = await fetch('/api/listModel', params)
-    const model = await mod.json()
-    const tyr = await fetch('/api/listTyres', params)
-    const models = await tyr.json()
-    const dat = await fetch('/api/wialonAll', params)
-    const data = await dat.json()
-    const osis = await fetch('/api/barViewAll', params)
-    const osi = await osis.json()
 
-    model.result.sort((a, b) => {
-        if (a.osi > b.osi) {
-            return 1;
-        } else if (a.osi < b.osi) {
-            return -1;
-        } else {
-            return 0;
-        }
-    });
-    return [model, models, data, osi, el]
-}
 
 export async function conturTest(data) {
-
     const allId = format(data, 0)
     const final = format(data, 1)
     const groups = document.querySelectorAll('.groups')

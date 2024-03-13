@@ -265,6 +265,7 @@ export class SelectObjectsView {
             body: JSON.stringify({ interval, att })
         })
         const chartData = await res.json()
+        console.log(chartData)
         this.createChartToWialon(chartData)
     }
 

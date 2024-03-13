@@ -77,14 +77,13 @@ export class GrafikView {
 
     controllerMethodCharts() {
         if (this.grafik.classList.contains('activGraf')) {
-            console.log(this.time)
-            console.log(this.activeGrafiks)
-            const fn = this.objectMethod[this.activeGrafiks]
-            fn(this.time[0], this.time[1])
             const grafOld = document.querySelector('.infoGraf')
             if (grafOld) {
                 grafOld.remove()
             }
+            const fn = this.objectMethod[this.activeGrafiks]
+            fn(this.time[0], this.time[1])
+
             const loaders = document.querySelector('.loaders_charts')
             loaders.style.display = 'flex';
 

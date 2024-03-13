@@ -2,6 +2,7 @@
 import { Tooltip } from '../../class/Tooltip.js'
 import { createMapsUniq } from '../geo.js'
 
+import { dataInfo } from '../paramsTyresView.js'
 let isCanceled = false;
 
 export function convertTineAll(t) {
@@ -51,6 +52,70 @@ export async function datas(t1, t2) {
         const tt1 = convertTineAll(t1)
         const tt2 = convertTineAll(t2)
         console.log(tt1, tt2)
+
+        /* console.time('я')
+         console.log(dataInfo)
+         const [params, tyres, osibar] = dataInfo
+         console.log(params)
+         // Преобразование массива osss в объект для быстрого доступа
+         const osssMap = {};
+         osibar.forEach(e => {
+             osssMap[e.idOs] = e;
+         });
+         const idw = Number(document.querySelector('.color').id)
+         const paramss = {
+             method: "POST",
+             headers: {
+                 'Content-Type': 'application/json',
+             },
+             body: (JSON.stringify({ idw, t1, t2 }))
+         }
+         console.log('тутада???')
+         const res = await fetch('/api/getDataParamsInterval', paramss)
+         const data = await res.json();
+ 
+         if (data.length === 0) {
+             document.querySelector('.noGraf').style.display = 'block'
+             const grafOld = document.querySelector('.infoGraf')
+             if (grafOld) {
+                 grafOld.remove()
+             }
+             const loaders = document.querySelector('.loaders_charts')
+             loaders.style.display = 'none';
+             isCanceled = false;
+             return
+         }
+         document.querySelector('.noGraf').style.display = 'none'
+ 
+ 
+         const paramnew = tyres.map(el => {
+             if (osssMap[el.osNumber]) {
+                 const sens = params.find(it => Object.values(it).includes(el.pressure));
+                 if (!sens) return
+                 return {
+                     sens: sens.sens,
+                     position: Number(el.tyresdiv),
+                     parametr: el.pressure,
+                     bar: osssMap[el.osNumber],
+                     val: data.map(elem => {
+                         return ({
+                             dates: new Date(Number(elem.data) * 1000),
+                             geo: [Number(elem.lat), Number(elem.lon)],
+                             speed: Number(elem.speed),
+                             stop: Number(elem.engineOn) === 1 ? 'ВКЛ' : 'ВЫКЛ',
+                             value: Number(elem[el.pressure]),
+                             tvalue: Number(elem[el.temp])
+                         })
+                     })
+                 };
+             }
+         }).filter(el => el !== undefined)
+         paramnew.sort((a, b) => a.position - b.position)
+         console.log(paramnew)
+         console.timeEnd('я')
+ */
+
+        console.time('old')
         const param = {
             method: "POST",
             headers: {
@@ -61,6 +126,8 @@ export async function datas(t1, t2) {
         const rest = await fetch('/api/viewStructura', param)
         const resultt = await rest.json()
         console.log(resultt)
+
+
         if (resultt.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')
@@ -106,6 +173,7 @@ export async function datas(t1, t2) {
                 })
             };
         });
+        console.timeEnd('old')
         await grafikStartPress(dat2)
         const loaders = document.querySelector('.loaders_charts')
         loaders.style.display = 'none';

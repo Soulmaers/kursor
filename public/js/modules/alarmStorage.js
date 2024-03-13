@@ -1,11 +1,9 @@
 import { tr } from './content.js'
 import { convert } from './helpersFunc.js'
-import { ggg } from './menu.js'
 import { createMapsUniq } from './geo.js'
 import { testovfn } from './charts/bar.js'
 import { Tooltip } from '../class/Tooltip.js'
-import { DraggableContainer } from '../class/Dragdown.js'
-import { CloseBTN } from '../class/Flash.js'
+import { dataInfo } from './paramsTyresView.js'
 
 
 const login = document.querySelectorAll('.log')[1].textContent
@@ -22,19 +20,10 @@ export async function alarmFind() {
             it.remove();
         })
     }
+    const [, tyres,] = dataInfo
     const idw = document.querySelector('.color').id
-    const par = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ idw })
-    }
-    const tyres = await fetch('/api/tyresView', par)
-    const tyresmassiv = await tyres.json();
-    console.log(tyresmassiv)
-    if (tyresmassiv.result.length !== 0) {
-        const sorTyrest = convert(tyresmassiv.result).reduce((acc, el) => {
+    if (tyres.length !== 0) {
+        const sorTyrest = convert(tyres).reduce((acc, el) => {
             acc.push(el.pressure)
             return acc;
         }, [])
@@ -73,7 +62,6 @@ const funcSortArray = (arr) => {
 
 async function viewAlarmStorage(name, stor) {
     const resultArray = funcSortArray(stor)
-    console.log(resultArray)
     function removeDuplicates(arr) {
         const result = [];
         const duplicatesIndexes = [];

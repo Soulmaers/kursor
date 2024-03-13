@@ -1,61 +1,103 @@
 
 import { zapros } from './modules/menu.js'
-import { btnDel } from './modules/event.js'
-import { liCreate } from './modules/visual.js'
 
-
-
-
-async function init() {
+export let app;
+document.addEventListener('DOMContentLoaded', () => {
+    // Это гарантирует, что DOM полностью загружен перед инициализацией классов
     const role = document.querySelector('.role').getAttribute('rel')
     const login = document.querySelectorAll('.log')[1].textContent
-    const radioVal = document.querySelector('.radioVal')
-    role === 'Пользователь' ? dis() : btnDel()
-    function dis() {
-        const delIcon = document.querySelectorAll('.delIcon')
-        delIcon.forEach(e => {
-            e.style.display = 'none';
-        })
-        radioVal.style.marginTop = '10px'
-        radioVal.style.marginLeft = '10px'
-        radioVal.style.justifyContent = 'start'
-        radioVal.style.display = 'none'
+    app = new Application(role, login);
+    // Здесь вы можете использовать app и router для выполнения дальнейших операций
+});
+
+
+export class Application {
+    constructor(role, login) {
+        this.role = role
+        this.login = login
+        console.log('Application initialized');
+        this.init()
     }
 
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ login }))
+    // Методы класса Application
+    async init() {
+        this.formatContainer()
+        this.logs()
+        zapros(this.login)
 
     }
-    const res = await fetch('/api/viewLogs', param)
-    const confirm = await res.json()
-    zapros(login) //делаем запрос на wialon получаем объекты
-    liCreate()
-    const wrapperFull = document.querySelector('.wrapperFull')
-    const lowList = document.querySelector('.low_list')
 
-    if (screen.width < 860) {
-        const newColumn = document.querySelectorAll('.newColumn')
-        const newCel = document.querySelectorAll('.newCel')
-        newColumn.forEach(e => e.remove())
-        newCel.forEach(e => e.remove())
 
+    async logs() {
+        const login = this.login
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ login }))
+
+        }
+        const res = await fetch('/api/viewLogs', param)
+        const confirm = await res.json()
     }
-    if (screen.width === 1366 && screen.height === 768) {
-        wrapperFull.style.height = '651px'
-    } else if (screen.width === 1920 && screen.height === 1080) {
-        wrapperFull.style.height = '883px'
-    }
-    lowList.style.height = wrapperFull.clientHeight - 65 + 'px';
+    formatContainer() {
+        const wrapperFull = document.querySelector('.wrapperFull')
+        const lowList = document.querySelector('.low_list')
 
+        if (screen.width < 860) {
+            const newColumn = document.querySelectorAll('.newColumn')
+            const newCel = document.querySelectorAll('.newCel')
+            newColumn.forEach(e => e.remove())
+            newCel.forEach(e => e.remove())
+
+        }
+        if (screen.width === 1366 && screen.height === 768) {
+            wrapperFull.style.height = '651px'
+        } else if (screen.width === 1920 && screen.height === 1080) {
+            wrapperFull.style.height = '883px'
+        }
+        lowList.style.height = wrapperFull.clientHeight - 65 + 'px';
+    }
 }
 
 
 
-init();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

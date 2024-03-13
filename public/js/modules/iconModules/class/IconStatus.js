@@ -286,6 +286,9 @@ export class IconStatus {
                 case 'ign-card':
                     elem.children[0].textContent = parametrs
                     break;
+                case 'moto-card':
+                    elem.children[0].textContent = parametrs !== '---' ? parametrs.toFixed(1) : '---'
+                    break;
                 case 'akb-card':
                     elem.children[0].textContent = parametrs !== '---' ? parametrs.toFixed(1) : '---'
                     break;

@@ -45,7 +45,7 @@ export async function loadParamsView(signal) {
         'Если зажигание включено, а данные не приходят, то колесо будет с серый фоном',
         'Если зажигание выключено, то колесо будет черным, а последние зафиксированные показатели серым цветом',
         'При наведении на колесо появится подсказка с параметром колеса и актуальностью данных'])
-    viewPokasateli(signal)
+    await viewPokasateli(signal)
 
     intervalId = setInterval(viewPokasateli, 60000)
     isProcessing = false;
@@ -221,8 +221,8 @@ export function viewMenuParams() {
     })
 }
 
-
-export async function viewPokasateli(signal) {
+export let dataInfo;
+async function viewPokasateli(signal) {
     const color = document.querySelector('.color')
     console.log(color)
     if (!color) {
@@ -248,10 +248,8 @@ export async function viewPokasateli(signal) {
         }
         const paramsss = await fetch('/api/tyresView', param)
         const params = await paramsss.json()
-        console.log(idw)
         const datas = await fetch('/api/getSens', param)
         const data = await datas.json()
-        console.log(data)
 
         const os = await fetch('/api/barView', param)
         const osi = await os.json()
@@ -259,6 +257,7 @@ export async function viewPokasateli(signal) {
             if (prev.name < next.name) return -1;
             if (prev.name < next.name) return 1;
         })
+        dataInfo = [data, params.result, osi]
         view(data)
         viewConfigurator(data, params.result, osi)
 

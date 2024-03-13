@@ -147,10 +147,7 @@ export async function visual(el) {
     if (titleCar) {
         titleCar.textContent = el.children[0].textContent
     }
-    const graf = document.querySelector('.activGraf')
-    if (graf) {
-        grafClick.controllerMethodCharts();
-    }
+
     const idw = el.id
     if (createEvent && createEvent.updateInterval) {
         clearInterval(createEvent.updateInterval);
@@ -166,10 +163,14 @@ export async function visual(el) {
     }
     controller = new AbortController();
     const signal = controller.signal;
-
-    await loadParamsView(signal)
-    timeIntervalStatistiks(signal);
     liCreate()
+    await loadParamsView(signal)
+    const graf = document.querySelector('.activGraf')
+    if (graf) {
+        console.log('график')
+        grafClick.controllerMethodCharts();
+    }
+    timeIntervalStatistiks(signal);
     // findTyresInstall()
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
@@ -178,7 +179,7 @@ export async function visual(el) {
     setInterval(kranParams, 300000)
     // tarirView();
     // setInterval(tarirView, 300000)
-    // alarmFind()
+    alarmFind()
     const btnShina = document.querySelectorAll('.modals')
     console.log(btnShina)
     if (btnShina[1].classList.contains('active')) {
@@ -227,7 +228,7 @@ export function visualNone(e) {
 
 
 //создаем список под параметры
-export async function liCreate() {
+export function liCreate() {
     const obo = document.querySelector('.obo')
     const count = 250;
     for (let i = 0; i < count; i++) {
@@ -238,11 +239,12 @@ export async function liCreate() {
 }
 export function view(arg) {
     const msg = document.querySelectorAll('.msg')
+    console.log(msg)
     arg.forEach((el, index) => {
         msg[index].textContent = `${el.params}:${el.value !== null ? el.value : '-'}`
     })
 }
-export async function viewConfigurator(arg, params, osi) {
+export function viewConfigurator(arg, params, osi) {
     const role = document.querySelector('.role').getAttribute('rel')
     const active = document.querySelector('.color')
     console.log(params)

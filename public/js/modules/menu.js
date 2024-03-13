@@ -2,15 +2,17 @@
 import { conturTest } from './spisok.js'
 import { checkCreate } from './admin.js'
 import { logsView } from './popup.js'
-import { inits } from '../main.js'
+
 
 export let dataspisok = false
 
 export let allObjects;
+
+/*
 const wrapContaint = document.querySelector('.wrapper_containt')
 const cont = document.createElement('div')
 cont.classList.add('container2')
-wrapContaint.appendChild(cont);
+wrapContaint.appendChild(cont);*/
 
 export async function zapros(login) {
     const [wialonData, kursorData] = await Promise.all([zaprosWialon(login), zaprosKursor(login)])
