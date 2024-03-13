@@ -8,7 +8,7 @@ import { DraggableContainer } from '../class/Dragdown.js'
 
 let intervalId
 let isProcessing = false;
-export async function loadParamsView() {
+export async function loadParamsView(signal) {
     if (isProcessing) {
         return;
     }
@@ -31,6 +31,7 @@ export async function loadParamsView() {
         headers: {
             'Content-Type': 'application/json',
         },
+        signal: signal,
         body: (JSON.stringify({ idw }))
     }
     const mod = await fetch('/api/modelView', params)
@@ -44,7 +45,7 @@ export async function loadParamsView() {
         'Если зажигание включено, а данные не приходят, то колесо будет с серый фоном',
         'Если зажигание выключено, то колесо будет черным, а последние зафиксированные показатели серым цветом',
         'При наведении на колесо появится подсказка с параметром колеса и актуальностью данных'])
-    viewPokasateli()
+    viewPokasateli(signal)
 
     intervalId = setInterval(viewPokasateli, 60000)
     isProcessing = false;
@@ -221,7 +222,7 @@ export function viewMenuParams() {
 }
 
 
-export async function viewPokasateli() {
+export async function viewPokasateli(signal) {
     const color = document.querySelector('.color')
     console.log(color)
     if (!color) {
@@ -242,6 +243,7 @@ export async function viewPokasateli() {
             headers: {
                 'Content-Type': 'application/json',
             },
+            signal: signal,
             body: (JSON.stringify({ activePost, idw }))
         }
         const paramsss = await fetch('/api/tyresView', param)

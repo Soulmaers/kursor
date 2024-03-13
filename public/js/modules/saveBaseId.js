@@ -129,6 +129,7 @@ export async function findTyresInstall() {
     }
     const par = await fetch('/api/listTyresId', param)
     const params = await par.json()
+    console.log(params)
     const result = Object.values(params.result.reduce(
         (acc, val) => {
             acc[val.idTyres] = Object.assign(acc[val.idTyres] ?? {}, val);
@@ -136,6 +137,7 @@ export async function findTyresInstall() {
         },
         {}
     ));
+    console.log(result)
     const tiresLink = document.querySelectorAll('.tires_link')
     tiresLink.forEach(el => {
         result.forEach(item => {

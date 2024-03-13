@@ -26,6 +26,7 @@ export class CreateNewObject {
         Array.from(this.navi.children).forEach(e => { e.addEventListener('click', this.toogleModal.bind(this, e)) })
         this.idPref = null
         this.id = null
+        this.object == null
     }
 
     toogleModal(e) {
@@ -267,6 +268,9 @@ export class CreateNewObject {
     }
 
     async viewObjects(el) {
+        this.object = el.parentElement.parentElement
+        el.parentElement.parentElement.style.zIndex = 2;
+        el.parentElement.parentElement.style.backgroundColor = '#fff';
         const idw = el.parentElement.parentElement.id
         const element = el.parentElement.parentElement
         const prefix = element.classList.contains('wialon') ? 'wialon' : 'kursor'
@@ -312,8 +316,6 @@ export class CreateNewObject {
                 else {
                     this.instance = new ConfiguratorParams(this.idPref, result[0].port, result[0].imei, dat)
                 }
-
-
             }
             else {
                 const params = {
@@ -351,7 +353,9 @@ export class CreateNewObject {
             data.forEach((e, index) => {
                 this.field_modal[index].value = e
             })
-
+            console.log(data)
+            const metaObject = document.querySelector('.metaObject')
+            metaObject.textContent = `${data[0]} (${data[1]} : ${data[3]})`
             this.pop.style.display = 'block'
             this.modal.style.display = 'flex';
             this.modal.style.zIndex = 2
@@ -361,6 +365,10 @@ export class CreateNewObject {
     }
 
     hiddenModal() {
+        this.object.style.zIndex = '';
+        this.object.style.backgroundColor = '';
+        this.object = null
+
         const titleModales = this.modal.querySelector('.title_modales')
         titleModales.textContent = 'Объект'
         this.pop.style.display = 'none'

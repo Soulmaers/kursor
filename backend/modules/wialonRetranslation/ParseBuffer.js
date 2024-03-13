@@ -40,7 +40,7 @@ class ParseBuffer {
             console.log('дата')
             this.buffer.push(data);
         })
-        this.socket.on('end', () => {
+        this.socket.on('end', async () => {
             console.log('энд')
             const data = Buffer.concat(this.buffer);
             let buf = data
@@ -57,26 +57,26 @@ class ParseBuffer {
             const mask = buf.readUInt32BE()
             buf = buf.slice(4)
             this.parse(buf)
-            this.setData(this.imei, this.port)
-            this.setValidationImeiToBase()
+            const res = await databaseService.objectsImei(String(this.imei))
+            if (res.length !== 0) {
+                this.setData(this.imei, this.port, res[0].idObject)
+                this.setValidationImeiToBase()
+            }
         })
         this.socket.end();
     }
 
-    async setData(imei, port) {
-        await helpers.setDataToBase(imei, port, this.arrayData)
+    async setData(imei, port, id) {
+        await helpers.setDataToBase(imei, port, this.arrayData, id)
     }
-    async setValidationImeiToBase() {
-        const res = await databaseService.objectsImei(String(this.imei))
-        if (res.length !== 0) {
-            this.allData['idObject'] = res[0].idObject
-            const table = 'wialon_retranslation'
-            const base = new JobToBase()
-            await base.createTable(table)
-            await base.fillingTableColumns(this.allData, table)
-            await base.fillingTableRows(this.allData, table)
-            console.log('Протокол wialon R -даные сохранены в БД')
-        }
+    async setValidationImeiToBase(id) {
+        this.allData['idObject'] = id
+        const table = 'wialon_retranslation'
+        const base = new JobToBase()
+        await base.createTable(table)
+        await base.fillingTableColumns(this.allData, table)
+        await base.fillingTableRows(this.allData, table)
+        console.log('Протокол wialon R -даные сохранены в БД')
     }
     parse(buf) {
         if (buf.length === 0) {

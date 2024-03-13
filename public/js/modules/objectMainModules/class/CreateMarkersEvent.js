@@ -20,13 +20,31 @@ export class CreateMarkersEvent {
         this.setTrack = document.querySelector('.togTrack');
         this.calendar = document.querySelector('.calendar_track')
         this.button = this.calendar.querySelectorAll('.btm_formStart')
-        this.button[0].addEventListener('click', this.clear.bind(this))
-        this.button[1].addEventListener('click', this.ok.bind(this))
-        //this.boundViewTrackAndMarkersEvent = this.viewTrackAndMarkersEnent.bind(this);
-        //this.setTrack.addEventListener('click', this.boundViewTrackAndMarkersEvent)
-        this.setTrack.addEventListener('click', this.toggleCalendar.bind(this))
+        // Сохраняем привязанные методы
+        this.boundClear = this.clear.bind(this);
+        this.boundOk = this.ok.bind(this);
+        this.boundToggleCalendar = this.toggleCalendar.bind(this);
+        this.init();
+        this.initEventListeners();
     }
 
+    reinitialize(newId) {
+        this.removeEventListeners(); // Удаление старых слушателей событий
+        this.id = newId; // Обновление id
+        this.init(); // Переинициализация с новым id
+        this.initEventListeners(); // Повторное добавление слушателей событий
+    }
+
+    initEventListeners() {
+        this.button[0].addEventListener('click', this.boundClear);
+        this.button[1].addEventListener('click', this.boundOk);
+        this.setTrack.addEventListener('click', this.boundToggleCalendar);
+    }
+    removeEventListeners() {
+        this.button[0].removeEventListener('click', this.boundClear);
+        this.button[1].removeEventListener('click', this.boundOk);
+        this.setTrack.removeEventListener('click', this.boundToggleCalendar);
+    }
     async toggleCalendar(event) {
         const element = event.target
         console.log(element)
@@ -52,7 +70,6 @@ export class CreateMarkersEvent {
         console.log(this.time)
         if (this.time) {
             this.calendar.style.display = 'none'
-            //  this.calendar.previousElementSibling.classList.remove('clickUp')
             this.calendar.children[0].children[0].value = ''
             this.viewTrackAndMarkersEnent()
         } else {
@@ -68,18 +85,18 @@ export class CreateMarkersEvent {
 
 
     async viewTrackAndMarkersEnent() {
-        const tracks = await this.getIntervalTrack()
-        this.track = tracks
+        this.track = await this.getIntervalTrack()
         const track = this.track.map(e => e.geo)
+        const prostoy = await this.getEventProstoy()
+        this.eventMarkers = await this.getEventObject(track, prostoy)
+        this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
+
         if (this.poly) {
             mapLocal.removeLayer(this.poly);
             this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
         }
         this.poly = L.polyline(track, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
-
-        this.startTrack ? this.startTrack.addTo(mapLocal) : null
-        this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
-        console.log(this.track)
+        //  this.startTrack ? this.startTrack.addTo(mapLocal) : null
         this.track.forEach((it, i) => {
             const icon = L.icon({
                 iconUrl: '../../image/starttrack.png',
@@ -172,31 +189,35 @@ export class CreateMarkersEvent {
         this.time = null
         this.updateInterval = setInterval(() => {
             this.update();
-        }, 120000);
+        }, 110000);
         this.update();
     }
 
     async update() {
-        const track = await this.getIntervalTrack()
-        console.log(track)
-        //  if (track.length !== 0) {
-        const geo = track.length !== 0 ? [track[track.length - 1].geo[0], track[track.length - 1].geo[1], track[track.length - 1].course] : []
+        const geo = await this.lastGeo()
         this.createMapMainObject(geo)
-        const prostoy = await this.getEventProstoy()
-        //  const pressure = await this.getEventPressure()
-        //  this.track = track
-        this.eventMarkers = await this.getEventObject(track, prostoy)
         if (!this.markerCreator) {
             this.markerCreator = new MarkerCreator(mapLocal);
         }
-        if (track.length !== 0) {
-            const startTrack = {
-                geo: track[0].geo, course: track[0].course, time: track[0].time
-            }
-            this.getStartTrack(startTrack)
-        }
-        //  }
 
+    }
+
+    async lastGeo() {
+        const category = document.querySelector('.color')
+        const idw = category.id
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idw })
+        }
+        const geoTest = await fetch('/api/getSens', params)
+        const geoCard = await geoTest.json();
+        const lat = geoCard.find(e => e.params === 'lat')
+        const lon = geoCard.find(e => e.params === 'lon')
+        const geo = lat && lon ? [Number(lat.value), Number(lon.value)] : []
+        return geo
     }
 
     async getStartTrack(startTrack) {
@@ -255,44 +276,24 @@ export class CreateMarkersEvent {
         let nowDate = Math.round(new Date().getTime() / 1000);
         let nDate = new Date();
         let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 1) / 1000);
+        const t1 = !this.time ? timeFrom : this.time[0]
+        const t2 = !this.time ? nowDate : this.time[1] === this.time[0] ? this.time[1] + 86399 : this.time[1]
         let data;
-        if (!category.classList.contains('kursor')) {
-            const t1 = !this.time ? timeFrom : this.time[0]
-            const t2 = !this.time ? nowDate : this.time[1] === this.time[0] ? this.time[1] + 86399 : this.time[1]
-            console.log(t1, t2)
-            const active = idw
-            const param = {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: (JSON.stringify({ active, t1, t2 }))
-            }
-            const rest = await fetch('/api/viewSortChart', param)
-            const resultt = await rest.json()
-            // console.log(resultt)
-            resultt.sort((a, b) => Number(a.time) - Number(b.time));
-            data = resultt.reduce((acc, el) => {
-                acc.push({ geo: [JSON.parse(el.geo)[0], JSON.parse(el.geo)[1]], speed: el.speed, time: el.time, sats: el.sats, course: el.curse })
-                return acc
-            }, [])
+        console.log(t1, t2)
+        const paramss = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw, t1, t2 }))
         }
-        else {
-            const paramss = {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: (JSON.stringify({ nowDate, timeFrom, idw }))
-            }
-            const geoTest = await fetch('/api/geoLastIntervalKursor', paramss)
-            const geoCard = await geoTest.json();
-            data = geoCard.resTrack.reduce((acc, el) => {
-                acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
-                return acc
-            }, [])
-        }
-        //  console.log(data)
+        console.log('тутада???')
+        const geoTest = await fetch('/api/geoLastInterval', paramss)
+        const geoCard = await geoTest.json();
+        data = geoCard.resTrack.reduce((acc, el) => {
+            acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
+            return acc
+        }, [])
         return data
     }
 

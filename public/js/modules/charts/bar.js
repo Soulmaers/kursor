@@ -27,12 +27,13 @@ export async function testovfn(active, t1, t2) {
     return resultt
 }
 
-export async function testovfnNew(active, t1, t2) {
+export async function testovfnNew(active, t1, t2, signal) {
     const param = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
+        signal: signal,
         body: (JSON.stringify({ active, t1, t2 }))
     }
     const rest = await fetch('/api/viewSortChart', param)

@@ -34,34 +34,13 @@ export async function kartaContainer(elem) {
         }, 0);
     }
     const list = document.querySelectorAll('.listItem')
-
-    const arrayId = [];
-    const arrayIdKursor = [];
-
-    Array.from(list).reduce((acc, el) => {
-        if (el.classList.contains('wialon')) {
-            arrayId.push(el.id);
-        }
-        if (el.classList.contains('kursor')) {
-            arrayIdKursor.push(el.id);
-        }
-        return acc;
-    }, []);
-
-    console.log(arrayId)
-    const paramsW = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ arrayId }),
-    };
-
-
-    const resW = await fetch('/api/getGeo', paramsW);
-    const resultsW = await resW.json();
-    console.log(resultsW)
-    const promises = arrayIdKursor.map(async el => {
+    const objCondition = {
+        0: 'Стоянка',
+        1: 'Движется',
+        2: 'Остановка'
+    }
+    const arrayId = Array.from(list).map(el => el.id)
+    const promises = arrayId.map(async el => {
         const idw = el
         const param = {
             method: "POST",
@@ -70,34 +49,34 @@ export async function kartaContainer(elem) {
             },
             body: (JSON.stringify({ idw }))
         }
-        const ress = await fetch('api/objectId', param)
-        const object = await ress.json()
-        const port = object[0].port
-        const paramsK = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ idw, port }),
-        };
-        const resK = await fetch('/api/getParamsKursor', paramsK);
-        const resultsK = await resK.json();
-        console.log(resultsK)
-        const res = resultsK.reduce((acc, e) => {
-            const geo = [e.lat, e.lon]
-            const status = Number(e.speed) === 0 ? 'Стоянка' : 'Поездка'
-            const meliage = Number(Number(e.meliage).toFixed(2))
-            const speed = Number(Number(e.speed).toFixed(0))
-            acc.push(e.idObject, geo, Number(e.course), speed, status, meliage)
-            return acc
-        }, [])
-        return res
-    })
+        const res = await fetch('api/getSens', param)
+        const data = await res.json()
+        const speed = data.find(e => e.params === 'speed')
+        const lat = data.find(e => e.params === 'lat')
+        const lon = data.find(e => e.params === 'lon')
+        const course = data.find(e => e.params === 'course')
+        const engine = data.find(e => e.params === 'engine')
+        const lastTime = data.find(e => e.params === 'last_valid_time')
+        let condition;
+        if (speed.value && engine.value) {
+            const num = (Number(speed.value) > 0 && Number(engine.value) === 1) ? 1
+                : (Number(speed.value) === 0 && Number(engine.value) === 1) ? 2
+                    : (Number(speed.value) === 0 && Number(engine.value) === 0) ? 0 : undefined;
+            condition = objCondition[num]
+        }
+        const geo = [lat.value, lon.value]
+        if (lastTime.value !== null) {
+            return ([el, geo, Number(course.value), Number(speed.value), condition, lastTime.value])
+        }
+        else {
+            return []
+        }
+    }).filter(t => t.length !== 0)
     const res = await Promise.allSettled(promises)
-    const resultsK = res
+    const allData = res
         .filter(promise => promise.status === 'fulfilled')
         .map(promise => promise.value);
-    const allData = resultsW.concat(resultsK)
+
     const clearArray = Array.from(document.querySelectorAll('.checkInList')).reduce((acc, el) => {
         acc.push(el.closest('.listItem').id)
         return acc
@@ -110,8 +89,9 @@ export async function kartaContainer(elem) {
     }, [])
     const result = originalObjectsData.map(el => {
         let newArr = [...el]
-        newArr[5] = el[5] == null ? undefined : convertTime(el[5])
-        newArr.push(el[5] > 3600 ? 'off' : 'on')
+        const lastTime = Math.floor(new Date().getTime() / 1000) - Number(el[5])
+        newArr[5] = el[5] == null ? null : convertTime(Number(lastTime))
+        newArr.push(el[5] !== null ? lastTime > 3600 ? 'off' : 'on' : '-')
         return newArr
     })
     const itog = result.reduce((acc, el) => {
@@ -121,12 +101,12 @@ export async function kartaContainer(elem) {
         acc.push([...el, name, group])
         return acc
     }, [])
-    console.log(itog)
     initsmarkers = new InitMarkers(itog, map, resultGeoTrack)
     initsmarkers.addMarkersToMap()
     initsmarkers.viewHiddenMenuMap()
     initsmarkers.viewHiddenInfoMap()
     initsmarkers.toggleMarkersIcon()
+    initsmarkers.createInfoControll()
 
     const checkMarkers = document.querySelectorAll('.checkMarkers')
 

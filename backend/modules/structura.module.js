@@ -5,13 +5,44 @@ exports.datas = async (objects, now, old) => {
     const result = objects
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
+
+    //   console.log(result)
     try {
         for (const e of result) {
-            const params = await databaseService.tyresViewToBase(e[4])
-            const osiBar = await databaseService.barViewToBase(e[4])
-            const ossParams = { osi: osiBar, params: params }
-            //   console.log(ossParams)
+            const params = e[1].result
+            const osiBar = e[3].result//await databaseService.barViewToBase(e[4])
+            const sensToParams = e[2].result
+            const idw = String(e[4])
+            const dannienew = await databaseService.geoLastInterval(old, now, idw)
+
+
+            // Преобразование массива osss в объект для быстрого доступа
+            const osssMap = {};
+            osiBar.forEach(e => {
+                osssMap[e.idOs] = e;
+            });
+
+
+            const paramnew = params.map(el => {
+                if (osssMap[el.osNumber]) {
+                    const sens = sensToParams.filter(e => e.params === el.params).map(it => ({ sens: it.sens }));
+                    return {
+                        sens: sens,
+                        position: el.tyresdiv,
+                        bar: osssMap[el.osNumber],
+                        val: [],
+
+                    };
+                }
+            })
+
+            console.log(paramnew)
+            const globalArray = sensToParams.filter(e => e.params.startsWith('tpms_p')).map(it => {
+                return { sens: it.sens }
+            })
+            //console.log(globalArray)
             const dannie = await databaseService.viewChartDataToBase(e[4], old, now)
+            // console.log(dannie)
             const itogy = dannie.map(it => {
                 return {
                     id: it.idw,
@@ -34,19 +65,7 @@ exports.datas = async (objects, now, old) => {
             nameArr.forEach((item) => {
                 allArrNew.push({ sens: item[0], params: item[1], value: [] })
             })
-            const osss = ossParams.osi
-            const par = ossParams.params
-            osss.forEach(it => {
-                delete it.id
-                delete it.nameCar
-            })
-            par.forEach(el => {
-                osss.forEach(e => {
-                    if (el.osNumber === e.idOs) {
-                        el.bar = e
-                    }
-                })
-            })
+
             sensTest.forEach(el => {
                 for (let i = 0; i < allArrNew.length; i++) {
                     allArrNew[i].value.push(Object.values(el)[i])
@@ -82,7 +101,7 @@ exports.datas = async (objects, now, old) => {
                 el.stop = stop
             })
             finishArrayData.forEach(e => {
-                par.forEach(it => {
+                params.forEach(it => {
                     if (e.params === it.pressure) {
                         e.bar = it.bar
                         e.position = Number(it.tyresdiv)
@@ -174,6 +193,7 @@ exports.datas = async (objects, now, old) => {
             mass.push(dat)
             mass.push(e[4])
             mass.push(JSON.stringify(dat2))
+
 
             // console.log(mass)
             const res = dat2.length !== 0 ? await databaseService.saveStructuraToBase(mass) : null

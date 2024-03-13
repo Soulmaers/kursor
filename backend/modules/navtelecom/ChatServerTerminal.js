@@ -81,36 +81,42 @@ class ChartServerTerminal {
                     //  console.log(buf)
                     let count = type === '~A' ? buf.readUInt8() : 1
                     this.telemetrationFields(buf, type, count)
-                    this.setData(this.imei, this.port)
-                    WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
-                    this.globalArrayMSG = []
-                    const response = Buffer.alloc(type === '~A' ? 3 : 2);
-                    response.write(type, 'ascii');
-                    type === '~A' ? response.writeUInt8(count, type.length, 1) : null
-                    const crc8c = CheckSumm.crc8(response)
-                    this.responce = Buffer.concat([response, Buffer.from([crc8c])])
-                    this.responces(type === '~A' ? 'A~' : 'C~')
+                    const res = await databaseService.objectsImei(String(this.imei))
+                    if (res.length !== 0) {
+                        this.setData(this.imei, this.port, res[0].idObject)
+                        WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
+                        this.globalArrayMSG = []
+                        const response = Buffer.alloc(type === '~A' ? 3 : 2);
+                        response.write(type, 'ascii');
+                        type === '~A' ? response.writeUInt8(count, type.length, 1) : null
+                        const crc8c = CheckSumm.crc8(response)
+                        this.responce = Buffer.concat([response, Buffer.from([crc8c])])
+                        this.responces(type === '~A' ? 'A~' : 'C~')
+                    }
                 }
                 else if (type === '~T') {
                     const eventindex = buf.readUInt32LE()
                     buf = buf.slice(3)
                     this.telemetrationFields(buf, type, 1)
-                    this.setData(this.imei, this.port)
-                    WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
-                    this.globalArrayMSG = []
-                    const response = Buffer.alloc(6);
-                    response.write(type, 'ascii');
-                    response.writeUInt32LE(eventindex, 2);
-                    const crc8c = CheckSumm.crc8(response)
-                    this.responce = Buffer.concat([response, Buffer.from([crc8c])])
-                    this.responces('T~')
+                    const res = await databaseService.objectsImei(String(this.imei))
+                    if (res.length !== 0) {
+                        this.setData(this.imei, this.port, res[0].idObject)
+                        WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
+                        this.globalArrayMSG = []
+                        const response = Buffer.alloc(6);
+                        response.write(type, 'ascii');
+                        response.writeUInt32LE(eventindex, 2);
+                        const crc8c = CheckSumm.crc8(response)
+                        this.responce = Buffer.concat([response, Buffer.from([crc8c])])
+                        this.responces('T~')
+                    }
                 }
             }
         });
     }
 
-    async setData(imei, port) {
-        await helpers.setDataToBase(imei, port, this.globalArrayMSG)
+    async setData(imei, port, id) {
+        await helpers.setDataToBase(imei, port, this.globalArrayMSG, id)
     }
 
 

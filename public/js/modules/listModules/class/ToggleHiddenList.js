@@ -294,7 +294,7 @@ export class ToggleHiddenList {
             karta.classList.add('tablo')
             click.karta(element)
             initsmarkers ? initsmarkers.toggleMarkersIcon() : null
-            this.statistikaObjectCar()
+            initsmarkers ? initsmarkers.createInfoControll() : null
         }
         if (el.classList.contains('report_unit')) {
             this.mapUnit.forEach(e => {
@@ -311,7 +311,10 @@ export class ToggleHiddenList {
             click.reports(element, 'avl_unit', el)
         }
     }
+
+    /*
     statistikaObjectCar(final) {
+
         const checkInList = document.querySelectorAll('.checkInList')
         if (!final) {
             let count = checkInList.length;
@@ -338,6 +341,7 @@ export class ToggleHiddenList {
                     count--
                 }
             })
+
             const statusCounts = final.reduce((acc, el) => {
                 if (el[0] === 'state' && el[3] === 1) {
                     acc.move = (acc.move || 0) + 1;
@@ -360,7 +364,7 @@ export class ToggleHiddenList {
                 element.textContent = arrayStatus[index]
             });
         }
-    }
+    }*/
     opasity(event) {
         initsmarkers ? initsmarkers.opasityMarkers(event.target.parentElement) : null
     }
@@ -390,7 +394,8 @@ export class ToggleHiddenList {
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
         initSummary.clickListUpdateSummary()
         initCharts ? initCharts.getDataSummary() : null
-        this.statistikaObjectCar()
+        initsmarkers ? initsmarkers.createInfoControll() : null
+
     }
     toggleHiddenList(event) {
         event.stopPropagation()
@@ -404,11 +409,12 @@ export class ToggleHiddenList {
             classReports ? classReports.createListObjectsSelect(element) : null
         }
         else {
+
             element.classList.toggle('changeColorCheck')
             initsmarkers ? initsmarkers.toggleMarkersIcon() : null
-            this.statistikaObjectCar()
             initSummary.clickListUpdateSummary()
             initCharts ? initCharts.getDataSummary() : null
+            initsmarkers ? initsmarkers.createInfoControll() : null
         }
 
     }
@@ -434,9 +440,9 @@ export class ToggleHiddenList {
                 }
             })
             initsmarkers ? initsmarkers.toggleMarkersIcon() : null
-            this.statistikaObjectCar()
             initSummary.clickListUpdateSummary()
             initCharts ? initCharts.getDataSummary() : null
+            initsmarkers ? initsmarkers.createInfoControll() : null
         }
 
 

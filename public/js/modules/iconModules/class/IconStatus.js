@@ -154,7 +154,7 @@ export class IconStatus {
 
     getValue(params) {
         let res;
-        const value = this.coefficient.find(e => e.params === params)
+        const value = this.coefficient ? this.coefficient.find(e => e.params === params) : null
         value ? res = value.value : false
         return res
     }
@@ -276,7 +276,6 @@ export class IconStatus {
                 }
             })
             const parametrs = this.valueparamsObject[elem.id] === -348201.3876 ? '---' : this.valueparamsObject[elem.id]
-            console.log(parametrs)
             switch (elem.id) {
                 case 'odom-card':
                     elem.children[0].textContent = parametrs !== '---' ? this.addZero(8, parametrs.toFixed(0)) : '---'

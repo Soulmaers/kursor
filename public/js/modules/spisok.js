@@ -225,7 +225,6 @@ export async function conturTest(data) {
     await viewList(login)
     const toggleList = new ToggleHiddenList()
     toggleList.init()
-    toggleList.statistikaObjectCar(final)
     lastSensor = true
     initSummary = new SummaryViewControll(allId)
     initCharts = new ChartsViewControll()
@@ -234,7 +233,7 @@ export async function conturTest(data) {
     validRole()
     navigator();
     finishload = true
-    setInterval(zaprosSpisok, 10000, toggleList)
+    setInterval(zaprosSpisok, 100000)
 }
 
 
@@ -395,26 +394,8 @@ function format(data, num) {
 }
 
 
-export async function alternativa(data) {
-    return new Promise(async function (resolve, reject) {
-        sensorsName = true
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ data }))
-        }
-        const sens = await fetch('/api/getSensAll', param)
-        const allsens = await sens.json()
-        const itog = allsens.filter(e => e.value !== null)
-            .map(e => [e.sens, e.params, Number(e.idw), Number(e.value), e.status !== null ? e.status : 'false']);
-        lastSensor = true
-        resolve(itog)
-    })
-}
-
 function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, engine) {
+
     const countElem = document.querySelectorAll('.newColumn')
     let condition;
     let updatetime;
@@ -426,7 +407,7 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, en
     }
 
     const oilValue = data.find(i => i[1] === 'oil' && i[2] === elemId);
-    const oil = oilValue ? oilValue[3] === -348201 ? '-' : `${oilValue[3].toFixed(0)} л.` : '-';
+    const oil = oilValue ? oilValue[3] === null ? '-' : `${oilValue[3].toFixed(0)} л.` : '-';
     const pwrValue = data.find(i => i[1] === 'pwr' && i[2] === elemId);
     const pwr = pwrValue ? parseFloat(Number(pwrValue[3]).toFixed(1)) : '-';
     const meliageValue = data.find(i => i[1] === 'mileage' && i[2] === elemId);
@@ -623,9 +604,9 @@ function fnPricep(arr, nameCarId, group) {
             .style('fill', 'white')
     })
 }
-async function zaprosSpisok(toggleList) {
+async function zaprosSpisok() {
     const list = document.querySelectorAll('.listItem')
-    const arrId = Array.from(list).map(el => (el.id))
+    const arrId = Array.from(list).map(el => (Number(el.id)))
     const uniqData = [...new Set(arrId.map(JSON.stringify))].map(JSON.parse).map(id => Number(id));
     const param = {
         method: "POST",
@@ -644,11 +625,11 @@ async function zaprosSpisok(toggleList) {
             }
         });
         const spisok = spisok1[0].result
-        const data = Object.values(spisok[2])[0].filter(e => e.idw === idw && e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status]);
-        viewListKoleso(spisok[0], spisok[1], spisok[2], spisok[3], el, data, toggleList)
+        const data = Object.values(spisok[2])[0].filter(e => e.idw === idw && e.value !== 'Н/Д' && e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status]);
+        viewListKoleso(spisok[0], spisok[1], spisok[2], spisok[3], el, data)
     })
 }
-async function viewListKoleso(model, params, arg, osi, nameCar, data, toggleList) {
+async function viewListKoleso(model, params, arg, osi, nameCar, data) {
     const idw = parseFloat(nameCar.id)
     const engineValue = data.find(i => i[1] === 'engine' && i[2] === idw);
     const engine = engineValue ? Number(engineValue[3]) : null;
@@ -659,7 +640,6 @@ async function viewListKoleso(model, params, arg, osi, nameCar, data, toggleList
     const shina = nameCar.querySelectorAll('.arc');
     coloring(shina, nameCar, params, arg, osi, engine)
     updateIconsSensors(data, idw, nameCar, statusnew, sats, type, engine)
-    toggleList.statistikaObjectCar(data)
 }
 
 function coloring(shina, nameCar, params, arg, osi, engine) {
@@ -672,7 +652,7 @@ function coloring(shina, nameCar, params, arg, osi, engine) {
                 if (matchingTyre) {
                     const integer = nameCar == 'А652УА198' ? parseFloat((el.value / 10).toFixed(1)) : el.value;
                     const backgroundStyle = engine === 0 || engine === null ? '#000' : el.status === 'false' ? 'gray' :
-                        objColorFront[generDav(integer, osi.result.find(it => it.idOs == matchingItem.osNumber))]
+                        integer !== null ? objColorFront[generDav(integer, osi.result.find(it => it.idOs == matchingItem.osNumber))] : null
                     matchingTyre.children[0].style.fill = backgroundStyle
                 }
             }

@@ -1,7 +1,5 @@
 const databaseService = require('../services/database.service');
-const wialonService = require('../services/wialon.service');
-const structura = require('./structura.module')
-
+const helpers = require('../helpers.js')
 
 class SummaryStatistiks {
     constructor(object) {
@@ -15,113 +13,67 @@ class SummaryStatistiks {
         this.rashod = '-'
     }
 
-    async testovfnNew(active, t1, t2, pref) {
-        const resultt = pref !== 'kursor' ? await databaseService.viewSortDataToBase(active, t1, t2) : await databaseService.getParamsKursorInterval(active, t1, t2)
-        // const resultt = await databaseService.viewSortDataToBase(active, t1, t2)
-
-        return resultt
-    }
-    timefn() {
-        const currentDate = new Date();
-        currentDate.setHours(0, 0, 0, 0);
-        const startOfTodayUnix = Math.floor(currentDate.getTime() / 1000);
-        const unix = Math.floor(new Date().getTime() / 1000);
-        const timeNow = unix
-        const timeOld = startOfTodayUnix
-        return [timeNow, timeOld]
-    }
-
     async init() {
-        const idwArray = this.object
-            .map(el => Object.values(el)) // получаем массивы всех id
-            .flat()
-            .map(e => [e[4], e[0].message, e[5], e[e.length - 1]])
-
-        // Запускаем все асинхронные операции одновременно и ждем их завершения
+        const idwArray = helpers.format(this.object)        // Запускаем все асинхронные операции одновременно и ждем их завершения
         const dataPromises = idwArray.map(el => this.getSensorsAndParametrs(el[0], el[el.length - 1]));
         const dataResults = await Promise.allSettled(dataPromises);
-
-        const fulfilledPromises = dataResults
-            .filter(promise => promise.status === 'fulfilled')
-            .map(promise => promise.value);
-        //  console.log(fulfilledPromises)
-
         // Обрабатываем результаты асинхронных операций
-        for (let i = 0; i < idwArray.length; i++) {
-            const id = idwArray[i][0];
-            const message = idwArray[i][1];
-            const group = idwArray[i][2];
-            this.strustura[id] = {
-                ts: 1,
-                nameCar: message,
-                group: group,
-                type: 'Тест',
-                // По умолчанию ставим заполнители
-                probeg: '-',
-                job: '-',
-                rashod: '-',
-                zapravka: '-',
-                medium: '-',
-                moto: '-',
-                prostoy: '-'
-            };
-            //   console.log(id)
-            this.data = fulfilledPromises[i];
-
-            if (this.data) {
-                const mileg = this.data.some(it => it.params === 'mileage' && it.value.length !== 0);// const mileg = this.data.some(it => it.params === 'can_mileage' || it.params === 'mileage');
-                if (mileg) {
-                    this.probeg = this.calculationMileage();
-                    this.strustura[id].probeg = this.probeg;
-                    this.strustura[id].job = this.calculationJobTs();
-                }
-
-                const oil = this.data.some(it => it.sens === 'Топливо');// const oil = this.data.some(it => it.sens === 'Топливо' || it.sens === 'Топливо ДУТ');
-                if (oil) {
-                    const [rashod, zapravka] = this.calculationOil();
-                    this.strustura[id].rashod = rashod;
-                    this.strustura[id].zapravka = zapravka;
-
-                    this.strustura[id].medium = this.calculationMedium();
-                }
-
-                const pwr = this.data.some(it => it.sens.startsWith('Бортовое'))
-
-                if (pwr) {
-
-                    const idw = id
-                    const model = await databaseService.modelViewToBase(idw)
-                    let tsiControll = model.length !== 0 && model[0].tsiControll && model[0].tsiControll !== '' ? Number(model[0].tsiControll) : null;
-                    if (tsiControll === null) {
-                        this.strustura[id].moto = 0
-                        this.strustura[id].prostoy = 0
-                    }
-                    else {
-                        const pwr = this.data.filter(it => it.sens.startsWith('Бортовое')).map(it => it);
-                        const prostoys = this.calkulateProstoy(tsiControll, pwr);
-                        this.strustura[id].prostoy = prostoys !== undefined ? prostoys : 0;
-                        const motos = this.calkulateMotos(tsiControll, pwr);
-                        this.strustura[id].moto = motos !== undefined ? motos : 0;
-                    }
-
-                }
-
-
+        const strusturas = idwArray.map(([id, message, group, pref], index) => {
+            const result = dataResults[index];
+            const data = result.status === 'fulfilled' ? result.value : null;
+            // Инициализация структуры объекта с дефолтными значениями
+            const strustura = this.initializeStrustura(id, message, group, 'Тест');
+            if (data) {
+                this.fillStrusturaWithData(strustura, data, pref);
             }
-
-        }
-
+            return strustura;
+        })
+        // Объединение всех strustura в один объект
+        this.strustura = Object.assign({}, ...strusturas.map(s => ({ [s.id]: s })));
         return this.strustura;
     }
 
-    calculationMedium() {
+    fillStrusturaWithData(strustura, data, pref) {
+        const mileg = data.some(it => it.params === 'mileage' && it.value.length !== 0);
+        if (mileg) {
+            this.probeg = this.calculationMileage(data);
+            strustura.probeg = this.probeg;
+            strustura.job = this.calculationJobTs(data);
+
+        }
+        const oil = data.some(it => it.params === 'oil' && it.value.length !== 0);
+        if (oil && pref !== 'kursor') {
+            const [rashod, zapravka] = this.calculationOil(data);
+            strustura.rashod = rashod;
+            strustura.zapravka = zapravka;
+            strustura.medium = this.calculationMedium(rashod);
+        }
+        const engineOn = data.some(it => it.params === 'engineOn' && it.value.length !== 0)
+        if (engineOn) {
+            const engineOn = data.filter(it => it.params === 'engineOn').map(it => it);
+            const prostoys = this.calculateDuration(engineOn, 'prostoy');
+            strustura.prostoy = prostoys !== undefined ? prostoys : 0;
+            const motos = this.calculateDuration(engineOn, 'motos');
+            strustura.moto = motos !== undefined ? motos : 0;
+        }
+        else {
+            strustura.moto = 0
+            strustura.prostoy = 0
+        }
+    }
+
+
+    initializeStrustura(id, nameCar, group, type) {
+        return { id, ts: 1, nameCar, group, type, probeg: '-', job: '-', rashod: '-', zapravka: '-', medium: '-', moto: '-', prostoy: '-' };
+    }
+
+    calculationMedium(rashod) {
         let medium;
         if (this.probeg !== 0 && this.probeg !== '-') {
-            medium = Number(((this.rashod / this.probeg) * 100).toFixed(0))
+            medium = Number(((rashod / this.probeg) * 100).toFixed(0))
         }
         else {
             medium = '-'
-
         }
         return medium
     }
@@ -132,8 +84,8 @@ class SummaryStatistiks {
             return 0
         }
     }
-    calculationMileage() {
-        const arrayValue = this.data.find(it => it.params === 'can_mileage' || it.params === 'mileage');
+    calculationMileage(data) {
+        const arrayValue = data.find(it => it.params === 'mileage');
         let probegZero = 0
         let probegNow = 0;
         if (arrayValue.value.length !== 0) {
@@ -169,93 +121,62 @@ class SummaryStatistiks {
     }
 
 
-    quickly(data, pref) {
-        data.sort((a, b) => {
-            if (a.time > b.time) {
-                return 1;
-            }
-            if (a.time < b.time) {
-                return -1;
-            }
-            return 0;
-        })
-
-        const time = [];
-        const speed = [];
-        const sats = [];
-        const geo = [];
-        const oil = [];
-        const meliage = [];
-        const engine = [];
-        const pwr = [];
-
-        data.forEach(el => {
-            const timestamp = Number(el.time);
-            const date = new Date(timestamp * 1000);
-            const isoString = date.toISOString();
-            time.push(new Date(isoString))
-            speed.push(pref !== 'kursor' ? el.speed : Number(Number(el.speed).toFixed(0)))
-            sats.push(Number(el.sats))
-            geo.push(pref !== 'kursor' ? JSON.parse(el.geo) : [el.lat, el.lon])
-            oil.push(pref !== 'kursor' ? el.oil : 0)
-            meliage.push(pref !== 'kursor' ? el.meliage : Number(Number(el.meliage).toFixed(0)))
-            engine.push(pref !== 'kursor' ? el.engine : el.in1 === 'Вход IN1(датчик сработал)' ? 1 : 0)
-            pwr.push(pref !== 'kursor' ? el.pwr : Number(Number(el.pwr_ext).toFixed(1)))
-        })
-
-        const allsens = [{
-            time: time,
-            speed: speed,
-            sats: sats,
-            geo: geo,
-            sens: 'Топливо',
-            params: 'oil',
-            value: oil
-        }, {
-            time: time,
-            speed: speed,
-            sats: sats,
-            geo: geo,
-            sens: 'Пробег',
-            params: 'mileage',
-            value: meliage
-        }, {
-            time: time,
-            speed: speed,
-            sats: sats,
-            geo: geo,
-            sens: 'Зажигание',
-            params: 'engine',
-            value: engine
-        }, {
-            time: time,
-            speed: speed,
-            sats: sats,
-            geo: geo,
-            sens: 'Бортовое питание',
-            params: 'pwr',
-            value: pwr
-        }]
-        return allsens
+    quickly(data) {
+        data.sort((a, b) => a.time - b.time); // Упрощённая сортировка
+        const allsens = {
+            time: [],
+            speed: [],
+            sats: [],
+            geo: [],
+            oil: [],
+            mileage: [],
+            engine: [],
+            pwr: [],
+            engineOn: []
+        };
+        for (let i = 0; i < data.length; i++) {
+            const el = data[i];
+            const timestamp = Number(el.data);
+            allsens.time.push(new Date(timestamp * 1000)); // Напрямую создаём Date
+            allsens.speed.push(parseInt(el.speed)); // Предполагаем, что el.speed уже число
+            allsens.sats.push(parseInt(el.sats));
+            allsens.geo.push([parseFloat(el.lat), parseFloat(el.lon)]);
+            el.oil !== null && el.oil !== 'Н/Д' ? allsens.oil.push(Number(Number(el.oil).toFixed(0))) : null;
+            el.mileage !== null && el.mileage !== 'Н/Д' ? allsens.mileage.push(Number(Number(el.mileage).toFixed(1))) : null;
+            el.engine !== null && el.engine !== 'Н/Д' ? allsens.engine.push(parseInt(el.engine)) : null;
+            el.pwr !== null && el.pwr !== 'Н/Д' ? allsens.pwr.push(Number(Number(el.pwr).toFixed(1))) : null;
+            el.engineOn !== null && el.engineOn !== 'Н/Д' ? allsens.engineOn.push(parseInt(el.engineOn)) : null;
+        }
+        const datas = Object.keys(allsens).map(key => ({
+            time: allsens.time,
+            speed: allsens.speed,
+            sats: allsens.sats,
+            geo: allsens.geo,
+            sens: key, // Название сенсора
+            params: key, // Параметры
+            value: allsens[key] // Значения
+        }));
+        return datas
     }
-    async getSensorsAndParametrs(el, pref) {
-        const interval = this.timefn()
+    async getSensorsAndParametrs(el) {
+        const interval = helpers.timefn()
         const timeOld = interval[1]
         const timeNow = interval[0]
-        const itognew = await this.testovfnNew(el, timeOld, timeNow, pref)
-        const alt = this.quickly(itognew, pref)
+        const itognew = await helpers.getDataToInterval(el, timeOld, timeNow)
+        const alt = this.quickly(itognew)
         return alt
     }
 
-    calculationOil() {
-        const arrayValue = this.data.find(it => (it.sens === 'Топливо' || it.sens === 'Топливо ДУТ'))
+
+    calculationOil(data) {
+        const arrayValue = data.find(it => (it.params === 'oil'))
         if (arrayValue && Array.isArray(arrayValue.value)) {
             arrayValue.value = arrayValue.value.map(element => {
-                return element === -348201 ? 0 : element;
+                return element;
             });
         }
         let i = 0;
-        //  console.log(arrayValue)
+
         const newData = JSON.parse(JSON.stringify(arrayValue));
         while (i < newData.value.length - 1) {
             if (newData.value[i] === newData.value[i + 1]) {
@@ -340,192 +261,78 @@ class SummaryStatistiks {
         filteredZapravka.forEach(e => {
             zap.push(e[1][0] - e[0][0])
         })
+
         const zapravleno = zap.reduce((acc, el) => acc + el, 0) < 0 ? '-' : zap.reduce((acc, el) => acc + el, 0)
-
-        return [rashod, zapravleno]
+        return [Number(rashod.toFixed(1)), Number(zapravleno.toFixed(1))]
     }
 
-    calkulateProstoy(tsi, newdata) {
-        const newStruktura = []
-        for (let i = 0; i < newdata[0].value.length; i++) {
-            const obj = {
-                time: newdata[0].time[i],
-                speed: newdata[0].speed[i],
-                sats: newdata[0].sats[i],
-                geo: newdata[0].geo[i],
-                sens: 'Бортовое питание',
-                params: 'pwr',
-                value: newdata[0].value[i],
-            };
-            newStruktura.push(obj);
-        }
-        if (newStruktura.length === 0) {
-            return undefined
-        }
-        else {
-            const res = newStruktura.reduce((acc, e) => {
-                if (e.value >= tsi && e.speed === 0 && e.sats > 4) {
-                    if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
-                        && acc[acc.length - 1][0].value >= tsi && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
-                        acc[acc.length - 1].push(e);
-                    } else {
-                        acc.push([e]);
+    calculateDuration(newdata, type) {
+        let totalDuration = 0;
+        newdata.forEach((item) => {
+            let segmentStart = null;
+            for (let i = 0; i < item.time.length; i++) {
+                let isActive;
+                if (type === 'prostoy') {
+                    // Условие для простоя: двигатель включен, скорость равна 0, количество спутников более 4
+                    isActive = item.value[i] === 1 && item.speed[i] === 0 && item.sats[i] > 4;
+                } else if (type === 'motos') {
+                    // Условие для моточасов: двигатель включен
+                    isActive = item.value[i] === 1;
+                }
+
+                if (isActive && segmentStart === null) {
+                    segmentStart = item.time[i]; // Начало сегмента активности
+                } else if ((!isActive || i === item.time.length - 1) && segmentStart !== null) {
+                    // Конец сегмента активности или последняя точка данных
+                    const segmentEnd = item.time[i] || segmentStart; // Конец сегмента или текущий момент
+                    let duration = segmentEnd - segmentStart;
+
+                    if (type === 'prostoy') {
+                        duration /= 1000; // Переводим время из миллисекунд в секунды для простоев
+                        if (duration > 1200) { // Только сегменты длительностью более 1200 секунд
+                            totalDuration += duration;
+                        }
+                    } else if (type === 'motos') {
+                        totalDuration += duration; // Для моточасов сохраняем миллисекунды
                     }
-                } else if (e.value < tsi && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
-                    || e.speed > 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
-                    || e.sats <= 4 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
-                    acc.push([]);
+                    segmentStart = null;
                 }
-
-                return acc;
-            }, []).filter(el => el.length > 0).reduce((acc, el) => {
-                if ((Number(el[el.length - 1].time) - Number(el[0].time)) / 1000 > 1200) {
-                    acc.push([[el[0].time, el[0].geo], [el[el.length - 1].time, el[el.length - 1].geo]])
-                }
-                return acc
-            }, [])
-            const prostoys = res.reduce((acc, el) => {
-                acc = acc + (Number(el[1][0]) - Number(el[0][0])) / 1000
-                return acc
-            }, 0)
-            return prostoys
-        }
-
+            }
+        });
+        return totalDuration;
     }
-
-    calkulateMotos(tsi, newdata) {
-        const newStruktura = []
-        for (let i = 0; i < newdata[0].value.length; i++) {
-            const obj = {
-                time: newdata[0].time[i],
-                speed: newdata[0].speed[i],
-                sats: newdata[0].sats[i],
-                geo: newdata[0].geo[i],
-                sens: 'Бортовое питание',
-                params: 'pwr',
-                value: newdata[0].value[i],
-            };
-            newStruktura.push(obj);
-        }
-        if (newStruktura.length === 0) {
-            return undefined
-        }
-        else {
-            const res = newStruktura.reduce((acc, e) => {
-                if (e.value >= tsi) {
-                    if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
-                        && acc[acc.length - 1][0].value >= tsi) {
-                        acc[acc.length - 1].push(e);
-                    } else {
-                        acc.push([e]);
-                    }
-                } else if (e.value < tsi && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
-                    acc.push([]);
-                }
-
-                return acc;
-            }, []).filter(el => el.length > 0).reduce((acc, el) => {
-                if ((Number(el[el.length - 1].time) - Number(el[0].time)) / 1000 > 1200) {
-                    acc.push([[el[0].time, el[0].geo], [el[el.length - 1].time, el[el.length - 1].geo]])
-                }
-                return acc
-            }, [])
-            const motos = res.reduce((acc, el) => {
-                acc = acc + (Number(el[1][0]) - Number(el[0][0]))
-                return acc
-            }, 0)
-            return motos
-        }
-
-    }
-
-}
-
-
-
-function timefn() {
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-    const startOfTodayUnix = Math.floor(currentDate.getTime() / 1000);
-    const unix = Math.floor(new Date().getTime() / 1000);
-    const timeNow = unix
-    const timeOld = startOfTodayUnix
-    return [timeNow, timeOld]
 }
 
 const popupProstoy = async (array) => {
-    const result = array
-        .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
-        .flat()
-    const arrays = result.filter(e => e[0].message && !e[0].message.startsWith('Цистерна')).map(e => e);
-    const interval = timefn()
-    const timeOld = interval[1]
-    const timeNow = interval[0]
-    for (const e of arrays) {
-        const pref = e[e.length - 1]
-        const idw = e[4];
-        const model = await databaseService.modelViewToBase(idw)
-        let tsiControll = model.length !== 0 && model[0].tsiControll && model[0].tsiControll !== '' ? Number(model[0].tsiControll) : null;
-        tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
+    const arrays = helpers.format(array)
+    const [timeNow, timeOld] = helpers.timefn()
 
-        if (tsiControll === null || tsiControll === undefined) {
-            continue
-        }
-        const active = idw
-        let newGlobal;
-        if (pref !== 'kursor') {
-            newGlobal = await testovfnNew(active, timeOld, timeNow)
-        }
-        else {
-            const res = await databaseService.getParamsKursorInterval(active, timeOld, timeNow)
-            newGlobal = res.map(el => {
-                return {
-                    idw: active, nameCar: e[0].message, time: el.time, geo: JSON.stringify([el.lat, el.lon]), speed: Number(Number(el.speed).toFixed(0)),
-                    sats: Number(Number(el.sats).toFixed(0)), curse: Number(Number(el.course).toFixed(0)), oil: 0, pwr: Number(Number(el.pwr_ext).toFixed(1)),
-                    engine: el.in1 === 'Вход IN1(датчик сработал)' ? 1 : 0, meliage: Number(Number(el.meliage).toFixed(0))
-                }
-            })
-        }
-        newGlobal.sort((a, b) => {
-            if (a.time > b.time) {
-                return 1;
-            }
-            if (a.time < b.time) {
-                return -1;
-            }
-            return 0;
-        })
-        const resnew = await prostoyNew(tsiControll, newGlobal)
+    const processArrayItem = async (e) => {
+        const [active, group, name] = e
+        const newGlobal = await helpers.getDataToInterval(active, timeOld, timeNow)
+        newGlobal.sort((a, b) => a.time - b.time)
+
+        const resnew = await prostoyNew(newGlobal)
         if (resnew) {
-            resnew.forEach(async el => {
-                const map = JSON.parse(el[1][1])
-                const timesProstoy = timesFormat(Number(el[1][0]) - Number(el[0][0]))
-                const group = e[6]
-                const name = e[0].message
-                const time = new Date(Number(el[0][0]) * 1000)
-                const day = time.getDate();
-                const month = (time.getMonth() + 1).toString().padStart(2, '0');
-                const year = time.getFullYear();
-                const hours = time.getHours().toString().padStart(2, '0');
-                const minutes = time.getMinutes().toString().padStart(2, '0');
-                const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+            for (const el of resnew) {
+                const map = JSON.parse(el[1][1]);
+                const timesProstoy = timesFormat(Number(el[1][0]) - Number(el[0][0]));
+                const formattedDate = new Date(Number(el[0][0]) * 1000).toLocaleString(); // Упрощенное форматирование даты
                 const data = [{
                     event: `Простой`, group: `Компания: ${group}`,
                     name: `Объект: ${name}`,
                     time: `Дата начала простоя: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`
-                }]
-                const newTime = Math.floor(new Date().getTime() / 1000)
-                const delta = newTime - Number(el[1][0])
+                }];
+                const newTime = Math.floor(new Date().getTime() / 1000);
+                const delta = newTime - Number(el[1][0]);
 
                 if (delta > 900) {
-                    const resu = await databaseService.controllerSaveToBase(data, idw, map, group, name)
-                    // console.log('Простой' + ' ' + resu.message)
+                    await databaseService.controllerSaveToBase(data, active, map, group, name);
                 }
-
-            })
+            }
         }
-
     }
+    await Promise.all(arrays.map(e => processArrayItem(e)))
 }
 
 function timesFormat(dates) {
@@ -538,25 +345,20 @@ function timesFormat(dates) {
 }
 
 
-async function testovfnNew(active, t1, t2) {
-    const resultt = await databaseService.viewSortDataToBase(active, t1, t2)
-    return resultt
-}
-
-async function prostoyNew(tsi, newdata) {
+async function prostoyNew(newdata) {
     if (newdata.length === 0) {
         return undefined
     }
     else {
         const res = newdata.reduce((acc, e) => {
-            if (e.pwr >= tsi && e.speed === 0 && e.sats > 4) {
+            if (Number(e.engineOn) === 1 && e.speed === 0 && e.sats > 4) {
                 if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
-                    && acc[acc.length - 1][0].pwr >= tsi && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
+                    && acc[acc.length - 1][0].engineOn === 1 && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
                     acc[acc.length - 1].push(e);
                 } else {
                     acc.push([e]);
                 }
-            } else if (e.pwr < tsi && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
+            } else if (Number(e.engineOn) === 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
                 || e.speed > 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
                 || e.sats <= 4 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
                 acc.push([]);
@@ -564,12 +366,11 @@ async function prostoyNew(tsi, newdata) {
 
             return acc;
         }, []).filter(el => el.length > 0).reduce((acc, el) => {
-            if (Number(el[el.length - 1].time) - Number(el[0].time) > 1200) {
-                acc.push([[el[0].time, el[0].geo, el[0].oil], [el[el.length - 1].time, el[el.length - 1].geo, el[el.length - 1].oil]])
+            if (Number(el[el.length - 1].data) - Number(el[0].data) > 1200) {
+                acc.push([[el[0].data, [el[0].lat, el[0].lon], el[0].oil], [el[el.length - 1].data, [el[el.length - 1].lat, el[el.length - 1].lon], el[el.length - 1].oil]])
             }
             return acc
         }, [])
-        //  console.log(res)
         return res
     }
 
@@ -577,6 +378,5 @@ async function prostoyNew(tsi, newdata) {
 
 module.exports = {
     SummaryStatistiks,
-    //  startAllStatic,
     popupProstoy
 }

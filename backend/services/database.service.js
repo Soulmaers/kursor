@@ -14,6 +14,7 @@ exports.createIndexDataToDatabase = async () => {
     })
 }
 
+
 //сохраняем в базу параметры и обновляем их
 exports.saveDataToDatabase = async (name, idw, port, param, time) => {
     //  console.log(name, idw, param, time)
@@ -465,6 +466,7 @@ exports.getParamsKursorInterval = async (idObject, t1, t2) => {
         return []
     }
     try {
+
         const pool = await connection
         const postModel = `SELECT * FROM ${table} WHERE idObject=@idObject AND time >= '${t1}' AND time <= '${t2}'`
 
@@ -472,6 +474,7 @@ exports.getParamsKursorInterval = async (idObject, t1, t2) => {
             .input('idObject', idObject)
             .query(postModel)
         const record = result.recordset;
+
         if (record.length !== 0) {
             const params = record.map(el => {
                 //  console.log(el)
@@ -486,9 +489,12 @@ exports.getParamsKursorInterval = async (idObject, t1, t2) => {
             return params
         }
         else {
-            const last = await databaseService.getParamsKursor(idObject)
-            return last.length !== 0 ? last : []
+            return []
         }
+        /* else {
+             const last = await databaseService.getParamsKursor(idObject)
+                       return last.length !== 0 ? last : []
+         }*/
 
     } catch (e) {
         console.log(e);
@@ -533,44 +539,61 @@ exports.getKursorObjects = async (login) => {
 }
 
 
-exports.geoLastIntervalKursor = async (time1, time2, idObject) => {
-    const data = await databaseService.objectId(idObject)
-    if (data.length === 0) {
-        return
-    }
-    const port = data[0].port
-    let table;
-    if (port === '20163') {
-        table = 'wialon_retranslation';
-    } else if (port === '20332') {
-        table = 'wialon_ips';
-    } else if (port === '21626' || !port) {
-        table = 'navtelecom';
-    }
-    else {
-        return []
-    }
+exports.geoLastInterval = async (time1, time2, idw) => {
     try {
         const pool = await connection
-        const postModel = `SELECT * FROM ${table} WHERE idObject=@idObject AND time >= @time2 AND time <= @time1 `
+        const postModel = `SELECT * FROM globalStor WHERE idw=@idw AND last_valid_time >= @time1 AND last_valid_time <= @time2 `
         const result = await pool.request()
-            .input('idObject', idObject)
+            .input('idw', idw)
             .input('time2', String(time2))
             .input('time1', String(time1))
             .query(postModel)
-
         if (result.recordset.length === 0) {
-            const last = await databaseService.getParamsKursor(idObject)
-            return last.length !== 0 ? last : []
+            return []
         }
         else {
             return result.recordset
         }
-
     }
     catch (e) {
         console.log(e)
     }
+
+    /*  const data = await databaseService.objectId(idObject)
+      if (data.length === 0) {
+          return
+      }
+      const port = data[0].port
+      let table;
+      if (port === '20163') {
+          table = 'wialon_retranslation';
+      } else if (port === '20332') {
+          table = 'wialon_ips';
+      } else if (port === '21626' || !port) {
+          table = 'navtelecom';
+      }
+      else {
+          return []
+      }
+      try {
+          const pool = await connection
+          const postModel = `SELECT * FROM ${table} WHERE idObject=@idObject AND time >= @time2 AND time <= @time1 `
+          const result = await pool.request()
+              .input('idObject', idObject)
+              .input('time2', String(time2))
+              .input('time1', String(time1))
+              .query(postModel)
+  
+          if (result.recordset.length === 0) {
+              return []
+          }
+          else {
+              return result.recordset
+          }
+      }
+      catch (e) {
+          console.log(e)
+      }*/
 
 }
 exports.getWialonObjects = async () => {
@@ -786,12 +809,13 @@ exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
 }
 
 
-exports.getSensStorMetaFilter = async (imei, port) => {
+exports.getSensStorMetaFilter = async (imei, port, id) => {
     try {
         const pool = await connection;
-        const post = `SELECT idw,imei,port,params,meta, value, data FROM sens_stor_meta WHERE imei=@imei AND port=@port`;
+        const post = `SELECT idw,imei,port,params,meta, value, data FROM sens_stor_meta WHERE imei=@imei AND port=@port AND idw=@idw`;
         const result = await pool.request()
             .input('imei', String(imei))
+            .input('idw', String(id))
             .input('port', String(port))
             .query(post);
         return result.recordset
@@ -967,7 +991,7 @@ exports.setSensStorMeta = async (data) => {
     }
 }
 
-
+/*
 exports.setSensorsWialonToBase = async (login, idw, arr) => {
     // console.log(login, idw, arr)
     const data = Math.floor(new Date().getTime() / 1000)
@@ -1017,7 +1041,7 @@ exports.setSensorsWialonToBase = async (login, idw, arr) => {
     catch (e) {
         console.log(e)
     }
-}
+}*/
 
 exports.uniqImeiAndPhone = async (col, value, table, login, id) => {
     console.log(col, value, table, login, id)

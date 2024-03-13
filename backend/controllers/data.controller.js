@@ -54,7 +54,6 @@ exports.dataSpisok = async (req, res) => {
                     e.idGroup = idGroup;
                     massObject.push(e);
                 }
-
             })
             const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup, idGroup: idGroup })));
             aLLmassObject.push(objectsWithGroup);
@@ -83,40 +82,35 @@ const getWialonSetToBaseObject = async (login) => {
 
 const getWialon = async (login) => {
     const data = await wialonService.getAllGroupDataFromWialon();
-    const time = Math.floor(new Date().getTime() / 1000);
-    if (data) {
-        const promises = data.items.flatMap((elem) => {
-            const nameGroup = elem.nm;
-            const idGroup = elem.id;
-            const nameObject = elem.u;
-            return nameObject.map(async (el) => {
-                try {
-                    const all = await wialonService.getAllParamsIdDataFromWialon(el);
-                    const phone = await wialonService.getUniqImeiAndPhoneIdDataFromWialon(el);
-                    if (!all.item || !phone.item) {
-                        return;
-                    }
-                    return {
-                        login: login,
-                        data: String(time),
-                        idg: String(idGroup),
-                        name_g: nameGroup,
-                        idObject: String(all.item.id),
-                        nameObject: String(all.item.nm),
-                        imei: phone.item.uid ? String(phone.item.uid) : null,
-                        phone: phone.item.ph ? String(phone.item.ph) : null
-                    };
-                } catch (error) {
-                    console.error(error);
-                    return;
-                }
-            });
-
-        });
-        const results = await Promise.all(promises);
-        return results.filter(Boolean);
-    }
-    return [];
+    const time = Math.floor(Date.now() / 1000);
+    if (!data) return [];
+    const promises = data.items.flatMap((elem) => {
+        const { nm: nameGroup, id: idGroup, u: nameObject } = elem;
+        return nameObject.map((el) => (async () => {
+            try {
+                const [all, phone] = await Promise.all([
+                    wialonService.getAllParamsIdDataFromWialon(el),
+                    wialonService.getUniqImeiAndPhoneIdDataFromWialon(el)
+                ]);
+                if (!all.item || !phone.item) return null;
+                return {
+                    login,
+                    data: String(time),
+                    idg: String(idGroup),
+                    name_g: nameGroup,
+                    idObject: String(all.item.id),
+                    nameObject: String(all.item.nm),
+                    imei: phone.item.uid ? String(phone.item.uid) : null,
+                    phone: phone.item.ph ? String(phone.item.ph) : null
+                };
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        })());
+    });
+    const results = await Promise.all(promises);
+    return results.filter(Boolean); // Отфильтровываем null значения, которые могут возникнуть из-за ошибок
 };
 
 
@@ -141,40 +135,10 @@ exports.start = async (session) => {
     console.timeEnd('data')
     if (data) {
         const allCar = Object.entries(data)
-        const arr = allCar[5][1].map(it => it.id)
-        const resa = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(arr)
-        const event = Object.entries(resa).map(([key, value]) => {
-            return {
-                [key]: [
-                    ['speed', 'speed', value[1] && value[1].trips && value[1].trips.length !== 0 ? value[1].trips.curr_speed : null],
-                    ['state', 'state', value[1] && value[1].trips && value[1].trips.length !== 0 ? value[1].trips.state : null],
-                    ['lasttime', 'listtime', value[1] && value[1].trips && value[1].trips.length !== 0 ? value[1].trips.m : null]
-                ]
-            };
-        });
-        const promises = allCar[5][1].map(async (el) => {
-            const sats = el.lmsg && el.lmsg.p && el.lmsg.p.sats ? el.lmsg.p.sats : '-'
-            const res = await engines(el.id);
-            if (el.lmsg && el.lmsg.p && res) {
-                Object.keys(el.lmsg.p).forEach(key => {
-                    if (!res.some(([k, v]) => v === key)) {
-                        res.push([key, key, el.lmsg.p[key]]);
-                    }
-                });
-            }
-            if (res && resa) {
-                await saveStatus(res, el)
-                const foundObject = event.find(obj => obj.hasOwnProperty(el.id));
-                const all = res.concat(...Object.values(foundObject))
-                all.push(['Спутники', 'sats', sats])
-                await databaseService.setSensorsWialonToBase(session._session.au, el.id, all);
-            }
-        })
-
         const dataKursor = await databaseService.getObjects()
         const validKursorData = dataKursor.filter(e => [...e.imei].length > 10)
         // Запускаем все функции параллельно
-        await Promise.all([promises, await updateParams(data, validKursorData), saveSensorsToBase(allCar, session)])
+        await Promise.all([await updateParams(data, validKursorData), saveSensorsToBase(allCar, session)])
         console.log('выполнено')
     }
 
@@ -187,39 +151,30 @@ async function saveSensorsToBase(allCar, session) {
     const nowTime = Math.floor(now.getTime() / 1000);
 
     for (const el of allCar[5][1]) {
-        //   if (el.id === 25766831) {
         const timeBase = await databaseService.lostChartDataToBase(el.id)
-        //  console.log(el.nm, timeBase)
         const oldTime = timeBase.length !== 0 ? Number(timeBase[0].data) : nowTime - 1;
         // Запускаем загрузку данных сообщений и данные датчиков параллельно
-        //let [rr, rez, nameSens] = await Promise.all([
 
         let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i')
 
         if (rr === undefined) {
             rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i')
         }
-        //    console.log(new Date(), el.nm, rr.messages.length)
         let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id)
-        // console.log(rez)
         if (rez === undefined) {
             rez = await wialonService.getAllSensorsIdDataFromWialon(el.id)
         }
-        //  console.log(new Date(), el.nm, rez.length)
         let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id)
-        //   console.log(nameSens)
         if (nameSens === undefined) {
             nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id)
         }
-        // console.log(new Date(), el.nm, nameSens.item.flags)
-        //  ]);
-
         if (!rr || rr.messages.length === 0 || rez && rez.length === 0) {
             null
         }
         else {
             while (rez && rr.messages.length !== rez.length) {
                 console.log('повторно')
+                //  console.log(session)
                 [rr, rez, nameSens] = await Promise.all([
                     await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i'),
                     await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i'),
@@ -253,25 +208,7 @@ async function saveSensorsToBase(allCar, session) {
     console.timeEnd('write')
     console.log('saveSensorsToBase end')
 }
-async function saveStatus(res, el) {
-    const idw = el.id
-    const model = await databaseService.modelViewToBase(idw)
-    let statusTSI;
-    if (model[0] && model[0].tsiControll) {
-        statusTSI = el.lmsg.p.pwr_ext > Number(model[0].tsiControll) ? 'ВКЛ' : 'ВЫКЛ';
-    } else {
-        statusTSI = '-';
-    }
-    let status;
-    res.forEach(e => {
-        if (e.includes('Зажигание'))
-            status = e[2] === 1 ? 'ВКЛ' : 'ВЫКЛ'
-    })
-    const currentDate = new Date();
-    const todays = Math.floor(currentDate.getTime() / 1000);
-    const activePost = el.nm.replace(/\s+/g, '');
-    await databaseService.saveStatusToBase(activePost, idw, todays, statusTSI, todays, status);
-}
+
 function detaly(data, str, str2) {
     if (!str2) {
         const res = data.reduce((acc, e) => {
@@ -320,34 +257,6 @@ function ggg(nameSens, rez, id) {
 async function updateParams(data, kursor) {
     console.time('updatedata')
 
-    const currentTime = new Date(); // Assume the current time is the same for all elements in this context.
-    const dataKursor = await Promise.allSettled(kursor.map(async (e) => {
-        const res = await databaseService.getParamsKursor(e.idObject);
-        if (res.length !== 0) {
-            return { id: e.idObject, port: res[0].port, name: e.nameObject, params: res.map(obj => Object.entries(obj)).flat() };
-        } else {
-            return null;
-        }
-    })).then(results => results.filter(result => result !== null));
-
-    const fulfilledPromises = dataKursor
-        .filter(promise => promise.status === 'fulfilled')
-        .map(promise => promise.value);
-    const kursorParams = fulfilledPromises;
-    const nameCarK = kursorParams.map(el => {
-        if (el) {
-            const speed = el.params.find(it => it[0] === 'speed')[1];
-            const lat = el.params.find(it => it[0] === 'lat')[1];
-            const lon = el.params.find(it => it[0] === 'lon')[1];
-            const geo = JSON.stringify([parseFloat(lat), parseFloat(lon)]);
-            return [el.name, el.id, speed, geo, el.port];
-        }
-    });
-    const dataKursorPromises = [];
-    for (const el of kursorParams) {
-        el ? dataKursorPromises.push(databaseService.saveDataToDatabase(el.name, el.id, el.port, el.params, currentTime)) : null;
-    };
-
     const allCar = Object.entries(data)
     const nameCar = allCar[5][1].map(el => {
         const nameTable = el.nm.replace(/\s+/g, '');
@@ -357,20 +266,9 @@ async function updateParams(data, kursor) {
         const geo = el.pos?.x ? JSON.stringify([el.pos.y, el.pos.x]) : null;
         return [nameTable, idw, speed, geo, port];
     });
-    const databasePromises = [];
-    for (const el of allCar[5][1]) {
-        if (el.lmsg) {
-            const nameTable = el.nm.replace(/\s+/g, '');
-            const sensor = Object.entries(el.lmsg.p);
-            databasePromises.push(databaseService.saveDataToDatabase(nameTable, el.id, 'wialon', sensor, currentTime));
-        }
-    };
-    await Promise.all([databasePromises, dataKursorPromises]);
-    // передаем работы функции по формированию массива данных и проверки условий для записи данных по алармам в бд
-    const allData = nameCarK.concat(nameCar)
-    // console.log(allData)
-    await zaprosSpisokb(nameCar)
+
     const res = await constorller.dataSpisok()
+    zaprosSpisokb(nameCar, res)
     const kursorObjects = await kursorService.getKursorObjects()
     const dataAll = res.concat(kursorObjects)
 
@@ -389,96 +287,51 @@ async function updateParams(data, kursor) {
         await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
             databaseService.summaryToBase(idw, arrayInfo, datas)
         ));
-        hunterTime()
+        hunterTime(dataAll)
     }
 
     console.timeEnd('updatedata')
     return 'updateData end'
 }
 
-
-const hunterTime = async () => {
+const hunterTime = async (res) => {
     const now = new Date();
-    //   if (now.getHours() === 0 && now.getMinutes() === 0) { // если время 0 часов и 0 минут
     const nowUnix = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime() / 1000);
     const previousDayUnix = nowUnix;
     const previousDayEndUnix = Math.floor(new Date(now).getTime() / 1000);
-    const res = await constorller.dataSpisok()
     structura.datas(res, previousDayEndUnix, previousDayUnix)
-    //   }
 };
 
-
-async function engines(idw) {
-    const resSensor = await wialonService.getAllNameSensorsIdDataFromWialon(idw, 'i');
-
-
-    if (resSensor !== undefined) {
-        const nameSens = Object.entries(resSensor.item.sens)
-        //  console.log(nameSens)
-        const arrNameSens = [];
-        nameSens.forEach(el => {
-            arrNameSens.push([el[1].n, el[1].p])
-        })
-        const res = await wialonService.getLastAllSensorsIdDataFromWialon(idw, 'i');
-        if (res) {
-            const valueSens = [];
-            Object.entries(res).forEach(e => {
-                valueSens.push(e[1])
-            })
-            const allArr = [];
-            arrNameSens.forEach((e, index) => {
-                allArr.push([...e, valueSens[index]])
-            })
-
-            return allArr
-        }
-    }
-}
-
-async function zaprosSpisokb(name) {
+async function zaprosSpisokb(name, res) {
     const massItog = [];
+
+    const tyreResPromises = name.map(item => queryDB(`SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE idw='${item[1]}'`));
+    const tyreResults = await Promise.all(tyreResPromises);
+
     for (let i = 0; i < name.length; i++) {
         const nameCar = name[i][0];
-        const selectBase = `SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE idw='${name[i][1]}'`;
-        let tyreRes = await queryDB(selectBase);
-        if (tyreRes === undefined) {
+        const tyreRes = tyreResults[i];
+        if (!tyreRes) {
             console.log('нет таблицы');
             continue;
         }
-        const params = tyreRes;
-        const modelUniqValues = convert(params);
+        const modelUniqValues = convert(tyreRes);
+        const paramsRes = await queryDB(`SELECT name, value FROM params WHERE idw='${name[i][1]}' AND port='${name[i][4]}'`);
+        const osiRes = await queryDB(`SELECT * FROM ifBar WHERE idw='${name[i][1]}'`);
 
-        const selectBase2 = `SELECT name, value FROM params WHERE idw='${name[i][1]}' AND port='${name[i][4]}' `;
-        let paramsRes = await queryDB(selectBase2);
-        let integer;
-        let osiBar;
-        for (let j = 0; j < paramsRes.length; j++) {
-            const selectBase3 = `SELECT * FROM ifBar WHERE idw='${name[i][1]}'`;
-            let osiRes = await queryDB(selectBase3);
-            const osi = osiRes;
-            let el = paramsRes[j];
-            for (let k = 0; k < modelUniqValues.length; k++) {
-                if (el.name == modelUniqValues[k].pressure) {
-                    if (nameCar === 'А652УА198') {
-                        integer = parseFloat((el.value / 10).toFixed(1));
-                    } else {
-                        integer = el.value;
-                    }
-                    for (let z = 0; z < osi.length; z++) {
-                        if (osi[z].idOs === modelUniqValues[k].osNumber) {
-                            osiBar = osi[z];
-                        }
-                    }
-                    for (let y = 0; y < paramsRes.length; y++) {
-                        if (paramsRes[y].name === modelUniqValues[k].temp) {
-                            //   console.log(name)
-                            massItog.push([name[i][0], modelUniqValues[k].pressure, parseFloat(integer), parseFloat(paramsRes[y].value), osiBar, name[i][1], name[i][2], name[i][3]]);
-                        }
+        paramsRes.forEach(el => {
+            modelUniqValues.forEach(model => {
+                if (el.name === model.pressure) {
+                    const integer = nameCar === 'А652УА198' ? parseFloat((el.value / 10).toFixed(1)) : el.value;
+                    const osiBar = osiRes.find(osi => osi.idOs === model.osNumber);
+
+                    const tempParam = paramsRes.find(param => param.name === model.temp);
+                    if (tempParam) {
+                        massItog.push([nameCar, model.pressure, parseFloat(integer), parseFloat(tempParam.value), osiBar, name[i][1], name[i][2], name[i][3]]);
                     }
                 }
-            }
-        }
+            });
+        });
     }
     proverka(massItog);
 }

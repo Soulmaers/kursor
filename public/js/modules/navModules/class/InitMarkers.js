@@ -30,7 +30,6 @@ export class InitMarkers {
                 if (e._tooltip) {
                     e.closeTooltip()
                 }
-
             })
             Object.values(InitMarkers.markersArrow).forEach(e => {
                 e.setOpacity(0.0)
@@ -92,6 +91,44 @@ export class InitMarkers {
         })
     }
 
+    createInfoControll() {
+        const checkInList = document.querySelectorAll('.checkInList');
+        const allId = new Set(this.list.filter(e => e[0]).map(it => Number(it[0])));
+        let count = allId.size;
+        const idsToRemove = new Set();
+        checkInList.forEach(e => {
+            const elementId = Number(e.parentNode.parentNode.id);
+            if (allId.has(elementId) && e.classList.contains('changeColorCheck')) {
+                idsToRemove.add(elementId);
+                count--;
+            }
+        });
+        let rely = 0;
+        const statusCounts = { move: 0, pause: 0, stop: 0 };
+        this.list.forEach(el => {
+            if (!idsToRemove.has(Number(el[0]))) {
+                if (el[6] === 'off') {
+                    rely++;
+                } else {
+                    const status = el[4];
+                    if (status === 'Движется' || status === 'Остановка' || status === 'Стоянка') {
+                        statusCounts[status === 'Движется' ? 'move' : status === 'Остановка' ? 'pause' : 'stop']++;
+                    }
+                }
+            }
+        });
+        const arrayStatus = [
+            checkInList.length,
+            count,
+            rely,
+            statusCounts.move,
+            statusCounts.pause,
+            statusCounts.stop
+        ];
+        [...this.tableInfoCar.children[0].children].forEach((element, index) => {
+            element.textContent = arrayStatus[index];
+        });
+    }
     viewHiddenMenuMap() {
         this.settings.addEventListener('mouseenter', () => {
             this.container.style.display = 'flex'

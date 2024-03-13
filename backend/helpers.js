@@ -18,7 +18,42 @@ exports.convert = (ob) => {
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
     return Array.from(uniq).map(e => JSON.parse(e));
 }
+exports.getDataToInterval = async (active, t1, t2) => {
+    const resnew = await databaseService.geoLastInterval(t1, t2, active)
+    const meta = ['idw', 'data', 'lat', 'lon', 'speed', 'sats', 'geo', 'oil', 'course', 'pwr', 'engine', 'mileage', 'engineOn']
+    const arrayData = resnew.map(e => {
+        return Object.keys(e).reduce((acc, key) => {
+            if (meta.includes(key)) {
+                acc[key] = e[key];
+            }
+            return acc;
+        }, {});
+    });
+    return arrayData
+}
 
+
+exports.timefn = () => {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const startOfTodayUnix = Math.floor(currentDate.getTime() / 1000);
+    const unix = Math.floor(new Date().getTime() / 1000);
+    const timeNow = unix
+    const timeOld = startOfTodayUnix
+    return [timeNow, timeOld]
+}
+exports.format = (data) => {
+    const resultData = data.flat().flatMap(el => {
+        let res = [Number(el[4]), el[0].message, el[6], el[el.length - 1]];
+        if (el.length === 10 && el[8].sub && el[8].sub.length !== 0) {
+            return el[8].sub.flat().map(it => [Number(it[4]), it[0].message, it[6], it[it.length - 1]]);
+        }
+        return [res]; // Обернули res в массив, чтобы сохранить формат двумерного массива
+    });
+    const uniqueMap = new Map(resultData.map(subArr => [subArr[0], subArr]));
+    const uniqueArr = Array.from(uniqueMap.values());
+    return uniqueArr
+}
 
 exports.processing = async (arr, timez, idw, geoLoc, group, name, start) => {
     const newdata = arr[0]
@@ -48,6 +83,7 @@ exports.processing = async (arr, timez, idw, geoLoc, group, name, start) => {
 
 
 exports.sortData = (datas) => {
+    //  console.log(datas)
     const res = Object.values(datas.reduce((acc, elem) => {
         if (!acc[elem.idg]) {
             acc[elem.idg] = {
@@ -65,6 +101,7 @@ exports.sortData = (datas) => {
                     name_sub_g: elem.name_sub_g,
                     objects: []
                 })
+
             }
             acc[elem.idg].sub.find(item => item.id_sub_g === elem.id_sub_g).objects.push({
                 idObject: elem.idObject,
@@ -86,35 +123,41 @@ exports.sortData = (datas) => {
     return res
 }
 
-
-
-exports.setDataToBase = async (imei, port, info) => {
-    console.log(imei, port)
-    const data = await databaseService.getSensStorMetaFilter(imei, port)
-
+exports.setDataToBase = async (imei, port, info, id) => {
+    const data = await databaseService.getSensStorMetaFilter(imei, port, id)
     if (data.length !== 0) {
         const idw = data[0].idw
+        const coefEngine = await databaseService.getValuePWRToBase(idw, 'engine')
+        const coefPWR = await databaseService.getValuePWRToBase(idw, 'pwr')
+        const coefMileage = await databaseService.getValuePWRToBase(idw, 'mileage')
+
         const now = new Date();
         const nowTime = Math.floor(now.getTime() / 1000);
 
         const lastObject = info[info.length - 1]
         const value = data.map(el => {
-            if (lastObject.hasOwnProperty(el.meta)) {
-                return lastObject[el.meta] !== null ? { key: el.meta, params: el.params, value: String(lastObject[el.meta]), status: 'true', data: nowTime } : { key: el.meta, params: el.params, value: el.value, status: 'false', data: el.data }
+            // Базовая проверка наличия значения
+            const hasValue = lastObject.hasOwnProperty(el.meta) && lastObject[el.meta] !== null;
+            // Определение статуса и времени
+            const status = hasValue ? 'true' : 'false';
+            const dataTime = hasValue ? nowTime : el.data;
+            // Если значение отсутствует, возвращаем базовую структуру
+            if (!hasValue) {
+                return { key: el.meta, params: el.params, value: el.value, status, data: dataTime };
             }
-            else {
-                return { key: el.meta, params: el.params, value: el.value, status: 'false', data: el.data }
+            // Обработка специфических параметров
+            let computedValue = String(lastObject[el.meta]);
+            if (el.params === 'engine' && coefEngine) {
+                computedValue = Number(computedValue) > Number(coefEngine[0].value) ? '1' : '0';
+            } else if (el.params === 'mileage' && coefMileage) {
+                computedValue = Number(computedValue) + Number(coefMileage[0].value);
             }
-        })
+            return { key: el.meta, params: el.params, value: String(computedValue), status, data: dataTime };
+        });
         await databaseService.setUpdateValueSensStorMeta(imei, port, value)
-
-        const coefEngine = await databaseService.getValuePWRToBase(idw, 'engine')
-        const coefPWR = await databaseService.getValuePWRToBase(idw, 'pwr')
-        console.log(idw, coefEngine, coefPWR)
         const tcpObject = info
         for (let elem of tcpObject) {
             const value = data.map(el => {
-                //   console.log(el)
                 if (elem.hasOwnProperty(el.meta)) {
                     return elem[el.meta] !== null ? { key: el.meta, params: el.params, value: String(elem[el.meta]), status: 'true' } : { key: el.meta, params: el.params, value: el.value, status: 'false' }
                 }
@@ -122,7 +165,6 @@ exports.setDataToBase = async (imei, port, info) => {
                     return { key: el.meta, params: el.params, value: el.value, status: 'false' }
                 }
             })
-
             if (value.length !== 0) {
                 const obj = {}
                 const nowTime = Math.floor(new Date().getTime() / 1000)
@@ -135,13 +177,6 @@ exports.setDataToBase = async (imei, port, info) => {
                 value.forEach(e => {
                     obj[e.params] = e.value
                 })
-                if (coefEngine) {
-                    data.forEach(el => {
-                        if (el.params === 'engine') {
-                            obj['engine'] = Number(el.value) > Number(coefEngine[0].value) ? '1' : '0'
-                        }
-                    });
-                }
                 if (coefPWR) {
                     data.forEach(el => {
                         if (el.params === 'pwr') {
@@ -149,12 +184,6 @@ exports.setDataToBase = async (imei, port, info) => {
                         }
                     });
                 }
-                /* if (idw === '26936623') {
-                     console.log(obj['engine'])
-                     console.log(obj['engineOn'])
-                     console.log(obj)
-                 }*/
-
                 await databaseService.setAddDataToGlobalBase(obj)
             }
         }

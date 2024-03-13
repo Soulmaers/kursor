@@ -7,7 +7,7 @@ import { eskiz, convertTime, updateHTML, yesTo, weekTo, convertToHoursAndMinutes
 import { createChart, createJobTS, createOilTS, createMelagiTS } from './detalisation/charts.js'
 
 export let objectRazmetka
-export async function timeIntervalStatistiks() {
+export async function timeIntervalStatistiks(signal) {
     objectRazmetka = {
         'nav1': { html: jobTSDetalisation, data: [], fn: createChart, title: { to: null, yes: null, week: null } },
         'nav2': { html: jobTS, data: [], fn: createJobTS, title: { to: null, yes: null, week: null } },
@@ -64,14 +64,14 @@ export async function timeIntervalStatistiks() {
 
 
     loaders(today.nextElementSibling, loader)
-    await statistics(weekTo(), 'int', 4, objectRazmetka)
-    await statistics(timefn(), 'today', 1, objectRazmetka)
+    await statistics(weekTo(), 'int', 4, objectRazmetka, signal)
+    await statistics(timefn(), 'today', 1, objectRazmetka, signal)
     loader.style.display = 'none'
     loaders(yestoday.nextElementSibling, loader)
-    await statistics(yesTo(), 'yestoday', 2, objectRazmetka)
+    await statistics(yesTo(), 'yestoday', 2, objectRazmetka, signal)
     loader.style.display = 'none'
     loaders(week.nextElementSibling, loader)
-    await statistics(weekTo(), 'week', 3, objectRazmetka)
+    await statistics(weekTo(), 'week', 3, objectRazmetka, signal)
     loader.style.display = 'none'
 }
 export async function load(act, el, num) {
@@ -129,7 +129,7 @@ function eventClikInterval(objectRazmetka) {
                     eventClikInterval(objectRazmetka)
                     //   const interval = times.map(e => e[2])
                     //    console.log(interval)
-                    statistics(times, 'free', el.getAttribute('rel'), objectRazmetka)
+                    statistics(times, 'free', el.getAttribute('rel'), objectRazmetka, signal)
                 }
                 else {
                     console.log('работает отрисовка')
@@ -145,7 +145,7 @@ function eventClikInterval(objectRazmetka) {
         })
     })
 }
-export async function statistics(interval, ele, num, objectRazmetka) {
+export async function statistics(interval, ele, num, objectRazmetka, signal) {
 
     const idw = document.querySelector('.color').id
     if (ele === 'int') {
@@ -163,6 +163,7 @@ export async function statistics(interval, ele, num, objectRazmetka) {
         headers: {
             'Content-Type': 'application/json',
         },
+        signal: signal,
         body: (JSON.stringify({ idw }))
     }
     const mod = await fetch('/api/modelView', params)
@@ -172,7 +173,7 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     const t1 = !isNaN(num) ? interval[1] : interval[0][2]
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
     const active = document.querySelector('.color').id
-    const newData = document.querySelector('.color').classList.contains('wialon') ? await testovfnNew(active, t1, t2) : await kursorfnNew(active, t1, t2)
+    const newData = document.querySelector('.color').classList.contains('wialon') ? await testovfnNew(active, t1, t2, signal) : await kursorfnNew(active, t1, t2, signal)
     const newGlobal = newData.map(it => {
         return {
             id: it.idw,
@@ -250,14 +251,13 @@ export async function statistics(interval, ele, num, objectRazmetka) {
     objectRazmetka = null;
 }
 
-
-export async function kursorfnNew(active, t1, t2) {
-
+export async function kursorfnNew(active, t1, t2, signal) {
     const params = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
+        signal: signal,
         body: (JSON.stringify({ active, t1, t2 }))
     }
     const res = await fetch('/api/getParamsKursorIntervalController', params)

@@ -366,6 +366,7 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
     }
     return new Promise(async function (resolve, reject) {
         const session = await geSession.geSession();
+        // console.log(session)
         session.request('messages/load_interval', prms2)
             .catch(function (err) {
                 console.log(err);

@@ -53,29 +53,21 @@ let session;
 async function init() {
     await initServer()
 
-    /*  const res = await wialon()
-      console.log(res)
-      if (res !== 'ошибка') {
-          console.log('сессия открыта')
-          new WialonOrigin(session);
-          setInterval(() => {
-              new WialonOrigin(session);
-          }, 120000);
-          await globalstart.start(session)
-          setInterval(globalstart.start, 300000, session)
-      }*/
+    const res = await wialon()
+    console.log(res)
+    if (res !== 'ошибка') {
+        console.log('сессия открыта')
+        new WialonOrigin(session);
+        setInterval(() => {
+            new WialonOrigin(session);
+        }, 120000);
+        await globalstart.start(session)
+        setInterval(globalstart.start, 300000, session)
+    }
 
 }
 init()
-//0f481b03d94e32db858c7bf2d8415204BC9192516432699D521630B59B32E63DE759A503
-//0f481b03d94e32db858c7bf2d8415204977173E354D49AA7AFA37B01431539AEAC5DAD5E
-//0f481b03d94e32db858c7bf2d8415204289C57FB5B35C22FC84E9F4ED84D5063558E1178
-//0f481b03d94e32db858c7bf2d8415204616F1C781302A0F13D8C8C61B8B8CCBCEB8D19EB
 
-//0f481b03d94e32db858c7bf2d841520483AA3DFA6B70F0D652D0D81E1837E52CB73B4320
-
-//0f481b03d94e32db858c7bf2d8415204053B81B65B49F2370AA9ABEC5A05DCE9EA16B835
-//0f481b03d94e32db858c7bf2d8415204DEEDFF25A757DC4510358300A187F0A9537446D0
 async function wialon() {
     const token = process.env.TOKEN// await getTokenFromDB(login)
     console.log(token)
@@ -120,9 +112,9 @@ const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js
 const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
 const ListenPortIPS = require('./backend/modules/wialonIPS/ParseBuffer.js')
 const WialonOrigin = require('./backend/modules/wialon/WialonOrigin.js')
-//new ListenPortTP(21626)
-//new ListenPortTPNew(20163)
-//exports.ips = new ListenPortIPS(20332)
+new ListenPortTP(21626)
+new ListenPortTPNew(20163)
+exports.ips = new ListenPortIPS(20332)
 
 
 

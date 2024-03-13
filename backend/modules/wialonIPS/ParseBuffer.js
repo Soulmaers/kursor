@@ -44,7 +44,7 @@ class ParseBuffer {
             console.log('датаIPS')
             this.buffer.push(data);
         })
-        this.socket.on('end', () => {
+        this.socket.on('end', async () => {
             console.log('энд')
             let data = Buffer.concat(this.buffer);
             let buf = data.toString()
@@ -93,33 +93,33 @@ class ParseBuffer {
                     Object.values(allData).length !== 0 ? this.arrayData.push(allData) : null
                     //  this.listenPortIPS.object = allData
                 }
-                this.setData(this.imei, this.port)
-                this.setValidationImeiToBase()
+                const res = await databaseService.objectsImei(String(this.imei))
+                if (res.length !== 0) {
+                    this.setData(this.imei, this.port, res[0].idObject)
+                    this.setValidationImeiToBase(res[0].idObject)
+                }
 
             }
         })
         this.socket.end();
     }
-    async setData(imei, port) {
-        await helpers.setDataToBase(imei, port, this.arrayData)
+    async setData(imei, port, id) {
+        await helpers.setDataToBase(imei, port, this.arrayData, id)
     }
-    async setValidationImeiToBase() {
-        const res = await databaseService.objectsImei(String(this.imei))
-        if (res.length !== 0) {
-            this.arrayData.map(e => {
-                e['idObject'] = res[0].idObject
-                // e['time_reg'] = nowTime
-            })
-            const table = 'wialon_ips'
-            const base = new JobToBase()
-            await base.createTable(table)
+    async setValidationImeiToBase(id) {
+        this.arrayData.map(e => {
+            e['idObject'] = id
+        })
+        const table = 'wialon_ips'
+        const base = new JobToBase()
+        await base.createTable(table)
 
-            for (let msg of this.arrayData) {
-                await base.fillingTableColumns(msg, table)
-                await base.fillingTableRows(msg, table)
-            }
-            console.log('Протокол wialon IPS -даные сохранены в БД')
+        for (let msg of this.arrayData) {
+            await base.fillingTableColumns(msg, table)
+            await base.fillingTableRows(msg, table)
         }
+        console.log('Протокол wialon IPS -даные сохранены в БД')
+
     }
 
     reverseBinaryArray(stringOfInt) {

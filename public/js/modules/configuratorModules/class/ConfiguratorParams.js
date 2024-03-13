@@ -63,6 +63,11 @@ export class ConfiguratorParams {
             { 'id': 53, 'sensor': 't° Прицеп 2 Ось П', 'parametr': 'tpms_temp_41' },
             { 'id': 54, 'sensor': 't° Прицеп 3 Ось Л', 'parametr': 'tpms_temp_39' },
             { 'id': 55, 'sensor': 't° Прицеп 3 Ось П', 'parametr': 'tpms_temp_38' },
+            { 'id': 56, 'sensor': 'Моточасы', 'parametr': 'engine_hours' },
+            { 'id': 57, 'sensor': 'Колесо', 'parametr': 'tpms_pressure_17' },
+            { 'id': 58, 'sensor': 'Колесо', 'parametr': 'tpms_pressure_20' },
+            { 'id': 59, 'sensor': 't° Колесо', 'parametr': 'tpms_temp_17' },
+            { 'id': 60, 'sensor': 't° Колесо', 'parametr': 'tpms_temp_20' },
         ]
         this.listMeta = document.querySelector('.list_meta')
         this.listOldData = document.querySelector('.list_old_data')
@@ -118,7 +123,7 @@ export class ConfiguratorParams {
     }
 
     async createListMeta() {
-        const arrayNameParams = ['engine_hours', 'mileage', 'can_mileage', 'inter_mileage', 'pwr_int', 'rs485fuel_level',
+        const arrayNameParams = ['engine_hours', 'can_engine_hours', 'mileage', 'can_mileage', 'inter_mileage', 'pwr_int', 'rs485fuel_level',
             'rs485fuel_temp', 'rs485fuel_level1', 'rs485fuel_temp1', 'rs485fuel_level2', 'rs485fuel_temp2']
         const data = await this.getMetaParams()
         if (data.length === 0) { return }
@@ -127,6 +132,8 @@ export class ConfiguratorParams {
         if (list) {
             list.forEach(e => e.remove())
         }
+        console.log(meta)
+        meta.sort((a, b) => a[0].localeCompare(b[0]));
         meta.forEach(e => {
             const li = document.createElement('li')
             li.classList.add('item_meta')
@@ -137,7 +144,7 @@ export class ConfiguratorParams {
             li.appendChild(name)
             const value = document.createElement('div')
             value.classList.add('item_meta_value')
-            value.textContent = arrayNameParams.includes(e[0]) ? ` :${parseFloat(Number(e[1]).toFixed(2))}` : ` :${e[1]}`
+            value.textContent = e[1] === undefined || e[1] === '-348201.4' ? '-Н/Д' : arrayNameParams.includes(e[0]) ? ` :${parseFloat(Number(e[1]).toFixed(2))}` : ` :${e[1]}`
             li.appendChild(value)
         })
         new Findmeta(this.element)
@@ -155,8 +162,11 @@ export class ConfiguratorParams {
                     e.children[2].textContent = matchingItem.meta;
                     e.children[0].value = matchingItem.sens;
                     e.children[0].style.color = 'gray';
-                    if (matchingItem.params == 'pwr' || matchingItem.params == 'engine') {
-                        matchingItem.meta == 'pwr_ext' ? e.children[4].style.display = 'block' : e.children[4].style.display = 'none'
+                    if (matchingItem.params == 'pwr' || matchingItem.params == 'engine' || matchingItem.params == 'mileage') {
+                        matchingItem.meta == 'pwr_ext' ||
+                            matchingItem.meta == 'mileage' ||
+                            matchingItem.meta == 'adc3' ? e.children[4].style.display = 'block' :
+                            e.children[4].style.display = 'none'
 
                     }
 
@@ -251,7 +261,7 @@ export class ConfiguratorParams {
                 i.classList.add('fa-times')
                 i.classList.add('clear_params')
                 li.appendChild(i)
-                if (e.parametr === 'pwr' || e.parametr === 'engine') {
+                if (e.parametr === 'pwr' || e.parametr === 'engine' || e.parametr === 'mileage') {
                     let val = await this.getValueToBase(li)
                     console.log(val)
                     val = val ? val[0].value : ''
@@ -340,6 +350,10 @@ export class ConfiguratorParams {
                     value = value.substr(0, dotIndex + 3);
                 }
             }
+            // Проверяем минимальное значение
+            if (parseFloat(value) < minValue) {
+                value = String(minValue);
+            }
             // Обновляем значение инпута
             input.value = value;
         });
@@ -375,6 +389,8 @@ export class ConfiguratorParams {
         const wrap = document.querySelectorAll('.wrapper_add_value_fixed')
         wrap ? wrap.forEach(e => e.style.display = 'none') : null
         el.children[2].textContent === 'pwr_ext' && el.querySelector('.wrapper_add_value_fixed') ? el.querySelector('.wrapper_add_value_fixed').style.display = 'flex' : null
+        el.children[2].textContent === 'adc3' && el.querySelector('.wrapper_add_value_fixed') ? el.querySelector('.wrapper_add_value_fixed').style.display = 'flex' : null
+        el.children[2].textContent === 'mileage' && el.querySelector('.wrapper_add_value_fixed') ? el.querySelector('.wrapper_add_value_fixed').style.display = 'flex' : null
         const clickElement = document.querySelector('.clickStor')
         clickElement ? clickElement.classList.remove('clickStor') : null
         el.classList.add('clickStor')
@@ -389,7 +405,9 @@ export class ConfiguratorParams {
             clickStor.children[2].textContent = el.children[0].textContent
 
             if (clickStor.children[1].textContent === 'engine' && clickStor.children[2].textContent === 'pwr_ext' ||
-                clickStor.children[1].textContent === 'pwr' && clickStor.children[2].textContent === 'pwr_ext') {
+                clickStor.children[1].textContent === 'pwr' && clickStor.children[2].textContent === 'pwr_ext' ||
+                clickStor.children[1].textContent === 'engine' && clickStor.children[2].textContent === 'adc3' ||
+                clickStor.children[1].textContent === 'mileage' && clickStor.children[2].textContent === 'mileage') {
                 clickStor.children[4].style.display = 'block'
             }
             else {

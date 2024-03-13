@@ -14,6 +14,7 @@ import { alarmFind } from './alarmStorage.js'
 let time;
 let timeIcon;
 let createEvent;
+let controller;
 
 
 export async function visual(el) {
@@ -139,8 +140,6 @@ export async function visual(el) {
         }
 
     }
-    // alarmClear();
-
     const alarm = document.querySelector('.wrap_alarm')
     new Tooltip(alarm, ['События по давлению'])
     wrapperUp.style.display = 'flex'
@@ -156,29 +155,30 @@ export async function visual(el) {
     if (createEvent && createEvent.updateInterval) {
         clearInterval(createEvent.updateInterval);
         createEvent.hiddenTrackAndMarkersEnent()
-
     }
     if (!createEvent) {
-        createEvent = new CreateMarkersEvent(idw)
-        createEvent.init()
+        createEvent = new CreateMarkersEvent(idw);
+    } else {
+        createEvent.reinitialize(idw);
     }
-    else {
-        createEvent.init()
+    if (controller && !controller.signal.aborted) {
+        controller.abort()
     }
+    controller = new AbortController();
+    const signal = controller.signal;
 
+    await loadParamsView(signal)
+    timeIntervalStatistiks(signal);
     liCreate()
-    await loadParamsView()
-    // timeIntervalStatistiks();
-
-    findTyresInstall()
+    // findTyresInstall()
     btnsens.forEach(el => {
         el.classList.remove('actBTN')
     })
-    //  kranParams()
-    // setInterval(kranParams, 300000)
+    kranParams()
+    setInterval(kranParams, 300000)
     // tarirView();
     // setInterval(tarirView, 300000)
-    //alarmFind()
+    // alarmFind()
     const btnShina = document.querySelectorAll('.modals')
     console.log(btnShina)
     if (btnShina[1].classList.contains('active')) {
@@ -192,7 +192,6 @@ export async function visual(el) {
             removeElem(e)
         })
     }
-
 }
 export function visualNone(e) {
     console.log('кликер!!!!')
@@ -246,6 +245,8 @@ export function view(arg) {
 export async function viewConfigurator(arg, params, osi) {
     const role = document.querySelector('.role').getAttribute('rel')
     const active = document.querySelector('.color')
+    console.log(params)
+    console.log(arg)
     if (params) {
         const parametrs = convert(params)
         const tiresLink = document.querySelectorAll('.tires_link_test')
@@ -256,8 +257,7 @@ export async function viewConfigurator(arg, params, osi) {
             const temp = arg.find(element => element.params === item.temp);
             const element = osi.find(element => element.idOs === item.osNumber);
             const tireLink = Array.from(tiresLink).find(e => e.id == item.tyresdiv);
-            if (pressure && tireLink || temp && tireLink) {
-
+            if (pressure && tireLink) {
                 const done = active.id === '26702383' ? parseFloat((pressure.value / 10).toFixed(1)) : pressure.value !== null ? parseFloat(pressure.value) : '-';
                 const signal = element ? objColor[generDav(done, element)] : null;
                 tireLink.children[0].style.position = 'relative';
@@ -280,39 +280,43 @@ export async function viewConfigurator(arg, params, osi) {
                 if (signal === '#FF0000') {
                     tireLink.parentElement.style.borderRadius = '15px';
                 }
-                const backgroundStyleTemp = engine === '0' ? 'none' : temp.status === 'false' ? 'lightgray' : 'none'
-                const colorStyleTemp = engine === '0' ? 'lightgray' : temp.status === 'false' ? '#000' : objColor[generT(parseFloat(temp.value))];
-                tireLink.children[1].style.background = backgroundStyleTemp;
-                tireLink.children[1].style.color = colorStyleTemp;
-
-                switch (temp.value) {
-                    case '-128':
-                    case '-50':
-                    case '-51':
-                        tireLink.children[1].style.color = 'red';
-                        tireLink.children[1].textContent = 'err';
-                        break;
-                    case null:
-                        tireLink.children[1].textContent = '-' + '°C';
-                        tireLink.children[1].setAttribute('rel', `${item.temp}`);
-                        break;
-                    default:
-                        tireLink.children[1].textContent = temp.value + '°C';
-                        tireLink.children[1].setAttribute('rel', `${item.temp}`);
-                }
-                const nowTime = new Date();
-                const nowDate = Math.floor(nowTime.getTime() / 1000);
-                const timeStor = pressure.data ? getHoursDiff(parseInt(pressure.data), nowDate) : '-'
-                if (role === 'Администратор') {
-                    new Tooltip(tireLink, [pressure.sens + '(' + pressure.params + ')', temp.sens + '(' + temp.params + ')', 'Актуальность данных:' + timeStor]);
-                }
-                else {
-                    new Tooltip(tireLink, [pressure.sens, pressure.temp, 'Актуальность данных:' + timeStor]);
+                if (temp) {
+                    const backgroundStyleTemp = engine === '0' ? 'none' : temp.status === 'false' ? 'lightgray' : 'none'
+                    const colorStyleTemp = engine === '0' ? 'lightgray' : temp.status === 'false' ? '#000' : objColor[generT(parseFloat(temp.value))];
+                    tireLink.children[1].style.background = backgroundStyleTemp;
+                    tireLink.children[1].style.color = colorStyleTemp;
+                    tireLink.children[1].style.borderRadius = ' 0 0 30% 30%';
+                    switch (temp.value) {
+                        case '-128':
+                        case '-50':
+                        case '-51':
+                            tireLink.children[1].style.color = 'red';
+                            tireLink.children[1].textContent = 'err';
+                            break;
+                        case null:
+                            tireLink.children[1].textContent = '-' + '°C';
+                            tireLink.children[1].setAttribute('rel', `${item.temp}`);
+                            break;
+                        default:
+                            tireLink.children[1].textContent = temp.value + '°C';
+                            tireLink.children[1].setAttribute('rel', `${item.temp}`);
+                    }
+                    const nowTime = new Date();
+                    const nowDate = Math.floor(nowTime.getTime() / 1000);
+                    const timeStor = pressure.data ? getHoursDiff(parseInt(pressure.data), nowDate) : '-'
+                    if (role === 'Администратор') {
+                        new Tooltip(tireLink, [pressure.sens + '(' + pressure.params + ')', temp.sens + '(' + temp.params + ')', 'Актуальность данных:' + timeStor]);
+                    }
+                    else {
+                        new Tooltip(tireLink, [pressure.sens, pressure.temp, 'Актуальность данных:' + timeStor]);
+                    }
                 }
             }
 
         })
+
     }
+
 }
 
 function getHoursDiff(startDate, nowDate) {

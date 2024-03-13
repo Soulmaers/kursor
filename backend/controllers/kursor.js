@@ -8,6 +8,7 @@ const { sortData } = require('../helpers')
 exports.getKursorObjects = async (req, res) => {
     const login = req && req.body && req.body.login ? req.body.login : null
     const data = await databaseService.getKursorObjects(login)
+    // console.log(data)
     const ress = sortData(data)
     const massObject = [];
     for (const elem of ress) {
@@ -39,8 +40,6 @@ exports.getKursorObjects = async (req, res) => {
             result = [[{}, {}, {}, {}, null, elem.name_g, Number(elem.idg), { sub: massSub }, 'kursor']]
 
         }
-
-        //   console.log(result)
         massObject.push(result)
     }
     if (login) {
@@ -171,11 +170,11 @@ exports.getParamsKursorIntervalController = async (req, res) => {
 
 
 
-exports.geoLastIntervalKursor = async (req, res) => {
-    const time1 = req.body.nowDate
-    const time2 = req.body.timeFrom
-    const idObject = req.body.idw
-    const geoloc = await databaseService.geoLastIntervalKursor(time1, time2, idObject)
+exports.geoLastInterval = async (req, res) => {
+    const time1 = req.body.t1
+    const time2 = req.body.t2
+    const idw = req.body.idw
+    const geoloc = await databaseService.geoLastInterval(time1, time2, idw)
     const geo = [];
     if (geoloc) {
         var rows = geoloc.length;
