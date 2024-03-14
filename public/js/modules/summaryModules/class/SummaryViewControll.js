@@ -287,15 +287,7 @@ export class SummaryViewControll {
         try {
             const mods = await fetch('/api/summaryYestoday', params)
             const models = await mods.json()
-            models.sort((a, b) => {
-                if (a.data > b.data) {
-                    return 1;
-                }
-                if (a.data < b.data) {
-                    return -1;
-                }
-                return 0;
-            })
+            models.sort((a, b) => a.data - b.data)
             return models
         }
         catch (e) {

@@ -5,7 +5,7 @@ import { initSummary, initCharts } from '../../spisok.js'
 import { classReports } from '../../navModules/reports.js'
 import { NavigationMenu } from '../../navModules/NavigatorClass.js'
 import { Tooltip } from '../../../class/Tooltip.js'
-import { zapros } from '../../menu.js'
+import { app } from '../../../main.js'
 import { sett, obj } from '../../event.js'
 export class ToggleHiddenList {
     constructor() {
@@ -144,12 +144,14 @@ export class ToggleHiddenList {
             if (num === 1) {
                 await this.deleteObjectToBase(el)
                 await this.deleteObjectToBaseGroups(el)
-                await zapros(this.login)
+                app.zapros(this.login)
+                //await zapros(this.login)
             }
             if (num === 2) {
                 const id = el.parentNode.parentNode.id
                 await this.deleteGroupToBaseGroups(id)
-                await zapros(this.login)
+                app.zapros(this.login)
+                //  await zapros(this.login)
                 const createObject = document.querySelector('.create_object')
                 const parentElement = document.querySelector('.list_item1')
                 this.mores.classList.remove('toggle_list')

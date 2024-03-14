@@ -83,14 +83,12 @@ export class CreateMarkersEvent {
         this.calendar.children[0].children[0].value = ''
     }
 
-
     async viewTrackAndMarkersEnent() {
         this.track = await this.getIntervalTrack()
         const track = this.track.map(e => e.geo)
         const prostoy = await this.getEventProstoy()
         this.eventMarkers = await this.getEventObject(track, prostoy)
         this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
-
         if (this.poly) {
             mapLocal.removeLayer(this.poly);
             this.startTrack ? mapLocal.removeLayer(this.startTrack) : null

@@ -4,7 +4,7 @@ import { objColorFront, generDav } from './content.js'
 import { approximateValue } from './staticObject.js'
 import { convertTime, removeArrElem } from './helpersFunc.js'
 import { globalSelect } from './filtersList.js'
-import { dataspisok } from './menu.js'
+import { app } from '../main.js'
 import { ToggleHiddenList } from './listModules/class/ToggleHiddenList.js'
 import { SummaryViewControll } from './summaryModules/class/SummaryViewControll.js'
 import { ChartsViewControll } from './summaryModules/class/ChartsViewControll.js'
@@ -18,7 +18,6 @@ export let initCharts
 
 let sensorsName = false;
 let lastSensor = false;
-let updateSensor = false;
 let finishload = false
 function simulateLoader() {
     let progress = 0;
@@ -42,8 +41,7 @@ function updateProgress(progress) {
         return progress
     }
     let load = 0;
-
-    if (dataspisok) {
+    if (app.dataspisok) {
         if (sensorsName) {
             progress = 66;
             load += 1;
@@ -201,7 +199,6 @@ export async function conturTest(data) {
     initSummary = new SummaryViewControll(allId)
     initCharts = new ChartsViewControll()
     initCharts.getDataSummary()
-    updateSensor = true
     validRole()
     navigator();
     finishload = true

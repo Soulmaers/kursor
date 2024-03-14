@@ -2506,7 +2506,7 @@ exports.group = async (idw) => {
 
 
 module.exports.summaryYestodayToBase = async (data, arrayId) => {
-    // console.log(data, arrayId)
+    //console.log(data, arrayId)
     if (!arrayId.length) {
         return;
     }
@@ -2515,6 +2515,7 @@ module.exports.summaryYestodayToBase = async (data, arrayId) => {
         try {
             // Создание строки с placeholder'ами для каждого id из arrayId
             const placeholders = arrayId.map((_, i) => '@id' + i).join(',');
+            //console.log(placeholders)
             const selectBase = `SELECT * FROM summary WHERE idw IN (${placeholders}) AND data=@data`;
             const request = pool.request();
             // Добавляем данные для каждого элемента из arrayId
@@ -2522,7 +2523,7 @@ module.exports.summaryYestodayToBase = async (data, arrayId) => {
             // Добавляем данные для @data
             request.input('data', sql.VarChar, data[0]);
             const results = await request.query(selectBase);
-            //  console.log(results.recordset)
+            //   console.log(results.recordset.length)
             return results.recordset;
         } catch (e) {
             console.error(e);

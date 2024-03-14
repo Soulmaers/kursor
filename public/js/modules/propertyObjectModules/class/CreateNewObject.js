@@ -1,4 +1,4 @@
-import { zapros } from '../../menu.js'
+import { app } from '../../../main.js'
 import { ConfiguratorParams } from '../../configuratorModules/class/ConfiguratorParams.js'
 
 
@@ -61,7 +61,8 @@ export class CreateNewObject {
             console.log('сохраняем')
             const mess = await this.instance.setToBaseSensStorMeta()
             this.handleValidationResult(mess, 'green', 'bold');
-            await zapros(this.login)
+            app.zapros(this.login)
+            //   await zapros(this.login)
         }
         else {
             const idObject = await this.generationId(this.login)
@@ -99,7 +100,8 @@ export class CreateNewObject {
                 // this.field_modal.forEach(e => {
                 // e.value = ''
                 //  })
-                await zapros(this.login)
+                app.zapros(this.login)
+                //await zapros(this.login)
             }
         }
 

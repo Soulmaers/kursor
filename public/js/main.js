@@ -1,31 +1,86 @@
 
-import { zapros } from './modules/menu.js'
+
+import { conturTest } from './modules/spisok.js'
+import { checkCreate } from './modules/admin.js'
+import { logsView } from './modules/popup.js'
 
 export let app;
+
 document.addEventListener('DOMContentLoaded', () => {
     // Это гарантирует, что DOM полностью загружен перед инициализацией классов
     const role = document.querySelector('.role').getAttribute('rel')
     const login = document.querySelectorAll('.log')[1].textContent
     app = new Application(role, login);
-    // Здесь вы можете использовать app и router для выполнения дальнейших операций
+
 });
 
 
 export class Application {
+    //Основной класс 1 экземпляр при запуске приложения
     constructor(role, login) {
-        this.role = role
-        this.login = login
-        console.log('Application initialized');
-        this.init()
+        this.role = role   //получаем роль прав доступа
+        this.login = login //получаем логин пользователя
+        this.dataspisok = false //флаг загрузки
+        this.logsInterval = null; // Инициализация свойства для хранения интервала
+        this.init()  //основной метод который запускает стартовые методы загрузки данных на страницу
     }
-
     // Методы класса Application
     async init() {
-        this.formatContainer()
-        this.logs()
-        zapros(this.login)
+        this.formatContainer() //метод который корретирует границы контейнеров взависимости от разрешения экрана
+        this.logs() //метод который сохраняет в базу число просмотренных логов
+        this.zapros(this.login) //метод который забирает из бд данные по объектам, заппускает проверку обновления логов, проверку  объектов из бд соответствующих логину, запускает функцию отрисовки списка
 
     }
+    async zapros(login) {
+        const [wialonData, kursorData] = await Promise.all([this.zaprosWialon(login), this.zaprosKursor(login)])
+        this.dataspisok = true
+        const arrayList = wialonData.response.aLLmassObject
+        const nameCarCheck = wialonData.response.arrName
+        const data = kursorData.concat(arrayList)
+        if (data.flat().length === 0) {
+            const loaders = document.querySelector('.loaders');
+            loaders.style.display = 'none'
+        }
+        await conturTest(data) //отрисовка списка и статусов списка, будет переписано на класс
+        logsView(data) //отрисовка и наполнение логов будет переписано на класс
+        // Очистка предыдущего интервала перед созданием нового
+        if (this.logsInterval !== null) {
+            clearInterval(this.logsInterval);
+        }
+        // Установка нового интервала и сохранение его идентификатора
+        this.logsInterval = setInterval(logsView, 60000, data);
+        //передаем имена объектов для отображения в панели администратора
+        checkCreate(nameCarCheck)
+    }
+
+    async zaprosWialon(login) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ login }))
+
+        }
+        const mods = await fetch('/api/dataSpisok', params)
+        const models = await mods.json()
+        return models
+    }
+
+    async zaprosKursor(login) {
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ login })
+        }
+        const res = await fetch('/api/getKursorObjects', params)
+        const objects = await res.json()
+        const arrayList = objects.result
+        return arrayList
+    }
+
 
 
     async logs() {
@@ -41,6 +96,10 @@ export class Application {
         const res = await fetch('/api/viewLogs', param)
         const confirm = await res.json()
     }
+
+
+
+
     formatContainer() {
         const wrapperFull = document.querySelector('.wrapperFull')
         const lowList = document.querySelector('.low_list')

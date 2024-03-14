@@ -144,7 +144,6 @@ export async function viewBar(id) {
 
 
 
-import { zapros } from './menu.js'
 
 //конфигуратор оси
 export async function changeBase(massModel, activePost, idw, type, go, go1, goCar, goCar1) {
