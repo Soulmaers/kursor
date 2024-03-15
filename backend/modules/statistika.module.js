@@ -263,7 +263,7 @@ class SummaryStatistiks {
         })
 
         const zapravleno = zap.reduce((acc, el) => acc + el, 0) < 0 ? '-' : zap.reduce((acc, el) => acc + el, 0)
-        return [Number(rashod.toFixed(1)), Number(zapravleno.toFixed(1))]
+        return [rashod !== '-' ? Number(rashod.toFixed(1)) : 0, Number(zapravleno.toFixed(1))]
     }
 
     calculateDuration(newdata, type) {

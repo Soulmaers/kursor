@@ -8205,12 +8205,31 @@ i.filterEvent {
 
 .add_pwr,
 .add_mileage,
-.add_engine {
+.add_engine,
+.add_oil {
   font-size: 0.6rem;
   cursor: pointer;
   position: absolute;
   right: 15px;
   top: 6px;
+}
+
+
+.container_tarir {
+  width: 900px;
+  height: 700px;
+  position: absolute;
+  top: 54%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+  border: 2px solid rgba(6, 28, 71, 1);
+  background-color: rgba(6, 28, 71, 1);
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
 i.acEvent {
@@ -8567,6 +8586,11 @@ i.changeColorCheck {
   cursor: pointer;
 }
 
+.title_tarir {
+  padding: 8px 3px;
+  margin: 0;
+}
+
 .toogleModalNavi {
   background-color: #fff;
   color: rgba(6, 28, 71, 1);
@@ -8579,7 +8603,8 @@ i.changeColorCheck {
   justify-content: space-around;
 }
 
-.listStorMeta {
+.listStorMeta,
+.left_tarir_wrapper {
   width: 54%;
   border: 1px solid rgba(6, 28, 71, 1);
   height: 576px;
@@ -8592,7 +8617,8 @@ i.changeColorCheck {
 
 }
 
-.listDataOldParams {
+.listDataOldParams,
+.right_tarir_wrapper {
   width: 44%;
   border: 1px solid rgba(6, 28, 71, 1);
   height: 576px;
@@ -8600,6 +8626,11 @@ i.changeColorCheck {
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+}
+
+.left_tarir_wrapper,
+.right_tarir_wrapper {
+  margin: 2px
 }
 
 .list_old_data::-webkit-scrollbar {
@@ -8615,6 +8646,9 @@ i.changeColorCheck {
   background-color: rgba(0, 0, 0, 0);
   /* Цвет фона полосы прокрутки (невидимый) */
 }
+
+
+
 
 .list_old_data {
   width: 98%;
@@ -8683,6 +8717,12 @@ i.changeColorCheck {
   align-items: center;
 }
 
+.chart_title {
+  color: #fff;
+  font-size: 0.8rem;
+
+}
+
 .sensor_stor {
   width: 37%;
   border: none;
@@ -8721,14 +8761,43 @@ i.changeColorCheck {
   align-items: center;
   padding: 2px 0;
   font-size: 0.8rem;
+}
 
+.title_row,
+.row_tarir_data {
+  color: #fff;
+  width: 100%;
+  font-weight: bold;
+  background-color: rgba(6, 28, 71, 1);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 2px 0;
+  font-size: 0.8rem;
+}
+
+.row_tarir_data {
+  background-color: #fff;
+}
+
+.title_data {
+  width: 48%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.value_data {
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid rgba(6, 28, 71, 1)
 }
 
 .item_stor_title {
   color: #fff;
   width: 100%;
   font-weight: bold;
-  padding: 2px;
+  padding: 2px 0;
   background-color: rgba(6, 28, 71, 1);
   display: flex;
   justify-content: center;
@@ -9384,8 +9453,8 @@ i.changeColorCheck {
 .create_object_modal,
 .create_group_modal {
   display: none;
-  width: 700px;
-  height: 500px;
+  width: 900px;
+  height: 700px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -9399,8 +9468,8 @@ i.changeColorCheck {
 }
 
 .body_modal {
-  width: 650px;
-  height: 450px;
+  width: 850px;
+  height: 650px;
   background-color: #fff;
   border-radius: 0px 5px 5px 5px;
   display: flex;
@@ -9409,7 +9478,33 @@ i.changeColorCheck {
   justify-content: space-between
 }
 
-.header_modal {
+.body_tarir {
+  width: 850px;
+  height: 580px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-around;
+}
+
+.list_table_tarir {
+  margin: 2px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.list_table_tarir::-webkit-scrollbar {
+  width: 0.1em;
+  /* Ширина полосы прокрутки */
+  background-color: rgba(0, 0, 0, 0);
+  /* Цвет фона полосы прокрутки (невидимый) */
+}
+
+
+.header_modal,
+.header_tarir {
   background-color: rgba(6, 28, 71, 1);
   width: 100%;
   display: flex;
@@ -9424,8 +9519,9 @@ i.changeColorCheck {
 
 
 
-.footer_modal {
-  width: 650px;
+.footer_modal,
+.footer_tarir {
+  width: 850px;
   height: 60px;
   border-top: 2px solid rgba(6, 28, 71, 1);
   display: flex;

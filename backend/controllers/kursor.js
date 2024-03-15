@@ -58,6 +58,16 @@ exports.getDataParamsInterval = async (req, res) => {
     const result = await databaseService.geoLastInterval(time1, time2, idw)
     res.json(result)
 }
+exports.updateTarirTableToBase = async (req, res) => {
+    const data = req.body.values
+    const result = await databaseService.updateTarirTable(data)
+    res.json(result)
+}
+exports.getTarirDataToBase = async (req, res) => {
+    const idw = req.body.idw
+    const result = await databaseService.getTarirData(idw)
+    res.json(result)
+}
 
 exports.saveValuePWR = async (req, res) => {
     //  console.log(ips.ips.object);

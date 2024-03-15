@@ -35,23 +35,12 @@ export class CreateNewObject {
         if (e.classList.contains('title_configurator')) {
             this.listModal.style.display = 'none';
             this.configParams.style.display = 'flex';
-            this.modal.style.width = '900px'
-            this.modal.style.height = '700px'
-            this.modal.lastElementChild.style.width = '850px'
-            this.modal.lastElementChild.style.height = '650px'
-            this.modal.lastElementChild.lastElementChild.style.width = '850px'
             console.log(this.id)
             this.id || this.idPref ? this.updateMeta.style.display = 'block' : 'none'
-            //  this.updateMeta.style.display = 'block'
 
         } else {
             this.listModal.style.display = 'block';
             this.configParams.style.display = 'none';
-            this.modal.style.width = '700px'
-            this.modal.style.height = '500px'
-            this.modal.lastElementChild.style.width = '650px'
-            this.modal.lastElementChild.style.height = '450px'
-            this.modal.lastElementChild.lastElementChild.style.width = '650px'
             this.updateMeta.style.display = 'none'
         }
     }
@@ -62,7 +51,6 @@ export class CreateNewObject {
             const mess = await this.instance.setToBaseSensStorMeta()
             this.handleValidationResult(mess, 'green', 'bold');
             app.zapros(this.login)
-            //   await zapros(this.login)
         }
         else {
             const idObject = await this.generationId(this.login)
@@ -94,14 +82,7 @@ export class CreateNewObject {
                 const mess = !this.idPref ? await this.saveObject(object) : await this.updateObject(object)
                 this.handleValidationResult(mess, 'green', 'bold');
                 this.instance = new ConfiguratorParams(object.idObject, object.port, object.imei)
-                // this.pop.style.display = 'none'
-                // this.modal.style.display = 'none';
-                // this.modal.style.zIndex = 0
-                // this.field_modal.forEach(e => {
-                // e.value = ''
-                //  })
                 app.zapros(this.login)
-                //await zapros(this.login)
             }
         }
 
@@ -249,6 +230,7 @@ export class CreateNewObject {
 
     }
     viewModal() {
+        console.log(this.element)
         if (this.element.classList.contains('gr')) {
             return
         }
@@ -277,6 +259,7 @@ export class CreateNewObject {
         const element = el.parentElement.parentElement
         const prefix = element.classList.contains('wialon') ? 'wialon' : 'kursor'
         const titleModales = this.modal.querySelector('.title_modales')
+        console.log(titleModales)
         titleModales.textContent = 'Объект'
         if (this.element.classList.contains('gr')) {
             return
@@ -367,8 +350,12 @@ export class CreateNewObject {
     }
 
     hiddenModal() {
-        this.object.style.zIndex = '';
-        this.object.style.backgroundColor = '';
+        if (this.object) {
+            this.object.style.zIndex = '';
+            this.object.style.backgroundColor = '';
+            this.instance.itemMeta ? this.instance.itemMeta.forEach(e => e.remove()) : null
+            this.instance.itemStor ? this.instance.itemStor.forEach(e => e.remove()) : null
+        }
         this.object = null
 
         const titleModales = this.modal.querySelector('.title_modales')
@@ -379,19 +366,12 @@ export class CreateNewObject {
         this.field_modal.forEach(e => {
             e.value = ''
         })
+        const metaObject = document.querySelector('.metaObject')
+        metaObject.textContent = ''
         this.listModal.style.display = 'block';
         this.configParams.style.display = 'none';
-        this.modal.style.width = '700px'
-        this.modal.style.height = '500px'
-        this.modal.lastElementChild.style.width = '650px'
-        this.modal.lastElementChild.style.height = '450px'
-        this.modal.lastElementChild.lastElementChild.style.width = '650px'
         this.updateMeta.style.display = 'none'
         this.id = null
-        this.instance.itemMeta ? this.instance.itemMeta.forEach(e => e.remove()) : null
-        this.instance.itemStor ? this.instance.itemStor.forEach(e => e.remove()) : null
 
-
-        // console.log(this.instance.itemMeta)
     }
 }

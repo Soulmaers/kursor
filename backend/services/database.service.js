@@ -920,7 +920,45 @@ exports.saveValuePWRToBase = async (idw, params, value) => {
     }
 }
 
+exports.getTarirData = async (idw) => {
+    const pool = await connection;
+    const query = `
+            SELECT * FROM tarirTable WHERE idw=@idw
+                      `;
+    const result = await pool.request()
+        .input('idw', idw)
+        .query(query);
+    if (result.recordset.length !== 0) {
+        return result.recordset
+    }
+    else {
+        return []
+    }
 
+}
+exports.updateTarirTable = async (data) => {
+    const pool = await connection;
+    const idw = data[0][0]; // Предполагаем, что все записи для одного и того же idw
+    // Удаляем все записи для этого idw
+    await pool.request()
+        .input('idw', idw)
+        .query('DELETE FROM tarirTable WHERE idw = @idw');
+    // Проверяем, содержит ли массив data только один элемент с idw
+    if (data.length === 1 && data[0].length === 1) {
+        return 'Все записи для данного idw удалены';
+    }
+    // Вставляем новые данные
+    for (const [idw, param, place, dut, litrazh] of data) {
+        await pool.request()
+            .input('idw', idw)
+            .input('param', param)
+            .input('place', place)
+            .input('dut', dut)
+            .input('litrazh', litrazh)
+            .query('INSERT INTO tarirTable (idw, param, place, dut, litrazh) VALUES (@idw, @param, @place, @dut, @litrazh)');
+    }
+    return 'Данные обновлены';
+};
 
 
 

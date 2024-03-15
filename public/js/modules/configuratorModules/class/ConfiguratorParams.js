@@ -1,11 +1,12 @@
 import { Findmeta } from '../../../class/FindMeta.js'
-
+import { TarirTable } from './TarirTable.js'
 export class ConfiguratorParams {
     constructor(id, port, imei, dat) {
         this.id = id
         this.port = port
         this.imei = imei
         this.dat = dat
+        this.activeClassTarir = null
         this.element = document.querySelector('.search_input_meta')
         this.storageMeta = [
             { 'id': 1, 'sensor': 'Скорость', 'parametr': 'speed' },
@@ -276,8 +277,18 @@ export class ConfiguratorParams {
                     li.appendChild(i)
                     i.addEventListener('click', this.addValueFixed.bind(this, i, val))
                 }
+                if (e.parametr === 'oil') {
+                    const i = document.createElement('i')
+                    i.classList.add('fas')
+                    i.classList.add('fa-info-circle')
+                    i.classList.add(`add_${e.parametr}`)
+                    //  i.style.display = 'none'
+                    const bool = await this.validColorIcon()
+                    i.style.color = bool ? 'green' : null
+                    li.appendChild(i)
+                    i.addEventListener('click', this.createTarir.bind(this, i, e.parametr))
+                }
             }
-
         })
         this.itemStor = [...document.querySelectorAll('.item_stor')];
         this.clearParams = [...document.querySelectorAll('.clear_params')];
@@ -285,7 +296,26 @@ export class ConfiguratorParams {
         this.clearParams.forEach(el => el.addEventListener('click', this.clearMetaParams.bind(this, el)))
     }
 
-
+    async validColorIcon() {
+        const idw = this.id
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ idw })
+        }
+        const res = await fetch('api/getTarirTable', params)
+        const result = await res.json()
+        return result.length !== 0 ? true : false
+    }
+    createTarir(el, param) {
+        if (!this.activeClassTarir) {
+            this.activeClassTarir = new TarirTable(this.id, el, param)
+        } else {
+            this.activeClassTarir.reinitialize(this.id, param);
+        }
+    }
     async getValueToBase(parent) {
         const param = parent.children[1].textContent
         const id = this.id
@@ -407,7 +437,8 @@ export class ConfiguratorParams {
             if (clickStor.children[1].textContent === 'engine' && clickStor.children[2].textContent === 'pwr_ext' ||
                 clickStor.children[1].textContent === 'pwr' && clickStor.children[2].textContent === 'pwr_ext' ||
                 clickStor.children[1].textContent === 'engine' && clickStor.children[2].textContent === 'adc3' ||
-                clickStor.children[1].textContent === 'mileage' && clickStor.children[2].textContent === 'mileage') {
+                clickStor.children[1].textContent === 'mileage' && clickStor.children[2].textContent === 'mileage' ||
+                clickStor.children[1].textContent === 'oil') {
                 clickStor.children[4].style.display = 'block'
             }
             else {

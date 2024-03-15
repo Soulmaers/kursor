@@ -192,7 +192,6 @@ export async function tarirView() {
         point.push(Number(el.litrs))
         points.push(point)
     })
-
     const argy = await fetch('/api/wialon', param)
     const arg = await argy.json()
     const parFind = await fetch('/api/iconFind', param)
@@ -295,6 +294,7 @@ function evaluatePolynomial(x, a) {
             y[i] = y[i] * xi + a[j];
         }
     }
+    console.log(y)
     return y;
 }
 export function approximateValue(value, x, y, degree) {
@@ -338,6 +338,7 @@ export function grafikPoly(points, degree, coeffs) {
     const step = (xScale.domain()[1] - xScale.domain()[0]) / resolution;
     const polyData = d3.range(xScale.domain()[0], xScale.domain()[1], step)
         .map(x => [x, polyEval(x, coeffs)]);
+    console.log(polyData)
     const line = d3.line()
         .x(d => xScale(d[0]))
         .y(d => yScale(d[1]));

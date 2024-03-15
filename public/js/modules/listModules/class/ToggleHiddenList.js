@@ -32,7 +32,6 @@ export class ToggleHiddenList {
         this.deleteGroup = document.querySelectorAll('.deleteGroup')
         this.settingGroups = document.querySelectorAll('.settingsGroup')
         this.prefs = document.querySelectorAll('.pref')
-
     }
     init() {
         this.minusS.forEach(el => el.addEventListener('click', this.hiddenList.bind(this)))
@@ -53,7 +52,6 @@ export class ToggleHiddenList {
         this.ones.addEventListener('click', this.toggleMoresOnes.bind(this))
         this.settingGroups.forEach(el => el.addEventListener('click', this.edit.bind(this, el)))
         this.prefs.forEach(el => el.addEventListener('click', this.editObject.bind(this, el)))
-
         Array.from(this.cond).forEach((e, index) => {
             e.addEventListener('click', () => {
                 if (e.classList.contains('clicker')) {
@@ -80,6 +78,7 @@ export class ToggleHiddenList {
             })
         })
     }
+
 
     editObject(el) {
         obj.viewObjects(el)

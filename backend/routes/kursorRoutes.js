@@ -24,4 +24,5 @@ router.post('/api/saveValuePWR', controllerKursor.saveValuePWR)
 router.post('/api/getValuePWR', controllerKursor.getValueToBase)
 router.post('/api/deleteParams', controllerKursor.deleteParams)
 router.post('/api/getDataParamsInterval', controllerKursor.getDataParamsInterval)
-
+router.post('/api/updateTarirTable', controllerKursor.updateTarirTableToBase)
+router.post('/api/getTarirTable', controllerKursor.getTarirDataToBase)

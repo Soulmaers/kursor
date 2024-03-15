@@ -177,7 +177,7 @@ export async function visual(el) {
     })
     kranParams()
     setInterval(kranParams, 300000)
-    // tarirView();
+    tarirView();
     // setInterval(tarirView, 300000)
     alarmFind()
     const btnShina = document.querySelectorAll('.modals')
