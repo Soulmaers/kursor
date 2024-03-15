@@ -313,7 +313,7 @@ export class ConfiguratorParams {
         if (!this.activeClassTarir) {
             this.activeClassTarir = new TarirTable(this.id, el, param)
         } else {
-            this.activeClassTarir.reinitialize(this.id, param);
+            this.activeClassTarir.reinitialize(this.id, el, param);
         }
     }
     async getValueToBase(parent) {

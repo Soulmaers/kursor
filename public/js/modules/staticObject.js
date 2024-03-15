@@ -208,6 +208,7 @@ export async function tarirView() {
                     if (x.length >= 3) {
                         degree = 6
                     }
+                    console.log(val)
                     const approximated = approximateValue(val, x, y, degree);
                     const znak = Number((approximated[0] * 0.9987).toFixed(0))
 

@@ -27,8 +27,11 @@ export class TarirTable {
             const rows = this.wrapper_data.querySelectorAll('.row_tarir_data');
             rows.forEach(row => { row.remove() });
             this.createRowsViewValue(values)
+            const valueArray = values.map(e => {
+                return [1, 2, 3, Number(e.dut), Number(e.litrazh)]
+            });
+            this.approcsimationsViewParabola(valueArray)
         }
-
     }
 
     createRowsViewValue(values) {
@@ -37,15 +40,20 @@ export class TarirTable {
         });
 
     }
-    reinitialize(newId, param) {
+    reinitialize(newId, el, param) {
         this.removeEventListeners(); // Удаление старых слушателей событий
         this.id = newId; // Обновление id
         this.param = param
+        this.element = el//Обновление иконки
         this.resetInputs(); // Сброс состояния инпутов
         this.init(); // Переинициализация с новым id
         this.add('', '')
         this.add('', '')
         this.initEventListeners(); // Повторное добавление слушателей событий
+        const chartTarirer = document.querySelector('.chartTarir')
+        if (chartTarirer) {
+            chartTarirer.remove()
+        }
     }
     resetInputs() {
         // Удалить все лишние строки, оставив только две начальные
@@ -97,6 +105,7 @@ export class TarirTable {
             console.log(values[0].length)
             values[0].length > 1 ? this.element.style.color = 'green' : this.element.style.color = 'rgba(6, 28, 71, 1)'
             //  this.container.style.display = 'none';
+            this.approcsimationsViewParabola(values)
         } else {
             // Здесь можно установить сообщение о некорректных данных
             this.message.textContent = "Некорректные данные";
@@ -104,6 +113,155 @@ export class TarirTable {
             this.message.style.fontWeigth = 'bold'
         }
     }
+
+
+
+
+    approcsimationsViewParabola(values) {
+        const x = [];
+        const y = [];
+        const points = []
+        values.forEach(el => {
+            const point = []
+            x.push(Number(el[3]))
+            y.push(Number(el[4]))
+            point.push(Number(el[3]))
+            point.push(Number(el[4]))
+            points.push(point)
+        })
+        console.log(points)
+        let degree;
+        if (x.length < 3) {
+            degree = 1
+        }
+        if (x.length >= 3) {
+            degree = 6
+        }
+        const approximated = this.approximateValue(x, y, degree);
+        //   const znak = Number((approximated[0] * 0.9987).toFixed(0))
+        console.log(approximated)
+        this.grafikPoly(points, 6, approximated)
+    }
+
+
+
+    approximateValue(x, y, degree) {
+        const coeffs = this.polynomialApproximation(x, y, degree);
+        //  const approximated = this.evaluatePolynomial([value], coeffs)[0];
+        return coeffs
+    }
+    polynomialApproximation(x, y, degree) {
+        const n = x.length;
+        const m = degree + 1;
+        let A = Array.from({ length: m }, () => new Array(m).fill(0));
+        let B = new Array(m).fill(0);
+        let a = new Array(m).fill(0);
+        for (let i = 0; i < n; i++) {
+            let xi = x[i];
+            let yi = y[i];
+            for (let j = 0; j < m; j++) {
+                for (let k = 0; k < m; k++) {
+                    let val = Math.pow(xi, j + k);
+                    if (Number.isFinite(val)) {
+                        A[j][k] += val;
+                    }
+                }
+                let val = Math.pow(xi, j) * yi;
+                if (Number.isFinite(val)) {
+                    B[j] += val;
+                }
+            }
+        }
+        for (let j = 0; j < m; j++) {
+            for (let k = j + 1; k < m; k++) {
+                let coef = A[k][j] / A[j][j];
+                B[k] -= coef * B[j];
+                for (let l = j; l < m; l++) {
+                    let val = A[j][l] * coef;
+                    if (Number.isFinite(val)) {
+                        A[k][l] -= val;
+                    }
+                }
+            }
+        }
+        for (let j = m - 1; j >= 0; j--) {
+            let tmp = B[j];
+            for (let k = j + 1; k < m; k++) {
+                tmp -= a[k] * A[j][k];
+            }
+            let val = A[j][j];
+            if (!Number.isFinite(val)) {
+                val = Number.MAX_VALUE;
+            }
+            a[j] = tmp / val;
+        }
+        return a;
+    }
+
+
+    grafikPoly(points, degree, coeffs) {
+        const tarir = document.querySelector('.chart_tarir')
+        const polyEval = (x, coeffs) => coeffs.reduce((acc, coeff, i) => acc + coeff * x ** i, 0);
+        const margin = { top: 20, right: 20, bottom: 50, left: 40 };
+        const width = 450 - margin.left - margin.right;
+        const height = 300 - margin.top - margin.bottom;
+        const chartTarirer = document.querySelector('.chartTarir')
+        if (chartTarirer) {
+            chartTarirer.remove()
+        }
+        const chartTarir = document.createElement('div')
+        chartTarir.classList.add('chartTarir')
+        tarir.appendChild(chartTarir)
+        const svg = d3.select(".chartTarir")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + `${margin.left}` + ", " + `${margin.top}` + ")");
+
+        const xScale = d3.scaleLinear()
+            .range([0, width])
+            .domain(d3.extent(points, d => d[0]))
+        const yScale = d3.scaleLinear()
+            .range([height, 0])
+            .domain([0, d3.max(points, d => d[1])]);
+        svg.append("g")
+            .attr("transform", "translate(0, " + `${height}` + ")")
+            .call(d3.axisBottom(xScale));
+        svg.append("g")
+            .call(d3.axisLeft(yScale));
+        const resolution = 100;
+        const step = (xScale.domain()[1] - xScale.domain()[0]) / resolution;
+        const polyData = d3.range(xScale.domain()[0], xScale.domain()[1], step)
+            .map(x => [x, polyEval(x, coeffs)]);
+        console.log(polyData)
+        const line = d3.line()
+            .x(d => xScale(d[0]))
+            .y(d => yScale(d[1]));
+        svg.append("path")
+            .datum(polyData)
+            .attr("class", "line")
+            .attr("d", line)
+            .attr("fill", "none")
+            .attr("stroke", "steelblue")
+            .attr("stroke-width", 2)
+        svg.append("path")
+            .datum(points)
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-width", 2)
+            .attr("d", line);
+        svg.selectAll("circle")
+            .data(points)
+            .enter()
+            .append("circle")
+            .attr("cx", d => xScale(d[0]))
+            .attr("cy", d => yScale(d[1]))
+            .attr("r", 2)
+            .attr("fill", "black")
+    }
+
+
     async getTarirData() {
         const idw = this.id
         const params = {
