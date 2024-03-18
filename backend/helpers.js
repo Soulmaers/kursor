@@ -130,10 +130,8 @@ exports.setDataToBase = async (imei, port, info, id) => {
         const coefEngine = await databaseService.getValuePWRToBase(idw, 'engine')
         const coefPWR = await databaseService.getValuePWRToBase(idw, 'pwr')
         const coefMileage = await databaseService.getValuePWRToBase(idw, 'mileage')
-
         const now = new Date();
         const nowTime = Math.floor(now.getTime() / 1000);
-
         const lastObject = info[info.length - 1]
         const value = data.map(el => {
             // Базовая проверка наличия значения
@@ -154,6 +152,21 @@ exports.setDataToBase = async (imei, port, info, id) => {
             }
             return { key: el.meta, params: el.params, value: String(computedValue), status, data: dataTime };
         });
+        const tarirData = await getTarirTableToBase(idw)
+        if (tarirData.length !== 0) {
+            const val = data.find(e => e.params === 'oil');
+            if (val && lastObject.hasOwnProperty(val.meta)) {
+                const propertyValue = lastObject[val.meta]; // Исправление для получения значения свойства
+                const dut = parseInt(propertyValue); // Преобразование строки в число
+                if (!isNaN(dut)) { // Проверка, что результат преобразования - действительное число
+                    const sensOil = sortTarirOil(tarirData, dut); // Предполагается, что sortTarirOil - это функция, принимающая массив tarirData и число dut
+                    const index = value.findIndex(e => e.params === 'oil');
+                    if (index !== -1) { // Проверяем, найден ли элемент
+                        value[index].value = String(sensOil); // Изменяем значение на строковое представление sensOil
+                    }
+                }
+            }
+        }
         await databaseService.setUpdateValueSensStorMeta(imei, port, value)
         const tcpObject = info
         for (let elem of tcpObject) {
@@ -184,9 +197,105 @@ exports.setDataToBase = async (imei, port, info, id) => {
                         }
                     });
                 }
+                if (tarirData.length !== 0) {
+                    const val = data.find(e => e.params === 'oil');
+                    if (val && elem.hasOwnProperty(val.meta)) {
+                        const propertyValue = elem[val.meta]; // Исправление для получения значения свойства
+                        const dut = parseInt(propertyValue); // Преобразование строки в число
+                        if (!isNaN(dut)) { // Проверка, что результат преобразования - действительное число
+                            const sensOil = sortTarirOil(tarirData, dut); // Предполагается, что sortTarirOil - это функция, принимающая массив tarirData и число dut
+                            const index = value.findIndex(e => e.params === 'oil');
+                            if (index !== -1) { // Проверяем, найден ли элемент
+                                obj.oil = String(sensOil); // Изменяем значение на строковое представление sensOil
+                            }
+                        }
+                    }
+                }
                 await databaseService.setAddDataToGlobalBase(obj)
             }
         }
 
     }
+}
+
+const getTarirTableToBase = async (idw) => {
+    const res = await databaseService.getTarirData(idw)
+    return res
+}
+
+const sortTarirOil = (data, dut) => {
+    const x = [];
+    const y = [];
+    const points = []
+    data.forEach(el => {
+        const point = []
+        x.push(Number(el.dut))
+        y.push(Number(el.litrazh))
+        point.push(Number(el.dut))
+        point.push(Number(el.litrazh))
+        points.push(point)
+    })
+    let degree = x.length < 3 ? 1 : 6
+    const coeffs = polynomialApproximation(x, y, degree)
+    const approximated = evaluatePolynomial([dut], coeffs)[0];
+    const znak = Number((approximated * 0.9987).toFixed(0))
+    return znak
+}
+function polynomialApproximation(x, y, degree) {
+    const n = x.length;
+    const m = degree + 1;
+    let A = Array.from({ length: m }, () => new Array(m).fill(0));
+    let B = new Array(m).fill(0);
+    let a = new Array(m).fill(0);
+    for (let i = 0; i < n; i++) {
+        let xi = x[i];
+        let yi = y[i];
+        for (let j = 0; j < m; j++) {
+            for (let k = 0; k < m; k++) {
+                let val = Math.pow(xi, j + k);
+                if (Number.isFinite(val)) {
+                    A[j][k] += val;
+                }
+            }
+            let val = Math.pow(xi, j) * yi;
+            if (Number.isFinite(val)) {
+                B[j] += val;
+            }
+        }
+    }
+    for (let j = 0; j < m; j++) {
+        for (let k = j + 1; k < m; k++) {
+            let coef = A[k][j] / A[j][j];
+            B[k] -= coef * B[j];
+            for (let l = j; l < m; l++) {
+                let val = A[j][l] * coef;
+                if (Number.isFinite(val)) {
+                    A[k][l] -= val;
+                }
+            }
+        }
+    }
+    for (let j = m - 1; j >= 0; j--) {
+        let tmp = B[j];
+        for (let k = j + 1; k < m; k++) {
+            tmp -= a[k] * A[j][k];
+        }
+        let val = A[j][j];
+        if (!Number.isFinite(val)) {
+            val = Number.MAX_VALUE;
+        }
+        a[j] = tmp / val;
+    }
+    return a;
+}
+function evaluatePolynomial(x, a) {
+    const n = a.length;
+    const y = new Array(x.length).fill(0);
+    for (let i = 0; i < x.length; i++) {
+        let xi = x[i];
+        for (let j = n - 1; j >= 0; j--) {
+            y[i] = y[i] * xi + a[j];
+        }
+    }
+    return y;
 }

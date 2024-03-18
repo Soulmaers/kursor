@@ -287,6 +287,7 @@ function polynomialApproximation(x, y, degree) {
     return a;
 }
 function evaluatePolynomial(x, a) {
+
     const n = a.length;
     const y = new Array(x.length).fill(0);
     for (let i = 0; i < x.length; i++) {

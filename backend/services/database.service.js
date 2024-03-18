@@ -921,6 +921,7 @@ exports.saveValuePWRToBase = async (idw, params, value) => {
 }
 
 exports.getTarirData = async (idw) => {
+    console.log(idw)
     const pool = await connection;
     const query = `
             SELECT * FROM tarirTable WHERE idw=@idw
