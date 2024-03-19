@@ -706,6 +706,7 @@ export class SelectObjectsView {
             }
 
             function findClosestDataIndex(xPosition, data) {
+                console.log(xPosition, data)
                 const x0 = xScaleStart.invert(xPosition);
                 const times = data.map((d, i) => { return d.x });
                 const index = d3.bisect(times, x0);

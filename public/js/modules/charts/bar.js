@@ -53,82 +53,28 @@ export async function datas(t1, t2) {
         const tt2 = convertTineAll(t2)
         console.log(tt1, tt2)
 
-        /* console.time('я')
-         console.log(dataInfo)
-         const [params, tyres, osibar] = dataInfo
-         console.log(params)
-         // Преобразование массива osss в объект для быстрого доступа
-         const osssMap = {};
-         osibar.forEach(e => {
-             osssMap[e.idOs] = e;
-         });
-         const idw = Number(document.querySelector('.color').id)
-         const paramss = {
-             method: "POST",
-             headers: {
-                 'Content-Type': 'application/json',
-             },
-             body: (JSON.stringify({ idw, t1, t2 }))
-         }
-         console.log('тутада???')
-         const res = await fetch('/api/getDataParamsInterval', paramss)
-         const data = await res.json();
- 
-         if (data.length === 0) {
-             document.querySelector('.noGraf').style.display = 'block'
-             const grafOld = document.querySelector('.infoGraf')
-             if (grafOld) {
-                 grafOld.remove()
-             }
-             const loaders = document.querySelector('.loaders_charts')
-             loaders.style.display = 'none';
-             isCanceled = false;
-             return
-         }
-         document.querySelector('.noGraf').style.display = 'none'
- 
- 
-         const paramnew = tyres.map(el => {
-             if (osssMap[el.osNumber]) {
-                 const sens = params.find(it => Object.values(it).includes(el.pressure));
-                 if (!sens) return
-                 return {
-                     sens: sens.sens,
-                     position: Number(el.tyresdiv),
-                     parametr: el.pressure,
-                     bar: osssMap[el.osNumber],
-                     val: data.map(elem => {
-                         return ({
-                             dates: new Date(Number(elem.data) * 1000),
-                             geo: [Number(elem.lat), Number(elem.lon)],
-                             speed: Number(elem.speed),
-                             stop: Number(elem.engineOn) === 1 ? 'ВКЛ' : 'ВЫКЛ',
-                             value: Number(elem[el.pressure]),
-                             tvalue: Number(elem[el.temp])
-                         })
-                     })
-                 };
-             }
-         }).filter(el => el !== undefined)
-         paramnew.sort((a, b) => a.position - b.position)
-         console.log(paramnew)
-         console.timeEnd('я')
- */
-
-        console.time('old')
-        const param = {
+        console.time('я')
+        console.log(dataInfo)
+        const [params, tyres, osibar] = dataInfo
+        console.log(params)
+        // Преобразование массива osss в объект для быстрого доступа
+        const osssMap = {};
+        osibar.forEach(e => {
+            osssMap[e.idOs] = e;
+        });
+        const idw = Number(document.querySelector('.color').id)
+        const paramss = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ active, tt1, tt2 }))
+            body: (JSON.stringify({ idw, t1, t2 }))
         }
-        const rest = await fetch('/api/viewStructura', param)
-        const resultt = await rest.json()
-        console.log(resultt)
+        console.log('тутада???')
+        const res = await fetch('/api/getDataParamsInterval', paramss)
+        const data = await res.json();
 
-
-        if (resultt.length === 0) {
+        if (data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')
             if (grafOld) {
@@ -140,41 +86,107 @@ export async function datas(t1, t2) {
             return
         }
         document.querySelector('.noGraf').style.display = 'none'
-        //  const dat = resultt.map(e => JSON.parse(e.info))
 
-        function parseInfo(data) {
-            return data.map(item => {
+
+        const paramnew = tyres.map(el => {
+            if (osssMap[el.osNumber]) {
+                const sens = params.find(it => Object.values(it).includes(el.pressure));
+                if (!sens) return
                 return {
-                    ...JSON.parse(item.info)
+                    sens: sens.sens,
+                    position: Number(el.tyresdiv),
+                    parametr: el.pressure,
+                    bar: osssMap[el.osNumber],
+                    val: data.map(elem => {
+                        return ({
+                            dates: new Date(Number(elem.last_valid_time) * 1000),
+                            geo: [Number(elem.lat), Number(elem.lon)],
+                            speed: Number(elem.speed),
+                            stop: Number(elem.engineOn) === 1 ? 'ВКЛ' : 'ВЫКЛ',
+                            value: Number(elem[el.pressure]),
+                            tvalue: Number(elem[el.temp])
+                        })
+                    })
                 };
-            });
-        }
-        console.time()
-        const dat = parseInfo(resultt);
-        console.timeEnd()
-        const merged = {};
-        dat.forEach((obj) => {
-            for (const key in obj) {
-                if (!merged.hasOwnProperty(key)) {
-                    merged[key] = { ...obj[key], val: [] };
-                }
-                merged[key].val.push(...obj[key].val);
             }
-        });
-        const dat1 = [merged];
-        let dat2 = Object.values(dat1[0]).map(e => {
-            return {
-                ...e, // Keep other properties
-                val: e.val.map(item => {
+        }).filter(el => el !== undefined)
+        paramnew.sort((a, b) => a.position - b.position)
+        paramnew.forEach(e => e.val.sort((a, b) => {
+            if (a.dates > b.dates) {
+                return 1;
+            }
+            if (a.dates < b.dates) {
+                return -1;
+            }
+            return 0;
+        }))
+
+        console.log(paramnew)
+        console.timeEnd('я')
+
+        /*
+                console.time('old')
+                const param = {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: (JSON.stringify({ active, tt1, tt2 }))
+                }
+                const rest = await fetch('/api/viewStructura', param)
+                const resultt = await rest.json()
+                console.log(resultt)
+        
+        
+                if (resultt.length === 0) {
+                    document.querySelector('.noGraf').style.display = 'block'
+                    const grafOld = document.querySelector('.infoGraf')
+                    if (grafOld) {
+                        grafOld.remove()
+                    }
+                    const loaders = document.querySelector('.loaders_charts')
+                    loaders.style.display = 'none';
+                    isCanceled = false;
+                    return
+                }
+                document.querySelector('.noGraf').style.display = 'none'
+                //  const dat = resultt.map(e => JSON.parse(e.info))
+        
+                function parseInfo(data) {
+                    return data.map(item => {
+                        return {
+                            ...JSON.parse(item.info)
+                        };
+                    });
+                }
+                console.time()
+                const dat = parseInfo(resultt);
+                console.timeEnd()
+                const merged = {};
+                dat.forEach((obj) => {
+                    for (const key in obj) {
+                        if (!merged.hasOwnProperty(key)) {
+                            merged[key] = { ...obj[key], val: [] };
+                        }
+                        merged[key].val.push(...obj[key].val);
+                    }
+                });
+                const dat1 = [merged];
+                let dat2 = Object.values(dat1[0]).map(e => {
                     return {
-                        ...item, // Keep other properties
-                        dates: new Date(item.dates) // Convert "dates" property to Date object
+                        ...e, // Keep other properties
+                        val: e.val.map(item => {
+                            return {
+                                ...item, // Keep other properties
+                                dates: new Date(item.dates) // Convert "dates" property to Date object
+                            };
+                        })
                     };
-                })
-            };
-        });
-        console.timeEnd('old')
-        await grafikStartPress(dat2)
+                });
+                console.timeEnd('old')*/
+
+
+        // await grafikStartPress(paramnew)
         const loaders = document.querySelector('.loaders_charts')
         loaders.style.display = 'none';
         isCanceled = false;
@@ -183,6 +195,8 @@ export async function datas(t1, t2) {
         isCanceled = false;
     }
 }
+
+
 
 async function grafikStartPress(dat2) {
     console.log(dat2)
@@ -873,6 +887,7 @@ async function grafikStartPress(dat2) {
         const tires = e.querySelectorAll('.tyresChart')
         tires[num].style.background = 'black'
         num++
+        console.log(e)
         new Tooltip(e, [e.nextElementSibling.getAttribute('rel')]);
     })
     function globalTooltip(time) {
@@ -944,6 +959,7 @@ async function iconChart() {
 }
 
 async function vieModelChart(model, im1) {
+    console.log(model, im1)
     model.sort((a, b) => parseInt(a.osi) - parseInt(b.osi));
     im1.forEach(it => {
         for (let i = 0; i < model.length; i++) {

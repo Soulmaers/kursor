@@ -2,13 +2,14 @@ import { datas } from '../../charts/bar.js'
 import { oil } from '../../charts/oil.js'
 import { Tooltip } from '../../../class/Tooltip.js'
 import { GetDataTime } from '../../../class/GetDataTime.js'
+import { PressureCharts } from '../../charts/PressureCharts.js'
 export class GrafikView {
     constructor(nav) {
         this.list = nav
         this.time = null
         this.activeGrafiks = null
         this.objectMethod = {
-            'pressure': datas,
+            'pressure': PressureCharts,//datas,
             'oil': oil,
 
         }
@@ -82,7 +83,7 @@ export class GrafikView {
                 grafOld.remove()
             }
             const fn = this.objectMethod[this.activeGrafiks]
-            fn(this.time[0], this.time[1])
+            this.activeGrafiks === 'pressure' ? new fn(this.time[0], this.time[1]) : fn(this.time[0], this.time[1])
 
             const loaders = document.querySelector('.loaders_charts')
             loaders.style.display = 'flex';

@@ -9402,6 +9402,31 @@ i.changeColorCheck {
   flex-direction: column;
   border-radius: 5px;
   background-color: #fff;
+  z-index: 1000
+}
+
+.chart-tooltips {
+  font-size: 0.8rem;
+  padding: 2px;
+  border: 1px solid rgba(6, 28, 71, 1);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  color: rgba(6, 28, 71, 1);
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+}
+
+.icon_tool {
+  height: 15px;
+  font-size: 0.9rem;
+  padding: 2px;
+}
+
+.spanVal {
+  padding-left: 5px;
+  font-weight: 400;
 }
 
 .title_tooltip {
@@ -9416,6 +9441,12 @@ i.changeColorCheck {
 }
 
 .body_tooltip {
+  display: flex;
+  flex-direction: column;
+}
+
+.body_tooltips {
+  margin-top: 3px;
   display: flex;
   flex-direction: column;
 }

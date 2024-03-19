@@ -6,6 +6,8 @@ import { modalOs } from './modalOs.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 
+
+export let model;
 let intervalId
 let isProcessing = false;
 export async function loadParamsView(signal) {
@@ -35,7 +37,7 @@ export async function loadParamsView(signal) {
         body: (JSON.stringify({ idw }))
     }
     const mod = await fetch('/api/modelView', params)
-    const model = await mod.json()
+    model = await mod.json()
     console.log(model)
     if (model.result && model.result.length > 0) {
         createViewModel(model.result);
