@@ -34,11 +34,13 @@ export class PressureCharts {
         this.createLegend()
         this.createBodyCharts()
         this.createIconsCar()
+        this.toggleChecked()
         const loaders = document.querySelector('.loaders_charts')
         loaders.style.display = 'none';
         isCanceled = false;
 
     }
+
 
     createBodyCharts() {
         const margin = { top: 100, right: 10, bottom: 30, left: 10 };
@@ -206,25 +208,58 @@ export class PressureCharts {
                 .duration(1000)
                 .attr("d", area2)
                 .style('display', legendBar[1].classList.contains('noActive') ? 'none' : 'block')
-
-            svgContainer.call(d3.zoom().on("zoom", this.zoomed.bind(this, svg, x, y1, y2, height, data, svgContainer)))
+            this.svgContainers.push([svgContainer, svg, x, y1, y2, height, data])
             this.createTooltip(svgContainer, svg, data.val, x)
         });
-    }
-    zoomed(svg, x, y1, y2, height, data, svgContainer) {
-        const transform = d3.event.transform;
-        const newX = transform.rescaleX(x);
-        // Обновляем ось X
-        // Обновляем первую ось X с форматом времени HH:MM
-        svg.select(".osx").call(d3.axisBottom(newX).tickFormat(d3.timeFormat("%H:%M")));
-        // Обновляем вторую ось X с форматом даты DD.MM
-        svg.select(".osx2").call(d3.axisBottom(newX).tickFormat(d3.timeFormat("%d.%m")));
 
+    }
+    setupZoom() {
+        const isChecked = document.querySelector('.inputAllPress').checked;
+        // Создаем единый экземпляр d3.zoom
+        const zoom = d3.zoom()
+            .scaleExtent([1, 10])
+            .on("zoom", () => {
+                const transform = d3.event.transform;
+                // В зависимости от состояния чекбокса, применяем масштабирование
+                this.svgContainers.forEach(([container, svg, x, y1, y2, height, data]) => {
+                    if (isChecked) {
+                        // Применяем единое масштабирование ко всем графикам
+                        const newX = transform.rescaleX(x);
+                        this.zoomed(svg, newX, y1, y2, height, data, container);
+                    } else {
+                        // Применяем индивидуальное масштабирование, если контейнер активен (с курсором)
+                        if (d3.select(d3.event.sourceEvent.target).node().closest('.graf') === container.node()) {
+                            const newX = transform.rescaleX(x);
+                            this.zoomed(svg, newX, y1, y2, height, data, container);
+                        }
+                    }
+                });
+            });
+        // Применяем настройку масштабирования к каждому графику
+        this.svgContainers.forEach(([container]) => container.call(zoom));
+        // Применяем настройку масштабирования к каждому графику
+        d3.selectAll('.graf').call(zoom);
+    }
+    // Метод для инициализации слушателя на чекбокс
+    toggleChecked() {
+        document.querySelector('.inputAllPress').addEventListener('change', this.setupZoom.bind(this));
+        this.setupZoom(); // Вызываем сразу, чтобы установить начальное состояние
+        document.querySelector('.comback').addEventListener('click', () => {
+            this.resetZoom();
+        });
+    }
+    resetZoom() {
+        this.svgContainers.forEach(([container, svg, x, y1, y2, height, data]) => {
+            this.zoomed(svg, x, y1, y2, height, data, container);
+        });
+    }
+    zoomed(svg, newX, y1, y2, height, data, svgContainer) {
+        svg.select(".osx").call(d3.axisBottom(newX).tickFormat(d3.timeFormat("%H:%M")));
+        svg.select(".osx2").call(d3.axisBottom(newX).tickFormat(d3.timeFormat("%d.%m")));
         // Обновляем области и линии
         const updatePath = (areaGenerator, selector) => {
             svg.selectAll(selector)
                 .attr("d", d => {
-                    console.log(d)
                     areaGenerator.x(d => newX(new Date(d.dates)));
                     return areaGenerator(d);
                 });
@@ -235,21 +270,18 @@ export class PressureCharts {
             .y1(d => y1(d.value))
             .curve(d3.curveStep);
         updatePath(area1Generator, ".area1");
-
         // Для area11 с условиями
         const area11Generator = d3.area()
             .y0(height)
             .y1(d => d.value > data.bar.knd && d.value <= data.bar.dnn || d.value > data.bar.dvn && d.value <= data.bar.kvd ? y1(d.value) : height)
             .curve(d3.curveStep);
         updatePath(area11Generator, ".area11");
-
         // Для area12 с условиями
         const area12Generator = d3.area()
             .y0(height)
             .y1(d => d.value <= data.bar.knd || d.value >= data.bar.kvd ? y1(d.value) : height)
             .curve(d3.curveStep);
         updatePath(area12Generator, ".area12");
-
         // Для area2
         const area2Generator = d3.area()
             .y0(height)
