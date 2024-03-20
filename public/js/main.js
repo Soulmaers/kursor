@@ -31,7 +31,7 @@ export class Application {
         this.zapros(this.login) //метод который забирает из бд данные по объектам, заппускает проверку обновления логов, проверку  объектов из бд соответствующих логину, запускает функцию отрисовки списка
 
     }
-    async zapros(login) {
+    async zapros(login, elem) {
         const [wialonData, kursorData] = await Promise.all([this.zaprosWialon(login), this.zaprosKursor(login)])
         this.dataspisok = true
         const arrayList = wialonData.response.aLLmassObject
@@ -42,6 +42,12 @@ export class Application {
             loaders.style.display = 'none'
         }
         await conturTest(data) //отрисовка списка и статусов списка, будет переписано на класс
+        if (elem) {
+            const list = document.querySelectorAll('.listItem')
+            const el = [...list].find(el => el.id === elem)
+            el.classList.add('border')
+            el.children[0].children[0].style.color = 'green'
+        }
         logsView(data) //отрисовка и наполнение логов будет переписано на класс
         // Очистка предыдущего интервала перед созданием нового
         if (this.logsInterval !== null) {

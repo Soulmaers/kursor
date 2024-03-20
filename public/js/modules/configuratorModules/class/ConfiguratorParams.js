@@ -76,10 +76,26 @@ export class ConfiguratorParams {
         this.clearParams = null
         this.itemMeta = null;
         this.itemStor = null;
-        this.updateMeta.addEventListener('click', this.createListMeta.bind(this))
+        this.boundClear = this.createListMeta.bind(this);
         this.init()
+        this.initEventListeners();
+    }
+    reinitialize(newId, port, imei, dat) {
+        this.removeEventListeners(); // Удаление старых слушателей событий
+        this.id = newId; // Обновление id
+        this.port = port
+        this.imei = imei
+        this.dat = dat
+        this.init(); // Переинициализация с новым id
+        this.initEventListeners(); // Повторное добавление слушателей событий
     }
 
+    initEventListeners() {
+        this.updateMeta.addEventListener('click', this.boundUpdate);
+    }
+    removeEventListeners() {
+        this.updateMeta.removeEventListener('click', this.boundUpdate);
+    }
 
     clearMetaParams(el, event) {
         event.stopPropagation();

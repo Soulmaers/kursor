@@ -11,6 +11,7 @@ export class ToggleHiddenList {
     constructor() {
         //  this.status = status
         //  this.final = final
+        this.clickElement = null
         this.login = document.querySelectorAll('.log')[1].textContent
         this.chekHiddens = document.querySelectorAll('.chekHidden')
         this.plusS = document.querySelectorAll('.plusS')
@@ -81,10 +82,16 @@ export class ToggleHiddenList {
 
 
     editObject(el) {
+        const list = document.querySelector('.border')
+        if (list) {
+            list.classList.remove('border')
+            list.children[0].children[0].style.color = 'darkblue'
+        }
+        el.parentElement.parentElement.classList.add('border')
+        el.style.color = 'green'
         obj.viewObjects(el)
     }
     async edit(el) {
-
         const id = el.parentElement.parentElement.id
         const nameGroup = el.parentElement.parentElement.getAttribute('rel')
         const modal = document.querySelector('.create_group_modal')

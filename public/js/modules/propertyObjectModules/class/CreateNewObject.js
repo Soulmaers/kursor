@@ -50,7 +50,8 @@ export class CreateNewObject {
             console.log('сохраняем')
             const mess = await this.instance.setToBaseSensStorMeta()
             this.handleValidationResult(mess, 'green', 'bold');
-            app.zapros(this.login)
+
+            app.zapros(this.login, this.object.id)
         }
         else {
             const idObject = await this.generationId(this.login)
@@ -81,8 +82,8 @@ export class CreateNewObject {
                 console.log(this.idPref)
                 const mess = !this.idPref ? await this.saveObject(object) : await this.updateObject(object)
                 this.handleValidationResult(mess, 'green', 'bold');
-                this.instance = new ConfiguratorParams(object.idObject, object.port, object.imei)
-                app.zapros(this.login)
+                // this.instance = new ConfiguratorParams(object.idObject, object.port, object.imei)
+                app.zapros(this.login, this.object.id)
             }
         }
 
@@ -253,8 +254,8 @@ export class CreateNewObject {
 
     async viewObjects(el) {
         this.object = el.parentElement.parentElement
-        el.parentElement.parentElement.style.zIndex = 2;
-        el.parentElement.parentElement.style.backgroundColor = '#fff';
+        // el.parentElement.parentElement.style.zIndex = 2;
+        //  el.parentElement.parentElement.style.backgroundColor = '#fff';
         const idw = el.parentElement.parentElement.id
         const element = el.parentElement.parentElement
         const prefix = element.classList.contains('wialon') ? 'wialon' : 'kursor'
@@ -291,16 +292,12 @@ export class CreateNewObject {
                 const rr = await fetch('/api/getSensStorMeta', param)
                 const dat = await rr.json()
                 this.idPref = result[0].idObject
-                if (this.instance) {
-                    this.instance.id = this.idPref
-                    this.instance.port = result[0].port,
-                        this.instance.imei = result[0].imei
-                    this.instance.dat = dat
-                    this.instance.init()
+                if (!this.instance) {
+                    this.instance = new ConfiguratorParams(this.idPref, result[0].port, result[0].imei, dat);
+                } else {
+                    this.instance.reinitialize(this.idPref, result[0].port, result[0].imei, dat);
                 }
-                else {
-                    this.instance = new ConfiguratorParams(this.idPref, result[0].port, result[0].imei, dat)
-                }
+
             }
             else {
                 const params = {
@@ -323,15 +320,11 @@ export class CreateNewObject {
                 const rr = await fetch('/api/getSensStorMeta', param)
                 const dat = await rr.json()
                 this.idPref = idw
-                if (this.instance) {
-                    this.instance.id = this.idPref
-                    this.instance.port = 'wialon'
-                    this.instance.imei = result[0].imei
-                    this.instance.dat = dat
-                    this.instance.init()
-                }
-                else {
-                    this.instance = new ConfiguratorParams(this.idPref, 'wialon', result[0].imei, dat)
+
+                if (!this.instance) {
+                    this.instance = new ConfiguratorParams(this.idPref, 'wialon', result[0].imei, dat);
+                } else {
+                    this.instance.reinitialize(this.idPref, 'wialon', result[0].imei, dat);
                 }
 
             }
@@ -351,8 +344,8 @@ export class CreateNewObject {
 
     hiddenModal() {
         if (this.object) {
-            this.object.style.zIndex = '';
-            this.object.style.backgroundColor = '';
+            //   this.object.style.zIndex = '';
+            //   this.object.style.backgroundColor = '';
             this.instance.itemMeta ? this.instance.itemMeta.forEach(e => e.remove()) : null
             this.instance.itemStor ? this.instance.itemStor.forEach(e => e.remove()) : null
         }

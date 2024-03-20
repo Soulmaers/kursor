@@ -364,7 +364,6 @@ function format(data, num) {
 
 
 function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, engine) {
-    console.log(data, elemId, listItemCar, statusnew, sats, type, engine)
     const countElem = document.querySelectorAll('.newColumn')
     let condition;
     let updatetime;

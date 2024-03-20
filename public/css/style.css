@@ -4100,6 +4100,10 @@ input[type="date"] {
   border-radius: 5px;
 }
 
+.border {
+  z-index: 2;
+  background-color: #fff;
+}
 
 .im1 {
   width: 20px;
