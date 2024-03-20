@@ -216,7 +216,7 @@ export class ConfiguratorParams {
             data: null,
             imei: this.imei
         }))
-
+        console.log(data)
         const params = {
             method: "POST",
             headers: {

@@ -1004,7 +1004,8 @@ exports.setSensStorMeta = async (data) => {
                     .query(insertQuery);
             }
             else {
-                const updateQuery = `UPDATE sens_stor_meta SET idw=@idw, port=@port, sens=@sens, data=@data, params=@params, meta=@meta, login=@login, imei=@imei 
+                console.log()
+                const updateQuery = `UPDATE sens_stor_meta SET idw=@idw, port=@port, sens=@sens, time=@time, params=@params, meta=@meta, login=@login, imei=@imei 
             WHERE idw=@idw AND params=@params`;
                 const res = await pool.request()
                     .input('idw', String(id))
