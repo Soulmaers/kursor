@@ -175,7 +175,7 @@ exports.setDataToBase = async (imei, port, info, id) => {
                     return elem[el.meta] !== null ? { key: el.meta, params: el.params, value: String(elem[el.meta]), status: 'true' } : { key: el.meta, params: el.params, value: el.value, status: 'false' }
                 }
                 else {
-                    return { key: el.meta, params: el.params, value: el.value, status: 'false' }
+                    return { key: el.meta, params: el.params, value: null, status: 'false' }
                 }
             })
             if (value.length !== 0) {
