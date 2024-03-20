@@ -437,6 +437,7 @@ export class ConfiguratorParams {
             if (clickStor.children[1].textContent === 'engine' && clickStor.children[2].textContent === 'pwr_ext' ||
                 clickStor.children[1].textContent === 'pwr' && clickStor.children[2].textContent === 'pwr_ext' ||
                 clickStor.children[1].textContent === 'engine' && clickStor.children[2].textContent === 'adc3' ||
+                clickStor.children[1].textContent === 'pwr' && clickStor.children[2].textContent === 'adc3' ||
                 clickStor.children[1].textContent === 'mileage' && clickStor.children[2].textContent === 'mileage' ||
                 clickStor.children[1].textContent === 'oil') {
                 clickStor.children[4].style.display = 'block'
