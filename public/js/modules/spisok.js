@@ -364,7 +364,6 @@ function format(data, num) {
 
 
 function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, engine) {
-    console.log(data, elemId, listItemCar, statusnew, sats, type, engine)
     const countElem = document.querySelectorAll('.newColumn')
     let condition;
     let updatetime;
@@ -390,12 +389,12 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, en
         statusnew = currentTime > 3600 ? 'ВЫКЛ' : statusnew
         updatetime = convertTime(currentTime)
     }
-    if (speed && speed !== '-') {
-        if (speed && speed !== '-') {
-            const num = (speed > 0 && engine === 1) ? 1 : (speed === 0 && engine === 1) ? 2 : (speed === 0 && engine === 0) ? 0 : undefined;
-            condition = objCondition[num]
-        }
+
+    if (speed !== '-' && (speed || speed === 0)) {
+        const num = (speed > 0 && engine === 1) ? 1 : (speed === 0 && engine === 1) ? 2 : (speed === 0 && engine === 0) ? 0 : undefined;
+        condition = objCondition[num]
     }
+
     const iconValues = {
         statusnew: [statusnew, `<i class="fas fa-satellite-dish actIcon"></i>`],
         ingine: [engine, `<i class="fas fa-key actIcon"></i>`],
@@ -407,6 +406,7 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, en
         meliage: [meliage, meliage],
         lasttime: [updatetime, updatetime]
     }
+
     for (let i = 0; i < countElem.length; i++) {
         const newClass = countElem[i].getAttribute('rel')
         const existingCel = listItemCar.querySelector(`.newCel[rel="${newClass}"]`);

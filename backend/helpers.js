@@ -211,6 +211,9 @@ exports.setDataToBase = async (imei, port, info, id) => {
                         }
                     }
                 }
+                if (idw == 26936623) {
+                    console.log(obj)
+                }
                 await databaseService.setAddDataToGlobalBase(obj)
             }
         }
