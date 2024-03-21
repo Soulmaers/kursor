@@ -51,6 +51,11 @@ exports.getKursorObjects = async (req, res) => {
 
 }
 
+exports.setSummator = async (req, res) => {
+    const data = req.body.data
+    const result = await databaseService.setSummatorToBase(data)
+    res.json(result)
+}
 exports.getDataParamsInterval = async (req, res) => {
     const time1 = req.body.t1
     const time2 = req.body.t2
@@ -65,7 +70,8 @@ exports.updateTarirTableToBase = async (req, res) => {
 }
 exports.getTarirDataToBase = async (req, res) => {
     const idw = req.body.idw
-    const result = await databaseService.getTarirData(idw)
+    const param = req.body.param
+    const result = await databaseService.getTarirData(idw, param)
     res.json(result)
 }
 

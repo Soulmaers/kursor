@@ -264,12 +264,14 @@ export class TarirTable {
 
     async getTarirData() {
         const idw = this.id
+        const param = this.param
+        console.log(idw, param)
         const params = {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({ idw })
+            body: JSON.stringify({ idw, param })
         }
         const res = await fetch('api/getTarirTable', params)
         const result = await res.json()

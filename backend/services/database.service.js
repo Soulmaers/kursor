@@ -786,8 +786,6 @@ exports.getSensStorMeta = async (idw) => {
 
 
 exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
-    const now = new Date();
-    const nowTime = Math.floor(now.getTime() / 1000);
     try {
         const pool = await connection;
         for (let i of data) {
@@ -920,13 +918,13 @@ exports.saveValuePWRToBase = async (idw, params, value) => {
     }
 }
 
-exports.getTarirData = async (idw) => {
+exports.getTarirData = async (idw, param) => {
     const pool = await connection;
     const query = `
-            SELECT * FROM tarirTable WHERE idw=@idw
-                      `;
+            SELECT * FROM tarirTable WHERE idw=@idw AND param=@param`;
     const result = await pool.request()
         .input('idw', idw)
+        .input('param', param)
         .query(query);
     if (result.recordset.length !== 0) {
         return result.recordset
@@ -939,10 +937,12 @@ exports.getTarirData = async (idw) => {
 exports.updateTarirTable = async (data) => {
     const pool = await connection;
     const idw = data[0][0]; // Предполагаем, что все записи для одного и того же idw
+    const param = data[0][1]
     // Удаляем все записи для этого idw
     await pool.request()
         .input('idw', idw)
-        .query('DELETE FROM tarirTable WHERE idw = @idw');
+        .input('param', param)
+        .query('DELETE FROM tarirTable WHERE idw = @idw AND param=@param');
     // Проверяем, содержит ли массив data только один элемент с idw
     if (data.length === 1 && data[0].length === 1) {
         return 'Все записи для данного idw удалены';
@@ -956,6 +956,25 @@ exports.updateTarirTable = async (data) => {
             .input('dut', dut)
             .input('litrazh', litrazh)
             .query('INSERT INTO tarirTable (idw, param, place, dut, litrazh) VALUES (@idw, @param, @place, @dut, @litrazh)');
+    }
+    return 'Данные обновлены';
+};
+
+exports.setSummatorToBase = async (data) => {
+    console.log(data)
+    const pool = await connection;
+    const idw = data[0].idw; // Предполагаем, что все записи для одного и того же idw
+    // Удаляем все записи для этого idw
+    await pool.request()
+        .input('idw', idw)
+        .query('DELETE FROM summator_oil_stor WHERE idw = @idw');
+    // Вставляем новые данные
+    for (const { idw, param, dut } of data) {
+        await pool.request()
+            .input('idw', idw)
+            .input('param', param)
+            .input('dut', dut)
+            .query('INSERT INTO summator_oil_stor (idw, param,  dut) VALUES (@idw, @param, @dut)');
     }
     return 'Данные обновлены';
 };
