@@ -171,7 +171,6 @@ export class ConfiguratorParams {
     }
 
     controllFlashBorder() {
-        console.log(this.dat)
         if (this.dat) {
             this.itemStor.forEach(e => {
                 const matchingItem = this.dat.find(it => it.params === e.children[1].textContent);

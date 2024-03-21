@@ -964,25 +964,20 @@ exports.updateTarirTable = async (data) => {
 
 
 exports.setSensStorMeta = async (data) => {
-    // console.log(data)
     const pool = await connection;
     if (data.length !== 0) {
-
         // Получаем уникальные params из массива data
         const uniqueParams = Array.from(new Set(data.map(entry => entry.params)));
-
         // Выбираем все params из sens_stor_meta
         const selectParamsQuery = `SELECT DISTINCT params FROM sens_stor_meta WHERE idw=@idw`;
         const paramsRes = await pool.request().input('idw', String(data[0].id)).query(selectParamsQuery);
         const existingParams = paramsRes.recordset.map(row => row.params);
-
         // Удаляем строки с params, которых нет в data
         const paramsToDelete = existingParams.filter(param => !uniqueParams.includes(param));
         for (const param of paramsToDelete) {
             const deleteQuery = `DELETE FROM sens_stor_meta WHERE params=@params AND idw=@idw`;
             await pool.request().input('params', param).input('idw', String(data[0].id)).query(deleteQuery);
         }
-
         for (const entry of data) {
             const { id, port, sens, params, meta, value, status, time, login, data, imei } = entry;
             const post = `SELECT * FROM sens_stor_meta WHERE idw=@idw AND params=@params`
@@ -1021,6 +1016,7 @@ exports.setSensStorMeta = async (data) => {
                     .input('data', data)
                     .query(updateQuery);
             }
+            console.log('здесь')
         }
         return 'Выполнено'
 

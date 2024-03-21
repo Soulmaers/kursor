@@ -331,7 +331,7 @@ export class PressureCharts {
         tooltip.innerHTML = `<div class="title_tooltip">${formattedDate}</div>
             <div class="body_tooltips"><i class='fas fa-tachometer-alt icon_tool'><span class='spanVal'>${tooltipData.speed} км/ч</span></i>
             <i class='fas fa-life-ring icon_tool'><span class='spanVal'>${tooltipData.value === -0.5 ? 'Потеря связи с датчиком' : tooltipData.value} Бар</span></i>
-            <i class='fas fa-temperature-high icon_tool'><span class='spanVal'>${tooltipData.tvalue === -0.5 || tooltipData.tvalue === -128 ? 'Потеря связи с датчиком' : tooltipData.tvalue} t°</span></i>
+            <i class='fas fa-temperature-high icon_tool'><span class='spanVal'>${tooltipData.tvalue === -0.5 ? 'Потеря связи с датчиком' : tooltipData.tvalue} t°</span></i>
             <i class='fas fa-key icon_tool'><span class='spanVal'>${tooltipData.stop}</span></i> </div>`
         const xPositionk = event.pageX; // Используйте абсолютные координаты
         const yPositionk = event.pageY; // Используйте абсолютные координаты
@@ -667,7 +667,7 @@ export class PressureCharts {
                             speed: Number(elem.speed),
                             stop: Number(elem.engineOn) === 1 ? 'ВКЛ' : 'ВЫКЛ',
                             value: elem[el.pressure] ? Number(elem[el.pressure]) : -0.5,
-                            tvalue: elem[el.temp] ? Number(elem[el.temp]) : -0.5
+                            tvalue: elem[el.temp] ? (Number(elem[el.temp]) !== -128 && Number(elem[el.temp]) !== -50 && Number(elem[el.temp]) !== -51 ? Number(elem[el.temp]) : -0.5) : -0.5
                         })
                     })
                 };
