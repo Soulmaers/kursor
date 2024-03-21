@@ -964,7 +964,7 @@ exports.updateTarirTable = async (data) => {
 
 
 exports.setSensStorMeta = async (data) => {
-
+    // console.log(data)
     const pool = await connection;
     if (data.length !== 0) {
 
@@ -979,8 +979,8 @@ exports.setSensStorMeta = async (data) => {
         // Удаляем строки с params, которых нет в data
         const paramsToDelete = existingParams.filter(param => !uniqueParams.includes(param));
         for (const param of paramsToDelete) {
-            const deleteQuery = `DELETE FROM sens_stor_meta WHERE params=@params`;
-            await pool.request().input('params', param).query(deleteQuery);
+            const deleteQuery = `DELETE FROM sens_stor_meta WHERE params=@params AND idw=@idw`;
+            await pool.request().input('params', param).input('idw', String(data[0].id)).query(deleteQuery);
         }
 
         for (const entry of data) {
