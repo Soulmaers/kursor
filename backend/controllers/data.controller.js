@@ -82,35 +82,40 @@ const getWialonSetToBaseObject = async (login) => {
 
 const getWialon = async (login) => {
     const data = await wialonService.getAllGroupDataFromWialon();
-    const time = Math.floor(Date.now() / 1000);
     if (!data) return [];
-    const promises = data.items.flatMap((elem) => {
+    const time = Math.floor(Date.now() / 1000);
+    const results = [];
+    // Проходим по каждой группе
+    for (const elem of data.items) {
         const { nm: nameGroup, id: idGroup, u: nameObject } = elem;
-        return nameObject.map((el) => (async () => {
+        // Проходим по каждому объекту в группе
+        for (const el of nameObject) {
             try {
                 const [all, phone] = await Promise.all([
                     wialonService.getAllParamsIdDataFromWialon(el),
                     wialonService.getUniqImeiAndPhoneIdDataFromWialon(el)
                 ]);
-                if (!all.item || !phone.item) return null;
-                return {
-                    login,
-                    data: String(time),
-                    idg: String(idGroup),
-                    name_g: nameGroup,
-                    idObject: String(all.item.id),
-                    nameObject: String(all.item.nm),
-                    imei: phone.item.uid ? String(phone.item.uid) : null,
-                    phone: phone.item.ph ? String(phone.item.ph) : null
-                };
+                // Проверяем наличие данных
+                if (all.item && phone.item) {
+                    results.push({
+                        login,
+                        data: String(time),
+                        idg: String(idGroup),
+                        name_g: nameGroup,
+                        idObject: String(all.item.id),
+                        nameObject: String(all.item.nm),
+                        imei: phone.item.uid ? String(phone.item.uid) : null,
+                        phone: phone.item.ph ? String(phone.item.ph) : null
+                    });
+                }
             } catch (error) {
-                console.error(error);
-                return null;
+                console.error(`Ошибка при получении данных для объекта ${el}: ${error}`);
+                // Можно решить, добавлять ли в результат null или вообще пропустить этот шаг
             }
-        })());
-    });
-    const results = await Promise.all(promises);
-    return results.filter(Boolean); // Отфильтровываем null значения, которые могут возникнуть из-за ошибок
+        }
+    }
+    // console.log(`Обработано объектов: ${results.length}`);
+    return results; // Возвращаем массив без null значений
 };
 
 
@@ -127,12 +132,9 @@ exports.viewLogs = async (req, res) => {
 
 
 
-exports.start = async (session) => {
+exports.start = async (session, data) => {
     console.log('старт')
     await getWialonSetToBaseObject(session._session.au) //обновляем объекты с виалона в нашей базе
-    console.time('data')
-    const data = await wialonService.getDataFromWialon()
-    console.timeEnd('data')
     if (data) {
         const allCar = Object.entries(data)
         const dataKursor = await databaseService.getObjects()
@@ -141,7 +143,6 @@ exports.start = async (session) => {
         await Promise.all([await updateParams(data, validKursorData), saveSensorsToBase(allCar, session)])
         console.log('выполнено')
     }
-
 }
 
 async function saveSensorsToBase(allCar, session) {
@@ -287,7 +288,7 @@ async function updateParams(data, kursor) {
         await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
             databaseService.summaryToBase(idw, arrayInfo, datas)
         ));
-        hunterTime(dataAll)
+        //  hunterTime(dataAll)
     }
 
     console.timeEnd('updatedata')

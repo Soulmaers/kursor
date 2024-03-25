@@ -61,8 +61,8 @@ async function init() {
         setInterval(() => {
             new WialonOrigin(session);
         }, 120000);
-        await globalstart.start(session)
-        setInterval(globalstart.start, 300000, session)
+        //  await globalstart.start(session)
+        // setInterval(globalstart.start, 300000, session)
     }
 }
 init()

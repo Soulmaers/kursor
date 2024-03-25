@@ -27,3 +27,4 @@ router.post('/api/getDataParamsInterval', controllerKursor.getDataParamsInterval
 router.post('/api/updateTarirTable', controllerKursor.updateTarirTableToBase)
 router.post('/api/getTarirTable', controllerKursor.getTarirDataToBase)
 router.post('/api/setSummator', controllerKursor.setSummator)
+router.post('/api/getSummator', controllerKursor.getSummator)

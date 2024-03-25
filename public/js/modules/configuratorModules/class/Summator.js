@@ -21,9 +21,31 @@ export class Summator {
         this.container.style.display = 'flex'
         this.filterOil()
         this.createRows()
-        console.log(this.oils)
-        // const values = await this.getTarirData()
 
+        const param = await this.getSummatorData()
+        param.length !== 0 ? this.addClassCheckBox(param) : null
+    }
+
+    addClassCheckBox(param) {
+        this.colorSummator('green', 'ON')
+        const rows = this.container.querySelectorAll('.rowOil')
+        const value = param.map(it => it.param)
+        rows.forEach(el => {
+            value.includes(el.children[1].textContent) ? el.children[0].classList.remove('falseCheck') : null
+        })
+    }
+    async getSummatorData() {
+        const idw = this.id
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ idw })
+        }
+        const res = await fetch('/api/getSummator', params)
+        const result = await res.json()
+        return result
     }
     createRows() {
         const rows = document.querySelectorAll('.rowOil')
@@ -73,20 +95,27 @@ export class Summator {
     ok() {
         const rows = this.container.querySelectorAll('.rowOil')
         const data = [...rows].filter(e => !e.children[0].classList.contains('falseCheck')).map(it => ({ idw: this.id, param: it.children[1].textContent, dut: it.children[2].textContent }))
-        console.log(data)
         this.setSummator(data)
+        data.length !== 0 ? this.colorSummator('green', 'ON') : this.colorSummator('rgba(6, 28, 71, 1)', 'OFF')
         this.clos()
+    }
+    colorSummator(color, text) {
+        const meta = this.element.closest('.item_stor').children[2]
+        this.element.style.color = `${color}`
+        meta.style.color = `${color}`
+        meta.textContent = `${text}`
     }
     clos() {
         this.container.style.display = 'none'
     }
     async setSummator(data) {
+        const idw = this.id
         const params = {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({ data })
+            body: JSON.stringify({ data, idw })
         }
         const res = await fetch('/api/setSummator', params)
         const result = await res.json()

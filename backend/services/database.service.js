@@ -679,19 +679,17 @@ exports.setObjectGroupWialon = async (objects) => {
         const result = await pool.request()
             .input('login', objects[0].login)
             .query(post)
-        const missingValues = objects.filter(object => {
-            return !result.recordset.some(record => record.idObject === object.idObject);
-        }).map(object => object.idObject);
-
-        missingValues.forEach(async elem => {
-            const postDEL = `DELETE wialon_groups WHERE login=@login AND idObject =@idObject`
-            const result = await pool.request()
-                .input('idObject', elem.idObject)
+        const missingValues = result.recordset.filter(record => {
+            return !objects.some(object => object.idObject === record.idObject);
+        }).map(record => record.idObject);
+        for (const elem of missingValues) {
+            const postDEL = `DELETE FROM wialon_groups WHERE login=@login AND idObject =@idObject`;
+            await pool.request()
+                .input('idObject', elem)
                 .input('login', objects[0].login)
-                .query(postDEL)
-        })
+                .query(postDEL);
+        }
         objects.forEach(async el => {
-            // console.log(el)
             const post = `SELECT idObject FROM wialon_groups WHERE login=@login AND idObject=@idObject`
             const result = await pool.request()
                 .input('login', el.login)
@@ -960,10 +958,8 @@ exports.updateTarirTable = async (data) => {
     return 'Данные обновлены';
 };
 
-exports.setSummatorToBase = async (data) => {
-    console.log(data)
+exports.setSummatorToBase = async (data, idw) => {
     const pool = await connection;
-    const idw = data[0].idw; // Предполагаем, что все записи для одного и того же idw
     // Удаляем все записи для этого idw
     await pool.request()
         .input('idw', idw)
@@ -979,7 +975,16 @@ exports.setSummatorToBase = async (data) => {
     return 'Данные обновлены';
 };
 
+exports.getSummatorToBase = async (idw) => {
 
+    const pool = await connection;
+
+    const result = await pool.request()
+        .input('idw', idw)
+        .query('SELECT param FROM summator_oil_stor WHERE idw = @idw');
+
+    return result.recordset
+};
 
 
 exports.setSensStorMeta = async (data) => {

@@ -88,7 +88,7 @@ export class ConfiguratorParams {
         this.clearParams = null
         this.itemMeta = null;
         this.itemStor = null;
-        this.boundClear = this.createListMeta.bind(this);
+        // this.boundClear = this.createListMeta.bind(this);
         this.init()
         this.initEventListeners();
     }
@@ -130,7 +130,26 @@ export class ConfiguratorParams {
                 el.parentNode.children[4].style.display = 'none'
                 this.deleteParams(this.id, param)
             }
+            if (param === 'summatorOil') {
+                console.log(el.parentNode)
+                el.parentNode.children[4].style.color = 'rgba(6, 28, 71, 1)'
+                el.parentNode.children[2].style.color = 'rgba(6, 28, 71, 1)'
+                el.parentNode.children[2].textContent = 'OFF'
+                this.setSummator([])
+            }
         }
+    }
+    async setSummator(data) {
+        const idw = this.id
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ data, idw })
+        }
+        const res = await fetch('/api/setSummator', params)
+        const result = await res.json()
     }
     async deleteParams(id, param) {
         const params = {
@@ -309,8 +328,15 @@ export class ConfiguratorParams {
                 if (e.parametr === 'summatorOil') {
                     const i = this.createIcon(li, e.parametr)
                     oldParam.textContent = 'OFF'
-                    //   const bool = await this.validColorIcon(e.parametr)
-                    // i.style.color = bool ? 'green' : null
+                    const bool = await this.validColorIconSummator()
+                    console.log(bool)
+                    if (bool) {
+                        i.style.color = 'green'
+                        this.colorSummator('green', 'ON', i)
+                    }
+                    else {
+                        this.colorSummator('rgba(6, 28, 71, 1)', 'OFF', i)
+                    }
                     i.addEventListener('click', this.createSummatorOil.bind(this, i, e.parametr))
                 }
             }
@@ -320,7 +346,14 @@ export class ConfiguratorParams {
         this.itemStor.forEach(el => { el.addEventListener('click', this.storToggle.bind(this, el)) })
         this.clearParams.forEach(el => el.addEventListener('click', this.clearMetaParams.bind(this, el)))
     }
-
+    colorSummator(color, text, i) {
+        console.log(text)
+        const meta = i.closest('.item_stor').children[2]
+        console.log(meta)
+        this.element.style.color = `${color}`
+        meta.style.color = `${color}`
+        meta.textContent = `${text}`
+    }
     createIcon(li, param) {
         const i = document.createElement('i')
         i.classList.add('fas')
@@ -341,6 +374,19 @@ export class ConfiguratorParams {
         const res = await fetch('api/getTarirTable', params)
         const result = await res.json()
         console.log(result)
+        return result.length !== 0 ? true : false
+    }
+    async validColorIconSummator() {
+        const idw = this.id
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ idw })
+        }
+        const res = await fetch('/api/getSummator', params)
+        const result = await res.json()
         return result.length !== 0 ? true : false
     }
 
