@@ -20,7 +20,7 @@ exports.convert = (ob) => {
 }
 exports.getDataToInterval = async (active, t1, t2) => {
     const resnew = await databaseService.geoLastInterval(t1, t2, active)
-    const meta = ['idw', 'data', 'lat', 'lon', 'speed', 'sats', 'geo', 'oil', 'course', 'pwr', 'engine', 'mileage', 'engineOn']
+    const meta = ['idw', 'data', 'lat', 'lon', 'speed', 'sats', 'geo', 'oil', 'course', 'pwr', 'engine', 'mileage', 'engineOn', 'last_valid_time']
     const arrayData = resnew.map(e => {
         return Object.keys(e).reduce((acc, key) => {
             if (meta.includes(key)) {
@@ -240,7 +240,7 @@ exports.setDataToBase = async (imei, port, info, id) => {
                         if (val && elem.hasOwnProperty(val.meta)) {
                             const propertyValue = elem[val.meta]; // Исправление для получения значения свойства
                             const dut = parseInt(propertyValue); // Преобразование строки в число
-                            if (!isNaN(dut)) { // Проверка, что результат преобразования - действительное число
+                            if (!isNaN(dut) && dut < 4100) { // Проверка, что результат преобразования - действительное число
                                 const param = val.params
                                 const tarirData = await getTarirTableToBase(idw, param)
                                 if (tarirData.length !== 0) {

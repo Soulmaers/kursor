@@ -36,7 +36,6 @@ export function prostoyNew(newdata) {
 export async function dannieOilTS(idw, num, interval) {
     let number;
     let data
-    console.log(idw, num, interval)
     if (interval) {
         data = [interval[0][0], interval[1][0]]
     }

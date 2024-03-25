@@ -337,8 +337,8 @@ export class TarirTable {
     }
 
     validateInput(event) {
-        // Если ввод не соответствует паттерну только цифр
-        if (!/^\d*$/.test(event.target.value)) {
+        // Разрешаем ввод целых чисел и чисел с плавающей точкой (например, 123, 1.23, .23)
+        if (!/^\d*\.?\d*$/.test(event.target.value)) {
             event.target.style.border = '1px solid red';
         } else {
             // Если ввод корректен или поле пустое, сбрасываем стиль границы

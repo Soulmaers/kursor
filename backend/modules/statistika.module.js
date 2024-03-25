@@ -122,7 +122,7 @@ class SummaryStatistiks {
 
 
     quickly(data) {
-        data.sort((a, b) => a.time - b.time); // Упрощённая сортировка
+        data.sort((a, b) => Number(a.last_valid_time) - Number(b.last_valid_time)); // Упрощённая сортировка
         const allsens = {
             time: [],
             speed: [],
@@ -136,7 +136,7 @@ class SummaryStatistiks {
         };
         for (let i = 0; i < data.length; i++) {
             const el = data[i];
-            const timestamp = Number(el.data);
+            const timestamp = Number(el.last_valid_time);
             allsens.time.push(new Date(timestamp * 1000)); // Напрямую создаём Date
             allsens.speed.push(parseInt(el.speed)); // Предполагаем, что el.speed уже число
             allsens.sats.push(parseInt(el.sats));
@@ -170,14 +170,12 @@ class SummaryStatistiks {
 
     calculationOil(data) {
         const arrayValue = data.find(it => (it.params === 'oil'))
-        console.log(arrayValue)
         if (arrayValue && Array.isArray(arrayValue.value)) {
             arrayValue.value = arrayValue.value.map(element => {
                 return element;
             });
         }
         let i = 0;
-
         const newData = JSON.parse(JSON.stringify(arrayValue));
         while (i < newData.value.length - 1) {
             if (newData.value[i] === newData.value[i + 1]) {
@@ -247,7 +245,6 @@ class SummaryStatistiks {
         const firstData = arrayValue.value[0];
         const lastData = arrayValue.value[arrayValue.value.length - 1];
         if (filteredZapravka.length !== 0) {
-
             rash.push(firstData - filteredZapravka[0][0][0]);
             for (let i = 0; i < filteredZapravka.length - 1; i++) {
                 rash.push(filteredZapravka[i][1][0] - filteredZapravka[i + 1][0][0]);
@@ -262,7 +259,6 @@ class SummaryStatistiks {
         filteredZapravka.forEach(e => {
             zap.push(e[1][0] - e[0][0])
         })
-
         const zapravleno = zap.reduce((acc, el) => acc + el, 0) < 0 ? '-' : zap.reduce((acc, el) => acc + el, 0)
         return [rashod !== '-' ? Number(rashod.toFixed(1)) : 0, zapravleno !== '-' ? Number(zapravleno.toFixed(1)) : 0]
     }
