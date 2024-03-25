@@ -338,9 +338,9 @@ export const viewList = async (login) => {
 function format(data, num) {
     if (num === 1) {
         const resultData = data.flat().flatMap(el => {
-            let res = el[2].result.filter(e => e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status]).filter(arr => arr.length > 0)
+            let res = el[2].result.filter(e => e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status, it.meta]).filter(arr => arr.length > 0)
             if (el.length === 10 && el[8].sub.length !== 0) {
-                return Object.values(el[8].sub).flat().flatMap(it => it[2].result.filter(e => e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status]).filter(arr => arr.length > 0));
+                return Object.values(el[8].sub).flat().flatMap(it => it[2].result.filter(e => e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status, it.meta]).filter(arr => arr.length > 0));
             }
             return res;
         })
@@ -374,8 +374,16 @@ function updateIconsSensors(data, elemId, listItemCar, statusnew, sats, type, en
         2: `<i class="fas fa-pause-circle toogleIcon"rel="02g"></i>`
     }
 
-    const oilValue = data.find(i => i[1] === 'oil' && i[2] === elemId);
-    const oil = oilValue ? oilValue[3] === null ? '-' : `${oilValue[3].toFixed(0)} л.` : '-';
+    let oil;
+    const summator = data.find(i => i[1] === 'summatorOil' && i[2] === elemId);
+    if (summator && summator[5] === 'ON') {
+        oil = `${summator[3].toFixed(0)} л.`
+    }
+    else {
+        const oilValue = data.find(i => i[1] === 'oil' && i[2] === elemId);
+        oil = oilValue ? oilValue[3] === null ? '-' : `${oilValue[3].toFixed(0)} л.` : '-';
+    }
+
     const pwrValue = data.find(i => i[1] === 'pwr' && i[2] === elemId);
     const pwr = pwrValue ? parseFloat(Number(pwrValue[3]).toFixed(1)) : '-';
     const meliageValue = data.find(i => i[1] === 'mileage' && i[2] === elemId);
@@ -594,7 +602,7 @@ async function zaprosSpisok() {
             }
         });
         const spisok = spisok1[0].result
-        const data = Object.values(spisok[2])[0].filter(e => e.idw === idw && e.value !== 'Н/Д' && e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status]);
+        const data = Object.values(spisok[2])[0].filter(e => e.idw === idw && e.value !== 'Н/Д' && e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status, it.meta]);
         viewListKoleso(spisok[0], spisok[1], spisok[2], spisok[3], el, data)
     })
 }

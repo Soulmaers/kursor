@@ -3,29 +3,33 @@ const databaseService = require('../../services/database.service');
 const JobToBase = require('../navtelecom/JobToBase')
 const wialonService = require('../../services/wialon.service.js')
 const helpers = require('../../helpers');
+const globalstart = require('../../controllers/data.controller.js');
 class WialonOrigin {
     constructor(session) {
         this.session = session
         this.init()
     }
     async init() {
-        const data = await wialonService.getDataFromWialon()
-        data ? await this.getObjectData(data) : this.init()
-
+        const data = await wialonService.getDataFromWialon();
+        if (data) {
+            await Promise.all([
+                this.getObjectData(data),
+                globalstart.start(this.session, data)
+            ]);
+        } else {
+            this.init();
+        }
     }
     async getObjectData(data) {
         const dataArray = data?.items ?? [];
         const now = Math.floor(Date.now() / 1000);
         const phones = await Promise.all(dataArray.map(el => wialonService.getUniqImeiAndPhoneIdDataFromWialon(el.id)));
-
         // Пакетная обработка обновлений в базе данных
         const updateTasks = [];
-
         for (let i = 0; i < dataArray.length; i++) {
             const el = dataArray[i];
             const phone = phones[i];
             const idw = el.id;
-
             if (!phone?.item?.uid) {
                 continue;
             }

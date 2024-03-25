@@ -679,19 +679,18 @@ exports.setObjectGroupWialon = async (objects) => {
         const result = await pool.request()
             .input('login', objects[0].login)
             .query(post)
-        const missingValues = objects.filter(object => {
-            return !result.recordset.some(record => record.idObject === object.idObject);
-        }).map(object => object.idObject);
-
-        missingValues.forEach(async elem => {
-            const postDEL = `DELETE wialon_groups WHERE login=@login AND idObject =@idObject`
-            const result = await pool.request()
-                .input('idObject', elem.idObject)
+        const missingValues = result.recordset.filter(record => {
+            return !objects.some(object => object.idObject === record.idObject);
+        }).map(record => record.idObject);
+        for (const elem of missingValues) {
+            const postDEL = `DELETE FROM wialon_groups WHERE login=@login AND idObject =@idObject`;
+            await pool.request()
+                .input('idObject', elem)
                 .input('login', objects[0].login)
-                .query(postDEL)
-        })
-        objects.forEach(async el => {
-            // console.log(el)
+                .query(postDEL);
+        }
+        for (let el of objects) {
+            // objects.forEach(async el => {
             const post = `SELECT idObject FROM wialon_groups WHERE login=@login AND idObject=@idObject`
             const result = await pool.request()
                 .input('login', el.login)
@@ -731,7 +730,7 @@ exports.setObjectGroupWialon = async (objects) => {
                     .query(post);
             }
 
-        })
+        }
         return 'объекты обновлены'
     }
     catch (e) {
@@ -739,6 +738,34 @@ exports.setObjectGroupWialon = async (objects) => {
     }
 
 }
+
+/* exports.setObjectGroupWialon = async (objects) => {
+    try {
+        const pool = await connection;
+        // Получение всех idObject сразу
+        const allObjectsResult = await pool.request().input('login', objects[0].login).query('SELECT idObject FROM wialon_groups WHERE login=@login');
+        const allObjects = allObjectsResult.recordset.map(rec => rec.idObject);
+
+        for (const el of objects) {
+            // Проверка на существование без дополнительного запроса
+            if (!allObjects.includes(el.idObject)) {
+                // Вставка новых записей
+                await pool.request()
+                    .input('login', el.login)
+                    .query(`INSERT INTO wialon_groups (...) VALUES (...)`);
+            } else {
+                // Обновление существующих записей
+                await pool.request()
+                    .input('login', el.login)
+                    .query(`UPDATE wialon_groups SET ... WHERE login=@login AND idObject=@idObject`);
+            }
+        }
+        return 'Объекты обновлены';
+    } catch (e) {
+        console.log(e);
+        return 'Ошибка обновления объектов';
+    }
+};*/
 exports.getSensorsWialonToBase = async (arr) => {
     try {
         const pool = await connection;
@@ -786,8 +813,6 @@ exports.getSensStorMeta = async (idw) => {
 
 
 exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
-    const now = new Date();
-    const nowTime = Math.floor(now.getTime() / 1000);
     try {
         const pool = await connection;
         for (let i of data) {
@@ -920,13 +945,13 @@ exports.saveValuePWRToBase = async (idw, params, value) => {
     }
 }
 
-exports.getTarirData = async (idw) => {
+exports.getTarirData = async (idw, param) => {
     const pool = await connection;
     const query = `
-            SELECT * FROM tarirTable WHERE idw=@idw
-                      `;
+            SELECT * FROM tarirTable WHERE idw=@idw AND param=@param`;
     const result = await pool.request()
         .input('idw', idw)
+        .input('param', param)
         .query(query);
     if (result.recordset.length !== 0) {
         return result.recordset
@@ -939,10 +964,12 @@ exports.getTarirData = async (idw) => {
 exports.updateTarirTable = async (data) => {
     const pool = await connection;
     const idw = data[0][0]; // Предполагаем, что все записи для одного и того же idw
+    const param = data[0][1]
     // Удаляем все записи для этого idw
     await pool.request()
         .input('idw', idw)
-        .query('DELETE FROM tarirTable WHERE idw = @idw');
+        .input('param', param)
+        .query('DELETE FROM tarirTable WHERE idw = @idw AND param=@param');
     // Проверяем, содержит ли массив data только один элемент с idw
     if (data.length === 1 && data[0].length === 1) {
         return 'Все записи для данного idw удалены';
@@ -960,7 +987,33 @@ exports.updateTarirTable = async (data) => {
     return 'Данные обновлены';
 };
 
+exports.setSummatorToBase = async (data, idw) => {
+    const pool = await connection;
+    // Удаляем все записи для этого idw
+    await pool.request()
+        .input('idw', idw)
+        .query('DELETE FROM summator_oil_stor WHERE idw = @idw');
+    // Вставляем новые данные
+    for (const { idw, param, dut } of data) {
+        await pool.request()
+            .input('idw', idw)
+            .input('param', param)
+            .input('dut', dut)
+            .query('INSERT INTO summator_oil_stor (idw, param,  dut) VALUES (@idw, @param, @dut)');
+    }
+    return 'Данные обновлены';
+};
 
+exports.getSummatorToBase = async (idw) => {
+
+    const pool = await connection;
+
+    const result = await pool.request()
+        .input('idw', idw)
+        .query('SELECT param FROM summator_oil_stor WHERE idw = @idw');
+
+    return result.recordset
+};
 
 
 exports.setSensStorMeta = async (data) => {

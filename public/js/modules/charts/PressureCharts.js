@@ -26,6 +26,17 @@ export class PressureCharts {
         }
         isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
         this.data = await this.createStructura()
+        if (this.data.length === 0) {
+            document.querySelector('.noGraf').style.display = 'block'
+            const grafOld = document.querySelector('.infoGraf')
+            if (grafOld) {
+                grafOld.remove()
+            }
+            const loaders = document.querySelector('.loaders_charts')
+            loaders.style.display = 'none';
+            isCanceled = false;
+            return
+        }
         this.createChart()
     }
 

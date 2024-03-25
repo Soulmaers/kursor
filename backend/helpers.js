@@ -150,29 +150,65 @@ exports.setDataToBase = async (imei, port, info, id) => {
             } else if (el.params === 'mileage' && coefMileage) {
                 computedValue = Number(computedValue) + Number(coefMileage[0].value);
             }
+            else if (el.params.startsWith('tpms_press') && idw == 26702383) {
+                computedValue = String(Number(computedValue) / 10)
+            }
             return { key: el.meta, params: el.params, value: String(computedValue), status, data: dataTime };
         });
-        const tarirData = await getTarirTableToBase(idw)
-        if (tarirData.length !== 0) {
-            const val = data.find(e => e.params === 'oil');
-            if (val && lastObject.hasOwnProperty(val.meta)) {
-                const propertyValue = lastObject[val.meta]; // Исправление для получения значения свойства
-                const dut = parseInt(propertyValue); // Преобразование строки в число
-                if (!isNaN(dut)) { // Проверка, что результат преобразования - действительное число
-                    const sensOil = sortTarirOil(tarirData, dut); // Предполагается, что sortTarirOil - это функция, принимающая массив tarirData и число dut
-                    const index = value.findIndex(e => e.params === 'oil');
-                    if (index !== -1) { // Проверяем, найден ли элемент
-                        value[index].value = String(sensOil); // Изменяем значение на строковое представление sensOil
+
+        const oilValues = data.filter(e => e.params.startsWith('oil') && e.params.length <= 4);
+        if (oilValues.length !== 0) {
+            for (let val of oilValues) {
+                if (val && lastObject.hasOwnProperty(val.meta)) {
+                    const propertyValue = lastObject[val.meta]; // Исправление для получения значения свойства
+                    const dut = parseInt(propertyValue); // Преобразование строки в число
+                    if (!isNaN(dut)) { // Проверка, что результат преобразования - действительное число
+                        const param = val.params
+                        const tarirData = await getTarirTableToBase(idw, param)
+                        if (tarirData.length !== 0) {
+                            const sensOil = sortTarirOil(tarirData, dut); //  sortTarirOil - это функция, принимающая массив tarirData и число dut
+                            value.forEach(e => {
+                                if (e.params === val.params) {
+                                    e.value = String(sensOil)
+                                }
+                            })
+                        }
                     }
                 }
             }
+        }
+        const summator = data.find(e => e.params === 'summatorOil');
+        if (summator && summator.meta === 'ON') {
+            const params = await databaseService.getSummatorToBase(idw)
+            if (params.length === 0) {
+                const objectToUpdate = value.find(e => e.params === 'summatorOil');
+                objectToUpdate.meta = 'OFF'
+                objectToUpdate.data = objectToUpdate.data
+                objectToUpdate.status = 'false'
+                return
+            }
+            const values = params.map(it => it.param)
+            const summatorValue = value.reduce((acc, e) => {
+                if (values.includes(e.params)) {
+                    acc = acc + Number(e.value)
+                }
+                return acc
+            }, 0)
+            const objectToUpdate = value.find(e => e.params === 'summatorOil');
+            objectToUpdate.value = String(summatorValue)
+            objectToUpdate.data = nowTime
+            objectToUpdate.status = 'true'
         }
         await databaseService.setUpdateValueSensStorMeta(imei, port, value)
         const tcpObject = info
         for (let elem of tcpObject) {
             const value = data.map(el => {
                 if (elem.hasOwnProperty(el.meta)) {
-                    return elem[el.meta] !== null ? { key: el.meta, params: el.params, value: String(elem[el.meta]), status: 'true' } : { key: el.meta, params: el.params, value: el.value, status: 'false' }
+                    let val = String(elem[el.meta])
+                    if (el.params.startsWith('tpms_press') && idw == 26702383) {
+                        val = String(Number(elem[el.meta]) / 10)
+                    }
+                    return elem[el.meta] !== null ? { key: el.meta, params: el.params, value: val, status: 'true' } : { key: el.meta, params: el.params, value: el.value, status: 'false' }
                 }
                 else {
                     return { key: el.meta, params: el.params, value: null, status: 'false' }
@@ -197,29 +233,49 @@ exports.setDataToBase = async (imei, port, info, id) => {
                         }
                     });
                 }
-                if (tarirData.length !== 0) {
-                    const val = data.find(e => e.params === 'oil');
-                    if (val && elem.hasOwnProperty(val.meta)) {
-                        const propertyValue = elem[val.meta]; // Исправление для получения значения свойства
-                        const dut = parseInt(propertyValue); // Преобразование строки в число
-                        if (!isNaN(dut)) { // Проверка, что результат преобразования - действительное число
-                            const sensOil = sortTarirOil(tarirData, dut); // Предполагается, что sortTarirOil - это функция, принимающая массив tarirData и число dut
-                            const index = value.findIndex(e => e.params === 'oil');
-                            if (index !== -1) { // Проверяем, найден ли элемент
-                                obj.oil = String(sensOil); // Изменяем значение на строковое представление sensOil
+
+                const oilValues = data.filter(e => e.params.startsWith('oil') && e.params.length <= 4);
+                if (oilValues.length !== 0) {
+                    for (let val of oilValues) {
+                        if (val && elem.hasOwnProperty(val.meta)) {
+                            const propertyValue = elem[val.meta]; // Исправление для получения значения свойства
+                            const dut = parseInt(propertyValue); // Преобразование строки в число
+                            if (!isNaN(dut)) { // Проверка, что результат преобразования - действительное число
+                                const param = val.params
+                                const tarirData = await getTarirTableToBase(idw, param)
+                                if (tarirData.length !== 0) {
+                                    const sensOil = sortTarirOil(tarirData, dut); //  sortTarirOil - это функция, принимающая массив tarirData и число dut
+                                    obj[val.params] = String(sensOil); // Изменяем значение на строковое представление sensOil
+                                }
                             }
+                            obj[val.meta] = String(dut)
                         }
                     }
+                }
+                const summator = data.find(e => e.params === 'summatorOil');
+                if (summator && summator.meta === 'ON') {
+                    const params = await databaseService.getSummatorToBase(idw)
+                    if (params.length === 0) {
+                        obj['summatorOil'] = null
+                        return
+                    }
+                    const values = params.map(it => it.param)
+                    const summatorValue = Object.keys(obj).reduce((acc, e) => {
+                        if (values.includes(e)) {
+                            acc = acc + Number(obj[e])
+                        }
+                        return acc
+                    }, 0)
+                    obj['summatorOil'] = String(summatorValue)
                 }
                 await databaseService.setAddDataToGlobalBase(obj)
             }
         }
-
     }
 }
 
-const getTarirTableToBase = async (idw) => {
-    const res = await databaseService.getTarirData(idw)
+const getTarirTableToBase = async (idw, param) => {
+    const res = await databaseService.getTarirData(idw, param)
     return res
 }
 

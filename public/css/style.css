@@ -8210,7 +8210,13 @@ i.filterEvent {
 .add_pwr,
 .add_mileage,
 .add_engine,
-.add_oil {
+.add_oil,
+.add_oil2,
+.add_oil3,
+.add_oil4,
+.add_oil5,
+.add_oil6,
+.add_summatorOil {
   font-size: 0.6rem;
   cursor: pointer;
   position: absolute;
@@ -8619,6 +8625,10 @@ i.changeColorCheck {
   align-items: center;
   box-sizing: border-box;
 
+}
+
+.listStorMeta {
+  position: relative;
 }
 
 .listDataOldParams,
@@ -9510,7 +9520,8 @@ i.changeColorCheck {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between
+  justify-content: space-between;
+  position: relative;
 }
 
 .body_tarir {
@@ -9537,6 +9548,76 @@ i.changeColorCheck {
   /* Цвет фона полосы прокрутки (невидимый) */
 }
 
+
+.container_summ {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  width: 170px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 2px solid rgba(6, 28, 71, 1);
+  display: none;
+  flex-direction: column;
+  z-index: 3;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+.header_summ,
+.body_summ,
+.footer_summ {
+  width: 100%;
+}
+
+.body_summ {
+  margin: 10px 0
+}
+
+.rowOil {
+  width: 98%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 0.9rem;
+  margin: 2px 0;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(6, 28, 71, 1);
+  cursor: pointer;
+}
+
+.litrazhParams,
+.dutParams {
+  color: rgba(6, 28, 71, 1);
+
+}
+
+.header_summ {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  background-color: rgba(6, 28, 71, 1);
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.body_summ {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer_summ {
+  padding: 2px 0;
+  border-top: 1px solid rgba(6, 28, 71, 1);
+}
+
+
+.falseCheck {
+  color: gray
+}
 
 .header_modal,
 .header_tarir {
@@ -9998,6 +10079,13 @@ i.settingsGroup {
 }
 
 .save_ok:hover {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+.rowOil:hover .drebizg {
   animation-name: wiggle;
   animation-duration: 1s;
   animation-timing-function: ease;

@@ -292,6 +292,8 @@ export class CreateMarkersEvent {
             acc.push({ geo: [el[0], el[1]], speed: el[3], time: el[4], sats: el[5], course: el[2] })
             return acc
         }, [])
+        console.log(data)
+        data.sort((a, b) => Number(a.time) - Number(b.time))
         return data
     }
 

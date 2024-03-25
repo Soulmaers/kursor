@@ -16,6 +16,7 @@ export class CreateNewObject {
         this.navi = document.querySelector('.navi_object')
         this.configParams = document.querySelector('.config_params')
         this.listModal = document.querySelector('.list_modal')
+        this.summator = document.querySelector('.container_summ')
         this.login = document.querySelectorAll('.log')[1].textContent
         this.field_modal = this.modal.querySelectorAll('.field_modal')
         this.element.addEventListener('click', this.viewModal.bind(this))
@@ -45,6 +46,10 @@ export class CreateNewObject {
         }
     }
     async enter() {
+        if (this.summator.style.display === 'flex') {
+            this.handleValidationResult('Закройте Сумматор', 'red', 'bold');
+            return
+        }
         const activeButton = document.querySelector('.toogleModalNavi')
         if (activeButton.classList.contains('title_configurator')) {
             console.log('сохраняем')
@@ -343,6 +348,10 @@ export class CreateNewObject {
     }
 
     hiddenModal() {
+        if (this.summator.style.display === 'flex') {
+            this.handleValidationResult('Закройте Сумматор', 'red', 'bold');
+            return
+        }
         if (this.object) {
             //   this.object.style.zIndex = '';
             //   this.object.style.backgroundColor = '';
