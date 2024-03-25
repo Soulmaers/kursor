@@ -689,7 +689,8 @@ exports.setObjectGroupWialon = async (objects) => {
                 .input('login', objects[0].login)
                 .query(postDEL);
         }
-        objects.forEach(async el => {
+        for (let el of objects) {
+            // objects.forEach(async el => {
             const post = `SELECT idObject FROM wialon_groups WHERE login=@login AND idObject=@idObject`
             const result = await pool.request()
                 .input('login', el.login)
@@ -729,7 +730,7 @@ exports.setObjectGroupWialon = async (objects) => {
                     .query(post);
             }
 
-        })
+        }
         return 'объекты обновлены'
     }
     catch (e) {
@@ -737,6 +738,34 @@ exports.setObjectGroupWialon = async (objects) => {
     }
 
 }
+
+/* exports.setObjectGroupWialon = async (objects) => {
+    try {
+        const pool = await connection;
+        // Получение всех idObject сразу
+        const allObjectsResult = await pool.request().input('login', objects[0].login).query('SELECT idObject FROM wialon_groups WHERE login=@login');
+        const allObjects = allObjectsResult.recordset.map(rec => rec.idObject);
+
+        for (const el of objects) {
+            // Проверка на существование без дополнительного запроса
+            if (!allObjects.includes(el.idObject)) {
+                // Вставка новых записей
+                await pool.request()
+                    .input('login', el.login)
+                    .query(`INSERT INTO wialon_groups (...) VALUES (...)`);
+            } else {
+                // Обновление существующих записей
+                await pool.request()
+                    .input('login', el.login)
+                    .query(`UPDATE wialon_groups SET ... WHERE login=@login AND idObject=@idObject`);
+            }
+        }
+        return 'Объекты обновлены';
+    } catch (e) {
+        console.log(e);
+        return 'Ошибка обновления объектов';
+    }
+};*/
 exports.getSensorsWialonToBase = async (arr) => {
     try {
         const pool = await connection;
