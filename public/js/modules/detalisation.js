@@ -146,7 +146,6 @@ function eventClikInterval(objectRazmetka) {
     })
 }
 export async function statistics(interval, ele, num, objectRazmetka, signal) {
-
     const idw = document.querySelector('.color').id
     if (ele === 'int') {
         if (objectRazmetka['nav4'].data.length === 0) {
@@ -158,46 +157,26 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
             return
         }
     }
-    const params = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        signal: signal,
-        body: (JSON.stringify({ idw }))
-    }
-    const mod = await fetch('/api/modelView', params)
-    const model = await mod.json()
-    let tsiControll = model.result.length !== 0 || model.result[0] && model.result[0].tsiControll && model.result[0].tsiControll !== '' ? Number(model.result[0].tsiControll) : null;
-    tsiControll === 0 ? tsiControll = null : tsiControll = tsiControll
     const t1 = !isNaN(num) ? interval[1] : interval[0][2]
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
     const active = document.querySelector('.color').id
-    const newData = document.querySelector('.color').classList.contains('wialon') ? await testovfnNew(active, t1, t2, signal) : await kursorfnNew(active, t1, t2, signal)
-    const newGlobal = newData.map(it => {
+    const res = await getDataStor(active, t1, t2)
+    const newGlobal = res.map(it => {
         return {
             id: it.idw,
-            nameCar: it.nameCar,
-            time: new Date(it.time * 1000),
-            speed: it.speed,
-            geo: JSON.parse(it.geo),
-            oil: it.oil,
-            pwr: it.pwr,
-            engine: it.engine,
-            meliage: it.meliage,
-            curse: it.curse,
-            sats: it.sats
+            time: new Date(Number(it.last_valid_time) * 1000),
+            speed: Number(it.speed),
+            geo: [Number(it.lat), Number(it.lon)],
+            oil: Number(it.oil),
+            pwr: Number(it.pwr),
+            engine: Number(it.engine),
+            mileage: Number(it.mileage),
+            curse: Number(it.course),
+            sats: Number(it.sats),
+            engineOn: Number(it.engineOn)
         }
     })
-    newGlobal.sort((a, b) => {
-        if (a.time > b.time) {
-            return 1;
-        }
-        if (a.time < b.time) {
-            return -1;
-        }
-        return 0;
-    })
+    newGlobal.sort((a, b) => a.time - b.time)
 
     for (let i = 0; i < newGlobal.length; i++) {
         if (newGlobal[i].speed > 5) {
@@ -210,7 +189,7 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
             newGlobal[i].condition = 'Парковка';
         }
     }
-    const intStopNew = prostoyNew(tsiControll, newGlobal)
+    const intStopNew = prostoyNew(newGlobal)
     if (intStopNew) {
         intStopNew.forEach(el => {
             const startIndex = newGlobal.findIndex(x => x.time === el[0][0]);
@@ -235,15 +214,15 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
         return item;
     });
     if (isNaN(num)) {
-        objectRazmetka['nav1'].data.splice(num === 'cal2' ? 1 : 2, 1, tsiControll === null ? [] : datas);
-        objectRazmetka['nav2'].data.splice(num === 'cal2' ? 1 : 2, 1, dannieSortJobTS(tsiControll === null ? [] : datas));
+        objectRazmetka['nav1'].data.splice(num === 'cal2' ? 1 : 2, 1, datas);
+        objectRazmetka['nav2'].data.splice(num === 'cal2' ? 1 : 2, 1, dannieSortJobTS(datas));
         objectRazmetka['nav3'].data.splice(num === 'cal2' ? 1 : 2, 1, await dannieOilTS(idw, num, interval));
         const act = document.querySelector('.activStatic').id
         objectRazmetka[act].fn(objectRazmetka[act].data[num === 'cal2' ? 1 : 2], num === 'cal2' ? 2 : 3)
     }
     else {
-        objectRazmetka['nav1'].data.push(tsiControll === null ? [] : datas);
-        objectRazmetka['nav2'].data.push(dannieSortJobTS(tsiControll === null ? [] : datas));
+        objectRazmetka['nav1'].data.push(datas);
+        objectRazmetka['nav2'].data.push(dannieSortJobTS(datas));
         objectRazmetka['nav3'].data.push(await dannieOilTS(idw, num));
         const act = document.querySelector('.activStatic').id
         objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)
@@ -251,16 +230,18 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
     objectRazmetka = null;
 }
 
-export async function kursorfnNew(active, t1, t2, signal) {
-    const params = {
+
+async function getDataStor(active, t1, t2) {
+    const idw = active
+    console.log(active, t1, t2)
+    const paramss = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        signal: signal,
-        body: (JSON.stringify({ active, t1, t2 }))
+        body: (JSON.stringify({ idw, t1, t2 }))
     }
-    const res = await fetch('/api/getParamsKursorIntervalController', params)
-    const result = await res.json()
-    return result
+    const res = await fetch('/api/getDataParamsInterval', paramss)
+    const data = await res.json();
+    return data
 }

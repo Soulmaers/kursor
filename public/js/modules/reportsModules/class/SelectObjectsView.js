@@ -1,7 +1,6 @@
 import { NaviChartLegenda } from "./NaviChartLegends.js"
 import { GetDataTime } from '../../../class/GetDataTime.js'
 import { Tooltip } from "../../../class/Tooltip.js"
-import { kursorfnNew } from '../../detalisation.js'
 import { testovfnNew } from '../../charts/bar.js'
 export class SelectObjectsView {
 
@@ -1212,6 +1211,19 @@ export class SelectObjectsView {
                 object = e
             }
         })
+        async function kursorfnNew(active, t1, t2, signal) {
+            const params = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                signal: signal,
+                body: (JSON.stringify({ active, t1, t2 }))
+            }
+            const res = await fetch('/api/getParamsKursorIntervalController', params)
+            const result = await res.json()
+            return result
+        }
         const newData = object.classList.contains('wialon') ? await testovfnNew(active, t1, t2) : await kursorfnNew(active, t1, t2)
         const newGlobal = newData.map(it => {
             return {

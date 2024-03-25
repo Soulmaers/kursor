@@ -2,20 +2,20 @@
 import { convertDate } from '../helpersFunc.js'
 
 
-export function prostoyNew(tsi, newdata) {
+export function prostoyNew(newdata) {
     if (newdata.length === 0) {
         return undefined
     }
     else {
         const res = newdata.reduce((acc, e) => {
-            if (e.pwr >= tsi && e.speed === 0 && e.sats > 4) {
+            if (e.engineOn === 1 && e.speed === 0 && e.sats > 4) {
                 if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
-                    && acc[acc.length - 1][0].pwr >= tsi && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
+                    && acc[acc.length - 1][0].engineOn === 1 && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
                     acc[acc.length - 1].push(e);
                 } else {
                     acc.push([e]);
                 }
-            } else if (e.pwr < tsi && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
+            } else if (e.engineOn === 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
                 || e.speed > 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
                 || e.sats <= 4 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
                 acc.push([]);
@@ -36,7 +36,7 @@ export function prostoyNew(tsi, newdata) {
 export async function dannieOilTS(idw, num, interval) {
     let number;
     let data
-    console.log(interval, num)
+    console.log(idw, num, interval)
     if (interval) {
         data = [interval[0][0], interval[1][0]]
     }

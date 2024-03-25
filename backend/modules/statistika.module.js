@@ -170,6 +170,7 @@ class SummaryStatistiks {
 
     calculationOil(data) {
         const arrayValue = data.find(it => (it.params === 'oil'))
+        console.log(arrayValue)
         if (arrayValue && Array.isArray(arrayValue.value)) {
             arrayValue.value = arrayValue.value.map(element => {
                 return element;
