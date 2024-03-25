@@ -580,7 +580,7 @@ export class PressureCharts {
         const labelAllPress = this.graf.querySelector('.labelAllPress')
         const combacks = this.graf.querySelector('.comback')
         const inf = this.graf.querySelector('.infos')
-        new Tooltip(inf, ['График отражает давление и температуру по каждому колесу', 'Чтобы увеличить график, надо выделить область мышкой слева направо', 'Чтобы вернуть график в предыдущий масштаб, надо выделить область мышкой справа налево']);
+        new Tooltip(inf, ['График отражает давление и температуру по каждому колесу']);
         new Tooltip(labelPress, ['Включает подсветку графика относительно выставленных значений на ось']);
         new Tooltip(labelAllPress, ['Включает масштабирование всех графиков']);
         new Tooltip(combacks, ['Cбрасывает масштабирование']);

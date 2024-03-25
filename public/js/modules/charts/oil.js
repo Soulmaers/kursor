@@ -352,7 +352,6 @@ export async function oil(t1, t2) {
     const tooltipOil = svg.append("text")
         .attr("class", "tooltipIcon")
         .style("opacity", 0);
-    console.log(objOil)
     svg.selectAll("image")
         .remove();
 

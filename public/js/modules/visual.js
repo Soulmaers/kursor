@@ -258,7 +258,8 @@ export function viewConfigurator(arg, params, osi) {
             const element = osi.find(element => element.idOs === item.osNumber);
             const tireLink = Array.from(tiresLink).find(e => e.id == item.tyresdiv);
             if (pressure && tireLink) {
-                const done = active.id === '26702383' ? parseFloat((pressure.value / 10).toFixed(1)) : pressure.value !== null ? parseFloat(pressure.value) : '-';
+                //   const done = active.id === '26702383' ? parseFloat((pressure.value / 10).toFixed(1)) : pressure.value !== null ? parseFloat(pressure.value) : '-';
+                const done = pressure.value !== null ? parseFloat(pressure.value) : '-';
                 const signal = element ? objColor[generDav(done, element)] : null;
                 tireLink.children[0].style.position = 'relative';
                 tireLink.children[0].style.border = 'none';
