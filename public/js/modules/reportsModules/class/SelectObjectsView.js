@@ -235,6 +235,7 @@ export class SelectObjectsView {
     }
 
     createMetaTable(el) {
+        console.log(el)
         this.clearTable()
         this.marker ? this.hiddenMarkerToMap() : null
         const titleNameReport = document.querySelectorAll('.titleNameReport')
@@ -245,8 +246,9 @@ export class SelectObjectsView {
             this.createStatsTable(this.stats)
         }
         else if (el.id === 'chart') {
-            this.requestParams.idResourse === 'cursor' ? this.createChartToWialon(this.globalChartData) :
-                this.requestChartData(el.getAttribute('rel'))
+            this.createChartToWialon(this.globalChartData)
+            //  this.requestParams.idResourse === 'cursor' ? this.createChartToWialon(this.globalChartData) :
+            //  this.requestChartData(el.getAttribute('rel'))
         }
         else {
             this.createTable(this.tablesReports, this.rows, el.id)
@@ -255,6 +257,7 @@ export class SelectObjectsView {
     }
 
     async requestChartData(att) {
+        console.log(att)
         const interval = this.requestParams.timeInterval
         const res = await fetch('/api/chartData', {
             method: "POST",
@@ -1199,6 +1202,7 @@ export class SelectObjectsView {
         return dateStr
     }
 
+
     async requestData(idShablon, idObject, interval) {
         const idw = idObject
         const ifPwr = await this.requstModel(idw)
@@ -1211,44 +1215,38 @@ export class SelectObjectsView {
                 object = e
             }
         })
-        async function kursorfnNew(active, t1, t2, signal) {
-            const params = {
+        async function getDataStor(active, t1, t2) {
+            const idw = active
+            console.log(active, t1, t2)
+            const paramss = {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                signal: signal,
-                body: (JSON.stringify({ active, t1, t2 }))
+                body: (JSON.stringify({ idw, t1, t2 }))
             }
-            const res = await fetch('/api/getParamsKursorIntervalController', params)
-            const result = await res.json()
-            return result
+            const res = await fetch('/api/getDataParamsInterval', paramss)
+            const data = await res.json();
+            return data
         }
-        const newData = object.classList.contains('wialon') ? await testovfnNew(active, t1, t2) : await kursorfnNew(active, t1, t2)
-        const newGlobal = newData.map(it => {
+        const res = await getDataStor(active, t1, t2)
+        const newGlobal = res.map(it => {
             return {
                 id: it.idw,
-                nameCar: it.nameCar,
-                time: new Date(it.time * 1000),
-                speed: it.speed,
-                geo: JSON.parse(it.geo),
-                oil: it.oil,
-                pwr: it.pwr,
-                engine: it.engine,
-                meliage: it.meliage,
-                curse: it.curse,
-                sats: it.sats
+                time: new Date(Number(it.last_valid_time) * 1000),
+                speed: Number(it.speed),
+                geo: [Number(it.lat), Number(it.lon)],
+                oil: Number(it.oil),
+                pwr: Number(it.pwr),
+                engine: Number(it.engine),
+                mileage: Number(it.mileage),
+                curse: Number(it.course),
+                sats: Number(it.sats),
+                engineOn: Number(it.engineOn)
             }
         })
-        newGlobal.sort((a, b) => {
-            if (a.time > b.time) {
-                return 1;
-            }
-            if (a.time < b.time) {
-                return -1;
-            }
-            return 0;
-        })
+        newGlobal.sort((a, b) => a.time - b.time)
+
         const properties = ['speed', 'sats', 'engine', 'pwr', 'oil', 'meliage'];
         const datas = properties.map(property => {
             const items = newGlobal.map(el => ({

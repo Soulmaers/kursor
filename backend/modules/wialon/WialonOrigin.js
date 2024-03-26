@@ -38,14 +38,10 @@ class WialonOrigin {
                 continue;
             }
             const timeBase = await databaseService.getLastTimeMessage(idw);
-            const oldTime = timeBase?.[0]?.time_reg ? Number(timeBase[0].time_reg) : now - 1;
+            const oldTime = timeBase?.[0]?.time_reg ? Number(timeBase[0].time_reg) : now - 1000;
             const [result] = await Promise.all([
                 wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i'),
             ]);
-
-            if (!result?.messages?.length) {
-                continue;
-            }
             const allArrayData = [];
             result.messages.forEach(async (e) => {
                 const allObject = {
@@ -78,12 +74,18 @@ class WialonOrigin {
                 allArrayData.push(allObject);
             });
             updateTasks.push(this.updateDatabase(allArrayData, res[0].idObject));
+
         }
+
         await Promise.all(updateTasks);
+
     }
     async updateDatabase(allArrayData, res) {
-        await this.setData(allArrayData[0].imei, allArrayData[0].port, allArrayData, res);
-        await this.setValidationImeiToBase(allArrayData);
+        if (allArrayData.length !== 0) {
+            await this.setData(allArrayData[0].imei, allArrayData[0].port, allArrayData, res);
+            await this.setValidationImeiToBase(allArrayData);
+        }
+
     }
 
     async setData(imei, port, allArrayData, id) {

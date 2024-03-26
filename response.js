@@ -1,7 +1,7 @@
 "use strict"
 
 
-exports.status = (status, values, message, res) => {
+/*exports.status = (status, values, message, res) => {
 
     const data = {
         status: status,
@@ -11,4 +11,4 @@ exports.status = (status, values, message, res) => {
     // res.status(data.status)
     res.json(data)
     res.end();
-}
+}*/

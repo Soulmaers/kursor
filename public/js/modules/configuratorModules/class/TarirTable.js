@@ -103,7 +103,7 @@ export class TarirTable {
             const values = this.saveToBaseAndCreateChart();
             await this.updateTarirTable(values)
             console.log(values[0].length)
-            values[0].length > 1 ? this.element.style.color = 'green' : this.element.style.color = 'rgba(6, 28, 71, 1)'
+            values[0].length > 2 ? this.element.style.color = 'green' : this.element.style.color = 'rgba(6, 28, 71, 1)'
             //  this.container.style.display = 'none';
             this.approcsimationsViewParabola(values)
         } else {
@@ -297,7 +297,7 @@ export class TarirTable {
         const values = [...this.wrapper_data.querySelectorAll('.row_tarir_data')]
             .filter(e => e.children[0].value !== '' && e.children[1].value !== '')
             .map((it, index) => [this.id, this.param, index + 1, it.children[0].value, it.children[1].value])
-        return values.length !== 0 ? values : [[this.id]]
+        return values.length !== 0 ? values : [[this.id, this.param]]
     }
 
     validateRows() {

@@ -140,11 +140,12 @@ exports.start = async (session, data) => {
         const dataKursor = await databaseService.getObjects()
         const validKursorData = dataKursor.filter(e => [...e.imei].length > 10)
         // Запускаем все функции параллельно
-        await Promise.all([await updateParams(data, validKursorData), saveSensorsToBase(allCar, session)])
+        await Promise.all([await updateParams(data, validKursorData)])
         console.log('выполнено')
+        //, saveSensorsToBase(allCar, session)
     }
 }
-
+/*
 async function saveSensorsToBase(allCar, session) {
     console.log('тут')
     console.time('write')
@@ -253,7 +254,7 @@ function ggg(nameSens, rez, id) {
     else {
         return
     }
-}
+}*/
 
 async function updateParams(data, kursor) {
     console.time('updatedata')
@@ -430,6 +431,7 @@ function proverka(arr) {
         if (el[4] === undefined) {
             return
         }
+
         else {
             let alarm;
             const pool = await connection;
@@ -558,46 +560,3 @@ function proverka(arr) {
 }
 
 
-
-
-// console.log(massObject)
-
-//   console.log(aLLmassObject2)
-//new
-
-/*
-const data = await wialonService.getAllGroupDataFromWialon();
-const aLLmassObject = [];
-const arrName = [];
-for (const elem of data.items) {
-    const nameGroup = elem.nm;
-    const idGroup = elem.id
-    const nameObject = elem.u;
-    const massObject = [];
-    await Promise.all(nameObject.map(async el => {
-        try {
-            const all = await wialonService.getAllParamsIdDataFromWialon(el, login);
-            //  console.log(all)
-            if (!all.item) {
-                return;
-            }
-            const objects = all.item.nm;
-            const idw = all.item.id
-            arrName.push([objects, idw])
-            const prob = await databaseService.loadParamsViewList(objects, el);
-            const massObjectCar = await databaseService.dostupObject(login);
-            if (massObjectCar.includes(`${prob[4]}`)) {
-                prob.group = nameGroup;
-
-                massObject.push(prob);
-            }
-
-        }
-        catch (e) {
-            console.log(e)
-        }
-    }));
-    const objectsWithGroup = massObject.map(obj => (Object.values({ ...obj, group: nameGroup, idGroup: idGroup })));
-    aLLmassObject.push(objectsWithGroup);
-    aLLmassObject.reverse();
-}*/

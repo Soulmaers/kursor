@@ -971,8 +971,8 @@ exports.updateTarirTable = async (data) => {
         .input('param', param)
         .query('DELETE FROM tarirTable WHERE idw = @idw AND param=@param');
     // Проверяем, содержит ли массив data только один элемент с idw
-    if (data.length === 1 && data[0].length === 1) {
-        return 'Все записи для данного idw удалены';
+    if (data[0].length === 2) {
+        return 'Все записи для данного параметра удалены';
     }
     // Вставляем новые данные
     for (const [idw, param, place, dut, litrazh] of data) {
@@ -1726,6 +1726,7 @@ exports.ggg = async (id) => {
 
 //сохраняем в базу
 exports.alarmBase = async (data, tyres, alarm) => {
+    console.log(data, tyres, alarm)
     console.log('данные по алармам')
     const dannie = data.concat(tyres)
     let val;

@@ -2,12 +2,12 @@ const databaseService = require('../services/database.service');
 
 module.exports.alarmFind = async (req, res) => {
     const idw = req.body.idw
-    // const tyresp = req.body.tyresP
     const array = req.body.sorTyrest
-    const alarms = await databaseService.alarmFindtoBase(idw, array)
+    const alarms = await databaseService.alarmFindtoBase(idw, array) //запрос в БД для получения данных с алармами
     res.json(alarms)
 }
 
+/*
 let old = 0
 module.exports.alert = async (req, res) => {
     const alert = databaseService.myVariable
@@ -24,21 +24,21 @@ module.exports.alert = async (req, res) => {
     else {
         res.json(null)
     }
-}
+}*/
 
 module.exports.logs = async (req, res) => {
     const newdata = req.body.newdata
     const idw = req.body.idw
     const time = new Date();
     const date = (time.getTime() / 1000).toFixed(0)
-    const itog = await databaseService.logsSaveToBase(newdata, date, idw)
+    const itog = await databaseService.logsSaveToBase(newdata, date, idw) //сохранение в БД лога события
     res.json({ itog })
 }
 module.exports.logsView = async (req, res) => {
     const idw = req.body.arrayId
     const tr = req.body.tr
     const count = req.body.count
-    const val = await databaseService.logsFindToBase(idw)
+    const val = await databaseService.logsFindToBase(idw) //получение логов из БД
     const valnew = val.map(el => el)
     const quant = val.length
     val.sort((a, b) => {
@@ -54,19 +54,21 @@ module.exports.logsView = async (req, res) => {
     valnew.splice(0, tr)
     res.json({ itog: valnew.length, quant: quant, view: val })
 }
+
+/*
 module.exports.logsViewId = async (req, res) => {
     const idw = req.body.idw
     const t1 = req.body.nowDate
     const t2 = req.body.timeFrom
-    const itog = await databaseService.logsFindToBaseId(t1, t2, idw)
+    const itog = await databaseService.logsFindToBaseId(t1, t2, idw) //получение логов за интервал времени
     res.json(itog)
-}
+}*/
 
 module.exports.alarmViewId = async (req, res) => {
     const idw = req.body.idw
     const t1 = req.body.nowDate
     const t2 = req.body.timeFrom
-    const itog = await databaseService.alarmFindToBaseId(t1, t2, idw)
+    const itog = await databaseService.alarmFindToBaseId(t1, t2, idw) //получение алармов за интервал времени
     res.json(itog)
 }
 module.exports.saveEvent = async (req, res) => {

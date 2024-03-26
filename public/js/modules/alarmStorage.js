@@ -370,17 +370,38 @@ async function geoMarker(time, idw, tr) {
     const parts = dateString.match(/(\d+)/g);
     const dateObj = new Date(parts[2], parts[1] - 1, parts[0], parts[3], parts[4]);
     const unixTime = Math.floor(dateObj.getTime() / 1000);
-    const nowDate = unixTime
-    const timeFrom = unixTime - 3600
-    console.log(nowDate, timeFrom, idw, login); // 1687935780
-    const ttt = await testovfn(idw, timeFrom, nowDate)
-    const geoCard = ttt.map(e => {
+    const t2 = unixTime
+    const t1 = unixTime - 3600
+    console.log(idw, t1, t2)
+    const paramss = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ idw, t1, t2 }))
+    }
+    const res = await fetch('/api/getDataParamsInterval', paramss)
+    const data = await res.json();
+    console.log(data)
+    const newGlobal = data.map(it => {
         return {
-            ...e,
-            geo: JSON.parse(e.geo)
-        };
-    });
-    const trackAlarm = geoCard.map(it => {
+            id: it.idw,
+            time: new Date(Number(it.last_valid_time) * 1000),
+            speed: Number(it.speed),
+            geo: [Number(it.lat), Number(it.lon)],
+            oil: Number(it.oil),
+            pwr: Number(it.pwr),
+            engine: Number(it.engine),
+            mileage: Number(it.mileage),
+            curse: Number(it.course),
+            sats: Number(it.sats),
+            engineOn: Number(it.engineOn),
+            summatorOil: it.summatorOil ? Number(it.summatorOil) : null
+        }
+    })
+    newGlobal.sort((a, b) => a.time - b.time)
+
+    const trackAlarm = newGlobal.map(it => {
         return it.geo
     })
     console.log(trackAlarm);

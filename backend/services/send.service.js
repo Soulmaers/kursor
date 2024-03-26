@@ -22,8 +22,6 @@ exports.convertMessage = (mess) => {
     return msg
 }
 
-
-
 exports.sendEmail = async (mess, login) => {
     const message = mess
     const msg = this.convertMessage(message)

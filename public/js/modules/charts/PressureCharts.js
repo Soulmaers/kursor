@@ -265,41 +265,41 @@ export class PressureCharts {
         });
     }
     zoomed(svg, newX, y1, y2, height, data, svgContainer) {
-        svg.select(".osx").call(d3.axisBottom(newX).tickFormat(d3.timeFormat("%H:%M")));
-        svg.select(".osx2").call(d3.axisBottom(newX).tickFormat(d3.timeFormat("%d.%m")));
-        // Обновляем области и линии
-        const updatePath = (areaGenerator, selector) => {
-            svg.selectAll(selector)
-                .attr("d", d => {
-                    areaGenerator.x(d => newX(new Date(d.dates)));
-                    return areaGenerator(d);
-                });
-        };
-        // Для area1
-        const area1Generator = d3.area()
-            .y0(height)
-            .y1(d => y1(d.value))
-            .curve(d3.curveStep);
-        updatePath(area1Generator, ".area1");
-        // Для area11 с условиями
-        const area11Generator = d3.area()
-            .y0(height)
-            .y1(d => d.value > data.bar.knd && d.value <= data.bar.dnn || d.value > data.bar.dvn && d.value <= data.bar.kvd ? y1(d.value) : height)
-            .curve(d3.curveStep);
-        updatePath(area11Generator, ".area11");
-        // Для area12 с условиями
-        const area12Generator = d3.area()
-            .y0(height)
-            .y1(d => d.value <= data.bar.knd || d.value >= data.bar.kvd ? y1(d.value) : height)
-            .curve(d3.curveStep);
-        updatePath(area12Generator, ".area12");
-        // Для area2
-        const area2Generator = d3.area()
-            .y0(height)
-            .y1(d => y2(d.tvalue))
-            .curve(d3.curveStep);
-        updatePath(area2Generator, ".area2");
-        this.createTooltip(svgContainer, svg, data.val, newX)
+        requestAnimationFrame(() => {
+            svg.select(".osx").call(d3.axisBottom(newX).tickFormat(d3.timeFormat("%H:%M")));
+            svg.select(".osx2").call(d3.axisBottom(newX).tickFormat(d3.timeFormat("%d.%m")));
+
+            // Обновляем области и линии
+            const updateArea1 = d3.area()
+                .x(d => newX(new Date(d.dates)))
+                .y0(height)
+                .y1(d => y1(d.value))
+                .curve(d3.curveStep);
+            svg.selectAll(".area1").attr('d', updateArea1(data.val));
+
+            const updateArea11 = d3.area()
+                .x(d => newX(new Date(d.dates)))
+                .y0(height)
+                .y1(d => d.value > data.bar.knd && d.value <= data.bar.dnn || d.value > data.bar.dvn && d.value <= data.bar.kvd ? y1(d.value) : height)
+                .curve(d3.curveStep);
+            svg.selectAll(".area11").attr('d', updateArea11(data.val));
+
+            const updateArea12 = d3.area()
+                .x(d => newX(new Date(d.dates)))
+                .y0(height)
+                .y1(d => d.value <= data.bar.knd || d.value >= data.bar.kvd ? y1(d.value) : height)
+                .curve(d3.curveStep);
+            svg.selectAll(".area12").attr('d', updateArea12(data.val));
+
+            const updateArea2 = d3.area()
+                .x(d => newX(new Date(d.dates)))
+                .y0(height)
+                .y1(d => y2(d.tvalue))
+                .curve(d3.curveStep);
+            svg.selectAll(".area2").attr('d', updateArea2(data.val));
+
+            this.createTooltip(svgContainer, svg, data.val, newX);
+        });
     }
 
     createTooltip(svgContainer, svg, datasets, xScaleStart) {
