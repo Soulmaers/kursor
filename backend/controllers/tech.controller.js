@@ -1,49 +1,30 @@
 const databaseService = require('../services/database.service');
 
 
-
 exports.savePr = async (req, res) => {
     console.log('сэйв')
     const value = [Object.values(req.body.arr)]
-    const message = await databaseService.saveTechToBase(value, req.body.arr.dataAdd)
+    const message = await databaseService.saveTechToBase(value, req.body.arr.dataAdd) //сохранение параметров замера протектора колеса
     res.json(message)
 }
 exports.techView = async (req, res) => {
     const nameCar = req.body.activePost
     const count = req.body.id
     const idw = req.body.idw
-    const result = await databaseService.techViewToBase(nameCar, count, idw)
+    const result = await databaseService.techViewToBase(nameCar, count, idw) //получение параметров замера протектора колеса
     res.json(result)
 }
 
 exports.techViewAll = async (req, res) => {
     const idw = req.body.idw
-    const result = await databaseService.techViewAllToBase(idw)
-    res.json(result)
-}
-
-
-exports.summary = async (req, res) => {
-    const idw = req.body.idw
-    const arr = req.body.arrayInfo
-    const data = req.body.data
-    // console.log(idw, arr, data)
-    const result = await databaseService.summaryToBase(idw, arr, data)
+    const result = await databaseService.techViewAllToBase(idw) //получение параметров замера протектора по всем колесам объекта
     res.json(result)
 }
 
 exports.summaryYestoday = async (req, res) => {
-    //  console.log(req.body)
     const data = req.body.data
     const arrayId = req.body.arrayId
-    //   console.log(arrayId, data)
-    const result = await databaseService.summaryYestodayToBase(data, arrayId)
+    const result = await databaseService.summaryYestodayToBase(data, arrayId) //получение статистики по объектам за интервал
     res.json(result)
 }
 
-exports.summaryIdwToBase = async (req, res) => {
-    const data = req.body.data
-    const idw = req.body.idw
-    const result = await databaseService.sumIdwToBase(data, idw)
-    res.json(result)
-}

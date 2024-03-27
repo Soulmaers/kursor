@@ -8,7 +8,7 @@ const fs = require('fs');
 const JobToBase = require('./JobToBase')
 class NavtelecomResponceData {
 
-    static bufferAssembly(peamble, receiver, sender, message) {
+    static bufferAssembly(peamble, receiver, sender, message) { //подготовка ответных сообщений
         const responceHead = Buffer.concat([peamble, sender, receiver, message.lengthMsg, Buffer.from([message.crc])])
         const crcHeas = CheckSumm.xorSum(responceHead, responceHead.length)
         const responce = Buffer.concat([responceHead, Buffer.from([crcHeas]), message.msg])
@@ -26,7 +26,7 @@ class NavtelecomResponceData {
 }
 
 
-class CheckSumm {
+class CheckSumm { //подсчет контрольных сумм
 
     static xorSum(buffer) {
         let tempSum = 0;
@@ -48,7 +48,7 @@ class CheckSumm {
     }
 }
 
-class BitsCount {
+class BitsCount { // расчет битов
     static check(number, index) {
         return (number & (1 << index)) !== 0;
     }
@@ -63,7 +63,7 @@ class BitsCount {
     }
 }
 
-class WriteFile {
+class WriteFile { //запись расшифрованных данных в файл txt
     static async writeDataFile(globalArrayMSG, imei) {
         const res = await databaseService.objectsImei(String(imei))
         if (res.length !== 0) {

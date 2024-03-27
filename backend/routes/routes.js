@@ -41,11 +41,7 @@ router.post('/api/alarmViewId', controllerAlarm.alarmViewId)
 router.post('/api/savePr', controllerTech.savePr)
 router.post('/api/techView', controllerTech.techView)
 router.post('/api/techViewAll', controllerTech.techViewAll)
-router.post('/api/summary', controllerTech.summary)
 router.post('/api/summaryYestoday', controllerTech.summaryYestoday)
-router.post('/api/summaryIdwToBase', controllerTech.summaryIdwToBase)
-
-
 
 router.post('/api/generate', controllerModel.generate)
 router.get('/api/findId', controllerModel.findId)
@@ -59,18 +55,9 @@ router.post('/api/iconFind', controllerIcon.iconFind)
 router.post('/api/saveList', controllerIcon.saveList)
 router.post('/api/viewList', controllerIcon.viewList)
 
-
-router.post('/api/to', controllerModel.to)
-router.post('/api/toView', controllerModel.toView)
-
-
-
-router.post('/api/tarirSave', controllerTarir.tarirSave)
+router.post('/api/updateTarirTable', controllerTarir.updateTarirTableToBase)
+router.post('/api/getTarirTable', controllerTarir.getTarirDataToBase)
 router.post('/api/tarirView', controllerTarir.tarirView)
 
-
-
-
-router.post('/api/viewStatus', controllerModel.viewStatus)
 
 

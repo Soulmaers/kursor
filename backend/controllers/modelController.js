@@ -2,56 +2,6 @@
 const { connection, sql } = require('../config/db')
 
 
-module.exports.viewStatus = async (req, res) => {
-    try {
-        const pool = await connection
-        const postModel = `SELECT * FROM statusObj WHERE idw=@idw`
-        const results = await pool.request().input('idw', req.body.idw).query(postModel)
-
-        res.json({ result: results.recordset })
-    }
-    catch (e) {
-        console.log(e)
-    }
-}
-
-module.exports.to = (req, res) => {
-    try {
-        const selectBase = `SELECT id FROM toChange  WHERE nameCar='${req.body.activePost}'`
-        connection.query(selectBase, function (err, results) {
-            if (err) console.log(err)
-            if (results.length === 0) {
-                const postModel = `INSERT INTO toChange(nameCar, value) VALUES('${req.body.activePost}', '${req.body.valueTO}')`
-                connection.query(postModel, function (err, results) {
-                    if (err) console.log(err)
-                    else res.json({ message: 'запись есть' })
-                })
-            }
-            else {
-                const sql = `UPDATE toChange SET nameCar='${req.body.activePost}',  value='${req.body.valueTO}' WHERE nameCar='${req.body.activePost}'`;
-                connection.query(sql, function (err, results) {
-                    if (err) console.log(err)
-                    else res.json({ message: 'запись обновлена' })
-                });
-            }
-        })
-    }
-    catch (e) {
-        console.log(e)
-    }
-}
-module.exports.toView = (req, res) => {
-    try {
-        const postModel = `SELECT nameCar, value FROM toChange WHERE nameCar='${req.body.activePost}'`
-        connection.query(postModel, function (err, results) {
-            if (err) console.log(err)
-            res.json({ status: 200, result: results, name: req.body.activePost })
-        })
-    }
-    catch (e) {
-        console.log(e)
-    }
-}
 module.exports.generate = (req, res) => {
     const id = req.body.newId
     const arr = [req.body.arrNameColId]

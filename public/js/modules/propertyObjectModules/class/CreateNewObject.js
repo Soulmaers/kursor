@@ -281,7 +281,7 @@ export class CreateNewObject {
                     },
                     body: JSON.stringify({ idw })
                 }
-                const res = await fetch('/api/objectId', params)
+                const res = await fetch('/api/objects', params)
                 const result = await res.json()
                 data = result.reduce((acc, el) => {
                     acc.push(el.nameObject, el.typeObject, el.typeDevice, el.port, el.adress, el.imei, el.number)

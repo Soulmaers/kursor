@@ -10,7 +10,7 @@ const cookieExtractor = function (req) {
     return token;
 };
 
-module.exports = function (passport) {
+module.exports = function (passport) { //натсройка аутентификации пользователя
     var opts = {};
     opts.jwtFromRequest = cookieExtractor; // проверяем токен в куке
     opts.secretOrKey = 'jwt-key';

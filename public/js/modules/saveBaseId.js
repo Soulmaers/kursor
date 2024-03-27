@@ -80,6 +80,7 @@ export async function reqBaseId() {
 }
 
 export async function saveDouble(arr) {
+    console.log(arr)
     const complete = await fetch('/api/savePr', {
         method: "POST",
         headers: {

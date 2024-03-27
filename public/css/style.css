@@ -8224,6 +8224,21 @@ i.filterEvent {
   top: 6px;
 }
 
+.add_pwr:hover,
+.add_mileage:hover,
+.add_engine:hover,
+.add_oil:hover,
+.add_oil2:hover,
+.add_oil3:hover,
+.add_oil4:hover,
+.add_oil5:hover,
+.add_oil6:hover,
+.add_summatorOil:hover {
+  animation-name: wiggle;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
 
 .container_tarir {
   width: 900px;
@@ -9616,7 +9631,7 @@ i.changeColorCheck {
 
 
 .falseCheck {
-  color: gray
+  color: lightgray
 }
 
 .header_modal,

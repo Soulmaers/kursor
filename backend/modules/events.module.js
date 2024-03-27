@@ -7,7 +7,7 @@ exports.eventFunction = async (arr) => {
     const all = arr
         .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
         .flat()
-    const rt = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(result)
+    const rt = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(result) //получаем события с wialon
     oilFunc(rt, all)
     lastMsgFunc(rt, all)
 
@@ -18,7 +18,7 @@ const objCondition = {
     1: 'Поездка',
     2: 'Остановка'
 }
-function lastMsgFunc(rt, all) {
+function lastMsgFunc(rt, all) { //
     const itogEvents = Object.entries(rt).map(el => {
         const eventObject = el[1][1] ? Object.values(Object.values(el[1])[1])[0] : null
         if (eventObject) {
@@ -53,7 +53,7 @@ function lastMsgFunc(rt, all) {
 }
 
 
-async function checkSortLastTime(idw, group, name, time, geo) {
+async function checkSortLastTime(idw, group, name, time, geo) { //проверка на событие потеря связи
     const times = new Date(time * 1000)
     const day = times.getDate();
     const month = (times.getMonth() + 1).toString().padStart(2, '0');
@@ -65,10 +65,10 @@ async function checkSortLastTime(idw, group, name, time, geo) {
         event: 'Потеря связи',
         lasttime: `Время последнего сообщения: ${formattedDate}`
     }]
-    const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name)
+    const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name) //запись лога
 }
 
-function oilFunc(rt, all) {
+function oilFunc(rt, all) {  //проверка на событие заправка/слив
     const itogEvents = Object.entries(rt).map(el => {
         const eventObject = el[1][0].lls ? Object.values(Object.values(el[1])[0].lls)[0] : null
         const fill = eventObject ? Object.values(Object.values(el[1])[0].lls)[0].filled !== 0 ? Object.values(Object.values(el[1])[0].lls)[0].filled : null : null
@@ -109,5 +109,5 @@ async function modalView(filled, name, group, idw, geo, time) {
         event: filled > 0 ? `Заправка` : 'Слив', litrazh: filled > 0 ? `Запралено: ${filled} л.` : `Слив: ${filled - (filled * 2)} л.`,
         time: `Время: ${formattedDate}`
     }]
-    const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name, filled)
+    const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name, filled) //запись лога
 }

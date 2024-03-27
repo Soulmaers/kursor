@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const databaseService = require('./database.service')
 const request = require("request");
 
-exports.convertMessage = (mess) => {
+exports.convertMessage = (mess) => { //Шаблонирование строки уведомления
     let msg;
     if (mess.event === 'Заправка') {
         msg = `Событие: ${mess.event}\u2028${mess.group}\u2028Объект: ${mess.name}\u2028Заправлено: ${mess.litrazh} л.\u2028${mess.time}`
@@ -22,10 +22,10 @@ exports.convertMessage = (mess) => {
     return msg
 }
 
-exports.sendEmail = async (mess, login) => {
+exports.sendEmail = async (mess, login) => {  //отправка сообщения на электронную почту
     const message = mess
     const msg = this.convertMessage(message)
-    const contact = await databaseService.findToBaseProfil(login)
+    const contact = await databaseService.findToBaseProfil(login)  //получение контактов из БД
     if (contact.length !== 0) {
         contact.forEach(el => {
             const email = el.email
@@ -67,10 +67,10 @@ exports.sendEmail = async (mess, login) => {
     }
 }
 
-exports.sendWhat = async (mess, login) => {
+exports.sendWhat = async (mess, login) => { // отправка сообщения на whatsapp
     const message = mess
     const msg = this.convertMessage(message)
-    const contact = await databaseService.findToBaseProfil(login)
+    const contact = await databaseService.findToBaseProfil(login) //получение контактов из БД
     if (contact.length !== 0) {
         contact.forEach(el => {
             const phone = parseFloat(el.phone)

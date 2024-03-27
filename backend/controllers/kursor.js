@@ -70,17 +70,6 @@ exports.getDataParamsInterval = async (req, res) => {
     const result = await databaseService.geoLastInterval(time1, time2, idw) //получение парамтеров и значений датчиков за интервал времени
     res.json(result)
 }
-exports.updateTarirTableToBase = async (req, res) => {
-    const data = req.body.values
-    const result = await databaseService.updateTarirTable(data) //обновление тарировочной таблицы по параметру объектв в БД
-    res.json(result)
-}
-exports.getTarirDataToBase = async (req, res) => {
-    const idw = req.body.idw
-    const param = req.body.param
-    const result = await databaseService.getTarirData(idw, param) //получение тарировочной таблицы по параметру  объекта из БД
-    res.json(result)
-}
 
 exports.saveValuePWR = async (req, res) => {
     //  console.log(ips.ips.object);
@@ -126,82 +115,23 @@ exports.getSensStorMeta = async (req, res) => {
     res.json(result)
 }
 
-
-exports.objectId = async (req, res) => {
-    const idw = req.body.idw
-    const result = await databaseService.objectId(idw) //получение объектов не wialona
-    res.json(result)
-}
-
 exports.objects = async (req, res) => {
     const idw = req.body.idw
-    const result = await databaseService.objects(idw) //получение объекта не wialona по Id
+    const result = await databaseService.objects(idw) //получение объекта не wialona
     res.json(result)
 }
-
-
-/*
-exports.getParamsKursor = async (req, res) => {
-    const idObject = req.body.idw
-    // const port = req.body.port
-    const result = await databaseService.getParamsKursor(idObject)
-    res.json(result)
-}*/
-
-/*
-exports.getGeoKursor = async (req, res) => {
-    const idObject = req.body.getGeoKursor
-    const result = await databaseService.getGeoKursor(idObject)
-    res.json(result)
-}*/
-
 
 exports.getSens = async (req, res) => {
     const idw = req.body.idw
-    const params = await databaseService.paramsToBaseSens(idw) //получение парамтерво и значений датчиков по id
+    const params = await databaseService.paramsToBaseSens(idw) //получение параметров и значений датчиков по id
     res.json(params)
 }
-exports.getSensAll = async (req, res) => {
-    const arr = req.body.data
-    const params = await databaseService.paramsToBaseSensAll(arr)
-    res.json(params)
-}
-//тут!
-exports.getParamsKursorIntervalController = async (req, res) => {
-    const t1 = req.body.t1
-    const t2 = req.body.t2
-    const idObject = req.body.active
-    const result = await databaseService.getParamsKursorInterval(idObject, t1, t2)
-    if (result.length === 1) {
-        const strukturaKursor =
-            [{
-                idw: result[0].idObject, time: result[0].time, geo: JSON.stringify([Number(result[0].lat), Number(result[0].lon)]), speed: Number(Number(result[0].speed).toFixed(0)),
-                sats: Number(Number(result[0].sats).toFixed(0)), curse: Number(Number(result[0].course).toFixed(0)), oil: 0, pwr: Number(Number(result[0].pwr_ext).toFixed(1)),
-                engine: result[0].in1 === 'Вход IN1(датчик сработал)' ? 1 : 0, meliage: Number(Number(result[0].mileage).toFixed(0))
-            }]
-        res.json(strukturaKursor)
-    }
-    else {
-        const strukturaKursor = result.map(el => {
-            return {
-                idw: idObject, time: el.time, geo: JSON.stringify([Number(el.lat), Number(el.lon)]), speed: Number(Number(el.speed).toFixed(0)),
-                sats: Number(Number(el.sats).toFixed(0)), curse: Number(Number(el.course).toFixed(0)), oil: 0, pwr: Number(Number(el.pwr_ext).toFixed(1)),
-                engine: el.in1 === 'Вход IN1(датчик сработал)' ? 1 : 0, meliage: Number(Number(el.meliage).toFixed(0))
-            }
-        })
-        res.json(strukturaKursor)
-    }
-}
-
-
-
-
 
 exports.geoLastInterval = async (req, res) => {
     const time1 = req.body.t1
     const time2 = req.body.t2
     const idw = req.body.idw
-    const geoloc = await databaseService.geoLastInterval(time1, time2, idw)
+    const geoloc = await databaseService.geoLastInterval(time1, time2, idw) //получение данных геопозиции за интервал
     const geo = [];
     if (geoloc) {
         var rows = geoloc.length;
@@ -212,6 +142,5 @@ exports.geoLastInterval = async (req, res) => {
             el.push(geoloc[index].lat, geoloc[index].lon, geoloc[index].course, geoloc[index].speed, geoloc[index].last_valid_time, geoloc[index].sats);
         })
     }
-
     res.json({ resTrack: geo })
 }

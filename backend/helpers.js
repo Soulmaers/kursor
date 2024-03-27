@@ -162,7 +162,7 @@ exports.setDataToBase = async (imei, port, info, id) => {
                 if (val && lastObject.hasOwnProperty(val.meta)) {
                     const propertyValue = lastObject[val.meta]; // Исправление для получения значения свойства
                     const dut = parseInt(propertyValue); // Преобразование строки в число
-                    if (!isNaN(dut)) { // Проверка, что результат преобразования - действительное число
+                    if (!isNaN(dut) && dut < 4100) { // Проверка, что результат преобразования - действительное число
                         const param = val.params
                         const tarirData = await getTarirTableToBase(idw, param)
                         if (tarirData.length !== 0) {

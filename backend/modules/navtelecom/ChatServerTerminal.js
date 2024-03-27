@@ -35,7 +35,7 @@ class ChartServerTerminal {
         this.type = null
         this.port = this.socket.localPort
         this.globalArrayMSG = [];
-        this.socketOn()
+        this.socketOn()  //расшифрока буффера пакета сообщений
     }
 
     socketOn() {
@@ -116,7 +116,7 @@ class ChartServerTerminal {
     }
 
     async setData(imei, port, id) {
-        await helpers.setDataToBase(imei, port, this.globalArrayMSG, id)
+        await helpers.setDataToBase(imei, port, this.globalArrayMSG, id) //передача расшифрованных данных для обработки и записи в БД
     }
 
 

@@ -1,12 +1,41 @@
 
-const { prms, prmsAllGoup } = require('../params')
+
 const { getSess, getSessiont } = require('../controllers/data.controller.js')
 const geSession = require('../../index.js')
 const fs = require('fs');
 //запрос всех  групп объектов  с виалона
 
 
+//все параметры
+const flags = 1 + 1026
+const prms = {
+    "spec": {
+        "itemsType": "avl_unit",
+        "propName": "sys_name",
+        "propValueMask": "*",
+        "sortType": "sys_name"
+    },
+    "force": 1,
+    "flags": flags,
+    "from": 0,
+    "to": 0
+};
 
+//параметры запроса всех групп с виалона
+const flagsAllGroup = 1 + 1024// + 1024//4096
+const prmsAllGoup = {
+    "spec": {
+        "itemsType": "avl_unit_group",
+        "propName": "sys_name",
+        "propValueMask": "*",
+        "sortType": "sys_name"
+    },
+    "force": 1,
+    "flags": flagsAllGroup,
+    "from": 0,
+    "to": 0xffffffff,
+    "rand": Math.random() // Добавляем рандомный параметр rand
+};
 
 
 exports.getTitleShablonToWialon = async (idResourse, idShablon, idObject, interval) => {

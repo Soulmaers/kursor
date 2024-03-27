@@ -35,7 +35,7 @@ class ParseBuffer {
     }
 
 
-    socketOn() {
+    socketOn() { //расшифровка буффера пакетов сообщений
         this.socket.on('data', async (data) => {
             console.log('дата')
             this.buffer.push(data);
@@ -67,9 +67,9 @@ class ParseBuffer {
     }
 
     async setData(imei, port, id) {
-        await helpers.setDataToBase(imei, port, this.arrayData, id)
+        await helpers.setDataToBase(imei, port, this.arrayData, id) //передача расшифрованных данных для обработки и записи в БД
     }
-    async setValidationImeiToBase(id) {
+    async setValidationImeiToBase(id) { //валидация на наличие заведенного объекта с IMEI
         this.allData['idObject'] = id
         const table = 'wialon_retranslation'
         const base = new JobToBase()

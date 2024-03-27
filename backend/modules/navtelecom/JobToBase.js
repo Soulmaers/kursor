@@ -26,7 +26,7 @@ class JobToBase {
     }
 
 
-    async fillingTableColumns(object, table) {
+    async fillingTableColumns(object, table) { //проверка и создание столбцов в таблице БД
         const tableName = table;
         const columnsQuery = `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '${tableName}'`;
         const pool = await connection;
@@ -50,7 +50,7 @@ class JobToBase {
         }
     }
 
-    async fillingTableRows(object, table) {
+    async fillingTableRows(object, table) { //запись строк в таблицу БД
         const tableName = table;
         const columns = Object.keys(object).join(', ');
         const values = Object.values(object).map(value => `'${value}'`).join(', ');

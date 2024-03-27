@@ -88,7 +88,7 @@ export class ConfiguratorParams {
         this.clearParams = null
         this.itemMeta = null;
         this.itemStor = null;
-        // this.boundClear = this.createListMeta.bind(this);
+        this.boundUpdate = this.createListMeta.bind(this);
         this.init()
         this.initEventListeners();
     }
@@ -533,7 +533,7 @@ export class ConfiguratorParams {
                 clickStor.children[4].style.display = 'block'
             }
             else {
-                clickStor.children[4].style.display = 'none'
+                clickStor.children[4] ? clickStor.children[4].style.display = 'none' : null
             }
 
             this.itemMeta.forEach(el => { el.children[0].classList.remove('clickMeta') })

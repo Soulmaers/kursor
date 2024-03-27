@@ -12,7 +12,7 @@ class SendingCommandToTerminal {
         this.handshake(preamble, receiver, sender, msg)
     }
 
-    responces(msg) {
+    responces(msg) { //отправка команд на терминал
         const writeSuccessful = this.socket.write(this.responce);
         if (writeSuccessful) {
             console.log(`${msg}`);

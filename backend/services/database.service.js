@@ -282,21 +282,6 @@ exports.getObjects = async (login) => {
     }
 
 }
-
-exports.objectId = async (idw) => {
-    try {
-        const pool = await connection
-        postModel = `SELECT * FROM objects WHERE idObject=@idw`
-        const result = await pool.request()
-            .input('idw', idw)
-            .query(postModel)
-
-        return result.recordset
-    }
-    catch (e) {
-        console.log(e)
-    }
-}
 exports.objectsImei = async (imei) => {
     try {
         const pool = await connection
@@ -378,123 +363,6 @@ exports.getLastTimeMessage = async (idw) => {
         throw e;
     }
 };
-
-exports.getParamsKursor = async (idObject) => {
-
-    const data = await databaseService.objectId(idObject)
-    if (data.length === 0) {
-        return
-    }
-    const port = data[0].port
-    let table;
-    if (port === '20163') {
-        table = 'wialon_retranslation';
-    } else if (port === '20332') {
-        table = 'wialon_ips';
-    } else if (port === '21626' || !port) {
-        table = 'navtelecom';
-    }
-    else {
-        return []
-    }
-
-    try {
-        const pool = await connection
-        const postModel = `SELECT TOP 1 * FROM ${table} WHERE idObject=@idObject ORDER BY id DESC`
-        const result = await pool.request()
-            .input('idObject', String(idObject))
-            .query(postModel)
-        const record = result.recordset[0];
-        if (record !== undefined) {
-            const params = Object.keys(record).reduce((acc, key) => {
-                if (record[key] !== null) {
-                    acc[key] = record[key]
-                }
-                return acc
-            }, {});
-            return [params];
-        }
-
-        else {
-            return []
-        }
-
-    } catch (e) {
-        console.log(e);
-        throw e;
-    }
-};
-
-
-exports.getGeoKursor = async (arr) => {
-    try {
-        const pool = await connection
-        const postModel = `SELECT lat, lon FROM navtelecom WHERE idObject=@idObject`
-        const result = await pool.request()
-            .input('idObject', idObject)
-            .query(postModel)
-        const record = result.recordset;
-
-    }
-    catch (e) {
-        console.log(e)
-    }
-
-}
-exports.getParamsKursorInterval = async (idObject, t1, t2) => {
-    const data = await databaseService.objectId(idObject)
-    if (data.length === 0 || data[0].port === null) {
-        return
-    }
-    const port = data[0].port
-    let table;
-    if (port === '20163') {
-        table = 'wialon_retranslation';
-    } else if (port === '20332') {
-        table = 'wialon_ips';
-    } else if (port === '21626' || !port) {
-        table = 'navtelecom';
-    }
-    else {
-        return []
-    }
-    try {
-
-        const pool = await connection
-        const postModel = `SELECT * FROM ${table} WHERE idObject=@idObject AND time >= '${t1}' AND time <= '${t2}'`
-
-        const result = await pool.request()
-            .input('idObject', idObject)
-            .query(postModel)
-        const record = result.recordset;
-
-        if (record.length !== 0) {
-            const params = record.map(el => {
-                //  console.log(el)
-                return Object.keys(el).reduce((acc, key) => {
-                    if (el[key] !== null) {
-                        acc[key] = el[key]
-                    }
-                    return acc
-                }, {})
-            })
-
-            return params
-        }
-        else {
-            return []
-        }
-        /* else {
-             const last = await databaseService.getParamsKursor(idObject)
-                       return last.length !== 0 ? last : []
-         }*/
-
-    } catch (e) {
-        console.log(e);
-        throw e;
-    }
-};
-
 
 exports.objects = async (arr) => {
     try {
@@ -1669,7 +1537,7 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
     }
     const dat = async () => {
         try {
-            const data = await databaseService.objectId(idw)
+            const data = await databaseService.objects(String(idw))
             let port;
             if (data.length === 0) {
                 port = 'wialon'
@@ -1777,23 +1645,6 @@ exports.paramsToBaseSens = async (idw) => {
     }
     catch (e) {
         console.log(e)
-    }
-}
-
-exports.paramsToBaseSensAll = async (arr) => {
-    try {
-        const pool = await connection;
-        if (arr.length > 0) {
-            const post = `SELECT * FROM sens_stor_meta WHERE idw IN (${arr.map(id => `'${id.id ? id.id : id}'`).join(',')})`;
-            const result = await pool.request()
-                .query(post);
-            return result.recordset
-        }
-        else {
-            return []
-        }
-    } catch (error) {
-        console.log(error)
     }
 }
 
@@ -2137,39 +1988,6 @@ exports.alarmFindToBaseId = async (t1, t2, idw) => {
     }
 }
 
-exports.tarirSaveToBase = async (arr) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const selectBase = `SELECT nameCar FROM tarir WHERE idx='${arr[0][1]}'`
-            connection.query(selectBase, function (err, results) {
-                if (err) {
-                    console.log(err)
-                }
-                if (results.length === 0) {
-                    const postModel = `INSERT INTO tarir(date, idx,nameCar, zamer, DUT,litrs) VALUES?`
-                    connection.query(postModel, [arr], function (err, results) {
-                        if (err) console.log(err);
-                        resolve({ message: 'Данные добавлены' })
-                    })
-                }
-                if (results.length > 0) {
-                    arr.forEach(el => {
-                        const postModel = `UPDATE tarir SET  date='${el[0]}', idx='${el[1]}', nameCar='${el[2]}', zamer='${el[3]}', DUT='${el[4]}',litrs='${el[5]}'WHERE idx='${el[1]}' AND zamer='${el[3]}'`
-                        connection.query(postModel, function (err, results) {
-                            if (err) {
-                                console.log(err)
-                                resolve({ message: 'Данные обновлены' })
-                            }
-                        })
-                    })
-                }
-            })
-        }
-        catch (e) {
-            console.log(e)
-        }
-    })
-}
 
 module.exports.saveToBaseProfil = async (mass) => { //сохранение контактов
     try {
@@ -2311,34 +2129,75 @@ exports.iconSaveToBase = async (activePost, param, coef, id, idw) => {
 };
 
 exports.saveTechToBase = async (value, add) => {
-    try {
-        const pool = await connection;
-        console.log(add ? 'дата есть' : 'даты нет');
-        const sql = add
-            ? `INSERT INTO  tyresBase(idw, dataAdd, identificator, nameCar, typeOs, numberOs, idTyres, marka,
-                model,
-                psi,
-                changeBar,
-                probegNow,
-                dateInstall,
-                probegPass,
-                dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`
-            : `INSERT INTO  tyresBase(idw, identificator, nameCar, typeOs, numberOs, idTyres, marka,
-                model,
-                psi,
-                changeBar,
-                probegNow,
-                dateInstall,
-                probegPass,
-                dateZamer, N1, N2, N3, N4 ,maxMM) VALUES?`;
-        const results = await pool.request()
-            .input('value', sql.TVP, value)
-            .query(sql);
-        return 'Данные добавлены';
-    } catch (err) {
-        console.error(err);
-        throw err;
+    const pool = await connection;
+    if (add) {
+        let [idw, dataAdd, identificator, nameCar, typeOs, numberOs,
+            idTyres, marka, model, psi, changeBar, probegNow, dateInstall, probegPass, dateZamer, N1, N2, N3, N4, maxMM] = value[0]
+        const sql = `INSERT INTO tyresBase(idw, dataAdd,identificator, nameCar, typeOs, numberOs,idTyres,marka,model,psi,changeBar,probegNow,dateInstall,probegPass,dateZamer,N1,N2,N3,N4,maxMM)
+                               VALUES(@idw, @dataAdd,@identificator, @nameCar, @typeOs, @numberOs,@idTyres,@marka,@model,@psi,@changeBar,@probegNow,@dateInstall,@probegPass,@dateZamer,@N1,@N2,@N3,@N4,@maxMM)`;
+        try {
+            const results = await pool.request()
+                .input('idw', idw)
+                .input('dataAdd', dataAdd)
+                .input('identificator', identificator)
+                .input('nameCar', nameCar)
+                .input('typeOs', typeOs)
+                .input('numberOs', numberOs)
+                .input('idTyres', idTyres)
+                .input('marka', marka)
+                .input('model', model)
+                .input('psi', psi)
+                .input('changeBar', changeBar)
+                .input('probegNow', probegNow)
+                .input('dateInstall', dateInstall)
+                .input('probegPass', probegPass)
+                .input('dateZamer', dateZamer)
+                .input('N1', N1)
+                .input('N2', N2)
+                .input('N3', N3)
+                .input('N4', N4)
+                .input('maxMM', maxMM)
+                .query(sql);
+            return 'Данные добавлены';
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
     }
+    else {
+        let [idw, identificator, nameCar, typeOs, numberOs,
+            idTyres, marka, model, psi, changeBar, probegNow, dateInstall, probegPass, dateZamer, N1, N2, N3, N4, maxMM] = value[0]
+        const sql = `INSERT INTO tyresBase(idw, identificator, nameCar, typeOs, numberOs,idTyres,marka,model,psi,changeBar,probegNow,dateInstall,probegPass,dateZamer,N1,N2,N3,N4,maxMM)
+                               VALUES(@idw, @identificator, @nameCar, @typeOs, @numberOs,@idTyres,@marka,@model,@psi,@changeBar,@probegNow,@dateInstall,@probegPass,@dateZamer,@N1,@N2,@N3,@N4,@maxMM)`;
+        try {
+            const results = await pool.request()
+                .input('idw', idw)
+                .input('identificator', identificator)
+                .input('nameCar', nameCar)
+                .input('typeOs', typeOs)
+                .input('numberOs', numberOs)
+                .input('idTyres', idTyres)
+                .input('marka', marka)
+                .input('model', model)
+                .input('psi', psi)
+                .input('changeBar', changeBar)
+                .input('probegNow', probegNow)
+                .input('dateInstall', dateInstall)
+                .input('probegPass', probegPass)
+                .input('dateZamer', dateZamer)
+                .input('N1', N1)
+                .input('N2', N2)
+                .input('N3', N3)
+                .input('N4', N4)
+                .input('maxMM', maxMM)
+                .query(sql);
+            return 'Данные добавлены';
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
 };
 
 exports.techViewToBase = async (nameCar, count, idw) => {

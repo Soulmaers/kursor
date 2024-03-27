@@ -652,6 +652,7 @@ export class OilCharts {
             }
         })
         newGlobal.sort((a, b) => a.time - b.time)
+        console.log(newGlobal)
         if (data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')

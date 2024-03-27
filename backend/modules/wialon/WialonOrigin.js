@@ -10,7 +10,7 @@ class WialonOrigin {
         this.init()
     }
     async init() {
-        const data = await wialonService.getDataFromWialon();
+        const data = await wialonService.getDataFromWialon(); //получение объектов с wialon
         if (data) {
             await Promise.all([
                 this.getObjectData(data),
@@ -23,7 +23,7 @@ class WialonOrigin {
     async getObjectData(data) {
         const dataArray = data?.items ?? [];
         const now = Math.floor(Date.now() / 1000);
-        const phones = await Promise.all(dataArray.map(el => wialonService.getUniqImeiAndPhoneIdDataFromWialon(el.id)));
+        const phones = await Promise.all(dataArray.map(el => wialonService.getUniqImeiAndPhoneIdDataFromWialon(el.id))); //получение IMEI, контактов с wialon
         // Пакетная обработка обновлений в базе данных
         const updateTasks = [];
         for (let i = 0; i < dataArray.length; i++) {
@@ -33,14 +33,14 @@ class WialonOrigin {
             if (!phone?.item?.uid) {
                 continue;
             }
-            const res = await databaseService.objectsWialonImei(String(phone.item.uid));
+            const res = await databaseService.objectsWialonImei(String(phone.item.uid)); // валидация полученного объекта по IMEI и id
             if (!res?.length) {
                 continue;
             }
             const timeBase = await databaseService.getLastTimeMessage(idw);
             const oldTime = timeBase?.[0]?.time_reg ? Number(timeBase[0].time_reg) : now - 1000;
             const [result] = await Promise.all([
-                wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i'),
+                wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i'), //запрос параметров по объекту за интервал времени
             ]);
             const allArrayData = [];
             result.messages.forEach(async (e) => {
@@ -89,7 +89,7 @@ class WialonOrigin {
     }
 
     async setData(imei, port, allArrayData, id) {
-        await helpers.setDataToBase(imei, port, allArrayData, id)
+        await helpers.setDataToBase(imei, port, allArrayData, id) // передача данных для обработки и записи в БД
     }
     async setValidationImeiToBase(allArrayData) {
         for (let elem of allArrayData) {
