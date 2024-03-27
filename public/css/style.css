@@ -8217,7 +8217,7 @@ i.filterEvent {
 .add_oil5,
 .add_oil6,
 .add_summatorOil {
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   cursor: pointer;
   position: absolute;
   right: 15px;
@@ -8227,7 +8227,7 @@ i.filterEvent {
 
 .container_tarir {
   width: 900px;
-  height: 700px;
+  height: 800px;
   position: absolute;
   top: 54%;
   left: 55%;
@@ -8617,7 +8617,7 @@ i.changeColorCheck {
 .left_tarir_wrapper {
   width: 54%;
   border: 1px solid rgba(6, 28, 71, 1);
-  height: 576px;
+  height: 776px;
   margin: 0;
   padding: 0;
   display: flex;
@@ -8635,7 +8635,7 @@ i.changeColorCheck {
 .right_tarir_wrapper {
   width: 44%;
   border: 1px solid rgba(6, 28, 71, 1);
-  height: 576px;
+  height: 776px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8701,7 +8701,7 @@ i.changeColorCheck {
 .item_meta {
   width: 48.6%;
   color: rgba(6, 28, 71, 1);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   box-sizing: border-box;
 
 }
@@ -8714,7 +8714,7 @@ i.changeColorCheck {
 .param_stor,
 .param_meta {
   color: rgba(6, 28, 71, 1);
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -8725,7 +8725,7 @@ i.changeColorCheck {
 .param_stor_name,
 .sensor_stor_name {
   color: #fff;
-  font-size: 0.8rem;
+  font-size: 1rem;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -8773,7 +8773,7 @@ i.changeColorCheck {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2px 0;
+  padding: 4px 0;
   font-size: 0.8rem;
 }
 
@@ -8811,7 +8811,7 @@ i.changeColorCheck {
   color: #fff;
   width: 100%;
   font-weight: bold;
-  padding: 2px 0;
+  padding: 5px 0;
   background-color: rgba(6, 28, 71, 1);
   display: flex;
   justify-content: center;
@@ -9498,8 +9498,8 @@ i.changeColorCheck {
 .create_object_modal,
 .create_group_modal {
   display: none;
-  width: 900px;
-  height: 700px;
+  width: 1200px;
+  height: 900px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -9513,8 +9513,8 @@ i.changeColorCheck {
 }
 
 .body_modal {
-  width: 850px;
-  height: 650px;
+  width: 98%;
+  height: 850px;
   background-color: #fff;
   border-radius: 0px 5px 5px 5px;
   display: flex;
@@ -9525,8 +9525,8 @@ i.changeColorCheck {
 }
 
 .body_tarir {
-  width: 850px;
-  height: 580px;
+  width: 98%;
+  height: 700px;
   background-color: #fff;
   display: flex;
   justify-content: space-around;
@@ -9628,7 +9628,7 @@ i.changeColorCheck {
   align-items: center;
   color: #fff;
   font-weight: bold;
-  padding: 2px 25px;
+  padding: 2px 12px;
   box-sizing: border-box;
 
 }
@@ -9637,7 +9637,7 @@ i.changeColorCheck {
 
 .footer_modal,
 .footer_tarir {
-  width: 850px;
+  width: 98%;
   height: 60px;
   border-top: 2px solid rgba(6, 28, 71, 1);
   display: flex;
@@ -9733,7 +9733,7 @@ i.toggle_list {
 .middle_level {
   padding: 5px;
   width: 95%;
-  height: 300px;
+  height: 700px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9744,7 +9744,7 @@ i.toggle_list {
 
 .container_middle_level {
   width: 30%;
-  height: 300px;
+  height: 690px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9772,7 +9772,7 @@ i.toggle_list {
 
 .element_to_controll {
   position: absolute;
-  right: 200px;
+  right: 360px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9851,7 +9851,7 @@ i.toggle_list {
 .deleteObject,
 .clear_params {
   cursor: pointer;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   color: #8f170e
 }
 
