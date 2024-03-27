@@ -246,9 +246,8 @@ export class SelectObjectsView {
             this.createStatsTable(this.stats)
         }
         else if (el.id === 'chart') {
-            this.createChartToWialon(this.globalChartData)
-            //  this.requestParams.idResourse === 'cursor' ? this.createChartToWialon(this.globalChartData) :
-            //  this.requestChartData(el.getAttribute('rel'))
+            this.requestParams.idResourse === 'cursor' ? this.createChartToWialon(this.globalChartData) :
+                this.requestChartData(el.getAttribute('rel'))
         }
         else {
             this.createTable(this.tablesReports, this.rows, el.id)

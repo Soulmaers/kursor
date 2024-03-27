@@ -2,12 +2,9 @@
 const wialonService = require('../services/wialon.service.js')
 const databaseService = require('../services/database.service');
 const kursorService = require('./kursor.js')
-const wialonModule = require('../modules/wialon.module');
 const statistika = require('../modules/statistika.module');
 const structura = require('../modules/structura.module.js')
 const events = require('../modules/events.module.js')
-//const connection = require('../config/db')
-const geSession = require('../../index.js')
 const { createDate, convert, sortData } = require('../helpers')
 const constorller = require('./data.controller.js')
 const { SummaryStatistiks } = require('../modules/statistika.module.js')
@@ -24,9 +21,9 @@ exports.dataSpisok = async (req, res) => {
         else {
             login = null
         }
-        const datas = await databaseService.getWialonObjects()
+        const datas = await databaseService.getWialonObjects() //получем данные из БД по объектам wialona
         const ress = sortData(datas)
-        const massObjectCar = login ? await databaseService.dostupObject(login) : null
+        const massObjectCar = login ? await databaseService.dostupObject(login) : null //проверяем к каким из них есть доступ у УЗ
         const aLLmassObject = [];
         const arrName = []
         for (const elem of ress) {
@@ -37,7 +34,7 @@ exports.dataSpisok = async (req, res) => {
             let promises;
             promises = elem.objects.map(async el => {
                 arrName.push([el.nameObject, el.idObject])
-                return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), el);
+                return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), el); //получаем основную структуру данных из БД по объекту (модели, колеса, параметры, пороговые значения)
 
             });
             const dataObjectGroup = await Promise.all(promises)
@@ -72,10 +69,10 @@ exports.dataSpisok = async (req, res) => {
 const getWialonSetToBaseObject = async (login) => {
     console.log('login', login)
     console.time('getWialon')
-    const objects = await getWialon(login)
+    const objects = await getWialon(login) // получаем объекты с wialona
     console.timeEnd('getWialon')
     console.time('save')
-    const mess = await databaseService.setObjectGroupWialon(objects)
+    const mess = await databaseService.setObjectGroupWialon(objects) //обновления объекты в БД с wialona
     console.timeEnd('save')
     console.log(mess)
 }
@@ -114,19 +111,12 @@ const getWialon = async (login) => {
             }
         }
     }
-    // console.log(`Обработано объектов: ${results.length}`);
     return results; // Возвращаем массив без null значений
 };
 
-
-exports.up = async (req, res) => {
-    updateParams()
-    res.json({ message: 'ок' })
-}
-
 exports.viewLogs = async (req, res) => {
     const login = req.body.login;
-    const data = req.body.quantity ? await databaseService.quantitySaveToBase(login, req.body.quantity) : await databaseService.quantitySaveToBase(login)
+    const data = req.body.quantity ? await databaseService.quantitySaveToBase(login, req.body.quantity) : await databaseService.quantitySaveToBase(login) //сохраняем в БД счетчик просмотренных логов
     res.json(data)
 }
 
@@ -134,127 +124,16 @@ exports.viewLogs = async (req, res) => {
 
 exports.start = async (session, data) => {
     console.log('старт')
-    await getWialonSetToBaseObject(session._session.au) //обновляем объекты с виалона в нашей базе
+    await getWialonSetToBaseObject(session._session.au) //обновляем объекты с виалона в БД
     if (data) {
         const allCar = Object.entries(data)
-        const dataKursor = await databaseService.getObjects()
+        const dataKursor = await databaseService.getObjects() //получаем объекты из БД все кроме wialona
         const validKursorData = dataKursor.filter(e => [...e.imei].length > 10)
         // Запускаем все функции параллельно
-        await Promise.all([await updateParams(data, validKursorData)])
+        await Promise.all([await updateParams(data, validKursorData)]) //запускаем метод обновления данных
         console.log('выполнено')
-        //, saveSensorsToBase(allCar, session)
     }
 }
-/*
-async function saveSensorsToBase(allCar, session) {
-    console.log('тут')
-    console.time('write')
-    const now = new Date();
-    const nowTime = Math.floor(now.getTime() / 1000);
-
-    for (const el of allCar[5][1]) {
-        const timeBase = await databaseService.lostChartDataToBase(el.id)
-        const oldTime = timeBase.length !== 0 ? Number(timeBase[0].data) : nowTime - 1;
-        // Запускаем загрузку данных сообщений и данные датчиков параллельно
-
-        let rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i')
-
-        if (rr === undefined) {
-            rr = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i')
-        }
-        let rez = await wialonService.getAllSensorsIdDataFromWialon(el.id)
-        if (rez === undefined) {
-            rez = await wialonService.getAllSensorsIdDataFromWialon(el.id)
-        }
-        let nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id)
-        if (nameSens === undefined) {
-            nameSens = await wialonService.getAllNameSensorsIdDataFromWialon(el.id)
-        }
-        if (!rr || rr.messages.length === 0 || rez && rez.length === 0) {
-            null
-        }
-        else {
-            while (rez && rr.messages.length !== rez.length) {
-                console.log('повторно')
-                //  console.log(session)
-                [rr, rez, nameSens] = await Promise.all([
-                    await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, nowTime, 'i'),
-                    await wialonService.getAllSensorsIdDataFromWialon(el.id, 'i'),
-                    await wialonService.getAllNameSensorsIdDataFromWialon(el.id, 'i')
-                ]);
-            }
-
-            const mass = [];
-            const sort = [];
-            const allArray = ggg(nameSens, rez, el.id)
-
-            rr.messages.forEach((e, index) => {
-                const geo = JSON.stringify([e.pos.y, e.pos.x]);
-                mass.push([String(el.id), el.nm.replace(/\s+/g, ''), String(e.t), String(new Date(e.t * 1000)), String(e.pos.s), String(e.p.sats), geo, String(e.pos.c)]);
-                const oil = detaly(allArray[index], 'Топливо')
-                const pwr = detaly(allArray[index], 'Бортовое питание')
-                const engine = detaly(allArray[index], 'Зажигание')
-                const meliage = detaly(allArray[index], 'Одометр', 'Пробег')
-                sort.push([el.id, el.nm.replace(/\s+/g, ''), String(e.t), geo, e.pos.s, e.p.sats, e.pos.c, oil, pwr, engine, meliage]);
-            });
-            const sens = rez.map(e => JSON.stringify(e));
-            const arr = allArray.map(e => JSON.stringify(e));
-            mass.forEach((el, index) => {
-                el.push(sens[index]);
-                el.push(arr[index])
-            });
-            await Promise.all([databaseService.saveChartDataToBase(mass), databaseService.saveSortDataToBase(sort)])
-        }
-        //  }
-    }
-    console.timeEnd('write')
-    console.log('saveSensorsToBase end')
-}
-
-function detaly(data, str, str2) {
-    if (!str2) {
-        const res = data.reduce((acc, e) => {
-            if (e[0] === str) {
-                acc = e[2]
-            }
-            return acc
-        }, 0)
-        return res
-    }
-    else {
-        const res = data.reduce((acc, e) => {
-            if (e[0] === str && e.includes(str2) || e[0] === str && !e.includes(str2)) { // Проверяем содержание str в элементе с индексом 0
-                acc = e[2]; // Присваиваем значение элемента с индексом 2 в acc
-            }
-            else if (e[0] === str2 && !e.includes(str)) {
-                acc = e[2]
-            }
-            return acc;
-        }, 0);
-
-        return res
-    }
-
-}
-function ggg(nameSens, rez, id) {
-    if (rez && nameSens) {
-        const nameSenz = Object.entries(nameSens.item.sens)
-        const arrNameSens = [];
-        nameSenz.forEach(el => {
-            arrNameSens.push([el[1].n, el[1].p])
-        })
-        const allArr = rez.map((el) => {
-            return arrNameSens.reduce((acc, it, index) => {
-                acc.push([...it, Object.values(el)[index]])
-                return acc
-            }, [])
-        })
-        return allArr
-    }
-    else {
-        return
-    }
-}*/
 
 async function updateParams(data, kursor) {
     console.time('updatedata')
@@ -270,7 +149,7 @@ async function updateParams(data, kursor) {
     });
 
     const res = await constorller.dataSpisok()
-    zaprosSpisokb(nameCar, res)
+    zaprosSpisokb(nameCar, res) //создание и подготовка структуры для проверки на аларм
     const kursorObjects = await kursorService.getKursorObjects()
     const dataAll = res.concat(kursorObjects)
 
@@ -289,27 +168,16 @@ async function updateParams(data, kursor) {
         await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
             databaseService.summaryToBase(idw, arrayInfo, datas)
         ));
-        //  hunterTime(dataAll)
     }
 
     console.timeEnd('updatedata')
     return 'updateData end'
 }
 
-const hunterTime = async (res) => {
-    const now = new Date();
-    const nowUnix = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime() / 1000);
-    const previousDayUnix = nowUnix;
-    const previousDayEndUnix = Math.floor(new Date(now).getTime() / 1000);
-    structura.datas(res, previousDayEndUnix, previousDayUnix)
-};
-
 async function zaprosSpisokb(name, res) {
     const massItog = [];
-
     const tyreResPromises = name.map(item => queryDB(`SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE idw='${item[1]}'`));
     const tyreResults = await Promise.all(tyreResPromises);
-
     for (let i = 0; i < name.length; i++) {
         const nameCar = name[i][0];
         const tyreRes = tyreResults[i];
@@ -318,24 +186,20 @@ async function zaprosSpisokb(name, res) {
             continue;
         }
         const modelUniqValues = convert(tyreRes);
-        const paramsRes = await queryDB(`SELECT name, value FROM params WHERE idw='${name[i][1]}' AND port='${name[i][4]}'`);
         const osiRes = await queryDB(`SELECT * FROM ifBar WHERE idw='${name[i][1]}'`);
-
-        paramsRes.forEach(el => {
-            modelUniqValues.forEach(model => {
-                if (el.name === model.pressure) {
-                    const integer = nameCar === 'А652УА198' ? parseFloat((el.value / 10).toFixed(1)) : el.value;
-                    const osiBar = osiRes.find(osi => osi.idOs === model.osNumber);
-
-                    const tempParam = paramsRes.find(param => param.name === model.temp);
-                    if (tempParam) {
-                        massItog.push([nameCar, model.pressure, parseFloat(integer), parseFloat(tempParam.value), osiBar, name[i][1], name[i][2], name[i][3]]);
-                    }
+        const paramsRes = await queryDB(`SELECT params, value FROM sens_stor_meta WHERE idw='${name[i][1]}' AND port='${name[i][4]}'`);
+        for (const model of modelUniqValues) {
+            const param = paramsRes.find(el => el.params === model.pressure);
+            if (param) {
+                const osiBar = osiRes.find(osi => osi.idOs === model.osNumber);
+                const tempParam = paramsRes.find(el => el.params === model.temp);
+                if (tempParam) {
+                    massItog.push([nameCar, model.pressure, parseFloat(param.value), parseFloat(tempParam.value), osiBar, name[i][1], name[i][2], name[i][3]]);
                 }
-            });
-        });
+            }
+        }
     }
-    proverka(massItog);
+    proverka(massItog); //проверка на аларм
 }
 const queryDB = async (sql) => {
     try {

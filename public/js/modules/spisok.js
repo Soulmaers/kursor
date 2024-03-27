@@ -627,7 +627,7 @@ function coloring(shina, nameCar, params, arg, osi, engine) {
             if (matchingItem) {
                 const matchingTyre = [...shina].find(e => e.id == matchingItem.tyresdiv);
                 if (matchingTyre) {
-                    const integer = nameCar == 'А652УА198' ? parseFloat((el.value / 10).toFixed(1)) : el.value;
+                    const integer = el.value;
                     const backgroundStyle = engine === 0 || engine === null ? '#000' : el.status === 'false' ? 'gray' :
                         integer !== null ? objColorFront[generDav(integer, osi.result.find(it => it.idOs == matchingItem.osNumber))] : null
                     matchingTyre.children[0].style.fill = backgroundStyle

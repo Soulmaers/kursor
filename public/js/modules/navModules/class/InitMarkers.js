@@ -1,5 +1,5 @@
 import { visual } from '../../visual.js'
-
+import { dataInfo } from '../../paramsTyresView.js'
 
 export class InitMarkers {
     static markers = {}; // Хранилище для маркеров
@@ -219,9 +219,9 @@ export class InitMarkers {
     }
 
     async lastTravelTrek(event) {
-        let nowDate = Math.round(new Date().getTime() / 1000);
+        let t2 = Math.round(new Date().getTime() / 1000);
         let nDate = new Date();
-        let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
+        let t1 = Math.round(nDate.setHours(nDate.getHours() - 12) / 1000);
         const idw = event.target.id;
         const marker = InitMarkers.markers[idw];
         marker.isTrackActive = !marker.isTrackActive;
@@ -233,14 +233,12 @@ export class InitMarkers {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: (JSON.stringify({ nowDate, timeFrom, idw }))
+                body: (JSON.stringify({ idw, t1, t2 }))
             }
-            const geoTest = await fetch('/api/geoloc', params)
-            const geoCard = await geoTest.json();
-            const coordinates = geoCard.resTrack.reduce((acc, el) => {
-                acc.push([el[0], el[1]])
-                return acc
-            }, [])
+            const trek = await fetch('/api/geoLastInterval', params)
+            const inTrek = await trek.json();
+            const coordinates = inTrek.resTrack.map(e => [e[0], e[1]])
+
             if (InitMarkers.polyMode[idw]) {
                 InitMarkers.polyMode[idw].setLatLngs(coordinates);
             }

@@ -5,7 +5,6 @@ import { testovfn } from './charts/bar.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { dataInfo } from './paramsTyresView.js'
 
-
 const login = document.querySelectorAll('.log')[1].textContent
 let isProcessing = false
 export async function alarmFind() {
@@ -96,25 +95,15 @@ async function viewAlarmStorage(name, stor) {
         'Если нажать красный маркер карты, то на карте отразится место события с переданными туда данными']);
 
     const active = document.querySelector('.color')
-    const data = [active.id]
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: (JSON.stringify({ data }))
-    }
-    const sens = await fetch('/api/getSensorsWialonToBase', param)
-    const allsens = await sens.json()
 
-    console.log(allsens)
+    const [allsens, ,] = dataInfo
     result.forEach(el => {
         el.forEach(it => {
-            const sensName = allsens.find(obj => obj.param_name === it.senspressure);
+            const sensName = allsens.find(obj => obj.params === it.senspressure);
             if (!sensName) {
                 return;
             }
-            it.senspressure = sensName.sens_name;
+            it.senspressure = sensName.sens;
 
             const tr = document.createElement('div');
             tr.classList.add('tr');
@@ -404,7 +393,7 @@ async function geoMarker(time, idw, tr) {
     const trackAlarm = newGlobal.map(it => {
         return it.geo
     })
-    console.log(trackAlarm);
+    console.log(newGlobal);
     const nameCar = document.querySelector('.color').children[0].textContent
     const alarm = {
         car: nameCar,
@@ -415,10 +404,10 @@ async function geoMarker(time, idw, tr) {
         alarm: tr.children[4].textContent,
     }
     const geo = {
-        geoX: geoCard[geoCard.length - 1].geo[1],
-        geoY: geoCard[geoCard.length - 1].geo[0],
+        geoX: newGlobal[newGlobal.length - 1].geo[1],
+        geoY: newGlobal[newGlobal.length - 1].geo[0],
         info: alarm,
-        speed: geoCard[geoCard.length - 1].speed
+        speed: newGlobal[newGlobal.length - 1].speed
     }
     createMapsUniq(trackAlarm, geo, 'alarm')
 }

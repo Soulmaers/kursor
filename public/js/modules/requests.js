@@ -182,18 +182,6 @@ export async function changeBase(massModel, activePost, idw, type, go, go1, goCa
     const checkAlt = document.getElementById('check_Title')
     checkAlt.checked = false
     clearConfig()
-    //  loadParamsView()
-    /*   const par = {
-           method: "POST",
-           headers: {
-               'Content-Type': 'application/json',
-           },
-           body: (JSON.stringify({ idw }))
-       }
-       const zapuskUp = await fetch('/api/up', par)
-       console.log(zapuskUp)*/
-    //  zapros(login);
-
 }
 
 

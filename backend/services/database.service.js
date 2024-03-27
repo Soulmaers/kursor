@@ -327,13 +327,6 @@ exports.objectsWialonImei = async (imei) => {
 }
 
 exports.getMeta = async (idObject, port, imei) => {
-    console.log(idObject, port, imei)
-    console.log('дата')
-    //const data = await databaseService.objectId(idObject);
-    // if (data.length === 0) {
-    // return [];
-    //   }
-    // const port = data[0].port;
     let table;
     if (port === '20163') {
         table = 'wialon_retranslation';
@@ -739,65 +732,6 @@ exports.setObjectGroupWialon = async (objects) => {
 
 }
 
-/* exports.setObjectGroupWialon = async (objects) => {
-    try {
-        const pool = await connection;
-        // Получение всех idObject сразу
-        const allObjectsResult = await pool.request().input('login', objects[0].login).query('SELECT idObject FROM wialon_groups WHERE login=@login');
-        const allObjects = allObjectsResult.recordset.map(rec => rec.idObject);
-
-        for (const el of objects) {
-            // Проверка на существование без дополнительного запроса
-            if (!allObjects.includes(el.idObject)) {
-                // Вставка новых записей
-                await pool.request()
-                    .input('login', el.login)
-                    .query(`INSERT INTO wialon_groups (...) VALUES (...)`);
-            } else {
-                // Обновление существующих записей
-                await pool.request()
-                    .input('login', el.login)
-                    .query(`UPDATE wialon_groups SET ... WHERE login=@login AND idObject=@idObject`);
-            }
-        }
-        return 'Объекты обновлены';
-    } catch (e) {
-        console.log(e);
-        return 'Ошибка обновления объектов';
-    }
-};*/
-exports.getSensorsWialonToBase = async (arr) => {
-    try {
-        const pool = await connection;
-        if (arr && arr.length > 0) {
-            const post = `SELECT sens_name, param_name,idw, value, data FROM wialon_sensors WHERE idw IN (${arr.map(id => `'${id.id ? id.id : id}'`).join(',')})`;
-            //console.log(post)
-            const result = await pool.request()
-                .query(post);
-            //  console.log(result.recordset)
-            return result.recordset
-        }
-        else {
-            return []
-        }
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-
-exports.getSensorsWialonToBaseId = async (idw) => {
-    try {
-        const pool = await connection;
-        const post = `SELECT sens_name, param_name,idw, value FROM wialon_sensors WHERE idw=@idw`;
-        const result = await pool.request()
-            .input('idw', idw)
-            .query(post);
-        return result.recordset
-    } catch (error) {
-        console.log(error)
-    }
-}
 exports.getSensStorMeta = async (idw) => {
     try {
         const pool = await connection;
@@ -1078,58 +1012,6 @@ exports.setSensStorMeta = async (data) => {
         return 'Массив пуст'
     }
 }
-
-/*
-exports.setSensorsWialonToBase = async (login, idw, arr) => {
-    // console.log(login, idw, arr)
-    const data = Math.floor(new Date().getTime() / 1000)
-    try {
-        const pool = await connection;
-        if (arr.length > 0) {
-            for (const entry of arr) {
-                const [sens_name, param_name, value] = entry;
-
-                const post = `SELECT * FROM wialon_sensors WHERE login=@login AND idw=@idw AND sens_name=@sens_name`
-                const res = await pool.request()
-                    .input('sens_name', sens_name)
-                    .input('login', login)
-                    .input('idw', String(idw))
-                    .query(post);
-                if (res.recordset.length === 0) {
-                    const insertQuery = `INSERT INTO wialon_sensors (data,sens_name, param_name, value, idw, login) VALUES (@data, @sens_name, @param_name, @value, @idw,@login)`;
-                    const res = await pool.request()
-                        .input('sens_name', sens_name)
-                        .input('param_name', param_name)
-                        .input('value', value)
-                        .input('login', login)
-                        .input('idw', String(idw))
-                        .input('data', data)
-                        .query(insertQuery);
-                }
-                else {
-                    const updateQuery = `UPDATE wialon_sensors SET data=@data, sens_name=@sens_name, param_name=@param_name, value=@value WHERE login=@login AND idw=@idw AND sens_name=@sens_name`;
-                    const res = await pool.request()
-                        .input('sens_name', sens_name)
-                        .input('param_name', param_name)
-                        .input('value', String(value))
-                        .input('login', login)
-                        .input('idw', String(idw))
-                        .input('data', data)
-                        .query(updateQuery);
-                }
-
-            }
-            return 'выполнено'
-        }
-        else {
-            return 'массив для записи пуст'
-        }
-
-    }
-    catch (e) {
-        console.log(e)
-    }
-}*/
 
 exports.uniqImeiAndPhone = async (col, value, table, login, id) => {
     console.log(col, value, table, login, id)
@@ -1544,7 +1426,7 @@ exports.deleteGroupToBaseGroups = async (login, id) => {
     console.log(login, id)
     try {
         const pool = await connection
-        const post = `DELETE groups WHERE login=@login AND idg =@id OR login=@LOGIN AND id_sub_g=@id`
+        const post = `DELETE groups WHERE login=@login AND idg =@id OR login=@login AND id_sub_g=@id`
         const result = await pool.request()
             .input('login', login)
             .input('id', id)
@@ -1648,50 +1530,9 @@ exports.lostChartDataToBase = async (idw) => {
     }
 };
 
-exports.saveStatusToBase = async (activePost, idw, todays, statusTSI, todays2, status) => {
-    if (!status) return;
 
-    try {
-        let postModel = `SELECT * FROM statusObj WHERE idw=@idw`;
-        const pool = await connection;
-        let results = await pool.request().input('idw', sql.NVarChar, String(idw)).query(postModel);
-        // console.log(results.recordset)
-        if (results.recordset.length === 0) {
-            const selectBase = `INSERT INTO statusObj(idw, nameCar, time, status, timeIng, statusIng) VALUES (@idw, @nameCar, @time, @status, @timeIng, @statusIng)`;
-            await pool.request()
-                .input('idw', String(idw))
-                .input('nameCar', activePost)
-                .input('time', todays)
-                .input('status', statusTSI)
-                .input('timeIng', todays2)
-                .input('statusIng', status)
-                .query(selectBase);
-        }
-        else {
-            if (results.recordset[0].status !== statusTSI) {
-                postModel = `UPDATE statusObj SET time=@todays, status=@statusTSI WHERE idw=@idw`;
-                await pool.request()
-                    .input('todays', sql.NVarChar, String(todays))
-                    .input('statusTSI', sql.NVarChar, statusTSI)
-                    .input('idw', sql.VarChar, String(idw))
-                    .query(postModel);
-            }
-            if (results.recordset[0].statusIng !== status) {
-                postModel = `UPDATE statusObj SET timeIng=@todays2, statusIng=@status WHERE idw=@idw`;
-                await pool.request()
-                    .input('todays2', sql.NVarChar, String(todays2))
-                    .input('status', sql.NVarChar, status)
-                    .input('idw', sql.VarChar, String(idw))
-                    .query(postModel);
-            }
-        }
-    }
-    catch (e) {
-        console.log(e);
-        throw e;
-    }
-};
 
+/*
 exports.ggg = async (id) => {
     console.log('ggg')
     return new Promise(async function (resolve, reject) {
@@ -1722,11 +1563,10 @@ exports.ggg = async (id) => {
         }
         resolve(allobj)
     });
-}
+}*/
 
 //сохраняем в базу
 exports.alarmBase = async (data, tyres, alarm) => {
-    console.log(data, tyres, alarm)
     console.log('данные по алармам')
     const dannie = data.concat(tyres)
     let val;
@@ -2331,7 +2171,7 @@ exports.tarirSaveToBase = async (arr) => {
     })
 }
 
-module.exports.saveToBaseProfil = async (mass) => {
+module.exports.saveToBaseProfil = async (mass) => { //сохранение контактов
     try {
         const pool = await connection;
         const postModel = `INSERT INTO profil (uniqId, login, role, email, phone) VALUES (@uniqId,@login,@role,@email,@phone)`;
@@ -2347,7 +2187,7 @@ module.exports.saveToBaseProfil = async (mass) => {
         console.log(err);
     }
 };
-module.exports.deleteToBaseProfil = async (uniqId) => {
+module.exports.deleteToBaseProfil = async (uniqId) => { //удаление контактов
     const pool = await connection;
     try {
         const selectBase = `DELETE FROM profil WHERE uniqId =@uniqId`;
@@ -2361,7 +2201,7 @@ module.exports.deleteToBaseProfil = async (uniqId) => {
 }
 
 
-module.exports.findToBaseProfil = async (login) => {
+module.exports.findToBaseProfil = async (login) => { //получение контактов
     try {
         const postModel = `SELECT * FROM profil WHERE login='${login}'`
         const pool = await connection

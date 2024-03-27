@@ -13,6 +13,7 @@ export class OilCharts {
         this.width = null
         this.height = null
         this.chartGroup = null
+        this.parametr = null
         this.x = null
         this.y1 = null
         this.y2 = null
@@ -106,7 +107,7 @@ export class OilCharts {
         const selectedTime = this.timeConvert(d.time)
         // Отображаем подсказку с координатами и значениями по оси y
         let oilTool;
-        d.oil === 0 ? oilTool = 'Нет данных' : oilTool = d.oil
+        +d[this.parametr] === 0 ? oilTool = 'Нет данных' : oilTool = +d[this.parametr]
         this.tooltip
             .style("left", `${xPosition + 100}px`)
             .style("top", `${yPosition + 100}px`)
@@ -179,7 +180,8 @@ export class OilCharts {
     }
 
     createBodyCharts() {
-        console.log(this.height)
+        const parametr = this.data[this.data.length - 1].summatorOil ? 'summatorOil' : 'oil'
+        this.parametr = parametr
         // задаем x-шкалу
         const x = d3.scaleTime()
             .domain(d3.extent(this.data, (d) => new Date(d.time)))
@@ -187,7 +189,7 @@ export class OilCharts {
         this.x = x
         // задаем y-шкалу для первой оси y
         const y1 = d3.scaleLinear()
-            .domain([0, d3.max(this.data, (d) => d.oil)])
+            .domain([0, d3.max(this.data, (d) => +d[parametr] || 0)])
             .range([(this.height - 40), 0]);
         this.y1 = y1
         // задаем y-шкалу для второй оси y
@@ -201,7 +203,7 @@ export class OilCharts {
 
         const line1 = d3.line()
             .x((d) => x(new Date(d.time)))
-            .y((d) => y1(d.oil))
+            .y((d) => y1(+d[parametr] || 0))
             .curve(d3.curveStepAfter);
         const line2 = d3.line()
             .x((d) => x(new Date(d.time)))
@@ -211,7 +213,7 @@ export class OilCharts {
         const area1 = d3.area()
             .x(d => x(new Date(d.time)))
             .y0(this.height)
-            .y1(d => y1(d.oil))
+            .y1(d => y1(+d[parametr] || 0))
             .curve(d3.curveStepAfter);
 
         const area2 = d3.area()
@@ -355,7 +357,7 @@ export class OilCharts {
         // Обновляем пути линий и областей
         const updateLine1 = d3.line()
             .x((d) => new_xScale(new Date(d.time)))
-            .y((d) => this.y1(d.oil))
+            .y((d) => this.y1(+d[parametr] || 0))
             .curve(d3.curveStepAfter);
 
         const updateLine2 = d3.line()
@@ -366,7 +368,7 @@ export class OilCharts {
         const updateArea1 = d3.area()
             .x(d => new_xScale(new Date(d.time)))
             .y0(this.height)
-            .y1(d => this.y1(d.oil))
+            .y1(d => this.y1(+d[parametr] || 0))
             .curve(d3.curveStepAfter);
 
         const updateArea2 = d3.area()
@@ -646,7 +648,7 @@ export class OilCharts {
                 curse: Number(it.course),
                 sats: Number(it.sats),
                 engineOn: Number(it.engineOn),
-                summatorOil: it.summatorOil ? Number(it.summatorOil) : null
+                summatorOil: it.summatorOil ? Number(it.summatorOil) : 0
             }
         })
         newGlobal.sort((a, b) => a.time - b.time)

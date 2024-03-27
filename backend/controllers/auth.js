@@ -7,7 +7,7 @@ const databaseService = require('../services/database.service');
 const { connection, sql } = require('../config/db')
 
 
-module.exports.update = async (req, res) => {
+module.exports.update = async (req, res) => { //обновление пользовательских данных
     const id = req.body.idx
     const login = req.body.log
     const roleNew = req.body.role
@@ -27,7 +27,7 @@ module.exports.update = async (req, res) => {
     }
 }
 
-module.exports.delete = async (req, res) => {
+module.exports.delete = async (req, res) => { //удаление пользователя
     const pool = await connection;
     try {
 
@@ -49,7 +49,7 @@ module.exports.delete = async (req, res) => {
 
 
 
-module.exports.users = async (req, res) => {
+module.exports.users = async (req, res) => { //получение данных пользователей
     console.log('запрос пришел')
     try {
         const pool = await connection
@@ -62,26 +62,26 @@ module.exports.users = async (req, res) => {
     }
 }
 
-exports.saveProfil = async (req, res) => {
+exports.saveProfil = async (req, res) => { //сохранение контактов
     const mass = req.body.mass
     const params = await databaseService.saveToBaseProfil(mass)
     res.json(params)
 }
 
-exports.findProfil = async (req, res) => {
+exports.findProfil = async (req, res) => { //получение контактов
     const login = req.body.login
     const params = await databaseService.findToBaseProfil(login)
     res.json(params)
 }
 
-exports.deleteProfil = async (req, res) => {
+exports.deleteProfil = async (req, res) => { //удаление контактов
     const uniqId = req.body.uniqId
     const params = await databaseService.deleteToBaseProfil(uniqId)
     res.json(params)
 }
 
 
-module.exports.signup = async function (req, res) {
+module.exports.signup = async function (req, res) { //сохранение учетных данных нового пользователя
     const { login, pass, role, idx } = req.body;
     try {
         const pool = await connection
@@ -120,11 +120,11 @@ module.exports.signup = async function (req, res) {
 };
 
 
-module.exports.page = async function (req, res) {
+module.exports.page = async function (req, res) { //получение страницы с формой авторизации
     res.render('form.ejs', { message: '' });
 }
 
-module.exports.sing = async function (req, res) {
+module.exports.sing = async function (req, res) { //авторизация
     try {
         const pool = await connection
         const result = await pool.query(`SELECT idx, name, password FROM users WHERE name='${req.body.username}'`);
@@ -154,7 +154,7 @@ module.exports.sing = async function (req, res) {
     }
 }
 
-module.exports.action = function (req, res) {
+module.exports.action = function (req, res) { //получение стартовой страницы приложения после авторизации
     console.log('экшион')
     if (req.user) {
         const login = req.user.name
@@ -162,7 +162,7 @@ module.exports.action = function (req, res) {
         const device = req.headers['user-agent'];
         const platform = req.headers['sec-ch-ua-platform']
         const ip = req.ip
-        logLogin(login, ip, platform, device)
+        logLogin(login, ip, platform, device) //сохранение логов входа пользователя
         res.render('in.ejs', {
             user: login,
             role: role
@@ -197,12 +197,12 @@ function logLogin(username, ip, platform, device) {
 
 
 
-module.exports.logout = async function (req, res, next) {
+module.exports.logout = async function (req, res, next) { //получение страницы с формой авторизации при выходе
     res.redirect('/');
 }
 
 
-module.exports.checkObject = async (req, res) => {
+module.exports.checkObject = async (req, res) => { //сохранение, удаление, обновление объектов wialon пользователя
     const { login, role, objects } = req.body;
     try {
         const pool = await connection;
@@ -232,7 +232,7 @@ module.exports.checkObject = async (req, res) => {
 
     }
 }
-module.exports.viewCheckObject = async (req, res) => {
+module.exports.viewCheckObject = async (req, res) => { //получение названий и id объектов wialon пользователя
     const login = req.body.name
     try {
         const pool = await connection

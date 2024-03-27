@@ -26,6 +26,7 @@ export class PressureCharts {
         }
         isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
         this.data = await this.createStructura()
+        console.log(this.data)
         if (this.data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')
@@ -657,7 +658,7 @@ export class PressureCharts {
             const loaders = document.querySelector('.loaders_charts')
             loaders.style.display = 'none';
             isCanceled = false;
-            return
+            return []
         }
         document.querySelector('.noGraf').style.display = 'none'
 

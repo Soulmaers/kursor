@@ -55,14 +55,14 @@ module.exports.logsView = async (req, res) => {
     res.json({ itog: valnew.length, quant: quant, view: val })
 }
 
-/*
+
 module.exports.logsViewId = async (req, res) => {
     const idw = req.body.idw
     const t1 = req.body.nowDate
     const t2 = req.body.timeFrom
     const itog = await databaseService.logsFindToBaseId(t1, t2, idw) //получение логов за интервал времени
     res.json(itog)
-}*/
+}
 
 module.exports.alarmViewId = async (req, res) => {
     const idw = req.body.idw
@@ -74,11 +74,11 @@ module.exports.alarmViewId = async (req, res) => {
 module.exports.saveEvent = async (req, res) => {
     const login = req.body.login
     const obj = req.body.objEvent
-    const itog = await databaseService.eventSaveToBase(login, obj)
+    const itog = await databaseService.eventSaveToBase(login, obj) //сохранение настроек уведомлений
     res.json({ itog })
 }
 module.exports.viewEvent = async (req, res) => {
     const login = req.body.login
-    const itog = await databaseService.eventFindToBase(login)
+    const itog = await databaseService.eventFindToBase(login) //получение настроек уведомлений
     res.json({ itog })
 }
