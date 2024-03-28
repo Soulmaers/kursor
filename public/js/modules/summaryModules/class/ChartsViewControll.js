@@ -1,5 +1,5 @@
 
-import { initSummary } from '../../spisok.js'
+import { initSummary } from '../../SpisokObject.js'
 
 export class ChartsViewControll {
     constructor() {

@@ -3,7 +3,7 @@
 import { conturTest } from './modules/spisok.js'
 import { checkCreate } from './modules/admin.js'
 import { logsView } from './modules/popup.js'
-
+import { SpisokObject } from './modules/SpisokObject.js'
 export let app;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,6 +22,7 @@ export class Application {
         this.login = login //получаем логин пользователя
         this.dataspisok = false //флаг загрузки
         this.logsInterval = null; // Инициализация свойства для хранения интервала
+        this.spisok = null
         this.init()  //основной метод который запускает стартовые методы загрузки данных на страницу
     }
     // Методы класса Application
@@ -41,7 +42,13 @@ export class Application {
             const loaders = document.querySelector('.loaders');
             loaders.style.display = 'none'
         }
-        await conturTest(data) //отрисовка списка и статусов списка, будет переписано на класс
+        if (this.spisok) {
+            this.spisok.updateData(data)
+        }
+        else {
+            this.spisok = new SpisokObject(data)
+        }
+        //  await conturTest(data) //отрисовка списка и статусов списка, будет переписано на класс
         if (elem) {
             const list = document.querySelectorAll('.listItem')
             const el = [...list].find(el => el.id === elem)
