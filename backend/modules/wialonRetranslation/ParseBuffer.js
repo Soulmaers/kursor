@@ -1,6 +1,6 @@
 const { net } = require('../../../index')
 const databaseService = require('../../services/database.service');
-const helpers = require('../../helpers');
+const helpers = require('../../services/helpers');
 const JobToBase = require('../navtelecom/JobToBase')
 class ListenPortTPNew {
     constructor(port) {

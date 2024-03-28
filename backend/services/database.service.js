@@ -2,7 +2,7 @@
 const { connection, sql } = require('../config/db')
 const databaseService = require('./database.service');
 const wialonService = require('./wialon.service.js')
-const helpers = require('../helpers.js')
+const helpers = require('./helpers.js')
 const send = require('./send.service.js');
 const { y } = require('pdfkit');
 

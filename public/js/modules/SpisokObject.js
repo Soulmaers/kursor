@@ -34,17 +34,17 @@ export class SpisokObject {
         this.findDomElement()  //поиск и удаление старых элементов
         this.createListObjectAndGroup() //создание списка групп и объектов на страницы
         this.sensorsName = true
-        await this.viewList(this.login)
         const toggleList = new ToggleHiddenList()
         toggleList.init()
         this.lastSensor = true
         initSummary = new SummaryViewControll(this.allId)
         initCharts = new ChartsViewControll()
         initCharts.getDataSummary()
+        await this.viewList(this.login)
         this.validRole()
         navigator();
         this.finishload = true
-        setInterval(this.zaprosSpisok, 100000)
+        setInterval(this.zaprosSpisok.bind(this), 100000)
     }
 
     simulateLoader() {
@@ -222,7 +222,7 @@ export class SpisokObject {
         }
         const listsr = await fetch('/api/spisokList', param)
         const spisoks = await listsr.json()
-        list.forEach(async el => {
+        list.forEach(el => {
             const idw = el.id
             const spisok1 = spisoks.res.filter(e => {
                 if (e.idw === Number(idw)) {
@@ -234,7 +234,7 @@ export class SpisokObject {
             this.viewListKoleso(spisok[0], spisok[1], spisok[2], spisok[3], el, data)
         })
     }
-    async viewListKoleso(model, params, arg, osi, nameCar, data) {
+    viewListKoleso(model, params, arg, osi, nameCar, data) {
         const idw = parseFloat(nameCar.id)
         const engineValue = data.find(i => i[1] === 'engine' && i[2] === idw);
         const engine = engineValue ? Number(engineValue[3]) : null;
@@ -243,8 +243,8 @@ export class SpisokObject {
         const statusnew = sats ? sats > 4 && engine === 1 ? 'ВКЛ' : 'ВЫКЛ' : null
         const type = model.result && model.result.length !== 0 ? model.result[0].type : undefined
         const shina = nameCar.querySelectorAll('.arc');
-        coloring(shina, nameCar, params, arg, osi, engine)
-        updateIconsSensors(data, idw, nameCar, statusnew, sats, type, engine)
+        this.coloring(shina, nameCar, params, arg, osi, engine)
+        this.updateIconsSensors(data, idw, nameCar, statusnew, sats, type, engine)
     }
     viewList = async (login) => {
         const param = {

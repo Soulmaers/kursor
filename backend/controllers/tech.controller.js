@@ -27,4 +27,10 @@ exports.summaryYestoday = async (req, res) => {
     const result = await databaseService.summaryYestodayToBase(data, arrayId) //получение статистики по объектам за интервал
     res.json(result)
 }
+exports.summaryIdwToBase = async (req, res) => { //получение статистики по объекту за интервал
+    const data = req.body.data
+    const idw = req.body.idw
+    const result = await databaseService.sumIdwToBase(data, idw)
+    res.json(result)
+}
 

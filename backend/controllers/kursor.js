@@ -3,7 +3,7 @@
 const databaseService = require('../services/database.service');
 //const ips = require('../../index');
 
-const { sortData } = require('../helpers')
+const { sortData } = require('../services/helpers')
 
 exports.getKursorObjects = async (req, res) => {
     const login = req && req.body && req.body.login ? req.body.login : null

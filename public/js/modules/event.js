@@ -9,7 +9,10 @@ import { rotate, zbor } from './rotate.js'
 import { clearElem } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 import { Tooltip } from '../class/Tooltip.js'
-import { Flash, CloseBTN, ResizeContainer } from '../class/Flash.js'
+
+import { Flash, CloseBTN } from '../class/Flash.js'
+
+import { ResizeContainer } from '../class/ResizeContainer.js'
 import { protDash, dashViewProtector } from './charts/protek.js'
 import { getStat } from './charts/stat.js'
 
@@ -19,7 +22,8 @@ import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 import { draggable } from './filtersList.js'
 import { storTitleList } from './content.js'
 import { filterCondition } from './filtersList.js'
-import { initCharts, initSummary } from './spisok.js'
+//import { initCharts, initSummary } from './spisok.js'
+import { initCharts, initSummary } from './SpisokObject.js'
 import { CreateNewObject } from './propertyObjectModules/class/CreateNewObject.js'
 import { CreateNewGroup } from './propertyObjectModules/class/CreateNewGroup.js'
 
@@ -41,10 +45,14 @@ const role = document.querySelector('.role')
 const logout = document.querySelector('.logoutIcon')
 const create = document.querySelector('.create_object')
 const search = document.querySelector('.loop_find')
+
+console.log('эвент')
+
 new Flash()
-
-
 new ResizeContainer(sec, start, secondFlash[0])
+
+
+
 mainMenu.addEventListener('click', (event) => {
     event.stopPropagation();
     new CloseBTN(menu, mainMenu)
@@ -204,7 +212,6 @@ logo.addEventListener('click', () => {
     start.style.width = 100 + '%'
     sections.style.display = 'flex'
     color ? color.classList.remove('color') : null
-
     initSummary.clickListUpdateSummary()
     initCharts.getDataSummary()
 })

@@ -2,7 +2,7 @@
 const databaseService = require('../../services/database.service');
 const JobToBase = require('../navtelecom/JobToBase')
 const wialonService = require('../../services/wialon.service.js')
-const helpers = require('../../helpers');
+const helpers = require('../../services/helpers.js');
 const globalstart = require('../../controllers/data.controller.js');
 class WialonOrigin {
     constructor(session) {

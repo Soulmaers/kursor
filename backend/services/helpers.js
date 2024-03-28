@@ -1,5 +1,5 @@
-const databaseService = require('./services/database.service');
-exports.createDate = () => {
+const databaseService = require('./database.service');
+exports.createDate = () => {   //форматироваие даты
     let today = new Date();
     const year = today.getFullYear();
     const month = (today.getMonth() + 1) < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
@@ -14,12 +14,12 @@ exports.createDate = () => {
 
 }
 
-exports.convert = (ob) => {
+exports.convert = (ob) => {  //фильтрация уникальных элементов
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
     return Array.from(uniq).map(e => JSON.parse(e));
 }
 exports.getDataToInterval = async (active, t1, t2) => {
-    const resnew = await databaseService.geoLastInterval(t1, t2, active)
+    const resnew = await databaseService.geoLastInterval(t1, t2, active)  //получение параметров за интервал
     const meta = ['idw', 'data', 'lat', 'lon', 'speed', 'sats', 'geo', 'oil', 'course', 'pwr', 'engine', 'mileage', 'engineOn', 'last_valid_time']
     const arrayData = resnew.map(e => {
         return Object.keys(e).reduce((acc, key) => {
@@ -33,7 +33,7 @@ exports.getDataToInterval = async (active, t1, t2) => {
 }
 
 
-exports.timefn = () => {
+exports.timefn = () => { //форматирование интервала времени с 0 часов
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     const startOfTodayUnix = Math.floor(currentDate.getTime() / 1000);
@@ -42,7 +42,7 @@ exports.timefn = () => {
     const timeOld = startOfTodayUnix
     return [timeNow, timeOld]
 }
-exports.format = (data) => {
+exports.format = (data) => {  //форматирование структуры данных
     const resultData = data.flat().flatMap(el => {
         let res = [Number(el[4]), el[0].message, el[6], el[el.length - 1]];
         if (el.length === 10 && el[8].sub && el[8].sub.length !== 0) {
@@ -55,10 +55,10 @@ exports.format = (data) => {
     return uniqueArr
 }
 
-exports.processing = async (arr, timez, idw, geoLoc, group, name, start) => {
+exports.processing = async (arr, timez, idw, geoLoc, group, name, start) => { // подготовка шаблона строки события
     const newdata = arr[0]
     let mess;
-    const res = await databaseService.dostupObject(idw)
+    const res = await databaseService.dostupObject(idw) //проверка наличия объекта в БД
     const event = newdata.event
     if (event === 'Заправка') {
         mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, litrazh: `${start}`, time: `${newdata.time}` }]
@@ -82,7 +82,7 @@ exports.processing = async (arr, timez, idw, geoLoc, group, name, start) => {
 }
 
 
-exports.sortData = (datas) => {
+exports.sortData = (datas) => {  // подготовка вложенности структуры групп и объектов
     //  console.log(datas)
     const res = Object.values(datas.reduce((acc, elem) => {
         if (!acc[elem.idg]) {
@@ -124,12 +124,12 @@ exports.sortData = (datas) => {
 }
 
 exports.setDataToBase = async (imei, port, info, id) => {
-    const data = await databaseService.getSensStorMetaFilter(imei, port, id)
+    const data = await databaseService.getSensStorMetaFilter(imei, port, id) //получение привязанных параметров
     if (data.length !== 0) {
         const idw = data[0].idw
-        const coefEngine = await databaseService.getValuePWRToBase(idw, 'engine')
-        const coefPWR = await databaseService.getValuePWRToBase(idw, 'pwr')
-        const coefMileage = await databaseService.getValuePWRToBase(idw, 'mileage')
+        const coefEngine = await databaseService.getValuePWRToBase(idw, 'engine') //получение порогового значения по зажиганию
+        const coefPWR = await databaseService.getValuePWRToBase(idw, 'pwr')  //получение порогового значения по питанию
+        const coefMileage = await databaseService.getValuePWRToBase(idw, 'mileage') //получение порогового значения по пробегу
         const now = new Date();
         const nowTime = Math.floor(now.getTime() / 1000);
         const lastObject = info[info.length - 1]
@@ -164,9 +164,9 @@ exports.setDataToBase = async (imei, port, info, id) => {
                     const dut = parseInt(propertyValue); // Преобразование строки в число
                     if (!isNaN(dut) && dut < 4100) { // Проверка, что результат преобразования - действительное число
                         const param = val.params
-                        const tarirData = await getTarirTableToBase(idw, param)
+                        const tarirData = await getTarirTableToBase(idw, param) //получение данных тарировочной таблицы по id и параметру
                         if (tarirData.length !== 0) {
-                            const sensOil = sortTarirOil(tarirData, dut); //  sortTarirOil - это функция, принимающая массив tarirData и число dut
+                            const sensOil = sortTarirOil(tarirData, dut); // тарировка ДУТа, получение топлива в литрах
                             value.forEach(e => {
                                 if (e.params === val.params) {
                                     e.value = String(sensOil)
@@ -179,7 +179,7 @@ exports.setDataToBase = async (imei, port, info, id) => {
         }
         const summator = data.find(e => e.params === 'summatorOil');
         if (summator && summator.meta === 'ON') {
-            const params = await databaseService.getSummatorToBase(idw)
+            const params = await databaseService.getSummatorToBase(idw) //получение параметров в сумматоре топлива
             if (params.length === 0) {
                 const objectToUpdate = value.find(e => e.params === 'summatorOil');
                 objectToUpdate.meta = 'OFF'
@@ -199,7 +199,9 @@ exports.setDataToBase = async (imei, port, info, id) => {
             objectToUpdate.data = nowTime
             objectToUpdate.status = 'true'
         }
-        await databaseService.setUpdateValueSensStorMeta(imei, port, value)
+        await databaseService.setUpdateValueSensStorMeta(imei, port, value)  //обновление значений привязанных параметров
+
+
         const tcpObject = info
         for (let elem of tcpObject) {
             const value = data.map(el => {
@@ -268,7 +270,7 @@ exports.setDataToBase = async (imei, port, info, id) => {
                     }, 0)
                     obj['summatorOil'] = String(summatorValue)
                 }
-                await databaseService.setAddDataToGlobalBase(obj)
+                await databaseService.setAddDataToGlobalBase(obj)  //запись отфильтрованных параметров и значений в накопительную таблицу датчиков
             }
         }
     }

@@ -42,6 +42,7 @@ router.post('/api/savePr', controllerTech.savePr)
 router.post('/api/techView', controllerTech.techView)
 router.post('/api/techViewAll', controllerTech.techViewAll)
 router.post('/api/summaryYestoday', controllerTech.summaryYestoday)
+router.post('/api/summaryIdwToBase', controllerTech.summaryIdwToBase)
 
 router.post('/api/generate', controllerModel.generate)
 router.get('/api/findId', controllerModel.findId)

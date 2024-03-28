@@ -3,9 +3,8 @@ const wialonService = require('../services/wialon.service.js')
 const databaseService = require('../services/database.service');
 const kursorService = require('./kursor.js')
 const statistika = require('../modules/statistika.module');
-const structura = require('../modules/structura.module.js')
 const events = require('../modules/events.module.js')
-const { createDate, convert, sortData } = require('../helpers')
+const { createDate, convert, sortData } = require('../services/helpers.js')
 const constorller = require('./data.controller.js')
 const { SummaryStatistiks } = require('../modules/statistika.module.js')
 require('dotenv').config();

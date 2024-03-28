@@ -1,7 +1,7 @@
 
 import { initsmarkers } from '../../navModules/karta.js'
 import { filterCondition } from '../../filtersList.js'
-import { initSummary, initCharts } from '../../spisok.js'
+import { initSummary, initCharts } from '../../SpisokObject.js'
 import { classReports } from '../../navModules/reports.js'
 import { NavigationMenu } from '../../navModules/NavigatorClass.js'
 import { Tooltip } from '../../../class/Tooltip.js'
@@ -320,59 +320,6 @@ export class ToggleHiddenList {
         }
     }
 
-    /*
-    statistikaObjectCar(final) {
-
-        const checkInList = document.querySelectorAll('.checkInList')
-        if (!final) {
-            let count = checkInList.length;
-            checkInList.forEach(e => {
-                if (e.classList.contains('changeColorCheck')) {
-                    count--
-                }
-            })
-            this.tableInfoCar.children[0].children[1].textContent = count
-        }
-        else {
-            const arrayStatus = [];
-            const newCelChange = document.querySelectorAll('.newCelChange')
-
-            const rely = Array.from(newCelChange).reduce((acc, el) => {
-                if (el.getAttribute('rel') === 'statusnew' && !el.children[0].classList.contains('toogleIcon')) {
-                    acc = acc + 1;
-                }
-                return acc;
-            }, 0);
-            let count = checkInList.length;
-            checkInList.forEach(e => {
-                if (e.classList.contains('changeColorCheck')) {
-                    count--
-                }
-            })
-
-            const statusCounts = final.reduce((acc, el) => {
-                if (el[0] === 'state' && el[3] === 1) {
-                    acc.move = (acc.move || 0) + 1;
-                }
-                if (el[0] === 'state' && el[3] === 2) {
-                    acc.pause = (acc.pause || 0) + 1;
-                }
-                if (el[0] === 'state' && el[3] === 0) {
-                    acc.stop = (acc.stop || 0) + 1;
-                }
-                return acc;
-            }, {});
-            arrayStatus.push(this.listItem.length)
-            arrayStatus.push(count);
-            arrayStatus.push(rely);
-            arrayStatus.push(statusCounts.move !== undefined ? statusCounts.move : 0)
-            arrayStatus.push(statusCounts.pause !== undefined ? statusCounts.pause : 0);
-            arrayStatus.push(statusCounts.stop !== undefined ? statusCounts.stop : 0);
-            Array.from(this.tableInfoCar.children[0].children).forEach((element, index) => {
-                element.textContent = arrayStatus[index]
-            });
-        }
-    }*/
     opasity(event) {
         initsmarkers ? initsmarkers.opasityMarkers(event.target.parentElement) : null
     }
@@ -383,6 +330,7 @@ export class ToggleHiddenList {
     toggleGlobalObjectMaps(event) {
         this.globalcheck.classList.toggle('changeGlobalCheck')
         const changeGlobalCheck = document.querySelector('.changeGlobalCheck')
+        console.log(changeGlobalCheck)
         if (changeGlobalCheck) {
             this.checkInList.forEach(e => {
                 e.classList.add('changeColorCheck')

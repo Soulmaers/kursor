@@ -1,7 +1,7 @@
 
 const { NavtelecomResponceData, CheckSumm, BitsCount, WriteFile } = require('./Helpers');
 const SendingCommandToTerminal = require('./SendingCommandToTerminal')
-const helpers = require('../../helpers');
+const helpers = require('../../services/helpers');
 const { net } = require('../../../index')
 
 class ListenPortTP {

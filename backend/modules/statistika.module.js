@@ -1,5 +1,5 @@
 const databaseService = require('../services/database.service');
-const helpers = require('../helpers.js')
+const helpers = require('../services/helpers.js')
 
 class SummaryStatistiks {
     constructor(object) {
@@ -15,16 +15,16 @@ class SummaryStatistiks {
 
     async init() {
         const idwArray = helpers.format(this.object)        // Запускаем все асинхронные операции одновременно и ждем их завершения
-        const dataPromises = idwArray.map(el => this.getSensorsAndParametrs(el[0], el[el.length - 1]));
+        const dataPromises = idwArray.map(el => this.getSensorsAndParametrs(el[0], el[el.length - 1])); //получение структуры данных по параметрам
         const dataResults = await Promise.allSettled(dataPromises);
         // Обрабатываем результаты асинхронных операций
         const strusturas = idwArray.map(([id, message, group, pref], index) => {
             const result = dataResults[index];
             const data = result.status === 'fulfilled' ? result.value : null;
             // Инициализация структуры объекта с дефолтными значениями
-            const strustura = this.initializeStrustura(id, message, group, 'Тест');
+            const strustura = this.initializeStrustura(id, message, group, 'Тест'); //подготовка шаблона структуры объекта
             if (data) {
-                this.fillStrusturaWithData(strustura, data, pref);
+                this.fillStrusturaWithData(strustura, data, pref); //наполнение структуры объектов суммирующими данными статистики
             }
             return strustura;
         })
@@ -36,24 +36,24 @@ class SummaryStatistiks {
     fillStrusturaWithData(strustura, data, pref) {
         const mileg = data.some(it => it.params === 'mileage' && it.value.length !== 0);
         if (mileg) {
-            this.probeg = this.calculationMileage(data);
+            this.probeg = this.calculationMileage(data); //получение статистики по пробегу
             strustura.probeg = this.probeg;
-            strustura.job = this.calculationJobTs(data);
+            strustura.job = this.calculationJobTs(data); //получение статистики по объектам в работе
 
         }
         const oil = data.some(it => it.params === 'oil' && it.value.length !== 0);
         if (oil && pref !== 'kursor') {
-            const [rashod, zapravka] = this.calculationOil(data);
+            const [rashod, zapravka] = this.calculationOil(data); //получение статистики по заправкам и расходам
             strustura.rashod = rashod;
             strustura.zapravka = zapravka;
-            strustura.medium = this.calculationMedium(rashod);
+            strustura.medium = this.calculationMedium(rashod); //получение статистики по среднему расходу
         }
         const engineOn = data.some(it => it.params === 'engineOn' && it.value.length !== 0)
         if (engineOn) {
             const engineOn = data.filter(it => it.params === 'engineOn').map(it => it);
-            const prostoys = this.calculateDuration(engineOn, 'prostoy');
+            const prostoys = this.calculateDuration(engineOn, 'prostoy'); //получение статистики по простоям
             strustura.prostoy = prostoys !== undefined ? prostoys : 0;
-            const motos = this.calculateDuration(engineOn, 'motos');
+            const motos = this.calculateDuration(engineOn, 'motos'); //получение статистики по времени работы
             strustura.moto = motos !== undefined ? motos : 0;
         }
         else {
@@ -163,7 +163,7 @@ class SummaryStatistiks {
         const timeOld = interval[1]
         const timeNow = interval[0]
         const itognew = await helpers.getDataToInterval(el, timeOld, timeNow)
-        const alt = this.quickly(itognew)
+        const alt = this.quickly(itognew)  //приведение структуры данных в нужный формат
         return alt
     }
 
@@ -309,7 +309,7 @@ const popupProstoy = async (array) => {
         const newGlobal = await helpers.getDataToInterval(active, timeOld, timeNow)
         newGlobal.sort((a, b) => a.time - b.time)
 
-        const resnew = await prostoyNew(newGlobal)
+        const resnew = await prostoyNew(newGlobal)  ////проверка на событие простой
         if (resnew) {
             for (const el of resnew) {
                 const map = JSON.parse(el[1][1]);
@@ -324,7 +324,7 @@ const popupProstoy = async (array) => {
                 const delta = newTime - Number(el[1][0]);
 
                 if (delta > 900) {
-                    await databaseService.controllerSaveToBase(data, active, map, group, name);
+                    await databaseService.controllerSaveToBase(data, active, map, group, name); //запись лога
                 }
             }
         }
