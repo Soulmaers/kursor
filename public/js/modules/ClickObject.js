@@ -18,28 +18,96 @@ import { grafClick } from '../main.js'
 export let iconStatusClick;
 
 export class ClickObject {
-    constructor(element) {
-        this.element = element
+    constructor(elements) {
+        this.elements = elements
+        this.element = null
         this.createEvent = null
         this.controller = null
         this.wrapperFull = document.querySelector('.wrapperFull')
+        this.btnShina = document.querySelectorAll('.modals')
         this.widthWind = document.querySelector('body').offsetWidth;
-        this.element.addEventListener('click', this.handleClick.bind(this));
+        this.elements.forEach(e => e.addEventListener('click', this.handleClick.bind(this, e)))
+        this.btnShina.forEach(e => e.addEventListener('click', this.changeTyresValue.bind(this, e)))
     }
 
-    handleClick(event) {
+    changeTyresValue(e) {
+        const main = document.querySelector('.main')
+        main.style.flexDirection = 'row'
+        this.btnShina.forEach(el => {
+            el.classList.remove('active')
+        })
+        e.classList.add('active')
+        this.visual('check')
+        if (this.btnShina[1].classList.contains('active')) {
+            this.styleShinaActive()
+        }
+        const activGraf = document.querySelector('.activGraf')
+        if (activGraf) {
+            this.mainblock()
+        }
+        if (this.widthWind <= 860) {
+            sections.style.display = 'none'
+            wrapleft.style.display = 'none'
+        }
+    }
+    mainblock() {
+        const rightFrame = document.querySelectorAll('.rigthFrame')
+        rightFrame.forEach(e => e.style.display = 'flex')
+        const wrapperFull = document.querySelector('.wrapperFull')
+        const lowList = document.querySelector('.low_list')
+        lowList.style.height = wrapperFull.clientHeight - 65 + 'px';
+
+        const idw = document.querySelector('.color')
+        if (!idw) {
+            const main = document.querySelector('.main')
+            const start = document.querySelector('.start')
+            const sections = document.querySelector('.sections')
+            const dash = document.querySelector('.wrapper_right_dash')
+            main.style.display = 'none'
+            dash.style.display = 'none'
+            start.style.display = 'flex'
+            sections.style.display = 'flex'
+            return
+        }
+        const start = document.querySelector('.start')
+        start.style.display = 'none'
+        const dash = document.querySelector('.wrapper_right_dash')
+        const sections = document.querySelector('.sections')
+        const main = document.querySelector('.main')
+        dash.style.display = 'none'
+        sections.style.display = 'flex'
+        main.style.display = 'flex'
+        const wRight = document.querySelector('.wrapper_right')
+        const wLeft = document.querySelector('.wrapper_left')
+        const grafics = document.querySelector('.grafics')
+        const wrapList = document.querySelector('.wrapList')
+        const techInfo = document.querySelector('.techInfo')
+        const plug = document.querySelectorAll('.plug')
+        const config = document.querySelector('.config')
+        plug[2].classList.remove('activGraf')
+        wRight.style.display = 'flex';
+        wLeft.style.display = 'block';
+        grafics.style.display = 'none';
+        config.style.display = 'flex';
+        techInfo.style.display = 'none';
+        wrapList.style.overflowY = 'visible';
+        wrapList.style.height = 'none';
+        wrapList.style.height = 'auto'
+    }
+    handleClick(e) {
+        this.element = e
         this.windowAdaptiv()
-        if (this.element.classList.contains('color') || event.target.classList.contains('checkInList')
-            || event.target.classList.contains('map_unit')
-            || event.target.classList.contains('report_unit')
-            || event.target.classList.contains('deleteObject')
-            || event.target.classList.contains('pref')) {
+        if (this.element.classList.contains('color') || e.classList.contains('checkInList')
+            || e.classList.contains('map_unit')
+            || e.classList.contains('report_unit')
+            || e.classList.contains('deleteObject')
+            || e.classList.contains('pref')) {
             return
         }
         this.deleteClasses('.color')
         this.element.classList.add('color')
         //  visual(this.element)
-        this.visual(this.element)
+        this.visual()
     }
 
     deleteClasses(...tags) {
@@ -87,16 +155,18 @@ export class ClickObject {
             obo.append(li);
         }
     }
-    async visual() {
+    async visual(check) {
         const idw = this.element.id
+        console.log(check)
+
         this.deleteClasses('.tablo', '.choice', '.acto');  //метод удаляет переданыые классы
         this.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.tableTarir', '.disketa', '.korzina', '.sensors', '.allsec', '.delIcon'], 'none'); //метод скрывает переданные элементы
         this.hideElements(['.trEvent', '.main', '.wrapper_up', '.wrapperCont'], 'flex') //ставим flex элементам
-        this.deleteElements('.msg', '.wrapMap', '.containerAlt', '.delIcon', '.zamer', '.jobTSDetalisationGraf', '.jobTSDetalisationCharts_legenda') //удаление элементов
-        this.clearTexContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value') //очищаем текстконтент
-        this.specific(this.element)//метод который обрабатывает специфические условия
-
-
+        const elementsToDelete = check ? ['.msg', '.wrapMap', '.containerAlt', '.delIcon'] : ['.msg', '.wrapMap', '.containerAlt', '.delIcon', '.zamer', '.jobTSDetalisationGraf', '.jobTSDetalisationCharts_legenda'];
+        this.deleteElements(elementsToDelete);
+        if (!check) {
+            this.clearTexContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value');
+        }
 
         const graf = document.querySelector('.activGraf')
         if (graf) grafClick.controllerMethodCharts();
@@ -111,29 +181,22 @@ export class ClickObject {
         }
         this.controller = new AbortController();
         const signal = this.controller.signal;
-
-        if (!this.createEvent) {
-            this.createEvent = new CreateMarkersEvent(idw);
-        } else {
-            this.createEvent.reinitialize(idw);
-        }
-        if (!iconStatusClick) {
-            iconStatusClick = new IconStatus(this.element);
-        } else {
-            iconStatusClick.reinitialize(this.element);
-        }
-        if (this.createEvent && this.createEvent.updateInterval) {
-            clearInterval(this.createEvent.updateInterval);
-            this.createEvent.hiddenTrackAndMarkersEnent()
-        }
-
         await loadParamsView(signal)
-        timeIntervalStatistiks(signal);
-
+        if (!check) {
+            this.createEvent = this.createEvent || new CreateMarkersEvent(idw);
+            this.createEvent.reinitialize(idw);
+            iconStatusClick = iconStatusClick || new IconStatus(this.element);
+            iconStatusClick.reinitialize(this.element);
+            if (this.createEvent.updateInterval) {
+                clearInterval(this.createEvent.updateInterval);
+                this.createEvent.hiddenTrackAndMarkersEnent();
+            }
+            timeIntervalStatistiks(signal);
+            alarmFind()
+            this.specific(this.element)//метод который обрабатывает специфические условия
+        }
         kranParams()
         setInterval(kranParams, 300000)
-        alarmFind()
-
     }
 
     specific(el) {
@@ -144,11 +207,9 @@ export class ClickObject {
         const tiresLink = document.querySelectorAll('.tires_link')
         const wrapperLeft = document.querySelector('.wrapper_left')
         const titleCar = document.querySelector('.title_two')
-        //const btnsens = document.querySelectorAll('.btnsens')
         const plug = document.querySelectorAll('.plug')
         const grafics = document.querySelector('.grafics')
         const createList = document.querySelector('.createList')
-        const btnShina = document.querySelectorAll('.modals')
 
         checkConfig.checked = false
         checkAlt.style.color = 'black'
@@ -171,13 +232,6 @@ export class ClickObject {
         }
         else {
             wrapperLeft.style.display = this.widthWind < 860 ? 'none' : 'block'
-        }
-        // btnsens.forEach(el => {
-        //  el.classList.remove('actBTN')
-        //     })
-
-        if (btnShina[1].classList.contains('active')) {
-            this.styleShinaActive(btnShina[1])
         }
         clearElem(createList.value)
         clearElem(tsiControll.value)

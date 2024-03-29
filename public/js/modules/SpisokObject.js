@@ -33,6 +33,8 @@ export class SpisokObject {
         this.final = this.format(this.data, 1) //корректировка структуры data
         this.findDomElement()  //поиск и удаление старых элементов
         this.createListObjectAndGroup() //создание списка групп и объектов на страницы
+        const lists = this.lowList.querySelectorAll('.listItem')
+        new ClickObject(lists)
         this.sensorsName = true
         this.lastSensor = true
         initSummary = new SummaryViewControll(this.allId)
@@ -612,7 +614,6 @@ export class SpisokObject {
         listItemCar.setAttribute('rel', `${elem[4]}`)
         listItemCar.setAttribute('id', `${elem[4]}`)
         listArr.lastChild.appendChild(listItemCar)
-        new ClickObject(listItemCar)
         const listName = document.createElement('div')
         listName.classList.add('list_name2')
         listName.setAttribute('rel', `name`)

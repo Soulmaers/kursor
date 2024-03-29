@@ -533,6 +533,7 @@ if (dropdown) {
         dropdownContent.style.display = 'block'
     })
 }
+/*
 const btnShina = document.querySelectorAll('.modals')
 btnShina.forEach(el => {
     el.addEventListener('click', () => {
@@ -542,7 +543,7 @@ btnShina.forEach(el => {
         })
         el.classList.add('active')
         const e = document.querySelector('.color')
-        visualNone(e);
+        //  visualNone(e);
         visual(e)
         const activGraf = document.querySelector('.activGraf')
         console.log(activGraf)
@@ -554,7 +555,7 @@ btnShina.forEach(el => {
             wrapleft.style.display = 'none'
         }
     })
-})
+})*/
 
 
 /*
