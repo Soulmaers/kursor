@@ -23,9 +23,9 @@ export class GrafikView {
         this.iconGraf.addEventListener('click', this.toggleCalendar.bind(this))
         this.button[0].addEventListener('click', this.clear.bind(this))
         this.button[1].addEventListener('click', this.ok.bind(this))
-        this.init()
+        this.colorOneActiveButton()
     }
-    init() {
+    colorOneActiveButton() {
         this.menuGrafik[0].classList.add('activMenuGraf')
     }
     ok() {

@@ -159,7 +159,6 @@ function createViewModel(model) {
 }
 
 export function viewMenuParams() {
-    const kolesos = [];
     const sensors = document.querySelector('.sensors')
     const wrapperMap = document.querySelector('.wrapper_left')
     const tiresLink = document.querySelectorAll('.tires_link_test')
@@ -187,7 +186,6 @@ export function viewMenuParams() {
                 }
                 return
             }
-            kolesos.push(e)
             tiresLink.forEach(e => {
                 tableTarir.style.display = 'none'
                 e.classList.remove('tiresActiv')
@@ -210,45 +208,33 @@ export function viewMenuParams() {
 
 export let dataInfo;
 async function viewPokasateli(signal) {
-    const color = document.querySelector('.color')
-    console.log(color)
-    if (!color) {
+    const btnShina = document.querySelectorAll('.modals')
+    if (btnShina[1].classList.contains('active') === true) {
         return
     }
-    else {
-        console.log('апдейт?')
-        const btnShina = document.querySelectorAll('.modals')
-        if (btnShina[1].classList.contains('active') === true) {
-            return
-        }
-        let activePost;
-        const active = document.querySelectorAll('.color')
-        activePost = active[0].children[0].textContent.replace(/\s+/g, '')
-        const idw = document.querySelector('.color').id
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            signal: signal,
-            body: (JSON.stringify({ activePost, idw }))
-        }
-        const paramsss = await fetch('/api/tyresView', param)
-        const params = await paramsss.json()
-        const datas = await fetch('/api/getSens', param)
-        const data = await datas.json()
-
-        const os = await fetch('/api/barView', param)
-        const osi = await os.json()
-        data.sort((prev, next) => {
-            if (prev.name < next.name) return -1;
-            if (prev.name < next.name) return 1;
-        })
-        dataInfo = [data, params.result, osi]
-        view(data)
-        viewConfigurator(data, params.result, osi)
-
+    const idw = document.querySelector('.color').id
+    const param = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        signal: signal,
+        body: (JSON.stringify({ idw }))
     }
+    const paramsss = await fetch('/api/tyresView', param)
+    const params = await paramsss.json()
+    const datas = await fetch('/api/getSens', param)
+    const data = await datas.json()
+
+    const os = await fetch('/api/barView', param)
+    const osi = await os.json()
+    data.sort((prev, next) => {
+        if (prev.name < next.name) return -1;
+        if (prev.name < next.name) return 1;
+    })
+    dataInfo = [data, params.result, osi]
+    view(data)
+    viewConfigurator(data, params.result, osi)
 }
 
 

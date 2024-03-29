@@ -1,18 +1,12 @@
-import { objColor, generT, generDav } from './content.js'
+
 import { loadParamsView } from './paramsTyresView.js'
-import { findTyresInstall } from './saveBaseId.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
-import { Tooltip } from '../class/Tooltip.js'
-import { removeElem, clearElem } from './helpersFunc.js'
-import { convert } from './helpersFunc.js'
+import { clearElem } from './helpersFunc.js'
 import { timeIntervalStatistiks } from './detalisation.js'
 import { CreateMarkersEvent } from './objectMainModules/class/CreateMarkersEvent.js'
 import { alarmFind } from './alarmStorage.js'
-
-
 import { IconStatus } from './iconModules/class/IconStatus.js'
-import { visual } from './visual.js'
 import { grafClick } from '../main.js'
 
 export let iconStatusClick;
@@ -131,12 +125,7 @@ export class ClickObject {
         if (!check) {
             this.clearTexContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value');
         }
-
-        const alarm = document.querySelector('.wrap_alarm')
-        new Tooltip(alarm, ['События по давлению'])
-
         this.liCreate() //отрисовка строк под параметры
-
         if (this.controller && !this.controller.signal.aborted) {
             this.controller.abort()
         }

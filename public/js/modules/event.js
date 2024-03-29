@@ -38,6 +38,7 @@ export class AddTooltip {
         const viewIcon = document.querySelectorAll('.viewIcon')
         const tableInfoCar = document.querySelector('.tableInfoCar')
         const inf = document.querySelector('.infosCenter')
+        const alarm = document.querySelector('.wrap_alarm')
 
         viewIcon.forEach(e => {
             const relValues = e.getAttribute('rel').split(' ');
@@ -48,6 +49,7 @@ export class AddTooltip {
             this.arrayContent.push([e, [e.getAttribute('rel')]]);
         })
         this.arrayContent.push([role, [role.getAttribute('rel')]])
+        this.arrayContent.push([alarm, ['События по давлению']])
         this.arrayContent.push([logout, [logout.getAttribute('rel')]])
         this.arrayContent.push([create, ['Добавить новый объект']])
         this.arrayContent.push([search, [['Поиск объектов по имени, ID, имени группы,'], ['уникальному IMEI, телефону']]])
