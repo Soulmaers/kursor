@@ -6,6 +6,8 @@ import { DropDownList } from './class/DropdownList.js'
 import { AlarmControll } from './modules/alarmModules/class/AlarmControll.js'
 import { GrafikView } from './modules/grafikModules/class/GrafikView.js'
 import { ToggleHiddenList } from './modules/listModules/class/ToggleHiddenList.js'
+import { AddTooltip } from './modules/event.js'
+
 
 export let app;
 export let grafClick
@@ -54,6 +56,7 @@ export class Application {
         new NavigationMenu()// запускаем класс по работе с меню навигацией
         new AlarmControll()// запускаем класс управление отображение списка алармов
         new ToggleHiddenList() //запускаем класс управления списком
+        new AddTooltip()
         grafClick = new GrafikView()
 
     }

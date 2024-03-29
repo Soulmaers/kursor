@@ -336,8 +336,6 @@ function getHoursDiff(startDate, nowDate) {
 }
 
 export function alarmClear() {
-    // const ogon = document.querySelector('.ogon')
-    //  ogon.style.display = 'none'
     const alarmCheck = document.querySelectorAll('.alarmCheck')
     console.log(alarmCheck)
     alarmCheck.forEach(e => {

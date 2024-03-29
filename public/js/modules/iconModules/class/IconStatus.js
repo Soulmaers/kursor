@@ -59,6 +59,7 @@ export class IconStatus {
 
     //вывод и скрытие модального окна
     toogleModalWindow(element) {
+        console.log(element)
         this.targetCard = element
         const sensors = document.querySelector('.sensors')
         const btnsens = document.querySelectorAll('.btnsens')
@@ -235,6 +236,7 @@ export class IconStatus {
                 mess = 'Двигатель выключен, Не установлена связь со спутниками'
             }
             statusObj.textContent = 'Offline'
+            statusObj.style.color = 'gray'
             new Tooltip(statusObj, [mess]);
         }
         else if (sats > 3 || statusTSI === 'ВКЛ') {

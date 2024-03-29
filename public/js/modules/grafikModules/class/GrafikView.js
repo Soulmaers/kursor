@@ -85,6 +85,7 @@ export class GrafikView {
             if (grafOld) {
                 grafOld.remove()
             }
+            console.log(this.activeGrafiks)
             const fn = this.objectMethod[this.activeGrafiks]
             new fn(this.time[0], this.time[1])
             const loaders = document.querySelector('.loaders_charts')

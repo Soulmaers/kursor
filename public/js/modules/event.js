@@ -1,6 +1,6 @@
 import { postTyres, reqDelete, paramsDelete, barDelete, changeBase } from './requests.js'
 import { data } from './content.js'
-import { alarmClear, visual, visualNone } from './visual.js'
+import { alarmClear } from './visual.js'
 import { getUsers } from './admin.js'
 import { reqProtectorBase } from './protector.js'
 import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
@@ -23,6 +23,48 @@ import { initCharts, initSummary } from './SpisokObject.js'
 import { CreateNewObject } from './propertyObjectModules/class/CreateNewObject.js'
 import { CreateNewGroup } from './propertyObjectModules/class/CreateNewGroup.js'
 
+
+
+export class AddTooltip {
+    constructor() {
+        this.arrayContent = []
+        this.init()
+    }
+    init() {
+        const role = document.querySelector('.role')
+        const logout = document.querySelector('.logoutIcon')
+        const create = document.querySelector('.create_object')
+        const search = document.querySelector('.loop_find')
+        const viewIcon = document.querySelectorAll('.viewIcon')
+        const tableInfoCar = document.querySelector('.tableInfoCar')
+        const inf = document.querySelector('.infosCenter')
+
+        viewIcon.forEach(e => {
+            const relValues = e.getAttribute('rel').split(' ');
+            const lastRel = relValues[relValues.length - 1];
+            this.arrayContent.push([e, [storTitleList[lastRel]]]);
+        });
+        [...tableInfoCar.children[0].children].forEach(e => {
+            this.arrayContent.push([e, [e.getAttribute('rel')]]);
+        })
+        this.arrayContent.push([role, [role.getAttribute('rel')]])
+        this.arrayContent.push([logout, [logout.getAttribute('rel')]])
+        this.arrayContent.push([create, ['Добавить новый объект']])
+        this.arrayContent.push([search, [['Поиск объектов по имени, ID, имени группы,'], ['уникальному IMEI, телефону']]])
+        this.arrayContent.push([inf, ['Если зажигание включено и данные  приходят, то значения подсвечены в зависимости от условий подсветки',
+            'Если зажигание включено, а данные не приходят, то колесо будет с серый фоном',
+            'Если зажигание выключено, то колесо будет черным, а последние зафиксированные показатели серым цветом',
+            'При наведении на колесо появится подсказка с параметром колеса и актуальностью данных']])
+        this.initTooltipClass()
+    }
+
+    initTooltipClass() {
+        this.arrayContent.forEach(el => {
+            new Tooltip(el[0], el[1])
+        })
+    }
+}
+
 const sec = document.querySelector('.sections')
 const centerBlock = document.querySelector('.centerBlock')
 const start = document.querySelector('.start')
@@ -36,11 +78,8 @@ const sections = document.querySelector('.sections')
 const techinfo = document.querySelector('.techInfo')
 const mainMenu = document.querySelector('.main_menu')
 const grafics = document.querySelector('.grafics')
-const viewIcon = document.querySelectorAll('.viewIcon')
-const role = document.querySelector('.role')
-const logout = document.querySelector('.logoutIcon')
 const create = document.querySelector('.create_object')
-const search = document.querySelector('.loop_find')
+
 
 new ResizeContainer(sec, start, secondFlash[0])
 new Flasher()
@@ -54,26 +93,14 @@ mainMenu.addEventListener('click', (event) => {
 
 
 draggable()
-new Tooltip(role, [role.getAttribute('rel')]);
-new Tooltip(logout, [logout.getAttribute('rel')]);
-new Tooltip(create, ['Добавить новый объект']);
-new Tooltip(search, [['Поиск объектов по имени, ID, имени группы,'], ['уникальному IMEI, телефону']])
+
 export const obj = new CreateNewObject(create)
 export const sett = new CreateNewGroup(create)
-viewIcon.forEach(e => {
-    const relValues = e.getAttribute('rel').split(' ');
-    const lastRel = relValues[relValues.length - 1];
-    new Tooltip(e, [storTitleList[lastRel]]);
-});
+
 
 const itemInfoGlobal = document.querySelector('.itemInfoGlobal')
 itemInfoGlobal.addEventListener('click', (event) => {
     event.target.classList.toggle('iconMapsInfoActive')
-})
-
-const tableInfoCar = document.querySelector('.tableInfoCar')
-Array.from(tableInfoCar.children[0].children).forEach(e => {
-    new Tooltip(e, [e.getAttribute('rel')]);
 })
 
 const mobileItem = document.querySelectorAll('.mobile_item')
@@ -335,93 +362,7 @@ iconStrela.addEventListener('click', () => {
 let intervalId
 let intervalId2
 
-/*
-const btnDash = document.querySelector('.dash')
-btnDash.addEventListener('click', () => {
-    const color = document.querySelector('.color')
-    color ? color.classList.remove('color') : null
-    const wrapMap = document.querySelector('.wrapMap')
-    if (wrapMap) {
-        wrapMap.remove();
-    }
-    const start = document.querySelector('.start')
-    const pen = document.querySelectorAll('.rigthFrame')[0]
-    start.style.display = 'none'
-    pen.style.display = 'none';
-    const dash = document.querySelector('.wrapper_right_dash')
-    const sections = document.querySelector('.sections')
-    const main = document.querySelector('.main')
-    dash.style.display = 'flex'
-    sections.style.display = 'none'
-    main.style.display = 'none'
-    const group = Array.from(document.querySelectorAll('.groups'))
-    const ids = group.reduce((acc, el) => {
-        const one = Array.from(el.children[1].children)
-        const two = one.map(it => it.id)
-        return acc.concat(two)
-    }, [])
-    dashView(ids)
-    dashViewProtector()
-    getDash(ids)
-    protDash()
-    getStat()
-    intervalId = setInterval(getDash, 30000),
-        intervalId2 = setInterval(getStat, 30000)
 
-});*/
-
-function mainblock() {
-    const allsec = document.querySelectorAll('.allsec')
-    allsec.forEach(el => {
-        el.style.display = 'none';
-    })
-    const rightFrame = document.querySelectorAll('.rigthFrame')
-    rightFrame.forEach(e => e.style.display = 'flex')
-    const wrapperFull = document.querySelector('.wrapperFull')
-    const lowList = document.querySelector('.low_list')
-    lowList.style.height = wrapperFull.clientHeight - 65 + 'px';
-    const wrapMap = document.querySelector('.wrapMap')
-    if (wrapMap) {
-        wrapMap.remove();
-    }
-    const idw = document.querySelector('.color')
-    if (!idw) {
-        const main = document.querySelector('.main')
-        const start = document.querySelector('.start')
-        const sections = document.querySelector('.sections')
-        const dash = document.querySelector('.wrapper_right_dash')
-        main.style.display = 'none'
-        dash.style.display = 'none'
-        start.style.display = 'flex'
-        sections.style.display = 'flex'
-        return
-    }
-    clearInterval(intervalId)
-    const start = document.querySelector('.start')
-    start.style.display = 'none'
-    const dash = document.querySelector('.wrapper_right_dash')
-    const sections = document.querySelector('.sections')
-    const main = document.querySelector('.main')
-    dash.style.display = 'none'
-    sections.style.display = 'flex'
-    main.style.display = 'flex'
-    const wRight = document.querySelector('.wrapper_right')
-    const wLeft = document.querySelector('.wrapper_left')
-    const grafics = document.querySelector('.grafics')
-    const wrapList = document.querySelector('.wrapList')
-    const techInfo = document.querySelector('.techInfo')
-    const plug = document.querySelectorAll('.plug')
-    const config = document.querySelector('.config')
-    plug[2].classList.remove('activGraf')
-    wRight.style.display = 'flex';
-    wLeft.style.display = 'block';
-    grafics.style.display = 'none';
-    config.style.display = 'flex';
-    techInfo.style.display = 'none';
-    wrapList.style.overflowY = 'visible';
-    wrapList.style.height = 'none';
-    wrapList.style.height = 'auto'
-}
 
 
 const btnGenerate = document.querySelector('.btn_generate')
@@ -533,29 +474,7 @@ if (dropdown) {
         dropdownContent.style.display = 'block'
     })
 }
-/*
-const btnShina = document.querySelectorAll('.modals')
-btnShina.forEach(el => {
-    el.addEventListener('click', () => {
-        main.style.flexDirection = 'row'
-        btnShina.forEach(el => {
-            el.classList.remove('active')
-        })
-        el.classList.add('active')
-        const e = document.querySelector('.color')
-        //  visualNone(e);
-        visual(e)
-        const activGraf = document.querySelector('.activGraf')
-        console.log(activGraf)
-        if (activGraf) {
-            mainblock()
-        }
-        if (widthWind <= 860) {
-            sections.style.display = 'none'
-            wrapleft.style.display = 'none'
-        }
-    })
-})*/
+
 
 
 /*
@@ -593,8 +512,6 @@ rad.forEach(el => {
         }
     })
 })
-
-
 
 const modalNameOs = document.querySelector('.modalNameOs')
 modalNameOs.addEventListener('click', () => {

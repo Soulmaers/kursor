@@ -3,7 +3,6 @@ import { view, viewConfigurator } from './visual.js'
 import { tech } from './tech.js'
 import { gosNum } from './altConfig.js'
 import { modalOs } from './modalOs.js'
-import { Tooltip } from '../class/Tooltip.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 
 
@@ -16,17 +15,7 @@ export async function loadParamsView(signal) {
     }
     isProcessing = true;
     clearInterval(intervalId)
-    const titleCar = document.querySelector('.title_two')
-    let activePost;
-    const active = document.querySelectorAll('.color')
-    if (active[0] == undefined) {
-        const listItem = document.querySelectorAll('.listItem')[0]
-        activePost = listItem.textContent.replace(/\s+/g, '')
-        titleCar.textContent = listItem.textContent
-    }
-    else {
-        activePost = active[0].textContent.replace(/\s+/g, '')
-    }
+
     const idw = document.querySelector('.color').id
     const params = {
         method: "POST",
@@ -42,11 +31,7 @@ export async function loadParamsView(signal) {
     if (model.result && model.result.length > 0) {
         createViewModel(model.result);
     }
-    const inf = document.querySelector('.infosCenter')
-    new Tooltip(inf, ['Если зажигание включено и данные  приходят, то значения подсвечены в зависимости от условий подсветки',
-        'Если зажигание включено, а данные не приходят, то колесо будет с серый фоном',
-        'Если зажигание выключено, то колесо будет черным, а последние зафиксированные показатели серым цветом',
-        'При наведении на колесо появится подсказка с параметром колеса и актуальностью данных'])
+
     await viewPokasateli(signal)
 
     intervalId = setInterval(viewPokasateli, 60000)

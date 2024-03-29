@@ -51,48 +51,12 @@ export class ClickObject {
         }
     }
     mainblock() {
-        const rightFrame = document.querySelectorAll('.rigthFrame')
-        rightFrame.forEach(e => e.style.display = 'flex')
-        const wrapperFull = document.querySelector('.wrapperFull')
-        const lowList = document.querySelector('.low_list')
-        lowList.style.height = wrapperFull.clientHeight - 65 + 'px';
+        const grafikButton = document.querySelector('.grafik_button')
+        grafikButton.classList.remove('activGraf')
+        this.hideElements(['.wrapper_right', '.config', '.secondFlash'], 'flex')
+        this.hideElements(['.grafics'], 'none')
+        this.hideElements(['.wrapper_left'], 'block')
 
-        const idw = document.querySelector('.color')
-        if (!idw) {
-            const main = document.querySelector('.main')
-            const start = document.querySelector('.start')
-            const sections = document.querySelector('.sections')
-            const dash = document.querySelector('.wrapper_right_dash')
-            main.style.display = 'none'
-            dash.style.display = 'none'
-            start.style.display = 'flex'
-            sections.style.display = 'flex'
-            return
-        }
-        const start = document.querySelector('.start')
-        start.style.display = 'none'
-        const dash = document.querySelector('.wrapper_right_dash')
-        const sections = document.querySelector('.sections')
-        const main = document.querySelector('.main')
-        dash.style.display = 'none'
-        sections.style.display = 'flex'
-        main.style.display = 'flex'
-        const wRight = document.querySelector('.wrapper_right')
-        const wLeft = document.querySelector('.wrapper_left')
-        const grafics = document.querySelector('.grafics')
-        const wrapList = document.querySelector('.wrapList')
-        const techInfo = document.querySelector('.techInfo')
-        const plug = document.querySelectorAll('.plug')
-        const config = document.querySelector('.config')
-        plug[2].classList.remove('activGraf')
-        wRight.style.display = 'flex';
-        wLeft.style.display = 'block';
-        grafics.style.display = 'none';
-        config.style.display = 'flex';
-        techInfo.style.display = 'none';
-        wrapList.style.overflowY = 'visible';
-        wrapList.style.height = 'none';
-        wrapList.style.height = 'auto'
     }
     handleClick(e) {
         this.element = e
@@ -168,9 +132,6 @@ export class ClickObject {
             this.clearTexContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value');
         }
 
-        const graf = document.querySelector('.activGraf')
-        if (graf) grafClick.controllerMethodCharts();
-
         const alarm = document.querySelector('.wrap_alarm')
         new Tooltip(alarm, ['События по давлению'])
 
@@ -182,11 +143,22 @@ export class ClickObject {
         this.controller = new AbortController();
         const signal = this.controller.signal;
         await loadParamsView(signal)
+        const graf = document.querySelector('.activGraf')
+        if (graf) grafClick.controllerMethodCharts();
         if (!check) {
-            this.createEvent = this.createEvent || new CreateMarkersEvent(idw);
-            this.createEvent.reinitialize(idw);
-            iconStatusClick = iconStatusClick || new IconStatus(this.element);
-            iconStatusClick.reinitialize(this.element);
+            if (this.createEvent) {
+                this.createEvent.reinitialize(this.element);
+            }
+            else {
+                this.createEvent = new CreateMarkersEvent(idw);
+            }
+            if (iconStatusClick) {
+                iconStatusClick.reinitialize(this.element);
+            }
+            else {
+                iconStatusClick = new IconStatus(this.element);
+            }
+
             if (this.createEvent.updateInterval) {
                 clearInterval(this.createEvent.updateInterval);
                 this.createEvent.hiddenTrackAndMarkersEnent();
