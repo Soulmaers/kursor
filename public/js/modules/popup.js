@@ -316,7 +316,7 @@ function clickHandlerObject(event) {
     const listItem = document.querySelectorAll('.listItem')
     listItem.forEach(it => {
         if (it.getAttribute('rel') === id) {
-            iconStatusClick.listeModalWindow(it)
+            //  iconStatusClick.listeModalWindow(it)
             visual(it)
             chanchColor()
             const evgentElement = document.querySelector('.toogleIconEvent')
@@ -427,6 +427,7 @@ async function createLogsTable(mass) {
                 const td = document.createElement('p')
                 td.classList.add('tdEvent')
                 td.textContent = el[key]
+                td.setAttribute('rel', `${el.id}`)
                 trEvent.appendChild(td)
                 td.style.color = objColor[td.textContent]
             }

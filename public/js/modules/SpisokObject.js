@@ -34,7 +34,11 @@ export class SpisokObject {
         this.findDomElement()  //поиск и удаление старых элементов
         this.createListObjectAndGroup() //создание списка групп и объектов на страницы
         const lists = this.lowList.querySelectorAll('.listItem')
+        // const logs = document.querySelectorAll('.trEvent')
+        // const twoChildren = [...logs].map(e => e.children[2])
+        //  console.log(twoChildren)
         new ClickObject(lists)
+        //new ClickObject(twoChildren)
         this.sensorsName = true
         this.lastSensor = true
         initSummary = new SummaryViewControll(this.allId)

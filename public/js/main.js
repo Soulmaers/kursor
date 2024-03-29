@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 export class Application {
     //Основной класс 1 экземпляр при запуске приложения
     constructor(role, login) {
+        this.data = null
         this.body = document.querySelector('body')
         this.wrapperFull = document.querySelector('.wrapperFull')
         this.lowList = this.wrapperFull.querySelector('.low_list')
@@ -42,9 +43,10 @@ export class Application {
     async init() {
         this.formatContainer() //метод который корректирует границы контейнеров взависимости от разрешения экрана
         this.adaptiv()  //адаптив
-        this.logs() //метод который сохраняет в базу число просмотренных логов
         this.activButton()
-        this.startClass()
+        this.logs() //метод который сохраняет в базу число просмотренных логов
+        await this.startClass()
+
 
     }
     activButton() {
@@ -66,6 +68,8 @@ export class Application {
         const arrayList = wialonData.response.aLLmassObject
         const nameCarCheck = wialonData.response.arrName
         const data = kursorData.concat(arrayList)
+        this.data = data
+        await logsView(this.data) //отрисовка и наполнение логов будет переписано на класс
         if (data.flat().length === 0) {
             const loaders = document.querySelector('.loaders');
             loaders.style.display = 'none'
@@ -82,7 +86,7 @@ export class Application {
             el.classList.add('border')
             el.children[0].children[0].style.color = 'green'
         }
-        logsView(data) //отрисовка и наполнение логов будет переписано на класс
+
         // Очистка предыдущего интервала перед созданием нового
         if (this.logsInterval !== null) {
             clearInterval(this.logsInterval);

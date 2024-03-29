@@ -638,6 +638,7 @@ export class PressureCharts {
             osssMap[e.idOs] = e;
         });
         const idw = Number(document.querySelector('.color').id)
+        console.log(idw)
         const t1 = this.t1
         const t2 = this.t2
         const paramss = {
@@ -649,6 +650,7 @@ export class PressureCharts {
         }
         const res = await fetch('/api/getDataParamsInterval', paramss)
         const data = await res.json();
+        console.log(data)
         if (data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')
