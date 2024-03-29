@@ -1,5 +1,5 @@
 
-import { viewList } from './spisok.js'
+//import { viewList } from './SpisokObject.js'
 export const objViewContent = {
     set_one: 'account',
     set_two: 'listView',
@@ -76,7 +76,7 @@ export const saveCheckListToBase = async (nums) => {
     }
     const res = await fetch('/api/saveList', param)
     const results = await res.json()
-    viewList(login)
+    //  viewList(login)
     if (!nums) {
         eventSave()
     }

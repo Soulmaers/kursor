@@ -2292,9 +2292,20 @@ div.spoyler {
   cursor: pointer;
 }
 
+.tyreD-modified {
+  border: none;
+}
+
+.tyreT-modified {
+  border-top: none;
+  font-size: 0.8rem;
+  justify-content: flex-start;
+}
+
+
 .start {
   width: 100%;
-  display: none;
+  display: flex;
   flex-wrap: wrap;
   padding: 5px;
   background-color: #fff;

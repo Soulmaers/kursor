@@ -33,6 +33,7 @@ export class ToggleHiddenList {
         this.deleteGroup = document.querySelectorAll('.deleteGroup')
         this.settingGroups = document.querySelectorAll('.settingsGroup')
         this.prefs = document.querySelectorAll('.pref')
+        this.init()
     }
     init() {
         this.minusS.forEach(el => el.addEventListener('click', this.hiddenList.bind(this)))
@@ -150,14 +151,12 @@ export class ToggleHiddenList {
             if (num === 1) {
                 await this.deleteObjectToBase(el)
                 await this.deleteObjectToBaseGroups(el)
-                app.zapros(this.login)
-                //await zapros(this.login)
+                app.startClass()
             }
             if (num === 2) {
                 const id = el.parentNode.parentNode.id
                 await this.deleteGroupToBaseGroups(id)
-                app.zapros(this.login)
-                //  await zapros(this.login)
+                app.startClass()
                 const createObject = document.querySelector('.create_object')
                 const parentElement = document.querySelector('.list_item1')
                 this.mores.classList.remove('toggle_list')

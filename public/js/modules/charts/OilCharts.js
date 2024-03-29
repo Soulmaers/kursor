@@ -182,6 +182,7 @@ export class OilCharts {
     createBodyCharts() {
         const parametr = this.data[this.data.length - 1].summatorOil ? 'summatorOil' : 'oil'
         this.parametr = parametr
+        console.log(this.parametr)
         // задаем x-шкалу
         const x = d3.scaleTime()
             .domain(d3.extent(this.data, (d) => new Date(d.time)))
@@ -357,7 +358,7 @@ export class OilCharts {
         // Обновляем пути линий и областей
         const updateLine1 = d3.line()
             .x((d) => new_xScale(new Date(d.time)))
-            .y((d) => this.y1(+d[parametr] || 0))
+            .y((d) => this.y1(+d[this.parametr] || 0))
             .curve(d3.curveStepAfter);
 
         const updateLine2 = d3.line()
@@ -368,7 +369,7 @@ export class OilCharts {
         const updateArea1 = d3.area()
             .x(d => new_xScale(new Date(d.time)))
             .y0(this.height)
-            .y1(d => this.y1(+d[parametr] || 0))
+            .y1(d => this.y1(+d[this.parametr] || 0))
             .curve(d3.curveStepAfter);
 
         const updateArea2 = d3.area()

@@ -56,7 +56,7 @@ export class CreateNewObject {
             const mess = await this.instance.setToBaseSensStorMeta()
             this.handleValidationResult(mess, 'green', 'bold');
 
-            app.zapros(this.login, this.object.id)
+            app.startClass(this.object.id)
         }
         else {
             const idObject = await this.generationId(this.login)
@@ -88,7 +88,7 @@ export class CreateNewObject {
                 const mess = !this.idPref ? await this.saveObject(object) : await this.updateObject(object)
                 this.handleValidationResult(mess, 'green', 'bold');
                 // this.instance = new ConfiguratorParams(object.idObject, object.port, object.imei)
-                app.zapros(this.login, this.object.id)
+                app.startClass(this.object.id)
             }
         }
 

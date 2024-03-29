@@ -1,4 +1,3 @@
-import { testovfnNew } from './charts/bar.js'
 import { timefn } from './helpersFunc.js'
 import { prostoyNew, dannieOilTS, dannieSortJobTS } from './detalisation/statistic.js'
 import { GetDataTime } from '../class/GetDataTime.js'
@@ -70,9 +69,9 @@ export async function timeIntervalStatistiks(signal) {
     loaders(yestoday.nextElementSibling, loader)
     await statistics(yesTo(), 'yestoday', 2, objectRazmetka, signal)
     loader.style.display = 'none'
-    loaders(week.nextElementSibling, loader)
-    await statistics(weekTo(), 'week', 3, objectRazmetka, signal)
-    loader.style.display = 'none'
+    //  loaders(week.nextElementSibling, loader)
+    // await statistics(weekTo(), 'week', 3, objectRazmetka, signal)
+    // loader.style.display = 'none'
 }
 export async function load(act, el, num) {
     objectRazmetka[act].fn(objectRazmetka[act].data[el], num)

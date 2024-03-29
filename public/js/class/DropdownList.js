@@ -8,7 +8,6 @@ export class DropDownList {
         this.group = document.querySelectorAll('.groups')
         this.element.addEventListener(`input`, this.onElementInput.bind(this));
         this.pushData();
-
     }
 
     async pushData() {
@@ -64,13 +63,13 @@ export class DropDownList {
 
     createList(data) {
         this.list.forEach(e => {
-            if (data.includes(e.children[0].textContent) || data.includes(e.getAttribute('rel')) || data.includes(e.closest('.groups').getAttribute('rel'))
+            const group = e.closest('.groups'); // Получаем ближайший элемент с классом .groups
+            if (data.includes(e.children[0].textContent) || data.includes(e.getAttribute('rel')) || (group && data.includes(group.getAttribute('rel')))
                 || data.includes(e.getAttribute('data-att')) || data.includes(e.getAttribute('data-phone'))) {
-                e.style.display = 'flex'
-                e.closest('.groups').style.display = 'flex'
+                e.style.display = 'flex';
+                if (group) group.style.display = 'flex'; // Добавляем проверку перед изменением стиля
             }
-        })
-
+        });
     }
     removeList() {
         this.list.forEach(e => e.style.display = 'none');

@@ -2,8 +2,8 @@
 import { DraggableContainer } from '../../../class/Dragdown.js'
 import { Tooltip } from '../../../class/Tooltip.js'
 export class IconStatus {
-    constructor(nav) {
-        this.list = nav
+    constructor(elem) {
+        this.elem = elem
         this.card = document.querySelectorAll('.icon_card')
         this.msg = null
         this.nameObject = null
@@ -15,11 +15,25 @@ export class IconStatus {
         this.intervalId = null
         this.params = null
         this.coefficient = null
-        this.list.forEach(el => el.addEventListener('click', this.listeModalWindow.bind(this, el)))
-        this.card.forEach(el => el.addEventListener('click', this.toogleModalWindow.bind(this, el)))
+        this.cards = this.toogleModalWindow.bind(this)
+        this.initEventListeners();
+    }
+    reinitialize(newElem) {
+        this.removeEventListeners(); // Удаление старых слушателей событий
+        this.elem = newElem; // Обновление id
+        this.initEventListeners(); // Повторное добавление слушателей событий
     }
 
+    initEventListeners() {
+        this.listeModalWindow(this.elem)
+        this.card.forEach(el => el.addEventListener('click', () => this.cards(el)))
+
+    }
+    removeEventListeners() {
+        this.card.forEach(el => el.removeEventListener('click', () => this.cards(el)))
+    }
     async listeModalWindow(elem) {
+        console.log(elem)
         this.targetElement = elem
         this.id = elem.id
         this.nameObject = elem.children[0].textContent.replace(/\s+/g, '')
@@ -40,11 +54,8 @@ export class IconStatus {
         })
         const coef = this.changeParams.value
         const id = document.querySelector('.acto').id
-
         await this.postIconParams(param, coef, id)
     }
-
-
 
     //вывод и скрытие модального окна
     toogleModalWindow(element) {
@@ -54,8 +65,8 @@ export class IconStatus {
         const wRight = document.querySelector('.wrapper_right')
         const tiresActiv = document.querySelector('.tiresActiv')
         if (tiresActiv) tiresActiv.classList.remove('tiresActiv');
-        if (element.classList.contains('acto')) {
-            element.classList.remove('acto')
+        if (this.targetCard.classList.contains('acto')) {
+            this.targetCard.classList.remove('acto')
             sensors.style.display = 'none'
             btnsens[2].style.display = 'none'
             const actBTN = document.querySelector('.actBTN')
@@ -70,7 +81,7 @@ export class IconStatus {
         })
         this.changeParams.value = '1';
         const checkConfig = document.getElementById('check_Title')
-        checkConfig.checked ? (element.classList.add('acto'), sensors.style.display = 'flex', new DraggableContainer(sensors), wRight.style.zIndex = 2,
+        checkConfig.checked ? (this.targetCard.classList.add('acto'), sensors.style.display = 'flex', new DraggableContainer(sensors), wRight.style.zIndex = 2,
             document.querySelector('.popup-background').style.display = 'block',
             this.msg = document.querySelectorAll('.msg'),
             this.msg.forEach(el => el.addEventListener('click', this.viewValueToSaveBase.bind(this, el))))
@@ -79,7 +90,7 @@ export class IconStatus {
         btnsens[1].style.display = 'none'
         btnsens[2].style.display = 'flex'
         const engineEvent = document.querySelector('.engineEvent')
-        element.id === 'tsi-card' ? engineEvent.style.display = 'flex' : engineEvent.style.display = 'none'
+        this.targetCard.id === 'tsi-card' ? engineEvent.style.display = 'flex' : engineEvent.style.display = 'none'
     }
     //сохранение назначенного параметра
     async postIconParams(param, coef, id) {
@@ -100,7 +111,6 @@ export class IconStatus {
 
     //отображение значений иконок
     async displayIconValues(idw) {
-        console.log('дисплэй?')
         const param = {
             method: "POST",
             headers: {
@@ -110,8 +120,6 @@ export class IconStatus {
         }
         const params = await this.iconFindParams(param)
         const editParams = await this.iconFindParamsEdit(param)
-        console.log(params)
-        console.log(editParams)
         this.coefficient = await this.validationIngition(idw)
         this.pushObjectProperty(params, editParams)
         await this.statusTSI(param)
@@ -129,7 +137,6 @@ export class IconStatus {
                     this.valueparamsObject['speed-card'] = Number(Number(el[3]).toFixed(0))
                     break;
                 case 'engine':
-                    console.log(el[3])
                     this.valueparamsObject['ign-card'] = el[3]
                     break;
             }
@@ -144,7 +151,6 @@ export class IconStatus {
         const engine = this.valueparamsObject['ign-card']
         if (this.valueparamsObject['ign-card'] > 1) {
             this.getValue('engine')
-            console.log(this.getValue('engine'))
             this.valueparamsObject['ign-card'] = this.getValue('engine') ? engine > Number(this.getValue('engine')) ? 'ВКЛ' : 'ВЫКЛ' : '-'
         }
         else {
@@ -192,31 +198,6 @@ export class IconStatus {
         this.getValue('pwr')
         this.valueparamsObject['tsi-card'] = this.getValue('pwr') ? Number(this.valueparamsObject['akb-card']) > Number(this.getValue('pwr')) && this.valueparamsObject['ign-card'] === 'ВКЛ' ?
             'ВКЛ' : 'ВЫКЛ' : '-'
-
-        /* const vals = await fetch('/api/viewStatus', param)
-         const val = await vals.json()
-         if (val.result.length !== 0) {
-             const startDate = val.result[0].time
-             const startDateIng = val.result[0].timeIng
-             const techdate = new Date();
-             const nowDate = Math.floor(techdate.getTime() / 1000);
-             const timeStor = getHoursDiff(startDate, nowDate)
-             const timeStorIng = getHoursDiff(startDateIng, nowDate)
-             function getHoursDiff(startDate, nowDate) {
-                 var diff = nowDate - startDate;
-                 let dayS;
-                 let hourS;
-                 const minutes = Math.floor(diff / 60)
-                 const hours = Math.floor(minutes / 60);
-                 const days = Math.floor(hours / 24);
-                 const day = days % 60;
-                 const hour = hours % 24;
-                 const minut = minutes % 60;
-                 day === 0 ? dayS = '' : dayS = days + 'д ';
-                 hour === 0 ? hourS = '' : hourS = hour + 'ч ';
-                 const mess = `${dayS} ${hourS} ${minut} мин`
-                 return mess;
-             }*/
         let statName;
         let statNameIng;
         this.valueparamsObject['tsi-card'] === 'ВКЛ' ? statName = 'Включен' : this.valueparamsObject['tsi-card'] === '-' ? statName = '-' : statName = 'Выключен'

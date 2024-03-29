@@ -178,7 +178,7 @@ export class CreateMarkersEvent {
             mapLocal.removeLayer(e.marker);
         })
         this.setTrack.classList.remove('activeTrack')
-        this.setTrack.removeEventListener('click', this.boundViewTrackAndMarkersEvent);
+        //   this.setTrack.removeEventListener('click', this.boundViewTrackAndMarkersEvent);
         this.poly ? mapLocal.removeLayer(this.poly) : null
         this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
         this.markerCreator ? this.markerCreator.deleteMarkers() : null

@@ -1,10 +1,16 @@
-
-
-import { conturTest } from './modules/spisok.js'
 import { checkCreate } from './modules/admin.js'
 import { logsView } from './modules/popup.js'
 import { SpisokObject } from './modules/SpisokObject.js'
+import { NavigationMenu } from './modules/navModules/NavigatorClass.js'
+import { DropDownList } from './class/DropdownList.js'
+import { AlarmControll } from './modules/alarmModules/class/AlarmControll.js'
+import { GrafikView } from './modules/grafikModules/class/GrafikView.js'
+import { ToggleHiddenList } from './modules/listModules/class/ToggleHiddenList.js'
+
 export let app;
+export let grafClick
+export let initSummary
+export let initCharts
 
 document.addEventListener('DOMContentLoaded', () => {
     // Это гарантирует, что DOM полностью загружен перед инициализацией классов
@@ -18,6 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
 export class Application {
     //Основной класс 1 экземпляр при запуске приложения
     constructor(role, login) {
+        this.body = document.querySelector('body')
+        this.wrapperFull = document.querySelector('.wrapperFull')
+        this.lowList = this.wrapperFull.querySelector('.low_list')
+        this.searchInput = this.wrapperFull.querySelector('.search_input')
+        this.startActivButton = document.querySelector('.stat_start')
         this.role = role   //получаем роль прав доступа
         this.login = login //получаем логин пользователя
         this.dataspisok = false //флаг загрузки
@@ -27,13 +38,27 @@ export class Application {
     }
     // Методы класса Application
     async init() {
-        this.formatContainer() //метод который корретирует границы контейнеров взависимости от разрешения экрана
+        this.formatContainer() //метод который корректирует границы контейнеров взависимости от разрешения экрана
+        this.adaptiv()  //адаптив
         this.logs() //метод который сохраняет в базу число просмотренных логов
-        this.zapros(this.login) //метод который забирает из бд данные по объектам, заппускает проверку обновления логов, проверку  объектов из бд соответствующих логину, запускает функцию отрисовки списка
+        this.activButton()
+        this.startClass()
 
     }
-    async zapros(login, elem) {
-        const [wialonData, kursorData] = await Promise.all([this.zaprosWialon(login), this.zaprosKursor(login)])
+    activButton() {
+        this.startActivButton.classList.add('tablo')
+    }
+    async startClass(elem) {
+        await this.zapros(elem) //метод который забирает из бд данные по объектам, заппускает проверку обновления логов, проверку  объектов из бд соответствующих логину, запускает функцию отрисовки списка
+        new DropDownList(this.searchInput)  //запускаем сквозной поиск по элементам
+        new NavigationMenu()// запускаем класс по работе с меню навигацией
+        new AlarmControll()// запускаем класс управление отображение списка алармов
+        new ToggleHiddenList() //запускаем класс управления списком
+        grafClick = new GrafikView()
+
+    }
+    async zapros(elem) {
+        const [wialonData, kursorData] = await Promise.all([this.zaprosWialon(this.login), this.zaprosKursor(this.login)])
         this.dataspisok = true
         const arrayList = wialonData.response.aLLmassObject
         const nameCarCheck = wialonData.response.arrName
@@ -46,9 +71,8 @@ export class Application {
             this.spisok.updateData(data)
         }
         else {
-            this.spisok = new SpisokObject(data)
+            this.spisok = new SpisokObject(data) //отрисовка списка и статусов списка
         }
-        //  await conturTest(data) //отрисовка списка и статусов списка, будет переписано на класс
         if (elem) {
             const list = document.querySelectorAll('.listItem')
             const el = [...list].find(el => el.id === elem)
@@ -94,8 +118,6 @@ export class Application {
         return arrayList
     }
 
-
-
     async logs() {
         const login = this.login
         const param = {
@@ -110,27 +132,38 @@ export class Application {
         const confirm = await res.json()
     }
 
-
-
-
     formatContainer() {
-        const wrapperFull = document.querySelector('.wrapperFull')
-        const lowList = document.querySelector('.low_list')
-
         if (screen.width < 860) {
-            const newColumn = document.querySelectorAll('.newColumn')
-            const newCel = document.querySelectorAll('.newCel')
-            newColumn.forEach(e => e.remove())
-            newCel.forEach(e => e.remove())
-
+            document.querySelectorAll('.newColumn, .newCel').forEach(e => e.remove());
         }
-        if (screen.width === 1366 && screen.height === 768) {
-            wrapperFull.style.height = '651px'
-        } else if (screen.width === 1920 && screen.height === 1080) {
-            wrapperFull.style.height = '883px'
+        const heights = {
+            '1366x768': '651px',
+            '1920x1080': '883px'
+        };
+        const screenSize = `${screen.width}x${screen.height}`;
+        if (heights[screenSize]) {
+            this.wrapperFull.style.height = heights[screenSize];
         }
-        lowList.style.height = wrapperFull.clientHeight - 65 + 'px';
+        this.lowList.style.height = `${this.wrapperFull.clientHeight - 65}px`;
     }
+
+    adaptiv() {
+        const widthWind = this.body.offsetWidth;
+        if (widthWind > 860 && widthWind <= 1200) {
+            this.wrapperFull.querySelector('.wrapper_left').style.display = 'none';
+        }
+        if (widthWind <= 860) {
+            this.wrapperFull.querySelector('.start').style.display = 'none';
+            this.wrapperFull.style.minHeight = `${screen.height - 85}px`;
+            this.lowList.style.height = `${this.wrapperFull.clientHeight - 20}px`;
+            const auth = this.body.querySelector('.auth');
+            if (auth) {
+                this.body.querySelector('.menu').appendChild(auth);
+            }
+            document.querySelector('.mobile_spisok').classList.add('mobile_active');
+        }
+    }
+
 }
 
 

@@ -4,8 +4,8 @@ import { GetDataTime } from '../../../class/GetDataTime.js'
 import { PressureCharts } from '../../charts/PressureCharts.js'
 import { OilCharts } from '../../charts/OilCharts.js'
 export class GrafikView {
-    constructor(nav) {
-        this.list = nav
+    constructor() {
+        //  this.list = nav
         this.time = null
         this.activeGrafiks = null
         this.objectMethod = {
@@ -23,8 +23,11 @@ export class GrafikView {
         this.iconGraf.addEventListener('click', this.toggleCalendar.bind(this))
         this.button[0].addEventListener('click', this.clear.bind(this))
         this.button[1].addEventListener('click', this.ok.bind(this))
+        this.init()
     }
-
+    init() {
+        this.menuGrafik[0].classList.add('activMenuGraf')
+    }
     ok() {
         console.log(this.time)
         this.calendar.style.display = 'none'

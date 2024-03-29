@@ -1,19 +1,19 @@
 
 import { convert } from './helpersFunc.js'
-import { navigator } from './navigator.js'
 import { objColorFront, generDav } from './content.js'
-import { approximateValue } from './staticObject.js'
-import { convertTime, removeArrElem } from './helpersFunc.js'
+import { convertTime } from './helpersFunc.js'
 import { globalSelect } from './filtersList.js'
 import { app } from '../main.js'
-import { ToggleHiddenList } from './listModules/class/ToggleHiddenList.js'
 import { SummaryViewControll } from './summaryModules/class/SummaryViewControll.js'
 import { ChartsViewControll } from './summaryModules/class/ChartsViewControll.js'
 import { Tooltip } from '../class/Tooltip.js'
+import { ClickObject } from './ClickObject.js'
 
 
 export let initSummary
 export let initCharts
+
+
 export class SpisokObject {
     constructor(data) {
         this.data = data
@@ -34,15 +34,12 @@ export class SpisokObject {
         this.findDomElement()  //поиск и удаление старых элементов
         this.createListObjectAndGroup() //создание списка групп и объектов на страницы
         this.sensorsName = true
-        const toggleList = new ToggleHiddenList()
-        toggleList.init()
         this.lastSensor = true
         initSummary = new SummaryViewControll(this.allId)
         initCharts = new ChartsViewControll()
         initCharts.getDataSummary()
         await this.viewList(this.login)
         this.validRole()
-        navigator();
         this.finishload = true
         setInterval(this.zaprosSpisok.bind(this), 100000)
     }
@@ -52,7 +49,6 @@ export class SpisokObject {
         let loaderProgress = document.querySelector('.loaders-progress');
         let interval = setInterval(() => {
             progress = this.updateProgress(progress);
-
             if (this.finishload) {
                 clearInterval(interval);
                 const loaders = document.querySelector('.loaders');
@@ -616,12 +612,12 @@ export class SpisokObject {
         listItemCar.setAttribute('rel', `${elem[4]}`)
         listItemCar.setAttribute('id', `${elem[4]}`)
         listArr.lastChild.appendChild(listItemCar)
+        new ClickObject(listItemCar)
         const listName = document.createElement('div')
         listName.classList.add('list_name2')
         listName.setAttribute('rel', `name`)
         listItemCar.appendChild(listName)
         listName.textContent = elem[0].message
-
         const typeOss = this.createElements(listName, nameCar, listItemCar) //отрисовка объекта в списке
 
         const listCheck = document.createElement('i')

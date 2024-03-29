@@ -1,9 +1,8 @@
 
 import { DraggableContainer } from '../../../class/Dragdown.js'
-import { CloseBTN } from '../../../class/Flash.js'
+import { CloseBTN } from '../../../class/CloseBTN.js'
 export class AlarmControll {
-    constructor(nav) {
-        this.list = nav
+    constructor() {
         this.mainAlarm = document.querySelector('.mainAlarm')
         this.alarmStorage = document.querySelector('.alarmStorage')
         this.wrapMap = document.querySelector('.wrapMap')

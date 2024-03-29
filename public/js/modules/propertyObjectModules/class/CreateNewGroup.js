@@ -42,8 +42,7 @@ export class CreateNewGroup {
             new Tooltip(createObject, ['Добавить новый объект'])
             console.log(parentElement.lastElementChild)
             parentElement.lastElementChild.textContent = 'Список объектов';
-            app.zapros(this.login)
-            //  await zapros(this.login)
+            app.startClass(this.login)
         }
         else {
             const idg = await this.generationId()
@@ -81,8 +80,7 @@ export class CreateNewGroup {
                 this.modal.style.display = 'none';
                 this.modal.style.zIndex = 0
                 this.field_modal.value = ''
-                app.zapros(this.login)
-                //  await zapros(this.login)
+                app.startClass(this.login)
                 const mores = document.querySelector('.mores')
                 const ones = document.querySelector('.ones')
                 mores.classList.remove('toggle_list')
@@ -128,8 +126,7 @@ export class CreateNewGroup {
             this.modal.style.display = 'none';
             this.modal.style.zIndex = 0
             this.field_modal.value = ''
-            app.zapros(this.login)
-            // await zapros(this.login)
+            app.startClass(this.login)
         }
 
 

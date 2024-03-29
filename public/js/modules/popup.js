@@ -1,10 +1,10 @@
 import { DraggableContainer } from '../class/Dragdown.js'
-import { CloseBTN } from '../class/Flash.js'
+import { CloseBTN } from '../class/CloseBTN.js'
 import { titleLogs } from './content.js'
 import { createMapsUniq } from './geo.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { visual } from './visual.js'
-import { iconStatusClick } from './navigator.js'
+import { iconStatusClick } from './ClickObject.js'
 async function createPopup(array) {
     const arr = Object.values(array[0]);
     console.log(arr)

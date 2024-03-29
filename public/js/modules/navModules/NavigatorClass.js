@@ -17,9 +17,11 @@ export class NavigationMenu {
             sklad: { method: this.sklad.bind(this), elem: 'globalSklad' },
             statistika: { method: this.statistika.bind(this), elem: 'start' }
         };
+        this.init()
     }
 
     init() {
+        this.handleButtonClickList()
         this.buttonElements.forEach(button => {
             button.addEventListener('click', this.handleButtonClick.bind(this));
         });
@@ -103,7 +105,7 @@ export class NavigationMenu {
         kartaContainer(wrap)
         this.currentTimeoutId = setInterval(() => {
             kartaContainer(wrap)
-        }, 60000);
+        }, 6000);
     }
 
     reports(elem, avl, num) {
