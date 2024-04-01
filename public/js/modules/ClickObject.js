@@ -20,7 +20,7 @@ export class ClickObject {
         this.wrapperFull = document.querySelector('.wrapperFull')
         this.btnShina = document.querySelectorAll('.modals')
         this.widthWind = document.querySelector('body').offsetWidth;
-        this.elements.forEach(e => e.addEventListener('click', this.handleClick.bind(this, e)))
+        this.elements.forEach(e => e.addEventListener('click', this.handleClick.bind(this)))
         this.btnShina.forEach(e => e.addEventListener('click', this.changeTyresValue.bind(this, e)))
     }
 
@@ -52,14 +52,14 @@ export class ClickObject {
         this.hideElements(['.wrapper_left'], 'block')
 
     }
-    handleClick(e) {
-        this.element = e
+    handleClick(event) {
         this.windowAdaptiv()
-        if (this.element.classList.contains('color') || e.classList.contains('checkInList')
-            || e.classList.contains('map_unit')
-            || e.classList.contains('report_unit')
-            || e.classList.contains('deleteObject')
-            || e.classList.contains('pref')) {
+        this.element = event.currentTarget;
+        if (this.element.classList.contains('color') || event.target.classList.contains('checkInList')
+            || event.target.classList.contains('map_unit')
+            || event.target.classList.contains('report_unit')
+            || event.target.classList.contains('deleteObject')
+            || event.target.classList.contains('pref')) {
             return
         }
         this.deleteClasses('.color')
@@ -126,17 +126,18 @@ export class ClickObject {
             this.clearTexContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value');
         }
         this.liCreate() //отрисовка строк под параметры
-        if (this.controller && !this.controller.signal.aborted) {
-            this.controller.abort()
-        }
-        this.controller = new AbortController();
-        const signal = this.controller.signal;
-        await loadParamsView(signal)
+        // if (this.controller && !this.controller.signal.aborted) {
+        //   this.controller.abort()
+        //   }
+        //   this.controller = new AbortController();
+        //  const signal = this.controller.signal;
+        await loadParamsView()
         const graf = document.querySelector('.activGraf')
         if (graf) grafClick.controllerMethodCharts();
         if (!check) {
+            this.specific(this.element)//метод который обрабатывает специфические условия
             if (this.createEvent) {
-                this.createEvent.reinitialize(this.element);
+                this.createEvent.reinitialize(this.element.id);
             }
             else {
                 this.createEvent = new CreateMarkersEvent(idw);
@@ -152,9 +153,9 @@ export class ClickObject {
                 clearInterval(this.createEvent.updateInterval);
                 this.createEvent.hiddenTrackAndMarkersEnent();
             }
-            timeIntervalStatistiks(signal);
+            timeIntervalStatistiks();
             alarmFind()
-            this.specific(this.element)//метод который обрабатывает специфические условия
+
         }
         kranParams()
         setInterval(kranParams, 300000)

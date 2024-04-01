@@ -15,7 +15,7 @@ export class IconStatus {
         this.intervalId = null
         this.params = null
         this.coefficient = null
-        this.cards = this.toogleModalWindow.bind(this)
+        this.handleCardClick = this.toogleModalWindow.bind(this)
         this.initEventListeners();
     }
     reinitialize(newElem) {
@@ -26,11 +26,13 @@ export class IconStatus {
 
     initEventListeners() {
         this.listeModalWindow(this.elem)
-        this.card.forEach(el => el.addEventListener('click', () => this.cards(el)))
+        //  this.card.forEach(el => el.addEventListener('click', () => this.cards(el)))
+        this.card.forEach(el => el.addEventListener('click', this.handleCardClick));
 
     }
     removeEventListeners() {
-        this.card.forEach(el => el.removeEventListener('click', () => this.cards(el)))
+        //  this.card.forEach(el => el.removeEventListener('click', () => this.cards(el)))
+        this.card.forEach(el => el.removeEventListener('click', this.handleCardClick));
     }
     async listeModalWindow(elem) {
         console.log(elem)
@@ -58,8 +60,8 @@ export class IconStatus {
     }
 
     //вывод и скрытие модального окна
-    toogleModalWindow(element) {
-        console.log(element)
+    toogleModalWindow(event) {
+        const element = event.currentTarget
         this.targetCard = element
         const sensors = document.querySelector('.sensors')
         const btnsens = document.querySelectorAll('.btnsens')

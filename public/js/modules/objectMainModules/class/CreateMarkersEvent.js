@@ -242,6 +242,7 @@ export class CreateMarkersEvent {
         let nowDate = Math.round(new Date().getTime() / 1000);
         let nDate = new Date();
         let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);
+        console.log(nowDate, timeFrom, idw)
         const params = {
             method: "POST",
             headers: {
