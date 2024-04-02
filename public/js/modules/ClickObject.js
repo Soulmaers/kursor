@@ -17,6 +17,7 @@ export class ClickObject {
         this.elements = elements
         this.element = null
         this.createEvent = null
+        this.instanceStatistika = null
         this.controller = null
         this.wrapperFull = document.querySelector('.wrapperFull')
         this.btnShina = document.querySelectorAll('.modals')
@@ -168,8 +169,8 @@ export class ClickObject {
         const idw = this.element.id
         console.log(check)
 
-        this.deleteClasses('.tablo', '.choice', '.acto');  //метод удаляет переданыые классы
-        this.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.tableTarir', '.disketa', '.korzina', '.sensors', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
+        this.deleteClasses('.tablo', '.choice', '.acto', '.check_probeg');  //метод удаляет переданыые классы
+        this.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.techInfo', '.tableTarir', '.disketa', '.korzina', '.sensors', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
         this.hideElements(['.trEvent', '.main', '.wrapper_up', '.wrapperCont'], 'flex') //ставим flex элементам
         const elementsToDelete = check ? ['.msg', '.wrapMap', '.containerAlt', '.delIcon'] : ['.msg', '.wrapMap', '.containerAlt', '.delIcon', '.zamer', '.jobTSDetalisationGraf', '.jobTSDetalisationCharts_legenda'];
         this.deleteElements(elementsToDelete);
@@ -177,11 +178,11 @@ export class ClickObject {
             this.clearTexContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value');
         }
         this.liCreate() //отрисовка строк под параметры
-        // if (this.controller && !this.controller.signal.aborted) {
-        //   this.controller.abort()
-        //   }
-        //   this.controller = new AbortController();
-        //  const signal = this.controller.signal;
+        if (this.controller && !this.controller.signal.aborted) {
+            this.controller.abort()
+        }
+        this.controller = new AbortController();
+        const signal = this.controller.signal;
 
         await loadParamsView()
         const graf = document.querySelector('.activGraf')
@@ -200,13 +201,18 @@ export class ClickObject {
             else {
                 iconStatusClick = new IconStatus(this.element);
             }
-
             if (this.createEvent.updateInterval) {
                 clearInterval(this.createEvent.updateInterval);
                 this.createEvent.hiddenTrackAndMarkersEnent();
             }
-            timeIntervalStatistiks();
-            new StatistikaPressure(dataInfo, this.element)
+            timeIntervalStatistiks(signal);
+            if (this.instanceStatistika) {
+                this.instanceStatistika.reinitialize(dataInfo, this.element);
+            }
+            else {
+                this.instanceStatistika = new StatistikaPressure(dataInfo, this.element)
+            }
+
             alarmFind()
             //  setTimeout(() => this.createStata(), 300)
             //  this.createStata()

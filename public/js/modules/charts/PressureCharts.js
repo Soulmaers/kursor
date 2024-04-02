@@ -166,7 +166,7 @@ export class PressureCharts {
                 .attr("d", area1)
                 .attr("fill", function (d) {
                     if (d3.select(".inputPress").property("checked")) {
-                        return "darkgreen";
+                        return "darkgreen"
                     } else {
                         return "#009933";
                     }
@@ -205,9 +205,10 @@ export class PressureCharts {
                         return "#009933";
                     }
                 })
-                .attr("fill-opacity", 0.9)
+                .attr("fill-opacity", d.value === -0.1 ? 0 : 0.9)
                 .style('display', legendBar[0].classList.contains('noActive') ? 'none' : 'block')
             // добавляем области для второй кривой
+            console.log(data.val)
             svg.append("path")
                 .datum(data.val)
                 .attr("fill", "none")
@@ -342,8 +343,8 @@ export class PressureCharts {
         const formattedDate = this.timeFormats(closestIndex[0])
         tooltip.innerHTML = `<div class="title_tooltip">${formattedDate}</div>
             <div class="body_tooltips"><i class='fas fa-tachometer-alt icon_tool'><span class='spanVal'>${tooltipData.speed} км/ч</span></i>
-            <i class='fas fa-life-ring icon_tool'><span class='spanVal'>${tooltipData.value === -0.5 ? 'Потеря связи с датчиком' : tooltipData.value} Бар</span></i>
-            <i class='fas fa-temperature-high icon_tool'><span class='spanVal'>${tooltipData.tvalue === -0.5 ? 'Потеря связи с датчиком' : tooltipData.tvalue} t°</span></i>
+            <i class='fas fa-life-ring icon_tool'><span class='spanVal'>${tooltipData.value === -0.1 ? 'Потеря связи с датчиком' : tooltipData.value} Бар</span></i>
+            <i class='fas fa-temperature-high icon_tool'><span class='spanVal'>${tooltipData.tvalue === -0.1 ? 'Потеря связи с датчиком' : tooltipData.tvalue} t°</span></i>
             <i class='fas fa-key icon_tool'><span class='spanVal'>${tooltipData.stop}</span></i> </div>`
         const xPositionk = event.pageX; // Используйте абсолютные координаты
         const yPositionk = event.pageY; // Используйте абсолютные координаты
@@ -394,9 +395,9 @@ export class PressureCharts {
         const chart = document.querySelectorAll('.chart')
         chart.forEach((chartItem, i) => {
             // Защита на случай, если objTool не содержит запись для каждого элемента chart
-            const tooltipData = objTool[i] || { value: -0.5, tvalue: -0.5 }; // Значение по умолчанию, если не найдено
-            const dav = tooltipData.value === -0.5 ? '-' : tooltipData.value;
-            const temp = tooltipData.tvalue === -0.5 ? '-' : tooltipData.tvalue;
+            const tooltipData = objTool[i] || { value: -0.1, tvalue: -0.1 }; // Значение по умолчанию, если не найдено
+            const dav = tooltipData.value === -0.1 ? '-' : tooltipData.value;
+            const temp = tooltipData.tvalue === -0.1 ? '-' : tooltipData.tvalue;
             chartItem.children[2].textContent = `${dav} Бар/${temp} С°`;
         });
     }
@@ -680,8 +681,8 @@ export class PressureCharts {
                             geo: [Number(elem.lat), Number(elem.lon)],
                             speed: Number(elem.speed),
                             stop: Number(elem.engineOn) === 1 ? 'ВКЛ' : 'ВЫКЛ',
-                            value: elem[el.pressure] ? Number(elem[el.pressure]) : -0.5,
-                            tvalue: elem[el.temp] ? (Number(elem[el.temp]) !== -128 && Number(elem[el.temp]) !== -50 && Number(elem[el.temp]) !== -51 ? Number(elem[el.temp]) : -0.5) : -0.5
+                            value: elem[el.pressure] ? Number(elem[el.pressure]) : -0.1,
+                            tvalue: elem[el.temp] ? (Number(elem[el.temp]) !== -128 && Number(elem[el.temp]) !== -50 && Number(elem[el.temp]) !== -51 ? Number(elem[el.temp]) : -0.1) : -0.1
                         })
                     })
                 };

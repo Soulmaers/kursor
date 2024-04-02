@@ -2227,7 +2227,14 @@ div.spoyler {
   position: absolute;
   left: 20px;
   top: 2px;
+  cursor: pointer;
+  color: #fff
+}
 
+.icon_check {
+  position: absolute;
+  left: 50px;
+  top: 2px;
   cursor: pointer;
   color: #fff
 }
@@ -2481,6 +2488,22 @@ div.spoyler {
 
 .calendar_graf,
 .calendar_track {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  right: 10px;
+  top: 30px;
+  border: 1px solid black;
+  padding: 5px;
+  background: #fff;
+  position: absolute;
+  left: 30px;
+  top: 60px;
+  width: 180px;
+  z-index: 1
+}
+
+.calendar_graf_stata {
   display: none;
   flex-direction: column;
   position: absolute;

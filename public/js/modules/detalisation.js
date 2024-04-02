@@ -128,7 +128,7 @@ function eventClikInterval(objectRazmetka) {
                     eventClikInterval(objectRazmetka)
                     //   const interval = times.map(e => e[2])
                     //    console.log(interval)
-                    statistics(times, 'free', el.getAttribute('rel'), objectRazmetka, signal)
+                    statistics(times, 'free', el.getAttribute('rel'), objectRazmetka)
                 }
                 else {
                     console.log('работает отрисовка')
