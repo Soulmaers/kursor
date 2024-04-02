@@ -221,9 +221,7 @@ exports.setDataToBase = async (imei, port, info, id) => {
                 obj['data'] = String(nowTime)
                 obj['time'] = String(elem.time)
 
-                value.forEach(e => {
-                    obj[e.params] = e.value
-                })
+
                 if (coefPWR) {
                     data.forEach(el => {
                         if (el.params === 'pwr') {
@@ -250,6 +248,7 @@ exports.setDataToBase = async (imei, port, info, id) => {
                         }
                     }
                 }
+
                 // Проходим по исходному массиву один раз, обновляя значения согласно Map
                 for (let e of value) {
                     if (updatedValues.has(e.params)) {
@@ -257,6 +256,9 @@ exports.setDataToBase = async (imei, port, info, id) => {
                     }
                 }
 
+                value.forEach(e => {
+                    obj[e.params] = e.value
+                })
                 const summator = data.find(e => e.params === 'summatorOil');
                 if (summator && summator.meta === 'ON') {
                     const params = await databaseService.getSummatorToBase(idw)
