@@ -156,25 +156,28 @@ exports.setDataToBase = async (imei, port, info, id) => {
             return { key: el.meta, params: el.params, value: String(computedValue), status, data: dataTime };
         });
 
-        const oilValues = data.filter(e => e.params.startsWith('oil') && e.params.length <= 4);
-        if (oilValues.length !== 0) {
-            for (let val of oilValues) {
-                if (val && lastObject.hasOwnProperty(val.meta)) {
-                    const propertyValue = lastObject[val.meta]; // Исправление для получения значения свойства
-                    const dut = parseInt(propertyValue); // Преобразование строки в число
-                    if (!isNaN(dut) && dut < 4100) { // Проверка, что результат преобразования - действительное число
-                        const param = val.params
-                        const tarirData = await getTarirTableToBase(idw, param) //получение данных тарировочной таблицы по id и параметру
+        // Создаем Map для хранения новых значений для params
+        const updatedValues = new Map();
+        for (let val of data.filter(e => e.params.startsWith('oil') && e.params.length <= 4)) {
+            if (lastObject.hasOwnProperty(val.meta)) {
+                const propertyValue = parseInt(lastObject[val.meta]);
+                if (!isNaN(propertyValue)) {
+                    if (propertyValue < 4100) {
+                        const tarirData = await getTarirTableToBase(idw, val.params);
                         if (tarirData.length !== 0) {
-                            const sensOil = sortTarirOil(tarirData, dut); // тарировка ДУТа, получение топлива в литрах
-                            value.forEach(e => {
-                                if (e.params === val.params) {
-                                    e.value = String(sensOil)
-                                }
-                            })
+                            const sensOil = sortTarirOil(tarirData, propertyValue);
+                            updatedValues.set(val.params, String(sensOil));
                         }
+                    } else {
+                        updatedValues.set(val.params, null);
                     }
                 }
+            }
+        }
+        // Проходим по исходному массиву один раз, обновляя значения согласно Map
+        for (let e of value) {
+            if (updatedValues.has(e.params)) {
+                e.value = updatedValues.get(e.params);
             }
         }
         const summator = data.find(e => e.params === 'summatorOil');
@@ -187,20 +190,13 @@ exports.setDataToBase = async (imei, port, info, id) => {
                 objectToUpdate.status = 'false'
                 return
             }
-            const values = params.map(it => it.param)
-            const summatorValue = value.reduce((acc, e) => {
-                if (values.includes(e.params)) {
-                    acc = acc + Number(e.value)
-                }
-                return acc
-            }, 0)
+            const summatorValue = calculateSummatorOil(value, params)
             const objectToUpdate = value.find(e => e.params === 'summatorOil');
-            objectToUpdate.value = String(summatorValue)
+            objectToUpdate.value = summatorValue ? String(summatorValue) : summatorValue
             objectToUpdate.data = nowTime
             objectToUpdate.status = 'true'
         }
         await databaseService.setUpdateValueSensStorMeta(imei, port, value)  //обновление значений привязанных параметров
-
 
         const tcpObject = info
         for (let elem of tcpObject) {
@@ -236,24 +232,31 @@ exports.setDataToBase = async (imei, port, info, id) => {
                     });
                 }
 
-                const oilValues = data.filter(e => e.params.startsWith('oil') && e.params.length <= 4);
-                if (oilValues.length !== 0) {
-                    for (let val of oilValues) {
-                        if (val && elem.hasOwnProperty(val.meta)) {
-                            const propertyValue = elem[val.meta]; // Исправление для получения значения свойства
-                            const dut = parseInt(propertyValue); // Преобразование строки в число
-                            if (!isNaN(dut) && dut < 4100) { // Проверка, что результат преобразования - действительное число
-                                const param = val.params
-                                const tarirData = await getTarirTableToBase(idw, param)
+                // Создаем Map для хранения новых значений для params
+                const updatedValues = new Map();
+                for (let val of data.filter(e => e.params.startsWith('oil') && e.params.length <= 4)) {
+                    if (val && elem.hasOwnProperty(val.meta)) {
+                        const propertyValue = parseInt(lastObject[val.meta]);
+                        if (!isNaN(propertyValue)) {
+                            if (propertyValue < 4100) {
+                                const tarirData = await getTarirTableToBase(idw, val.params);
                                 if (tarirData.length !== 0) {
-                                    const sensOil = sortTarirOil(tarirData, dut); //  sortTarirOil - это функция, принимающая массив tarirData и число dut
-                                    obj[val.params] = String(sensOil); // Изменяем значение на строковое представление sensOil
+                                    const sensOil = sortTarirOil(tarirData, propertyValue);
+                                    updatedValues.set(val.params, String(sensOil));
                                 }
+                            } else {
+                                updatedValues.set(val.params, null);
                             }
-                            obj[val.meta] = String(dut)
                         }
                     }
                 }
+                // Проходим по исходному массиву один раз, обновляя значения согласно Map
+                for (let e of value) {
+                    if (updatedValues.has(e.params)) {
+                        e.value = updatedValues.get(e.params);
+                    }
+                }
+
                 const summator = data.find(e => e.params === 'summatorOil');
                 if (summator && summator.meta === 'ON') {
                     const params = await databaseService.getSummatorToBase(idw)
@@ -261,14 +264,9 @@ exports.setDataToBase = async (imei, port, info, id) => {
                         obj['summatorOil'] = null
                         return
                     }
-                    const values = params.map(it => it.param)
-                    const summatorValue = Object.keys(obj).reduce((acc, e) => {
-                        if (values.includes(e)) {
-                            acc = acc + Number(obj[e])
-                        }
-                        return acc
-                    }, 0)
-                    obj['summatorOil'] = String(summatorValue)
+                    const summatorValue = calculateSummatorOil(value, params)
+                    console.log(summatorValue)
+                    obj['summatorOil'] = summatorValue ? String(summatorValue) : summatorValue
                 }
                 await databaseService.setAddDataToGlobalBase(obj)  //запись отфильтрованных параметров и значений в накопительную таблицу датчиков
             }
@@ -276,6 +274,19 @@ exports.setDataToBase = async (imei, port, info, id) => {
     }
 }
 
+
+function calculateSummatorOil(value, params) {
+    const values = params.map(it => it.param)
+    const summatorValue = value.reduce((acc, e) => {
+        if (acc === null) return null; // Если уже встретился null, возвращаем null для всех последующих итераций
+        if (values.includes(e.params)) {
+            if (e.value === null) return null; // Возвращаем null, если значение null и params в списке values
+            return acc + Number(e.value); // Суммируем значения, если они не null
+        }
+        return acc; // Возвращаем текущий аккумулятор, если params не в списке values
+    }, 0);// Начальное значение аккумулятора
+    return summatorValue
+}
 const getTarirTableToBase = async (idw, param) => {
     const res = await databaseService.getTarirData(idw, param)
     return res

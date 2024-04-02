@@ -8,7 +8,8 @@ import { CreateMarkersEvent } from './objectMainModules/class/CreateMarkersEvent
 import { alarmFind } from './alarmStorage.js'
 import { IconStatus } from './iconModules/class/IconStatus.js'
 import { grafClick } from '../main.js'
-
+import { dataInfo } from '../modules/paramsTyresView.js'
+import { StatistikaPressure } from './StatistikaModules/Statistikapressure.js'
 export let iconStatusClick;
 
 export class ClickObject {
@@ -26,6 +27,8 @@ export class ClickObject {
 
     changeTyresValue(e) {
         const main = document.querySelector('.main')
+        const detalisation = document.querySelector('.windowStatistic')
+        const stata = document.querySelector('.stata_container')
         main.style.flexDirection = 'row'
         this.btnShina.forEach(el => {
             el.classList.remove('active')
@@ -33,7 +36,14 @@ export class ClickObject {
         e.classList.add('active')
         this.visual('check')
         if (this.btnShina[1].classList.contains('active')) {
+            detalisation.style.display = 'none'
+            stata.style.display = 'flex'
             this.styleShinaActive()
+            //  this.createStata()
+        }
+        else {
+            detalisation.style.display = 'flex'
+            stata.style.display = 'none'
         }
         const activGraf = document.querySelector('.activGraf')
         if (activGraf) {
@@ -50,6 +60,47 @@ export class ClickObject {
         this.hideElements(['.wrapper_right', '.config', '.secondFlash'], 'flex')
         this.hideElements(['.grafics'], 'none')
         this.hideElements(['.wrapper_left'], 'block')
+
+    }
+
+
+    createStata() {
+        console.log('статистика!')
+        const [arg, params, osi] = dataInfo
+        console.log(dataInfo)
+        const sens = params.reduce((acc, item) => {
+            const pressure = arg.find(element => element.params === item.pressure);
+            if (pressure) {
+                acc.push({ ...pressure, tyresdiv: item.tyresdiv });
+            }
+            return acc
+        }, [])
+        sens.sort((a, b) => a.tyresdiv - b.tyresdiv);
+        console.log(sens)
+        const table = document.querySelector('.table_stata')
+        const rows = document.querySelectorAll('.row_stata')
+        if (rows) {
+            [...rows].forEach(e => {
+                e.remove()
+            })
+        }
+        sens.forEach(it => {
+            let count = 4
+            const tr = document.createElement('tr')
+            tr.classList.add('row_stata')
+            table.appendChild(tr)
+            const td = document.createElement('td')
+            td.classList.add('cel')
+            td.setAttribute('rel', it.params);
+            td.textContent = it.sens
+            tr.appendChild(td)
+            for (let i = 0; i <= count; i++) {
+                const td = document.createElement('td')
+                td.classList.add('cel')
+                td.textContent = '-'
+                tr.appendChild(td)
+            }
+        })
 
     }
     handleClick(event) {
@@ -118,7 +169,7 @@ export class ClickObject {
         console.log(check)
 
         this.deleteClasses('.tablo', '.choice', '.acto');  //метод удаляет переданыые классы
-        this.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.tableTarir', '.disketa', '.korzina', '.sensors', '.allsec', '.delIcon'], 'none'); //метод скрывает переданные элементы
+        this.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.tableTarir', '.disketa', '.korzina', '.sensors', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
         this.hideElements(['.trEvent', '.main', '.wrapper_up', '.wrapperCont'], 'flex') //ставим flex элементам
         const elementsToDelete = check ? ['.msg', '.wrapMap', '.containerAlt', '.delIcon'] : ['.msg', '.wrapMap', '.containerAlt', '.delIcon', '.zamer', '.jobTSDetalisationGraf', '.jobTSDetalisationCharts_legenda'];
         this.deleteElements(elementsToDelete);
@@ -131,6 +182,7 @@ export class ClickObject {
         //   }
         //   this.controller = new AbortController();
         //  const signal = this.controller.signal;
+
         await loadParamsView()
         const graf = document.querySelector('.activGraf')
         if (graf) grafClick.controllerMethodCharts();
@@ -154,7 +206,10 @@ export class ClickObject {
                 this.createEvent.hiddenTrackAndMarkersEnent();
             }
             timeIntervalStatistiks();
+            new StatistikaPressure(dataInfo, this.element)
             alarmFind()
+            //  setTimeout(() => this.createStata(), 300)
+            //  this.createStata()
 
         }
         kranParams()
@@ -172,7 +227,6 @@ export class ClickObject {
         const plug = document.querySelectorAll('.plug')
         const grafics = document.querySelector('.grafics')
         const createList = document.querySelector('.createList')
-
         checkConfig.checked = false
         checkAlt.style.color = 'black'
         checkAlt.style.fontWeight = '400'

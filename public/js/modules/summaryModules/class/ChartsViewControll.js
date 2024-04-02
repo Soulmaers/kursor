@@ -113,7 +113,7 @@ export class ChartsViewControll {
     }
 
     createChart(datas, nameCharts) {
-        console.log(datas)
+
         let nameChart;
         let data;
         if (datas && nameCharts) {
@@ -124,7 +124,7 @@ export class ChartsViewControll {
             nameChart = this.nameChart
             data = this.data
         }
-
+        console.log(data)
         const char = document.querySelector('.chart_global')
         if (char) {
             char.remove()
@@ -158,6 +158,8 @@ export class ChartsViewControll {
             .call(nameChart !== 'moto' && nameChart !== 'prostoy' && nameChart !== 'timeJob' ? d3.axisLeft(yScale) : d3.axisLeft(yScale).tickFormat(function (d) {
                 return self.timesFormat(d)
             }))
+        console.log(data)
+        console.log(content_lower_charts.clientHeight)
         svg.selectAll('rect')
             .data(data)
             .enter().append('rect')

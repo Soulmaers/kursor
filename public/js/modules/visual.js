@@ -98,6 +98,8 @@ export async function visual(el) {
     if (el.children[0].textContent === 'Цистерна ДТ') {
         tarir.style.display = 'block'
     }
+    const contKran = document.querySelector('.contKran')
+    contKran.style.display = 'none'
     const tiresLink = document.querySelectorAll('.tires_link')
     const sensors = document.querySelector('.sensors')
     sensors.style.display = 'none';
@@ -202,8 +204,8 @@ export function visualNone(e) {
     const techInfo = document.querySelector('.techInfo')
     const modalCenterOs = document.querySelector('.modalCenterOs')
     const alarmStorage = document.querySelector('.alarmStorage')
-    const contKran = document.querySelector('.contKran')
-    contKran.style.display = 'none'
+    //const contKran = document.querySelector('.contKran')
+    // contKran.style.display = 'none'
     const card = document.querySelectorAll('.cardClick')
     card.forEach(el => {
         el.classList.remove('acto')

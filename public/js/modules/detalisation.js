@@ -176,9 +176,8 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
         }
     })
     newGlobal.sort((a, b) => a.time - b.time)
-
     for (let i = 0; i < newGlobal.length; i++) {
-        if (newGlobal[i].speed > 5) {
+        if (newGlobal[i].speed > 4 && newGlobal[i].engineOn === 1) {
             newGlobal[i].condition = 'Движется';
         }
         else if (newGlobal[i].speed === 0 && newGlobal[i].engine === 1) {

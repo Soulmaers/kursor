@@ -20,6 +20,7 @@ export async function alarmFind() {
         })
     }
     const [, tyres,] = dataInfo
+    console.log(dataInfo)
     const idw = document.querySelector('.color').id
     if (tyres.length !== 0) {
         const sorTyrest = convert(tyres).reduce((acc, el) => {

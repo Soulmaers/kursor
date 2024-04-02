@@ -317,7 +317,7 @@ function clickHandlerObject(event) {
     listItem.forEach(it => {
         if (it.getAttribute('rel') === id) {
             //  iconStatusClick.listeModalWindow(it)
-            visual(it)
+            // visual(it)
             chanchColor()
             const evgentElement = document.querySelector('.toogleIconEvent')
             filterEventLogs(evgentElement)

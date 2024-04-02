@@ -2222,6 +2222,16 @@ div.spoyler {
   cursor: pointer;
 }
 
+
+.icon_stata {
+  position: absolute;
+  left: 20px;
+  top: 2px;
+
+  cursor: pointer;
+  color: #fff
+}
+
 .grafics {
   position: relative;
 }
@@ -9286,6 +9296,40 @@ i.changeColorCheck {
   color: #fff
 }
 
+
+.body_stata {
+  width: 100%;
+}
+
+.table_stata {
+  font-size: 0.8rem;
+  font-weight: 400;
+  border-spacing: 0;
+  width: 100%;
+}
+
+
+.rows_stata {
+  width: 100%;
+  background-color: #fff;
+  position: sticky;
+  top: 0px;
+}
+
+.cell_stata {
+  font-weight: bold;
+  font-size: 0.75rem;
+  padding: 2px 5px;
+  border: 1px solid rgba(6, 28, 71, 1);
+}
+
+.cel {
+  font-size: 0.75rem;
+  padding: 2px 5px;
+  color: rgba(6, 28, 71, 1);
+  border: 1px solid rgba(6, 28, 71, 1);
+}
+
 .item_type_file:hover .type_file {
   animation-name: wiggle;
   animation-duration: 1s;
@@ -9644,6 +9688,28 @@ i.changeColorCheck {
 .falseCheck {
   color: lightgray
 }
+
+
+.stata_container {
+  margin: 5px;
+  width: 98%;
+  border: 2px solid rgba(6, 28, 71, 1);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.title_stata {
+  width: 100%;
+  background-color: rgba(6, 28, 71, 1);
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  padding: 2px;
+}
+
+
 
 .header_modal,
 .header_tarir {

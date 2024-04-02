@@ -218,6 +218,11 @@ export class IconStatus {
 
     //расчет статуса объекта
     async status(data) {
+        console.log(data)
+
+        const lastValidTime = data.find(e => e[1] === 'last_valid_time')
+        const nowTime = Math.floor(new Date().getTime() / 1000)
+        const status = (nowTime - Number(lastValidTime[3])) > 3600 ? 0 : 1
         let sats;
         data.forEach(e => {
             if (e[1] === 'sats') {
@@ -227,7 +232,11 @@ export class IconStatus {
         let mess;
         const statusObj = document.querySelector('.status_obj')
         const statusTSI = this.valueparamsObject['tsi-card']
-        if (sats <= 4 || statusTSI === 'ВЫКЛ') {
+        if (status === 0) {
+            statusObj.textContent = 'Offline'
+            statusObj.style.color = 'gray'
+        }
+        else if (sats <= 4 || statusTSI === 'ВЫКЛ') {
             if (sats <= 4 && statusTSI === 'ВКЛ') {
                 mess = 'Не установлена связь со спутниками'
             }
@@ -241,14 +250,12 @@ export class IconStatus {
             statusObj.style.color = 'gray'
             new Tooltip(statusObj, [mess]);
         }
-        else if (sats > 3 || statusTSI === 'ВКЛ') {
+        else if (sats > 3 && statusTSI === 'ВКЛ') {
             statusObj.textContent = 'Online'
             statusObj.style.color = '#15a32d'
             mess = `Установлена связь с ${sats} спутниками`
             new Tooltip(statusObj, [mess]);
         }
-
-
     }
 
     //вывод значений в дом элементы

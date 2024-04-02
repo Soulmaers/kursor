@@ -27,13 +27,11 @@ export async function loadParamsView(signal) {
     }
     const mod = await fetch('/api/modelView', params)
     model = await mod.json()
-    console.log(model)
     if (model.result && model.result.length > 0) {
         createViewModel(model.result);
     }
 
     await viewPokasateli(signal)
-
     intervalId = setInterval(viewPokasateli, 60000)
     isProcessing = false;
 }
@@ -208,10 +206,7 @@ export function viewMenuParams() {
 
 export let dataInfo;
 async function viewPokasateli(signal) {
-    const btnShina = document.querySelectorAll('.modals')
-    if (btnShina[1].classList.contains('active') === true) {
-        return
-    }
+
     const idw = document.querySelector('.color').id
     const param = {
         method: "POST",
@@ -233,8 +228,13 @@ async function viewPokasateli(signal) {
         if (prev.name < next.name) return 1;
     })
     dataInfo = [data, params.result, osi]
+    const btnShina = document.querySelectorAll('.modals')
+    if (btnShina[1].classList.contains('active') === true) {
+        return
+    }
     view(data)
     viewConfigurator(data, params.result, osi)
+
 }
 
 
