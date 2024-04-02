@@ -71,6 +71,14 @@ exports.getDataParamsInterval = async (req, res) => {
     res.json(result)
 }
 
+exports.getParamsToPressureAndOil = async (req, res) => {
+    const time1 = req.body.t1
+    const time2 = req.body.t2
+    const idw = req.body.idw
+    const result = await databaseService.getParamsToPressureAndOilToBase(time1, time2, idw) //получение парамтеров и значений датчиков за интервал времени
+    res.json(result)
+}
+
 exports.saveValuePWR = async (req, res) => {
     //  console.log(ips.ips.object);
     const idw = req.body.id

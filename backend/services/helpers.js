@@ -267,7 +267,6 @@ exports.setDataToBase = async (imei, port, info, id) => {
                         return
                     }
                     const summatorValue = calculateSummatorOil(value, params)
-                    console.log(summatorValue)
                     obj['summatorOil'] = summatorValue ? String(summatorValue) : summatorValue
                 }
                 await databaseService.setAddDataToGlobalBase(obj)  //запись отфильтрованных параметров и значений в накопительную таблицу датчиков

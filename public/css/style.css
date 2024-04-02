@@ -825,6 +825,10 @@ input[type="checkbox"]::before {
   cursor: pointer;
 }
 
+.checkColor {
+  color: green
+}
+
 .UpTo {
   display: none;
   justify-content: space-around;

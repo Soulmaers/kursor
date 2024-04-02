@@ -55,7 +55,7 @@ export class CreateNewObject {
             console.log('сохраняем')
             const mess = await this.instance.setToBaseSensStorMeta()
             this.handleValidationResult(mess, 'green', 'bold');
-
+            console.log(this.object.id)
             app.startClass(this.object.id)
         }
         else {

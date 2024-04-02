@@ -19,5 +19,7 @@ router.post('/api/saveValuePWR', controllerKursor.saveValuePWR)
 router.post('/api/getValuePWR', controllerKursor.getValueToBase)
 router.post('/api/deleteParams', controllerKursor.deleteParams)
 router.post('/api/getDataParamsInterval', controllerKursor.getDataParamsInterval)
+router.post('/api/getPressureOil', controllerKursor.getParamsToPressureAndOil)
 router.post('/api/setSummator', controllerKursor.setSummator)
 router.post('/api/getSummator', controllerKursor.getSummator)
+

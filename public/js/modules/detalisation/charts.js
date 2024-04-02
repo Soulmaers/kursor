@@ -17,6 +17,7 @@ export function createJobTS(data, num) {
         2: 'yestodayChart',
         3: 'weekChart',
     }
+    console.log(data)
     const dataArray = Object.entries(data).map(([category, value]) => ({ category, value }));
 
     const windowStatistic = document.querySelector('.windowStatistic')

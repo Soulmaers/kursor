@@ -17,6 +17,7 @@ export let initCharts
 export class SpisokObject {
     constructor(data) {
         this.data = data
+        this.element = null
         this.lowList = document.querySelector('.low_list')
         this.login = document.querySelectorAll('.log')[1].textContent
         this.allId = null
@@ -34,22 +35,24 @@ export class SpisokObject {
         this.findDomElement()  //поиск и удаление старых элементов
         this.createListObjectAndGroup() //создание списка групп и объектов на страницы
         const lists = this.lowList.querySelectorAll('.listItem')
-        // const logs = document.querySelectorAll('.trEvent')
-        // const twoChildren = [...logs].map(e => e.children[2])
-        //  console.log(twoChildren)
         new ClickObject(lists)
-        //new ClickObject(twoChildren)
         this.sensorsName = true
         this.lastSensor = true
         initSummary = new SummaryViewControll(this.allId)
         initCharts = new ChartsViewControll()
         initCharts.getDataSummary()
         await this.viewList(this.login)
+        if (this.element) this.grennColorPref(lists)
         this.validRole()
         this.finishload = true
         setInterval(this.zaprosSpisok.bind(this), 100000)
     }
 
+    grennColorPref(list) {
+        const el = [...list].find(el => el.id === this.element)
+        el.classList.add('border')
+        el.children[0].children[0].style.color = 'green'
+    }
     simulateLoader() {
         let progress = 0;
         let loaderProgress = document.querySelector('.loaders-progress');
@@ -646,6 +649,10 @@ export class SpisokObject {
         pref.classList.add('fas')
         pref.classList.add('fa-wrench')
         pref.classList.add('pref')
+        if (console.log(Number(this.element) === elem[4])) {
+            console.log(listItemCar)
+        }
+
         pref.style.color = elem[5] === false ? 'red' : 'darkblue'
         listName.prepend(pref)
         new Tooltip(pref, ['Редактировать объект'])
@@ -710,8 +717,9 @@ export class SpisokObject {
             });
         }
     }
-    updateData(newData) {
+    updateData(newData, elem) {
         this.data = newData
+        this.element = elem
         this.init()
     }
 

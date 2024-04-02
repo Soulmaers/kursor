@@ -420,43 +420,30 @@ exports.geoLastInterval = async (time1, time2, idw) => {
         console.log(e)
     }
 
-    /*  const data = await databaseService.objectId(idObject)
-      if (data.length === 0) {
-          return
-      }
-      const port = data[0].port
-      let table;
-      if (port === '20163') {
-          table = 'wialon_retranslation';
-      } else if (port === '20332') {
-          table = 'wialon_ips';
-      } else if (port === '21626' || !port) {
-          table = 'navtelecom';
-      }
-      else {
-          return []
-      }
-      try {
-          const pool = await connection
-          const postModel = `SELECT * FROM ${table} WHERE idObject=@idObject AND time >= @time2 AND time <= @time1 `
-          const result = await pool.request()
-              .input('idObject', idObject)
-              .input('time2', String(time2))
-              .input('time1', String(time1))
-              .query(postModel)
-  
-          if (result.recordset.length === 0) {
-              return []
-          }
-          else {
-              return result.recordset
-          }
-      }
-      catch (e) {
-          console.log(e)
-      }*/
+}
+
+exports.getParamsToPressureAndOilToBase = async (time1, time2, idw) => {
+    try {
+        const pool = await connection
+        const postModel = `SELECT speed,sats,engine,oil,pwr,engineOn, last_valid_time FROM globalStor WHERE idw=@idw AND last_valid_time >= @time1 AND last_valid_time <= @time2 `
+        const result = await pool.request()
+            .input('idw', idw)
+            .input('time2', String(time2))
+            .input('time1', String(time1))
+            .query(postModel)
+        if (result.recordset.length === 0) {
+            return []
+        }
+        else {
+            return result.recordset
+        }
+    }
+    catch (e) {
+        console.log(e)
+    }
 
 }
+
 exports.getWialonObjects = async () => {
 
     try {

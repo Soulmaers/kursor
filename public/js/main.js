@@ -75,18 +75,11 @@ export class Application {
             loaders.style.display = 'none'
         }
         if (this.spisok) {
-            this.spisok.updateData(data)
+            this.spisok.updateData(data, elem)
         }
         else {
             this.spisok = new SpisokObject(data) //отрисовка списка и статусов списка
         }
-        if (elem) {
-            const list = document.querySelectorAll('.listItem')
-            const el = [...list].find(el => el.id === elem)
-            el.classList.add('border')
-            el.children[0].children[0].style.color = 'green'
-        }
-
         // Очистка предыдущего интервала перед созданием нового
         if (this.logsInterval !== null) {
             clearInterval(this.logsInterval);

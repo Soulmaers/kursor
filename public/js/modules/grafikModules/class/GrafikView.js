@@ -1,5 +1,4 @@
 
-import { Tooltip } from '../../../class/Tooltip.js'
 import { GetDataTime } from '../../../class/GetDataTime.js'
 import { PressureCharts } from '../../charts/PressureCharts.js'
 import { OilCharts } from '../../charts/OilCharts.js'
@@ -23,11 +22,8 @@ export class GrafikView {
         this.iconGraf.addEventListener('click', this.toggleCalendar.bind(this))
         this.button[0].addEventListener('click', this.clear.bind(this))
         this.button[1].addEventListener('click', this.ok.bind(this))
-        this.colorOneActiveButton()
     }
-    colorOneActiveButton() {
-        this.menuGrafik[0].classList.add('activMenuGraf')
-    }
+
     ok() {
         console.log(this.time)
         this.calendar.style.display = 'none'
@@ -59,7 +55,9 @@ export class GrafikView {
         this.time = await getTime.getTimeInterval(this.calendar, ide)
     }
     init() {
-        new Tooltip(this.iconGraf, ['Календарь']);
+        this.menuGrafik.forEach(e => {
+            e.classList.remove('activMenuGraf')
+        })
         this.menuGrafik[0].classList.add('activMenuGraf')
         this.activeGrafiks = this.menuGrafik[0].getAttribute('rel')
         this.installTime()

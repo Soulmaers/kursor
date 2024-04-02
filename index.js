@@ -53,15 +53,15 @@ let session;
 async function init() {
     await initServer()
 
-    /*  const res = await wialon()
-      console.log(res)
-      if (res !== 'ошибка') {
-          console.log('сессия открыта')
-          new WialonOrigin(session);
-          setInterval(() => {
-              new WialonOrigin(session);
-          }, 120000);
-      }*/
+    const res = await wialon()
+    console.log(res)
+    if (res !== 'ошибка') {
+        console.log('сессия открыта')
+        new WialonOrigin(session);
+        setInterval(() => {
+            new WialonOrigin(session);
+        }, 120000);
+    }
 }
 init()
 
@@ -109,9 +109,9 @@ const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js
 const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js')
 const ListenPortIPS = require('./backend/modules/wialonIPS/ParseBuffer.js')
 const WialonOrigin = require('./backend/modules/wialon/WialonOrigin.js')
-//new ListenPortTP(21626)
-//new ListenPortTPNew(20163)
-//exports.ips = new ListenPortIPS(20332)
+new ListenPortTP(21626)
+new ListenPortTPNew(20163)
+exports.ips = new ListenPortIPS(20332)
 
 
 

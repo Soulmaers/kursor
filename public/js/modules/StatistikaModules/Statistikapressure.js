@@ -26,7 +26,9 @@ export class StatistikaPressure {
     async init() {
         if (!this.time) this.installTime()
         console.log(this.time)
+        console.time('1')
         await this.getParamsToInterval()
+        console.timeEnd('1')
         const content = this.calcilator()
         this.createTableContent(content)
     }
@@ -117,7 +119,7 @@ export class StatistikaPressure {
         })
     }
     calcilator() {
-        // console.log(this.structura);
+        console.log(this.structura);
         const result = this.structura.map(sensor => ({
             sensor: sensor.sens,
             intervals: this.processSensor(sensor, Number(sensor.bar.knd), Number(sensor.bar.kvd), Number(sensor.bar.dnn), Number(sensor.bar.dvn))
@@ -167,7 +169,7 @@ export class StatistikaPressure {
 
         sensorData.val.forEach((point, index) => {
             const time = new Date(point.dates).getTime() / 1000;
-            const isMovingAndStopSignal = point.stop === 'ВКЛ' && point.speed > 4;
+            const isMovingAndStopSignal = point.stop === 'ВКЛ' && point.speed > 0;
             let type = null;
 
             // Определяем тип интервала на основе значений давления
@@ -215,7 +217,6 @@ export class StatistikaPressure {
                 });
             }
         });
-        console.log(intervals)
         return intervals;
     }
 
@@ -233,7 +234,7 @@ export class StatistikaPressure {
             },
             body: JSON.stringify({ idw, t1, t2 })
         }
-
+        //getPressureOil
         const res = await fetch('/api/getDataParamsInterval', param)
         const data = await res.json()
 

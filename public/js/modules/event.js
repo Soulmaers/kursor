@@ -41,6 +41,8 @@ export class AddTooltip {
         const alarm = document.querySelector('.wrap_alarm')
         const iconStata = document.querySelector('.icon_stata')
         const iconCheck = document.querySelector('.icon_check')
+        const iconGraf = document.querySelector('.icon_graf')
+
         viewIcon.forEach(e => {
             const relValues = e.getAttribute('rel').split(' ');
             const lastRel = relValues[relValues.length - 1];
@@ -49,6 +51,7 @@ export class AddTooltip {
         [...tableInfoCar.children[0].children].forEach(e => {
             this.arrayContent.push([e, [e.getAttribute('rel')]]);
         })
+        this.arrayContent.push([iconGraf, ['Календарь']])
         this.arrayContent.push([iconStata, ['Календарь']])
         this.arrayContent.push([iconCheck, ['Давление/Пробег']])
         this.arrayContent.push([role, [role.getAttribute('rel')]])
