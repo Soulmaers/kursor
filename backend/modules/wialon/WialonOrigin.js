@@ -30,18 +30,15 @@ class WialonOrigin {
             const el = dataArray[i];
             const phone = phones[i];
             const idw = el.id;
-            if (!phone?.item?.uid) {
-                continue;
-            }
+            if (!phone?.item?.uid) continue;
             const res = await databaseService.objectsWialonImei(String(phone.item.uid)); // валидация полученного объекта по IMEI и id
-            if (!res?.length) {
-                continue;
-            }
+            if (!res?.length) continue;
             const timeBase = await databaseService.getLastTimeMessage(idw);
             const oldTime = timeBase?.[0]?.time_reg ? Number(timeBase[0].time_reg) : now - 1000;
             const [result] = await Promise.all([
                 wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i'), //запрос параметров по объекту за интервал времени
             ]);
+            if (!result?.length) continue;
             const allArrayData = [];
             result.messages.forEach(async (e) => {
                 const allObject = {
@@ -74,11 +71,8 @@ class WialonOrigin {
                 allArrayData.push(allObject);
             });
             updateTasks.push(this.updateDatabase(allArrayData, res[0].idObject));
-
         }
-
         await Promise.all(updateTasks);
-
     }
     async updateDatabase(allArrayData, res) {
         if (allArrayData.length !== 0) {

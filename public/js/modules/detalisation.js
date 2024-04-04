@@ -107,7 +107,6 @@ function eventClikInterval(objectRazmetka) {
                 const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
                 return [`${year}-${month}-${day}`, `${day}.${month}.${year}`, date.getTime() / 1000];
             });
-            console.log(times)
             el.nextElementSibling.children[1].children[1].addEventListener('click', async () => {
                 const perem = el.getAttribute('rel') === 'cal2' ? cal2 : cal3;
                 const titles = times[1][2] !== times[0][1]
@@ -126,12 +125,9 @@ function eventClikInterval(objectRazmetka) {
                         }
                     }
                     eventClikInterval(objectRazmetka)
-                    //   const interval = times.map(e => e[2])
-                    //    console.log(interval)
                     statistics(times, 'free', el.getAttribute('rel'), objectRazmetka)
                 }
                 else {
-                    console.log('работает отрисовка')
                     eventClikInterval(objectRazmetka)
                     const idw = document.querySelector('.color').id
                     objectRazmetka['nav4'].data.splice(0, 1, (await dannieOilTS(idw, 4, times)));
@@ -160,6 +156,7 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
     const t2 = !isNaN(num) ? interval[0] : interval[1][2] !== interval[0][2] ? interval[1][2] : interval[0][2] + 24 * 60 * 60
     const active = document.querySelector('.color').id
     const res = await getDataStor(active, t1, t2)
+    res.sort((a, b) => a.last_valid_time - b.last_valid_time);
     const newGlobal = res.map(it => {
         return {
             id: it.idw,
@@ -175,18 +172,8 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
             engineOn: Number(it.engineOn)
         }
     })
-    newGlobal.sort((a, b) => a.time - b.time)
-    for (let i = 0; i < newGlobal.length; i++) {
-        if (newGlobal[i].speed > 4 && newGlobal[i].engineOn === 1) {
-            newGlobal[i].condition = 'Движется';
-        }
-        else if (newGlobal[i].speed === 0 && newGlobal[i].engine === 1) {
-            newGlobal[i].condition = 'Повернут ключ зажигания';
-        }
-        else {
-            newGlobal[i].condition = 'Парковка';
-        }
-    }
+
+
     const intStopNew = prostoyNew(newGlobal)
     if (intStopNew) {
         intStopNew.forEach(el => {
@@ -201,26 +188,67 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
         })
     }
 
-    const datas = newGlobal.map((item, index, arr) => {
-        if (index === 0 || item.condition !== arr[index - 1].condition) {
-            const conditionGroup = arr.slice(index).findIndex(el => el.condition !== item.condition);
-            const endIndex = conditionGroup === -1 ? arr.length : index + conditionGroup;
-            const conditionItems = arr.slice(index, endIndex);
-            const interval = conditionItems.length > 1 ? conditionItems[conditionItems.length - 1].time - conditionItems[0].time : 0;
-            conditionItems.forEach(condItem => condItem.interval = convertToHoursAndMinutes(interval / 1000));
-        }
-        return item;
-    });
+    function calculateIntervalsAndTotalTime(data) {
+        let totalStateDurations = {}; // Для хранения общего времени каждого состояния
+        let currentState = null;
+        let stateStart = null;
+
+        data.forEach((item, index, arr) => {
+            const newState = item.condition || (item.speed > 0 && item.engineOn === 1 ? 'Движется'
+                : item.speed === 0 && item.engine === 1 ? 'Повернут ключ зажигания' : 'Парковка');
+            if (newState !== currentState || index === 0) {
+                if (stateStart !== null && currentState !== null) {
+                    // Закрытие предыдущего интервала и добавление его продолжительности
+                    const intervalSeconds = (item.time - stateStart) / 1000;
+                    if (!totalStateDurations[currentState]) {
+                        totalStateDurations[currentState] = 0;
+                    }
+                    totalStateDurations[currentState] += intervalSeconds;
+                    // Добавляем интервал ко всем элементам в группе
+                    const interval = convertToHoursAndMinutes(intervalSeconds);
+                    for (let j = arr.findIndex(el => el.time === stateStart); j < index; j++) {
+                        arr[j].interval = interval;
+                    }
+                }
+                stateStart = item.time; // Начало нового состояния
+            }
+            item.condition = newState; // Присваиваем состояние
+            currentState = newState; // Обновляем текущее состояние
+
+            // Если это последний элемент, закрываем текущий интервал
+            if (index === data.length - 1) {
+                const intervalSeconds = (item.time - stateStart) / 1000;
+                if (!totalStateDurations[currentState]) {
+                    totalStateDurations[currentState] = 0;
+                }
+                totalStateDurations[currentState] += intervalSeconds;
+
+                const interval = convertToHoursAndMinutes(intervalSeconds);
+                for (let j = arr.findIndex(el => el.time === stateStart); j <= index; j++) {
+                    arr[j].interval = interval;
+                }
+            }
+        });
+
+        return {
+            datas: data, // Данные с интервалами по каждому состоянию
+            intervals: totalStateDurations // Общее время по всем состояниям
+        };
+    }
+
+
+    const { datas, intervals } = calculateIntervalsAndTotalTime(newGlobal);
+
     if (isNaN(num)) {
         objectRazmetka['nav1'].data.splice(num === 'cal2' ? 1 : 2, 1, datas);
-        objectRazmetka['nav2'].data.splice(num === 'cal2' ? 1 : 2, 1, dannieSortJobTS(datas));
+        objectRazmetka['nav2'].data.splice(num === 'cal2' ? 1 : 2, 1, dannieSortJobTS(intervals));
         objectRazmetka['nav3'].data.splice(num === 'cal2' ? 1 : 2, 1, await dannieOilTS(idw, num, interval));
         const act = document.querySelector('.activStatic').id
         objectRazmetka[act].fn(objectRazmetka[act].data[num === 'cal2' ? 1 : 2], num === 'cal2' ? 2 : 3)
     }
     else {
         objectRazmetka['nav1'].data.push(datas);
-        objectRazmetka['nav2'].data.push(dannieSortJobTS(datas));
+        objectRazmetka['nav2'].data.push(dannieSortJobTS(intervals));
         objectRazmetka['nav3'].data.push(await dannieOilTS(idw, num));
         const act = document.querySelector('.activStatic').id
         objectRazmetka[act].fn(objectRazmetka[act].data[num - 1], num)
@@ -231,7 +259,6 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
 
 async function getDataStor(active, t1, t2) {
     const idw = active
-    console.log(active, t1, t2)
     const paramss = {
         method: "POST",
         headers: {

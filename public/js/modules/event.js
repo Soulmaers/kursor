@@ -3,16 +3,12 @@ import { data } from './content.js'
 import { alarmClear } from './visual.js'
 import { getUsers } from './admin.js'
 import { reqProtectorBase } from './protector.js'
-import { reqBaseId, saveDouble, findId } from './saveBaseId.js'
-import { rotate, zbor } from './rotate.js'
-import { clearElem } from './helpersFunc.js'
+import { saveDouble } from './saveBaseId.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 import { Tooltip } from '../class/Tooltip.js'
-
 import { Flasher } from '../class/Flash.js'
 import { CloseBTN } from '../class/CloseBTN.js'
 import { ResizeContainer } from '../class/ResizeContainer.js'
-
 import { conf } from './altConfig.js'
 import { viewTech } from './tech.js'
 import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
@@ -310,14 +306,6 @@ closeForm.addEventListener('click', () => {
     //  document.querySelector('.popup-background').style.display = 'none'
     account.style.zIndex = 2
 })
-const rotateDiv = document.querySelector('.rotateDiv')
-rotateDiv.addEventListener('click', () => {
-    const rotates = document.querySelectorAll('.rotates')
-    zbor(rotates);
-    rotates.forEach(e => {
-        e.classList.remove('rotates')
-    })
-})
 const widthWind = document.querySelector('body').offsetWidth;
 const iconStrela = document.querySelector('.iconStrela')
 iconStrela.addEventListener('click', () => {
@@ -370,75 +358,6 @@ iconStrela.addEventListener('click', () => {
 let intervalId
 let intervalId2
 
-
-
-
-const btnGenerate = document.querySelector('.btn_generate')
-btnGenerate.addEventListener('click', reqBaseId)
-const btnBase = document.querySelector('.btn_base')
-btnBase.addEventListener('click', async () => {
-    const findTyresId = document.querySelector('.findTyresId')
-    if (findTyresId.classList.contains('activeFind')) {
-        findTyresId.classList.remove('activeFind')
-        findTyresId.style.display = 'none'
-        return
-    }
-    findTyresId.classList.add('activeFind')
-    findTyresId.style.display = 'flex'
-    const uniq = await findId()
-    console.log(uniq)
-    const data = [];
-    uniq.forEach(el => {
-        data.push(el.identificator)
-    })
-    new DropDownList({ element: document.querySelector(`#inputId`), btn: document.querySelector('.buhId'), data });
-})
-const configs = document.querySelector('.configs')
-const configClear = document.querySelector('.configClear')
-if (configs) {
-    configs.addEventListener('click', () => {
-        const card = document.querySelectorAll('.cardClick')
-        card.forEach(el => {
-            el.classList.remove('acto')
-        })
-        // Создаем экземпляр класса и передаем элемент, который необходимо перемещать
-        const control = document.querySelector('.controll')
-        const draggable = new DraggableContainer(control);
-
-        const controll = document.querySelector('.container_left')
-        const config = document.querySelector('.config')
-        const sensors = document.querySelector('.sensors')
-        controll.style.display = 'flex'
-        config.style.display = 'flex'
-
-        sensors.style.display = 'none';
-        configs.classList.add('conf')
-        rotate()
-    })
-    configClear.addEventListener('click', () => {
-        const configs = document.querySelector('.configs')
-        const findTyresId = document.querySelector('.findTyresId')
-        const findValueId = document.querySelector('.findValueId')
-        const controll = document.querySelector('.container_left')
-        const sensors = document.querySelector('.sensors')
-        const moduleConfig = document.querySelector('.moduleConfig')
-        const rotates = document.querySelectorAll('.rotates')
-        rotates.forEach(e => {
-            e.classList.remove('rotates')
-        })
-        const wPod = document.querySelector('.wrap_pod')
-        if (findTyresId.classList.contains('activeFind')) {
-            findTyresId.classList.remove('activeFind')
-            findTyresId.style.display = 'none'
-        }
-        clearElem(findValueId.value)
-        controll.style.display = 'none'
-        sensors.style.display = 'none';
-        moduleConfig.style.display = 'none';
-        wPod.style.display = 'none';
-        configs.classList.remove('conf')
-    })
-}
 //очистка модели из базы и удаление отрисовки
 export function btnDel() {
     const korz = document.querySelector('.korz')

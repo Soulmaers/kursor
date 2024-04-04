@@ -938,14 +938,6 @@ input[type="checkbox"]::before {
   background-color: #fff;
 }
 
-.btn_generate:hover {
-  background-color: #fff;
-}
-
-.btn_base:hover {
-  background-color: #fff;
-}
-
 .message,
 .messagech {
   display: flex;
@@ -953,17 +945,6 @@ input[type="checkbox"]::before {
   align-items: center;
   font-family: Arial;
   font-weight: bold;
-}
-
-.messageId {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial;
-  font-weight: bold;
-  position: absolute;
-  bottom: 40%;
-
 }
 
 .sel {
@@ -978,6 +959,14 @@ input[type="checkbox"]::before {
 }
 
 
+.span_date {
+  position: absolute;
+  left: 85px;
+  top: 2px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #fff
+}
 
 .singUpForm {
   width: 50%;
@@ -1388,13 +1377,9 @@ div.spoyler {
   margin-left: 15px
 }
 
-.control_panel {
-  display: flex;
-  align-items: center;
-}
 
-.auth,
-.configs {
+
+.auth {
   color: #fff;
   font-family: Arial;
   font-size: 1rem;
@@ -1408,13 +1393,7 @@ div.spoyler {
   border-bottom: 1px solid #fff
 }
 
-.configs:hover {
-  border-bottom: 1px solid #fff
-}
 
-.configs {
-  display: none;
-}
 
 .list_menu {
   display: flex;
@@ -1706,8 +1685,7 @@ div.spoyler {
   color: gray
 }
 
-.buh,
-.buhId {
+.buh {
   width: 24px;
   height: 20px;
   display: flex;
@@ -2783,13 +2761,6 @@ div.spoyler {
   background-color: blue;
 }
 
-.rotateDiv {
-  margin-top: 10px;
-  border: 1px solid gray;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
 .wrapper_right {
   display: flex;
   box-sizing: border-box;
@@ -2983,25 +2954,6 @@ input[type="date"] {
   text-align: center;
   font-size: 1rem;
   height: 20px;
-}
-
-.findTyresId {
-  margin-top: 2px;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid lightgray;
-  font-family: Arial;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.findValueId {
-  border: none;
-  text-align: center;
-  font-size: 1rem;
-  height: 20px;
-  width: 100%;
 }
 
 .techInputId {
@@ -3621,29 +3573,6 @@ input[type="date"] {
 }
 
 
-.container_left {
-  width: 220px;
-  box-sizing: border-box;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  left: -25%
-}
-
-.rotateDiv {
-  width: 170px;
-  margin: 1px 0;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid gray;
-  padding: 2px 0;
-  box-sizing: border-box;
-  text-align: center;
-  cursor: pointer;
-
-}
-
 .mapsOilCard {
   border-radius: 5px;
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.5);
@@ -3708,11 +3637,6 @@ input[type="date"] {
   background: #fff;
 }
 
-.saveId {
-  display: flex;
-  margin-left: 5px;
-}
-
 .rightBlock {
   margin-top: 30px;
   width: 60%;
@@ -3720,61 +3644,6 @@ input[type="date"] {
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-}
-
-
-.generateId {
-  width: 160px;
-  height: 38px;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid gray;
-  padding: 2px 0;
-  box-sizing: border-box;
-  text-align: center;
-  cursor: pointer;
-}
-
-.btn_generate {
-  height: 32px;
-  width: 154px;
-  border: 1px solid gray;
-  box-sizing: border-box;
-  background-color: lightgray;
-  padding: 5px 0;
-  font-size: 0.8rem;
-  font-family: Arial;
-  font-weight: 700;
-  color: #000;
-  cursor: pointer;
-}
-
-
-.btn_base {
-  height: 32px;
-  width: 88px;
-  border: 1px solid gray;
-  box-sizing: border-box;
-  background-color: lightgray;
-  padding: 5px 0;
-  font-size: 0.8rem;
-  font-family: Arial;
-  font-weight: 700;
-  color: #000;
-  cursor: pointer;
-}
-
-.listId {
-  width: 94px;
-  height: 38px;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid gray;
-  padding: 2px 0;
-  box-sizing: border-box;
-  text-align: center;
-  cursor: pointer;
-  margin: 0 10px;
 }
 
 .save {
@@ -3814,22 +3683,6 @@ input[type="date"] {
   cursor: pointer;
 }
 
-.btn_rotate {
-  width: 164px;
-  border: 1px solid gray;
-  box-sizing: border-box;
-  background-color: lightgray;
-  padding: 5px 15px;
-  font-size: 0.9rem;
-  font-family: Arial;
-  font-weight: 700;
-  color: #000;
-  cursor: pointer;
-}
-
-.btn_rotate:hover {
-  background-color: #fff;
-}
 
 .btn_save {
   height: 32px;
@@ -4688,27 +4541,12 @@ input[type="date"] {
   display: flex;
 }
 
-.mainConfig {
-  display: flex;
-  align-items: center;
-  margin: 30px 0;
-  justify-content: space-around;
-}
 
 .moduleConfig {
 
   width: 50%;
   display: none;
 }
-
-.configClear {
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-
-}
-
 
 .card_strate {
   width: 110px;
@@ -6927,21 +6765,6 @@ i.minusS {
     font-size: 0.6rem;
   }
 
-  .configs {
-    color: #fff;
-    font-family: Arial;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: none;
-    display: none;
-
-  }
-
-  .control_panel {
-    display: none;
-  }
-
   .main_menu {
     width: 10%;
     display: flex;
@@ -6963,10 +6786,6 @@ i.minusS {
   }
 
   .auth:hover {
-    border-bottom: 1px solid #fff
-  }
-
-  .configs:hover {
     border-bottom: 1px solid #fff
   }
 
@@ -7098,12 +6917,6 @@ i.minusS {
   .state_tyres {
     font-size: 0.8rem;
   }
-
-  .container_left {
-    left: 0;
-    top: 0
-  }
-
 
 
   .noGraf {

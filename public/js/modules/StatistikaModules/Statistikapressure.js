@@ -11,6 +11,7 @@ export class StatistikaPressure {
         this.iconStata = document.querySelector('.icon_stata')
         this.iconCheck = document.querySelector('.icon_check')
         this.calendar = document.querySelector('.calendar_graf_stata')
+        this.spanDate = document.querySelector('.span_date')
         this.button = this.calendar.querySelectorAll('.btm_formStart')
         this.button[0].addEventListener('click', this.clear.bind(this))
         this.button[1].addEventListener('click', this.ok.bind(this))
@@ -31,8 +32,22 @@ export class StatistikaPressure {
         console.timeEnd('1')
         const content = this.calcilator()
         this.createTableContent(content)
+        this.viewTime()
     }
 
+    viewTime() {
+        const dataTime = this.time.map(el => {
+            const date = new Date(el * 1000);
+            const day = date.getDate().toString().padStart(2, '0'); // Добавляем ведущий ноль для дня
+            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Добавляем ведущий ноль для месяца
+            const year = date.getFullYear();
+            const formattedDate = `${day}.${month}.${year}`;
+            return formattedDate
+        })
+        const bool = dataTime[0] === dataTime[1] ? true : false
+        console.log(dataTime)
+        this.spanDate.textContent = bool ? dataTime[0] : `${dataTime[0]} - ${dataTime[1]}`
+    }
     initEventListeners() {
         this.iconStata.addEventListener('click', this.clickIcon)
         this.iconCheck.removeEventListener('click', this.clickCheck)
@@ -125,7 +140,6 @@ export class StatistikaPressure {
             sensor: sensor.sens,
             intervals: this.processSensor(sensor, Number(sensor.bar.knd), Number(sensor.bar.kvd), Number(sensor.bar.dnn), Number(sensor.bar.dvn))
         }));
-        console.log(result)
         const resultWithDurations = result.map(sensor => {
             // Инициализируем переменную для хранения суммарного времени и общего пробега всех интервалов
             let totalTimeAll = 0;
@@ -138,13 +152,9 @@ export class StatistikaPressure {
                     const intervalTime = interval.end - interval.start;
                     // Рассчитываем пробег для интервала
                     const intervalMileage = interval.mileage;
-                    // Накапливаем общий пробег
-
                     // Возвращаем объект с посчитанными значениями для каждого интервала
                     return { ...acc, totalTime: acc.totalTime + intervalTime, mileageInterval: acc.mileageInterval + intervalMileage };
                 }, { totalTime: 0, mileageInterval: 0 }); // Начальные значения аккумулятора
-
-                console.log(totalTime.totalTime)
                 // Накапливаем суммарное время всех интервалов
                 totalTimeAll += totalTime.totalTime;
                 totalMileageAll += totalTime.mileageInterval;
@@ -234,7 +244,8 @@ export class StatistikaPressure {
 
     async getParamsToInterval() {
         const t1 = this.time[0]
-        const t2 = this.time[1]
+        const t2 = this.time[1] + 86399
+        console.log(t1, t2)
         const idw = this.id
         const param = {
             method: 'POST',

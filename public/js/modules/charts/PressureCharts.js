@@ -641,7 +641,7 @@ export class PressureCharts {
         const idw = Number(document.querySelector('.color').id)
         console.log(idw)
         const t1 = this.t1
-        const t2 = this.t2
+        const t2 = this.t2 + 86399
         const paramss = {
             method: "POST",
             headers: {

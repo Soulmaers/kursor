@@ -23,7 +23,7 @@ export function prostoyNew(newdata) {
 
             return acc;
         }, []).filter(el => el.length > 0).reduce((acc, el) => {
-            if (((el[el.length - 1].time.getTime()) / 1000) - ((el[0].time.getTime()) / 1000) > 600) {
+            if (((el[el.length - 1].time.getTime()) / 1000) - ((el[0].time.getTime()) / 1000) > 1200) {
                 acc.push([[el[0].time, el[0].geo, el[0].oil], [el[el.length - 1].time, el[el.length - 1].geo, el[el.length - 1].oil]])
             }
             return acc
@@ -95,41 +95,9 @@ export async function dannieOilTS(idw, num, interval) {
 
 
 export function dannieSortJobTS(datas, ele, num) {
-    const data = datas.map(el => ({
-        geo: el.geo,
-        sats: el.sats,
-        pwr: el.pwr,
-        time: el.time,
-        speed: el.speed,
-        condition: el.condition === 'Повернут ключ зажигания' ? 'Парковка' : el.condition
-    }));
-    const obj = {};
-    let start;
-    let end;
-    let currentCondition;
-    for (let i = 0; i < data.length; i++) {
-        const current = data[i];
-
-        if (current.condition !== currentCondition) {
-            if (start && end) {
-                const duration = subtractTimes(end, start);
-                obj[currentCondition] = obj[currentCondition] || 0;
-                obj[currentCondition] += duration;
-            }
-            start = current.time;
-        }
-        end = current.time;
-        currentCondition = current.condition;
+    if (datas["Повернут ключ зажигания"]) {
+        datas["Парковка"] += datas["Повернут ключ зажигания"];
+        delete datas["Повернут ключ зажигания"];
     }
-    // Добавляем последний отрезок времени
-    if (start && end && currentCondition) {
-        const duration = subtractTimes(end, start);
-        obj[currentCondition] = obj[currentCondition] || 0;
-        obj[currentCondition] += duration;
-    }
-    function subtractTimes(end, start) {
-        const diff = (end.getTime() / 1000) - (start.getTime() / 1000)
-        return diff
-    }
-    return obj
+    return datas
 }
