@@ -1,8 +1,8 @@
 
-import { Tooltip } from '../../class/Tooltip.js'
-import { createMapsUniq } from '../geo.js'
+import { Tooltip } from '../../../class/Tooltip.js'
+import { createMapsUniq } from '../../geo.js'
 
-import { dataInfo, model } from '../paramsTyresView.js'
+import { dataInfo, model } from '../../paramsTyresView.js'
 let isCanceled = false;
 
 export class PressureCharts {

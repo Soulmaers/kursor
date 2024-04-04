@@ -1,7 +1,7 @@
 
 import { GetDataTime } from '../../../class/GetDataTime.js'
-import { PressureCharts } from '../../charts/PressureCharts.js'
-import { OilCharts } from '../../charts/OilCharts.js'
+import { PressureCharts } from '../../chartsModules/class/PressureCharts.js'
+import { OilCharts } from '../../chartsModules/class/OilCharts.js'
 export class GrafikView {
     constructor() {
         //  this.list = nav

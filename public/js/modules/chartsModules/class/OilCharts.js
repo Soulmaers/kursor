@@ -1,5 +1,5 @@
-import { Tooltip } from '../../class/Tooltip.js'
-import { createMapsUniq } from '../geo.js'
+import { Tooltip } from '../../../class/Tooltip.js'
+import { createMapsUniq } from '../../geo.js'
 
 let isCanceled = false;
 export class OilCharts {
@@ -27,8 +27,8 @@ export class OilCharts {
             return Promise.reject(new Error('Запрос отменен'));
         }
         isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
-        this.data = await this.createStructura()
-        this.objOil = this.findMarkerReFill()
+        this.data = await this.createStructura() //получение и подготовка структуры данных
+        this.objOil = this.findMarkerReFill() //поиск заправок
         console.log(this.objOil)
         if (this.data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'

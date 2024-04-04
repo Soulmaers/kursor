@@ -798,58 +798,120 @@
             </div>
             <div class="techInfo">
                 <h2 class="techTitle">Основные показатели колеса</h2>
-                <% if (role!=='Пользователь' ) { %><%-include('modalTechNoTDRMX') %>
-                        <% } %>
-                            <% if (role=='Пользователь' ) { %><%-include('modalTechTDRMX') %>
-                                    <% } %>
-                                        <div class="radioVal">
-                                            <div class="wrarbtn"><button class="buttonTth">Сохранить</button></div>
-                                            <div class="radioModule">
-                                                <p>Сторона колеса</p>
-                                                <p><input class="radio" name="radio" type="radio" id='1' value="left"
-                                                        checked>
-                                                    Левое</p>
-                                                <p><input class="radio" name="radio" type="radio" id="rigth"
-                                                        value="rigth">
-                                                    Правое</p>
-                                            </div>
-                                        </div>
-                                        <div class="protector">
-                                            <div class="title_prot">График замера протектора</div>
-                                            <div class="progressBar2">
-                                                <!--      <p class="mm12">12mm</p>-->
-                                                <div class="maxMMM"><span class='mmtext'>16mm</span></div>
-                                                <!--      <p class="mm6">6mm</p>-->
-                                                <p class="mm0">0mm</p>
-                                                <div class="contBar22">
-                                                    <canvas id="drawLine2" height="60"></canvas>
-                                                </div>
-                                                <div class="contBar22">
-                                                    <canvas id="drawLine3" height="60"></canvas>
-                                                </div>
-                                                <div class="contBar22">
-                                                    <canvas id="drawLine4" height="60"></canvas>
-                                                </div>
-                                            </div>
-                                            <div class="headerMM">
-                                                <div class="titleMM N1">
-                                                    <div class="number"></div>
-                                                    <p class="text"></p>
-                                                </div>
-                                                <div class="titleMM N2">
-                                                    <div class="number"></div>
-                                                    <p class="text"></p>
-                                                </div>
-                                                <div class="titleMM N3">
-                                                    <div class="number"></div>
-                                                    <p class="text"></p>
-                                                </div>
-                                                <div class="titleMM N4">
-                                                    <div class="number"></div>
-                                                    <p class="text"></p>
-                                                </div>
-                                            </div>
-                                        </div>
+                <div class="tth">
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="marka">Марка</h3>
+                        <div class="formTth "> <input class="formValue techInput" id="input"> <button
+                                class="buh">&#8595</button></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="modelT">Модель</h3>
+                        <div class="formTth "><input class="formValue techInput"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTthId techId" id="identificator">Идентификатор колеса</h3>
+                        <div class="formTth">
+                            <div class="idbaseTyres"></div>
+                        </div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="psi">Рабочее давление в PSI</h3>
+                        <div class="formTth  psi">
+                            <input class="techInput formValue jobDav validation" type="number" placeholder="130">
+                            <p class="techText titleTth barD" id="bar">BAR</p>
+                            <p class="techInput bar job"></p>
+                        </div>
+                    </div>
+                    <div class="modal hiddenPos">
+                        <h3 class="titleTth tech" id="changeBar">min и max отклонение в BAR</h3>
+                        <div class="formTth formValue"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="probegNow">Текущий пробег колеса</h3>
+                        <div class="formTth"><input class="techInput formValue probeg"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="montaj">Дата монтажа</h3>
+                        <div class="formTth"> <input class="formValue dateChangeTires" type="date"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="probegPass">Пробег по паспорту</h3>
+                        <div class="formTth"><input class="formValue techInput probeg"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth" id="probegVal">Остаточный пробег колеса в км</h3>
+                        <div class="formTth">
+                            <p class="techInput probeg job"></p>
+                        </div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTths techs">Оставшаяся глубина протектора мм. (замеры)</h3>
+                        <div class=" params ">
+                            <h4 class=" tech" id="N1"></h4><input class="techInput formValue" step="0.1" type="number"
+                                lang="en" placeholder="№1">
+                            <h4 class=" tech" id="N2"></h4><input class="techInput formValue" step="0.1" type="number"
+                                lang="en" placeholder="№2">
+                            <h4 class=" tech" id="N3"></h4><input class="techInput formValue" step="0.1" type="number"
+                                lang="en" placeholder="№3">
+                            <h4 class="tech" id="N4"></h4><input class="techInput formValue" step="0.1" type="number"
+                                lang="en" placeholder="№4">
+                        </div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="protectorDate">Дата замера протектора</h3>
+                        <div class="formTth"><input class="formValue dateChangeTires" type="date"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="maxProtector">Высота протектора (мм)</h3>
+                        <div class="formTth"><input class="techInput formValue maxProtector" placeholder="16"></div>
+                    </div>
+                </div>
+                <div class="radioVal">
+                    <div class="wrarbtn"><button class="buttonTth">Сохранить</button></div>
+                    <div class="radioModule">
+                        <p>Сторона колеса</p>
+                        <p><input class="radio" name="radio" type="radio" id='1' value="left" checked>
+                            Левое</p>
+                        <p><input class="radio" name="radio" type="radio" id="rigth" value="rigth">
+                            Правое</p>
+                    </div>
+                </div>
+                <div class="protector">
+                    <div class="title_prot">График замера протектора</div>
+                    <div class="progressBar2">
+                        <!--      <p class="mm12">12mm</p>-->
+                        <div class="maxMMM"><span class='mmtext'>16mm</span></div>
+                        <!--      <p class="mm6">6mm</p>-->
+                        <p class="mm0">0mm</p>
+                        <div class="contBar22">
+                            <canvas id="drawLine2" height="60"></canvas>
+                        </div>
+                        <div class="contBar22">
+                            <canvas id="drawLine3" height="60"></canvas>
+                        </div>
+                        <div class="contBar22">
+                            <canvas id="drawLine4" height="60"></canvas>
+                        </div>
+                    </div>
+                    <div class="headerMM">
+                        <div class="titleMM N1">
+                            <div class="number"></div>
+                            <p class="text"></p>
+                        </div>
+                        <div class="titleMM N2">
+                            <div class="number"></div>
+                            <p class="text"></p>
+                        </div>
+                        <div class="titleMM N3">
+                            <div class="number"></div>
+                            <p class="text"></p>
+                        </div>
+                        <div class="titleMM N4">
+                            <div class="number"></div>
+                            <p class="text"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="tableTarir">
                 <h2 class="techTitle">Тарировочная таблица

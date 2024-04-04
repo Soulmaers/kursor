@@ -1,4 +1,4 @@
-import { timeConvert } from '../charts/oil.js'
+import { timeConvert } from '../helpersFunc.js'
 import { convertToHoursAndMinutes } from './helpers.js'
 import { createMapsUniq } from '../geo.js'
 

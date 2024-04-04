@@ -8,6 +8,20 @@ export function clearElem(el) {
     el = ''
 }
 
+
+export function timeConvert(d) {
+    const date = new Date(d);
+    const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+        "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+    const month = monthNames[date.getMonth()];
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const timeString = `${month} ${day}, ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+    return timeString;
+}
+
+
 export function removeArrElem(arr) {
     arr.forEach(el => {
         el.remove()

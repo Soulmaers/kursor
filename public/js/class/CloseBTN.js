@@ -1,4 +1,4 @@
-import { alarmFind } from '../modules/alarmStorage.js'
+import { alarmFind } from '../modules/alarmModules/alarmStorage.js'
 
 export class CloseBTN {
     constructor(elem1, elem2, elem3) {

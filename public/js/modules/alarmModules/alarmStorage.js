@@ -1,11 +1,9 @@
-import { tr } from './content.js'
-import { convert } from './helpersFunc.js'
-import { createMapsUniq } from './geo.js'
-import { testovfn } from './charts/bar.js'
-import { Tooltip } from '../class/Tooltip.js'
-import { dataInfo } from './paramsTyresView.js'
+import { tr } from '../content.js'
+import { convert } from '../helpersFunc.js'
+import { createMapsUniq } from '../geo.js'
+import { Tooltip } from '../../class/Tooltip.js'
+import { dataInfo } from '../paramsTyresView.js'
 
-const login = document.querySelectorAll('.log')[1].textContent
 let isProcessing = false
 export async function alarmFind() {
     console.log('алармфайнд')
@@ -94,8 +92,6 @@ async function viewAlarmStorage(name, stor) {
     new Tooltip(infos, ['Лента уведомлений отражает зафиксированные отклонения от заданных параметров по давлению и температуре',
         'Если внутри зафиксированного отклонения есть дополнительные изменения, то они подгружаются по нажатию стрелки вниз напротив уведомления',
         'Если нажать красный маркер карты, то на карте отразится место события с переданными туда данными']);
-
-    const active = document.querySelector('.color')
 
     const [allsens, ,] = dataInfo
     result.forEach(el => {

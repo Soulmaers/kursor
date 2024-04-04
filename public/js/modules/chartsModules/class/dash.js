@@ -1,4 +1,4 @@
-import { generDav } from '../content.js'
+import { generDav } from '../../content.js'
 const login = document.querySelectorAll('.log')[1].textContent
 export function dashView(ids) {
     const group = Array.from(document.querySelectorAll('.groups'))

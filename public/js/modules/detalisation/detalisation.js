@@ -1,9 +1,9 @@
-import { timefn } from './helpersFunc.js'
-import { prostoyNew, dannieOilTS, dannieSortJobTS } from './detalisation/statistic.js'
-import { GetDataTime } from '../class/GetDataTime.js'
-import { jobTSDetalisation, jobTS, oilTS, melageTS, cal2, cal3 } from './content.js'
-import { eskiz, convertTime, updateHTML, yesTo, weekTo, convertToHoursAndMinutes } from './detalisation/helpers.js'
-import { createChart, createJobTS, createOilTS, createMelagiTS } from './detalisation/charts.js'
+import { timefn } from '../helpersFunc.js'
+import { prostoyNew, dannieOilTS, dannieSortJobTS } from './statistic.js'
+import { GetDataTime } from '../../class/GetDataTime.js'
+import { jobTSDetalisation, jobTS, oilTS, melageTS, cal2, cal3 } from '../content.js'
+import { eskiz, convertTime, updateHTML, yesTo, weekTo, convertToHoursAndMinutes } from './helpers.js'
+import { createChart, createJobTS, createOilTS, createMelagiTS } from './charts.js'
 
 export let objectRazmetka
 export async function timeIntervalStatistiks(signal) {
@@ -172,7 +172,6 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
             engineOn: Number(it.engineOn)
         }
     })
-
 
     const intStopNew = prostoyNew(newGlobal)
     if (intStopNew) {

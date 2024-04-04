@@ -2,7 +2,7 @@
 
 import { map } from '../modules/navModules/karta.js'
 import { mapLocal } from '../modules/objectMainModules/class/CreateMarkersEvent.js'
-import { load } from '../modules/detalisation.js'
+import { load } from '../modules/detalisation/detalisation.js'
 
 
 console.log('флеш')

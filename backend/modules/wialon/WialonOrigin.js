@@ -38,7 +38,7 @@ class WialonOrigin {
             const [result] = await Promise.all([
                 wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i'), //запрос параметров по объекту за интервал времени
             ]);
-            if (!result?.length) continue;
+            if (!result) continue;
             const allArrayData = [];
             result.messages.forEach(async (e) => {
                 const allObject = {

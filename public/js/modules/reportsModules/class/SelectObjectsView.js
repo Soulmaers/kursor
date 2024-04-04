@@ -1,7 +1,6 @@
 import { NaviChartLegenda } from "./NaviChartLegends.js"
 import { GetDataTime } from '../../../class/GetDataTime.js'
 import { Tooltip } from "../../../class/Tooltip.js"
-import { testovfnNew } from '../../charts/bar.js'
 export class SelectObjectsView {
 
     constructor() {

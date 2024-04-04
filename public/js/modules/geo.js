@@ -1,6 +1,8 @@
 //e156e8924c3a4e75bc1eac26f153457e-ключ апи https://opencagedata.com/dashboard#geocoding
-import { timeConvert } from './charts/oil.js'
+import { timeConvert } from './helpersFunc.js'
 import { DraggableContainer } from '../class/Dragdown.js'
+
+
 
 
 export async function reverseGeocode(geoY, geoX) {

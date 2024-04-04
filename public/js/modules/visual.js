@@ -6,10 +6,10 @@ import { kranParams } from './strelaKran.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { removeElem, clearElem } from './helpersFunc.js'
 import { convert } from './helpersFunc.js'
-import { timeIntervalStatistiks } from './detalisation.js'
+import { timeIntervalStatistiks } from './detalisation/detalisation.js'
 import { CreateMarkersEvent } from './objectMainModules/class/CreateMarkersEvent.js'
 //import { grafClick } from './ClickObject.js'
-import { alarmFind } from './alarmStorage.js'
+import { alarmFind } from './alarmModules/alarmStorage.js'
 let time;
 let timeIcon;
 let createEvent;
