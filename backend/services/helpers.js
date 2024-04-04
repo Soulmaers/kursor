@@ -146,7 +146,7 @@ exports.setDataToBase = async (imei, port, info, id) => {
             // Обработка специфических параметров
             let computedValue = String(lastObject[el.meta]);
             if (el.params === 'engine' && coefEngine) {
-                computedValue = Number(computedValue) > Number(coefEngine[0].value) ? '1' : '0';
+                computedValue = Number(computedValue) >= Number(coefEngine[0].value) ? '1' : '0';
             } else if (el.params === 'mileage' && coefMileage) {
                 computedValue = Number(computedValue) + Number(coefMileage[0].value);
             }
@@ -222,13 +222,7 @@ exports.setDataToBase = async (imei, port, info, id) => {
                 obj['time'] = String(elem.time)
 
 
-                if (coefPWR) {
-                    data.forEach(el => {
-                        if (el.params === 'pwr') {
-                            obj['engineOn'] = obj['engine'] === '1' && Number(el.value) > Number(coefPWR[0].value) ? '1' : '0'
-                        }
-                    });
-                }
+
 
                 // Создаем Map для хранения новых значений для params
                 const updatedValues = new Map();
@@ -248,17 +242,22 @@ exports.setDataToBase = async (imei, port, info, id) => {
                         }
                     }
                 }
-
                 // Проходим по исходному массиву один раз, обновляя значения согласно Map
                 for (let e of value) {
                     if (updatedValues.has(e.params)) {
                         e.value = updatedValues.get(e.params);
                     }
                 }
-
                 value.forEach(e => {
                     obj[e.params] = e.value
                 })
+                if (coefPWR) {
+                    data.forEach(el => {
+                        if (el.params === 'pwr') {
+                            obj['engineOn'] = obj['engine'] === '1' && Number(el.value) >= Number(coefPWR[0].value) ? '1' : '0'
+                        }
+                    });
+                }
                 const summator = data.find(e => e.params === 'summatorOil');
                 if (summator && summator.meta === 'ON') {
                     const params = await databaseService.getSummatorToBase(idw)

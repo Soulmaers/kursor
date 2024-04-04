@@ -203,6 +203,8 @@ export class IconStatus {
             'ВКЛ' : 'ВЫКЛ' : '-'
         let statName;
         let statNameIng;
+        console.log(this.valueparamsObject['tsi-card'])
+        console.log(this.id)
         this.valueparamsObject['tsi-card'] === 'ВКЛ' ? statName = 'Включен' : this.valueparamsObject['tsi-card'] === '-' ? statName = '-' : statName = 'Выключен'
         this.valueparamsObject['ign-card'] === 'ВКЛ' ? statNameIng = 'Включено' : statNameIng = 'Выключено'
 

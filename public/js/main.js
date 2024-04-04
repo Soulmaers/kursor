@@ -136,14 +136,14 @@ export class Application {
         if (screen.width < 860) {
             document.querySelectorAll('.newColumn, .newCel').forEach(e => e.remove());
         }
-        const heights = {
-            '1366x768': '651px',
-            '1920x1080': '883px'
-        };
-        const screenSize = `${screen.width}x${screen.height}`;
-        if (heights[screenSize]) {
-            this.wrapperFull.style.height = heights[screenSize];
-        }
+        /*  const heights = {
+              '1366x768': '651px',
+              '1920x1080': '883px'
+          };
+          const screenSize = `${screen.width}x${screen.height}`;
+          if (heights[screenSize]) {
+              this.wrapperFull.style.height = heights[screenSize];
+          }*/
         this.lowList.style.height = `${this.wrapperFull.clientHeight - 65}px`;
     }
 

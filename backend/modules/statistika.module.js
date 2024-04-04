@@ -34,6 +34,7 @@ class SummaryStatistiks {
     }
 
     fillStrusturaWithData(strustura, data, pref) {
+
         const mileg = data.some(it => it.params === 'mileage' && it.value.length !== 0);
         if (mileg) {
             this.probeg = this.calculationMileage(data); //получение статистики по пробегу
@@ -86,40 +87,33 @@ class SummaryStatistiks {
     }
     calculationMileage(data) {
         const arrayValue = data.find(it => it.params === 'mileage');
-        let probegZero = 0
-        let probegNow = 0;
         if (arrayValue.value.length !== 0) {
-            if (Number(arrayValue.value[arrayValue.value.length - 1].toFixed(0)) === 0) {
-                for (let i = arrayValue.value.length - 1; i >= 0; i--) {
-                    if (Number(arrayValue.value[i].toFixed(0)) !== 0) {
-                        probegNow = Number(arrayValue.value[i].toFixed(0));
-                        break;
+            //  console.log(arrayValue)
+            function processSensor(sensorData) {
+                let totalMileage = 0;
+                let previousMileage = sensorData.value[0]; // Начальное значение пробега
+
+                sensorData.value.forEach((point, index) => {
+                    //  console.log(sensorData.dvs[index], sensorData.speed[index])
+                    if (sensorData.dvs[index] === 1 && sensorData.speed[index] > 0) {
+                        const currentMileage = point;
+                        totalMileage += currentMileage - previousMileage;
+                        previousMileage = currentMileage; // Обновляем предыдущее значение пробега
                     }
-                }
-            } else {
-                probegNow = Number(arrayValue.value[arrayValue.value.length - 1].toFixed(0));
+                });
+
+                return totalMileage; // Возвращает общий пробег
             }
-            if (Number(arrayValue.value[0].toFixed(0)) === 0) {
-                for (let i = 0; i <= arrayValue.value.length - 1; i++) {
-                    if (Number(arrayValue.value[i].toFixed(0)) !== 0) {
-                        if (this.id == 27472317) {
-                            probegZero = 373134
-                        }
-                        else {
-                            probegZero = Number(arrayValue.value[i].toFixed(0));
-                        }
-                        break;
-                    }
-                }
-            } else {
-                probegZero = Number(arrayValue.value[0].toFixed(0));
-            }
+            const result = processSensor(arrayValue)
+
+            //  console.log(result)
+
+            const probegNow = parseInt(arrayValue.value[arrayValue.value.length - 1])
+            const probegZero = parseInt(arrayValue.value[0])
+            const probegDay = probegNow - probegZero
+            return parseInt(result)
         }
-
-        const probegDay = probegNow - probegZero < 0 ? 0 : probegNow - probegZero;
-        return probegDay
     }
-
 
     quickly(data) {
         data.sort((a, b) => Number(a.last_valid_time) - Number(b.last_valid_time)); // Упрощённая сортировка
@@ -132,7 +126,8 @@ class SummaryStatistiks {
             mileage: [],
             engine: [],
             pwr: [],
-            engineOn: []
+            engineOn: [],
+            dvs: []
         };
         for (let i = 0; i < data.length; i++) {
             const el = data[i];
@@ -140,6 +135,7 @@ class SummaryStatistiks {
             allsens.time.push(new Date(timestamp * 1000)); // Напрямую создаём Date
             allsens.speed.push(parseInt(el.speed)); // Предполагаем, что el.speed уже число
             allsens.sats.push(parseInt(el.sats));
+            allsens.dvs.push(parseInt(el.engineOn));
             allsens.geo.push([parseFloat(el.lat), parseFloat(el.lon)]);
             el.oil !== null && el.oil !== 'Н/Д' ? allsens.oil.push(Number(Number(el.oil).toFixed(0))) : null;
             el.mileage !== null && el.mileage !== 'Н/Д' ? allsens.mileage.push(Number(Number(el.mileage).toFixed(1))) : null;
@@ -152,6 +148,7 @@ class SummaryStatistiks {
             speed: allsens.speed,
             sats: allsens.sats,
             geo: allsens.geo,
+            dvs: allsens.dvs,
             sens: key, // Название сенсора
             params: key, // Параметры
             value: allsens[key] // Значения

@@ -91,6 +91,7 @@ export class StatistikaPressure {
         })
     }
     createTableContent(content) {
+        console.log(content)
         const table = document.querySelector('.table_stata')
         const rows = document.querySelectorAll('.row_stata')
         if (rows) {
@@ -124,25 +125,26 @@ export class StatistikaPressure {
             sensor: sensor.sens,
             intervals: this.processSensor(sensor, Number(sensor.bar.knd), Number(sensor.bar.kvd), Number(sensor.bar.dnn), Number(sensor.bar.dvn))
         }));
-
+        console.log(result)
         const resultWithDurations = result.map(sensor => {
             // Инициализируем переменную для хранения суммарного времени и общего пробега всех интервалов
             let totalTimeAll = 0;
             let totalMileageAll = 0;
-
+            // console.log(sensor.intervals)
             // Для каждой категории интервала в каждом сенсоре рассчитываем общее время и пробег
             Object.keys(sensor.intervals).forEach(category => {
                 const totalTime = sensor.intervals[category].reduce((acc, interval) => {
                     // Добавляем разницу между концом и началом интервала к аккумулятору времени
                     const intervalTime = interval.end - interval.start;
                     // Рассчитываем пробег для интервала
-                    const intervalMileage = interval.endMileage - interval.startMileage;
+                    const intervalMileage = interval.mileage;
                     // Накапливаем общий пробег
 
                     // Возвращаем объект с посчитанными значениями для каждого интервала
                     return { ...acc, totalTime: acc.totalTime + intervalTime, mileageInterval: acc.mileageInterval + intervalMileage };
                 }, { totalTime: 0, mileageInterval: 0 }); // Начальные значения аккумулятора
 
+                console.log(totalTime.totalTime)
                 // Накапливаем суммарное время всех интервалов
                 totalTimeAll += totalTime.totalTime;
                 totalMileageAll += totalTime.mileageInterval;
@@ -163,65 +165,72 @@ export class StatistikaPressure {
 
 
     processSensor(sensorData, knd, kvd, dnn, dvn) {
-        // Инициализируем объект для хранения интервалов пяти категорий
-        let intervals = { belowKnd: [], betweenKndDnn: [], betweenDnnDvn: [], betweenDvnKvd: [], aboveKvd: [] };
-        let currentInterval = { type: null, start: null, end: null, startMileage: 0, endMileage: 0 };
+        let intervals = {
+            potery: [],
+            belowKnd: [],
+            betweenKndDnn: [],
+            betweenDnnDvn: [],
+            betweenDvnKvd: [],
+            aboveKvd: []
+        };
+
+        let currentCategory = null;
+        let intervalStart = null;
+        let startMileage = null;
 
         sensorData.val.forEach((point, index) => {
             const time = new Date(point.dates).getTime() / 1000;
             const isMovingAndStopSignal = point.stop === 'ВКЛ' && point.speed > 0;
-            let type = null;
-
-            // Определяем тип интервала на основе значений давления
+            let category = null;
             if (isMovingAndStopSignal) {
-                if (point.value <= knd) type = 'belowKnd';
-                else if (point.value > knd && point.value <= dnn) type = 'betweenKndDnn';
-                else if (point.value > dnn && point.value < dvn) type = 'betweenDnnDvn';
-                else if (point.value >= dvn && point.value < kvd) type = 'betweenDvnKvd';
-                else if (point.value >= kvd) type = 'aboveKvd';
+                if (point.value === -0.1) {
+                    category = 'potery';
+                } else if (point.value >= 0 && point.value <= knd) {
+                    category = 'belowKnd';
+                } else if (point.value > knd && point.value <= dnn) {
+                    category = 'betweenKndDnn';
+                } else if (point.value > dnn && point.value < dvn) {
+                    category = 'betweenDnnDvn';
+                } else if (point.value >= dvn && point.value < kvd) {
+                    category = 'betweenDvnKvd';
+                } else if (point.value >= kvd) {
+                    category = 'aboveKvd';
+                }
 
-                if (currentInterval.type === type) {
-                    // Продолжаем текущий интервал
-                    currentInterval.end = time;
-                    currentInterval.endMileage = point.mileage; // Обновляем пробег на конец интервала
-                } else {
-                    // Закрываем предыдущий интервал и начинаем новый
-                    if (currentInterval.start !== null) {
-                        intervals[currentInterval.type].push({
-                            start: currentInterval.start,
-                            end: currentInterval.end,
-                            startMileage: currentInterval.startMileage,
-                            endMileage: currentInterval.endMileage
+                if (category && (category !== currentCategory || intervalStart === null)) {
+                    if (intervalStart !== null) {
+                        intervals[currentCategory].push({
+                            start: intervalStart,
+                            end: time,
+                            mileage: startMileage !== null ? point.mileage - startMileage : 0
                         });
                     }
-                    currentInterval = { type: type, start: time, end: time, startMileage: point.mileage, endMileage: point.mileage };
+                    intervalStart = time;
+                    startMileage = point.mileage;
+                    currentCategory = category;
                 }
-            } else if (currentInterval.start !== null) {
-                // Закрываем текущий интервал, если условия не выполняются
-                intervals[currentInterval.type].push({
-                    start: currentInterval.start,
-                    end: currentInterval.end,
-                    startMileage: currentInterval.startMileage,
-                    endMileage: currentInterval.endMileage
+            } else if (intervalStart !== null) {
+                intervals[currentCategory].push({
+                    start: intervalStart,
+                    end: time,
+                    mileage: startMileage !== null ? point.mileage - startMileage : 0
                 });
-                currentInterval = { type: null, start: null, end: null, startMileage: 0, endMileage: 0 };
+                intervalStart = null;
+                startMileage = null;
+                currentCategory = null;
             }
 
-            // Проверка на конец массива для незакрытых интервалов
-            if (index === sensorData.val.length - 1 && currentInterval.start !== null) {
-                intervals[currentInterval.type].push({
-                    start: currentInterval.start,
-                    end: currentInterval.end,
-                    startMileage: currentInterval.startMileage,
-                    endMileage: currentInterval.endMileage
+            if (index === sensorData.val.length - 1 && intervalStart !== null) {
+                intervals[currentCategory].push({
+                    start: intervalStart,
+                    end: time,
+                    mileage: startMileage !== null ? point.mileage - startMileage : 0
                 });
             }
         });
+
         return intervals;
     }
-
-
-
 
     async getParamsToInterval() {
         const t1 = this.time[0]
@@ -259,6 +268,9 @@ export class StatistikaPressure {
                             geo: [Number(elem.lat), Number(elem.lon)],
                             speed: Number(elem.speed),
                             mileage: parseInt(elem.mileage),
+                            pwr: parseFloat(elem.pwr),
+                            sats: parseInt(elem.sats),
+                            engine: Number(elem.engine),
                             stop: Number(elem.engineOn) === 1 ? 'ВКЛ' : 'ВЫКЛ',
                             value: elem[el.pressure] ? Number(elem[el.pressure]) : -0.1,
                             tvalue: elem[el.temp] ? (Number(elem[el.temp]) !== -128 && Number(elem[el.temp]) !== -50 && Number(elem[el.temp]) !== -51 ? Number(elem[el.temp]) : -0.1) : -0.1

@@ -205,15 +205,15 @@ export class ClickObject {
                 clearInterval(this.createEvent.updateInterval);
                 this.createEvent.hiddenTrackAndMarkersEnent();
             }
-            timeIntervalStatistiks(signal);
+
             if (this.instanceStatistika) {
                 this.instanceStatistika.reinitialize(dataInfo, this.element);
             }
             else {
                 this.instanceStatistika = new StatistikaPressure(dataInfo, this.element)
             }
-
             alarmFind()
+            timeIntervalStatistiks(signal);
             //  setTimeout(() => this.createStata(), 300)
             //  this.createStata()
 
