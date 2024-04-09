@@ -134,9 +134,8 @@ exports.start = async (session, data) => {
     }
 }
 
-async function updateParams(data, kursor) {
+async function updateParams(data) {
     console.time('updatedata')
-
     const allCar = Object.entries(data)
     const nameCar = allCar[5][1].map(el => {
         const nameTable = el.nm.replace(/\s+/g, '');
@@ -151,22 +150,10 @@ async function updateParams(data, kursor) {
     zaprosSpisokb(nameCar, res) //создание и подготовка структуры для проверки на аларм
     const kursorObjects = await kursorService.getKursorObjects()
     const dataAll = res.concat(kursorObjects)
-
     if (res) {
-        await statistika.popupProstoy(dataAll) //ловим простои
-        await events.eventFunction(res) //ловим через вилаон заправки/сливы+потеря связи
-        const summary = new SummaryStatistiks(dataAll)
-        const global = await summary.init();
-        const arraySummary = Object.entries(global)
-        const now = new Date();
-        const date = new Date(now);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const datas = `${year}-${month}-${day}`;
-        await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
-            databaseService.summaryToBase(idw, arrayInfo, datas)
-        ));
+        statistika.popupProstoy(dataAll) //ловим простои
+        events.eventFunction(res) //ловим через вилаон заправки/сливы+потеря связи
+        new SummaryStatistiks(dataAll)
     }
 
     console.timeEnd('updatedata')

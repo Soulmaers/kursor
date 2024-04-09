@@ -1,6 +1,12 @@
 const databaseService = require('../services/database.service');
 const helpers = require('../services/helpers.js')
 
+
+// Предположим, у нас есть глобальное хранилище для сохранения состояния
+global.summaryStatisticsState = {
+    lastUpdateTime: new Date().setHours(0, 0, 0, 0), // Начало текущего дня
+    dailyDataStorage: {}
+};
 class SummaryStatistiks {
     constructor(object) {
         this.object = object
@@ -11,9 +17,32 @@ class SummaryStatistiks {
         this.probeg = '-'
         this.zapravka = '-'
         this.rashod = '-'
+        this.checkAndResetStateIfNeeded();
+        this.init()
     }
 
+    checkAndResetStateIfNeeded() {
+        const currentDate = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+        // Если глобальное состояние еще не инициализировано, инициализируем его
+        if (!global.summaryStatisticsState) {
+            global.summaryStatisticsState = {
+                lastUpdateTime: currentDate,
+                dailyDataStorage: {}
+            };
+        }
+        const lastUpdateDate = new Date(global.summaryStatisticsState.lastUpdateTime).getTime();
+        // Сбрасываем хранилище данных и время обновления, если начался новый день
+        if (lastUpdateDate < currentDate) {
+            global.summaryStatisticsState.lastUpdateTime = currentDate;
+            global.summaryStatisticsState.dailyDataStorage = {};
+        }
+        this.lastUpdateTime = global.summaryStatisticsState.lastUpdateTime;
+        this.dailyDataStorage = global.summaryStatisticsState.dailyDataStorage;
+    }
+
+
     async init() {
+        console.time('sum')
         const idwArray = helpers.format(this.object)        // Запускаем все асинхронные операции одновременно и ждем их завершения
         const dataPromises = idwArray.map(el => this.getSensorsAndParametrs(el[0], el[el.length - 1])); //получение структуры данных по параметрам
         const dataResults = await Promise.allSettled(dataPromises);
@@ -28,19 +57,27 @@ class SummaryStatistiks {
             }
             return strustura;
         })
+        console.timeEnd('sum')
         // Объединение всех strustura в один объект
         this.strustura = Object.assign({}, ...strusturas.map(s => ({ [s.id]: s })));
-        return this.strustura;
+        const arraySummary = Object.entries(this.strustura)
+        const now = new Date();
+        const date = new Date(now);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const datas = `${year}-${month}-${day}`;
+        await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
+            databaseService.summaryToBase(idw, arrayInfo, datas)
+        ));
     }
 
     fillStrusturaWithData(strustura, data, pref) {
-
         const mileg = data.some(it => it.params === 'mileage' && it.value.length !== 0);
         if (mileg) {
             this.probeg = this.calculationMileage(data); //получение статистики по пробегу
             strustura.probeg = this.probeg;
             strustura.job = this.calculationJobTs(data); //получение статистики по объектам в работе
-
         }
         const oil = data.some(it => it.params === 'oil' && it.value.length !== 0);
         if (oil && pref !== 'kursor') {
@@ -88,11 +125,9 @@ class SummaryStatistiks {
     calculationMileage(data) {
         const arrayValue = data.find(it => it.params === 'mileage');
         if (arrayValue.value.length !== 0) {
-            //  console.log(arrayValue)
             function processSensor(sensorData) {
                 let totalMileage = 0;
                 let previousMileage = sensorData.value[0]; // Начальное значение пробега
-
                 sensorData.value.forEach((point, index) => {
                     //  console.log(sensorData.dvs[index], sensorData.speed[index])
                     if (sensorData.dvs[index] === 1 && sensorData.speed[index] > 0) {
@@ -105,12 +140,6 @@ class SummaryStatistiks {
                 return totalMileage; // Возвращает общий пробег
             }
             const result = processSensor(arrayValue)
-
-            //  console.log(result)
-
-            const probegNow = parseInt(arrayValue.value[arrayValue.value.length - 1])
-            const probegZero = parseInt(arrayValue.value[0])
-            const probegDay = probegNow - probegZero
             return parseInt(result)
         }
     }
@@ -155,13 +184,26 @@ class SummaryStatistiks {
         }));
         return datas
     }
-    async getSensorsAndParametrs(el) {
-        const interval = helpers.timefn()
-        const timeOld = interval[1]
-        const timeNow = interval[0]
-        const itognew = await helpers.getDataToInterval(el, timeOld, timeNow)
-        const alt = this.quickly(itognew)  //приведение структуры данных в нужный формат
-        return alt
+
+    async getSensorsAndParametrs(id) {
+
+        const currentTime = Date.now();
+        let itognew = [];
+        if (this.lastUpdateTime < currentTime) {
+            //  const timeLabel = `ID_${id}_time`;
+            //  console.time(timeLabel);
+            itognew = await helpers.getDataToInterval(id, Math.floor(this.lastUpdateTime / 1000), Math.floor(currentTime / 1000));
+            //  console.timeEnd(timeLabel);
+            this.dailyDataStorage[id] = this.dailyDataStorage[id] ? [...this.dailyDataStorage[id], ...itognew] : itognew;
+            this.lastUpdateTime = currentTime;
+
+            // Обновляем глобальное состояние
+            global.summaryStatisticsState.lastUpdateTime = this.lastUpdateTime;
+            global.summaryStatisticsState.dailyDataStorage = this.dailyDataStorage;
+        }
+
+        const alt = this.quickly(this.dailyDataStorage[id] || []);
+        return alt;
     }
 
 

@@ -3,8 +3,8 @@ import { CloseBTN } from '../class/CloseBTN.js'
 import { titleLogs } from './content.js'
 import { createMapsUniq } from './geo.js'
 import { Tooltip } from '../class/Tooltip.js'
-import { visual } from './visual.js'
-import { iconStatusClick } from './ClickObject.js'
+
+
 async function createPopup(array) {
     const arr = Object.values(array[0]);
     console.log(arr)
@@ -316,8 +316,6 @@ function clickHandlerObject(event) {
     const listItem = document.querySelectorAll('.listItem')
     listItem.forEach(it => {
         if (it.getAttribute('rel') === id) {
-            //  iconStatusClick.listeModalWindow(it)
-            // visual(it)
             chanchColor()
             const evgentElement = document.querySelector('.toogleIconEvent')
             filterEventLogs(evgentElement)

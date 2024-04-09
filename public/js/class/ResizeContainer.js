@@ -50,19 +50,6 @@ export class ResizeContainer {
         this.isResizing = false;
         this.sliderBar.style.removeProperty('user-select');
         console.log('дубль!!!')
-        const color = document.querySelector('.color')
-        const act = document.querySelector('.activStatic').id
-        if (color) {
-            // new Detalisation(document.querySelector('.activStatic'))
-            setTimeout(function () {
-                Promise.all([
-                    load(act, 0, 1),
-                    load(act, 1, 2),
-                    load(act, 2, 3)
-                ])
-
-            }, 500)
-        }
         setTimeout(function () { initCharts.createChart(); }, 300);
     }
 }

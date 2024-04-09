@@ -3,7 +3,6 @@ import { loadParamsView } from './paramsTyresView.js'
 import { reqProtectorBase } from './protector.js'
 import { kranParams } from './strelaKran.js'
 import { clearElem } from './helpersFunc.js'
-import { timeIntervalStatistiks } from './detalisation/detalisation.js'
 import { CreateMarkersEvent } from './objectMainModules/class/CreateMarkersEvent.js'
 import { alarmFind } from './alarmModules/alarmStorage.js'
 import { IconStatus } from './iconModules/class/IconStatus.js'
@@ -42,7 +41,6 @@ export class ClickObject {
             detalisation.style.display = 'none'
             stata.style.display = 'flex'
             this.styleShinaActive()
-            //  this.createStata()
         }
         else {
             detalisation.style.display = 'flex'
@@ -66,11 +64,8 @@ export class ClickObject {
 
     }
 
-
     createStata() {
-        console.log('статистика!')
         const [arg, params, osi] = dataInfo
-        console.log(dataInfo)
         const sens = params.reduce((acc, item) => {
             const pressure = arg.find(element => element.params === item.pressure);
             if (pressure) {
@@ -79,7 +74,6 @@ export class ClickObject {
             return acc
         }, [])
         sens.sort((a, b) => a.tyresdiv - b.tyresdiv);
-        console.log(sens)
         const table = document.querySelector('.table_stata')
         const rows = document.querySelectorAll('.row_stata')
         if (rows) {
@@ -118,7 +112,6 @@ export class ClickObject {
         }
         this.deleteClasses('.color')
         this.element.classList.add('color')
-        //  visual(this.element)
         this.visual()
     }
 
@@ -180,11 +173,6 @@ export class ClickObject {
             this.clearTexContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value');
         }
         this.liCreate() //отрисовка строк под параметры
-        if (this.controller && !this.controller.signal.aborted) {
-            this.controller.abort()
-        }
-        this.controller = new AbortController();
-        const signal = this.controller.signal;
 
         await loadParamsView()
         const graf = document.querySelector('.activGraf')
@@ -222,10 +210,6 @@ export class ClickObject {
             }
 
             alarmFind()
-            //  timeIntervalStatistiks(signal);
-            //  setTimeout(() => this.createStata(), 300)
-            //  this.createStata()
-
         }
         kranParams()
         setInterval(kranParams, 300000)

@@ -9,12 +9,66 @@ export class Detalisation {
         this.time = null
         this.structura = []
         this.data = null
+        this.datas = null
         this.nav = null
         this.container = document.querySelector('.windowStatistic')
         this.navstat = this.container.querySelectorAll('.navstat')
         this.handleCardClick = this.toogleModalWindow.bind(this)
         this.handleCalensClick = this.toogleModalData.bind(this)
+        this.wrap = document.querySelector('.wrapper_left')
+
+        // Инициализация ResizeObserver
+        this.initResizeObserver();
         this.init()
+    }
+
+    initResizeObserver() {
+        this.currentWidth = this.wrap.clientWidth;
+        this.resizeObserver = new ResizeObserver(entries => {
+            const nav = document.querySelector('.activStatic')?.id;
+            for (const entry of entries) {
+                const { width } = entry.contentRect;
+                console.log(this.currentWidth, width)
+                if (Math.abs(this.currentWidth - width) > 100) {
+                    this.currentWidth = width;
+                    this.performResizeActions(nav);
+                }
+            }
+        });
+    }
+
+    performResizeActions(nav) {
+        switch (nav) {
+            case 'nav1':
+                // Выполняем перерисовку, так как размер изменился
+                this.structura.forEach((elem, index) => {
+                    createChart(Object.values(elem)[0].datas, index + 1, this.container);
+                });
+                break;
+            case 'nav2':
+                // Выполняем перерисовку, так как размер изменился
+                this.structura.forEach((elem, index) => {
+                    const data = this.dannieSortJobTS(Object.values(elem)[0].intervals)
+                    createJobTS(data, index + 1, this.container)
+
+                })
+                break;
+            case 'nav3':
+                let zap = this.datas.reduce((acc, el) => Number(el.zapravka) + acc, 0)
+                let ras = this.datas.reduce((acc, el) => Number(el.rashod) + acc, 0)
+                const structura = [
+                    { day: this.datas[this.datas.length - 1] },
+                    { yesterday: this.datas[this.datas.length - 2] },
+                    { week: { zapravka: zap, rashod: ras } }
+                ];
+                structura.forEach((elem, index) => {
+                    createOilTS(elem, index + 1, this.container)
+                })
+                break;
+            case 'nav4':
+                createMelagiTS(this.datas, 1, this.container)
+                break;
+        }
     }
 
     async init() {
@@ -26,13 +80,18 @@ export class Detalisation {
         const stor = await this.getDataStor()
         this.createStructura(stor)
         this.initEventListenersCalendar()
+        this.resizeObserver.observe(this.wrap);
+
     }
+
     reinitialize(id) {
         this.data = null
         this.id = id.id
         this.structura = []
         this.time = null
         this.removeEventListeners()
+        this.resizeObserver.disconnect(); // Отключение ResizeObserver
+        this.initResizeObserver(); // Переинициализация ResizeObserver
         this.init()
     }
 
@@ -45,6 +104,7 @@ export class Detalisation {
     }
     removeEventListeners() {
         this.navstat.forEach(el => el.removeEventListener('click', this.handleCardClick));
+
     }
 
 
@@ -137,13 +197,12 @@ export class Detalisation {
                 this.container.insertAdjacentHTML('beforeend', ` ${oilTS}`);
                 this.updateHTML()
                 this.eskiz()
-                const datas = await this.getParamsOilAndMileage(3)
-                console.log(datas)
-                let zap = datas.reduce((acc, el) => Number(el.zapravka) + acc, 0)
-                let ras = datas.reduce((acc, el) => Number(el.rashod) + acc, 0)
+                this.datas = await this.getParamsOilAndMileage(3)
+                let zap = this.datas.reduce((acc, el) => Number(el.zapravka) + acc, 0)
+                let ras = this.datas.reduce((acc, el) => Number(el.rashod) + acc, 0)
                 const structura = [
-                    { day: datas[datas.length - 1] },
-                    { yesterday: datas[datas.length - 2] },
+                    { day: this.datas[this.datas.length - 1] },
+                    { yesterday: this.datas[this.datas.length - 2] },
                     { week: { zapravka: zap, rashod: ras } }
                 ];
                 structura.forEach((elem, index) => {
@@ -155,8 +214,8 @@ export class Detalisation {
                 this.container.insertAdjacentHTML('beforeend', ` ${melageTS}`);
                 const interval = document.querySelector('.intervalTitle')
                 interval.innerHTML = `10 дней: ${this.convertTime(4)} <div class="calen" rel="cal2"></div>${cal2}`
-                const datasMileage = await this.getParamsOilAndMileage(4)
-                createMelagiTS(datasMileage, 1, this.container)
+                this.datas = await this.getParamsOilAndMileage(4)
+                createMelagiTS(this.datas, 1, this.container)
                 break;
         }
         this.initEventListenersCalendar()
@@ -423,7 +482,7 @@ export class Detalisation {
         const arrayColumns = ['last_valid_time', 'speed', 'lat', 'lon', 'engine', 'sats', 'engineOn']
         const idw = this.id
         const t1 = this.time[0].length > 2 ? this.time[0][2] : this.time[0]
-        const t2 = this.time[0].length > 2 ? this.time[1][2] : this.time[1]
+        const t2 = this.time[0].length > 2 ? this.time[1][2] + 86399 : this.time[1]
         const num = 0
         const paramss = {
             method: "POST",

@@ -1,5 +1,3 @@
-import { visual } from '../../visual.js'
-import { dataInfo } from '../../paramsTyresView.js'
 
 export class InitMarkers {
     static markers = {}; // Хранилище для маркеров
@@ -58,15 +56,7 @@ export class InitMarkers {
         })
         //  this.map.setView([59.9386, 30.3141], 9)
     }
-    clickMarkers(event) {
-        const marker = event.target
-        console.log(marker)
-        this.listObject.forEach(el => {
-            if (el.id === marker.id) {
-                visual(el)
-            }
-        })
-    }
+
 
     viewHiddenInfoMap() {
         this.tableInfoCar.addEventListener('mouseenter', () => {
@@ -331,7 +321,6 @@ export class InitMarkers {
                 InitMarkers.markersArrow[id] = markers;
                 // Проверяем, было ли добавлено событие click к маркеру
                 if (!marker.clickEventAttached) {
-                    marker.on('click', this.clickMarkers.bind(this));
                     // Обозначаем, что событие click было установлено
                     marker.clickEventAttached = true;
                 }

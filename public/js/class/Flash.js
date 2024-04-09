@@ -2,10 +2,6 @@
 
 import { map } from '../modules/navModules/karta.js'
 import { mapLocal } from '../modules/objectMainModules/class/CreateMarkersEvent.js'
-import { load } from '../modules/detalisation/detalisation.js'
-import { Detalisation } from '../modules/detalisationModules/class/Detalisation.js'
-
-console.log('флеш')
 
 export class Flasher {
     constructor() {
@@ -41,11 +37,10 @@ export class Flasher {
         parent.children[1].style.display = 'none'
         parent.children[0].style.display = 'block'
 
-
         side[0].style.width = '10px';
-        side[0].style.transition = 'width 0.2s ease-in-out';
+        side[0].style.transition = 'width 0s ease-in-out';
         side[1].style.width = '98%'
-        side[1].style.transition = 'width 0.2s ease-in-out';
+        side[1].style.transition = 'width 0s ease-in-out';
         if (side[1].classList.contains('globalMaps')) {
             setTimeout(function () { map.invalidateSize(); }, 300);
 
@@ -53,67 +48,28 @@ export class Flasher {
         if (side[1].classList.contains('main') || side[1].classList.contains('wrapper_left')) {
             setTimeout(function () { mapLocal.invalidateSize(); }, 300);
         }
-        const act = document.querySelector('.activStatic').id
-        const color = document.querySelector('.color')
-        if (color) {
-            const num = [1, 2, 3]
-            num.forEach(e => {
-                const chartStatic = document.querySelector(`.chartStatic${e}`)
-                if (chartStatic) {
-                    chartStatic.remove();
-                }
-            })
-            // new Detalisation(document.querySelector('.activStatic'))
-            setTimeout(function () {
-                Promise.all([
-                    load(act, 0, 1),
-                    load(act, 1, 2),
-                    load(act, 2, 3)
-                ])
-
-            }, 500)
-        }
-
     }
     handleClickTwo(event) {
         const parent = event.target.parentNode
+        console.time('side')
         const side = this.init(parent)
-        console.log(side)
+        console.timeEnd('side')
         parent.children[0].style.display = 'none'
         parent.children[1].style.display = 'block'
 
 
         side[0].style.width = '550px';
-        side[0].style.transition = 'width 0.2s ease-in-out';
+        //  side[0].style.transition = 'width 0s ease-in-out';
         side[1].style.width = '74%'
-        side[1].style.transition = 'width 0.2s ease-in-out';
+        console.log(side[1])
+        console.log(side[1].clientWidth)
+        // side[1].style.transition = 'width 0s ease-in-out';
         if (side[1].classList.contains('globalMaps')) {
             setTimeout(function () { map.invalidateSize(); }, 300);
         }
         if (side[1].classList.contains('main') || side[1].classList.contains('wrapper_left')) {
             setTimeout(function () { mapLocal.invalidateSize(); }, 300);
         }
-        const color = document.querySelector('.color')
-        const act = document.querySelector('.activStatic').id
-        if (color) {
-            const num = [1, 2, 3]
-            num.forEach(e => {
-                const chartStatic = document.querySelector(`.chartStatic${e}`)
-                if (chartStatic) {
-                    chartStatic.remove();
-                }
-            })
-
-            setTimeout(function () {
-                Promise.all([
-                    load(act, 0, 1),
-                    load(act, 1, 2),
-                    load(act, 2, 3)
-                ])
-
-            }, 500)
-        }
-
     }
 }
 

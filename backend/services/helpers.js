@@ -19,11 +19,11 @@ exports.convert = (ob) => {  //фильтрация уникальных эле�
     return Array.from(uniq).map(e => JSON.parse(e));
 }
 exports.getDataToInterval = async (active, t1, t2) => {
-    const resnew = await databaseService.geoLastInterval(t1, t2, active)  //получение параметров за интервал
-    const meta = ['idw', 'data', 'lat', 'lon', 'speed', 'sats', 'geo', 'oil', 'course', 'pwr', 'engine', 'mileage', 'engineOn', 'last_valid_time']
-    const arrayData = resnew.map(e => {
+    const columns = ['idw', 'data', 'lat', 'lon', 'speed', 'sats', 'oil', 'course', 'pwr', 'engine', 'mileage', 'engineOn', 'last_valid_time']
+    const resnew1 = await databaseService.getParamsToPressureAndOilToBase(t1, t2, active, columns, 0)  //получение параметров за интервал
+    const arrayData = resnew1.map(e => {
         return Object.keys(e).reduce((acc, key) => {
-            if (meta.includes(key)) {
+            if (columns.includes(key)) {
                 acc[key] = e[key];
             }
             return acc;
