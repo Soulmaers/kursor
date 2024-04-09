@@ -36,9 +36,11 @@ export function prostoyNew(newdata) {
 export async function dannieOilTS(idw, num, interval) {
     let number;
     let data
+    console.log(interval)
     if (interval) {
         data = [interval[0][0], interval[1][0]]
     }
+
     else {
         if (num === 1) {
             number = 0
@@ -57,6 +59,7 @@ export async function dannieOilTS(idw, num, interval) {
             data = [convertDate(number), convertDate(1)]
         }
     }
+    console.log(data, idw)
     const params = {
         method: "POST",
         headers: {
@@ -66,6 +69,7 @@ export async function dannieOilTS(idw, num, interval) {
     };
     const mods = await fetch('/api/summaryIdwToBase', params);
     const models = await mods.json();
+    console.log(models)
     models.sort((a, b) => {
         if (a.data > b.data) {
             return 1;

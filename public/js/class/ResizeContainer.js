@@ -1,5 +1,5 @@
 import { initCharts } from '../modules/SpisokObject.js'
-
+import { Detalisation } from '../modules/detalisationModules/class/Detalisation.js'
 
 export class ResizeContainer {
     constructor(leftContainer, rightContainer, resizeHandle) {
@@ -53,6 +53,7 @@ export class ResizeContainer {
         const color = document.querySelector('.color')
         const act = document.querySelector('.activStatic').id
         if (color) {
+            // new Detalisation(document.querySelector('.activStatic'))
             setTimeout(function () {
                 Promise.all([
                     load(act, 0, 1),

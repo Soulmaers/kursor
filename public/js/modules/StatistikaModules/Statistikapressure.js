@@ -26,10 +26,7 @@ export class StatistikaPressure {
 
     async init() {
         if (!this.time) this.installTime()
-        console.log(this.time)
-        console.time('1')
         await this.getParamsToInterval()
-        console.timeEnd('1')
         const content = this.calcilator()
         this.createTableContent(content)
         this.viewTime()
@@ -243,22 +240,27 @@ export class StatistikaPressure {
     }
 
     async getParamsToInterval() {
+        const [params, tyres, osibar] = this.data
         const t1 = this.time[0]
         const t2 = this.time[1] + 86399
-        console.log(t1, t2)
         const idw = this.id
+        const arrayColumns = ['last_valid_time', 'speed', 'lat', 'lon', 'mileage', 'engineOn']
+        tyres.forEach(el => {
+            arrayColumns.push(el.pressure, el.temp)
+        })
+        const num = 0
         const param = {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({ idw, t1, t2 })
+            body: JSON.stringify({ idw, t1, t2, arrayColumns, num })
         }
         //getPressureOil
-        const res = await fetch('/api/getDataParamsInterval', param)
+        const res = await fetch('/api/getPressureOil', param)
         const data = await res.json()
 
-        const [params, tyres, osibar] = this.data
+
         // Преобразование массива osss в объект для быстрого доступа
         const osssMap = {};
         osibar.forEach(e => {

@@ -625,16 +625,18 @@ export class OilCharts {
 
     async createStructura() {
         const idw = Number(document.querySelector('.color').id)
+        const arrayColumns = ['last_valid_time', 'lat', 'lon', 'pwr', 'oil']
         const t1 = this.t1
         const t2 = this.t2 + 86399
+        const num = 0
         const paramss = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idw, t1, t2 }))
+            body: (JSON.stringify({ idw, t1, t2, arrayColumns, num }))
         }
-        const res = await fetch('/api/getDataParamsInterval', paramss)
+        const res = await fetch('/api/getPressureOil', paramss)
         const data = await res.json();
         const newGlobal = data.map(it => {
             return {

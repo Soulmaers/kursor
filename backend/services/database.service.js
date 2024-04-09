@@ -421,28 +421,40 @@ exports.geoLastInterval = async (time1, time2, idw) => {
     }
 
 }
+exports.getParamsToPressureAndOilToBase = async (time1, time2, idw, columns, num) => {
 
-exports.getParamsToPressureAndOilToBase = async (time1, time2, idw) => {
     try {
-        const pool = await connection
-        const postModel = `SELECT speed,sats,engine,oil,pwr,engineOn, last_valid_time FROM globalStor WHERE idw=@idw AND last_valid_time >= @time1 AND last_valid_time <= @time2 `
+        const pool = await connection;
+        const selectedTColumnsTest = columns.join(", ")
+        const postModel = `
+            SELECT ${selectedTColumnsTest}
+            FROM globalStor
+            WHERE idw=@idw AND last_valid_time >= @time1 AND last_valid_time <= @time2
+        `;
+        const postModel2 = `
+        WITH NumberedRows AS (
+            SELECT 
+                ${selectedTColumnsTest}, 
+                ROW_NUMBER() OVER (ORDER BY last_valid_time) AS RowNum
+            FROM globalStor
+            WHERE idw = @idw AND last_valid_time >= @time1 AND last_valid_time <= @time2
+        )
+        SELECT *
+        FROM NumberedRows
+        WHERE RowNum % 2 = 0;
+        `;
         const result = await pool.request()
             .input('idw', idw)
             .input('time2', String(time2))
             .input('time1', String(time1))
-            .query(postModel)
-        if (result.recordset.length === 0) {
-            return []
-        }
-        else {
-            return result.recordset
-        }
-    }
-    catch (e) {
-        console.log(e)
-    }
+            .query(num === 0 ? postModel : postModel2);
 
-}
+        return result.recordset.length ? result.recordset : [];
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+};
 
 exports.getWialonObjects = async () => {
 

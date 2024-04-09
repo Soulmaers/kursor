@@ -2,7 +2,8 @@ import { timeConvert } from '../helpersFunc.js'
 import { convertToHoursAndMinutes } from './helpers.js'
 import { createMapsUniq } from '../geo.js'
 
-export function createJobTS(data, num) {
+export function createJobTS(data, num, container) {
+    console.log(data)
     const chartStatic = document.querySelector(`.chartStatic${num}`)
     if (chartStatic) {
         chartStatic.remove();
@@ -17,14 +18,14 @@ export function createJobTS(data, num) {
         2: 'yestodayChart',
         3: 'weekChart',
     }
-    console.log(data)
-    const dataArray = Object.entries(data).map(([category, value]) => ({ category, value }));
 
-    const windowStatistic = document.querySelector('.windowStatistic')
+    const dataArray = Object.entries(data).map(([category, value]) => ({ category, value }));
+    console.log(dataArray)
     const chartJobTS = document.querySelector('.chartJobTS')
     var widthWind = document.querySelector('body').offsetWidth;
     const jobTSDetalisationLines = document.querySelector('.jobTSDetalisationLine')
-
+    const windowStatistic = document.querySelector('.windowStatistic')
+    console.log(chartJobTS)
     jobTSDetalisationLines.style.width = ''
     jobTSDetalisationLines.style.width = widthWind / 3 //widthWind / 3 - 15
     chartJobTS.style.alignItems = 'center';
@@ -126,6 +127,7 @@ export function createChart(data, num) {
 
     const jobTSDetalisationGraf = document.querySelector('.jobTSDetalisationGraf ')
     const widthInPx = jobTSDetalisationGraf.offsetWidth;
+    console.log(data)
     // Функция для объединения смежных интервалов с одинаковым статусом
     function combineIntervals(data) {
         const combinedData = [];
@@ -143,11 +145,13 @@ export function createChart(data, num) {
         return combinedData;
 
     }
+
     const windowStatistic = document.querySelector('.windowStatistic')
 
     var widthWind = document.querySelector('body').offsetWidth;
     console.log(windowStatistic.clientWidth)
     const combinedData = combineIntervals(data);
+    console.log(combinedData)
     const win = windowStatistic.clientWidth == 0 ? 707 : windowStatistic.clientWidth
     let width = widthWind < 860 ? widthWind - 15 : win - 40//widthInPx; // Ширина графика
     //  width < 0 ? 0 : width
@@ -409,6 +413,7 @@ export function createMelagiTS(data, num) {
 
 }
 export function createOilTS(data, num) {
+    console.log(data)
     const jobTSDetalisationChartsLegenda = document.querySelector('.jobTSDetalisationCharts_legenda')
     const legendaButton = document.querySelectorAll('.legendaButton')
     jobTSDetalisationChartsLegenda.style.justifyContent = 'center'

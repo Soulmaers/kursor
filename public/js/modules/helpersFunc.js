@@ -59,7 +59,7 @@ export function convertDate(num) {
     const year = yesterday.getFullYear();
     const month = String(yesterday.getMonth() + 1).padStart(2, '0');
     const day = String(yesterday.getDate()).padStart(2, '0');
-    const data = `${year} -${month} -${day} `;
+    const data = `${year}-${month}-${day} `;
     return data
 }
 

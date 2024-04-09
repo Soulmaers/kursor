@@ -10,6 +10,7 @@ import { IconStatus } from './iconModules/class/IconStatus.js'
 import { grafClick } from '../main.js'
 import { dataInfo } from '../modules/paramsTyresView.js'
 import { StatistikaPressure } from './StatistikaModules/Statistikapressure.js'
+import { Detalisation } from './detalisationModules/class/Detalisation.js'
 export let iconStatusClick;
 
 export class ClickObject {
@@ -18,6 +19,7 @@ export class ClickObject {
         this.element = null
         this.createEvent = null
         this.instanceStatistika = null
+        this.instanceDetalisation = null
         this.controller = null
         this.wrapperFull = document.querySelector('.wrapperFull')
         this.btnShina = document.querySelectorAll('.modals')
@@ -212,8 +214,15 @@ export class ClickObject {
             else {
                 this.instanceStatistika = new StatistikaPressure(dataInfo, this.element)
             }
+            if (this.instanceDetalisation) {
+                this.instanceDetalisation.reinitialize(this.element);
+            }
+            else {
+                this.instanceDetalisation = new Detalisation(this.element)
+            }
+
             alarmFind()
-            timeIntervalStatistiks(signal);
+            //  timeIntervalStatistiks(signal);
             //  setTimeout(() => this.createStata(), 300)
             //  this.createStata()
 

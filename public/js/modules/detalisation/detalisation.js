@@ -20,9 +20,9 @@ export async function timeIntervalStatistiks(signal) {
     const navstat = document.querySelectorAll('.navstat')
     const windowStatistic = document.querySelector('.windowStatistic')
     windowStatistic.insertAdjacentHTML('beforeend', ` ${objectRazmetka[act].html}`);
-    const today = document.querySelector('.todayTitle')
-    const yestoday = document.querySelector('.yestodayTitle')
-    const week = document.querySelector('.weekTitle')
+    const today = windowStatistic.querySelector('.todayTitle')
+    const yestoday = windowStatistic.querySelector('.yestodayTitle')
+    const week = windowStatistic.querySelector('.weekTitle')
     act !== 'nav1' ? updateHTML() : null
     navstat.forEach(el => {
         el.addEventListener('click', async () => {
@@ -172,7 +172,7 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
             engineOn: Number(it.engineOn)
         }
     })
-
+    console.log(newGlobal)
     const intStopNew = prostoyNew(newGlobal)
     if (intStopNew) {
         intStopNew.forEach(el => {
@@ -257,15 +257,18 @@ export async function statistics(interval, ele, num, objectRazmetka, signal) {
 
 
 async function getDataStor(active, t1, t2) {
+    const arrayColumns = ['last_valid_time', 'speed', 'lat', 'lon', 'engine', 'sats', 'engineOn']
     const idw = active
+    const num = 0
     const paramss = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
-        body: (JSON.stringify({ idw, t1, t2 }))
+        body: (JSON.stringify({ idw, t1, t2, arrayColumns, num }))
+
     }
-    const res = await fetch('/api/getDataParamsInterval', paramss)
+    const res = await fetch('/api/getPressureOil', paramss)
     const data = await res.json();
     return data
 }

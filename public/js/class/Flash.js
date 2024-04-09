@@ -3,7 +3,7 @@
 import { map } from '../modules/navModules/karta.js'
 import { mapLocal } from '../modules/objectMainModules/class/CreateMarkersEvent.js'
 import { load } from '../modules/detalisation/detalisation.js'
-
+import { Detalisation } from '../modules/detalisationModules/class/Detalisation.js'
 
 console.log('флеш')
 
@@ -63,7 +63,7 @@ export class Flasher {
                     chartStatic.remove();
                 }
             })
-
+            // new Detalisation(document.querySelector('.activStatic'))
             setTimeout(function () {
                 Promise.all([
                     load(act, 0, 1),

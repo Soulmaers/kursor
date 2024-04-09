@@ -16,6 +16,7 @@ export class PressureCharts {
         this.x = null
         this.svgContainers = []
         this.svg = null
+        this.legendBar = null
         this.init()
     }
 
@@ -42,11 +43,22 @@ export class PressureCharts {
     }
 
     createChart() {
+        console.time('cre')
         this.createContainer()
+        console.timeEnd('cre')
+        console.time('cre1')
         this.createLegend()
+        console.timeEnd('cre1')
+        console.time('cre2')
         this.createBodyCharts()
+        console.timeEnd('cre2')
+        console.time('cre3')
         this.createIconsCar()
+        console.timeEnd('cre3')
+        console.time('cre4')
         this.toggleChecked()
+        console.timeEnd('cre4')
+
         const loaders = document.querySelector('.loaders_charts')
         loaders.style.display = 'none';
         isCanceled = false;
@@ -156,8 +168,6 @@ export class PressureCharts {
                 .attr("class", "os2y")
                 .attr("transform", "translate(" + width + ", 0)")
 
-            const legendBar = document.querySelectorAll('.legendBar')
-
             // добавляем области для первой кривой
             svg.append("path")
                 .datum(data.val)
@@ -175,7 +185,7 @@ export class PressureCharts {
                 .attr("stroke", "black")
                 .attr("stroke-width", 1)
                 .attr("fill-opacity", 1)
-                .style('display', legendBar[0].classList.contains('noActive') ? 'none' : 'block')
+                .style('display', this.legendBar[0].classList.contains('noActive') ? 'none' : 'block')
             svg.append("path")
                 .datum(data.val)
                 .attr("class", "area11")
@@ -191,7 +201,7 @@ export class PressureCharts {
                 })
                 .attr("stroke-width", 1)
                 .attr("fill-opacity", 0.9)
-                .style('display', legendBar[0].classList.contains('noActive') ? 'none' : 'block')
+                .style('display', this.legendBar[0].classList.contains('noActive') ? 'none' : 'block')
             svg.append("path")
                 .datum(data.val)
                 .attr("class", "area12")
@@ -206,9 +216,8 @@ export class PressureCharts {
                     }
                 })
                 .attr("fill-opacity", d.value === -0.1 ? 0 : 0.9)
-                .style('display', legendBar[0].classList.contains('noActive') ? 'none' : 'block')
+                .style('display', this.legendBar[0].classList.contains('noActive') ? 'none' : 'block')
             // добавляем области для второй кривой
-            console.log(data.val)
             svg.append("path")
                 .datum(data.val)
                 .attr("fill", "none")
@@ -220,7 +229,7 @@ export class PressureCharts {
                 .transition()
                 .duration(1000)
                 .attr("d", area2)
-                .style('display', legendBar[1].classList.contains('noActive') ? 'none' : 'block')
+                .style('display', this.legendBar[1].classList.contains('noActive') ? 'none' : 'block')
             this.svgContainers.push([svgContainer, svg, x, y1, y2, height, data])
             this.createTooltip(svgContainer, svg, data.val, x)
         });
@@ -326,7 +335,6 @@ export class PressureCharts {
         });
         document.addEventListener('click', function (event) {
             const targetElement = event.target;
-            const map = document.getElementById('mapOil');
             const act = document.querySelector('.activMenuGraf').textContent;
             const wrapMap = document.querySelector('.wrapMap')
             if (wrapMap && !wrapMap.contains(targetElement) && act === 'Давление') {
@@ -577,7 +585,7 @@ export class PressureCharts {
                     });
             });
 
-        const legendBar = this.graf.querySelectorAll('.legendBar')
+        this.legendBar = this.graf.querySelectorAll('.legendBar')
         const labelPress = this.graf.querySelector('.labelPress')
         const labelAllPress = this.graf.querySelector('.labelAllPress')
         const combacks = this.graf.querySelector('.comback')
@@ -586,17 +594,17 @@ export class PressureCharts {
         new Tooltip(labelPress, ['Включает подсветку графика относительно выставленных значений на ось']);
         new Tooltip(labelAllPress, ['Включает масштабирование всех графиков']);
         new Tooltip(combacks, ['Cбрасывает масштабирование']);
-        new Tooltip(legendBar[0], ['Отключает и включает график давления']);
-        new Tooltip(legendBar[1], ['Отключает и включает график температуры']);
+        new Tooltip(this.legendBar[0], ['Отключает и включает график давления']);
+        new Tooltip(this.legendBar[1], ['Отключает и включает график температуры']);
 
-        legendBar[0].addEventListener('click', () => {
+        this.legendBar[0].addEventListener('click', () => {
             const line1 = d3.selectAll('.line1')
             const area1 = d3.selectAll('.area1')
             const area11 = d3.selectAll('.area11')
             const area12 = d3.selectAll('.area12')
             const legendBarCircle = d3.select('.barGraf')
-            legendBar[0].classList.toggle('noActive')
-            if (legendBar[0].classList.contains('noActive')) {
+            this.legendBar[0].classList.toggle('noActive')
+            if (this.legendBar[0].classList.contains('noActive')) {
                 legendBarCircle.attr('fill', 'none')
                 line1.style("display", "none")
                 area1.style("display", "none")
@@ -612,12 +620,12 @@ export class PressureCharts {
             }
 
         })
-        legendBar[1].addEventListener('click', () => {
+        this.legendBar[1].addEventListener('click', () => {
             const line2 = d3.selectAll('.line2')
             const area2 = d3.selectAll('.area2')
             const legendBarCircle = d3.select('.tempGraf')
-            legendBar[1].classList.toggle('noActive')
-            if (legendBar[1].classList.contains('noActive')) {
+            this.legendBar[1].classList.toggle('noActive')
+            if (this.legendBar[1].classList.contains('noActive')) {
                 legendBarCircle.attr('fill', 'none')
                 line2.style("display", "none")
                 area2.style("display", "none")
@@ -639,20 +647,27 @@ export class PressureCharts {
             osssMap[e.idOs] = e;
         });
         const idw = Number(document.querySelector('.color').id)
-        console.log(idw)
+        const arrayColumns = ['last_valid_time', 'speed', 'lat', 'lon', 'engineOn']
+        tyres.forEach(el => {
+            arrayColumns.push(el.pressure, el.temp)
+        })
         const t1 = this.t1
         const t2 = this.t2 + 86399
-        const paramss = {
+        const num = 1
+        const paramssNew = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idw, t1, t2 }))
+            body: (JSON.stringify({ idw, t1, t2, arrayColumns, num }))
         }
-        const res = await fetch('/api/getDataParamsInterval', paramss)
-        const data = await res.json();
-        console.log(data)
-        if (data.length === 0) {
+        console.time('newreq')
+        const resNew = await fetch('/api/getPressureOil', paramssNew)
+        const dataNew = await resNew.json();
+        console.timeEnd('newreq')
+        console.log(dataNew)
+
+        if (dataNew.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')
             if (grafOld) {
@@ -665,41 +680,40 @@ export class PressureCharts {
         }
         document.querySelector('.noGraf').style.display = 'none'
 
+        console.time('newreq1')
+        // Предварительная сортировка, если это возможно и необходимо
+        dataNew.sort((a, b) => Number(a.last_valid_time) - Number(b.last_valid_time));
 
-        const paramnew = tyres.map(el => {
-            if (osssMap[el.osNumber]) {
-                const sens = params.find(it => Object.values(it).includes(el.pressure));
-                if (!sens) return
-                return {
-                    sens: sens.sens,
-                    position: Number(el.tyresdiv),
-                    parametr: el.pressure,
-                    bar: osssMap[el.osNumber],
-                    val: data.map(elem => {
-                        return ({
-                            dates: new Date(Number(elem.last_valid_time) * 1000),
-                            geo: [Number(elem.lat), Number(elem.lon)],
-                            speed: Number(elem.speed),
-                            stop: Number(elem.engineOn) === 1 ? 'ВКЛ' : 'ВЫКЛ',
-                            value: elem[el.pressure] ? Number(elem[el.pressure]) : -0.1,
-                            tvalue: elem[el.temp] ? (Number(elem[el.temp]) !== -128 && Number(elem[el.temp]) !== -50 && Number(elem[el.temp]) !== -51 ? Number(elem[el.temp]) : -0.1) : -0.1
-                        })
-                    })
-                };
-            }
-        }).filter(el => el !== undefined)
-        paramnew.sort((a, b) => a.position - b.position)
-        paramnew.forEach(e => e.val.sort((a, b) => {
-            if (a.dates > b.dates) {
-                return 1;
-            }
-            if (a.dates < b.dates) {
-                return -1;
-            }
-            return 0;
-        }))
+        const paramnew = tyres.reduce((acc, el) => {
+            const oss = osssMap[el.osNumber];
+            const sens = params.find(it => Object.values(it).includes(el.pressure));
 
-        return paramnew
+            if (!oss || !sens) return acc;
+
+            const processedData = dataNew.filter((elem, index) => index % 5 === 0).map(elem => ({
+                dates: new Date(Number(elem.last_valid_time) * 1000),
+                geo: [Number(elem.lat), Number(elem.lon)],
+                speed: Number(elem.speed),
+                stop: Number(elem.engineOn) === 1 ? 'ВКЛ' : 'ВЫКЛ',
+                value: elem[el.pressure] ? Number(elem[el.pressure]) : -0.1,
+                tvalue: elem[el.temp] ? (Number(elem[el.temp]) !== -128 && Number(elem[el.temp]) !== -50 && Number(elem[el.temp]) !== -51 ? Number(elem[el.temp]) : -0.1) : -0.1
+            }));
+
+            acc.push({
+                sens: sens.sens,
+                position: Number(el.tyresdiv),
+                parametr: el.pressure,
+                bar: oss,
+                val: processedData
+            });
+
+            return acc;
+        }, []);
+
+        paramnew.sort((a, b) => a.position - b.position);
+
+        console.timeEnd('newreq1');
+        return paramnew;
     }
 
 }
