@@ -1,5 +1,4 @@
 import { checkCreate } from './modules/admin.js'
-import { logsView } from './modules/popup.js'
 import { SpisokObject } from './modules/SpisokObject.js'
 import { NavigationMenu } from './modules/navModules/NavigatorClass.js'
 import { DropDownList } from './class/DropdownList.js'
@@ -35,7 +34,6 @@ export class Application {
         this.role = role   //получаем роль прав доступа
         this.login = login //получаем логин пользователя
         this.dataspisok = false //флаг загрузки
-        this.logsInterval = null; // Инициализация свойства для хранения интервала
         this.spisok = null
         this.init()  //основной метод который запускает стартовые методы загрузки данных на страницу
     }
@@ -44,10 +42,7 @@ export class Application {
         this.formatContainer() //метод который корректирует границы контейнеров взависимости от разрешения экрана
         this.adaptiv()  //адаптив
         this.activButton()
-        // this.logs() //метод который сохраняет в базу число просмотренных логов
         await this.startClass()
-
-
     }
     activButton() {
         this.startActivButton.classList.add('tablo')
@@ -70,7 +65,6 @@ export class Application {
         const data = kursorData.concat(arrayList)
         this.data = data
         new LogsEvent(this.data, this.login)
-        //await logsView(this.data) //отрисовка и наполнение логов будет переписано на класс
         if (data.flat().length === 0) {
             const loaders = document.querySelector('.loaders');
             loaders.style.display = 'none'
@@ -81,12 +75,7 @@ export class Application {
         else {
             this.spisok = new SpisokObject(data) //отрисовка списка и статусов списка
         }
-        // Очистка предыдущего интервала перед созданием нового
-        if (this.logsInterval !== null) {
-            clearInterval(this.logsInterval);
-        }
-        // Установка нового интервала и сохранение его идентификатора
-        this.logsInterval = setInterval(logsView, 60000, data);
+
         //передаем имена объектов для отображения в панели администратора
         checkCreate(nameCarCheck)
     }

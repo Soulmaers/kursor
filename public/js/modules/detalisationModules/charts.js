@@ -1,6 +1,6 @@
 
 import { timeConvert } from '../helpersFunc.js'
-import { createMapsUniq } from '../../modules/geo.js'
+import { GeoCreateMapsMini } from '../../modules/geoModules/class/GeoCreateMapsMini.js'
 
 
 export function createMelagiTS(data, num, container) {
@@ -469,17 +469,15 @@ export function createChart(data, num, container) {
             const d0 = combinedData[i - 1];
             const d1 = combinedData[i];
             d = x0 - d0.dates > d1.dates - x0 ? d1 : d0;
-            createMapsUniq([], d, 'stat')
+            new GeoCreateMapsMini([], d, 'stat')
 
 
             const graph = document.querySelector(`.${obj[num]}`)
             graph.addEventListener('click', function (event) {
                 event.stopPropagation(); // Остановка всплытия события, чтобы клик на графике не вызывал обработчик события click на document
-                //   createMapsUniq([], d, 'stat')
             });
             document.addEventListener('click', function (event) {
                 const targetElement = event.target;
-                const map = document.getElementById('mapOil');
                 const wrapMap = document.querySelector('.wrapMap')
                 if (wrapMap && !wrapMap.contains(targetElement)) {
                     wrapMap.remove();

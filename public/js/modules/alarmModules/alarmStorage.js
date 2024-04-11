@@ -1,8 +1,9 @@
 import { tr } from '../content.js'
 import { convert } from '../helpersFunc.js'
-import { createMapsUniq } from '../geo.js'
 import { Tooltip } from '../../class/Tooltip.js'
 import { dataInfo } from '../paramsTyresView.js'
+import { GeoCreateMapsMini } from '../../modules/geoModules/class/GeoCreateMapsMini.js'
+
 
 let isProcessing = false
 export async function alarmFind() {
@@ -406,7 +407,7 @@ async function geoMarker(time, idw, tr) {
         info: alarm,
         speed: newGlobal[newGlobal.length - 1].speed
     }
-    createMapsUniq(trackAlarm, geo, 'alarm')
+    new GeoCreateMapsMini(trackAlarm, geo, 'alarm')
 }
 
 

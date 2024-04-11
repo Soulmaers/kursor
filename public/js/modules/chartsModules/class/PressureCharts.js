@@ -1,7 +1,6 @@
 
 import { Tooltip } from '../../../class/Tooltip.js'
-import { createMapsUniq } from '../../geo.js'
-
+import { GeoCreateMapsMini } from '../../geoModules/class/GeoCreateMapsMini.js'
 import { dataInfo, model } from '../../paramsTyresView.js'
 let isCanceled = false;
 
@@ -328,7 +327,7 @@ export class PressureCharts {
     handleMouseClick(datasets, xScaleStart, svgElement) {
         const [xPosition, yPosition] = d3.mouse(svgElement);
         const closestIndex = this.findClosestDataIndex(xPosition, datasets, xScaleStart);
-        createMapsUniq([], closestIndex[2], 'bar')
+        new GeoCreateMapsMini([], closestIndex[2], 'bar')
         const graph = document.querySelector('.infoGraf')
         graph.addEventListener('click', function (event) {
             event.stopPropagation(); // Остановка всплытия события, чтобы клик на графике не вызывал обработчик события click на document

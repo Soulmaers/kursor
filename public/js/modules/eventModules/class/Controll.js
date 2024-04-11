@@ -1,6 +1,6 @@
 
 import { CloseBTN } from '../../../class/CloseBTN.js'
-import { createMapsUniq } from '../../geo.js'
+import { GeoCreateMapsMini } from '../../../modules/geoModules/class/GeoCreateMapsMini.js'
 export class Controll {
     constructor(element, evnt, allObjects) {
         this.element = element
@@ -80,7 +80,7 @@ export class Controll {
             elem.parentElement.lastElementChild.parentElement.children[2].textContent,
             elem.parentElement.lastElementChild.parentElement.children[4].textContent]
         }]
-        createMapsUniq([], obj, 'log')
+        new GeoCreateMapsMini([], obj, 'log')
         const wrap = document.querySelector('.wrapMap')
         new CloseBTN(wrap)
     }

@@ -2,7 +2,6 @@
 export let mapLocal, iss, marker;
 
 import { GetDataTime } from '../../../class/GetDataTime.js'
-import { times } from '../../popup.js'
 import { Tooltip } from '../../../class/Tooltip.js';
 export class CreateMarkersEvent {
     constructor(id) {
@@ -44,6 +43,16 @@ export class CreateMarkersEvent {
         this.button[0].removeEventListener('click', this.boundClear);
         this.button[1].removeEventListener('click', this.boundOk);
         this.setTrack.removeEventListener('click', this.boundToggleCalendar);
+    }
+
+    times(time) {
+        const day = time.getDate();
+        const month = (time.getMonth() + 1).toString().padStart(2, '0');
+        const year = time.getFullYear();
+        const hours = time.getHours().toString().padStart(2, '0');
+        const minutes = time.getMinutes().toString().padStart(2, '0');
+        const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+        return formattedDate
     }
     async toggleCalendar(event) {
         const element = event.target
@@ -104,7 +113,7 @@ export class CreateMarkersEvent {
                 className: 'custom-marker'
             });
             if (i % 20 === 0) {
-                const time = times(new Date(Number(it.time) * 1000));
+                const time = this.times(new Date(Number(it.time) * 1000));
 
                 const divIconUpdated = L.divIcon({
                     className: 'custom-marker-arrow',
@@ -516,7 +525,7 @@ export class MarkerCreator {
                 className: 'custom-marker'
             });
             const contentPopup = this.contentPopup(e)[key];
-            const time = times(new Date(Number(e.time) * 1000));
+            const time = this.times(new Date(Number(e.time) * 1000));
             const eventMarkers = L.marker(e.geo, { icon }).bindPopup(`${contentPopup}<br>Время: ${time}`).addTo(this.map);
             eventMarkers.on('mouseover', function (e) {
                 this.openPopup();

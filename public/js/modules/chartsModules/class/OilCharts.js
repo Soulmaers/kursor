@@ -1,5 +1,5 @@
 import { Tooltip } from '../../../class/Tooltip.js'
-import { createMapsUniq } from '../../geo.js'
+import { GeoCreateMapsMini } from '../../geoModules/class/GeoCreateMapsMini.js'
 
 let isCanceled = false;
 export class OilCharts {
@@ -172,7 +172,7 @@ export class OilCharts {
         // Делаем активной текущую иконку
         d3.select(clickedElement).style("opacity", 1).classed('clickOil', true);
         // Создаем карту для текущего элемента
-        createMapsUniq([], d, 'oil')
+        new GeoCreateMapsMini([], d, 'oil')
         // Добавляем обработчик клика на график, чтобы предотвратить всплытие и случайное закрытие карты
         this.graf.addEventListener('click', function (event) {
             event.stopPropagation();
