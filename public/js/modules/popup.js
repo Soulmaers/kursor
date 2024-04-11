@@ -109,8 +109,8 @@ export async function logsView(array) {
     }
     if (previus !== value.quant && num !== 0) {
         const num = value.quant - previus
-        // const arrayPopup = value.view.slice(-num)
         previus = value.quant
+
         var arraypop = value.view.filter(function (objB) {
             return !data.some(function (objA) {
                 return objA.data === objB.time;
@@ -181,8 +181,10 @@ export async function logsView(array) {
     num++
     const clickLog = document.querySelector('.clickLog')
     if (value.view.length !== 0) {
+        console.log(value.view)
         const mass = value.view.map(el => {
             const parsedContent = JSON.parse(el.content);
+            console.log()
             const typeEvent = parsedContent[0].event;
             const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
             const geo = geoloc !== null ? geoloc.map(e => Number(e).toFixed(5)) : 'нет данных'
@@ -192,8 +194,8 @@ export async function logsView(array) {
                 .map(it => it[1]);
             const int = Object.values(parsedContent[0]);
             int.shift();
-            const time = times(new Date(Number(el.time) * 1000));
             const info = `${int.join(", ")}`;
+            const time = times(new Date(Number(el.time) * 1000));
             return { data: el.time, time: time, group: login === 'Курсор' ? 'demo' : typeEvent !== 'Предупреждение' ? el.groups : group, name: el.name, typeEvent: typeEvent, content: info, geo: geo, id: el.idw };
         });
         data = mass
@@ -248,6 +250,7 @@ async function togglePopup() {
         const evnt = document.querySelector('.evnt')
         evnt.style.color = 'rgba(6, 28, 71, 1)'
         const trEvent = document.querySelectorAll('.trEvent')
+        console.log(trEvent)
         trEvent.forEach(item => item.style.display = 'flex')
         const allobjects = document.querySelector('.allobjects')
         const choice = document.querySelector('.choice')
@@ -445,7 +448,7 @@ async function createLogsTable(mass) {
     });
 }
 
-
+/*
 const log = document.querySelector('.logs')
 log.addEventListener('click', function (event) {
     event.stopPropagation();
@@ -457,7 +460,7 @@ const numy = document.querySelector('.num')
 numy.addEventListener('click', function (event) {
     event.stopPropagation();
     togglePopup(); // Появление/скрытие попапа при клике на элементе "log"
-});
+});*/
 
 
 export function times(time) {

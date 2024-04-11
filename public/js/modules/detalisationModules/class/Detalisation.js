@@ -29,7 +29,7 @@ export class Detalisation {
             for (const entry of entries) {
                 const { width } = entry.contentRect;
                 console.log(this.currentWidth, width)
-                if (Math.abs(this.currentWidth - width) > 100) {
+                if (Math.abs(this.currentWidth !== width)) {
                     this.currentWidth = width;
                     this.performResizeActions(nav);
                 }
@@ -38,6 +38,7 @@ export class Detalisation {
     }
 
     performResizeActions(nav) {
+        console.log(this.container)
         switch (nav) {
             case 'nav1':
                 // Выполняем перерисовку, так как размер изменился

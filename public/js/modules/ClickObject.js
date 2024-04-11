@@ -164,8 +164,8 @@ export class ClickObject {
         const idw = this.element.id
         console.log(check)
 
-        this.deleteClasses('.tablo', '.choice', '.acto', '.check_probeg');  //метод удаляет переданыые классы
-        this.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.techInfo', '.tableTarir', '.disketa', '.korzina', '.sensors', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
+        this.deleteClasses('.tablo', '.choice', '.acto', '.check_probeg', '.toogleIconEvent');  //метод удаляет переданыые классы
+        this.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.techInfo', '.tableTarir', '.disketa', '.korzina', '.sensors', '.alllogs', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
         this.hideElements(['.trEvent', '.main', '.wrapper_up', '.wrapperCont'], 'flex') //ставим flex элементам
         const elementsToDelete = check ? ['.msg', '.wrapMap', '.containerAlt', '.delIcon'] : ['.msg', '.wrapMap', '.containerAlt', '.delIcon', '.zamer', '.jobTSDetalisationGraf', '.jobTSDetalisationCharts_legenda'];
         this.deleteElements(elementsToDelete);

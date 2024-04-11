@@ -9915,6 +9915,7 @@ i.settingsGroup {
   width: 50px;
   font-size: 0.7rem;
   text-align: center;
+  display: none;
 }
 
 .trLogs {

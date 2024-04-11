@@ -6,11 +6,13 @@ import { mapLocal } from '../modules/objectMainModules/class/CreateMarkersEvent.
 export class Flasher {
     constructor() {
         this.rigthFrame = document.querySelectorAll('.rigthFrame')
+        this.rightContainerWidth = null
         this.rigthFrame.forEach(el => {
             console.log(el)
             el.children[1].addEventListener('click', this.handleClickOne.bind(this))
             el.children[0].addEventListener('click', this.handleClickTwo.bind(this))
         })
+        this.wrapLeft = document.querySelector('.wrapper_left').clientWidth
     }
     init(parent) {
         let prevElement = parent.previousElementSibling;
@@ -30,17 +32,21 @@ export class Flasher {
         return [prevElement, nextElement]
     }
     handleClickOne(event) {
-        console.log(event.target.parentNode)
         const parent = event.target.parentNode
         const side = this.init(parent)
         console.log(side)
         parent.children[1].style.display = 'none'
         parent.children[0].style.display = 'block'
+        if (side[0].classList.contains('sections')) {
+            side[0].style.width = '10px';
+            side[1].style.width = '98%'
+        }
+        else {
+            this.rightContainerWidth = document.querySelector('.main').offsetWidth
+            side[0].style.width = '10px';
+            side[1].style.flexGrow = '1'
+        }
 
-        side[0].style.width = '10px';
-        side[0].style.transition = 'width 0s ease-in-out';
-        side[1].style.width = '98%'
-        side[1].style.transition = 'width 0s ease-in-out';
         if (side[1].classList.contains('globalMaps')) {
             setTimeout(function () { map.invalidateSize(); }, 300);
 
@@ -51,19 +57,19 @@ export class Flasher {
     }
     handleClickTwo(event) {
         const parent = event.target.parentNode
-        console.time('side')
         const side = this.init(parent)
-        console.timeEnd('side')
         parent.children[0].style.display = 'none'
         parent.children[1].style.display = 'block'
 
-
-        side[0].style.width = '550px';
-        //  side[0].style.transition = 'width 0s ease-in-out';
-        side[1].style.width = '74%'
-        console.log(side[1])
-        console.log(side[1].clientWidth)
-        // side[1].style.transition = 'width 0s ease-in-out';
+        if (side[0].classList.contains('section')) {
+            side[0].style.width = '550px';
+            side[1].style.width = '74%';
+        }
+        else {
+            console.log(this.rightContainerWidth)
+            side[0].style.width = '495px';
+            side[1].style.flexGrow = '1'
+        }
         if (side[1].classList.contains('globalMaps')) {
             setTimeout(function () { map.invalidateSize(); }, 300);
         }

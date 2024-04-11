@@ -7,7 +7,7 @@ import { AlarmControll } from './modules/alarmModules/class/AlarmControll.js'
 import { GrafikView } from './modules/grafikModules/class/GrafikView.js'
 import { ToggleHiddenList } from './modules/listModules/class/ToggleHiddenList.js'
 import { AddTooltip } from './modules/event.js'
-
+import { LogsEvent } from './modules/eventModules/class/LogsEvent.js'
 
 export let app;
 export let grafClick
@@ -44,7 +44,7 @@ export class Application {
         this.formatContainer() //метод который корректирует границы контейнеров взависимости от разрешения экрана
         this.adaptiv()  //адаптив
         this.activButton()
-        this.logs() //метод который сохраняет в базу число просмотренных логов
+        // this.logs() //метод который сохраняет в базу число просмотренных логов
         await this.startClass()
 
 
@@ -69,7 +69,8 @@ export class Application {
         const nameCarCheck = wialonData.response.arrName
         const data = kursorData.concat(arrayList)
         this.data = data
-        await logsView(this.data) //отрисовка и наполнение логов будет переписано на класс
+        new LogsEvent(this.data, this.login)
+        //await logsView(this.data) //отрисовка и наполнение логов будет переписано на класс
         if (data.flat().length === 0) {
             const loaders = document.querySelector('.loaders');
             loaders.style.display = 'none'
