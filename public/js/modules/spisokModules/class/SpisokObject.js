@@ -1,13 +1,13 @@
 
-import { convert } from './helpersFunc.js'
-import { objColorFront, generDav } from './content.js'
-import { convertTime } from './helpersFunc.js'
-import { globalSelect } from './filtersList.js'
-import { app } from '../main.js'
-import { SummaryViewControll } from './summaryModules/class/SummaryViewControll.js'
-import { ChartsViewControll } from './summaryModules/class/ChartsViewControll.js'
-import { Tooltip } from '../class/Tooltip.js'
-import { ClickObject } from './ClickObject.js'
+import { convert } from '../../helpersFunc.js'
+import { objColorFront, generDav } from '../../content.js'
+import { convertTime } from '../../helpersFunc.js'
+import { globalSelect } from '../../filtersList.js'
+import { app } from '../../../main.js'
+import { SummaryViewControll } from '../../summaryModules/class/SummaryViewControll.js'
+import { ChartsViewControll } from '../../summaryModules/class/ChartsViewControll.js'
+import { Tooltip } from '../../../class/Tooltip.js'
+import { ClickObject } from '../../navigatorModules/class/ClickObject.js'
 
 
 export let initSummary
@@ -35,7 +35,7 @@ export class SpisokObject {
         this.findDomElement()  //поиск и удаление старых элементов
         this.createListObjectAndGroup() //создание списка групп и объектов на страницы
         const lists = this.lowList.querySelectorAll('.listItem')
-        new ClickObject(lists)
+        new ClickObject(lists, this.data)
         this.sensorsName = true
         this.lastSensor = true
         initSummary = new SummaryViewControll(this.allId)

@@ -1,5 +1,5 @@
 
-import { initSummary } from '../../SpisokObject.js'
+import { initSummary } from '../../spisokModules/class/SpisokObject.js'
 
 export class ChartsViewControll {
     constructor() {
@@ -24,7 +24,6 @@ export class ChartsViewControll {
         this.data = await initSummary.getRequestSummaryToBase(data)
         const originalData = initSummary.controllActiveObject(Object.values(this.data))
         this.originalData = originalData
-        console.log(this.originalData)
         let dataAndValue = {};
         for (let i = 0; i < originalData.length; i++) {
             const currentDate = originalData[i].data;
@@ -68,9 +67,7 @@ export class ChartsViewControll {
         let outputArray = Object.values(dataAndValue);
         const clickParams = document.querySelector('.clickToggle').parentElement.getAttribute('rel')
         this.data = outputArray
-        console.log(this.data)
         const char = document.querySelector('.chart_global')
-        console.log(char)
         outputArray.length !== 0 ? this.createChart(outputArray, clickParams) : char ? char.remove() : null
 
     }
@@ -124,7 +121,6 @@ export class ChartsViewControll {
             nameChart = this.nameChart
             data = this.data
         }
-        console.log(data)
         const char = document.querySelector('.chart_global')
         if (char) {
             char.remove()
@@ -158,8 +154,6 @@ export class ChartsViewControll {
             .call(nameChart !== 'moto' && nameChart !== 'prostoy' && nameChart !== 'timeJob' ? d3.axisLeft(yScale) : d3.axisLeft(yScale).tickFormat(function (d) {
                 return self.timesFormat(d)
             }))
-        console.log(data)
-        console.log(content_lower_charts.clientHeight)
         svg.selectAll('rect')
             .data(data)
             .enter().append('rect')

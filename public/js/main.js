@@ -1,5 +1,5 @@
 import { checkCreate } from './modules/admin.js'
-import { SpisokObject } from './modules/SpisokObject.js'
+import { SpisokObject } from './modules/spisokModules/class/SpisokObject.js'
 import { NavigationMenu } from './modules/navModules/NavigatorClass.js'
 import { DropDownList } from './class/DropdownList.js'
 import { AlarmControll } from './modules/alarmModules/class/AlarmControll.js'

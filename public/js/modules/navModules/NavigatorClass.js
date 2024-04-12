@@ -1,4 +1,4 @@
-import { initCharts } from '../SpisokObject.js'
+import { initCharts } from '../spisokModules/class/SpisokObject.js'
 import { skladContainer } from './sklad.js'
 import { kartaContainer } from './karta.js'
 import { reportsContainer } from './reports.js'

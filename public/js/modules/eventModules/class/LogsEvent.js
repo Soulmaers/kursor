@@ -1,6 +1,7 @@
 
 import { LogsTable } from './LogsTable.js'
 import { CloseBTN } from '../../../class/CloseBTN.js'
+import { Popup } from './Popup.js'
 import { DraggableContainer } from '../../../class/Dragdown.js'
 
 export class LogsEvent {
@@ -45,7 +46,7 @@ export class LogsEvent {
             });
         });
         arrayPopup.length !== 0 ? new Popup(arrayPopup, this.login, this.arrayIdGroups) : null
-        console.log(arrayPopup)
+
     }
 
     updateValueCount() {
@@ -154,7 +155,6 @@ export class LogsEvent {
     }
 
     async logs(quantity) {
-        console.log(quantity)
         const param = quantity ? this.createFetchRequestParams({ login: this.login, quantity }) : this.createFetchRequestParams({ login: this.login });
         await fetch('/api/viewLogs', param);
     }

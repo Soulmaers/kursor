@@ -41,7 +41,7 @@ export class IconStatus {
         this.nameObject = elem.children[0].textContent.replace(/\s+/g, '')
         await this.displayIconValues(this.id)
         clearInterval(this.intervalId)
-        this.intervalId = setInterval(() => this.displayIconValues(this.id), 60000)
+        this.intervalId = setInterval(() => this.displayIconValues(this.id), 110000)
     }
     //навешиваем значнеие кликнутого параметра на иконку и запускаем метод сохранения даных в бд
     async viewValueToSaveBase(element) {

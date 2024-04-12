@@ -1,20 +1,24 @@
 
-import { loadParamsView } from './paramsTyresView.js'
-import { reqProtectorBase } from './protector.js'
-import { kranParams } from './strelaKran.js'
-import { clearElem } from './helpersFunc.js'
-import { CreateMarkersEvent } from './objectMainModules/class/CreateMarkersEvent.js'
-import { alarmFind } from './alarmModules/alarmStorage.js'
-import { IconStatus } from './iconModules/class/IconStatus.js'
-import { grafClick } from '../main.js'
-import { dataInfo } from '../modules/paramsTyresView.js'
-import { StatistikaPressure } from './StatistikaModules/Statistikapressure.js'
-import { Detalisation } from './detalisationModules/class/Detalisation.js'
+import { loadParamsView } from '../../paramsTyresView.js'
+import { reqProtectorBase } from '../../protector.js'
+import { kranParams } from '../../strelaKran.js'
+import { clearElem } from '../../helpersFunc.js'
+import { CreateMarkersEvent } from '../../objectMainModules/class/CreateMarkersEvent.js'
+import { alarmFind } from '../../alarmModules/alarmStorage.js'
+import { IconStatus } from '../../iconModules/class/IconStatus.js'
+import { grafClick } from '../../../main.js'
+import { dataInfo } from '../../paramsTyresView.js'
+import { StatistikaPressure } from '../../StatistikaModules/Statistikapressure.js'
+import { Detalisation } from '../../detalisationModules/class/Detalisation.js'
+import { DOMHelper } from './DOMHelper.js'
+import { ViewModel } from '../../skdshModules/class/ViewModel.js'
 export let iconStatusClick;
 
 export class ClickObject {
-    constructor(elements) {
+    constructor(elements, data) {
         this.elements = elements
+        this.data = data
+        this.info == null
         this.element = null
         this.createEvent = null
         this.instanceStatistika = null
@@ -23,6 +27,7 @@ export class ClickObject {
         this.wrapperFull = document.querySelector('.wrapperFull')
         this.btnShina = document.querySelectorAll('.modals')
         this.widthWind = document.querySelector('body').offsetWidth;
+        this.uniqStruktura = this.findObjectByIdRecursive(this.data);
         this.elements.forEach(e => e.addEventListener('click', this.handleClick.bind(this)))
         this.btnShina.forEach(e => e.addEventListener('click', this.changeTyresValue.bind(this, e)))
     }
@@ -58,51 +63,34 @@ export class ClickObject {
     mainblock() {
         const grafikButton = document.querySelector('.grafik_button')
         grafikButton.classList.remove('activGraf')
-        this.hideElements(['.wrapper_right', '.config', '.secondFlash'], 'flex')
-        this.hideElements(['.grafics'], 'none')
-        this.hideElements(['.wrapper_left'], 'block')
+        DOMHelper.hideElements(['.wrapper_right', '.config', '.secondFlash'], 'flex')
+        DOMHelper.hideElements(['.grafics'], 'none')
+        DOMHelper.hideElements(['.wrapper_left'], 'block')
 
     }
 
-    createStata() {
-        const [arg, params, osi] = dataInfo
-        const sens = params.reduce((acc, item) => {
-            const pressure = arg.find(element => element.params === item.pressure);
-            if (pressure) {
-                acc.push({ ...pressure, tyresdiv: item.tyresdiv });
+    findObjectByIdRecursive(data) {
+        const resultData = data.flat().reduce((acc, it) => {
+            if (it.length === 10 && it[8].sub.length !== 0) {
+                acc.push(...Object.values(it[8].sub).flat());
             }
-            return acc
-        }, [])
-        sens.sort((a, b) => a.tyresdiv - b.tyresdiv);
-        const table = document.querySelector('.table_stata')
-        const rows = document.querySelectorAll('.row_stata')
-        if (rows) {
-            [...rows].forEach(e => {
-                e.remove()
-            })
-        }
-        sens.forEach(it => {
-            let count = 4
-            const tr = document.createElement('tr')
-            tr.classList.add('row_stata')
-            table.appendChild(tr)
-            const td = document.createElement('td')
-            td.classList.add('cel')
-            td.setAttribute('rel', it.params);
-            td.textContent = it.sens
-            tr.appendChild(td)
-            for (let i = 0; i <= count; i++) {
-                const td = document.createElement('td')
-                td.classList.add('cel')
-                td.textContent = '-'
-                tr.appendChild(td)
-            }
-        })
-
+            acc.push(it);
+            return acc;
+        }, []);
+        const uniqueSubArrays = Array.from(new Map(resultData.map(item => [item[4], item])).values());
+        return uniqueSubArrays
     }
+
+    filterData(id) {
+        const foundElement = this.uniqStruktura.find(el => el[4] === Number(id));
+        this.info = [foundElement[0].result, foundElement[1].result, foundElement[2].result, foundElement[3].result]
+    }
+
     handleClick(event) {
-        this.windowAdaptiv()
         this.element = event.currentTarget;
+        this.filterData(this.element.id)
+        this.windowAdaptiv()
+
         if (this.element.classList.contains('color') || event.target.classList.contains('checkInList')
             || event.target.classList.contains('map_unit')
             || event.target.classList.contains('report_unit')
@@ -110,109 +98,51 @@ export class ClickObject {
             || event.target.classList.contains('pref')) {
             return
         }
-        this.deleteClasses('.color')
+        DOMHelper.deleteClasses('.color')
         this.element.classList.add('color')
         this.visual()
     }
 
-    deleteClasses(...tags) {
-        tags.forEach(selector => {
-            const elements = document.querySelectorAll(selector);
-            elements.forEach(element => {
-                if (element) {
-                    element.classList.remove(selector.substring(1));
-                }
-            });
-        });
-    }
-    deleteElements(...tags) {
-        tags.forEach(selector => {
-            const elements = document.querySelectorAll(selector);
-            elements.forEach(element => {
-                if (element) {
-                    element.remove(selector);
-                }
-            });
-        });
-    }
-    hideElements(selectors, value) {
-        selectors.forEach(selector => {
-            const elements = document.querySelectorAll(selector);
-            elements.forEach(element => {
-                element.style.display = value;
-            });
-        });
-    }
-    clearTexContent(...selectors) {
-        selectors.forEach(selector => {
-            const elements = document.querySelectorAll(selector);
-            elements.forEach(element => {
-                element.textContent = ''
-            });
-        });
-    }
-    liCreate() {
-        const obo = document.querySelector('.obo')
-        const count = 250;
-        for (let i = 0; i < count; i++) {
-            let li = document.createElement('li');
-            li.className = "msg";
-            obo.append(li);
-        }
-    }
+
     async visual(check) {
         const idw = this.element.id
-        console.log(check)
-
-        this.deleteClasses('.tablo', '.choice', '.acto', '.check_probeg', '.toogleIconEvent');  //метод удаляет переданыые классы
-        this.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.techInfo', '.tableTarir', '.disketa', '.korzina', '.sensors', '.alllogs', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
-        this.hideElements(['.trEvent', '.main', '.wrapper_up', '.wrapperCont'], 'flex') //ставим flex элементам
+        DOMHelper.deleteClasses('.tablo', '.choice', '.acto', '.check_probeg', '.toogleIconEvent');  //метод удаляет переданыые классы
+        DOMHelper.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.techInfo', '.tableTarir', '.disketa', '.korzina', '.sensors', '.alllogs', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
+        DOMHelper.hideElements(['.trEvent', '.main', '.wrapper_up', '.wrapperCont'], 'flex') //ставим flex элементам
         const elementsToDelete = check ? ['.msg', '.wrapMap', '.containerAlt', '.delIcon'] : ['.msg', '.wrapMap', '.containerAlt', '.delIcon', '.zamer', '.jobTSDetalisationGraf', '.jobTSDetalisationCharts_legenda'];
-        this.deleteElements(elementsToDelete);
+        DOMHelper.deleteElements(elementsToDelete);
         if (!check) {
-            this.clearTexContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value');
+            DOMHelper.clearTextContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value');
         }
-        this.liCreate() //отрисовка строк под параметры
+        DOMHelper.createListItems('.obo', 250, 'msg')
 
-        await loadParamsView()
+        // new ViewModel(this.info)
+        await loadParamsView(this.info)
         const graf = document.querySelector('.activGraf')
         if (graf) grafClick.controllerMethodCharts();
         if (!check) {
             this.specific(this.element)//метод который обрабатывает специфические условия
-            if (this.createEvent) {
-                this.createEvent.reinitialize(this.element.id);
-            }
-            else {
-                this.createEvent = new CreateMarkersEvent(idw);
-            }
-            if (iconStatusClick) {
-                iconStatusClick.reinitialize(this.element);
-            }
-            else {
-                iconStatusClick = new IconStatus(this.element);
-            }
+            this.reinitializeOrCreateInstance('createEvent', CreateMarkersEvent, idw);
+            this.reinitializeOrCreateInstance('iconStatusClick', IconStatus, this.element);
+            this.reinitializeOrCreateInstance('instanceStatistika', StatistikaPressure, dataInfo, this.element);
+            this.reinitializeOrCreateInstance('instanceDetalisation', Detalisation, this.element);
             if (this.createEvent.updateInterval) {
                 clearInterval(this.createEvent.updateInterval);
                 this.createEvent.hiddenTrackAndMarkersEnent();
-            }
-
-            if (this.instanceStatistika) {
-                this.instanceStatistika.reinitialize(dataInfo, this.element);
-            }
-            else {
-                this.instanceStatistika = new StatistikaPressure(dataInfo, this.element)
-            }
-            if (this.instanceDetalisation) {
-                this.instanceDetalisation.reinitialize(this.element);
-            }
-            else {
-                this.instanceDetalisation = new Detalisation(this.element)
             }
 
             alarmFind()
         }
         kranParams()
         setInterval(kranParams, 300000)
+    }
+
+    reinitializeOrCreateInstance(property, Constructor, ...args) {
+        if (this[property]) {
+            this[property].reinitialize(...args);
+        } else {
+            this[property] = new Constructor(...args);
+        }
     }
 
     specific(el) {

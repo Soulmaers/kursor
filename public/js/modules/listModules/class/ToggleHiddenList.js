@@ -1,7 +1,7 @@
 
 import { initsmarkers } from '../../navModules/karta.js'
 import { filterCondition } from '../../filtersList.js'
-import { initSummary, initCharts } from '../../SpisokObject.js'
+import { initSummary, initCharts } from '../../spisokModules/class/SpisokObject.js'
 import { classReports } from '../../navModules/reports.js'
 import { NavigationMenu } from '../../navModules/NavigatorClass.js'
 import { Tooltip } from '../../../class/Tooltip.js'

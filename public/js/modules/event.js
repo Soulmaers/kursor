@@ -15,7 +15,7 @@ import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 import { draggable } from './filtersList.js'
 import { storTitleList } from './content.js'
 import { filterCondition } from './filtersList.js'
-import { initCharts, initSummary } from './SpisokObject.js'
+import { initCharts, initSummary } from './spisokModules/class/SpisokObject.js'
 import { CreateNewObject } from './propertyObjectModules/class/CreateNewObject.js'
 import { CreateNewGroup } from './propertyObjectModules/class/CreateNewGroup.js'
 

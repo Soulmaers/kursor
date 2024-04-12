@@ -17,7 +17,6 @@ export function liCreate() {
 }
 export function view(arg) {
     const msg = document.querySelectorAll('.msg')
-    console.log(msg)
     arg.forEach((el, index) => {
         msg[index].textContent = `${el.params}:${el.value !== null ? el.value : '-'}`
     })
@@ -25,8 +24,6 @@ export function view(arg) {
 export function viewConfigurator(arg, params, osi) {
     const role = document.querySelector('.role').getAttribute('rel')
     const active = document.querySelector('.color')
-    console.log(params)
-    console.log(arg)
     if (params) {
         const parametrs = convert(params)
         const tiresLink = document.querySelectorAll('.tires_link_test')
@@ -118,28 +115,10 @@ function getHoursDiff(startDate, nowDate) {
 
 export function alarmClear() {
     const alarmCheck = document.querySelectorAll('.alarmCheck')
-    console.log(alarmCheck)
     alarmCheck.forEach(e => {
         e.style.borderTopLeftRadius = 'none'
         e.style.border = 'none'
     })
 }
 
-function styleShinaActive(arg) {
-    console.log('бтншина')
-    reqProtectorBase()
-    const tyresD = document.querySelectorAll('.tiresD')
-    const tyresT = document.querySelectorAll('.tiresT')
-    const main = document.querySelector('.main')
-    main.style.display = 'flex'
-    //arg.style.fontSize = '0.65rem'
-    tyresD.forEach(e => {
-        e.style.Border = 'none'
-    })
-    tyresT.forEach(e => {
-        e.style.borderTop = 'none'
-        e.style.fontSize = '0.8rem'
-        e.style.justifyContent = 'flex-start'
-    })
-}
 

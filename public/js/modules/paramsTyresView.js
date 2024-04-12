@@ -9,30 +9,36 @@ import { DraggableContainer } from '../class/Dragdown.js'
 export let model;
 let intervalId
 let isProcessing = false;
-export async function loadParamsView(signal) {
+export async function loadParamsView(info) {
     if (isProcessing) {
         return;
     }
     isProcessing = true;
     clearInterval(intervalId)
 
-    const idw = document.querySelector('.color').id
-    const params = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        signal: signal,
-        body: (JSON.stringify({ idw }))
+    if (!info) {
+        const idw = document.querySelector('.color').id
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw }))
+        }
+        const mod = await fetch('/api/modelView', params)
+        const res = await mod.json()
+        model = res.result
     }
-    const mod = await fetch('/api/modelView', params)
-    model = await mod.json()
-    if (model.result && model.result.length > 0) {
-        createViewModel(model.result);
+    else {
+        model = info[0]
     }
 
-    await viewPokasateli(signal)
-    intervalId = setInterval(viewPokasateli, 60000)
+    if (model && model.length > 0) {
+        createViewModel(model);
+    }
+
+    await viewPokasateli(info)
+    intervalId = setInterval(viewPokasateli, 110000)
     isProcessing = false;
 }
 
@@ -205,35 +211,39 @@ export function viewMenuParams() {
 }
 
 export let dataInfo;
-async function viewPokasateli(signal) {
+async function viewPokasateli(info) {
+    if (!info) {
+        const idw = document.querySelector('.color').id
+        const param = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw }))
+        }
+        const paramsss = await fetch('/api/tyresView', param)
+        const params = await paramsss.json()
+        const datas = await fetch('/api/getSens', param)
+        const data = await datas.json()
 
-    const idw = document.querySelector('.color').id
-    const param = {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        signal: signal,
-        body: (JSON.stringify({ idw }))
+        const os = await fetch('/api/barView', param)
+        const osi = await os.json()
+        data.sort((prev, next) => {
+            if (prev.name < next.name) return -1;
+            if (prev.name < next.name) return 1;
+        })
+        dataInfo = [data, params.result, osi]
     }
-    const paramsss = await fetch('/api/tyresView', param)
-    const params = await paramsss.json()
-    const datas = await fetch('/api/getSens', param)
-    const data = await datas.json()
-
-    const os = await fetch('/api/barView', param)
-    const osi = await os.json()
-    data.sort((prev, next) => {
-        if (prev.name < next.name) return -1;
-        if (prev.name < next.name) return 1;
-    })
-    dataInfo = [data, params.result, osi]
+    else {
+        dataInfo = [info[2], info[1], info[3]]
+    }
+    console.log(dataInfo)
     const btnShina = document.querySelectorAll('.modals')
     if (btnShina[1].classList.contains('active') === true) {
         return
     }
-    view(data)
-    viewConfigurator(data, params.result, osi)
+    view(dataInfo[0])
+    viewConfigurator(dataInfo[0], dataInfo[1], dataInfo[2])
 
 }
 

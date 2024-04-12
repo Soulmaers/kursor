@@ -430,9 +430,9 @@ export class PressureCharts {
             return div
         })
         this.char[this.char.length - 1].children[0].classList.add('last')
-        model.result.sort((a, b) => parseInt(a.osi) - parseInt(b.osi));
+        model.sort((a, b) => parseInt(a.osi) - parseInt(b.osi));
         im1.forEach((it, index) => {
-            model.result.forEach(({ trailer, tyres }) => {
+            model.forEach(({ trailer, tyres }) => {
                 const osElement = this.createOsElement(trailer, +tyres);
                 it.appendChild(osElement);
             });

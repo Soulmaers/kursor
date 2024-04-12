@@ -1,4 +1,4 @@
-import { initCharts } from '../modules/SpisokObject.js'
+import { initCharts } from '../modules/spisokModules/class/SpisokObject.js'
 import { Detalisation } from '../modules/detalisationModules/class/Detalisation.js'
 
 export class ResizeContainer {

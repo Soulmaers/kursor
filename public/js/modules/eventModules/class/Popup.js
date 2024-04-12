@@ -76,7 +76,7 @@ export class Popup {
                 const mess = this.createMessage(el, event, content, formattedDate);
 
                 // Показываем попап если событие совпадает с требуемым
-                if (viewObj.alert.includes(event)) createPopup(mess);
+                if (viewObj.alert.includes(event)) this.createPopup(mess);
             });
         } else {
             console.log('нет данных');
