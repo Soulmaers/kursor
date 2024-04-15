@@ -76,7 +76,6 @@ export class CreateMarkersEvent {
     }
 
     ok() {
-        console.log(this.time)
         if (this.time) {
             this.calendar.style.display = 'none'
             this.calendar.children[0].children[0].value = ''
@@ -86,7 +85,6 @@ export class CreateMarkersEvent {
         }
     }
     clear() {
-        console.log('здесь')
         this.calendar.style.display = 'none'
         this.calendar.previousElementSibling.classList.remove('activeTrack')
         this.calendar.children[0].children[0].value = ''
@@ -96,14 +94,16 @@ export class CreateMarkersEvent {
         this.track = await this.getIntervalTrack()
         const track = this.track.map(e => e.geo)
         const prostoy = await this.getEventProstoy()
+
         this.eventMarkers = await this.getEventObject(track, prostoy)
+        console.log(this.eventMarkers)
         this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
+        console.log(this.poly)
         if (this.poly) {
             mapLocal.removeLayer(this.poly);
             this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
         }
         this.poly = L.polyline(track, { color: 'rgb(0, 0, 204)', weight: 2 }).addTo(mapLocal);
-        //  this.startTrack ? this.startTrack.addTo(mapLocal) : null
         this.track.forEach((it, i) => {
             const icon = L.icon({
                 iconUrl: '../../image/starttrack.png',
@@ -370,6 +370,7 @@ export class CreateMarkersEvent {
         let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);
         let oilEvent;
         if (this.pref !== 'kursor') {
+            console.log(id, nowDate, timeFrom)
             const params = {
                 method: "POST",
                 headers: {

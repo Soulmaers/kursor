@@ -3,9 +3,9 @@
 import { convertTime } from '../helpersFunc.js'
 import { GetDataTime } from '../../class/GetDataTime.js'
 export class StatistikaPressure {
-    constructor(data, id) {
-        this.data = data
+    constructor(id, info) {
         this.id = id.id
+        this.info = info
         this.structura = null
         this.time = null
         this.iconStata = document.querySelector('.icon_stata')
@@ -20,7 +20,6 @@ export class StatistikaPressure {
         this.clickCheck = this.updateTexContent.bind(this)
         this.init()
         this.initEventListeners()
-
     }
 
 
@@ -53,9 +52,9 @@ export class StatistikaPressure {
         this.iconStata.removeEventListener('click', this.clickIcon)
         this.iconCheck.addEventListener('click', this.clickCheck)
     }
-    reinitialize(newData, newId) {
+    reinitialize(newId, newData,) {
         this.removeEventListeners();
-        this.data = newData
+        this.info = newData
         this.id = newId.id
         this.init(); // Переинициализация с новым id
         this.initEventListeners(); // Повторное добавление слушателей событий
@@ -240,15 +239,17 @@ export class StatistikaPressure {
     }
 
     async getParamsToInterval() {
-        const [params, tyres, osibar] = this.data
+        const [, tyres, params, osibar] = this.info
         const t1 = this.time[0]
         const t2 = this.time[1] + 86399
         const idw = this.id
         const arrayColumns = ['last_valid_time', 'speed', 'lat', 'lon', 'mileage', 'engineOn']
+        console.log(tyres)
         tyres.forEach(el => {
             arrayColumns.push(el.pressure, el.temp)
         })
         const num = 0
+        console.log(idw, t1, t2, arrayColumns, num)
         const param = {
             method: 'POST',
             headers: {

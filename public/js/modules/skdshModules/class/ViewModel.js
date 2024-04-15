@@ -1,18 +1,27 @@
 
+import { Helpers } from './Helpers.js'
+
 export class ViewModel {
-    constructor(data) {
-        [this.model, this.tyres, this.params, this.osi] = data
+    constructor(model) {
+        this.model = model
         this.config = document.querySelector('.config')
-
-
-        this.init()
+        this.containerTagach = null
+        this.containerPricep = null
+        this.createViewModel()
     }
 
 
-    init() {
-        this.model.length > 0 ? this.createViewModel() : null
-    }
+    createViewModel() {
+        const type = this.model.type
+        this.controllViewType(type)
+        if (this.model.length === 1 && this.model[0].osi === '-') return
+        this.createContainer()
+        this.createOsi()
+        this.createTyres()
+        this.createNomer()
 
+
+    }
 
     controllViewType(type) {
         const selectType = this.config.querySelector('.select_type')
@@ -32,36 +41,34 @@ export class ViewModel {
             selectType.selectedIndex = 0;
         }
     }
-    createViewModel() {
-        const type = this.model.type
-        this.controllViewType(type)
-        console.log(this.model)
-        if (this.model.length === 1 && this.osi === '-') return
 
-        const containerAll = document.querySelector('.containerAll')
+    createContainer() {
+        const containerAll = this.config.querySelector('.containerAll')
         if (containerAll) {
             containerAll.remove()
         }
-        const altConfig = document.querySelector('.altConfig')
+        const altConfig = this.config.querySelector('.altConfig')
         const containerAlt = document.createElement('div')
         containerAlt.classList.add('containerAlt')
         altConfig.appendChild(containerAlt)
-        const containerTagach = document.createElement('div')
-        containerTagach.classList.add('containerTagach')
-        const containerPricep = document.createElement('div')
-        containerPricep.classList.add('containerPricep')
-        containerAlt.appendChild(containerTagach)
-        containerAlt.appendChild(containerPricep)
-        containerTagach.style.border = '2px solid darkblue'
-        containerTagach.style.padding = '2px'
-        containerPricep.style.padding = '2px'
-        containerPricep.style.marginTop = '50px'
+        this.containerTagach = document.createElement('div')
+        this.containerTagach.classList.add('containerTagach')
+        this.containerPricep = document.createElement('div')
+        this.containerPricep.classList.add('containerPricep')
+        containerAlt.appendChild(this.containerTagach)
+        containerAlt.appendChild(this.containerPricep)
+        this.containerTagach.style.border = '2px solid darkblue'
+        this.containerTagach.style.padding = '2px'
+        this.containerPricep.style.padding = '2px'
+        this.containerPricep.style.marginTop = '50px'
+    }
 
+    createOsi() {
         this.model.sort((a, b) => a.osi - b.osi)
         for (let i = 0; i < this.model.length; i++) {
             const item = this.model[i];
-            const container = item.trailer === 'Тягач' ? containerTagach : containerPricep;
-            item.trailer === 'Прицеп' ? containerPricep.style.border = '2px solid darkblue' : containerPricep.style.border = 'none'
+            const container = item.trailer === 'Тягач' ? this.containerTagach : this.containerPricep;
+            item.trailer === 'Прицеп' ? this.containerPricep.style.border = '2px solid darkblue' : this.containerPricep.style.border = 'none'
             container.innerHTML += `<div class=" osiTest">
         <div class="tires_spark_test">
             <div class="tiresTest mod">
@@ -94,6 +101,9 @@ export class ViewModel {
                 e.children[0].style.background = '#000'
             }
         })
+    }
+
+    createTyres() {
         const tiresTest = document.querySelectorAll('.tiresTest')
         let indexTires = 0;
         tiresTest.forEach(el => {
@@ -109,8 +119,12 @@ export class ViewModel {
             linkTest.appendChild(tiresDTest);
             linkTest.appendChild(tiresTTest);
         })
+    }
+
+
+    createNomer() {
         const center = document.querySelectorAll('.centerOsTest')
-        //  gosNum(center)
+        Helpers.gosNum(center)
         const nomerP = document.querySelector('.nomerP')
         if (nomerP) {
             nomerP.closest('.osiTest').children[0].children.length === 2 ? nomerP.style.left = '15px' : null
@@ -119,12 +133,12 @@ export class ViewModel {
         const gosNumber1 = document.querySelector('.gosNumber1')
         const gosNumberCar = document.querySelector('.gosNumberCar')
         const gosNumberCar1 = document.querySelector('.gosNumberCar1')
+        console.log(this.model[0])
         this.model[0].frontGosp ? gosNumberCar.value = this.model[0].frontGosp : null
         this.model[0].frontGosp1 ? gosNumberCar1.value = this.model[0].frontGosp1 : null
         this.model[0].gosp ? gosNumber.value = this.model[0].gosp : null
         this.model[0].gosp1 ? gosNumber1.value = this.model[0].gosp1 : null
-
-        //  viewMenuParams()
-        //  modalOs();
     }
+
 }
+

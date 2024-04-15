@@ -466,7 +466,7 @@ modalNameOs.addEventListener('click', () => {
     })
 })
 
-
+/*
 const disk = document.querySelector('.disk')
 disk.addEventListener('click', () => {
     const buttOnConfig = document.querySelectorAll('.buttOnConfig')
@@ -521,31 +521,10 @@ save.addEventListener('click', () => {
 const buttOnConfig = document.querySelectorAll('.buttOnConfig')
 otmena.addEventListener('click', () => {
     buttOnConfig[0].style.display = 'none'
-})
+})*/
 
 
-export function fnsortTest(el) {
-    const numberOs = parseFloat(el.children[1].id)
-    let typeOs;
-    let sparka;
-    el.children[1].classList.contains('pricepT') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
-    console.log(el)
-    const spark = el.querySelector('.sparkCheck')
-    if (spark) {
-        spark.checked ? sparka = 4 : sparka = 2
-    }
-    else {
-        sparka = 2
-    }
-    return [numberOs, typeOs, sparka]
-}
-export function fnsortTyresTest(el) {
-    const numOs = el.closest('.osiTest').children[1].id
-    const idw = el.id
-    const relD = el.children[0].getAttribute('rel')
-    const relT = el.children[1].getAttribute('rel')
-    return [idw, relD, relT, numOs]
-}
+
 
 
 const buttonTth = document.querySelector('.buttonTth')
@@ -762,13 +741,7 @@ class DropDownList {
 new DropDownList({ element: document.querySelector(`#input`), btn: document.querySelector('.buh'), data });
 
 
-const altConfig = document.getElementById('check_Title')
-altConfig.addEventListener('change', () => {
-    const selectType = document.querySelector('.select_type')
-    const selectOld = selectType.options[selectType.selectedIndex].textContent
-    console.log()
-    conf(selectOld)
-})
+
 
 
 const selectSummary = document.querySelectorAll('.select_summary');

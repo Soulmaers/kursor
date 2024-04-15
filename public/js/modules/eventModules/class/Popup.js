@@ -126,8 +126,10 @@ export class Popup {
         if (this.login === 'Курсор') {
             return 'demo';
         }
+        console.log(id)
+        console.log(this.arrayIdGroups)
         // Ищем группу по id объекта
-        const groupEntry = this.arrayIdGroups.find(([groupId]) => groupId === id);
+        const groupEntry = this.arrayIdGroups.find(([groupId]) => groupId[0] === id);
         return groupEntry ? groupEntry[1] : 'не определено';
     }
 }

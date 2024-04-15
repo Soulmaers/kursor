@@ -15,10 +15,10 @@ export async function postTyres(tyres) {
     }
     const results = await fetch('/api/tyres', params)
     const res = results.json()
-    const messaga = document.querySelector('.messageId')
-    messaga.textContent = 'Датчики добавлены'
-    messaga.style.color = 'green'
-    setTimeout(() => messaga.textContent = '', 2000)
+    // const messaga = document.querySelector('.messageId')
+    // messaga.textContent = 'Датчики добавлены'
+    // messaga.style.color = 'green'
+    //  setTimeout(() => messaga.textContent = '', 2000)
 }
 
 export const reqDelete = async (idw) => {
@@ -35,10 +35,11 @@ export const reqDelete = async (idw) => {
     if (containerAlt) {
         containerAlt.remove();
     }
-    const messaga = document.querySelector('.messageId')
-    messaga.textContent = 'Модель удалена'
-    messaga.style.color = 'green'
-    setTimeout(() => messaga.textContent = '', 2000)
+    //  const messaga = document.querySelector('.messageId')
+    //  console.log(messaga)
+    //  messaga.textContent = 'Модель удалена'
+    // messaga.style.color = 'green'
+    // setTimeout(() => messaga.textContent = '', 2000)
 
 }
 export const barDelete = async (idw) => {
@@ -142,9 +143,6 @@ export async function viewBar(id) {
 }
 
 
-
-
-
 //конфигуратор оси
 export async function changeBase(massModel, activePost, idw, type, go, go1, goCar, goCar1) {
     // const containerAlt = document.querySelector('.containerAlt')
@@ -174,8 +172,8 @@ export async function changeBase(massModel, activePost, idw, type, go, go1, goCa
     const res = await fetch('/api/updateModel', param)
     const response = await res.json()
     console.log(response)
-    const controll = document.querySelector('.container_left')
-    controll.style.display = 'none'
+    //const controll = document.querySelector('.container_left')
+    //controll.style.display = 'none'
     const modalCenterOs = document.querySelector('.modalCenterOs')
     modalCenterOs.style.display = 'none'
     console.log(response)

@@ -422,10 +422,10 @@ exports.geoLastInterval = async (time1, time2, idw) => {
 
 }
 exports.getParamsToPressureAndOilToBase = async (time1, time2, idw, columns, num) => {
-
+    const value = columns.filter(e => e !== null)
     try {
         const pool = await connection;
-        const selectedTColumnsTest = columns.join(", ")
+        const selectedTColumnsTest = value.join(", ")
         const postModel = `
             SELECT ${selectedTColumnsTest}
             FROM globalStor

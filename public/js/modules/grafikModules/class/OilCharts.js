@@ -29,7 +29,6 @@ export class OilCharts {
         isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
         this.data = await this.createStructura() //получение и подготовка структуры данных
         this.objOil = this.findMarkerReFill() //поиск заправок
-        console.log(this.objOil)
         if (this.data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')
@@ -93,7 +92,6 @@ export class OilCharts {
             .style("opacity", 0);
     }
     toolMousemove(d) {
-        console.log(this.new_xScale)
         // Определяем координаты курсора в отношении svg
         const [xPosition, yPosition] = d3.mouse(this.svg.node());
         // Определяем ближайшую точку на графике
@@ -182,7 +180,6 @@ export class OilCharts {
     createBodyCharts() {
         const parametr = this.data[this.data.length - 1].summatorOil ? 'summatorOil' : 'oil'
         this.parametr = parametr
-        console.log(this.parametr)
         // задаем x-шкалу
         const x = d3.scaleTime()
             .domain(d3.extent(this.data, (d) => new Date(d.time)))
@@ -439,9 +436,7 @@ export class OilCharts {
         new Tooltip(inf, ['График отражает топливо и бортовое питание']);
         new Tooltip(legendOil[0], ['Отключает и включает график топливо']);
         new Tooltip(legendOil[1], ['Отключает и включает график бортовое питание']);
-        console.log(legendOil[0])
         legendOil[0].addEventListener('click', () => {
-            console.log('нажал топливо')
             const os1y = d3.select('.os1y')
             const line1 = d3.select('.line1')
             const area1 = d3.select('.area1')
@@ -451,7 +446,6 @@ export class OilCharts {
 
             legendOil[0].classList.toggle('noActive')
             if (legendOil[0].classList.contains('noActive')) {
-                console.log('удаляем легенда топливо')
                 legendOilcircle.attr('fill', 'none')
                 os1y.style("display", "none")
                 line1.style("display", "none")
@@ -475,7 +469,6 @@ export class OilCharts {
             const legendVoltcircle = d3.select('.legendVoltcircle')
             legendOil[1].classList.toggle('noActive')
             if (legendOil[1].classList.contains('noActive')) {
-                console.log('удаляем легенда напряжение')
                 legendVoltcircle.attr('fill', 'none')
                 os2y.style("display", "none")
                 line2.style("display", "none")
@@ -514,7 +507,6 @@ export class OilCharts {
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        console.log(this.height)
         // Инициализация тултипа один раз в конструкторе или инициализирующем методе
         this.tooltip = d3.select(".infoGraf").append("div")
             .attr("class", "tooltip")
@@ -580,7 +572,6 @@ export class OilCharts {
             const time0 = (e[0].time).getTime() / 1000;
             const time1 = (e[1].time).getTime() / 1000;
             const initTime = time1 - time0;
-            console.log(initTime)
             const diff = e[1].oil - e[0].oil
             return initTime >= 5 * 60 && diff > 40;
         });
@@ -655,7 +646,6 @@ export class OilCharts {
             }
         })
         newGlobal.sort((a, b) => a.time - b.time)
-        console.log(newGlobal)
         if (data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')

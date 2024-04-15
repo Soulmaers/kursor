@@ -359,10 +359,9 @@ export function createJobTS(data, num, container) {
         });
 }
 export function createChart(data, num, container) {
-    console.log(data, num, container)
-    if (data.length === 0) {
-        return
-    }
+    console.log(data.length)
+    if (data[0].length === 0) return
+
     const chartStatic = document.querySelector(`.chartStatic${num}`)
     if (chartStatic) {
         chartStatic.remove();

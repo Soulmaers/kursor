@@ -1,5 +1,5 @@
 import { textTest } from './content.js'
-import { loadParamsView } from './paramsTyresView.js'
+//import { loadParamsView } from './paramsTyresView.js'
 import { objColor, generT, generFront } from './content.js'
 
 export function conf(selectOld) {
@@ -140,7 +140,7 @@ export function clearConfig() {
     if (alt) {
         alt.remove();
     }
-    loadParamsView()
+    // loadParamsView()
 }
 function listenerNum() {
     const arrayPlu = document.querySelectorAll('.pluT, .pluP');
@@ -229,11 +229,6 @@ function forTyres() {
     const tyres = globalWrapper.querySelectorAll('.tires_link_test')
     tyres.forEach(e => {
         e.addEventListener('click', () => {
-            /*  const actBTN = document.querySelector('.actBTN')
-              if (actBTN) {
-                  actBTN.classList.remove('actBTN')
-              }*/
-            console.log(e)
             const tact = document.querySelector('.tiresActiv')
             tact ? obo.style.display = 'flex' : obo.style.display = 'none'
 

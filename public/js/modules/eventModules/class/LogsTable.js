@@ -58,7 +58,7 @@ export class LogsTable {
 
     // Метод для создания и обновления таблицы логов
     updateTable(rowsContent) {
-        console.log('тута?')
+        console.log(rowsContent)
         const allobjects = document.querySelector('.allobjects')
         new Tooltip(allobjects, ['Все объекты/Текущий']);
         // Удаление существующих строк таблицы, если они есть

@@ -1,17 +1,15 @@
 
-import { loadParamsView } from '../../paramsTyresView.js'
 import { reqProtectorBase } from '../../protector.js'
 import { kranParams } from '../../strelaKran.js'
 import { clearElem } from '../../helpersFunc.js'
 import { CreateMarkersEvent } from '../../objectMainModules/class/CreateMarkersEvent.js'
 import { alarmFind } from '../../alarmModules/alarmStorage.js'
 import { IconStatus } from '../../iconModules/class/IconStatus.js'
-import { grafClick } from '../../../main.js'
-import { dataInfo } from '../../paramsTyresView.js'
 import { StatistikaPressure } from '../../StatistikaModules/Statistikapressure.js'
 import { Detalisation } from '../../detalisationModules/class/Detalisation.js'
 import { DOMHelper } from './DOMHelper.js'
-import { ViewModel } from '../../skdshModules/class/ViewModel.js'
+import { SKDSHClass } from '../../skdshModules/class/SKDSHClass.js'
+import { GrafikView } from '../../grafikModules/class/GrafikView.js'
 export let iconStatusClick;
 
 export class ClickObject {
@@ -107,7 +105,7 @@ export class ClickObject {
     async visual(check) {
         const idw = this.element.id
         DOMHelper.deleteClasses('.tablo', '.choice', '.acto', '.check_probeg', '.toogleIconEvent');  //метод удаляет переданыые классы
-        DOMHelper.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.techInfo', '.tableTarir', '.disketa', '.korzina', '.sensors', '.alllogs', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
+        DOMHelper.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.modalCenterOs', '.techInfo', '.tableTarir', '.disketa', '.korzina', '.sensors', '.alllogs', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
         DOMHelper.hideElements(['.trEvent', '.main', '.wrapper_up', '.wrapperCont'], 'flex') //ставим flex элементам
         const elementsToDelete = check ? ['.msg', '.wrapMap', '.containerAlt', '.delIcon'] : ['.msg', '.wrapMap', '.containerAlt', '.delIcon', '.zamer', '.jobTSDetalisationGraf', '.jobTSDetalisationCharts_legenda'];
         DOMHelper.deleteElements(elementsToDelete);
@@ -116,22 +114,21 @@ export class ClickObject {
         }
         DOMHelper.createListItems('.obo', 250, 'msg')
 
-        // new ViewModel(this.info)
-        await loadParamsView(this.info)
-        const graf = document.querySelector('.activGraf')
-        if (graf) grafClick.controllerMethodCharts();
+        if (this.info[0].length !== 0) new SKDSHClass(this.info, idw)
+
         if (!check) {
             this.specific(this.element)//метод который обрабатывает специфические условия
             this.reinitializeOrCreateInstance('createEvent', CreateMarkersEvent, idw);
             this.reinitializeOrCreateInstance('iconStatusClick', IconStatus, this.element);
-            this.reinitializeOrCreateInstance('instanceStatistika', StatistikaPressure, dataInfo, this.element);
+            this.reinitializeOrCreateInstance('instanceStatistika', StatistikaPressure, this.element, this.info);
             this.reinitializeOrCreateInstance('instanceDetalisation', Detalisation, this.element);
+            this.reinitializeOrCreateInstance('instanceGrafik', GrafikView, this.info);
             if (this.createEvent.updateInterval) {
                 clearInterval(this.createEvent.updateInterval);
                 this.createEvent.hiddenTrackAndMarkersEnent();
             }
 
-            alarmFind()
+            alarmFind(this.info)
         }
         kranParams()
         setInterval(kranParams, 300000)

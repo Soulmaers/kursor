@@ -1,10 +1,10 @@
 
 import { GetDataTime } from '../../../class/GetDataTime.js'
-import { PressureCharts } from '../../chartsModules/class/PressureCharts.js'
-import { OilCharts } from '../../chartsModules/class/OilCharts.js'
+import { PressureCharts } from './PressureCharts.js'
+import { OilCharts } from './OilCharts.js'
 export class GrafikView {
-    constructor() {
-        //  this.list = nav
+    constructor(data) {
+        this.data = data
         this.time = null
         this.activeGrafiks = null
         this.objectMethod = {
@@ -12,20 +12,51 @@ export class GrafikView {
             'oil': OilCharts
 
         }
-        this.grafik = document.querySelector('.grafik_button')
-        this.menuGrafik = document.querySelectorAll('.menu_graf')
-        this.iconGraf = document.querySelector('.icon_graf')
-        this.calendar = document.querySelector('.calendar_graf')
-        this.button = this.calendar.querySelectorAll('.btm_formStart')
-        this.grafik.addEventListener('click', this.init.bind(this))
-        this.menuGrafik.forEach(el => el.addEventListener('click', this.navi.bind(this, el)))
-        this.iconGraf.addEventListener('click', this.toggleCalendar.bind(this))
-        this.button[0].addEventListener('click', this.clear.bind(this))
-        this.button[1].addEventListener('click', this.ok.bind(this))
+        // Привязываем методы и сохраняем ссылки на них
+        this.initBound = this.init.bind(this);
+        this.toggleCalendarBound = this.toggleCalendar.bind(this);
+        this.okBound = this.ok.bind(this);
+        this.clearBound = this.clear.bind(this);
+        this.setupInitialListeners();
+    }
+
+    setup() {
+        this.controllerMethodCharts()
+    }
+
+    setupInitialListeners() {
+        this.grafik = document.querySelector('.grafik_button');
+        this.menuGrafik = document.querySelectorAll('.menu_graf');
+        this.iconGraf = document.querySelector('.icon_graf');
+        this.calendar = document.querySelector('.calendar_graf');
+        this.buttons = this.calendar.querySelectorAll('.btm_formStart');
+
+        this.grafik.addEventListener('click', this.initBound);
+        this.menuGrafik.forEach(el => el.addEventListener('click', () => this.navi(el)));
+        this.iconGraf.addEventListener('click', this.toggleCalendarBound);
+        this.buttons[0].addEventListener('click', this.clearBound);
+        this.buttons[1].addEventListener('click', this.okBound);
+    }
+    removeAllListeners() {
+        const grafOld = document.querySelector('.infoGraf')
+        if (grafOld) {
+            grafOld.remove()
+        }
+        this.grafik.removeEventListener('click', this.initBound);
+        this.menuGrafik.forEach(el => el.removeEventListener('click', () => this.navi(el)));
+        this.iconGraf.removeEventListener('click', this.toggleCalendarBound);
+        this.buttons[0].removeEventListener('click', this.clearBound);
+        this.buttons[1].removeEventListener('click', this.okBound);
+    }
+    reinitialize(data) {
+        this.removeAllListeners();
+        this.data = data;
+        this.setup()
+        this.setupInitialListeners();
+
     }
 
     ok() {
-        console.log(this.time)
         this.calendar.style.display = 'none'
         this.calendar.previousElementSibling.classList.remove('clickUp')
         this.calendar.children[0].children[0].value = ''
@@ -78,14 +109,14 @@ export class GrafikView {
     }
 
     controllerMethodCharts() {
+
         if (this.grafik.classList.contains('activGraf')) {
             const grafOld = document.querySelector('.infoGraf')
             if (grafOld) {
                 grafOld.remove()
             }
-            console.log(this.activeGrafiks)
             const fn = this.objectMethod[this.activeGrafiks]
-            new fn(this.time[0], this.time[1])
+            new fn(this.time[0], this.time[1], this.data)
             const loaders = document.querySelector('.loaders_charts')
             loaders.style.display = 'flex';
         }

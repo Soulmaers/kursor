@@ -3,15 +3,11 @@ import { SpisokObject } from './modules/spisokModules/class/SpisokObject.js'
 import { NavigationMenu } from './modules/navModules/NavigatorClass.js'
 import { DropDownList } from './class/DropdownList.js'
 import { AlarmControll } from './modules/alarmModules/class/AlarmControll.js'
-import { GrafikView } from './modules/grafikModules/class/GrafikView.js'
 import { ToggleHiddenList } from './modules/listModules/class/ToggleHiddenList.js'
 import { AddTooltip } from './modules/event.js'
 import { LogsEvent } from './modules/eventModules/class/LogsEvent.js'
 
 export let app;
-export let grafClick
-//export let initSummary
-//export let initCharts
 
 document.addEventListener('DOMContentLoaded', () => {
     // Это гарантирует, что DOM полностью загружен перед инициализацией классов
@@ -43,6 +39,7 @@ export class Application {
         this.adaptiv()  //адаптив
         this.activButton()
         await this.startClass()
+        new LogsEvent(this.data, this.login)
     }
     activButton() {
         this.startActivButton.classList.add('tablo')
@@ -54,8 +51,6 @@ export class Application {
         new AlarmControll()// запускаем класс управление отображение списка алармов
         new ToggleHiddenList() //запускаем класс управления списком
         new AddTooltip() //запуск класса отображения тултипов
-        grafClick = new GrafikView()
-
     }
     async zapros(elem) {
         const [wialonData, kursorData] = await Promise.all([this.zaprosWialon(this.login), this.zaprosKursor(this.login)])
@@ -64,7 +59,7 @@ export class Application {
         const nameCarCheck = wialonData.response.arrName
         const data = kursorData.concat(arrayList)
         this.data = data
-        new LogsEvent(this.data, this.login)
+
         if (data.flat().length === 0) {
             const loaders = document.querySelector('.loaders');
             loaders.style.display = 'none'

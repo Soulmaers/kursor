@@ -1,12 +1,12 @@
 import { tr } from '../content.js'
 import { convert } from '../helpersFunc.js'
 import { Tooltip } from '../../class/Tooltip.js'
-import { dataInfo } from '../paramsTyresView.js'
+//import { dataInfo } from '../paramsTyresView.js'
 import { GeoCreateMapsMini } from '../../modules/geoModules/class/GeoCreateMapsMini.js'
 
 
 let isProcessing = false
-export async function alarmFind() {
+export async function alarmFind(data) {
     console.log('алармфайнд')
     if (isProcessing) {
         return;
@@ -18,8 +18,8 @@ export async function alarmFind() {
             it.remove();
         })
     }
-    const [, tyres,] = dataInfo
-    console.log(dataInfo)
+    const [, tyres,] = data
+    console.log(tyres)
     const idw = document.querySelector('.color').id
     if (tyres.length !== 0) {
         const sorTyrest = convert(tyres).reduce((acc, el) => {
@@ -35,7 +35,7 @@ export async function alarmFind() {
             body: JSON.stringify({ idw, sorTyrest })
         })
         const storList = await stor.json();
-        viewAlarmStorage(idw, storList)
+        viewAlarmStorage(idw, storList, data)
     }
     isProcessing = false
 }
@@ -59,7 +59,7 @@ const funcSortArray = (arr) => {
     return resultArray
 }
 
-async function viewAlarmStorage(name, stor) {
+async function viewAlarmStorage(name, stor, data) {
     const resultArray = funcSortArray(stor)
     function removeDuplicates(arr) {
         const result = [];
@@ -94,7 +94,7 @@ async function viewAlarmStorage(name, stor) {
         'Если внутри зафиксированного отклонения есть дополнительные изменения, то они подгружаются по нажатию стрелки вниз напротив уведомления',
         'Если нажать красный маркер карты, то на карте отразится место события с переданными туда данными']);
 
-    const [allsens, ,] = dataInfo
+    const [, , allsens] = data
     result.forEach(el => {
         el.forEach(it => {
             const sensName = allsens.find(obj => obj.params === it.senspressure);

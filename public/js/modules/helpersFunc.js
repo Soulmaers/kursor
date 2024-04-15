@@ -8,7 +8,21 @@ export function clearElem(el) {
     el = ''
 }
 
-
+export function getHoursDiff(startDate, nowDate) {
+    var diff = nowDate - startDate;
+    let dayS;
+    let hourS;
+    const minutes = Math.floor(diff / 60)
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const day = days % 60;
+    const hour = hours % 24;
+    const minut = minutes % 60;
+    day === 0 ? dayS = '' : dayS = days + 'д ';
+    hour === 0 ? hourS = '' : hourS = hour + 'ч ';
+    const mess = `${dayS} ${hourS} ${minut} мин`
+    return mess;
+}
 export function timeConvert(d) {
     const date = new Date(d);
     const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",

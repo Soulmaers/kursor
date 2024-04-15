@@ -1,11 +1,12 @@
 
 import { Tooltip } from '../../../class/Tooltip.js'
 import { GeoCreateMapsMini } from '../../geoModules/class/GeoCreateMapsMini.js'
-import { dataInfo, model } from '../../paramsTyresView.js'
 let isCanceled = false;
 
 export class PressureCharts {
-    constructor(t1, t2) {
+    constructor(t1, t2, data) {
+        this.info = data
+        this.model = data[0]
         this.t1 = t1
         this.t2 = t2
         this.data = null
@@ -42,21 +43,11 @@ export class PressureCharts {
     }
 
     createChart() {
-        console.time('cre')
         this.createContainer()
-        console.timeEnd('cre')
-        console.time('cre1')
         this.createLegend()
-        console.timeEnd('cre1')
-        console.time('cre2')
         this.createBodyCharts()
-        console.timeEnd('cre2')
-        console.time('cre3')
         this.createIconsCar()
-        console.timeEnd('cre3')
-        console.time('cre4')
         this.toggleChecked()
-        console.timeEnd('cre4')
 
         const loaders = document.querySelector('.loaders_charts')
         loaders.style.display = 'none';
@@ -371,7 +362,6 @@ export class PressureCharts {
         const bisector = d3.bisector(d => d).left;
         let index = bisector(times, x0);
         if (times[index] === x0.getTime()) {
-            console.log("Exact match found");
             return [data[index].dates, index, data[index]];
         }
         const leftIndex = index - 1 < 0 ? 0 : index - 1;
@@ -430,9 +420,9 @@ export class PressureCharts {
             return div
         })
         this.char[this.char.length - 1].children[0].classList.add('last')
-        model.sort((a, b) => parseInt(a.osi) - parseInt(b.osi));
+        this.model.sort((a, b) => parseInt(a.osi) - parseInt(b.osi));
         im1.forEach((it, index) => {
-            model.forEach(({ trailer, tyres }) => {
+            this.model.forEach(({ trailer, tyres }) => {
                 const osElement = this.createOsElement(trailer, +tyres);
                 it.appendChild(osElement);
             });
@@ -639,13 +629,14 @@ export class PressureCharts {
     }
 
     async createStructura() {
-        const [params, tyres, osibar] = dataInfo
+        const [, tyres, params, osibar] = this.info
         // Преобразование массива osss в объект для быстрого доступа
         const osssMap = {};
         osibar.forEach(e => {
             osssMap[e.idOs] = e;
         });
         const idw = Number(document.querySelector('.color').id)
+        console.log(tyres)
         const arrayColumns = ['last_valid_time', 'speed', 'lat', 'lon', 'engineOn']
         tyres.forEach(el => {
             arrayColumns.push(el.pressure, el.temp)
@@ -660,11 +651,8 @@ export class PressureCharts {
             },
             body: (JSON.stringify({ idw, t1, t2, arrayColumns, num }))
         }
-        console.time('newreq')
         const resNew = await fetch('/api/getPressureOil', paramssNew)
         const dataNew = await resNew.json();
-        console.timeEnd('newreq')
-        console.log(dataNew)
 
         if (dataNew.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
@@ -678,17 +666,13 @@ export class PressureCharts {
             return []
         }
         document.querySelector('.noGraf').style.display = 'none'
-
-        console.time('newreq1')
         // Предварительная сортировка, если это возможно и необходимо
         dataNew.sort((a, b) => Number(a.last_valid_time) - Number(b.last_valid_time));
 
         const paramnew = tyres.reduce((acc, el) => {
             const oss = osssMap[el.osNumber];
             const sens = params.find(it => Object.values(it).includes(el.pressure));
-
             if (!oss || !sens) return acc;
-
             const processedData = dataNew.filter((elem, index) => index % 5 === 0).map(elem => ({
                 dates: new Date(Number(elem.last_valid_time) * 1000),
                 geo: [Number(elem.lat), Number(elem.lon)],
@@ -708,10 +692,7 @@ export class PressureCharts {
 
             return acc;
         }, []);
-
         paramnew.sort((a, b) => a.position - b.position);
-
-        console.timeEnd('newreq1');
         return paramnew;
     }
 
