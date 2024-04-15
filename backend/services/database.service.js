@@ -1794,6 +1794,8 @@ exports.tyresSaveToBase = async (nameCar, tyres, idw) => {
 
 
 exports.deleteModelToBase = async (idw) => {
+    console.log('удаляем?')
+    console.log(idw)
     try {
         const pool = await connection;
         const postModel = `DELETE FROM model WHERE idw='${idw}'`

@@ -1,6 +1,6 @@
-import { postTyres, reqDelete, paramsDelete, barDelete, changeBase } from './requests.js'
+
 import { data } from './content.js'
-import { alarmClear } from './visual.js'
+//import { alarmClear } from './visual.js'
 import { getUsers } from './admin.js'
 import { reqProtectorBase } from './protector.js'
 import { saveDouble } from './saveBaseId.js'
@@ -9,7 +9,6 @@ import { Tooltip } from '../class/Tooltip.js'
 import { Flasher } from '../class/Flash.js'
 import { CloseBTN } from '../class/CloseBTN.js'
 import { ResizeContainer } from '../class/ResizeContainer.js'
-import { conf } from './altConfig.js'
 import { viewTech } from './tech.js'
 import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 import { draggable } from './filtersList.js'
@@ -358,36 +357,6 @@ iconStrela.addEventListener('click', () => {
 let intervalId
 let intervalId2
 
-//очистка модели из базы и удаление отрисовки
-export function btnDel() {
-    const korz = document.querySelector('.korz')
-    korz.addEventListener('click', () => {
-        const buttOnConfig = document.querySelectorAll('.buttOnConfig')
-        buttOnConfig[1].style.display = 'flex'
-        const clear = document.querySelector('.galClear')
-        clear.addEventListener('click', () => {
-            const idw = document.querySelector('.color').id
-            alarmClear()
-            reqDelete(idw);
-            paramsDelete(idw);
-            barDelete(idw);
-            buttOnConfig[1].style.display = 'none'
-            const disketa = document.querySelector('.disketa')
-            const korzina = document.querySelector('.korzina')
-            const checkAlt = document.getElementById('check_Title')
-            disketa.style.display = 'none'
-            korzina.style.display = 'none'
-            checkAlt.checked = false;
-        })
-        const otmena = document.querySelector('.otmClear')
-        otmena.addEventListener('click', () => {
-            buttOnConfig[1].style.display = 'none'
-        })
-
-    })
-
-}
-
 const dropdown = document.querySelector('.dropdown')
 const dropdownContent = document.querySelector('.dropdown-content')
 if (dropdown) {
@@ -465,66 +434,6 @@ modalNameOs.addEventListener('click', () => {
         })
     })
 })
-
-/*
-const disk = document.querySelector('.disk')
-disk.addEventListener('click', () => {
-    const buttOnConfig = document.querySelectorAll('.buttOnConfig')
-    buttOnConfig[0].style.display = 'flex'
-})
-const save = document.querySelector('.galSave')
-const otmena = document.querySelector('.otmSave')
-save.addEventListener('click', () => {
-    const wrapRight = document.querySelector('.wrapper_right')
-    wrapRight.style.zIndex = 0,
-        document.querySelector('.popup-background').style.display = 'none'
-    console.log('save')
-    const arrModel = [];
-    const arrTyres = [];
-    const active = document.querySelector('.color')
-    const idw = document.querySelector('.color').id
-    const activePost = active.children[0].textContent
-    const osi = document.querySelectorAll('.osiTest')
-    const linkTyres = document.querySelectorAll('.tires_link_test')
-    const buttOnConfig = document.querySelectorAll('.buttOnConfig')
-    const go = document.querySelector('.gosNumber')
-    const go1 = document.querySelector('.gosNumber1')
-    const goCar = document.querySelector('.gosNumberCar')
-    const goCar1 = document.querySelector('.gosNumberCar1')
-    console.log(go, go1, goCar, goCar1)
-    let index = 0;
-    let indexTyres = 0;
-    osi.forEach(el => {
-        index++
-        el.children[1].setAttribute('id', `${index}`)
-        arrModel.push(fnsortTest(el))
-    })
-    linkTyres.forEach(el => {
-        indexTyres++
-        el.setAttribute('id', `${indexTyres}`)
-        arrTyres.push(fnsortTyresTest(el))
-    })
-    console.log(arrModel)
-    console.log(arrTyres)
-    const selectType = document.querySelector('.select_type')
-    const selectedOption = selectType.options[selectType.selectedIndex];
-    const selectedText = selectedOption.text;
-    console.log(selectedText)
-
-
-    changeBase(arrModel, activePost, idw, selectedText, go, go1, goCar, goCar1)
-    postTyres(arrTyres, activePost, idw);
-    const sensors = document.querySelector('.sensors')
-    sensors.style.display = 'none';
-    buttOnConfig[0].style.display = 'none'
-})
-const buttOnConfig = document.querySelectorAll('.buttOnConfig')
-otmena.addEventListener('click', () => {
-    buttOnConfig[0].style.display = 'none'
-})*/
-
-
-
 
 
 const buttonTth = document.querySelector('.buttonTth')
@@ -745,6 +654,7 @@ new DropDownList({ element: document.querySelector(`#input`), btn: document.quer
 
 
 const selectSummary = document.querySelectorAll('.select_summary');
+console.log(selectSummary)
 selectSummary.forEach(el => {
     console.log('работаем?')
     el.addEventListener('change', function () {

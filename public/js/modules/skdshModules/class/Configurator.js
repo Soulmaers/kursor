@@ -1,9 +1,10 @@
 
 
 import { Helpers } from './Helpers.js'
+import { SetModel } from './SetModel.js'
 import { objColor, generT, generFront, textTest } from '../../content.js'
-//import { app } from '../../../main.js'
 import { SKDSHClass } from './SKDSHClass.js'
+
 
 export class Configurator {
     constructor(id) {
@@ -12,18 +13,26 @@ export class Configurator {
         this.clickDisk = this.viewSubMenu.bind(this, 'flex')
         this.cancel = this.viewSubMenu.bind(this, 'none')
         this.saved = this.saveConfigurator.bind(this)
+        this.del = this.viewSubMenuDel.bind(this, 'flex')
+        this.cancelDel = this.viewSubMenuDel.bind(this, 'none')
+        this.savedDel = this.saveConfiguratorDelete.bind(this)
         this.index = 0
         this.getDOM()
         this.initAddEvent()
     }
 
-
     getDOM() {
         this.altConfig = document.getElementById('check_Title')
         this.selectType = document.querySelector('.select_type')
         this.disk = document.querySelector('.disk')
+        this.sensors = document.querySelector('.sensors')
+        this.btnsens = document.querySelectorAll('.btnsens')
+        this.korz = document.querySelector('.korz')
         this.save = this.disk.nextElementSibling.children[0]
         this.otmena = this.disk.nextElementSibling.children[1]
+        this.saveDel = this.korz.nextElementSibling.children[0]
+        this.otmenaDel = this.korz.nextElementSibling.children[1]
+
     }
     reinitialize(newId) {
         this.removeEventListeners();
@@ -37,173 +46,67 @@ export class Configurator {
         this.disk.addEventListener('click', this.clickDisk)
         this.otmena.addEventListener('click', this.cancel)
         this.save.addEventListener('click', this.saved)
+        this.korz.addEventListener('click', this.del)
+        this.otmenaDel.addEventListener('click', this.cancelDel)
+        this.saveDel.addEventListener('click', this.savedDel)
     }
     removeEventListeners() {
         this.altConfig.removeEventListener('change', this.change)
         this.disk.removeEventListener('click', this.clickDisk)
         this.otmena.removeEventListener('click', this.cancel)
         this.save.removeEventListener('click', this.saved)
+        this.korz.removeEventListener('click', this.del)
+        this.otmenaDel.removeEventListener('click', this.cancelDel)
+        this.saveDel.removeEventListener('click', this.savedDel)
     }
-
+    viewSubMenuDel(num) {
+        this.korz.nextElementSibling.style.display = num
+    }
     viewSubMenu(num) {
         this.disk.nextElementSibling.style.display = num
     }
 
+    async saveConfiguratorDelete() {
+        const instance = new SetModel(this.selectType, this.sensors, this.id)
+        await instance.reqDelete(this.id)
+        await instance.paramsDelete(this.id)
+        await instance.barDelete(this.id)
+        this.viewSubMenuDel('none')
+    }
 
-    saveConfigurator() {
-        const wrapRight = document.querySelector('.wrapper_right')
-        wrapRight.style.zIndex = 0,
-            document.querySelector('.popup-background').style.display = 'none'
-        console.log('save')
-        const arrModel = [];
-        const arrTyres = [];
-        const active = document.querySelector('.color')
-        const idw = document.querySelector('.color').id
-        const activePost = active.children[0].textContent
-        const osi = document.querySelectorAll('.osiTest')
-        const linkTyres = document.querySelectorAll('.tires_link_test')
-        const buttOnConfig = document.querySelectorAll('.buttOnConfig')
-        const go = document.querySelector('.gosNumber')
-        const go1 = document.querySelector('.gosNumber1')
-        const goCar = document.querySelector('.gosNumberCar')
-        const goCar1 = document.querySelector('.gosNumberCar1')
-        let index = 0;
-        let indexTyres = 0;
-        osi.forEach(el => {
-            index++
-            el.children[1].setAttribute('id', `${index}`)
-            arrModel.push(this.fnsortTest(el))
-        })
-        linkTyres.forEach(el => {
-            indexTyres++
-            el.setAttribute('id', `${indexTyres}`)
-            arrTyres.push(this.fnsortTyresTest(el))
-        })
-        const selectType = document.querySelector('.select_type')
-        const selectedOption = selectType.options[selectType.selectedIndex];
-        const selectedText = selectedOption.text;
-        console.log(selectedText)
-        this.changeBase(arrModel, activePost, idw, selectedText, go, go1, goCar, goCar1)
-        this.postTyres(arrTyres, activePost, idw);
-        const sensors = document.querySelector('.sensors')
-        sensors.style.display = 'none';
-        buttOnConfig[0].style.display = 'none'
-    }
-    fnsortTest(el) {
-        const numberOs = parseFloat(el.children[1].id)
-        let typeOs;
-        let sparka;
-        el.children[1].classList.contains('pricepT') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
-        console.log(el)
-        const spark = el.querySelector('.sparkCheck')
-        if (spark) {
-            spark.checked ? sparka = 4 : sparka = 2
-        }
-        else {
-            sparka = 2
-        }
-        return [numberOs, typeOs, sparka]
-    }
-    fnsortTyresTest(el) {
-        const numOs = el.closest('.osiTest').children[1].id
-        const idw = el.id
-        const relD = el.children[0].getAttribute('rel')
-        const relT = el.children[1].getAttribute('rel')
-        return [idw, relD, relT, numOs]
+    async saveConfigurator() {
+        const instance = new SetModel(this.selectType, this.sensors, this.id)
+        await instance.init()
+        this.clearConfig()
+        this.viewSubMenu('none')
     }
 
     startConfig() {
         const selectOld = this.selectType.options[this.selectType.selectedIndex].textContent
         const checkAlt = document.getElementById('check_Title')
+        console.log(checkAlt.checked)
         checkAlt.checked ? this.createConfig(selectOld) : this.clearConfig()
     }
-    async postTyres(tyres) {
-        const active = document.querySelectorAll('.color')
-        const activePost = active[0].textContent.replace(/\s+/g, '')
-        const idw = document.querySelector('.color').id
-        const params = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ tyres, activePost, idw })
-        }
-        const results = await fetch('/api/tyres', params)
-        const res = results.json()
-    }
-
-    async reqDelete(idw) {
-        fetch('/api/delete', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ idw }),
-        })
-            .then((res) => res.json())
-            .then((res) => console.log(res))
-        const containerAlt = document.querySelector('.containerAlt')
-        if (containerAlt) {
-            containerAlt.remove();
-        }
-    }
-
-    //конфигуратор оси
-    async changeBase(massModel, activePost, idw, type, go, go1, goCar, goCar1) {
-        const tsiControll = document.querySelector('.tsiControll').value
-        massModel.length !== 0 ? massModel : massModel.push(['-', '-', '-'])
-        await this.reqDelete(idw);
-        let gosp;
-        let frontGosp;
-        let gosp1;
-        let frontGosp1;
-        go ? gosp = go.value : gosp = ''
-        goCar ? frontGosp = goCar.value : frontGosp = ''
-        go1 ? gosp1 = go1.value : gosp1 = ''
-        goCar1 ? frontGosp1 = goCar1.value : frontGosp1 = ''
-        console.log(gosp, gosp1, frontGosp, frontGosp1)
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ massModel, idw, activePost, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll }))
-        }
-        const res = await fetch('/api/updateModel', param)
-        const response = await res.json()
-        console.log(response)
-        //const controll = document.querySelector('.container_left')
-        //controll.style.display = 'none'
-        const modalCenterOs = document.querySelector('.modalCenterOs')
-        modalCenterOs.style.display = 'none'
-        console.log(response)
-        const checkAlt = document.getElementById('check_Title')
-        checkAlt.checked = false
-        this.clearConfig()
-    }
-
 
     createConfig(selectOld) {
+        console.log('тута?')
         const tiresActiv = document.querySelector('.tiresActiv')
         tiresActiv ? tiresActiv.classList.remove('tiresActiv') : null
         const checkAlt = document.querySelector('.checkAlt')
         checkAlt.style.color = 'red'
         checkAlt.style.fontWeight = 'bold'
-        const selectType = document.querySelector('.select_type')
 
-        for (let i = 0; i < selectType.options.length; i++) {
-            if (selectType.options[i].textContent === selectOld) {
-                console.log(selectType.options[i])
-                selectType.options[i].selected = true;
+        for (let i = 0; i < this.selectType.options.length; i++) {
+            if (this.selectType.options[i].textContent === selectOld) {
+                this.selectType.options[i].selected = true;
                 break;
             }
         }
-        selectType.style.display = 'flex'
-        selectType.style.appearance = '';
-        selectType.disabled = false;
-
+        this.selectType.style.display = 'flex'
+        this.selectType.style.appearance = '';
+        this.selectType.disabled = false;
         // Отображаем все скрытые элементы
-        Array.from(selectType.children).forEach(el => {
+        Array.from(this.selectType.children).forEach(el => {
             el.hidden = false;
             el.disabled = false;
         });
@@ -292,15 +195,13 @@ export class Configurator {
 
     async clearConfig() {
         const wrapRight = document.querySelector('.wrapper_right')
-        const sensors = document.querySelector('.sensors')
         const msg = document.querySelectorAll('.msg')
         msg.forEach(el => el.style.fontWeight = '300')
         document.querySelector('.acto') ? document.querySelector('.acto').classList.remove('acto') : null
         document.querySelector('.actBTN') ? document.querySelector('.actBTN').classList.remove('actBTN') : null
-        sensors.style.display === 'flex' ? (sensors.style.display = 'none', wrapRight.style.zIndex = 0,
+        this.sensors.style.display === 'flex' ? (this.sensors.style.display = 'none', wrapRight.style.zIndex = 0,
             document.querySelector('.popup-background').style.display = 'none') : null
-        const selectType = document.querySelector('.select_type')
-        selectType.style.display = 'none'
+        this.selectType.style.display = 'none'
         const checkAlt = document.querySelector('.checkAlt')
         checkAlt.style.color = 'black'
         checkAlt.style.fontWeight = '400'
@@ -314,8 +215,8 @@ export class Configurator {
         }
         const idw = document.querySelector('.color').id
         const data = await this.getNewData(idw)
+        console.log(data)
         new SKDSHClass(data, idw)
-        // app.startClass()
     }
 
     async getNewData(idw) {
@@ -390,7 +291,6 @@ export class Configurator {
         })
         this.sparka()
     }
-
 
     nowModel(alt) {
         const centerOsTest = document.querySelectorAll('.centerOsTest')
@@ -596,8 +496,6 @@ export class Configurator {
         this.forTyres()
     }
     forTyres() {
-        const btnsens = document.querySelectorAll('.btnsens')
-        const sensors = document.querySelector('.sensors')
         const obo = document.querySelector('.obo')
         const globalWrapper = document.querySelector('.containerAlt')
         const tyres = globalWrapper.querySelectorAll('.tires_link_test')
@@ -605,7 +503,6 @@ export class Configurator {
             e.addEventListener('click', () => {
                 const tact = document.querySelector('.tiresActiv')
                 tact ? obo.style.display = 'flex' : obo.style.display = 'none'
-
                 tyres.forEach(e => {
                     const msg = document.querySelectorAll('.msg')
                     msg.forEach(el => {
@@ -615,15 +512,15 @@ export class Configurator {
                     e.classList.remove('tiresActiv')
                 });
                 e.classList.add('tiresActiv')
-                sensors.style.display = 'flex';
-                btnsens[0].style.display = 'flex'
-                btnsens[1].style.display = 'flex'
+                this.sensors.style.display = 'flex';
+                this.btnsens[0].style.display = 'flex'
+                this.btnsens[1].style.display = 'flex'
             })
         })
-        this.allparamsTyres(btnsens)
+        this.allparamsTyres()
     }
 
-    allparamsTyres(btnsens) {
+    allparamsTyres() {
         const active = document.querySelectorAll('.color')
         const msg = document.querySelectorAll('.msg')
         let prmsD = [];
@@ -643,7 +540,7 @@ export class Configurator {
                         value = arrSpreed.splice(arrSpreed.indexOf(el) + 1, arrSpreed.length - 1).join('')
                     }
                 })
-                if (btnsens[0].classList.contains('actBTN')) {
+                if (this.btnsens[0].classList.contains('actBTN')) {
                     arrSpreed.forEach(el => {
                         if (el === ':') {
                             tiresActiv.children[0].setAttribute('rel', arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
@@ -662,7 +559,7 @@ export class Configurator {
                         tiresActiv.children[0].textContent = valJob + '\nБар'
                     tiresActiv.children[0].style.color = objColor[generFront(valJob)];
                 }
-                if (btnsens[1].classList.contains('actBTN')) {
+                if (this.btnsens[1].classList.contains('actBTN')) {
                     arrSpreed.forEach(el => {
                         if (el === ':') {
                             tiresActiv.children[1].setAttribute('rel', arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join(''))
