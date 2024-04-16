@@ -2,13 +2,12 @@
 import { convert } from '../../helpersFunc.js'
 import { objColorFront, generDav } from '../../content.js'
 import { convertTime } from '../../helpersFunc.js'
-import { globalSelect } from '../../filtersList.js'
 import { app } from '../../../main.js'
 import { SummaryViewControll } from '../../summaryModules/class/SummaryViewControll.js'
 import { ChartsViewControll } from '../../summaryModules/class/ChartsViewControll.js'
 import { Tooltip } from '../../../class/Tooltip.js'
 import { ClickObject } from '../../navigatorModules/class/ClickObject.js'
-
+import { FilterElements } from '../../filterModules/class/FilterElements.js'
 
 export let initSummary
 export let initCharts
@@ -262,7 +261,8 @@ export class SpisokObject {
         const ress = await fetch('/api/viewList', param)
         const results = await ress.json()
         if (results.res.length === 0) {
-            globalSelect()
+            const instance = new FilterElements()
+            instance.draggable()
             return
         } else {
             const objChangeList = results.res[0]
@@ -306,7 +306,8 @@ export class SpisokObject {
                     parent.insertBefore(el, sibling);
                 });
             }
-            globalSelect()
+            const instance = new FilterElements()
+            instance.draggable()
         }
     }
     coloring(shina, nameCar, params, arg, osi, engine) {

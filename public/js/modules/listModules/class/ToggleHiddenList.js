@@ -1,6 +1,6 @@
 
 import { initsmarkers } from '../../navModules/karta.js'
-import { filterCondition } from '../../filtersList.js'
+//import { filterCondition } from '../../filtersList.js'
 import { initSummary, initCharts } from '../../spisokModules/class/SpisokObject.js'
 import { classReports } from '../../navModules/reports.js'
 import { NavigationMenu } from '../../navModules/NavigatorClass.js'
@@ -58,14 +58,14 @@ export class ToggleHiddenList {
             e.addEventListener('click', () => {
                 if (e.classList.contains('clicker')) {
                     e.classList.remove('clicker')
-                    filterCondition(null, this.parent.children[index])
+                    //  filterCondition(null, this.parent.children[index])
                 }
                 else {
                     Array.from(this.cond).forEach(el => {
                         el.classList.remove('clicker')
                     })
                     e.classList.add('clicker')
-                    filterCondition(null, this.parent.children[index])
+                    //   filterCondition(null, this.parent.children[index])
                 }
                 Array.from(this.listItem).forEach(e => {
                     e.children[0].children[0].classList.remove('changeColorCheck')

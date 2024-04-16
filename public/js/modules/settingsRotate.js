@@ -29,13 +29,6 @@ export function settingsRotate() {
 
 }
 
-
-
-
-
-
-
-
 export const saveCheckListToBase = async (nums) => {
     const uniqBar = document.querySelectorAll('.uniqBar')
     const login = document.querySelectorAll('.log')[1].textContent

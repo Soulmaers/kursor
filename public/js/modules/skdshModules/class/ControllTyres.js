@@ -62,8 +62,8 @@ export class ControllTyres {
         const checkAlt = document.getElementById('check_Title');
         if (checkAlt.checked) {
             this.sensors.style.display = 'flex';
-
             this.controllObo()
+            this.close()
 
             new DraggableContainer(this.sensors);
             this.wright.style.zIndex = 2;
@@ -93,4 +93,21 @@ export class ControllTyres {
             });
         });
     }
+
+    close() {
+        const closeIconConfig = document.querySelector('.closeIconConfig')
+        closeIconConfig.addEventListener('click', () => {
+            const tiresActivt = document.querySelector('.tiresActivt')
+            tiresActivt ? tiresActivt.classList.remove('tiresActivt') : null
+            const tiresActiv = document.querySelector('.tiresActiv')
+            tiresActiv ? tiresActiv.classList.remove('tiresActiv') : null
+            const acto = document.querySelector('.acto')
+            acto ? acto.classList.remove('acto') : null
+            document.querySelector('.actBTN') ? document.querySelector('.actBTN').classList.remove('actBTN') : null
+            this.sensors.style.display = 'none'
+            this.wright.style.zIndex = 0,
+                document.querySelector('.popup-background').style.display = 'none'
+        })
+    }
+
 }

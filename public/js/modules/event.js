@@ -11,9 +11,7 @@ import { CloseBTN } from '../class/CloseBTN.js'
 import { ResizeContainer } from '../class/ResizeContainer.js'
 import { viewTech } from './tech.js'
 import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
-import { draggable } from './filtersList.js'
 import { storTitleList } from './content.js'
-import { filterCondition } from './filtersList.js'
 import { initCharts, initSummary } from './spisokModules/class/SpisokObject.js'
 import { CreateNewObject } from './propertyObjectModules/class/CreateNewObject.js'
 import { CreateNewGroup } from './propertyObjectModules/class/CreateNewGroup.js'
@@ -93,9 +91,6 @@ mainMenu.addEventListener('click', (event) => {
     new CloseBTN(menu, mainMenu)
     menu.style.display = 'flex'
 })
-
-
-draggable()
 
 export const obj = new CreateNewObject(create)
 export const sett = new CreateNewGroup(create)
@@ -204,15 +199,11 @@ logo.addEventListener('click', () => {
     list.forEach(e => {
         e.querySelector('.checkInList').style.opacity = 1
     })
-    const parent = document.querySelector('.sortCondition')
     cond.forEach((el, index) => {
         if (el.classList.contains('clicker')) {
-            filterCondition(null, parent.children[index])
             el.classList.remove('clicker')
         }
     })
-
-    // navMenu.handleButtonClickList()
     clearInterval(intervalId)
     clearInterval(intervalId2)
     const allsec = document.querySelectorAll('.allsec')
@@ -371,28 +362,6 @@ if (dropdown) {
     })
 }
 
-
-
-/*
-const burger = document.querySelector('.burger')
-burger.addEventListener('click', () => {
-    const control = document.querySelector('.control_panel')
-    const adminka = document.querySelector('.container_flash')
-    if (burger.classList.contains('burgerActive')) {
-        adminka.style.display = 'flex'
-        control.style.display = 'none'
-        burger.classList.remove('burgerActive')
-        return
-    }
-    adminka.style.display = 'none'
-    control.style.display = 'flex'
-    control.style.width = 30 + '%'
-    control.style.background = 'rgba(6, 28, 71, 1)'
-    control.style.paddingBottom = '5px'
-    control.style.paddingTop = '5px'
-    burger.classList.add('burgerActive')
-
-})*/
 const rad = document.querySelectorAll('[name=radio]')
 rad.forEach(el => {
     el.addEventListener('change', () => {
@@ -408,35 +377,6 @@ rad.forEach(el => {
         }
     })
 })
-
-
-/*
-const modalNameOs = document.querySelector('.modalNameOs')
-modalNameOs.addEventListener('click', () => {
-    const moduleConfig = document.querySelector('.moduleConfig')
-    moduleConfig.style.display = 'flex';
-    modalNameOs.classList.add('changeOs')
-    const linkSelectOs = document.querySelectorAll('.linkSelectOs')
-    linkSelectOs.forEach(el => {
-        el.addEventListener('click', () => {
-            if (el.textContent === 'Прицеп') {
-                const centerOsActiv = document.querySelector('.centerOsActiv').closest('.osi')
-                centerOsActiv.children[1].children[0].style.background = "#00FFFF"
-                centerOsActiv.children[1].classList.add('pricep')
-                const cont = document.querySelector('.cont')
-                cont.prepend(centerOsActiv)
-            }
-            if (el.textContent === 'Тягач') {
-                const centerOsActiv = document.querySelector('.centerOsActiv').closest('.osi')
-                centerOsActiv.children[1].children[0].style.background = '#3333ff'
-                centerOsActiv.children[1].classList.remove('pricep')
-                const container = document.querySelector('.container')
-                container.prepend(centerOsActiv)
-            }
-        })
-    })
-})*/
-
 
 const buttonTth = document.querySelector('.buttonTth')
 buttonTth.addEventListener('click', pr)
@@ -481,24 +421,6 @@ export async function pr() {
     }
     viewTech(tyresActive.id)
 }
-
-
-const closeIconConfig = document.querySelector('.closeIconConfig')
-closeIconConfig.addEventListener('click', () => {
-    const tiresActivt = document.querySelector('.tiresActivt')
-    tiresActivt ? tiresActivt.classList.remove('tiresActivt') : null
-    const tiresActiv = document.querySelector('.tiresActiv')
-    tiresActiv ? tiresActiv.classList.remove('tiresActiv') : null
-    const sensors = document.querySelector('.sensors')
-    const wright = document.querySelector('.wrapper_right')
-    const acto = document.querySelector('.acto')
-    acto ? acto.classList.remove('acto') : null
-    document.querySelector('.actBTN') ? document.querySelector('.actBTN').classList.remove('actBTN') : null
-    sensors.style.display = 'none'
-    wright.style.zIndex = 0,
-        document.querySelector('.popup-background').style.display = 'none'
-})
-
 
 class DropDownList {
     constructor({ element, data, btn }) {
@@ -571,18 +493,6 @@ class DropDownList {
 }
 new DropDownList({ element: document.querySelector(`#input`), btn: document.querySelector('.buh'), data });
 
-
-
-
-
-const selectSummary = document.querySelectorAll('.select_summary');
-console.log(selectSummary)
-selectSummary.forEach(el => {
-    console.log('работаем?')
-    el.addEventListener('change', function () {
-        element(el);
-    })
-})
 
 
 
