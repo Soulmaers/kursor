@@ -102,15 +102,16 @@ export class GrafikView {
         const wLeft = document.querySelector('.wrapper_left')
         const grafics = document.querySelector('.grafics')
         const techInfo = document.querySelector('.techInfo')
+        const main = document.querySelector('.main')
+        const secondFlash = document.querySelectorAll('.secondFlash')[1]
         button.classList.add('activGraf')
         wRight.style.display = 'none';
         techInfo.style.display = 'none';
         wLeft.style.display = 'none';
         grafics.style.display = 'flex';
-        /*    const wrapMap = document.querySelector('wrapMap')
-            if (wrapMap) {
-                wrapMap.remove();
-            }*/
+        secondFlash.style.display = 'none'
+        main.style.flexDirection = 'column'
+
     }
     navi(el) {
         this.menuGrafik.forEach(e => e.classList.remove('activMenuGraf'))

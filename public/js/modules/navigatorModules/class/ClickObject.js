@@ -143,7 +143,6 @@ export class ClickObject {
     }
 
     specific(el) {
-        const tsiControll = document.querySelector('.tsiControll')
         const checkConfig = document.getElementById('check_Title')
         const checkAlt = document.querySelector('.checkAlt')
         const tarir = document.querySelector('.tarir')
@@ -176,7 +175,6 @@ export class ClickObject {
             wrapperLeft.style.display = this.widthWind < 860 ? 'none' : 'block'
         }
         clearElem(createList.value)
-        clearElem(tsiControll.value)
     }
 
     styleShinaActive() {

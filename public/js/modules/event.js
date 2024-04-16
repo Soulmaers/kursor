@@ -499,26 +499,6 @@ closeIconConfig.addEventListener('click', () => {
         document.querySelector('.popup-background').style.display = 'none'
 })
 
-const tsiControll = document.querySelector('.tsiControll');
-tsiControll.addEventListener('input', () => {
-    let value = tsiControll.value;
-    // Заменяем запятую на точку
-    value = value.replace(',', '.');
-    // Удаляем все символы, кроме цифр и точек
-    value = value.replace(/[^0-9.]/g, '');
-    // Проверяем количество символов после точки
-    const dotIndex = value.indexOf('.');
-    if (dotIndex !== -1) {
-        const decimalPart = value.substr(dotIndex + 1);
-        if (decimalPart.length > 2) {
-            // Обрезаем количество символов после точки до 2
-            value = value.substr(0, dotIndex + 3);
-        }
-    }
-    // Обновляем значение инпута
-    tsiControll.value = value;
-});
-
 
 class DropDownList {
     constructor({ element, data, btn }) {

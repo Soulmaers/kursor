@@ -82,7 +82,6 @@ export class IconStatus {
             el.classList.remove('acto')
 
         })
-        this.changeParams.value = '1';
         const checkConfig = document.getElementById('check_Title')
         checkConfig.checked ? (this.targetCard.classList.add('acto'), sensors.style.display = 'flex', new DraggableContainer(sensors), wRight.style.zIndex = 2,
             document.querySelector('.popup-background').style.display = 'block',
@@ -92,8 +91,6 @@ export class IconStatus {
         btnsens[0].style.display = 'none'
         btnsens[1].style.display = 'none'
         btnsens[2].style.display = 'flex'
-        const engineEvent = document.querySelector('.engineEvent')
-        this.targetCard.id === 'tsi-card' ? engineEvent.style.display = 'flex' : engineEvent.style.display = 'none'
     }
     //сохранение назначенного параметра
     async postIconParams(param, coef, id) {
