@@ -6,6 +6,11 @@ import { saveCheckListToBase } from '../../settingsRotate.js'
 
 export class FilterElements {
     constructor() {
+        this.getDOM()
+        this.init()
+    }
+
+    getDOM() {
         this.titleList = document.querySelectorAll('.viewIcon')
         this.titleModal = document.querySelectorAll('.titleModal')
         this.grays = document.querySelectorAll('.grays')
@@ -18,10 +23,7 @@ export class FilterElements {
         this.sortCondition = document.querySelector('.sortCondition')
         this.sortConditionType = document.querySelector('.sortConditionType')
         this.list = document.querySelectorAll('.listItem')
-        this.init()
     }
-
-
     init() {
         this.conditionFilter()
         this.typeFilter()
@@ -115,7 +117,6 @@ export class FilterElements {
 
     }
 
-
     dubleSelectOn(elem) {
         const newCelChange = document.querySelectorAll('.newCelChange')
         newCelChange.forEach(el => {
@@ -148,7 +149,6 @@ export class FilterElements {
             }
         });
     }
-
     selection(event) {
         event.target.children[1].style.display = 'flex'
     }
@@ -398,6 +398,7 @@ export class FilterElements {
         const elemArray = [];
         const elemCelev = [];
         let dragged;
+        const self = this
         Array.from(elem.children).forEach(el => {
             // console.log(el)
             el.setAttribute('draggable', true);
@@ -412,7 +413,6 @@ export class FilterElements {
             if (elemArray.length !== 0) {
                 elemArray.length = 0
             }
-            console.log('раз два??')
             dragged = event.target;
             event.dataTransfer.effectAllowed = 'move';
             event.dataTransfer.setData('text/html', dragged.outerHTML);
@@ -449,9 +449,7 @@ export class FilterElements {
             console.log(data)
             const tempContainer = document.createElement('div');
             tempContainer.innerHTML = data;
-
             tempContainer.children[0].children[1].style.display = 'none'
-            const container = document.querySelector('.list_att')
             elem.insertBefore(tempContainer.children[0], event.target.closest('.viewIcon'));
             // Удаляем перетаскиваемый элемент
             const newCelChange = document.querySelectorAll('.newCelChange')
@@ -487,10 +485,10 @@ export class FilterElements {
                 arrayIndexTitleList.push({ rel: lastRel, index: index })
                 new Tooltip(e, [storTitleList[lastRel]]);
             });
-            console.log(arrayIndexTitleList)
             saveCheckListToBase(1)
-            draggable()
-            this.init()
+            self.getDOM()
+            self.init()
+            self.draggable()
 
         }
     }
