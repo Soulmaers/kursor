@@ -520,25 +520,6 @@ tsiControll.addEventListener('input', () => {
 });
 
 
-//отрисовываем список под параметры
-const btnsens = document.querySelectorAll('.btnsens')
-const titleSens = document.querySelector('.title_sens')
-const obo = document.querySelector('.obo')
-btnsens.forEach(e => {
-    e.addEventListener('click', () => {
-        if (e.classList.contains('actBTN')) {
-            e.classList.remove('actBTN')
-            return
-        }
-        btnsens.forEach(el => {
-            el.classList.remove('actBTN')
-        })
-        e.classList.add('actBTN')
-        obo.style.display = 'flex';
-        titleSens.style.display = 'block';
-    })
-})
-
 class DropDownList {
     constructor({ element, data, btn }) {
         this.element = element;

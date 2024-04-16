@@ -47,7 +47,6 @@ export class ControllTyres {
         acto?.classList.remove('acto');
 
         this.hideElements(); // Скрываем элементы
-
         if (element.classList.contains('tiresActiv')) {
             element.classList.remove('tiresActiv');
             if (this.plug[1].classList.contains('activGraf')) {
@@ -63,6 +62,9 @@ export class ControllTyres {
         const checkAlt = document.getElementById('check_Title');
         if (checkAlt.checked) {
             this.sensors.style.display = 'flex';
+
+            this.controllObo()
+
             new DraggableContainer(this.sensors);
             this.wright.style.zIndex = 2;
             document.querySelector('.popup-background').style.display = 'block';
@@ -73,5 +75,22 @@ export class ControllTyres {
         this.grafics.style.display = 'none'; // Дополнительное скрытие
         this.wrapperMap.style.display = 'none'
         tech(); // Функция, отображающая технические характеристики и логику формул
+    }
+
+    controllObo() {
+        this.btnsens = document.querySelectorAll('.btnsens')
+        this.titleSens = document.querySelector('.title_sens')
+        this.obo = document.querySelector('.obo')
+        this.btnsens.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Сначала удаляем класс 'actBTN' у всех кнопок
+                this.btnsens.forEach(el => el.classList.remove('actBTN'));
+                // Затем добавляем класс 'actBTN' только нажатой кнопке
+                btn.classList.add('actBTN');
+                // Показываем элементы, зависящие от активации кнопки
+                this.obo.style.display = 'flex';
+                this.titleSens.style.display = 'block';
+            });
+        });
     }
 }

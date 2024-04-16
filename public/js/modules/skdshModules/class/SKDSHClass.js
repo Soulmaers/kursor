@@ -4,7 +4,7 @@ import { ViewTyresValue } from './ViewTyresValue.js'
 import { SetPressureOs } from './SetPressureOs.js'
 import { Configurator } from './Configurator.js'
 import { ControllTyres } from './ControllTyres.js'
-import { viewMenuParams } from '../../paramsTyresView.js'
+
 export class SKDSHClass {
     constructor(data, idw) {
         [this.model, this.tyres, this.params, this.osi] = data
@@ -16,7 +16,6 @@ export class SKDSHClass {
 
 
     init() {
-        console.log(this.model)
         if (this.model.length !== 0) {
             new ViewModel(this.model) // класс отрисовывает саму модель СКДШ
             new ViewTyresValue(this.tyres, this.params, this.osi)// класс отрисовывает состояние давления и температуры на колесах
@@ -34,8 +33,5 @@ export class SKDSHClass {
         } else {
             SKDSHClass.configurator.reinitialize(this.id);
         }
-
-
-        // viewMenuParams()
     }
 }
