@@ -12,7 +12,7 @@ export class ViewModel {
 
 
     createViewModel() {
-        const type = this.model.type
+        const type = this.model[0].type
         this.controllViewType(type)
         if (this.model.length === 1 && this.model[0].osi === '-') return
         this.createContainer()
@@ -24,6 +24,7 @@ export class ViewModel {
     }
 
     controllViewType(type) {
+        console.log(type)
         const selectType = this.config.querySelector('.select_type')
         selectType.style.display = type !== '' ? 'flex' : 'none'
         Array.from(selectType.children).forEach(el => {
