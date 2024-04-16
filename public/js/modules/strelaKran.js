@@ -12,20 +12,19 @@ export async function kranParams() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idw, login }))
+            body: (JSON.stringify({ idw }))
         }
-        const res = await fetch('/api/parametrs', param)
-        const response = await res.json()
-        console.log(response)
-        loadKran(response);
+        const res = await fetch('/api/getSens', param)
+        const data = await res.json()
+        console.log(data)
+        loadKran(data);
     }
 }
 const strela = [];
-function loadKran(id) {
-    const active = Number(document.querySelector('.color').id)
-    if (id.item.id === active) {
-        //   console.log(id.item.lmsg.p.user_2u_1)
-        const str = id.item.lmsg.p.user_2u_1
+function loadKran(data) {
+    const sensors = data.find(el => el.params === 'lift')
+    if (sensors && sensors.value) {
+        const str = sensors.value
         if (str) {
             if (str && str !== strela[strela.length - 1]) {
                 strela.push(str)
@@ -36,6 +35,7 @@ function loadKran(id) {
             drawMyLine(null, null, false)
         }
     }
+
 }
 
 

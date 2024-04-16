@@ -96,6 +96,7 @@ export class Popup {
     }
 
     createMessage(el, event, content, formattedDate) {
+        console.log(el)
         const baseMess = { event: event, group: `Компания: ${el.groups}`, name: `Объект: ${el.name}` };
         switch (event) {
             case 'Заправка':
@@ -129,7 +130,8 @@ export class Popup {
         console.log(id)
         console.log(this.arrayIdGroups)
         // Ищем группу по id объекта
-        const groupEntry = this.arrayIdGroups.find(([groupId]) => groupId[0] === id);
+        const groupEntry = this.arrayIdGroups.find(([groupId]) => groupId[0] == id);
+        console.log(groupEntry[1])
         return groupEntry ? groupEntry[1] : 'не определено';
     }
 }

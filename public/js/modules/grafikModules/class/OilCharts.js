@@ -28,7 +28,7 @@ export class OilCharts {
         }
         isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
         this.data = await this.createStructura() //получение и подготовка структуры данных
-        this.objOil = this.findMarkerReFill() //поиск заправок
+        console.log(this.data)
         if (this.data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')
@@ -40,7 +40,10 @@ export class OilCharts {
             isCanceled = false;
             return
         }
+        this.objOil = this.findMarkerReFill() //поиск заправок
         this.createChart()
+
+
     }
 
     createChart() {
@@ -655,9 +658,10 @@ export class OilCharts {
             const loaders = document.querySelector('.loaders_charts')
             loaders.style.display = 'none';
             isCanceled = false;
-            return
+            return []
         }
         document.querySelector('.noGraf').style.display = 'none'
+
         return newGlobal
     }
 }

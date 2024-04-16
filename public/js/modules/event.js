@@ -409,6 +409,8 @@ rad.forEach(el => {
     })
 })
 
+
+/*
 const modalNameOs = document.querySelector('.modalNameOs')
 modalNameOs.addEventListener('click', () => {
     const moduleConfig = document.querySelector('.moduleConfig')
@@ -433,7 +435,7 @@ modalNameOs.addEventListener('click', () => {
             }
         })
     })
-})
+})*/
 
 
 const buttonTth = document.querySelector('.buttonTth')
@@ -479,47 +481,6 @@ export async function pr() {
     }
     viewTech(tyresActive.id)
 }
-
-
-
-const plug = document.querySelectorAll('.plug')
-plug[0].classList.add('clickNavi')
-plug[0].parentNode.style.background = 'rgba(6, 28, 71, 1)'
-plug.forEach(e => {
-    e.addEventListener('click', () => {
-        plug.forEach(e => { e.parentNode.style.background = '#fff', e.classList.remove('clickNavi') })
-        e.classList.add('clickNavi')
-        e.parentNode.style.background = 'rgba(6, 28, 71, 1)'
-
-    })
-})
-console.log(plug[2])
-plug[2].addEventListener('click', () => {
-    const wRight = document.querySelector('.wrapper_right')
-    const wLeft = document.querySelector('.wrapper_left')
-    const grafics = document.querySelector('.grafics')
-    const main = document.querySelector('.main')
-    const techInfo = document.querySelector('.techInfo')
-    const secondFlash = document.querySelectorAll('.secondFlash')[1]
-    plug[2].classList.add('activGraf')
-    wRight.style.display = 'none';
-    techInfo.style.display = 'none';
-    wLeft.style.display = 'none';
-    grafics.style.display = 'flex';
-    if (widthWind > 860) {
-        wRight.style.display = 'none';
-        techInfo.style.display = 'none';
-        wLeft.style.display = 'none';
-        grafics.style.display = 'flex';
-        secondFlash.style.display = 'none'
-        main.style.flexDirection = 'column'
-
-    }
-    const wrapMap = document.querySelector('wrapMap')
-    if (wrapMap) {
-        wrapMap.remove();
-    }
-})
 
 
 const closeIconConfig = document.querySelector('.closeIconConfig')

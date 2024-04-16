@@ -1,0 +1,80 @@
+
+import { DraggableContainer } from '../../../class/Dragdown.js'
+import { tech } from '../../tech.js'
+
+export class ControllTyres {
+    constructor() {
+        this.getDOM()
+        this.clearText()
+        this.initEventListener()
+    }
+
+
+    getDOM() {
+        this.sensors = document.querySelector('.sensors')
+        this.wrapperMap = document.querySelector('.wrapper_left')
+        this.tiresLink = document.querySelectorAll('.tires_link_test')
+        this.techInfo = document.querySelector('.techInfo')
+        this.grafics = document.querySelector('.grafics')
+        this.plug = document.querySelectorAll('.plug')
+        this.tableTarir = document.querySelector('.tableTarir')
+        this.idbaseTyres = document.querySelector('.idbaseTyres')
+        this.wright = document.querySelector('.wrapper_right')
+        this.widthWind = document.querySelector('body').offsetWidth;
+    }
+
+    clearText() {
+        this.idbaseTyres.textContent = ''
+    }
+
+    initEventListener() {
+        console.log(this.tiresLink)
+        this.tiresLink.forEach(el => el.addEventListener('click', this.operation.bind(this)))
+    }
+
+
+    hideElements() {
+        this.techInfo.style.display = 'none';
+        this.tableTarir.style.display = 'none';
+        this.sensors.style.display = 'none';
+        this.wrapperMap.style.display = this.widthWind >= 860 ? 'block' : 'none';
+        this.grafics.style.display = 'none';
+    }
+
+    operation(event) {
+        console.log('тут');
+        const element = event.target;
+        console.log(element);
+        // Удаляем класс 'acto' с активного элемента, если таковой имеется
+        const acto = document.querySelector('.acto');
+        acto?.classList.remove('acto');
+
+        this.hideElements(); // Скрываем элементы
+
+        if (element.classList.contains('tiresActiv')) {
+            element.classList.remove('tiresActiv');
+            if (this.plug[1].classList.contains('activGraf')) {
+                this.grafics.style.display = 'flex';
+                this.wrapperMap.style.display = 'none';
+            }
+            return;
+        }
+        // Удаляем класс 'tiresActiv' с всех элементов
+        this.tiresLink.forEach(e => e.classList.remove('tiresActiv'));
+        // Активируем текущий элемент
+        element.classList.add('tiresActiv');
+        const checkAlt = document.getElementById('check_Title');
+        if (checkAlt.checked) {
+            this.sensors.style.display = 'flex';
+            new DraggableContainer(this.sensors);
+            this.wright.style.zIndex = 2;
+            document.querySelector('.popup-background').style.display = 'block';
+        }
+        // Отображаем техническую информацию
+        this.techInfo.style.display = 'block';
+        this.tableTarir.style.display = 'none'; // Дополнительное скрытие
+        this.grafics.style.display = 'none'; // Дополнительное скрытие
+        this.wrapperMap.style.display = 'none'
+        tech(); // Функция, отображающая технические характеристики и логику формул
+    }
+}

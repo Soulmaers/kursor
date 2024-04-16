@@ -133,7 +133,6 @@ export class ViewModel {
         const gosNumber1 = document.querySelector('.gosNumber1')
         const gosNumberCar = document.querySelector('.gosNumberCar')
         const gosNumberCar1 = document.querySelector('.gosNumberCar1')
-        console.log(this.model[0])
         this.model[0].frontGosp ? gosNumberCar.value = this.model[0].frontGosp : null
         this.model[0].frontGosp1 ? gosNumberCar1.value = this.model[0].frontGosp1 : null
         this.model[0].gosp ? gosNumber.value = this.model[0].gosp : null

@@ -85,7 +85,9 @@ export class GrafikView {
         const getTime = new GetDataTime()
         this.time = await getTime.getTimeInterval(this.calendar, ide)
     }
-    init() {
+    init(event) {
+        const button = event.currentTarget
+        this.switch(button)
         this.menuGrafik.forEach(e => {
             e.classList.remove('activMenuGraf')
         })
@@ -95,6 +97,21 @@ export class GrafikView {
         this.controllerMethodCharts()
     }
 
+    switch(button) {
+        const wRight = document.querySelector('.wrapper_right')
+        const wLeft = document.querySelector('.wrapper_left')
+        const grafics = document.querySelector('.grafics')
+        const techInfo = document.querySelector('.techInfo')
+        button.classList.add('activGraf')
+        wRight.style.display = 'none';
+        techInfo.style.display = 'none';
+        wLeft.style.display = 'none';
+        grafics.style.display = 'flex';
+        /*    const wrapMap = document.querySelector('wrapMap')
+            if (wrapMap) {
+                wrapMap.remove();
+            }*/
+    }
     navi(el) {
         this.menuGrafik.forEach(e => e.classList.remove('activMenuGraf'))
         el.classList.add('activMenuGraf')
