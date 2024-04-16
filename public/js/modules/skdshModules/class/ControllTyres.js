@@ -29,7 +29,7 @@ export class ControllTyres {
 
     initEventListener() {
         console.log(this.tiresLink)
-        this.tiresLink.forEach(el => el.addEventListener('click', this.operation.bind(this)))
+        this.tiresLink.forEach(el => el.addEventListener('click', this.operation.bind(this, el)))
     }
 
 
@@ -41,10 +41,7 @@ export class ControllTyres {
         this.grafics.style.display = 'none';
     }
 
-    operation(event) {
-        console.log('тут');
-        const element = event.target;
-        console.log(element);
+    operation(element) {
         // Удаляем класс 'acto' с активного элемента, если таковой имеется
         const acto = document.querySelector('.acto');
         acto?.classList.remove('acto');
