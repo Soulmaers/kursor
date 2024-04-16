@@ -43,7 +43,6 @@ export const saveCheckListToBase = async (nums) => {
 
     });
     uniqBar.forEach(el => {
-        console.log(el)
         el.children[0].checked ? changeList[el.children[0].id] = true : changeList[el.children[0].id] = false
     })
     arrayIndexTitleList.forEach(el => {
@@ -54,12 +53,10 @@ export const saveCheckListToBase = async (nums) => {
         }
     });
     const mass = arrayIndexTitleList.reduce((result, e) => {
-        console.log(e)
         result[e.rel] = JSON.stringify(e);
         return result;
     }, {})
     mass.login = login
-    console.log(mass)
     const param = {
         method: "POST",
         headers: {
@@ -69,14 +66,12 @@ export const saveCheckListToBase = async (nums) => {
     }
     const res = await fetch('/api/saveList', param)
     const results = await res.json()
-    //  viewList(login)
     if (!nums) {
         eventSave()
     }
 
 }
 const buttonList = document.querySelector('.listView').lastElementChild
-console.log(buttonList)
 buttonList.addEventListener('click', () => saveCheckListToBase())
 
 const viewProfil = async (login) => {

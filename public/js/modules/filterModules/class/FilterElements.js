@@ -40,107 +40,61 @@ export class FilterElements {
         })
     }
 
-
-    selectOn(event) {
-        event.target.style.display = 'none'
-        event.target.nextElementSibling.style.display = 'block'
-        const newCelChange = document.querySelectorAll('.newCelChange')
-        newCelChange.forEach(el => {
-            if (event.target.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
-                if (el.getAttribute('rel').split(' ')[1] === event.target.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
+    select(element, display, sideElement) {
+        sideElement !== undefined ? element.style.display = 'none' : null
+        sideElement !== undefined ? sideElement.style.display = 'block' : null
+        display === 'flex' ? element.parentNode.previousElementSibling.style.color = 'rgba(6, 28, 71, 1)' : null
+        const atribute = element.parentNode.parentNode.getAttribute('rel')
+        this.newCelChange.forEach(el => {
+            if (atribute.split(' ')[1]) {
+                if (el.getAttribute('rel').split(' ')[1] === atribute.split(' ')[1]) {
                     if (el.children.length === 0) {
-                        el.closest('.listItem').style.display = 'none'
+                        el.closest('.listItem').style.display = display
                     }
                 }
             }
             else {
-                if (el.getAttribute('rel') === event.target.parentNode.parentNode.getAttribute('rel')) {
-                    console.log(el.children.length)
+                if (el.getAttribute('rel') === atribute) {
                     if (el.children.length === 0) {
-                        el.textContent === '-' ? el.closest('.listItem').style.display = 'none' : null
-                    }
-                    else {
+                        el.textContent === '-' ? el.closest('.listItem').style.display = display : null
+                    } else {
                         if (!el.children[0].classList.contains('toogleIcon') || el.textContent === '-') {
-                            el.closest('.listItem').style.display = 'none'
+                            el.closest('.listItem').style.display = display
                         }
-
                     }
                 }
             }
         })
+
+    }
+    selectOn(event) {
+        const element = event.target
+        this.select(element, 'none', event.target.nextElementSibling)
         this.checkZero();
     }
 
     selectOff(event) {
-        event.target.style.display = 'none'
-        event.target.previousElementSibling.style.display = 'block'
-        event.target.parentNode.previousElementSibling.style.color = 'rgba(6, 28, 71, 1)'
-        const newCelChange = document.querySelectorAll('.newCelChange')
-        newCelChange.forEach(el => {
-            if (event.target.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
-                if (el.getAttribute('rel').split(' ')[1] === event.target.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
-                    if (el.children.length === 0) {
-                        el.closest('.listItem').style.display = 'flex'
-                    }
-                }
-            }
-            else {
-                if (el.getAttribute('rel') === event.target.parentNode.parentNode.getAttribute('rel')) {
-                    if (el.children.length === 0) {
-                        el.textContent === '-' ? el.closest('.listItem').style.display = 'flex' : null
-                    } else {
-                        if (!el.children[0].classList.contains('toogleIcon') || el.textContent === '-') {
-                            el.closest('.listItem').style.display = 'flex'
-                        }
-
-                    }
-                }
-            }
-        })
-        const titleModal = document.querySelectorAll('.titleModal')
-        titleModal.forEach(e => {
+        const element = event.target
+        this.select(element, 'flex', event.target.previousElementSibling)
+        this.titleModal.forEach(e => {
             e.style.display === 'none' ? e.style.display = 'flex' : null;
         });
-        // 
         this.check()
         this.filterType()
-        //  checkCond()
 
         const grays = document.querySelectorAll('.grays')
         let act = false
-        grays.forEach(e => {
+        this.grays.forEach(e => {
             if (e.classList.contains('toogleIcon')) {
                 act = true
             }
         })
-        act ? grays.parentElement.previousElementSibling.previousElementSibling.style.color = 'gray' : null
+        act ? grays[0].parentElement.previousElementSibling.previousElementSibling.style.color = 'gray' : null
 
     }
 
     dubleSelectOn(elem) {
-        const newCelChange = document.querySelectorAll('.newCelChange')
-        newCelChange.forEach(el => {
-            if (elem.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
-                if (el.getAttribute('rel').split(' ')[1] === elem.parentNode.parentNode.getAttribute('rel').split(' ')[1]) {
-                    if (el.children.length === 0) {
-                        el.closest('.listItem').style.display = 'none'
-                    }
-                }
-            }
-            else {
-                if (el.getAttribute('rel') === elem.parentNode.parentNode.getAttribute('rel')) {
-                    if (el.children.length === 0) {
-                        el.textContent === '-' ? el.closest('.listItem').style.display = 'none' : null
-                    }
-                    else {
-                        if (!el.children[0].classList.contains('toogleIcon') || el.textContent === '-') {
-                            el.closest('.listItem').style.display = 'none'
-                        }
-
-                    }
-                }
-            }
-        })
+        this.select(elem, 'none')
         const titleModal = document.querySelectorAll('.titleModal')
         titleModal.forEach(e => {
             const visibleChildren = Array.from(e.nextElementSibling.children).filter(it => it.style.display !== 'none');
@@ -168,11 +122,9 @@ export class FilterElements {
                 e.classList.remove('toogleIcon')
             }
         });
-        console.log(targetElement)
         targetElement.classList.toggle('toogleIcon'), targetElement.closest('.viewIcon').children[0].style.color = 'gray'
         if (targetElement.classList.contains('toogleIcon')) {
             const newCelChange = document.querySelectorAll('.newCelChange')
-            const list = document.querySelectorAll('.listItem')
             Array.from(newCelChange).forEach(e => {
                 if (e.getAttribute('rel') === targetElement.parentNode.parentNode.getAttribute('rel')) {
                     if (e.children[0]) {
@@ -214,8 +166,7 @@ export class FilterElements {
     }
 
     check() {
-        const titleList = document.querySelectorAll('.viewIcon')
-        titleList.forEach(item => {
+        this.titleList.forEach(item => {
             if (item.children[0].style.color === 'gray') {
                 this.dubleSelectOn(item.children[1].children[1])
             }
@@ -266,7 +217,6 @@ export class FilterElements {
                         if (firstCondition && secondCondition) {
                             arrayIconsElements.push(it);
                         }
-                        console.log(firstCondition, secondCondition, it)
                     });
                 }
             }
@@ -323,23 +273,21 @@ export class FilterElements {
         const sortCondition = document.querySelector('.sortConditionType')
         if (element) {
             element.addEventListener('mouseenter', () => {
-                element.style.width = '80px'
+                //   element.style.width = '80px'
                 sortIcon.style.display = 'block'
 
             })
             sortCondition.addEventListener('mouseleave', () => {
                 sortCondition.style.display = 'none'
-                //   sortIcon.classList.remove('cluch')
             })
             sortIcon.addEventListener('click', () => {
-                console.log('кликнул')
                 element.style.position = 'relative'
                 sortCondition.style.display = 'flex'
             })
 
             element.addEventListener('mouseleave', () => {
                 sortIcon.style.display = 'none'
-                element.style.width = '70px'
+                // element.style.width = '70px'
 
 
             })
@@ -380,7 +328,6 @@ export class FilterElements {
                 hasToogleIcon ? (element.children[0].style.color = 'gray', sortIcon.style.color = 'gray') : (element.children[0].style.color = 'rgba(6, 28, 71, 1)', sortIcon.style.color = 'rgba(6, 28, 71, 1)')
             })
             sortIcon.addEventListener('click', () => {
-                console.log('кликнул')
                 element.style.position = 'relative'
                 sortCondition.style.display = 'flex'
             })
@@ -400,7 +347,6 @@ export class FilterElements {
         let dragged;
         const self = this
         Array.from(elem.children).forEach(el => {
-            // console.log(el)
             el.setAttribute('draggable', true);
             el.addEventListener('dragstart', handleDragStart);
             el.addEventListener('dragover', handleDragOver);
@@ -419,7 +365,6 @@ export class FilterElements {
             // Создаем временный контейнер для хранения всех элементов, включая дочерние
             const tempContainer = document.createElement('div');
             tempContainer.appendChild(dragged.cloneNode(true));
-            console.log(tempContainer)
             // Сериализуем временный контейнер и передаем его данные
             event.dataTransfer.setData('text/html', tempContainer.innerHTML);
 
@@ -446,7 +391,6 @@ export class FilterElements {
             event.preventDefault();
             event.target.classList.remove('drag-over');
             const data = event.dataTransfer.getData('text/html');
-            console.log(data)
             const tempContainer = document.createElement('div');
             tempContainer.innerHTML = data;
             tempContainer.children[0].children[1].style.display = 'none'
@@ -481,7 +425,6 @@ export class FilterElements {
             viewIcon.forEach((e, index) => {
                 const relValues = e.getAttribute('rel').split(' ');
                 const lastRel = relValues[relValues.length - 1];
-                console.log(lastRel)
                 arrayIndexTitleList.push({ rel: lastRel, index: index })
                 new Tooltip(e, [storTitleList[lastRel]]);
             });
