@@ -311,6 +311,7 @@ export class SpisokObject {
         }
     }
     coloring(shina, nameCar, params, arg, osi, engine) {
+        console.log(nameCar, engine)
         if (params.result) {
             const modelUniqValues = convert(params.result)
             arg.result.forEach((el) => {
