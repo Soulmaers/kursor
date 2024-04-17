@@ -23,7 +23,7 @@ export class ClickObject {
         this.instanceDetalisation = null
         this.controller = null
         this.wrapperFull = document.querySelector('.wrapperFull')
-        this.btnShina = document.querySelectorAll('.modals')
+        this.btnShina = document.querySelectorAll('.plug')
         this.widthWind = document.querySelector('body').offsetWidth;
         this.uniqStruktura = this.findObjectByIdRecursive(this.data);
         this.elements.forEach(e => e.addEventListener('click', this.handleClick.bind(this)))

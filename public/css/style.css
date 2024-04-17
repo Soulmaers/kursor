@@ -9123,6 +9123,10 @@ i.changeColorCheck {
 
 }
 
+.active {
+  color: rgba(6, 28, 71, 1);
+  background: #fff
+}
 
 .header_table_reports {
   font-weight: bold;

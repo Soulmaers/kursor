@@ -16,10 +16,6 @@ export class ViewTyresValue {
     }
 
     init() {
-        const btnShina = document.querySelectorAll('.modals')
-        if (btnShina[1].classList.contains('active') === true) {
-            return
-        }
         setInterval(() => this.getParams(), 110000)
         this.createParamsRows()
         this.viewValueTyres()
@@ -48,8 +44,11 @@ export class ViewTyresValue {
         return generatedValue;
     };
     viewValueTyres() {
-        console.log(this.params)
         const role = document.querySelector('.role').getAttribute('rel')
+        const btnShina = document.querySelectorAll('.modals')
+        if (btnShina[1].classList.contains('active') === true) {
+            return
+        }
         if (this.tyres) {
             const parametrs = convert(this.tyres)
             const tiresLink = document.querySelectorAll('.tires_link_test')
