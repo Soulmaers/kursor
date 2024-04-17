@@ -127,6 +127,7 @@ exports.setDataToBase = async (imei, port, info, id) => {
     const data = await databaseService.getSensStorMetaFilter(imei, port, id) //получение привязанных параметров
     if (data.length !== 0) {
         const idw = data[0].idw
+
         const coefEngine = await databaseService.getValuePWRToBase(idw, 'engine') //получение порогового значения по зажиганию
         const coefPWR = await databaseService.getValuePWRToBase(idw, 'pwr')  //получение порогового значения по питанию
         const coefMileage = await databaseService.getValuePWRToBase(idw, 'mileage') //получение порогового значения по пробегу
@@ -196,6 +197,9 @@ exports.setDataToBase = async (imei, port, info, id) => {
             objectToUpdate.data = nowTime
             objectToUpdate.status = 'true'
         }
+        //  if (idw == 28039151 || idw == 27523670 || idw == 25399461) {
+        //console.log(idw, value)
+        //  }
         await databaseService.setUpdateValueSensStorMeta(imei, port, value)  //обновление значений привязанных параметров
 
         const tcpObject = info

@@ -617,12 +617,13 @@ exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
     try {
         const pool = await connection;
         for (let i of data) {
-            const updateQuery = `UPDATE sens_stor_meta SET value=@value, data=@data, status= @status WHERE imei=@imei AND port=@port AND meta=@meta`;
+            const updateQuery = `UPDATE sens_stor_meta SET value=@value, data=@data, status= @status WHERE imei=@imei AND port=@port AND params=@params`;
             const res = await pool.request()
                 .input('port', String(port))
                 .input('imei', imei)
                 .input('value', sql.VarChar, i.value)
                 .input('meta', sql.VarChar, i.key)
+                .input('params', sql.VarChar, i.params)
                 .input('data', i.data)
                 .input('status', sql.VarChar, i.status)
                 .query(updateQuery);

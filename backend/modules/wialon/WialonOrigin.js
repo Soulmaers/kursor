@@ -30,6 +30,7 @@ class WialonOrigin {
             const el = dataArray[i];
             const phone = phones[i];
             const idw = el.id;
+
             if (!phone?.item?.uid) continue;
             const res = await databaseService.objectsWialonImei(String(phone.item.uid)); // валидация полученного объекта по IMEI и id
             if (!res?.length) continue;
@@ -38,6 +39,7 @@ class WialonOrigin {
             const [result] = await Promise.all([
                 wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i'), //запрос параметров по объекту за интервал времени
             ]);
+
             if (!result) continue;
             const allArrayData = [];
             result.messages.forEach(async (e) => {
