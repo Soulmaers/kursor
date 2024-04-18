@@ -59,6 +59,7 @@ router.post('/api/viewList', controllerIcon.viewList)
 router.post('/api/updateTarirTable', controllerTarir.updateTarirTableToBase)
 router.post('/api/getTarirTable', controllerTarir.getTarirDataToBase)
 router.post('/api/tarirView', controllerTarir.tarirView)
+router.get('/api/webhook', controllerTarir.webhook)
 
 
 

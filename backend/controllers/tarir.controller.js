@@ -20,3 +20,9 @@ exports.tarirView = async (req, res) => {
     const result = await databaseService.tarirViewToBase(idw)
     res.json(result)
 }
+
+exports.webhook = async (req, res) => {
+    const result = await databaseService.tarirViewToBase(25766831)
+    res.json(result)
+}
+

@@ -104,11 +104,16 @@ export class ClickObject {
 
     async visual(check) {
         const idw = this.element.id
+        if (this.btnShina[1].classList.contains('active')) {
+            this.styleShinaActive()
+        }
         DOMHelper.deleteClasses('.tablo', '.choice', '.acto', '.check_probeg', '.toogleIconEvent');  //метод удаляет переданыые классы
         DOMHelper.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.modalCenterOs', '.techInfo', '.tableTarir', '.disketa', '.korzina', '.sensors', '.alllogs', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
         DOMHelper.hideElements(['.trEvent', '.main', '.wrapper_up', '.wrapperCont'], 'flex') //ставим flex элементам
         const elementsToDelete = check ? ['.msg', '.wrapMap', '.containerAlt', '.delIcon'] : ['.msg', '.wrapMap', '.containerAlt', '.delIcon', '.zamer', '.jobTSDetalisationGraf', '.jobTSDetalisationCharts_legenda'];
         DOMHelper.deleteElements(elementsToDelete);
+
+
         if (!check) {
             DOMHelper.clearTextContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value');
         }
@@ -116,6 +121,7 @@ export class ClickObject {
         // if (this.info[0].length !== 0)
         new SKDSHClass(this.info, idw)
 
+        console.log(check)
         if (!check) {
             this.specific(this.element)//метод который обрабатывает специфические условия
             this.reinitializeOrCreateInstance('createEvent', CreateMarkersEvent, idw);
