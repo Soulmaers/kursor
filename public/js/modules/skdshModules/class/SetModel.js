@@ -100,7 +100,6 @@ export class SetModel {
     }
     //конфигуратор оси
     async changeBase(massModel, activePost, idw, type, go, go1, goCar, goCar1) {
-        const tsiControll = document.querySelector('.tsiControll').value
         massModel.length !== 0 ? massModel : massModel.push(['-', '-', '-'])
         await this.reqDelete(idw);
         let gosp;
@@ -117,7 +116,7 @@ export class SetModel {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ massModel, idw, activePost, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll }))
+            body: (JSON.stringify({ massModel, idw, activePost, gosp, gosp1, frontGosp, frontGosp1, type }))
         }
         const res = await fetch('/api/updateModel', param)
         const response = await res.json()
