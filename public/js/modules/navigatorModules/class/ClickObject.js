@@ -118,7 +118,6 @@ export class ClickObject {
             DOMHelper.clearTextContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value');
         }
         DOMHelper.createListItems('.obo', 250, 'msg')
-        // if (this.info[0].length !== 0)
         new SKDSHClass(this.info, idw)
 
         console.log(check)
@@ -133,7 +132,7 @@ export class ClickObject {
                 clearInterval(this.createEvent.updateInterval);
                 this.createEvent.hiddenTrackAndMarkersEnent();
             }
-
+            console.log(this.info)
             alarmFind(this.info)
         }
         kranParams()

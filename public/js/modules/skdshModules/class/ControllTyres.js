@@ -7,6 +7,7 @@ export class ControllTyres {
         this.getDOM()
         this.clearText()
         this.initEventListener()
+        // this.close()
     }
 
 
@@ -49,6 +50,7 @@ export class ControllTyres {
         this.hideElements(); // Скрываем элементы
         if (element.classList.contains('tiresActiv')) {
             element.classList.remove('tiresActiv');
+            console.log(this.plug[1])
             if (this.plug[1].classList.contains('activGraf')) {
                 this.grafics.style.display = 'flex';
                 this.wrapperMap.style.display = 'none';
@@ -64,6 +66,7 @@ export class ControllTyres {
             this.sensors.style.display = 'flex';
             this.controllObo()
             this.close()
+
 
             new DraggableContainer(this.sensors);
             this.wright.style.zIndex = 2;
@@ -96,6 +99,7 @@ export class ControllTyres {
 
     close() {
         const closeIconConfig = document.querySelector('.closeIconConfig')
+        console.log(closeIconConfig)
         closeIconConfig.addEventListener('click', () => {
             const tiresActivt = document.querySelector('.tiresActivt')
             tiresActivt ? tiresActivt.classList.remove('tiresActivt') : null

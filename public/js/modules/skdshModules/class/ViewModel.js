@@ -24,14 +24,15 @@ export class ViewModel {
     }
 
     controllViewType(type) {
-        console.log(type)
+        if (type == 'Тип ТС') return
         const selectType = this.config.querySelector('.select_type')
         selectType.style.display = type !== '' ? 'flex' : 'none'
         Array.from(selectType.children).forEach(el => {
             if (type !== el.textContent) {
                 el.hidden = true;
             } else {
-                selectType.value = el.value;
+                selectType.value = type !== 'Тип ТС' ? el.value : '-';
+                console.log(selectType.value)
                 selectType.disabled = true;
                 el.disabled = true;
                 el.selected = true;

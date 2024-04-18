@@ -6,7 +6,10 @@ import { GeoCreateMapsMini } from '../../modules/geoModules/class/GeoCreateMapsM
 
 
 let isProcessing = false
-export async function alarmFind(data) {
+let data;
+export async function alarmFind(datas) {
+    if (datas) data = datas
+    console.log(data)
     console.log('алармфайнд')
     if (isProcessing) {
         return;
