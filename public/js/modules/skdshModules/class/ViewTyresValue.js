@@ -17,7 +17,6 @@ export class ViewTyresValue {
 
     init() {
         setInterval(() => this.getParams(), 110000)
-        this.createParamsRows()
         this.viewValueTyres()
     }
 
@@ -120,13 +119,6 @@ export class ViewTyresValue {
 
         }
 
-    }
-
-    createParamsRows() {
-        const msg = document.querySelectorAll('.msg')
-        this.params.forEach((el, index) => {
-            msg[index].textContent = `${el.params}:${el.value !== null ? el.value : '-'}`
-        })
     }
 
     async getParams() {

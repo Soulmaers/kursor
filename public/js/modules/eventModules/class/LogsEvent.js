@@ -114,7 +114,7 @@ export class LogsEvent {
             const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
             const geo = geoloc ? geoloc.map(e => Number(e).toFixed(5)).join(", ") : 'нет данных';
             const group = this.login === 'Курсор' ? 'demo' : typeEvent !== 'Предупреждение' ? el.groups : groupDict[el.idw] || [];
-            // Удаление первого элемента и преобразование оставшихся в строку
+
             const int = Object.values(parsedContent[0]);
             int.shift();
             const info = `${int.join(", ")}`
@@ -151,7 +151,7 @@ export class LogsEvent {
     }
     pushId() {
         this.arrayId = this.data.reduce((acc, el) => acc.concat(Object.values(el).map(subArray => subArray[4])), []);
-        this.arrayIdGroups = this.data.reduce((acc, el) => acc.concat(Object.values(el).map(subArray => [subArray[4], subArray[6]])), []);
+        this.arrayIdGroups = this.data.reduce((acc, el) => acc.concat(Object.values(el).map(subArray => [subArray[4], subArray[7]])), []);
     }
 
     async logs(quantity) {

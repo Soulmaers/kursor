@@ -131,7 +131,6 @@ export class ConfiguratorParams {
                 this.deleteParams(this.id, param)
             }
             if (param === 'summatorOil') {
-                console.log(el.parentNode)
                 el.parentNode.children[4].style.color = 'rgba(6, 28, 71, 1)'
                 el.parentNode.children[2].style.color = 'rgba(6, 28, 71, 1)'
                 el.parentNode.children[2].textContent = 'OFF'
@@ -165,7 +164,6 @@ export class ConfiguratorParams {
 
     //868184064811311
     async init() {
-        console.log(this.dat)
         this.createListParams() //создаем элементы из stora
         await this.createListMeta() //создаем элементы из meta
     }
@@ -180,7 +178,6 @@ export class ConfiguratorParams {
         if (list) {
             list.forEach(e => e.remove())
         }
-        console.log(meta)
         meta.sort((a, b) => a[0].localeCompare(b[0]));
         meta.forEach(e => {
             const li = document.createElement('li')
@@ -246,7 +243,6 @@ export class ConfiguratorParams {
             data: null,
             imei: this.imei
         }))
-        console.log(data)
         const params = {
             method: "POST",
             headers: {
@@ -263,7 +259,6 @@ export class ConfiguratorParams {
         const idw = this.id
         const port = this.port
         const imei = this.imei
-        console.log(idw, port, imei)
         const params = {
             method: "POST",
             headers: {
@@ -273,7 +268,6 @@ export class ConfiguratorParams {
         }
         const parametrs = await fetch('api/getMetas', params)
         const lastParams = await parametrs.json()
-        console.log(lastParams)
         return lastParams
     }
 
@@ -310,7 +304,6 @@ export class ConfiguratorParams {
                 li.appendChild(i)
                 if (['pwr', 'engine', 'mileage'].includes(e.parametr)) {
                     let val = await this.getValueToBase(li)
-                    console.log(val)
                     val = val ? val[0].value : ''
                     const i = this.createIcon(li, e.parametr)
                     i.style.display = 'none'
@@ -329,7 +322,6 @@ export class ConfiguratorParams {
                     const i = this.createIcon(li, e.parametr)
                     oldParam.textContent = 'OFF'
                     const bool = await this.validColorIconSummator()
-                    console.log(bool)
                     if (bool) {
                         i.style.color = 'green'
                         this.colorSummator('green', 'ON', i)
@@ -347,9 +339,7 @@ export class ConfiguratorParams {
         this.clearParams.forEach(el => el.addEventListener('click', this.clearMetaParams.bind(this, el)))
     }
     colorSummator(color, text, i) {
-        console.log(text)
         const meta = i.closest('.item_stor').children[2]
-        console.log(meta)
         this.element.style.color = `${color}`
         meta.style.color = `${color}`
         meta.textContent = `${text}`
@@ -373,7 +363,6 @@ export class ConfiguratorParams {
         }
         const res = await fetch('api/getTarirTable', params)
         const result = await res.json()
-        console.log(result)
         return result.length !== 0 ? true : false
     }
     async validColorIconSummator() {
@@ -489,7 +478,6 @@ export class ConfiguratorParams {
     }
     cancel(el, event) {
         event.stopPropagation();
-        console.log(el)
         el.parentNode.style.display = 'none'
     }
     async saveValueToBase(id, params, value) {

@@ -12,21 +12,25 @@ const { connection, sql } = require('../config/db')
 
 //готовим данные и отправляем ответ на клиент который отрисовывает список
 exports.dataSpisok = async (req, res) => {
+
     try {
         let login;
+        let role;
         if (req && req.body && req.body.login) {
             login = req.body.login
+            role = req.body.role
         }
         else {
             login = null
+            role = null
         }
         const datas = await databaseService.getWialonObjects() //получем данные из БД по объектам wialona
         const ress = sortData(datas)
-        const massObjectCar = login ? await databaseService.dostupObject(login) : null //проверяем к каким из них есть доступ у УЗ
+        console.log(role, login)
+        const massObjectCar = login && role !== 'Администратор' ? await databaseService.dostupObject(login) : null //проверяем к каким из них есть доступ у УЗ
         const aLLmassObject = [];
         const arrName = []
         for (const elem of ress) {
-
             const massObject = [];
             const nameGroup = elem.name_g;
             const idGroup = elem.idg
@@ -38,7 +42,8 @@ exports.dataSpisok = async (req, res) => {
             });
             const dataObjectGroup = await Promise.all(promises)
             dataObjectGroup.forEach(e => {
-                if (login) {
+                //   console.log(e)
+                if (login && role !== 'Администратор') {
                     if (massObjectCar.includes(`${e[4]}`)) {
                         e.group = nameGroup;
                         e.idGroup = idGroup;
@@ -71,9 +76,9 @@ const getWialonSetToBaseObject = async (login) => {
     const objects = await getWialon(login) // получаем объекты с wialona
     console.timeEnd('getWialon')
     console.time('save')
-    const mess = await databaseService.setObjectGroupWialon(objects) //обновления объекты в БД с wialona
+    const mess = await databaseService.setObjectGroup(objects) //обновления объекты в БД с wialona
     console.timeEnd('save')
-    console.log(mess)
+
 }
 
 const getWialon = async (login) => {
@@ -148,12 +153,10 @@ async function updateParams(data) {
 
     const res = await constorller.dataSpisok()
     zaprosSpisokb(nameCar, res) //создание и подготовка структуры для проверки на аларм
-    const kursorObjects = await kursorService.getKursorObjects()
-    const dataAll = res.concat(kursorObjects)
     if (res) {
-        statistika.popupProstoy(dataAll) //ловим простои
+        statistika.popupProstoy(res) //ловим простои
         events.eventFunction(res) //ловим через вилаон заправки/сливы+потеря связи
-        new SummaryStatistiks(dataAll)
+        new SummaryStatistiks(res)
     }
 
     console.timeEnd('updatedata')

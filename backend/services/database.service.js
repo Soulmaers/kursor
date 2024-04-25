@@ -285,7 +285,7 @@ exports.getObjects = async (login) => {
 exports.objectsImei = async (imei) => {
     try {
         const pool = await connection
-        postModel = `SELECT idObject FROM objects WHERE imei=@imei`
+        postModel = `SELECT idObject FROM object_table WHERE imei=@imei`
         const result = await pool.request()
             .input('imei', imei)
             .query(postModel)
@@ -299,7 +299,7 @@ exports.objectsImei = async (imei) => {
 exports.objectsWialonImei = async (imei) => {
     try {
         const pool = await connection
-        postModel = `SELECT idObject FROM wialon_groups WHERE imei=@imei`
+        postModel = `SELECT idObject FROM object_table WHERE imei=@imei`
         const result = await pool.request()
             .input('imei', imei)
             .query(postModel)
@@ -326,9 +326,10 @@ exports.getMeta = async (idObject, port, imei) => {
     }
     try {
         const pool = await connection;
-        const postModel = `SELECT TOP (1) * FROM ${table} WHERE idObject = ${idObject} AND imei=${imei} ORDER BY id DESC`
+        const postModel = `SELECT TOP (1) * FROM ${table} WHERE idObject =@idw AND imei=@imei ORDER BY id DESC`
         const result = await pool.request()
-            .input('idw', String(idObject))
+            .input('idw', idObject)
+            .input('imei', imei)
             .query(postModel)
         //  console.log(result.recordset)
         const res = result.recordset.map(obj => {
@@ -342,6 +343,7 @@ exports.getMeta = async (idObject, port, imei) => {
         });
         return res;
     } catch (e) {
+        console.log(imei)
         console.log(e);
         return [];
     }
@@ -460,7 +462,7 @@ exports.getWialonObjects = async () => {
 
     try {
         const pool = await connection
-        const postModel = `SELECT * FROM wialon_groups`
+        const postModel = `SELECT * FROM object_table` //wialon_groups
         const result = await pool.request()
             .query(postModel)
         return result.recordset
@@ -469,13 +471,15 @@ exports.getWialonObjects = async () => {
         console.log(e)
     }
 }
-exports.getWialonObjectsId = async (idw) => {
+exports.getObjectsId = async (idw) => {
+    console.log(idw)
     try {
         const pool = await connection
-        const postModel = `SELECT * FROM wialon_groups WHERE idObject=@idw`
+        const postModel = `SELECT * FROM object_table WHERE idObject=@idw`
         const result = await pool.request()
             .input('idw', idw)
             .query(postModel)
+        console.log(result.recordset)
         return result.recordset
     }
     catch (e) {
@@ -488,9 +492,8 @@ exports.getWialonObjectsId = async (idw) => {
 exports.getIdGroup = async (id, login) => {
     try {
         const pool = await connection;
-        const post = `SELECT * FROM groups WHERE login=@login AND id_sub_g=@id OR login=@login AND idg=@id`
+        const post = `SELECT * FROM object_table WHERE  idg=@id`
         const result = await pool.request()
-            .input('login', login)
             .input('id', id)
             .query(post)
 
@@ -532,10 +535,13 @@ exports.getGroups = async (login) => {
     }
 }
 
-exports.setObjectGroupWialon = async (objects) => {
+
+
+exports.setObjectGroup = async (objects) => {
     try {
+        const port = 'wialon'
         const pool = await connection;
-        const post = `SELECT idObject FROM wialon_groups WHERE login=@login`
+        const post = `SELECT idObject FROM object_table`
         const result = await pool.request()
             .input('login', objects[0].login)
             .query(post)
@@ -543,41 +549,42 @@ exports.setObjectGroupWialon = async (objects) => {
             return !objects.some(object => object.idObject === record.idObject);
         }).map(record => record.idObject);
         for (const elem of missingValues) {
-            const postDEL = `DELETE FROM wialon_groups WHERE login=@login AND idObject =@idObject`;
+            const postDEL = `DELETE FROM object_table WHERE idObject =@idObject AND port=@port`;
             await pool.request()
                 .input('idObject', elem)
                 .input('login', objects[0].login)
+                .input('port', port)
                 .query(postDEL);
         }
         for (let el of objects) {
             // objects.forEach(async el => {
-            const post = `SELECT idObject FROM wialon_groups WHERE login=@login AND idObject=@idObject`
+            const post = `SELECT idObject FROM object_table WHERE idObject=@idObject AND port=@port`
             const result = await pool.request()
                 .input('login', el.login)
                 .input('idObject', el.idObject)
+                .input('port', port)
                 .query(post)
             if (result.recordset.length === 0) {
                 const post = `
-    INSERT INTO wialon_groups (login, data, idg, name_g, id_sub_g, name_sub_g, idObject, nameObject, imei,phone)
-    VALUES (@login, @data, @idg, @name_g, @id_sub_g, @name_sub_g, @idObject, @nameObject,@imei, @phone)
+    INSERT INTO object_table (login, data, idg, name_g, port, idObject, nameObject, imei,phone)
+    VALUES (@login, @data, @idg, @name_g,@port, @idObject, @nameObject,@imei, @phone)
 `;
                 const result = await pool.request()
                     .input('login', el.login)
                     .input('data', el.data)
                     .input('idg', el.idg)
                     .input('name_g', el.name_g)
-                    .input('id_sub_g', null)
-                    .input('name_sub_g', null)
                     .input('idObject', el.idObject)
                     .input('nameObject', el.nameObject)
                     .input('imei', el.imei)
                     .input('phone', el.phone)
+                    .input('port', port)
                     .query(post);
             }
             else {
                 // console.log(el.name_g, el.nameObject)
-                const post = `UPDATE wialon_groups  SET login=@login, data = @data, idg = @idg, name_g=@name_g, idObject=@idObject, nameObject=@nameObject,imei=@imei,phone=@phone
-            WHERE login = @login AND idObject = @idObject`;
+                const post = `UPDATE object_table  SET login=@login, port=@port,data = @data, idg = @idg, name_g=@name_g, idObject=@idObject, nameObject=@nameObject,imei=@imei,phone=@phone
+            WHERE idObject = @idObject AND port=@port`;
                 const result = await pool.request()
                     .input('login', el.login)
                     .input('data', el.data)
@@ -587,6 +594,7 @@ exports.setObjectGroupWialon = async (objects) => {
                     .input('nameObject', el.nameObject)
                     .input('imei', el.imei)
                     .input('phone', el.phone)
+                    .input('port', port)
                     .query(post);
             }
 
@@ -598,7 +606,6 @@ exports.setObjectGroupWialon = async (objects) => {
     }
 
 }
-
 exports.getSensStorMeta = async (idw) => {
     try {
         const pool = await connection;
@@ -892,7 +899,7 @@ exports.uniqImeiAndPhone = async (col, value, table, login, id) => {
                     ELSE NULL
                 END AS matched_column
             FROM ${table}
-            WHERE ${col} = @${col} AND login = @login AND idObject <> @id
+            WHERE ${col} = @${col} AND idObject <> @id
         `;
         const result = await pool.request()
             .input(`${col}`, value)
@@ -912,12 +919,11 @@ exports.validationCloneGroupName = async (id, name, login) => {
     try {
         const pool = await connection;
         const query = `
-            SELECT * FROM groups WHERE name_g=@name_g OR name_sub_g=@name_sub_g
+            SELECT * FROM object_table WHERE name_g=@name_g
                 
         `;
         const result = await pool.request()
             .input('name_g', name)
-            .input('name_sub_g', name)
             .input('login', login)
             .query(query);
 
@@ -956,146 +962,60 @@ exports.deleteIdToRowsTime = async (data, id, login) => {
 
 
 exports.updateObject = async (object) => {
+    console.log(object)
     try {
         const pool = await connection;
-        const updateModel = `UPDATE objects SET data = @data, login = @login,idObject=@idObject,port=@port,typeDevice=@typeDevice,imei=@imei,adress=@adress,number=@number,nameObject=@nameObject,
-         typeObject=@typeObject WHERE login = @login AND idObject = @idObject`;
+        const updateModel = `UPDATE object_table SET marka = @marka,model = @model,vin = @vin,dut = @dut,angle = @angle,data = @data, login = @login,idObject=@idObject,port=@port,typeDevice=@typeDevice,imei=@imei,adress=@adress,phone=@phone,nameObject=@nameObject,
+         typeObject=@typeObject,  gosnomer=@gosnomer WHERE idObject = @idObject`;
         const result = await pool.request()
             .input('data', object.data)
             .input('login', object.login)
             .input('idObject', object.idObject)
             .input('imei', object.imei)
             .input('adress', object.adress)
-            .input('number', object.number)
+            .input('phone', object.number)
             .input('nameObject', object.nameObject)
             .input('typeObject', object.typeObject)
             .input('port', object.port)
             .input('typeDevice', object.typeDevice)
+            .input('marka', object.marka)
+            .input('model', object.model)
+            .input('vin', object.vin)
+            .input('gosnomer', object.gosnomer)
+            .input('dut', object.dut)
+            .input('angle', object.angle)
             .query(updateModel)
 
-        if (result) {
-            await databaseService.updateObjectToGroups(object)
-            return 'Объект обновлен'
+        return 'Объект обновлен'
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
+
+
+exports.updateGroup = async (object) => {
+    try {
+        const pool = await connection;
+        const select = `SELECT id FROM object_table WHERE idg=@idg`
+        const res = await pool.request()
+            .input('idg', object.idg)
+            .query(select);
+        await databaseService.setGroup(object)
+        const id = res.recordset.map(e => e.id)
+        console.log(id)
+        for (let el of id) {
+            const post = `DELETE FROM object_table WHERE id=@id`
+            const result = await pool.request()
+                .input('id', el)
+                .query(post);
         }
+        return 'Группа изменена'
     }
+
     catch (e) {
-        console.log(e)
-    }
-}
-
-exports.updateObjectToGroups = async (object) => {
-    try {
-        const pool = await connection;
-        const updateModel = `UPDATE groups SET idObject=@idObject,nameObject=@nameObject WHERE  idObject = @idObject`;
-        const result = await pool.request()
-            .input('idObject', object.idObject)
-            .input('nameObject', object.nameObject)
-            .query(updateModel)
-    }
-    catch (e) {
-        console.log(e)
-    }
-
-}
-
-
-exports.updateGroup = async (object, prefix) => {
-    try {
-        const pool = await connection;
-        const query = `INSERT INTO groups (login, data, idg, name_g, id_sub_g,name_sub_g,idObject, nameObject)
-            VALUES(@login, @data, @idg, @name_g,@id_sub_g, @name_sub_g,@idObject, @nameObject)`;
-        const updateModel = `UPDATE groups SET data = @data, idg = @idg, name_g=@name_g, id_sub_g=@id_sub_g, name_sub_g=@name_sub_g WHERE login = @login AND idg = @id_sub_g`;
-
-        const result = await databaseService.getIdToRows(object.id, object.login)
-        object.arraySubg.forEach(async el => {
-            //ищем все строки по id подгрупп которые должны быть добавлены
-            const results = await databaseService.getIdToRows(el.id_sub_g, object.login)
-            const objectsToSub = results.map(e => {
-                return { idObject: e.idObject, nameObject: e.nameObject }
-            })
-            if (results[0].idg === el.id_sub_g) {
-                const res = await pool.request()
-                    .input('login', object.login)
-                    .input('data', object.data)
-                    .input('idg', object.id)
-                    .input('name_g', object.name)
-                    .input('id_sub_g', el.id_sub_g)
-                    .input('name_sub_g', el.name_sub_g)
-                    .query(updateModel);
-            }
-            //получаем уникальные строки с объектами которые есть в подгруппах
-            if (results[0].id_sub_g === el.id_sub_g) {
-                [...new Set(objectsToSub.map(JSON.stringify))].map(JSON.parse).map(async e => {
-                    const res = await pool.request()
-                        .input('login', object.login)
-                        .input('data', object.data)
-                        .input('idg', object.id)
-                        .input('name_g', object.name)
-                        .input('id_sub_g', el.id_sub_g)
-                        .input('name_sub_g', el.name_sub_g)
-                        .input('idObject', e.idObject)
-                        .input('nameObject', e.nameObject)
-                        .query(query);
-                })
-            }
-        })
-        let idg;
-        result.forEach(async e => {
-            if (idg !== e.idg) {
-                object.arrayObjects.forEach(async it => {
-                    const result = await pool.request()
-                        .input('login', object.login)
-                        .input('data', object.data)
-                        .input('idg', prefix === 'sub' ? e.idg : object.id)
-                        .input('name_g', prefix === 'sub' ? e.name_g : object.name)
-                        .input('id_sub_g', prefix === 'sub' ? object.id : null)//e.id_sub_g)
-                        .input('name_sub_g', prefix === 'sub' ? object.name : null)//e.name_sub_g)
-                        .input('idObject', it.idObject)
-                        .input('nameObject', it.nameObject)
-                        .query(query);
-                })
-                idg = e.idg
-            }
-            else {
-                null
-            }
-        })
-        const twoDimensionalArray = Array.from(
-            result.reduce((map, obj) => {
-                if (obj.id_sub_g !== null) {
-                    const existingSubg = map.get(obj.id_sub_g);
-                    if (!existingSubg) {
-                        map.set(obj.id_sub_g, {
-                            id_sub_g: obj.id_sub_g,
-                            name_sub_g: obj.name_sub_g,
-                            objects: [],
-                        });
-                    }
-                    map.get(obj.id_sub_g).objects.push(obj);
-                }
-                return map;
-            }, new Map()).values()
-        );
-        await databaseService.deleteIdToRowsTime(object.data, object.id, object.login)
-        twoDimensionalArray.forEach(async item => {
-            const res = await databaseService.getIdToRows(item.id_sub_g, object.login)
-            if (res.length === 0) {
-                item.objects.forEach(async e => {
-                    const res = await pool.request()
-                        .input('login', object.login)
-                        .input('data', object.data)
-                        .input('idg', item.id_sub_g)
-                        .input('name_g', item.name_sub_g)
-                        .input('id_sub_g', null)
-                        .input('name_sub_g', null)
-                        .input('idObject', e.idObject)
-                        .input('nameObject', e.nameObject)
-                        .query(query);
-                })
-            }
-        })
-        return 'Группа изменена';
-    } catch (e) {
         console.error(e);
     }
 }
@@ -1105,7 +1025,7 @@ exports.updateGroup = async (object, prefix) => {
 exports.lastIdObject = async () => {
     try {
         const pool = await connection
-        const postModel = `SELECT TOP 1 idObject FROM objects ORDER BY idObject DESC`
+        const postModel = `SELECT TOP 1 idObject FROM object_table WHERE port!='wialon' ORDER BY idObject DESC`
         const result = await pool.request()
             .query(postModel)
         return result.recordset;
@@ -1118,15 +1038,10 @@ exports.lastIdObject = async () => {
 exports.lastIdGroup = async () => {
     try {
         const pool = await connection
-        const postModel = `SELECT TOP 1 idg FROM groups ORDER BY idg DESC`
+        const postModel = `SELECT TOP 1 idg FROM object_table WHERE port!='wialon' AND idg!='idg' ORDER BY idg DESC`
         const result = await pool.request()
             .query(postModel)
-
-        const postModel2 = `SELECT TOP 1 id_sub_g FROM groups ORDER BY id_sub_g DESC`
-        const res = await pool.request()
-            .query(postModel2)
-        const id = Math.max(Number(result.recordset[0].idg), Number(res.recordset[0].id_sub_g))
-        return id;
+        return result.recordset;
     }
     catch (e) {
         console.log(e)
@@ -1134,30 +1049,111 @@ exports.lastIdGroup = async () => {
 }
 
 exports.setGroup = async (object) => {
-    //  console.log(object)
-    const login = object.login
-    const time = object.data
-    const idg = object.idg
-    const name_g = object.name_g
+    console.log(object)
+    const login = object.login;
+    const time = object.data;
+    const idg = object.idg;
+    const name_g = object.name_g;
+    const face_company = object.face
+    const number_company = object.contact
     try {
-        const pool = await connection
-        const postModel = `
-            INSERT INTO groups (login, data, idg, name_g, idObject, nameObject)
-            VALUES (@login, @data, @idg, @name_g, @idObject, @nameObject)
-        `;
-        object.arrayObjects.forEach(async el => {
-            const result = await pool.request()
+        const pool = await connection;
+        const post = `SELECT * FROM object_table WHERE idObject=@idObject`
+
+        for (const el of object.arrayObjects) {
+            const res = await pool.request()
                 .input('login', login)
-                .input('data', time)
-                .input('idg', idg)
+                .input('data', String(time)) // Предполагая, что время в Unix timestamp
+                .input('idg', String(idg))
                 .input('name_g', name_g)
                 .input('idObject', el.idObject)
                 .input('nameObject', el.nameObject)
-                .query(postModel);
-        });
-        return 'Объект создан'
+                .input('face_company', face_company)
+                .input('number_company', number_company)
+                .query(post);
+            //    console.log(res.recordset)
+
+            if (res.recordset[0].idg === 'idg') {
+                const updateModel = `
+                    UPDATE object_table
+                    SET data = @data,
+                        idg = @idg,
+                        name_g=@name_g,
+                        face_company=@face_company,
+                        number_company=@number_company
+                                        WHERE idObject=@idObject
+                `;
+                const res = await pool.request()
+                    .input('login', login)
+                    .input('data', String(time)) // Предполагая, что время в Unix timestamp
+                    .input('idObject', el.idObject)
+                    .input('idg', String(idg))
+                    .input('name_g', name_g)
+                    .input('face_company', face_company)
+                    .input('number_company', number_company)
+                    .query(updateModel);
+            }
+            /* else if (res.recordset[0].port === 'wialon') {
+                 const updateModel = `
+                     UPDATE object_table
+                     SET data = @data,
+                         idg = @idg,
+                         name_g=@name_g,
+                         face_company=@face_company,
+                         number_company=@number_company
+                                         WHERE idObject=@idObject
+                 `;
+                 const res = await pool.request()
+                     .input('login', login)
+                     .input('data', String(time)) // Предполагая, что время в Unix timestamp
+                     .input('idObject', el.idObject)
+                     .input('idg', String(idg))
+                     .input('name_g', name_g)
+                     .input('face_company', face_company)
+                     .input('number_company', number_company)
+                     .query(updateModel);
+             }*/
+            else {
+                const obj = res.recordset[0]
+                obj.login = login
+                obj.data = time
+                obj.idg = idg
+                obj.name_g = name_g
+                obj.number_company = number_company
+                obj.face_company = face_company
+                console.log(obj)
+                const post = `INSERT INTO object_table(login, data, idg, name_g, idObject, nameObject,imei,phone, typeObject,
+                typeDevice,adress, port,marka,model,dut,angle, gosnomer,face_company,number_company)
+                VALUES(@login, @data, @idg, @name_g,  @idObject, @nameObject,@imei,@phone, @typeObject,
+                @typeDevice,@adress, @port,@marka,@model,@dut,@angle, @gosnomer,@face_company,@number_company)`
+                await pool.request()
+                    .input('login', obj.login)
+                    .input('data', String(obj.data))
+                    .input('idg', String(obj.idg))
+                    .input('name_g', obj.name_g)
+                    .input('idObject', obj.idObject)
+                    .input('nameObject', obj.nameObject)
+                    .input('imei', obj.imei)
+                    .input('phone', obj.phone)
+                    .input('typeObject', obj.typeObject)
+                    .input('typeDevice', obj.typeDevice)
+                    .input('adress', obj.adress)
+                    .input('port', obj.port)
+                    .input('marka', obj.marka)
+                    .input('model', obj.model)
+                    .input('dut', obj.dut)
+                    .input('angle', obj.angle)
+                    .input('gosnomer', obj.gosnomer)
+                    .input('face_company', obj.face_company)
+                    .input('number_company', obj.number_company)
+                    .query(post);
+            }
+        }
+
+        return 'Обработка завершена';
     } catch (e) {
-        console.log(e);
+        console.error(e);
+        return 'Ошибка при обработке данных';
     }
 };
 exports.setSubGroups = async (subgroups, object) => {
@@ -1234,24 +1230,33 @@ exports.setSubGroups = async (subgroups, object) => {
 };
 
 exports.saveObject = async (object) => {
+    console.log('тута???')
     try {
         const pool = await connection
         const postModel = `
-            INSERT INTO objects (adress, data, idObject, imei, login, nameObject, number, port, typeDevice, typeObject)
-            VALUES (@adress, @data, @idObject, @imei, @login, @nameObject, @number, @port, @typeDevice, @typeObject)
+            INSERT INTO object_table (adress, data, name_g,idObject, imei, login,idg, nameObject, phone, port, typeDevice, typeObject, marka,model,vin,gosnomer,dut,angle)
+            VALUES (@adress, @data,@name_g, @idObject, @imei, @login, @idg,@nameObject, @phone, @port, @typeDevice, @typeObject,@marka,@model,@vin,@gosnomer,@dut,@angle)
         `;
 
         const result = await pool.request()
             .input('adress', object.adress)
             .input('data', object.data)
+            .input('idg', object.idg)
+            .input('name_g', object.name_g)
             .input('idObject', object.idObject)
             .input('imei', object.imei)
             .input('login', object.login)
             .input('nameObject', object.nameObject)
-            .input('number', object.number)
+            .input('phone', object.number)
             .input('typeDevice', object.typeDevice)
             .input('port', object.port)
             .input('typeObject', object.typeObject)
+            .input('marka', object.marka)
+            .input('model', object.model)
+            .input('vin', object.vin)
+            .input('gosnomer', object.gosnomer)
+            .input('dut', object.dut)
+            .input('angle', object.angle)
             .query(postModel);
         return 'Объект создан'
     } catch (e) {
@@ -1263,9 +1268,8 @@ exports.saveObject = async (object) => {
 exports.deleteObject = async (login, idObject) => {
     try {
         const pool = await connection
-        const post = `DELETE objects WHERE login=@login AND idObject = @idObject`
+        const post = `DELETE object_table WHERE  idObject = @idObject`
         const result = await pool.request()
-            .input('login', login)
             .input('idObject', Number(idObject))
             .query(post)
         return 'Объект удален'
@@ -1291,12 +1295,10 @@ exports.deleteObjectInGroup = async (login, idObject) => {
 }
 
 exports.deleteGroupToBaseGroups = async (login, id) => {
-    console.log(login, id)
     try {
         const pool = await connection
-        const post = `DELETE groups WHERE login=@login AND idg =@id OR login=@login AND id_sub_g=@id`
+        const post = `DELETE FROM object_table WHERE idg =@id`
         const result = await pool.request()
-            .input('login', login)
             .input('id', id)
             .query(post)
         return 'Группа удалена'
@@ -1305,6 +1307,7 @@ exports.deleteGroupToBaseGroups = async (login, id) => {
         console.log(e)
     }
 }
+
 
 
 exports.eventFindToBase = async (login) => {
@@ -1588,8 +1591,9 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
             return 0;
         }
     });
-    const params = save.result.length !== 0 ? true : false
-    return [model, models, data, osi, el, params]
+    const params = save.result.length !== 0 ? 'true' : 'false'
+    // console.log(model, models, data, osi, el, params)
+    return [model, models, data, osi, el, params, object]
 
 }
 
@@ -2092,34 +2096,33 @@ exports.barViewToBase = async (idw, count) => {
     }
 }
 
-exports.iconSaveToBase = async (activePost, param, coef, id, idw) => {
+exports.iconSaveToBase = async (activePost, param, id, idw) => {
+    console.log(activePost, param, id, idw)
     try {
         const selectBase = `SELECT icons FROM icon WHERE idw=@idw AND icons=@icons`;
         const pool = await connection;
         let results = await pool.request()
-            .input('idw', sql.Int, idw)
+            .input('idw', idw)
             .input('icons', sql.VarChar, id)
             .query(selectBase);
 
         if (results.recordset.length === 0) {
-            const postModel = `INSERT INTO icon(idw, nameCar, params, coef, icons) 
-                               VALUES(@idw, @activePost, @param, @coef, @icons)`;
+            const postModel = `INSERT INTO icon(idw, nameCar, params, icons) 
+                               VALUES(@idw, @activePost, @param, @icons)`;
             results = await pool.request()
-                .input('idw', sql.Int, idw)
+                .input('idw', idw)
                 .input('activePost', sql.VarChar, activePost)
                 .input('param', sql.VarChar, param)
-                .input('coef', sql.VarChar, coef)
                 .input('icons', sql.VarChar, id)
                 .query(postModel);
         }
         else {
             const sqlUpdate = `UPDATE icon SET  idw=@idw, nameCar=@activePost, params=@param,
-                              coef=@coef, icons=@icons WHERE  idw=@idw AND icons=@icons`;
+                            icons=@icons WHERE  idw=@idw AND icons=@icons`;
             results = await pool.request()
-                .input('idw', sql.Int, idw)
+                .input('idw', idw)
                 .input('activePost', sql.VarChar, activePost)
                 .input('param', sql.VarChar, param)
-                .input('coef', sql.VarChar, coef)
                 .input('icons', sql.VarChar, id)
                 .query(sqlUpdate);
         }
@@ -2228,6 +2231,7 @@ exports.techViewAllToBase = async (idw) => {
 }
 
 exports.summaryToBase = async (idw, arr, data) => {
+    // console.log(arr)
     const value = []
     value.push(idw)
     value.push(data)

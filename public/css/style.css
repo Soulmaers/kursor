@@ -135,12 +135,14 @@ body {
 }
 
 
-.secondFlash2 {
+.secondFlash2,
+.pen_servis {
   width: 17px;
   background-color: rgba(6, 28, 71, 1);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
 
 .strR {
@@ -204,7 +206,268 @@ i.choice {
 }
 
 
+.global_inner {
+  border-radius: 5px;
+  width: 80%;
+  height: 95vh;
+  left: 20%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  z-index: 2000;
+  padding: 5px;
+  background-color: rgba(6, 28, 71, 1);
+  border: 3px solid #fff;
+  box-sizing: border-box;
 
+
+}
+
+.header_inner {
+  height: 30px;
+  width: 100%;
+  background-color: rgba(6, 28, 71, 1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.info_inner {
+  margin: 0 10px;
+  padding: 0;
+  color: #fff;
+  font-weight: bold;
+}
+
+.close_settings_inner {
+  margin: 0 10px;
+  color: #fff
+}
+
+.inner_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 90vh;
+}
+
+.left_inner,
+.right_inner {
+  height: 100%;
+  box-sizing: border-box;
+  width: 23%;
+  border: 2px solid rgba(6, 28, 71, 1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.oblako_inner {
+  width: 95%;
+  padding: 10px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border: 3px solid rgba(6, 28, 71, 1);
+  margin: 8px 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: rgba(6, 28, 71, 1);
+  border-radius: 10px;
+}
+
+.oblako_inner:last-child {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.title_inner {
+  width: 40%;
+  font-size: 1.3rem;
+}
+
+.oblako_inner:last-child .title_inner,
+.oblako_inner:last-child .value_inner {
+  width: 90%;
+}
+
+.value_inner {
+  width: 50%;
+  font-size: 1rem;
+}
+
+.value_center_inner {
+  font-size: 1rem;
+}
+
+.wrap_inner {
+  width: 95%;
+  border: 3px solid rgba(6, 28, 71, 1);
+  height: 30%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1px;
+  border-radius: 10px;
+}
+
+.picture_inner {
+  padding: 2px;
+  margin: 2px;
+  width: 93%;
+  height: 90%;
+  background-image: url(../image/traktor.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.nomer_inner {
+  width: 120px;
+  height: 30px;
+  border: 3px solid rgba(6, 28, 71, 1);
+  border-radius: 5px;
+  position: absolute;
+  left: 3%;
+  top: 3%;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: rgba(6, 28, 71, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map_inner {
+  margin: 2px;
+  width: 95%;
+  border: 3px solid rgba(6, 28, 71, 1);
+  height: 40%;
+  border-radius: 10px;
+}
+
+.map_servis_id {
+  width: 100%;
+  height: 100%;
+}
+
+.koordinatos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  margin: 2px;
+  width: 95%;
+  border: 3px solid rgba(6, 28, 71, 1);
+  height: 30%;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: rgba(6, 28, 71, 1);
+  border-radius: 10px;
+}
+
+.center_inner {
+  height: 100%;
+  box-sizing: border-box;
+  width: 54%;
+  border: 3px solid rgba(6, 28, 71, 1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.navi_inner {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  background-color: #fff;
+}
+
+.wrap_btn_inner {
+  padding: 2px;
+  width: 25%;
+  border: 2px solid rgba(6, 28, 71, 1);
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.btn_inner {
+  padding: 5px 0;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: rgba(6, 28, 71, 1);
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+}
+
+.activ_inner {
+  background-color: #fff;
+  color: rgba(6, 28, 71, 1);
+}
+
+
+.btn_inner:hover {
+  background-color: gray;
+}
+
+.oblako_calendar_inner {
+  position: relative;
+}
+
+.calendar_inner {
+  display: none;
+}
+
+.body_inner {
+  margin: 10px;
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  color: rgba(6, 28, 71, 1);
+  font-size: 1.4rem;
+  font-weight: bold;
+  background-color: #fff;
+
+}
+
+
+
+.to_inner,
+.svodka_inner,
+.zaglushka_inner {
+  display: none;
+  width: 90%;
+  height: 500px;
+  border: 2px solid rgba(6, 28, 71, 1);
+}
+
+.activ_body_inner {
+  display: flex;
+}
+
+
+.oblako_center_inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 3px solid rgba(6, 28, 71, 1);
+  margin: 10px 0;
+  width: 60%;
+  border-radius: 10px;
+}
 
 .wrapperLogs {
   width: 870px;
@@ -1543,7 +1806,6 @@ div.spoyler {
   display: flex;
   overflow-y: auto;
   flex-wrap: wrap;
-  height: 400px;
   padding: 0 5px;
   margin: 0;
 
@@ -2212,6 +2474,17 @@ div.spoyler {
   cursor: pointer;
 }
 
+.icon_inner {
+  position: absolute;
+  left: 5px;
+  top: 4px;
+  width: 20px;
+  height: 20px;
+  background-image: url(../image/cal.png);
+  background-size: contain;
+  background-position: center center;
+  cursor: pointer;
+}
 
 .icon_stata {
   position: absolute;
@@ -2477,7 +2750,8 @@ div.spoyler {
 }
 
 .calendar_graf,
-.calendar_track {
+.calendar_track,
+.calendar_inner {
   display: none;
   flex-direction: column;
   position: absolute;
@@ -8191,6 +8465,90 @@ i.acEvent {
   border-top: 3px solid rgba(6, 28, 71, 1);
 }
 
+.globalServis {
+  display: none;
+  width: 100%;
+  height: 95vh;
+  background-color: #fff;
+  position: relative;
+}
+
+.wrapper_servis {
+  display: flex;
+  width: 100%;
+}
+
+.list_servis {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header_servis {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.rows_servis {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  font-size: 0.8rem;
+
+}
+
+.rows_servis:hover {
+  background-color: lightgray;
+}
+
+
+.special_first {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.body_servis {
+  width: 100%;
+  overflow-y: auto;
+  flex-grow: 1;
+  scrollbar-width: none;
+  /* для Firefox */
+  -ms-overflow-style: none;
+  /* для Internet Explorer и Edge */
+}
+
+.body_servis::-webkit-scrollbar {
+  display: none;
+  /* для Chrome, Safari и Opera */
+}
+
+.title_servis {
+  width: 9%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgba(6, 28, 71, 1);
+  margin: 0;
+  padding: 0 1px;
+  color: rgba(6, 28, 71, 1);
+  box-sizing: border-box;
+}
+
+.long {
+  width: 11%;
+}
+
 .globalMaps {
   position: relative;
 }
@@ -9422,14 +9780,19 @@ i.changeColorCheck {
   left: 5px;
 }
 
-
+.map_servis {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightcyan;
+}
 
 
 .create_object_modal,
 .create_group_modal {
   display: none;
   width: 1200px;
-  height: 900px;
+  height: 95vh;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -9442,9 +9805,10 @@ i.changeColorCheck {
 
 }
 
+
 .body_modal {
   width: 98%;
-  height: 850px;
+  height: 95%;
   background-color: #fff;
   border-radius: 0px 5px 5px 5px;
   display: flex;
@@ -9685,7 +10049,6 @@ i.toggle_list {
 .middle_level {
   padding: 5px;
   width: 95%;
-  height: 700px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9695,8 +10058,7 @@ i.toggle_list {
 }
 
 .container_middle_level {
-  width: 30%;
-  height: 690px;
+  width: 48%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9718,13 +10080,14 @@ i.toggle_list {
 
 .body_middle_level {
   width: 100%;
-  height: 280px;
+  height: 60vh;
+  overflow-y: auto;
 }
 
 
 .element_to_controll {
   position: absolute;
-  right: 360px;
+  right: 556px;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -43,6 +43,7 @@ class SummaryStatistiks {
 
     async init() {
         console.time('sum')
+        //  console.log(this.object)
         const idwArray = helpers.format(this.object)        // Запускаем все асинхронные операции одновременно и ждем их завершения
         const dataPromises = idwArray.map(el => this.getSensorsAndParametrs(el[0], el[el.length - 1])); //получение структуры данных по параметрам
         const dataResults = await Promise.allSettled(dataPromises);

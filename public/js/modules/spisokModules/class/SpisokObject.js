@@ -49,8 +49,10 @@ export class SpisokObject {
 
     grennColorPref(list) {
         const el = [...list].find(el => el.id === this.element)
-        el.classList.add('border')
-        el.children[0].children[0].style.color = 'green'
+        if (el) {
+            el.classList.add('border')
+            el.children[0].children[0].style.color = 'green'
+        }
     }
     simulateLoader() {
         let progress = 0;
@@ -311,7 +313,6 @@ export class SpisokObject {
         }
     }
     coloring(shina, nameCar, params, arg, osi, engine) {
-        console.log(nameCar, engine)
         if (params.result) {
             const modelUniqValues = convert(params.result)
             arg.result.forEach((el) => {
@@ -336,9 +337,9 @@ export class SpisokObject {
                 const group = document.createElement('div')
                 group.classList.add('groups')
                 el[0][el[0].length - 1] === 'kursor' ? group.classList.add('kursorgroups') : group.classList.add('wialongroups')
-                const nameGroup = el[0][6].replace(/\s/g, '_');
+                const nameGroup = el[0][7].replace(/\s/g, '_')
                 group.classList.add(`${nameGroup}`)
-                group.setAttribute('id', el[0][7])
+                group.setAttribute('id', el[0][8])
                 group.style.display = 'flex',
                     group.style.flexDirection = 'column'
                 group.style.width = 100 + '%',
@@ -390,47 +391,6 @@ export class SpisokObject {
                 titleModal.appendChild(del)
                 titleModal.appendChild(sett)
 
-                let sub = false
-                if (el[0].length > 8 && el[0][8].sub.length !== 0) {
-                    sub = true
-                    const subgroupAll = document.createElement('div');
-                    subgroupAll.classList.add('subgroupAll');
-                    group.appendChild(subgroupAll)
-                    el[0][8].sub.forEach(item => {
-                        const nameSubGroup = item[0][6]
-                        const subgroup = document.createElement('div');
-                        subgroup.classList.add('subgroup');
-                        subgroup.classList.add(`${nameSubGroup}`)
-                        subgroup.setAttribute('rel', `${nameSubGroup}`)
-                        subgroup.setAttribute('id', item[0][7])
-                        subgroup.style.display = 'flex',
-                            subgroup.style.flexDirection = 'column'
-                        subgroup.style.alignItems = 'start'
-                        subgroup.style.width = 100 + '%'
-                        subgroupAll.appendChild(subgroup)
-                        const subTitle = document.createElement('div');
-                        subTitle.classList.add('subTitle');
-                        subTitle.classList.add('titlekursor');
-                        subTitle.innerHTML = `<i class="fa fa-check chekHidden subcheck"></i> 
-                    ${item[0][6]} (${item.length})
-                     <i class="fas fa-times deleteGroup"></i>
-                      <i class="fas fa-wrench settingsGroup"></i>
-                      <i class="fas fa-sort-amount-up filterV"></i>
-                      <i class="fas fa-sort-amount-down filterVN"></i>`
-                        subgroup.appendChild(subTitle);
-                        const hiddenModal = document.createElement('div')
-                        hiddenModal.classList.add('hiddenSubModal')
-                        subgroup.appendChild(hiddenModal);
-                        const listArr = document.querySelector(`.${nameGroup}`).querySelector(`.${nameSubGroup}`)
-                        for (let elem of item) {
-                            if (Object.values(elem[0]).length !== 0) {
-                                this.createIconsAndLeftSpisok(elem, this.final, listArr, nameGroup, 'kursor') // создание объектов, покраска колес, установка статусов и значений датчиков
-                            }
-                        }
-
-
-                    })
-                }
                 const hiddenModal = document.createElement('div')
                 hiddenModal.classList.add('hiddenModal')
                 group.classList.add(`${nameGroup}`)
@@ -631,30 +591,20 @@ export class SpisokObject {
         const typeOss = this.createElements(listName, nameCar, listItemCar) //отрисовка объекта в списке
 
         const listCheck = document.createElement('i')
-        listCheck.classList.add('fa')
-        listCheck.classList.add('fa-check')
-        listCheck.classList.add('checkInList')
+        listCheck.classList.add('fa', 'fa-check', 'checkInList')
         listCheck.setAttribute('rel', `${nameCar}`)
         listCheck.setAttribute('id', `${nameCar}`)
         listName.prepend(listCheck)
 
         const listDelete = document.createElement('i')
-        listDelete.classList.add('fas')
-        listDelete.classList.add('fa-times')
-        listDelete.classList.add('deleteObject')
+        listDelete.classList.add('fas', 'fa-times', 'deleteObject')
         listDelete.setAttribute('rel', `${nameCar}`)
         listDelete.setAttribute('id', `${nameCar}`)
         listName.prepend(listDelete)
         new Tooltip(listDelete, ['Удалить объект'])
 
         const pref = document.createElement('i')
-        pref.classList.add('fas')
-        pref.classList.add('fa-wrench')
-        pref.classList.add('pref')
-        if (console.log(Number(this.element) === elem[4])) {
-            console.log(listItemCar)
-        }
-
+        pref.classList.add('fas', 'fa-wrench', 'pref')
         pref.style.color = elem[5] === false ? 'red' : 'darkblue'
         listName.prepend(pref)
         new Tooltip(pref, ['Редактировать объект'])
@@ -726,29 +676,32 @@ export class SpisokObject {
     }
 
 
-    format(data, num) {
+    format(datas, num) {
+        const data = datas.filter(e => e.length !== 0);
         if (num === 1) {
             const resultData = data.flat().flatMap(el => {
-                let res = el[2].result.filter(e => e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status, it.meta]).filter(arr => arr.length > 0)
-                if (el.length === 10 && el[8].sub.length !== 0) {
-                    return Object.values(el[8].sub).flat().flatMap(it => it[2].result.filter(e => e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status, it.meta]).filter(arr => arr.length > 0));
-                }
-                return res;
-            })
-            const uniqueArr = Array.from(new Set(resultData.map(subArr => JSON.stringify(subArr)))).map(str => JSON.parse(str));
-            return uniqueArr
-        }
-        else {
-            const subArray = []
-            const resultData = data.flat().flatMap(el => {
-                let res = el[4];
-                if (el.length === 10 && el[8].sub.length !== 0) {
-                    subArray.push(Object.values(el[8].sub).flat().map(it => it[4]))
+                if (!el[2] || !el[2].result) return [];  // Проверка на существование el[2] и el[2].result
+                let res = el[2].result.filter(e => e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status, it.meta]).filter(arr => arr.length > 0);
+                if (el.length === 10 && el[8] && el[8].sub && el[8].sub.length !== 0) {
+                    return Object.values(el[8].sub).flat().flatMap(it => {
+                        if (!it[2] || !it[2].result) return [];  // Проверка на существование it[2] и it[2].result
+                        return it[2].result.filter(e => e.value !== null).map(it => [it.sens, it.params, Number(it.idw), Number(it.value), it.status, it.meta]).filter(arr => arr.length > 0);
+                    });
                 }
                 return res;
             });
+            const uniqueArr = Array.from(new Set(resultData.map(subArr => JSON.stringify(subArr)))).map(str => JSON.parse(str));
+            return uniqueArr;
+        } else {
+            const subArray = [];
+            const resultData = data.flat().flatMap(el => {
+                if (el.length === 10 && el[8] && el[8].sub && el[8].sub.length !== 0) {
+                    subArray.push(Object.values(el[8].sub).flat().map(it => it[4]));
+                }
+                return el[4] || [];  // Убедитесь, что el[4] существует, иначе возвращайте пустой массив
+            });
             const uniqueArr = [...new Set(resultData.concat(subArray.flat()))];
-            return uniqueArr
+            return uniqueArr;
         }
     }
 }

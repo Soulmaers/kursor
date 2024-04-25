@@ -54,9 +54,9 @@ export class IconStatus {
                 param = arrSpreed.splice(arrSpreed[0] + 1, arrSpreed.indexOf(el)).join('')
             }
         })
-        const coef = this.changeParams.value
+
         const id = document.querySelector('.acto').id
-        await this.postIconParams(param, coef, id)
+        await this.postIconParams(param, id)
     }
 
     //вывод и скрытие модального окна
@@ -91,20 +91,40 @@ export class IconStatus {
         btnsens[0].style.display = 'none'
         btnsens[1].style.display = 'none'
         btnsens[2].style.display = 'flex'
+        this.close(sensors, wRight)
+    }
+
+    close(sensors, wRight) {
+        const closeIconConfig = document.querySelector('.closeIconConfig')
+        console.log(closeIconConfig)
+        closeIconConfig.addEventListener('click', () => {
+            const tiresActivt = document.querySelector('.tiresActivt')
+            tiresActivt ? tiresActivt.classList.remove('tiresActivt') : null
+            const tiresActiv = document.querySelector('.tiresActiv')
+            tiresActiv ? tiresActiv.classList.remove('tiresActiv') : null
+            const acto = document.querySelector('.acto')
+            acto ? acto.classList.remove('acto') : null
+            document.querySelector('.actBTN') ? document.querySelector('.actBTN').classList.remove('actBTN') : null
+            sensors.style.display = 'none'
+            wRight.style.zIndex = 0,
+                document.querySelector('.popup-background').style.display = 'none'
+        })
     }
     //сохранение назначенного параметра
-    async postIconParams(param, coef, id) {
+    async postIconParams(param, id) {
         const activePost = this.nameObject
         const idw = this.id
+        console.log(activePost, param, id, idw)
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ activePost, param, coef, id, idw }))
+            body: (JSON.stringify({ activePost, param, id, idw }))
         }
         const par = await fetch('/api/icon', params)
         const paramssAve = await par.json()
+        console.log(paramssAve)
         this.displayIconValues(idw)
 
     }
@@ -144,7 +164,7 @@ export class IconStatus {
         editParams.result.forEach(item => {
             params.forEach(e => {
                 if (e[1] === item.params) {
-                    this.valueparamsObject[item.icons] = Number(e[3]) * item.coef
+                    this.valueparamsObject[item.icons] = Number(e[3])
                 }
             })
         })
@@ -260,12 +280,15 @@ export class IconStatus {
     //вывод значений в дом элементы
     viewValueElement() {
         const role = document.querySelector('.role').getAttribute('rel')
+        console.log(this.valueparamsObject)
         this.card.forEach(elem => {
             this.params.result.forEach(it => {
+                //   console.log(it.icons, elem.id)
                 if (it.icons === elem.id) {
                     role === 'Администратор' ? new Tooltip(elem, [elem.getAttribute('rel'), it.params]) : new Tooltip(elem, [elem.getAttribute('rel')]);
                 }
             })
+
             const parametrs = this.valueparamsObject[elem.id] === -348201.3876 ? '---' : this.valueparamsObject[elem.id]
             switch (elem.id) {
                 case 'odom-card':
@@ -278,6 +301,7 @@ export class IconStatus {
                     elem.children[0].textContent = parametrs
                     break;
                 case 'moto-card':
+                    console.log(parametrs)
                     elem.children[0].textContent = parametrs !== '---' ? parametrs.toFixed(1) : '---'
                     break;
                 case 'akb-card':

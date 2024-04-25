@@ -32,13 +32,15 @@ export class DOMHelper {
         });
     }
 
-    static createListItems(containerSelector, count, className) {
+    static createListItems(containerSelector, count, className, params) {
         const container = document.querySelector(containerSelector);
-        for (let i = 0; i < count; i++) {
+
+        params.forEach((el, index) => {
             const li = document.createElement('li');
             li.className = className;
+            li.textContent = `${el.params}:${el.value !== null ? el.value : '-'}`
             container.append(li);
-        }
+        })
     }
 
 }

@@ -7,24 +7,6 @@ module.exports.alarmFind = async (req, res) => {
     res.json(alarms)
 }
 
-/*
-let old = 0
-module.exports.alert = async (req, res) => {
-    const alert = databaseService.myVariable
-    if (alert) {
-        if (alert[3] !== old) {
-            console.log('1')
-            res.json(alert)
-            old = alert[3]
-        }
-        else {
-            res.json(null)
-        }
-    }
-    else {
-        res.json(null)
-    }
-}*/
 
 module.exports.logs = async (req, res) => {
     const newdata = req.body.newdata
@@ -39,6 +21,7 @@ module.exports.logsView = async (req, res) => {
     const tr = req.body.tr
     const count = req.body.count
     const val = await databaseService.logsFindToBase(idw) //получение логов из БД
+    // console.log(val)
     const valnew = val.map(el => el)
     const quant = val.length
     val.sort((a, b) => {

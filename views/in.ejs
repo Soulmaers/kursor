@@ -92,7 +92,8 @@
                 <a class="monitoring karta add_navi" rel="karta" href="#"><i
                         class="w20 fas fa-map-marked-alt"></i>Карта</a>
                 <a class="monitoring reports add_navi" rel="reports" href="#"><i class="w20 fas fa-print"></i>Отчеты</a>
-                <a class="monitoring sklad add_navi" rel="sklad" href="#"><i class="w20 fas fa-industry"></i>Склад</a>
+                <a class="monitoring servis add_navi" rel="servis" href="#"><i class="w20 fas fa-wrench"></i>Сервис</a>
+                <a class=" monitoring sklad add_navi" rel="sklad" href="#"><i class="w20 fas fa-industry"></i>Склад</a>
             </div>
         </div>
         <div class="main_menu">
@@ -1000,7 +1001,145 @@
             </div>
 
     </div>
-    </main>
+    <section class="allsec globalServis">
+        <div class="wrapper_servis">
+            <div class="list_servis">
+                <div class="header_servis">
+                    <h4 class="title_servis long">Модель</h4>
+                    <h4 class="title_servis long">VIN</h4>
+                    <h4 class="title_servis long">Компания Владелец</h4>
+                    <h4 class="title_servis long">Контактное лицо</h4>
+                    <h4 class="title_servis long">Гос. номер</h4>
+                    <h4 class="title_servis">Наработка моточасы</h4>
+                    <h4 class="title_servis">Моточасы до ТО</h4>
+                    <h4 class="title_servis">ТО №</h4>
+                    <h4 class="title_servis">Дата последнего ТО</h4>
+                    <h4 class="title_servis">Дата предполагаемого ТО</h4>
+                    <h4 class="title_servis">Осталось дней до ТО</h4>
+                </div>
+                <div class="body_servis">
+
+                </div>
+            </div>
+            <div class="pen_servis">
+                <div class="strR">&#10095</div>
+                <div class="strL">&#10094</div>
+            </div>
+            <div class="map_servis" id="mapServis"></div>
+        </div>
+
+        <div class="global_inner">
+            <div class="header_inner">
+                <p class="info_inner">Карточка объекта</p>
+                <div class="close_settings_inner"><i class="fas fa fa-times"></i></div>
+            </div>
+            <div class="inner_container">
+                <div class="left_inner">
+                    <div class="oblako_inner">
+                        <span class="title_inner">Марка:</span>
+                        <span class="value_inner">'-'</span>
+                    </div>
+                    <div class="oblako_inner">
+                        <span class="title_inner">Модель:</span>
+                        <span class="value_inner">'-'</span>
+                    </div>
+                    <div class="oblako_inner">
+                        <span class="title_inner">Vin №:</span>
+                        <span class="value_inner">'-'</span>
+                    </div>
+                    <div class="oblako_inner">
+                        <span class="title_inner">Наработка (м.ч):</span>
+                        <span class="value_inner">'-'</span>
+                    </div>
+                    <div class="oblako_inner">
+                        <span class="title_inner">Пробег (км):</span>
+                        <span class="value_inner">'-'</span>
+                    </div>
+                    <div class="oblako_inner">
+                        <span class="title_inner">Статус:</span>
+                        <span class="value_inner" rel="status">'-'</span>
+                    </div>
+                    <div class="oblako_inner">
+                        <span class="title_inner">Терминал:</span>
+                        <span class="value_inner">'-'</span>
+                    </div>
+                    <div class="oblako_inner">
+                        <span class="title_inner">ДУТ:</span>
+                        <span class="value_inner">'-'</span>
+                    </div>
+                    <div class="oblako_inner">
+                        <span class="title_inner">Время последнего сообщения:</span>
+                        <span class="value_inner">'-'</span>
+                    </div>
+                </div>
+                <div class="center_inner">
+                    <div class="navi_inner">
+                        <div class="wrap_btn_inner">
+                            <div class="btn_inner info_object activ_inner">Информация по объекту</div>
+                        </div>
+                        <div class="wrap_btn_inner">
+                            <div class="btn_inner info_to">Информация по ТО</div>
+                        </div>
+                        <div class="wrap_btn_inner">
+                            <div class="btn_inner info_svodka">Сводка по работе объекта</div>
+                        </div>
+                        <div class="wrap_btn_inner">
+                            <div class="btn_inner info_saglushka">Заглушка</div>
+                        </div>
+                    </div>
+                    <div class="body_inner activ_body_inner">
+                        <div class="oblako_center_inner diler_info">
+                            <span class="title_center_inner">Продавец/Дилер:</span>
+                            <span class="value_center_inner">'-'</span>
+                            <span class="title_center_inner">Контактное лицо:</span>
+                            <span class="value_center_inner">'-'</span>
+                            <span class="value_center_inner">'-'</span>
+                        </div>
+                        <div class="oblako_center_inner oblako_calendar_inner">
+                            <div class="icon_inner" rel="calen_inner"></div>
+                            <div class="calendar_inner">
+                                <input type="text" id="dateranges500" placeholder="Выберите диапазон дат">
+                                <div class="btn_speedStart">
+                                    <button class="btm_formStart">Очистить</button>
+                                    <button class="btm_formStart control">Выполнить</button>
+                                </div>
+                            </div>
+                            <span class="title_center_inner">Дата продажи:</span>
+                            <span class="value_center_inner">'-'</span>
+                        </div>
+                        <div class="oblako_center_inner">
+                            <span class="title_center_inner">Гарантийный период:</span>
+                            <span class="value_center_inner">'-'</span>
+                        </div>
+                        <div class="oblako_center_inner">
+                            <span class="title_center_inner">Клиент/Покупатель:</span>
+                            <span class="value_center_inner">'-'</span>
+                            <span class="title_center_inner">Контактное лицо:</span>
+                            <span class="value_center_inner">'-'</span>
+                            <span class="value_center_inner">'-'</span>
+                        </div>
+
+                    </div>
+                    <div class="body_inner to_inner">ТО</div>
+                    <div class="body_inner svodka_inner">СВОДКА</div>
+                    <div class="body_inner zaglushka_inner">ЗАГЛУШКА</div>
+
+                </div>
+                <div class="right_inner">
+                    <div class="wrap_inner">
+                        <span class="nomer_inner">'-'</span>
+                        <div class="picture_inner"></div>
+                    </div>
+                    <div class="map_inner"></div>
+                    <div class="koordinatos">
+                        <span class="title_inner_geo">Местоположение</span>
+                        <span class="mestopolo">'-'</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
     <div class="settings_users">
         <div class="header_title_settings">
             <p class="info_settings">Настройки</p>
@@ -1355,6 +1494,30 @@
                     <p class="property_modal">Телефонный номер</p><input rel="number" class="field_modal"
                         placeholder="введите телефонный номер">
                 </li>
+                <li class="item_modal">
+                    <p class="property_modal">Марка</p><input rel="marka" class="field_modal"
+                        placeholder="введите марку объекта">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">Модель</p><input rel="model" class="field_modal"
+                        placeholder="введите модель объекта">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">VIN</p><input rel="vin" class="field_modal"
+                        placeholder="введите win-номер объекта">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">Гос. номер</p><input rel="gosnomer" class="field_modal"
+                        placeholder="введите гос-номер объекта">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">ДУТ</p><input rel="dut" class="field_modal"
+                        placeholder="введите тип датчика">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">Угол наклона</p><input rel="angle" class="field_modal"
+                        placeholder="введите ип датчика">
+                </li>
             </ul>
             <div class="footer_modal">
                 <div class="validation_message"></div>
@@ -1369,7 +1532,7 @@
     </div>
     <div class="create_group_modal">
         <div class="header_modal">
-            <p class="title_modales">Новая группа</p><i class="fas fa fa-times closes"></i>
+            <p class="title_modales">Новая группа</p><i class="fas fa fa-times closes_gr"></i>
         </div>
         <div class="body_modal">
             <ul class="list_modal">
@@ -1377,17 +1540,20 @@
                     <p class="property_modal">Имя группы*</p><input class="field_modal" rel='t'
                         placeholder="введите имя группы">
                 </li>
+                <li class="item_modal">
+                    <p class="property_modal">Контактное лицо</p><input class="field_modal" rel='face'
+                        placeholder="введите имя">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">Контакт</p><input class="field_modal" rel='c'
+                        placeholder="введите контакт">
+                </li>
             </ul>
             <div class="middle_level">
                 <div class="container_middle_level">
                     <div class="header_middle_level">Добавить объект</div>
                     <div class="body_middle_level objects_list">
 
-                    </div>
-                </div>
-                <div class="container_middle_level">
-                    <div class="header_middle_level">Добавить группу</div>
-                    <div class="body_middle_level pod_group">
                     </div>
                 </div>
                 <div class="element_to_controll">
@@ -1404,8 +1570,8 @@
             <div class="footer_modal">
                 <div class="validation_message"></div>
                 <div class="button_modal">
-                    <div class="btn_modal cancel">Отмена</div>
-                    <div class="btn_modal ok_modal">ОК</div>
+                    <div class="btn_modal cancel_gr">Отмена</div>
+                    <div class="btn_modal ok_modal_gr">ОК</div>
                 </div>
             </div>
         </div>

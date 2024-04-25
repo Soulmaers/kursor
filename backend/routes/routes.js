@@ -19,7 +19,7 @@ router.post('/api/viewLogs', controllerData.viewLogs)
 router.post('/api/quantityLogs', controllerWialon.quantityLogs)
 
 router.get('/api/wialonObjects', controllerWialon.wialonObjects)
-router.post('/api/wialonObjectsId', controllerWialon.wialonObjectsId)
+router.post('/api/objectsId', controllerWialon.objectsId)
 
 router.get('/api/shablons', controllerWialon.shablons)
 router.post('/api/titleShablon', controllerWialon.titleShablon)

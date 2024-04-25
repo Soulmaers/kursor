@@ -44,9 +44,9 @@ exports.timefn = () => { //форматирование интервала вр�
 }
 exports.format = (data) => {  //форматирование структуры данных
     const resultData = data.flat().flatMap(el => {
-        let res = [Number(el[4]), el[0].message, el[6], el[el.length - 1]];
+        let res = [Number(el[4]), el[0].message, el[7], el[el.length - 1]];
         if (el.length === 10 && el[8].sub && el[8].sub.length !== 0) {
-            return el[8].sub.flat().map(it => [Number(it[4]), it[0].message, it[6], it[it.length - 1]]);
+            return el[8].sub.flat().map(it => [Number(it[4]), it[0].message, it[7], it[it.length - 1]]);
         }
         return [res]; // Обернули res в массив, чтобы сохранить формат двумерного массива
     });
@@ -89,35 +89,30 @@ exports.sortData = (datas) => {  // подготовка вложенности 
             acc[elem.idg] = {
                 idg: elem.idg,
                 name_g: elem.name_g,
-                sub: [],
+                number_company: elem.number_company,
+                face_company: elem.face_company,
                 objects: []
             };
         }
-        if (elem.id_sub_g !== null) {
-            const subExists = acc[elem.idg].sub.some(item => item.id_sub_g === elem.id_sub_g);
-            if (!subExists) {
-                acc[elem.idg].sub.push({
-                    id_sub_g: elem.id_sub_g,
-                    name_sub_g: elem.name_sub_g,
-                    objects: []
-                })
+        acc[elem.idg].objects.push({
+            idObject: elem.idObject,
+            nameObject: elem.nameObject,
+            imei: elem.imei,
+            phone: elem.phone,
+            typeObject: elem.typeObject,
+            typeDevice: elem.typeDevice,
+            port: elem.port,
+            adress: elem.adress,
+            marka: elem.marka,
+            model: elem.model,
+            vin: elem.vin,
+            gosnomer: elem.gosnomer,
+            dut: elem.dut,
+            angle: elem.angle,
+            face: elem.face_company,
+            number: elem.number_company
+        })
 
-            }
-            acc[elem.idg].sub.find(item => item.id_sub_g === elem.id_sub_g).objects.push({
-                idObject: elem.idObject,
-                nameObject: elem.nameObject,
-                imei: elem.imei,
-                phone: elem.phone
-            })
-        }
-        else {
-            acc[elem.idg].objects.push({
-                idObject: elem.idObject,
-                nameObject: elem.nameObject,
-                imei: elem.imei,
-                phone: elem.phone
-            })
-        }
         return acc;
     }, {}));
     return res

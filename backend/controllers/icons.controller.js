@@ -13,8 +13,7 @@ exports.icon = async (req, res) => {
     const param = req.body.param
     const activePost = req.body.activePost
     const idw = req.body.idw
-    const coef = req.body.coef
-    const icons = await databaseService.iconSaveToBase(activePost, param, coef, id, idw) //сохранение в БД назначенных параметров на иконки
+    const icons = await databaseService.iconSaveToBase(activePost, param, id, idw) //сохранение в БД назначенных параметров на иконки
     res.json({ icons })
 }
 

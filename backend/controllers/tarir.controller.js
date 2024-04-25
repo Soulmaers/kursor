@@ -22,7 +22,9 @@ exports.tarirView = async (req, res) => {
 }
 
 exports.webhook = async (req, res) => {
-    const result = await databaseService.tarirViewToBase(25766831)
+    const param1 = req.query.param1;
+    console.log(param1)
+    const result = await databaseService.techViewAllToBase(param1)
     res.json(result)
 }
 

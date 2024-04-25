@@ -133,8 +133,7 @@ exports.validationCloneGroupName = async (req, res) => {
 
 exports.updateGroup = async (req, res) => {
     const object = req.body.object
-    const prefix = req.body.prefix
-    const result = await databaseService.updateGroup(object, prefix) //обновление состава группы в БД
+    const result = await databaseService.updateGroup(object) //обновление состава группы в БД
     res.json(result)
 }
 
@@ -149,9 +148,8 @@ exports.getGroups = async (req, res) => {
     res.json(result)
 }
 exports.getIdGroup = async (req, res) => {
-    const login = req.body.login
     const id = req.body.id
-    const result = await databaseService.getIdGroup(id, login) //полчение группы по id
+    const result = await databaseService.getIdGroup(id) //полчение группы по id
     res.json(result)
 }
 

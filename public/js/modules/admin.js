@@ -203,6 +203,7 @@ function updateFn() {
             <select class="sel" id="select">
                 <option class="opt" selected disabled>Укажите права доступа</option>
                 <option class="opt" value="Пользователь" name="role">Пользователь</option>
+                  <option class="opt" value="Дилер" name="role">Дилер</option>
                           <option class="opt" value="Дежурный" name="role">Дежурный</option>
                 <option class="opt" value="Администратор" name="role">Администратор</option>
             </select>
@@ -230,6 +231,7 @@ function updateFn() {
                 <select class="sel" id="select">
                     <option class="opt" selected disabled>Укажите права доступа</option>
                     <option class="opt" value="Пользователь" name="role">Пользователь</option>
+                     <option class="opt" value="Дилер" name="role">Дилер</option>
                         <option class="opt" value="Дежурный" name="role">Дежурный</option>
                     <option class="opt" value="Администратор" name="role">Администратор</option>
                 </select>
@@ -309,10 +311,16 @@ export async function deleteFn(id, log) {
     getUsers()
 }
 
-export function checkCreate(nameCar) {
+export function checkCreate(array) {
     const ide = document.getElementById('all')
+    const box = document.querySelector('.check_boxs')
+    const lists = box.querySelectorAll('.listTitles')
+    if (lists) {
+        lists.forEach(e => e.remove())
+    }
+    const nameCar = Array.from(new Map(array.map(item => [item[1], item])).values());
+    console.log(nameCar)
     nameCar.forEach(elem => {
-        const box = document.querySelector('.check_boxs')
         const activePost = elem[0].replace(/\s+/g, '')
         const idw = elem[1]
         const list = document.createElement('p')

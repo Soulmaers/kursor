@@ -6,7 +6,8 @@ import { AlarmControll } from './modules/alarmModules/class/AlarmControll.js'
 import { ToggleHiddenList } from './modules/listModules/class/ToggleHiddenList.js'
 import { AddTooltip } from './modules/event.js'
 import { LogsEvent } from './modules/eventModules/class/LogsEvent.js'
-
+import { CreateNewObject } from './modules/propertyObjectModules/class/CreateNewObject.js'
+import { CreateNewGroup } from './modules/propertyObjectModules/class/CreateNewGroup.js'
 export let app;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,16 +23,28 @@ export class Application {
     //Основной класс 1 экземпляр при запуске приложения
     constructor(role, login) {
         this.data = null
+        this.nameCar = null
         this.body = document.querySelector('body')
         this.wrapperFull = document.querySelector('.wrapperFull')
         this.lowList = this.wrapperFull.querySelector('.low_list')
         this.searchInput = this.wrapperFull.querySelector('.search_input')
         this.startActivButton = document.querySelector('.stat_start')
+        this.create = document.querySelector('.create_object')
+        this.servis = document.querySelector('.servis')
         this.role = role   //получаем роль прав доступа
         this.login = login //получаем логин пользователя
         this.dataspisok = false //флаг загрузки
         this.spisok = null
+        this.obj = null
+        this.sett = null
+        this.validationRole()
         this.init()  //основной метод который запускает стартовые методы загрузки данных на страницу
+    }
+
+    validationRole() {
+        if (this.role !== 'Дилер' && this.role !== 'Администратор') {
+            this.servis.style.display = 'none'
+        }
     }
     // Методы класса Application
     async init() {
@@ -47,45 +60,55 @@ export class Application {
     async startClass(elem) {
         await this.zapros(elem) //метод который забирает из бд данные по объектам, заппускает проверку обновления логов, проверку  объектов из бд соответствующих логину, запускает функцию отрисовки списка
         new DropDownList(this.searchInput)  //запускаем сквозной поиск по элементам
-        new NavigationMenu()// запускаем класс по работе с меню навигацией
+        new NavigationMenu(this.data)// запускаем класс по работе с меню навигацией
         new AlarmControll()// запускаем класс управление отображение списка алармов
-        new ToggleHiddenList() //запускаем класс управления списком
+        if (this.obj) {
+            this.obj.destroy(); // Удаляем обработчики
+        }
+        this.obj = new CreateNewObject(this.create);
+        if (this.sett) {
+            this.sett.destroy(); // Удаляем обработчики
+        }
+        this.sett = new CreateNewGroup(this.create, this.nameCar, this.data)
+
+
+        new ToggleHiddenList(this.obj, this.sett) //запускаем класс управления списком
         new AddTooltip() //запуск класса отображения тултипов
     }
     async zapros(elem) {
-        const [wialonData, kursorData] = await Promise.all([this.zaprosWialon(this.login), this.zaprosKursor(this.login)])
+        const [wialonData] = await Promise.all([this.zaprosWialon(this.login, this.role)])//, this.zaprosKursor(this.login)])
         this.dataspisok = true
         const arrayList = wialonData.response.aLLmassObject
-        const nameCarCheck = wialonData.response.arrName
-        const data = kursorData.concat(arrayList)
-        this.data = data
-
-        if (data.flat().length === 0) {
+        this.nameCar = wialonData.response.arrName
+        this.data = arrayList
+        console.log(this.data)
+        if (arrayList.flat().length === 0) {
             const loaders = document.querySelector('.loaders');
             loaders.style.display = 'none'
         }
         if (this.spisok) {
-            this.spisok.updateData(data, elem)
+            this.spisok.updateData(arrayList, elem)
         }
         else {
-            this.spisok = new SpisokObject(data) //отрисовка списка и статусов списка
+            this.spisok = new SpisokObject(arrayList) //отрисовка списка и статусов списка
         }
-
+        //   console.log(this.nameCar)
         //передаем имена объектов для отображения в панели администратора
-        checkCreate(nameCarCheck)
+        checkCreate(this.nameCar)
     }
 
-    async zaprosWialon(login) {
+    async zaprosWialon(login, role) {
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ login }))
+            body: (JSON.stringify({ login, role }))
 
         }
         const mods = await fetch('/api/dataSpisok', params)
         const models = await mods.json()
+        console.log(models)
         return models
     }
 
@@ -99,8 +122,7 @@ export class Application {
         }
         const res = await fetch('/api/getKursorObjects', params)
         const objects = await res.json()
-        const arrayList = objects.result
-        return arrayList
+        return objects
     }
 
     async logs() {

@@ -39,8 +39,8 @@ function lastMsgFunc(rt, all) { //
         itogEvents.forEach(it => {
             if (parseFloat(it.id) === e[4]) {
                 const lastTime = nowDate - it.time
-                mass.push({ id: it.id, group: e[6], name: e[0].message, lastTime: lastTime, time: it.time, geo: it.geo });
-                condition.push({ id: it.id, group: e[6], name: e[0].message, condition: it.condition, time: it.time, geo: it.geo })
+                mass.push({ id: it.id, group: e[7], name: e[0].message, lastTime: lastTime, time: it.time, geo: it.geo });
+                condition.push({ id: it.id, group: e[7], name: e[0].message, condition: it.condition, time: it.time, geo: it.geo })
             }
         });
     });
@@ -88,7 +88,7 @@ function oilFunc(rt, all) {  //проверка на событие заправ
     all.forEach(e => {
         itogEvents.forEach(it => {
             if (parseFloat(it.id) === e[4]) {
-                mass.push({ id: it.id, filled: it.filled, oil: it.oil, time: it.time, geo: it.geo, group: e[6], name: e[0].message });
+                mass.push({ id: it.id, filled: it.filled, oil: it.oil, time: it.time, geo: it.geo, group: e[7], name: e[0].message });
             }
         });
     });

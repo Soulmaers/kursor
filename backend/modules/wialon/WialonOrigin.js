@@ -33,6 +33,7 @@ class WialonOrigin {
 
             if (!phone?.item?.uid) continue;
             const res = await databaseService.objectsWialonImei(String(phone.item.uid)); // валидация полученного объекта по IMEI и id
+            // console.log(res)
             if (!res?.length) continue;
             const timeBase = await databaseService.getLastTimeMessage(idw);
             const oldTime = timeBase?.[0]?.time_reg ? Number(timeBase[0].time_reg) : now - 1000;

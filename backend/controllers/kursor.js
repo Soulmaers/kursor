@@ -8,22 +8,40 @@ const { sortData } = require('../services/helpers')
 exports.getKursorObjects = async (req, res) => {
     const login = req && req.body && req.body.login ? req.body.login : null
     const data = await databaseService.getKursorObjects(login) //получаем объекты не wialona в структуре с группами
-    // console.log(data)
+    const massObjectCar = login ? await databaseService.dostupObject(login) : null //проверяем к каким из них есть доступ у УЗ
     const ress = sortData(data)
     const massObject = [];
+    const arrName = []
     for (const elem of ress) {
         let promises;
         promises = elem.objects.map(async el => {
-            return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), el, 'kursor'); //получаем основную структуру данных по объекту
+            arrName.push([el.nameObject, el.idObject])
+            if (login) {
+                if (massObjectCar.includes(el.idObject)) {
+                    return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), el, 'kursor'); //получаем основную структуру данных по объекту
+                }
+            } else {
+                return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), el, 'kursor'); //получаем основную структуру данных по объекту
+            }
         });
-        const dataObjectGroup = await Promise.all(promises)
+
+        const filteredDataObjectGroup = await Promise.all(promises)
+        const dataObjectGroup = filteredDataObjectGroup.filter(item => item !== undefined);
         elem.objects = dataObjectGroup
         const massSub = []
         for (const sub of elem.sub) {
             promises = sub.objects.map(async el => {
-                return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), el, 'kursor');
+                arrName.push([el.nameObject, el.idObject])
+                if (login) {
+                    if (massObjectCar.includes(el.idObject)) {
+                        return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), el, 'kursor'); //получаем основную структуру данных по объекту
+                    }
+                } else {
+                    return await databaseService.loadParamsViewList(el.nameObject, Number(el.idObject), el, 'kursor'); //получаем основную структуру данных по объекту
+                }
             });
-            const dataObjectSub = await Promise.all(promises)
+            const filteredDataObjectGroupSub = await Promise.all(promises)
+            const dataObjectSub = filteredDataObjectGroupSub.filter(item => item !== undefined);
             sub.objects = dataObjectSub
             const result = sub.objects.map(e => {
                 return [...e, sub.name_sub_g, Number(sub.id_sub_g)]
@@ -37,13 +55,13 @@ exports.getKursorObjects = async (req, res) => {
             })
         }
         else {
-            result = [[{}, {}, {}, {}, null, elem.name_g, Number(elem.idg), { sub: massSub }, 'kursor']]
+            result = [[{}, {}, {}, {}, 0, null, elem.name_g, Number(elem.idg), { sub: massSub }, 'kursor']]
 
         }
         massObject.push(result)
     }
     if (login) {
-        res.json({ result: massObject })
+        res.json({ response: { massObject, arrName } })
     }
     else {
         return massObject

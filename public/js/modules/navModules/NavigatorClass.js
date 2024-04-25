@@ -2,18 +2,23 @@ import { initCharts } from '../spisokModules/class/SpisokObject.js'
 import { skladContainer } from './sklad.js'
 import { kartaContainer } from './karta.js'
 import { reportsContainer } from './reports.js'
+import { Servis } from './servis.js'
 
 export class NavigationMenu {
-    constructor() {
+    constructor(data) {
+        this.data = data
         this.buttonElements = document.querySelectorAll('.monitoring');
         this.iconsToggle = document.querySelectorAll('.report_map_InList')
         this.mapUnit = document.querySelectorAll('.map_unit')
         this.reportUnit = document.querySelectorAll('.report_unit')
+        this.globalContainer = document.querySelector('.wrapperFull')
+        this.globalServis = document.querySelector('.globalServis')
         this.currentTimeoutId = null;
         this.menuItems = {
             dash: { method: this.dash.bind(this), elem: 'globalDash' },
             karta: { method: this.karta.bind(this), elem: 'globalMaps' },
             reports: { method: this.reports.bind(this), elem: 'globalReports' },
+            servis: { method: this.servis.bind(this), elem: 'globalServis' },
             sklad: { method: this.sklad.bind(this), elem: 'globalSklad' },
             statistika: { method: this.statistika.bind(this), elem: 'start' }
         };
@@ -33,7 +38,6 @@ export class NavigationMenu {
             clearInterval(this.currentTimeoutId);
             this.currentTimeoutId = null;
         }
-
     }
 
     handleButtonClick(event) {
@@ -76,21 +80,29 @@ export class NavigationMenu {
     }
 
     dash(elem) {
-
         elem.style.display = 'flex'
+        this.globalContainer.style.display = 'flex'
         //   dashContainer()
     }
 
+    servis(elem) {
+        this.globalContainer.style.display = 'none'
+        elem.style.display = 'flex'
+        new Servis(this.data)
+        //    servisContainer(elem)
+    }
     statistika(elem) {
         this.reportUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
         this.mapUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
         elem.style.display = 'flex'
         elem.style.width = 98 + '%'
         setTimeout(function () { initCharts.createChart(); }, 300);
+        this.globalContainer.style.display = 'flex'
         //   dashContainer()
     }
 
     karta(elem) {
+        this.globalContainer.style.display = 'flex'
         console.log('карта')
         elem.style.display = 'flex'
         const checkTypeMarkers = document.querySelector('.checkTypeMarkers')
@@ -109,6 +121,7 @@ export class NavigationMenu {
     }
 
     reports(elem, avl, num) {
+        this.globalContainer.style.display = 'flex'
         this.reportUnit.forEach(e => { e.style.display = 'none', e.classList.remove('act_modules') })
         this.mapUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
         if (num) {
@@ -119,6 +132,7 @@ export class NavigationMenu {
     }
 
     sklad(elem) {
+        this.globalContainer.style.display = 'flex'
         elem.style.display = 'flex'
         skladContainer()
     }

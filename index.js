@@ -52,16 +52,18 @@ const initServer = async () => {
 let session;
 async function init() {
     await initServer()
-
+    let interval;
     try {
         const res = await wialon();
+        console.log(res)
         new WialonOrigin(session);
-        setInterval(() => {
+        interval = setInterval(() => {
             new WialonOrigin(session);
         }, 120000);
     } catch (error) {
-        console.error("Ошибка инициализации:", new Date(), error);
+        clearInterval(interval)
         init()
+        console.error("Ошибка инициализации:", new Date(), error);
     }
 }
 init()

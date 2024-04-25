@@ -40,6 +40,7 @@ export class ClickObject {
         })
         e.classList.add('active')
         this.visual('check')
+        console.log('визуал')
         if (this.btnShina[1].classList.contains('active')) {
             detalisation.style.display = 'none'
             stata.style.display = 'flex'
@@ -101,7 +102,6 @@ export class ClickObject {
         this.visual()
     }
 
-
     async visual(check) {
         const idw = this.element.id
         if (this.btnShina[1].classList.contains('active')) {
@@ -114,10 +114,14 @@ export class ClickObject {
         DOMHelper.deleteElements(elementsToDelete);
 
 
+
+
+
         if (!check) {
             DOMHelper.clearTextContent('.odom_value', '.akb_value1', '.ohl_value', '.oil_value1', '.toil_value', '.ign_value', '.oborot_value', '.moto_value');
         }
-        DOMHelper.createListItems('.obo', 250, 'msg')
+        DOMHelper.createListItems('.obo', 250, 'msg', this.info[2])
+
         new SKDSHClass(this.info, idw)
 
         console.log(check)

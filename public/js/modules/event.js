@@ -13,8 +13,8 @@ import { viewTech } from './tech.js'
 import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 import { storTitleList } from './content.js'
 import { initCharts, initSummary } from './spisokModules/class/SpisokObject.js'
-import { CreateNewObject } from './propertyObjectModules/class/CreateNewObject.js'
-import { CreateNewGroup } from './propertyObjectModules/class/CreateNewGroup.js'
+//import { CreateNewObject } from './propertyObjectModules/class/CreateNewObject.js'
+//import { CreateNewGroup } from './propertyObjectModules/class/CreateNewGroup.js'
 
 
 
@@ -92,8 +92,8 @@ mainMenu.addEventListener('click', (event) => {
     menu.style.display = 'flex'
 })
 
-export const obj = new CreateNewObject(create)
-export const sett = new CreateNewGroup(create)
+//export const obj = new CreateNewObject(create)
+//export const sett = new CreateNewGroup(create)
 
 
 const itemInfoGlobal = document.querySelector('.itemInfoGlobal')
@@ -421,6 +421,7 @@ export async function pr() {
     }
     viewTech(tyresActive.id)
 }
+
 
 class DropDownList {
     constructor({ element, data, btn }) {

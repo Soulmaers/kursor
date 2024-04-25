@@ -6,11 +6,11 @@ import { classReports } from '../../navModules/reports.js'
 import { NavigationMenu } from '../../navModules/NavigatorClass.js'
 import { Tooltip } from '../../../class/Tooltip.js'
 import { app } from '../../../main.js'
-import { sett, obj } from '../../event.js'
+//import { sett, obj } from '../../event.js'
 export class ToggleHiddenList {
-    constructor() {
-        //  this.status = status
-        //  this.final = final
+    constructor(obj, sett) {
+        this.sett = sett
+        this.obj = obj
         this.clickElement = null
         this.login = document.querySelectorAll('.log')[1].textContent
         this.chekHiddens = document.querySelectorAll('.chekHidden')
@@ -90,42 +90,26 @@ export class ToggleHiddenList {
         }
         el.parentElement.parentElement.classList.add('border')
         el.style.color = 'green'
-        obj.viewObjects(el)
+        this.obj.viewObjects(el)
     }
     async edit(el) {
         const id = el.parentElement.parentElement.id
-        const nameGroup = el.parentElement.parentElement.getAttribute('rel')
         const modal = document.querySelector('.create_group_modal')
-        const field_modal = modal.querySelector('.field_modal')
+        const field_modal = modal.querySelectorAll('.field_modal')
         const prefix = el.parentElement.parentElement.classList.contains('subgroup') ? 'sub' : 'group'
-        field_modal.value = nameGroup
-        field_modal.setAttribute('id', id)
-        field_modal.setAttribute('rel', prefix)
-        await sett.viewModal()
-        const resSostav = await sett.getIdGroup(id)
+        field_modal[0].setAttribute('id', id)
+        field_modal[0].setAttribute('rel', prefix)
+        await this.sett.viewModal()
+        const resSostav = await this.sett.getIdGroup(id)
         const sostavGroup = document.querySelectorAll('.sostav_group')
         const objectList = document.querySelectorAll('.objects_list')
-        const podGroup = document.querySelectorAll('.pod_group')
+        const title = [resSostav[0].name_g, resSostav[0].face_company, resSostav[0].number_company]
+        field_modal.forEach((el, index) => el.value = title[index])
         resSostav.forEach(it => {
             Array.from(objectList[0].children).forEach(e => {
-                if (e.getAttribute('rel') === it.idObject && it.id_sub_g === id || e.getAttribute('rel') === it.idObject && it.id_sub_g === null) {
+                if (e.getAttribute('rel') === it.idObject) {
                     sostavGroup[0].appendChild(e)
                 }
-            })
-            Array.from(podGroup[0].children).forEach(e => {
-                if (prefix === 'sub') {
-                    e.remove();
-                }
-                else {
-                    if (e.getAttribute('rel') === id) {
-                        e.remove();
-                    }
-                    if (e.getAttribute('rel') === it.id_sub_g && e.getAttribute('rel') !== id) {
-                        sostavGroup[0].appendChild(e)
-                    }
-
-                }
-
             })
         })
     }
