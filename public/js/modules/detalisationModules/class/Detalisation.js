@@ -342,12 +342,12 @@ export class Detalisation {
         const intStopNew = this.prostoy(element)
         if (intStopNew) {
             intStopNew.forEach(el => {
-                const startIndex = element.findIndex(x => x.time === el[0][0]);
-                const endIndex = element.findIndex(x => x.time === el[1][0]);
+                const startIndex = element[0].findIndex(x => x.time === el[0][0]);
+                const endIndex = element[0].findIndex(x => x.time === el[1][0]);
                 if (startIndex !== -1 && endIndex !== -1) {
                     // Обновить значения в свойстве condition
                     for (let i = startIndex; i <= endIndex; i++) {
-                        e[i].condition = 'Работа на холостом ходу';
+                        element[0][i].condition = 'Работа на холостом ходу';
                     }
                 }
             })
@@ -420,7 +420,7 @@ export class Detalisation {
             return undefined
         }
         else {
-            const res = newdata.reduce((acc, e) => {
+            const res = newdata[0].reduce((acc, e) => {
                 if (e.engineOn === 1 && e.speed === 0 && e.sats > 4) {
                     if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
                         && acc[acc.length - 1][0].engineOn === 1 && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
@@ -485,12 +485,24 @@ export class Detalisation {
         const t1 = this.time[0].length > 2 ? this.time[0][2] : this.time[0]
         const t2 = this.time[0].length > 2 ? this.time[1][2] + 86399 : this.time[1]
         const num = 0
+
+        // Отмена предыдущего запроса, если он существует
+        if (this.abortController) {
+            this.abortController.abort();
+        }
+
+        // Создание нового контроллера для отмены
+        this.abortController = new AbortController();
+        const signal = this.abortController.signal;
+
+
         const paramss = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idw, t1, t2, arrayColumns, num }))
+            body: (JSON.stringify({ idw, t1, t2, arrayColumns, num })),
+            signal: signal
 
         }
         const res = await fetch('/api/getPressureOil', paramss)

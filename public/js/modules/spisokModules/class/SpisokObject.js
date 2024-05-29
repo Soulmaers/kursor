@@ -283,8 +283,14 @@ export class SpisokObject {
                 }
             }
             const uniqBar = document.querySelectorAll('.uniqBar')
+            console.log(parsedObj)
+
             uniqBar.forEach(el => {
-                el.children[0].checked = parsedObj[el.children[0].id].view === false ? false : true
+                console.log(el.children[0].id)
+                if (parsedObj[el.children[0].id].view) {
+                    el.children[0].checked = parsedObj[el.children[0].id].view === false ? false : true
+                }
+
             })
 
             const titleChangeList = document.querySelectorAll('.title_list_global')
@@ -331,7 +337,9 @@ export class SpisokObject {
     }
 
     createListObjectAndGroup() {
+        // console.log(this.data)
         for (let el of this.data) {
+            //  console.log(el)
             if (el.length !== 0) {
                 const lowList = document.querySelector('.low_list')
                 const group = document.createElement('div')

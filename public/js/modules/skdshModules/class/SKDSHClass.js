@@ -11,6 +11,8 @@ export class SKDSHClass {
         this.id = idw
         this.pressureOsInstance = null
         this.configurator = null
+        this.controllTyresInstance = null;
+        this.viewTyresValueInstance = null
         this.init()
     }
 
@@ -18,8 +20,11 @@ export class SKDSHClass {
     init() {
         if (this.model.length !== 0) {
             new ViewModel(this.model) // класс отрисовывает саму модель СКДШ
-            new ViewTyresValue(this.tyres, this.params, this.osi)// класс отрисовывает состояние давления и температуры на колесах
-            new ControllTyres() //управление кликами на колеса
+            if (this.viewTyresValueInstance) {
+                this.viewTyresValueInstance.clearInterval(); // Очистка интервала перед созданием нового экземпляра
+            }
+            this.viewTyresValueInstance = new ViewTyresValue(this.tyres, this.params, this.osi); // класс отрисовывает состояние давления и температуры на колесах
+            this.controllTyresInstance = new ControllTyres(); // Создание и сохранение экземпляра ControllTyres
         }
 
         // Управление жизненным циклом SetPressureOs
@@ -34,4 +39,18 @@ export class SKDSHClass {
             SKDSHClass.configurator.reinitialize(this.id);
         }
     }
+
+    reinitialize(data, id) {
+        this.id = id; // Обновление id
+        [this.model, this.tyres, this.params, this.osi] = data
+        const inst = this.getControllInstance()
+        console.log(inst)
+        if (inst && inst.instance) inst.instance.destroy()
+        this.init();
+    }
+
+    getControllInstance() {
+        return this.controllTyresInstance
+    }
+
 }

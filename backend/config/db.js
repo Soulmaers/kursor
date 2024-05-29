@@ -1,8 +1,5 @@
-
 require('dotenv').config();
-
 const sql = require('mssql');
-
 
 const config = {
     user: process.env.DB_USER,
@@ -12,12 +9,35 @@ const config = {
     options: {
         trustServerCertificate: true // если используете самоподписанный сертификат SSL
     }
-}
-
-
+};
 
 const pool = new sql.ConnectionPool(config);
-const connection = pool.connect()
+const connection = pool.connect();
 
-module.exports.sql = sql;
-module.exports.connection = connection;
+let session;
+
+const getSession = () => {
+    return new Promise((resolve, reject) => {
+        if (session) {
+            resolve(session);
+        } else {
+            const checkInterval = setInterval(() => {
+                if (session) {
+                    clearInterval(checkInterval);
+                    resolve(session);
+                }
+            }, 500);
+        }
+    });
+};
+
+const setSession = (newSession) => {
+    session = newSession;
+};
+
+module.exports = {
+    sql,
+    connection,
+    getSession,
+    setSession
+};

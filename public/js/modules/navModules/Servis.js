@@ -13,37 +13,69 @@ export class Servis {
         this.wrapper = document.querySelector('.wrapper_servis')
         this.icons = {
             'Экскаватор': `../../../image/exkavator.png`,
-            'Кран': `../../../image/Kran.png`,
+            'Кран': `../../../image/kran_icon.png`,
             'Бульдозер': `../../../image/Buldozer.png`,
             'Фронтальный погрузчик': `../../../image/frong-pogr.png`,
-            'Газель': '../../../image/furgon.png',
+            'Газель': '../../../image/gasel.png',
             'Фургон': '../../../image/furgon.png',
             'Экскаватор-погрузчик': '../../../image/ex-pogr.png',
             'Трактор': '../../../image/traktor.png',
             'Фура': '../../../image/fura.png',
             'Легковушка': '../../../image/legk.png',
             'Самосвал': '../../../image/samosval.png',
+            'Каток': '../../../image/katok.png',
+            'Бетономешалка': '../../../image/beton.png',
+            'Бензовоз': '../../../image/benzovoz.png',
+            'ЖКХ': '../../../image/zkh.png',
             '-': '../../../image/tehnika.png'
+
         }
         this.init()
     }
 
 
-    init() {
+    async init() {
+
         this.convertionIdArray()
         this.getData()
+        await this.findTo()
         this.createRows()
         new SliderController(this.onlineParams)
-        this.controllClickRows()
+
 
     }
 
-
-    controllClickRows() {
-        const rows = document.querySelectorAll('.rows_servis')
-        // rows.forEach(el => el.addEventListener('click', new CardServis(el.id)))
+    async findTo() {
+        const arrayId = this.data.flat().map(e => e[4]);
+        const engineHours = this.struktura.map(e => e.engineHours);
+        const array = arrayId.map((e, index) => ({ idw: e, engineHours: engineHours[index] }));
+        await this.getTo(array);
     }
 
+    async getTo(array) {
+        const params = {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ array })
+        };
+        try {
+            const res = await fetch('/api/getToToBase ', params);
+            const req = await res.json();
+            // Обработка ответа и обновление this.struktura
+            req.forEach(toData => {
+                let structureItems = this.struktura.filter(item => item.idw === toData.idw);
+                structureItems.map(structureItem => {
+                    if (structureItem) {
+                        structureItem.hoursDifference = toData.motoRemains
+                        structureItem.nearestTo = toData.TOData.length !== 0 ? toData.TOData[0].nameTo : '-'
+
+                    }
+                });
+            });
+        } catch (error) {
+            console.error("Failed to fetch TO data:", error);
+        }
+    }
 
     convertionIdArray() {
         this.struktura = this.data.flat().map(el => {
@@ -60,7 +92,7 @@ export class Servis {
             this.type.push({ type: type, idw: idw })
             const company = el[7]
             return {
-                object: [marka, model], vin: vin, company: company, contact: [face, number], gosnomer: gosnomer, engineHours: engineHours
+                idw: idw, object: [marka, model], vin: vin, company: company, contact: [face, number], gosnomer: gosnomer, engineHours: engineHours
             }
         })
     }
@@ -71,6 +103,7 @@ export class Servis {
         this.bodyTable.style.width = this.wrapper.clientWidth - 15 + 'px'
         this.bodyTable.previousElementSibling.style.width = this.wrapper.clientWidth - 15 + 'px'
         this.struktura.forEach((el, index) => {
+            delete el.idw
             const ul = document.createElement('div');
             ul.classList.add('rows_servis');
             ul.setAttribute('id', this.type[index].idw)
@@ -79,10 +112,11 @@ export class Servis {
             specialLi.classList.add('special_first');
             specialLi.style.backgroundImage = `url(${this.icons[this.type[index].type]})`
             ul.appendChild(specialLi);
+
             for (let key in el) {
                 const li = document.createElement('div');
                 const classes = ['cel_servis', 'title_servis'];
-                if (key !== 'engineHours') classes.push('long');
+                if (key !== 'engineHours' && key !== 'hoursDifference' && key !== 'nearestTo') classes.push('long');
                 li.classList.add(...classes);
                 ul.appendChild(li)
                 // Проверяем тип значения и преобразуем его в строку
@@ -92,8 +126,7 @@ export class Servis {
                 }
                 li.textContent = value || '-';
             }
-            this.createRowsStata(5, ul)
-
+            this.createRowsStata(3, ul)
             ul.addEventListener('click', () => {
                 if (this.instance) this.instance.destroy(), this.instance = null;
                 this.instance = new CardServis(this.data.flat()[index], el, this.wrapper)

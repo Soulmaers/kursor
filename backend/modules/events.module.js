@@ -45,6 +45,7 @@ function lastMsgFunc(rt, all) { //
         });
     });
     mass.forEach(e => {
+
         e.lastTime > 3600 ? checkSortLastTime(e.id, e.group, e.name, e.time, e.geo) : null
     })
     condition.forEach(e => {
@@ -65,6 +66,7 @@ async function checkSortLastTime(idw, group, name, time, geo) { //проверк
         event: 'Потеря связи',
         lasttime: `Время последнего сообщения: ${formattedDate}`
     }]
+
     const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name) //запись лога
 }
 

@@ -79,17 +79,22 @@ export class SliderController {
     addMarkersToMap() {
         this.icons = {
             'Экскаватор': `../../../image/exkavator.png`,
-            'Кран': `../../../image/Kran.png`,
+            'Кран': `../../../image/kran_icon.png`,
             'Бульдозер': `../../../image/Buldozer.png`,
             'Фронтальный погрузчик': `../../../image/frong-pogr.png`,
-            'Газель': '../../../image/furgon.png',
+            'Газель': '../../../image/gasel.png',
             'Фургон': '../../../image/furgon.png',
             'Экскаватор-погрузчик': '../../../image/ex-pogr.png',
             'Трактор': '../../../image/traktor.png',
             'Фура': '../../../image/fura.png',
             'Легковушка': '../../../image/legk.png',
             'Самосвал': '../../../image/samosval.png',
+            'Каток': '../../../image/katok.png',
+            'Бетономешалка': '../../../image/beton.png',
+            'Бензовоз': '../../../image/benzovoz.png',
+            'ЖКХ': '../../../image/zkh.png',
             '-': '../../../image/tehnika.png'
+
         }
         this.data.forEach(item => {
             const { idObject, geo, course, speed, nameObject, idGroup, nameGroup, time, condition, type } = item
@@ -103,7 +108,7 @@ export class SliderController {
             });
             const iconCar = new LeafIcon({
                 iconUrl: this.icons[type],
-                iconSize: [30, 22],
+                iconSize: [30, 15],
                 iconAnchor: [20, 20],
                 popupAnchor: [0, -10],
                 className: 'custom-markers'

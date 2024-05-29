@@ -7,9 +7,9 @@ const globalstart = require('../../controllers/data.controller.js');
 class WialonOrigin {
     constructor(session) {
         this.session = session
-        this.init()
+        this.inits()
     }
-    async init() {
+    async inits() {
         const data = await wialonService.getDataFromWialon(); //получение объектов с wialon
         if (data) {
             await Promise.all([
@@ -17,7 +17,7 @@ class WialonOrigin {
                 globalstart.start(this.session, data)
             ]);
         } else {
-            this.init();
+            this.inits();
         }
     }
     async getObjectData(data) {

@@ -1,0 +1,886 @@
+.globalSklad {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 94vh;
+    background-color: rgba(6, 28, 71, 1);
+    position: relative;
+}
+
+.container_sklad {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 98%;
+    height: 100%;
+    background-color: #fff;
+}
+
+.analitika {
+    width: 98%;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(6, 28, 71, 1);
+}
+
+
+
+.add_model_tyres {
+    color: #fff;
+    cursor: pointer;
+    position: absolute;
+    right: 40px;
+}
+
+.add_tyres {
+    color: #fff;
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+}
+
+.spisok_list_object {
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.job_tyres {
+    display: none;
+}
+
+
+.titleModalSklad {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+    font-family: Arial;
+    font-weight: bold;
+    position: relative;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #f0eded;
+    display: flex;
+    align-items: center;
+    color: rgba(6, 28, 71, 1);
+    padding-left: 8px;
+}
+
+.listItemSklad {
+    cursor: pointer;
+    box-sizing: border-box;
+    display: flex;
+    border-bottom: 1px solid #f0eded;
+    color: rgba(6, 28, 71, 1);
+    padding: 2px 15px;
+    font-size: 0.7rem;
+    font-family: Arial;
+    font-weight: bold;
+}
+
+.clickElement {
+    border: 1px solid rgba(6, 28, 71, 1);
+}
+
+.navi_sklad {
+    width: 98%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    background-color: rgba(6, 28, 71, 1);
+    color: #fff;
+    box-sizing: border-box;
+    border-top: 2px solid #fff;
+    position: relative;
+}
+
+.tyres_room {
+    width: 600px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.up_name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(6, 28, 71, 1);
+    color: #fff;
+    padding: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.activ_button_sklad {
+    background-color: #fff;
+    color: rgba(6, 28, 71, 1);
+}
+
+.up_name_header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(6, 28, 71, 1);
+    color: #fff;
+    padding: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    box-sizing: border-box;
+    border-top: 2px solid #fff;
+}
+
+.up_name_last_container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(6, 28, 71, 1);
+    color: #fff;
+    padding: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    box-sizing: border-box;
+    border-top: 2px solid #fff;
+}
+
+.header_sklad {
+    display: flex;
+    border: 1px solid rgba(6, 28, 71, 1);
+}
+
+.body_sklad {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* для Firefox */
+    -ms-overflow-style: none;
+    /* для Internet Explorer и Edge */
+}
+
+.list_body {
+    width: 95%;
+    height: 100%;
+}
+
+.body_sklad::-webkit-scrollbar {
+    display: none;
+    /* для Chrome, Safari и Opera */
+}
+
+.row_sklad {
+    width: 98%;
+    min-height: 70px;
+    border: 1px solid rgba(6, 28, 71, 1);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 2px 0;
+}
+
+.left_wrap_sklad {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.right_wrap_sklad {
+    width: 67%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.right_model_wrap_sklad {
+    width: 8%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.cel_tyres_sklad {
+    width: 90%;
+    height: 20px;
+    margin: 2px;
+    color: rgba(6, 28, 71, 1);
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+
+.ostatok_tyres {
+    width: 22%;
+    height: 92%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+.sezon_tyres_and_type {
+    width: 20%;
+    height: 92%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.sezon_tyres {
+    width: 95%;
+    height: 45%;
+    background-image: url(../../../../image/leto.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.type_tyres {
+    width: 95%;
+    height: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(6, 28, 71, 1);
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.icon_tyres {
+    width: 30%;
+    height: 92%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.protektor_tyres {
+    width: 100%;
+    height: 15%;
+    /* Высота для всех по умолчанию */
+    display: grid;
+    place-items: center;
+    margin: 1px 0;
+}
+
+.protektor_tyres:first-child {
+    height: 70%;
+    /* Высота для первого элемента */
+}
+
+
+.text_value {
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: rgba(6, 28, 71, 1);
+
+}
+
+.battery {
+    border: 1px solid rgba(6, 28, 71, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    width: 80%;
+    height: 95%;
+    background-color: #fff;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+.delenie {
+    width: 100%;
+    height: 25%;
+    margin: 1px;
+    box-sizing: border-box;
+}
+
+.tyres_shema {
+    width: 8px;
+    height: 11px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    border-radius: 2px;
+}
+
+.osi_shema {
+    width: 30px;
+    height: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1px 0;
+}
+
+.osi_shema_car {
+    width: 360px;
+    height: 160px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1px 0;
+}
+
+.tyres_shema_car {
+    width: 70px;
+    height: 142px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 15px;
+}
+
+.centerOs_shema_car {
+    width: 220px;
+    height: 4px;
+    background-color: black;
+}
+
+.centerOs_shema {
+    width: 22px;
+    height: 1px;
+    background-color: black;
+}
+
+
+.center_shema {
+    display: flex;
+    width: 38%;
+    height: 98%;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.discription_car {
+    width: 100%;
+    color: rgba(6, 28, 71, 1);
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 5px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.container_shema {
+    margin-top: 10px;
+    display: flex;
+    width: 100%;
+    height: 90%;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.global_container {
+    display: none;
+    width: 100%;
+    height: 98%;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.job_field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    height: 100%;
+    background-color: #fff;
+}
+
+.body_last_container {
+    width: 100%;
+    height: 98%;
+    position: relative;
+}
+
+.wrap_graf {
+    width: 30%;
+    height: 98%;
+    border: 2px solid rgba(6, 28, 71, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.tyres_model_card {
+    display: none;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+.tyres_model_list {
+    display: none;
+}
+
+
+.graf_uniq {
+    width: 98%;
+    height: 50px;
+    background-image: url(../../../../image/graf_test.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.card_model_window {
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid rgba(6, 28, 71, 1);
+    background-color: #fff;
+}
+
+.card_model_tyres {
+    width: 450px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.header_card_model_window {
+    width: 100%;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: rgba(6, 28, 71, 1);
+    padding: 5px 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.header_card_tyres {
+    width: 100%;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: rgba(6, 28, 71, 1);
+    padding: 5px 10px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+
+.close_modal_window {
+    position: absolute;
+    right: 10px;
+}
+
+.body_card_model_window {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.body_card_tyres {
+    width: 100%;
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin: 10px 0;
+}
+
+.discripiton_image {
+    color: rgba(6, 28, 71, 1);
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.image_card {
+    width: 200px;
+    height: 200px;
+    margin: 10px 0;
+    background-image: url(../../../../image/zeto_tyres.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.image_card_wiew {
+    width: 140px;
+    height: 140px;
+    margin: 2px 0;
+    background-image: url(../../../../image/zeto_tyres.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.image_picture {
+    width: 250px;
+    height: 250px;
+}
+
+.input-fields {
+    width: 100%;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.input-fields_params {
+    border-top: 2px solid rgba(6, 28, 71, 1);
+    width: 100%;
+    margin: 1px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.input-fields_wiew {
+    width: 100%;
+    margin: 1px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.field-row {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    margin: 0.5px 0;
+}
+
+.field-label {
+    width: 250px;
+    color: rgba(6, 28, 71, 1);
+    font-size: 0.95rem;
+}
+
+.styled-input {
+    border: none;
+    border-bottom: 1px solid rgba(6, 28, 71, 1);
+    outline: none;
+    color: rgba(6, 28, 71, 1);
+    font-size: 0.95rem;
+    width: 150px;
+}
+
+.styled-input:focus {
+    border-bottom: 2px solid rgba(6, 28, 71, 1);
+}
+
+
+.footer_card_model_window {
+    border-top: 2px solid rgba(6, 28, 71, 1);
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 10px;
+    box-sizing: border-box;
+}
+
+.footer_card_tyres {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.save_params,
+.load_image {
+    height: 20px;
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 5px;
+    border: 2px solid rgba(6, 28, 71, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(6, 28, 71, 1);
+    margin: 2px 5px;
+}
+
+
+.reduct_params {
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 5px;
+    border: 2px solid rgba(6, 28, 71, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(6, 28, 71, 1);
+    margin: 2px 5px;
+}
+
+.save_params:active {
+    background-color: steelblue;
+}
+
+.load_image:active {
+    background-color: steelblue;
+}
+
+.reduct_params:active {
+    background-color: steelblue;
+}
+
+.mess_validation {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+
+.tyres_model_list {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+.add_card_tyres {
+    width: 455px;
+    height: 100%;
+    border: 2px solid rgba(6, 28, 71, 1);
+    box-sizing: border-box;
+}
+
+.list_model_tyres_spisok {
+    flex-grow: 1;
+    height: 100%;
+    border: 2px solid rgba(6, 28, 71, 1);
+    box-sizing: border-box;
+    width: 98%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.list_item_tyres_model {
+    height: 100%;
+    box-sizing: border-box;
+    width: 99%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.row_model {
+    color: rgba(6, 28, 71, 1);
+    display: flex;
+    width: 99%;
+    align-items: center;
+    margin: 1px 0;
+    padding: 2px;
+    border: 1px solid rgba(6, 28, 71, 1);
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+
+.img_tyres {
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-left: 5px;
+}
+
+.parametr_tyres {
+    flex-grow: 1;
+    padding: 1px;
+    margin-left: 10px;
+}
+
+
+.autocomplete-list {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: white;
+}
+
+.autocomplete-item {
+    padding: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+}
+
+.autocomplete-item:hover {
+    background-color: #e9e9e9;
+}
+
+.modal_podtver {
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid rgba(6, 28, 71, 1);
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    border-radius: 5px;
+}
+
+.header_podtver {
+    width: 100%;
+    height: 30px;
+    background-color: rgba(6, 28, 71, 1);
+    color: #fff;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.body_podtver {
+    width: 100%;
+    height: 100px;
+    color: rgba(6, 28, 71, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.body_podtver_install {
+    width: 100%;
+    height: 60px;
+    color: rgba(6, 28, 71, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.button_podtver {
+    display: flex;
+    width: 100%;
+    height: 30px;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(6, 28, 71, 1);
+    background-color: rgba(6, 28, 71, 1);
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+.ok_podtver,
+.cancel_podtver {
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+    width: 50%;
+    text-align: center;
+    margin: 0 5px;
+}
+
+.ok_podtver:active {
+    color: steelblue;
+}
+
+.cancel_podtver:active {
+    color: steelblue;
+}
+
+.styled-select,
+.comm {
+    width: 90%;
+    padding: 8px;
+    font-size: 14px;
+    color: rgba(6, 28, 71, 1);
+    border: 1px solid rgba(6, 28, 71, 1);
+    border-radius: 4px;
+    appearance: none;
+    background-color: #fff;
+}
+
+.styled-select:focus {
+    border-color: rgba(6, 28, 71, 1);
+    outline: none;
+    box-shadow: 0 0 5px rgba(102, 175, 233, 0.6);
+}
+
+.styled-select.invalid {
+    border-color: red;
+    color: red;
+}
+
+.comm {
+    height: 40px;
+    resize: none;
+    width: 81%;
+    color: rgba(6, 28, 71, 1);
+}

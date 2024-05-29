@@ -12,13 +12,25 @@ export class ViewTyresValue {
             3: '#4af72f',//#009933',
             5: '#fff'
         }
+        this.intervalId = null; // Свойство для хранения идентификатора интервала
         this.init()
     }
 
     init() {
-        setInterval(() => this.getParams(), 110000)
-        this.viewValueTyres()
+        if (this.intervalId) {
+            clearInterval(this.intervalId); // Очистка предыдущего интервала, если он существует
+        }
+        this.intervalId = setInterval(() => this.getParams(), 110000); // Сохранение идентификатора нового интервала
+        this.viewValueTyres();
     }
+
+    clearInterval() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+    }
+
 
     generDav(el, arrBar) {
         let generatedValue;
@@ -136,7 +148,7 @@ export class ViewTyresValue {
             if (prev.name < next.name) return -1;
             if (prev.name < next.name) return 1;
         })
-        this.createParamsRows()
+        // this.createParamsRows()
         this.viewValueTyres()
 
     }

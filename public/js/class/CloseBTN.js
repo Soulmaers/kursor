@@ -35,3 +35,24 @@ export class CloseBTN {
         }
     }
 }
+
+
+
+export class CloseBTNServis {
+    constructor(elem1, elem2, modal) {
+        this.elem1 = elem1
+        this.elem2 = elem2
+        this.modal = modal
+        document.addEventListener('click', this.handleClickOutside.bind(this))
+    }
+
+    handleClickOutside(event) {
+        console.log(this.elem1, this.elem2)
+        const isClickedOnElem1 = this.elem1.contains(event.target);
+        const isClickedOnElem2 = this.elem2.contains(event.target);
+        console.log(isClickedOnElem1, isClickedOnElem2)
+        if (!isClickedOnElem1 && !isClickedOnElem2) {
+            this.modal.style.display = 'none'
+        }
+    }
+}

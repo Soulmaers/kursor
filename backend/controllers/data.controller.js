@@ -1,14 +1,14 @@
 
 const wialonService = require('../services/wialon.service.js')
 const databaseService = require('../services/database.service');
-const kursorService = require('./kursor.js')
 const statistika = require('../modules/statistika.module');
 const events = require('../modules/events.module.js')
-const { createDate, convert, sortData } = require('../services/helpers.js')
-const constorller = require('./data.controller.js')
 const { SummaryStatistiks } = require('../modules/statistika.module.js')
 require('dotenv').config();
 const { connection, sql } = require('../config/db')
+const { getSession } = require('../config/db');
+const { Worker } = require('worker_threads');
+const path = require('path');
 
 //готовим данные и отправляем ответ на клиент который отрисовывает список
 exports.dataSpisok = async (req, res) => {
@@ -25,7 +25,7 @@ exports.dataSpisok = async (req, res) => {
             role = null
         }
         const datas = await databaseService.getWialonObjects() //получем данные из БД по объектам wialona
-        const ress = sortData(datas)
+        const ress = sortDatas(datas)
         console.log(role, login)
         const massObjectCar = login && role !== 'Администратор' ? await databaseService.dostupObject(login) : null //проверяем к каким из них есть доступ у УЗ
         const aLLmassObject = [];
@@ -74,6 +74,7 @@ const getWialonSetToBaseObject = async (login) => {
     console.log('login', login)
     console.time('getWialon')
     const objects = await getWialon(login) // получаем объекты с wialona
+    //  console.log(objects)
     console.timeEnd('getWialon')
     console.time('save')
     const mess = await databaseService.setObjectGroup(objects) //обновления объекты в БД с wialona
@@ -82,40 +83,24 @@ const getWialonSetToBaseObject = async (login) => {
 }
 
 const getWialon = async (login) => {
-    const data = await wialonService.getAllGroupDataFromWialon();
-    if (!data) return [];
-    const time = Math.floor(Date.now() / 1000);
-    const results = [];
-    // Проходим по каждой группе
-    for (const elem of data.items) {
-        const { nm: nameGroup, id: idGroup, u: nameObject } = elem;
-        // Проходим по каждому объекту в группе
-        for (const el of nameObject) {
-            try {
-                const [all, phone] = await Promise.all([
-                    wialonService.getAllParamsIdDataFromWialon(el),
-                    wialonService.getUniqImeiAndPhoneIdDataFromWialon(el)
-                ]);
-                // Проверяем наличие данных
-                if (all.item && phone.item) {
-                    results.push({
-                        login,
-                        data: String(time),
-                        idg: String(idGroup),
-                        name_g: nameGroup,
-                        idObject: String(all.item.id),
-                        nameObject: String(all.item.nm),
-                        imei: phone.item.uid ? String(phone.item.uid) : null,
-                        phone: phone.item.ph ? String(phone.item.ph) : null
-                    });
-                }
-            } catch (error) {
-                console.error(`Ошибка при получении данных для объекта ${el}: ${error}`);
-                // Можно решить, добавлять ли в результат null или вообще пропустить этот шаг
+    const token = process.env.TOKEN;
+    return new Promise((resolve, reject) => {
+        const worker = new Worker(path.resolve(__dirname, '../services/worker2.js'));
+        worker.on('message', (result) => {
+            worker.terminate();
+            resolve(result);
+        });
+        worker.on('error', (err) => {
+            worker.terminate();
+            reject(err);
+        });
+        worker.on('exit', (code) => {
+            if (code !== 0) {
+                reject(new Error(`Worker stopped with exit code ${code}`));
             }
-        }
-    }
-    return results; // Возвращаем массив без null значений
+        });
+        worker.postMessage({ login: login, token: token });
+    });
 };
 
 exports.viewLogs = async (req, res) => {
@@ -124,7 +109,40 @@ exports.viewLogs = async (req, res) => {
     res.json(data)
 }
 
+function sortDatas(datas) {
+    const res = Object.values(datas.reduce((acc, elem) => {
+        if (!acc[elem.idg]) {
+            acc[elem.idg] = {
+                idg: elem.idg,
+                name_g: elem.name_g,
+                number_company: elem.number_company,
+                face_company: elem.face_company,
+                objects: []
+            };
+        }
+        acc[elem.idg].objects.push({
+            idObject: elem.idObject,
+            nameObject: elem.nameObject,
+            imei: elem.imei,
+            phone: elem.phone,
+            typeObject: elem.typeObject,
+            typeDevice: elem.typeDevice,
+            port: elem.port,
+            adress: elem.adress,
+            marka: elem.marka,
+            model: elem.model,
+            vin: elem.vin,
+            gosnomer: elem.gosnomer,
+            dut: elem.dut,
+            angle: elem.angle,
+            face: elem.face_company,
+            number: elem.number_company
+        })
 
+        return acc;
+    }, {}));
+    return res
+}
 
 exports.start = async (session, data) => {
     console.log('старт')
@@ -134,7 +152,7 @@ exports.start = async (session, data) => {
         const dataKursor = await databaseService.getObjects() //получаем объекты из БД все кроме wialona
         const validKursorData = dataKursor.filter(e => [...e.imei].length > 10)
         // Запускаем все функции параллельно
-        await Promise.all([await updateParams(data, validKursorData)]) //запускаем метод обновления данных
+        await Promise.all([updateParams(data, validKursorData)]) //запускаем метод обновления данных
         console.log('выполнено')
     }
 }
@@ -151,7 +169,7 @@ async function updateParams(data) {
         return [nameTable, idw, speed, geo, port];
     });
 
-    const res = await constorller.dataSpisok()
+    const res = await module.exports.dataSpisok();
     zaprosSpisokb(nameCar, res) //создание и подготовка структуры для проверки на аларм
     if (res) {
         statistika.popupProstoy(res) //ловим простои
@@ -190,6 +208,13 @@ async function zaprosSpisokb(name, res) {
     }
     proverka(massItog); //проверка на аларм
 }
+
+const convert = (ob) => {  //фильтрация уникальных элементов
+    const uniq = new Set(ob.map(e => JSON.stringify(e)));
+    return Array.from(uniq).map(e => JSON.parse(e));
+}
+
+
 const queryDB = async (sql) => {
     try {
         const pool = await connection;
@@ -277,7 +302,20 @@ function proverka(arr) {
     });
 }*/
 
+const createDate = () => {   //форматироваие даты
+    let today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1) < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
+    const day = today.getDate() < 10 ? '0' + today.getDate() : today.getDate();
+    today = day + '.' + month + '.' + year;
+    let time = new Date();
+    const hour = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
+    const minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
+    time = hour + ':' + minutes
+    const todays = today + ' ' + time
+    return [todays]
 
+}
 function proverka(arr) {
     const time = new Date()
     arr.forEach(async el => {

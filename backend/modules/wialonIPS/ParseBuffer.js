@@ -1,4 +1,4 @@
-const { net } = require('../../../index')
+const net = require('net');
 const databaseService = require('../../services/database.service');
 const helpers = require('../../services/helpers');
 const JobToBase = require('../navtelecom/JobToBase')

@@ -1,7 +1,8 @@
 
 
-const { getSess, getSessiont } = require('../controllers/data.controller.js')
-const geSession = require('../../index.js')
+
+const { getSession } = require('../config/db');
+
 const fs = require('fs');
 //запрос всех  групп объектов  с виалона
 
@@ -53,15 +54,7 @@ exports.getTitleShablonToWialon = async (idResourse, idShablon, idObject, interv
     }
 
     return new Promise(async function (resolve, reject) {
-        /* const session = await geSession.geSession();
-         session.request('report/cleanup_result', params)
-             .catch(function (err) {
-                 console.log(err);
-             })
-             .then(function (data) {
-                 console.log(data)
-             });*/
-        const session = await geSession.geSession();
+        const session = await getSession();
         session.request('report/exec_report', params)
             .then(async function (data) {
                 //  console.log(data)
@@ -89,7 +82,7 @@ exports.getTitleShablonToWialon = async (idResourse, idShablon, idObject, interv
 
 exports.getChartDatatToWialon = async (interval, idChart) => {
     return new Promise(async function (resolve, reject) {
-        const session = await geSession.geSession();
+        const session = await getSession();
         const params = {
             "attachmentIndex": idChart,
             "width": 1000000,// 100000,
@@ -113,7 +106,7 @@ exports.getChartDatatToWialon = async (interval, idChart) => {
 
 
 exports.getFileReportsToWialon = async (format, formatToWialon) => {
-    const session = await geSession.geSession();
+    const session = await getSession();
     const eid = session._session.eid;
     const headers = {
         'Accept': 'application/pdf',
@@ -162,7 +155,7 @@ exports.getAllShablonsToWialon = async () => {
     };
 
     return new Promise(async function (resolve, reject) {
-        const session = await geSession.geSession();
+        const session = await getSession();
         session.request('core/search_items', params)
             .catch(function (err) {
                 console.log(err);
@@ -176,18 +169,15 @@ exports.getAllShablonsToWialon = async () => {
 
 
 
-exports.getAllGroupDataFromWialon = async () => {
-    return new Promise(async function (resolve, reject) {
-        const session = await geSession.geSession();
-        session.request('core/search_items', prmsAllGoup)
-            .catch(function (err) {
-                console.log(err);
-            })
-            .then(function (data) {
-                resolve(data)
-            });
-        //}
-    })
+exports.getAllGroupDataFromWialon = async (sess) => {
+    try {
+        const session = sess ? sess : await getSession();
+        const data = await session.request('core/search_items', prmsAllGoup);
+        return data;
+    } catch (error) {
+        console.error('Error in getAllGroupDataFromWialon:', error);
+        throw error;
+    }
 };
 
 exports.getClearLoadIntervalWialon = async () => {
@@ -196,10 +186,10 @@ exports.getClearLoadIntervalWialon = async () => {
     };
     return new Promise(async function (resolve, reject) {
         try {
-            const session = await geSession.geSession();
+            const session = await getSession();
             const data = await session.request('messages/unload', prmsId);
             // Обработка успешного ответа
-            console.log(data)
+            //  console.log(data)
             resolve(data);
         } catch (err) {
             if (err.code === 7) {
@@ -214,14 +204,14 @@ exports.getClearLoadIntervalWialon = async () => {
 };
 
 //запрос всех параметров по id объекта
-exports.getAllParamsIdDataFromWialon = async (id) => {
+exports.getAllParamsIdDataFromWialon = async (id, sess) => {
     const prmsId = {
         "id": id,
         "flags": 1025
     };
     return new Promise(async function (resolve, reject) {
         try {
-            const session = await geSession.geSession();
+            const session = sess ? sess : await getSession();
             const data = await session.request('core/search_item', prmsId);
             // Обработка успешного ответа
             //   console.log(data)
@@ -237,14 +227,16 @@ exports.getAllParamsIdDataFromWialon = async (id) => {
         }
     });
 };
-exports.getUniqImeiAndPhoneIdDataFromWialon = async (id) => {
+exports.getUniqImeiAndPhoneIdDataFromWialon = async (id, sess) => {
+    // console.log(id, session)
     const prmsId = {
         "id": id,
         "flags": 0x00000100
     };
     return new Promise(async function (resolve, reject) {
         try {
-            const session = await geSession.geSession();
+
+            const session = sess ? sess : await getSession();
             const data = await session.request('core/search_item', prmsId);
             // Обработка успешного ответа
             resolve(data);
@@ -272,7 +264,7 @@ exports.getAnimalsWialon = async (login) => {
         ]
     }
     return new Promise(async function (resolve, reject) {
-        const session = await geSession.geSession();
+        const session = await getSession();
         session.request('core/update_data_flags', prms)
             .catch(function (err) {
                 console.log(err);
@@ -298,7 +290,7 @@ exports.getAllSensorsIdDataFromWialon = async (id, sens) => {
     };
     try {
         return new Promise(async function (resolve, reject) {
-            const session = await geSession.geSession();
+            const session = await getSession();
             const data = await session.request('unit/calc_sensors', prms3)
             resolve(data)
         })
@@ -317,7 +309,7 @@ exports.getLastAllSensorsIdDataFromWialon = async (id, login) => {
         "sensors": []
     }
     return new Promise(async function (resolve, reject) {
-        const session = await geSession.geSession();
+        const session = await getSession();
         session.request('unit/calc_last_message', prms)
             .catch(function (err) {
                 console.log(err);
@@ -335,7 +327,7 @@ exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
         'flags': 4096
     }
     return new Promise(async function (resolve, reject) {
-        const session = await geSession.geSession();
+        const session = await getSession();
         session.request('core/search_item', prmss)
             .catch(function (err) {
                 console.log(err);
@@ -352,9 +344,7 @@ exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
 //запрос данных на виалон по объекту и получение параметров
 exports.getDataFromWialon = async () => {
     return new Promise(async function (resolve, reject) {
-        const session = await geSession.geSession();
-        //  console.log(session)
-        //  const session = await getSessiont('i');
+        const session = await getSession();
         session.request('core/search_items', prms)
             .catch(function (err) {
                 console.log(err);
@@ -374,7 +364,7 @@ exports.geoDataFromWialon = async (time1, time2, idw) => {
         "loadCount": 180000
     }
     return new Promise(async function (resolve, reject) {
-        const session = await geSession.geSession();
+        const session = await getSession();
         session.request('messages/load_interval', prmsIdTime)
             .catch(function (err) {
                 console.log(err);
@@ -394,8 +384,7 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
         "loadCount": 180000
     }
     return new Promise(async function (resolve, reject) {
-        const session = await geSession.geSession();
-        // console.log(session)
+        const session = await getSession();
         session.request('messages/load_interval', prms2)
             .catch(function (err) {
                 console.log(err);
@@ -425,7 +414,7 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
         "detalization": 3
     }
     return new Promise(async function (resolve, reject) {
-        const session = await geSession.geSession();
+        const session = await getSession();
         session.request('events/update_units', prms)
             .catch(function (err) {
                 console.log(err);
@@ -471,7 +460,7 @@ exports.getEventFromToDayWialon = async (id, t1, t2) => {
         }
     }
     return new Promise(async function (resolve, reject) {
-        const session = await geSession.geSession();
+        const session = await getSession();
         session.request('events/load', params)
             .catch(function (err) {
                 console.log(err);

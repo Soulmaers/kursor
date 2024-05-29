@@ -1,9 +1,10 @@
 
 const { connection, sql } = require('../config/db')
 const databaseService = require('./database.service');
-const wialonService = require('./wialon.service.js')
 const helpers = require('./helpers.js')
 const send = require('./send.service.js');
+
+const getEvent = require('../controllers/bitrix.controller.js')
 const { y } = require('pdfkit');
 
 
@@ -264,16 +265,8 @@ exports.viewListToBase = async (login) => {
 exports.getObjects = async (login) => {
     try {
         const pool = await connection
-        let postModel;
-        if (login) {
-            postModel = `SELECT idObject, nameObject,imei FROM objects WHERE login=@login`
-        }
-        else {
-            postModel = `SELECT idObject, nameObject,imei FROM objects`
-        }
-
+        postModel = `SELECT idObject, nameObject,imei FROM object_table WHERE port!='wialon'`
         const result = await pool.request()
-            .input('login', login)
             .query(postModel)
         return result.recordset
     }
@@ -446,11 +439,10 @@ exports.getParamsToPressureAndOilToBase = async (time1, time2, idw, columns, num
         WHERE RowNum % 2 = 0;
         `;
         const result = await pool.request()
-            .input('idw', idw)
+            .input('idw', String(idw))
             .input('time2', String(time2))
             .input('time1', String(time1))
             .query(num === 0 ? postModel : postModel2);
-
         return result.recordset.length ? result.recordset : [];
     } catch (e) {
         console.error(e);
@@ -841,14 +833,14 @@ exports.setSensStorMeta = async (data) => {
             await pool.request().input('params', param).input('idw', String(data[0].id)).query(deleteQuery);
         }
         for (const entry of data) {
-            const { id, port, sens, params, meta, value, status, time, login, data, imei } = entry;
+            const { id, port, sens, params, meta, value, status, time, login, data, imei, idBitrix } = entry;
             const post = `SELECT * FROM sens_stor_meta WHERE idw=@idw AND params=@params`
             const res = await pool.request()
                 .input('idw', String(id))
                 .input('params', params)
                 .query(post);
             if (res.recordset.length === 0) {
-                const insertQuery = `INSERT INTO sens_stor_meta (idw,port, sens, params, meta, time, login, imei) VALUES (@idw,@port, @sens, @params, @meta, @time, @login, @imei)`;
+                const insertQuery = `INSERT INTO sens_stor_meta (idw,port, sens, params, meta, time, login, imei,idBitrixObject) VALUES (@idw,@port, @sens, @params, @meta, @time, @login, @imei,@idBitrixObject)`;
                 const res = await pool.request()
                     .input('idw', String(id))
                     .input('port', port)
@@ -858,11 +850,11 @@ exports.setSensStorMeta = async (data) => {
                     .input('time', time)
                     .input('login', login)
                     .input('imei', imei)
+                    .input('idBitrixObject', idBitrix)
                     .query(insertQuery);
             }
             else {
-                console.log()
-                const updateQuery = `UPDATE sens_stor_meta SET idw=@idw, port=@port, sens=@sens, time=@time, params=@params, meta=@meta, login=@login, imei=@imei 
+                const updateQuery = `UPDATE sens_stor_meta SET idw=@idw, port=@port, sens=@sens, time=@time, params=@params, meta=@meta, login=@login, imei=@imei, idBitrixObject=@idBitrixObject 
             WHERE idw=@idw AND params=@params`;
                 const res = await pool.request()
                     .input('idw', String(id))
@@ -876,6 +868,7 @@ exports.setSensStorMeta = async (data) => {
                     .input('imei', imei)
                     .input('status', status)
                     .input('data', data)
+                    .input('idBitrixObject', idBitrix)
                     .query(updateQuery);
             }
             console.log('здесь')
@@ -966,7 +959,7 @@ exports.updateObject = async (object) => {
     try {
         const pool = await connection;
         const updateModel = `UPDATE object_table SET marka = @marka,model = @model,vin = @vin,dut = @dut,angle = @angle,data = @data, login = @login,idObject=@idObject,port=@port,typeDevice=@typeDevice,imei=@imei,adress=@adress,phone=@phone,nameObject=@nameObject,
-         typeObject=@typeObject,  gosnomer=@gosnomer WHERE idObject = @idObject`;
+         typeObject=@typeObject,  gosnomer=@gosnomer, id_bitrix=@id_bitrix WHERE idObject = @idObject`;
         const result = await pool.request()
             .input('data', object.data)
             .input('login', object.login)
@@ -984,6 +977,7 @@ exports.updateObject = async (object) => {
             .input('gosnomer', object.gosnomer)
             .input('dut', object.dut)
             .input('angle', object.angle)
+            .input('id_bitrix', object.idBitrix)
             .query(updateModel)
 
         return 'Объект обновлен'
@@ -1093,26 +1087,6 @@ exports.setGroup = async (object) => {
                     .input('number_company', number_company)
                     .query(updateModel);
             }
-            /* else if (res.recordset[0].port === 'wialon') {
-                 const updateModel = `
-                     UPDATE object_table
-                     SET data = @data,
-                         idg = @idg,
-                         name_g=@name_g,
-                         face_company=@face_company,
-                         number_company=@number_company
-                                         WHERE idObject=@idObject
-                 `;
-                 const res = await pool.request()
-                     .input('login', login)
-                     .input('data', String(time)) // Предполагая, что время в Unix timestamp
-                     .input('idObject', el.idObject)
-                     .input('idg', String(idg))
-                     .input('name_g', name_g)
-                     .input('face_company', face_company)
-                     .input('number_company', number_company)
-                     .query(updateModel);
-             }*/
             else {
                 const obj = res.recordset[0]
                 obj.login = login
@@ -1234,8 +1208,8 @@ exports.saveObject = async (object) => {
     try {
         const pool = await connection
         const postModel = `
-            INSERT INTO object_table (adress, data, name_g,idObject, imei, login,idg, nameObject, phone, port, typeDevice, typeObject, marka,model,vin,gosnomer,dut,angle)
-            VALUES (@adress, @data,@name_g, @idObject, @imei, @login, @idg,@nameObject, @phone, @port, @typeDevice, @typeObject,@marka,@model,@vin,@gosnomer,@dut,@angle)
+            INSERT INTO object_table (adress, data, name_g,idObject, imei, login,idg, nameObject, phone, port, typeDevice, typeObject, marka,model,vin,gosnomer,dut,angle,id_bitrix)
+            VALUES (@adress, @data,@name_g, @idObject, @imei, @login, @idg,@nameObject, @phone, @port, @typeDevice, @typeObject,@marka,@model,@vin,@gosnomer,@dut,@angle,@id_bitrix)
         `;
 
         const result = await pool.request()
@@ -1257,6 +1231,7 @@ exports.saveObject = async (object) => {
             .input('gosnomer', object.gosnomer)
             .input('dut', object.dut)
             .input('angle', object.angle)
+            .input('id_bitrix', object.idBitrix)
             .query(postModel);
         return 'Объект создан'
     } catch (e) {
@@ -1403,39 +1378,6 @@ exports.lostChartDataToBase = async (idw) => {
 
 
 
-/*
-exports.ggg = async (id) => {
-    console.log('ggg')
-    return new Promise(async function (resolve, reject) {
-        const idw = id
-        const allobj = {};
-        const ress = await wialonService.getAllNameSensorsIdDataFromWialon(idw)
-        if (!ress) {
-            ggg(id)
-        }
-        const nameSens = Object.entries(ress.item.sens)
-        const arrNameSens = [];
-        nameSens.forEach(el => {
-            arrNameSens.push([el[1].n, el[1].p])
-        })
-        const result = await wialonService.getLastAllSensorsIdDataFromWialon(idw)
-        if (result) {
-            const valueSens = [];
-            Object.entries(result).forEach(e => {
-                valueSens.push(e[1])
-            })
-            const allArr = [];
-            arrNameSens.forEach((e, index) => {
-                allArr.push([...e, valueSens[index]])
-            })
-            allArr.forEach(it => {
-                allobj[it[1]] = it[0]
-            })
-        }
-        resolve(allobj)
-    });
-}*/
-
 //сохраняем в базу
 exports.alarmBase = async (data, tyres, alarm) => {
     console.log('данные по алармам')
@@ -1540,15 +1482,15 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
     }
     const dat = async () => {
         try {
-            const data = await databaseService.objects(String(idw))
-            let port;
-            if (data.length === 0) {
-                port = 'wialon'
-            }
-            else {
-                port = data[0].port
-            }
-            const selectBase = `SELECT * FROM sens_stor_meta WHERE idw='${idw}' AND port='${port}'`
+            /*   const data = await databaseService.objects(String(idw))
+               let port;
+               if (data.length === 0) {
+                   port = 'wialon'
+               }
+               else {
+                   port = data[0].port
+               }*/
+            const selectBase = `SELECT * FROM sens_stor_meta WHERE idw='${idw}'`
             //  const selectBase = `SELECT name, value, status FROM params WHERE idw='${idw}' AND port='${port}'`
             const result = await pool.query(selectBase)
             return { result: result.recordset, message: car }
@@ -1868,19 +1810,39 @@ exports.deleteBarToBase = async (idw) => {
     }
 }
 
+exports.getBitrixEvent = async (idw) => {
+    try {
+        const pool = await connection;
+        const postModel = `SELECT * FROM bitrix_table_events WHERE idObject=@idObject`
+        const results = await pool.request().input('idObject', String(idw)).query(postModel)
+        return results.recordset.length !== 0 ? results.recordset : []
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+
 exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
+    // console.log(arr, id, geo, group, name, start)
     const idw = id
     const date = new Date()
     const time = (date.getTime() / 1000).toFixed(0)
     const newdata = JSON.stringify(arr)
     const geoLoc = JSON.stringify(geo)
 
-
     const res = await databaseService.logsSaveToBase(newdata, time, idw, geoLoc, group, name, start)
+
+
     if (res.message === 'Событие уже существует в базе логов') {
         null
     }
     else {
+        const result = await databaseService.getBitrixEvent(idw)
+        if (result.length !== 0) {
+            getEvent.pushEvent(arr, id, geo, group, name, start, result[0].idBitrix, time)
+            //result[0].idBitrix === '30' ? getEvent.pushEvent(arr, id, geo, group, name, start, result[0].idBitrix, time) : null
+        }
         const mess = await helpers.processing(arr, time, idw, geoLoc, group, name, start)
         const objFuncAlarm = {
             email: { fn: send.sendEmail },
@@ -1920,6 +1882,7 @@ exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
 }
 
 exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
+    // console.log(arr, time, idw, geo, group, name, start)
     try {
         const pool = await connection;
         let checkExistQuery;
@@ -2205,6 +2168,152 @@ exports.saveTechToBase = async (value, add) => {
 
 };
 
+
+exports.getMotoTo = async (data) => {
+    try {
+        const pool = await connection; // Предполагается, что connection уже готов к использованию
+        let results = []; // Массив для хранения результатов
+
+        for (const item of data) {
+            const query = `SELECT TOP 1
+                mt.typeTo AS typeTo,
+                mt.nameTo AS nameTo,
+                mt.discriptionType AS discriptionType,
+                j.guideID AS guideID,
+                j.guideDescription AS guideDescription,
+                j.guideType AS guideType,
+                mj.IsRequired AS IsRequired,
+                mj.motohours AS motohours,
+                mj.mileage AS mileage,
+                mj.day AS day
+            FROM connectTyTOandGuide mj
+            JOIN typeTo mt ON mj.typeTo = mt.typeTo
+            JOIN guide j ON mj.guideID = j.guideID
+            WHERE mj.idObject = @idObject AND mj.motohours > @engineHours
+            ORDER BY mj.motohours ASC`;
+
+            // Выполнение запроса с параметрами idObject и engineHours
+            const result = await pool.request()
+                .input('idObject', item.idw)  // Добавление параметра idObject
+                .input('engineHours', item.engineHours)  // Добавление параметра engineHours
+                .query(query);
+            const moto = result.recordset[0] ? Math.max(0, result.recordset[0].motohours - item.engineHours) : '-';
+            // Добавление полученных данных в результат с сохранением idw и engineHours
+            results.push({
+                idw: item.idw,
+                engineHours: item.engineHours,
+                TOData: result.recordset,// Сохранение ближайшего ТО для данного idw,
+                motoRemains: moto
+            });
+        }
+        return results; // Возвращение массива результатов
+    } catch (e) {
+        console.log(e);
+        throw e; // Проброс ошибки для обработки на более высоком уровне
+    }
+}
+
+
+exports.setShablonToBase = async (data) => {
+    const idw = data[0].idObject; // Извлекаем idObject из первого элемента массива данных
+    try {
+        const pool = await connection;
+
+        let query = `
+            MERGE INTO connectTyTOandGuide AS target
+            USING (VALUES `;
+
+        // Формируем строки для вставки из данных
+        const values = data.map(item => {
+            const isRequired = item.bool !== undefined ? item.bool : 'NULL';
+            const motohours = item.moto !== undefined ? item.moto : 'NULL';
+            const mileage = item.mileage !== undefined ? item.mileage : 'NULL';
+            const day = item.day !== undefined ? item.day : 'NULL';
+            return `(${item.to}, ${item.guide}, ${isRequired}, ${motohours}, ${mileage}, ${day}, ${item.idObject})`;
+        });
+
+        query += values.join(', ');
+
+        query += `
+            ) AS source (typeTo, guideID, IsRequired, motohours, mileage, day, idObject)
+            ON target.typeTo = source.typeTo AND target.guideID = source.guideID AND target.idObject = source.idObject
+            WHEN MATCHED THEN
+                UPDATE SET target.IsRequired = source.IsRequired,
+                           target.motohours = source.motohours,
+                           target.mileage = source.mileage,
+                           target.day = source.day
+            WHEN NOT MATCHED THEN
+                INSERT (typeTo, guideID, IsRequired, motohours, mileage, day, idObject)
+                VALUES (source.typeTo, source.guideID, source.IsRequired, source.motohours, source.mileage, source.day, source.idObject)
+            WHEN NOT MATCHED BY SOURCE AND target.idObject = ${idw} THEN
+                DELETE;
+        `;
+
+        const results = await pool.request().query(query);
+        return 'Данные обновлены/добавлены';
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+};
+
+
+exports.getPressureTyres = async (idBitrix) => {
+    try {
+        const pool = await connection
+        const post = `SELECT value FROM sens_stor_meta WHERE idBitrix=@idBitrix`
+        const results = await pool.request()
+            .input('idBitrix', idBitrix)
+            .query(post)
+        return results.recordset
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+exports.getShablonToBase = async (idw) => {
+    try {
+        const pool = await connection
+        const querys = `SELECT 
+        mt.typeTo AS typeTo,
+          mt.nameTo AS nameTo,
+            mt.discriptionType AS discriptionType,
+               j.guideID AS guideID,
+                     j.guideDescription AS guideDescription,
+            j.guideType AS guideType,
+             mj.IsRequired AS IsRequired,
+    mj.motohours AS motohours,
+     mj.mileage AS mileage,
+    mj.day AS day
+          FROM connectTyTOandGuide mj
+JOIN typeTo mt ON mj.typeTo = mt.typeTo
+JOIN guide j ON mj.guideID = j.guideID WHERE idObject=@idObject`;
+
+        const results = await pool.request()
+            .input('idObject', String(idw))
+            .query(querys)
+        return results.recordset
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+
+exports.getGuideToBase = async () => {
+    try {
+        const selectBase = `SELECT *FROM guide`
+        const pool = await connection
+        const results = await pool.request()
+            .query(selectBase)
+        return results.recordset
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
 exports.techViewToBase = async (nameCar, count, idw) => {
     try {
         const selectBase = `SELECT marka, model, identificator, psi, changeBar, probegNow, dateInstall, probegPass, dateZamer, N1, N2, N3, N4, maxMM FROM tyresBase WHERE idw=@idw AND idTyres=@count`
@@ -2217,7 +2326,39 @@ exports.techViewToBase = async (nameCar, count, idw) => {
     }
 }
 
+exports.getHistoryTyres = async (identificator, id) => {
+    console.log(identificator, id)
+    try {
+        const selectBase = `SELECT TOP 1 th.*, tg.*
+FROM tyres_history th
+JOIN tyres_guide tg ON th.uniqTyresID = tg.uniqTyresID
+WHERE th.identificator = @identificator AND th.idObject = @idObject
+ORDER BY th.incriment DESC`
+        const pool = await connection
+        const results = await pool.request()
+            .input('identificator', identificator)
+            .input('idObject', id)
+            .query(selectBase)
+        return results.recordset.length !== 0 ? results.recordset[0] : []
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
 
+exports.techViewToBaseBitrix = async (idb) => {
+    try {
+        const selectBase = `SELECT marka, model, identificator, psi, changeBar, probegNow, dateInstall, probegPass, dateZamer, N1, N2, N3, N4, maxMM FROM tyresBase WHERE identificator=@idB`
+        const pool = await connection
+        const results = await pool.request()
+            .input('idB', idb)
+            .query(selectBase)
+        return results.recordset
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
 exports.techViewAllToBase = async (idw) => {
     try {
         const selectBase = `SELECT * FROM tyresBase WHERE idw=@idw`
@@ -2391,6 +2532,119 @@ exports.saveDataNavtelecomToBase = async (mass) => {
         catch (error) {
             console.log(error);
         }
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+exports.setModelTyresGuide = async (data, reduct) => {
+    console.log(reduct)
+    try {
+        const pool = await connection;
+        // Проверяем, существует ли уже такая модель в базе данных
+        const checkModelQuery = `
+            SELECT uniqTyresID 
+            FROM tyres_model_guide 
+            WHERE type_tire = @type_tire 
+                AND marka = @marka 
+                AND model = @model 
+                AND type_tyres = @type_tyres 
+                AND radius = @radius 
+                AND profil = @profil 
+                AND width = @width 
+                AND sezon = @sezon 
+                AND index_speed = @index_speed 
+                AND index_massa = @index_massa `;
+
+        const modelExist = await pool.request()
+            .input('type_tire', data.type_tire)
+            .input('marka', data.marka)
+            .input('model', data.model)
+            .input('type_tyres', data.type_tyres)
+            .input('radius', data.radius)
+            .input('profil', data.profil)
+            .input('width', data.width)
+            .input('sezon', data.sezon)
+            .input('index_speed', data.index_speed)
+            .input('index_massa', data.index_massa)
+            .query(checkModelQuery);
+
+        if (modelExist.recordset.length > 0) {
+            // Модель существует, обновляем запись
+            const updateQuery = `
+                UPDATE tyres_model_guide
+                SET imagePath = @imagePath 
+                WHERE uniqTyresID = @uniqTyresID`;
+
+            await pool.request()
+                .input('imagePath', data.imagePath)
+                .input('uniqTyresID', modelExist.recordset[0].uniqTyresID)
+                .query(updateQuery);
+        } else {
+            if (reduct && reduct !== 'null') {
+                // Модель существует, обновляем запись
+                const updateQuery = `
+                UPDATE tyres_model_guide
+             SET type_tire = @type_tire,
+                        marka = @marka,
+                        model = @model,
+                        type_tyres = @type_tyres,
+                        radius = @radius,
+                 profil = @profil,
+                 width = @width,
+                 sezon = @sezon,
+                 index_speed = @index_speed,
+                 index_massa = @index_massa,
+                                      imagePath = @imagePath
+                WHERE uniqTyresID = @uniqTyresID`;
+
+                await pool.request()
+                    .input('type_tire', data.type_tire)
+                    .input('marka', data.marka)
+                    .input('model', data.model)
+                    .input('type_tyres', data.type_tyres)
+                    .input('radius', data.radius)
+                    .input('profil', data.profil)
+                    .input('width', data.width)
+                    .input('sezon', data.sezon)
+                    .input('index_speed', data.index_speed)
+                    .input('index_massa', data.index_massa)
+                    .input('imagePath', data.imagePath)
+                    .input('uniqTyresID', Number(reduct))
+                    .query(updateQuery);
+            }
+            else {
+                // Модель не существует, вставляем новую запись
+                const insertQuery = `
+                INSERT INTO tyres_model_guide (type_tire, marka, model, type_tyres, radius, profil, width, sezon, index_speed, index_massa, imagePath)
+                VALUES (@type_tire, @marka, @model, @type_tyres, @radius, @profil, @width, @sezon, @index_speed, @index_massa, @imagePath)`;
+
+                await pool.request()
+                    .input('type_tire', data.type_tire)
+                    .input('marka', data.marka)
+                    .input('model', data.model)
+                    .input('type_tyres', data.type_tyres)
+                    .input('radius', data.radius)
+                    .input('profil', data.profil)
+                    .input('width', data.width)
+                    .input('sezon', data.sezon)
+                    .input('index_speed', data.index_speed)
+                    .input('index_massa', data.index_massa)
+                    .input('imagePath', data.imagePath)
+                    .query(insertQuery);
+            }
+        }
+    } catch (error) {
+        console.error('Ошибка при сохранении данных в базу данных:', error);
+        throw error;
     }
 };
 

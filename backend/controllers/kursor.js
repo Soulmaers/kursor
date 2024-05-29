@@ -1,15 +1,17 @@
 
 
 const databaseService = require('../services/database.service');
+const { Worker } = require('worker_threads');
+const path = require('path');
 //const ips = require('../../index');
 
-const { sortData } = require('../services/helpers')
+//const { sortData } = require('../services/helpers')
 
 exports.getKursorObjects = async (req, res) => {
     const login = req && req.body && req.body.login ? req.body.login : null
     const data = await databaseService.getKursorObjects(login) //получаем объекты не wialona в структуре с группами
     const massObjectCar = login ? await databaseService.dostupObject(login) : null //проверяем к каким из них есть доступ у УЗ
-    const ress = sortData(data)
+    // const ress = sortData(data)
     const massObject = [];
     const arrName = []
     for (const elem of ress) {
@@ -88,15 +90,33 @@ exports.getDataParamsInterval = async (req, res) => {
     const result = await databaseService.geoLastInterval(time1, time2, idw) //получение парамтеров и значений датчиков за интервал времени
     res.json(result)
 }
-
+let workerPress = null;
 exports.getParamsToPressureAndOil = async (req, res) => {
     const time1 = req.body.t1
     const time2 = req.body.t2
     const idw = req.body.idw
     const arrayColumns = req.body.arrayColumns
     const num = req.body.num
-    const result = await databaseService.getParamsToPressureAndOilToBase(time1, time2, idw, arrayColumns, num) //получение парамтеров и значений датчиков за интервал времени
-    res.json(result)
+    // Завершаем предыдущего воркера, если он существует
+    if (workerPress) {
+        workerPress.terminate();
+    }
+    workerPress = new Worker(path.resolve(__dirname, '../services/workerDetalisation.js'));
+    workerPress.on('message', (result) => {
+        workerPress.terminate();
+        res.json(result)
+    });
+    workerPress.on('error', (err) => {
+        workerPress.terminate();
+        console.log('ошибка воркера', err);
+    });
+    workerPress.on('exit', (code) => {
+        if (code !== 0) {
+            console.log('выход воркера', code);
+        }
+    });
+    workerPress.postMessage({ time1: time1, time2: time2, idw: idw, arrayColumns: arrayColumns, num: num });
+
 }
 
 exports.saveValuePWR = async (req, res) => {
@@ -137,10 +157,28 @@ exports.setSensStorMeta = async (req, res) => {
     res.json(result)
 }
 
+let worker = null;
 exports.getSensStorMeta = async (req, res) => {
     const idw = req.body.idw
-    const result = await databaseService.getSensStorMeta(idw)  //получение привязанных параметров по объекту
-    res.json(result)
+    // Завершаем предыдущего воркера, если он существует
+    if (worker) {
+        worker.terminate();
+    }
+    worker = new Worker(path.resolve(__dirname, '../services/workerParams.js'));
+    worker.on('message', (result) => {
+        worker.terminate();
+        res.json(result)
+    });
+    worker.on('error', (err) => {
+        worker.terminate();
+        console.log(err);
+    });
+    worker.on('exit', (code) => {
+        if (code !== 0) {
+            console.log(code);
+        }
+    });
+    worker.postMessage(idw);
 }
 
 exports.objects = async (req, res) => {

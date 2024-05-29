@@ -19,28 +19,38 @@ export class IconStatus {
         this.initEventListeners();
     }
     reinitialize(newElem) {
+        this.clearInterval(); // Удаление предыдущего интервала
         this.removeEventListeners(); // Удаление старых слушателей событий
         this.elem = newElem; // Обновление id
+        this.intervalId = null
         this.initEventListeners(); // Повторное добавление слушателей событий
     }
 
     initEventListeners() {
         this.listeModalWindow(this.elem)
-        //  this.card.forEach(el => el.addEventListener('click', () => this.cards(el)))
         this.card.forEach(el => el.addEventListener('click', this.handleCardClick));
 
     }
     removeEventListeners() {
-        //  this.card.forEach(el => el.removeEventListener('click', () => this.cards(el)))
         this.card.forEach(el => el.removeEventListener('click', this.handleCardClick));
     }
+
+
+
+    clearInterval() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+    }
+
     async listeModalWindow(elem) {
         console.log(elem)
         this.targetElement = elem
         this.id = elem.id
         this.nameObject = elem.children[0].textContent.replace(/\s+/g, '')
         await this.displayIconValues(this.id)
-        clearInterval(this.intervalId)
+        this.clearInterval(); // Удаление предыдущего интервала
         this.intervalId = setInterval(() => this.displayIconValues(this.id), 110000)
     }
     //навешиваем значнеие кликнутого параметра на иконку и запускаем метод сохранения даных в бд
@@ -131,12 +141,23 @@ export class IconStatus {
 
     //отображение значений иконок
     async displayIconValues(idw) {
+
+        // Отмена предыдущего запроса, если он существует
+        if (this.abortController) {
+            this.abortController.abort();
+        }
+
+        // Создание нового контроллера для отмены
+        this.abortController = new AbortController();
+        const signal = this.abortController.signal;
+
         const param = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idw }))
+            body: (JSON.stringify({ idw })),
+            signal: signal
         }
         const params = await this.iconFindParams(param)
         const editParams = await this.iconFindParamsEdit(param)
@@ -199,6 +220,7 @@ export class IconStatus {
     // запрос параметров (params)
     async iconFindParams(param) {
         let result;
+
         const res = await fetch('/api/getSens', param)
         const data = await res.json()
         result = data.map(e => {
@@ -238,7 +260,7 @@ export class IconStatus {
     //расчет статуса объекта
     async status(data) {
         console.log(data)
-
+        if (data.lengh === 0) return
         const lastValidTime = data.find(e => e[1] === 'last_valid_time')
         const nowTime = Math.floor(new Date().getTime() / 1000)
         const status = (nowTime - Number(lastValidTime[3])) > 3600 ? 0 : 1

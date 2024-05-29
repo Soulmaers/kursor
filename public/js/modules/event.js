@@ -1,20 +1,15 @@
 
 import { data } from './content.js'
-//import { alarmClear } from './visual.js'
 import { getUsers } from './admin.js'
-import { reqProtectorBase } from './protector.js'
-import { saveDouble } from './saveBaseId.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 import { Tooltip } from '../class/Tooltip.js'
 import { Flasher } from '../class/Flash.js'
 import { CloseBTN } from '../class/CloseBTN.js'
 import { ResizeContainer } from '../class/ResizeContainer.js'
-import { viewTech } from './tech.js'
 import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 import { storTitleList } from './content.js'
 import { initCharts, initSummary } from './spisokModules/class/SpisokObject.js'
-//import { CreateNewObject } from './propertyObjectModules/class/CreateNewObject.js'
-//import { CreateNewGroup } from './propertyObjectModules/class/CreateNewGroup.js'
+
 
 
 
@@ -91,10 +86,6 @@ mainMenu.addEventListener('click', (event) => {
     new CloseBTN(menu, mainMenu)
     menu.style.display = 'flex'
 })
-
-//export const obj = new CreateNewObject(create)
-//export const sett = new CreateNewGroup(create)
-
 
 const itemInfoGlobal = document.querySelector('.itemInfoGlobal')
 itemInfoGlobal.addEventListener('click', (event) => {
@@ -378,121 +369,8 @@ rad.forEach(el => {
     })
 })
 
-const buttonTth = document.querySelector('.buttonTth')
-buttonTth.addEventListener('click', pr)
-export async function pr() {
-    console.log('сохранил')
-    const techText = document.querySelectorAll('.tech')
-    const formValue = document.querySelectorAll('.formValue')
-    const tyresActive = document.querySelector('.tiresActiv')
-    const osId = tyresActive.closest('.osiTest').children[1].id
-    let nameOs;
-    tyresActive.closest('.osiTest').children[1].classList.contains('pricepT') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
-    const arrNameCol = [];
-    const arrNameColId = [];
-    techText.forEach(el => {
-        arrNameCol.push(el.id)
-    })
-    const active = document.querySelector('.color')
-    const activePost = active.textContent.replace(/\s+/g, '')
-    const idw = document.querySelector('.color').id
-    tyresActive.closest('.osiTest').children[1].classList.contains('pricepT') ? nameOs = 'Прицеп' : nameOs = 'Тягач'
-    const pr = Array.from(formValue)
-    const maxMM = pr.pop()
-    const idbaseTyres = document.querySelector('.idbaseTyres')
-    arrNameColId.push(idw)
-    arrNameColId.push(idbaseTyres.textContent)
-    arrNameColId.push(activePost)
-    arrNameColId.push(nameOs)
-    arrNameColId.push(osId)
-    arrNameColId.push(tyresActive.id)
-    pr.forEach(e => {
-        arrNameColId.push(e.value)
-    })
-    !maxMM.value ? arrNameColId.push(maxMM.placeholder) : arrNameColId.push(maxMM.value)
-    arrNameColId.splice(13, 0, arrNameColId.splice(17, 1)[0]);
-    if (idbaseTyres.textContent !== '') {
-        await saveDouble(arrNameColId)
-    }
-    const btnShina = document.querySelectorAll('.modals')
-    if (btnShina[1].classList.contains('active')) {
-        console.log('икс')
-        reqProtectorBase()
-    }
-    viewTech(tyresActive.id)
-}
 
 
-class DropDownList {
-    constructor({ element, data, btn }) {
-        this.element = element;
-        this.data = data;
-        this.btn = btn;
-        this.listElement = null;
-        this._onElementInput = this._onElementInput.bind(this);
-        this._onElementKursor = this._onElementKursor.bind(this);
-        this._onItemListClick = this._onItemListClick.bind(this);
-        this._onDocumentKeyDown = this._onDocumentKeyDown.bind(this);
-        this.bind();
-    }
-    _onDocumentKeyDown({ keyCode }) {
-        console.log(keyCode);
-    }
-    _onElementInput({ target }) {
-        console.log(target.value)
-        this.removeList();
-
-        if (!target.value) {
-            return
-        }
-        this.createList(this.data.filter(it => it.toLowerCase().indexOf(target.value.toLowerCase()) !== -1));
-        this.appendList();
-    }
-    _onElementKursor() {
-        this.removeList();
-        this.createList(this.data);
-        this.appendList();
-    }
-    _onItemListClick({ target }) {
-        this.element.value = target.textContent;
-        this.removeList();
-    }
-    createList(data) {
-        this.listElement = document.createElement(`ul`);
-        this.listElement.className = `drop-down__list`;
-        this.listElement.innerHTML = data.map(it => `<li tabindex="0" class="drop-down__item">${it}</li>`).join(``);
-
-        [...this.listElement.querySelectorAll(`.drop-down__item`)].forEach(it => {
-            it.addEventListener(`click`, this._onItemListClick);
-        });
-        document.addEventListener(`keydown`, this._onDocumentKeyDown);
-    }
-    appendList() {
-        const { left, width, bottom } = this.element.getBoundingClientRect();
-        this.listElement.style.width = width + `px`;
-        this.listElement.style.left = window.scrollX + left + `px`;
-        this.listElement.style.top = window.scrollY + bottom + `px`;
-        this.listElement.style.display = 'block'
-        this.listElement.style.zIndex = '1000'
-        document.body.appendChild(this.listElement);
-    }
-    removeList() {
-        if (this.listElement) {
-            this.listElement.remove();
-            this.listElement = null;
-        }
-    }
-    bind() {
-        this.element.addEventListener(`input`, this._onElementInput);
-        this.btn.addEventListener(`click`, this._onElementKursor);
-        document.addEventListener('click', (e) => {
-            if (e.target !== this.btn) {
-                this.removeList()
-            }
-        })
-    }
-}
-new DropDownList({ element: document.querySelector(`#input`), btn: document.querySelector('.buh'), data });
 
 
 

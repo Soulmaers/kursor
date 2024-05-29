@@ -1,8 +1,8 @@
 import { initCharts } from '../spisokModules/class/SpisokObject.js'
-import { skladContainer } from './sklad.js'
 import { kartaContainer } from './karta.js'
 import { reportsContainer } from './reports.js'
 import { Servis } from './servis.js'
+import { SkladTyres } from '../skladModules/class/SkladTyres.js'
 
 export class NavigationMenu {
     constructor(data) {
@@ -14,6 +14,7 @@ export class NavigationMenu {
         this.globalContainer = document.querySelector('.wrapperFull')
         this.globalServis = document.querySelector('.globalServis')
         this.currentTimeoutId = null;
+        this.instancSklad = null
         this.menuItems = {
             dash: { method: this.dash.bind(this), elem: 'globalDash' },
             karta: { method: this.karta.bind(this), elem: 'globalMaps' },
@@ -132,9 +133,14 @@ export class NavigationMenu {
     }
 
     sklad(elem) {
-        this.globalContainer.style.display = 'flex'
+        this.globalContainer.style.display = 'none'
         elem.style.display = 'flex'
-        skladContainer()
+
+        if (!this.instancSklad) {
+            this.instancSklad = new SkladTyres(elem, this.data);
+        } else {
+            this.instancSklad.destroy(elem, this.data);
+        }
     }
 }
 

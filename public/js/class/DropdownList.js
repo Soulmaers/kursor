@@ -48,7 +48,7 @@ export class DropDownList {
         resultW.forEach(e => {
             e.idObject !== '' && this.globalArrayDatas.push(String(e.idObject));
             e.nameObject !== '' && this.globalArrayDatas.push(e.nameObject);
-            e.imei !== '' && this.globalArrayDatas.push(e.imei);
+            e.imei !== '' || e.imei !== null && this.globalArrayDatas.push(e.imei);
             e.phone !== '' || e.phone !== null && this.globalArrayDatas.push(e.phone);
         });
     }

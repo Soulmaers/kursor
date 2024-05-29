@@ -24,7 +24,7 @@ export class CreateNewObject {
         this.pop = document.querySelector('.popup-background')
         this.cancel.addEventListener('click', this.hiddenModal.bind(this))
         this.initEvent()
-        Array.from(this.navi.children).forEach(e => { e.addEventListener('click', this.toogleModal.bind(this, e)) })
+        Array.from(this.navi.children).forEach(e => { e.addEventListener('click', this.toogleModal.bind(this)) })
         this.idPref = null
         this.id = null
         this.object == null
@@ -41,18 +41,18 @@ export class CreateNewObject {
 
 
     toogleModal(e) {
-        Array.from(this.navi.children).forEach(e => e.classList.remove('toogleModalNavi'))
-        e.classList.add('toogleModalNavi')
-        if (e.classList.contains('title_configurator')) {
+        e.stopPropagation(); // Останавливаем всплытие события
+        Array.from(this.navi.children).forEach(e => e.classList.remove('toogleModalNavi'));
+        e.target.classList.add('toogleModalNavi');
+
+        if (e.target.classList.contains('title_configurator')) {
             this.listModal.style.display = 'none';
             this.configParams.style.display = 'flex';
-            console.log(this.id)
-            this.id || this.idPref ? this.updateMeta.style.display = 'block' : 'none'
-
+            this.id || this.idPref ? this.updateMeta.style.display = 'block' : 'none';
         } else {
             this.listModal.style.display = 'block';
             this.configParams.style.display = 'none';
-            this.updateMeta.style.display = 'none'
+            this.updateMeta.style.display = 'none';
         }
     }
     async enter() {
@@ -65,10 +65,12 @@ export class CreateNewObject {
         if (activeButton.classList.contains('title_configurator')) {
             console.log('сохраняем')
             const mess = await this.instance.setToBaseSensStorMeta()
+
             this.handleValidationResult(mess, 'green', 'bold');
             app.startClass(this.object.id)
         }
         else {
+            console.log(this.instance)
             const idObject = await this.generationId(this.login)
             const time = Math.floor(new Date().getTime() / 1000)
             const object = {
@@ -89,7 +91,8 @@ export class CreateNewObject {
                 vin: null,
                 gosnomer: null,
                 dut: null,
-                angle: null
+                angle: null,
+                idBitrix: null
             }
             this.id = object.idObject
             Array.from(this.field_modal).forEach(e => {
@@ -105,7 +108,7 @@ export class CreateNewObject {
                 console.log(object)
                 const mess = !this.idPref ? await this.saveObject(object) : await this.updateObject(object)
                 this.handleValidationResult(mess, 'green', 'bold');
-                app.startClass(String(object.idObject))
+                !this.idPref ? app.startClass(String(object.idObject)) : null
             }
         }
 
@@ -282,36 +285,34 @@ export class CreateNewObject {
             return
         }
         else {
-            console.log(idw)
+            console.time('11');
             const params = {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
                 },
                 body: JSON.stringify({ idw })
-            }
-            const res = await fetch('/api/objectsId', params)
-            const result = await res.json()
-            console.log(result)
-            const data = [element.children[0].textContent, result[0].typeObject, result[0].typeDevice, result[0].port,
-            result[0].adress, result[0].imei, result[0].phone,
-            result[0].marka, result[0].model, result[0].vin, result[0].gosnomer, result[0].dut, result[0].angle]
-            //console.log()
-            const param = {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({ idw })
-            }
-            const rr = await fetch('/api/getSensStorMeta', param)
-            const dat = await rr.json()
-            this.idPref = idw
+            };
 
+            const fetchObjectsId = fetch('/api/objectsId', params).then(res => res.json());
+            const fetchSensStorMeta = fetch('/api/getSensStorMeta', params).then(res => res.json());
+
+            const [result, dat] = await Promise.all([fetchObjectsId, fetchSensStorMeta]);
+
+            console.log(result);
+
+            const data = [
+                element.children[0].textContent, result[0].typeObject, result[0].typeDevice, result[0].port,
+                result[0].adress, result[0].imei, result[0].phone,
+                result[0].marka, result[0].model, result[0].vin, result[0].gosnomer, result[0].dut, result[0].angle, result[0].id_bitrix
+            ];
+
+            this.idPref = idw;
+            console.timeEnd('11');
             if (!this.instance) {
-                this.instance = new ConfiguratorParams(this.idPref, 'wialon', result[0].imei, dat);
+                this.instance = new ConfiguratorParams(this.idPref, 'wialon', result[0].imei, dat, result[0].id_bitrix);
             } else {
-                this.instance.reinitialize(this.idPref, 'wialon', result[0].imei, dat);
+                this.instance.reinitialize(this.idPref, 'wialon', result[0].imei, dat, result[0].id_bitrix);
             }
             data.forEach((e, index) => {
                 this.field_modal[index].value = e ? e : '-'

@@ -21,10 +21,4 @@ exports.tarirView = async (req, res) => {
     res.json(result)
 }
 
-exports.webhook = async (req, res) => {
-    const param1 = req.query.param1;
-    console.log(param1)
-    const result = await databaseService.techViewAllToBase(param1)
-    res.json(result)
-}
 

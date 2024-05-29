@@ -1,6 +1,8 @@
 const databaseService = require('../services/database.service');
 const helpers = require('../services/helpers.js')
 
+const { Worker } = require('worker_threads');
+const path = require('path');
 
 // Предположим, у нас есть глобальное хранилище для сохранения состояния
 global.summaryStatisticsState = {
@@ -40,22 +42,45 @@ class SummaryStatistiks {
         this.dailyDataStorage = global.summaryStatisticsState.dailyDataStorage;
     }
 
-
+    async processDataInWorker(dataElement) {
+        return new Promise((resolve, reject) => {
+            const worker = new Worker(path.resolve(__dirname, '../services/worker.js'));
+            worker.on('message', (result) => {
+                worker.terminate();
+                resolve(result);
+            });
+            worker.on('error', (err) => {
+                worker.terminate();
+                reject(err);
+            });
+            worker.on('exit', (code) => {
+                if (code !== 0) {
+                    reject(new Error(`Worker stopped with exit code ${code}`));
+                }
+            });
+            worker.postMessage({ id: dataElement, lastUpdateTime: this.lastUpdateTime, dailyDataStorage: this.dailyDataStorage });
+        });
+    }
     async init() {
         console.time('sum')
-        //  console.log(this.object)
         const idwArray = helpers.format(this.object)        // Запускаем все асинхронные операции одновременно и ждем их завершения
-        const dataPromises = idwArray.map(el => this.getSensorsAndParametrs(el[0], el[el.length - 1])); //получение структуры данных по параметрам
+        const dataPromises = idwArray.map(el => this.processDataInWorker(el)); //получение структуры данных по параметрам
         const dataResults = await Promise.allSettled(dataPromises);
+        //   console.log(dataResults)
         // Обрабатываем результаты асинхронных операций
         const strusturas = idwArray.map(([id, message, group, pref], index) => {
             const result = dataResults[index];
             const data = result.status === 'fulfilled' ? result.value : null;
+            // Обновляем глобальное состояние
+            global.summaryStatisticsState.lastUpdateTime = this.lastUpdateTime;
+            global.summaryStatisticsState.dailyDataStorage = this.dailyDataStorage;
             // Инициализация структуры объекта с дефолтными значениями
             const strustura = this.initializeStrustura(id, message, group, 'Тест'); //подготовка шаблона структуры объекта
             if (data) {
+                // console.log(data)
                 this.fillStrusturaWithData(strustura, data, pref); //наполнение структуры объектов суммирующими данными статистики
             }
+            // console.log(strustura)
             return strustura;
         })
         console.timeEnd('sum')
@@ -199,8 +224,8 @@ class SummaryStatistiks {
             this.lastUpdateTime = currentTime;
 
             // Обновляем глобальное состояние
-            global.summaryStatisticsState.lastUpdateTime = this.lastUpdateTime;
-            global.summaryStatisticsState.dailyDataStorage = this.dailyDataStorage;
+            //  global.summaryStatisticsState.lastUpdateTime = this.lastUpdateTime;
+            //  global.summaryStatisticsState.dailyDataStorage = this.dailyDataStorage;
         }
 
         const alt = this.quickly(this.dailyDataStorage[id] || []);

@@ -1,4 +1,4 @@
-import { viewTech } from './tech.js'
+//import { viewTech } from './tech.js'
 import { convert } from './helpersFunc.js'
 
 export function createDate() {

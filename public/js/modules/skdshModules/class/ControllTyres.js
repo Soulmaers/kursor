@@ -1,13 +1,14 @@
 
 import { DraggableContainer } from '../../../class/Dragdown.js'
-import { tech } from '../../tech.js'
+import { Sklad } from '../../skladModules/class/Sklad.js'
+
 
 export class ControllTyres {
     constructor() {
         this.getDOM()
         this.clearText()
         this.initEventListener()
-        // this.close()
+        this.instance = null
     }
 
 
@@ -29,7 +30,6 @@ export class ControllTyres {
     }
 
     initEventListener() {
-        console.log(this.tiresLink)
         this.tiresLink.forEach(el => el.addEventListener('click', this.operation.bind(this, el)))
     }
 
@@ -50,7 +50,6 @@ export class ControllTyres {
         this.hideElements(); // Скрываем элементы
         if (element.classList.contains('tiresActiv')) {
             element.classList.remove('tiresActiv');
-            console.log(this.plug[1])
             if (this.plug[1].classList.contains('activGraf')) {
                 this.grafics.style.display = 'flex';
                 this.wrapperMap.style.display = 'none';
@@ -77,8 +76,11 @@ export class ControllTyres {
         this.tableTarir.style.display = 'none'; // Дополнительное скрытие
         this.grafics.style.display = 'none'; // Дополнительное скрытие
         this.wrapperMap.style.display = 'none'
-        tech(); // Функция, отображающая технические характеристики и логику формул
+        // tech(); // Функция, отображающая технические характеристики и логику формул
+        if (this.instance) this.instance.destroy(), this.instance = null;
+        this.instance = new Sklad(element)
     }
+
 
     controllObo() {
         this.btnsens = document.querySelectorAll('.btnsens')
@@ -99,7 +101,6 @@ export class ControllTyres {
 
     close() {
         const closeIconConfig = document.querySelector('.closeIconConfig')
-        console.log(closeIconConfig)
         closeIconConfig.addEventListener('click', () => {
             const tiresActivt = document.querySelector('.tiresActivt')
             tiresActivt ? tiresActivt.classList.remove('tiresActivt') : null

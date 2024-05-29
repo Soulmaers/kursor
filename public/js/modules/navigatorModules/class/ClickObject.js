@@ -54,10 +54,7 @@ export class ClickObject {
         if (activGraf) {
             this.mainblock()
         }
-        if (this.widthWind <= 860) {
-            sections.style.display = 'none'
-            wrapleft.style.display = 'none'
-        }
+        DOMHelper.hideElements(['.wrapper_left'], 'block')
     }
     mainblock() {
         const grafikButton = document.querySelector('.grafik_button')
@@ -108,13 +105,10 @@ export class ClickObject {
             this.styleShinaActive()
         }
         DOMHelper.deleteClasses('.tablo', '.choice', '.acto', '.check_probeg', '.toogleIconEvent');  //метод удаляет переданыые классы
-        DOMHelper.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.modalCenterOs', '.techInfo', '.tableTarir', '.disketa', '.korzina', '.sensors', '.alllogs', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
+        DOMHelper.hideElements(['.calendar_track', '.calendar_graf', '.select_type', '.start', '.techInfo', '.modalCenterOs', '.tableTarir', '.disketa', '.korzina', '.sensors', '.alllogs', '.allsec', '.delIcon', '.contKran'], 'none'); //метод скрывает переданные элементы
         DOMHelper.hideElements(['.trEvent', '.main', '.wrapper_up', '.wrapperCont'], 'flex') //ставим flex элементам
         const elementsToDelete = check ? ['.msg', '.wrapMap', '.containerAlt', '.delIcon'] : ['.msg', '.wrapMap', '.containerAlt', '.delIcon', '.zamer', '.jobTSDetalisationGraf', '.jobTSDetalisationCharts_legenda'];
         DOMHelper.deleteElements(elementsToDelete);
-
-
-
 
 
         if (!check) {
@@ -122,9 +116,10 @@ export class ClickObject {
         }
         DOMHelper.createListItems('.obo', 250, 'msg', this.info[2])
 
-        new SKDSHClass(this.info, idw)
+        //  new SKDSHClass(this.info, idw)
+        this.reinitializeOrCreateInstance('instanceSKDH', SKDSHClass, this.info, idw);
 
-        console.log(check)
+        console.log(this.info)
         if (!check) {
             this.specific(this.element)//метод который обрабатывает специфические условия
             this.reinitializeOrCreateInstance('createEvent', CreateMarkersEvent, idw);
@@ -132,6 +127,7 @@ export class ClickObject {
             this.reinitializeOrCreateInstance('instanceStatistika', StatistikaPressure, this.element, this.info);
             this.reinitializeOrCreateInstance('instanceDetalisation', Detalisation, this.element);
             this.reinitializeOrCreateInstance('instanceGrafik', GrafikView, this.info);
+
             if (this.createEvent.updateInterval) {
                 clearInterval(this.createEvent.updateInterval);
                 this.createEvent.hiddenTrackAndMarkersEnent();
@@ -161,6 +157,7 @@ export class ClickObject {
         const plug = document.querySelectorAll('.plug')
         const grafics = document.querySelector('.grafics')
         const createList = document.querySelector('.createList')
+        const techInfo = document.querySelector('.techInfo')
         checkConfig.checked = false
         checkAlt.style.color = 'black'
         checkAlt.style.fontWeight = '400'
@@ -187,7 +184,7 @@ export class ClickObject {
     }
 
     styleShinaActive() {
-        reqProtectorBase();
+        //reqProtectorBase();
         const container = document.querySelector('.wrapper_containt')
         const tyresD = container.querySelectorAll('.tiresD');
         const tyresT = container.querySelectorAll('.tiresT');

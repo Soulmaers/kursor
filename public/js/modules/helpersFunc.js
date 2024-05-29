@@ -86,3 +86,66 @@ export function timefn() {
     const timeOld = startOfTodayUnix
     return [timeNow, timeOld]
 }
+
+
+export function focusCorrect(td) {
+    td.addEventListener('focus', () => {
+        td.dataset.oldContent = td.textContent;
+        td.textContent = '';
+    });
+    // Восстанавливаем старый текст при потере фокуса, если новый текст не был введен
+    td.addEventListener('blur', () => {
+        if (td.textContent.trim() === '') {
+            td.textContent = td.dataset.oldContent;
+        }
+    });
+}
+export function focusCorrectValue(td) {
+    td.addEventListener('focus', () => {
+        td.dataset.oldvalue = td.value;
+        td.value = '';
+    });
+    // Восстанавливаем старый текст при потере фокуса, если новый текст не был введен
+    td.addEventListener('blur', () => {
+        if (td.value.trim() === '') {
+            td.value = td.dataset.oldvalue;
+        }
+    });
+}
+
+export async function reverseGeocode(geoY, geoX) {
+    const API_KEY = 'e156e8924c3a4e75bc1eac26f153457e';
+    const API_URL = `https://api.opencagedata.com/geocode/v1/json`
+    var lat = geoY; // Ваша широта
+    var lng = geoX; // Ваша долгота
+    console.log(lat, lng)
+    try {
+        const responses = await fetch(`${API_URL}?q=${lat},${lng}&key=${API_KEY}&no_annotations=1&language=ru`);
+        const data = await responses.json();
+        console.log(data.results)
+        console.log(responses.status)
+        if (!responses.ok) {
+            if (responses.status === 402) {
+
+                return [geoY, geoX];
+            }
+        }
+        else {
+            console.log('рекорд')
+            const address = data.results[0].components;
+            const adres = [];
+            adres.push(address.road_reference)
+            adres.push(address.municipality)
+            adres.push(address.county)
+            adres.push(address.town)
+            adres.push(address.state)
+            adres.push(address.country)
+            const res = Object.values(adres).filter(val => val !== undefined).join(', ');
+            return res
+        }
+
+    }
+    catch (e) {
+        return [geoY, geoX]
+    }
+}

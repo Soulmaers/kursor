@@ -21,21 +21,26 @@ module.exports.logsView = async (req, res) => {
     const tr = req.body.tr
     const count = req.body.count
     const val = await databaseService.logsFindToBase(idw) //получение логов из БД
-    // console.log(val)
-    const valnew = val.map(el => el)
-    const quant = val.length
-    val.sort((a, b) => {
-        if (a.time > b.time) {
-            return 1;
-        }
-        if (a.time < b.time) {
-            return -1;
-        }
-        return 0;
-    })
-    val.splice(0, val.length - count)
-    valnew.splice(0, tr)
-    res.json({ itog: valnew.length, quant: quant, view: val })
+    if (val) {
+        const valnew = val.map(el => el)
+        const quant = val.length
+        val.sort((a, b) => {
+            if (a.time > b.time) {
+                return 1;
+            }
+            if (a.time < b.time) {
+                return -1;
+            }
+            return 0;
+        })
+        val.splice(0, val.length - count)
+        valnew.splice(0, tr)
+        res.json({ itog: valnew.length, quant: quant, view: val })
+    }
+    else {
+        res.json({ itog: 0, quant: 0, view: 0 })
+    }
+
 }
 
 

@@ -32,4 +32,34 @@ export class GetDataTime {
             });
         });
     }
+
+
+    async getTimeIntervalOne(calendar, id) {
+        const ide = !id ? `#${!calendar.children[0].children[0] ? calendar.children[0].id : calendar.children[0].children[0].id}` : id;
+        const fp = flatpickr(ide, {
+            mode: "single",  // Изменено с "range" на "single"
+            dateFormat: "d-m-Y",
+            locale: "ru",
+            static: true,
+            "locale": {
+                "firstDayOfWeek": 1
+            },
+        });
+
+        console.log(ide);
+
+        return new Promise((resolve, reject) => {
+            fp.config.onChange.push((selectedDates, dateStr, instance) => {
+                if (selectedDates.length > 0) {
+                    const date = selectedDates[0];
+                    const year = date.getFullYear();
+                    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+                    const day = ("0" + date.getDate()).slice(-2);
+                    const formattedDate = `${year}-${month}-${day}`;
+                    console.log(formattedDate);
+                    resolve(formattedDate);
+                }
+            });
+        });
+    }
 }

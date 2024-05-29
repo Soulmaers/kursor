@@ -2,11 +2,12 @@ import { Findmeta } from '../../../class/FindMeta.js'
 import { TarirTable } from './TarirTable.js'
 import { Summator } from './Summator.js'
 export class ConfiguratorParams {
-    constructor(id, port, imei, dat) {
+    constructor(id, port, imei, dat, idBitrix) {
         this.id = id
         this.port = port
         this.imei = imei
         this.dat = dat
+        this.idBitrix = idBitrix
         this.activeClassTarir = null
         this.element = document.querySelector('.search_input_meta')
         this.storageMeta = [
@@ -200,6 +201,7 @@ export class ConfiguratorParams {
 
     controllFlashBorder() {
         if (this.dat) {
+            console.log(this.dat)
             this.itemStor.forEach(e => {
                 const matchingItem = this.dat.find(it => it.params === e.children[1].textContent);
                 if (matchingItem) {
@@ -241,7 +243,8 @@ export class ConfiguratorParams {
             time: Math.floor(new Date().getTime() / 1000),
             login: login,
             data: null,
-            imei: this.imei
+            imei: this.imei,
+            idBitrix: this.idBitrix
         }))
         const params = {
             method: "POST",

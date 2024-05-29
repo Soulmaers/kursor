@@ -15,7 +15,10 @@
     <link rel="stylesheet" href=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.css "
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="" />
+
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/js/modules/skladModules/styles/skladTyresStyles.css" />
+
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.js'></script>
 
     <script src=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.js "
@@ -585,7 +588,6 @@
 
             </div>
         </section>
-        <section class="allsec globalSklad">Склад</section>
         <main class="main">
             <div class="update_time">
             </div>
@@ -792,77 +794,159 @@
                 <div class="strL">&#10094</div>
             </div>
             <div class="techInfo">
-                <h2 class="techTitle">Основные показатели колеса</h2>
+                <div class="techTitle">Основные показатели колеса</div>
                 <div class="tth">
                     <div class="modal">
-                        <h3 class="titleTth tech" id="marka">Марка</h3>
-                        <div class="formTth "> <input class="formValue techInput" id="input"> <button
-                                class="buh">&#8595</button></div>
+                        <h3 class="titleTthId techId">Работа с колесом</h3>
+                        <div class="formTth ">
+                            <div class="controll_tyres">выберите действие</div>
+                            <ul class="select_sklad">
+                                <li class="item_type controll_sub" rel="0">Установить новое колесо</li>
+                                <li class="item_type controll_sub" rel="1">Установить колесо со склада</li>
+                                <li class="item_type controll_sub" rel="2">Поставить колесо на склад</li>
+                            </ul>
+                            <div class="data_find sklad_list"></div>
+                        </div>
                     </div>
                     <div class="modal">
-                        <h3 class="titleTth tech" id="modelT">Модель</h3>
-                        <div class="formTth "><input class="formValue techInput"></div>
+                        <h3 class="titleTthId techId" id="idBitrix">Идентификатор битрикс</h3>
+                        <div class="formTth "><input class="formValue techInput desc idBitrix focus_input"
+                                rel="idBitrix"></div>
                     </div>
                     <div class="modal">
-                        <h3 class="titleTthId techId" id="identificator">Идентификатор колеса</h3>
-                        <div class="formTth">
+                        <h3 class="titleTthId techId" id="id_t">Идентификатор колеса</h3>
+                        <div class="formTth sklad_controll">
                             <div class="idbaseTyres"></div>
                         </div>
                     </div>
                     <div class="modal">
-                        <h3 class="titleTth tech" id="psi">Рабочее давление в PSI</h3>
-                        <div class="formTth  psi">
-                            <input class="techInput formValue jobDav validation" type="number" placeholder="130">
-                            <p class="techText titleTth barD" id="bar">BAR</p>
-                            <p class="techInput bar job"></p>
+                        <h3 class="titleTth tech uniq_marka" id="marka1">Производитель</h3>
+                        <div class="formTth marka_flash"> <input class="formValue techInput wheel focus_input"
+                                rel='marka' id="input">
+                            <div class="data_find marka_list"></div>
                         </div>
                     </div>
-                    <div class="modal hiddenPos">
-                        <h3 class="titleTth tech" id="changeBar">min и max отклонение в BAR</h3>
-                        <div class="formTth formValue"></div>
+                    <div class="modal">
+                        <h3 class="titleTth tech uniq_model" id="modelT">Модель</h3>
+                        <div class="formTth model_flash"><input class="formValue techInput wheel focus_input"
+                                rel='model'>
+                            <div class="data_find model_list"></div>
+                        </div>
                     </div>
                     <div class="modal">
-                        <h3 class="titleTth tech" id="probegNow">Текущий пробег колеса</h3>
-                        <div class="formTth"><input class="techInput formValue probeg"></div>
+                        <h3 class="titleTth tech" id="typeTyres">Тип колеса</h3>
+                        <div class="formTth "><input class="formValue techInput wheel focus_input" rel='type'></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="sizeTyres">Размер колеса</h3>
+                        <div class="formTth "><input class="formValue techInput wheel focus_input" rel='size'></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="sezon1">Сезон</h3>
+                        <div class="formTth "><input class="formValue techInput wheel sezon_type focus_input"
+                                rel='sezon'></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="serial">Серийный номер колеса</h3>
+                        <div class="formTth "><input class="formValue techInput wheel focus_input" rel='serial'></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="probegPass">Паспортный пробег, км</h3>
+                        <div class="formTth"><input class="probegPassport formValue techInput wheel focus_input"
+                                rel='pasportMileage' value="150000"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="indexSpeed">Индекс скорости</h3>
+                        <div class="formTth "><input class="formValue techInput wheel focus_input" rel='index_speed'>
+                        </div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="indexMassa">Индекс нагрузки</h3>
+                        <div class="formTth "><input class="formValue techInput wheel focus_input" rel='index_massa'>
+                        </div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="psi">Рабочее давление в PSI/BAR</h3>
+                        <div class="formTth  psi">
+                            <input class="techInput formValue desc jobDav validation focus_input" rel="psi"
+                                type="number" placeholder="130">
+                            <p class="techText titleTth barD" id="bar">BAR</p>
+                            <p class="techInput bar job desc" rel="bar"></p>
+                        </div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="maxProtector">Протектор по паспорту, мм</h3>
+                        <div class="formTth"><input
+                                class="formValue techInput wheel desc protector_passport focus_input"
+                                rel="passportProtektor"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="probegNow">Текущий пробег, км</h3>
+                        <div class="formTth"><input class="techInput formValue desc focus_input probeg_tyres"
+                                rel="probegNow" value="0"></div>
                     </div>
                     <div class="modal">
                         <h3 class="titleTth tech" id="montaj">Дата монтажа</h3>
-                        <div class="formTth"> <input class="formValue dateChangeTires" type="date"></div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="probegPass">Пробег по паспорту</h3>
-                        <div class="formTth"><input class="formValue techInput probeg"></div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth" id="probegVal">Остаточный пробег колеса в км</h3>
-                        <div class="formTth">
-                            <p class="techInput probeg job"></p>
+                        <div class="formTth"> <input class="formValue dateChangeTires desc focus_input montaj_date"
+                                rel="dateInstall">
+                            <i class="icon_data_montaj trigger_calendar fas fa-calendar-week" rel="calen_montaj"></i>
+                            <div class="calendar_montaj">
+                                <input type="text" id="daterangesMontaj" placeholder="Выберите диапазон дат">
+                                <div class="btn_speedStart">
+                                    <button class="btm_formStart">Очистить</button>
+                                    <button class="btm_formStart control">Выполнить</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal">
-                        <h3 class="titleTths techs">Оставшаяся глубина протектора мм. (замеры)</h3>
-                        <div class=" params ">
-                            <h4 class=" tech" id="N1"></h4><input class="techInput formValue" step="0.1" type="number"
-                                lang="en" placeholder="№1">
-                            <h4 class=" tech" id="N2"></h4><input class="techInput formValue" step="0.1" type="number"
-                                lang="en" placeholder="№2">
-                            <h4 class=" tech" id="N3"></h4><input class="techInput formValue" step="0.1" type="number"
-                                lang="en" placeholder="№3">
-                            <h4 class="tech" id="N4"></h4><input class="techInput formValue" step="0.1" type="number"
-                                lang="en" placeholder="№4">
+                        <h3 class="titleTth" id="probegVal">Остаточный пробег,км</h3>
+                        <div class="formTth">
+                            <p class="techInput probeg job  probeg_ostatok" rel="probegVal"></p>
                         </div>
                     </div>
                     <div class="modal">
                         <h3 class="titleTth tech" id="protectorDate">Дата замера протектора</h3>
-                        <div class="formTth"><input class="formValue dateChangeTires" type="date"></div>
+                        <div class="formTth"><input class="formValue dateChangeTires desc focus_input" rel="dateZamer">
+                            <i class="icon_data_zamer trigger_calendar fas fa-calendar-week" rel="calen_zamer"></i>
+                            <div class="calendar_zamer">
+                                <input type="text" id="daterangesZamer" placeholder="Выберите диапазон дат">
+                                <div class="btn_speedStart">
+                                    <button class="btm_formStart">Очистить</button>
+                                    <button class="btm_formStart control">Выполнить</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal">
-                        <h3 class="titleTth tech" id="maxProtector">Высота протектора (мм)</h3>
-                        <div class="formTth"><input class="techInput formValue maxProtector" placeholder="16"></div>
+                        <h3 class="titleTths techs">Высота протектора, мм</h3>
+                        <div class="params">
+                            <div class=" tech" id="N1"></div><input class="techInput formValue desc pro focus_input"
+                                rel='N1' step="0.1" type="number" lang="en" placeholder="№1">
+                            <div class=" tech" id="N2"></div><input class="techInput formValue desc pro focus_input"
+                                rel='N2' step="0.1" type="number" lang="en" placeholder="№2">
+                            <div class=" tech" id="N3"></div><input class="techInput formValue desc pro focus_input"
+                                rel='N3' step="0.1" type="number" lang="en" placeholder="№3">
+                            <div class="tech" id="N4"></div><input class="techInput formValue desc pro focus_input"
+                                rel='N4' step="0.1" type="number" lang="en" placeholder="№4">
+                        </div>
                     </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="procentProtector">Остаток протектора,%</h3>
+                        <div class="formTth"><input class="formValue techInput desc procentProtector" rel='ostatok'>
+                        </div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="rfid">Код, RFID</h3>
+                        <div class="formTth"><input class="formValue techInput desc" rel="rfid"></div>
+                    </div>
+                    <div class="modal">
+                        <h3 class="titleTth tech" id="comments">Комментарий</h3>
+                        <div class="formTth"><input class="formValue techInput desc" rel="comment"></div>
+                    </div>
+
                 </div>
                 <div class="radioVal">
-                    <div class="wrarbtn"><button class="buttonTth">Сохранить</button></div>
                     <div class="radioModule">
                         <p>Сторона колеса</p>
                         <p><input class="radio" name="radio" type="radio" id='1' value="left" checked>
@@ -905,6 +989,11 @@
                             <div class="number"></div>
                             <p class="text"></p>
                         </div>
+                    </div>
+                </div>
+                <div class="footer_tth">
+                    <div class="validation_message_to"></div>
+                    <div class="button_modal">
                     </div>
                 </div>
             </div>
@@ -964,11 +1053,16 @@
                         </div>
                     </div>
                     <div class="title_stata">Статистика по давлению</div>
+
+
+
+
+
                     <div class="body_stata">
                         <table class="table_stata">
                             <tr class="rows_stata">
                                 <th class="cell_stata cel">Колесо</th>
-                                <th class="cell_stata cel">Потери</th>
+                                <th class="cell_stata cel">Ожидание</th>
                                 <th class="cell_stata cel">Низкое</th>
                                 <th class="cell_stata cel">Ниже нормы</th>
                                 <th class="cell_stata cel">Норма</th>
@@ -1026,6 +1120,65 @@
                 <div class="strL">&#10094</div>
             </div>
             <div class="map_servis" id="mapServis"></div>
+        </div>
+
+        <div class="container_servis_shablon">
+            <div class="header_shablon_to">
+                <p class="info_inner">Настройка ТО</p>
+                <div class="close_settings_inner_to"><i class="fas fa fa-times"></i></div>
+            </div>
+            <div class="body_shablon_to">
+                <table class="tableTo">
+                    <tr class="header_shablon_servis_to">
+                        <th class="cel_headers">Название</th>
+                        <th class="cel_headers" rel="1">TO-0</th>
+                        <th class="cel_headers" rel="2">TO-1</th>
+                        <th class="cel_headers" rel="3">TO-2</th>
+                        <th class="cel_headers" rel="4">TO-3</th>
+                        <th class="cel_headers" rel="5">TO-4</th>
+                        <th class="cel_headers" rel="6">TO-5</th>
+                        <th class="cel_headers" rel="7">TO-6</th>
+                        <th class="cel_headers" rel="8">TO-7</th>
+                        <th class="cel_headers" rel="9">TO-8</th>
+                        <th class="cel_headers" rel="10">TO-9</th>
+                        <th class="cel_headers" rel="11">TO-10</th>
+                        <th class="cel_headers" rel="12">TO-11</th>
+                        <th class="cel_headers" rel="13">TO-12</th>
+                        <th class="cel_headers" rel="14">TO-13</th>
+                        <th class="cel_headers" rel="15">TO-14</th>
+                        <th class="cel_headers" rel="16">TO-15</th>
+                        <th class="cel_headers" rel="17">TO-16</th>
+                        <th class="cel_headers" rel="18">TO-17</th>
+                        <th class="cel_headers" rel="19">TO-18</th>
+                        <th class="cel_headers" rel="20">TO-19</th>
+                        <th class="cel_headers" rel="21">TO-20</th>
+                        <th class="cel_headers" rel="22">TO-21</th>
+                        <th class="cel_headers" rel="23">TO-22</th>
+                        <th class="cel_headers" rel="24">TO-23</th>
+                        <th class="cel_headers" rel="25">TO-24</th>
+                        <th class="cel_headers" rel="26">TO-25</th>
+                    </tr>
+                    <tr class="header_shablon_servis_to sub_headers">
+                        <th class="cel_headers_sub" colspan="27">Настройка пороговых значений</th>
+                    </tr>
+                    <tr class="header_shablon_servis_to sub_headers mat_to" rel="mat">
+                        <th class="cel_headers_sub" colspan="27">Материалы</th>
+                    </tr>
+                    <tr class="header_shablon_servis_to sub_headers  job_to" rel="job">
+                        <th class="cel_headers_sub" colspan="27">Работы</th>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="footer_shablon_to">
+                <div class="validation_message_to"></div>
+                <div class="button_modal">
+                    <div class="modal_window"></div>
+                    <div class="btn_modal shablons_model_marka">Шаблоны</div>
+                    <div class="btn_modal cancel">Отмена</div>
+                    <div class="btn_modal ok_modal">Сохранить</div>
+                </div>
+            </div>
         </div>
 
         <div class="global_inner">
@@ -1120,10 +1273,50 @@
                         </div>
 
                     </div>
-                    <div class="body_inner to_inner">ТО</div>
-                    <div class="body_inner svodka_inner">СВОДКА</div>
-                    <div class="body_inner zaglushka_inner">ЗАГЛУШКА</div>
+                    <div class="body_inner to_inner">
+                        <div class=" to_title">
+                            <i class="fas fa-angle-double-left left_to_str"></i>
+                            <span class="title_to_inner type_to_shablons">Тип ТО:</span>
+                            <span class=" value_to_inner type_to">'-'</span>
+                            <i class="fas fa-angle-double-right right_to_str"></i>
+                        </div>
+                        <div class=" to_title">
+                            <span class="title_to_inner moto_do_to">Моточасы до ТО:</span>
+                            <span class="value_to_inner">'-'</span>
+                        </div>
+                        <div class=" to_title">
+                            <span class="title_to_inner data_last_to">Дата последнего ТО:</span>
+                            <span class="value_to_inner">'-'</span>
+                        </div>
+                        <div class="list_job">
+                            <div class="title_job">Лист ТО</div>
+                            <div class="body_job">
+                                <table class="tableToUniq">
+                                    <tr class="header_shablon_servis_to sub_headers mat_to" rel="mat">
+                                        <th class="cel_headers_sub" colspan="2">Материалы</th>
+                                    </tr>
+                                    <tr class="header_shablon_servis_to sub_headers  job_to" rel="job">
+                                        <th class="cel_headers_sub" colspan="2">Работы</th>
+                                    </tr>
+                                </table>
 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body_inner svodka_inner">
+                        <div class="header_inner_svodka">Информация по работе объекта</div>
+                        <div class="midlle_inner_sbodka">
+                            <div class="wrap_inner_graf inner_yestoday"></div>
+                            <div class="wrap_inner_graf inner_week"></div>
+                            <div class="wrap_inner_graf inner_month"></div>
+                        </div>
+                        <div class="footer_inner_svodka">
+                            <div class="legenda_inner dvig">Движение/Работа</div>
+                            <div class="legenda_inner stop">Работа на холостом ходу</div>
+                        </div>
+                    </div>
+
+                    <div class="body_inner zaglushka_inner">ЗАГЛУШКА</div>
                 </div>
                 <div class="right_inner">
                     <div class="wrap_inner">
@@ -1138,8 +1331,66 @@
                 </div>
             </div>
         </div>
+    </section>
+    <section class="allsec globalSklad">
+        <div class="spisok_list_object">
+            <div class="up_name_header">Список объектов</div>
+            <div class="body_sklad list_body"></div>
+        </div>
+        <div class="tyres_room">
+            <div class="navi_sklad">
+                <div class="up_name navi_job_tyres">Установлены</div>
+                <div class="up_name  navi_sklad_tyres activ_button_sklad">Склад</div>
+                <i class="fas fa-compact-disc icon_add_tyres add_model_tyres"></i>
+                <i class="  fas fa-dot-circle icon_add_tyres add_tyres"></i>
+            </div>
+            <div class="job_tyres container_sklad">
+                <div class="body_sklad"></div>
+            </div>
+            <div class="sklad_tyres container_sklad" rel="sklad">
+                <div class="body_sklad" rel="sklad"></div>
+            </div>
+        </div>
+        <div class="job_field">
+            <div class="up_name_last_container">Аналитика</div>
+            <div class="body_last_container">
+                <div class="analitika">СТАТИСТИКА</div>
+                <div class="global_container">
+                    <div class="left_grafs wrap_graf">
+                        <div class="graf_uniq"></div>
+                        <div class="graf_uniq"></div>
+                        <div class="graf_uniq"></div>
+                        <div class="graf_uniq"></div>
+                    </div>
+                    <div class="center_shema">
+                        <div class="discription_car"></div>
+                        <div class="container_shema">Модель</div>
+                    </div>
+                    <div class="right_grafs wrap_graf">
+                        <div class="graf_uniq"></div>
+                        <div class="graf_uniq"></div>
+                        <div class="graf_uniq"></div>
+                        <div class="graf_uniq"></div>
+
+                    </div>
+                </div>
+                <div class="tyres_model_card">карточка модели колеса</div>
+                <div class="tyres_model_list">
+                    <div class="add_card_tyres"></div>
+                    <div class="list_model_tyres_spisok">
+                        <div class="header_card_tyres">Список моделей колес</div>
+                        <div class="list_item_tyres_model"></div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
 
     </section>
+
+
     <div class="settings_users">
         <div class="header_title_settings">
             <p class="info_settings">Настройки</p>
@@ -1148,12 +1399,14 @@
         <div class="container_settings">
             <div class="nav_settings">
                 <ul class="list_settings">
-                    <li class="item_settings set_one" rel="set_one"><i class="w30 fas fa-user-cog"></i> Настройка прав
+                    <li class="item_settings set_one" rel="set_one"><i class="w30 fas fa-user-cog"></i> Настройка
+                        прав
                         доступа</li>
                     <li class="item_settings set_two" rel="set_two"><i class="w30  fas fa-list-ul"></i> Отображение
                         списка
                     </li>
-                    <li class="item_settings set_four" rel="set_four"><i class="w30  fas fa-mobile-alt"></i> Контакты
+                    <li class="item_settings set_four" rel="set_four"><i class="w30  fas fa-mobile-alt"></i>
+                        Контакты
                     </li>
                     <li class="item_settings set_three" rel="set_three"><i class="w30  fas fa-bell"></i> Уведомления
                     </li>
@@ -1272,7 +1525,8 @@
                             <li class="uniqBar">
                                 <input type="checkbox" id="type" checked>
                                 <i class="fas fa-truck-moving f"></i> <label class="label_item"
-                                    for="checkbox9">Тип</label><span class="description">принадлежность ТС к выбранному
+                                    for="checkbox9">Тип</label><span class="description">принадлежность ТС к
+                                    выбранному
                                     типу</span>
                             </li>
                             <li class="uniqBar">
@@ -1292,7 +1546,8 @@
                         </ul>
                     </div>
 
-                    <div class="buttonSaveSettings"> <i class="saveIcon fas fa-sd-card"></i> Сохранить настройки</div>
+                    <div class="buttonSaveSettings"> <i class="saveIcon fas fa-sd-card"></i> Сохранить настройки
+                    </div>
                 </div>
                 <div class="content_set contactSet">
                     <h3 class="titleAccount">Настройка оповещений</h3>
@@ -1389,7 +1644,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="buttonSaveSettings"> <i class="saveIcon fas fa-sd-card"></i> Сохранить настройки</div>
+                    <div class="buttonSaveSettings"> <i class="saveIcon fas fa-sd-card"></i> Сохранить настройки
+                    </div>
                 </div>
             </div>
         </div>
@@ -1517,6 +1773,10 @@
                 <li class="item_modal">
                     <p class="property_modal">Угол наклона</p><input rel="angle" class="field_modal"
                         placeholder="введите ип датчика">
+                </li>
+                <li class="item_modal">
+                    <p class="property_modal">ID Bitrix</p><input rel="idBitrix" class="field_modal"
+                        placeholder="введите id Bitrix">
                 </li>
             </ul>
             <div class="footer_modal">

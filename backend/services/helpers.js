@@ -82,7 +82,8 @@ exports.processing = async (arr, timez, idw, geoLoc, group, name, start) => { //
 }
 
 
-exports.sortData = (datas) => {  // подготовка вложенности структуры групп и объектов
+sortData = (datas) => {  // подготовка вложенности структуры групп и объектов
+    console.log('здесь?')
     //  console.log(datas)
     const res = Object.values(datas.reduce((acc, elem) => {
         if (!acc[elem.idg]) {
@@ -192,9 +193,6 @@ exports.setDataToBase = async (imei, port, info, id) => {
             objectToUpdate.data = nowTime
             objectToUpdate.status = 'true'
         }
-        //  if (idw == 28039151 || idw == 27523670 || idw == 25399461) {
-        //console.log(idw, value)
-        //  }
         await databaseService.setUpdateValueSensStorMeta(imei, port, value)  //обновление значений привязанных параметров
 
         const tcpObject = info
