@@ -371,42 +371,7 @@ WHERE tt.flag_sklad = 0;`;
 }
 
 
-/*
-module.exports.getAllTyres = async (req, res) => {
-    try {
-        const pool = await connection
-        const post = `SELECT tg.*, tt.*
-FROM tyres_guide tg
-JOIN tyres_table tt ON tg.uniqTyresID = tt.uniqTyresID`;
-        const result = await pool.request()
-            .query(post);
-        res.json(result.recordset)
-    }
-    catch (e) {
-        res.json('Ошибка')
-        console.log(e)
-    }
-}*/
 
-
-module.exports.getHistoryTyresToID = async (req, res) => {
-    const id = req.body.id
-    try {
-        const selectBase = `SELECT TOP 1 th.*, tg.*
-FROM tyres_history th
-JOIN tyres_guide tg ON th.uniqTyresID = tg.uniqTyresID
-WHERE th.id = @id
-ORDER BY th.incriment DESC`
-        const pool = await connection
-        const results = await pool.request()
-            .input('id', id)
-            .query(selectBase)
-        res.json(results.recordset.length !== 0 ? results.recordset[0] : [])
-    } catch (err) {
-        console.error(err)
-        throw err
-    }
-}
 
 
 

@@ -7,12 +7,6 @@ exports.savePr = async (req, res) => {
     const message = await databaseService.saveTechToBase(value, req.body.arr.dataAdd) //сохранение параметров замера протектора колеса
     res.json(message)
 }
-exports.getHistoryTyres = async (req, res) => {
-    const identificator = req.body.id
-    const id = req.body.idw
-    const result = await databaseService.getHistoryTyres(identificator, id) //получение параметров замера протектора колеса
-    res.json(result)
-}
 
 exports.techViewAll = async (req, res) => {
     const idw = req.body.idw

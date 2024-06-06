@@ -51,6 +51,7 @@ export class CreateDOMElements {
         const idw = data[4]
         const tyresCar = elements.filter(el => el.flag_status === '0' && el.idObject === String(idw))
         const model = data[0].result
+        console.log(model)
         model.sort((a, b) => parseInt(a.osi) - parseInt(b.osi));
         let globalTyresCounter = 1; // Глобальный счётчик для всех шин
         const osElements = []
@@ -86,7 +87,6 @@ export class CreateDOMElements {
     }
 
     static createListModelsTyres(elem, data) {
-        console.log(elem)
         elem.innerHTML = data.map(el => {
             console.log(el)
             const styleFon = el.imagePath && el.imagePath !== '' ? `style="background-image: url('../../../..${el.imagePath}')"` :

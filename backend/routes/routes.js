@@ -41,7 +41,6 @@ router.post('/api/alarmViewId', controllerAlarm.alarmViewId)
 
 
 router.post('/api/savePr', controllerTech.savePr)
-router.post('/api/getHistoryTyres', controllerTech.getHistoryTyres)
 router.post('/api/techViewAll', controllerTech.techViewAll)
 router.post('/api/summaryYestoday', controllerTech.summaryYestoday)
 router.post('/api/summaryIdwToBase', controllerTech.summaryIdwToBase)
@@ -65,10 +64,14 @@ router.post('/api/saveDataToDBTyres', controllerTyres.saveDataToDBTyres)
 router.get('/api/getAllTyres', controllerTyres.getAllTyres)
 router.post('/api/updateDataInDB', controllerTyres.updateDataInDB)
 router.post('/api/updateTyreSklad', controllerTyres.updateTyreSklad)
+router.post('/api/updateWheel', controllerTyres.updateWheel)
+router.post('/api/saveDataHistoryToDBTyres', controllerTyres.saveDataHistoryToDBTyres)
+router.post('/api/getTyresPosition', controllerTyres.getTyresPosition)
+router.post('/api/getHistoryTyresToID', controllerTyres.getHistoryTyresToID)
 
 
 router.post('/api/updateFilterTable', controllerModel.updateFilterTable)
-router.post('/api/getHistoryTyresToID', controllerModel.getHistoryTyresToID)
+
 
 
 router.post('/api/icon', controllerIcon.icon)

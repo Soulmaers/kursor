@@ -6,7 +6,8 @@ import { Tooltip } from "../../../class/Tooltip.js"
 import { TyreSearch } from './TyreSearch.js'
 import { TyresService } from './TyresService.js'
 import { DragAndDrop } from './DragAndDropTyres.js'
-
+import { WindowCard } from './WindowCard.js'
+import { Crafika } from './Grafika.js'
 
 export class SkladTyres {
     constructor(element, data) {
@@ -27,13 +28,14 @@ export class SkladTyres {
         this.tyresRoom = this.element.querySelector('.tyres_room')
         this.modelTyres = null
         this.modelCar = null
+        this.clickCard = null
         this.fields = [
             'type_tire', 'marka', 'model', 'type_tyres',
             'radius', 'profil', 'width', 'sezon',
             'index_speed', 'index_massa'
         ];
         this.lastClickedElement = null; // Храним ссылку на последний кликнутый элемент
-        this.clickCard = null
+        this.clickCardRow = null
         this.boundNavi = this.showBody.bind(this)
         this.boundModelTyresWindow = this.addWindow.bind(this)
         this.boundTyresWindow = this.addCardListTyres.bind(this)
@@ -42,20 +44,21 @@ export class SkladTyres {
 
     async init() {
         console.log('инит')
+        await this.getTyres()
         this.defaultDOMElements()
         this.addTooltips()
         this.initEvent()
         this.uniqData = this.getUniqData(this.data)
         CreateDOMElements.createListObject(this.data)
         this.modelTyres = await RequestStaticMetods.getModelTyresGuide();
-        this.allTyres = await this.getTyres()
+
+
         this.createRows()
-        this.addTooltip()
         this.controllListAndTyres()
     }
 
     async updateListTyres() {
-        this.allTyres = await this.getTyres();
+        await this.getTyres();
         this.createRows();
         if (this.lastClickedElement) {
             if (this.dragAndDropInstance) {
@@ -63,13 +66,15 @@ export class SkladTyres {
             }
             this.dragAndDropInstance = new DragAndDrop(this.skladTyres, '.row_sklad', '.tyres_shema_car', this.element, this); // Пересоздаем с новыми элементами
         }
-
+        this.addTooltip()
     }
     async addCardListTyres() {
+        const windowClick = this.element.querySelector('.click_row')
+        if (windowClick) windowClick.classList.remove('click_row')
         console.log('тута!Ё')
         const element = this.job_field.querySelector('.tyres_model_list');
         this.toggleDisplay(element, 'flex');
-        this.updateJobField('Карточка создания колеса', 'none', 'none', 'flex');
+        this.updateJobField('Карточка создания колеса', 'none', 'none', 'flex', 'none');
         element.children[0].innerHTML = ContentGeneration.createCardTyres();
         const list_item_tyres_model = this.job_field.querySelector('.list_item_tyres_model');
         this.modelTyres = await RequestStaticMetods.getModelTyresGuide();
@@ -92,6 +97,7 @@ export class SkladTyres {
             }
             const message = await TyresService.createTyre(uniqID, fieldsParams)
             Helpers.viewRemark(mess, 'green', message)
+            this.clickCard = null
             this.addCardListTyres()
             this.updateListTyres()
 
@@ -127,7 +133,9 @@ export class SkladTyres {
     }
     protektorsEvent(element, pro, ostatok) {
         pro.forEach(e => {
-            e.addEventListener('input', () => {
+            e.addEventListener('input', (event) => {
+                console.log(event.target)
+                Helpers.validatonPunctuation(event.target)
                 ostatok.value = Helpers.raschetProtector(element, pro)
             })
         })
@@ -139,6 +147,7 @@ export class SkladTyres {
         const reduct = element.querySelector('.reduct_params');
         const mess = element.querySelector('.mess_validation');
         reduct.addEventListener('click', () => {
+            console.log(this.clickCard)
             if (!this.clickCard) {
                 Helpers.viewRemark(mess, 'red', 'Выберите модель колеса')
                 return
@@ -209,6 +218,8 @@ export class SkladTyres {
     }
 
     addWindow(reduct) {
+        const windowClick = this.element.querySelector('.click_row')
+        if (windowClick) windowClick.classList.remove('click_row')
         if (reduct.isTrusted) this.clickCard = null
         const element = this.job_field.querySelector('.tyres_model_card')
         element.style.display = 'flex'
@@ -304,26 +315,30 @@ export class SkladTyres {
         this.init()
     }
 
-
     addTooltips() {
         new Tooltip(this.add_model_tyres, ['Создать модель колеса'])
         new Tooltip(this.add_tyres, ['Создать колесо'])
     }
 
     defaultDOMElements() {
-        this.updateJobField('Аналитика', 'flex', 'none', 'none');
+        new Crafika(this.allTyres, 'sklad')
+        this.updateJobField('Аналитика', 'flex', 'none', 'none', 'none');
         this.navi.forEach(e => e.classList.remove('activ_button_sklad'))
         this.navi[1].classList.add('activ_button_sklad')
         this.toggleDisplay(this.jobTyres.parentElement, 'none');
         this.toggleDisplay(this.skladTyres.parentElement, 'flex');
         this.icon_add_tyres.forEach(e => e.style.display = 'flex')
         this.clickCard = null
+        this.clickCardRow = null
+        this.lastClickedElement = null;
 
     }
     controllListAndTyres() {
         const listItemSklad = this.element.querySelectorAll('.listItemSklad')
         console.log(listItemSklad)
         listItemSklad.forEach(e => e.addEventListener('click', (event) => {
+            const windowClick = this.element.querySelector('.click_row')
+            if (windowClick) windowClick.classList.remove('click_row')
             const object = event.target
             this.controllActivElement(object)
             this.toggleTyresVisibility()
@@ -346,27 +361,26 @@ export class SkladTyres {
         if (object.classList.contains('clickElement')) {
             object.classList.remove('clickElement');
             this.lastClickedElement = null;
-            this.updateJobField('Аналитика', 'flex', 'none', 'none');
+            this.updateJobField('Аналитика', 'flex', 'none', 'none', 'none');
         } else {
             object.classList.add('clickElement');
             this.lastClickedElement = object;
-            this.updateJobField('Колесная схема', 'none', 'flex', 'none');
+            this.updateJobField('Колесная схема', 'none', 'flex', 'none', 'none');
         }
     }
 
-    updateJobField(title, display0, display1, display2) {
+    updateJobField(title, display0, display1, display2, display3) {
         this.job_field.children[0].textContent = title;
         this.job_field.children[1].children[0].style.display = display0;
         this.job_field.children[1].children[1].style.display = display1;
         this.job_field.children[1].children[3].style.display = display2;
+        this.job_field.children[1].children[4].style.display = display3;
     }
 
     toggleTyresVisibility() {
-        const activID = this.lastClickedElement
-        if (activID) {
+        if (this.lastClickedElement) {
             [...this.jobTyres.children].forEach(e => {
-                console.log(activID.getAttribute('rel'), e.getAttribute('rel'))
-                activID.getAttribute('rel') === e.getAttribute('data-att') ? e.style.display = 'flex' : e.style.display = 'none'
+                this.lastClickedElement.getAttribute('rel') === e.getAttribute('data-att') ? e.style.display = 'flex' : e.style.display = 'none'
             })
         }
         else {
@@ -385,13 +399,14 @@ export class SkladTyres {
             this.toggleDisplay(this.skladTyres.parentElement, 'none');
             this.icon_add_tyres.forEach(e => e.style.display = 'none')
             this.toggleTyresVisibility()
+            new Crafika(this.allTyres, 'install')
         }
         else {
             this.toggleDisplay(this.jobTyres.parentElement, 'none');
             this.toggleDisplay(this.skladTyres.parentElement, 'flex');
             this.icon_add_tyres.forEach(e => e.style.display = 'flex')
+            new Crafika(this.allTyres, 'sklad')
         }
-
     }
 
     toggleDisplay(element, display) {
@@ -399,10 +414,8 @@ export class SkladTyres {
     }
 
     createRows() {//отрисовка строк с данными
-        console.log('rhtfnthje&')
         const rows = this.element.querySelectorAll('.row_sklad')
         if (rows) rows.forEach(e => e.remove())
-        console.log(this.allTyres)
         this.allTyres.forEach(el => {
             const rowHTML = ContentGeneration.tyresRow(el, this.uniqData);
             if (el.flag_status !== '0') {
@@ -411,10 +424,13 @@ export class SkladTyres {
                 this.jobTyres.insertAdjacentHTML('beforeend', rowHTML);
             }
         });
+        this.addTooltip()
+        const newRows = this.element.querySelectorAll('.row_sklad')
+        new WindowCard(newRows, this)
     }
 
     async getTyres() {
-        return await RequestStaticMetods.getAllTyres()
+        this.allTyres = await RequestStaticMetods.getAllTyres()
     }
 
     getUniqData(data) {
@@ -425,11 +441,10 @@ export class SkladTyres {
     }
 
     addTooltip() {
-        const rows = this.element.querySelectorAll('.row_sklad')
-        rows.forEach(el => {
-            const ostatos_tyres = el.querySelector('.ostatok_tyres')
-            new Tooltip(ostatos_tyres, ['Остаток протектора'])
-        })
+        Helpers.tooltipView('battery', 'Остаток протектора', this.element)
+        Helpers.tooltipView('fa-database', 'На складе', this.element)
+        Helpers.tooltipView('fa-tools', 'В ремонте', this.element)
+        Helpers.tooltipView('fa-trash', 'Утилизация', this.element)
     }
 
 }

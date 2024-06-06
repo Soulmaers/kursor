@@ -6,6 +6,7 @@ import { mapLocal } from '../modules/objectMainModules/class/CreateMarkersEvent.
 export class Flasher {
     constructor() {
         this.rigthFrame = document.querySelectorAll('.rigthFrame')
+        this.searchList = document.querySelector('.search_list')
         this.rightContainerWidth = null
         this.rigthFrame.forEach(el => {
             console.log(el)
@@ -37,13 +38,16 @@ export class Flasher {
         console.log(side)
         parent.children[1].style.display = 'none'
         parent.children[0].style.display = 'block'
+        console.log(side[0])
+        console.log(side[1])
         if (side[0].classList.contains('sections')) {
             side[0].style.width = '10px';
             side[1].style.width = '98%'
         }
         else {
             this.rightContainerWidth = document.querySelector('.main').offsetWidth
-            side[0].style.width = '10px';
+            side[0].style.width = '0px';
+            side[0].style.margin = 0
             side[1].style.flexGrow = '1'
         }
 
@@ -60,13 +64,15 @@ export class Flasher {
         const side = this.init(parent)
         parent.children[0].style.display = 'none'
         parent.children[1].style.display = 'block'
-
-        if (side[0].classList.contains('section')) {
+        console.log(side[0])
+        console.log(side[1])
+        if (side[0].classList.contains('sections')) {
             side[0].style.width = '550px';
             side[1].style.width = '74%';
         }
         else {
-            console.log(this.rightContainerWidth)
+
+            side[0].style.margin = '0 10px'
             side[0].style.width = '495px';
             side[1].style.flexGrow = '1'
         }

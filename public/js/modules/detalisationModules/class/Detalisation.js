@@ -495,13 +495,13 @@ export class Detalisation {
         this.abortController = new AbortController();
         const signal = this.abortController.signal;
 
-
+        const workerKey = 'detalisationStatistiks'
         const paramss = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idw, t1, t2, arrayColumns, num })),
+            body: (JSON.stringify({ idw, t1, t2, arrayColumns, num, workerKey })),
             signal: signal
 
         }

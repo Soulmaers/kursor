@@ -14,6 +14,26 @@ exports.createDate = () => {   //форматироваие даты
 
 }
 
+exports.getCurrentDate = () => {
+    const date = new Date(); // Получаем текущую дату и время
+    const year = date.getFullYear(); // Получаем год
+    const month = date.getMonth() + 1; // Получаем месяц (getMonth возвращает месяцы от 0 до 11)
+    const day = date.getDate(); // Получаем день
+    const hours = date.getHours(); // Получаем часы
+    const minutes = date.getMinutes(); // Получаем минуты
+    const seconds = date.getSeconds(); // Получаем секунды
+
+    // Форматируем месяц, день, часы, минуты и секунды, чтобы они всегда были в двухзначном формате
+    const formattedMonth = month < 10 ? `0${month}` : month;
+    const formattedDay = day < 10 ? `0${day}` : day;
+    const formattedHours = hours < 10 ? `0${hours}` : hours;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+
+    return `${formattedDay}-${formattedMonth}-${year} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+};
+
+
 exports.convert = (ob) => {  //фильтрация уникальных элементов
     const uniq = new Set(ob.map(e => JSON.stringify(e)));
     return Array.from(uniq).map(e => JSON.parse(e));

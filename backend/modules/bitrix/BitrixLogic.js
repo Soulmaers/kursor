@@ -147,12 +147,12 @@ class BitrixLogic {
             Parameter9: null
         }
         const res = await BitrixGetData.BitrixGetData.getDataBitrix(idBitrix)
-        console.log(res)
+        // console.log(res)
         const mileage = res.find(e => e.params === 'mileage' && e.idBitrixObject === idBitrix)
         console.log('пробег:', mileage)
         obj.Parameter9 = mileage && mileage.value ? Math.round(parseFloat(mileage.value)) : null
         if (array[0].event === 'Предупреждение') {
-            console.log(array)
+            //  console.log(array)
             const param = res.find(e => e.params === array[0].tyres && e.idBitrixObject === idBitrix)
             console.log('id колеса:', param)
             obj.Parameter3 = param ? param.idBitrix : null

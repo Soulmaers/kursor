@@ -623,12 +623,13 @@ export class OilCharts {
         const t1 = this.t1
         const t2 = this.t2 + 86399
         const num = 0
+        const workerKey = 'oil'
         const paramss = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idw, t1, t2, arrayColumns, num }))
+            body: (JSON.stringify({ idw, t1, t2, arrayColumns, num, workerKey }))
         }
         const res = await fetch('/api/getPressureOil', paramss)
         const data = await res.json();

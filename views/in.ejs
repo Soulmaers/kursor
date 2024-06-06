@@ -796,205 +796,6 @@
             <div class="techInfo">
                 <div class="techTitle">Основные показатели колеса</div>
                 <div class="tth">
-                    <div class="modal">
-                        <h3 class="titleTthId techId">Работа с колесом</h3>
-                        <div class="formTth ">
-                            <div class="controll_tyres">выберите действие</div>
-                            <ul class="select_sklad">
-                                <li class="item_type controll_sub" rel="0">Установить новое колесо</li>
-                                <li class="item_type controll_sub" rel="1">Установить колесо со склада</li>
-                                <li class="item_type controll_sub" rel="2">Поставить колесо на склад</li>
-                            </ul>
-                            <div class="data_find sklad_list"></div>
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTthId techId" id="idBitrix">Идентификатор битрикс</h3>
-                        <div class="formTth "><input class="formValue techInput desc idBitrix focus_input"
-                                rel="idBitrix"></div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTthId techId" id="id_t">Идентификатор колеса</h3>
-                        <div class="formTth sklad_controll">
-                            <div class="idbaseTyres"></div>
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech uniq_marka" id="marka1">Производитель</h3>
-                        <div class="formTth marka_flash"> <input class="formValue techInput wheel focus_input"
-                                rel='marka' id="input">
-                            <div class="data_find marka_list"></div>
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech uniq_model" id="modelT">Модель</h3>
-                        <div class="formTth model_flash"><input class="formValue techInput wheel focus_input"
-                                rel='model'>
-                            <div class="data_find model_list"></div>
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="typeTyres">Тип колеса</h3>
-                        <div class="formTth "><input class="formValue techInput wheel focus_input" rel='type'></div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="sizeTyres">Размер колеса</h3>
-                        <div class="formTth "><input class="formValue techInput wheel focus_input" rel='size'></div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="sezon1">Сезон</h3>
-                        <div class="formTth "><input class="formValue techInput wheel sezon_type focus_input"
-                                rel='sezon'></div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="serial">Серийный номер колеса</h3>
-                        <div class="formTth "><input class="formValue techInput wheel focus_input" rel='serial'></div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="probegPass">Паспортный пробег, км</h3>
-                        <div class="formTth"><input class="probegPassport formValue techInput wheel focus_input"
-                                rel='pasportMileage' value="150000"></div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="indexSpeed">Индекс скорости</h3>
-                        <div class="formTth "><input class="formValue techInput wheel focus_input" rel='index_speed'>
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="indexMassa">Индекс нагрузки</h3>
-                        <div class="formTth "><input class="formValue techInput wheel focus_input" rel='index_massa'>
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="psi">Рабочее давление в PSI/BAR</h3>
-                        <div class="formTth  psi">
-                            <input class="techInput formValue desc jobDav validation focus_input" rel="psi"
-                                type="number" placeholder="130">
-                            <p class="techText titleTth barD" id="bar">BAR</p>
-                            <p class="techInput bar job desc" rel="bar"></p>
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="maxProtector">Протектор по паспорту, мм</h3>
-                        <div class="formTth"><input
-                                class="formValue techInput wheel desc protector_passport focus_input"
-                                rel="passportProtektor"></div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="probegNow">Текущий пробег, км</h3>
-                        <div class="formTth"><input class="techInput formValue desc focus_input probeg_tyres"
-                                rel="probegNow" value="0"></div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="montaj">Дата монтажа</h3>
-                        <div class="formTth"> <input class="formValue dateChangeTires desc focus_input montaj_date"
-                                rel="dateInstall">
-                            <i class="icon_data_montaj trigger_calendar fas fa-calendar-week" rel="calen_montaj"></i>
-                            <div class="calendar_montaj">
-                                <input type="text" id="daterangesMontaj" placeholder="Выберите диапазон дат">
-                                <div class="btn_speedStart">
-                                    <button class="btm_formStart">Очистить</button>
-                                    <button class="btm_formStart control">Выполнить</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth" id="probegVal">Остаточный пробег,км</h3>
-                        <div class="formTth">
-                            <p class="techInput probeg job  probeg_ostatok" rel="probegVal"></p>
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="protectorDate">Дата замера протектора</h3>
-                        <div class="formTth"><input class="formValue dateChangeTires desc focus_input" rel="dateZamer">
-                            <i class="icon_data_zamer trigger_calendar fas fa-calendar-week" rel="calen_zamer"></i>
-                            <div class="calendar_zamer">
-                                <input type="text" id="daterangesZamer" placeholder="Выберите диапазон дат">
-                                <div class="btn_speedStart">
-                                    <button class="btm_formStart">Очистить</button>
-                                    <button class="btm_formStart control">Выполнить</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTths techs">Высота протектора, мм</h3>
-                        <div class="params">
-                            <div class=" tech" id="N1"></div><input class="techInput formValue desc pro focus_input"
-                                rel='N1' step="0.1" type="number" lang="en" placeholder="№1">
-                            <div class=" tech" id="N2"></div><input class="techInput formValue desc pro focus_input"
-                                rel='N2' step="0.1" type="number" lang="en" placeholder="№2">
-                            <div class=" tech" id="N3"></div><input class="techInput formValue desc pro focus_input"
-                                rel='N3' step="0.1" type="number" lang="en" placeholder="№3">
-                            <div class="tech" id="N4"></div><input class="techInput formValue desc pro focus_input"
-                                rel='N4' step="0.1" type="number" lang="en" placeholder="№4">
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="procentProtector">Остаток протектора,%</h3>
-                        <div class="formTth"><input class="formValue techInput desc procentProtector" rel='ostatok'>
-                        </div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="rfid">Код, RFID</h3>
-                        <div class="formTth"><input class="formValue techInput desc" rel="rfid"></div>
-                    </div>
-                    <div class="modal">
-                        <h3 class="titleTth tech" id="comments">Комментарий</h3>
-                        <div class="formTth"><input class="formValue techInput desc" rel="comment"></div>
-                    </div>
-
-                </div>
-                <div class="radioVal">
-                    <div class="radioModule">
-                        <p>Сторона колеса</p>
-                        <p><input class="radio" name="radio" type="radio" id='1' value="left" checked>
-                            Левое</p>
-                        <p><input class="radio" name="radio" type="radio" id="rigth" value="rigth">
-                            Правое</p>
-                    </div>
-                </div>
-                <div class="protector">
-                    <div class="title_prot">График замера протектора</div>
-                    <div class="progressBar2">
-                        <!--      <p class="mm12">12mm</p>-->
-                        <div class="maxMMM"><span class='mmtext'>16mm</span></div>
-                        <!--      <p class="mm6">6mm</p>-->
-                        <p class="mm0">0mm</p>
-                        <div class="contBar22">
-                            <canvas id="drawLine2" height="60"></canvas>
-                        </div>
-                        <div class="contBar22">
-                            <canvas id="drawLine3" height="60"></canvas>
-                        </div>
-                        <div class="contBar22">
-                            <canvas id="drawLine4" height="60"></canvas>
-                        </div>
-                    </div>
-                    <div class="headerMM">
-                        <div class="titleMM N1">
-                            <div class="number"></div>
-                            <p class="text"></p>
-                        </div>
-                        <div class="titleMM N2">
-                            <div class="number"></div>
-                            <p class="text"></p>
-                        </div>
-                        <div class="titleMM N3">
-                            <div class="number"></div>
-                            <p class="text"></p>
-                        </div>
-                        <div class="titleMM N4">
-                            <div class="number"></div>
-                            <p class="text"></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="footer_tth">
-                    <div class="validation_message_to"></div>
-                    <div class="button_modal">
-                    </div>
                 </div>
             </div>
             <div class="tableTarir">
@@ -1354,7 +1155,7 @@
         <div class="job_field">
             <div class="up_name_last_container">Аналитика</div>
             <div class="body_last_container">
-                <div class="analitika">СТАТИСТИКА</div>
+                <div class="analitika"></div>
                 <div class="global_container">
                     <div class="left_grafs wrap_graf">
                         <div class="graf_uniq"></div>
@@ -1374,15 +1175,19 @@
 
                     </div>
                 </div>
-                <div class="tyres_model_card">карточка модели колеса</div>
+                <div class="tyres_model_card"></div>
                 <div class="tyres_model_list">
                     <div class="add_card_tyres"></div>
                     <div class="list_model_tyres_spisok">
                         <div class="header_card_tyres">Список моделей колес</div>
                         <div class="list_item_tyres_model"></div>
                     </div>
-
-
+                </div>
+                <div class="card_tyres_window">
+                    <div class="add_card_tyres"></div>
+                    <div class="list_model_tyres_spisok">
+                        <div class="header_card_tyres">Информация</div>
+                    </div>
                 </div>
             </div>
 

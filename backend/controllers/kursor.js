@@ -3,6 +3,8 @@
 const databaseService = require('../services/database.service');
 const { Worker } = require('worker_threads');
 const path = require('path');
+
+let activeWorkers = {};
 //const ips = require('../../index');
 
 //const { sortData } = require('../services/helpers')
@@ -90,18 +92,22 @@ exports.getDataParamsInterval = async (req, res) => {
     const result = await databaseService.geoLastInterval(time1, time2, idw) //получение парамтеров и значений датчиков за интервал времени
     res.json(result)
 }
-let workerPress = null;
+
 exports.getParamsToPressureAndOil = async (req, res) => {
     const time1 = req.body.t1
     const time2 = req.body.t2
     const idw = req.body.idw
     const arrayColumns = req.body.arrayColumns
     const num = req.body.num
+    const workerKey = req.body.workerKey
+    console.log(workerKey)
     // Завершаем предыдущего воркера, если он существует
-    if (workerPress) {
-        workerPress.terminate();
+    if (activeWorkers[workerKey]) {
+        activeWorkers[workerKey].terminate();
     }
-    workerPress = new Worker(path.resolve(__dirname, '../services/workerDetalisation.js'));
+    const workerPress = new Worker(path.resolve(__dirname, '../services/workerDetalisation.js'));
+
+    activeWorkers[workerKey] = worker;
     workerPress.on('message', (result) => {
         workerPress.terminate();
         res.json(result)

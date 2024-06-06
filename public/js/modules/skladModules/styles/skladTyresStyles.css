@@ -13,7 +13,7 @@
     align-items: center;
     flex-direction: column;
     width: 98%;
-    height: 100%;
+    height: 96.5%;
     background-color: #fff;
 }
 
@@ -189,6 +189,11 @@
     align-items: center;
     justify-content: space-around;
     margin: 2px 0;
+    cursor: pointer;
+}
+
+.click_row {
+    background-color: lightgray;
 }
 
 .left_wrap_sklad {
@@ -432,9 +437,10 @@
     display: none;
     position: absolute;
     top: 45%;
-    left: 50%;
+    left: 20.5%;
     transform: translate(-50%, -50%);
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
 }
 
 .tyres_model_list {
@@ -460,6 +466,7 @@
     justify-content: space-between;
     border: 2px solid rgba(6, 28, 71, 1);
     background-color: #fff;
+    border-radius: 5px;
 }
 
 .card_model_tyres {
@@ -471,6 +478,7 @@
     justify-content: start;
     background-color: #fff;
     box-sizing: border-box;
+    border: 1px solid rgba(6, 28, 71, 1);
 }
 
 .header_card_model_window {
@@ -515,7 +523,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
+
+
 
 .image_container {
     display: flex;
@@ -684,7 +695,8 @@
 }
 
 
-.tyres_model_list {
+.tyres_model_list,
+.card_tyres_window {
     width: 100%;
     height: 100%;
     display: flex;
@@ -692,6 +704,10 @@
     justify-content: space-around;
     padding: 2px;
     box-sizing: border-box;
+}
+
+.card_tyres_window {
+    display: none;
 }
 
 .add_card_tyres {
@@ -878,9 +894,162 @@
     color: red;
 }
 
+
 .comm {
     height: 40px;
     resize: none;
     width: 81%;
     color: rgba(6, 28, 71, 1);
+}
+
+
+.status_tyres {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(6, 28, 71, 1);
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.position_icon {
+    position: absolute;
+    top: 90px;
+    left: 130px;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+
+.header_card_tyres_wheel {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.card_model_tyres_wheel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    background-color: #fff;
+    box-sizing: border-box;
+    border: 1px solid rgba(6, 28, 71, 1);
+}
+
+.image_container_wheel {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.protector {
+    flex-grow: 1;
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.body_card_tyres_wheel {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    border-right: 2px solid rgba(6, 28, 71, 1);
+    box-sizing: border-box;
+}
+
+.all_body {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-top: 2px solid rgba(6, 28, 71, 1);
+    box-sizing: border-box;
+}
+
+.analitika_wheel {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.child_chart {
+    width: 310px;
+    height: 310px;
+}
+
+.new_card_label {
+    width: 250px;
+    color: rgba(6, 28, 71, 1);
+    font-size: 0.9rem;
+}
+
+.new_card_input {
+    border: none;
+    border-bottom: 1px solid rgba(6, 28, 71, 1);
+    outline: none;
+    color: rgba(6, 28, 71, 1);
+    font-size: 0.95rem;
+    width: 100px;
+}
+
+.field-row_wheel {
+    width: 20px;
+    height: 60px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0.5px 0;
+}
+
+.headerMM {
+    margin-top: 5px;
+    width: 380px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.titleMM,
+.protektors_wheel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 20px;
+    border-radius: 10%;
+    border: 1px solid #000;
+    font-size: 0.8rem;
+    color: rgba(6, 28, 71, 1);
+    text-align: center;
+}
+
+.mmtext {
+    width: 25px;
+    position: absolute;
+    top: 1px;
+    font-size: 0.5rem;
+    font-weight: bold;
+    color: #000;
+    margin: 0;
+    background: none;
+    border: none;
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
 }

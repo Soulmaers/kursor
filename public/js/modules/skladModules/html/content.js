@@ -1,3 +1,5 @@
+import { Tooltip } from "../../../class/Tooltip.js";
+
 export class ContentGeneration {
     static objColors = {
         5: '#009933', // зеленый
@@ -13,6 +15,12 @@ export class ContentGeneration {
         if (el >= 60) return 3;
         if (el >= 40) return 2;
         return 1;
+    }
+
+    static objSezon = {
+        'Лето': '../../../../image/leto.png',
+        'Зима': '../../../../image/zima.png',
+        'Всесезонная': '../../../../image/vse.png'
     }
 
 
@@ -34,7 +42,7 @@ export class ContentGeneration {
             color = ContentGeneration.objColors[level];
         }
 
-        const model = el.flag_status !== '0' ? '' : ContentGeneration.createIconsCar(el, dataObject, color)
+        const model = el.flag_status !== '0' ? this.statusTyres(el.flag_status) : ContentGeneration.createIconsCar(el, dataObject, color)
         const probeg = dataObject ? ContentGeneration.calcValue(dataObject, el) : null
 
         const upElement = `${el.marka} ${el.model} ${el.radius}/${el.profil}/${el.width}   ${el.index_speed}   ${el.index_massa}`
@@ -43,7 +51,8 @@ export class ContentGeneration {
             `${nomer}  ${probeg} км   ${el.idw_tyres}   ${el.dateZamer}`
 
 
-        const backgroundUrl = el.sezon === 'Лето' ? '../../../../image/leto.png' : '../../../../image/zima.png';
+        const backgroundUrl = ContentGeneration.objSezon[el.sezon]
+
         const deleniesWithBackground = [1, 2, 3, 4].slice(0, level).map(i => `<div class="delenie" style="background-color: ${color};"></div>`).join('');
         const deleniesWithoutBackground = [1, 2, 3, 4].slice(level).map(i => `<div class="delenie" style="border: 1px solid ${color};"></div>`).join('');
         const fon = `style="background-image: url(../../../..${el.imagePath})";`
@@ -77,6 +86,16 @@ ${model}
         </div>`;
     }
 
+    static statusTyres(flag) {
+        const status = {
+            '1': { element: `<i class="fas fa-database status_tyres" rel="1" flag="true"></i>`, class: 'fa-database', text: 'На cкладе' },
+            '2': { element: `<i class="fas fa-tools status_tyres" rel="2" flag="false"></i>`, class: 'fa-tools', text: 'В ремонте' },
+            '3': { element: `<i class="fas fa-trash status_tyres" rel="3" flag="false"></i>`, class: 'fa-trash', text: 'Утилизация' }
+        }
+        return status[flag].element
+
+
+    }
     static calcValue(data, tyres) {//считает пробег-текущий и остаток
         const params = data[2].result
         const findMileage = params.find(e => e.params === 'mileage')
@@ -86,24 +105,26 @@ ${model}
     }
 
     static createIconsCar(element, data, color) {
+        const sensors = data[1].result
         const model = data[0].result
         const identificator = Number(element.identifikator)
         model.sort((a, b) => parseInt(a.osi) - parseInt(b.osi));
         let globalTyresCounter = 1; // Глобальный счётчик для всех шин
         const osElements = []
         model.forEach(({ trailer, tyres }) => {
-            osElements.push(ContentGeneration.createOsElement(trailer, Number(tyres), globalTyresCounter, identificator, color))
+            osElements.push(ContentGeneration.createOsElement(trailer, Number(tyres), globalTyresCounter, identificator, color, sensors))
             globalTyresCounter += Number(tyres);
         });
         return osElements.join('')
     }
-    static createOsElement(trailer, tires, globalTyresCounter, identificator, color) {
+    static createOsElement(trailer, tires, globalTyresCounter, identificator, color, sensors) {
         let centerChartOsHTML = `<div class="centerOs_shema" rel="${trailer}"></div>`;
         const tyresHTML = [];
         for (let y = 0; y < tires; y++) {
             const currentTyreNumber = globalTyresCounter + y;
             const isHighlighted = currentTyreNumber === identificator ? `style="background-color: ${color};"` : '';
-            tyresHTML.push(`<div class="tyres_shema"${isHighlighted}></div>`);
+            const sensor = currentTyreNumber === identificator ? sensors.filter(e => Number(e.tyresdiv) === identificator).map(it => it.pressure)[0] : ''
+            tyresHTML.push(`<div class="tyres_shema"${isHighlighted} rel="${sensor}"></div>`);
         }
         if (tires === 2) {
             return `<div class="osi_shema">
@@ -184,7 +205,8 @@ ${model}
     }
 
 
-    static createCardTyres() {
+    static createCardTyres(flag) {
+        const status = flag && flag !== '0' ? this.statusTyres(flag) : ''
         return `   <div class="card_model_tyres">
         <div class="header_card_tyres">Карточка колеса</div>
         <div class="body_card_tyres">
@@ -192,7 +214,7 @@ ${model}
                 <div class="discripiton_image">Изображение</div>
                 <div class="image_card_wiew" id="imageContainer_wiew"></div>
                         </div>
-
+${status}
             <div class="input-fields_wiew">
                 <div class="field-row">
                     <div class="field-label">Тип шины</div>
@@ -349,12 +371,12 @@ ${model}
     <div class='header_podtver'>Подтверждение</div>
     <div class='body_podtver'>
         <select id="actionSelect" class="styled-select">
-            <option value="" disabled selected>Выберите действие</option>
+            <option value="-" disabled selected>Выберите действие</option>
               <option value="1">На склад</option>
                     <option value="2">В ремонт</option>
             <option value="3">Утилизация</option>
                       </select>
-        <textarea class="comm"></textarea>
+        <textarea class="comm" placeholder="комментарии..."></textarea>
     </div>
     <div class='button_podtver'>
         <div class="ok_podtver">Ок</div>
@@ -363,32 +385,163 @@ ${model}
 </div>
 `
         }
-        /*   else if (tyre) {
-               install = `
-       <div class="modal_podtver">
-       <div class='header_podtver'>Подтверждение</div>
-       <div class='body_podtver'>
-           <select id="actionSelect" class="styled-select">
-               <option value="" disabled selected>Выберите действие</option>
-                                 <option value="2">В ремонт</option>
-               <option value="3">Утилизация</option>
-                  <option value="4">Ротация</option>
-                         </select>
-                          
-           <textarea class="comm"></textarea>
-       </div>
-       <div class='button_podtver'>
-           <div class="ok_podtver">Ок</div>
-           <div class="cancel_podtver">Отмена</div>
-       </div>
-   </div>
-   `
-           }*/
         else {
             console.log('другие условия')
         }
         return install
     }
 
+    static htmlContantModal(flag) {
+        const optionsHTML = ['1', '2', '3']
+            .filter(value => value !== flag)
+            .map(value => {
+                const text = value === '1' ? 'На склад' : value === '2' ? 'В ремонт' : 'Утилизация';
+                return `<option value="${value}">${text}</option>`;
+            })
+            .join('');
 
+        return `
+    <div class="modal_podtver">
+        <div class='header_podtver'>Подтверждение</div>
+        <div class='body_podtver'>
+            <select id="actionSelect" class="styled-select">
+                <option value="-" disabled selected>Выберите действие</option>
+                ${optionsHTML}
+            </select>
+            <textarea class="comm" placeholder="комментарии..."></textarea>
+        </div>
+        <div class='button_podtver'>
+            <div class="ok_podtver">Ок</div>
+            <div class="cancel_podtver">Отмена</div>
+        </div>
+    </div>`;
+    }
+
+
+
+    static createCarWheel() {
+        return `   <div class="card_model_tyres_wheel">
+            <div class="header_card_tyres_wheel">
+           <div class="image_container_wheel">
+                        <div class="image_card_wiew" id="imageContainer_wiew"></div>
+                        </div>
+                       <div class="protector">
+                    <div class="title_prot">График замера протектора</div>
+                    <div class="progressBar2">
+
+                        <div class="maxMMM"> 
+                        <input class="styled-input mmtext" type="text" id="protektor_passport_wiew" autocomplete="off">
+                        </div>
+                        <p class="mm0">0</p>
+                        <div class="contBar22">
+                            <canvas id="drawLine2" height="60"></canvas>
+                        </div>
+                        <div class="contBar22">
+                            <canvas id="drawLine3" height="60"></canvas>
+                        </div>
+                        <div class="contBar22">
+                            <canvas id="drawLine4" height="60"></canvas>
+                        </div>
+                    </div>
+                    <div class="headerMM">
+                                                <div class="field-row_wheel">
+                    <div class="field-label titleMM">N1</div>
+                    <input class="styled-input protektors_wheel" type="text" id="N1" autocomplete="off">
+                </div>
+                 <div class="field-row_wheel">
+                    <div class="field-label titleMM">N2</div>
+                    <input class="styled-input protektors_wheel" type="text" id="N2" autocomplete="off">
+                </div>
+                 <div class="field-row_wheel">
+                    <div class="field-label titleMM">N3</div>
+                    <input class="styled-input protektors_wheel" type="text" id="N3" autocomplete="off">
+                </div>
+                 <div class="field-row_wheel">
+                    <div class="field-label titleMM">N4</div>
+                    <input class="styled-input protektors_wheel" type="text" id="N4" autocomplete="off">
+                </div>
+                    </div>
+                </div>
+        </div>
+        <div class="all_body">
+                <div class="body_card_tyres_wheel">
+                     <div class="input-fields_wiew">
+                <div class="field-row">
+                    <div class="field-label">Тип шины</div>
+                    <div class="styled-input" type="text" id="type_tire_wiew"></div>
+                </div>
+                <div class="field-row">
+                    <div class="field-label">Производитель</div>
+                    <div class="styled-input" type="text" id="marka_wiew"></div>
+                </div>
+                <div class="field-row">
+                    <div class="field-label">Модель</div>
+                    <div class="styled-input" type="text" id="model_wiew"></div>
+                </div>
+                <div class="field-row">
+                    <div class="field-label">Тип колеса</div>
+                    <div class="styled-input" type="text" id="type_tyres_wiew"></div>
+                </div>
+                <div class="field-row">
+                    <div class="field-label">Радиус</div>
+                    <div class="styled-input" type="text" id="radius_wiew"></div>
+                </div>
+                <div class="field-row">
+                    <div class="field-label">Профиль</div>
+                    <div class="styled-input" type="text" id="profil_wiew"></div>
+                </div>
+                <div class="field-row">
+                    <div class="field-label">Ширина</div>
+                    <div class="styled-input" type="text" id="width_wiew"></div>
+                </div>
+                <div class="field-row">
+                    <div class="field-label">Сезонность</div>
+                    <div class="styled-input" type="text" id="sezon_wiew"></div>
+                </div>
+                <div class="field-row">
+                    <div class="field-label">Индекс скорости</div>
+                    <div class="styled-input" type="text" id="index_speed_wiew"></div>
+                </div>
+                <div class="field-row">
+                    <div class="field-label">Индекс нагрузки</div>
+                    <div class="styled-input" type="text" id="index_massa_wiew"></div>
+                </div>
+                           </div>
+                            <div class="input-fields_params">
+                          <div class="field-row">
+                    <div class="field-label new_card_label">Рабочее давление в PSI</div>
+                    <input class="styled-input new_card_input" type="text" id="psi_wiew" autocomplete="off" disabled>
+                </div>
+                <div class="field-row">
+                    <div class="field-label new_card_label">Давление в Bar</div>
+                    <input class="styled-input new_card_input" type="text" id="bar_wiew" readonly="disabled" autocomplete="off">
+                </div>
+                                              <div class="field-row">
+                    <div class="field-label new_card_label">Текущий пробег, км</div>
+                    <input class="styled-input new_card_input" type="text" id="probeg_now_wiew" value="0" autocomplete="off" disabled>
+                </div>
+                <div class="field-row">
+                    <div class="field-label new_card_label">Остаточный пробег, км</div>
+                    <input class="styled-input new_card_input" type="text" id="probeg_last_wiew" autocomplete="off" disabled>
+                </div>
+                                <div class="field-row">
+                    <div class="field-label new_card_label">Остаток протектора, %</div>
+                    <input class="styled-input new_card_input" type="text" id="ostatok" autocomplete="off" disabled>
+                </div>
+                                <div class="field-row">
+                    <div class="field-label new_card_label">Комментарий</div>
+                    <input class="styled-input new_card_input" type="text" id="comment" autocomplete="off">
+                </div>
+                             </div>
+        </div>
+<div class="analitika_wheel"><div class="child_chart"></div></div>
+        </div>
+        <div class="footer_card_model_window">
+            <div class="mess_validation"></div>
+            <div class="save_params">Сохранить</div>
+        </div>
+    </div>`
+    }
 }
+
+

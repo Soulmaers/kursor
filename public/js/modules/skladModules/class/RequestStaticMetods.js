@@ -78,20 +78,7 @@ export class RequestStaticMetods {
         return uniqID
 
     }
-    static async updateFilterTable(idObject, idBitrix, id, pressure) {
-        console.log(idObject, idBitrix, id, pressure)
-        const params = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({ idObject, idBitrix, id, pressure })
-        }
-        const res = await fetch('/api/updateFilterTable', params)
-        const uniqID = await res.json()
-        return uniqID
 
-    }
     static async getTyresToSlad() {
         const params = {
             method: 'GET',
@@ -104,17 +91,21 @@ export class RequestStaticMetods {
         return uniqID
     }
 
-    /* static async getAllTyres() {
-         const params = {
-             method: 'GET',
-             headers: {
-                 'Content-type': 'application/json'
-             }
-         }
-         const res = await fetch('/api/getAllTyres', params)
-         const result = await res.json()
-         return result
-     }*/
+    static async getTyresPosition(obj) {
+        const idObject = obj.idObject
+        const identifikator = obj.identifikator
+        console.log(idObject, identifikator)
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ idObject, identifikator })
+        }
+        const res = await fetch('/api/getTyresPosition', params)
+        const result = await res.json()
+        return result
+    }
 
     static async setTyresHistory(object) {
         const params = {
@@ -129,33 +120,22 @@ export class RequestStaticMetods {
         return uniqID
 
     }
-    static async getHistoryTyres(id) {
+
+    static async getHistoryTyresidTyres(idw) {
+        const idw_tyres = idw
         const param = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ id }))
+            body: JSON.stringify({ idw_tyres })
         }
         const res = await fetch('/api/getHistoryTyresToID', param)
         const response = await res.json()
         return response
     }
-    static async getHistoryTyresidTyres(id, idw) {
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ id, idw }))
-        }
-        const res = await fetch('/api/getHistoryTyres', param)
-        const response = await res.json()
-        return response
-    }
 
-    static async getParams() {
-        const idw = document.querySelector('.color').id
+    static async getParams(idw) {
         const param = {
             method: "POST",
             headers: {
@@ -223,7 +203,7 @@ export class RequestStaticMetods {
     }
 
     static async saveDataToDBTyres(obj) {
-        console.log(obj)
+        //console.log(obj)
         const params = {
             method: "POST",
             headers: {
@@ -240,6 +220,27 @@ export class RequestStaticMetods {
             console.error('Error:', error);
         }
     }
+
+    static async saveDataHistoryToDBTyres(obj) {
+        //    console.log(obj)
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ obj })
+        }
+        try {
+            const response = await fetch('/api/saveDataHistoryToDBTyres', params);
+
+            const result = await response.json();
+            return 'Модель сохранена';
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+
 
     static async getAllTyres() {
         const params = {
@@ -277,6 +278,34 @@ export class RequestStaticMetods {
         const res = await fetch('/api/updateTyreSklad', params)
         const result = await res.json()
         return result
+    }
+
+    static async updateWheel(obj) {
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ obj })
+        }
+        const res = await fetch('/api/updateWheel', params)
+        const result = await res.json()
+        return result
+    }
+
+    static async updateFilterTable(idObject, idBitrix, id, pressure) {
+        console.log(idObject, idBitrix, id, pressure)
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ idObject, idBitrix, id, pressure })
+        }
+        const res = await fetch('/api/updateFilterTable', params)
+        const uniqID = await res.json()
+        return uniqID
+
     }
 
 }

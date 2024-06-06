@@ -12,7 +12,7 @@ export class TyresService {
 
     // Метод для обновления информации о колесе
     static async updateTyre(dropzone, model) {
-        console.log(dropzone)
+
         const mileage = model[2].result.find(e => e.params === 'mileage')
         const obj = {}
         obj.idw_tyres = dropzone.getAttribute('rel')
@@ -28,15 +28,15 @@ export class TyresService {
         obj.numberOs = dropzone.parentElement.querySelector('.centerOs_shema_car').id
         obj.login = document.querySelectorAll('.log')[1].textContent // получаем логин
         const result = await RequestStaticMetods.updateDataInDB(obj);
-
         return result;
     }
 
 
 
     // Метод для обновления информации о колесе
-    static async updateTyreSklad(id, data, model, flag_status) {
+    static async updateTyreSklad(id, data, model, flag_status, comments) {
         const mileage = model[2].result.find(e => e.params === 'mileage')
+        console.log(data, mileage.value)
         const obj = {}
         obj.idw_tyres = id
         obj.nameCar = '-'
@@ -52,20 +52,12 @@ export class TyresService {
         obj.login = document.querySelectorAll('.log')[1].textContent // получаем логин
         obj.probeg_now = mileage ? (Math.round(parseFloat(mileage.value)) - Math.round(parseFloat(data.mileage))) + Math.round(parseFloat(data.probeg_now)) : Math.round(parseFloat(data.probeg_now))
         obj.probeg_last = Number(data.probeg_passport) - obj.probeg_now
+        obj.comments = comments
+        console.log(obj)
         const result = await RequestStaticMetods.updateTyreSklad(obj);
         return result;
     }
 
-
-
-    // Метод для перевода колеса в ремонт или утилизацию
-    static async changeTyreState(tyreId, newState) {
-        const tyreData = { id: tyreId, state: newState };
-
-        //  const result = await RequestStaticMetods.updateTyreStateInDB(tyreData);
-
-        return result;
-    }
 
     static async generateUniqueId() {
         return await RequestStaticMetods.findIdTyres() // Метод для генерации уникального ID (пример)

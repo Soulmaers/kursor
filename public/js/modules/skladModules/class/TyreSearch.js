@@ -1,3 +1,4 @@
+import { Helpers } from './Helpers.js'
 export class TyreSearch {
     constructor(tyreModels, fields) {
         this.tyreModels = tyreModels;
@@ -33,6 +34,7 @@ export class TyreSearch {
     }
 
     onElementInput(event, field) {
+        Helpers.validatonPunctuation(event.target)
         const inputElement = this.inputElements[field];
         const value = inputElement.value.toLowerCase();
         this.selection[field] = value;

@@ -1,6 +1,6 @@
 
 import { RequestStaticMetods } from "./RequestStaticMetods.js";
-
+import { Tooltip } from "../../../class/Tooltip.js";
 export class Helpers {
     static getCurrentDate() {
         const date = new Date(); // Получаем текущую дату и время
@@ -34,8 +34,8 @@ export class Helpers {
     }
 
 
-    static async mileageCalc(resMileage, probegNow) {
-        const res = await RequestStaticMetods.getParams()
+    static async mileageCalc(resMileage, probegNow, idw) {
+        const res = await RequestStaticMetods.getParams(idw)
         const mileageTyres = (Number(res) - Number(resMileage)) + Number(probegNow)
         return ({ mileageTyres: mileageTyres, mileage: res })
     }
@@ -60,8 +60,21 @@ export class Helpers {
     }
 
 
+    static tooltipView(classDOM, text, parent) {
+        const elem = parent.querySelectorAll(`.${classDOM}`)
+        elem.forEach(el => {
+            new Tooltip(el, [text])
+        })
+    }
 
-
+    static validatonPunctuation(input) {
+        input.addEventListener('input', function () {
+            if (input.value.includes(',')) {
+                const newValue = input.value.replace(',', '.');
+                input.value = newValue;
+            }
+        });
+    }
 
     static raschetProtector(techInfo, pro) {
         const sezon = techInfo.querySelector('#sezon_wiew').textContent
@@ -73,6 +86,17 @@ export class Helpers {
         let percentage = ((minNumber - minMM) / (protectorDefault - minMM)) * 100;
         percentage = Math.min(percentage, 100);
         return percentage.toFixed(1); // Округление до двух знаков после запятой и возвращение результата
+    }
+
+    static validateSelection(actionSelect) {
+        console.log(actionSelect.value)
+        if (actionSelect.value === "-") {
+            actionSelect.classList.add('invalid');
+            setTimeout(() => actionSelect.classList.remove('invalid'), 1000)
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }

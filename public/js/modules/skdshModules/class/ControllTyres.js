@@ -26,7 +26,7 @@ export class ControllTyres {
     }
 
     clearText() {
-        this.idbaseTyres.textContent = ''
+        // this.idbaseTyres.textContent = ''
     }
 
     initEventListener() {
@@ -76,9 +76,7 @@ export class ControllTyres {
         this.tableTarir.style.display = 'none'; // Дополнительное скрытие
         this.grafics.style.display = 'none'; // Дополнительное скрытие
         this.wrapperMap.style.display = 'none'
-        // tech(); // Функция, отображающая технические характеристики и логику формул
-        if (this.instance) this.instance.destroy(), this.instance = null;
-        this.instance = new Sklad(element)
+        new Sklad(element)
     }
 
 

@@ -26,7 +26,9 @@ export class StatistikaPressure {
     async init() {
         if (!this.time) this.installTime()
         await this.getParamsToInterval()
+        console.log('тут')
         const content = this.calcilator()
+        console.log(content)
         this.createTableContent(content)
         this.viewTime()
     }
@@ -249,13 +251,13 @@ export class StatistikaPressure {
             arrayColumns.push(el.pressure, el.temp)
         })
         const num = 0
-        console.log(idw, t1, t2, arrayColumns, num)
+        const workerKey = 'pressureStatistiks'
         const param = {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({ idw, t1, t2, arrayColumns, num })
+            body: JSON.stringify({ idw, t1, t2, arrayColumns, num, workerKey })
         }
         //getPressureOil
         const res = await fetch('/api/getPressureOil', param)
@@ -304,6 +306,7 @@ export class StatistikaPressure {
             return 0;
         }))
         this.structura = paramnew
+        console.log(this.structura)
     }
     installTime() {
         const now = new Date();
