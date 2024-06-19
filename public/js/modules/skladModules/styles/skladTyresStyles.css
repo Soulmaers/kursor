@@ -183,7 +183,7 @@
 .row_sklad {
     width: 98%;
     min-height: 70px;
-    border: 1px solid rgba(6, 28, 71, 1);
+    border: 1px solid rgba(6, 28, 71, 0.4);
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -223,7 +223,7 @@
 }
 
 .cel_tyres_sklad {
-    width: 90%;
+    width: 100%;
     height: 20px;
     margin: 2px;
     color: rgba(6, 28, 71, 1);
@@ -339,8 +339,8 @@
 }
 
 .osi_shema_car {
-    width: 360px;
-    height: 160px;
+    width: 300px;
+    height: 130px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -348,18 +348,23 @@
 }
 
 .tyres_shema_car {
-    width: 70px;
-    height: 142px;
+    width: 60px;
+    height: 120px;
     border: 1px solid black;
     box-sizing: border-box;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 15px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 
 .centerOs_shema_car {
-    width: 220px;
+    width: 180px;
     height: 4px;
     background-color: black;
 }
@@ -370,10 +375,25 @@
     background-color: black;
 }
 
+.container_na_osi {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.charts_wrap_wheel {
+    width: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
 
 .center_shema {
     display: flex;
-    width: 38%;
+    width: 98%;
     height: 98%;
     flex-direction: column;
     align-items: center;
@@ -423,8 +443,9 @@
     position: relative;
 }
 
+
 .wrap_graf {
-    width: 30%;
+    width: 1%;
     height: 98%;
     border: 2px solid rgba(6, 28, 71, 1);
     display: flex;
@@ -478,7 +499,7 @@
     justify-content: start;
     background-color: #fff;
     box-sizing: border-box;
-    border: 1px solid rgba(6, 28, 71, 1);
+    border: 1px solid rgba(6, 28, 71, 0.4);
 }
 
 .header_card_model_window {
@@ -486,7 +507,7 @@
     color: #fff;
     font-size: 1rem;
     font-weight: bold;
-    background-color: rgba(6, 28, 71, 1);
+    background-color: rgba(6, 28, 71, 0.7);
     padding: 5px 10px;
     box-sizing: border-box;
     position: relative;
@@ -497,10 +518,11 @@
     color: #fff;
     font-size: 1rem;
     font-weight: bold;
-    background-color: rgba(6, 28, 71, 1);
+    background-color: rgba(6, 28, 71, 0.7);
     padding: 5px 10px;
     box-sizing: border-box;
     text-align: center;
+    position: relative;
 }
 
 
@@ -533,7 +555,7 @@
     flex-direction: column;
     align-items: center;
     width: 80%;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
 .discripiton_image {
@@ -578,7 +600,7 @@
 }
 
 .input-fields_params {
-    border-top: 2px solid rgba(6, 28, 71, 1);
+    border-top: 2px solid rgba(6, 28, 71, 0.2);
     width: 100%;
     margin: 1px 0;
     display: flex;
@@ -606,18 +628,19 @@
 }
 
 .field-label {
-    width: 250px;
+    width: 260px;
     color: rgba(6, 28, 71, 1);
     font-size: 0.95rem;
 }
 
 .styled-input {
     border: none;
-    border-bottom: 1px solid rgba(6, 28, 71, 1);
+    border-bottom: 1px solid rgba(6, 28, 71, 0.2);
     outline: none;
     color: rgba(6, 28, 71, 1);
     font-size: 0.95rem;
     width: 150px;
+    text-align: right;
 }
 
 .styled-input:focus {
@@ -626,7 +649,7 @@
 
 
 .footer_card_model_window {
-    border-top: 2px solid rgba(6, 28, 71, 1);
+    border-top: 2px solid rgba(6, 28, 71, 0.2);
     width: 100%;
     height: 40px;
     display: flex;
@@ -642,7 +665,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px;
+    padding: 3px;
     box-sizing: border-box;
 }
 
@@ -654,11 +677,11 @@
     cursor: pointer;
     padding: 2px 5px;
     border-radius: 5px;
-    border: 2px solid rgba(6, 28, 71, 1);
+    border: 2px solid rgba(6, 28, 71, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(6, 28, 71, 1);
+    background-color: rgba(6, 28, 71, 0.7);
     margin: 2px 5px;
 }
 
@@ -669,11 +692,11 @@
     cursor: pointer;
     padding: 2px 5px;
     border-radius: 5px;
-    border: 2px solid rgba(6, 28, 71, 1);
+    border: 2px solid rgba(6, 28, 71, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(6, 28, 71, 1);
+    background-color: rgba(6, 28, 71, 0.7);
     margin: 2px 5px;
 }
 
@@ -708,24 +731,37 @@
 
 .card_tyres_window {
     display: none;
+    align-items: start;
 }
 
 .add_card_tyres {
     width: 455px;
     height: 100%;
-    border: 2px solid rgba(6, 28, 71, 1);
+    border: 2px solid rgba(6, 28, 71, 0.4);
     box-sizing: border-box;
 }
 
 .list_model_tyres_spisok {
     flex-grow: 1;
     height: 100%;
-    border: 2px solid rgba(6, 28, 71, 1);
+    border: 2px solid rgba(6, 28, 71, 0.4);
     box-sizing: border-box;
     width: 98%;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.model_body_analitika {
+    flex-grow: 1;
+    border: 2px solid rgba(6, 28, 71, 0.4);
+    box-sizing: border-box;
+    width: 98%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: none
 }
 
 .list_item_tyres_model {
@@ -745,7 +781,7 @@
     align-items: center;
     margin: 1px 0;
     padding: 2px;
-    border: 1px solid rgba(6, 28, 71, 1);
+    border: 1px solid rgba(6, 28, 71, 0.4);
     cursor: pointer;
     box-sizing: border-box;
     border-radius: 5px;
@@ -765,6 +801,8 @@
     flex-grow: 1;
     padding: 1px;
     margin-left: 10px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
 }
 
 
@@ -904,7 +942,6 @@
 
 
 .status_tyres {
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -917,7 +954,7 @@
 .position_icon {
     position: absolute;
     top: 90px;
-    left: 130px;
+    right: 100px;
     cursor: pointer;
     font-size: 1.5rem;
 }
@@ -938,7 +975,7 @@
     justify-content: start;
     background-color: #fff;
     box-sizing: border-box;
-    border: 1px solid rgba(6, 28, 71, 1);
+    border: 1px solid rgba(6, 28, 71, 0.4);
 }
 
 .image_container_wheel {
@@ -964,7 +1001,7 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    border-right: 2px solid rgba(6, 28, 71, 1);
+    border-right: 2px solid rgba(6, 28, 71, 0.2);
     box-sizing: border-box;
 }
 
@@ -973,7 +1010,7 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    border-top: 2px solid rgba(6, 28, 71, 1);
+    border-top: 2px solid rgba(6, 28, 71, 0.2);
     box-sizing: border-box;
 }
 
@@ -981,11 +1018,12 @@
     flex-grow: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
+    position: relative;
 }
 
 .child_chart {
-    width: 310px;
+    width: 370px;
     height: 310px;
 }
 
@@ -997,7 +1035,7 @@
 
 .new_card_input {
     border: none;
-    border-bottom: 1px solid rgba(6, 28, 71, 1);
+    border-bottom: 1px solid rgba(6, 28, 71, 0.2);
     outline: none;
     color: rgba(6, 28, 71, 1);
     font-size: 0.95rem;
@@ -1005,8 +1043,7 @@
 }
 
 .field-row_wheel {
-    width: 20px;
-    height: 60px;
+    width: 30px;
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
@@ -1016,7 +1053,7 @@
 
 .headerMM {
     margin-top: 5px;
-    width: 380px;
+    width: 174px;
     display: flex;
     justify-content: space-between;
 }
@@ -1029,27 +1066,353 @@
     justify-content: center;
     width: 100%;
     height: 20px;
-    border-radius: 10%;
-    border: 1px solid #000;
-    font-size: 0.8rem;
+    font-size: 0.6rem;
+    font-weight: bold;
     color: rgba(6, 28, 71, 1);
     text-align: center;
+    border: none
+}
+
+.maxMMM {
+    position: absolute;
+    top: 0;
+    left: -25px;
+}
+
+
+.mm0 {
+    position: absolute;
+    top: 80%;
+    left: -15px;
+    border-bottom: 1px solid rgba(6, 28, 71, 0.4);
+    font-weight: bold;
+    font-size: 0.7rem;
+    color: rgba(6, 28, 71, 1);
+    margin: 0;
 }
 
 .mmtext {
-    width: 25px;
-    position: absolute;
-    top: 1px;
-    font-size: 0.5rem;
+    width: 15px;
+    font-size: 0.7rem;
     font-weight: bold;
-    color: #000;
+    color: rgba(6, 28, 71, 1);
     margin: 0;
     background: none;
-    border: none;
+    border-bottom: 1px solid rgba(6, 28, 71, 0.4);
 }
 
 .line {
     fill: none;
     stroke: steelblue;
     stroke-width: 2px;
+}
+
+.tooltip_tochka {
+    background-color: #fff;
+    width: 300px;
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    top: 15px;
+    left: 90px;
+    border: 1px solid rgba(6, 28, 71, 0.2);
+}
+
+
+.tooltip_element {
+    display: flex;
+    width: 100%;
+    margin: 1px 0;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.tooltip_element_title {
+    margin: 0 2px;
+    font-size: 0.7rem;
+    color: rgba(6, 28, 71, 1);
+    width: 57%;
+}
+
+.tooltip_element_value {
+    margin: 0 2px;
+    font-size: 0.7rem;
+    color: rgba(6, 28, 71, 1);
+    width: 25%;
+}
+
+.tooltip_element_value_otklonenie {
+    margin: 0 2px;
+    font-size: 0.7rem;
+    color: rgba(6, 28, 71, 1);
+    width: 18%;
+}
+
+.table_ishue {
+    width: 99%;
+    border: 1px solid rgba(6, 28, 71, 0.2);
+    margin: 0 auto;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.dannie_stat {
+    width: 99%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.header_stat {
+    width: 100%;
+    color: #fff;
+    background-color: rgba(6, 28, 71, 0.7);
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.wrapper_visual_wheel {
+    width: 100%;
+    height: 100%;
+}
+
+
+.card_wheel {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 99%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 5px 0;
+}
+
+.card_wheel_chart {
+    width: 500px;
+    border: 1px solid rgba(6, 28, 71, 0.2);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 0.7rem;
+    padding-top: 10px;
+    position: relative;
+}
+
+.list_data_time {
+    margin: 0 5px;
+    height: 310px;
+    flex-grow: 1;
+    border: 1px solid rgba(6, 28, 71, 0.2);
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.header_list_data_time {
+    width: 100%;
+    background-color: rgba(6, 28, 71, 0.7);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 2px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+
+.body_zamer {
+    width: 100%;
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* для Firefox */
+    -ms-overflow-style: none;
+    /* для Internet Explorer и Edge */
+}
+
+
+
+
+.body_zamer::-webkit-scrollbar {
+    display: none;
+    /* для Chrome, Safari и Opera */
+}
+
+.listRows {
+    margin: 2px 0;
+    border-bottom: 1px solid rgba(6, 28, 71, 0.2);
+    box-sizing: border-box;
+    color: rgba(6, 28, 71, 1);
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.listRows:hover {
+    background-color: #e9e9e9;
+}
+
+.selected {
+    background-color: #e9e9e9;
+}
+
+
+.wheel_card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.right_container_chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dannie_wheel_info {
+    display: flex;
+    flex-direction: column;
+}
+
+.info_discription {
+    margin: 2px 0;
+    color: rgba(6, 28, 71, 1);
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.row_wheel_sklad {
+    width: auto;
+    height: auto
+}
+
+.center_body_list {
+    margin-bottom: 10px;
+}
+
+.description_wheel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.list_discription {
+    font-size: 0.8rem;
+    color: rgba(6, 28, 71, 1);
+    margin-left: 10px
+}
+
+.left_container {
+    align-items: end;
+}
+
+.right_container {
+    align-items: start;
+}
+
+.row_text_shina {
+    font-size: 0.6rem;
+    color: rgba(6, 28, 71, 1);
+    width: 100%;
+    font-weight: bold;
+
+}
+
+.discription_shina_wrap {
+    width: 190px;
+
+    display: flex;
+    flex-direction: column;
+    padding: 2px;
+    box-sizing: border-box;
+    position: absolute;
+    top: -6px;
+    border-bottom: 1px solid rgba(6, 28, 71, 0.2);
+}
+
+.legend_wheel_chart {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+
+}
+
+.dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.contur {
+    border: 1px solid green
+}
+
+.blue {
+    background-color: blue;
+    border-top: 1px solid transparent;
+}
+
+.green {
+    background-color: green;
+    border: 1px solid transparent;
+}
+
+.line_wheel {
+    display: inline-block;
+    width: 10px;
+    margin-right: 7px;
+}
+
+.dashed_red {
+    border: 1px dashed darkred;
+}
+
+.dashed_blue {
+    border: 1px dashed blue;
+}
+
+.solid {
+    border-top: 3px solid blue;
+}
+
+.thin {
+    border-top: 1px solid blue;
+}
+
+.label {
+    font-size: 0.5rem;
+    color: rgba(6, 28, 71, 1);
+}
+
+
+.find_wheel {
+    position: absolute;
+    bottom: 3px;
 }

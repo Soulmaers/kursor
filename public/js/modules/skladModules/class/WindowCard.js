@@ -1,7 +1,9 @@
 import { ContentGeneration } from '../html/content.js'
 import { RequestStaticMetods } from './RequestStaticMetods.js'
 import { Helpers } from './Helpers.js'
+import { Dinamic } from './Dinamic.js'
 import { Tooltip } from '../../../class/Tooltip.js'
+import { RenderChartAndStatistiks } from './RenderChartAndStatistiks.js'
 export class WindowCard {
     constructor(rows, instance) {
         this.rows = rows
@@ -9,6 +11,7 @@ export class WindowCard {
         this.activeRow = null
         this.cardWindow = this.instanceSkladTyres.element.querySelector('.card_tyres_window')
         this.card = this.cardWindow.children[0]
+        this.analitika = this.cardWindow.children[1]
         this.protektor = []
         this.pop = document.querySelector('.popup-background');
         this.init()
@@ -34,11 +37,21 @@ export class WindowCard {
         if (!wasActive) {
             this.setActiveRow(row);
             this.methods(row);
-            this.instanceSkladTyres.lastClickedElement = null
-            // this.instanceSkladTyres.toggleTyresVisibility();
         } else {
-            this.instanceSkladTyres.defaultDOMElements();
+            if (this.instanceSkladTyres.lastClickedElement) {
+                this.instanceSkladTyres.updateJobField('Колесная схема', 'none', 'flex', 'none', 'none');
+                const activ = document.querySelector('.activ_button_sklad')
+                if (activ.classList.contains('navi_job_tyres')) {
+                    this.instanceSkladTyres.changeSkaldAndJob()
+                }
+                else {
+                    this.instanceSkladTyres.changeJobAndSklad()
+                }
 
+            }
+            else {
+                this.instanceSkladTyres.updateJobField('Аналитика', 'flex', 'none', 'none', 'none');
+            }
             this.cardWindow.style.display = 'none';
         }
     }
@@ -55,12 +68,19 @@ export class WindowCard {
         this.activeRow = row;
     }
 
-    methods(row) {
+    async methods(row) {
         this.renderCard(row);
         this.wiewDataTyres(row);
+        const vvod = this.cardWindow.querySelectorAll('.vvod')
+        vvod.forEach(e => Helpers.validatonPunctuation(e))
+        const dinamicInstance = new Dinamic(this.targetWheel, this.cardWindow);
+        await dinamicInstance.init();  // Ждем завершения инициализации Dinamic
+        this.historyWheel = await RequestStaticMetods.getHistoryTyresidTyres(this.targetWheel.idw_tyres)
+        new RenderChartAndStatistiks(this.historyWheel, this.targetWheel, this.cardWindow, this.instanceSkladTyres)
         if (this.targetWheel.flag_status !== '0') this.controllStatusTyres(row)
         this.saveReduct(row)
     }
+
     controllStatusTyres(row) {
         const icon = this.card.querySelector('.position_icon');
         const flag_status = icon.getAttribute('rel');
@@ -113,16 +133,25 @@ export class WindowCard {
         const save = this.cardWindow.querySelector('.save_params')
         const mess = this.cardWindow.querySelector('.mess_validation')
         save.addEventListener('click', async () => {
-            const obj = this.getObject()
-            const message = await RequestStaticMetods.updateWheel(obj)
-
-            Helpers.viewRemark(mess, 'green', message)
-            this.instanceSkladTyres.clickCardRow = row.getAttribute('rel')
-            if (childElement) {
-                const updateFilterTable = await RequestStaticMetods.updateFilterTable(row.getAttribute('data-att'), obj.id_bitrix_wiew, row.getAttribute('rel'), childElement.getAttribute('rel'))
+            const bool = Helpers.validationInput(this.cardWindow)
+            if (!bool) {
+                Helpers.viewRemark(mess, 'red', 'Заполните обязательные поля')
             }
-            await this.instanceSkladTyres.getTyres()
-            this.instanceSkladTyres.createRows()
+            else {
+                const obj = this.getObject()
+                const message = await RequestStaticMetods.updateWheel(obj)
+
+                Helpers.viewRemark(mess, 'green', message)
+                this.instanceSkladTyres.clickCardRow = row.getAttribute('rel')
+                if (childElement) {
+                    const updateFilterTable = await RequestStaticMetods.updateFilterTable(row.getAttribute('data-att'), obj.id_bitrix_wiew, row.getAttribute('rel'), childElement.getAttribute('rel'))
+                }
+                await this.instanceSkladTyres.updateListTyres()
+                this.instanceSkladTyres.toggleTyresVisibility()
+                this.methods(row);
+            }
+
+
         })
     }
 
@@ -175,7 +204,8 @@ export class WindowCard {
             { id: '#ostatok', value: targetWheel.ostatok },
             { id: '#rfid_cod', value: targetWheel.rfid },
             { id: '#price_tyres', value: targetWheel.price },
-            { id: '#comment', value: targetWheel.comments }
+            { id: '#comment', value: targetWheel.comments },
+            { id: '#protektor_passport_wiew_chart', value: targetWheel.protektor_passport }
         ];
         this.protektor = [targetWheel.N1, targetWheel.N2, targetWheel.N3, targetWheel.N4, targetWheel.ostatok]
         fields.forEach(field => {
@@ -187,7 +217,7 @@ export class WindowCard {
         });
         this.probeg = await Helpers.mileageCalc(targetWheel.mileage, targetWheel.probeg_now, targetWheel.idObject)
         console.log(this.cardWindow)
-        this.cardWindow.querySelector('#probeg_now_wiew').value = this.probeg.mileageTyres
+        this.cardWindow.querySelector('#probeg_now_wiew').value = !isNaN(this.probeg.mileageTyres) ? this.probeg.mileageTyres : targetWheel.probeg_now
         this.instanceSkladTyres.valueCalculate(this.cardWindow)
 
     }
@@ -195,8 +225,11 @@ export class WindowCard {
         const idw_tyres = row.getAttribute('rel')
         const targetWheel = this.instanceSkladTyres.allTyres.find(el => el.idw_tyres === idw_tyres)
         this.card.innerHTML = ContentGeneration.createCardTyres(targetWheel.flag_status)
+        this.analitika.innerHTML = ContentGeneration.contentVisualWheel()
+
         if (targetWheel.flag_status !== '0') {
             this.card.querySelector('.status_tyres').classList.add('position_icon')
+            console.log(this.card.querySelector('.status_tyres'))
             new Tooltip(this.card.querySelector('.status_tyres'), ['Изменение статуса колеса'])
         }
         this.card.querySelector('.footer_card_tyres').remove()
@@ -213,11 +246,6 @@ export class WindowCard {
         const header = this.instanceSkladTyres.element.querySelector('.up_name_last_container');
         if (header) {
             header.textContent = 'Основные характеристики колеса';
-        }
-        // Удаляем класс clickElement, если он был активен
-        const clickElement = this.instanceSkladTyres.element.querySelector('.clickElement');
-        if (clickElement) {
-            clickElement.classList.remove('clickElement');
         }
     }
 }

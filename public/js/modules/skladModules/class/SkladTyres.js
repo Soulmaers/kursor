@@ -8,6 +8,8 @@ import { TyresService } from './TyresService.js'
 import { DragAndDrop } from './DragAndDropTyres.js'
 import { WindowCard } from './WindowCard.js'
 import { Crafika } from './Grafika.js'
+import { AddChartsToModel } from "./AddChartsToModel.js"
+import { Find } from './Find.js'
 
 export class SkladTyres {
     constructor(element, data) {
@@ -26,6 +28,7 @@ export class SkladTyres {
         this.navi = this.element.querySelectorAll('.up_name')
         this.icon_add_tyres = this.element.querySelectorAll('.icon_add_tyres')
         this.tyresRoom = this.element.querySelector('.tyres_room')
+        this.find = this.element.querySelector('.search_input_meta')
         this.modelTyres = null
         this.modelCar = null
         this.clickCard = null
@@ -34,6 +37,7 @@ export class SkladTyres {
             'radius', 'profil', 'width', 'sezon',
             'index_speed', 'index_massa'
         ];
+        //   this.fieldsWheel = ['price_tyres', 'probeg_passport_wiew']
         this.lastClickedElement = null; // Храним ссылку на последний кликнутый элемент
         this.clickCardRow = null
         this.boundNavi = this.showBody.bind(this)
@@ -43,7 +47,7 @@ export class SkladTyres {
     }
 
     async init() {
-        console.log('инит')
+
         await this.getTyres()
         this.defaultDOMElements()
         this.addTooltips()
@@ -71,14 +75,19 @@ export class SkladTyres {
     async addCardListTyres() {
         const windowClick = this.element.querySelector('.click_row')
         if (windowClick) windowClick.classList.remove('click_row')
-        console.log('тута!Ё')
         const element = this.job_field.querySelector('.tyres_model_list');
         this.toggleDisplay(element, 'flex');
-        this.updateJobField('Карточка создания колеса', 'none', 'none', 'flex', 'none');
+        this.updateJobField('Карточка создания шины', 'none', 'none', 'flex', 'none');
         element.children[0].innerHTML = ContentGeneration.createCardTyres();
+        this.container = document.querySelector('.body_card_tyres')
+        const vvod = this.container.querySelectorAll('.vvod')
+        vvod.forEach(e => Helpers.validatonPunctuation(e))
         const list_item_tyres_model = this.job_field.querySelector('.list_item_tyres_model');
         this.modelTyres = await RequestStaticMetods.getModelTyresGuide();
         CreateDOMElements.createListModelsTyres(list_item_tyres_model, this.modelTyres);
+        const rowsModel = list_item_tyres_model.querySelectorAll('.row_model')
+        const searchInput = element.querySelector('.search_input_meta')
+        new Find(searchInput, rowsModel)
         this.viewValueParamsCard(element, this.modelTyres)
         this.clickReduct(element)
         this.saveTyres(element)
@@ -90,17 +99,25 @@ export class SkladTyres {
         const mess = element.querySelector('.mess_validation')
         const fieldsParams = element.querySelector('.input-fields_params').querySelectorAll('.styled-input')
         saveButton.addEventListener('click', async () => {
-            const uniqID = saveButton.getAttribute('id')
-            if (!uniqID) {
-                Helpers.viewRemark(mess, 'red', 'Выберите модель колеса')
-                return
+            const bool = Helpers.validationInput(this.container)
+            if (!bool) {
+                Helpers.viewRemark(mess, 'red', 'Заполните обязательные поля')
             }
-            const message = await TyresService.createTyre(uniqID, fieldsParams)
-            Helpers.viewRemark(mess, 'green', message)
-            this.clickCard = null
-            this.addCardListTyres()
-            this.updateListTyres()
+            else {
 
+                const uniqID = saveButton.getAttribute('id')
+                if (!uniqID) {
+                    Helpers.viewRemark(mess, 'red', 'Выберите модель колеса')
+                    return
+                }
+                const message = await TyresService.createTyre(uniqID, fieldsParams)
+                Helpers.viewRemark(mess, 'green', message)
+                this.clickCard = null
+                saveButton.removeAttribute('rel');
+                this.addCardListTyres()
+                this.updateListTyres()
+
+            }
         })
     }
     valueCalculate(element) {
@@ -174,6 +191,7 @@ export class SkladTyres {
             { id: '#index_massa', value: this.clickCard.index_massa },
             { id: '#probeg_passport', value: this.clickCard.probeg_passport },
             { id: '#protektor_passport', value: this.clickCard.protektor_passport }
+
         ];
         fields.forEach(field => {
             const fieldElement = globalParent.querySelector(field.id);
@@ -343,7 +361,11 @@ export class SkladTyres {
             this.controllActivElement(object)
             this.toggleTyresVisibility()
             if (this.lastClickedElement) this.addShema();
-            new DragAndDrop(this.skladTyres, '.row_sklad', '.tyres_shema_car', this.element, this)
+            if (this.dragAndDropInstance) {
+                this.dragAndDropInstance.removeEventListeners(); // Удаляем старые события
+            }
+            this.dragAndDropInstance = new DragAndDrop(this.skladTyres, '.row_sklad', '.tyres_shema_car', this.element, this)
+
         }))
     }
 
@@ -352,6 +374,8 @@ export class SkladTyres {
         this.modelCar = this.uniqData.find(e => e[4] === Number(this.lastClickedElement.getAttribute('rel')))
         this.container_shema.innerHTML = CreateDOMElements.createModelCar(this.modelCar, this.allTyres)
         this.container_shema.previousElementSibling.textContent = this.modelCar[0].message
+        Helpers.tooltipView('tyres_shema_car', 'Остаток протектора', this.container_shema)
+        new AddChartsToModel(this.allTyres, this.job_field.children[1].children[1])
     }
 
     controllActivElement(object) {
@@ -366,6 +390,7 @@ export class SkladTyres {
             object.classList.add('clickElement');
             this.lastClickedElement = object;
             this.updateJobField('Колесная схема', 'none', 'flex', 'none', 'none');
+            this.changeSkaldAndJob()
         }
     }
 
@@ -386,6 +411,10 @@ export class SkladTyres {
         else {
             [...this.jobTyres.children].forEach(e => e.style.display = 'flex')
         }
+        const jobTyres = [...this.jobTyres.children].filter(e =>
+            e.style.display === 'flex'
+        );
+        this.instanceFind.updateRows(jobTyres)
     }
 
     showBody(event) {
@@ -395,20 +424,32 @@ export class SkladTyres {
         element.classList.add('activ_button_sklad')
 
         if (element.classList.contains('navi_job_tyres')) {
-            this.toggleDisplay(this.jobTyres.parentElement, 'flex');
-            this.toggleDisplay(this.skladTyres.parentElement, 'none');
-            this.icon_add_tyres.forEach(e => e.style.display = 'none')
+            this.changeSkaldAndJob()
             this.toggleTyresVisibility()
-            new Crafika(this.allTyres, 'install')
+
         }
         else {
-            this.toggleDisplay(this.jobTyres.parentElement, 'none');
-            this.toggleDisplay(this.skladTyres.parentElement, 'flex');
-            this.icon_add_tyres.forEach(e => e.style.display = 'flex')
-            new Crafika(this.allTyres, 'sklad')
+            this.changeJobAndSklad()
+            const rowsSklad = this.skladTyres.querySelectorAll('.row_sklad')
+            rowsSklad.forEach(e => e.style.display = 'flex')
+            this.instanceFind.updateRows(rowsSklad)
         }
     }
-
+    changeJobAndSklad() {
+        this.toggleDisplay(this.jobTyres.parentElement, 'none');
+        this.toggleDisplay(this.skladTyres.parentElement, 'flex');
+        this.icon_add_tyres.forEach(e => e.style.display = 'flex')
+        new Crafika(this.allTyres, 'sklad')
+    }
+    changeSkaldAndJob() {
+        this.toggleDisplay(this.jobTyres.parentElement, 'flex');
+        this.toggleDisplay(this.skladTyres.parentElement, 'none');
+        this.icon_add_tyres.forEach(e => e.style.display = 'none')
+        const activ = document.querySelector('.activ_button_sklad')
+        activ.classList.remove('activ_button_sklad')
+        this.navi[0].classList.add('activ_button_sklad')
+        new Crafika(this.allTyres, 'install')
+    }
     toggleDisplay(element, display) {
         element.style.display = display;
     }
@@ -427,8 +468,9 @@ export class SkladTyres {
         this.addTooltip()
         const newRows = this.element.querySelectorAll('.row_sklad')
         new WindowCard(newRows, this)
+        const rowsSklad = this.skladTyres.querySelectorAll('.row_sklad')
+        this.instanceFind = new Find(this.find, rowsSklad)
     }
-
     async getTyres() {
         this.allTyres = await RequestStaticMetods.getAllTyres()
     }

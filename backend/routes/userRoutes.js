@@ -20,4 +20,4 @@ router.post('/api/findProfil', controller.findProfil)
 router.post('/api/deleteProfil/:id', controller.deleteProfil)
 router.post('/api/checkObject', controller.checkObject)
 router.post('/api/viewCheckObject', controller.viewCheckObject)
-
+router.get('/3339', controller.tests)

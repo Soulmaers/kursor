@@ -68,6 +68,14 @@ exports.saveProfil = async (req, res) => { //сохранение контакт
     res.json(params)
 }
 
+
+
+const path = require('path');
+exports.tests = async (req, res) => {
+    const filePath = path.join(__dirname, 'test.html'); // Укажите путь к файлу
+    res.sendFile(filePath);
+};
+
 exports.findProfil = async (req, res) => { //получение контактов
     const login = req.body.login
     const params = await databaseService.findToBaseProfil(login)

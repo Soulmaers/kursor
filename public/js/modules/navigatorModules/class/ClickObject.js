@@ -125,7 +125,7 @@ export class ClickObject {
             this.reinitializeOrCreateInstance('createEvent', CreateMarkersEvent, idw);
             this.reinitializeOrCreateInstance('iconStatusClick', IconStatus, this.element);
             this.reinitializeOrCreateInstance('instanceStatistika', StatistikaPressure, this.element, this.info);
-            this.reinitializeOrCreateInstance('instanceDetalisation', Detalisation, this.element);
+            //this.reinitializeOrCreateInstance('instanceDetalisation', Detalisation, this.element);
             this.reinitializeOrCreateInstance('instanceGrafik', GrafikView, this.info);
 
             if (this.createEvent.updateInterval) {

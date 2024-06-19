@@ -10,6 +10,7 @@ export class TyreSearch {
     }
 
     init() {
+        console.log(this.tyreModels)
         this.fields.forEach(field => {
             const inputElement = document.getElementById(field);
             if (inputElement) {

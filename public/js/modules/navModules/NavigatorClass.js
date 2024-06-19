@@ -23,6 +23,7 @@ export class NavigationMenu {
             sklad: { method: this.sklad.bind(this), elem: 'globalSklad' },
             statistika: { method: this.statistika.bind(this), elem: 'start' }
         };
+        console.log(this.data)
         this.init()
     }
 

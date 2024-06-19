@@ -638,7 +638,7 @@ exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
 exports.getSensStorMetaFilter = async (imei, port, id) => {
     try {
         const pool = await connection;
-        const post = `SELECT idw,imei,port,params,meta, value, data FROM sens_stor_meta WHERE imei=@imei AND port=@port AND idw=@idw`;
+        const post = `SELECT idw,imei,port,params,meta, value,idTyres,idBitrix,data FROM sens_stor_meta WHERE imei=@imei AND port=@port AND idw=@idw`;
         const result = await pool.request()
             .input('imei', String(imei))
             .input('idw', String(id))
@@ -745,6 +745,31 @@ exports.saveValuePWRToBase = async (idw, params, value) => {
         console.log(e)
     }
 }
+
+exports.setStatistiksPressure = async (data) => {
+    const pool = await connection;
+    try {
+        const insertQuery = `INSERT INTO tyres_history_statistika (idw_tyres, idObject, time, speed, params, value,dvs, mileage) VALUES (@idw_tyres, @idObject, @time, @speed, @params, @value,@dvs,@mileage)`;
+
+        const promises = data.map(item =>
+            pool.request()
+                .input('idw_tyres', item.idTyres)
+                .input('idObject', item.idObject)
+                .input('time', item.time)
+                .input('speed', item.speed)
+                .input('params', item.params)
+                .input('value', item.value)
+                .input('dvs', item.engine)
+                .input('mileage', item.mileage)
+                .query(insertQuery)
+        );
+
+        await Promise.all(promises);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
 
 exports.getTarirData = async (idw, param) => {
     const pool = await connection;
@@ -1585,7 +1610,7 @@ exports.paramsToBase = async (idw) => {
 exports.paramsToBaseSens = async (idw) => {
     try {
         const pool = await connection
-        const selectBase = `SELECT idw,port,imei,sens,params,value,status, data FROM sens_stor_meta WHERE idw=@idw`
+        const selectBase = `SELECT idw,port,imei,sens,params,value,status, idTyres, data FROM sens_stor_meta WHERE idw=@idw`
         const result = await pool.request().input('idw', idw).query(selectBase)
         return result.recordset
     }
@@ -1593,6 +1618,8 @@ exports.paramsToBaseSens = async (idw) => {
         console.log(e)
     }
 }
+
+
 
 exports.iconFindtoBase = async (idw) => {
     try {

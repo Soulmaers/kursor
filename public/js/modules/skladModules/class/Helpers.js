@@ -15,8 +15,6 @@ export class Helpers {
     static raschet(techInfo, pro) {
         const sezon = techInfo.querySelector('.sezon_type').value
         const protectorDefault = techInfo.querySelector('.protector_passport').value
-        console.log(sezon)
-        console.log(protectorDefault)
         const valuesArray = [...pro].map(it => it.value)
         const filteredArr = valuesArray.filter(num => num !== undefined && num !== null && num !== '').map(num => parseFloat(num));
         const minNumber = Math.min(...filteredArr);
@@ -52,14 +50,18 @@ export class Helpers {
         let isValid = true;
         fields.forEach(selector => {
             const field = element.querySelector(selector);
-            console.log(field)
             if (!field.value.trim()) isValid = false;
         });
 
         return isValid
     }
 
-
+    static protek(wheels) {
+        const protector = [];
+        protector.push(wheels.N1, wheels.N2, wheels.N3, wheels.N4)
+        const pro = protector.filter(e => e !== '').map(it => it)
+        return pro
+    }
     static tooltipView(classDOM, text, parent) {
         const elem = parent.querySelectorAll(`.${classDOM}`)
         elem.forEach(el => {
@@ -74,14 +76,48 @@ export class Helpers {
                 input.value = newValue;
             }
         });
+        input.addEventListener('keydown', (e) => {
+            const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Enter', '.', ','];
+
+            if (!allowedKeys.includes(e.key) && !/\d/.test(e.key)) {
+                e.preventDefault(); // Блокировка всех символов, кроме разрешённых
+            }
+        });
     }
 
+    static renderProtektors(data, container) {
+        const fields = [
+            { id: '#N1_wiew_chart', value: data.N1 },
+            { id: '#N2_wiew_chart', value: data.N2 },
+            { id: '#N3_wiew_chart', value: data.N3 },
+            { id: '#N4_wiew_chart', value: data.N4 }
+        ];
+
+        fields.forEach(field => {
+            const fieldElement = container.querySelector(field.id);
+            if (fieldElement) {
+                if (field.value === null || field.value === "") {
+                    fieldElement.parentElement.style.display = 'none';
+                } else {
+                    fieldElement.parentElement.style.display = 'flex'; // Показываем элемент, если он был скрыт ранее
+                    const valueText = `${field.value} мм`;
+                    if (fieldElement.tagName.toLowerCase() === 'input') {
+                        fieldElement.value = valueText;
+                    } else {
+                        fieldElement.textContent = valueText;
+                    }
+                }
+            }
+        });
+    }
     static raschetProtector(techInfo, pro) {
         const sezon = techInfo.querySelector('#sezon_wiew').textContent
         const protectorDefault = techInfo.querySelector('#protektor_passport_wiew').value
+        if (!protectorDefault) return null
         const valuesArray = [...pro].map(it => it.value)
-        const filteredArr = valuesArray.filter(num => num !== undefined && num !== null && num !== '').map(num => parseFloat(num));
-        const minNumber = Math.min(...filteredArr);
+        const nValues = valuesArray.filter(num => num !== undefined && num !== null && num !== '').map(num => parseFloat(num));
+        if (nValues.length === 0) return null
+        const minNumber = Math.min(...nValues)
         const minMM = sezon === 'Лето' ? 2 : 4;
         let percentage = ((minNumber - minMM) / (protectorDefault - minMM)) * 100;
         percentage = Math.min(percentage, 100);
@@ -89,7 +125,6 @@ export class Helpers {
     }
 
     static validateSelection(actionSelect) {
-        console.log(actionSelect.value)
         if (actionSelect.value === "-") {
             actionSelect.classList.add('invalid');
             setTimeout(() => actionSelect.classList.remove('invalid'), 1000)
@@ -97,6 +132,93 @@ export class Helpers {
         } else {
             return true;
         }
+    }
+    static validationInput(container) {
+        const elements = container.querySelectorAll('.valid_input');
+        let allValid = true;
+        elements.forEach(element => {
+            if (!element.value.trim()) {
+                allValid = false;
+                element.style.border = '1px solid red';
+                setTimeout(() => {
+                    element.style.border = '';
+                }, 3000);
+            }
+        });
+        return allValid;
+    }
+    static addStruktura(data, historyWheel) {
+        const priceNew = Number(data.price);
+        const probegPassport = Number(data.probeg_passport);
+        const protektorPassport = Number(data.protektor_passport);
+        // Формируем данные для графика
+        const dataWithPrice = historyWheel.map(d => {
+            const nValues = [d.N1, d.N2, d.N3, d.N4]
+                .filter(x => x !== '' && x !== null)
+                .map(Number);
+            return {
+                probegNow: Number(d.probeg_now),
+                price: priceNew,//Math.round((priceNew - (pricePerKm * Number(d.probeg_now))).toFixed(0)),
+                minN: nValues.length > 0 ? Math.min(...nValues) : null,
+                id: d.id
+            };
+        });
+        // Удаление элементов с null значением minN
+        const validDataWithPrice = dataWithPrice.filter(item => item.minN !== null);
+        const uniqueDataWithPrice = Array.from(
+            new Map(validDataWithPrice.map(item => [item.minN, item])).values()
+        );
+        const struktura = Helpers.calculate(priceNew, probegPassport, protektorPassport, uniqueDataWithPrice)
+        return struktura
+    }
+
+    static calcPrognozPobeg(data) {
+        const pro = Math.min(...Helpers.protek(data))
+        const protektorPassport = Number(data.protektor_passport);
+        const defaultProtektor = Math.round((protektorPassport / Number(data.probeg_passport)) * 100000) / 100000;
+        const protektorOneKM = pro === protektorPassport ? defaultProtektor : Math.round(((protektorPassport - pro) / Number(data.probeg_now)) * 100000) / 100000;
+        const lastZamer = pro
+            / protektorOneKM;
+        const last = lastZamer - Number(data.probeg_now)
+        return last.toFixed(0)
+    }
+
+    static addContent(discription, dataWheel) {
+        console.log(dataWheel)
+        const result = Helpers.calcPrognozPobeg(dataWheel)
+        const row = discription.querySelectorAll('.row_text_shina')
+        row[0].textContent = `ID: ${dataWheel.idw_tyres}`
+        row[1].textContent = `Монтаж: ${dataWheel.dateInstall}`
+        row[2].textContent = `Остаток пробега: ${result} км`
+    }
+    static calculate(priceNew, probegPassport, protektorPassport, uniqueDataWithPrice) {
+        const priceOneMM = priceNew / protektorPassport;
+        const defaultPrice = Math.round((priceNew / probegPassport) * 100) / 100;
+        const defaultProtektor = Math.round((protektorPassport / probegPassport) * 100000) / 100000;
+        uniqueDataWithPrice.forEach((el, index) => {
+            if (el.price === priceNew && el.minN === protektorPassport || el.probegNow == 0) {
+                el.priceOneKM = Math.round((priceNew / probegPassport) * 100) / 100;
+                el.protektorOneKM = Math.round((protektorPassport / probegPassport) * 100000) / 100000;
+                el.priceOneKMLine = el.priceOneKM;
+                el.protektorOneKMLine = el.protektorOneKM;
+                el.defaultPrice = defaultPrice
+                el.defaultProtektor = defaultProtektor
+            } else {
+                el.priceOneKM = Math.round(((protektorPassport - el.minN) * priceOneMM / el.probegNow) * 100) / 100;
+                el.protektorOneKM = Math.round(((protektorPassport - el.minN) / el.probegNow) * 100000) / 100000;
+                el.defaultPrice = defaultPrice
+                el.defaultProtektor = defaultProtektor
+                if (index > 0) {
+                    const prev = uniqueDataWithPrice[index - 1];
+                    el.priceOneKMLine = Math.round(((prev.minN - el.minN) * priceOneMM / (el.probegNow - prev.probegNow === 0 ? 1 : el.probegNow - prev.probegNow)) * 100) / 100;
+                    el.protektorOneKMLine = Math.round(((prev.minN - el.minN) / (el.probegNow - prev.probegNow === 0 ? 1 : el.probegNow - prev.probegNow)) * 100000) / 100000;
+                } else {
+                    el.priceOneKMLine = el.priceOneKM;
+                    el.protektorOneKMLine = el.protektorOneKM;
+                }
+            }
+        });
+        return uniqueDataWithPrice
     }
 
 }

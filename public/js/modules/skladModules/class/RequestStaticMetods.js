@@ -42,7 +42,6 @@ export class RequestStaticMetods {
         }
         else {
             const sortt = [...result[0].idw_tyres]
-            console.log(sortt)
             sortt.forEach(el => {
                 if (el === 'i') {
                     sortt.splice(sortt.indexOf(el), 2).join('')
@@ -94,7 +93,6 @@ export class RequestStaticMetods {
     static async getTyresPosition(obj) {
         const idObject = obj.idObject
         const identifikator = obj.identifikator
-        console.log(idObject, identifikator)
         const params = {
             method: 'POST',
             headers: {
@@ -203,7 +201,6 @@ export class RequestStaticMetods {
     }
 
     static async saveDataToDBTyres(obj) {
-        //console.log(obj)
         const params = {
             method: "POST",
             headers: {
@@ -222,7 +219,6 @@ export class RequestStaticMetods {
     }
 
     static async saveDataHistoryToDBTyres(obj) {
-        //    console.log(obj)
         const params = {
             method: "POST",
             headers: {
@@ -294,7 +290,6 @@ export class RequestStaticMetods {
     }
 
     static async updateFilterTable(idObject, idBitrix, id, pressure) {
-        console.log(idObject, idBitrix, id, pressure)
         const params = {
             method: 'POST',
             headers: {
@@ -306,6 +301,19 @@ export class RequestStaticMetods {
         const uniqID = await res.json()
         return uniqID
 
+    }
+
+    static async getHistoryValueWheel(idw) {
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ idw })
+        }
+        const res = await fetch('/api/getHistoryValueWheel', params)
+        const result = await res.json()
+        return result
     }
 
 }

@@ -68,6 +68,9 @@ router.post('/api/updateWheel', controllerTyres.updateWheel)
 router.post('/api/saveDataHistoryToDBTyres', controllerTyres.saveDataHistoryToDBTyres)
 router.post('/api/getTyresPosition', controllerTyres.getTyresPosition)
 router.post('/api/getHistoryTyresToID', controllerTyres.getHistoryTyresToID)
+router.post('/api/getHistoryValueWheel', controllerTyres.getHistoryValueWheel)
+
+
 
 
 router.post('/api/updateFilterTable', controllerModel.updateFilterTable)

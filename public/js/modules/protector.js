@@ -23,7 +23,6 @@ export async function reqProtectorBase() {
         body: JSON.stringify({ idw })
     })
     const dannie = await res.json();
-    console.log(dannie)
 
     if (dannie.length == 0) {
         fnCanvas([])
@@ -41,7 +40,6 @@ export async function reqProtectorBase() {
 }
 
 function fnCanvas(arg) {
-    console.log(arg)
     const wrapCanvas = document.querySelectorAll('.wrapCanvas')
     const dan = document.querySelectorAll('.dan')
     if (wrapCanvas) {
@@ -51,7 +49,6 @@ function fnCanvas(arg) {
         removeArrElem(dan)
     }
     const tiresLink = document.querySelectorAll('.tires_link_test')
-    console.log(tiresLink)
     arg.forEach(el => {
         const massProtector = [];
         const protec = [];
@@ -96,7 +93,6 @@ function fnCanvas(arg) {
 
 
 function viewPicture(arr, id, elem, mm) {
-    console.log(arr, id, elem, mm)
     const conts = document.querySelectorAll(`.contBar${id}`)
     conts.forEach(el => {
         el.style.display = 'none'
@@ -324,7 +320,7 @@ export function protekGrafThreeAll(y1, y2, y3, arr, id, elem, mm) {
     ctx3.lineTo(23.2, 18);
     ctx3.lineTo(22.4, 0);
     ctx3.lineTo(24, 0);
-    ctx3.fillStyle = 'rgba(14, 12, 11, 1)';
+    ctx3.fillStyle = 'gray'//'rgba(14, 12, 11, 1)';
     ctx3.fill();
 }
 
@@ -546,12 +542,20 @@ export function protekGrafFreeAll(arr, id, elem) {
 
 
 
-export function viewDinamic(arr, maxProtector) {
-    const conts = document.querySelectorAll('.contBar22')
-    conts.forEach(el => {
+export function viewDinamic(arr, maxProtector, containerCard, persent, num) {
+    const headerMM = document.querySelector('.headerMM')
+
+    console.log(arr, maxProtector, containerCard, persent, num)
+    const blocks = containerCard
+    console.log(containerCard[0].parentNode)
+    const parentWidth = 348 / num;
+    if (headerMM) headerMM.style.width = `${parentWidth}px`;
+    containerCard[0].parentNode.style.width = `${parentWidth}px`;
+    blocks.forEach(el => {
         el.style.display = 'none'
     })
     const arrAll = [];
+
     arr.forEach(el => {
         arrAll.push(el * 10)
     })
@@ -561,11 +565,12 @@ export function viewDinamic(arr, maxProtector) {
     let y3;
     let y4;
     if (arr.length === 0) {
-        conts.forEach(e => {
+        const parentWidth = 116 / num;
+        blocks.forEach(e => {
             e.style.display = 'block'
-            e.style.width = '116px'
+            e.style.width = `${parentWidth}px`;
         })
-        protekGrafFree()
+        protekGrafFree(containerCard, persent, num)
     }
     if (arrAll.length == 2) {
         if (mm <= 120) {
@@ -580,9 +585,10 @@ export function viewDinamic(arr, maxProtector) {
             y1 = (mm - arrAll[0]) / 4
             y2 = (mm - arrAll[1]) / 4
         }
-        conts[0].style.display = 'block'
-        conts[0].style.width = '348px'
-        protekGrafTwo(y1, y2, arr, mm)
+        const parentWidth = 348 / num;
+        blocks[0].style.display = 'block'
+        blocks[0].style.width = `${parentWidth}px`;
+        protekGrafTwo(y1, y2, containerCard, persent, num)
     }
     if (arrAll.length == 3) {
         if (mm <= 120) {
@@ -600,17 +606,20 @@ export function viewDinamic(arr, maxProtector) {
             y2 = (mm - arrAll[1]) / 4
             y3 = (mm - arrAll[2]) / 4
         }
-        conts[0].style.display = 'block'
-        conts[1].style.display = 'block'
-        conts[0].style.width = '174px'
-        conts[1].style.width = '174px'
-        protekGrafThree(y1, y2, y3, arr, mm)
+        const parentWidth = 174 / num;
+        blocks[0].style.display = 'block'
+        blocks[1].style.display = 'block'
+        blocks[0].style.width = `${parentWidth}px`;
+        blocks[1].style.width = `${parentWidth}px`;
+        protekGrafThree(y1, y2, y3, containerCard, persent, num)
     }
     if (arrAll.length === 4) {
-        conts.forEach(e => {
+        const parentWidth = 116 / num;
+        blocks.forEach(e => {
             e.style.display = 'block'
-            e.style.width = '116px'
+            e.style.width = `${parentWidth}px`;
         })
+
         if (mm <= 120) {
             y1 = (mm - arrAll[0]) / 2
             y2 = (mm - arrAll[1]) / 2
@@ -629,7 +638,7 @@ export function viewDinamic(arr, maxProtector) {
             y3 = (mm - arrAll[2]) / 4
             y4 = (mm - arrAll[3]) / 4
         }
-        protekGrafFour(y1, y2, y3, y4, arr, mm)
+        protekGrafFour(y1, y2, y3, y4, containerCard, persent, num)
     }
 }
 

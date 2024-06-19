@@ -5995,31 +5995,7 @@ div.wrapper {
   padding-left: 5px;
 }
 
-.maxMMM {
-  position: absolute;
-  top: 0;
-  left: -2px;
-  font-size: 0.5rem;
-  font-weight: bold;
-  color: #000;
-  margin: 0;
-  width: 25px;
-  border: none;
-  background: none;
 
-  padding-left: 5px;
-}
-
-
-.mm0 {
-  position: absolute;
-  top: 80%;
-  left: 5px;
-  font-size: 0.5rem;
-  font-weight: bold;
-  color: #000;
-  margin: 0;
-}
 
 
 
@@ -6087,10 +6063,8 @@ input[type="text"]:focus {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  width: 380px;
-  height: 60px;
-  border: 1px solid #000;
-  background-image: url(../image/003.png);
+  width: 174px;
+  height: 30px;
   position: relative;
 }
 
@@ -6099,10 +6073,7 @@ input[type="text"]:focus {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-
   height: 60px;
-
-  background-image: url(../image/003.png);
   position: relative;
 }
 
@@ -6113,9 +6084,9 @@ input[type="text"]:focus {
   border-bottom: none;
   border-right: none;
   display: none;
-  width: 116px;
-  height: 60px;
-  background-color: rgba(14, 12, 11, 1);
+  width: 58px;
+  height: 30px;
+  background-color: rgba(14, 12, 11, 0.7);
 }
 
 
@@ -9823,14 +9794,14 @@ i.changeColorCheck {
   font-weight: bold;
   font-size: 0.75rem;
   padding: 2px 5px;
-  border: 1px solid rgba(6, 28, 71, 1);
+  border: 1px solid rgba(6, 28, 71, 0.2);
 }
 
 .cel {
   font-size: 0.75rem;
   padding: 2px 5px;
   color: rgba(6, 28, 71, 1);
-  border: 1px solid rgba(6, 28, 71, 1);
+  border: 1px solid rgba(6, 28, 71, 0.2);
 }
 
 .item_type_file:hover .type_file {

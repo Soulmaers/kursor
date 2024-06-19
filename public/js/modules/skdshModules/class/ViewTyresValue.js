@@ -7,7 +7,7 @@ export class ViewTyresValue {
         this.params = params
         this.osi = osi
         this.objColor = {
-            1: '#FF0000',
+            1: 'darkred',//'#FF0000',
             2: '#FFFF00',
             3: '#4af72f',//#009933',
             5: '#fff'
@@ -61,6 +61,7 @@ export class ViewTyresValue {
             return
         }
         if (this.tyres) {
+            console.log(this.params)
             const parametrs = convert(this.tyres)
             const tiresLink = document.querySelectorAll('.tires_link_test')
             let engine = this.params.find(element => element.params === 'engine');
@@ -70,7 +71,10 @@ export class ViewTyresValue {
                 const temp = this.params.find(element => element.params === item.temp);
                 const element = this.osi.find(element => element.idOs === item.osNumber);
                 const tireLink = Array.from(tiresLink).find(e => e.id == item.tyresdiv);
+
                 if (pressure && tireLink) {
+                    const wheel = pressure.idTyres
+                    console.log(wheel)
                     //   const done = active.id === '26702383' ? parseFloat((pressure.value / 10).toFixed(1)) : pressure.value !== null ? parseFloat(pressure.value) : '-';
                     const done = pressure.value !== null ? parseFloat(pressure.value) : '-';
                     const signal = element ? this.objColor[this.generDav(done, element)] : null;
@@ -83,7 +87,7 @@ export class ViewTyresValue {
                     spanBar.style.position = 'absolute';
                     spanBar.style.bottom = 0;
 
-                    const backgroundStyle = engine === '0' ? 'none' : pressure.status === 'false' ? 'lightgray' : 'none'
+                    const backgroundStyle = engine === '0' ? 'none' : pressure.status === 'false' && wheel ? 'lightgray' : 'none'
                     const colorStyle = engine === '0' ? 'lightgray' : pressure.status === 'false' ? '#000' : signal
                     const borderStyle = signal === '#FF0000' ? `1px solid ${signal}` : '1px solid #fff';
 
@@ -91,11 +95,17 @@ export class ViewTyresValue {
                     tireLink.children[0].style.color = colorStyle;
                     tireLink.parentElement.style.border = borderStyle;
 
+                    console.log(tireLink)
+                    if (!wheel) {
+                        tireLink.style.backgroundImage = 'url("../../../../image/wheel_gray.png")';
+                        tireLink.style.backgroundColor = "#000"
+                    }
+
                     if (signal === '#FF0000') {
                         tireLink.parentElement.style.borderRadius = '15px';
                     }
                     if (temp) {
-                        const backgroundStyleTemp = engine === '0' ? 'none' : temp.status === 'false' ? 'lightgray' : 'none'
+                        const backgroundStyleTemp = engine === '0' ? 'none' : temp.status === 'false' && wheel ? 'lightgray' : 'none'
                         const colorStyleTemp = engine === '0' ? 'lightgray' : temp.status === 'false' ? '#000' : this.objColor[this.generT(parseFloat(temp.value))];
                         tireLink.children[1].style.background = backgroundStyleTemp;
                         tireLink.children[1].style.color = colorStyleTemp;
@@ -104,7 +114,7 @@ export class ViewTyresValue {
                             case '-128':
                             case '-50':
                             case '-51':
-                                tireLink.children[1].style.color = 'red';
+                                tireLink.children[1].style.color = 'darkred';
                                 tireLink.children[1].textContent = 'err';
                                 break;
                             case null:

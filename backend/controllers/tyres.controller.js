@@ -471,6 +471,19 @@ exports.saveDataHistoryToDBTyres = async (data) => {
 }
 
 
+exports.getHistoryValueWheel = async (req, res) => { //получение статистики по объекту за интервал
+
+    const idw = req.body.idw
+    console.log(idw)
+    const pool = await connection
+    const insertQuery = `SELECT * FROM tyres_history_statistika WHERE idw_tyres=@idw_tyres`;
+    const result = await pool.request()
+        .input('idw_tyres', idw)
+        .query(insertQuery);
+    res.json(result.recordset)
+}
+
+
 
 
 

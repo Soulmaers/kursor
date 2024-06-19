@@ -7,6 +7,7 @@ const userRoutes = require('./backend/routes/userRoutes.js');
 const configRoutes = require('./backend/routes/configRoutes');
 const kursorRoutes = require('./backend/routes/kursorRoutes');
 const https = require('https');
+const http = require('http');
 const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
@@ -20,8 +21,15 @@ require('dotenv').config();
 const { getSession, setSession } = require('./backend/config/db');
 
 const port = process.env.PORT || 3333;
+const httpsPort = process.env.HTTPS_PORT || 8443;
+const options = {
+    key: fs.readFileSync('./cursor-gps.ru/privkey1.pem'),
+    cert: fs.readFileSync('./cursor-gps.ru/cert1.pem'),
+};
 
 let interval;
+
+
 
 const initServer = async () => {
     try {
@@ -32,7 +40,25 @@ const initServer = async () => {
         console.error(`Ошибка при запуске сервера: ${error.message}`);
     }
 };
+/*
+const initServer = async () => {
+    try {
+        // Запуск HTTPS-сервера
+        https.createServer(options, app).listen(httpsPort, () => {
+            console.log(`HTTPS сервер запущен, порт: ${httpsPort}`);
+        });
 
+        // Запуск HTTP-сервера для перенаправления на HTTPS
+        http.createServer((req, res) => {
+            res.writeHead(301, { "Location": `https://${req.headers.host}${req.url}` });
+            res.end();
+        }).listen(port, () => {
+            console.log(`HTTP сервер запущен для перенаправления на HTTPS, порт: ${port}`);
+        });
+    } catch (error) {
+        console.error(`Ошибка при запуске сервера: ${error.message}`);
+    }
+};*/
 async function wialon() {
     const token = process.env.TOKEN;
     console.log(token);
@@ -63,10 +89,7 @@ if (isMainThread) {
     app.use(configRoutes);
     app.use(kursorRoutes);
 
-    const options = {
-        key: fs.readFileSync('./cursor-gps.ru/privkey1.pem'),
-        cert: fs.readFileSync('./cursor-gps.ru/cert1.pem'),
-    };
+
 
     async function init() {
         await initServer();

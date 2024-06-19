@@ -139,14 +139,42 @@ sortData = (datas) => {  // подготовка вложенности стру
     return res
 }
 
+
+
+async function setHistoryStatistiks(data, coefPWR) {
+    const speed = data.find(e => e.params === 'speed')
+    const lastTime = data.find(e => e.params === 'last_valid_time')
+    const engine = data.find(e => e.params === 'engine')
+    const pwr = data.find(e => e.params === 'pwr')
+    const mileage = data.find(e => e.params === 'mileage')
+    const idTyres = data.filter(el => el.idTyres).map(e => e)
+
+    const arrayData = idTyres.map(el => {
+        let check = null
+        if (coefPWR && engine && pwr) {
+            check = engine.value === '1' && Number(pwr.value) >= Number(coefPWR[0].value) ? '1' : '0'
+        }
+        return ({
+            engine: check,
+            idObject: data[0].idw,
+            speed: speed ? speed.value : null,
+            mileage: mileage && mileage.value ? Number(mileage.value).toFixed(0) : null,
+            time: lastTime ? lastTime.value : null,
+            ...el
+
+        })
+    })
+    await databaseService.setStatistiksPressure(arrayData)
+    // console.log(arrayData)
+}
 exports.setDataToBase = async (imei, port, info, id) => {
     const data = await databaseService.getSensStorMetaFilter(imei, port, id) //получение привязанных параметров
     if (data.length !== 0) {
         const idw = data[0].idw
-
         const coefEngine = await databaseService.getValuePWRToBase(idw, 'engine') //получение порогового значения по зажиганию
         const coefPWR = await databaseService.getValuePWRToBase(idw, 'pwr')  //получение порогового значения по питанию
         const coefMileage = await databaseService.getValuePWRToBase(idw, 'mileage') //получение порогового значения по пробегу
+        setHistoryStatistiks(data, coefPWR)
         const now = new Date();
         const nowTime = Math.floor(now.getTime() / 1000);
         const lastObject = info[info.length - 1]

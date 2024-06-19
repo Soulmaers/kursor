@@ -253,11 +253,11 @@ export function gener(el) {
 };
 
 export const objColors = {
-    5: '#009933',//зеленый
-    4: '#009933', //зеленый
-    3: '#FFFF00',//желтый
-    2: '#FF6633',//оранж
-    1: '#FF0000'//красный
+    5: 'rgba(5, 159, 16, 0.8)',//#009933',//зеленый
+    4: 'rgba(5, 159, 16, 0.8)',//#009933', //зеленый
+    3: 'rgba(200, 202, 8, 0.8)',//#FFFF00',//желтый
+    2: 'rgba(205, 95, 5, 0.8)',//#FF6633',//оранж
+    1: 'rgba(209, 3, 13, 0.8)'///'#FF0000'//красный
 }
 
 export const data = ["BFGoodrich", "Bridgestone", "Continental", "Cordiant", "Dunlop", "Nokian Tyres", "Gislaved", "Goodyear", "Hankook", "Kumho", "Michelin"];

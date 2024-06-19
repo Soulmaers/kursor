@@ -3,6 +3,8 @@ import { RequestStaticMetods } from './RequestStaticMetods.js'
 import { Helpers } from './Helpers.js'
 import { viewDinamic } from '../../protector.js'
 import { ContentGeneration } from '../html/content.js'
+import { Dinamic } from './Dinamic.js'
+
 
 export class Sklad {
     constructor(tyres) {
@@ -18,18 +20,16 @@ export class Sklad {
         this.createCardTyres()
         const params = this.paramsGeneration()
         this.dannieWheel = await RequestStaticMetods.getTyresPosition(params)
-        this.historyWheel = await RequestStaticMetods.getHistoryTyresidTyres(this.dannieWheel.idw_tyres)
-        console.log(this.historyWheel)
-        console.log(this.dannieWheel)
         if (this.dannieWheel.length !== 0) {
             this.wiewDataTyres()
             this.protektorsEvent()
             this.addChartProtektor()
-            this.addStruktura()
+            const dinamicInstance = new Dinamic(this.dannieWheel, this.containerCard, 'monitoring');
+            await dinamicInstance.init();
             this.initEvent()
         }
         else {
-            Helpers.viewRemark(this.message, 'red', 'Колесо не установлено')
+            Helpers.viewRemark(this.message, 'red', 'Шина не установлена')
         }
     }
 
@@ -81,7 +81,6 @@ export class Sklad {
             }
         });
         this.probeg = await Helpers.mileageCalc(this.dannieWheel.mileage, this.dannieWheel.probeg_now, this.dannieWheel.idObject)
-        console.log(this.cardWindow)
         this.containerCard.querySelector('#probeg_now_wiew').value = this.probeg.mileageTyres
     }
 
@@ -107,9 +106,12 @@ export class Sklad {
         console.log(obj)
         const message = await RequestStaticMetods.updateWheel(obj)
         Helpers.viewRemark(this.message, 'green', 'Изменения сохранены')
-        const pro = [...protector].filter(e => e.value !== '').map(it => it.value)
+        pro = [...protector].filter(e => e.value !== '').map(it => it.value)
         pro.shift()
-        viewDinamic(pro, this.dannieWheel.protektor_passport)
+        const container = this.containerCard.querySelectorAll('.contBar22')
+        viewDinamic(pro, this.dannieWheel.protektor_passport, container, this.dannieWheel.ostatok, 1.5)
+        const dinamicInstance = new Dinamic(this.dannieWheel, this.containerCard, 'monitoring');
+        await dinamicInstance.init();
     }
     getObject(pro) {
         const fieldsParams = this.containerCard.querySelector('.input-fields_params').querySelectorAll('.styled-input')
@@ -140,87 +142,8 @@ export class Sklad {
         const protector = [];
         protector.push(this.dannieWheel.N1, this.dannieWheel.N2, this.dannieWheel.N3, this.dannieWheel.N4)
         const pro = protector.filter(e => e !== '').map(it => it)
-        viewDinamic(pro, this.dannieWheel.protektor_passport)
+        const container = this.containerCard.querySelectorAll('.contBar22')
+        viewDinamic(pro, this.dannieWheel.protektor_passport, container, this.dannieWheel.ostatok, 1.5)
     }
 
-
-
-    addStruktura() {
-        const priceNew = Number(this.dannieWheel.price);
-        const probegPassport = Number(this.dannieWheel.probeg_passport);
-        const data = this.historyWheel.map(e =>
-            ({ probegNow: e.probeg_now })
-        );
-        console.log(data)
-        // Рассчитываем цену за км пробега
-        const pricePerKm = priceNew / probegPassport;
-
-        // Формируем данные для графика
-        this.dataWithPrice = data.map(d => {
-            return {
-                probegNow: Number(d.probegNow),
-                price: Math.round((priceNew - (pricePerKm * Number(d.probegNow))).toFixed(0))
-            };
-        });
-        this.chartLine(priceNew, probegPassport)
-    }
-
-    chartLine(priceNew, probegPassport) {
-        console.log(priceNew, probegPassport)
-        console.log(this.dataWithPrice)
-        console.log(this.containerCard.querySelector('.child_chart'))
-
-        var width = 350;
-        var height = 330;
-        var margin = { top: 20, right: 30, bottom: 40, left: 50 };
-        var graphWidth = width - margin.left - margin.right;
-        var graphHeight = height - margin.top - margin.bottom;
-        var margin = { top: 20, right: 30, bottom: 40, left: 50 };
-        var graphWidth = width - margin.left - margin.right;
-        var graphHeight = height - margin.top - margin.bottom;
-
-        // Создание svg элемента
-        const svg = d3.select(this.containerCard.querySelector('.child_chart')).append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-
-        // Масштабирование осей
-        var x = d3.scaleLinear().range([0, graphWidth]).domain([0, probegPassport]);
-        var y = d3.scaleLinear().range([graphHeight, 0]).domain([0, priceNew]);
-
-        // Ось x
-        var xAxis = d3.axisBottom(x)
-            .ticks(5);
-        svg.append("g")
-            .attr("transform", "translate(0," + graphHeight + ")")
-            .call(xAxis);
-
-        // Ось y
-        var yAxis = d3.axisLeft(y)
-            .ticks(10);
-        svg.append("g")
-            .call(yAxis);
-
-
-
-        // Линия от максимальной цены до максимального пробега
-        svg.append("line")
-            .attr("x1", x(0))
-            .attr("y1", y(priceNew))
-            .attr("x2", x(probegPassport))
-            .attr("y2", y(0))
-            .style("stroke", "blue");
-
-        // Отметки точками на линии
-        svg.selectAll(".dot")
-            .data(this.dataWithPrice)
-            .enter().append("circle")
-            .attr("class", "dot")
-            .attr("cx", function (d) { return x(d.probegNow); })
-            .attr("cy", function (d) { return y(d.price); })
-            .attr("r", 2)
-            .style("fill", "green");
-    }
 }

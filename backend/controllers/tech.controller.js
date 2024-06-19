@@ -27,3 +27,6 @@ exports.summaryIdwToBase = async (req, res) => { //получение стати
     res.json(result)
 }
 
+
+
+

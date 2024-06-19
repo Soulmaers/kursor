@@ -1,5 +1,9 @@
 import { ContentGeneration } from '../html/content.js';
 import { TyresService } from './TyresService.js';
+import { Helpers } from './Helpers.js';
+import { objColors } from '../html/stor.js';
+
+
 
 export class DragAndDrop {
     constructor(parent, draggableSelector, droppableSelector, element, instance) {
@@ -24,7 +28,6 @@ export class DragAndDrop {
     }
 
     init() {
-        console.log(this.element)
         this.draggableElements.forEach(element => {
             if (element !== this.parent) {
                 element.setAttribute('draggable', true);
@@ -75,13 +78,21 @@ export class DragAndDrop {
 
     onDrop(event) {
         event.preventDefault();
+
         const dataAtt = event.dataTransfer.getData('data-att');
         const dropzone = event.target
         const parentElement1 = dropzone.closest('.sklad_tyres')
         const parentElement2 = this.drag.closest('.sklad_tyres')
         const rotationOne = dropzone.closest('.container_shema')
         const rotationTwo = this.drag.closest('.container_shema')
-        if (dropzone.getAttribute('rel') === dataAtt || parentElement1 && parentElement2 || !this.drag.getAttribute('rel')) {
+
+        this.id = dropzone.getAttribute('rel');
+        this.idBitrix = dropzone.getAttribute('relid');
+        this.sensor = dropzone.getAttribute('data-att');
+        this.idDrag = this.drag.getAttribute('rel');
+        this.idBitrixDrag = this.drag.getAttribute('relid');
+        this.sensorDrag = this.drag.getAttribute('data-att');
+        if ((dropzone.getAttribute('rel') === dataAtt) || (parentElement1 && parentElement2) || !this.drag.getAttribute('rel')) {
             return;
         }
         this.removeExistingModal();
@@ -117,76 +128,85 @@ export class DragAndDrop {
 
         okButton.addEventListener('click', async () => {
             if (dropzone.closest('.sklad_tyres')) {
-                console.log(this.validateSelection(actionSelect))
                 if (this.validateSelection(actionSelect)) {
+                    this.removeChart(this.drag)
                     this.clearRelAttribute(dataAtt);
-                    await this.selectionControlMethod(actionSelect.value, dataAtt, null, dropzone, comments.value);
+                    await this.selectionControlMethod(actionSelect.value, null, this.drag, comments.value);
                 }
                 else {
                     return
                 }
             } else if (flag) {
-                await this.handleFlagDrop(dataAtt, dropzone);
+                await this.handleFlagDrop(dropzone, flag);
             } else {
-                const bool = await this.handleDefaultDrop(dataAtt, dropzone, actionSelect, comments);
+                const bool = await this.handleDefaultDrop(dropzone, actionSelect, comments);
                 if (!bool) return
             }
             this.closeModal();
         });
     }
 
-    async handleFlagDrop(dataAtt, dropzone) {
-        const id = dropzone.getAttribute('rel');
-        this.assignDataAttribute(dataAtt, dropzone);
-        await this.updateStatusTyres(dropzone);
+    async handleFlagDrop(dropzone, flag) {
+        const id = dropzone.getAttribute('rel')
         if (id) {
-            this.assignDataAttribute(id, this.drag);
-            await this.updateStatusTyres(this.drag);
+            this.removeChart(dropzone)
+            this.assignDataAttribute(this.idDrag, this.idBitrixDrag, dropzone);
+            await this.updateStatusTyres(dropzone, this.sensor, flag);
+            this.removeChart(this.drag)
+            this.assignDataAttribute(this.id, this.idBitrix, this.drag);
+            await this.updateStatusTyres(this.drag, this.sensorDrag, flag);
+
         } else {
+            this.assignDataAttribute(this.idDrag, this.idBitrixDrag, dropzone);
+            await this.updateStatusTyres(dropzone, this.sensorDrag, flag, 'rotate');
             this.updateBackgroundImage(dropzone);
+            this.removeChart(this.drag)
             this.clearRelAttribute();
+
         }
         this.closeModal();
     }
 
-    async handleDefaultDrop(dataAtt, dropzone, actionSelect, comments) {
+    async handleDefaultDrop(dropzone, actionSelect, comments) {
         if (dropzone.getAttribute('rel')) {
             if (this.validateSelection(actionSelect)) {
                 const id = dropzone.getAttribute('rel');
-                await this.selectionControlMethod(actionSelect.value, dataAtt, id, dropzone, comments.value);
+                this.removeChart(dropzone)
+                await this.selectionControlMethod(actionSelect.value, id, dropzone, comments.value);
             }
             else {
                 return false
             }
         } else {
-            this.assignDataAttribute(dataAtt, dropzone);
+            this.assignDataAttribute(this.idDrag, this.idBitrixDrag, dropzone);
             this.updateBackgroundImage(dropzone);
-            await this.updateStatusTyres(dropzone);
+            await this.updateStatusTyres(dropzone, this.sensor);
         }
         this.closeModal();
     }
 
-    async selectionControlMethod(selectedAction, dataAtt, id, dropzone, comments) {
+    async selectionControlMethod(selectedAction, id, dropzone, comments) {
+        //  this.removeChart(dropzone)
         let uniqID;
         if (id) {
             uniqID = id
-            this.assignDataAttribute(dataAtt, dropzone);
+            this.assignDataAttribute(this.idDrag, this.idBitrixDrag, dropzone);
             this.updateBackgroundImage(dropzone);
-            await this.updateStatusTyres(dropzone);
+            await this.updateStatusTyres(dropzone, this.sensorDrag);
         }
         else {
-            uniqID = dataAtt
+            uniqID = this.idDrag
         }
         const tyre = this.instanceSkladyres.allTyres.find(e => e.idw_tyres === uniqID);
         switch (selectedAction) {
             case '1':
-                await this.updateStatusTyresSklad(uniqID, tyre, this.instanceSkladyres.modelCar, '1', comments);
+                await this.updateStatusTyresSklad(uniqID, tyre, this.instanceSkladyres.modelCar, '1', dropzone, this.drag, comments);
                 break;
             case '2':
-                await this.updateStatusTyresSklad(uniqID, tyre, this.instanceSkladyres.modelCar, '2', comments);
+                await this.updateStatusTyresSklad(uniqID, tyre, this.instanceSkladyres.modelCar, '2', dropzone, this.drag, comments);
                 break;
             case '3':
-                await this.updateStatusTyresSklad(uniqID, tyre, this.instanceSkladyres.modelCar, '3', comments);
+                await this.updateStatusTyresSklad(uniqID, tyre, this.instanceSkladyres.modelCar, '3', dropzone, this.drag, comments);
                 break;
             default:
                 console.error('Неизвестное действие:', selectedAction);
@@ -195,7 +215,6 @@ export class DragAndDrop {
     }
 
     validateSelection(actionSelect) {
-        console.log(actionSelect.value)
         if (actionSelect.value === "-") {
             actionSelect.classList.add('invalid');
             return false;
@@ -209,26 +228,52 @@ export class DragAndDrop {
         this.pop.style.display = 'none';
         this.modal.remove();
     }
+    removeChart(el) {
+        const charts = el.closest('.container_na_osi').querySelectorAll('.progressBar2')
+        const chart = [...charts].find(e => e.getAttribute('rel') === el.getAttribute('rel'))
+        chart.remove()
+    }
     clearRelAttribute() {
         this.drag.removeAttribute('rel');
+        this.drag.removeAttribute('relId');
         this.drag.style.backgroundImage = 'none';
+        this.drag.textContent = ''
     }
 
-    async updateStatusTyres(dropzone, flag) {
-        const result = await TyresService.updateTyre(dropzone, this.instanceSkladyres.modelCar);
+
+    async updateStatusTyres(element, sensor, flag, rotate) {
+        const result = await TyresService.updateTyre(element, this.instanceSkladyres.modelCar, sensor, rotate);
         if (!flag) {
             this.instanceSkladyres.updateListTyres();
         }
     }
 
-    async updateStatusTyresSklad(id, tyre, model, flagStatus, comments) {
-        const result = await TyresService.updateTyreSklad(id, tyre, model, flagStatus, comments);
+    async updateStatusTyresSklad(id, tyre, model, flagStatus, dropzone, drag, comments) {
+        const result = await TyresService.updateTyreSklad(id, tyre, model, flagStatus, dropzone, drag, comments);
         this.instanceSkladyres.updateListTyres();
     }
 
-    assignDataAttribute(dataAtt, dropzone) {
-        if (dataAtt) {
-            dropzone.setAttribute('rel', dataAtt);
+    assignDataAttribute(id, idBitrix, elem) {
+        if (id) {
+            const data = this.instanceSkladyres.allTyres.find(e => e.idw_tyres === id)
+            elem.textContent = data.ostatok
+            elem.setAttribute('rel', id);
+            elem.setAttribute('relid', idBitrix);
+            elem.style.color = objColors[ContentGeneration.gener(Number(data.ostatok))]
+            const side = elem.getAttribute('side')
+            const progressBar = ContentGeneration.addContainerCharts(id)
+            progressBar.setAttribute('rel', id)
+            const discription = progressBar.querySelector('.discription_shina_wrap')
+            if (side === 'left') {
+                elem.closest('.osi_shema_car').previousElementSibling.appendChild(progressBar)
+                discription.style.left = '-110%'
+            }
+            else {
+                elem.closest('.osi_shema_car').nextElementSibling.appendChild(progressBar)
+                discription.style.right = '-125%'
+            }
+            Helpers.addContent(discription, data)
+            TyresService.renderChartById(data, progressBar)
         }
     }
 
