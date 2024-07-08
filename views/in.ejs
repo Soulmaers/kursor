@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
     <link rel="stylesheet" type="text/css" href="/js/modules/skladModules/styles/skladTyresStyles.css" />
-
+    <link rel="stylesheet" type="text/css" href="/js/modules/usersModules/styles/styleUsersModal.css" />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.js'></script>
 
     <script src=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.js "
@@ -106,6 +106,7 @@
         </div>
 
         <div class="headerAdmin">
+            <i class="fas fa-users-cog global_settings"></i>
             <div class="logs">
                 <div class="num"></div>
             </div>
@@ -116,6 +117,8 @@
         <div class="iconStrela"></div>
         <p class="titleName"></p>
     </div>
+    <div class='wrapper_set'></div>
+    <div class="setting_container"></div>
     <div class="wrapperFull">
         <div class="wrapper_right_dash">
             <div class="boards">
@@ -1137,18 +1140,22 @@
             <div class="navi_sklad">
                 <div class="up_name navi_job_tyres">Установлены</div>
                 <div class="up_name  navi_sklad_tyres activ_button_sklad">Склад</div>
-                <div class="search_list_meta">
-                    <i class="loop_find_meta fas fa-search"></i>
-                    <input class="search_input_meta" placeholder="Поиск">
+                <div class="search_list_meta find_tyres">
+                    <i class="loop_find_meta fas fa-search loops"></i>
+                    <input class="search_input_meta find_wheel_rows" placeholder="Поиск">
                 </div>
+
                 <i class="fas fa-compact-disc icon_add_tyres add_model_tyres"></i>
-                <i class="  fas fa-dot-circle icon_add_tyres add_tyres"></i>
+                <i class="fas fa-dot-circle icon_add_tyres add_tyres"></i>
+                <i class="fas fa-sort add_tyres_sort"></i>
+
             </div>
             <div class="job_tyres container_sklad">
                 <div class="body_sklad"></div>
             </div>
             <div class="sklad_tyres container_sklad" rel="sklad">
                 <div class="body_sklad" rel="sklad"></div>
+                <div class="text_disklaymer"></div>
             </div>
         </div>
         <div class="job_field">
@@ -1159,6 +1166,7 @@
                     <div class="center_shema">
                         <div class="discription_car"></div>
                         <div class="container_shema">Модель</div>
+                        <div class="discription_axis"></div>
                     </div>
                 </div>
                 <div class="tyres_model_card"></div>
@@ -1166,10 +1174,10 @@
                     <div class="add_card_tyres"></div>
                     <div class="list_model_tyres_spisok">
                         <div class="header_card_tyres">
-                            <div class="search_list_meta find_wheel">
-                                <i class="loop_find_meta fas fa-search"></i>
-                                <input class="search_input_meta" placeholder="Поиск">
-                            </div>Список моделей шин
+                            Список моделей шин<div class="search_list_meta find_wheel">
+                                <i class="loop_find_meta fas fa-search loops"></i>
+                                <input class="search_input_meta find_wheel_rows" placeholder="Поиск">
+                            </div>
                         </div>
                         <div class="list_item_tyres_model"></div>
                     </div>

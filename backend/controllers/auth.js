@@ -67,6 +67,67 @@ exports.saveProfil = async (req, res) => { //сохранение контакт
     const params = await databaseService.saveToBaseProfil(mass)
     res.json(params)
 }
+exports.findLastIdUser = async (req, res) => { //сохранение контактов
+    const table = req.body.table
+    try {
+        const pool = await connection
+        const selectBase = `SELECT TOP 1 idx FROM ${table} ORDER BY incriment DESC`;
+        const results = await pool.request()
+            .query(selectBase)
+        res.json(results.recordset)
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+exports.addAccount = async (req, res) => { //сохранение контактов
+    const { idx, name, uniqCreater, uniqTP } = req.body;
+    try {
+        const pool = await connection
+        const sqlS = `SELECT * FROM accounts WHERE name = @name AND uniqCreater=@uniqCreater`;
+        const rows = await pool.request()
+            .input('name', sql.NVarChar, name)
+            .input('uniqCreater', sql.NVarChar, uniqCreater)
+            .query(sqlS);
+        if (rows.recordset.length > 0) {
+            res.json({
+                message: `Учетная запись с таким именем - ${rows.recordset[0].name} уже есть`, flag: false
+            });
+
+        }
+        else {
+
+            const sqls = 'INSERT INTO accounts (idx, name, uniqCreater, uniqTP)  OUTPUT INSERTED.incriment VALUES (@idx, @name,@uniqCreater,@uniqTP)';
+            const result = await pool.request()
+                .input('idx', idx)
+                .input('name', name)
+                .input('uniqCreater', uniqCreater)
+                .input('uniqTP', uniqTP)
+                .query(sqls);
+            const userIncriment = result.recordset[0].incriment;
+            // Вставка записи в таблицу accountUsers
+            const insertAccountUserQuery = `
+                  INSERT INTO accountUsers (uniqAccountID, uniqUsersID)
+                  VALUES (@AccountIncriment, @UserIncriment)
+              `;
+            await pool.request()
+                .input('AccountIncriment', sql.Int, userIncriment)
+                .input('UserIncriment', sql.Int, uniqCreater)
+                .query(insertAccountUserQuery);
+            res.json({
+                message: 'Учетная запись создана', flag: true
+            });
+
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: 'An error occurred'
+        });
+    }
+}
 
 
 
@@ -88,33 +149,175 @@ exports.deleteProfil = async (req, res) => { //удаление контакто
     res.json(params)
 }
 
+exports.getAccountUsers = async function (req, res) {
+    try {
+        const pool = await connection;
 
-module.exports.signup = async function (req, res) { //сохранение учетных данных нового пользователя
-    const { login, pass, role, idx } = req.body;
+        // SQL-запрос для получения пользователей и информации о создателе
+        const sqlS = `
+            SELECT
+                u.*,
+                cu.name AS creator_name,
+                cu.role AS creator_role
+            FROM users AS u
+            JOIN accountUsers AS au ON u.incriment = au.uniqUsersID
+            JOIN accounts AS a ON au.uniqAccountID = a.incriment
+            LEFT JOIN users AS cu ON a.uniqCreater = cu.incriment;`;
+
+        // Выполнение запроса и получение результатов
+        const result = await pool.request().query(sqlS);
+
+        // Отправка результата в формате JSON
+        res.json(result.recordset);
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({
+            message: 'Ошибка при получении данных'
+        });
+    }
+};
+
+
+
+module.exports.getUsers = async function (req, res) { //сохранение учетных данных нового пользователя
+    const prava = req.body.role
+    const creator = req.body.creater
     try {
         const pool = await connection
-        const sqlS = `SELECT * FROM users WHERE name = @name`;
+        let sqlS = '';
+        if (prava === 'Интегратор') {
+            sqlS = `
+                SELECT * FROM users 
+                WHERE role = 'Сервис-инженер' AND creater=${creator}
+            `;
+        } else {
+            sqlS = `
+                SELECT * FROM users 
+                WHERE role = 'Интегратор' OR role = 'Сервис-инженер'
+            `;
+        }
         const rows = await pool.request()
-            .input('name', sql.NVarChar, login).query(sqlS);
+            .query(sqlS);
+        res.json(rows.recordset)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+exports.getAccounts = async function (req, res) { //сохранение учетных данных нового пользователя
+    const creator = req.body.creater
+    try {
+        const pool = await connection
+        const sqlS = `SELECT * FROM accounts`;
+
+        const rows = await pool.request()
+            .query(sqlS);
+        res.json(rows.recordset)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+exports.deleteAccount = async function (req, res) {
+    const incriment = req.body.id;
+    const index = req.body.index;
+    console.log(incriment, index)
+    const pool = await connection; // Получение подключения к базе данных
+
+    try {
+        if (index == 0) {
+            // Удаляем связи из accountUsers
+            const sqlS = `DELETE FROM accountUsers WHERE uniqAccountID = @incriment;`;
+            await pool.request()
+                .input('incriment', incriment)
+                .query(sqlS);
+
+            // Удаляем сам аккаунт из accounts
+            const sqlS2 = `DELETE FROM accounts WHERE incriment = @incriment`;
+            await pool.request()
+                .input('incriment', incriment)
+                .query(sqlS2);
+        }
+        else {  // Удаляем связи из accountUsers
+            const sqlS = `DELETE FROM accountUsers WHERE uniqUsersID = @incriment;`;
+            await pool.request()
+                .input('incriment', incriment)
+                .query(sqlS);
+
+            // Удаляем сам аккаунт из accounts
+            const sqlS2 = `DELETE FROM users WHERE incriment = @incriment`;
+            await pool.request()
+                .input('incriment', incriment)
+                .query(sqlS2);
+
+        }
+        // Отправка успешного ответа клиенту
+        res.json({
+            message: 'Аккаунт успешно удален'
+        });
+    } catch (e) {
+        // В случае ошибки откат транзакции и отправка сообщения об ошибке клиенту
+        console.error(e);
+        res.status(500).json({
+            message: 'Произошла ошибка при удалении аккаунта'
+        });
+    }
+
+};
+
+
+
+
+module.exports.signup = async function (req, res) { //сохранение учетных данных нового пользователя
+    const { login, password, role, idx, uz, creater } = req.body;
+
+    try {
+        const pool = await connection
+        const sqlS = `SELECT * FROM users WHERE name = @name AND uz=@uz`;
+        const rows = await pool.request()
+            .input('name', sql.NVarChar, login)
+            .input('uz', sql.NVarChar, uz)
+            .query(sqlS);
         if (rows.recordset.length > 0) {
-            res.status(404).json({
-                message: `Пользователь с таким Логином - ${rows.recordset[0].name} уже есть`
+            res.json({
+                message: `Пользователь с таким Логином - ${rows.recordset[0].name} уже есть`, flag: false
             });
-            return;
+            //  return;
         }
         else {
             const salt = bcrypt.genSaltSync(10);
-            const hashedPassword = bcrypt.hashSync(pass, salt);
-            const sqls = 'INSERT INTO users (idx, name, password, role) VALUES (@idx, @login,@password,@role)';
-            const result = await pool.request()
+            const hashedPassword = bcrypt.hashSync(password, salt);
+            const insertUserQuery = `
+                INSERT INTO users (idx, name, password, role, uz, creater)
+                OUTPUT INSERTED.incriment
+                VALUES (@idx, @login, @password, @role, @uz, @creater)
+            `;
+            const userResult = await pool.request()
                 .input('idx', idx)
                 .input('login', login)
                 .input('password', hashedPassword)
                 .input('role', role)
-                .query(sqls, [idx, login, hashedPassword, role]);
+                .input('uz', uz)
+                .input('creater', creater)
+                .query(insertUserQuery);
 
-            res.status(200).json({
-                message: 'Пользователь зарегистрирован'
+            if (uz) {
+                const userIncriment = userResult.recordset[0].incriment;
+
+                // Вставка записи в таблицу accountUsers
+                const insertAccountUserQuery = `
+                  INSERT INTO accountUsers (uniqAccountID, uniqUsersID)
+                  VALUES (@AccountIncriment, @UserIncriment)
+              `;
+                await pool.request()
+                    .input('AccountIncriment', sql.Int, uz)
+                    .input('UserIncriment', sql.Int, userIncriment)
+                    .query(insertAccountUserQuery);
+            }
+            res.json({
+                message: 'Пользователь зарегистрирован', flag: true
             });
 
         }
@@ -132,48 +335,57 @@ module.exports.page = async function (req, res) { //получение стра�
     res.render('form.ejs', { message: '' });
 }
 
-module.exports.sing = async function (req, res) { //авторизация
+module.exports.sing = async function (req, res) { // авторизация
     try {
-        const pool = await connection
-        const result = await pool.query(`SELECT idx, name, password FROM users WHERE name='${req.body.username}'`);
-        const rows = result.recordset;
-        if (rows.length <= 0) {
+        const pool = await connection;
+        // Используем параметризованный запрос для получения пользователя по имени и email
+        const result = await pool.request()
+            .input('username', req.body.username)
+            .query('SELECT * FROM users WHERE name = @username');
+
+        if (result.recordset.length === 0) {
             res.render('form.ejs', { message: 'Пользователь не найден!' });
             return;
         }
-        const row = rows[0];
-        const resulty = bcrypt.compareSync(req.body.password, row.password);
-        if (!resulty) {
+        // Ищем первого пользователя с совпадающим паролем
+        const matchedUser = await result.recordset.find(async user => {
+            return await bcrypt.compare(req.body.password, user.password);
+        });
+        if (!matchedUser) {
             res.render('form.ejs', { message: 'Неверный пароль!' });
             return;
         }
 
         const token = jwt.sign({
-            userId: row.idx,
-            user: row.name
-        }, 'jwt-key', { expiresIn: '300d' });
+            userId: matchedUser.idx,
+            user: matchedUser.name
+        }, process.env.JWT_SECRET || 'jwt-key', { expiresIn: '300d' });
 
-        res.cookie('AuthToken', `${token}`);
-        res.cookie('name', `${row.name}`);
+        res.cookie('AuthToken', token);
+        res.cookie('name', matchedUser.name);
         res.redirect('/action');
     } catch (error) {
-        console.log('Ошибка: ' + error);
-        res.json('error')
+        console.error('Ошибка: ' + error);
+        res.status(500).json({ error: 'Произошла ошибка при авторизации.' });
     }
-}
+};
 
 module.exports.action = function (req, res) { //получение стартовой страницы приложения после авторизации
     console.log('экшион')
+
     if (req.user) {
         const login = req.user.name
         const role = req.user.role
+        const incriment = req.user.incriment
         const device = req.headers['user-agent'];
         const platform = req.headers['sec-ch-ua-platform']
         const ip = req.ip
-        logLogin(login, ip, platform, device) //сохранение логов входа пользователя
+        // logLogin(login, ip, platform, device) //сохранение логов входа пользователя
+        console.log(login, role)
         res.render('in.ejs', {
             user: login,
-            role: role
+            role: role,
+            uniqIDCreater: incriment
         })
         //  res.redirect(`/data/${login}/${role}`);
     }

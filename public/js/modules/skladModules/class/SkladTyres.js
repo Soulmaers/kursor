@@ -10,6 +10,7 @@ import { WindowCard } from './WindowCard.js'
 import { Crafika } from './Grafika.js'
 import { AddChartsToModel } from "./AddChartsToModel.js"
 import { Find } from './Find.js'
+import { Sorting } from "./Sorting.js"
 
 export class SkladTyres {
     constructor(element, data) {
@@ -25,6 +26,7 @@ export class SkladTyres {
         this.container_shema = this.element.querySelector('.container_shema')
         this.add_model_tyres = this.element.querySelector('.add_model_tyres')
         this.add_tyres = this.element.querySelector('.add_tyres')
+        this.add_tyres_sort = this.element.querySelector('.add_tyres_sort')
         this.navi = this.element.querySelectorAll('.up_name')
         this.icon_add_tyres = this.element.querySelectorAll('.icon_add_tyres')
         this.tyresRoom = this.element.querySelector('.tyres_room')
@@ -37,17 +39,16 @@ export class SkladTyres {
             'radius', 'profil', 'width', 'sezon',
             'index_speed', 'index_massa'
         ];
-        //   this.fieldsWheel = ['price_tyres', 'probeg_passport_wiew']
         this.lastClickedElement = null; // Храним ссылку на последний кликнутый элемент
         this.clickCardRow = null
         this.boundNavi = this.showBody.bind(this)
         this.boundModelTyresWindow = this.addWindow.bind(this)
         this.boundTyresWindow = this.addCardListTyres.bind(this)
+        this.boundSorting = this.sortingModal.bind(this)
         this.init()
     }
 
     async init() {
-
         await this.getTyres()
         this.defaultDOMElements()
         this.addTooltips()
@@ -55,15 +56,60 @@ export class SkladTyres {
         this.uniqData = this.getUniqData(this.data)
         CreateDOMElements.createListObject(this.data)
         this.modelTyres = await RequestStaticMetods.getModelTyresGuide();
-
-
         this.createRows()
         this.controllListAndTyres()
     }
 
+    initEvent() {
+        this.navi.forEach(e => e.addEventListener('click', this.boundNavi))
+        this.add_model_tyres.addEventListener('click', this.boundModelTyresWindow)
+        this.add_tyres.addEventListener('click', this.boundTyresWindow)
+        this.add_tyres_sort.addEventListener('click', this.boundSorting)
+
+    }
+    removeEvent() {
+        this.navi.forEach(e => e.removeEventListener('click', this.boundNavi))
+        this.add_model_tyres.removeEventListener('click', this.boundModelTyresWindow)
+        this.add_tyres.removeEventListener('click', this.boundTyresWindow)
+        this.add_tyres_sort.removeEventListener('click', this.boundSorting)
+    }
+
+    sortingModal() {
+        this.element.insertAdjacentHTML('beforeend', Sorting.formaSorting(this.element.querySelector('.job_tyres')));
+        const modal = this.element.querySelector('.modal_podtver')
+        modal.style.zIndex = 2
+        this.toggleDisplay(this.pop, 'block')
+        this.toogleFlagSorting(modal)
+        const [ok, cancel] = modal.querySelectorAll('.ok_podtver, .cancel_podtver');
+        cancel.addEventListener('click', () => {
+            this.toggleDisplay(this.pop, 'none')
+            modal.remove();
+        })
+        ok.addEventListener('click', () => {
+            const arrayAttributes = Array.from(modal.querySelectorAll('.activFlagSort'))
+                .map(e => e.nextElementSibling.getAttribute('rel'));
+            const container = Array.from(this.element.querySelectorAll('.container_sklad'))
+                .find(e => e.style.display === 'flex');
+            const rows = container.querySelectorAll('.row_sklad')
+            const parent = rows[0].parentElement
+            Sorting.userSorting(arrayAttributes, parent, rows)
+            this.toggleDisplay(this.pop, 'none')
+            modal.remove();
+        })
+    }
+    toogleFlagSorting(modal) {
+        const flagSorting = modal.querySelectorAll('.row_kritery')
+        flagSorting.forEach(e => e.addEventListener('click', () => {
+            e.children[0].classList.toggle('activFlagSort')
+        }))
+    }
     async updateListTyres() {
         await this.getTyres();
         this.createRows();
+        const rowsSklad = this.skladTyres.querySelectorAll('.row_sklad')
+        rowsSklad.forEach(e => {
+            if (e.getAttribute('status') !== '1') e.style.display = 'none'
+        })
         if (this.lastClickedElement) {
             if (this.dragAndDropInstance) {
                 this.dragAndDropInstance.removeEventListeners(); // Удаляем старые события
@@ -104,7 +150,6 @@ export class SkladTyres {
                 Helpers.viewRemark(mess, 'red', 'Заполните обязательные поля')
             }
             else {
-
                 const uniqID = saveButton.getAttribute('id')
                 if (!uniqID) {
                     Helpers.viewRemark(mess, 'red', 'Выберите модель колеса')
@@ -116,7 +161,6 @@ export class SkladTyres {
                 saveButton.removeAttribute('rel');
                 this.addCardListTyres()
                 this.updateListTyres()
-
             }
         })
     }
@@ -134,7 +178,6 @@ export class SkladTyres {
     }
 
     probegEvent(probeg_passport, probeg_now_wiew, probeg_last_wiew) {
-        console.log(probeg_passport, probeg_now_wiew, probeg_last_wiew)
         probeg_last_wiew.value = Number(probeg_passport.value) - Number(probeg_now_wiew.value)
         probeg_now_wiew.addEventListener('input', () => {
             probeg_last_wiew.value = Number(probeg_passport.value) - Number(probeg_now_wiew.value)
@@ -151,7 +194,6 @@ export class SkladTyres {
     protektorsEvent(element, pro, ostatok) {
         pro.forEach(e => {
             e.addEventListener('input', (event) => {
-                console.log(event.target)
                 Helpers.validatonPunctuation(event.target)
                 ostatok.value = Helpers.raschetProtector(element, pro)
             })
@@ -164,7 +206,6 @@ export class SkladTyres {
         const reduct = element.querySelector('.reduct_params');
         const mess = element.querySelector('.mess_validation');
         reduct.addEventListener('click', () => {
-            console.log(this.clickCard)
             if (!this.clickCard) {
                 Helpers.viewRemark(mess, 'red', 'Выберите модель колеса')
                 return
@@ -298,7 +339,6 @@ export class SkladTyres {
                 formData.append('imagePath', this.clickCard.imagePath);
             }
             const res = await RequestStaticMetods.saveDataToDB(formData);
-            console.log(res)
             Helpers.viewRemark(mess_validation, 'green', res)
             if (reduct) this.addCardListTyres()
         })
@@ -312,19 +352,6 @@ export class SkladTyres {
             this.pop.style.display = 'none'
         })
     }
-    initEvent() {
-        this.navi.forEach(e => e.addEventListener('click', this.boundNavi))
-        this.add_model_tyres.addEventListener('click', this.boundModelTyresWindow)
-        this.add_tyres.addEventListener('click', this.boundTyresWindow)
-
-
-    }
-    removeEvent() {
-        this.navi.forEach(e => e.removeEventListener('click', this.boundNavi))
-        this.add_model_tyres.removeEventListener('click', this.boundModelTyresWindow)
-        this.add_tyres.removeEventListener('click', this.boundTyresWindow)
-    }
-
 
     destroy(element, data) {
         this.removeEvent()
@@ -336,6 +363,7 @@ export class SkladTyres {
     addTooltips() {
         new Tooltip(this.add_model_tyres, ['Создать модель колеса'])
         new Tooltip(this.add_tyres, ['Создать колесо'])
+        new Tooltip(this.add_tyres_sort, ['Сортировка списка'])
     }
 
     defaultDOMElements() {
@@ -353,7 +381,6 @@ export class SkladTyres {
     }
     controllListAndTyres() {
         const listItemSklad = this.element.querySelectorAll('.listItemSklad')
-        console.log(listItemSklad)
         listItemSklad.forEach(e => e.addEventListener('click', (event) => {
             const windowClick = this.element.querySelector('.click_row')
             if (windowClick) windowClick.classList.remove('click_row')
@@ -375,9 +402,54 @@ export class SkladTyres {
         this.container_shema.innerHTML = CreateDOMElements.createModelCar(this.modelCar, this.allTyres)
         this.container_shema.previousElementSibling.textContent = this.modelCar[0].message
         Helpers.tooltipView('tyres_shema_car', 'Остаток протектора', this.container_shema)
-        new AddChartsToModel(this.allTyres, this.job_field.children[1].children[1])
+        new AddChartsToModel(this.allTyres, this.job_field.children[1].children[1], this.container_shema)
+        this.wheelClick()
     }
 
+    wheelClick() {
+        const wheel = this.container_shema.querySelectorAll('.tyres_shema_car')
+        wheel.forEach(e => e.addEventListener('click', (event) => {
+            if (this.navi[0].classList.contains('activ_button_sklad')) return
+            const tyres = event.target
+            const sum = tyres.parentElement.querySelectorAll('.tyres_shema_car').length
+            let sosed;
+            if (sum === 2) {
+                sosed = tyres.getAttribute('side') === 'left' ? tyres.parentElement.querySelector('.tyres_shema_car[side="right"]') :
+                    tyres.parentElement.querySelector('.tyres_shema_car[side="left"]')
+            }
+            else {
+                sosed = tyres.previousElementSibling && tyres.previousElementSibling.hasAttribute("side") ? tyres.previousElementSibling :
+                    (tyres.nextElementSibling && tyres.nextElementSibling.hasAttribute("side") ? tyres.nextElementSibling : null);
+            }
+            const minNSosed = Number(sosed.getAttribute('minn'))
+            const idw_tyres_sosed = sosed.getAttribute('rel')
+            if (!idw_tyres_sosed) return
+            const objectSosed = this.allTyres.find(e => e.idw_tyres === idw_tyres_sosed)
+            objectSosed.minn = minNSosed
+            this.sortingConfirmation(objectSosed)
+        }))
+    }
+
+    sortingConfirmation(objectSosed) {
+        this.element.insertAdjacentHTML('beforeend', Sorting.formaChangeWheel(this.element.querySelector('.job_tyres')));
+        const modal = this.element.querySelector('.modal_podtver')
+        modal.style.zIndex = 2
+        this.toggleDisplay(this.pop, 'block')
+        this.toogleFlagSorting(modal)
+        const [ok, cancel] = modal.querySelectorAll('.ok_podtver, .cancel_podtver');
+        cancel.addEventListener('click', () => {
+            this.toggleDisplay(this.pop, 'none')
+            modal.remove();
+        })
+        ok.addEventListener('click', () => {
+            const arrayAttributes = Array.from(modal.querySelectorAll('.activFlagSort'))
+                .map(e => e.nextElementSibling.getAttribute('rel'));
+            const rowsSklad = this.skladTyres.querySelectorAll('.row_sklad')
+            Sorting.podborWheel(arrayAttributes, this.skladTyres, rowsSklad, objectSosed)
+            this.toggleDisplay(this.pop, 'none')
+            modal.remove();
+        })
+    }
     controllActivElement(object) {
         if (this.lastClickedElement && this.lastClickedElement !== object) {
             this.lastClickedElement.classList.remove('clickElement');
@@ -403,6 +475,8 @@ export class SkladTyres {
     }
 
     toggleTyresVisibility() {
+        const jobTyress = this.jobTyres.querySelectorAll('.row_sklad')
+        Sorting.userSorting(['data-att', 'position'], this.jobTyres, jobTyress)
         if (this.lastClickedElement) {
             [...this.jobTyres.children].forEach(e => {
                 this.lastClickedElement.getAttribute('rel') === e.getAttribute('data-att') ? e.style.display = 'flex' : e.style.display = 'none'
@@ -414,6 +488,7 @@ export class SkladTyres {
         const jobTyres = [...this.jobTyres.children].filter(e =>
             e.style.display === 'flex'
         );
+
         this.instanceFind.updateRows(jobTyres)
     }
 
@@ -422,16 +497,19 @@ export class SkladTyres {
         const activ = document.querySelector('.activ_button_sklad')
         activ.classList.remove('activ_button_sklad')
         element.classList.add('activ_button_sklad')
-
         if (element.classList.contains('navi_job_tyres')) {
             this.changeSkaldAndJob()
             this.toggleTyresVisibility()
-
+            const jobTyres = this.jobTyres.querySelectorAll('.row_sklad')
+            Sorting.userSorting(['data-att', 'position'], this.jobTyres, jobTyres)
         }
         else {
             this.changeJobAndSklad()
             const rowsSklad = this.skladTyres.querySelectorAll('.row_sklad')
-            rowsSklad.forEach(e => e.style.display = 'flex')
+            rowsSklad.forEach(e => {
+                e.style.display = (this.lastClickedElement && e.getAttribute('status') !== '1') ? 'none' : 'flex';
+            })
+            Sorting.userSorting(['status', 'ostatok'], this.skladTyres, rowsSklad)
             this.instanceFind.updateRows(rowsSklad)
         }
     }
@@ -469,6 +547,9 @@ export class SkladTyres {
         const newRows = this.element.querySelectorAll('.row_sklad')
         new WindowCard(newRows, this)
         const rowsSklad = this.skladTyres.querySelectorAll('.row_sklad')
+        const jobTyres = this.jobTyres.querySelectorAll('.row_sklad')
+        Sorting.userSorting(['status', 'ostatok'], this.skladTyres, rowsSklad)
+        Sorting.userSorting(['data-att', 'position'], this.jobTyres, jobTyres)
         this.instanceFind = new Find(this.find, rowsSklad)
     }
     async getTyres() {

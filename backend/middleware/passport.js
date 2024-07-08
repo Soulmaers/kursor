@@ -20,7 +20,7 @@ module.exports = function (passport) { //натсройка аутентифик
             try {
                 //  console.log(payload)
                 const pool = await connection;
-                const post = `SELECT idx, name, role FROM users WHERE idx='${payload.userId}'`
+                const post = `SELECT idx, name, role, incriment FROM users WHERE idx='${payload.userId}'`
                 const result = await pool.request().query(post);
                 const user = result.recordset[0];
                 if (user.name) {

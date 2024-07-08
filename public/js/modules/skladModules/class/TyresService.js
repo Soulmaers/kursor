@@ -1,6 +1,6 @@
 import { RequestStaticMetods } from './RequestStaticMetods.js';
 import { Helpers } from './Helpers.js'
-import { viewDinamic } from '../../protector.js'
+import { viewDinamic } from '../func/protector.js'
 export class TyresService {
     // Метод для создания нового колеса
     static async createTyre(uniqId, fields) {

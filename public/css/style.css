@@ -5696,6 +5696,13 @@ div.wrapper {
   border-radius: 3px;
 }
 
+.global_settings {
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin: 0 10px;
+  color: #fff;
+}
+
 .logout {
   color: #fff;
   text-decoration: none;

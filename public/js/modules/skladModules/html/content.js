@@ -1,5 +1,6 @@
 
 import { objectDiscription } from './stor.js'
+import { Helpers } from '../class/Helpers.js';
 export class ContentGeneration {
     static objColors = {
         5: 'rgba(5, 159, 16, 0.8)',//#009933',//зеленый
@@ -39,12 +40,11 @@ export class ContentGeneration {
     static tyresRow = (el, data) => {
         const dataObject = data.find(e => e[6].idObject === el.idObject)
         const nomer = dataObject === undefined || dataObject[6].gosnomer === null ? '-' : dataObject[6].gosnomer
-
-        console.log(el)
         const defaultColor = 'rgba(6, 28, 71, 1)';
         let ostatok = el.ostatok.trim(); // Убираем пробельные символы
         let level, color;
 
+        const minN = Math.min(...Helpers.protek(el)) === Infinity ? '-' : Math.min(...Helpers.protek(el))
         if (ostatok === '') {
             color = defaultColor; // Устанавливаем стандартный цвет, если ostatok пуст
             level = 0; // Не выводим никакие деления
@@ -66,9 +66,9 @@ export class ContentGeneration {
         const deleniesWithoutBackground = [1, 2, 3, 4].slice(level).map(i => `<div class="delenie" style="border: 1px solid ${color};"></div>`).join('');
         const fon = `style="background-image: url(../../../..${el.imagePath})";`
         return `<div class="row_sklad" marka='${el.marka}' model='${el.model}' radius='${el.radius}'
-       type='${el.type_tyres}' tire='${el.type_tire}' massa='${el.index_massa}' speed='${el.index_speed}' sezon='${el.sezon}'
-        width='${el.width}' profil='${el.profil}'
-        rel="${el.idw_tyres}" nameCar="${el.nameCar}"data-att="${el.idObject}" relid="${el.id_bitrix}">
+       type='${el.type_tyres}' tire='${el.type_tire} psi='${el.psi}' protektorpassport='${el.protektor_passport}' massa='${el.index_massa}' speed='${el.index_speed}' sezon='${el.sezon}'
+        width='${el.width}' profil='${el.profil}' ostatok='${el.ostatok}' position='${el.identifikator}' status='${el.flag_status}'
+        rel="${el.idw_tyres}" nameCar="${el.nameCar}"data-att="${el.idObject}" minn="${minN}"relid="${el.id_bitrix}">
             <div class="left_wrap_sklad">
                 <div class="icon_tyres" ${fon}></div>
                 <div class="ostatok_tyres">
@@ -431,7 +431,6 @@ ${status}
     }
 
 
-    // < div class="field-label titleMM" > N4</div > -->
     static createCarWheel() {
         return `   <div class="card_model_tyres_wheel">
             <div class="header_card_tyres_wheel">

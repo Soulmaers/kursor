@@ -69,7 +69,7 @@ export class LogsEvent {
         const isHidden = !this.wrapperLogs.style.display || this.wrapperLogs.style.display === 'none';
         this.wrapperLogs.style.display = isHidden ? 'block' : 'none';
         this.wrapperLogs.classList.toggle('clickLog', isHidden);
-
+        new DraggableContainer(this.wrapperLogs)
         // Управление видимостью и фильтрацией событий
         if (isHidden) {
             this.logs(this.quantity);

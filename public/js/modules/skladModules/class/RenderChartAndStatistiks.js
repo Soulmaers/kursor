@@ -1,5 +1,5 @@
 import { Helpers } from './Helpers.js'
-import { viewDinamic } from '../../protector.js'
+import { viewDinamic } from '../func/protector.js'
 import { RequestStaticMetods } from './RequestStaticMetods.js';
 import { SvodkaGeneration } from './SvodkaGeneration.js';
 
@@ -22,6 +22,7 @@ export class RenderChartAndStatistiks {
     }
 
     async init() {
+        console.log(this.history)
         this.uniqueDataWithPrice = Helpers.addStruktura(this.data, this.history)
         await this.getValue()
         this.preparation();
@@ -55,6 +56,7 @@ export class RenderChartAndStatistiks {
     }
 
     addListElements() {
+        console.log(this.date)
         this.date.forEach(e => {
             const div = document.createElement('div');
             div.classList.add('listRows');
@@ -116,7 +118,9 @@ export class RenderChartAndStatistiks {
     }
 
     renderTexContent(id) {
+        console.log(id)
         const object = this.date.find(e => e.id === Number(id));
+        console.log(object)
         const obj = this.uniqueDataWithPrice.find(e => e.id === Number(id));
         const lastZamer = Math.floor(parseFloat(obj.minN)
             / parseFloat(obj.protektorOneKM));

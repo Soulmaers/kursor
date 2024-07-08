@@ -1,6 +1,6 @@
 
-import { objColors, gener } from './content.js'
-import { removeArrElem } from './helpersFunc.js'
+import { objColors, gener } from '../../content.js'
+import { removeArrElem } from '../../helpersFunc.js'
 import { protekGrafTwo, protekGrafThree, protekGrafFour, protekGrafFree } from './canvas.js'
 
 export async function reqProtectorBase() {
@@ -544,10 +544,7 @@ export function protekGrafFreeAll(arr, id, elem) {
 
 export function viewDinamic(arr, maxProtector, containerCard, persent, num) {
     const headerMM = document.querySelector('.headerMM')
-
-    console.log(arr, maxProtector, containerCard, persent, num)
     const blocks = containerCard
-    console.log(containerCard[0].parentNode)
     const parentWidth = 348 / num;
     if (headerMM) headerMM.style.width = `${parentWidth}px`;
     containerCard[0].parentNode.style.width = `${parentWidth}px`;

@@ -1,7 +1,7 @@
 
 import { ContentGeneration } from "../html/content.js";
 import { objColors } from '../html/stor.js'
-
+import { Helpers } from "./Helpers.js";
 export class CreateDOMElements {
 
     static createListObject(data) {
@@ -72,11 +72,13 @@ export class CreateDOMElements {
             const rel = tyresInstall ? tyresInstall.idw_tyres : ''
             const relId = tyresInstall ? tyresInstall.id_bitrix : ''
             const ostatok = tyresInstall ? `${Number(tyresInstall.ostatok)}%` : null
+            const minN = tyresInstall ? Math.min(...Helpers.protek(tyresInstall)) : ''
+            console.log(minN)
             const isHighlighted = tyresInstall ? `background-image: url(../../../../image/0000.png);` : '';
             const styleColor = tyresInstall ? `color: ${objColors[ContentGeneration.gener(Number(tyresInstall.ostatok))]};` : '';
             const combinedStyle = `${isHighlighted} ${styleColor}`;
             const side = tires === 2 ? (y === 0 ? 'left' : 'right') : (y < 2 ? 'left' : 'right');
-            tyresHTML.push(`<div class="tyres_shema_car" id="${currentTyreNumber}"rel="${rel}"style="${combinedStyle}" data-att="${sensor}" relid="${relId}" side="${side}">${ostatok}</div>`);
+            tyresHTML.push(`<div class="tyres_shema_car" id="${currentTyreNumber}" minN='${minN}' rel="${rel}"style="${combinedStyle}" data-att="${sensor}" relid="${relId}" side="${side}">${ostatok}</div>`);
         }
         if (tires === 2) {
             return `<div class='container_na_osi'>

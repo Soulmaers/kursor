@@ -8,6 +8,7 @@ import { AddTooltip } from './modules/event.js'
 import { LogsEvent } from './modules/eventModules/class/LogsEvent.js'
 import { CreateNewObject } from './modules/propertyObjectModules/class/CreateNewObject.js'
 import { CreateNewGroup } from './modules/propertyObjectModules/class/CreateNewGroup.js'
+import { IndexClassSettings } from './modules/usersModules/class/IndexClassSettings.js'
 export let app;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -42,12 +43,13 @@ export class Application {
     }
 
     validationRole() {
-        if (this.role !== 'Дилер' && this.role !== 'Администратор') {
+        if (this.role !== 'Дилер' && this.role !== 'Курсор') {
             this.servis.style.display = 'none'
         }
     }
     // Методы класса Application
     async init() {
+        new IndexClassSettings(this.login)
         this.formatContainer() //метод который корректирует границы контейнеров взависимости от разрешения экрана
         this.adaptiv()  //адаптив
         this.activButton()

@@ -17,6 +17,7 @@ export class SvodkaGeneration {
 
 
     init() {
+        console.log(this.data)
         this.clearRows()
         this.formatTineUnix()
         this.addActualData()
@@ -24,6 +25,7 @@ export class SvodkaGeneration {
         this.addStruktura()
         if (this.structura.length === 0) return
         const content = this.calcilator()
+        console.log(content)
         this.createTableContent(content)
     }
 
@@ -53,8 +55,8 @@ export class SvodkaGeneration {
         const description1 = description[0];
         const description2 = description[1];
         // Извлечение данных
-        const intervals = Object.entries(content[0].intervals);
-        const speeding = Object.entries(content[0].speeding);
+        const intervals = Object.entries(content.intervals);
+        const speeding = Object.entries(content.speeding);
 
         // Функция для создания строки таблицы
         const createRow = (data, table) => {
@@ -81,12 +83,10 @@ export class SvodkaGeneration {
 
     calcilator() {
         const indexSpeed = indexSpeedObject[this.wheel.index_speed];
-        const result = this.structura[0].map(sensor => ({
-            sensor: sensor.sens,
-            intervals: this.processSensor(sensor, Number(sensor.bar.knd), Number(sensor.bar.kvd), Number(sensor.bar.dnn), Number(sensor.bar.dvn)),
-            speeding: this.processSpeed(sensor, indexSpeed)
+        const result = this.structura.map(sensor => ({
+            intervals: this.processSensor(sensor[0], Number(sensor[0].bar.knd), Number(sensor[0].bar.kvd), Number(sensor[0].bar.dnn), Number(sensor[0].bar.dvn)),
+            speeding: this.processSpeed(sensor[0], indexSpeed)
         }));
-
         // Функция для расчета общего времени и пробега
         const calculateTotalTimeAndMileage = (intervals) => {
             let totalTimeAll = 0;
@@ -106,25 +106,76 @@ export class SvodkaGeneration {
                 totalMileageAll += total.mileageInterval;
 
                 resultIntervals[category] = {
-                    totalTime: total.totalTime !== 0 ? convertTime(total.totalTime) : '-',
-                    totalMileage: total.mileageInterval !== 0 ? `${total.mileageInterval} км` : '-'
+                    totalTime: total.totalTime !== 0 ? total.totalTime : 0,//convertTime(total.totalTime)
+                    totalMileage: total.mileageInterval !== 0 ? total.mileageInterval : 0//`${total.mileageInterval} км`
                 };
             });
-
             resultIntervals.all = {
-                totalTime: totalTimeAll !== 0 ? convertTime(totalTimeAll) : '-',
-                totalMileage: totalMileageAll !== 0 ? `${totalMileageAll} км` : '-'
+                totalTime: totalTimeAll !== 0 ? totalTimeAll : '-',//convertTime(totalTimeAll) 
+                totalMileage: totalMileageAll !== 0 ? totalMileageAll : '-'//`${totalMileageAll} км` 
             };
 
             return resultIntervals;
         };
+
         // Применение функции для расчета общего времени и пробега
         const resultWithDurations = result.map(sensor => {
             sensor.intervals = calculateTotalTimeAndMileage(sensor.intervals);
             sensor.speeding = calculateTotalTimeAndMileage(sensor.speeding);
             return sensor;
         });
-        return resultWithDurations;
+
+
+        // Инициализация итоговой структуры
+        const groupedResults = {
+            intervals: {},
+            speeding: {}
+        };
+
+        // Суммирование данных по категориям для intervals и speeding
+        resultWithDurations.forEach(sensor => {
+            const { intervals, speeding } = sensor;
+
+            // Суммирование для intervals
+            Object.keys(intervals).forEach(category => {
+                if (!groupedResults.intervals[category]) {
+                    groupedResults.intervals[category] = {
+                        totalTime: 0,
+                        totalMileage: 0
+                    };
+                }
+                groupedResults.intervals[category].totalTime += intervals[category].totalTime;
+                groupedResults.intervals[category].totalMileage += intervals[category].totalMileage;
+            });
+
+            // Суммирование для speeding
+            Object.keys(speeding).forEach(category => {
+                if (!groupedResults.speeding[category]) {
+                    groupedResults.speeding[category] = {
+                        totalTime: 0,
+                        totalMileage: 0
+                    };
+                }
+                groupedResults.speeding[category].totalTime += speeding[category].totalTime;
+                groupedResults.speeding[category].totalMileage += speeding[category].totalMileage;
+            });
+        });
+
+        // Форматирование итоговых данных
+        Object.keys(groupedResults.intervals).forEach(category => {
+            groupedResults.intervals[category] = {
+                totalTime: groupedResults.intervals[category].totalTime ? convertTime(groupedResults.intervals[category].totalTime) : '-',
+                totalMileage: groupedResults.intervals[category].totalMileage ? `${groupedResults.intervals[category].totalMileage} км` : '-'
+            };
+        });
+
+        Object.keys(groupedResults.speeding).forEach(category => {
+            groupedResults.speeding[category] = {
+                totalTime: groupedResults.speeding[category].totalTime ? convertTime(groupedResults.speeding[category].totalTime) : '-',
+                totalMileage: groupedResults.speeding[category].totalMileage ? `${groupedResults.speeding[category].totalMileage} км` : '-'
+            };
+        });
+        return groupedResults;
     }
 
     processSpeed(sensorData, indexSpeed) {
@@ -298,6 +349,7 @@ export class SvodkaGeneration {
             paramnew.forEach(e => e.val.sort((a, b) => a.dates - b.dates));
             return paramnew;
         })
+        console.log(this.structura)
     }
 
 

@@ -1,4 +1,4 @@
-import { objColors, gener } from './content.js'
+import { objColors, gener } from '../../content.js'
 
 
 const drawLine = (canvas, yStart, yEnd, num, wid, color) => {

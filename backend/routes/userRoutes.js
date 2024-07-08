@@ -20,4 +20,12 @@ router.post('/api/findProfil', controller.findProfil)
 router.post('/api/deleteProfil/:id', controller.deleteProfil)
 router.post('/api/checkObject', controller.checkObject)
 router.post('/api/viewCheckObject', controller.viewCheckObject)
+router.post('/api/findLastIdUser', controller.findLastIdUser)
+
+router.post('/api/getUsers', controller.getUsers)
+router.post('/api/addAccount', controller.addAccount)
+router.post('/api/getAccounts', controller.getAccounts)
+router.post('/api/getAccountUsers', controller.getAccountUsers)
+router.post('/api/deleteAccount', controller.deleteAccount)
+
 router.get('/3339', controller.tests)

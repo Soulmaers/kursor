@@ -1,7 +1,7 @@
 
 import { RequestStaticMetods } from './RequestStaticMetods.js'
 import { Helpers } from './Helpers.js'
-import { viewDinamic } from '../../protector.js'
+import { viewDinamic } from '../func/protector.js'
 import { ContentGeneration } from '../html/content.js'
 import { Dinamic } from './Dinamic.js'
 

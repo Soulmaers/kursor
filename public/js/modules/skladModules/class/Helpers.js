@@ -26,9 +26,10 @@ export class Helpers {
 
 
     static viewRemark(element, color, text) {
+        console.log(element, color, text)
         element.textContent = text
         element.style.color = color
-        setTimeout(() => element.textContent = '', 3000)
+        setTimeout(() => element.textContent = '', 5000)
     }
 
 
@@ -59,7 +60,7 @@ export class Helpers {
     static protek(wheels) {
         const protector = [];
         protector.push(wheels.N1, wheels.N2, wheels.N3, wheels.N4)
-        const pro = protector.filter(e => e !== '').map(it => it)
+        const pro = protector.filter(e => e !== '').map(it => Number(it))
         return pro
     }
     static tooltipView(classDOM, text, parent) {
@@ -76,13 +77,13 @@ export class Helpers {
                 input.value = newValue;
             }
         });
-        input.addEventListener('keydown', (e) => {
-            const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Enter', '.', ','];
-
-            if (!allowedKeys.includes(e.key) && !/\d/.test(e.key)) {
-                e.preventDefault(); // Блокировка всех символов, кроме разрешённых
-            }
-        });
+        /*   input.addEventListener('keydown', (e) => {
+               const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Enter', '.', ','];
+   
+               if (!allowedKeys.includes(e.key) && !/\d/.test(e.key)) {
+                   e.preventDefault(); // Блокировка всех символов, кроме разрешённых
+               }
+           });*/
     }
 
     static renderProtektors(data, container) {
@@ -165,6 +166,7 @@ export class Helpers {
         });
         // Удаление элементов с null значением minN
         const validDataWithPrice = dataWithPrice.filter(item => item.minN !== null);
+        console.log(validDataWithPrice)
         const uniqueDataWithPrice = Array.from(
             new Map(validDataWithPrice.map(item => [item.minN, item])).values()
         );
@@ -184,7 +186,6 @@ export class Helpers {
     }
 
     static addContent(discription, dataWheel) {
-        console.log(dataWheel)
         const result = Helpers.calcPrognozPobeg(dataWheel)
         const row = discription.querySelectorAll('.row_text_shina')
         row[0].textContent = `ID: ${dataWheel.idw_tyres}`
