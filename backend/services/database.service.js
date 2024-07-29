@@ -416,6 +416,113 @@ exports.geoLastInterval = async (time1, time2, idw) => {
     }
 
 }
+
+exports.getUserGroupsAndObjects = async (userId) => {
+    try {
+        console.log(Number(userId));
+        const pool = await connection;
+
+        // Получаем аккаунты пользователя
+        let accountResult = await pool.request()
+            .input('incriment', sql.Int, Number(userId))
+            .query(`
+                SELECT 
+                    incriment AS inc_account,
+                    name,
+                    idx AS id
+                FROM accounts;
+            `);
+
+        let accounts = accountResult.recordset;
+
+        // Параллельно получаем группы и объекты для всех аккаунтов
+        await Promise.all(accounts.map(async (account) => {
+            // Получаем группы и объекты для каждого аккаунта
+            let groupAndObjectResult = await pool.request()
+                .input('accountId', sql.Int, account.inc_account)
+                .query(`
+                    SELECT 
+                        g.incriment AS inc_group, 
+                        g.nameGroup, 
+                        g.idx AS group_id,
+                        o.incriment AS inc_object, 
+                        o.objectname,
+                        o.idx AS object_id
+                    FROM accountGroups ag
+                    JOIN groups g ON ag.uniqGroupID = g.incriment
+                    JOIN groupsAndObjects go ON g.incriment = go.uniqGroupID
+                    JOIN objects o ON go.uniqObjectID = o.incriment
+                    WHERE ag.uniqAccountID = @accountId
+                    ORDER BY g.incriment, o.incriment;
+                `);
+
+            // Обработка групп и объектов
+            const groups = groupAndObjectResult.recordset.reduce((acc, row) => {
+                if (!acc[row.inc_group]) {
+                    acc[row.inc_group] = {
+                        inc_group: row.inc_group,
+                        group_name: row.nameGroup,
+                        group_id: row.group_id,
+                        objects: []
+                    };
+                }
+                acc[row.inc_group].objects.push({
+                    inc_object: row.inc_object,
+                    object_name: row.objectname,
+                    object_id: row.object_id
+                });
+                return acc;
+            }, {});
+
+            // Получаем объекты, которые не принадлежат ни одной группе
+            let ungroupedObjectsResult = await pool.request()
+                .input('accountId', sql.Int, account.inc_account)
+                .query(`
+                    SELECT 
+                        o.incriment AS inc_object, 
+                        o.objectname,
+                        o.idx AS object_id
+                    FROM accountObjects ao
+                    JOIN objects o ON ao.uniqObjectID = o.incriment
+                    LEFT JOIN groupsAndObjects go ON o.incriment = go.uniqObjectID
+                    WHERE ao.uniqAccountID = @accountId
+                    AND go.uniqObjectID IS NULL
+                    ORDER BY o.incriment;
+                `);
+
+            // Обновляем данные объектов
+            account.groups = Object.values(groups);
+            account.ungroupedObjects = ungroupedObjectsResult.recordset.map(row => ({
+                inc_object: row.inc_object,
+                object_name: row.objectname,
+                object_id: row.object_id
+            }));
+
+            // Обновляем объекты в группах и вне групп
+            await Promise.all([
+                ...account.groups.flatMap(group =>
+                    group.objects.map(async (obj) => {
+                        const params = await databaseService.loadParamsViewList(obj.object_name, Number(obj.object_id), obj);
+                        const cleanParams = JSON.parse(JSON.stringify(params)); // Убираем циклические ссылки
+                        Object.assign(obj, cleanParams); // Обновляем объект данными из loadParamsViewList
+                    })
+                ),
+                ...account.ungroupedObjects.map(async (obj) => {
+                    const params = await databaseService.loadParamsViewList(obj.object_name, Number(obj.object_id), obj);
+                    const cleanParams = JSON.parse(JSON.stringify(params)); // Убираем циклические ссылки
+                    Object.assign(obj, cleanParams); // Обновляем объект данными из loadParamsViewList
+                })
+            ]);
+        }));
+
+
+        return accounts;
+    } catch (err) {
+        console.error('Ошибка при получении данных:', err);
+    }
+}
+
+
 exports.getParamsToPressureAndOilToBase = async (time1, time2, idw, columns, num) => {
     const value = columns.filter(e => e !== null)
     try {
@@ -1472,96 +1579,44 @@ exports.alarmBase = async (data, tyres, alarm) => {
 
 
 exports.loadParamsViewList = async (car, el, object, kursor) => {
-    const idw = el
+    const idw = el;
     const pool = await connection;
-    const mod = async () => {
-        try {
-            const selectBase = `SELECT osi, trailer, tyres, type, tsiControll FROM model WHERE idw='${idw}'`
-            const result = await pool.query(selectBase)
-            if (kursor) {
-                const datas = (await databaseService.objects(String(el))).map(e => e.imei)[0]
-                return { result: result.recordset, message: car, imei: datas, phone: 'null' }
-            }
-            else {
-                return { result: result.recordset, message: car, imei: object ? object.imei : null, phone: object ? object.phone : null }
-            }
-        }
-        catch (e) {
-            console.log(e)
-        }
-    }
-    const tyr = async () => {
-        try {
-            const selectBase = `SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE idw='${idw}'`
-            const result = await pool.query(selectBase)
-            if (result.recordset === undefined) {
-                return ''
-            }
-            else {
-                return { result: result.recordset, message: car }
-            }
-        }
-        catch (e) {
-            console.log(e)
-        }
-    }
-    const dat = async () => {
-        try {
-            /*   const data = await databaseService.objects(String(idw))
-               let port;
-               if (data.length === 0) {
-                   port = 'wialon'
-               }
-               else {
-                   port = data[0].port
-               }*/
-            const selectBase = `SELECT * FROM sens_stor_meta WHERE idw='${idw}'`
-            //  const selectBase = `SELECT name, value, status FROM params WHERE idw='${idw}' AND port='${port}'`
-            const result = await pool.query(selectBase)
-            return { result: result.recordset, message: car }
-        }
-        catch (e) {
-            console.log(e)
-        }
-    }
-    const osis = async () => {
-        try {
-            const selectBase = `SELECT * FROM ifBar WHERE idw='${idw}'`
-            const result = await pool.query(selectBase)
-            return { result: result.recordset, message: car }
-        }
-        catch (e) {
-            console.log(e)
-        }
-    }
-    const saves = async () => {
-        try {
-            const selectBase = `SELECT * FROM sens_stor_meta WHERE idw='${idw}'`
-            const result = await pool.query(selectBase)
-            return { result: result.recordset, message: car }
-        }
-        catch (e) {
-            console.log(e)
-        }
-    }
-    const model = await mod();
-    const models = await tyr();
-    const data = await dat();
-    const osi = await osis();
-    const save = await saves();
-    model.result.sort((a, b) => {
-        if (a.osi > b.osi) {
-            return 1;
-        } else if (a.osi < b.osi) {
-            return -1;
-        } else {
-            return 0;
-        }
-    });
-    const params = save.result.length !== 0 ? 'true' : 'false'
-    // console.log(model, models, data, osi, el, params)
-    return [model, models, data, osi, el, params, object]
 
+    // Функция для выполнения SQL-запросов
+    const executeQuery = async (query) => {
+        try {
+            const result = await pool.query(query);
+            return result.recordset || [];
+        } catch (error) {
+            console.error('Ошибка выполнения запроса:', error);
+            return []; // Возвращаем пустой массив в случае ошибки
+        }
+    };
+
+    // Параллельные запросы
+    const [modelData, tyreData, metaData, osiData] = await Promise.all([
+        executeQuery(`SELECT osi, trailer, tyres, type, tsiControll FROM model WHERE idw='${idw}'`),
+        executeQuery(`SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE idw='${idw}'`),
+        executeQuery(`SELECT * FROM sens_stor_meta WHERE idw='${idw}'`),
+        executeQuery(`SELECT * FROM ifBar WHERE idw='${idw}'`)
+    ]);
+
+    // Обработка модели
+    const model = {
+        result: modelData,
+        message: car,
+        imei: kursor ? (await databaseService.objects(String(el))).map(e => e.imei)[0] : (object ? object.imei : null),
+        phone: object ? object.phone : null
+    };
+
+    // Сортировка модели
+    model.result.sort((a, b) => a.osi - b.osi); // Используйте простую арифметику для сортировки
+
+    // Проверка на наличие данных в metaData
+    const params = metaData.length !== 0 ? 'true' : 'false';
+
+    // Формируем ответ
+    return [model, { result: tyreData, message: car }, { result: metaData, message: car }, { result: osiData, message: car }, el, params, object];
 }
 
 exports.dostupObject = async (login) => {
@@ -1865,11 +1920,11 @@ exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
         null
     }
     else {
-        const result = await databaseService.getBitrixEvent(idw)
-        if (result.length !== 0) {
-            getEvent.pushEvent(arr, id, geo, group, name, start, result[0].idBitrix, time)
-            //result[0].idBitrix === '30' ? getEvent.pushEvent(arr, id, geo, group, name, start, result[0].idBitrix, time) : null
-        }
+        /*  const result = await databaseService.getBitrixEvent(idw)
+          if (result.length !== 0) {
+              getEvent.pushEvent(arr, id, geo, group, name, start, result[0].idBitrix, time)
+              //result[0].idBitrix === '30' ? getEvent.pushEvent(arr, id, geo, group, name, start, result[0].idBitrix, time) : null
+          }*/
         const mess = await helpers.processing(arr, time, idw, geoLoc, group, name, start)
         const objFuncAlarm = {
             email: { fn: send.sendEmail },
@@ -2327,7 +2382,18 @@ JOIN guide j ON mj.guideID = j.guideID WHERE idObject=@idObject`;
     }
 }
 
-
+exports.getProtokolRetranslations = async () => {
+    try {
+        const pool = await connection
+        const selectBase = `SELECT * FROM retranslations`
+        const results = await pool.request()
+            .query(selectBase)
+        return results.recordset
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 exports.getGuideToBase = async () => {
     try {
         const selectBase = `SELECT *FROM guide`

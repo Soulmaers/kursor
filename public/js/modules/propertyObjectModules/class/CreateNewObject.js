@@ -1,12 +1,14 @@
-import { app } from '../../../main.js'
+//import { app } from '../../../main.js'
 import { ConfiguratorParams } from '../../configuratorModules/class/ConfiguratorParams.js'
-
+import { CreateContent } from './CreateContent.js'
 
 export class CreateNewObject {
     constructor(element) {
+        console.log('объекты')
         this.element = element
         this.instance = null
         this.modal = document.querySelector('.create_object_modal')
+        this.createContentHTML()
         this.noValidation = this.modal.querySelector('.validation_message')
         this.closes = this.modal.querySelector('.closes')
         this.cancel = this.modal.querySelector('.cancel')
@@ -23,6 +25,7 @@ export class CreateNewObject {
         this.closes.addEventListener('click', this.hiddenModal.bind(this))
         this.pop = document.querySelector('.popup-background')
         this.cancel.addEventListener('click', this.hiddenModal.bind(this))
+
         this.initEvent()
         Array.from(this.navi.children).forEach(e => { e.addEventListener('click', this.toogleModal.bind(this)) })
         this.idPref = null
@@ -30,6 +33,9 @@ export class CreateNewObject {
         this.object == null
     }
 
+    createContentHTML() {
+        this.modal.innerHTML = CreateContent.createHTML()
+    }
     initEvent() {
         this.ent = this.enter.bind(this);
         this.ok.addEventListener('click', this.ent);
@@ -300,6 +306,7 @@ export class CreateNewObject {
             const [result, dat] = await Promise.all([fetchObjectsId, fetchSensStorMeta]);
 
             console.log(result);
+            console.log(dat);
 
             const data = [
                 element.children[0].textContent, result[0].typeObject, result[0].typeDevice, result[0].port,

@@ -3,6 +3,7 @@ import { TarirTable } from './TarirTable.js'
 import { Summator } from './Summator.js'
 export class ConfiguratorParams {
     constructor(id, port, imei, dat, idBitrix) {
+        console.log(id, port, imei, dat, idBitrix)
         this.id = id
         this.port = port
         this.imei = imei
@@ -104,10 +105,10 @@ export class ConfiguratorParams {
     }
 
     initEventListeners() {
-        this.updateMeta.addEventListener('click', this.boundUpdate);
+        //   this.updateMeta.addEventListener('click', this.boundUpdate);
     }
     removeEventListeners() {
-        this.updateMeta.removeEventListener('click', this.boundUpdate);
+        // this.updateMeta.removeEventListener('click', this.boundUpdate);
     }
 
     clearMetaParams(el, event) {
@@ -275,10 +276,12 @@ export class ConfiguratorParams {
     }
 
     createListParams() {
+        console.log('здесь?')
         const list = document.querySelectorAll('.item_stor')
         if (list) {
             list.forEach(e => e.remove())
         }
+        console.log(this.listMeta)
         this.storageMeta.forEach(async e => {
             const li = document.createElement('li')
             li.classList.add('item_stor')

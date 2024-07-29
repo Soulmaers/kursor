@@ -166,25 +166,28 @@ exports.setSensStorMeta = async (req, res) => {
 let worker = null;
 exports.getSensStorMeta = async (req, res) => {
     const idw = req.body.idw
+
+    const result = await databaseService.getSensStorMeta(idw)  //получение привязанных параметров по объекту
+    res.json(result)
     // Завершаем предыдущего воркера, если он существует
-    if (worker) {
-        worker.terminate();
-    }
-    worker = new Worker(path.resolve(__dirname, '../services/workerParams.js'));
-    worker.on('message', (result) => {
-        worker.terminate();
-        res.json(result)
-    });
-    worker.on('error', (err) => {
-        worker.terminate();
-        console.log(err);
-    });
-    worker.on('exit', (code) => {
-        if (code !== 0) {
-            console.log(code);
-        }
-    });
-    worker.postMessage(idw);
+    /*   if (worker) {
+           worker.terminate();
+       }
+       worker = new Worker(path.resolve(__dirname, '../services/workerParams.js'));
+       worker.on('message', (result) => {
+           worker.terminate();
+           res.json(result)
+       });
+       worker.on('error', (err) => {
+           worker.terminate();
+           console.log(err);
+       });
+       worker.on('exit', (code) => {
+           if (code !== 0) {
+               console.log(code);
+           }
+       });
+       worker.postMessage(idw);*/
 }
 
 exports.objects = async (req, res) => {

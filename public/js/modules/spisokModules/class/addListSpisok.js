@@ -13,7 +13,7 @@ export let initSummary
 export let initCharts
 
 
-export class SpisokObject {
+export class AddListSpisok {
     constructor(data) {
         this.data = data
         this.element = null

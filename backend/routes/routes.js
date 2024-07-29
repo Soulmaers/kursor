@@ -14,6 +14,8 @@ const router = express.Router()
 
 
 module.exports = router
+router.post('/api/dannie', controllerData.dannie)
+
 
 router.post('/api/dataSpisok', controllerData.dataSpisok)
 router.post('/api/spisokList', controllerWialon.spisok)

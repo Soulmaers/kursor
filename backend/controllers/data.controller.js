@@ -68,7 +68,18 @@ exports.dataSpisok = async (req, res) => {
         console.log(e)
     }
 }
-
+//готовим данные и отправляем ответ на клиент который отрисовывает список
+exports.dannie = async (req, res) => {
+    const role = req.body.role
+    const incriment = req.body.incriment
+    try {
+        const datas = await databaseService.getUserGroupsAndObjects(incriment) //получем данные из БД по объектам wialona
+        res.json({ datas });
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 
 const getWialonSetToBaseObject = async (login) => {
     console.log('login', login)
@@ -96,6 +107,7 @@ const getWialon = async (login) => {
         });
         worker.on('exit', (code) => {
             if (code !== 0) {
+                console.log('выход воркера', code);
                 reject(new Error(`Worker stopped with exit code ${code}`));
             }
         });

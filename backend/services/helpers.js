@@ -171,9 +171,11 @@ exports.setDataToBase = async (imei, port, info, id) => {
     const data = await databaseService.getSensStorMetaFilter(imei, port, id) //получение привязанных параметров
     if (data.length !== 0) {
         const idw = data[0].idw
-        const coefEngine = await databaseService.getValuePWRToBase(idw, 'engine') //получение порогового значения по зажиганию
-        const coefPWR = await databaseService.getValuePWRToBase(idw, 'pwr')  //получение порогового значения по питанию
-        const coefMileage = await databaseService.getValuePWRToBase(idw, 'mileage') //получение порогового значения по пробегу
+        const [coefEngine, coefPWR, coefMileage] = await Promise.all([
+            databaseService.getValuePWRToBase(idw, 'engine'), // получение порогового значения по зажиганию
+            databaseService.getValuePWRToBase(idw, 'pwr'), // получение порогового значения по питанию
+            databaseService.getValuePWRToBase(idw, 'mileage') // получение порогового значения по пробегу
+        ]);
         setHistoryStatistiks(data, coefPWR)
         const now = new Date();
         const nowTime = Math.floor(now.getTime() / 1000);

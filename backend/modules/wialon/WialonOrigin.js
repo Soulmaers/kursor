@@ -75,9 +75,11 @@ class WialonOrigin {
             });
             updateTasks.push(this.updateDatabase(allArrayData, res[0].idObject));
         }
+
         await Promise.all(updateTasks);
     }
     async updateDatabase(allArrayData, res) {
+
         if (allArrayData.length !== 0) {
             await this.setData(allArrayData[0].imei, allArrayData[0].port, allArrayData, res);
             await this.setValidationImeiToBase(allArrayData);
@@ -89,13 +91,14 @@ class WialonOrigin {
         await helpers.setDataToBase(imei, port, allArrayData, id) // передача данных для обработки и записи в БД
     }
     async setValidationImeiToBase(allArrayData) {
-        for (let elem of allArrayData) {
-            const table = 'wialon_origin'
-            const base = new JobToBase()
-            await base.createTable(table)
-            await base.fillingTableColumns(elem, table)
-            await base.fillingTableRows(elem, table)
-        }
+        const table = 'wialon_origin';
+        const base = new JobToBase();
+        await base.createTable(table);
+
+        const columnTasks = allArrayData.map(elem => base.fillingTableColumns(elem, table));
+        const rowTasks = allArrayData.map(elem => base.fillingTableRows(elem, table));
+
+        await Promise.all([...columnTasks, ...rowTasks]);
     }
 }
 

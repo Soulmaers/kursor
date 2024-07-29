@@ -3,9 +3,11 @@
 const wialon = require('wialon');
 
 exports.login = async (token) => {
+    console.log(token)
     const session = wialon().session;
     try {
         await session.start({ token: token });
+        console.log(session)
         return session;
     } catch (error) {
 
@@ -15,6 +17,7 @@ exports.login = async (token) => {
     }
 
 };
+
 
 /*
 exports.logout = async (session) => {

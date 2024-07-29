@@ -6,7 +6,12 @@ import { classReports } from '../../navModules/reports.js'
 import { NavigationMenu } from '../../navModules/NavigatorClass.js'
 import { Tooltip } from '../../../class/Tooltip.js'
 import { app } from '../../../main.js'
-//import { sett, obj } from '../../event.js'
+
+import { Helpers } from '../../usersModules/class/Helpers.js'
+import { Requests } from '../../usersModules/class/RequestStaticMethods.js'
+import { EditObject } from '../../usersModules/class/EditObject.js';
+
+
 export class ToggleHiddenList {
     constructor(obj, sett) {
         this.sett = sett
@@ -82,6 +87,23 @@ export class ToggleHiddenList {
     }
 
 
+
+    async handleObjectClick(objectId) {
+        try {
+            const creater = document.querySelector('.role').getAttribute('data-att')
+            const prava = document.querySelector('.role').getAttribute('rel')
+            const container = document.querySelector('.wrapper_set')
+            const element = objectId.closest('.listItem')
+            const [data, creators, userdata] = await Promise.all([Helpers.getAccountAll(), Requests.getUsers(prava, creater), Requests.getObjectCreater()])
+
+            new EditObject(data, element, container, creater, creators, null, userdata)
+
+        } catch (error) {
+            console.error('Error fetching object data:', error);
+        }
+    }
+
+
     editObject(el) {
         const list = document.querySelector('.border')
         if (list) {
@@ -90,7 +112,8 @@ export class ToggleHiddenList {
         }
         el.parentElement.parentElement.classList.add('border')
         el.style.color = 'green'
-        this.obj.viewObjects(el)
+
+        this.handleObjectClick(el)
     }
     async edit(el) {
         const id = el.parentElement.parentElement.id
@@ -196,12 +219,9 @@ export class ToggleHiddenList {
         this.ones.classList.remove('toggle_list')
         icon.classList.add('toggle_list')
         const parentElement = icon.parentElement;
-        const createObject = document.querySelector('.create_object')
         const del = document.querySelectorAll('.deleteGroup')
         const sett = document.querySelectorAll('.settingsGroup')
         if (icon.classList.contains('mores')) {
-            createObject.classList.add('gr')
-            new Tooltip(createObject, ['Добавить новую группу'])
             parentElement.lastElementChild.textContent = 'Список групп';
             this.minusS.forEach(el => {
                 el.style.display = 'none'
@@ -220,16 +240,14 @@ export class ToggleHiddenList {
             this.viewAndHidden(del, sett)
         }
         if (icon.classList.contains('ones')) {
-            this.viewOnes(createObject, parentElement)
+            this.viewOnes(parentElement)
         }
 
 
     }
-    viewOnes(createObject, parentElement) {
+    viewOnes(parentElement) {
         const del = document.querySelectorAll('.deleteGroup')
         const sett = document.querySelectorAll('.settingsGroup')
-        createObject.classList.remove('gr')
-        new Tooltip(createObject, ['Добавить новый объект'])
         parentElement.lastElementChild.textContent = 'Список объектов';
         this.plusS.forEach(el => {
             el.style.display = 'none'

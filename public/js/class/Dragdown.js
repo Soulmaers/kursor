@@ -3,6 +3,7 @@ console.log('дроп')
 
 export class DraggableContainer {
     constructor(element) {
+        console.log(element)
         //  this.container = element.parentElement;
         this.elem = element
         this.isDragging = false;
@@ -20,6 +21,7 @@ export class DraggableContainer {
         window.addEventListener('mousemove', this.drag);
     }
     dragStart(event) {
+        console.log(event.button)
         if (event.button === 0) { // проверяем, что зажата левая кнопка мыши
             this.initialX = event.clientX - this.xOffset;
             this.initialY = event.clientY - this.yOffset;
@@ -52,3 +54,4 @@ export class DraggableContainer {
         window.removeEventListener('mousemove', this.drag);
     }
 }
+//if (this.elem.contains(event.target))

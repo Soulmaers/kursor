@@ -5,7 +5,10 @@ export class Requests {
     static async findId(prefix) {
         const obj = {
             'idu': 'users',
-            'ida': 'accounts'
+            'ida': 'accounts',
+            'ido': 'objects',
+            'idg': 'groups',
+            'idr': 'retranslations'
         };
         const table = obj[prefix];
         const params = {
@@ -42,7 +45,7 @@ export class Requests {
 
 
 
-    static async saveUser(obj) {
+    static async saveUser(obj, objects, groups) {
         const { idx, login, password, role, uz, creater } = obj
         console.log(obj)
         const params = {
@@ -50,7 +53,7 @@ export class Requests {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idx, login, password, role, uz, creater }))
+            body: (JSON.stringify({ obj, objects, groups }))
         }
 
         const result = await fetch('/signup', params)
@@ -58,6 +61,149 @@ export class Requests {
         console.log(response)
         return response
     }
+
+    static async editUser(obj) {
+        console.log(obj)
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify(obj))
+        }
+
+        const result = await fetch('/api/editUser', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+    static async editRetra(obj) {
+        console.log(obj)
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify(obj))
+        }
+
+        const result = await fetch('/api/editRetra', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+
+
+    static async updateObjectUser(incriment, objects) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ incriment, objects }))
+        }
+
+        const result = await fetch('/api/updateObjectUser', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+
+    static async deleteUsersObjectGroupRetra(obj) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ obj }))
+        }
+
+        const result = await fetch('/api/deleteUsersObjectGroupRetra', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+    static async updateGroupUser(incriment, groups) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ incriment, groups }))
+        }
+
+        const result = await fetch('/api/updateGroupUser', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+    static async editObject(obj) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ obj }))
+        }
+
+        const result = await fetch('/api/editObject', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+    static async editGroup(obj) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ obj }))
+        }
+
+        const result = await fetch('/api/editGroup', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+
+    static async updateObjectsAndUsers(obj) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ obj }))
+        }
+
+        const result = await fetch('/api/updateObjectsAndUsers', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+
+    static async updateGroupsAndUsers(incriment, objects) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ incriment, objects }))
+        }
+
+        const result = await fetch('/api/updateGroupsAndUsers', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
     static async saveAccount(obj) {
         const { idx, name, uniqCreater, uniqTP } = obj
         console.log(obj)
@@ -74,6 +220,101 @@ export class Requests {
         console.log(response)
         return response
     }
+
+    static async editAccount(obj) {
+        const { incriment, name, uniqCreater, uniqTP, oldUniqCreator } = obj
+        console.log(obj)
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ incriment, name, uniqCreater, uniqTP, oldUniqCreator }))
+        }
+
+        const result = await fetch('/api/editAccount', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+
+    static async saveObject(obj) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(obj)
+        }
+
+        const result = await fetch('/api/addObject', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+    static async saveGroup(obj, arrayObjects) {
+        console.log(obj, arrayObjects)
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ obj, arrayObjects })
+        }
+
+        const result = await fetch('/api/addGroup', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+    static async saveRetra(obj) {
+
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ obj }))
+        }
+
+        const result = await fetch('/api/addRetra', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+
+    static async getAcc() {
+        const params = {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+
+        const result = await fetch('/api/geAccContent', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+    static async getObjectsGroups(incriment) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ incriment }))
+        }
+
+        const result = await fetch('/api/getObjectsGroups', params)
+        const response = await result.json()
+        return response
+    }
+
 
     static async getUsers(role, creater) {
         const params = {
@@ -108,6 +349,85 @@ export class Requests {
             body: JSON.stringify({ creater })
         }
         const complete = await fetch('/api/getAccountUsers', params)
+        const result = await complete.json()
+        return result
+    }
+
+    static async getUsersContent(creater) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ creater })
+        }
+        const complete = await fetch('/api/getUsersContent', params)
+        const result = await complete.json()
+        return result
+    }
+
+
+    static async getAccountCreater(creater) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ creater })
+        }
+        const complete = await fetch('/api/getAccountCreater', params)
+        const result = await complete.json()
+        return result
+    }
+
+    static async getObjectCreater(creater) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ creater })
+        }
+        const complete = await fetch('/api/getObjectCreater', params)
+        const result = await complete.json()
+        return result
+    }
+
+    static async getRetraCreater(creater) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ creater })
+        }
+        const complete = await fetch('/api/getRetraCreater', params)
+        const result = await complete.json()
+        return result
+    }
+
+
+    static async getGroupCreater(creater) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ creater })
+        }
+        const complete = await fetch('/api/getGroupCreater', params)
+        const result = await complete.json()
+        return result
+    }
+    static async getCountGroups(creater) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ creater })
+        }
+        const complete = await fetch('/api/getCountGroups', params)
         const result = await complete.json()
         return result
     }

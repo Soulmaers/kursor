@@ -6,23 +6,23 @@ import { AlarmControll } from './modules/alarmModules/class/AlarmControll.js'
 import { ToggleHiddenList } from './modules/listModules/class/ToggleHiddenList.js'
 import { AddTooltip } from './modules/event.js'
 import { LogsEvent } from './modules/eventModules/class/LogsEvent.js'
-import { CreateNewObject } from './modules/propertyObjectModules/class/CreateNewObject.js'
-import { CreateNewGroup } from './modules/propertyObjectModules/class/CreateNewGroup.js'
 import { IndexClassSettings } from './modules/usersModules/class/IndexClassSettings.js'
+import { AddListSpisok } from './modules/spisokModules/class/addListSpisok.js'
 export let app;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Это гарантирует, что DOM полностью загружен перед инициализацией классов
     const role = document.querySelector('.role').getAttribute('rel')
     const login = document.querySelectorAll('.log')[1].textContent
-    app = new Application(role, login);
+    const incriment = document.querySelector('.role').getAttribute('data-att')
+    app = new Application(role, login, incriment);
 
 });
 
 
 export class Application {
     //Основной класс 1 экземпляр при запуске приложения
-    constructor(role, login) {
+    constructor(role, login, incriment) {
         this.data = null
         this.nameCar = null
         this.body = document.querySelector('body')
@@ -34,6 +34,7 @@ export class Application {
         this.servis = document.querySelector('.servis')
         this.role = role   //получаем роль прав доступа
         this.login = login //получаем логин пользователя
+        this.incriment = incriment
         this.dataspisok = false //флаг загрузки
         this.spisok = null
         this.obj = null
@@ -49,6 +50,7 @@ export class Application {
     }
     // Методы класса Application
     async init() {
+        console.log('тут')
         new IndexClassSettings(this.login)
         this.formatContainer() //метод который корректирует границы контейнеров взависимости от разрешения экрана
         this.adaptiv()  //адаптив
@@ -60,22 +62,39 @@ export class Application {
         this.startActivButton.classList.add('tablo')
     }
     async startClass(elem) {
+        //    await this.zaprosData()
         await this.zapros(elem) //метод который забирает из бд данные по объектам, заппускает проверку обновления логов, проверку  объектов из бд соответствующих логину, запускает функцию отрисовки списка
         new DropDownList(this.searchInput)  //запускаем сквозной поиск по элементам
         new NavigationMenu(this.data)// запускаем класс по работе с меню навигацией
         new AlarmControll()// запускаем класс управление отображение списка алармов
-        if (this.obj) {
-            this.obj.destroy(); // Удаляем обработчики
-        }
-        this.obj = new CreateNewObject(this.create);
-        if (this.sett) {
-            this.sett.destroy(); // Удаляем обработчики
-        }
-        this.sett = new CreateNewGroup(this.create, this.nameCar, this.data)
-
-
         new ToggleHiddenList(this.obj, this.sett) //запускаем класс управления списком
         new AddTooltip() //запуск класса отображения тултипов
+    }
+
+
+    async zaprosData() {
+        const incriment = this.incriment
+        const role = this.role
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ incriment, role }))
+
+        }
+        const mods = await fetch('/api/dannie', params)
+        const models = await mods.json()
+        const arrayList = models.datas
+        //   if (this.spisok) {
+        // this.spisok.updateData(arrayList, elem)
+        // }
+        // else {
+        this.spisok = new AddListSpisok(arrayList) //отрисовка списка и статусов списка
+        //  }
+
+
+        // return models
     }
     async zapros(elem) {
         const [wialonData] = await Promise.all([this.zaprosWialon(this.login, this.role)])//, this.zaprosKursor(this.login)])

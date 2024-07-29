@@ -153,11 +153,32 @@ class SummaryStatistiks {
         if (arrayValue.value.length !== 0) {
             function processSensor(sensorData) {
                 let totalMileage = 0;
-                let previousMileage = sensorData.value[0]; // Начальное значение пробега
+                let previousMileage = sensorData.value.find(val => val !== 0); // Начальное значение пробега, не равное 0
+
                 sensorData.value.forEach((point, index) => {
-                    //  console.log(sensorData.dvs[index], sensorData.speed[index])
                     if (sensorData.dvs[index] === 1 && sensorData.speed[index] > 0) {
-                        const currentMileage = point;
+                        let currentMileage = point;
+
+                        // Пропускаем значения currentMileage, равные 0, и берем предыдущее значение, не равное 0
+                        if (currentMileage === 0) {
+                            for (let i = index - 1; i >= 0; i--) {
+                                if (sensorData.value[i] !== 0) {
+                                    currentMileage = sensorData.value[i];
+                                    break;
+                                }
+                            }
+                        }
+                        // Пропускаем значения previousMileage, равные 0, и берем следующее значение, не равное 0
+                        if (previousMileage === 0) {
+                            for (let i = index; i < sensorData.value.length; i++) {
+                                if (sensorData.value[i] !== 0) {
+                                    previousMileage = sensorData.value[i];
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Вычисление пробега
                         totalMileage += currentMileage - previousMileage;
                         previousMileage = currentMileage; // Обновляем предыдущее значение пробега
                     }
@@ -165,8 +186,9 @@ class SummaryStatistiks {
 
                 return totalMileage; // Возвращает общий пробег
             }
-            const result = processSensor(arrayValue)
-            return parseInt(result)
+
+            const result = processSensor(arrayValue);
+            return parseInt(result);
         }
     }
 

@@ -63,6 +63,7 @@ async function wialon() {
     const token = process.env.TOKEN;
     console.log(token);
     const session = await wialonModule.login(token);
+    console.log(session)
     const params = {
         'tzOffset': 10800,
         "language": 'ru',
@@ -93,13 +94,14 @@ if (isMainThread) {
 
     async function init() {
         await initServer();
+        // new ControllRetranslations()
         try {
-            const res = await wialon();
-            const session = await getSession()
-            new WialonOrigin(session);
-            interval = setInterval(() => {
-                new WialonOrigin(session);
-            }, 120000);
+            //   const res = await wialon();
+            //  const session = await getSession()
+            //  new WialonOrigin(session);
+            // interval = setInterval(() => {
+            //  new WialonOrigin(session);
+            //  }, 180000);
         } catch (error) {
             clearInterval(interval);
             console.error("Ошибка инициализации:", new Date(), error);
@@ -108,14 +110,24 @@ if (isMainThread) {
 
     init();
 
+
+    const ControllRetranslations = require('./backend/services/ControllRetranslations.js');
+
     const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js');
     const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js');
     const ListenPortIPS = require('./backend/modules/wialonIPS/ParseBuffer.js');
     const WialonOrigin = require('./backend/modules/wialon/WialonOrigin.js');
 
-    new ListenPortTP(21626);
-    new ListenPortTPNew(20163);
-    exports.ips = new ListenPortIPS(20332);
+    //new ListenPortTP(21626);
+    //new ListenPortTPNew(20163);
+    //exports.ips = new ListenPortIPS(20332);
+
+
+
+
+
+
+
 } else {
     console.log('Этот код не должен выполняться внутри воркера.');
 }

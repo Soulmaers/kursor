@@ -21,7 +21,6 @@ export class AddTooltip {
     init() {
         const role = document.querySelector('.role')
         const logout = document.querySelector('.logoutIcon')
-        const create = document.querySelector('.create_object')
         const search = document.querySelector('.loop_find')
         const viewIcon = document.querySelectorAll('.viewIcon')
         const tableInfoCar = document.querySelector('.tableInfoCar')
@@ -45,7 +44,6 @@ export class AddTooltip {
         this.arrayContent.push([role, [role.getAttribute('rel')]])
         this.arrayContent.push([alarm, ['События по давлению']])
         this.arrayContent.push([logout, [logout.getAttribute('rel')]])
-        this.arrayContent.push([create, ['Добавить новый объект']])
         this.arrayContent.push([search, [['Поиск объектов по имени, ID, имени группы,'], ['уникальному IMEI, телефону']]])
         this.arrayContent.push([inf, ['Если зажигание включено и данные  приходят, то значения подсвечены в зависимости от условий подсветки',
             'Если зажигание включено, а данные не приходят, то колесо будет с серый фоном',
@@ -74,7 +72,7 @@ const sections = document.querySelector('.sections')
 const techinfo = document.querySelector('.techInfo')
 const mainMenu = document.querySelector('.main_menu')
 const grafics = document.querySelector('.grafics')
-const create = document.querySelector('.create_object')
+
 
 
 new ResizeContainer(sec, start, secondFlash[0])

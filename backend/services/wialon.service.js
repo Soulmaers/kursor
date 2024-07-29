@@ -238,6 +238,7 @@ exports.getUniqImeiAndPhoneIdDataFromWialon = async (id, sess) => {
 
             const session = sess ? sess : await getSession();
             const data = await session.request('core/search_item', prmsId);
+            // console.log(data)
             // Обработка успешного ответа
             resolve(data);
         } catch (err) {
@@ -276,6 +277,74 @@ exports.getAnimalsWialon = async (login) => {
     })
 
 
+};
+
+
+//запрос данных на виалон по объекту и получение параметров
+exports.getDataObjects = async (session) => {
+    return new Promise(async function (resolve, reject) {
+        session.request('core/search_items', prms)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                resolve(data)
+            });
+    })
+};
+exports.getPropertyGroups = async (session) => {
+    const prms = {
+        "spec": {
+            "itemsType": "avl_unit_group",
+            "propName": "sys_name,,sys_phone_number",
+            "propValueMask": "*,*,*",
+            "sortType": "sys_name",
+            "propType": "sys_name,,sys_phone_number",
+            "or_logic": "1"
+        },
+        "force": 1,
+        "flags": 257,
+        "from": 0,
+        "to": 0
+    }
+    return new Promise(async function (resolve, reject) {
+        session.request('core/search_items', prms)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                // console.log(data.items)
+                resolve(data.items)
+            });
+    })
+};
+
+exports.getPropertyObjects = async (session) => {
+    console.log(session)
+    const prms = {
+        "spec": {
+            "itemsType": "avl_unit",
+            "propName": "sys_name,sys_unique_id,sys_phone_number",
+            "propValueMask": "*,*,*",
+            "sortType": "sys_name",
+            "propType": "sys_name,sys_unique_id,sys_phone_number",
+            "or_logic": "1"
+        },
+        "force": 0,
+        "flags": 257,
+        "from": 0,
+        "to": 0
+    }
+    return new Promise(async function (resolve, reject) {
+        session.request('core/search_items', prms)
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function (data) {
+                //  console.log(data)
+                resolve(data.items)
+            });
+    })
 };
 
 //запрос всех сенсоров по id объекта

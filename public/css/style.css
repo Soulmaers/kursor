@@ -9281,7 +9281,7 @@ i.changeColorCheck {
   color: #fff;
   width: 100%;
   font-weight: bold;
-  background-color: rgba(6, 28, 71, 1);
+  background-color: rgba(6, 28, 71, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9324,7 +9324,7 @@ i.changeColorCheck {
   width: 100%;
   font-weight: bold;
   padding: 5px 0;
-  background-color: rgba(6, 28, 71, 1);
+  background-color: rgba(6, 28, 71, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10066,6 +10066,11 @@ i.changeColorCheck {
   border: 2px solid rgba(6, 28, 71, 1);
   background-color: rgba(6, 28, 71, 1);
 
+}
+
+.create_object_modal {
+  justify-content: center;
+  align-items: center;
 }
 
 
