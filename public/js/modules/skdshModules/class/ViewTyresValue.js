@@ -1,5 +1,7 @@
 import { convert, getHoursDiff } from '../../helpersFunc.js'
 import { Tooltip } from '../../../class/Tooltip.js'
+import { GetUpdateStruktura } from '../../../GetUpdateStruktura.js'
+
 
 export class ViewTyresValue {
     constructor(tyres, params, osi) {
@@ -12,26 +14,26 @@ export class ViewTyresValue {
             3: '#4af72f',//#009933',
             5: '#fff'
         }
-        this.intervalId = null; // Свойство для хранения идентификатора интервала
+        GetUpdateStruktura.onDataReceived(this.render.bind(this));
         this.init()
     }
 
     init() {
-        if (this.intervalId) {
-            clearInterval(this.intervalId); // Очистка предыдущего интервала, если он существует
-        }
-        this.intervalId = setInterval(() => this.getParams(), 110000); // Сохранение идентификатора нового интервала
         this.viewValueTyres();
     }
 
-    clearInterval() {
-        if (this.intervalId) {
-            clearInterval(this.intervalId);
-            this.intervalId = null;
-        }
+    render({ final }) {
+        this.sortParams(final)
+        this.viewValueTyres()
     }
 
-
+    sortParams(final) {
+        const idw = document.querySelector('.color').id
+        const res = final.find(e => e.object_id === idw)
+        this.tyres = res[1].result
+        this.params = res[2].result
+        this.osi = res[3].result
+    }
     generDav(el, arrBar) {
         let generatedValue;
         if (el >= Number(arrBar.dnmin) && el <= Number(arrBar.dnmax)) {
@@ -61,7 +63,6 @@ export class ViewTyresValue {
             return
         }
         if (this.tyres) {
-            console.log(this.params)
             const parametrs = convert(this.tyres)
             const tiresLink = document.querySelectorAll('.tires_link_test')
             let engine = this.params.find(element => element.params === 'engine');
@@ -74,7 +75,6 @@ export class ViewTyresValue {
 
                 if (pressure && tireLink) {
                     const wheel = pressure.idTyres
-                    console.log(wheel)
                     //   const done = active.id === '26702383' ? parseFloat((pressure.value / 10).toFixed(1)) : pressure.value !== null ? parseFloat(pressure.value) : '-';
                     const done = pressure.value !== null ? parseFloat(pressure.value) : '-';
                     const signal = element ? this.objColor[this.generDav(done, element)] : null;
@@ -95,7 +95,6 @@ export class ViewTyresValue {
                     tireLink.children[0].style.color = colorStyle;
                     tireLink.parentElement.style.border = borderStyle;
 
-                    console.log(tireLink)
                     if (!wheel) {
                         tireLink.style.backgroundImage = 'url("../../../../image/wheel_gray.png")';
                         tireLink.style.backgroundColor = "#000"
@@ -140,26 +139,6 @@ export class ViewTyresValue {
             })
 
         }
-
-    }
-
-    async getParams() {
-        const idw = document.querySelector('.color').id
-        const param = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ idw }))
-        }
-        const datas = await fetch('/api/getSens', param)
-        this.params = await datas.json()
-        this.params.sort((prev, next) => {
-            if (prev.name < next.name) return -1;
-            if (prev.name < next.name) return 1;
-        })
-        // this.createParamsRows()
-        this.viewValueTyres()
 
     }
 }

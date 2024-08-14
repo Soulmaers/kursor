@@ -2,6 +2,7 @@
 const { NavtelecomResponceData, CheckSumm, BitsCount, WriteFile } = require('./Helpers');
 const SendingCommandToTerminal = require('./SendingCommandToTerminal')
 const helpers = require('../../services/helpers');
+const { HelpersUpdateParams } = require('../../services/HelpersUpdateParams.js')
 const net = require('net');
 
 class ListenPortTP {
@@ -11,6 +12,7 @@ class ListenPortTP {
     }
 
     createServer(port) {
+        console.log(port)
         const tcpServer = net.createServer((socket) => {
             console.log('TCP Client connected');
             //  console.log(socket)
@@ -19,6 +21,14 @@ class ListenPortTP {
         });
         tcpServer.listen(port, () => {
             console.log(`TCP протокол слушаем порт ${port}`);
+        });
+        tcpServer.on('error', (err) => {
+            console.error('Server error:', err);
+        });
+
+        tcpServer.on('clientError', (err, socket) => {
+            console.error('Client error:', err);
+            socket.destroy(); // Закрытие сокета при ошибке клиента
         });
     }
 }
@@ -41,6 +51,7 @@ class ChartServerTerminal {
     socketOn() {
         this.socket.on('data', async (data) => {
             this.data = data;
+            console.log(this.data)
             const str = data.toString()
             if (str.startsWith('@')) {
                 const preamble = data.slice(0, 4);
@@ -83,7 +94,7 @@ class ChartServerTerminal {
                     this.telemetrationFields(buf, type, count)
                     const res = await databaseService.objectsImei(String(this.imei))
                     if (res.length !== 0) {
-                        this.setData(this.imei, this.port, res[0].idObject)
+                        this.setData(this.imei, this.port, res[0].idx)
                         WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
                         this.globalArrayMSG = []
                         const response = Buffer.alloc(type === '~A' ? 3 : 2);
@@ -100,7 +111,7 @@ class ChartServerTerminal {
                     this.telemetrationFields(buf, type, 1)
                     const res = await databaseService.objectsImei(String(this.imei))
                     if (res.length !== 0) {
-                        this.setData(this.imei, this.port, res[0].idObject)
+                        this.setData(this.imei, this.port, res[0].idx)
                         WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
                         this.globalArrayMSG = []
                         const response = Buffer.alloc(6);
@@ -117,6 +128,8 @@ class ChartServerTerminal {
 
     async setData(imei, port, id) {
         await helpers.setDataToBase(imei, port, this.globalArrayMSG, id) //передача расшифрованных данных для обработки и записи в БД
+        //  HelpersUpdateParams.update(null, this.getStruktura(data)) сделать структуру как под виалон и взять последнее сообщение!
+
     }
 
 

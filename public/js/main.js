@@ -1,13 +1,11 @@
-import { checkCreate } from './modules/admin.js'
-import { SpisokObject } from './modules/spisokModules/class/SpisokObject.js'
 import { NavigationMenu } from './modules/navModules/NavigatorClass.js'
 import { DropDownList } from './class/DropdownList.js'
 import { AlarmControll } from './modules/alarmModules/class/AlarmControll.js'
-import { ToggleHiddenList } from './modules/listModules/class/ToggleHiddenList.js'
 import { AddTooltip } from './modules/event.js'
 import { LogsEvent } from './modules/eventModules/class/LogsEvent.js'
 import { IndexClassSettings } from './modules/usersModules/class/IndexClassSettings.js'
-import { AddListSpisok } from './modules/spisokModules/class/addListSpisok.js'
+import { AddListSpisok } from './modules/spisokModules/class/AddListSpisok.js'
+import { GetUpdateStruktura } from './GetUpdateStruktura.js'
 export let app;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -50,101 +48,34 @@ export class Application {
     }
     // Методы класса Application
     async init() {
-        console.log('тут')
+
+        const { data, allId, final, groupId, finalGroup } = await GetUpdateStruktura.zaprosData(this.incriment, this.role)
+        console.log(finalGroup)
+        this.data = data
+        this.allId = allId
+        this.final = final
+        this.groupId = groupId
+        this.finalGroup = finalGroup
+        GetUpdateStruktura.updateData()
         new IndexClassSettings(this.login)
         this.formatContainer() //метод который корректирует границы контейнеров взависимости от разрешения экрана
         this.adaptiv()  //адаптив
         this.activButton()
         await this.startClass()
-        new LogsEvent(this.data, this.login)
+        new LogsEvent(this.data, this.allId, this.final, this.login)
     }
     activButton() {
         this.startActivButton.classList.add('tablo')
     }
-    async startClass(elem) {
-        //    await this.zaprosData()
-        await this.zapros(elem) //метод который забирает из бд данные по объектам, заппускает проверку обновления логов, проверку  объектов из бд соответствующих логину, запускает функцию отрисовки списка
-        new DropDownList(this.searchInput)  //запускаем сквозной поиск по элементам
-        new NavigationMenu(this.data)// запускаем класс по работе с меню навигацией
+    async startClass() {
+
+        new AddListSpisok(this.data, this.allId, this.final, this.role, this.login)
+        new DropDownList(this.searchInput, this.final)  //запускаем сквозной поиск по элементам
+        new NavigationMenu(this.finalGroup, this.final)// запускаем класс по работе с меню навигацией
         new AlarmControll()// запускаем класс управление отображение списка алармов
-        new ToggleHiddenList(this.obj, this.sett) //запускаем класс управления списком
         new AddTooltip() //запуск класса отображения тултипов
     }
 
-
-    async zaprosData() {
-        const incriment = this.incriment
-        const role = this.role
-        const params = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ incriment, role }))
-
-        }
-        const mods = await fetch('/api/dannie', params)
-        const models = await mods.json()
-        const arrayList = models.datas
-        //   if (this.spisok) {
-        // this.spisok.updateData(arrayList, elem)
-        // }
-        // else {
-        this.spisok = new AddListSpisok(arrayList) //отрисовка списка и статусов списка
-        //  }
-
-
-        // return models
-    }
-    async zapros(elem) {
-        const [wialonData] = await Promise.all([this.zaprosWialon(this.login, this.role)])//, this.zaprosKursor(this.login)])
-        this.dataspisok = true
-        const arrayList = wialonData.response.aLLmassObject
-        this.nameCar = wialonData.response.arrName
-        this.data = arrayList
-        console.log(this.data)
-        if (arrayList.flat().length === 0) {
-            const loaders = document.querySelector('.loaders');
-            loaders.style.display = 'none'
-        }
-        if (this.spisok) {
-            this.spisok.updateData(arrayList, elem)
-        }
-        else {
-            this.spisok = new SpisokObject(arrayList) //отрисовка списка и статусов списка
-        }
-        //   console.log(this.nameCar)
-        //передаем имена объектов для отображения в панели администратора
-        checkCreate(this.nameCar)
-    }
-
-    async zaprosWialon(login, role) {
-        const params = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ login, role }))
-
-        }
-        const mods = await fetch('/api/dataSpisok', params)
-        const models = await mods.json()
-        console.log(models)
-        return models
-    }
-
-    async zaprosKursor(login) {
-        const params = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({ login })
-        }
-        const res = await fetch('/api/getKursorObjects', params)
-        const objects = await res.json()
-        return objects
-    }
 
     async logs() {
         const login = this.login

@@ -1,4 +1,4 @@
-import { app } from '../../../main.js'
+/*import { app } from '../../../main.js'
 import { Tooltip } from '../../../class/Tooltip.js'
 
 export class CreateNewGroup {
@@ -330,4 +330,4 @@ export class CreateNewGroup {
         });
     }
 
-}
+}*/

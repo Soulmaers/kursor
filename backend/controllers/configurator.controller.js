@@ -96,24 +96,6 @@ exports.setGroup = async (req, res) => {
     res.json(result)
 }
 
-exports.deleteObject = async (req, res) => {
-    const idObject = req.body.id
-    const login = req.body.login
-    const result = await databaseService.deleteObject(login, idObject) //удаление объекта из БД
-    res.json(result)
-}
-exports.deleteObjectInGroups = async (req, res) => {
-    const idObject = req.body.id
-    const login = req.body.login
-    const result = await databaseService.deleteObjectInGroup(login, idObject) //удаление объекта из групп из БД
-    res.json(result)
-}
-exports.deleteGroupToBaseGroups = async (req, res) => {
-    const id = req.body.id
-    const login = req.body.login
-    const result = await databaseService.deleteGroupToBaseGroups(login, id)//удаление группы из БД
-    res.json(result)
-}
 exports.uniqImeiAndPhone = async (req, res) => {
     const col = req.body.col
     const value = req.body.value

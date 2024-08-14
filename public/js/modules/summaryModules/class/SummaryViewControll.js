@@ -1,5 +1,6 @@
 import { GetDataTime } from '../../../class/GetDataTime.js'
-
+import { Helpers } from './Helpers.js'
+import { SimpleEventEmitter } from '../../../Emitter.js'
 export class SummaryViewControll {
     constructor(objectsId) {
         this.objectsId = objectsId
@@ -14,10 +15,15 @@ export class SummaryViewControll {
         this.select.forEach(el => el.querySelector('.toggle_list_select').addEventListener('click', this.toggleListSelect.bind(this, el)))
         this.select.forEach(el => el.querySelector('.select_summary').addEventListener('mouseleave', this.hiddenListOutsideKursor.bind(this, el)))
         this.select.forEach(el => el.querySelectorAll('.item_type').forEach(it => it.addEventListener('click', this.toggleCheckSelect.bind(this, it))))
-
+        SimpleEventEmitter.on('check', this.render.bind(this));
+        SimpleEventEmitter.on('dataReceived', this.render.bind(this));
         this.startUpdatingToday()
     }
 
+
+    render() {
+        this.clickListUpdateSummary()
+    }
     //обновляем саммари учитывая заголовки для запроса
     async clickListUpdateSummary() {
         const arrayTitle = ['Сегодня']
@@ -125,9 +131,6 @@ export class SummaryViewControll {
         for (const el of this.arrayInterval) {
             await this.getSummaryToBase(el);
         }
-        setInterval(() => {
-            this.getSummaryToBase('Сегодня');
-        }, 60000);
     }
 
     //меняем тоггл класс по нажатию на параметр
@@ -139,27 +142,12 @@ export class SummaryViewControll {
         el.children[0].classList.toggle('clickToggle')
     }
 
-    //сверка активных объектов с данными для подсчета саммари и отображения
-    controllActiveObject(array) {
-        const checkObjectsId = Array.from(document.querySelectorAll('.checkInList')).reduce((acc, el) => {
-            if (el.classList.contains('changeColorCheck')) {
-                acc.push(Number(el.closest('.listItem').id))
-            }
-            return acc
-        }, [])
-        const originalObjectsData = array.reduce((acc, el) => {
-            if (!checkObjectsId.includes(el.idw)) {
-                acc.push(el)
-            }
-            return acc
-        }, [])
-        return originalObjectsData
-    }
+
     //основной метод . готовить интервалы, запрашивает данные из базы, считает показатели, выводит в таблицу
     async getSummaryToBase(el, slot) {
-        const data = this.getIntervalDate(el)
-        const result = await this.getRequestSummaryToBase(data)
-        const cleanObject = this.controllActiveObject(result)
+        const data = Helpers.getIntervalDate(el)
+        const result = await Helpers.getRequestSummaryToBase(data, this.objectsId)
+        const cleanObject = Helpers.controllActiveObject(result)
         let summary;
         if (el === 'Неделя' || el === 'Месяц' || el.length === 2) {
             summary = this.filterWeekSummary(cleanObject)
@@ -274,65 +262,8 @@ export class SummaryViewControll {
         return motoHours;
     }
 
-    //забираем из бд данные
-    async getRequestSummaryToBase(data) {
-        const arrayId = this.objectsId
-        const params = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: (JSON.stringify({ data, arrayId }))
-        }
-        try {
-            const mods = await fetch('/api/summaryYestoday', params)
-            const models = await mods.json()
-            models.sort((a, b) => a.data - b.data)
-            return models
-        }
-        catch (e) {
-            console.log(e)
-        }
-    }
 
-    //готовим нужный интервал
-    getIntervalDate(interval) {
-        const data = [];
-        let int;
-        if (interval === 'Неделя') {
-            int = 7
-        }
-        if (interval === 'Месяц') {
-            int = 30
-        }
-        if (interval === 'Вчера') {
-            int = 1
-        }
-        if (interval === 'Сегодня') {
-            int = 0
-        }
-        if (interval.length === 2) {
-            data.push(interval[0], interval[1])
-        }
-        else if (int <= 1) {
-            data.push(this.convertDate(int))
-        }
-        else {
-            data.push(this.convertDate(int), this.convertDate(1))
-        }
 
-        return data
-    }
-    //форматируем юникс в дату
-    convertDate(num) {
-        const now = new Date();
-        const yesterday = new Date(now);
-        yesterday.setDate(now.getDate() - num)
-        const year = yesterday.getFullYear();
-        const month = String(yesterday.getMonth() + 1).padStart(2, '0');
-        const day = String(yesterday.getDate()).padStart(2, '0');
-        const data = `${year}-${month}-${day}`;
-        return data
-    }
+
 
 }

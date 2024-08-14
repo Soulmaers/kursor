@@ -20,6 +20,9 @@ module.exports.logsView = async (req, res) => {
     const idw = req.body.arrayId
     const tr = req.body.tr
     const count = req.body.count
+    //console.log(idw)
+    // console.log(tr)
+    // console.log(count)
     const val = await databaseService.logsFindToBase(idw) //получение логов из БД
     if (val) {
         const valnew = val.map(el => el)

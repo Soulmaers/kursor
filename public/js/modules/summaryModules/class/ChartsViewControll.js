@@ -1,16 +1,22 @@
 
-import { initSummary } from '../../spisokModules/class/SpisokObject.js'
-
+import { SimpleEventEmitter } from '../../../Emitter.js'
+import { Helpers } from './Helpers.js'
 export class ChartsViewControll {
-    constructor() {
+    constructor(arrayid) {
+        this.objects = arrayid
         this.data = null
         this.originalData = null
         this.nameChart = 'probeg'
         this.elementList = document.querySelectorAll('.checkInList')
         this.params = document.querySelectorAll('.pointer_chart')
         this.params.forEach(el => el.addEventListener('click', this.getTitleChart.bind(this, el)))
+        SimpleEventEmitter.on('check', this.render.bind(this));
+        this.getDataSummary()
     }
 
+    render() {
+        this.getDataSummary()
+    }
     getTitleChart(el) {
         const titleCharts = document.querySelector('.title_lower_charts')
         titleCharts.textContent = el.getAttribute('data-attribute')
@@ -20,9 +26,10 @@ export class ChartsViewControll {
     }
     //забираем даные за неделю и сортируем в массивы для графиков
     async getDataSummary() {
-        const data = initSummary.getIntervalDate('Месяц')
-        this.data = await initSummary.getRequestSummaryToBase(data)
-        const originalData = initSummary.controllActiveObject(Object.values(this.data))
+        const data = Helpers.getIntervalDate('Месяц')
+
+        this.data = await Helpers.getRequestSummaryToBase(data, this.objects)
+        const originalData = Helpers.controllActiveObject(Object.values(this.data))
         this.originalData = originalData
         let dataAndValue = {};
         for (let i = 0; i < originalData.length; i++) {

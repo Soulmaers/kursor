@@ -5,11 +5,9 @@ import { Validation } from './Validation.js'
 
 
 export class EditGroup {
-    constructor(data, element, container, login, prava, creator, creators, instance, usersdata) {
+    constructor(data, element, container, creator, creators, instance, usersdata) {
         this.data = data
         this.container = container
-        this.login = login
-        this.prava = prava
         this.creator = creator
         this.creators = creators
         this.instance = instance
@@ -27,7 +25,7 @@ export class EditGroup {
 
     async createModalEdit() {
         await this.getStruktura()
-        this.container.innerHTML = ContentGeneration.editGroup(this.creator, this.property, this.creators, this.name, this.data)
+        this.container.innerHTML = ContentGeneration.editGroup(this.creator, this.property, this.creators, this.property.nameGroup, this.data)
         this.cacheElements()
         if (!this.retra) this.applyValidation();
         this.addEventListeners()
@@ -38,6 +36,7 @@ export class EditGroup {
     }
 
     cacheElements() {
+        this.prava = document.querySelector('.role').getAttribute('rel')
         this.check_list = this.container.querySelector('.check_list');
         this.check_container = this.container.querySelector('.check_container');
         this.ok = this.container.querySelector('.ok_podtver');
@@ -91,14 +90,16 @@ export class EditGroup {
         const obj = this.container.querySelectorAll('.activ_check')
         if (obj) obj.forEach(e => e.classList.remove('activ_check'))
     }
-    modalActivity(pop, flex, num) {
+    modalActivity(pop, flex, num, cret) {
         this.modal.style.display = `${flex}`
         pop.style.zIndex = num
+        pop.style.display = cret ? 'none' : 'block'
     }
+
 
     close() {
         const close = this.modal.querySelector('.close_modal_window')
-        close.addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1))
+        close.addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1, 'cre'))
     }
 
     save() {
@@ -131,7 +132,7 @@ export class EditGroup {
             Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message);
         }
         this.updateListObjects(objectsCar)
-        this.instance.createTableGroup();
+        if (this.instance) this.instance.createTableGroup();
     }
 
     updateListObjects(objectsCar) {
@@ -139,7 +140,6 @@ export class EditGroup {
         wrap.innerHTML = [...objectsCar].map(e => `<div class="rows_sostav" >${e.nextElementSibling.textContent}</div>`).join('')
     }
     async getStruktura() {
-        // this.usersData = await Requests.getGroupCreater(this.creator)
         this.property = (this.usersData.filter(e => e.incriment[0] === this.incriment))[0]
     }
 }

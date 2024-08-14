@@ -51,6 +51,7 @@ export async function kartaContainer(elem) {
         }
         const res = await fetch('api/getSens', param)
         const data = await res.json()
+        console.log(data)
         const speed = data.find(e => e.params === 'speed')
         const lat = data.find(e => e.params === 'lat')
         const lon = data.find(e => e.params === 'lon')

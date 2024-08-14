@@ -10,6 +10,7 @@ import { Detalisation } from '../../detalisationModules/class/Detalisation.js'
 import { DOMHelper } from './DOMHelper.js'
 import { SKDSHClass } from '../../skdshModules/class/SKDSHClass.js'
 import { GrafikView } from '../../grafikModules/class/GrafikView.js'
+import { GetUpdateStruktura } from '../../../GetUpdateStruktura.js'
 export let iconStatusClick;
 
 export class ClickObject {
@@ -78,7 +79,7 @@ export class ClickObject {
     }
 
     filterData(id) {
-        const foundElement = this.uniqStruktura.find(el => el[4] === Number(id));
+        const foundElement = GetUpdateStruktura.globalData.final.find(el => el[4] === Number(id));
         this.info = [foundElement[0].result, foundElement[1].result, foundElement[2].result, foundElement[3].result]
     }
 
@@ -123,7 +124,7 @@ export class ClickObject {
         if (!check) {
             this.specific(this.element)//метод который обрабатывает специфические условия
             this.reinitializeOrCreateInstance('createEvent', CreateMarkersEvent, idw);
-            this.reinitializeOrCreateInstance('iconStatusClick', IconStatus, this.element);
+            this.reinitializeOrCreateInstance('iconStatusClick', IconStatus, this.element, this.info);
             this.reinitializeOrCreateInstance('instanceStatistika', StatistikaPressure, this.element, this.info);
             this.reinitializeOrCreateInstance('instanceDetalisation', Detalisation, this.element);
             this.reinitializeOrCreateInstance('instanceGrafik', GrafikView, this.info);

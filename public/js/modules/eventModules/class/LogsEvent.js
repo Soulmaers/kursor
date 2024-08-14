@@ -3,17 +3,17 @@ import { LogsTable } from './LogsTable.js'
 import { CloseBTN } from '../../../class/CloseBTN.js'
 import { Popup } from './Popup.js'
 import { DraggableContainer } from '../../../class/Dragdown.js'
-
+import { Helpers } from '../../spisokModules/class/Helpers.js'
 export class LogsEvent {
-    constructor(data, login) {
+    constructor(data, allId, groupId, login) {
         this.data = data
         this.login = login
         this.log = document.querySelector('.logs')
         this.wrapperLogs = null
         this.count = 300  //кол-во получаемых строк по умолчанию
         this.quantity = 0 //начальное кол-во рпосмотренных сообщений
-        this.arrayId = null   //массив с id объектов
-        this.arrayIdGroups = null   //массив с id и названиями компаний
+        this.arrayId = allId
+        this.arrayIdGroups = groupId.map(el => [el.object_id, el.group_id])
         this.value = null  //получаемые данные -кол-во  всего, кол-во по умолчанию
         this.rowsContent = null  // готовая структура строк для отрисовки
         this.logsTable = new LogsTable();
@@ -27,7 +27,6 @@ export class LogsEvent {
     }
     async init() {
         try {
-            this.pushId();
             await this.getLogs();
             await this.getQuantity();
             this.rowsContent ? this.validationPopup() : null
@@ -109,6 +108,7 @@ export class LogsEvent {
             return acc;
         }, {});
         this.rowsContent = this.value.view.map(el => {
+
             const parsedContent = JSON.parse(el.content);
             const typeEvent = parsedContent[0].event;
             const geoloc = el.geo !== '' ? JSON.parse(el.geo) : null;
@@ -150,8 +150,8 @@ export class LogsEvent {
         this.quantity = this.value.itog;
     }
     pushId() {
-        this.arrayId = this.data.reduce((acc, el) => acc.concat(Object.values(el).map(subArray => subArray[4])), []);
-        this.arrayIdGroups = this.data.reduce((acc, el) => acc.concat(Object.values(el).map(subArray => [subArray[4], subArray[7]])), []);
+        this.arrayId = Helpers.format(this.data, 0)
+        this.arrayIdGroups = Helpers.format(this.data, 2)
     }
 
     async logs(quantity) {

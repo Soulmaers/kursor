@@ -20,9 +20,7 @@ export class SKDSHClass {
     init() {
         if (this.model.length !== 0) {
             new ViewModel(this.model) // класс отрисовывает саму модель СКДШ
-            if (this.viewTyresValueInstance) {
-                this.viewTyresValueInstance.clearInterval(); // Очистка интервала перед созданием нового экземпляра
-            }
+
             this.viewTyresValueInstance = new ViewTyresValue(this.tyres, this.params, this.osi); // класс отрисовывает состояние давления и температуры на колесах
             this.controllTyresInstance = new ControllTyres(); // Создание и сохранение экземпляра ControllTyres
         }

@@ -18,6 +18,7 @@ export class SvodkaGeneration {
 
     init() {
         console.log(this.data)
+        console.log(this.info)
         this.clearRows()
         this.formatTineUnix()
         this.addActualData()
@@ -315,7 +316,7 @@ export class SvodkaGeneration {
     addStruktura() {
         this.structura = this.groupedData.map(elemGroup => {
             const idObject = elemGroup[0].idObject;
-            const celevoy = this.info.find(e => e[4] == idObject);
+            const celevoy = this.info.find(e => e.object_id == idObject);
             const [, tyres, params, osibar] = celevoy;
             // Преобразование массива osss в объект для быстрого доступа
             const osssMap = {};

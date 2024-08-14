@@ -1,5 +1,5 @@
 //import { app } from '../../../main.js'
-import { ConfiguratorParams } from '../../configuratorModules/class/ConfiguratorParams.js'
+/*import { ConfiguratorParams } from '../../configuratorModules/class/ConfiguratorParams.js'
 import { CreateContent } from './CreateContent.js'
 
 export class CreateNewObject {
@@ -361,4 +361,4 @@ export class CreateNewObject {
         this.id = null
 
     }
-}
+}*/

@@ -1,24 +1,20 @@
 
 import { initsmarkers } from '../../navModules/karta.js'
-//import { filterCondition } from '../../filtersList.js'
-import { initSummary, initCharts } from '../../spisokModules/class/SpisokObject.js'
 import { classReports } from '../../navModules/reports.js'
 import { NavigationMenu } from '../../navModules/NavigatorClass.js'
-import { Tooltip } from '../../../class/Tooltip.js'
-import { app } from '../../../main.js'
-
 import { Helpers } from '../../usersModules/class/Helpers.js'
 import { Requests } from '../../usersModules/class/RequestStaticMethods.js'
 import { EditObject } from '../../usersModules/class/EditObject.js';
-
+import { EditGroup } from '../../usersModules/class/EditGroup.js';
+import { EditAccount } from '../../usersModules/class/EditAccount.js';
+import { SimpleEventEmitter } from '../../../Emitter.js'
 
 export class ToggleHiddenList {
-    constructor(obj, sett) {
-        this.sett = sett
-        this.obj = obj
+    constructor() {
         this.clickElement = null
         this.login = document.querySelectorAll('.log')[1].textContent
         this.chekHiddens = document.querySelectorAll('.chekHidden')
+        this.accountCheck = document.querySelectorAll('.accountCheck')
         this.plusS = document.querySelectorAll('.plusS')
         this.minusS = document.querySelectorAll('.minusS')
         this.filterV = document.querySelectorAll('.filterV')
@@ -35,7 +31,7 @@ export class ToggleHiddenList {
         this.mores = document.querySelector('.mores')
         this.ones = document.querySelector('.ones')
         this.delete = document.querySelectorAll('.deleteObject')
-        this.deleteGroup = document.querySelectorAll('.deleteGroup')
+        this.settingsAccount = document.querySelectorAll('.settingsAccount')
         this.settingGroups = document.querySelectorAll('.settingsGroup')
         this.prefs = document.querySelectorAll('.pref')
         this.init()
@@ -45,32 +41,31 @@ export class ToggleHiddenList {
         this.plusS.forEach(el => el.addEventListener('click', this.viewList.bind(this)))
         this.filterVN.forEach(el => el.addEventListener('click', this.sortListUp.bind(this)))
         this.filterV.forEach(el => el.addEventListener('click', this.sortListDown.bind(this)))
-        this.groups.forEach(el => this.hiddenWindows.bind(this, el)())
-        this.chekHiddens.forEach(el => el.addEventListener('click', this.toggleHiddenChildList.bind(this)))
+        //  this.groups.forEach(el => this.hiddenWindows.bind(this, el)())
+        this.chekHiddens.forEach(el => el.addEventListener('click', this.toggleHiddenChildList.bind(this, el, 'group')))
         this.checkInList.forEach(el => el.addEventListener('click', this.toggleHiddenList.bind(this)))
+        this.accountCheck.forEach(el => el.addEventListener('click', this.toggleHiddenChildList.bind(this, el, 'account')))
         this.globalcheck.addEventListener('click', this.toggleGlobalObjectMaps.bind(this))
         this.listItem.forEach(el => el.children[0].addEventListener('mouseenter', this.opasity.bind(this)))
         this.listItem.forEach(el => el.children[0].addEventListener('mouseleave', this.opasityBack.bind(this)))
         this.mapUnit.forEach(el => el.addEventListener('click', this.naviToggle.bind(this, el)))
         this.reportUnit.forEach(el => el.addEventListener('click', this.naviToggle.bind(this, el)))
-        this.delete.forEach(el => el.addEventListener('click', this.confirmation.bind(this, el, 1)))
-        this.deleteGroup.forEach(el => el.addEventListener('click', this.confirmation.bind(this, el, 2)))
         this.mores.addEventListener('click', this.toggleMoresOnes.bind(this))
         this.ones.addEventListener('click', this.toggleMoresOnes.bind(this))
-        this.settingGroups.forEach(el => el.addEventListener('click', this.edit.bind(this, el)))
-        this.prefs.forEach(el => el.addEventListener('click', this.editObject.bind(this, el)))
+        this.settingsAccount.forEach(el => el.addEventListener('click', this.edit.bind(this, 'accounts', el)))
+        this.settingGroups.forEach(el => el.addEventListener('click', this.edit.bind(this, 'groups', el)))
+        this.prefs.forEach(el => el.addEventListener('click', this.edit.bind(this, 'listItem', el)))
+
         Array.from(this.cond).forEach((e, index) => {
             e.addEventListener('click', () => {
                 if (e.classList.contains('clicker')) {
                     e.classList.remove('clicker')
-                    //  filterCondition(null, this.parent.children[index])
                 }
                 else {
                     Array.from(this.cond).forEach(el => {
                         el.classList.remove('clicker')
                     })
                     e.classList.add('clicker')
-                    //   filterCondition(null, this.parent.children[index])
                 }
                 Array.from(this.listItem).forEach(e => {
                     e.children[0].children[0].classList.remove('changeColorCheck')
@@ -81,22 +76,33 @@ export class ToggleHiddenList {
                     }
                 })
                 initsmarkers.toggleMarkersIcon()
-                //   initsmarkers.statistikaObjectCar()
             })
         })
     }
 
-
-
-    async handleObjectClick(objectId) {
+    async handleClick(type, element) {
         try {
-            const creater = document.querySelector('.role').getAttribute('data-att')
-            const prava = document.querySelector('.role').getAttribute('rel')
-            const container = document.querySelector('.wrapper_set')
-            const element = objectId.closest('.listItem')
-            const [data, creators, userdata] = await Promise.all([Helpers.getAccountAll(), Requests.getUsers(prava, creater), Requests.getObjectCreater()])
+            const creater = document.querySelector('.role').getAttribute('data-att');
+            const prava = document.querySelector('.role').getAttribute('rel');
+            const container = document.querySelector('.wrapper_set');
+            const parentElement = element.closest(`.${type}`);
+            // Общий запрос данных
+            const dataPromises = [Helpers.getAccountAll(), Requests.getUsers(prava, creater)];
 
-            new EditObject(data, element, container, creater, creators, null, userdata)
+            if (type === 'listItem') {
+                dataPromises.push(Requests.getObjectCreater());
+            } else if (type === 'groups') {
+                dataPromises.push(Requests.getGroupCreater());
+            }
+            const [data, creators, userdata] = await Promise.all(dataPromises);
+            // Создание экземпляра нужного класса
+            if (type === 'listItem') {
+                new EditObject(data, parentElement, container, creater, creators, null, userdata);
+            } else if (type === 'accounts') {
+                new EditAccount(data, parentElement, container, creater, creators, null);
+            } else if (type === 'groups') {
+                new EditGroup(data, parentElement, container, creater, creators, null, userdata);
+            }
 
         } catch (error) {
             console.error('Error fetching object data:', error);
@@ -104,7 +110,7 @@ export class ToggleHiddenList {
     }
 
 
-    editObject(el) {
+    greenColorLast(el) {
         const list = document.querySelector('.border')
         if (list) {
             list.classList.remove('border')
@@ -112,158 +118,49 @@ export class ToggleHiddenList {
         }
         el.parentElement.parentElement.classList.add('border')
         el.style.color = 'green'
-
-        this.handleObjectClick(el)
     }
-    async edit(el) {
-        const id = el.parentElement.parentElement.id
-        const modal = document.querySelector('.create_group_modal')
-        const field_modal = modal.querySelectorAll('.field_modal')
-        const prefix = el.parentElement.parentElement.classList.contains('subgroup') ? 'sub' : 'group'
-        field_modal[0].setAttribute('id', id)
-        field_modal[0].setAttribute('rel', prefix)
-        await this.sett.viewModal()
-        const resSostav = await this.sett.getIdGroup(id)
-        const sostavGroup = document.querySelectorAll('.sostav_group')
-        const objectList = document.querySelectorAll('.objects_list')
-        const title = [resSostav[0].name_g, resSostav[0].face_company, resSostav[0].number_company]
-        field_modal.forEach((el, index) => el.value = title[index])
-        resSostav.forEach(it => {
-            Array.from(objectList[0].children).forEach(e => {
-                if (e.getAttribute('rel') === it.idObject) {
-                    sostavGroup[0].appendChild(e)
-                }
-            })
-        })
-    }
-    confirmation(el, num) {
-        console.log(el, num)
-        const modal = document.querySelector('.modal_confirm')
-        const popup = document.querySelector('.popup-background')
-        popup.style.display = 'block'
-        modal.style.display = 'flex'
-        const cancel = modal.querySelector('.cancel')
-        const ok = modal.querySelector('.ok_modal')
-        const nameObject = num === 1 ? el.closest('.listItem').firstChild.textContent : el.parentNode.parentNode.getAttribute('rel')
-        modal.children[1].textContent = nameObject
-        num === 1 ? modal.children[0].textContent = 'Удалить объект?' : modal.children[0].textContent = 'Удалить группу?'
-        cancel.addEventListener('click', () => {
-            modal.style.display = 'none'
-            popup.style.display = 'none'
-        })
-        ok.addEventListener('click', async () => {
-            modal.style.display = 'none'
-            popup.style.display = 'none'
-
-            if (num === 1) {
-                await this.deleteObjectToBase(el)
-                await this.deleteObjectToBaseGroups(el)
-                app.startClass()
-            }
-            if (num === 2) {
-                const id = el.parentNode.parentNode.id
-                await this.deleteGroupToBaseGroups(id)
-                app.startClass()
-                const createObject = document.querySelector('.create_object')
-                const parentElement = document.querySelector('.list_item1')
-                this.mores.classList.remove('toggle_list')
-                this.ones.classList.remove('toggle_list')
-                this.ones.classList.add('toggle_list')
-                this.viewOnes(createObject, parentElement)
-            }
-
-        })
+    edit(name, el) {
+        this.greenColorLast(el)
+        this.handleClick(name, el)
     }
 
-    async deleteObjectToBase(el) {
-        const id = el.closest('.listItem').id
-        const login = this.login
-        const params = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({ login, id })
-        }
-        const res = await fetch('api/deleteObject', params)
-        const mess = res.json()
-    }
-    async deleteGroupToBaseGroups(id) {
-        const login = this.login
-        const params = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({ login, id })
-        }
-        const res = await fetch('api/deleteGroupToBaseGroups', params)
-        const mess = res.json()
-    }
-    async deleteObjectToBaseGroups(el) {
-        const id = el.closest('.listItem').id
-        const login = this.login
-        const params = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({ login, id })
-        }
-        const res = await fetch('api/deleteObjectInGroups', params)
-        const mess = res.json()
-    }
+
     toggleMoresOnes(event) {
         const icon = event.target
         this.mores.classList.remove('toggle_list')
         this.ones.classList.remove('toggle_list')
         icon.classList.add('toggle_list')
         const parentElement = icon.parentElement;
-        const del = document.querySelectorAll('.deleteGroup')
-        const sett = document.querySelectorAll('.settingsGroup')
         if (icon.classList.contains('mores')) {
             parentElement.lastElementChild.textContent = 'Список групп';
             this.minusS.forEach(el => {
                 el.style.display = 'none'
-                el.previousElementSibling.style.display = 'flex'
-                if (el.closest('.groups').children[2]) {
-                    Array.from(el.closest('.groups').children[1].children).forEach(el => {
-                        el.lastElementChild.style.display = 'none'
-                    })
-                    el.closest('.groups').children[2].style.display = 'none'
-                }
-                else {
+                if (el.closest('.groups')) {
                     el.closest('.groups').children[1].style.display = 'none'
                 }
-
             })
-            this.viewAndHidden(del, sett)
+            this.plusS.forEach(el => {
+                el.style.display = 'none'
+            })
         }
-        if (icon.classList.contains('ones')) {
+        else {
             this.viewOnes(parentElement)
+
         }
-
-
     }
+
     viewOnes(parentElement) {
-        const del = document.querySelectorAll('.deleteGroup')
-        const sett = document.querySelectorAll('.settingsGroup')
         parentElement.lastElementChild.textContent = 'Список объектов';
         this.plusS.forEach(el => {
             el.style.display = 'none'
-            el.nextElementSibling.style.display = 'flex'
-            if (el.closest('.groups').children[2]) {
-                Array.from(el.closest('.groups').children[1].children).forEach(el => {
-                    el.lastElementChild.style.display = 'block'
-                })
-                el.closest('.groups').children[2].style.display = 'block'
-            }
-            else {
-                el.closest('.groups').children[1].style.display = 'block'
-            }
+            el.previousElementSibling.style.display = 'flex'
+            el.closest('.parent_class').children[1].style.display = 'block'
+
+
         })
-        this.viewAndHidden(del, sett, 'num')
     }
+
+
     naviToggle(el) {
         const monitoring = document.querySelectorAll('.monitoring')
         monitoring.forEach(e => e.classList.remove('tablo'))
@@ -331,7 +228,6 @@ export class ToggleHiddenList {
     toggleGlobalObjectMaps(event) {
         this.globalcheck.classList.toggle('changeGlobalCheck')
         const changeGlobalCheck = document.querySelector('.changeGlobalCheck')
-        console.log(changeGlobalCheck)
         if (changeGlobalCheck) {
             this.checkInList.forEach(e => {
                 e.classList.add('changeColorCheck')
@@ -349,8 +245,7 @@ export class ToggleHiddenList {
             })
         }
         initsmarkers ? initsmarkers.toggleMarkersIcon() : null
-        initSummary.clickListUpdateSummary()
-        initCharts ? initCharts.getDataSummary() : null
+        SimpleEventEmitter.emit('check');
         initsmarkers ? initsmarkers.createInfoControll() : null
 
     }
@@ -366,18 +261,17 @@ export class ToggleHiddenList {
             classReports ? classReports.createListObjectsSelect(element) : null
         }
         else {
-
+            console.log('клик!?')
+            SimpleEventEmitter.emit('check');
             element.classList.toggle('changeColorCheck')
             initsmarkers ? initsmarkers.toggleMarkersIcon() : null
-            initSummary.clickListUpdateSummary()
-            initCharts ? initCharts.getDataSummary() : null
             initsmarkers ? initsmarkers.createInfoControll() : null
         }
 
     }
-    toggleHiddenChildList(event) {
-        const element = event.target
-        const childCheck = (element.closest('.groups').lastElementChild).parentElement.querySelectorAll('.checkInList')
+
+    toggleHiddenChildList(element, name) {
+
         const tablo = document.querySelector('.tablo')
         if (tablo && tablo.getAttribute('rel') === 'reports') {
             this.chekHiddens.forEach(e => {
@@ -388,74 +282,48 @@ export class ToggleHiddenList {
         }
         else {
             element.classList.toggle('changeColorCheck')
-            Array.from(childCheck).forEach(el => {
-                if (element.classList.contains('changeColorCheck')) {
-                    el.classList.add('changeColorCheck')
-                }
-                else {
-                    el.classList.remove('changeColorCheck')
-                }
-            })
+            if (name === 'group') {
+                this.childCheck = (element.closest('.groups').lastElementChild).parentElement.querySelectorAll('.checkInList')
+                this.iteration(element, this.childCheck)
+            }
+            else {
+                this.childCheck = (element.closest('.accounts').lastElementChild).parentElement.querySelectorAll('.checkInList')
+                this.groupCheck = (element.closest('.accounts').lastElementChild).parentElement.querySelectorAll('.chekHidden')
+                this.iteration(element, this.childCheck)
+                this.iteration(element, this.groupCheck)
+            }
             initsmarkers ? initsmarkers.toggleMarkersIcon() : null
-            initSummary.clickListUpdateSummary()
-            initCharts ? initCharts.getDataSummary() : null
+            SimpleEventEmitter.emit('check');
             initsmarkers ? initsmarkers.createInfoControll() : null
         }
-
-
-
     }
+
+
+    iteration(element, array) {
+        array.forEach(el => {
+            if (element.classList.contains('changeColorCheck')) {
+                el.classList.add('changeColorCheck')
+            }
+            else {
+                el.classList.remove('changeColorCheck')
+            }
+        })
+    }
+
+
     hiddenList(event) {
         const element = event.target
         element.style.display = 'none'
-        element.previousElementSibling.style.display = 'flex'
-        if (element.closest('.groups').children[2]) {
-            Array.from(element.closest('.groups').children[1].children).forEach(el => {
-                el.lastElementChild.style.display = 'none'
-            })
-            element.closest('.groups').children[2].style.display = 'none'
-        }
-        else {
-            element.closest('.groups').children[1].style.display = 'none'
-        }
-
+        element.nextElementSibling.style.display = 'flex'
+        element.closest('.parent_class').lastElementChild.style.display = 'none'
     }
 
-    viewAndHidden(del, sett, num) {
-        const role = document.querySelector('.role').getAttribute('rel')
-        if (role === 'Администратор') {
-            if (!num) {
-                del.forEach(e => {
-                    e.style.display = 'block'
-                })
-                sett.forEach(e => {
-                    e.style.display = 'block'
-                })
-            }
-            else {
-                del.forEach(e => {
-                    e.style.display = 'none'
-                })
-                sett.forEach(e => {
-                    e.style.display = 'none'
-                })
-            }
-        }
 
-    }
     viewList(event) {
         const element = event.target
         element.style.display = 'none'
-        element.nextElementSibling.style.display = 'flex'
-        if (element.closest('.groups').children[2]) {
-            Array.from(element.closest('.groups').children[1].children).forEach(el => {
-                el.lastElementChild.style.display = 'block'
-            })
-            element.closest('.groups').children[2].style.display = 'block'
-        }
-        else {
-            element.closest('.groups').children[1].style.display = 'block'
-        }
+        element.previousElementSibling.style.display = 'flex'
+        element.closest('.parent_class').lastElementChild.style.display = 'block'
 
     }
     sortListUp(event) {

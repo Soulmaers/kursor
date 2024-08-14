@@ -74,8 +74,6 @@ export class InterfaceAccount {
     async createTableAccount() {
         this.table.innerHTML = ContentGeneration.addTableAccount()
         this.data = await Helpers.getAccountAll()
-        console.log(this.data)
-        //  this.usersData = await Requests.getAcc()
         this.addContentAccount()
     }
 

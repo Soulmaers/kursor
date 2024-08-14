@@ -32,7 +32,7 @@ export class EditContollClick {
                 break
             case 'object': new EditObject(this.data, this.element, this.container, this.creator, this.creators, this.instance, this.usersdata)
                 break
-            case 'group': new EditGroup(this.data, this.element, this.container, this.login, this.prava, this.creator, this.creators, this.instance, this.usersdata)
+            case 'group': new EditGroup(this.data, this.element, this.container, this.creator, this.creators, this.instance, this.usersdata)
                 break
             case 'retra': new EditRetra(this.data, this.element, this.container, this.login, this.prava, this.creator, this.creators, this.instance, this.usersdata)
                 break

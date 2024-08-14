@@ -1870,11 +1870,12 @@ div.spoyler {
 
 .checkInList {
   color: rgba(6, 28, 71, 1);
-  padding: 0 8px;
-  padding-right: 15px;
   font-size: 0.7rem;
 }
 
+.icon_controll {
+  margin: 0 3px;
+}
 
 .menu {
   width: 50%;
@@ -2473,12 +2474,41 @@ div.spoyler {
   font-family: Arial;
   font-weight: bold;
   position: relative;
+  background-color: #c5c1c1;
+  border-bottom: 1px solid #f0eded;
+  display: flex;
+  align-items: center;
+  color: rgba(6, 28, 71, 1);
+
+}
+
+
+.titleModalGroup {
+  padding: 5px 8px;
+  font-size: 0.8rem;
+  font-family: Arial;
+  font-weight: bold;
+  position: relative;
+  background-color: #e9dede;
+  border-bottom: 1px solid #f0eded;
+  display: flex;
+  align-items: center;
+  color: rgba(6, 28, 71, 1);
+
+}
+
+.titleModalObject {
+  padding: 5px 8px;
+  font-size: 0.8rem;
+  font-family: Arial;
+  font-weight: bold;
+  position: relative;
   background-color: #f5f5f5;
   border-bottom: 1px solid #f0eded;
   display: flex;
   align-items: center;
   color: rgba(6, 28, 71, 1);
-  padding-left: 40px;
+
 }
 
 .pAll {
@@ -2502,9 +2532,11 @@ div.spoyler {
   width: 900px;
 }
 
-.chekHidden {
+.chekHidden,
+.accountCheck {
   margin: 0 5px;
   cursor: pointer;
+  font-size: 0.7rem;
 }
 
 .windowStatistic {
@@ -4606,7 +4638,6 @@ input[type="date"] {
 }
 
 .border {
-  z-index: 2;
   background-color: #fff;
 }
 
@@ -6132,7 +6163,7 @@ input[type="text"]:focus {
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
   padding: 0;
-  margin: 0 10px;
+
 }
 
 
@@ -6175,6 +6206,7 @@ input[type="text"]:focus {
   display: flex;
   border-bottom: 1px solid #f0eded;
   position: relative;
+  padding: 5px 8px;
 }
 
 .listItem:hover {
@@ -6183,6 +6215,10 @@ input[type="text"]:focus {
 
 .listItemSklad:hover {
   background-color: #f5f5f5;
+}
+
+.last_elem {
+  margin-right: 10px;
 }
 
 .icon {
@@ -10028,7 +10064,6 @@ i.changeColorCheck {
 .report_map_InList {
   color: gray;
   font-size: 0.7rem;
-  padding: 0 5px;
 }
 
 .act_modules {
@@ -10534,26 +10569,20 @@ i.deleteGroup {
   display: none;
 }
 
-i.settingsGroup {
-  cursor: pointer;
-  font-size: 0.75rem;
-  color: rgba(6, 28, 71, 1);
-  margin-left: 5px;
-  position: absolute;
-  top: 7px;
-  right: 30px;
-  display: none;
-}
+
 
 .rightLine {
   justify-content: end;
 }
 
 
-.pref {
+.pref,
+.settingsGroup,
+.settingsAccount {
   font-size: 0.75rem;
-
-  margin: 0 10px;
+  color: rgba(6, 28, 71, 1);
+  margin: 0 3px;
+  cursor: pointer;
 }
 
 

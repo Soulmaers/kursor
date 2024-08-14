@@ -167,59 +167,79 @@ export class Detalisation {
         });
     }
     async toogleModalWindow(event) {
-        this.time = null
+        this.time = null;
         this.navstat.forEach(el => {
-            el.classList.remove('activStatic')
-        })
-        const element = event.currentTarget
-        element.classList.add('activStatic')
-        this.container.children[1].remove()
-        this.container.children[1].remove()
-        switch (element.id) {
-            case 'nav1':
-                this.nav = 'nav1'
-                this.container.insertAdjacentHTML('beforeend', ` ${jobTSDetalisation}`);
-                this.eskiz()
-                this.structura.forEach((elem, index) => { createChart(Object.values(elem)[0].datas, index + 1, this.container) })
-                break;
-            case 'nav2':
-                this.nav = 'nav2'
-                this.container.insertAdjacentHTML('beforeend', ` ${jobTS}`);
-                this.updateHTML()
-                this.eskiz()
-                this.structura.forEach((elem, index) => {
-                    const data = this.dannieSortJobTS(Object.values(elem)[0].intervals)
-                    createJobTS(data, index + 1, this.container)
+            el.classList.remove('activStatic');
+        });
 
-                })
-                break;
-            case 'nav3':
-                this.nav = 'nav3'
-                this.container.insertAdjacentHTML('beforeend', ` ${oilTS}`);
-                this.updateHTML()
-                this.eskiz()
-                this.datas = await this.getParamsOilAndMileage(3)
-                let zap = this.datas.reduce((acc, el) => Number(el.zapravka) + acc, 0)
-                let ras = this.datas.reduce((acc, el) => Number(el.rashod) + acc, 0)
-                const structura = [
-                    { day: this.datas[this.datas.length - 1] },
-                    { yesterday: this.datas[this.datas.length - 2] },
-                    { week: { zapravka: zap, rashod: ras } }
-                ];
-                structura.forEach((elem, index) => {
-                    createOilTS(elem, index + 1, this.container)
-                })
-                break;
-            case 'nav4':
-                this.nav = 'nav4'
-                this.container.insertAdjacentHTML('beforeend', ` ${melageTS}`);
-                const interval = document.querySelector('.intervalTitle')
-                interval.innerHTML = `10 дней: ${this.convertTime(4)} <div class="calen" rel="cal2"></div>${cal2}`
-                this.datas = await this.getParamsOilAndMileage(4)
-                createMelagiTS(this.datas, 1, this.container)
-                break;
+        const element = event.currentTarget;
+        element.classList.add('activStatic');
+
+        // Удаляем старые элементы графиков в один вызов
+        while (this.container.children.length > 1) {
+            this.container.children[1].remove();
         }
-        this.initEventListenersCalendar()
+
+        // Используем requestAnimationFrame для отложенного рендеринга
+        requestAnimationFrame(async () => {
+            switch (element.id) {
+                case 'nav1':
+                    this.nav = 'nav1';
+                    this.container.insertAdjacentHTML('beforeend', ` ${jobTSDetalisation}`);
+                    this.eskiz();
+                    await this.renderChartData(this.structura, createChart);
+                    break;
+                case 'nav2':
+                    this.nav = 'nav2';
+                    this.container.insertAdjacentHTML('beforeend', ` ${jobTS}`);
+                    this.updateHTML();
+                    this.eskiz();
+                    await this.renderChartData(this.structura, createJobTS);
+                    break;
+                case 'nav3':
+                    this.nav = 'nav3';
+                    this.container.insertAdjacentHTML('beforeend', ` ${oilTS}`);
+                    this.updateHTML();
+                    this.eskiz();
+                    this.datas = await this.getParamsOilAndMileage(3);
+                    await this.renderOilData(this.datas);
+                    break;
+                case 'nav4':
+                    this.nav = 'nav4';
+                    this.container.insertAdjacentHTML('beforeend', ` ${melageTS}`);
+                    const interval = document.querySelector('.intervalTitle');
+                    interval.innerHTML = `10 дней: ${this.convertTime(4)} <div class="calen" rel="cal2"></div>${cal2}`;
+                    this.datas = await this.getParamsOilAndMileage(4);
+                    await this.renderMelageData(this.datas);
+                    break;
+            }
+            this.initEventListenersCalendar();
+        });
+    }
+
+    async renderChartData(structura, createChartFunc) {
+        for (const [index, elem] of structura.entries()) {
+            const data = Object.values(elem)[0].datas;
+            createChartFunc(data, index + 1, this.container);
+        }
+    }
+
+    async renderOilData(datas) {
+        const zap = datas.reduce((acc, el) => Number(el.zapravka) + acc, 0);
+        const ras = datas.reduce((acc, el) => Number(el.rashod) + acc, 0);
+        const structura = [
+            { day: datas[datas.length - 1] },
+            { yesterday: datas[datas.length - 2] },
+            { week: { zapravka: zap, rashod: ras } }
+        ];
+
+        for (const [index, elem] of structura.entries()) {
+            createOilTS(elem, index + 1, this.container);
+        }
+    }
+
+    async renderMelageData(datas) {
+        createMelagiTS(datas, 1, this.container);
     }
     async getParamsOilAndMileage(num) {
         const data = this.time && this.time[0].length > 2 ? [this.time[0][0], this.time[1][0]] : [convertDate(9), convertDate(0)]

@@ -7,31 +7,44 @@ export class CreateDOMElements {
     static createListObject(data) {
         const groupsSklad = document.querySelectorAll('.groupsSklad')
         if (groupsSklad) groupsSklad.forEach(e => e.remove())
-        const allModel = data.map(e => e.filter(it => it[0].result.length !== 0 && it[0].result[0].osi !== '-')).filter(e => e.length > 0);
+
+
+        const allModel = data
+            .map(el => ({
+                ...el,
+                objects: el.objects.filter(obj =>
+                    obj[0].result &&
+                    obj[0].result.length > 0 &&
+                    obj[0].result[0].osi !== '-'
+                )
+            }))
+            .filter(el => el.objects.length > 0); // Фильтрация элементов с непустыми objects
+
+        console.log(allModel);
         for (let el of allModel) {
             const lowList = document.querySelector('.list_body')
             const group = document.createElement('div')
             group.classList.add('groupsSklad')
-            const nameGroup = el[0][7].replace(/\s/g, '_')
+            const nameGroup = el.group_name
             group.classList.add(`${nameGroup}`)
-            group.setAttribute('id', el[0][8])
+            group.setAttribute('id', el.group_id)
             group.style.display = 'flex',
                 group.style.flexDirection = 'column'
             group.style.width = 100 + '%',
                 lowList.appendChild(group)
             const titleModal = document.createElement('div')
             titleModal.classList.add('titleModalSklad')
-            titleModal.textContent = `${nameGroup}` + ' ' + '(' + `${el.length}` + ')'
+            titleModal.textContent = `${nameGroup}`
             group.appendChild(titleModal)
             const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModalSklad')
             group.classList.add(`${nameGroup}`)
             group.setAttribute('rel', `${nameGroup}`)
             group.appendChild(hiddenModal)
-            for (let elem of el) {
-                if (Object.values(elem[0]).length !== 0) {
-                    CreateDOMElements.createIconsAndLeftSpisok(elem, hiddenModal) // создание объектов, покраска колес, установка статусов и значений датчиков
-                }
+            console.log(el)
+            for (let elem of el.objects) {
+                CreateDOMElements.createIconsAndLeftSpisok(elem, hiddenModal) // создание объектов, покраска колес, установка статусов и значений датчиков
+
             }
         }
     }
@@ -39,10 +52,10 @@ export class CreateDOMElements {
     static createIconsAndLeftSpisok(elem, hiddenModal) {
         const listItemCar = document.createElement('div')
         listItemCar.classList.add('listItemSklad')
-        listItemCar.classList.add(`${elem[4]}`)
-        listItemCar.setAttribute('rel', `${elem[4]}`)
-        listItemCar.setAttribute('id', `${elem[4]}`)
-        listItemCar.textContent = elem[0].message
+        listItemCar.classList.add(`${Number(elem.object_id)}`)
+        listItemCar.setAttribute('rel', `${Number(elem.object_id)}`)
+        listItemCar.setAttribute('id', `${Number(elem.object_id)}`)
+        listItemCar.textContent = elem.object_name
         hiddenModal.appendChild(listItemCar)
     }
 

@@ -1,5 +1,5 @@
 
-import { data } from './content.js'
+
 import { getUsers } from './admin.js'
 import { DraggableContainer } from '../class/Dragdown.js'
 import { Tooltip } from '../class/Tooltip.js'
@@ -8,7 +8,7 @@ import { CloseBTN } from '../class/CloseBTN.js'
 import { ResizeContainer } from '../class/ResizeContainer.js'
 import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 import { storTitleList } from './content.js'
-import { initCharts, initSummary } from './spisokModules/class/SpisokObject.js'
+import { initCharts, initSummary } from './spisokModules/class/AddListSpisok.js'
 
 
 

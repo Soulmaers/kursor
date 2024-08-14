@@ -1,6 +1,7 @@
 const wialonModule = require('../modules/wialon.module');
 const wialonService = require('./wialon.service');
 const databaseRetranslation = require('./databaseRetranslation.service');
+const WialonOrigin = require('../modules/wialon/WialonOrigin.js');
 class WialonClassMethods {
     constructor(retranslation) {
         this.retranslation = retranslation
@@ -9,6 +10,7 @@ class WialonClassMethods {
         this.uniqRetraID = retranslation.incriment
         this.creater = retranslation.protokol
         this.nameRetra = retranslation.nameRetra
+        this.instance = null
         this.init()
     }
 
@@ -16,21 +18,32 @@ class WialonClassMethods {
         try {
             await this.getSessionWialon();
             await this.getObjects();
-
             await this.addGroup();
+            this.controllStartClass();
+            setInterval(() => this.controllStartClass(), 150000)
         } catch (error) {
             console.error('Ошибка при инициализации WialonClassMethods:', error);
             throw error;
         }
     }
 
+
+    controllStartClass() {
+        if (this.instance) {
+            this.instance.inits()
+        }
+        else {
+            this.instance = new WialonOrigin(this.session);
+        }
+
+    }
     async getSessionWialon() {
         this.session = await wialonModule.login('0f481b03d94e32db858c7bf2d8415204977173E354D49AA7AFA37B01431539AEAC5DAD5E');
     }
 
     async getObjects() {
-        const [data, propertyObjects, propertyGroups] = await Promise.all([
-            wialonService.getDataFromWialon(this.session),
+        const [propertyObjects, propertyGroups] = await Promise.all([
+            //    wialonService.getDataFromWialon(this.session),
             wialonService.getPropertyObjects(this.session),
             wialonService.getPropertyGroups(this.session)
         ]);

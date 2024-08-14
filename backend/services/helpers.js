@@ -52,6 +52,11 @@ exports.getDataToInterval = async (active, t1, t2) => {
     return arrayData
 }
 
+exports.getDataTemporaryToInterval = async (active, t1, t2) => {
+    const resnew1 = await databaseService.getTemporaryData(t1, t2, active)  //получение параметров за интервал
+    return resnew1
+}
+
 
 exports.timefn = () => { //форматирование интервала времени с 0 часов
     const currentDate = new Date();
@@ -73,6 +78,27 @@ exports.format = (data) => {  //форматирование структуры 
     const uniqueMap = new Map(resultData.map(subArr => [subArr[0], subArr]));
     const uniqueArr = Array.from(uniqueMap.values());
     return uniqueArr
+}
+
+exports.formats = (data) => {
+    // Функция для извлечения всех объектов из группы
+    const res = data.flatMap(account => [
+        ...account.groups.flatMap(group => group.objects),
+        ...account.ungroupedObjects
+    ]);
+    const filteredObjects = res
+        .filter(obj => obj) // Фильтруем по наличию ключа '6'
+        .map(obj => [obj.object_id, obj.object_name, obj.group_name ? obj.group_name : 'Без группы', obj.group_id ? obj.group_id : 'ungrouped']); // Извлекаем значение по ключу '6'
+
+    return filteredObjects
+}
+
+exports.formatFinal = (data) => {
+    const res = data.flatMap(account => [
+        ...account.groups.flatMap(group => group.objects),
+        ...account.ungroupedObjects
+    ]);
+    return res
 }
 
 exports.processing = async (arr, timez, idw, geoLoc, group, name, start) => { // подготовка шаблона строки события
@@ -101,7 +127,7 @@ exports.processing = async (arr, timez, idw, geoLoc, group, name, start) => { //
     return { msg: mess, logins: res }
 }
 
-
+/*
 sortData = (datas) => {  // подготовка вложенности структуры групп и объектов
     console.log('здесь?')
     //  console.log(datas)
@@ -137,7 +163,7 @@ sortData = (datas) => {  // подготовка вложенности стру
         return acc;
     }, {}));
     return res
-}
+}*/
 
 
 
@@ -168,7 +194,9 @@ async function setHistoryStatistiks(data, coefPWR) {
     // console.log(arrayData)
 }
 exports.setDataToBase = async (imei, port, info, id) => {
+    //  console.log(id)
     const data = await databaseService.getSensStorMetaFilter(imei, port, id) //получение привязанных параметров
+    //  console.log(data)
     if (data.length !== 0) {
         const idw = data[0].idw
         const [coefEngine, coefPWR, coefMileage] = await Promise.all([
@@ -202,7 +230,6 @@ exports.setDataToBase = async (imei, port, info, id) => {
             }
             return { key: el.meta, params: el.params, value: String(computedValue), status, data: dataTime };
         });
-
         // Создаем Map для хранения новых значений для params
         const updatedValues = new Map();
         for (let val of data.filter(e => e.params.startsWith('oil') && e.params.length <= 4)) {
@@ -243,6 +270,7 @@ exports.setDataToBase = async (imei, port, info, id) => {
             objectToUpdate.data = nowTime
             objectToUpdate.status = 'true'
         }
+        // console.log(value)
         await databaseService.setUpdateValueSensStorMeta(imei, port, value)  //обновление значений привязанных параметров
 
         const tcpObject = info
@@ -315,12 +343,34 @@ exports.setDataToBase = async (imei, port, info, id) => {
                     const summatorValue = calculateSummatorOil(value, params)
                     obj['summatorOil'] = summatorValue ? String(summatorValue) : summatorValue
                 }
+
                 await databaseService.setAddDataToGlobalBase(obj)  //запись отфильтрованных параметров и значений в накопительную таблицу датчиков
+                await temporary(obj)
             }
         }
     }
 }
 
+const temporary = (() => {
+    let lastDayChecked = new Date().toISOString().split('T')[0]; // Хранит последний проверенный день
+    return async function (value) {
+        const columns = ['idw', 'data', 'lat', 'lon', 'speed', 'sats', 'oil', 'course', 'pwr', 'engine', 'mileage', 'engineOn', 'last_valid_time'];
+        // Фильтруем значения
+        const filteredValue = Object.keys(value)
+            .filter(key => columns.includes(key))
+            .reduce((acc, key) => {
+                acc[key] = value[key]; // Создаем новый объект с отфильтрованными значениями
+                return acc;
+            }, {});
+        const currentDate = new Date().toISOString().split('T')[0]; // Получаем текущую дату в формате YYYY-MM-DD
+        // Проверка, изменился ли день
+        if (lastDayChecked !== currentDate) {
+            await databaseService.clearTemporary(); // Очищаем таблицу, если день изменился
+            lastDayChecked = currentDate; // Обновляем последний проверенный день
+        }
+        await databaseService.setTemporary(filteredValue); // Записываем данные в таблицу
+    };
+})();
 
 function calculateSummatorOil(value, params) {
     const values = params.map(it => it.param)

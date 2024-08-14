@@ -1,4 +1,3 @@
-
 //import { viewList } from './SpisokObject.js'
 export const objViewContent = {
     set_one: 'account',

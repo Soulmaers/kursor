@@ -3,86 +3,111 @@ const databaseService = require('../../services/database.service');
 const JobToBase = require('../navtelecom/JobToBase')
 const wialonService = require('../../services/wialon.service.js')
 const helpers = require('../../services/helpers.js');
-const globalstart = require('../../controllers/data.controller.js');
+const { HelpersUpdateParams } = require('../../services/HelpersUpdateParams.js')
 class WialonOrigin {
     constructor(session) {
         this.session = session
         this.inits()
     }
     async inits() {
-        const data = await wialonService.getDataFromWialon(); //получение объектов с wialon
+        const data = await wialonService.getDataFromWialon(this.session); //получение объектов с wialon
         if (data) {
-            await Promise.all([
-                this.getObjectData(data),
-                globalstart.start(this.session, data)
-            ]);
+            Promise.all([this.getObjectData(data), HelpersUpdateParams.update(this.session)])
         } else {
             this.inits();
         }
     }
-    async getObjectData(data) {
-        const dataArray = data?.items ?? [];
-        const now = Math.floor(Date.now() / 1000);
-        const phones = await Promise.all(dataArray.map(el => wialonService.getUniqImeiAndPhoneIdDataFromWialon(el.id))); //получение IMEI, контактов с wialon
-        // Пакетная обработка обновлений в базе данных
-        const updateTasks = [];
-        for (let i = 0; i < dataArray.length; i++) {
-            const el = dataArray[i];
-            const phone = phones[i];
-            const idw = el.id;
 
-            if (!phone?.item?.uid) continue;
-            const res = await databaseService.objectsWialonImei(String(phone.item.uid)); // валидация полученного объекта по IMEI и id
-            // console.log(res)
-            if (!res?.length) continue;
-            const timeBase = await databaseService.getLastTimeMessage(idw);
-            const oldTime = timeBase?.[0]?.time_reg ? Number(timeBase[0].time_reg) : now - 1000;
-            const [result] = await Promise.all([
-                wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i'), //запрос параметров по объекту за интервал времени
-            ]);
 
-            if (!result) continue;
-            const allArrayData = [];
-            result.messages.forEach(async (e) => {
-                const allObject = {
-                    port: 'wialon',
-                    imei: phone.item.uid,
-                    idObject: idw,
-                    nameCar: el.nm,
-                    time: e.t,
-                    lat: e.pos?.y,
-                    lon: e.pos?.x,
-                    course: e.pos?.c,
-                    speed: e.pos?.s,
-                    time_reg: Math.floor(new Date().getTime() / 1000)
-                };
-                Object.keys(e.p || {}).forEach(key => {
-                    allObject[key] = e.p[key];
-                });
-                if (e.i !== undefined) {
-                    let binary = e.i.toString(2).padStart(16, '0'); // Assuming 16 inputs for consistency
-                    binary.split("").reverse().forEach((bit, index) => {
-                        allObject[`in${index + 1}`] = bit;
-                    });
+    getObjectData = (() => {
+        const timeCache = new Map(); // Кэш для хранения времени по каждому idw
+        return async function (data) {
+            const dataArray = data?.items ?? [];
+            const now = Math.floor(Date.now() / 1000);
+            const phones = [];
+
+            // Получаем телефоны и IMEI, но без Promise.all
+            for (const el of dataArray) {
+                const phone = await wialonService.getUniqImeiAndPhoneIdDataFromWialon(el.id, this.session);
+                phones.push(phone);
+            }
+
+            // Обработка данных из Wialon
+            for (let i = 0; i < dataArray.length; i++) {
+                const el = dataArray[i];
+                const phone = phones[i];
+                const idw = el.id;
+
+                if (!phone?.item?.uid) continue;
+
+                const res = await databaseService.objectsWialonImei(String(phone.item.uid));
+                if (!res?.length) continue;
+
+                let oldTime = timeCache.get(idw);
+
+                if (!oldTime) {
+                    // Если времени в кэше нет, делаем запрос в базу данных
+                    const timeBase = await databaseService.getLastTimeMessage(idw);
+                    oldTime = timeBase?.[0]?.time_reg ? Number(timeBase[0].time_reg) : now - 1000;
+                    timeCache.set(idw, oldTime); // Сохраняем время в кэш
                 }
-                if (e.o !== undefined) {
-                    let binaryo = e.o.toString(2).padStart(16, '0'); // Assuming 16 outputs for consistency
-                    binaryo.split("").reverse().forEach((bit, index) => {
-                        allObject[`out${index + 1}`] = bit;
+
+                const result = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i', this.session);
+                if (!result) continue;
+
+                const allArrayData = [];
+
+                for (const e of result.messages) {
+                    const allObject = {
+                        port: 'wialon',
+                        imei: phone.item.uid,
+                        idObject: idw,
+                        nameCar: el.nm,
+                        time: e.t,
+                        lat: e.pos?.y,
+                        lon: e.pos?.x,
+                        course: e.pos?.c,
+                        speed: e.pos?.s,
+                        time_reg: Math.floor(new Date().getTime() / 1000)
+                    };
+
+                    Object.keys(e.p || {}).forEach(key => {
+                        allObject[key] = e.p[key];
                     });
+
+                    if (e.i !== undefined) {
+                        let binary = e.i.toString(2).padStart(16, '0');
+                        binary.split("").reverse().forEach((bit, index) => {
+                            allObject[`in${index + 1}`] = bit;
+                        });
+                    }
+
+                    if (e.o !== undefined) {
+                        let binaryo = e.o.toString(2).padStart(16, '0');
+                        binaryo.split("").reverse().forEach((bit, index) => {
+                            allObject[`out${index + 1}`] = bit;
+                        });
+                    }
+
+                    allArrayData.push(allObject);
                 }
-                allArrayData.push(allObject);
-            });
-            updateTasks.push(this.updateDatabase(allArrayData, res[0].idObject));
+
+                // Запись в базу данных
+                await this.updateDatabase(allArrayData, res[0].idx);
+
+                // Обновляем кэш с новым временем
+                timeCache.set(idw, now);
+            }
+
+            console.log('Все итерации завершены');
         }
-
-        await Promise.all(updateTasks);
-    }
+    })();
     async updateDatabase(allArrayData, res) {
 
         if (allArrayData.length !== 0) {
             await this.setData(allArrayData[0].imei, allArrayData[0].port, allArrayData, res);
             await this.setValidationImeiToBase(allArrayData);
+
         }
 
     }
@@ -93,12 +118,21 @@ class WialonOrigin {
     async setValidationImeiToBase(allArrayData) {
         const table = 'wialon_origin';
         const base = new JobToBase();
+
+        // Создание таблицы
         await base.createTable(table);
 
-        const columnTasks = allArrayData.map(elem => base.fillingTableColumns(elem, table));
-        const rowTasks = allArrayData.map(elem => base.fillingTableRows(elem, table));
+        // Последовательная обработка колонок
+        for (const elem of allArrayData) {
+            await base.fillingTableColumns(elem, table);
+        }
 
-        await Promise.all([...columnTasks, ...rowTasks]);
+        // Последовательная обработка строк
+        for (const elem of allArrayData) {
+            await base.fillingTableRows(elem, table);
+        }
+
+        // console.log('Все данные успешно обработаны и записаны в базу');
     }
 }
 

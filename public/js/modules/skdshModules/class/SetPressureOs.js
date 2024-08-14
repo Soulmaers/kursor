@@ -161,6 +161,7 @@ export class SetPressureOs {
             body: JSON.stringify({ id, activePost, idw })
         })
         const barValue = await bar.json();
+        console.log(barValue)
         const keys = [];
         if (barValue.length) {
             for (let key in barValue) {

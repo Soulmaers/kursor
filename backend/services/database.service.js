@@ -278,7 +278,7 @@ exports.getObjects = async (login) => {
 exports.objectsImei = async (imei) => {
     try {
         const pool = await connection
-        postModel = `SELECT idObject FROM object_table WHERE imei=@imei`
+        postModel = `SELECT idx FROM objects WHERE imeidevice=@imei`
         const result = await pool.request()
             .input('imei', imei)
             .query(postModel)
@@ -292,7 +292,7 @@ exports.objectsImei = async (imei) => {
 exports.objectsWialonImei = async (imei) => {
     try {
         const pool = await connection
-        postModel = `SELECT idObject FROM object_table WHERE imei=@imei`
+        postModel = `SELECT idx FROM objects WHERE imeidevice=@imei`
         const result = await pool.request()
             .input('imei', imei)
             .query(postModel)
@@ -363,14 +363,14 @@ exports.objects = async (arr) => {
     try {
         const pool = await connection
         if (typeof arr === 'string') {
-            const postModel = `SELECT * FROM objects WHERE idObject = @idw`
+            const postModel = `SELECT * FROM objects WHERE idx = @idx`
             const result = await pool.request()
-                .input('idw', arr)
+                .input('idx', arr)
                 .query(postModel)
             return result.recordset
         }
         else {
-            const postModel = `SELECT * FROM objects WHERE idObject IN (${arr.map(id => `'${id}'`).join(',')})`;
+            const postModel = `SELECT * FROM objects WHERE idx IN (${arr.map(id => `'${id}'`).join(',')})`;
             const result = await pool.request()
                 .query(postModel)
             return result.recordset
@@ -417,111 +417,6 @@ exports.geoLastInterval = async (time1, time2, idw) => {
 
 }
 
-exports.getUserGroupsAndObjects = async (userId) => {
-    try {
-        console.log(Number(userId));
-        const pool = await connection;
-
-        // Получаем аккаунты пользователя
-        let accountResult = await pool.request()
-            .input('incriment', sql.Int, Number(userId))
-            .query(`
-                SELECT 
-                    incriment AS inc_account,
-                    name,
-                    idx AS id
-                FROM accounts;
-            `);
-
-        let accounts = accountResult.recordset;
-
-        // Параллельно получаем группы и объекты для всех аккаунтов
-        await Promise.all(accounts.map(async (account) => {
-            // Получаем группы и объекты для каждого аккаунта
-            let groupAndObjectResult = await pool.request()
-                .input('accountId', sql.Int, account.inc_account)
-                .query(`
-                    SELECT 
-                        g.incriment AS inc_group, 
-                        g.nameGroup, 
-                        g.idx AS group_id,
-                        o.incriment AS inc_object, 
-                        o.objectname,
-                        o.idx AS object_id
-                    FROM accountGroups ag
-                    JOIN groups g ON ag.uniqGroupID = g.incriment
-                    JOIN groupsAndObjects go ON g.incriment = go.uniqGroupID
-                    JOIN objects o ON go.uniqObjectID = o.incriment
-                    WHERE ag.uniqAccountID = @accountId
-                    ORDER BY g.incriment, o.incriment;
-                `);
-
-            // Обработка групп и объектов
-            const groups = groupAndObjectResult.recordset.reduce((acc, row) => {
-                if (!acc[row.inc_group]) {
-                    acc[row.inc_group] = {
-                        inc_group: row.inc_group,
-                        group_name: row.nameGroup,
-                        group_id: row.group_id,
-                        objects: []
-                    };
-                }
-                acc[row.inc_group].objects.push({
-                    inc_object: row.inc_object,
-                    object_name: row.objectname,
-                    object_id: row.object_id
-                });
-                return acc;
-            }, {});
-
-            // Получаем объекты, которые не принадлежат ни одной группе
-            let ungroupedObjectsResult = await pool.request()
-                .input('accountId', sql.Int, account.inc_account)
-                .query(`
-                    SELECT 
-                        o.incriment AS inc_object, 
-                        o.objectname,
-                        o.idx AS object_id
-                    FROM accountObjects ao
-                    JOIN objects o ON ao.uniqObjectID = o.incriment
-                    LEFT JOIN groupsAndObjects go ON o.incriment = go.uniqObjectID
-                    WHERE ao.uniqAccountID = @accountId
-                    AND go.uniqObjectID IS NULL
-                    ORDER BY o.incriment;
-                `);
-
-            // Обновляем данные объектов
-            account.groups = Object.values(groups);
-            account.ungroupedObjects = ungroupedObjectsResult.recordset.map(row => ({
-                inc_object: row.inc_object,
-                object_name: row.objectname,
-                object_id: row.object_id
-            }));
-
-            // Обновляем объекты в группах и вне групп
-            await Promise.all([
-                ...account.groups.flatMap(group =>
-                    group.objects.map(async (obj) => {
-                        const params = await databaseService.loadParamsViewList(obj.object_name, Number(obj.object_id), obj);
-                        const cleanParams = JSON.parse(JSON.stringify(params)); // Убираем циклические ссылки
-                        Object.assign(obj, cleanParams); // Обновляем объект данными из loadParamsViewList
-                    })
-                ),
-                ...account.ungroupedObjects.map(async (obj) => {
-                    const params = await databaseService.loadParamsViewList(obj.object_name, Number(obj.object_id), obj);
-                    const cleanParams = JSON.parse(JSON.stringify(params)); // Убираем циклические ссылки
-                    Object.assign(obj, cleanParams); // Обновляем объект данными из loadParamsViewList
-                })
-            ]);
-        }));
-
-
-        return accounts;
-    } catch (err) {
-        console.error('Ошибка при получении данных:', err);
-    }
-}
-
 
 exports.getParamsToPressureAndOilToBase = async (time1, time2, idw, columns, num) => {
     const value = columns.filter(e => e !== null)
@@ -557,6 +452,74 @@ exports.getParamsToPressureAndOilToBase = async (time1, time2, idw, columns, num
     }
 };
 
+exports.getTemporaryData = async (time1, time2, idw) => {
+    try {
+        const pool = await connection;
+
+        // Формируем SQL-запрос
+        const insertQuery = `
+           SELECT * FROM temporary WHERE idw=@idw AND last_valid_time >= @time1 AND last_valid_time <= @time2`;
+        const result = await pool.request()
+            .input('idw', String(idw))
+            .input('time2', String(time2))
+            .input('time1', String(time1))
+            .query(insertQuery)
+
+        return result.recordset.length ? result.recordset : [];
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
+exports.setTemporary = async (data) => {
+    try {
+        const pool = await connection;
+
+        // Формируем SQL-запрос
+        const insertQuery = `
+            INSERT INTO temporary (idw, data, lat, lon, speed, sats, oil, course, pwr, engine, mileage, engineOn, last_valid_time)
+            VALUES (@idw, @data, @lat, @lon, @speed, @sats, @oil, @course, @pwr, @engine, @mileage, @engineOn, @last_valid_time)
+        `;
+
+        const request = pool.request();
+
+        // Добавляем параметры из объекта data
+        request
+            .input('idw', data.idw)
+            .input('data', data.data)
+            .input('lat', data.lat)
+            .input('lon', data.lon)
+            .input('speed', data.speed)
+            .input('sats', data.sats)
+            .input('oil', data.oil)
+            .input('course', data.course)
+            .input('pwr', data.pwr)
+            .input('engine', data.engine)
+            .input('mileage', data.mileage)
+            .input('engineOn', data.engineOn)
+            .input('last_valid_time', data.last_valid_time);
+
+        // Выполняем запрос
+        await request.query(insertQuery);
+    } catch (e) {
+        console.error("Error inserting data:", e);
+    }
+};
+
+
+exports.clearTemporary = async () => {
+    try {
+        const pool = await connection;
+        const deleteQuery = `DELETE FROM temporary`;
+        const request = pool.request();
+
+        // Выполняем запрос на удаление
+        await request.query(deleteQuery);
+    } catch (e) {
+        console.error("Error clearing temporary table:", e);
+    }
+};
 exports.getWialonObjects = async () => {
 
     try {
@@ -720,6 +683,7 @@ exports.getSensStorMeta = async (idw) => {
 
 
 exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
+    // console.log(imei, port, data)
     try {
         const pool = await connection;
         for (let i of data) {
@@ -743,6 +707,7 @@ exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
 
 
 exports.getSensStorMetaFilter = async (imei, port, id) => {
+    // console.log(id, port)
     try {
         const pool = await connection;
         const post = `SELECT idw,imei,port,params,meta, value,idTyres,idBitrix,data FROM sens_stor_meta WHERE imei=@imei AND port=@port AND idw=@idw`;
@@ -807,7 +772,6 @@ exports.getValuePWRToBase = async (idw, param) => {
     }
 }
 exports.deleteParamsToBase = async (idw, param) => {
-    console.log(idw, param)
     const pool = await connection;
     try {
         const post = `DELETE FROM coef WHERE idw=@idw AND params=@params`
@@ -1003,7 +967,6 @@ exports.setSensStorMeta = async (data) => {
                     .input('idBitrixObject', idBitrix)
                     .query(updateQuery);
             }
-            console.log('здесь')
         }
         return 'Выполнено'
 
@@ -1014,7 +977,7 @@ exports.setSensStorMeta = async (data) => {
 }
 
 exports.uniqImeiAndPhone = async (col, value, table, login, id) => {
-    console.log(col, value, table, login, id)
+
     try {
         const pool = await connection;
         const query = `
@@ -1087,7 +1050,6 @@ exports.deleteIdToRowsTime = async (data, id, login) => {
 
 
 exports.updateObject = async (object) => {
-    console.log(object)
     try {
         const pool = await connection;
         const updateModel = `UPDATE object_table SET marka = @marka,model = @model,vin = @vin,dut = @dut,angle = @angle,data = @data, login = @login,idObject=@idObject,port=@port,typeDevice=@typeDevice,imei=@imei,adress=@adress,phone=@phone,nameObject=@nameObject,
@@ -1131,7 +1093,6 @@ exports.updateGroup = async (object) => {
             .query(select);
         await databaseService.setGroup(object)
         const id = res.recordset.map(e => e.id)
-        console.log(id)
         for (let el of id) {
             const post = `DELETE FROM object_table WHERE id=@id`
             const result = await pool.request()
@@ -1175,7 +1136,6 @@ exports.lastIdGroup = async () => {
 }
 
 exports.setGroup = async (object) => {
-    console.log(object)
     const login = object.login;
     const time = object.data;
     const idg = object.idg;
@@ -1227,7 +1187,6 @@ exports.setGroup = async (object) => {
                 obj.name_g = name_g
                 obj.number_company = number_company
                 obj.face_company = face_company
-                console.log(obj)
                 const post = `INSERT INTO object_table(login, data, idg, name_g, idObject, nameObject,imei,phone, typeObject,
                 typeDevice,adress, port,marka,model,dut,angle, gosnomer,face_company,number_company)
                 VALUES(@login, @data, @idg, @name_g,  @idObject, @nameObject,@imei,@phone, @typeObject,
@@ -1515,19 +1474,10 @@ exports.alarmBase = async (data, tyres, alarm) => {
     console.log('данные по алармам')
     const dannie = data.concat(tyres)
     let val;
-    // console.log(dannie)
-    let tyress;
-    if (dannie[9] === 'wialon') {
-        const allSens = await databaseService.ggg(dannie[6])
-        tyress = allSens[dannie[2]]
-    }
-    else {
-        tyress = dannie[2]
-    }
 
     alarm !== 'Потеря связи с датчиком' ? val = dannie[3] + ' ' + 'Бар' : val = dannie[4] + '' + 't'
     const res = alarm !== 'Норма' && alarm !== 'Потеря связи с датчиком' ? await databaseService.controllerSaveToBase([{
-        event: 'Предупреждение', time: `Время ${dannie[0]}`, tyres: `Колесо: ${tyress}`, //time: `Время ${dannie[0]}`,
+        event: 'Предупреждение', time: `Время ${dannie[0]}`, tyres: `Колесо: ${dannie[2]}`, //time: `Время ${dannie[0]}`,
         param: `Параметр: ${val}`, alarm: `Описание: ${alarm}`
     }], dannie[6], JSON.parse(dannie[8]), dannie[1], dannie[1]) : 'Норма. В базу не пишем'
     console.log('Предупреждение' + ' ' + res.message)
@@ -2001,10 +1951,14 @@ exports.logsSaveToBase = async (arr, time, idw, geo, group, name, start) => {
 
 exports.logsFindToBase = async (id) => {
     if (id.length !== 0) {
-        const postModel = `SELECT * FROM logs WHERE idw IN (${id.join(',')})`;
+        const placeholders = id.map((_, index) => `@id${index}`).join(',');
+        const postModel = `SELECT * FROM logs WHERE idw IN (${placeholders})`;
         try {
             const pool = await connection
-            const result = await pool.query(postModel);
+            const request = pool.request();
+            // Добавляем параметры id
+            id.forEach((id, index) => { request.input(`id${index}`, sql.VarChar, id) });
+            const result = await request.query(postModel);
             return result.recordset;
         } catch (err) {
             console.error(err);
@@ -2142,7 +2096,6 @@ exports.barViewToBase = async (idw, count) => {
 }
 
 exports.iconSaveToBase = async (activePost, param, id, idw) => {
-    console.log(activePost, param, id, idw)
     try {
         const selectBase = `SELECT icons FROM icon WHERE idw=@idw AND icons=@icons`;
         const pool = await connection;
@@ -2465,7 +2418,6 @@ exports.techViewAllToBase = async (idw) => {
 }
 
 exports.summaryToBase = async (idw, arr, data) => {
-    // console.log(arr)
     const value = []
     value.push(idw)
     value.push(data)
@@ -2481,11 +2433,11 @@ exports.summaryToBase = async (idw, arr, data) => {
     value.push(arr.medium)
     value.push(arr.hhOil ? arr.hhOil : 0)
     value.push(arr.group)
-    //  console.log(arr)
+    // console.log(arr)
     try {
         const selectBase = `SELECT data, idw FROM summary WHERE idw=@idw AND data=@data`
         const pool = await connection
-        const results = await pool.request().input('idw', sql.Int, idw).input('data', sql.NVarChar, data).query(selectBase)
+        const results = await pool.request().input('idw', idw).input('data', sql.NVarChar, data).query(selectBase)
         if (results.recordset.length === 0) {
             const sqls = `INSERT INTO  summary(idw, data, type, nameCar, jobTS, probeg, rashod, zapravka, dumpTrack,moto, prostoy, medium, oilHH, company) VALUES (@idw, @data, @type, @nameCar, @jobTS, @probeg, @rashod, @zapravka, @dumpTrack, @moto, @prostoy, @medium, @oilHH, @company)`;
             await pool.request()
@@ -2534,38 +2486,44 @@ exports.group = async (idw) => {
 
 
 module.exports.summaryYestodayToBase = async (data, arrayId) => {
-    //console.log(data, arrayId)
+    const pool = await connection;
     if (!arrayId.length) {
         return;
     }
-    const pool = await connection
+
     if (data.length === 1) {
         try {
-            // Создание строки с placeholder'ами для каждого id из arrayId
-            const placeholders = arrayId.map((_, i) => '@id' + i).join(',');
-            //console.log(placeholders)
-            const selectBase = `SELECT * FROM summary WHERE idw IN (${placeholders}) AND data=@data`;
+            // Создание строки с параметрами для SQL-запроса
+            const placeholders = arrayId.map((_, index) => `@id${index}`).join(',');
+            const selectBase = `SELECT * FROM summary WHERE idw IN (${placeholders}) AND data = @data`;
             const request = pool.request();
-            // Добавляем данные для каждого элемента из arrayId
-            arrayId.forEach((id, i) => request.input('id' + i, sql.Int, id));
-            // Добавляем данные для @data
+
+            // Добавляем параметры id
+            arrayId.forEach((id, index) => {
+                request.input(`id${index}`, sql.VarChar, id); // Убедитесь, что используете правильный тип данных
+            });
             request.input('data', sql.VarChar, data[0]);
+
             const results = await request.query(selectBase);
-            //   console.log(results.recordset.length)
             return results.recordset;
         } catch (e) {
             console.error(e);
         }
     } else {
         try {
-            const placeholders = arrayId.map((_, i) => '@id' + i).join(',');
+            const placeholders = arrayId.map((_, index) => `@id${index}`).join(',');
             const selectBase = `SELECT * FROM summary WHERE idw IN (${placeholders}) AND CAST(data AS DATE) >= @start AND CAST(data AS DATE) <= @end`;
             const request = pool.request();
-            arrayId.forEach((id, i) => request.input('id' + i, sql.Int, id));
-            request.input('start', sql.NVarChar, data[0])
-            request.input('end', sql.NVarChar, data[1])
+
+            // Добавляем параметры id
+            arrayId.forEach((id, index) => {
+                // console.log(`id${index}`, id)
+                request.input(`id${index}`, String(id)); // Убедитесь, что используете правильный тип данных
+            });
+            request.input('start', sql.NVarChar, data[0]);
+            request.input('end', sql.NVarChar, data[1]);
+
             const results = await request.query(selectBase);
-            //  console.log(results.recordset)
             return results.recordset;
         } catch (e) {
             console.error(e);

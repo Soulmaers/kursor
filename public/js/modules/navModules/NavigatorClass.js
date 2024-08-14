@@ -1,12 +1,13 @@
-import { initCharts } from '../spisokModules/class/SpisokObject.js'
+import { initCharts } from '../spisokModules/class/AddListSpisok.js'
 import { kartaContainer } from './karta.js'
 import { reportsContainer } from './reports.js'
 import { Servis } from './servis.js'
 import { SkladTyres } from '../skladModules/class/SkladTyres.js'
 
 export class NavigationMenu {
-    constructor(data) {
+    constructor(data, final) {
         this.data = data
+        this.final = final
         this.buttonElements = document.querySelectorAll('.monitoring');
         this.iconsToggle = document.querySelectorAll('.report_map_InList')
         this.mapUnit = document.querySelectorAll('.map_unit')
@@ -90,7 +91,7 @@ export class NavigationMenu {
     servis(elem) {
         this.globalContainer.style.display = 'none'
         elem.style.display = 'flex'
-        new Servis(this.data)
+        new Servis(this.final)
         //    servisContainer(elem)
     }
     statistika(elem) {
@@ -138,9 +139,9 @@ export class NavigationMenu {
         elem.style.display = 'flex'
 
         if (!this.instancSklad) {
-            this.instancSklad = new SkladTyres(elem, this.data);
+            this.instancSklad = new SkladTyres(elem, this.data, this.final);
         } else {
-            this.instancSklad.destroy(elem, this.data);
+            this.instancSklad.destroy(elem, this.data, this.final);
         }
     }
 }

@@ -13,9 +13,10 @@ import { Find } from './Find.js'
 import { Sorting } from "./Sorting.js"
 
 export class SkladTyres {
-    constructor(element, data) {
+    constructor(element, final, data) {
         this.element = element
         this.data = data
+        this.final = final
         this.uniqData = null
         this.arrayNameColumns = ['marka', 'model', 'size', 'probegNow', 'probegVal', 'dateOutputSklad']
         this.allTyres = null
@@ -54,7 +55,8 @@ export class SkladTyres {
         this.addTooltips()
         this.initEvent()
         this.uniqData = this.getUniqData(this.data)
-        CreateDOMElements.createListObject(this.data)
+        console.log(this.uniqData)
+        CreateDOMElements.createListObject(this.final)
         this.modelTyres = await RequestStaticMetods.getModelTyresGuide();
         this.createRows()
         this.controllListAndTyres()
@@ -557,6 +559,7 @@ export class SkladTyres {
     }
 
     getUniqData(data) {
+        console.log(data)
         const alldata = data.flat()
         const uniqueMap = new Map(alldata.map(item => [item[4], item]))
         const res = Array.from(uniqueMap.values());

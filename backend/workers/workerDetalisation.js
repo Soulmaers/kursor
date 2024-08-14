@@ -1,7 +1,7 @@
 
 
 const { parentPort } = require('worker_threads');
-const databaseService = require('./database.service');
+const databaseService = require('../services/database.service');
 
 
 parentPort.on('message', (data) => {
@@ -17,6 +17,7 @@ parentPort.on('message', (data) => {
 });
 
 async function processSensorData(time1, time2, idw, arrayColumns, num) {
+    console.log('туту')
     const result = await databaseService.getParamsToPressureAndOilToBase(time1, time2, idw, arrayColumns, num)
     return result
 }

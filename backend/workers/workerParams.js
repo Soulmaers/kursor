@@ -1,7 +1,7 @@
 
 
 const { parentPort } = require('worker_threads');
-const databaseService = require('./database.service');
+const databaseService = require('../services/database.service');
 
 
 

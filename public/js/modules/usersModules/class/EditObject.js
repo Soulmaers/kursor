@@ -28,22 +28,19 @@ export class EditObject {
 
 
     async createModalEdit() {
-        console.time('get')
         this.getStruktura()
-        console.timeEnd('get')
         this.container.innerHTML = ContentGeneration.editObj(this.property, this.creators, this.property.objectname, this.data)
         this.cacheElements()
         this.applyValidation();
         this.eventListeners()
         this.modalActivity(this.pop, 'flex', 3)
-        console.time('stor')
         await this.viewObjects(this.idx)
-        console.timeEnd('stor')
         this.close()
         this.save()
     }
 
     cacheElements() {
+        this.prava = document.querySelector('.role').getAttribute('rel')
         this.objectname = this.container.querySelector('#objectname');
         this.typedevice = this.container.querySelector('#typedevice');
         this.typeobject = this.container.querySelector('#typeobject');

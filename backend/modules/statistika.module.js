@@ -10,8 +10,8 @@ global.summaryStatisticsState = {
     dailyDataStorage: {}
 };
 class SummaryStatistiks {
-    constructor(object) {
-        this.object = object
+    constructor(datas) {
+        this.datas = datas
         this.strustura = {}
         this.data = '-'
         this.id = '-'
@@ -44,7 +44,7 @@ class SummaryStatistiks {
 
     async processDataInWorker(dataElement) {
         return new Promise((resolve, reject) => {
-            const worker = new Worker(path.resolve(__dirname, '../services/worker.js'));
+            const worker = new Worker(path.resolve(__dirname, '../workers/worker.js'));
             worker.on('message', (result) => {
                 worker.terminate();
                 resolve(result);
@@ -63,30 +63,32 @@ class SummaryStatistiks {
     }
     async init() {
         console.time('sum')
-        const idwArray = helpers.format(this.object)        // Запускаем все асинхронные операции одновременно и ждем их завершения
-        const dataPromises = idwArray.map(el => this.processDataInWorker(el)); //получение структуры данных по параметрам
-        const dataResults = await Promise.allSettled(dataPromises);
-        //   console.log(dataResults)
-        // Обрабатываем результаты асинхронных операций
-        const strusturas = idwArray.map(([id, message, group, pref], index) => {
-            const result = dataResults[index];
-            const data = result.status === 'fulfilled' ? result.value : null;
-            // Обновляем глобальное состояние
-            global.summaryStatisticsState.lastUpdateTime = this.lastUpdateTime;
-            global.summaryStatisticsState.dailyDataStorage = this.dailyDataStorage;
-            // Инициализация структуры объекта с дефолтными значениями
-            const strustura = this.initializeStrustura(id, message, group, 'Тест'); //подготовка шаблона структуры объекта
+
+        const idwArray = helpers.formats(this.datas)
+        const strusturas = []; // Создаем пустой массив для хранения результатов
+        for (const el of idwArray) {
+            // Обрабатываем каждый элемент последовательно
+            const data = await this.processDataInWorker(el); // Получаем структуру данных
             if (data) {
-                // console.log(data)
-                this.fillStrusturaWithData(strustura, data, pref); //наполнение структуры объектов суммирующими данными статистики
+                // Обновляем глобальное состояние
+                global.summaryStatisticsState.lastUpdateTime = this.lastUpdateTime;
+                global.summaryStatisticsState.dailyDataStorage = this.dailyDataStorage;
+
+                // Инициализация структуры объекта с дефолтными значениями
+                const strustura = this.initializeStrustura(el[0], el[1], el[2], 'Тест'); // Подготовка шаблона структуры объекта
+                this.fillStrusturaWithData(strustura, data, el[3]); // Наполнение структуры объекта
+
+                // Добавляем strustura в массив
+                strusturas.push(strustura);
             }
-            // console.log(strustura)
-            return strustura;
-        })
+        }
+
+        //console.log(strusturas)
         console.timeEnd('sum')
         // Объединение всех strustura в один объект
         this.strustura = Object.assign({}, ...strusturas.map(s => ({ [s.id]: s })));
         const arraySummary = Object.entries(this.strustura)
+        //  console.log(arraySummary)
         const now = new Date();
         const date = new Date(now);
         const year = date.getFullYear();
@@ -388,15 +390,14 @@ class SummaryStatistiks {
 }
 
 const popupProstoy = async (array) => {
-    const arrays = helpers.format(array)
+    const arrays = helpers.formats(array)
     const [timeNow, timeOld] = helpers.timefn()
 
-    const processArrayItem = async (e) => {
-        const [active, group, name] = e
-        const newGlobal = await helpers.getDataToInterval(active, timeOld, timeNow)
-        newGlobal.sort((a, b) => a.time - b.time)
-
-        const resnew = await prostoyNew(newGlobal)  ////проверка на событие простой
+    for (const e of arrays) {
+        const [active, group, name] = e;
+        const newGlobal = await helpers.getDataToInterval(active, timeOld, timeNow);
+        newGlobal.sort((a, b) => a.time - b.time);
+        const resnew = await prostoyNew(newGlobal);  ////проверка на событие простой
         if (resnew) {
             for (const el of resnew) {
                 const map = JSON.parse(el[1][1]);
@@ -409,14 +410,12 @@ const popupProstoy = async (array) => {
                 }];
                 const newTime = Math.floor(new Date().getTime() / 1000);
                 const delta = newTime - Number(el[1][0]);
-
                 if (delta > 900) {
                     await databaseService.controllerSaveToBase(data, active, map, group, name); //запись лога
                 }
             }
         }
     }
-    await Promise.all(arrays.map(e => processArrayItem(e)))
 }
 
 function timesFormat(dates) {

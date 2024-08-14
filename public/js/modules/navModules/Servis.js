@@ -35,7 +35,7 @@ export class Servis {
 
 
     async init() {
-
+        console.log(this.data)
         this.convertionIdArray()
         this.getData()
         await this.findTo()
@@ -81,8 +81,8 @@ export class Servis {
         this.struktura = this.data.flat().map(el => {
             const paramsMap = new Map(el[2].result.map(p => [p.params, p.value]));
             const engineHours = paramsMap.get('engine_hours') ? parseInt(paramsMap.get('engine_hours')) : '-'
-            const idw = el[4]
-            const marka = el[6].marka
+            const idw = Number(el.object_id)//el[4]
+            const marka = el.object_name//el[6].marka
             const model = el[6].model
             const vin = el[6].vin
             const face = el[6].face

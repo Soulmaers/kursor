@@ -17,65 +17,31 @@ const wialonModule = require('./backend/modules/wialon.module');
 const WebSocket = require('ws');
 require('events').EventEmitter.prototype._maxListeners = 0;
 require('dotenv').config();
-
-const { getSession, setSession } = require('./backend/config/db');
+//const clinic = require('clinic');
+const ControllRetranslations = require('./backend/services/ControllRetranslations.js');
 
 const port = process.env.PORT || 3333;
-const httpsPort = process.env.HTTPS_PORT || 8443;
+
+
 const options = {
-    key: fs.readFileSync('./cursor-gps.ru/privkey1.pem'),
-    cert: fs.readFileSync('./cursor-gps.ru/cert1.pem'),
+    key: fs.readFileSync('./cursor-gps.ru/certificate.key'),
+    cert: fs.readFileSync('./cursor-gps.ru/certificate.crt'),
 };
 
-let interval;
 
 
 
+// Запуск HTTPS-сервера
 const initServer = async () => {
     try {
-        app.listen(port, () => {
-            console.log(`Сервер запущен, порт:${port}`);
-        });
+        https.createServer(options, app).listen(port, () => {
+            console.log(`HTTPS сервер запущен на порту ${port}`);
+        })
     } catch (error) {
         console.error(`Ошибка при запуске сервера: ${error.message}`);
-    }
-};
-/*
-const initServer = async () => {
-    try {
-        // Запуск HTTPS-сервера
-        https.createServer(options, app).listen(httpsPort, () => {
-            console.log(`HTTPS сервер запущен, порт: ${httpsPort}`);
-        });
-
-        // Запуск HTTP-сервера для перенаправления на HTTPS
-        http.createServer((req, res) => {
-            res.writeHead(301, { "Location": `https://${req.headers.host}${req.url}` });
-            res.end();
-        }).listen(port, () => {
-            console.log(`HTTP сервер запущен для перенаправления на HTTPS, порт: ${port}`);
-        });
-    } catch (error) {
-        console.error(`Ошибка при запуске сервера: ${error.message}`);
-    }
-};*/
-async function wialon() {
-    const token = process.env.TOKEN;
-    console.log(token);
-    const session = await wialonModule.login(token);
-    console.log(session)
-    const params = {
-        'tzOffset': 10800,
-        "language": 'ru',
-    };
-    if (session !== 'ошибка') {
-        setSession(session); // Устанавливаем сессию
-        await session.request('render/set_locale', params);
-        return 'ok';
-    } else {
-        return 'ошибка';
     }
 }
+
 
 if (isMainThread) {
     app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
@@ -91,17 +57,10 @@ if (isMainThread) {
     app.use(kursorRoutes);
 
 
-
     async function init() {
-        await initServer();
-        // new ControllRetranslations()
         try {
-            //   const res = await wialon();
-            //  const session = await getSession()
-            //  new WialonOrigin(session);
-            // interval = setInterval(() => {
-            //  new WialonOrigin(session);
-            //  }, 180000);
+            await initServer();
+            new ControllRetranslations()
         } catch (error) {
             clearInterval(interval);
             console.error("Ошибка инициализации:", new Date(), error);
@@ -109,24 +68,6 @@ if (isMainThread) {
     }
 
     init();
-
-
-    const ControllRetranslations = require('./backend/services/ControllRetranslations.js');
-
-    const ListenPortTP = require('./backend/modules/navtelecom/ChatServerTerminal.js');
-    const ListenPortTPNew = require('./backend/modules/wialonRetranslation/ParseBuffer.js');
-    const ListenPortIPS = require('./backend/modules/wialonIPS/ParseBuffer.js');
-    const WialonOrigin = require('./backend/modules/wialon/WialonOrigin.js');
-
-    //new ListenPortTP(21626);
-    //new ListenPortTPNew(20163);
-    //exports.ips = new ListenPortIPS(20332);
-
-
-
-
-
-
 
 } else {
     console.log('Этот код не должен выполняться внутри воркера.');

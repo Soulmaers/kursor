@@ -1,5 +1,5 @@
 const { parentPort } = require('worker_threads');
-const wialonService = require('./wialon.service.js')
+const wialonService = require('../services/wialon.service.js')
 const wialonModule = require('../modules/wialon.module.js');
 parentPort.on('message', async (data) => {
     const { login, token } = data

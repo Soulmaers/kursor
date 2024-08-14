@@ -105,7 +105,7 @@ exports.getParamsToPressureAndOil = async (req, res) => {
     if (activeWorkers[workerKey]) {
         activeWorkers[workerKey].terminate();
     }
-    const workerPress = new Worker(path.resolve(__dirname, '../services/workerDetalisation.js'));
+    const workerPress = new Worker(path.resolve(__dirname, '../workers/workerDetalisation.js'));
 
     activeWorkers[workerKey] = worker;
     workerPress.on('message', (result) => {

@@ -1,8 +1,12 @@
 
 import { DraggableContainer } from '../../../class/Dragdown.js'
 import { Tooltip } from '../../../class/Tooltip.js'
+import { GetUpdateStruktura } from '../../../GetUpdateStruktura.js'
+
+
 export class IconStatus {
-    constructor(elem) {
+    constructor(elem, info) {
+        this.info = info
         this.elem = elem
         this.card = document.querySelectorAll('.icon_card')
         this.msg = null
@@ -12,17 +16,20 @@ export class IconStatus {
         this.id = null
         this.targetElement = null
         this.targetCard = null
-        this.intervalId = null
         this.params = null
         this.coefficient = null
+        this.bool = false
+        this.getParams(this.info)
+        GetUpdateStruktura.onDataReceived(this.render.bind(this));
         this.handleCardClick = this.toogleModalWindow.bind(this)
         this.initEventListeners();
     }
-    reinitialize(newElem) {
-        this.clearInterval(); // Удаление предыдущего интервала
+    reinitialize(newElem, info) {
         this.removeEventListeners(); // Удаление старых слушателей событий
         this.elem = newElem; // Обновление id
-        this.intervalId = null
+        this.bool = false
+        this.getParams(info)
+
         this.initEventListeners(); // Повторное добавление слушателей событий
     }
 
@@ -36,22 +43,26 @@ export class IconStatus {
     }
 
 
+    render({ final }) {
+        this.bool = true
+        this.getParams(this.findData(final))
+        this.displayIconValues(this.id)
+    }
 
-    clearInterval() {
-        if (this.intervalId) {
-            clearInterval(this.intervalId);
-            this.intervalId = null;
-        }
+    findData(final) {
+        const res = final.find(e => e.object_id === this.elem.id)
+        return res
+    }
+    getParams(res) {
+        this.info = this.bool ? res[2].result.map(e => [e.sens, e.params, Number(e.idw), Number(e.value)]) :
+            res[2].map(e => [e.sens, e.params, Number(e.idw), Number(e.value)])
     }
 
     async listeModalWindow(elem) {
-        console.log(elem)
         this.targetElement = elem
         this.id = elem.id
         this.nameObject = elem.children[0].textContent.replace(/\s+/g, '')
         await this.displayIconValues(this.id)
-        this.clearInterval(); // Удаление предыдущего интервала
-        this.intervalId = setInterval(() => this.displayIconValues(this.id), 110000)
     }
     //навешиваем значнеие кликнутого параметра на иконку и запускаем метод сохранения даных в бд
     async viewValueToSaveBase(element) {
@@ -106,7 +117,6 @@ export class IconStatus {
 
     close(sensors, wRight) {
         const closeIconConfig = document.querySelector('.closeIconConfig')
-        console.log(closeIconConfig)
         closeIconConfig.addEventListener('click', () => {
             const tiresActivt = document.querySelector('.tiresActivt')
             tiresActivt ? tiresActivt.classList.remove('tiresActivt') : null
@@ -124,7 +134,6 @@ export class IconStatus {
     async postIconParams(param, id) {
         const activePost = this.nameObject
         const idw = this.id
-        console.log(activePost, param, id, idw)
         const params = {
             method: "POST",
             headers: {
@@ -134,14 +143,12 @@ export class IconStatus {
         }
         const par = await fetch('/api/icon', params)
         const paramssAve = await par.json()
-        console.log(paramssAve)
         this.displayIconValues(idw)
 
     }
 
     //отображение значений иконок
     async displayIconValues(idw) {
-
         // Отмена предыдущего запроса, если он существует
         if (this.abortController) {
             this.abortController.abort();
@@ -159,13 +166,12 @@ export class IconStatus {
             body: (JSON.stringify({ idw })),
             signal: signal
         }
-        const params = await this.iconFindParams(param)
         const editParams = await this.iconFindParamsEdit(param)
         this.coefficient = await this.validationIngition(idw)
-        this.pushObjectProperty(params, editParams)
+        this.pushObjectProperty(this.info, editParams)
         await this.statusTSI(param)
 
-        this.status(params)
+        this.status(this.info)
         this.viewValueElement()
     }
 
@@ -242,8 +248,6 @@ export class IconStatus {
             'ВКЛ' : 'ВЫКЛ' : '-'
         let statName;
         let statNameIng;
-        console.log(this.valueparamsObject['tsi-card'])
-        console.log(this.id)
         this.valueparamsObject['tsi-card'] === 'ВКЛ' ? statName = 'Включен' : this.valueparamsObject['tsi-card'] === '-' ? statName = '-' : statName = 'Выключен'
         this.valueparamsObject['ign-card'] === 'ВКЛ' ? statNameIng = 'Включено' : statNameIng = 'Выключено'
 
@@ -259,7 +263,6 @@ export class IconStatus {
 
     //расчет статуса объекта
     async status(data) {
-        console.log(data)
         if (data.lengh === 0) return
         const lastValidTime = data.find(e => e[1] === 'last_valid_time')
         const nowTime = Math.floor(new Date().getTime() / 1000)
@@ -302,15 +305,12 @@ export class IconStatus {
     //вывод значений в дом элементы
     viewValueElement() {
         const role = document.querySelector('.role').getAttribute('rel')
-        console.log(this.valueparamsObject)
         this.card.forEach(elem => {
             this.params.result.forEach(it => {
-                //   console.log(it.icons, elem.id)
                 if (it.icons === elem.id) {
                     role === 'Администратор' ? new Tooltip(elem, [elem.getAttribute('rel'), it.params]) : new Tooltip(elem, [elem.getAttribute('rel')]);
                 }
             })
-
             const parametrs = this.valueparamsObject[elem.id] === -348201.3876 ? '---' : this.valueparamsObject[elem.id]
             switch (elem.id) {
                 case 'odom-card':
@@ -323,7 +323,6 @@ export class IconStatus {
                     elem.children[0].textContent = parametrs
                     break;
                 case 'moto-card':
-                    console.log(parametrs)
                     elem.children[0].textContent = parametrs !== '---' ? parametrs.toFixed(1) : '---'
                     break;
                 case 'akb-card':

@@ -7,13 +7,13 @@ import { Validation } from './Validation.js'
 
 
 export class EditAccount {
-    constructor(data, element, container, login, prava, creator, creators, instance) {
+    constructor(data, element, container, creator, creators, instance) {
         this.data = data
         this.incriment = Number(element.getAttribute('rel'))
         this.name = element.textContent
         this.container = container
-        this.login = login
-        this.prava = prava
+        this.prava = document.querySelector('.role').getAttribute('rel')
+        this.login = document.querySelectorAll('.log')[1].textContent
         this.creator = creator
         this.creators = creators
         this.instance = instance
@@ -31,7 +31,7 @@ export class EditAccount {
 
     async createModalEdit() {
         await this.getStruktura()
-        this.container.innerHTML = ContentGeneration.editLK(this.login, this.prava, this.creator, this.property, this.creators, this.name, this.data)
+        this.container.innerHTML = ContentGeneration.editLK(this.login, this.prava, this.creator, this.property, this.creators, this.property.name, this.data)
         this.cacheElements()
         Validation.creator(this.createsUser, this.property.uniqCreater)
         this.modalActivity(this.pop, 'flex', 3)
@@ -45,14 +45,16 @@ export class EditAccount {
         this.createsUser = this.container.querySelector('.creates');
         this.modal = this.container.querySelector('.wrap_lk')
     }
-    modalActivity(pop, flex, num) {
+    modalActivity(pop, flex, num, cret) {
         this.modal.style.display = `${flex}`
         pop.style.zIndex = num
+        pop.style.display = cret ? 'none' : 'block'
     }
+
 
     close() {
         const close = this.modal.querySelector('.close_modal_window')
-        close.addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1))
+        close.addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1, 'cre'))
     }
 
     save() {

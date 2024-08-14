@@ -1,5 +1,5 @@
-import { initCharts } from '../modules/spisokModules/class/SpisokObject.js'
-import { Detalisation } from '../modules/detalisationModules/class/Detalisation.js'
+import { initCharts } from '../modules/spisokModules/class/AddListSpisok.js'
+
 
 export class ResizeContainer {
     constructor(leftContainer, rightContainer, resizeHandle) {

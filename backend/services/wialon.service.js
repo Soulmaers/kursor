@@ -235,10 +235,7 @@ exports.getUniqImeiAndPhoneIdDataFromWialon = async (id, sess) => {
     };
     return new Promise(async function (resolve, reject) {
         try {
-
-            const session = sess ? sess : await getSession();
-            const data = await session.request('core/search_item', prmsId);
-            // console.log(data)
+            const data = await sess.request('core/search_item', prmsId);
             // Обработка успешного ответа
             resolve(data);
         } catch (err) {
@@ -320,7 +317,6 @@ exports.getPropertyGroups = async (session) => {
 };
 
 exports.getPropertyObjects = async (session) => {
-    console.log(session)
     const prms = {
         "spec": {
             "itemsType": "avl_unit",
@@ -411,9 +407,9 @@ exports.getAllNameSensorsIdDataFromWialon = async (id, login) => {
 
 
 //запрос данных на виалон по объекту и получение параметров
-exports.getDataFromWialon = async () => {
+exports.getDataFromWialon = async (session) => {
     return new Promise(async function (resolve, reject) {
-        const session = await getSession();
+        //  const session = await getSession();
         session.request('core/search_items', prms)
             .catch(function (err) {
                 console.log(err);
@@ -443,7 +439,7 @@ exports.geoDataFromWialon = async (time1, time2, idw) => {
             });
     })
 };
-exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => {
+exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login, sess) => {
     const prms2 = {
         "itemId": active,
         "timeFrom": timeOld,
@@ -453,8 +449,8 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
         "loadCount": 180000
     }
     return new Promise(async function (resolve, reject) {
-        const session = await getSession();
-        session.request('messages/load_interval', prms2)
+        // const session = await getSession();
+        sess.request('messages/load_interval', prms2)
             .catch(function (err) {
                 console.log(err);
             })
@@ -466,7 +462,7 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login) => 
 
 
 
-exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
+exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr, sess) => {
     const array = Array.isArray(arr) ? arr : [arr]
     const prms = {
         "mode": "add",
@@ -483,13 +479,13 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr) => {
         "detalization": 3
     }
     return new Promise(async function (resolve, reject) {
-        const session = await getSession();
-        session.request('events/update_units', prms)
+        //  const session = await getSession();
+        sess.request('events/update_units', prms)
             .catch(function (err) {
                 console.log(err);
             })
             .then(function (data) {
-                session.request('events/check_updates&params', prmsUp)
+                sess.request('events/check_updates&params', prmsUp)
                     .catch(function (err) {
                         console.log(err);
                     })

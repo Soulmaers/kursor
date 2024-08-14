@@ -1,15 +1,13 @@
 const wialonService = require('../services/wialon.service');
 const databaseService = require('../services/database.service')
-exports.eventFunction = async (arr) => {
-    const result = arr
-        .map(el => el.map(it => it[4])) // получаем массивы всех значений свойств объектов
-        .flat()
-    const all = arr
-        .map(el => Object.values(el)) // получаем массивы всех значений свойств объектов
-        .flat()
-    const rt = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(result) //получаем события с wialon
-    oilFunc(rt, all)
-    lastMsgFunc(rt, all)
+const helpers = require('../services/helpers.js')
+
+exports.eventFunction = async (data, sess) => {
+    const formatData = helpers.formatFinal(data)
+    const idwArray = formatData.filter(e => !isNaN(Number(e.object_id))).map(it => Number(it.object_id))
+    const rt = await wialonService.getUpdateLastAllSensorsIdDataFromWialon(idwArray, sess) //получаем события с wialon
+    oilFunc(rt, formatData)
+    lastMsgFunc(rt, formatData)
 
 }
 
@@ -32,24 +30,19 @@ function lastMsgFunc(rt, all) { //
         return { event: null };
     }).filter(eventObj => eventObj.event !== null);
     const mass = [];
-    const condition = []
     const nowDate = parseFloat(((new Date().getTime()) / 1000).toFixed(0))
-
     all.forEach(e => {
-        itogEvents.forEach(it => {
-            if (parseFloat(it.id) === e[4]) {
-                const lastTime = nowDate - it.time
-                mass.push({ id: it.id, group: e[7], name: e[0].message, lastTime: lastTime, time: it.time, geo: it.geo });
-                condition.push({ id: it.id, group: e[7], name: e[0].message, condition: it.condition, time: it.time, geo: it.geo })
-            }
-        });
-    });
-    mass.forEach(e => {
+        const foundEvent = itogEvents.find(it => it.id === e.object_id);
+        if (foundEvent) {
+            const lastTime = nowDate - foundEvent.time;
+            mass.push({ id: foundEvent.id, group: e.group_name, name: e.object_name, lastTime: lastTime, time: foundEvent.time, geo: foundEvent.geo });
 
-        e.lastTime > 3600 ? checkSortLastTime(e.id, e.group, e.name, e.time, e.geo) : null
+        }
     })
-    condition.forEach(e => {
-        //    checkSortCondition(e.id, e.group, e.name, e.condition,e.time, e.geo)
+
+
+    mass.forEach(e => {
+        e.lastTime > 3600 ? checkSortLastTime(e.id, e.group, e.name, e.time, e.geo) : null
     })
 }
 
@@ -66,7 +59,6 @@ async function checkSortLastTime(idw, group, name, time, geo) { //проверк
         event: 'Потеря связи',
         lasttime: `Время последнего сообщения: ${formattedDate}`
     }]
-
     const res = await databaseService.controllerSaveToBase(data, idw, geo, group, name) //запись лога
 }
 
@@ -88,12 +80,12 @@ function oilFunc(rt, all) {  //проверка на событие заправ
     }).filter(eventObj => eventObj.event !== null);
     const mass = [];
     all.forEach(e => {
-        itogEvents.forEach(it => {
-            if (parseFloat(it.id) === e[4]) {
-                mass.push({ id: it.id, filled: it.filled, oil: it.oil, time: it.time, geo: it.geo, group: e[7], name: e[0].message });
-            }
-        });
-    });
+        const foundEvent = itogEvents.find(it => it.id === e.object_id);
+        if (foundEvent) {
+            mass.push({ id: foundEvent.id, filled: foundEvent.filled, oil: foundEvent.oil, time: foundEvent.time, geo: foundEvent.geo, group: e.group_name, name: e.object_name });
+
+        }
+    })
     mass.forEach(e => {
         modalView(e.filled, e.name, e.group, e.id, e.geo, e.time)
     })
