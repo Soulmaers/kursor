@@ -15,14 +15,17 @@ export class SummaryViewControll {
         this.select.forEach(el => el.querySelector('.toggle_list_select').addEventListener('click', this.toggleListSelect.bind(this, el)))
         this.select.forEach(el => el.querySelector('.select_summary').addEventListener('mouseleave', this.hiddenListOutsideKursor.bind(this, el)))
         this.select.forEach(el => el.querySelectorAll('.item_type').forEach(it => it.addEventListener('click', this.toggleCheckSelect.bind(this, it))))
-        SimpleEventEmitter.on('check', this.render.bind(this));
+        SimpleEventEmitter.on('check', this.renderUpdate.bind(this));
         SimpleEventEmitter.on('dataReceived', this.render.bind(this));
         this.startUpdatingToday()
     }
 
-
-    render() {
+    async renderUpdate() {
         this.clickListUpdateSummary()
+    }
+    async render() {
+        await this.getSummaryToBase('Сегодня')
+
     }
     //обновляем саммари учитывая заголовки для запроса
     async clickListUpdateSummary() {
@@ -128,9 +131,8 @@ export class SummaryViewControll {
 
     //обновляем статистику за сегодня
     async startUpdatingToday() {
-        for (const el of this.arrayInterval) {
-            await this.getSummaryToBase(el);
-        }
+        const promises = this.arrayInterval.map(el => this.getSummaryToBase(el))
+        await Promise.all(promises)
     }
 
     //меняем тоггл класс по нажатию на параметр
@@ -181,7 +183,7 @@ export class SummaryViewControll {
         arraySummaryView.push(data.filter(el => el.oilHH > 0).length === 0 ? 0 : parseFloat((this.calculateParam(data, 'oilHH') / data.filter(el => el.oilHH > 0).length).toFixed(0)))
         const structura = arraySummaryView.reduce((acc, el, index) => {
             if (index === 6 || index === 7 || index === 8) {
-                acc.push(this.timesFormat(el));
+                acc.push(Helpers.timesFormat(el));
             } else {
                 acc.push(el);
             }
@@ -243,7 +245,7 @@ export class SummaryViewControll {
         arraySummaryView.push(data.filter(el => el.oilHH > 0).length === 0 ? 0 : parseFloat((this.calculateParam(data, 'oilHH') / data.filter(el => el.oilHH > 0).length).toFixed(0)))
         const structura = arraySummaryView.reduce((acc, el, index) => {
             if (index === 6 || index === 7 || index === 8) {
-                acc.push(this.timesFormat(el));
+                acc.push(Helpers.timesFormat(el));
             } else {
                 acc.push(el);
             }
@@ -251,19 +253,4 @@ export class SummaryViewControll {
         }, []);
         return structura
     }
-
-    //форматируем секунды в часыи минуты
-    timesFormat(dates) {
-        const totalSeconds = Math.floor(dates);
-        const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-        const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-        const seconds = (totalSeconds % 60).toString().padStart(2, '0');
-        const motoHours = `${hours}:${minutes}`;
-        return motoHours;
-    }
-
-
-
-
-
 }

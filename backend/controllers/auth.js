@@ -164,26 +164,32 @@ exports.deleteUsersObjectGroupRetra = async (req, res) => { //сохранени
     }
 }
 
-exports.updateGroupsAndUsers = async (req, res) => { //сохранение контактов
-    const incriment = req.body.incriment
-    const objects = req.body.objects
-    try {
-        const pool = await connection
-        const deleteObjectsQuery = `
-        DELETE FROM usersGroups
-        WHERE uniqGroupID = @incriment`;
-        const results = await pool.request()
-            .input('incriment', incriment)
-            .query(deleteObjectsQuery)
+exports.updateGroupsAndUsers = async (req, res) => {
+    const incriment = req.body.incriment;
+    const objects = req.body.objects;
+    const action = req.body.action
 
+    try {
+        const pool = await connection;
+
+        if (action !== 'Обновлён') {
+            // Удаляем все связи с пользователями, если изменился аккаунт
+            const deleteUsersGroupsQuery = `
+            DELETE FROM usersGroups
+            WHERE uniqGroupID = @incriment`;
+            await pool.request()
+                .input('incriment', incriment)
+                .query(deleteUsersGroupsQuery);
+        }
+
+        // Независимо от изменения аккаунта, обновляем связи с объектами
         const deleteObjectsGrQuery = `
         DELETE FROM groupsAndObjects
         WHERE uniqGroupID = @incriment`;
         await pool.request()
             .input('incriment', incriment)
-            .query(deleteObjectsGrQuery)
+            .query(deleteObjectsGrQuery);
 
-        // Добавить новые связи
         const insertUserObjectsQuery = `
         INSERT INTO groupsAndObjects (uniqGroupID, uniqObjectID)
         VALUES (@incriment, @objectId)`;
@@ -193,12 +199,15 @@ exports.updateGroupsAndUsers = async (req, res) => { //сохранение ко
                 .input('objectId', sql.Int, objectId)
                 .query(insertUserObjectsQuery)
         );
-        res.json({ message: 'Данные пользователя обновлены', flag: true })
+        await Promise.all(objectPromises);
+
+        res.json({ message: 'Данные группы обновлены', flag: true });
     }
     catch (e) {
-        console.log(e)
+        console.log(e);
+        res.status(500).json({ message: 'Произошла ошибка', flag: false });
     }
-}
+};
 
 
 exports.updateGroupUser = async (req, res) => { //сохранение контактов
@@ -234,7 +243,7 @@ exports.updateGroupUser = async (req, res) => { //сохранение конт�
 
 exports.editGroup = async (req, res) => { //сохранение контактов
 
-    const { creater, incrimentGroup, uz, face, facecontact, nameGroup } = req.body.obj;
+    const { creater, incrimentGroup, uz, face, facecontact, nameGroup, del } = req.body.obj;
     try {
         const pool = await connection
         const sqlS = `SELECT * FROM groups WHERE nameGroup = @nameGroup AND uz=@uz AND incriment!=@incrimentGroup`;
@@ -253,7 +262,7 @@ exports.editGroup = async (req, res) => { //сохранение контакт�
 
 
             const insertUserQuery = `
-                UPDATE groups SET nameGroup=@nameGroup, face=@face, creater=@creater,facecontact=@facecontact
+                UPDATE groups SET nameGroup=@nameGroup, del=@del,face=@face, creater=@creater,facecontact=@facecontact
                 WHERE incriment=@incrimentGroup `;
             const userResult = await pool.request()
                 .input('nameGroup', nameGroup)
@@ -261,6 +270,7 @@ exports.editGroup = async (req, res) => { //сохранение контакт�
                 .input('facecontact', facecontact)
                 .input('incrimentGroup', incrimentGroup)
                 .input('creater', creater)
+                .input('del', del)
                 .query(insertUserQuery);
 
             const insertAccountUserQuery = `
@@ -286,7 +296,7 @@ exports.editGroup = async (req, res) => { //сохранение контакт�
 exports.editObject = async (req, res) => { //сохранение контактов
 
     const { objectname, incrimentObject, uz, addressserver, gosnomerobject, idbitrixobject, imeidevice, markaobject, modelobject, phonenumber,
-        port, typedevice, typeobject, tp, creater, vinobject
+        port, typedevice, typeobject, tp, creater, del, vinobject
     } = req.body.obj;
     try {
         const pool = await connection
@@ -303,10 +313,8 @@ exports.editObject = async (req, res) => { //сохранение контакт
             //  return;
         }
         else {
-
-
             const insertUserQuery = `
-                UPDATE objects SET objectname=@objectname, addressserver=@addressserver, gosnomerobject=@gosnomerobject, 
+                UPDATE objects SET objectname=@objectname, del=@del,addressserver=@addressserver, gosnomerobject=@gosnomerobject, 
                 idbitrixobject=@idbitrixobject,imeidevice=@imeidevice,markaobject=@markaobject,
                 modelobject=@modelobject, phonenumber=@phonenumber,port=@port,tp=@tp,
                 typedevice=@typedevice, typeobject=@typeobject,creater=@creater,vinobject=@vinobject WHERE incriment=@incrimentObject `;
@@ -325,6 +333,7 @@ exports.editObject = async (req, res) => { //сохранение контакт
                 .input('typeobject', typeobject)
                 .input('vinobject', vinobject)
                 .input('creater', creater)
+                .input('del', del)
                 .input('incrimentObject', incrimentObject)
                 .query(insertUserQuery);
 
@@ -345,7 +354,6 @@ exports.editObject = async (req, res) => { //сохранение контакт
 
 exports.updateObjectsAndUsers = async (req, res) => { //сохранение контактов
     const { incrimentObject, uz } = req.body.obj;
-    console.log('дел!?')
     try {
         const pool = await connection
         const deleteObjectsQuery = `
@@ -382,7 +390,7 @@ exports.updateObjectsAndUsers = async (req, res) => { //сохранение к�
 };
 
 exports.editUser = async (req, res) => { //сохранение контактов
-    const { creator, incrimentUser, login, password, role, uz, oldUniqCreator } = req.body;
+    const { creator, incrimentUser, login, password, role, uz, oldUniqCreator, del } = req.body;
     try {
         const pool = await connection
         const sqlS = `SELECT * FROM users WHERE name = @name AND uz=@uz AND incriment!=@incrimentUser`;
@@ -410,14 +418,14 @@ exports.editUser = async (req, res) => { //сохранение контакто
                 const salt = bcrypt.genSaltSync(10);
                 hashedPassword = bcrypt.hashSync(password, salt);
             }
-            console.log(creator, incrimentUser)
             const insertUserQuery = `
-                UPDATE users SET name=@login, password=@password, role=@role, creater=@creater,uz=@uz WHERE incriment=@incrimentUser `;
+                UPDATE users SET name=@login, del=@del,password=@password, role=@role, creater=@creater,uz=@uz WHERE incriment=@incrimentUser `;
             const userResult = await pool.request()
                 .input('login', login)
                 .input('password', hashedPassword)
                 .input('role', role)
                 .input('uz', uz)
+                .input('del', del)
                 .input('creater', Number(creator))
                 .input('incrimentUser', incrimentUser)
                 .query(insertUserQuery);
@@ -448,8 +456,7 @@ exports.editUser = async (req, res) => { //сохранение контакто
 
 
 exports.editRetra = async (req, res) => { //сохранение контактов
-    const { creator, incrimentRetra, nameRetra, port_protokol, protokol, tokenRetra, uz } = req.body;
-    console.log(creator)
+    const { creator, incrimentRetra, nameRetra, port_protokol, protokol, tokenRetra, uz, del } = req.body;
     try {
         const pool = await connection
         const sqlS = `SELECT * FROM retranslations WHERE nameRetra = @nameRetra AND uz=@uz AND incriment!=@incrimentRetra`;
@@ -468,7 +475,7 @@ exports.editRetra = async (req, res) => { //сохранение контакт�
 
             const insertUserQuery = `
                 UPDATE retranslations SET nameRetra=@nameRetra, port_protokol=@port_protokol, protokol=@protokol,
-                 creater=@creator,tokenRetra=@tokenRetra,uz=@uz WHERE incriment=@incrimentRetra `;
+                 creater=@creator,tokenRetra=@tokenRetra,del=@del,uz=@uz WHERE incriment=@incrimentRetra `;
             const userResult = await pool.request()
                 .input('nameRetra', nameRetra)
                 .input('port_protokol', port_protokol)
@@ -476,6 +483,7 @@ exports.editRetra = async (req, res) => { //сохранение контакт�
                 .input('uz', uz)
                 .input('incrimentRetra', incrimentRetra)
                 .input('tokenRetra', tokenRetra)
+                .input('del', del)
                 .input('creator', Number(creator))
                 .query(insertUserQuery);
 
@@ -501,10 +509,31 @@ exports.editRetra = async (req, res) => { //сохранение контакт�
     }
 };
 
-
+exports.setHistorys = async (req, res) => {
+    console.log('тут')
+    console.log(req.body.obj)
+    const { action, table, columns, data, uniqUsersID, uniqEntityID, nameAccount } = req.body.obj;
+    console.log(action, table, data, uniqUsersID, uniqEntityID, nameAccount)
+    const pool = await connection
+    try {
+        const sql = `INSERT INTO ${table} (action, data, uniqUsersID, ${columns},nameAccount) VALUES(@action, @data, @uniqUsersID, @uniqEntityID,@nameAccount)`
+        const result = await pool.request()
+            .input('action', action)
+            .input('data', data)
+            .input('uniqUsersID', uniqUsersID)
+            .input('uniqEntityID', uniqEntityID)
+            .input('nameAccount', nameAccount)
+            .query(sql);
+        res.json({
+            message: 'ОК'
+        });
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 exports.editAccount = async (req, res) => { //сохранение контактов
-    const { incriment, name, uniqCreater, uniqTP, oldUniqCreator } = req.body;
-    console.log(incriment, name, uniqCreater, uniqTP, oldUniqCreator)
+    const { incriment, name, uniqCreater, uniqTP, oldUniqCreator, del } = req.body;
     try {
         const pool = await connection
         const sqlS = `SELECT * FROM accounts WHERE name = @name AND uniqCreater=@uniqCreater`;
@@ -520,11 +549,12 @@ exports.editAccount = async (req, res) => { //сохранение контак�
         }
         else {
 
-            const sqls = 'UPDATE accounts SET name = @name, uniqCreater = @uniqCreater, uniqTP = @uniqTP WHERE incriment = @incriment';
+            const sqls = 'UPDATE accounts SET name = @name, del=@del,uniqCreater = @uniqCreater, uniqTP = @uniqTP WHERE incriment = @incriment';
             const result = await pool.request()
                 .input('name', name)
                 .input('uniqCreater', Number(uniqCreater))
                 .input('uniqTP', uniqTP)
+                .input('del', del)
                 .input('incriment', incriment)
                 .query(sqls);
 
@@ -552,7 +582,8 @@ exports.editAccount = async (req, res) => { //сохранение контак�
 
 
 exports.addAccount = async (req, res) => { //сохранение контактов
-    const { idx, name, uniqCreater, uniqTP } = req.body;
+    const { idx, name, uniqCreater, uniqTP, idu, password, role } = req.body;
+    const time = String(Math.floor((new Date().getTime()) / 1000))
     try {
         const pool = await connection
         const sqlS = `SELECT * FROM accounts WHERE name = @name AND uniqCreater=@uniqCreater`;
@@ -585,6 +616,17 @@ exports.addAccount = async (req, res) => { //сохранение контакт
                 .input('AccountIncriment', sql.Int, userIncriment)
                 .input('UserIncriment', sql.Int, uniqCreater)
                 .query(insertAccountUserQuery);
+
+
+            const post = `INSERT INTO accountsHistory (action, data, uniqUsersID, uniqAccountID,nameAccount) VALUES(@action, @data, @uniqUsersID, @uniqAccountID,@nameAccount)`
+            const resu = await pool.request()
+                .input('action', 'Создан')
+                .input('data', time)
+                .input('uniqUsersID', Number(uniqCreater))
+                .input('uniqAccountID', Number(userIncriment))
+                .input('nameAccount', Number(userIncriment))
+                .query(post);
+            await registerUser(pool, name, password, role, idu, String(userIncriment), uniqCreater, [], []);
             res.json({
                 message: 'Учетная запись создана', flag: true
             });
@@ -600,7 +642,9 @@ exports.addAccount = async (req, res) => { //сохранение контакт
 }
 
 exports.addObject = async (req, res) => { //сохранение контактов
-    const obj = req.body;
+    const obj = req.body.obj;
+    userRole = req.body.role
+    const time = String(Math.floor((new Date().getTime()) / 1000))
     try {
         const pool = await connection
         const sqlS = `SELECT * FROM objects WHERE objectname = @objectname AND uz=@uz`;
@@ -615,6 +659,11 @@ exports.addObject = async (req, res) => { //сохранение контакт�
 
         }
         else {
+
+            // Начало транзакции
+            const transaction = new sql.Transaction(pool);
+            await transaction.begin();
+
             const keys = Object.keys(obj);
             const columns = keys.join(', ');
             const values = keys.map(key => `@${key}`).join(', ');
@@ -638,6 +687,53 @@ exports.addObject = async (req, res) => { //сохранение контакт�
                 .input('accountIncriment', sql.Int, obj.uz)
                 .input('objectIncriment', sql.Int, objectIncriment)
                 .query(insertAccountUserQuery);
+
+            const post = `INSERT INTO objectsHistory (action, data, uniqUsersID, uniqObjectID,nameAccount) VALUES(@action, @data, @uniqUsersID, @uniqObjectID,@nameAccount)`
+            const resu = await pool.request()
+                .input('action', 'Создан')
+                .input('data', time)
+                .input('uniqUsersID', Number(obj.creater))
+                .input('uniqObjectID', Number(objectIncriment))
+                .input('nameAccount', Number(obj.uz))
+                .query(post);
+
+            console.log(userRole)
+            // Проверка на роль Администратора
+            if (userRole === 'Администратор') {
+                const insertAdminGroupQuery = `
+                    INSERT INTO usersObjects (uniqUsersID, uniqObjectID)
+                    VALUES (@uniqUsersID, @uniqObjectID)`;
+                await pool.request()
+                    .input('uniqUsersID', sql.Int, obj.creater)  // Предполагается, что obj.creater содержит ID администратора
+                    .input('uniqObjectID', sql.Int, objectIncriment)
+                    .query(insertAdminGroupQuery);
+            }
+            // Привязка объекта к администратору, если создатель - другой пользователь
+            else {
+                // Поиск администратора, связанного с учетной записью
+                const adminQuery = `
+                SELECT incriment FROM users 
+                WHERE role = 'Администратор' AND uz = @uz
+            `;
+                const adminResult = await pool.request()
+                    .input('uz', sql.Int, obj.uz)
+                    .query(adminQuery);
+
+
+                const adminID = adminResult.recordset[0].incriment;
+
+                const insertAdminObjectQuery = `
+                    INSERT INTO usersObjects (uniqUsersID, uniqObjectID)
+                    VALUES (@adminID, @objectIncriment)
+                `;
+                await pool.request()
+                    .input('adminID', sql.Int, adminID)
+                    .input('objectIncriment', sql.Int, objectIncriment)
+                    .query(insertAdminObjectQuery);
+
+            }
+            // Завершение транзакции
+            await transaction.commit();
             res.json({
                 message: 'Объект добавлен', flag: true
             })
@@ -656,7 +752,7 @@ exports.addObject = async (req, res) => { //сохранение контакт�
 
 exports.addRetra = async (req, res) => { //сохранение контактов
     const obj = req.body.obj;
-
+    const time = String(Math.floor((new Date().getTime()) / 1000))
     try {
         const pool = await connection
         const sqlS = `SELECT * FROM retranslations WHERE nameRetra = @nameRetra AND uz=@uz`;
@@ -694,6 +790,15 @@ exports.addRetra = async (req, res) => { //сохранение контакто
                 .input('retraIncriment', sql.Int, retraIncriment)
                 .query(insertAccountUserQuery);
 
+            const post = `INSERT INTO retrasHistory (action, data, uniqUsersID, uniqRetraID,nameAccount) VALUES(@action, @data, @uniqUsersID, @uniqRetraID,@nameAccount)`
+            const resu = await pool.request()
+                .input('action', 'Создан')
+                .input('data', time)
+                .input('uniqUsersID', Number(obj.creater))
+                .input('uniqRetraID', Number(retraIncriment))
+                .input('nameAccount', Number(obj.uz))
+                .query(post);
+
             res.json({
                 message: 'Ретранслятор добавлен', flag: true
             })
@@ -710,6 +815,8 @@ exports.addRetra = async (req, res) => { //сохранение контакто
 exports.addGroup = async (req, res) => { //сохранение контактов
     const obj = req.body.obj;
     const arrayObjects = req.body.arrayObjects
+    const userRole = req.body.role;
+    const time = String(Math.floor((new Date().getTime()) / 1000))
     try {
         const pool = await connection
         const sqlS = `SELECT * FROM groups WHERE nameGroup = @nameGroup AND uz=@uz`;
@@ -724,6 +831,10 @@ exports.addGroup = async (req, res) => { //сохранение контакто
 
         }
         else {
+            // Начало транзакции
+            const transaction = new sql.Transaction(pool);
+            await transaction.begin();
+
             const keys = Object.keys(obj);
             const columns = keys.join(', ');
             const values = keys.map(key => `@${key}`).join(', ');
@@ -743,7 +854,6 @@ exports.addGroup = async (req, res) => { //сохранение контакто
         INSERT INTO groupsAndObjects (uniqObjectID, uniqGroupID)
         VALUES (@uniqObjectID, @groupIncriment)`;
                 const currentObject = arrayObjects[i];
-                console.log(Number(currentObject))
                 await pool.request()
                     .input('uniqObjectID', sql.Int, Number(currentObject))
                     .input('groupIncriment', sql.Int, groupIncriment)
@@ -758,6 +868,51 @@ exports.addGroup = async (req, res) => { //сохранение контакто
                 .input('accountIncriment', sql.Int, obj.uz)
                 .input('groupIncriment', sql.Int, groupIncriment)
                 .query(insertAccountUserQuery);
+
+            const post = `INSERT INTO groupsHistory (action, data, uniqUsersID, uniqGroupID,nameAccount) VALUES(@action, @data, @uniqUsersID, @uniqGroupID,@nameAccount)`
+            const resu = await pool.request()
+                .input('action', 'Создан')
+                .input('data', time)
+                .input('uniqUsersID', Number(obj.creater))
+                .input('uniqGroupID', Number(groupIncriment))
+                .input('nameAccount', Number(obj.uz))
+                .query(post);
+            console.log(userRole)
+            // Проверка на роль Администратора
+            if (userRole === 'Администратор') {
+                const insertAdminGroupQuery = `
+                    INSERT INTO usersGroups (uniqUsersID, uniqGroupID)
+                    VALUES (@uniqUsersID, @uniqGroupID)`;
+                await pool.request()
+                    .input('uniqUsersID', sql.Int, obj.creater)  // Предполагается, что obj.creater содержит ID администратора
+                    .input('uniqGroupID', sql.Int, groupIncriment)
+                    .query(insertAdminGroupQuery);
+            }
+            // Привязка объекта к администратору, если создатель - другой пользователь
+            else {
+                // Поиск администратора, связанного с учетной записью
+                const adminQuery = `
+                SELECT incriment FROM users 
+                WHERE role = 'Администратор' AND uz = @uz
+            `;
+                const adminResult = await pool.request()
+                    .input('uz', sql.Int, obj.uz)
+                    .query(adminQuery);
+
+                const adminID = adminResult.recordset[0].incriment;
+
+                const insertAdminObjectQuery = `
+                    INSERT INTO usersGroups (uniqUsersID, uniqGroupID)
+                    VALUES (@adminID, @groupIncriment)
+                `;
+                await pool.request()
+                    .input('adminID', sql.Int, adminID)
+                    .input('groupIncriment', sql.Int, groupIncriment)
+                    .query(insertAdminObjectQuery);
+
+            }
+            // Завершение транзакции
+            await transaction.commit();
             res.json({
                 message: 'Группа добавлена', flag: true
             })
@@ -819,7 +974,36 @@ FROM
     }
 }
 
+exports.getHistoryStor = async function (req, res) {
+    const { table, tableEntity, column, incriment } = req.body.obj
+    console.log(table, tableEntity, column, incriment)
+    try {
+        const pool = await connection;
 
+        const sqlQuery = `
+SELECT
+   h.action AS action,
+   h.data AS data,
+   te.*,
+   a.name AS nameAccount,
+   u.name AS nameUsers
+  
+FROM
+    ${table} AS h
+    LEFT JOIN ${tableEntity} AS te ON h.${column} = te.incriment
+        LEFT JOIN users AS u ON h.uniqUsersID = u.incriment
+    LEFT JOIN accounts AS a ON h.nameAccount = a.incriment
+   WHERE ${column}=@incriment`;
+
+        const rows = await pool.request()
+            .input('incriment', incriment)
+            .query(sqlQuery);
+        res.json(rows.recordset);
+    } catch (error) {
+        console.error('Error fetching account users:', error);
+        res.status(500).json({ error: 'Error fetching account users' });
+    }
+}
 
 module.exports.getUsers = async function (req, res) { //сохранение учетных данных нового пользователя
     const prava = req.body.role
@@ -829,9 +1013,10 @@ module.exports.getUsers = async function (req, res) { //сохранение у�
         let sqlS = '';
         if (prava === 'Интегратор') {
             sqlS = `
-                SELECT * FROM users 
-                WHERE role = 'Сервис-инженер' AND creater=${creator}
-            `;
+    SELECT * FROM users 
+    WHERE (role = 'Сервис-инженер' AND creater = ${creator}) 
+       OR (role = 'Интегратор' AND incriment = ${creator})
+`;
         } else {
             sqlS = `
                 SELECT * FROM users 
@@ -863,104 +1048,121 @@ exports.getAccounts = async function (req, res) { //сохранение уче�
 }
 
 
-exports.getAccountCreater = async function (req, res) { //поиск создателя аккаунта и юзеров
+exports.getAccountCreater = async function (req, res) { // Поиск создателя аккаунта и пользователей
     try {
-        const pool = await connection
+        const pool = await connection;
 
         const sqlQuery = `
-    SELECT
-               a.*,
-        u.name AS name,
-            u.incriment AS incriment,
-                u.idx AS idx,
-        g.nameGroup AS nameGroup,
-          g.incriment AS incriment,
-              g.idx AS idx,
-              r.nameRetra AS nameRetra,
-                  r.incriment AS incriment,
-                      r.idx AS idx,
-        o.objectname AS objectname, 
-             o.incriment AS incriment,  
-                 o.idx AS idx, 
-          cu.name AS creator_name,
-        cu.role AS creator_role,
-         gu.incriment AS global_creator
-    FROM
-        accountUsers AS au
-        JOIN users AS u ON au.uniqUsersID = u.incriment
-        JOIN accounts AS a ON au.uniqAccountID = a.incriment
-        LEFT JOIN users AS cu ON a.uniqCreater = cu.incriment
-           LEFT JOIN users AS gu ON cu.creater = gu.incriment
-        LEFT JOIN accountObjects AS ao ON au.uniqAccountID = ao.uniqAccountID
-        LEFT JOIN objects AS o ON ao.uniqObjectID = o.incriment
-          LEFT JOIN accountGroups AS ag ON au.uniqAccountID = ag.uniqAccountID
-        LEFT JOIN groups AS g ON ag.uniqGroupID = g.incriment
-            LEFT JOIN accountRetra AS ar ON au.uniqAccountID = ar.uniqAccountID
-        LEFT JOIN retranslations AS r ON ar.uniqRetraID = r.incriment
-`;
-        const rows = await pool.request()
-            .query(sqlQuery);
+            SELECT
+                a.*,
+                u.name AS user_name,
+                u.incriment AS user_incriment,
+                u.idx AS user_idx,
+                g.nameGroup AS group_name,
+                g.incriment AS group_incriment,
+                g.idx AS group_idx,
+                r.nameRetra AS retra_name,
+                r.incriment AS retra_incriment,
+                r.idx AS retra_idx,
+                o.objectname AS object_name, 
+                o.incriment AS object_incriment,  
+                o.idx AS object_idx, 
+                cu.name AS creator_name,
+                cu.role AS creator_role,
+                gu.incriment AS global_creator
+            FROM
+                accountUsers AS au
+                JOIN accounts AS a ON au.uniqAccountID = a.incriment
+                LEFT JOIN users AS u ON au.uniqUsersID = u.incriment
+                LEFT JOIN users AS cu ON a.uniqCreater = cu.incriment
+                LEFT JOIN users AS gu ON cu.creater = gu.incriment
+                LEFT JOIN accountObjects AS ao ON au.uniqAccountID = ao.uniqAccountID
+                LEFT JOIN objects AS o ON ao.uniqObjectID = o.incriment
+                LEFT JOIN accountGroups AS ag ON au.uniqAccountID = ag.uniqAccountID
+                LEFT JOIN groups AS g ON ag.uniqGroupID = g.incriment
+                LEFT JOIN accountRetra AS ar ON au.uniqAccountID = ar.uniqAccountID
+                LEFT JOIN retranslations AS r ON ar.uniqRetraID = r.incriment
+        `;
+
+        const rows = await pool.request().query(sqlQuery);
+
+        // Проверяем данные, полученные из запроса
+        //   console.log(rows.recordset);
 
         const struktura = rows.recordset.map(e => {
+            // console.log(e)
             return {
                 accounts: {
-                    incriment: e.incriment[0],
-                    name: e.name[0],
+                    incriment: e.incriment,
+                    name: e.name,
                     uniqCreater: e.uniqCreater,
                     tp: e.uniqTP,
                     creator_name: e.creator_name,
                     creator_role: e.creator_role,
-                    idx: e.idx[0],
-                    global_creator: e.global_creator
+                    idx: e.idx,
+                    global_creator: e.global_creator,
+                    del: e.del
                 },
-                users: {
-                    incriment_account: e.incriment[0],
-                    incriment: e.incriment[1],
-                    name: e.name[1],
-                    idx: e.idx[1],
+                users: e.user_name ? {
+                    incriment_account: e.incriment,
+                    incriment: e.user_incriment,
+                    name: e.user_name,
+                    idx: e.user_idx,
                     uniqCreater: e.uniqCreater
+                } : null,
+                groups: e.group_name ? {
+                    incriment_account: e.incriment,
+                    incriment: e.group_incriment,
+                    name: e.group_name,
+                    idx: e.group_idx,
+                    uniqCreater: e.uniqCreater,
+                    global_creator: e.global_creator
+                } : null,
+                objects: e.object_name ? {
+                    incriment_account: e.incriment,
+                    incriment: e.object_incriment,
+                    name: e.object_name,
+                    idx: e.object_idx,
+                    uniqCreater: e.uniqCreater,
+                    global_creator: e.global_creator
+                } : null,
+                retras: e.retra_name ? {
+                    incriment_account: e.incriment,
+                    incriment: e.retra_incriment,
+                    name: e.retra_name,
+                    idx: e.retra_idx,
+                    uniqCreater: e.uniqCreater,
+                    global_creator: e.global_creator
+                } : null
+            };
+        });
 
-                },
-                groups: {
-                    incriment_account: e.incriment[0],
-                    incriment: e.incriment[2],
-                    name: e.nameGroup,
-                    idx: e.idx[2],
-                    uniqCreater: e.uniqCreater,
-                    global_creator: e.global_creator
-                },
-                objects: {
-                    incriment_account: e.incriment[0],
-                    incriment: e.incriment[4],
-                    name: e.objectname,
-                    idx: e.idx[3],
-                    uniqCreater: e.uniqCreater,
-                    global_creator: e.global_creator
-                },
-                retras: {
-                    incriment_account: e.incriment[0],
-                    incriment: e.incriment[3],
-                    name: e.nameRetra,
-                    idx: e.idx[4],
-                    uniqCreater: e.uniqCreater,
-                    global_creator: e.global_creator
-                }
-            }
-        })
         // Создание Map для хранения уникальных значений
         const uniqueAccounts = new Map();
         const uniqueUsers = new Map();
         const uniqueGroups = new Map();
         const uniqueObjects = new Map();
         const uniqueRetras = new Map();
+
         // Итерация по массиву и добавление уникальных значений
         struktura.forEach(e => {
-            if (e.accounts.name) { uniqueAccounts.set(e.accounts.incriment, e.accounts); }
-            if (e.users.name) { uniqueUsers.set(e.users.incriment, e.users); }
-            if (e.groups.name) { uniqueGroups.set(e.groups.incriment, e.groups); }
-            if (e.objects.name) { uniqueObjects.set(e.objects.incriment, e.objects); }
-            if (e.retras.name) { uniqueRetras.set(e.retras.incriment, e.retras); }
+            if (e.accounts && e.accounts.incriment) {
+                uniqueAccounts.set(e.accounts.incriment, e.accounts);
+            }
+            if (e.users) {
+                uniqueUsers.set(e.users.incriment, e.users);
+            }
+            if (e.groups) {
+                uniqueGroups.set(e.groups.incriment, e.groups);
+            }
+            if (e.objects) {
+                uniqueObjects.set(e.objects.incriment, e.objects);
+            }
+            if (e.retras) {
+                uniqueRetras.set(e.retras.incriment, e.retras);
+            }
         });
+
         // Преобразование Map в массивы
         const uniqStruktura = {
             uniqueAccounts: Array.from(uniqueAccounts.values()),
@@ -969,6 +1171,7 @@ exports.getAccountCreater = async function (req, res) { //поиск созда�
             uniqueObjects: Array.from(uniqueObjects.values()),
             uniqueRetras: Array.from(uniqueRetras.values())
         };
+
         // Добавление количества уникальных пользователей, групп и объектов к каждому аккаунту
         uniqStruktura.uniqueAccounts.forEach(account => {
             // Подсчет уникальных пользователей
@@ -981,19 +1184,19 @@ exports.getAccountCreater = async function (req, res) { //поиск созда�
             account.uniqueRetrasCount = uniqStruktura.uniqueRetras.filter(e => e.incriment_account === account.incriment).length;
         });
 
-        res.json(uniqStruktura)
+        res.json(uniqStruktura);
 
     } catch (e) {
-        console.log(e)
+        console.error(e);
+        res.status(500).json({ message: 'Ошибка при выполнении запроса' });
     }
-}
+};
 
 
 
 
 exports.getObjectsGroups = async function (req, res) {
     const incriment = req.body.incriment
-    console.log(incriment)
     try {
         const pool = await connection;
 
@@ -1046,6 +1249,7 @@ exports.getObjectCreater = async function (req, res) {
         const sqlS = `
             SELECT
                 o.*,
+                o.del AS delStatus,
                 a.*,
                 u.name AS username,
                 u.role AS userrole,
@@ -1079,6 +1283,7 @@ exports.getGroupCreater = async function (req, res) { //поиск создат�
         const sqlS = `
             SELECT
                 o.*,
+                o.del AS delStatus,
                 a.*,
                  u.name AS username,
                 u.role AS userrole,
@@ -1132,6 +1337,7 @@ exports.getRetraCreater = async function (req, res) { //поиск создат�
         const sqlS = `
             SELECT
                 o.*,
+                o.del AS delStatus,
                 a.*,
                  u.name AS username,
                 u.role AS userrole,
@@ -1206,6 +1412,7 @@ exports.getUsersContent = async function (req, res) {
             SELECT
                 a.*,
                 u.*,
+                u.del AS delStatus,
                 a.name AS accountname,
                 gu.name AS username,
                 gu.role AS userrole,
@@ -1228,7 +1435,6 @@ exports.getUsersContent = async function (req, res) {
         `;
         const usersResult = await pool.request().query(sqlS);
         const users = usersResult.recordset;
-        console.log(users)
         // Запрос для получения объектов
         const sqlObjects = `
             SELECT
@@ -1241,7 +1447,6 @@ exports.getUsersContent = async function (req, res) {
         `;
         const objectsResult = await pool.request().query(sqlObjects);
         const objects = objectsResult.recordset;
-        console.log(objects)
         // Запрос для получения групп
         const sqlGroups = `
             SELECT
@@ -1388,223 +1593,286 @@ exports.geAccContent = async function (req, res) {
 
 
 exports.deleteAccount = async function (req, res) {
+    console.log(req.body)
     const incriment = req.body.id;
     const index = req.body.index;
-    const pool = await connection; // Получение подключения к базе данных
-    console.log(incriment, index)
+    const userRole = req.body.role; // Получаем роль пользователя из запроса
+    const uniqCreator = req.body.uniqCreator
+    const pool = await connection;
+    console.log(userRole)
+    console.log(incriment)
+    console.log(uniqCreator)
     try {
+        const isCursor = userRole === 'Курсор'; // Проверяем, является ли пользователь "Курсор"
+        console.log(isCursor)
         if (index == '0') {
-            const userIds = await methods('accountUsers', 'uniqUsersID', 'uniqAccountID')
-            const objectIds = await methods('accountObjects', 'uniqObjectID', 'uniqAccountID')
-            const groupIds = await methods('accountGroups', 'uniqGroupID', 'uniqAccountID')
-            const retraIds = await methods('accountRetra', 'uniqRetraID', 'uniqAccountID')
-            if (userIds.length > 0) {
-                const userIdsString = userIds.join(',');
-                const deleteUsersSql =
-                    `DELETE FROM users
-                        WHERE incriment IN(${userIdsString})
-                        AND role IN('Пользователь', 'Администратор');
-                    `;
-                await pool.request().query(deleteUsersSql);
-            }
-            if (objectIds.length > 0) {
-                const objectIdsString = objectIds.join(',');
-                const deleteObjectsSql =
-                    `DELETE FROM objects
-                        WHERE incriment IN(${objectIdsString})`;
-                await pool.request().query(deleteObjectsSql);
-            }
-            if (groupIds.length > 0) {
-                const groupIdsString = groupIds.join(',');
-                const deleteGroupsObjectsSql =
-                    `DELETE FROM groups
-                        WHERE incriment IN(${groupIdsString})`;
-                await pool.request().query(deleteGroupsObjectsSql);
+            // Получаем связанные сущности
+            const userIds = await methods('accountUsers', 'uniqUsersID', 'uniqAccountID');
+            const objectIds = await methods('accountObjects', 'uniqObjectID', 'uniqAccountID');
+            const groupIds = await methods('accountGroups', 'uniqGroupID', 'uniqAccountID');
+            const retraIds = await methods('accountRetra', 'uniqRetraID', 'uniqAccountID');
+
+            const usersMove = userIds.filter(e => e !== Number(uniqCreator))
+            console.log(usersMove)
+            if (isCursor) {
+                // Если роль "Курсор", удаляем сущности
+                if (usersMove.length > 0) {
+                    await deleteEntities('users', usersMove);
+                }
+                if (objectIds.length > 0) {
+                    await deleteEntities('objects', objectIds);
+                }
+                if (groupIds.length > 0) {
+                    await deleteEntities('groups', groupIds);
+                }
+                if (retraIds.length > 0) {
+                    await deleteEntities('retranslations', retraIds);
+                }
+                await deleteEntity('accounts', incriment);
+            } else {
+                // Если роль не "Курсор", помечаем сущности как удаленные
+                if (usersMove.length > 0) {
+                    await setFlagFalse('users', usersMove);
+                }
+                if (objectIds.length > 0) {
+                    await setFlagFalse('objects', objectIds);
+                }
+                if (groupIds.length > 0) {
+                    await setFlagFalse('groups', groupIds);
+                }
+                if (retraIds.length > 0) {
+                    await setFlagFalse('retranslations', retraIds);
+                }
+                await setFlagFalse('accounts', [incriment]);
             }
 
-            if (retraIds.length > 0) {
-                const retraIdsString = retraIds.join(',');
-                const deleteRetraObjectsSql =
-                    `DELETE FROM retranslations
-                        WHERE incriment IN(${retraIdsString})`;
-                await pool.request().query(deleteRetraObjectsSql);
+            res.json({
+                message: 'Операция завершена'
+            });
+        } else if (index == '1') {
+            if (isCursor) {
+                await deleteEntity('users', incriment);
+            } else {
+                await setFlagFalse('users', [incriment]);
             }
-            // Шаг 4: Удаляем сам аккаунт из accounts
-            const deleteAccountSql =
-                `DELETE FROM accounts
-                    WHERE incriment = @incriment;
-                `;
-            await pool.request()
-                .input('incriment', incriment)
-                .query(deleteAccountSql);
+            res.json({ message: 'Пользователь удален' });
+        } else if (index == '2') {
+            if (isCursor) {
+                await deleteEntity('objects', incriment);
+            } else {
+                await setFlagFalse('objects', [incriment]);
+            }
+            res.json({ message: 'Объект удален' });
+        } else if (index == '5') {
+            const groupIds = await methods('retraGroups', 'uniqGroupID', 'uniqRetraID');
+            const objectsIds = await methods('retraObjects', 'uniqObjectID', 'uniqRetraID');
 
-            res.json({
-                message: 'Аккаунт успешно удален'
-            });
-        }
-        else if (index == 1) {
-            await delete_method('users')
-            res.json({
-                message: 'Пользователь удален'
-            });
-        }
-        else if (index == 2) {
-            await delete_method('objects')
-            res.json({
-                message: 'Объект удален'
-            });
-        }
-        else if (index == 5) {
-            const groupIds = await methods('retraGroups', 'uniqGroupID', 'uniqRetraID')
-            const objectsIds = await methods('retraObjects', 'uniqObjectID', 'uniqRetraID')
-            if (groupIds.length > 0) {
-                const groupIdsString = groupIds.join(',');
-                const deleteRetraGroupsSql =
-                    `DELETE FROM groups
-                        WHERE incriment IN(${groupIdsString})`;
-                await pool.request().query(deleteRetraGroupsSql);
+            if (isCursor) {
+                if (groupIds.length > 0) {
+                    await deleteEntities('groups', groupIds);
+                }
+                if (objectsIds.length > 0) {
+                    await deleteEntities('objects', objectsIds);
+                }
+                await deleteEntity('retranslations', incriment);
+            } else {
+                if (groupIds.length > 0) {
+                    await setFlagFalse('groups', groupIds);
+                }
+                if (objectsIds.length > 0) {
+                    await setFlagFalse('objects', objectsIds);
+                }
+                await setFlagFalse('retranslations', [incriment]);
             }
-
-            if (objectsIds.length > 0) {
-                const objectsIdsString = objectsIds.join(',');
-                const deleteRetraObjectsSql =
-                    `DELETE FROM objects
-                        WHERE incriment IN(${objectsIdsString})`;
-                await pool.request().query(deleteRetraObjectsSql);
+            res.json({ message: 'Ретранслятор удален' });
+        } else {
+            if (isCursor) {
+                await deleteEntity('groups', incriment);
+            } else {
+                await setFlagFalse('groups', [incriment]);
             }
-            await delete_method('retranslations')
-            res.json({
-                message: 'Ретранслятор удален'
-            });
-        }
-        else {
-            await delete_method('groups')
-            res.json({
-                message: 'Группа удалена'
-            });
+            res.json({ message: 'Группа удалена' });
         }
     } catch (e) {
-        // В случае ошибки откат транзакции и отправка сообщения об ошибке клиенту
         console.error(e);
         res.status(500).json({
-            message: 'Произошла ошибка при удалении аккаунта'
+            message: 'Произошла ошибка при выполнении операции'
         });
     }
 
-
     async function methods(table, kluch, ifs) {
-        const findUsersSql =
+        const query =
             `SELECT ${kluch}
-                FROM ${table}
-                WHERE ${ifs} = @incriment;
+             FROM ${table}
+             WHERE ${ifs} = @incriment;
             `;
-        const usersResult = await pool.request()
+        const result = await pool.request()
             .input('incriment', incriment)
-            .query(findUsersSql);
+            .query(query);
 
-        const res = usersResult.recordset.map(row => row[kluch]);
-        console.log('Связанные сущности:', res);
-        return res
+        return result.recordset.map(row => row[kluch]);
     }
 
-    async function delete_method(table) {
+    async function deleteEntities(table, ids) {
+        const idsString = ids.join(',');
+        console.log(table, idsString)
+        const sql = `DELETE FROM ${table} WHERE incriment IN (${idsString})`;
+        await pool.request().query(sql);
+    }
+
+    async function deleteEntity(table, incriment) {
+        console.log(table, incriment, uniqCreator)
+        if (table === 'users') {
+            // Обновите `accounts`, где удаляемый пользователь является создателем
+            const sqlUpdateAccounts = `UPDATE accounts SET uniqCreater = @newCreator WHERE uniqCreater = @incriment`;
+            const result = await pool.request()
+                .input('incriment', incriment)
+                .input('newCreator', uniqCreator)
+                .query(sqlUpdateAccounts);
+            console.log(result.rowsAffected[0])
+            if (result.rowsAffected[0] > 0) {
+                //  Обновите `accountUsers` только если удаляемый пользователь является создателем
+                const sqlUpdateAccountUsers = `
+                   UPDATE accountUsers
+                  SET uniqUsersID = @newCreator
+                  WHERE uniqUsersID = @incriment
+                `;
+                await pool.request()
+                    .input('incriment', incriment)
+                    .input('newCreator', uniqCreator)
+                    .query(sqlUpdateAccountUsers);
+            }
+
+
+            await updateCreatorReferences('users', incriment, uniqCreator);
+            await updateCreatorReferences('objects', incriment, uniqCreator);
+            await updateCreatorReferences('groups', incriment, uniqCreator);
+            await updateCreatorReferences('retranslations', incriment, uniqCreator);
+
+        }
         const sql = `DELETE FROM ${table} WHERE incriment = @incriment`;
+        await pool.request().input('incriment', incriment).query(sql);
+    }
+
+    async function updateCreatorReferences(table, oldCreator, newCreator) {
+        const sql = `UPDATE ${table} SET creater = @newCreator WHERE creater = @oldCreator`;
         await pool.request()
-            .input('incriment', incriment)
+            .input('oldCreator', oldCreator)
+            .input('newCreator', newCreator)
             .query(sql);
 
     }
+
+    async function setFlagFalse(table, ids) {
+        const idsString = ids.join(',');
+        console.log(idsString)
+        const sql = `UPDATE ${table} SET del = 'true' WHERE incriment IN (${idsString})`;
+        await pool.request().query(sql);
+    }
 };
 
+async function registerUser(pool, login, password, role, idx, uz, creater, objectsId = [], groupsid = []) {
+    console.log(login, password, role, idx, uz, creater)
+    const time = String(Math.floor((new Date().getTime()) / 1000));
 
+    // Проверка наличия пользователя с таким же логином
+    const sqlS = `SELECT * FROM users WHERE name = @name AND uz=@uz`;
+    const rows = await pool.request()
+        .input('name', sql.NVarChar, login)
+        .input('uz', sql.NVarChar, uz)
+        .query(sqlS);
 
+    if (rows.recordset.length > 0) {
+        return { message: `Пользователь с таким Логином - ${rows.recordset[0].name} уже есть`, flag: false };
+    } else {
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
 
-module.exports.signup = async function (req, res) { //сохранение учетных данных нового пользователя
-    const { login, password, role, idx, uz, creater } = req.body.obj;
-    const objectsId = req.body.objects
-    const groupsid = req.body.groups
-    try {
-        const pool = await connection
-        const sqlS = `SELECT * FROM users WHERE name = @name AND uz=@uz`;
-        const rows = await pool.request()
-            .input('name', sql.NVarChar, login)
-            .input('uz', sql.NVarChar, uz)
-            .query(sqlS);
-        if (rows.recordset.length > 0) {
-            res.json({
-                message: `Пользователь с таким Логином - ${rows.recordset[0].name} уже есть`, flag: false
-            });
-            //  return;
-        }
-        else {
-            const salt = bcrypt.genSaltSync(10);
-            const hashedPassword = bcrypt.hashSync(password, salt);
-            const insertUserQuery = `
-                INSERT INTO users (idx, name, password, role, uz, creater)
-                OUTPUT INSERTED.incriment
-                VALUES (@idx, @login, @password, @role, @uz, @creater)
-            `;
-            const userResult = await pool.request()
-                .input('idx', idx)
-                .input('login', login)
-                .input('password', hashedPassword)
-                .input('role', role)
-                .input('uz', uz)
-                .input('creater', creater)
-                .query(insertUserQuery);
+        // Вставка пользователя в таблицу users
+        const insertUserQuery = `
+            INSERT INTO users (idx, name, password, role, uz, creater)
+            OUTPUT INSERTED.incriment
+            VALUES (@idx, @login, @password, @role, @uz, @creater)
+        `;
+        const userResult = await pool.request()
+            .input('idx', idx)
+            .input('login', login)
+            .input('password', hashedPassword)
+            .input('role', role)
+            .input('uz', sql.NVarChar, String(uz))
+            .input('creater', creater)
+            .query(insertUserQuery);
 
+        const userIncriment = userResult.recordset[0].incriment;
 
-            let iduz = uz ? uz : null
-            //  if (uz) {
-            const userIncriment = userResult.recordset[0].incriment;
-
+        if (uz) {
             // Вставка записи в таблицу accountUsers
             const insertAccountUserQuery = `
-                  INSERT INTO accountUsers (uniqAccountID, uniqUsersID)
-                  VALUES (@AccountIncriment, @UserIncriment)
-              `;
+              INSERT INTO accountUsers (uniqAccountID, uniqUsersID)
+              VALUES (@AccountIncriment, @UserIncriment)
+            `;
             await pool.request()
-                .input('AccountIncriment', sql.Int, iduz)
+                .input('AccountIncriment', sql.Int, uz)
                 .input('UserIncriment', sql.Int, userIncriment)
                 .query(insertAccountUserQuery);
-            //   }
-            if (objectsId.length !== 0) {
-                // Вставка записи в таблицу usersObjects
-                for (let i = 0; i < objectsId.length; i++) {
-                    const insertgroupsAndObjectsQuery = `
-        INSERT INTO usersObjects (uniqObjectID, uniqUsersID)
-        VALUES (@uniqObjectID, @userIncriment)`;
-                    const currentObject = objectsId[i];
-                    await pool.request()
-                        .input('uniqObjectID', sql.Int, Number(currentObject))
-                        .input('userIncriment', sql.Int, userIncriment)
-                        .query(insertgroupsAndObjectsQuery);
-                }
-            }
-            if (groupsid.length !== 0) {
-                // Вставка записи в таблицу usersObjects
-                for (let i = 0; i < groupsid.length; i++) {
-                    const insertgroupsAndObjectsQuery = `
-        INSERT INTO usersGroups (uniqGroupID,uniqUsersID)
-        VALUES (@uniqGroupID, @userIncriment)`;
-                    const currentObject = groupsid[i];
-                    await pool.request()
-                        .input('uniqGroupID', sql.Int, Number(currentObject))
-                        .input('userIncriment', sql.Int, userIncriment)
-                        .query(insertgroupsAndObjectsQuery);
-                }
-            }
-            res.json({
-                message: 'Пользователь зарегистрирован', flag: true
-            });
-
         }
 
+        if (objectsId.length !== 0) {
+            // Вставка записей в таблицу usersObjects
+            for (let objectId of objectsId) {
+                const insertObjectsQuery = `
+                    INSERT INTO usersObjects (uniqObjectID, uniqUsersID)
+                    VALUES (@uniqObjectID, @userIncriment)
+                `;
+                await pool.request()
+                    .input('uniqObjectID', sql.Int, Number(objectId))
+                    .input('userIncriment', sql.Int, userIncriment)
+                    .query(insertObjectsQuery);
+            }
+        }
+
+        if (groupsid.length !== 0) {
+            // Вставка записей в таблицу usersGroups
+            for (let groupId of groupsid) {
+                const insertGroupsQuery = `
+                    INSERT INTO usersGroups (uniqGroupID, uniqUsersID)
+                    VALUES (@uniqGroupID, @userIncriment)
+                `;
+                await pool.request()
+                    .input('uniqGroupID', sql.Int, Number(groupId))
+                    .input('userIncriment', sql.Int, userIncriment)
+                    .query(insertGroupsQuery);
+            }
+        }
+
+        // Запись в историю
+        const post = `INSERT INTO usersHistory (action, data, uniqUsersID, uniqUsersIDLow, nameAccount) 
+                      VALUES(@action, @data, @uniqUsersID, @uniqUsersIDLow, @nameAccount)`;
+        await pool.request()
+            .input('action', 'Создан')
+            .input('data', time)
+            .input('uniqUsersID', Number(creater))
+            .input('uniqUsersIDLow', Number(userIncriment))
+            .input('nameAccount', Number(uz))
+            .query(post);
+
+        return { message: 'Пользователь зарегистрирован', flag: true };
+    }
+}
+
+
+module.exports.signup = async function (req, res) {
+    const { login, password, role, idx, uz, creater } = req.body.obj;
+    const objectsId = req.body.objects;
+    const groupsid = req.body.groups;
+
+    try {
+        const pool = await connection;
+        const result = await registerUser(pool, login, password, role, idx, uz, creater, objectsId, groupsid);
+        res.json(result);
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            message: 'An error occurred'
-        });
+        res.status(500).json({ message: 'An error occurred' });
     }
 };
 

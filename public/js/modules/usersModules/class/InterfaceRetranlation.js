@@ -121,22 +121,25 @@ export class InterfaceRetranslation {
         console.log(this.usersData)
         if (this.add) this.usersData.sort((a, b) => b.incriment[0] - a.incriment[0])
         const data = this.usersData.map(el => {
-            return [{ id: el.incriment[0], creater: el.creater, global_creator: el.global_creator },
+            return [{ id: el.incriment[0], creater: el.creater, global_creator: el.global_creator, del: el.delStatus },
             [{ name: el.nameRetra, incriment: el.incriment[0], entity: 'retra' },
             { name: el.username, incriment: el.creater, entity: 'user' },
             { name: el.name, incriment: el.incriment[1], entity: 'account' }, { name: el.protokol, incriment: null, entity: null }, el.object_count, el.group_count, 'x']];
 
         })
         data.forEach(el => {
+            console.log(el)
             if (this.prava === 'Курсор') {
                 this.addRowToTable(tableParent, el)
             }
             else if (this.prava === 'Интегратор') {
                 if (el[0].global_creator === Number(this.creator) || el[0].creater === Number(this.creator)) {
+                    if (el[0].del === 'true') return
                     this.addRowToTable(tableParent, el)
                 }
             } else {
                 if (el[0].creater === Number(this.creator)) {
+                    if (el[0].del === 'true') return
                     this.addRowToTable(tableParent, el)
                 }
             }
@@ -149,6 +152,7 @@ export class InterfaceRetranslation {
         tr.innerHTML = rowData[1].map((it, index) => index < 4 ? `<th class="cell_stata cell cell_table_auth click_property" index="${index}" entity="${it.entity}" rel="${it.incriment}">${it.name ? it.name : '-'}</th>` :
             `<th class="cell_stata cell cell_table_auth">${it ? it : '-'}</th>`).join('');
         tr.setAttribute('data-id', rowData[0].id);
+        if (rowData[0].del === 'true') tr.classList.add('sleepblock')
         tableParent.appendChild(tr);
         const lastRow = tableParent.lastElementChild;
         const lastCell = lastRow.lastElementChild;
@@ -161,6 +165,7 @@ export class InterfaceRetranslation {
 
     async updateTable(lastRow) {
         const name = lastRow.children[0].textContent
+        this.accountIncriment = lastRow.children[2].getAttribute('rel')
         this.container.insertAdjacentHTML('beforeend', ContentGeneration.confirm('ретранслятор', name));
         this.idDelete = lastRow.getAttribute('data-id'); // Получаем id из data-атрибута
         this.modalConfirmElement = this.container.querySelector('.modal_podtver');
@@ -176,8 +181,12 @@ export class InterfaceRetranslation {
     }
 
     async delete() {
-        console.log(this.idDelete, this.index)
-        await Requests.deleteAccount(this.idDelete, this.index)
+        await Requests.deleteAccount(this.idDelete, this.index, this.prava)
+        const obj = {
+            action: 'Удалён', table: 'retrasHistory', columns: 'uniqRetraID', data: String(Math.floor((new Date().getTime()) / 1000)),
+            uniqUsersID: Number(this.creator), uniqEntityID: Number(this.idDelete), nameAccount: Number(this.accountIncriment)
+        }
+        const resu = await Requests.setHistory(obj)
         this.closeConfirm()
         this.createTableRetra()
     }

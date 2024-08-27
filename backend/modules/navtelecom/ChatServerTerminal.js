@@ -1,8 +1,7 @@
 
 const { NavtelecomResponceData, CheckSumm, BitsCount, WriteFile } = require('./Helpers');
 const SendingCommandToTerminal = require('./SendingCommandToTerminal')
-const helpers = require('../../services/helpers');
-const { HelpersUpdateParams } = require('../../services/HelpersUpdateParams.js')
+const { UpdateSetStor } = require('../../services/UpdateSetStor.js')
 const net = require('net');
 
 class ListenPortTP {
@@ -94,7 +93,7 @@ class ChartServerTerminal {
                     this.telemetrationFields(buf, type, count)
                     const res = await databaseService.objectsImei(String(this.imei))
                     if (res.length !== 0) {
-                        this.setData(this.imei, this.port, res[0].idx)
+                        new UpdateSetStor(this.imei, this.port, this.globalArrayMSG, res[0].idx)
                         WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
                         this.globalArrayMSG = []
                         const response = Buffer.alloc(type === '~A' ? 3 : 2);
@@ -111,7 +110,7 @@ class ChartServerTerminal {
                     this.telemetrationFields(buf, type, 1)
                     const res = await databaseService.objectsImei(String(this.imei))
                     if (res.length !== 0) {
-                        this.setData(this.imei, this.port, res[0].idx)
+                        new UpdateSetStor(this.imei, this.port, this.globalArrayMSG, res[0].idx)
                         WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
                         this.globalArrayMSG = []
                         const response = Buffer.alloc(6);
@@ -125,13 +124,6 @@ class ChartServerTerminal {
             }
         });
     }
-
-    async setData(imei, port, id) {
-        await helpers.setDataToBase(imei, port, this.globalArrayMSG, id) //передача расшифрованных данных для обработки и записи в БД
-        //  HelpersUpdateParams.update(null, this.getStruktura(data)) сделать структуру как под виалон и взять последнее сообщение!
-
-    }
-
 
     responces(msg) {
         const writeSuccessful = this.socket.write(this.responce);

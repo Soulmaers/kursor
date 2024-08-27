@@ -118,9 +118,9 @@ export class NavigationMenu {
         this.reportUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
         const wrap = document.querySelector('.globalMaps').children[0]
         kartaContainer(wrap)
-        this.currentTimeoutId = setInterval(() => {
-            kartaContainer(wrap)
-        }, 6000);
+        // this.currentTimeoutId = setInterval(() => {
+        //  kartaContainer(wrap)
+        // }, 6000);
     }
 
     reports(elem, avl, num) {

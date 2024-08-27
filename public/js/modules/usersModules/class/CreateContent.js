@@ -2,24 +2,70 @@
 
 export class ContentGeneration {
 
-  static fomraSetting() {
+
+  static addListStor(data) {
+
+    const html = data.map(e => `<div class="row_stor_history">
+  <div class="cell_stor_history ">${e.action}</div>
+    <div class="cell_stor_history ">${e.data}</div>
+   <div class="cell_stor_history ">${e.nameUsers}</div>
+   <div class="cell_stor_history ">${e.nameAccount}</div>
+  </div>`).join('')
+
+    return `<div class="row_stor_history"> 
+    <div class="cell_stor_history title_stor_history">Действие</div>
+    <div class="cell_stor_history title_stor_history">Дата</div>
+   <div class="cell_stor_history title_stor_history">Пользователь</div>
+   <div class="cell_stor_history title_stor_history">Учётная запись</div></div>
+   ${html}`
+  }
+
+  static addIerarhia(data) {
+    return data.map(account => `
+    <div class="accounts_ierarhia">
+        <div class="name_suzh acc_suz"><i class="fas fa-toggle-on check_ier slash_check" rel="plus"></i>
+            <i class="fas fa-toggle-off check_ier" rel="minus"></i>${account.nameAccount}</div>
+        <div class="body_suzh">
+            <div class="name_suzh"><i class="fas fa-toggle-on check_ier slash_check" rel="plus"></i>
+            <i class="fas fa-toggle-off check_ier" rel="minus"></i>Пользователи (${account.users.length}):</div>
+            <div class="body_suzh">${account.users.map(user => `<div class="name_children_suzh">${user}</div>`).join('')}</div>
+            
+            <div class="name_suzh"><i class="fas fa-toggle-on check_ier slash_check" rel="plus"></i>
+            <i class="fas fa-toggle-off check_ier" rel="minus"></i>Группы (${account.groups.length}):</div>
+            <div class="body_suzh">${account.groups.map(group => `<div class="name_children_suzh">${group}</div>`).join('')}</div>
+            
+            <div class="name_suzh"><i class="fas fa-toggle-on check_ier slash_check" rel="plus"></i>
+            <i class="fas fa-toggle-off check_ier" rel="minus"></i>Объекты (${account.objects.length}):</div>
+            <div class="body_suzh">${account.objects.map(object => `<div class="name_children_suzh">${object}</div>`).join('')}</div>
+            
+            <div class="name_suzh"><i class="fas fa-toggle-on check_ier slash_check" rel="plus"></i>
+            <i class="fas fa-toggle-off check_ier" rel="minus"></i>Ретрансляторы (${account.retras.length}):</div>
+            <div class="body_suzh">${account.retras.map(retra => `<div class="name_children_suzh">${retra}</div>`).join('')}</div>
+        </div>
+    </div>
+`).join('');
+
+
+  }
+  static fomraSetting(role) {
     return `<div class="container_index">
-        <div class="header_index">Панель администратора<i class="fas fa fa-times close_modal_window"></i></div>
+        <div class="header_index"><div class="icons_clear_rows"><i class="fas fa-check-circle position_icons" rel="nodeletes"></i>
+        <i class="fas fa-times-circle position_icons" rel="deletes"></div></i>Панель администратора <i class="fas fa-ellipsis-h ierarhia"></i><i class="fas fa fa-times close_modal_window"></i></div>
         <div class="body_index">
         <div class="navi_setting">
-        <div class="type_navi" rel="Создать учетную запись" data-att="0">Учетные записи<i class="fas fa-angle-down srows"></i></div>
+        <div class="type_navi" rel="Создать учетную запись" ${role === 'Администратор' ? 'style="display:none;"' : ''} data-att="0">Учетные записи<i class="fas fa-angle-down srows"></i></div>
            <div class="type_navi" rel="Создать пользователя" data-att="1">Пользователи<i class="fas fa-angle-down srows"></i></div>
                    <div class="type_navi" rel="Создать группу" data-att="3">Группы объектов<i class="fas fa-angle-down srows"></i></div>
               <div class="type_navi" rel="Создать объект" data-att="2">Объекты<i class="fas fa-angle-down srows"></i></div>
-                             <div class="type_navi" rel="Создать тарифный пан"data-att="4">Тарифные планы<i class="fas fa-angle-down srows"></i></div>
-                       <div class="type_navi" rel="Создать ретранслятор" data-att="5">Ретрансляторы<i class="fas fa-angle-down srows"></i></div>
+                             <div class="type_navi" rel="Создать тарифный план"  ${role === 'Администратор' ? 'style="display:none;"' : ''} data-att="4">Тарифные планы<i class="fas fa-angle-down srows"></i></div>
+                       <div class="type_navi" rel="Создать ретранслятор" ${role === 'Администратор' ? 'style="display:none;"' : ''}  data-att="5">Ретрансляторы<i class="fas fa-angle-down srows"></i></div>
         </div>
          <div class="table_setting">
          <div class="table_data_info"></div>
                <div class="magazin_stor"></div>
          </div>
         </div>
-                </div>`
+                      </div>`
   }
 
   static createFindAndButton(buttonText, index) {
@@ -65,7 +111,11 @@ export class ContentGeneration {
                        <option value="${creator}" data-att="${role}">${login}</option>
                     ${creatorsRows}
                     </select>
-</div ></div>
+</div >
+<div class="row_index"><div class="text_index optional_field">Пароль пользователя</div><input class="input_index" id="password" type="password"></div>
+<div class="row_index"><div class="text_index optional_field">Подтвердите пароль</div><input class="input_index" id="confirm_password" type="password"></div>
+
+</div>
 <div class="footer_index">
 <div class="valid_message"></div>
   <div class="button_setting bnt_set">Сохранить</div></div>
@@ -74,15 +124,20 @@ export class ContentGeneration {
 
   static editLK(login, prava, creator, property, creators, name, data) {
     console.log(property)
+    console.log([creators].length)
     const incriment_account = property.incriment
-    const creatorsRows = creators !== undefined ? [...creators].filter(it => it.incriment !== Number(creator)).map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
+    const creatorsRows = prava !== 'Сервис-инженер' && [creators].length !== 1 ? [...creators].filter(it => it.incriment !== Number(creator)).map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') :
+      ''
+
     const usersList = data.uniqueUsers.filter(it => it.incriment !== it.uniqCreater && it.incriment_account === incriment_account).map(e => `<div class="rows_sostav" rel="${e.incriment}">${e.name}</div>`).join('')
     const retrasList = data.uniqueRetras.filter(it => it.incriment_account === incriment_account).map(e => `<div class="rows_sostav" rel="${e.incriment}">${e.name}</div>`).join('')
     const groupsList = data.uniqueGroups.filter(it => it.incriment_account === incriment_account).map(e => `<div class="rows_sostav" rel="${e.incriment}">${e.name}</div>`).join('')
     const objectsList = data.uniqueObjects.filter(it => it.incriment_account === incriment_account).map(e => `<div class="rows_sostav" rel="${e.incriment}">${e.name}</div>`).join('')
 
     return `<div class="wrap_lk">
-        <div class="header_index">Учетная запись<i class="fas fa fa-times close_modal_window"></i></div>
+        <div class="header_index header_edit"><div class="buttons_menu click_button_object" id='objectID'>Учетная запись</div>
+        <div class="buttons_menu">Журнал событий</div>
+        <i class="fas fa fa-times close_modal_window"></i></div>
   <div class="body_indexs">
 <div class="row_index"><div class="text_index optional_field">Имя учетной записи</div><input class="input_index" id="uzname"  value="${name}"></div>
 <div class="row_index"><div class="text_index optional_field">Тарифный план</div><select class="select_index tp">
@@ -114,43 +169,54 @@ export class ContentGeneration {
 <div class="body_sostav">${objectsList}</div>
 </div>
 </div>
-<div class="footer_index">
+   <div class="history_stor"></div>
+    <div class="footer_index">
 <div class="valid_message"></div>
+<div class="button_setting recover">Восстановить</div>
   <div class="button_setting bnt_set">Сохранить</div></div>
                 </div>`
   }
 
   static createUser(login, role, creator, creators, data) {
+    console.log(data)
     const accounts = data.uniqueAccounts
     const objects = data.uniqueObjects
     const groups = data.uniqueGroups
+    const usersAcc = data.uniqueUsers
     const objectsHTML = ContentGeneration.renderModalCheckList(objects, 'объекты')
     const groupsHTML = ContentGeneration.renderModalCheckList(groups, 'группы')
     const creatorsRows = creators !== undefined ? [...creators].filter(it => it.incriment !== Number(creator)).map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
     const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
 
+    const acc = usersAcc.find(e => e.incriment === Number(creator))
+    const incriment_account = acc.incriment_account
+    const account = accounts.find(e => incriment_account === e.incriment)
+    console.log(account.name)
     return `<div class="wrap_lk wrap_user">
         <div class="header_index">Новый пользователь<i class="fas fa fa-times close_modal_window"></i></div>
           <div class="body_indexs">
 <div class="row_index"><div class="text_index optional_field">Имя пользователя</div><input class="input_index" id="username"></div>
 <div class="row_index"><div class="text_index optional_field">Пароль пользователя</div><input class="input_index" id="password" type="password"></div>
 <div class="row_index"><div class="text_index optional_field">Подтвердите пароль</div><input class="input_index" id="confirm_password" type="password"></div>
-<div class="row_index"><div class="text_index optional_field">Права доступа</div><select class="select_index roles">
-<option value="" disabled selected></option>
+<div class="row_index"><div class="text_index optional_field">Права доступа</div><select class="select_index roles" ${role === 'Администратор' ? 'disabled' : ''}>
+<option value="" disabled ${role !== 'Администратор' ? 'selected' : ''}></option>
                                               <option value="Курсор">Курсор</option>
                         <option value="Интегратор">Интегратор</option>
                          <option value="Сервис-инженер">Сервис-инженер</option>
-                          <option value="Администратор">Администратор</option>
-                             <option value="Пользователь">Пользователь</option>
+                                                     <option value="Пользователь"  ${role === 'Администратор' ? 'selected' : ''}>Пользователь</option>
                     </select></div>
 <div class="row_index"><div class="text_low">Создатель</div><select class="select_index creates">
                         <option value="${creator}" data-att="${role}">${login}</option>
                     ${creatorsRows}
-                    </select></div>
-<div class="row_index" rel="lk"><div class="text_index optional_field">Учетная запись</div><select class="select_index uz">
-<option value="" disabled selected></option>
-                    ${accountsRows}
-                    </select></div>
+                                        </select></div>
+<div class="row_index" rel="lk">
+    <div class="text_index optional_field">Учетная запись</div>
+    <select class="select_index uz" ${role === 'Администратор' ? 'disabled' : ''}>
+        ${role !== 'Администратор'
+        ? accountsRows
+        : `<option value="${account.incriment}" rel="${account.idx}" use="${acc.incriment}" global_creator="${account.global_creator}" data-att="${account.incriment}" selected>${account.name}</option>`}
+    </select>
+</div>
                      <div class="row_index"><div class="text_index no_optional obj_el">Объекты</div>
                                      <div class="select_index check_list"><div class="name_check_title"></div><i class="fas fa-angle-down icons_open_check_list"></i></div>
                                      <div class="check_container">
@@ -173,40 +239,51 @@ export class ContentGeneration {
 
   static editUser(login, role, creator, property, creators, name, data) {
     console.log(property)
-
+    console.log(login)
     const accounts = data.uniqueAccounts
     const objects = data.uniqueObjects
     const groups = data.uniqueGroups
+    const usersAcc = data.uniqueUsers
+    console.log(objects)
     const objectsHTML = ContentGeneration.renderModalCheckList(objects, 'объекты')
     const groupsHTML = ContentGeneration.renderModalCheckList(groups, 'группы')
-    console.log(creators)
     const creatorsRows = creators !== undefined ? [...creators].filter(it => it.incriment !== property.incriment[1]).map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
-    const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
+    const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' del="${e.del}"global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
 
     const groupsList = property.groups.map(e => `<div class="rows_sostav" rel="${e.incriment}">${e.nameGroup}</div>`).join('')
     const objectsList = property.objects.map(e => `<div class="rows_sostav" rel="${e.incriment}">${e.objectname}</div>`).join('')
 
+    const acc = usersAcc.find(e => e.incriment === Number(creator))
+    const incriment_account = acc.incriment_account
+    const account = accounts.find(e => incriment_account === e.incriment)
+    console.log(account.name)
 
     return `<div class="wrap_lk wrap_user">
-        <div class="header_index">Пользователь<i class="fas fa fa-times close_modal_window"></i></div>
+       <div class="header_index header_edit"><div class="buttons_menu click_button_object" id='objectID'>Пользователь</div>
+        <div class="buttons_menu">Журнал событий</div><i class="fas fa fa-times close_modal_window"></i></div>
           <div class="body_indexs">
 <div class="row_index"><div class="text_index optional_field">Имя пользователя</div><input class="input_index" id="username" value="${name}"></div>
 <div class="row_index"><div class="text_index optional_field">Пароль пользователя</div><input class="input_index" id="password" type="password" value="${property.password}"></div>
 <div class="row_index"><div class="text_index optional_field">Подтвердите пароль</div><input class="input_index" id="confirm_password" type="password"  value="${property.password}"></div>
-<div class="row_index"><div class="text_index optional_field">Права доступа</div><select class="select_index roles">
+<div class="row_index"><div class="text_index optional_field">Права доступа</div><select class="select_index roles" ${role === 'Администратор' ? 'disabled' : ''}>
+<option value="" disabled ${role !== 'Администратор' ? 'selected' : ''}></option>
                                               <option value="Курсор">Курсор</option>
                         <option value="Интегратор">Интегратор</option>
                          <option value="Сервис-инженер">Сервис-инженер</option>
-                          <option value="Администратор">Администратор</option>
-                             <option value="Пользователь">Пользователь</option>
+                                                     <option value="Пользователь"  ${role === 'Администратор' ? 'selected' : ''}>Пользователь</option>
                     </select></div>
-<div class="row_index"><div class="text_low">Создатель</div><select class="select_index creates">
-                                         ${creatorsRows}
+<div class="row_index"><div class="text_low">Создатель</div><select class="select_index creates" ${role === 'Администратор' ? 'disabled' : ''}>
+   ${role === 'Администратор' ? `<option value="${creator}" rel='${property.global_creator}' data-att="${role}" selected>${login}</option>` : creatorsRows}
                     </select></div>
 
-<div class="row_index" rel="lk"><div class="text_index optional_field">Учетная запись</div><select class="select_index uz">
-                    ${accountsRows}
-                    </select></div>
+<div class="row_index" rel="lk">
+    <div class="text_index optional_field">Учетная запись</div>
+    <select class="select_index uz" ${role === 'Администратор' ? 'disabled' : ''}>
+        ${role !== 'Администратор'
+        ? accountsRows
+        : `<option value="${account.incriment}" rel="${account.idx}" use="${acc.incriment}" global_creator="${account.global_creator}" data-att="${account.incriment}" selected>${account.name}</option>`}
+    </select>
+</div>
                      <div class="row_index"><div class="text_index no_optional obj_el">Объекты</div>
                                      <div class="select_index check_list"><div class="name_check_title"></div><i class="fas fa-angle-down icons_open_check_list"></i></div>
                                      <div class="check_container">
@@ -230,21 +307,23 @@ export class ContentGeneration {
 <div class="header_sostav">Объекты</div>
 <div class="body_sostav">${objectsList}</div>
 </div> </div>
-                   
+                      <div class="history_stor"></div>
                     <div class="footer_index">
 <div class="valid_message"></div>
+<div class="button_setting recover">Восстановить</div>
   <div class="button_setting bnt_set">Сохранить</div></div>
                 </div>`
   }
 
 
   static createObj(login, role, creator, creators, data) {
-
-    console.log(data)
     const accounts = data.uniqueAccounts
-    const creatorsRows = creators !== undefined ? [...creators].map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
+    const usersAcc = data.uniqueUsers
+    const creatorsRows = creators !== undefined ? [...creators].map(e => `< option value = "${e.incriment}" rel = '${e.idx}' data - att="${e.role}"'>${e.name}</option>`).join('') : ''
     const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
-
+    const acc = usersAcc.find(e => e.incriment === Number(creator))
+    const incriment_account = acc.incriment_account
+    const account = accounts.find(e => incriment_account === e.incriment)
     return ` <div class="wrap_lk wrap_object">
         <div class="header_index">Новый объект<i class="fas fa fa-times close_modal_window"></i></div>
         <div class="body_indexs">
@@ -270,9 +349,14 @@ export class ContentGeneration {
                 <div class="row_index"><div class="text_low">Создатель</div><select class="select_index creates">
                          <option value="${creator}" data-att="${role}">${login}</option>  ${creatorsRows}
                                       </select></div>
-                                      <div class="row_index" rel="lk"><div class="text_index optional_field">Учетная запись</div><select class="select_index uz">
-<option value="" disabled selected></option>     ${accountsRows}
-                                     </select></div>
+<div class="row_index" rel="lk">
+    <div class="text_index optional_field">Учетная запись</div>
+    <select class="select_index uz" ${role === 'Администратор' ? 'disabled' : ''}>
+        ${role !== 'Администратор'
+        ? accountsRows
+        : `<option value="${account.incriment}" rel="${account.idx}" use="${acc.incriment}" global_creator="${account.global_creator}" data-att="${account.incriment}" selected>${account.name}</option>`}
+    </select>
+</div>
                                                                           <div class="row_index"><div class="text_index optional_field">Тарифный план</div><select class="select_index tp">
  <option value="" disabled selected></option>
                         <option value="ТП1">ТП1</option>
@@ -312,21 +396,25 @@ export class ContentGeneration {
     </div>`
   }
 
-  static editObj(property, creators, names, data) {
+  static editObj(login, role, property, creator, creators, names, data) {
     //  console.log(login, role, creator, property, creators, names, data)
     console.log(data)
     const { name_retra, incriment_retra, name, typeobject, typeDevice, port, addressserver, imeidevice, idbitrixobject, phonenumber, markaobject, modelobject, vinobject, gosnomerobject } = property
     const accounts = data.uniqueAccounts
-
+    const usersAcc = data.uniqueUsers
     function filt(obj) {
       return obj ? obj : '-'
     }
     const creatorsRows = creators !== undefined ? [...creators].filter(it => it.incriment !== property.incriment[1]).map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
-    const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
-
+    const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' del="${e.del}" global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
+    const acc = usersAcc.find(e => e.incriment === Number(creator))
+    const incriment_account = acc.incriment_account
+    const account = accounts.find(e => incriment_account === e.incriment)
 
     return ` <div class="wrap_lk wrap_object wrap_edit">
-        <div class="header_index header_edit"><div class="buttons_menu click_button_object" id='objectID'>Объект</div><div class="buttons_menu" id='configID'>Конфигуратор параметров</div>${names}<i class="fas fa fa-times close_modal_window"></i></div>
+        <div class="header_index header_edit"><div class="buttons_menu click_button_object" id='objectID'>Объект</div>
+         <div class="buttons_menu">Журнал событий</div>
+        <div class="buttons_menu" id='configID'>Конфигуратор параметров</div>${names}<i class="fas fa fa-times close_modal_window"></i></div>
         <div class="body_indexs">
                      
              <div class="row_index">
@@ -347,11 +435,13 @@ export class ContentGeneration {
                <div class="row_index">
                  <div class="text_index optional_field">Уникальный ID устройства</div><input rel="imei" id="imeidevice" class="input_index" value="${filt(imeidevice)}">
                 </div>
-                <div class="row_index"><div class="text_low">Создатель</div><select class="select_index creates"${name_retra ? 'disabled' : ''}>
-                    ${!name_retra ? creatorsRows : `<option value="${incriment_retra}" disabled selected>${name_retra}</option>`}
+                    <div class="row_index">
+                   <div class="text_low">Создатель</div><select class="select_index creates" ${name_retra || role === 'Администратор' ? 'disabled' : ''}>
+                     ${!name_retra ? role === 'Администратор' ? `<option value="${creator}" rel='${property.global_creator}' data-att="${role}" selected>${login}</option>` : creatorsRows : `<option value="${incriment_retra}" selected>${name_retra}</option>`}
                                       </select></div>
-                                      <div class="row_index" rel="lk"><div class="text_index optional_field">Учетная запись</div><select class="select_index uz" ${name_retra ? 'disabled' : ''}>
-      ${!name_retra ? accountsRows : `<option value="${property.incriment[1]}" disabled selected>${name}</option>`}
+                                      <div class="row_index" rel="lk"><div class="text_index optional_field">Учетная запись</div><select class="select_index uz" ${name_retra || role === 'Администратор' ? 'disabled' : ''}>
+   ${!name_retra ? role === 'Администратор' ? `<option value="${account.incriment}" rel="${account.idx}" use="${acc.incriment}" global_creator="${account.global_creator}" data-att="${account.incriment}" selected>${account.name}</option>`
+        : accountsRows : `<option value="${property.incriment[1]}" disabled selected>${name}</option>`}
                                      </select></div>
                                                                           <div class="row_index"><div class="text_index optional_field">Тарифный план</div><select class="select_index tp">
                          <option value="${property.tp ? property.tp : '-'}">${property.tp ? property.tp : '-'}</option>
@@ -403,8 +493,11 @@ export class ContentGeneration {
                     <ul class="list_old_data"></ul>
                 </div>
             </div>
+               <div class="sostav_indexs"></div>
+               <div class="history_stor"></div>
             <div class="footer_index">
               <div class="valid_message"></div>
+              <div class="button_setting recover">Восстановить</div>
               <div class="button_setting bnt_set">Сохранить</div>
               </div>
         
@@ -412,11 +505,12 @@ export class ContentGeneration {
   }
 
 
-  static editGroup(creator, property, creators, names, data) {
+  static editGroup(login, role, creator, property, creators, names, data) {
     console.log(creator, property, creators, names, data)
     const { name_retra, incriment_retra, name, face, facecontact } = property
     const objectsRow = data.uniqueObjects
     const accounts = data.uniqueAccounts
+    const usersAcc = data.uniqueUsers
     const objectsHTML = ContentGeneration.renderModalCheckList(objectsRow, 'объекты')
     const creatorsRows = creators !== undefined ? [...creators].map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
     const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
@@ -425,9 +519,14 @@ export class ContentGeneration {
     function filt(obj) {
       return obj ? obj : '-'
     }
+    const acc = usersAcc.find(e => e.incriment === Number(creator))
+    const incriment_account = acc.incriment_account
+    const account = accounts.find(e => incriment_account === e.incriment)
+
     const style = name_retra ? 'style="display: none"' : 'style="display: flex"'
     return ` <div class="wrap_lk wrap_group">
-        <div class="header_index">Группа<i class="fas fa fa-times close_modal_window"></i></div>
+         <div class="header_index header_edit"><div class="buttons_menu click_button_object" id='objectID'>Группа</div>
+        <div class="buttons_menu">Журнал событий</div><i class="fas fa fa-times close_modal_window"></i></div>
         <div class="body_indexs">
                      
              <div class="row_index">
@@ -440,11 +539,12 @@ export class ContentGeneration {
                 <div class="text_index no_optional">Контакт</div><input rel="facecontact" id="facecontact" class="input_index" value="${filt(facecontact)}">
               </div>          
               <div class="row_index">
-                <div class="text_low">Создатель</div><select class="select_index creates" ${name_retra ? 'disabled' : ''}>
-                     ${!name_retra ? creatorsRows : `<option value="${incriment_retra}" disabled selected>${name_retra}</option>`}
+                <div class="text_low">Создатель</div><select class="select_index creates" ${name_retra || role === 'Администратор' ? 'disabled' : ''}>
+                     ${!name_retra ? role === 'Администратор' ? `<option value="${creator}" rel='${property.global_creator}' data-att="${role}" selected>${login}</option>` : creatorsRows : `<option value="${incriment_retra}" selected>${name_retra}</option>`}
                                       </select></div>
-                                      <div class="row_index" rel="lk"><div class="text_index optional_field">Учетная запись</div><select class="select_index uz" ${name_retra ? 'disabled' : ''}>
-   ${!name_retra ? accountsRows : `<option value="${property.incriment[1]}" disabled selected>${name}</option>`}
+                                      <div class="row_index" rel="lk"><div class="text_index optional_field">Учетная запись</div><select class="select_index uz" ${name_retra || role === 'Администратор' ? 'disabled' : ''}>
+   ${!name_retra ? role === 'Администратор' ? `<option value="${account.incriment}" rel="${account.idx}" use="${acc.incriment}" global_creator="${account.global_creator}" data-att="${account.incriment}" selected>${account.name}</option>`
+        : accountsRows : `<option value="${property.incriment[1]}" disabled selected>${name}</option>`}
                                      </select></div>
                                   <div class="row_index"><div class="text_index no_optional obj_el" ${style}>Объекты</div>
                                      <div class="select_index check_list"   ${style}><div class="name_check_title"></div><i class="fas fa-angle-down icons_open_check_list"></i></div>
@@ -459,22 +559,30 @@ export class ContentGeneration {
 <div class="body_sostav">${objectsList}</div>
 </div> </div>
 
+        
+    </div>
+     <div class="sostav_indexs"></div>
+   <div class="history_stor"></div>
             <div class="footer_index">
               <div class="valid_message"></div>
+              <div class="button_setting recover">Восстановить</div>
               <div class="button_setting bnt_set">Сохранить</div>
-              </div>
-        
-    </div>`
+              </div>`
   }
 
   static createGroup(login, role, creator, creators, data) {
     console.log(data)
     const objectsRow = data.uniqueObjects
     const accounts = data.uniqueAccounts
+    const usersAcc = data.uniqueUsers
     console.log(accounts)
     const objectsHTML = ContentGeneration.renderModalCheckList(objectsRow, 'объекты')
     const creatorsRows = creators !== undefined ? [...creators].map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
     const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
+
+    const acc = usersAcc.find(e => e.incriment === Number(creator))
+    const incriment_account = acc.incriment_account
+    const account = accounts.find(e => incriment_account === e.incriment)
 
     return ` <div class="wrap_lk wrap_group">
         <div class="header_index">Новая Группа<i class="fas fa fa-times close_modal_window"></i></div>
@@ -494,10 +602,14 @@ export class ContentGeneration {
                          <option value="${creator}" data-att="${role}">${login}</option>
 ${creatorsRows}
                                       </select></div>
-                                      <div class="row_index" rel="lk"><div class="text_index optional_field">Учетная запись</div><select class="select_index uz">
-<option value="" disabled selected></option>    
-  ${accountsRows}
-                                     </select></div>
+                                    <div class="row_index" rel="lk">
+    <div class="text_index optional_field">Учетная запись</div>
+    <select class="select_index uz" ${role === 'Администратор' ? 'disabled' : ''}>
+        ${role !== 'Администратор'
+        ? accountsRows
+        : `<option value="${account.incriment}" rel="${account.idx}" use="${acc.incriment}" global_creator="${account.global_creator}" data-att="${account.incriment}" selected>${account.name}</option>`}
+    </select>
+</div>
                                     <div class="row_index"><div class="text_index no_optional">Объекты</div>
                                      <div class="select_index check_list"><div class="name_check_title"></div><i class="fas fa-angle-down icons_open_check_list"></i></div>
                                      <div class="check_container">
@@ -582,9 +694,9 @@ ${creatorsRows}
   }
 
 
-  static editRetra(login, role, creator, creators, property, name, data) {
-    console.log(login, role, creator, creators, property, data)
-
+  static editRetra(creator, creators, property, name, data) {
+    // console.log(login, role, creator, creators, property, data)
+    console.log(data)
     const accounts = data.uniqueAccounts
 
     const creatorsRows = creators !== undefined ? [...creators].map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
@@ -594,7 +706,8 @@ ${creatorsRows}
     const objectsList = property.objects.map(e => `<div class="rows_sostav" rel="${e.incriment}">${e.objectname}</div>`).join('')
 
     return ` <div class="wrap_lk wrap_retra">
-        <div class="header_index">Ретранслятор<i class="fas fa fa-times close_modal_window"></i></div>
+        <div class="header_index header_edit"><div class="buttons_menu click_button_object" id='objectID'>Ретранслятор</div>
+        <div class="buttons_menu">Журнал событий</div><i class="fas fa fa-times close_modal_window"></i></div>
         <div class="body_indexs">
                      
              <div class="row_index">
@@ -630,8 +743,10 @@ ${creatorsRows}
 <div class="header_sostav">Объекты</div>
 <div class="body_sostav">${objectsList}</div>
 </div> </div>
+   <div class="history_stor"></div>
             <div class="footer_index">
               <div class="valid_message"></div>
+              <div class="button_setting recover">Восстановить</div>
               <div class="button_setting bnt_set">Сохранить</div>
               </div>
         
@@ -640,7 +755,7 @@ ${creatorsRows}
 
   static addTableAccount() {
     return `<table class="table_stata table_admin_panel">
-      <tr class="rows_stata ">
+      <tr class="rows_statas">
         <th class="cell_stata cel header_account_table">Имя</th>
         <th class="cell_stata cel header_account_table">Создатель</th>
         <th class="cell_stata cel header_account_table">Тарифный план</th>
@@ -655,7 +770,7 @@ ${creatorsRows}
 
   static addTableUser() {
     return `<table class="table_stata table_admin_panel">
-      <tr class="rows_stata">
+      <tr class="rows_statas">
         <th class="cell_stata cel header_account_table">Имя</th>
         <th class="cell_stata cel header_account_table">Создатель</th>
         <th class="cell_stata cel header_account_table">Учетная запись</th>
@@ -669,7 +784,7 @@ ${creatorsRows}
   }
   static addTableObject() {
     return `<table class="table_stata table_admin_panel">
-      <tr class="rows_stata ">
+      <tr class="rows_statas">
         <th class="cell_stata cel header_account_table">Имя</th>
         <th class="cell_stata cel header_account_table">Создатель</th>
         <th class="cell_stata cel header_account_table">Тарифный план</th>
@@ -683,7 +798,7 @@ ${creatorsRows}
 
   static addTableGroup() {
     return `<table class="table_stata table_admin_panel">
-      <tr class="rows_stata ">
+      <tr class="rows_statas">
         <th class="cell_stata cel header_account_table">Имя</th>
         <th class="cell_stata cel header_account_table">Создатель</th>
               <th class="cell_stata cel header_account_table">Учетная запись</th>
@@ -695,7 +810,7 @@ ${creatorsRows}
 
   static addTableRetra() {
     return `<table class="table_stata table_admin_panel">
-      <tr class="rows_stata ">
+      <tr class="rows_statas">
         <th class="cell_stata cel header_account_table">Имя</th>
         <th class="cell_stata cel header_account_table">Создатель</th>
               <th class="cell_stata cel header_account_table">Учетная запись</th>

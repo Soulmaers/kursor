@@ -3,12 +3,14 @@ import { Helpers } from './Helpers.js'
 import { Requests } from './RequestStaticMethods.js'
 import { Validation } from './Validation.js'
 import { ConfiguratorParams } from '../../configuratorModules/class/ConfiguratorParams.js'
-
+import { ControllNaviEdit } from './ControllNaviEdit.js'
 
 export class EditObject {
-    constructor(data, element, container, creator, creators, instance, usersdata) {
+    constructor(data, element, container, login, role, creator, creators, instance, usersdata) {
         this.data = data
         this.container = container
+        this.login = login
+        this.prava = role
         this.creator = creator
         this.creators = creators
         this.instance = instance
@@ -17,7 +19,12 @@ export class EditObject {
         this.incriment = Number(element.getAttribute('rel'))
         this.name = element.textContent
         this.pop = document.querySelector('.popup-background')
-
+        this.obj = {
+            table: 'objectsHistory',
+            tableEntity: 'objects',
+            column: 'uniqObjectID',
+            incriment: this.incriment
+        }
         this.init()
     }
 
@@ -26,19 +33,24 @@ export class EditObject {
         this.createModalEdit()
     }
 
-
     async createModalEdit() {
         this.getStruktura()
-        this.container.innerHTML = ContentGeneration.editObj(this.property, this.creators, this.property.objectname, this.data)
+        this.container.innerHTML = ContentGeneration.editObj(this.login, this.prava, this.property, this.creator, this.creators, this.property.objectname, this.data)
+        this.recored()
         this.cacheElements()
+        new ControllNaviEdit(this.container, this.obj)
         this.applyValidation();
-        this.eventListeners()
         this.modalActivity(this.pop, 'flex', 3)
         await this.viewObjects(this.idx)
         this.close()
         this.save()
     }
-
+    recored() {
+        this.recoredbtn = this.container.querySelector('.recover')
+        if (this.property.delStatus === 'true') {
+            this.recoredbtn.style.display = 'flex'
+        }
+    }
     cacheElements() {
         this.prava = document.querySelector('.role').getAttribute('rel')
         this.objectname = this.container.querySelector('#objectname');
@@ -68,25 +80,6 @@ export class EditObject {
         Validation.filterCreater(this.createsUser, this.uz)
         Validation.creator(this.createsUser, this.property.creater)
         Validation.account(this.uz, this.property.incriment[1])
-    }
-
-    eventListeners() {
-        this.buttonsMenu.forEach(el => el.addEventListener('click', this.changeSelect.bind(this, el)))
-    }
-
-    changeSelect(element) {
-        this.buttonsMenu.forEach(e => e.classList.remove('click_button_object'))
-        element.classList.add('click_button_object')
-        this.idButton = element.id
-        if (this.idButton === 'configID') {
-            this.bodyIndex.style.display = 'none';
-            this.configParams.style.display = 'flex';
-            //  this.id || this.idPref ? this.updateMeta.style.display = 'block' : 'none';
-        } else {
-            this.bodyIndex.style.display = 'flex';
-            this.configParams.style.display = 'none';
-            // this.updateMeta.style.display = 'none';
-        }
     }
 
     async viewObjects(idw) {
@@ -119,11 +112,16 @@ export class EditObject {
 
     save() {
         const button = this.container.querySelector('.bnt_set')
+        const recover = this.container.querySelector('.recover')
         this.mess = this.container.querySelector('.valid_message')
         button.addEventListener('click', this.validationAndPackObject.bind(this))
+        recover.addEventListener('click', this.reco.bind(this))
     }
 
-
+    reco() {
+        this.del = true
+        this.validationAndPackObject()
+    }
     async validationAndPackObject() {
         if (this.idButton === 'configID') {
             console.log('конфиг')
@@ -139,7 +137,6 @@ export class EditObject {
             if (this.addressserver.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите адрес сервера');
             if (this.uz.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите учетную запись');
             if (this.tp.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите тарифный план');
-            console.log(this.tp.value)
             this.obj = {
                 objectname: this.objectname.value,
                 typedevice: this.typedevice.value,
@@ -156,11 +153,17 @@ export class EditObject {
                 uz: this.uz.value,
                 tp: this.tp.value ? this.tp.value : '-',
                 creater: this.createsUser.value,
-                incrimentObject: this.property.incriment[0]
-
+                incrimentObject: this.property.incriment[0],
+                del: !this.del ? this.property.delStatus : 'false'
             }
             const oldUz = this.property.incriment[1]
             const messUser = await Requests.editObject(this.obj);
+            const action = oldUz === Number(this.uz.value) ? 'Обновлён' : 'Смена учётной записи'
+            const obj = {
+                action: action, table: 'objectsHistory', columns: 'uniqObjectID', data: String(Math.floor((new Date().getTime()) / 1000)),
+                uniqUsersID: Number(this.creator), uniqEntityID: Number(this.property.incriment[0]), nameAccount: Number(oldUz)
+            }
+            const resu = await Requests.setHistory(obj)
             Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message);
 
             if (messUser.flag && !this.retra && oldUz !== Number(this.uz.value)) {
@@ -174,8 +177,6 @@ export class EditObject {
 
 
     getStruktura() {
-        console.log(this.usersData)
-        console.log(this.idx)
         this.property = (this.usersData.filter(e => e.idx[0] === this.idx))[0]
     }
 }

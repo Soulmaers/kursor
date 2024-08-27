@@ -92,7 +92,7 @@ export class InterfaceObjects {
             idx: await Requests.findId('ido')
         }
         console.log(this.obj)
-        const messUser = await Requests.saveObject(this.obj)
+        const messUser = await Requests.saveObject(this.obj, this.prava)
         Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message)
         this.add = 'add'
         this.createTableObject()
@@ -112,6 +112,7 @@ export class InterfaceObjects {
     async createTableObject() {
         this.table.innerHTML = ContentGeneration.addTableObject()
         this.data = await Helpers.getAccountAll()
+        this.accountID = (this.data.uniqueUsers.find(e => e.incriment === Number(this.creator))).incriment_account
         this.result = await Requests.getObjectCreater(this.creator)
         this.addContentObjects()
     }
@@ -119,9 +120,9 @@ export class InterfaceObjects {
     addContentObjects() {
         const tableParent = this.table.querySelector('.table_stata')
         if (this.add) this.result.sort((a, b) => b.incriment[0] - a.incriment[0])
-        console.log(this.result)
+
         const data = this.result.map(el => {
-            return [{ id: el.incriment[0], creater: el.creater, global_creator: el.global_creator },
+            return [{ id: el.incriment[0], creater: el.creater, global_creator: el.global_creator, del: el.delStatus },
             [{ name: el.objectname, incriment: el.incriment[0], id: el.idx[0], entity: 'object' },
             { name: el.name_retra ? el.name_retra : el.username, incriment: el.name_retra ? el.incriment_retra : el.creater, entity: el.name_retra ? 'retra' : 'user' },
             { name: el.tp, incriment: null, entity: 'tp' }, { name: el.name, incriment: el.incriment[1], entity: 'account' }, el.group_count, { name: el.imeidevice, incriment: null, entity: null }, 'x']];
@@ -131,12 +132,20 @@ export class InterfaceObjects {
             if (this.prava === 'Курсор') {
                 this.addRowToTable(tableParent, el)
             }
+            else if (this.prava === 'Администратор') {
+                if (el[1][3].incriment === this.accountID) {  // Допустим, у вас есть this.accountId, который указывает на учетную запись администратора
+                    if (el.delStatus === 'true') return;
+                    this.addRowToTable(tableParent, el);
+                }
+            }
             else if (this.prava === 'Интегратор') {
                 if (el[0].global_creator === Number(this.creator) || el[0].creater === Number(this.creator)) {
+                    if (el[0].del === 'true') return
                     this.addRowToTable(tableParent, el)
                 }
             } else {
                 if (el[0].creater === Number(this.creator)) {
+                    if (el[0].del === 'true') return
                     this.addRowToTable(tableParent, el)
                 }
             }
@@ -149,6 +158,7 @@ export class InterfaceObjects {
         tr.innerHTML = rowData[1].map((it, index) => index < 4 || index === 5 ? `<th class="cell_stata cell cell_table_auth click_property" idx="${it.id}" index="${index}" entity="${it.entity}" rel="${it.incriment}">${it.name ? it.name : '-'}</th>` :
             `<th class="cell_stata cell cell_table_auth">${it ? it : '-'}</th>`).join('');
         tr.setAttribute('data-id', rowData[0].id);
+        if (rowData[0].del === 'true') tr.classList.add('sleepblock')
         tableParent.appendChild(tr);
         const lastRow = tableParent.lastElementChild;
         const lastCell = lastRow.lastElementChild;
@@ -159,6 +169,7 @@ export class InterfaceObjects {
     };
     async updateTable(lastRow) {
         const name = lastRow.children[0].textContent
+        this.accountIncriment = lastRow.children[3].getAttribute('rel')
         this.container.insertAdjacentHTML('beforeend', ContentGeneration.confirm('объект', name));
         this.idDelete = lastRow.getAttribute('data-id'); // Получаем id из data-атрибута
         this.modalConfirmElement = this.container.querySelector('.modal_podtver');
@@ -174,7 +185,12 @@ export class InterfaceObjects {
     }
 
     async delete() {
-        await Requests.deleteAccount(this.idDelete, this.index)
+        await Requests.deleteAccount(this.idDelete, this.index, this.prava)
+        const obj = {
+            action: 'Удалён', table: 'objectsHistory', columns: 'uniqObjectID', data: String(Math.floor((new Date().getTime()) / 1000)),
+            uniqUsersID: Number(this.creator), uniqEntityID: Number(this.idDelete), nameAccount: Number(this.accountIncriment)
+        }
+        const resu = await Requests.setHistory(obj)
         this.closeConfirm()
         this.createTableObject()
     }

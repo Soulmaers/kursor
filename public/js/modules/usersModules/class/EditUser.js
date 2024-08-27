@@ -4,7 +4,7 @@ import { ContentGeneration } from './CreateContent.js'
 import { Helpers } from './Helpers.js'
 import { Requests } from './RequestStaticMethods.js'
 import { Validation } from './Validation.js'
-
+import { ControllNaviEdit } from './ControllNaviEdit.js'
 
 export class EditUser {
     constructor(data, element, container, login, prava, creator, creators, instance, usersdata) {
@@ -19,7 +19,12 @@ export class EditUser {
         this.instance = instance
         this.usersData = usersdata
         this.pop = document.querySelector('.popup-background')
-
+        this.obj = {
+            table: 'usersHistory',
+            tableEntity: 'users',
+            column: 'uniqUsersIDLow',
+            incriment: this.incriment
+        }
         this.init()
     }
 
@@ -28,13 +33,12 @@ export class EditUser {
         this.createModalEdit()
     }
 
-
-
     async createModalEdit() {
-        console.log(this.data)
         await this.getStruktura()
         this.container.innerHTML = ContentGeneration.editUser(this.login, this.prava, this.creator, this.property, this.creators, this.name, this.data)
+        this.recored()
         this.cacheElements()
+        new ControllNaviEdit(this.container, this.obj)
         this.addEventListeners();
         this.applyValidation();
         this.check_container.forEach(e => this.vieCountCheck(e))
@@ -43,20 +47,30 @@ export class EditUser {
         this.close()
         this.save()
     }
-
+    recored() {
+        this.recoredbtn = this.container.querySelector('.recover')
+        if (this.property.delStatus === 'true') {
+            this.recoredbtn.style.display = 'flex'
+        }
+    }
     applyValidation() {
-        console.log(this.property)
-        Validation.creator(this.createsUser, this.property.creater)
-        Validation.role(this.roles, this.property.role)
+
         Validation.checkPasswords(this.passwordInput, this.confirmPasswordInput);
-        Validation.filterRole(this.roles, this.prava, this.createsUser, this.uz);
-        Validation.updateUZRowVisibility(this.roles, this.uzRow, this.obj_el, this.group_el);
-        Validation.filterAccount(this.creator, this.uz, this.prava);
-        Validation.filterCreaterObject(this.createsUser, this.uz, this.row_kritery);
-        Validation.filterObject(this.creator, this.row_kritery, this.prava);
-        Validation.filterSelectAccount(this.uz, this.row_kritery);
+        console.log(this.prava)
+        if (this.prava !== 'Администратор') {
+
+            Validation.creator(this.createsUser, this.property.creater)
+            Validation.role(this.roles, this.property.role)
+            Validation.updateUZRowVisibility(this.roles, this.uzRow, this.obj_el, this.group_el);
+            Validation.filterRole(this.roles, this.prava, this.createsUser, this.uz);
+            Validation.filterAccount(this.creator, this.uz, this.prava);
+            Validation.filterSelectAccount(this.uz, this.row_kritery)
+            Validation.filterCreaterObject(this.createsUser, this.uz, this.row_kritery);
+            Validation.filterObject(this.creator, this.row_kritery, this.prava);
+            Validation.account(this.uz, this.property.incriment[0])
+        }
+        console.log('админ')
         Validation.check(this.row_kritery);
-        Validation.account(this.uz, this.property.incriment[0])
         Validation.activated(this.obj_el, this.group_el, this.property)
     }
     cacheElements() {
@@ -133,21 +147,29 @@ export class EditUser {
 
     save() {
         const button = this.container.querySelector('.bnt_set')
+        const recover = this.container.querySelector('.recover')
         this.mess = this.container.querySelector('.valid_message')
         button.addEventListener('click', this.validationAndPackObject.bind(this))
+        recover.addEventListener('click', this.reco.bind(this))
     }
 
     async getStruktura() {
         //  this.usersData = await Requests.getUsersContent(this.creator)
         console.log(this.usersData)
         this.property = (this.usersData.filter(e => e.incriment[1] === this.incriment))[0]
+        console.log(this.property)
+    }
+
+    reco() {
+        this.del = true
+        this.validationAndPackObject()
     }
 
     async validationAndPackObject() {
         if (this.passwordInput.value !== this.confirmPasswordInput.value) return Helpers.viewRemark(this.mess, 'red', 'Не совпадают пароли');
         if (this.passwordInput.value === '' || this.confirmPasswordInput.value === '') return Helpers.viewRemark(this.mess, 'red', 'Установите пароль');
         if (this.username.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите имя пользователя');
-
+        //  if (this.uz.getAttribute('del') === 'true') return Helpers.viewRemark(this.mess, 'red', '');
         this.obj = {
             login: this.username.value,
             password: this.confirmPasswordInput.value,
@@ -155,9 +177,9 @@ export class EditUser {
             creator: this.createsUser.value,
             uz: this.uz.value,
             oldUniqCreator: this.property.incriment[0],
-            incrimentUser: this.property.incriment[1]
+            incrimentUser: this.property.incriment[1],
+            del: !this.del ? this.property.delStatus : 'false'
         }
-
         const objectsCar = this.check_container[0].querySelectorAll('.activ_check')
         const objectsId = [...objectsCar].map(el => el.nextElementSibling.getAttribute('uniqid'))
         const groupsCar = this.check_container[1].querySelectorAll('.activ_check')
@@ -165,6 +187,13 @@ export class EditUser {
         const currentObjectsId = this.property.objects.map(obj => obj.incriment)
         const currentGroupsId = this.property.groups.map(group => group.incriment)
         const messUser = await Requests.editUser(this.obj)
+        const action = this.property.incriment[0] === Number(this.uz.value) ? 'Обновлён' : 'Смена учётной записи'
+        const obj = {
+            action: action, table: 'usersHistory', columns: 'uniqUsersIDLow', data: String(Math.floor((new Date().getTime()) / 1000)),
+            uniqUsersID: Number(this.creator), uniqEntityID: Number(this.property.incriment[1]), nameAccount: Number(this.property.incriment[0])
+        }
+        const resu = await Requests.setHistory(obj)
+
         if (!messUser.flag) {
             Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message)
             return

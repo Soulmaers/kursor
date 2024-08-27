@@ -1,7 +1,6 @@
 const { connection, sql } = require('../config/db')
 const databaseService = require('../services/database.service');
-const helpers = require('../services/helpers.js')
-
+const { HelpersDefault } = require('../services/HelpersDefault.js')
 class AlarmControll {
     constructor(info) {
         this.info = info
@@ -17,7 +16,7 @@ class AlarmControll {
 
 
     async getparams() {
-        const struktura = helpers.formatFinal(this.info)
+        const struktura = HelpersDefault.formatFinal(this.info)
         this.uniq(struktura)
     }
 
@@ -45,7 +44,7 @@ class AlarmControll {
         const lat = (paramsRes.find(e => e.params === 'lat')).value
         const lon = (paramsRes.find(e => e.params === 'lon')).value
         const geo = JSON.stringify([lat, lon])
-        const modelUniqValues = this.convert(tyreRes);
+        const modelUniqValues = HelpersDefault.convert(tyreRes);
 
         modelUniqValues.forEach(model => {
             this.processModel(model, paramsRes, osiRes, nameCar, speed, geo, id);
@@ -72,23 +71,6 @@ class AlarmControll {
         }
     }
 
-
-
-    createDate = () => {   //форматироваие даты
-        let today = new Date();
-        const year = today.getFullYear();
-        const month = (today.getMonth() + 1) < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1);
-        const day = today.getDate() < 10 ? '0' + today.getDate() : today.getDate();
-        today = day + '.' + month + '.' + year;
-        let time = new Date();
-        const hour = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
-        const minutes = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
-        time = hour + ':' + minutes
-        const todays = today + ' ' + time
-        return [todays]
-
-    }
-
     queryDB = async (sql) => {
         try {
             const pool = await connection;
@@ -99,11 +81,6 @@ class AlarmControll {
             throw err;
         }
     };
-
-    convert = (ob) => {  //фильтрация уникальных элементов
-        const uniq = new Set(ob.map(e => JSON.stringify(e)));
-        return Array.from(uniq).map(e => JSON.parse(e));
-    }
 
     proverka(arr) {
         const time = new Date()
@@ -130,7 +107,7 @@ class AlarmControll {
                     //  console.log(el[0], el[2], 'таблицу не видит')
                     if (el[6] > 5 && el[3] <= -50) {
                         //     console.log(el + ' ' + 'таблица нет, аларм есть. потеря связи с датчиком' + ' ' + time)
-                        const data = this.createDate()
+                        const data = HelpersDefault.createDate()
                         alarm = 'Потеря связи с датчиком'
                         //записываем данные в бд
                         databaseService.alarmBase(data, el, alarm)
@@ -139,14 +116,14 @@ class AlarmControll {
                     else {
                         if (el[3] > 70) {
                             //   console.log(el + ' ' + 'таблица нет, аларм есть/ Критически низкое давление' + ' ' + time)
-                            const data = this.createDate()
+                            const data = HelpersDefault.createDate()
                             alarm = 'Критически высокая температура'
                             databaseService.alarmBase(data, el, alarm)
                             return
                         }
                         if (el[2] <= Number(el[4].knd) && el[3] > -50) {
                             //   console.log(el + ' ' + 'таблица нет, аларм есть/ Критически низкое давление' + ' ' + time)
-                            const data = this.createDate()
+                            const data = HelpersDefault.createDate()
                             alarm = 'Критически низкое давление'
                             console.log('КРАН!')
                             console.log(el)
@@ -155,7 +132,7 @@ class AlarmControll {
                         }
                         if (el[2] >= Number(el[4].kvd) && el[3] > -50) {
                             //    console.log(el + ' ' + 'таблица нет, аларм есть/ Критически высокое давление' + ' ' + time)
-                            const data = this.createDate()
+                            const data = HelpersDefault.createDate()
                             alarm = 'Критически высокое давление'
                             databaseService.alarmBase(data, el, alarm)
                             return
@@ -176,7 +153,7 @@ class AlarmControll {
                         } else {
                             //   console.log('-2')
                             //  console.log(el + ' ' + 'таблица есть, изменение аларма,потеря связи с датчиком ')
-                            const data = this.createDate()
+                            const data = HelpersDefault.createDate()
                             alarm = 'Потеря связи с датчиком'
                             databaseService.alarmBase(data, el, alarm)
                         }
@@ -193,7 +170,7 @@ class AlarmControll {
                             } else {
                                 //   console.log('-33')
                                 //  console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма N' + ' ' + time)
-                                const data = this.createDate()
+                                const data = HelpersDefault.createDate()
                                 alarm = 'Критически низкое давление'
                                 databaseService.alarmBase(data, el, alarm)
                                 //    return
@@ -211,7 +188,7 @@ class AlarmControll {
                             } else {
                                 //   console.log('-5')
                                 //  console.log(el + ' ' + 'таблица есть, аларм есть, изменение аларма V' + ' ' + time)
-                                const data = this.createDate()
+                                const data = HelpersDefault.createDate()
                                 alarm = 'Критически высокое давление'
                                 databaseService.alarmBase(data, el, alarm)
                                 // return
@@ -226,7 +203,7 @@ class AlarmControll {
                             } else {
                                 // console.log(el + ' ' + 'таблица есть, аларма нет, аларм истек-норма' + ' ' + time)
                                 //console.log('добавляем норму')
-                                const data = this.createDate()
+                                const data = HelpersDefault.createDate()
                                 alarm = 'Норма'
                                 databaseService.alarmBase(data, el, alarm)
                                 //return

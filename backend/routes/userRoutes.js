@@ -50,7 +50,7 @@ router.post('/api/updateGroupsAndUsers', controller.updateGroupsAndUsers)
 router.post('/api/deleteUsersObjectGroupRetra', controller.deleteUsersObjectGroupRetra)
 
 
-
+router.post('/api/setHistorys', controller.setHistorys)
 
 router.get('/api/geAccContent', controller.geAccContent)
 
@@ -58,7 +58,7 @@ router.post('/api/deleteAccount', controller.deleteAccount)
 
 router.get('/3339', controller.tests)
 
-
+router.post('/api/getHistoryStor', controller.getHistoryStor)
 
 
 router.post('/api/getObjectsGroups', controller.getObjectsGroups)

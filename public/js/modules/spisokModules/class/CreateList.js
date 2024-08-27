@@ -12,7 +12,6 @@ export class CreateList {
     }
 
     init() {
-        console.log(this.data)
         this.addContainerList();
     }
 
@@ -31,7 +30,6 @@ export class CreateList {
         }
 
         this.items = document.querySelectorAll('.listItem');
-        console.log(this.items); // Логирование всех элементов после добавления
     }
 
 

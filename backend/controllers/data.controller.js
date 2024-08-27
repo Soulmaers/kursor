@@ -30,6 +30,7 @@ exports.dannie = async (req, res) => {
                 break;
 
             default: result = await getDataObjectsToList.getUserGroupsAndObjects(incriment) //получем данные из БД по объектам wialona
+                console.log(result)
                 res.json({ result });
         }
 

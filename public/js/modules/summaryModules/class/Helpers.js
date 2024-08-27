@@ -43,6 +43,16 @@ export class Helpers {
         return data
     }
 
+    //форматируем секунды в часыи минуты
+    static timesFormat(dates) {
+        const totalSeconds = Math.floor(dates);
+        const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+        const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+        const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+        const motoHours = `${hours}:${minutes}`;
+        return motoHours;
+    }
+
     //забираем из бд данные
     static async getRequestSummaryToBase(data, ids) {
         const arrayId = ids.map(String);
@@ -68,12 +78,12 @@ export class Helpers {
     static controllActiveObject(array) {
         const checkObjectsId = Array.from(document.querySelectorAll('.checkInList')).reduce((acc, el) => {
             if (el.classList.contains('changeColorCheck')) {
-                acc.push(Number(el.closest('.listItem').id))
+                acc.push(el.closest('.listItem').id)
             }
             return acc
         }, [])
         const originalObjectsData = array.reduce((acc, el) => {
-            if (!checkObjectsId.includes(Number(el.idw))) {
+            if (!checkObjectsId.includes(el.idw)) {
                 acc.push(el)
             }
             return acc

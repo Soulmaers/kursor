@@ -1,8 +1,7 @@
 const net = require('net');
 const databaseService = require('../../services/database.service');
-const helpers = require('../../services/helpers');
 const JobToBase = require('../navtelecom/JobToBase')
-
+const { UpdateSetStor } = require('../../services/UpdateSetStor.js')
 
 class ListenPortIPS {
 
@@ -95,7 +94,7 @@ class ParseBuffer {
                 }
                 const res = await databaseService.objectsImei(String(this.imei))
                 if (res.length !== 0) {
-                    this.setData(this.imei, this.port, res[0].idObject)
+                    new UpdateSetStor(this.imei, this.port, this.arrayData, res[0].idObject)
                     this.setValidationImeiToBase(res[0].idObject)
                 }
 
@@ -103,9 +102,7 @@ class ParseBuffer {
         })
         this.socket.end();
     }
-    async setData(imei, port, id) {
-        await helpers.setDataToBase(imei, port, this.arrayData, id)  //передача расшифрованных данных для обработки и записи в БД
-    }
+
     async setValidationImeiToBase(id) { //валидация на наличие заведенного объекта с IMEI
         this.arrayData.map(e => {
             e['idObject'] = id

@@ -40,6 +40,7 @@ export async function kartaContainer(elem) {
         2: 'Остановка'
     }
     const arrayId = Array.from(list).map(el => el.id)
+    console.log(arrayId)
     const promises = arrayId.map(async el => {
         const idw = el
         const param = {

@@ -1,9 +1,9 @@
 
 const { connection, sql } = require('../config/db')
 const databaseService = require('./database.service');
-const helpers = require('./helpers.js')
-const send = require('./send.service.js');
 
+const send = require('./send.service.js');
+const { HelpersDefault } = require('./HelpersDefault.js')
 const getEvent = require('../controllers/bitrix.controller.js')
 const { y } = require('pdfkit');
 
@@ -1875,7 +1875,7 @@ exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
               getEvent.pushEvent(arr, id, geo, group, name, start, result[0].idBitrix, time)
               //result[0].idBitrix === '30' ? getEvent.pushEvent(arr, id, geo, group, name, start, result[0].idBitrix, time) : null
           }*/
-        const mess = await helpers.processing(arr, time, idw, geoLoc, group, name, start)
+        const mess = await HelpersDefault.processing(arr, time, idw, geoLoc, group, name, start)
         const objFuncAlarm = {
             email: { fn: send.sendEmail },
             what: { fn: send.sendWhat },
@@ -1884,7 +1884,7 @@ exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {
         }
         const event = mess.msg[0].event
         mess.logins.forEach(async el => {
-            const itog = await this.eventFindToBase(el)
+            const itog = await databaseService.eventFindToBase(el)
             if (itog.length !== 0) {
                 delete itog[0].id
                 delete itog[0].login

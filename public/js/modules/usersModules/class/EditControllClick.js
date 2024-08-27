@@ -6,6 +6,7 @@ import { EditRetra } from './EditRetra.js'
 
 export class EditContollClick {
     constructor(element, data, container, login, prava, creator, creators, instance, usersdata) {
+        console.log(element, data, container, login, prava, creator, creators, instance, usersdata)
         this.element = element
         this.entity = element.getAttribute('entity')
         this.data = data
@@ -25,14 +26,15 @@ export class EditContollClick {
 
 
     controllEntity() {
+        console.log(this.creator)
         switch (this.entity) {
-            case 'account': new EditAccount(this.data, this.element, this.container, this.login, this.prava, this.creator, this.creators, this.instance)
+            case 'account': new EditAccount(this.data, this.element, this.container, this.creator, this.creators, this.instance)
                 break
             case 'user': new EditUser(this.data, this.element, this.container, this.login, this.prava, this.creator, this.creators, this.instance, this.usersdata)
                 break
-            case 'object': new EditObject(this.data, this.element, this.container, this.creator, this.creators, this.instance, this.usersdata)
+            case 'object': new EditObject(this.data, this.element, this.container, this.login, this.prava, this.creator, this.creators, this.instance, this.usersdata)
                 break
-            case 'group': new EditGroup(this.data, this.element, this.container, this.creator, this.creators, this.instance, this.usersdata)
+            case 'group': new EditGroup(this.data, this.element, this.container, this.login, this.prava, this.creator, this.creators, this.instance, this.usersdata)
                 break
             case 'retra': new EditRetra(this.data, this.element, this.container, this.login, this.prava, this.creator, this.creators, this.instance, this.usersdata)
                 break

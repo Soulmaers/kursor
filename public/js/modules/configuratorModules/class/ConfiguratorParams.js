@@ -281,7 +281,7 @@ export class ConfiguratorParams {
         if (list) {
             list.forEach(e => e.remove())
         }
-        console.log(this.listMeta)
+        console.log(this.storageMeta)
         this.storageMeta.forEach(async e => {
             const li = document.createElement('li')
             li.classList.add('item_stor')

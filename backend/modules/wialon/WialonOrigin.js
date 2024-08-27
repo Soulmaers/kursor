@@ -2,8 +2,8 @@
 const databaseService = require('../../services/database.service');
 const JobToBase = require('../navtelecom/JobToBase')
 const wialonService = require('../../services/wialon.service.js')
-const helpers = require('../../services/helpers.js');
 const { HelpersUpdateParams } = require('../../services/HelpersUpdateParams.js')
+const { UpdateSetStor } = require('../../services/UpdateSetStor.js')
 class WialonOrigin {
     constructor(session) {
         this.session = session
@@ -103,17 +103,12 @@ class WialonOrigin {
         }
     })();
     async updateDatabase(allArrayData, res) {
-
         if (allArrayData.length !== 0) {
-            await this.setData(allArrayData[0].imei, allArrayData[0].port, allArrayData, res);
+            new UpdateSetStor(allArrayData[0].imei, allArrayData[0].port, allArrayData, res)
             await this.setValidationImeiToBase(allArrayData);
 
         }
 
-    }
-
-    async setData(imei, port, allArrayData, id) {
-        await helpers.setDataToBase(imei, port, allArrayData, id) // передача данных для обработки и записи в БД
     }
     async setValidationImeiToBase(allArrayData) {
         const table = 'wialon_origin';

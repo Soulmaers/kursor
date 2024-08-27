@@ -54,8 +54,9 @@ export class SkladTyres {
         this.defaultDOMElements()
         this.addTooltips()
         this.initEvent()
+        console.log(this.data)
         this.uniqData = this.getUniqData(this.data)
-        console.log(this.uniqData)
+        // console.log(this.uniqData)
         CreateDOMElements.createListObject(this.final)
         this.modelTyres = await RequestStaticMetods.getModelTyresGuide();
         this.createRows()
@@ -355,10 +356,11 @@ export class SkladTyres {
         })
     }
 
-    destroy(element, data) {
+    destroy(element, final, data) {
         this.removeEvent()
         this.element = element
         this.data = data
+        this.final = final
         this.init()
     }
 
@@ -381,6 +383,7 @@ export class SkladTyres {
         this.lastClickedElement = null;
 
     }
+
     controllListAndTyres() {
         const listItemSklad = this.element.querySelectorAll('.listItemSklad')
         listItemSklad.forEach(e => e.addEventListener('click', (event) => {
@@ -397,7 +400,6 @@ export class SkladTyres {
 
         }))
     }
-
 
     addShema() {
         this.modelCar = this.uniqData.find(e => e[4] === Number(this.lastClickedElement.getAttribute('rel')))
@@ -537,6 +539,7 @@ export class SkladTyres {
     createRows() {//отрисовка строк с данными
         const rows = this.element.querySelectorAll('.row_sklad')
         if (rows) rows.forEach(e => e.remove())
+        console.log(this.uniqData)
         this.allTyres.forEach(el => {
             const rowHTML = ContentGeneration.tyresRow(el, this.uniqData);
             if (el.flag_status !== '0') {

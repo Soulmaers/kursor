@@ -63,14 +63,19 @@ export class InterfaceUsers {
     }
 
     applyValidation() {
-        Validation.filterAccount(this.creator, this.uz, this.prava);
-        Validation.filterRole(this.roles, this.prava, this.createsUser, this.uz);
-        Validation.filterCreaterObject(this.createsUser, this.uz, this.row_kritery);
-        Validation.filterObject(this.creator, this.row_kritery, this.prava);
-        Validation.filterSelectAccount(this.uz, this.row_kritery, this.check_container);
         Validation.check(this.row_kritery);
         Validation.checkPasswords(this.passwordInput, this.confirmPasswordInput);
-        Validation.updateUZRowVisibility(this.roles, this.uzRow, this.obj_el, this.group_el);
+        if (this.prava !== 'Администратор') {
+            Validation.filterAccount(this.creator, this.uz, this.prava);
+            Validation.filterSelectAccount(this.uz, this.row_kritery, this.check_container);
+
+            Validation.filterRole(this.roles, this.prava, this.createsUser, this.uz);
+            Validation.filterCreaterObject(this.createsUser, this.uz, this.row_kritery);
+            Validation.filterObject(this.creator, this.row_kritery, this.prava);
+            Validation.updateUZRowVisibility(this.roles, this.uzRow, this.obj_el, this.group_el);
+        }
+
+
     }
 
     toggleChangeClass(event, element, select, index) {
@@ -149,26 +154,33 @@ export class InterfaceUsers {
     async createTableUser() {
         this.table.innerHTML = ContentGeneration.addTableUser()
         this.data = await Helpers.getAccountAll()
+        this.accountID = (this.data.uniqueUsers.find(e => e.incriment === Number(this.creator))).incriment_account
         this.usersData = await Requests.getUsersContent(this.creator)
         this.addContentUsers()
-
     }
 
     addContentUsers() {
         const tableParent = this.table.querySelector('.table_stata')
-        console.log(this.usersData)
         if (this.add) this.usersData.sort((a, b) => b.incriment[1] - a.incriment[1])
+        console.log(this.usersData)
         this.usersData.forEach(el => {
             if (this.prava === 'Курсор') {
                 this.addRowToTable(tableParent, el)
             }
+            else if (this.prava === 'Администратор') {
+                if (el.incriment[0] === this.accountID && el.role === 'Пользователь') {  // Допустим, у вас есть this.accountId, который указывает на учетную запись администратора
+                    if (el.delStatus === 'true') return;
+                    this.addRowToTable(tableParent, el);
+                }
+            }
             else if (this.prava === 'Интегратор') {
                 if (el.global_creator === Number(this.creator) || el.creater === Number(this.creator)) {
-
+                    if (el.delStatus === 'true') return
                     this.addRowToTable(tableParent, el)
                 }
             } else {
                 if (el.creater === Number(this.creator)) {
+                    if (el.delStatus === 'true') return
                     this.addRowToTable(tableParent, el)
                 }
             }
@@ -183,6 +195,7 @@ export class InterfaceUsers {
 
         const tr = document.createElement('tr');
         tr.classList.add('rows_stata', 'rows_move_kursor');
+        if (rowData.delStatus === 'true') tr.classList.add('sleepblock')
         tr.innerHTML = arrayText.map((it, index) => index < 4 ? `<th class="cell_stata cell cell_table_auth click_property"  index="${index}" entity="${it.entity}"rel="${it.incriment}">${it.name ? it.name : '-'}</th>` :
             `<th class="cell_stata cell cell_table_auth">${it ? it : '-'}</th>`).join('');
         tr.setAttribute('data-id', rowData.incriment[1]);
@@ -195,7 +208,9 @@ export class InterfaceUsers {
     };
 
     async updateTable(lastRow) {
+        console.log(lastRow)
         const name = lastRow.children[0].textContent
+        this.accountIncriment = lastRow.children[2].getAttribute('rel')
         this.container.insertAdjacentHTML('beforeend', ContentGeneration.confirm('пользователя', name));
         this.idDelete = lastRow.getAttribute('data-id'); // Получаем id из data-атрибута
         this.modalConfirmElement = this.container.querySelector('.modal_podtver');
@@ -211,8 +226,13 @@ export class InterfaceUsers {
     }
 
     async delete() {
-        console.log(this.idDelete, this.index)
-        await Requests.deleteAccount(this.idDelete, this.index)
+        console.log(this.creator)
+        await Requests.deleteAccount(this.idDelete, this.index, this.prava, this.creator)
+        const obj = {
+            action: 'Удалён', table: 'usersHistory', columns: 'uniqUsersIDLow', data: String(Math.floor((new Date().getTime()) / 1000)),
+            uniqUsersID: Number(this.creator), uniqEntityID: Number(this.idDelete), nameAccount: Number(this.accountIncriment)
+        }
+        const resu = await Requests.setHistory(obj)
         this.closeConfirm()
         this.createTableUser()
     }

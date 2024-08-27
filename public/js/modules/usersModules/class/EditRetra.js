@@ -2,7 +2,7 @@ import { ContentGeneration } from './CreateContent.js'
 import { Helpers } from './Helpers.js'
 import { Requests } from './RequestStaticMethods.js'
 import { Validation } from './Validation.js'
-
+import { ControllNaviEdit } from './ControllNaviEdit.js'
 
 
 export class EditRetra {
@@ -18,26 +18,38 @@ export class EditRetra {
         this.incriment = Number(element.getAttribute('rel'))
         this.name = element.textContent
         this.pop = document.querySelector('.popup-background')
+        this.obj = {
+            table: 'retrasHistory',
+            tableEntity: 'retranslations',
+            column: 'uniqRetraID',
+            incriment: this.incriment
+        }
         this.init()
     }
 
 
     init() {
-        console.log(this.instance)
         this.createModalEdit()
     }
 
     async createModalEdit() {
         await this.getStruktura()
-        this.container.innerHTML = ContentGeneration.editRetra(this.login, this.prava, this.creator, this.creators, this.property, this.name, this.data)
+        this.container.innerHTML = ContentGeneration.editRetra(this.creator, this.creators, this.property, this.name, this.data)
+        this.recored()
         this.cacheElements()
-        this.addEventListeners();
+        new ControllNaviEdit(this.container, this.obj)
         this.applyValidation();
+        this.addEventListeners();
         this.modalActivity(this.pop, 'flex', 3)
         this.close()
         this.save()
     }
-
+    recored() {
+        this.recoredbtn = this.container.querySelector('.recover')
+        if (this.property.delStatus === 'true') {
+            this.recoredbtn.style.display = 'flex'
+        }
+    }
     cacheElements() {
         this.nameRetra = this.container.querySelector('#nameRetra');
         this.tokenRetra = this.container.querySelector('#tokenRetra');
@@ -60,7 +72,7 @@ export class EditRetra {
         Validation.filterCreater(this.createsUser, this.uz)
         Validation.creator(this.createsUser, this.property.creater)
         Validation.account(this.uz, this.property.incriment[1])
-        Validation.protokol(this.retra, this.tokenRetra)
+        Validation.protokols(this.retra, this.property.protokol, this.tokenRetra)
     }
 
 
@@ -76,12 +88,19 @@ export class EditRetra {
 
     save() {
         const button = this.container.querySelector('.bnt_set')
+        const recover = this.container.querySelector('.recover')
         this.mess = this.container.querySelector('.valid_message')
         button.addEventListener('click', this.validationAndPackObject.bind(this))
+        recover.addEventListener('click', this.reco.bind(this))
     }
     addEventListeners() {
         this.modal.querySelector('.close_modal_window').addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1));
         this.get_token.addEventListener('click', this.openPageTokenAuth.bind(this))
+    }
+
+    reco() {
+        this.del = true
+        this.validationAndPackObject()
     }
 
     async validationAndPackObject() {
@@ -98,11 +117,18 @@ export class EditRetra {
             uz: this.uz.value,
             protokol: this.retra.value,
             creator: this.createsUser.value,
-            incrimentRetra: this.property.incriment[0]
+            incrimentRetra: this.property.incriment[0],
+            del: !this.del ? this.property.delStatus : 'false'
         }
 
         const oldAccount = this.property.incriment[1]
         const messUser = await Requests.editRetra(this.obj)
+        const action = oldAccount === Number(this.uz.value) ? 'Обновлён' : 'Смена учётной записи'
+        const obj = {
+            action: action, table: 'retrasHistory', columns: 'uniqRetraID', data: String(Math.floor((new Date().getTime()) / 1000)),
+            uniqUsersID: Number(this.creator), uniqEntityID: Number(this.property.incriment[0]), nameAccount: Number(oldAccount)
+        }
+        const resu = await Requests.setHistory(obj)
         Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message)
         if (messUser.flag && oldAccount !== Number(this.uz.value)) {
             this.obj.usersObjectGroupsRetra = this.data.uniqueUsers.filter(e => e.incriment_account === oldAccount).map(it => it.incriment)

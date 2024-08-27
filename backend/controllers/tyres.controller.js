@@ -1,6 +1,6 @@
 const databaseService = require('../services/database.service');
 const controllerTyres = require('./tyres.controller.js');
-const helpers = require('../services/helpers')
+const { HelpersDefault } = require('../services/HelpersDefault.js')
 const multer = require('multer');
 const path = require('path');
 const { connection, sql } = require('../config/db')
@@ -118,7 +118,7 @@ exports.findLastIdTyres = async (req, res) => {
 
 exports.saveDataToDBTyres = async (req, res) => {
     const data = req.body.obj;
-    data.dateAction = helpers.getCurrentDate();
+    data.dateAction = HelpersDefault.getCurrentDate();
     console.log(data);
 
     const inputParams = {
@@ -219,7 +219,7 @@ JOIN tyres_table_tire tt ON tg.uniqTyresID = tt.uniqTyresID`;
 exports.updateDataInDB = async (req, res) => {
     const data = req.body.obj
     console.log(data)
-    data.dateAction = helpers.getCurrentDate()
+    data.dateAction = HelpersDefault.getCurrentDate()
     try {
         const pool = await connection
         const updateQuery = `
@@ -279,7 +279,7 @@ exports.updateDataInDB = async (req, res) => {
 exports.updateWheel = async (req, res) => {
     const data = req.body.obj
     //console.log(data)
-    data.dateAction = helpers.getCurrentDate()
+    data.dateAction = HelpersDefault.getCurrentDate()
     try {
         const pool = await connection
         const updateQuery = `
@@ -354,7 +354,7 @@ exports.updateWheel = async (req, res) => {
 
 exports.updateTyreSklad = async (req, res) => {
     const data = req.body.obj;
-    data.dateAction = helpers.getCurrentDate();
+    data.dateAction = HelpersDefault.getCurrentDate();
 
     try {
         const pool = await connection;
@@ -421,7 +421,7 @@ exports.updateTyreSklad = async (req, res) => {
 
 exports.saveDataHistoryToDBTyres = async (data) => {
     //  const data = req.body.obj
-    data.dateAction = helpers.getCurrentDate()
+    data.dateAction = HelpersDefault.getCurrentDate()
     console.log(data)
     try {
         const pool = await connection

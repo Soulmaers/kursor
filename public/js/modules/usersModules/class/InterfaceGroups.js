@@ -24,16 +24,11 @@ export class InterfaceGroups {
 
     async init() {
         console.log('группа')
-        //  await this.getAccounts()
         this.createTableGroup()
         this.buttons[0].addEventListener('click', this.controllGroup.bind(this))
 
     }
 
-    /*
-        async getAccounts() {
-            this.accounts = await Requests.getAccounts(this.creator)
-        }*/
     controllGroup() {
         console.log(this.result)
         this.container.innerHTML = ContentGeneration.createGroup(this.login, this.prava, this.creator, this.creators, this.datas)
@@ -49,10 +44,13 @@ export class InterfaceGroups {
         this.createsUser = this.container.querySelector('.creates');
 
         this.eventListener()
-        Validation.filterAccount(this.creator, this.uz, this.prava)
-        Validation.filterCreaterObject(this.createsUser, this.uz, this.row_kritery)
-        Validation.filterObject(this.creator, this.row_kritery, this.prava)
-        Validation.filterSelectAccount(this.uz, this.row_kritery);
+        if (this.prava !== 'Администратор') {
+            Validation.filterAccount(this.creator, this.uz, this.prava)
+            Validation.filterCreaterObject(this.createsUser, this.uz, this.row_kritery)
+            Validation.filterObject(this.creator, this.row_kritery, this.prava)
+            Validation.filterSelectAccount(this.uz, this.row_kritery);
+        }
+
         Validation.check(this.row_kritery)
         this.modal = this.container.querySelector('.wrap_lk')
         this.modalActivity(this.pop, 'flex', 3)
@@ -121,8 +119,7 @@ export class InterfaceGroups {
             creater: this.createsUser.value,
             idx: await Requests.findId('idg')
         }
-        const messUser = await Requests.saveGroup(this.obj, objectsId)
-
+        const messUser = await Requests.saveGroup(this.obj, objectsId, this.prava)
         Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message)
         this.add = 'add'
         this.createTableGroup()
@@ -134,33 +131,40 @@ export class InterfaceGroups {
         console.log(this.creator)
         this.table.innerHTML = ContentGeneration.addTableGroup()
         this.datas = await Helpers.getAccountAll()
+        this.accountID = (this.datas.uniqueUsers.find(e => e.incriment === Number(this.creator))).incriment_account
         this.result = await Requests.getGroupCreater(this.creator)
+        console.log(this.result)
         this.addContenGroups()
     }
 
     addContenGroups() {
         const tableParent = this.table.querySelector('.table_stata')
         if (this.add) this.result.sort((a, b) => b.incriment[0] - a.incriment[0])
-        console.log(this.result)
         this.data = this.result.map(el => {
-            return [{ id: el.incriment[0], creater: el.creater, global_creator: el.global_creator },
+            return [{ id: el.incriment[0], creater: el.creater, global_creator: el.global_creator, del: el.delStatus },
             [{ name: el.nameGroup, incriment: el.incriment[0], entity: 'group' },
             { name: el.name_retra ? el.name_retra : el.username, incriment: el.name_retra ? el.incriment_retra : el.creater, entity: el.name_retra ? 'retra' : 'user' },
             { name: el.name, incriment: el.incriment[1], entity: 'account' }, el.object_count, 'x']];
 
         });
-
         this.data.forEach(el => {
             if (this.prava === 'Курсор') {
                 this.addRowToTable(tableParent, el)
             }
+            else if (this.prava === 'Администратор') {
+                if (el[1][2].incriment === this.accountID) {  // Допустим, у вас есть this.accountId, который указывает на учетную запись администратора
+                    if (el.delStatus === 'true') return;
+                    this.addRowToTable(tableParent, el);
+                }
+            }
             else if (this.prava === 'Интегратор') {
                 if (el[0].global_creator === Number(this.creator) || el[0].creater === Number(this.creator)) {
+                    if (el[0].del === 'true') return
                     this.addRowToTable(tableParent, el)
                 }
             } else {
-                console.log(el[0].creater, Number(this.creator))
                 if (el[0].creater === Number(this.creator)) {
+                    if (el[0].del === 'true') return
                     this.addRowToTable(tableParent, el)
                 }
             }
@@ -173,6 +177,7 @@ export class InterfaceGroups {
         tr.innerHTML = rowData[1].map((it, index) => index < 3 ? `<th class="cell_stata cell cell_table_auth click_property" index="${index}" entity="${it.entity}" rel="${it.incriment}">${it.name ? it.name : '-'}</th>` :
             `<th class="cell_stata cell cell_table_auth">${it ? it : '-'}</th>`).join('');
         tr.setAttribute('data-id', rowData[0].id);
+        if (rowData[0].del === 'true') tr.classList.add('sleepblock')
         tableParent.appendChild(tr);
         const lastRow = tableParent.lastElementChild;
         const lastCell = lastRow.lastElementChild;
@@ -183,6 +188,7 @@ export class InterfaceGroups {
     };
     async updateTable(lastRow) {
         const name = lastRow.children[0].textContent
+        this.accountIncriment = lastRow.children[2].getAttribute('rel')
         this.container.insertAdjacentHTML('beforeend', ContentGeneration.confirm('группу', name));
         this.idDelete = lastRow.getAttribute('data-id'); // Получаем id из data-атрибута
         this.modalConfirmElement = this.container.querySelector('.modal_podtver');
@@ -199,7 +205,12 @@ export class InterfaceGroups {
     }
 
     async delete() {
-        await Requests.deleteAccount(this.idDelete, this.index)
+        await Requests.deleteAccount(this.idDelete, this.index, this.prava)
+        const obj = {
+            action: 'Удалён', table: 'groupsHistory', columns: 'uniqGroupID', data: String(Math.floor((new Date().getTime()) / 1000)),
+            uniqUsersID: Number(this.creator), uniqEntityID: Number(this.idDelete), nameAccount: Number(this.accountIncriment)
+        }
+        const resu = await Requests.setHistory(obj)
         this.closeConfirm()
         this.createTableGroup()
     }

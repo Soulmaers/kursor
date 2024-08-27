@@ -94,7 +94,21 @@ export class Requests {
         return response
     }
 
+    static async setHistory(obj) {
+        console.log(obj)
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ obj })
+        }
 
+        const result = await fetch('/api/setHistorys', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
 
     static async updateObjectUser(incriment, objects) {
         const params = {
@@ -189,13 +203,13 @@ export class Requests {
     }
 
 
-    static async updateGroupsAndUsers(incriment, objects) {
+    static async updateGroupsAndUsers(incriment, objects, action) {
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ incriment, objects }))
+            body: (JSON.stringify({ incriment, objects, action }))
         }
 
         const result = await fetch('/api/updateGroupsAndUsers', params)
@@ -205,14 +219,14 @@ export class Requests {
     }
 
     static async saveAccount(obj) {
-        const { idx, name, uniqCreater, uniqTP } = obj
+        const { idx, name, uniqCreater, uniqTP, idu, password, role } = obj
         console.log(obj)
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ idx, name, uniqCreater, uniqTP }))
+            body: (JSON.stringify({ idx, name, uniqCreater, uniqTP, idu, password, role }))
         }
 
         const result = await fetch('/api/addAccount', params)
@@ -239,13 +253,13 @@ export class Requests {
     }
 
 
-    static async saveObject(obj) {
+    static async saveObject(obj, role) {
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(obj)
+            body: JSON.stringify({ obj, role })
         }
 
         const result = await fetch('/api/addObject', params)
@@ -254,14 +268,14 @@ export class Requests {
         return response
     }
 
-    static async saveGroup(obj, arrayObjects) {
+    static async saveGroup(obj, arrayObjects, role) {
         console.log(obj, arrayObjects)
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ obj, arrayObjects })
+            body: JSON.stringify({ obj, arrayObjects, role })
         }
 
         const result = await fetch('/api/addGroup', params)
@@ -286,6 +300,18 @@ export class Requests {
         return response
     }
 
+    static async getHistoryStor(obj) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ obj }))
+        }
+        const result = await fetch('/api/getHistoryStor', params)
+        const response = await result.json()
+        return response
+    }
 
     static async getAcc() {
         const params = {
@@ -432,13 +458,13 @@ export class Requests {
         return result
     }
 
-    static async deleteAccount(id, index) {
+    static async deleteAccount(id, index, role, uniqCreator) {
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id, index })
+            body: JSON.stringify({ id, index, role, uniqCreator })
         }
         const complete = await fetch('/api/deleteAccount', params)
         const result = await complete.json()

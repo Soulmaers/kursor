@@ -1,6 +1,5 @@
 const databaseService = require('../services/database.service');
-const helpers = require('../services/helpers.js')
-
+const { HelpersDefault } = require('../services/HelpersDefault.js')
 const { Worker } = require('worker_threads');
 const path = require('path');
 
@@ -64,7 +63,7 @@ class SummaryStatistiks {
     async init() {
         console.time('sum')
 
-        const idwArray = helpers.formats(this.datas)
+        const idwArray = HelpersDefault.formats(this.datas)
         const strusturas = []; // Создаем пустой массив для хранения результатов
         for (const el of idwArray) {
             // Обрабатываем каждый элемент последовательно
@@ -236,20 +235,13 @@ class SummaryStatistiks {
     }
 
     async getSensorsAndParametrs(id) {
-
         const currentTime = Date.now();
         let itognew = [];
         if (this.lastUpdateTime < currentTime) {
-            //  const timeLabel = `ID_${id}_time`;
-            //  console.time(timeLabel);
-            itognew = await helpers.getDataToInterval(id, Math.floor(this.lastUpdateTime / 1000), Math.floor(currentTime / 1000));
-            //  console.timeEnd(timeLabel);
+            itognew = await HelpersDefault.getDataToInterval(id, Math.floor(this.lastUpdateTime / 1000), Math.floor(currentTime / 1000));
+
             this.dailyDataStorage[id] = this.dailyDataStorage[id] ? [...this.dailyDataStorage[id], ...itognew] : itognew;
             this.lastUpdateTime = currentTime;
-
-            // Обновляем глобальное состояние
-            //  global.summaryStatisticsState.lastUpdateTime = this.lastUpdateTime;
-            //  global.summaryStatisticsState.dailyDataStorage = this.dailyDataStorage;
         }
 
         const alt = this.quickly(this.dailyDataStorage[id] || []);
@@ -389,77 +381,7 @@ class SummaryStatistiks {
     }
 }
 
-const popupProstoy = async (array) => {
-    const arrays = helpers.formats(array)
-    const [timeNow, timeOld] = helpers.timefn()
-
-    for (const e of arrays) {
-        const [active, group, name] = e;
-        const newGlobal = await helpers.getDataToInterval(active, timeOld, timeNow);
-        newGlobal.sort((a, b) => a.time - b.time);
-        const resnew = await prostoyNew(newGlobal);  ////проверка на событие простой
-        if (resnew) {
-            for (const el of resnew) {
-                const map = JSON.parse(el[1][1]);
-                const timesProstoy = timesFormat(Number(el[1][0]) - Number(el[0][0]));
-                const formattedDate = new Date(Number(el[0][0]) * 1000).toLocaleString(); // Упрощенное форматирование даты
-                const data = [{
-                    event: `Простой`, group: `Компания: ${group}`,
-                    name: `Объект: ${name}`,
-                    time: `Дата начала простоя: ${formattedDate}`, alarm: `Время простоя: ${timesProstoy}`
-                }];
-                const newTime = Math.floor(new Date().getTime() / 1000);
-                const delta = newTime - Number(el[1][0]);
-                if (delta > 900) {
-                    await databaseService.controllerSaveToBase(data, active, map, group, name); //запись лога
-                }
-            }
-        }
-    }
-}
-
-function timesFormat(dates) {
-    const totalSeconds = Math.floor(dates);
-    const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-    const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-    const seconds = (totalSeconds % 60).toString().padStart(2, '0');
-    const motoHours = `${hours}:${minutes}`;
-    return motoHours;
-}
-
-
-async function prostoyNew(newdata) {
-    if (newdata.length === 0) {
-        return undefined
-    }
-    else {
-        const res = newdata.reduce((acc, e) => {
-            if (Number(e.engineOn) === 1 && e.speed === 0 && e.sats > 4) {
-                if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
-                    && acc[acc.length - 1][0].engineOn === 1 && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
-                    acc[acc.length - 1].push(e);
-                } else {
-                    acc.push([e]);
-                }
-            } else if (Number(e.engineOn) === 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
-                || e.speed > 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
-                || e.sats <= 4 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
-                acc.push([]);
-            }
-
-            return acc;
-        }, []).filter(el => el.length > 0).reduce((acc, el) => {
-            if (Number(el[el.length - 1].data) - Number(el[0].data) > 1200) {
-                acc.push([[el[0].data, [el[0].lat, el[0].lon], el[0].oil], [el[el.length - 1].data, [el[el.length - 1].lat, el[el.length - 1].lon], el[el.length - 1].oil]])
-            }
-            return acc
-        }, [])
-        return res
-    }
-
-}
 
 module.exports = {
-    SummaryStatistiks,
-    popupProstoy
+    SummaryStatistiks
 }

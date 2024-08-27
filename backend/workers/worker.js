@@ -1,6 +1,5 @@
 const { parentPort } = require('worker_threads');
-const helpers = require('../services/helpers.js')
-
+const databaseService = require('../services/database.service.js')
 
 
 
@@ -19,8 +18,7 @@ async function processSensorData(id, lastUpdateTime, dailyDataStorage) {
     const currentTime = Date.now();
     let itognew = [];
     if (lastUpdateTime < currentTime) {
-        //  itognew = await helpers.getDataToInterval(id[0], Math.floor(lastUpdateTime / 1000), Math.floor(currentTime / 1000));
-        itognew = await helpers.getDataTemporaryToInterval(id[0], Math.floor(lastUpdateTime / 1000), Math.floor(currentTime / 1000));
+        itognew = await databaseService.getTemporaryData(Math.floor(lastUpdateTime / 1000), Math.floor(currentTime / 1000), id[0])  //получение параметров за интервал
         dailyDataStorage[id] = dailyDataStorage[id] ? [...dailyDataStorage[id], ...itognew] : itognew;
         lastUpdateTime = currentTime;
     }

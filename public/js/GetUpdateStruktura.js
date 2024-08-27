@@ -16,7 +16,7 @@ export class GetUpdateStruktura {
         const models = await mods.json()
         const arrayList = models.result
 
-
+        console.log(arrayList)
         const allId = Helpers.format(arrayList, 0)
         const final = Helpers.format(arrayList, 1)
         const groupId = Helpers.format(arrayList, 2)

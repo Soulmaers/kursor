@@ -103,7 +103,7 @@ class GetDataObjectsToList {
                 WHERE ug.uniqUsersID = @userId
                 ORDER BY g.incriment, o.incriment;
             `);
-
+            console.log(groupAndObjectResult)
             // Обработка групп и объектов
             const groups = groupAndObjectResult.recordset.reduce((acc, row) => {
                 if (!acc[row.inc_group]) {

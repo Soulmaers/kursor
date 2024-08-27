@@ -30,6 +30,7 @@ export class Application {
         this.startActivButton = document.querySelector('.stat_start')
         this.create = document.querySelector('.create_object')
         this.servis = document.querySelector('.servis')
+        this.adminPanel = document.querySelector('.global_settings')
         this.role = role   //получаем роль прав доступа
         this.login = login //получаем логин пользователя
         this.incriment = incriment
@@ -45,6 +46,10 @@ export class Application {
         if (this.role !== 'Дилер' && this.role !== 'Курсор') {
             this.servis.style.display = 'none'
         }
+        if (this.role === 'Пользователь') {
+            this.adminPanel.style.display = 'none'
+        }
+
     }
     // Методы класса Application
     async init() {
@@ -68,7 +73,7 @@ export class Application {
         this.startActivButton.classList.add('tablo')
     }
     async startClass() {
-
+        //  console.log(this.data, this.allId, this.final, this.role, this.login)
         new AddListSpisok(this.data, this.allId, this.final, this.role, this.login)
         new DropDownList(this.searchInput, this.final)  //запускаем сквозной поиск по элементам
         new NavigationMenu(this.finalGroup, this.final)// запускаем класс по работе с меню навигацией

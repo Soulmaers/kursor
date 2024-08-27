@@ -38,6 +38,7 @@ export class ContentGeneration {
 
 
     static tyresRow = (el, data) => {
+        // console.log(data)
         const dataObject = data.find(e => e[6].idObject === el.idObject)
         const nomer = dataObject === undefined || dataObject[6].gosnomer === null ? '-' : dataObject[6].gosnomer
         const defaultColor = 'rgba(6, 28, 71, 1)';

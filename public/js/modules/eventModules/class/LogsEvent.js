@@ -13,7 +13,7 @@ export class LogsEvent {
         this.count = 300  //кол-во получаемых строк по умолчанию
         this.quantity = 0 //начальное кол-во рпосмотренных сообщений
         this.arrayId = allId
-        this.arrayIdGroups = groupId.map(el => [el.object_id, el.group_id])
+        this.arrayIdGroups = groupId.map(el => [el.object_id, el.group_name])
         this.value = null  //получаемые данные -кол-во  всего, кол-во по умолчанию
         this.rowsContent = null  // готовая структура строк для отрисовки
         this.logsTable = new LogsTable();
@@ -152,6 +152,7 @@ export class LogsEvent {
     pushId() {
         this.arrayId = Helpers.format(this.data, 0)
         this.arrayIdGroups = Helpers.format(this.data, 2)
+        console.log(this.arrayIdGroups)
     }
 
     async logs(quantity) {

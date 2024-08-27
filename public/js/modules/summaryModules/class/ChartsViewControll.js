@@ -78,15 +78,6 @@ export class ChartsViewControll {
         outputArray.length !== 0 ? this.createChart(outputArray, clickParams) : char ? char.remove() : null
 
     }
-    //форматируем секунды в часыи минуты
-    timesFormat(dates) {
-        const totalSeconds = Math.floor(dates);
-        const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-        const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-        const seconds = (totalSeconds % 60).toString().padStart(2, '0');
-        const motoHours = `${hours}:${minutes}`;
-        return motoHours;
-    }
 
     findTop(date, nameChart) {
         const login = document.querySelectorAll('.log')[1].textContent
@@ -159,7 +150,7 @@ export class ChartsViewControll {
         svg.append("g")
             .attr("transform", `translate(70, 0)`)
             .call(nameChart !== 'moto' && nameChart !== 'prostoy' && nameChart !== 'timeJob' ? d3.axisLeft(yScale) : d3.axisLeft(yScale).tickFormat(function (d) {
-                return self.timesFormat(d)
+                return Helpers.timesFormat(d)
             }))
         svg.selectAll('rect')
             .data(data)
@@ -211,7 +202,7 @@ export class ChartsViewControll {
                             .attr('text-anchor', 'middle')
                             .style('font-size', '0.6rem')
                             .text(`${titleTop[i].company}, ${titleTop[i].nameCar}, ${nameChart === 'moto' || nameChart === 'prostoy' || nameChart === 'timeJob' ?
-                                self.timesFormat(titleTop[i][nameChart]) : titleTop[i][nameChart]}`);
+                                Helpers.timesFormat(titleTop[i][nameChart]) : titleTop[i][nameChart]}`);
                     }
                 }
             })
@@ -223,7 +214,7 @@ export class ChartsViewControll {
             svg.append("text")
                 .attr("x", xScale(d.date) + xScale.bandwidth() / 2)
                 .attr("y", yScale(d[nameChart]))
-                .text(nameChart === 'moto' || nameChart === 'prostoy' || nameChart === 'timeJob' ? self.timesFormat(d[nameChart]) : d[nameChart] !== 0 ? d[nameChart] : null)
+                .text(nameChart === 'moto' || nameChart === 'prostoy' || nameChart === 'timeJob' ? Helpers.timesFormat(d[nameChart]) : d[nameChart] !== 0 ? d[nameChart] : null)
                 .attr("font-size", "10px")
                 .attr("text-anchor", "middle")
                 .attr('fill', 'rgba(6, 28, 71, 1)')

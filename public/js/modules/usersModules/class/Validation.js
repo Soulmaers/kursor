@@ -147,13 +147,14 @@ export class Validation {
         console.log('селект аккаунт')
         if (selectedValue === 'Курсор') return
         const options = uzRow.options
+        console.log(options)
         for (let i = 0; i < options.length; i++) {
-            console.log(creator, options[i].getAttribute('data-att'), options[i].getAttribute('global_creator'))
-            if (creator !== options[i].getAttribute('data-att') && creator !== options[i].getAttribute('global_creator')) {
-                options[i].style.display = 'none'
+            console.log(creator, options[i].getAttribute('data-att'), options[i].getAttribute('use'), options[i].getAttribute('global_creator'))
+            if (creator === options[i].getAttribute('data-att') || creator === options[i].getAttribute('use') || creator === options[i].getAttribute('global_creator')) {
+                options[i].style.display = 'block'
             }
             else {
-                options[i].style.display = 'block'
+                options[i].style.display = 'none'
             }
         }
     }
@@ -163,6 +164,7 @@ export class Validation {
         for (let i = 0; i < rowKrytery.length; i++) {
             const id = rowKrytery[i].querySelector('.text_sotring').getAttribute('data-att')
             const globalId = rowKrytery[i].querySelector('.text_sotring').getAttribute('global')
+            console.log(creator, id, globalId)
             if (creator !== id && creator !== globalId) {
                 rowKrytery[i].style.display = 'none'
             }
@@ -186,6 +188,8 @@ export class Validation {
     }
 
     static filterElements(incriment_account, rowKrytery) {
+        console.log(incriment_account)
+        console.log(rowKrytery)
         let bool = false
         for (let i = 0; i < rowKrytery.length; i++) {
             const account_element_incriment = rowKrytery[i].querySelector('.text_sotring').getAttribute('incriment_account')
@@ -208,21 +212,26 @@ export class Validation {
         const options = selects.options
         Array.from(options).forEach(i => { if (i.value === role) { i.selected = true } })
     }
-    static protokol(selects, protokol) {
+    static protokols(selects, protokol, elements) {
         const options = selects.options
         Array.from(options).forEach(i => { if (i.value === protokol) { i.selected = true } })
+        Validation.protokol(selects, elements)
     }
 
     static account(selects, incriment) {
-        const options = selects.options
+        const options = selects.options;
         Array.from(options).forEach(i => {
-            if (Number(i.value) === incriment) { i.selected = true }
-        })
+            if (Number(i.value) === incriment) {
+                i.selected = true;
+                if (i.getAttribute('del') === 'true') {
+                    i.text = '';  // Если атрибут `del` равен 'true' или 'false', очищаем текст этого элемента
+                    i.value = ''
+                }
+            }
+        });
     }
     static protokol(selects, element) {
         function sel(selects, element) {
-            console.log('здесь')
-            console.log(selects)
             const selectedOption = selects.options[selects.selectedIndex].value
             element.parentElement.style.display = selectedOption === 'Wialon API' ? 'flex' : 'none'
         }
