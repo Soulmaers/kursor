@@ -45,15 +45,13 @@ export class Requests {
 
 
 
-    static async saveUser(obj, objects, groups) {
-        const { idx, login, password, role, uz, creater } = obj
-        console.log(obj)
+    static async saveUser(obj, objects, groups, resourses) {
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ obj, objects, groups }))
+            body: (JSON.stringify({ obj, objects, groups, resourses }))
         }
 
         const result = await fetch('/signup', params)
@@ -392,6 +390,18 @@ export class Requests {
         return result
     }
 
+    static async updatePermission(incriment, resourses) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ incriment, resourses })
+        }
+        const complete = await fetch('/api/updatePermission', params)
+        const result = await complete.json()
+        return result
+    }
 
     static async getAccountCreater(creater) {
         const params = {

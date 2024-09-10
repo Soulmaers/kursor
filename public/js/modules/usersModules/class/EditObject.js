@@ -73,6 +73,7 @@ export class EditObject {
         this.createsUser = this.container.querySelector('.creates');
         this.modal = this.container.querySelector('.wrap_lk')
         this.retra = this.property.name_retra
+
     }
 
     applyValidation() {
@@ -123,6 +124,7 @@ export class EditObject {
         this.validationAndPackObject()
     }
     async validationAndPackObject() {
+        this.idButton = this.container.querySelector('.click_button_object').id
         if (this.idButton === 'configID') {
             console.log('конфиг')
             const mess = await this.instanceConfig.setToBaseSensStorMeta()
@@ -171,7 +173,7 @@ export class EditObject {
                 const messObj = await Requests.updateObjectsAndUsers(this.obj);
                 Helpers.viewRemark(this.mess, messObj.flag ? 'green' : 'red', messObj.message);
             }
-            if (this.instance) this.instance.createTableObject();
+            if (this.instance) this.instance.create();
         }
     }
 

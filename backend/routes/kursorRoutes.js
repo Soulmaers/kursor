@@ -23,3 +23,11 @@ router.post('/api/getPressureOil', controllerKursor.getParamsToPressureAndOil)
 router.post('/api/setSummator', controllerKursor.setSummator)
 router.post('/api/getSummator', controllerKursor.getSummator)
 
+router.post('/api/getOldObjects', controllerKursor.getOldObjects)
+router.post('/api/updateIdOBjectToBase', controllerKursor.updateIdOBjectToBase)
+
+router.post('/api/getAccountResourseID', controllerKursor.getAccountResourseID)
+router.post('/api/getPropertyPermissions', controllerKursor.getPropertyPermissions)
+
+
+

@@ -1,38 +1,21 @@
-
-import { Requests } from './RequestStaticMethods.js'
+import { IntarfaceBase } from './IntarfaceBase.js'
 import { ContentGeneration } from './CreateContent.js'
+import { Requests } from './RequestStaticMethods.js'
 import { Helpers } from './Helpers.js'
-import { Validation } from './Validation.js'
 import { EditContollClick } from './EditControllClick.js'
-
-
-export class InterfaceObjects {
+import { Validation } from './Validation.js'
+export class IntObjects extends IntarfaceBase {
     constructor(index, buttons, settingWrap, container, login, prava, creator, creators) {
-        this.container = container
-        this.index = index
-        this.buttons = buttons
-        this.settingWrap = settingWrap
-        this.login = login
-        this.prava = prava
-        this.creator = creator
-        this.creators = creators
-        this.obj = null
-        this.pop = document.querySelector('.popup-background')
-        this.table = this.settingWrap.querySelector('.table_data_info')
-        this.init()
-    }
-
-
-
-    async init() {
-        console.log('объекты')
-        this.createTableObject()
-        this.buttons[0].addEventListener('click', this.controllObject.bind(this))
-
+        super(index, buttons, settingWrap, container, login, prava, creator, creators);
 
     }
-    controllObject() {
+
+    fetchContent() {
         this.container.innerHTML = ContentGeneration.createObj(this.login, this.prava, this.creator, this.creators, this.data)
+        this.caseElements()
+    }
+
+    caseElements() {
         this.objectname = this.container.querySelector('#objectname');
         this.typedevice = this.container.querySelector('#typedevice');
         this.typeobject = this.container.querySelector('#typeobject');
@@ -48,22 +31,18 @@ export class InterfaceObjects {
         this.uz = this.container.querySelector('.uz');
         this.tp = this.container.querySelector('.tp');
         this.createsUser = this.container.querySelector('.creates');
+        this.modal = this.container.querySelector('.wrap_lk')
+    }
+
+    async createTable() {
+        this.table.innerHTML = ContentGeneration.addTableObject()
+        this.result = await Requests.getObjectCreater(this.creator)
+        console.log(this.result)
+    }
+    applyValid() {
         Validation.filterAccount(this.creator, this.uz, this.prava)
         Validation.filterCreater(this.createsUser, this.uz)
-
-        this.modal = this.container.querySelector('.wrap_lk')
-        this.modalActivity(this.pop, 'flex', 3)
-        this.close()
-        this.save()
-
     }
-
-    save() {
-        const button = this.container.querySelector('.bnt_set')
-        this.mess = this.container.querySelector('.valid_message')
-        button.addEventListener('click', this.validationAndPackObject.bind(this))
-    }
-
     async validationAndPackObject() {
         if (this.objectname.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите название объекта');
         if (this.typedevice.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите тип устройства');
@@ -95,29 +74,9 @@ export class InterfaceObjects {
         const messUser = await Requests.saveObject(this.obj, this.prava)
         Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message)
         this.add = 'add'
-        this.createTableObject()
+        this.create()
     }
-
-
-    modalActivity(pop, flex, num) {
-        this.modal.style.display = `${flex}`
-        pop.style.zIndex = num
-    }
-
-    close() {
-        const close = this.modal.querySelector('.close_modal_window')
-        close.addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1))
-    }
-
-    async createTableObject() {
-        this.table.innerHTML = ContentGeneration.addTableObject()
-        this.data = await Helpers.getAccountAll()
-        this.accountID = (this.data.uniqueUsers.find(e => e.incriment === Number(this.creator))).incriment_account
-        this.result = await Requests.getObjectCreater(this.creator)
-        this.addContentObjects()
-    }
-
-    addContentObjects() {
+    addContent() {
         const tableParent = this.table.querySelector('.table_stata')
         if (this.add) this.result.sort((a, b) => b.incriment[0] - a.incriment[0])
 
@@ -128,6 +87,7 @@ export class InterfaceObjects {
             { name: el.tp, incriment: null, entity: 'tp' }, { name: el.name, incriment: el.incriment[1], entity: 'account' }, el.group_count, { name: el.imeidevice, incriment: null, entity: null }, 'x']];
 
         });
+        console.log(data)
         data.forEach(el => {
             if (this.prava === 'Курсор') {
                 this.addRowToTable(tableParent, el)
@@ -151,7 +111,7 @@ export class InterfaceObjects {
             }
         });
     }
-    // Функция для добавления строки в таблицу
+
     addRowToTable(tableParent, rowData) {
         const tr = document.createElement('tr');
         tr.classList.add('rows_stata', 'rows_move_kursor');
@@ -167,6 +127,7 @@ export class InterfaceObjects {
         cells.forEach(el => el.addEventListener('click', () => new EditContollClick(el, this.data, this.container, this.login, this.prava, this.creator, this.creators, this, this.result)))
 
     };
+
     async updateTable(lastRow) {
         const name = lastRow.children[0].textContent
         this.accountIncriment = lastRow.children[3].getAttribute('rel')
@@ -177,30 +138,13 @@ export class InterfaceObjects {
         this.eventListenerConfirm()
     }
 
-    eventListenerConfirm() {
-        const okButton = this.modalConfirmElement.querySelector('.ok_podtver');
-        const cancelButton = this.modalConfirmElement.querySelector('.cancel_podtver');
-        cancelButton.addEventListener('click', this.closeConfirm.bind(this))
-        okButton.addEventListener('click', this.delete.bind(this))
-    }
-
-    async delete() {
-        await Requests.deleteAccount(this.idDelete, this.index, this.prava)
+    createHistoryObject() {
         const obj = {
             action: 'Удалён', table: 'objectsHistory', columns: 'uniqObjectID', data: String(Math.floor((new Date().getTime()) / 1000)),
             uniqUsersID: Number(this.creator), uniqEntityID: Number(this.idDelete), nameAccount: Number(this.accountIncriment)
         }
-        const resu = await Requests.setHistory(obj)
-        this.closeConfirm()
-        this.createTableObject()
+        return obj
     }
 
-    closeConfirm() {
-        this.modalConfirmElement.remove()
-        this.pop.style.zIndex = 2
-    }
-    modalConfirm() {
-        this.modalConfirmElement.style.zIndex = 4
-        this.pop.style.zIndex = 3
-    }
+
 }

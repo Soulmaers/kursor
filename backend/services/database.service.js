@@ -72,7 +72,7 @@ exports.saveDataToDatabase = async (name, idw, port, param, time) => {
                             .input('port', String(el[6]))
                             .query(sqlInsert);
                     } catch (e) {
-                        console.log(el)
+                        console.log(e)
                     }
                 }
             }
@@ -248,6 +248,97 @@ exports.saveListToBase = async (obj) => {
     }
 };
 
+const retryTransaction = async (query, params, maxRetries = 3) => {
+    let attempt = 0;
+    while (attempt < maxRetries) {
+        try {
+            const pool = await connection;
+            const request = pool.request();
+
+            // Добавляем параметры в запрос
+            for (const [key, value] of Object.entries(params)) {
+                // Определите тип параметра в зависимости от данных
+                if (typeof value === 'string') {
+                    request.input(key, sql.VarChar, value);
+                } else if (typeof value === 'number') {
+                    request.input(key, sql.Int, value);
+                } else if (typeof value === 'boolean') {
+                    request.input(key, sql.Bit, value);
+                } else {
+                    throw new Error(`Unsupported parameter type: ${typeof value}`);
+                }
+            }
+
+            const result = await request.query(query);
+            return result;
+        } catch (e) {
+            if (e.message.includes('deadlock')) {
+                console.log('Deadlock detected, retrying...');
+                attempt++;
+                if (attempt === maxRetries) {
+                    throw e; // Если достигнут максимальный количество попыток, выбросить ошибку
+                }
+            } else {
+                console.log('Query error:', e.message);
+                throw e; // Если ошибка не связана с deadlock, выбросить ее
+            }
+        }
+    }
+};
+
+exports.updateIdOBjectToBaseNew = async (arrayId, stor) => {
+    try {
+        for (const item of stor) {
+
+            const tableName = item.table;
+            const columnName = item.column;
+            console.log(tableName)
+            for (const { oldId, newId } of arrayId) {
+                const query = `
+                    UPDATE ${tableName}
+                    SET ${columnName} = @newId
+                    WHERE ${columnName} = @oldId
+                `;
+                await retryTransaction(query, { oldId: oldId, newId: newId });
+            }
+        }
+        return { message: 'Update successful' };
+    } catch (e) {
+        console.log(e);
+        throw e;
+    }
+};
+
+exports.getOldObjectsToBaseWialonOrigin = async (arrayObjects) => {
+    // Преобразуем массив IMEI и idObject в строки для использования в запросе
+    const imeiList = arrayObjects.map(obj => `'${obj.imei}'`).join(',');
+    const idObjectList = arrayObjects.map(obj => `'${obj.idObject}'`).join(',');
+
+    // Формируем запрос для поиска первой строки по каждому imei, где idObject отличается
+    const query = `
+        WITH RankedObjects AS (
+            SELECT 
+                idObject, 
+                imei,
+                ROW_NUMBER() OVER (PARTITION BY imei ORDER BY (SELECT NULL)) AS rn
+            FROM wialon_origin
+            WHERE imei IN (${imeiList})
+            AND idObject NOT IN (${idObjectList})
+        )
+        SELECT idObject, imei
+        FROM RankedObjects
+        WHERE rn = 1
+    `;
+
+    try {
+        const pool = await connection;
+        const result = await pool.request().query(query);
+        return result.recordset;  // Возвращаем все найденные записи
+    } catch (e) {
+        console.log(e);
+        throw e;  // Выбрасываем ошибку, чтобы ее можно было обработать выше
+    }
+};
 exports.viewListToBase = async (login) => {
     try {
         const pool = await connection;
@@ -336,7 +427,6 @@ exports.getMeta = async (idObject, port, imei) => {
         });
         return res;
     } catch (e) {
-        console.log(imei)
         console.log(e);
         return [];
     }
@@ -534,14 +624,12 @@ exports.getWialonObjects = async () => {
     }
 }
 exports.getObjectsId = async (idw) => {
-    console.log(idw)
     try {
         const pool = await connection
         const postModel = `SELECT * FROM object_table WHERE idObject=@idw`
         const result = await pool.request()
             .input('idw', idw)
             .query(postModel)
-        console.log(result.recordset)
         return result.recordset
     }
     catch (e) {
@@ -1295,7 +1383,6 @@ exports.setSubGroups = async (subgroups, object) => {
 };
 
 exports.saveObject = async (object) => {
-    console.log('тута???')
     try {
         const pool = await connection
         const postModel = `
@@ -1570,6 +1657,7 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
 }
 
 exports.dostupObject = async (login) => {
+    // console.log(login)
     try {
         const pool = await connection;
         if (isNaN(login)) {
@@ -1853,6 +1941,210 @@ exports.getBitrixEvent = async (idw) => {
         console.log(e)
     }
 }
+
+
+exports.connectUserAccountsResourse = async (incriment, role) => {
+    console.log(incriment)
+    try {
+        const pool = await connection;
+        const postModel = `SELECT   
+     a.name AS nameAccount,
+r.incriment AS idResourse
+                    FROM accountUsers au
+            JOIN accounts a ON au.uniqAccountID = a.incriment
+             JOIN resourse r ON au.uniqAccountID = r.uniqAccountID
+             WHERE
+    au.uniqUsersID = @uniqUsersID;`;
+
+        const results = await pool.request()
+            .input('uniqUsersID', Number(incriment))
+            .query(postModel)
+        console.log(results.recordset)
+        return results.recordset
+
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+exports.getPropertyPermissionsID = async (incriment, role) => {
+    console.log(incriment)
+    try {
+        const pool = await connection;
+        const postModel = `SELECT   
+* FROM usersPermissions WHERE uniqUsersID=@incriment`;
+        const results = await pool.request()
+            .input('incriment', Number(incriment))
+            .query(postModel)
+        //console.log(results.recordset)
+        return results.recordset
+
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+exports.deleteTemplaceToBase = async (id) => {
+
+    try {
+        const pool = await connection;
+        const postModel = `DELETE FROM templates WHERE incriment=@incriment`;
+        const results = await pool.request()
+            .input('incriment', Number(id))
+            .query(postModel)
+        return results.recordset
+
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+
+
+exports.getAttributeTemplaceToBase = async (id) => {
+    try {
+        const pool = await connection;
+        const postModel = `SELECT   
+* FROM templates WHERE incriment=@incriment`;
+        const results = await pool.request()
+            .input('incriment', Number(id))
+            .query(postModel)
+        //  console.log(results.recordset)
+        return results.recordset
+
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+
+
+exports.getTemplatesProperty = async (arrayID, prop) => {
+    // Преобразуем массив чисел в строку с разделителями запятыми
+    const resourseIDArray = arrayID.join(',');
+
+    try {
+        const pool = await connection;
+
+        // Подготавливаем SQL-запрос с параметрами
+        const postModel = `
+            SELECT *
+            FROM resourseAndTemplates
+            WHERE nameProperty = @nameProperty
+              AND uniqResourseID IN (${resourseIDArray})
+        `;
+
+        // Выполняем запрос с параметрами
+        const results = await pool.request()
+            .input('nameProperty', sql.VarChar, prop)  // Устанавливаем значение параметра nameProperty
+            .query(postModel);
+
+        console.log(results.recordset);
+        return results.recordset;
+
+    } catch (e) {
+        console.log(e);
+        throw e;  // Выбрасываем ошибку для обработки выше
+    }
+}
+
+exports.updateTemplatesToBase = async (obj, id) => {
+    const pool = await connection;
+    const transaction = pool.transaction();
+    console.log(obj)
+    console.log(id)
+    try {
+        // Начинаем транзакцию
+        await transaction.begin();
+
+        // Вставляем запись в таблицу templates
+        const postModel = `UPDATE  templates SET jsonAttributes=@jsonAttributes WHERE incriment=@incriment`;
+        const resultTemplate = await transaction.request()
+            .input('jsonAttributes', sql.NVarChar(), obj.attributes)
+            .input('incriment', sql.Int(), id)
+            .query(postModel);
+
+        // Вставляем запись в таблицу resourseAndTemplates
+        const postResourse = `
+       UPDATE  resourseAndTemplates SET nameTemplate=@nameTemplate,   uniqResourseID=@uniqResourseID WHERE uniqTemplateID=@incriment
+        `;
+
+        await transaction.request()
+            .input('uniqResourseID', obj.idResourse)
+            .input('nameProperty', obj.proreptyTamplate)
+            .input('nameTemplate', obj.nameTemplate)
+            .input('incriment', sql.Int(), id)
+            .input('uniqUsersID', obj.idUser)
+            .query(postResourse);
+
+        // Подтверждаем транзакцию
+        await transaction.commit();
+
+        console.log('Transaction committed successfully');
+        return { mess: 'Отчет обновлен' };
+
+    } catch (e) {
+        // Откатываем транзакцию в случае ошибки
+        await transaction.rollback();
+        console.log('Transaction rolled back due to error:', e);
+        throw e; // Пробрасываем ошибку выше
+    } finally {
+        // Закрываем транзакцию и освобождаем ресурсы
+        transaction.release();
+    }
+};
+
+exports.setTemplates = async (obj) => {
+    const pool = await connection;
+    const transaction = pool.transaction();
+
+    try {
+        // Начинаем транзакцию
+        await transaction.begin();
+
+        // Вставляем запись в таблицу templates
+        const postModel = `INSERT INTO templates (jsonAttributes) OUTPUT INSERTED.incriment VALUES(@jsonAttributes);`;
+        const resultTemplate = await transaction.request()
+            .input('jsonAttributes', sql.NVarChar(), obj.attributes)
+            .query(postModel);
+
+        const templateIncriment = resultTemplate.recordset[0].incriment;
+
+        // Вставляем запись в таблицу resourseAndTemplates
+        const postResourse = `
+            INSERT INTO resourseAndTemplates (uniqResourseID, nameProperty, nameTemplate, uniqTemplateID, uniqUsersID)
+            VALUES (@uniqResourseID, @nameProperty, @nameTemplate, @uniqTemplateID, @uniqUsersID);
+        `;
+
+        await transaction.request()
+            .input('uniqResourseID', obj.idResourse)
+            .input('nameProperty', obj.proreptyTamplate)
+            .input('nameTemplate', obj.nameTemplate)
+            .input('uniqTemplateID', templateIncriment)
+            .input('uniqUsersID', obj.idUser)
+            .query(postResourse);
+
+        // Подтверждаем транзакцию
+        await transaction.commit();
+
+        console.log('Transaction committed successfully');
+        return { mess: 'Отчет сохранён' };
+
+    } catch (e) {
+        // Откатываем транзакцию в случае ошибки
+        await transaction.rollback();
+        console.log('Transaction rolled back due to error:', e);
+        throw e; // Пробрасываем ошибку выше
+    } finally {
+        // Закрываем транзакцию и освобождаем ресурсы
+        transaction.release();
+    }
+};
+
 
 
 exports.controllerSaveToBase = async (arr, id, geo, group, name, start) => {

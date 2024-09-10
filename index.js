@@ -13,7 +13,7 @@ const fs = require('fs');
 const path = require('path');
 const { Worker, isMainThread } = require('worker_threads');
 const app = express();
-const wialonModule = require('./backend/modules/wialon.module');
+//const wialonModule = require('./backend/modules/wialon.module');
 const WebSocket = require('ws');
 require('events').EventEmitter.prototype._maxListeners = 0;
 require('dotenv').config();

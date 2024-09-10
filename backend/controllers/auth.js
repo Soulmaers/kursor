@@ -617,6 +617,15 @@ exports.addAccount = async (req, res) => { //сохранение контакт
                 .input('UserIncriment', sql.Int, uniqCreater)
                 .query(insertAccountUserQuery);
 
+            const insertResourse = `
+                  INSERT INTO resourse (uniqAccountID) OUTPUT INSERTED.incriment
+                  VALUES (@AccountIncriment)
+              `;
+            const resourseId = await pool.request()
+                .input('AccountIncriment', sql.Int, userIncriment)
+                .query(insertResourse);
+
+            const resourse = resourseId.recordset[0].incriment;
 
             const post = `INSERT INTO accountsHistory (action, data, uniqUsersID, uniqAccountID,nameAccount) VALUES(@action, @data, @uniqUsersID, @uniqAccountID,@nameAccount)`
             const resu = await pool.request()
@@ -626,7 +635,7 @@ exports.addAccount = async (req, res) => { //сохранение контакт
                 .input('uniqAccountID', Number(userIncriment))
                 .input('nameAccount', Number(userIncriment))
                 .query(post);
-            await registerUser(pool, name, password, role, idu, String(userIncriment), uniqCreater, [], []);
+            await registerUser(pool, name, password, role, idu, String(userIncriment), uniqCreater, [], [], resourse, ['reports', 'geozones', 'events', 'settings']);
             res.json({
                 message: 'Учетная запись создана', flag: true
             });
@@ -1069,7 +1078,8 @@ exports.getAccountCreater = async function (req, res) { // Поиск созда
                 o.idx AS object_idx, 
                 cu.name AS creator_name,
                 cu.role AS creator_role,
-                gu.incriment AS global_creator
+                gu.incriment AS global_creator,
+                res.incriment AS resourseID
             FROM
                 accountUsers AS au
                 JOIN accounts AS a ON au.uniqAccountID = a.incriment
@@ -1082,6 +1092,7 @@ exports.getAccountCreater = async function (req, res) { // Поиск созда
                 LEFT JOIN groups AS g ON ag.uniqGroupID = g.incriment
                 LEFT JOIN accountRetra AS ar ON au.uniqAccountID = ar.uniqAccountID
                 LEFT JOIN retranslations AS r ON ar.uniqRetraID = r.incriment
+                  LEFT JOIN resourse AS res ON res.uniqAccountID = a.incriment
         `;
 
         const rows = await pool.request().query(sqlQuery);
@@ -1101,7 +1112,8 @@ exports.getAccountCreater = async function (req, res) { // Поиск созда
                     creator_role: e.creator_role,
                     idx: e.idx,
                     global_creator: e.global_creator,
-                    del: e.del
+                    del: e.del,
+                    resourse: e.resourseID
                 },
                 users: e.user_name ? {
                     incriment_account: e.incriment,
@@ -1460,14 +1472,27 @@ exports.getUsersContent = async function (req, res) {
         const groupsResult = await pool.request().query(sqlGroups);
         const groups = groupsResult.recordset;
 
+        const sqlResourse = `
+            SELECT
+                *
+            FROM
+                usersPermissions 
+           
+        `;
+        const sqlResourseResult = await pool.request().query(sqlResourse);
+        const resourse = sqlResourseResult.recordset;
+
+
         // Объединение результатов
         const userData = users.map(user => {
             const userObjects = objects.filter(obj => obj.uniqUsersID === user.incriment[1]);
             const userGroups = groups.filter(grp => grp.uniqUsersID === user.incriment[1]);
+            const resourseGroups = resourse.filter(grp => grp.uniqUsersID === user.incriment[1]);
             return {
                 ...user,
                 objects: userObjects,
-                groups: userGroups
+                groups: userGroups,
+                resourse: resourseGroups
             };
         });
 
@@ -1593,15 +1618,12 @@ exports.geAccContent = async function (req, res) {
 
 
 exports.deleteAccount = async function (req, res) {
-    console.log(req.body)
     const incriment = req.body.id;
     const index = req.body.index;
     const userRole = req.body.role; // Получаем роль пользователя из запроса
     const uniqCreator = req.body.uniqCreator
     const pool = await connection;
-    console.log(userRole)
-    console.log(incriment)
-    console.log(uniqCreator)
+
     try {
         const isCursor = userRole === 'Курсор'; // Проверяем, является ли пользователь "Курсор"
         console.log(isCursor)
@@ -1611,9 +1633,10 @@ exports.deleteAccount = async function (req, res) {
             const objectIds = await methods('accountObjects', 'uniqObjectID', 'uniqAccountID');
             const groupIds = await methods('accountGroups', 'uniqGroupID', 'uniqAccountID');
             const retraIds = await methods('accountRetra', 'uniqRetraID', 'uniqAccountID');
-
+            console.log(uniqCreator)
             const usersMove = userIds.filter(e => e !== Number(uniqCreator))
             console.log(usersMove)
+            console.log(isCursor)
             if (isCursor) {
                 // Если роль "Курсор", удаляем сущности
                 if (usersMove.length > 0) {
@@ -1771,8 +1794,9 @@ exports.deleteAccount = async function (req, res) {
     }
 };
 
-async function registerUser(pool, login, password, role, idx, uz, creater, objectsId = [], groupsid = []) {
-    console.log(login, password, role, idx, uz, creater)
+async function registerUser(pool, login, password, role, idx, uz, creater, objectsId = [], groupsid = [], resourse, resourseId = []) {
+    console.log(resourse)
+    console.log(resourseId)
     const time = String(Math.floor((new Date().getTime()) / 1000));
 
     // Проверка наличия пользователя с таким же логином
@@ -1844,6 +1868,37 @@ async function registerUser(pool, login, password, role, idx, uz, creater, objec
                     .query(insertGroupsQuery);
             }
         }
+        if (resourseId.length !== 0) {
+
+            // Список всех возможных колонок, совпадающих с именами ресурсов
+            const columns = ['reports', 'geozones', 'events', 'settings'];
+            // Формируем строки для вставки колонок и значений
+            const columnsString = columns.join(', ');
+            const valuesString = columns.map(col => `@${col}`).join(', ');
+            // Формируем запрос один раз
+            const insertObjectsQuery = `INSERT INTO usersPermissions (uniqUsersID, uniqResourseID, ${columnsString}) VALUES (@uniqUsersID, @uniqResourseID, ${valuesString})`;
+            // Итерируем по массиву ID ресурсов
+            //   for (let resours of resourseId) {
+            // Создаем объект с флагами доступа для каждой колонки
+            const accessFlags = columns.reduce((flags, col) => {
+                // Устанавливаем true, если ресурс присутствует в массиве
+                flags[col] = resourseId.some(resource => resource === col) ? 'true' : 'false';
+                return flags;
+            }, {});
+            // Создаем запрос с подстановкой значений
+            const request = pool.request()
+                .input('uniqUsersID', sql.Int, Number(userIncriment))
+                .input('uniqResourseID', sql.Int, resourse);
+
+            // Добавляем значения флагов в запрос
+            columns.forEach(col => {
+                request.input(col, String(accessFlags[col]));
+            });
+
+            // Выполняем запрос
+            await request.query(insertObjectsQuery);
+            // }
+        }
 
         // Запись в историю
         const post = `INSERT INTO usersHistory (action, data, uniqUsersID, uniqUsersIDLow, nameAccount) 
@@ -1861,14 +1916,58 @@ async function registerUser(pool, login, password, role, idx, uz, creater, objec
 }
 
 
-module.exports.signup = async function (req, res) {
-    const { login, password, role, idx, uz, creater } = req.body.obj;
-    const objectsId = req.body.objects;
-    const groupsid = req.body.groups;
+exports.updatePermission = async (req, res) => {
+    const incriment = req.body.incriment;
+    const resourses = req.body.resourses;
+    console.log(resourses);
+    console.log(incriment);
 
     try {
         const pool = await connection;
-        const result = await registerUser(pool, login, password, role, idx, uz, creater, objectsId, groupsid);
+        const columns = ['reports', 'geozones', 'events', 'settings'];
+
+        // Создаем объект с флагами доступа для каждой колонки
+        const accessFlags = columns.reduce((flags, col) => {
+            // Устанавливаем true, если ресурс присутствует в массиве
+            flags[col] = resourses.some(resource => resource === col) ? 'true' : 'false';
+            return flags;
+        }, {});
+
+        // Формируем строки для обновления колонок
+        const setString = columns.map(col => `${col} = @${col}`).join(', ');
+
+        // Формируем запрос один раз
+        const updateObjectsQuery = `UPDATE usersPermissions
+                                    SET ${setString}
+                                    WHERE uniqUsersID = @uniqUsersID`;
+
+        // Создаем запрос с подстановкой значений
+        const request = pool.request()
+            .input('uniqUsersID', sql.Int, Number(incriment));
+
+        // Добавляем значения флагов в запрос
+        columns.forEach(col => {
+            request.input(col, String(accessFlags[col]));
+        });
+
+        // Выполняем запрос
+        await request.query(updateObjectsQuery);
+
+        res.json('готово');
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+module.exports.signup = async function (req, res) {
+    const { login, password, role, idx, uz, creater, resourse } = req.body.obj;
+    const objectsId = req.body.objects;
+    const groupsid = req.body.groups;
+    const resourseid = req.body.resourses
+    try {
+        const pool = await connection;
+        const result = await registerUser(pool, login, password, role, idx, uz, creater, objectsId, groupsid, resourse, resourseid);
         res.json(result);
     } catch (error) {
         console.error(error);

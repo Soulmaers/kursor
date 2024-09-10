@@ -247,6 +247,7 @@ export class ConfiguratorParams {
             imei: this.imei,
             idBitrix: this.idBitrix
         }))
+        console.log(data)
         const params = {
             method: "POST",
             headers: {

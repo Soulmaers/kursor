@@ -61,7 +61,7 @@ export class EditUser {
 
             Validation.creator(this.createsUser, this.property.creater)
             Validation.role(this.roles, this.property.role)
-            Validation.updateUZRowVisibility(this.roles, this.uzRow, this.obj_el, this.group_el);
+            Validation.updateUZRowVisibility(this.roles, this.uzRow, this.obj_el, this.group_el, this.resourse_el);
             Validation.filterRole(this.roles, this.prava, this.createsUser, this.uz);
             Validation.filterAccount(this.creator, this.uz, this.prava);
             Validation.filterSelectAccount(this.uz, this.row_kritery)
@@ -71,7 +71,7 @@ export class EditUser {
         }
         console.log('админ')
         Validation.check(this.row_kritery);
-        Validation.activated(this.obj_el, this.group_el, this.property)
+        Validation.activated(this.obj_el, this.group_el, this.property, this.resourse_el)
     }
     cacheElements() {
         this.uzname = this.container.querySelector('#uzname');
@@ -86,6 +86,7 @@ export class EditUser {
         this.uzRow = this.container.querySelector('.uz').parentElement;
         this.obj_el = this.container.querySelector('.obj_el').parentElement;
         this.group_el = this.container.querySelector('.group_el').parentElement;
+        this.resourse_el = this.container.querySelector('.resourse_el').parentElement;
         this.row_kritery = this.container.querySelectorAll('.row_kritery');
         this.check_list = this.container.querySelectorAll('.check_list');
         this.check_container = this.container.querySelectorAll('.check_container');
@@ -106,8 +107,10 @@ export class EditUser {
             const nameContent = index === 0 ? 'объектов' : 'групп'
             if (this.uz.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите учетную запись');
             const rows = element.nextElementSibling.querySelectorAll('.row_kritery')
-            const bool = Validation.filterElements(this.uz.value, rows)
-            if (!bool) return Helpers.viewRemark(this.mess, 'red', `Учетная запись не содержит ${nameContent}`);
+            if (index < 2) {
+                const bool = Validation.filterElements(this.uz.value, rows)
+                if (!bool) return Helpers.viewRemark(this.mess, 'red', `Учетная запись не содержит ${nameContent}`);
+            }
             const elem = document.querySelector('.displays')
             console.log(elem, element.nextElementSibling)
             if (elem && elem !== element.nextElementSibling) elem.classList.remove('displays')
@@ -169,7 +172,8 @@ export class EditUser {
         if (this.passwordInput.value !== this.confirmPasswordInput.value) return Helpers.viewRemark(this.mess, 'red', 'Не совпадают пароли');
         if (this.passwordInput.value === '' || this.confirmPasswordInput.value === '') return Helpers.viewRemark(this.mess, 'red', 'Установите пароль');
         if (this.username.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите имя пользователя');
-        //  if (this.uz.getAttribute('del') === 'true') return Helpers.viewRemark(this.mess, 'red', '');
+
+        const resourseIDCheck = this.uz.options[this.uz.selectedIndex].getAttribute('resourse')
         this.obj = {
             login: this.username.value,
             password: this.confirmPasswordInput.value,
@@ -178,12 +182,16 @@ export class EditUser {
             uz: this.uz.value,
             oldUniqCreator: this.property.incriment[0],
             incrimentUser: this.property.incriment[1],
-            del: !this.del ? this.property.delStatus : 'false'
+            del: !this.del ? this.property.delStatus : 'false',
+            resourse: resourseIDCheck
         }
+
         const objectsCar = this.check_container[0].querySelectorAll('.activ_check')
         const objectsId = [...objectsCar].map(el => el.nextElementSibling.getAttribute('uniqid'))
         const groupsCar = this.check_container[1].querySelectorAll('.activ_check')
         const groupsId = [...groupsCar].map(el => el.nextElementSibling.getAttribute('uniqid'))
+        const resourse = this.check_container[2].querySelectorAll('.activ_check')
+        const resourseId = [...resourse].map(el => el.nextElementSibling.getAttribute('uniqid'))
         const currentObjectsId = this.property.objects.map(obj => obj.incriment)
         const currentGroupsId = this.property.groups.map(group => group.incriment)
         const messUser = await Requests.editUser(this.obj)
@@ -200,9 +208,11 @@ export class EditUser {
         }
         if (!Helpers.arraysAreEqual(objectsId, currentObjectsId)) await Requests.updateObjectUser(this.obj.incrimentUser, objectsId)
         if (!Helpers.arraysAreEqual(groupsId, currentGroupsId)) await Requests.updateGroupUser(this.obj.incrimentUser, groupsId)
+        await Requests.updatePermission(this.obj.incrimentUser, resourseId)
+
         Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message)
         this.updateListObjects(objectsCar, groupsCar)
-        this.instance.createTableUser()
+        this.instance.create()
     }
 
 

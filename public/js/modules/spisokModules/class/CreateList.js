@@ -44,7 +44,7 @@ export class CreateList {
                    <i class="fas fa-wrench settingsAccount icon_controll" rel="${incAccount}"  idx="${idAccount}"></i>
                       <i class="fa fa-check accountCheck"></i>
                    ${this.createTitleIcons()}
-                    ${this.login === 'Курсор' ? 'Учетная запись...' : nameAccount}
+                    ${this.login === 'Демо' ? 'Учетная запись...' : nameAccount}
                 </div>
                 <div class="hiddenModal" rel="${nameAccount}">
                     ${this.createGroups(el.groups)}   
@@ -62,7 +62,7 @@ export class CreateList {
                  <i class="fas fa-wrench settingsGroup icon_controll" rel="${group.inc_group}"  idx="${group.group_id}"></i>
                       <i class="fa fa-check chekHidden"></i>
                  ${this.createTitleIcons()}
-                    ${this.login === 'Курсор' ? 'Группа...' : group.group_name} (${group.objects.length})
+                    ${this.login === 'Демо' ? 'Группа...' : group.group_name} (${group.objects.length})
                 </div>
                 <div class="hiddenModal" rel="${group.group_name}">
                     ${this.createObjects(group.objects)}

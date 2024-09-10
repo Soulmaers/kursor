@@ -1,63 +1,37 @@
+import { IntarfaceBase } from './IntarfaceBase.js'
 import { ContentGeneration } from './CreateContent.js'
-import { Helpers } from './Helpers.js'
 import { Requests } from './RequestStaticMethods.js'
+import { Helpers } from './Helpers.js'
 import { EditContollClick } from './EditControllClick.js'
 import { Validation } from './Validation.js'
 
-export class InterfaceAccount {
-    constructor(container, index, settingWrap, buttons, login, prava, creator, creators) {
-        this.container = container
-        this.index = index
-        this.settingWrap = settingWrap
-        this.buttons = buttons
-        this.login = login
-        this.prava = prava
-        this.creator = creator
-        this.creators = creators
-        this.table = this.settingWrap.querySelector('.table_data_info')
-        this.pop = document.querySelector('.popup-background')
-        this.init()
-    }
 
-    init() {
-        console.log('аккаунт')
-        this.buttons[0].addEventListener('click', this.controllLK.bind(this))
-        this.createTableAccount()
+export class IntAccounts extends IntarfaceBase {
+    constructor(index, buttons, settingWrap, container, login, prava, creator, creators) {
+        super(index, buttons, settingWrap, container, login, prava, creator, creators)
     }
 
 
-    controllLK() {
-        console.log(this.login)
+    fetchContent() {
         this.container.innerHTML = ContentGeneration.createLK(this.login, this.prava, this.creator, this.creators)
+        this.caseElements()
+    }
+
+    caseElements() {
         this.uzname = this.container.querySelector('#uzname');
         this.tp = this.container.querySelector('.tp');
         this.createsUser = this.container.querySelector('.creates');
         this.modal = this.container.querySelector('.wrap_lk')
         this.confirmPasswordInput = this.container.querySelector('#confirm_password');
         this.passwordInput = this.container.querySelector('#password');
-        this.applyValidation()
-        this.modalActivity(this.pop, 'flex', 3)
-        this.close()
-        this.save()
-
     }
-    applyValidation() {
+
+    applyValid() {
         Validation.checkPasswords(this.passwordInput, this.confirmPasswordInput);
-
-    }
-    close() {
-        const close = this.modal.querySelector('.close_modal_window')
-        close.addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1))
-    }
-    save() {
-        const button = this.container.querySelector('.bnt_set')
-        this.mess = this.container.querySelector('.valid_message')
-        button.addEventListener('click', this.validationAndPackObject.bind(this))
     }
 
-    modalActivity(pop, flex, num) {
-        this.modal.style.display = `${flex}`
-        pop.style.zIndex = num
+    async createTable() {
+        this.table.innerHTML = ContentGeneration.addTableAccount()
     }
 
     async validationAndPackObject() {
@@ -81,16 +55,10 @@ export class InterfaceAccount {
         this.data = await Helpers.getAccountAll()
         console.log(this.data)
         this.add = 'add'
-        this.createTableAccount() //отрисовка контента таблицы
+        this.create()
     }
 
-    async createTableAccount() {
-        this.table.innerHTML = ContentGeneration.addTableAccount()
-        this.data = await Helpers.getAccountAll()
-        this.addContentAccount()
-    }
-
-    addContentAccount() {
+    addContent() {
         const tableParent = this.table.querySelector('.table_stata')
         if (this.add) this.data.uniqueAccounts.sort((a, b) => b.incriment - a.incriment)
         this.data.uniqueAccounts.forEach(el => {
@@ -112,7 +80,6 @@ export class InterfaceAccount {
         });
     }
 
-    // Функция для добавления строки в таблицу
     addRowToTable(tableParent, rowData) {
         const arrayText = [{ name: rowData.name, incriment: rowData.incriment, entity: 'account' },
         { name: rowData.creator_name, incriment: rowData.uniqCreater, entity: 'user' },
@@ -140,33 +107,16 @@ export class InterfaceAccount {
         this.modalConfirmElement = this.container.querySelector('.modal_podtver');
         this.modalConfirm()
         this.eventListenerConfirm()
+
     }
 
-    eventListenerConfirm() {
-        const okButton = this.modalConfirmElement.querySelector('.ok_podtver');
-        const cancelButton = this.modalConfirmElement.querySelector('.cancel_podtver');
-        cancelButton.addEventListener('click', this.closeConfirm.bind(this))
-        okButton.addEventListener('click', this.delete.bind(this))
-    }
-
-    async delete() {
-        const res = await Requests.deleteAccount(this.idDelete, this.index, this.prava, this.creatorId)
+    createHistoryObject() {
         const obj = {
             action: 'Удалён', table: 'accountsHistory', columns: 'uniqAccountID', data: String(Math.floor((new Date().getTime()) / 1000)),
             uniqUsersID: Number(this.creator), uniqEntityID: Number(this.idDelete), nameAccount: Number(this.idDelete)
         }
-        const resu = await Requests.setHistory(obj)
-        this.closeConfirm()
-        this.data = await Helpers.getAccountAll()
-        this.createTableAccount()
+        return obj
     }
 
-    closeConfirm() {
-        this.modalConfirmElement.remove()
-        this.pop.style.zIndex = 2
-    }
-    modalConfirm() {
-        this.modalConfirmElement.style.zIndex = 4
-        this.pop.style.zIndex = 3
-    }
+
 }

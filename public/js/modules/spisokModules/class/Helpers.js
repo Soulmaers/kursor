@@ -8,6 +8,7 @@ export class Helpers {
     }
 
     static generDav(el, arrBar) {
+        if (arrBar === undefined) return null
         let generatedValue;
         if (el >= Number(arrBar.dnmin) && el <= Number(arrBar.dnmax)) {
             generatedValue = 3;

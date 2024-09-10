@@ -1,0 +1,66 @@
+.wrap_rem {
+    width: 700px;
+
+    border: 2px solid rgba(6, 28, 71, 1);
+    z-index: 4;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.body_rem {
+    height: 550px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* для Firefox */
+    -ms-overflow-style: none;
+    /* для Internet Explorer и Edge */
+}
+
+
+
+.rows_rem {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    color: rgba(6, 28, 71, 1);
+    margin: 2px 0;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.title_rem {
+    font-weight: bold;
+    width: 100%;
+    padding: 5px 27px;
+    box-sizing: border-box;
+}
+
+.rem_cel {
+    width: 20%;
+    border-bottom: 1px solid rgba(6, 28, 71, 0.7);
+    margin: 0 3px;
+}
+
+
+.rem {
+    font-size: 1.2rem;
+}
+
+.history_update {
+    width: 400px;
+}
+
+.all_check {
+    opacity: 0;
+    pointer-events: none;
+}

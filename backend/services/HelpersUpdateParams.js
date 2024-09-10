@@ -14,7 +14,7 @@ class HelpersUpdateParams {
         const result = await getDataObjectsToList.getAccountGroupsAndObjects(datas) //получем данные из БД по объектам wialona
         await Promise.all([
             new AlarmControll(result),
-            new Events(result, session),
+            //   new Events(result, session),
             new SummaryStatistiks(result)
         ]);
 

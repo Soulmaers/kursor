@@ -21,6 +21,7 @@ class AlarmControll {
     }
 
     uniq(struktura) {
+        //  console.log(struktura)
         const uniqObj = new Map()
         struktura.forEach(e => uniqObj.set(e.object_id, e))
         this.info = Array.from(uniqObj.values())
@@ -40,9 +41,9 @@ class AlarmControll {
         if (tyreRes.length === 0) {
             return; // Прекращаем выполнение этой итерации
         }
-        const speed = Number((paramsRes.find(e => e.params === 'speed')).value)
-        const lat = (paramsRes.find(e => e.params === 'lat')).value
-        const lon = (paramsRes.find(e => e.params === 'lon')).value
+        const speed = Number((paramsRes.find(e => e.params === 'speed') || {}).value || 0);
+        const lat = (paramsRes.find(e => e.params === 'lat') || {}).value || null;
+        const lon = (paramsRes.find(e => e.params === 'lon') || {}).value || null;
         const geo = JSON.stringify([lat, lon])
         const modelUniqValues = HelpersDefault.convert(tyreRes);
 

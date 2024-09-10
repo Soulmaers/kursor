@@ -1,11 +1,12 @@
 
-import { InterfaceAccount } from "./InterfaceAccount.js"
-import { InterfaceUsers } from "./InterfaceUsers.js"
-import { InterfaceObjects } from "./InterfaceObjects.js"
-import { InterfaceGroups } from "./InterfaceGroups.js"
-import { InterfaceRetranslation } from './InterfaceRetranlation.js'
 
-import { Helpers } from './Helpers.js'
+import { IntObjects } from './IntObjects.js'
+import { IntGroups } from './IntGroups.js'
+import { IntUsers } from './IntUsers.js'
+import { IntRetra } from './IntRetra.js'
+import { IntAccounts } from './IntAccounts.js'
+
+
 //***класс  запускает нужный класс по работе с интерфейсом */
 export class ControllModal {
     constructor(element, pop, login, container, buttons, creators) {
@@ -19,6 +20,7 @@ export class ControllModal {
         this.pop = pop
         this.login = login
         this.buttons = buttons
+
         this.init()
     }
 
@@ -27,19 +29,22 @@ export class ControllModal {
     }
 
     async controll() {
+        console.log('тутааа')
+        let inst;
         switch (this.index) {
-            case '0': new InterfaceAccount(this.container, this.index, this.settingWrap, this.buttons, this.login, this.prava, this.creater, this.creators)
+            case '0': inst = new IntAccounts(this.index, this.buttons, this.settingWrap, this.container, this.login, this.prava, this.creater, this.creators)
                 break
-            case '1': new InterfaceUsers(this.container, this.index, this.settingWrap, this.buttons, this.login, this.prava, this.creater, this.creators)
+            case '1': inst = new IntUsers(this.index, this.buttons, this.settingWrap, this.container, this.login, this.prava, this.creater, this.creators)
                 break
-            case '2': new InterfaceObjects(this.index, this.buttons, this.settingWrap, this.container, this.login, this.prava, this.creater, this.creators)
+            case '2': inst = new IntObjects(this.index, this.buttons, this.settingWrap, this.container, this.login, this.prava, this.creater, this.creators)
                 break
-            case '3': new InterfaceGroups(this.index, this.buttons, this.settingWrap, this.container, this.login, this.prava, this.creater, this.creators)
+            case '3': inst = new IntGroups(this.index, this.buttons, this.settingWrap, this.container, this.login, this.prava, this.creater, this.creators)
                 break
             case '4': null
                 break
-            case '5': new InterfaceRetranslation(this.index, this.buttons, this.settingWrap, this.container, this.login, this.prava, this.creater, this.creators)
+            case '5': inst = new IntRetra(this.index, this.buttons, this.settingWrap, this.container, this.login, this.prava, this.creater, this.creators)
                 break
         }
+        inst.init()
     }
 }

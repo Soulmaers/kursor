@@ -25,11 +25,11 @@ class WialonOrigin {
             const dataArray = data?.items ?? [];
             const now = Math.floor(Date.now() / 1000);
             const phones = [];
-
             // Получаем телефоны и IMEI, но без Promise.all
             for (const el of dataArray) {
                 const phone = await wialonService.getUniqImeiAndPhoneIdDataFromWialon(el.id, this.session);
                 phones.push(phone);
+                // console.log('тут!')
             }
 
             // Обработка данных из Wialon
@@ -37,14 +37,12 @@ class WialonOrigin {
                 const el = dataArray[i];
                 const phone = phones[i];
                 const idw = el.id;
-
+                // console.log(phone)
                 if (!phone?.item?.uid) continue;
-
                 const res = await databaseService.objectsWialonImei(String(phone.item.uid));
                 if (!res?.length) continue;
 
                 let oldTime = timeCache.get(idw);
-
                 if (!oldTime) {
                     // Если времени в кэше нет, делаем запрос в базу данных
                     const timeBase = await databaseService.getLastTimeMessage(idw);
@@ -53,6 +51,7 @@ class WialonOrigin {
                 }
 
                 const result = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i', this.session);
+                //  console.log('здесь!')
                 if (!result) continue;
 
                 const allArrayData = [];
@@ -91,7 +90,7 @@ class WialonOrigin {
 
                     allArrayData.push(allObject);
                 }
-
+                //   console.log(allArrayData)
                 // Запись в базу данных
                 await this.updateDatabase(allArrayData, res[0].idx);
 

@@ -139,7 +139,7 @@ export class EditRetra {
             console.log(messObj)
             Helpers.viewRemark(this.mess, messObj.flag ? 'green' : 'red', messObj.message);
         }
-        this.instance.createTableRetra()
+        this.instance.create()
     }
     openPageTokenAuth() {
         const url = 'https://hosting.wialon.com/login.html';

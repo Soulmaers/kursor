@@ -34,6 +34,7 @@ export class ToggleHiddenList {
         this.settingsAccount = document.querySelectorAll('.settingsAccount')
         this.settingGroups = document.querySelectorAll('.settingsGroup')
         this.prefs = document.querySelectorAll('.pref')
+        this.prava = document.querySelector('.role').getAttribute('rel')
         this.init()
     }
     init() {
@@ -95,13 +96,16 @@ export class ToggleHiddenList {
                 dataPromises.push(Requests.getGroupCreater());
             }
             const [data, creators, userdata] = await Promise.all(dataPromises);
+            console.log(data)
+            console.log(creators)
+            console.log(userdata)
             // Создание экземпляра нужного класса
             if (type === 'listItem') {
-                new EditObject(data, parentElement, container, creater, creators, null, userdata);
+                new EditObject(data, parentElement, container, this.login, this.prava, creater, creators, null, userdata);
             } else if (type === 'accounts') {
                 new EditAccount(data, parentElement, container, creater, creators, null);
             } else if (type === 'groups') {
-                new EditGroup(data, parentElement, container, creater, creators, null, userdata);
+                new EditGroup(data, parentElement, container, this.login, this.prava, creater, creators, null, userdata);
             }
 
         } catch (error) {

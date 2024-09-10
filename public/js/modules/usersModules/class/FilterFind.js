@@ -1,6 +1,5 @@
 
 
-
 export class FilterFind {
     constructor(index, container) {
         this.index = index

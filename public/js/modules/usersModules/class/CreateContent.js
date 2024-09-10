@@ -183,15 +183,18 @@ export class ContentGeneration {
     const objects = data.uniqueObjects
     const groups = data.uniqueGroups
     const usersAcc = data.uniqueUsers
+    const acc = usersAcc.find(e => e.incriment === Number(creator))
+    const incriment_account = acc ? acc.incriment_account : null
+    const account = accounts.find(e => incriment_account === e.incriment)
+    console.log(incriment_account)
     const objectsHTML = ContentGeneration.renderModalCheckList(objects, 'объекты')
     const groupsHTML = ContentGeneration.renderModalCheckList(groups, 'группы')
+    const propertyResourseHTML = ContentGeneration.renderModalCheckList([{ name: 'Редактирование отчетов', incriment: 'reports' },
+    { name: 'Бордовый цвет шапки', incriment: 'settings' }], 'ресурсы', 'resourse')
     const creatorsRows = creators !== undefined ? [...creators].filter(it => it.incriment !== Number(creator)).map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
-    const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
+    const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' resourse="${e.resourse}" global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
 
-    const acc = usersAcc.find(e => e.incriment === Number(creator))
-    const incriment_account = acc.incriment_account
-    const account = accounts.find(e => incriment_account === e.incriment)
-    console.log(account.name)
+
     return `<div class="wrap_lk wrap_user">
         <div class="header_index">Новый пользователь<i class="fas fa fa-times close_modal_window"></i></div>
           <div class="body_indexs">
@@ -230,6 +233,13 @@ export class ContentGeneration {
                                    </div>
                     
                     </div>
+                     <div class="row_index"><div class="text_index no_optional resourse_el">Ресурсы</div>
+                                     <div class="select_index check_list"><div class="name_check_title"></div><i class="fas fa-angle-down icons_open_check_list"></i></div>
+                                     <div class="check_container">
+                                        ${propertyResourseHTML}
+                                   </div>
+                    
+                    </div>
                     <div class="footer_index">
 <div class="valid_message"></div>
   <div class="button_setting bnt_set">Сохранить</div></div>
@@ -247,16 +257,17 @@ export class ContentGeneration {
     console.log(objects)
     const objectsHTML = ContentGeneration.renderModalCheckList(objects, 'объекты')
     const groupsHTML = ContentGeneration.renderModalCheckList(groups, 'группы')
+    const propertyResourseHTML = ContentGeneration.renderModalCheckList([{ name: 'Редактирование отчетов', incriment: 'reports' },
+    { name: 'Бордовый цвет шапки', incriment: 'settings' }], 'ресурсы', 'resourse')
     const creatorsRows = creators !== undefined ? [...creators].filter(it => it.incriment !== property.incriment[1]).map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
-    const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' del="${e.del}"global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
+    const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' del="${e.del}" resourse="${e.resourse}" global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
 
     const groupsList = property.groups.map(e => `<div class="rows_sostav" rel="${e.incriment}">${e.nameGroup}</div>`).join('')
     const objectsList = property.objects.map(e => `<div class="rows_sostav" rel="${e.incriment}">${e.objectname}</div>`).join('')
 
     const acc = usersAcc.find(e => e.incriment === Number(creator))
-    const incriment_account = acc.incriment_account
+    const incriment_account = acc ? acc.incriment_account : null
     const account = accounts.find(e => incriment_account === e.incriment)
-    console.log(account.name)
 
     return `<div class="wrap_lk wrap_user">
        <div class="header_index header_edit"><div class="buttons_menu click_button_object" id='objectID'>Пользователь</div>
@@ -296,7 +307,15 @@ export class ContentGeneration {
                                         ${groupsHTML}
                                    </div>
                  
-  </div></div>
+  </div>
+    <div class="row_index"><div class="text_index no_optional resourse_el">Ресурсы</div>
+                                     <div class="select_index check_list"><div class="name_check_title"></div><i class="fas fa-angle-down icons_open_check_list"></i></div>
+                                     <div class="check_container">
+                                        ${propertyResourseHTML}
+                                   </div>
+                    
+                    </div>
+  </div>
                    
                    <div class="sostav_indexs">
 <div class="card_indexs groups_sostav" style="width:49%">
@@ -319,10 +338,10 @@ export class ContentGeneration {
   static createObj(login, role, creator, creators, data) {
     const accounts = data.uniqueAccounts
     const usersAcc = data.uniqueUsers
-    const creatorsRows = creators !== undefined ? [...creators].map(e => `< option value = "${e.incriment}" rel = '${e.idx}' data - att="${e.role}"'>${e.name}</option>`).join('') : ''
+    const creatorsRows = creators !== undefined ? [...creators].map(e => `<option value= "${e.incriment}" rel = '${e.idx}' data - att="${e.role}"'>${e.name}</option>`).join('') : ''
     const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
     const acc = usersAcc.find(e => e.incriment === Number(creator))
-    const incriment_account = acc.incriment_account
+    const incriment_account = acc ? acc.incriment_account : null
     const account = accounts.find(e => incriment_account === e.incriment)
     return ` <div class="wrap_lk wrap_object">
         <div class="header_index">Новый объект<i class="fas fa fa-times close_modal_window"></i></div>
@@ -408,7 +427,7 @@ export class ContentGeneration {
     const creatorsRows = creators !== undefined ? [...creators].filter(it => it.incriment !== property.incriment[1]).map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
     const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' del="${e.del}" global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
     const acc = usersAcc.find(e => e.incriment === Number(creator))
-    const incriment_account = acc.incriment_account
+    const incriment_account = acc ? acc.incriment_account : null
     const account = accounts.find(e => incriment_account === e.incriment)
 
     return ` <div class="wrap_lk wrap_object wrap_edit">
@@ -520,7 +539,7 @@ export class ContentGeneration {
       return obj ? obj : '-'
     }
     const acc = usersAcc.find(e => e.incriment === Number(creator))
-    const incriment_account = acc.incriment_account
+    const incriment_account = acc ? acc.incriment_account : null
     const account = accounts.find(e => incriment_account === e.incriment)
 
     const style = name_retra ? 'style="display: none"' : 'style="display: flex"'
@@ -581,7 +600,7 @@ export class ContentGeneration {
     const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
 
     const acc = usersAcc.find(e => e.incriment === Number(creator))
-    const incriment_account = acc.incriment_account
+    const incriment_account = acc ? acc.incriment_account : null
     const account = accounts.find(e => incriment_account === e.incriment)
 
     return ` <div class="wrap_lk wrap_group">
@@ -626,9 +645,11 @@ ${creatorsRows}
   }
 
 
-  static renderModalCheckList(objects, title) {
+  static renderModalCheckList(objects, title, pref) {
     console.log(objects)
-    const accountsRows = objects !== undefined ? [...objects].map(e => `<div class="row_kritery flasher"> <i class="fa fa-check flag_sorting"></i><div class="text_sotring" uniqid="${e.incriment}" incriment_account="${e.incriment_account}" rel='${e.idx}'global="${e.global_creator}" data-att="${e.uniqCreater}">${e.name}</div></div>`).join('') : ''
+
+    const addClass = pref ? 'resourse_row' : ''
+    const accountsRows = objects !== undefined ? [...objects].map(e => `<div class="row_kritery flasher ${addClass}"> <i class="fa fa-check flag_sorting"></i><div class="text_sotring" uniqid="${e.incriment}" incriment_account="${e.incriment_account}" rel='${e.idx}'global="${e.global_creator}" data-att="${e.uniqCreater}">${e.name}</div></div>`).join('') : ''
     const vstavka = ` <div class='header_podtver head_confirm'>Добавить ${title}</div>
             <div class='body_podtver body_sorting list_object_rows'>
             ${accountsRows}

@@ -65,7 +65,7 @@ class HelpersDefault {
     static processing = async (arr, timez, idw, geoLoc, group, name, start) => { // подготовка шаблона строки события
         const newdata = arr[0]
         let mess;
-        const res = await databaseService.dostupObject(idw) //проверка наличия объекта в БД
+        // const res = await databaseService.dostupObject(idw) //проверка наличия объекта в БД
         const event = newdata.event
         if (event === 'Заправка') {
             mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, litrazh: `${start}`, time: `${newdata.time}` }]
@@ -85,7 +85,7 @@ class HelpersDefault {
         if (event === 'Состояние') {
             mess = [{ event: event, group: `Компания: ${group}`, name: `${name}`, condition: `${newdata.lasttime}` }]
         }
-        return { msg: mess, logins: res }
+        return { msg: mess, logins: ['admin', 'soulmaers'] }//res }
     }
 
     static convert = (ob) => {  //фильтрация уникальных элементов

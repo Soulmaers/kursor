@@ -1,0 +1,338 @@
+.up_shablons,
+.object,
+.interval_reports {
+    width: 100%;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.select_list {
+    padding: 1px 2px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+}
+
+.titleChange_list_name {
+    font-size: 0.9rem;
+    font-weight: 400;
+    width: 35%;
+}
+
+.toggle_reports {
+    font-size: 0.9rem;
+    color: rgba(6, 28, 71, 0.8);
+    background: none;
+    border: 1px solid rgba(6, 28, 71, 0.8);
+    border-radius: 3px;
+    width: 55%;
+    scrollbar-width: none;
+    /* для Firefox */
+    -ms-overflow-style: none;
+    /* для Internet Explorer и Edge */
+}
+
+.down_calendar {
+    width: 100%;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.add_resourse {
+    display: none;
+}
+
+.titleChange_list {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.create_reports {
+    width: 30%;
+    padding: 5px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 200;
+    background-color: rgba(6, 28, 71, 1);
+    border: 1px solid rgb(28, 123, 160);
+    border-radius: 5px;
+    margin: 5px 0;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wrapper_preferens {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.complite {
+    margin-left: 5px;
+    background-color: rgba(6, 28, 71, 1);
+}
+
+.btm_formStart {
+    padding: 5px 8px;
+    color: rgb(28, 123, 160);
+    background-color: #fff;
+    border: 1px solid gray;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.control {
+    color: #fff;
+    background-color: rgba(6, 28, 71, 1);
+    border: 1px solid rgb(28, 123, 160);
+}
+
+.complite:active {
+    background-color: #fff;
+    color: rgba(6, 28, 71, 1);
+}
+
+.create_reports:active {
+    background-color: #fff;
+    color: rgba(6, 28, 71, 1);
+}
+
+.wrapper_template {
+    width: 60%;
+    height: 800px;
+    border: 2px solid rgba(6, 28, 71, 0.8);
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px;
+}
+
+.header_template {
+    width: 100%;
+    background-color: rgba(6, 28, 71, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    box-sizing: border-box;
+    color: #fff;
+    position: relative;
+}
+
+.close_wrap_template,
+.close_wrap_template_two {
+    color: #fff;
+    cursor: pointer;
+    position: absolute;
+    right: 10px
+}
+
+.name_template {
+    color: #fff;
+    font-weight: bold;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    position: absolute;
+    left: 10px
+}
+
+.title_wrapper {
+    color: #fff;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.footer_index {
+    justify-content: space-between;
+    padding: 3px 10px;
+    box-sizing: border-box;
+}
+
+.body_type_tamplate {
+    width: 33%;
+    border: 1px solid rgba(6, 28, 71, 0.8);
+    height: 700px;
+    border-radius: 10px;
+    margin: 0 5px;
+}
+
+
+
+.title_type_template {
+    width: 100%;
+    background-color: rgba(6, 28, 71, 0.8);
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 4px 0;
+}
+
+.checkbox_item {
+    width: 95%;
+    margin: 3px 0;
+    font-size: 0.9rem;
+    color: rgba(6, 28, 71, 0.8);
+    display: flex;
+    align-items: center;
+}
+
+.label_check_tambplate {
+    margin-left: 10px
+}
+
+.calendarReports {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    background: #fff;
+}
+
+.btn_speedStart_reports {
+    margin-top: 5px;
+    display: flex;
+}
+
+.input_data {
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid rgba(6, 28, 71, 1);
+    text-align: center;
+    padding: 3px 0
+}
+
+
+
+.clear_report {
+    background-color: #fff;
+    color: rgba(6, 28, 71, 1);
+    border: 1px solid rgba(6, 28, 71, 1)
+}
+
+.navi_block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flex_none {
+    display: none;
+}
+
+.checkbox-list {
+    width: 95%;
+    margin-bottom: 10px;
+}
+
+.modal_form {
+    width: 250px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid rgba(6, 28, 71, 0.8);
+    z-index: 3;
+    border-radius: 5px;
+    display: none;
+}
+
+.wrap_resourse {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header_resourse {
+    width: 100%;
+    background-color: rgba(6, 28, 71, 0.8);
+    color: #fff;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer_resourse {
+    width: 100%;
+    background-color: rgba(6, 28, 71, 0.8);
+    color: #fff;
+    padding: 3px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.body_resourse {
+    padding: 5px 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    width: 100%;
+    height: 200px;
+}
+
+.save_resourse {
+    width: 100%;
+    color: #fff;
+    margin: 0;
+}
+
+.rows_resourse {
+    color: rgba(6, 28, 71, 0.8);
+}
+
+.edition_template {
+    font-size: 0.9rem;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.delete_template {
+    font-size: 0.9rem;
+    margin-left: 5px;
+    cursor: pointer;
+    color: darkred
+}
+
+.edition_template:hover {
+    animation-name: wiggle;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    animation-iteration-count: 1;
+}
+
+.name_template {
+    color: #fff
+}

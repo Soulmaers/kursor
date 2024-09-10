@@ -623,6 +623,10 @@ i.slash_check {
     display: flex;
 }
 
+.text_type {
+    margin: 2px 15px;
+}
+
 .history_stor {
     display: none;
     flex-direction: column;

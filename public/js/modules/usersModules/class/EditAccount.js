@@ -109,6 +109,6 @@ export class EditAccount {
         }
         const resu = await Requests.setHistory(obj)
         Helpers.viewRemark(this.mess, messAccount.flag ? 'green' : 'red', messAccount.message)
-        this.instance.createTableAccount()
+        this.instance.create()
     }
 }

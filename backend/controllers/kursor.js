@@ -73,6 +73,53 @@ exports.getKursorObjects = async (req, res) => {
 
 }
 
+
+exports.getAccountResourseID = async (req, res) => {
+    const incrimentUser = req.body.incriment;
+    const role = req.body.role;
+    const result = await databaseService.connectUserAccountsResourse(incrimentUser, role);
+    res.json(result);
+}
+exports.getPropertyPermissions = async (req, res) => {
+    const incrimentUser = req.body.incriment;
+    const result = await databaseService.getPropertyPermissionsID(incrimentUser);
+    res.json(result);
+}
+
+
+
+
+
+exports.getOldObjects = async (req, res) => {
+    const arrayObjects = req.body.array;
+    // Получаем записи из базы данных
+    const result = await databaseService.getOldObjectsToBaseWialonOrigin(arrayObjects);
+    // Создаем мапу для быстрого поиска idObject по imei
+    const resultMap = new Map(result.map(obj => [obj.imei, obj.idObject]));
+
+    // Создаем массив объектов с новыми свойствами
+    const mismatchedObjects = arrayObjects
+        .filter(obj => {
+            // Проверяем, если существует запись с таким imei и отличается idObject
+            return resultMap.has(obj.imei) && resultMap.get(obj.imei) !== obj.idObject;
+        })
+        .map(obj => ({
+            oldId: resultMap.get(obj.imei),  // Старый idObject из базы данных
+            newId: obj.idObject,  // Новый idObject из входного массива
+            imei: obj.imei  // IMEI объекта
+        }));
+    res.json(mismatchedObjects);
+};
+
+exports.updateIdOBjectToBase = async (req, res) => {
+    const arrayObjects = req.body.arrayId;
+    const storTable = req.body.storTable;
+    // Получаем записи из базы данных
+    const result = await databaseService.updateIdOBjectToBaseNew(arrayObjects, storTable);
+    res.json(result);
+};
+
+
 exports.getSummator = async (req, res) => {
     const idw = req.body.idw
     const result = await databaseService.getSummatorToBase(idw) //получение данных по параметрам сумматора топлива из БД

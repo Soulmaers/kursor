@@ -1,9 +1,11 @@
-import { initCharts } from '../spisokModules/class/AddListSpisok.js'
+
+
+import { initCharts } from '../spisokModules/class/addListSpisok.js'
 import { kartaContainer } from './karta.js'
 import { reportsContainer } from './reports.js'
 import { Servis } from './servis.js'
 import { SkladTyres } from '../skladModules/class/SkladTyres.js'
-
+import { CentalClassReports } from '../reportsModules/class/CentalClassReports.js'
 export class NavigationMenu {
     constructor(data, final) {
         this.data = data
@@ -131,7 +133,9 @@ export class NavigationMenu {
             num.classList.add('act_modules')
         }
         elem.style.display = 'flex'
-        reportsContainer(avl)
+        //  console.log(elem)
+        new CentalClassReports(elem)
+        // reportsContainer(avl)
     }
 
     sklad(elem) {

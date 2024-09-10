@@ -65,6 +65,7 @@ class Events {
 
     oilFunc(rt, all) {  //проверка на событие заправка/слив
         const itogEvents = Object.entries(rt).map(el => {
+
             const eventObject = el[1][0].lls ? Object.values(Object.values(el[1])[0].lls)[0] : null
             const fill = eventObject ? Object.values(Object.values(el[1])[0].lls)[0].filled !== 0 ? Object.values(Object.values(el[1])[0].lls)[0].filled : null : null
             if (eventObject && fill) {

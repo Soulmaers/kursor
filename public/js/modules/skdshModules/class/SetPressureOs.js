@@ -30,7 +30,7 @@ export class SetPressureOs {
     }
     removeEventListeners() {
         console.log('Removing event listeners');
-        this.inpfinal.forEach(el => el.removeEventListener('input', this.finalBound));
+        this.inpfinal.forEach(el => el.addEventListener('input', (event) => this.finalBound(event, el)));
         this.vnut.forEach(e => e.removeEventListener('click', this.methodBound));
         this.btnModal.removeEventListener('click', this.validationBound);
         this.btnModalClear.removeEventListener('click', this.clearBarBound);
@@ -53,7 +53,7 @@ export class SetPressureOs {
     }
     async reqModalBar(arr, id) {
         const active = document.querySelector('.color')
-        const activePost = active.children[0].textContent
+        const activePost = active.getAttribute('name')
         const idw = this.id
         console.log(idw)
         const arrValue = [];
@@ -88,12 +88,12 @@ export class SetPressureOs {
         this.element.parentElement.classList.remove('centerOsActiv')
     }
 
-    final(it) {
-        let values = it.value;
+    final(event) {
+        let values = event.target.value;
         const valuess = values.replace(/,/g, '.'); // заменяем все запятые на точки
-        it.value = valuess;
+        event.target.value = valuess;
         if (this.norma.value) {
-            it.previousElementSibling.textContent = ((String(this.norma.value / 100 * it.value)).substr(0, 5))
+            event.target.previousElementSibling.textContent = ((String(this.norma.value / 100 * event.target.value)).substr(0, 5))
         }
     }
 

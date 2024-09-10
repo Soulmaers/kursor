@@ -4,7 +4,7 @@ import { ContentGeneration } from './CreateContent.js'
 
 export class Validation {
 
-    static updateUZRowVisibility(roles, uzRow, objel, groupel) {
+    static updateUZRowVisibility(roles, uzRow, objel, groupel, resourseEl) {
         // Функция для обновления видимости элементов
         function updateVisibility() {
             const selectedValue = roles.value;
@@ -21,6 +21,7 @@ export class Validation {
             uzRow.style.display = shouldHide ? 'none' : 'flex';
             objel.style.display = shouldHide ? 'none' : 'flex';
             groupel.style.display = shouldHide ? 'none' : 'flex';
+            resourseEl.style.display = shouldHide ? 'none' : 'flex';
             uzRow.children[1].selectedIndex = -1; // Сброс выбранного значения
         }
 
@@ -95,7 +96,8 @@ export class Validation {
 
 
 
-    static filterCreater(createsUser, uzRow,) {
+    static filterCreater(createsUser, uzRow) {
+        console.log(createsUser, uzRow)
         createsUser.addEventListener('change', function (event) {
             const title = document.querySelectorAll('.name_check_title')
             title.forEach(e => e.textContent = '')
@@ -172,6 +174,7 @@ export class Validation {
     }
 
     static filterSelectAccount(account, rowKrytery) {
+        console.log(rowKrytery)
         account.addEventListener('change', async function (event) {
             const title = document.querySelectorAll('.name_check_title')
             title.forEach(e => e.textContent = '')
@@ -190,11 +193,14 @@ export class Validation {
     static filterElements(incriment_account, rowKrytery) {
         console.log(incriment_account)
         console.log(rowKrytery)
+        const rows = [...rowKrytery].filter(e => !e.classList.contains('resourse_row'))
+        console.log(rows)
         let bool = false
-        for (let i = 0; i < rowKrytery.length; i++) {
-            const account_element_incriment = rowKrytery[i].querySelector('.text_sotring').getAttribute('incriment_account')
+        for (let i = 0; i < rows.length; i++) {
+            const account_element_incriment = rows[i].querySelector('.text_sotring').getAttribute('incriment_account')
+            console.log(account_element_incriment)
             if (incriment_account !== account_element_incriment) {
-                rowKrytery[i].style.display = 'none'
+                rows[i].style.display = 'none'
             }
             else {
                 bool = true
@@ -240,17 +246,23 @@ export class Validation {
         selects.addEventListener('change', () => sel(selects, element))
     }
 
-    static activated(objects, groups, property) {
+    static activated(objects, groups, property, resourses) {
         const activateFlags = (elements, incriments) => {
             elements.forEach(e => {
-                if (incriments.includes(Number(e.querySelector('.text_sotring').getAttribute('uniqid')))) {
+                if (incriments.includes(e.querySelector('.text_sotring').getAttribute('uniqid'))) {
                     e.querySelector('.flag_sorting').classList.add('activ_check');
                 }
             });
         };
 
-        if (objects) activateFlags(objects.querySelectorAll('.row_kritery'), property.objects.map(e => e.incriment));
-        if (groups) activateFlags(groups.querySelectorAll('.row_kritery'), property.groups.map(e => e.incriment));
 
+        console.log(property.resourse[0])
+        if (objects) activateFlags(objects.querySelectorAll('.row_kritery'), property.objects.map(e => String(e.incriment)));
+        if (groups) activateFlags(groups.querySelectorAll('.row_kritery'), property.groups.map(e => String(e.incriment)));
+        if (property.resourse[0]) {
+            const getTrueKeys = Object.keys(property.resourse[0]).filter(key => property.resourse[0][key] === "true");
+            activateFlags(resourses.querySelectorAll('.row_kritery'), getTrueKeys)
+
+        }
     }
 }

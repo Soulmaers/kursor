@@ -1,29 +1,34 @@
 
+const axios = require('axios');
 
-const wialon = require('wialon');
+
+
+
+const MAX_RETRIES = 10; // Максимальное количество попыток
 
 exports.login = async (token) => {
-    const session = wialon().session;
-    try {
-        await session.start({ token: token });
-        return session;
-    } catch (error) {
+    const url = `https://hst-api.watchit.ru/wialon/ajax.html?svc=token/login&params={"token":${token}}`;
+    const headers = {
+        'Content-Type': 'application/json'
+    };
 
-        console.error('Ошибка входа:', error);
-        return 'ошибка'
-        throw error; // Пробрасываем ошибку дальше для обработки
+    let attempt = 0;
+
+    while (attempt < MAX_RETRIES) {
+        try {
+            const response = await axios.post(url, {}, { headers: headers, timeout: 60000 });
+            return response.data
+        } catch (error) {
+            attempt++;
+            console.log(`Attempt ${attempt} failed:`, error.response ? error.response.data : error.message);
+
+            if (attempt >= MAX_RETRIES) {
+                return { success: false, error: 'Maximum retry attempts reached' };
+            }
+
+            // Рекомендуется добавить небольшую задержку перед повторной попыткой
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Задержка 2 секунды
+        }
     }
-
 };
 
-
-/*
-exports.logout = async (session) => {
-    try {
-        await session.stop()
-        return true;
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
-};*/

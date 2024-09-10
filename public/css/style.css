@@ -5502,19 +5502,7 @@ input[type="date_int"] {
   cursor: pointer;
 }
 
-.btm_formStart {
-  padding: 5px 8px;
-  color: rgb(28, 123, 160);
-  background-color: #fff;
-  border: 1px solid gray;
-  cursor: pointer;
-}
 
-.control {
-  color: #fff;
-  background-color: rgb(28, 123, 160);
-  border: 1px solid rgb(28, 123, 160);
-}
 
 
 
@@ -5727,7 +5715,8 @@ div.wrapper {
   border-radius: 3px;
 }
 
-.global_settings {
+.global_settings,
+.rem {
   font-size: 1.5rem;
   cursor: pointer;
   margin: 0 10px;
@@ -8695,7 +8684,7 @@ i.filterEvent {
   display: none;
   flex-direction: column;
   align-items: center;
-  z-index: 3;
+  z-index: 4;
   border: 2px solid rgba(6, 28, 71, 1);
   background-color: rgba(6, 28, 71, 1);
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
@@ -9578,64 +9567,12 @@ i.changeColorCheck {
 
 
 
-.wrapper_preferens {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-  /*margin-top: 20px;*/
-}
-
-.up_shablons {
-  width: 100%;
-  height: 38%;
-  border-radius: 5px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 5px;
-  box-sizing: border-box;
-}
-
-.down_calendar {
-  width: 100%;
-  height: 78%;
-  border-radius: 5px;
-  box-sizing: border-box;
-  margin-top: 20px;
-  /*padding: 10px;*/
-}
 
 .title_left_reports {
   font-size: 1rem;
   font-weight: 400;
 }
 
-
-.titleChange_list {
-  display: flex;
-  align-items: center;
-
-}
-
-.select_list {
-  padding: 1px 2px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-.titleChange_list_name {
-  font-size: 0.9rem;
-  font-weight: 400;
-}
-
-.toggle_reports {
-  font-size: 1.2rem;
-}
 
 
 .header_select {
@@ -9675,46 +9612,7 @@ i.changeColorCheck {
 }
 
 
-.interval_reports {
-  font-size: 0.9rem;
-  font-weight: 400;
-}
 
-.calendarReports {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 5px;
-  background: #fff;
-}
-
-.btn_speedStart_reports {
-  margin-top: 20px;
-  display: flex;
-}
-
-.input_data {
-  margin-top: 20px;
-  border-radius: 5px;
-  border: 1px solid rgba(6, 28, 71, 1);
-  text-align: center;
-  padding: 3px 0
-}
-
-.complite {
-  margin-left: 5px;
-  background-color: rgba(6, 28, 71, 1);
-}
-
-.clear_report {
-  background-color: #fff;
-  color: rgba(6, 28, 71, 1);
-  border: 1px solid rgba(6, 28, 71, 1)
-}
-
-.btm_formStart {
-  border-radius: 5px;
-}
 
 .body_interval {
   width: 100px;
@@ -9763,10 +9661,7 @@ i.changeColorCheck {
   border-bottom: 2px dashed rgba(6, 28, 71, 1);
 }
 
-.complite:active {
-  background-color: #fff;
-  color: rgba(6, 28, 71, 1);
-}
+
 
 .activeTitleReports {
   background-color: rgba(6, 28, 71, 1);
@@ -9866,10 +9761,6 @@ i.changeColorCheck {
 .active_cell {
   background-color: #f5f2f2;
   border: 1px dashed rgba(6, 28, 71, 1);
-}
-
-.object {
-  display: none;
 }
 
 .inform {

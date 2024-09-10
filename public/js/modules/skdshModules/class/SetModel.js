@@ -19,7 +19,8 @@ export class SetModel {
         const arrTyres = [];
         const active = document.querySelector('.color')
         const idw = this.id
-        const activePost = active.children[0].textContent
+        const activePost = active.getAttribute('name')
+        console.log(activePost)
         const osi = wrapRight.querySelectorAll('.osiTest')
         const linkTyres = wrapRight.querySelectorAll('.tires_link_test')
         const go = wrapRight.querySelector('.gosNumber')
@@ -40,6 +41,7 @@ export class SetModel {
         })
         const selectedOption = this.selectType.options[this.selectType.selectedIndex];
         const selectedText = selectedOption.text;
+        console.log(arrModel, activePost, idw, selectedText, go, go1, goCar, goCar1)
         await this.changeBase(arrModel, activePost, idw, selectedText, go, go1, goCar, goCar1)
         await this.postTyres(arrTyres, activePost, idw);
         this.sensors.style.display = 'none';
@@ -69,8 +71,9 @@ export class SetModel {
     }
 
     async postTyres(tyres) {
-        const active = document.querySelectorAll('.color')
-        const activePost = active[0].textContent.replace(/\s+/g, '')
+        const active = document.querySelector('.color')
+        console.log(active)
+        const activePost = active.getAttribute('name')
         const idw = document.querySelector('.color').id
         const params = {
             method: "POST",
@@ -84,24 +87,29 @@ export class SetModel {
     }
 
     async reqDelete(idw) {
-        fetch('/api/delete', {
+
+        const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ idw }),
-        })
-            .then((res) => res.json())
-            .then((res) => console.log(res))
+        }
+        const res = await fetch('/api/delete', params)
+        const result = await res.json()
+
+
         const containerAlt = document.querySelector('.containerAlt')
         if (containerAlt) {
             containerAlt.remove();
         }
+        return result
     }
     //конфигуратор оси
     async changeBase(massModel, activePost, idw, type, go, go1, goCar, goCar1) {
         massModel.length !== 0 ? massModel : massModel.push(['-', '-', '-'])
         await this.reqDelete(idw);
+        console.log('тат')
         let gosp;
         let frontGosp;
         let gosp1;

@@ -313,7 +313,7 @@ export class IconStatus {
             })
             const parametrs = this.valueparamsObject[elem.id] === -348201.3876 ? '---' : this.valueparamsObject[elem.id]
             switch (elem.id) {
-                case 'odom-card':
+                case 'odom-card': console.log(parametrs)
                     elem.children[0].textContent = parametrs !== '---' ? this.addZero(8, parametrs.toFixed(0)) : '---'
                     break;
                 case 'tsi-card':

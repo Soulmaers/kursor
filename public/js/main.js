@@ -4,16 +4,18 @@ import { AlarmControll } from './modules/alarmModules/class/AlarmControll.js'
 import { AddTooltip } from './modules/event.js'
 import { LogsEvent } from './modules/eventModules/class/LogsEvent.js'
 import { IndexClassSettings } from './modules/usersModules/class/IndexClassSettings.js'
-import { AddListSpisok } from './modules/spisokModules/class/AddListSpisok.js'
+import { RemClassControll } from './modules/remModules/class/RemSettingControll.js'
+import { AddListSpisok } from './modules/spisokModules/class/addListSpisok.js'
 import { GetUpdateStruktura } from './GetUpdateStruktura.js'
-export let app;
+import { PermissionControllClass } from './modules/permissionModules/class/PermissionControllClass.js'
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // Это гарантирует, что DOM полностью загружен перед инициализацией классов
     const role = document.querySelector('.role').getAttribute('rel')
     const login = document.querySelectorAll('.log')[1].textContent
     const incriment = document.querySelector('.role').getAttribute('data-att')
-    app = new Application(role, login, incriment);
+    new Application(role, login, incriment);
 
 });
 
@@ -31,6 +33,7 @@ export class Application {
         this.create = document.querySelector('.create_object')
         this.servis = document.querySelector('.servis')
         this.adminPanel = document.querySelector('.global_settings')
+        this.rem = document.querySelector('.rem')
         this.role = role   //получаем роль прав доступа
         this.login = login //получаем логин пользователя
         this.incriment = incriment
@@ -42,20 +45,29 @@ export class Application {
         this.init()  //основной метод который запускает стартовые методы загрузки данных на страницу
     }
 
-    validationRole() {
+    async validationRole() {
         if (this.role !== 'Дилер' && this.role !== 'Курсор') {
             this.servis.style.display = 'none'
         }
         if (this.role === 'Пользователь') {
             this.adminPanel.style.display = 'none'
         }
+        if (this.role !== 'Курсор') {
+            this.rem.style.display = 'none'
+        }
+        if (this.role === 'Пользователь' || this.role === 'Администратор') {
+            await GetUpdateStruktura.getPermissions(this.incriment)
+            new PermissionControllClass(this.incriment, this.role)
+        }
+
 
     }
     // Методы класса Application
     async init() {
 
         const { data, allId, final, groupId, finalGroup } = await GetUpdateStruktura.zaprosData(this.incriment, this.role)
-        console.log(finalGroup)
+        const resourses = await GetUpdateStruktura.getAccountResourse(this.incriment, this.role)
+        console.log(data, allId, final, groupId, finalGroup)
         this.data = data
         this.allId = allId
         this.final = final
@@ -63,6 +75,7 @@ export class Application {
         this.finalGroup = finalGroup
         GetUpdateStruktura.updateData()
         new IndexClassSettings(this.login)
+        new RemClassControll(this.login, final)
         this.formatContainer() //метод который корректирует границы контейнеров взависимости от разрешения экрана
         this.adaptiv()  //адаптив
         this.activButton()

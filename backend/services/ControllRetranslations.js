@@ -32,7 +32,7 @@ class ControllRetranslations {
 
     async getProtokolRetranslation() {
         this.protokols = await databaseService.getProtokolRetranslations()
-        console.log(this.protokols)
+        //  console.log(this.protokols)
     }
 }
 

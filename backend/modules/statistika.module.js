@@ -97,6 +97,7 @@ class SummaryStatistiks {
         await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
             databaseService.summaryToBase(idw, arrayInfo, datas)
         ));
+        //  console.log(this.strustura)
     }
 
     fillStrusturaWithData(strustura, data, pref) {

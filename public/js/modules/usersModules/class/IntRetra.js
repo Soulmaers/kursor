@@ -1,54 +1,23 @@
-
+import { IntarfaceBase } from './IntarfaceBase.js'
 import { ContentGeneration } from './CreateContent.js'
-import { Helpers } from './Helpers.js'
 import { Requests } from './RequestStaticMethods.js'
-import { Validation } from './Validation.js'
+import { Helpers } from './Helpers.js'
 import { EditContollClick } from './EditControllClick.js'
+import { Validation } from './Validation.js'
 
-export class InterfaceRetranslation {
+
+
+export class IntRetra extends IntarfaceBase {
     constructor(index, buttons, settingWrap, container, login, prava, creator, creators) {
-        this.container = container
-        this.index = index
-        this.buttons = buttons
-        this.settingWrap = settingWrap
-        this.login = login
-        this.prava = prava
-        this.creator = creator
-        this.creators = creators
-        this.obj = null
-        this.pop = document.querySelector('.popup-background')
-        this.table = this.settingWrap.querySelector('.table_data_info')
-        this.init()
+        super(index, buttons, settingWrap, container, login, prava, creator, creators)
     }
 
-
-    init() {
-        console.log('аккаунт')
-        this.buttons[0].addEventListener('click', this.controllRetra.bind(this))
-        this.createTableRetra()
-    }
-
-    close() {
-        const close = this.modal.querySelector('.close_modal_window')
-        close.addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1))
-    }
-    modalActivity(pop, flex, num) {
-        this.modal.style.display = `${flex}`
-        pop.style.zIndex = num
-    }
-
-    controllRetra() {
+    fetchContent() {
         this.container.innerHTML = ContentGeneration.createRetra(this.login, this.prava, this.creator, this.creators, this.data)
-        this.cacheElements();
-        this.addEventListeners();
-        this.applyValidation();
-        this.uzname = this.container.querySelector('#uzname');
-        this.tp = this.container.querySelector('.tp');
-        this.createsUser = this.container.querySelector('.creates');
-        this.modal = this.container.querySelector('.wrap_lk')
+        this.caseElements()
     }
 
-    cacheElements() {
+    caseElements() {
         this.nameRetra = this.container.querySelector('#nameRetra');
         this.tokenRetra = this.container.querySelector('#tokenRetra');
         this.port_protokol = this.container.querySelector('#port_protokol');
@@ -65,12 +34,16 @@ export class InterfaceRetranslation {
         this.mess = this.container.querySelector('.valid_message');
     }
 
-    addEventListeners() {
-        this.container.querySelector('.bnt_set').addEventListener('click', this.validationAndPackObject.bind(this));
-        this.modal.querySelector('.close_modal_window').addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1));
-        this.get_token.addEventListener('click', this.openPageTokenAuth.bind(this))
+    applyValid() {
+        Validation.filterAccount(this.creator, this.uz, this.prava);
+        Validation.filterCreater(this.createsUser, this.uz)
+        Validation.protokol(this.retra, this.tokenRetra)
+        this.eventListener()
     }
 
+    eventListener() {
+        this.get_token.addEventListener('click', this.openPageTokenAuth.bind(this))
+    }
 
     openPageTokenAuth() {
         const url = 'https://hosting.wialon.com/login.html';
@@ -78,11 +51,12 @@ export class InterfaceRetranslation {
         window.open(url, '_blank');
     }
 
-    applyValidation() {
-        Validation.filterAccount(this.creator, this.uz, this.prava);
-        Validation.filterCreater(this.createsUser, this.uz)
-        Validation.protokol(this.retra, this.tokenRetra)
+    async createTable() {
+        this.table.innerHTML = ContentGeneration.addTableRetra()
+        this.result = await Requests.getRetraCreater(this.creator)
+        console.log(this.result)
     }
+
 
     async validationAndPackObject() {
         if (this.nameRetra.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите имя ретранслятора');
@@ -104,23 +78,13 @@ export class InterfaceRetranslation {
         const messUser = await Requests.saveRetra(this.obj)
         Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message)
         this.add = 'add'
-        this.createTableRetra()
+        this.create()
     }
 
-    async createTableRetra() {
-        console.log('ТУТ?')
-        this.table.innerHTML = ContentGeneration.addTableRetra()
-        this.data = await Helpers.getAccountAll()
-        this.usersData = await Requests.getRetraCreater(this.creator)
-        console.log(this.usersData)
-        this.addContentRetra()
-
-    }
-    addContentRetra() {
+    addContent() {
         const tableParent = this.table.querySelector('.table_stata')
-        console.log(this.usersData)
-        if (this.add) this.usersData.sort((a, b) => b.incriment[0] - a.incriment[0])
-        const data = this.usersData.map(el => {
+        if (this.add) this.result.sort((a, b) => b.incriment[0] - a.incriment[0])
+        const data = this.result.map(el => {
             return [{ id: el.incriment[0], creater: el.creater, global_creator: el.global_creator, del: el.delStatus },
             [{ name: el.nameRetra, incriment: el.incriment[0], entity: 'retra' },
             { name: el.username, incriment: el.creater, entity: 'user' },
@@ -145,6 +109,7 @@ export class InterfaceRetranslation {
             }
         });
     }
+
     // Функция для добавления строки в таблицу
     addRowToTable(tableParent, rowData) {
         const tr = document.createElement('tr');
@@ -158,10 +123,9 @@ export class InterfaceRetranslation {
         const lastCell = lastRow.lastElementChild;
         lastCell.addEventListener('click', this.updateTable.bind(this, lastRow));
         const cells = tr.querySelectorAll('.click_property');
-        cells.forEach(el => el.addEventListener('click', () => new EditContollClick(el, this.data, this.container, this.login, this.prava, this.creator, this.creators, this, this.usersData)))
+        cells.forEach(el => el.addEventListener('click', () => new EditContollClick(el, this.data, this.container, this.login, this.prava, this.creator, this.creators, this, this.result)))
 
     };
-
 
     async updateTable(lastRow) {
         const name = lastRow.children[0].textContent
@@ -173,30 +137,11 @@ export class InterfaceRetranslation {
         this.eventListenerConfirm()
     }
 
-    eventListenerConfirm() {
-        const okButton = this.modalConfirmElement.querySelector('.ok_podtver');
-        const cancelButton = this.modalConfirmElement.querySelector('.cancel_podtver');
-        cancelButton.addEventListener('click', this.closeConfirm.bind(this))
-        okButton.addEventListener('click', this.delete.bind(this))
-    }
-
-    async delete() {
-        await Requests.deleteAccount(this.idDelete, this.index, this.prava)
+    createHistoryObject() {
         const obj = {
             action: 'Удалён', table: 'retrasHistory', columns: 'uniqRetraID', data: String(Math.floor((new Date().getTime()) / 1000)),
             uniqUsersID: Number(this.creator), uniqEntityID: Number(this.idDelete), nameAccount: Number(this.accountIncriment)
         }
-        const resu = await Requests.setHistory(obj)
-        this.closeConfirm()
-        this.createTableRetra()
-    }
-
-    closeConfirm() {
-        this.modalConfirmElement.remove()
-        this.pop.style.zIndex = 2
-    }
-    modalConfirm() {
-        this.modalConfirmElement.style.zIndex = 4
-        this.pop.style.zIndex = 3
+        return obj
     }
 }

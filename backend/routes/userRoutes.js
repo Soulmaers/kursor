@@ -49,6 +49,8 @@ router.post('/api/updateObjectsAndUsers', controller.updateObjectsAndUsers)
 router.post('/api/updateGroupsAndUsers', controller.updateGroupsAndUsers)
 router.post('/api/deleteUsersObjectGroupRetra', controller.deleteUsersObjectGroupRetra)
 
+router.post('/api/updatePermission', controller.updatePermission)
+
 
 router.post('/api/setHistorys', controller.setHistorys)
 

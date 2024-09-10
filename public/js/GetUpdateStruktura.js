@@ -3,6 +3,8 @@ import { SimpleEventEmitter } from './Emitter.js'
 export class GetUpdateStruktura {
 
     static globalData = null
+    static resourseData = null
+    static propertyResourse = null
     static async zaprosData(incriment, role) {
         const params = {
             method: "POST",
@@ -37,5 +39,35 @@ export class GetUpdateStruktura {
         const incriment = document.querySelector('.role').getAttribute('data-att')
         setInterval(async () => await GetUpdateStruktura.zaprosData(incriment, role), 120000)
     }
+
+    static async getAccountResourse(incriment, role) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ incriment, role }))
+
+        }
+        const mods = await fetch('/api/getAccountResourseID', params)
+        const models = await mods.json()
+        GetUpdateStruktura.resourseData = models
+        console.log(models)
+        //    const arrayList = models.result
+    }
+    static async getPermissions(incriment) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ incriment }))
+
+        }
+        const mods = await fetch('/api/getPropertyPermissions', params)
+        const models = await mods.json()
+        GetUpdateStruktura.propertyResourse = models
+    }
+
 
 }

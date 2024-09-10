@@ -91,6 +91,12 @@ router.get('/api/guide_to', controllerShablon.getGuide)
 router.post('/api/get_shablon', controllerShablon.getshablon)
 router.post('/api/save_shablon', controllerShablon.setShablon)
 router.post('/api/getToToBase', controllerShablon.getToToBase)
+router.post('/api/saveTemplates', controllerShablon.saveTemplates)
+router.post('/api/getTemplates', controllerShablon.getTemplates)
+router.post('/api/getAttributeTemplace', controllerShablon.getAttributeTemplace)
+router.post('/api/deleteTemplace', controllerShablon.deleteTemplace)
+router.post('/api/updateTemplates', controllerShablon.updateTemplates)
+
 
 
 

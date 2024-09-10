@@ -20,7 +20,7 @@ class WialonClassMethods {
             await this.getObjects();
             await this.addGroup();
             this.controllStartClass();
-            setInterval(() => this.controllStartClass(), 150000)
+            setInterval(() => this.controllStartClass(), 180000)
         } catch (error) {
             console.error('Ошибка при инициализации WialonClassMethods:', error);
             throw error;
@@ -38,7 +38,8 @@ class WialonClassMethods {
 
     }
     async getSessionWialon() {
-        this.session = await wialonModule.login('0f481b03d94e32db858c7bf2d8415204977173E354D49AA7AFA37B01431539AEAC5DAD5E');
+        this.session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c652CFC619A64BBDB70BB8C849676415227B7DE6A66"`);
+        console.log(this.session.eid)
     }
 
     async getObjects() {
@@ -47,8 +48,8 @@ class WialonClassMethods {
             wialonService.getPropertyObjects(this.session),
             wialonService.getPropertyGroups(this.session)
         ]);
-        this.propertyObjects = propertyObjects.map(e => ({ idx: e.id, objectname: e.nm, phonenumber: e.ph, imeidevice: e.uid, uz: this.uz, nameRetra: this.nameRetra, uniqRetraID: this.uniqRetraID }));
-        this.propertyGroups = propertyGroups.map(e => ({ idx: e.id, nameGroup: e.nm, uz: this.uz, arrayIdObjects: e.u, nameRetra: this.nameRetra, uniqRetraID: this.uniqRetraID }));
+        this.propertyObjects = propertyObjects ? propertyObjects.map(e => ({ idx: e.id, objectname: e.nm, phonenumber: e.ph, imeidevice: e.uid, uz: this.uz, nameRetra: this.nameRetra, uniqRetraID: this.uniqRetraID })) : []
+        this.propertyGroups = propertyGroups ? propertyGroups.map(e => ({ idx: e.id, nameGroup: e.nm, uz: this.uz, arrayIdObjects: e.u, nameRetra: this.nameRetra, uniqRetraID: this.uniqRetraID })) : []
         // Создаем allObjects
         this.allObjects = this.propertyGroups.map(group => {
             const filteredObjects = this.propertyObjects.filter(obj => group.arrayIdObjects.includes(obj.idx));
@@ -57,6 +58,7 @@ class WialonClassMethods {
                 arrayIdObjects: filteredObjects
             };
         });
+        //  console.log(this.allObjects)
     }
 
     async addGroup() {
@@ -68,6 +70,8 @@ class WialonClassMethods {
                 await databaseRetranslation.addGroups(el);
             });
             await Promise.all(promises);
+            await databaseRetranslation.deleteObjects('groups')
+            await databaseRetranslation.deleteObjects('objects')
         } catch (error) {
             console.error('Ошибка при добавлении групп в базу данных:', error);
             throw error;

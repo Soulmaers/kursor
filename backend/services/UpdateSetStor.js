@@ -80,7 +80,7 @@ class UpdateSetStor {
                 } else if (el.params === 'mileage' && coefMileage) {
                     computedValue = Number(computedValue) + Number(coefMileage[0].value);
                 }
-                else if (el.params.startsWith('tpms_press') && idw == 26702383) {
+                else if (el.params.startsWith('tpms_press') && idw == 28526612) {
                     computedValue = String(Number(computedValue) / 10)
                 }
                 return { key: el.meta, params: el.params, value: String(computedValue), status, data: dataTime };
@@ -132,7 +132,7 @@ class UpdateSetStor {
                 const value = data.map(el => {
                     if (elem.hasOwnProperty(el.meta)) {
                         let val = String(elem[el.meta])
-                        if (el.params.startsWith('tpms_press') && idw == 26702383) {
+                        if (el.params.startsWith('tpms_press') && idw == 28526612) {
                             val = String(Number(elem[el.meta]) / 10)
                         }
                         return elem[el.meta] !== null ? { key: el.meta, params: el.params, value: val, status: 'true' } : { key: el.meta, params: el.params, value: el.value, status: 'false' }
@@ -197,7 +197,7 @@ class UpdateSetStor {
                         const summatorValue = this.calculateSummatorOil(value, params)
                         obj['summatorOil'] = summatorValue ? String(summatorValue) : summatorValue
                     }
-
+                    // console.log(idw)
                     await databaseService.setAddDataToGlobalBase(obj)  //запись отфильтрованных параметров и значений в накопительную таблицу датчиков
                     await HelpersUpdateParams.temporary(obj)
                 }

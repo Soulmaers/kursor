@@ -26,7 +26,7 @@ export class EditContollClick {
 
 
     controllEntity() {
-        console.log(this.creator)
+        console.log(this.data)
         switch (this.entity) {
             case 'account': new EditAccount(this.data, this.element, this.container, this.creator, this.creators, this.instance)
                 break
