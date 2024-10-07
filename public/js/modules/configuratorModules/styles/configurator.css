@@ -1,0 +1,115 @@
+.uniq_params_set {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 46%;
+    left: 47%;
+    width: 550px;
+    height: 470px;
+    border: 2px solid rgba(6, 28, 71, 0.8);
+    z-index: 5;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.body_set_params {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+
+.set_save_param {
+    width: 100px;
+}
+
+.name_params {
+    margin: 10px 0
+}
+
+
+.val_koef {
+    width: 120px;
+}
+
+.val_koef_ts {
+    width: 120px;
+    margin: 0 10px;
+}
+
+.alarm_window {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid rgba(6, 28, 71, 0.8);
+    z-index: 5;
+    background-color: #fff;
+    border-radius: 5px;
+    width: 400px;
+    height: 100px;
+}
+
+.flex_none {
+    display: none;
+}
+
+.list_meta {
+    width: 98%;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* для Firefox */
+    -ms-overflow-style: none;
+    /* для Internet Explorer и Edge */
+}
+
+.item_stor,
+.item_meta {
+    border-bottom: 1px solid rgba(6, 28, 71, 1);
+    padding: 2px 0;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.item_stor {
+    position: relative;
+}
+
+.item_meta {
+    width: 48.6%;
+    color: rgba(6, 28, 71, 1);
+    font-size: 0.9rem;
+    box-sizing: border-box;
+
+}
+
+.item_meta:hover {
+    font-weight: bold;
+}
+
+.sensor_stor,
+.param_stor,
+.param_meta {
+    color: rgba(6, 28, 71, 1);
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 33%;
+}
+
+.param_meta_name,
+.param_stor_name,
+.sensor_stor_name {
+    color: #fff;
+    font-size: 1rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}

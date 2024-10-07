@@ -365,7 +365,6 @@ class SummaryStatistiks {
                     // Конец сегмента активности или последняя точка данных
                     const segmentEnd = item.time[i] || segmentStart; // Конец сегмента или текущий момент
                     let duration = segmentEnd - segmentStart;
-
                     if (type === 'prostoy') {
                         duration /= 1000; // Переводим время из миллисекунд в секунды для простоев
                         if (duration > 1200) { // Только сегменты длительностью более 1200 секунд

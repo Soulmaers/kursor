@@ -172,18 +172,16 @@ exports.getParamsToPressureAndOil = async (req, res) => {
 
 }
 
-exports.saveValuePWR = async (req, res) => {
-    //  console.log(ips.ips.object);
-    const idw = req.body.id
-    const params = req.body.params
-    const value = req.body.value
-    const result = await databaseService.saveValuePWRToBase(idw, params, value) //сохранение порогового значения по параметру
+exports.saveSetParams = async (req, res) => {
+    const { idw, param, formula, dopValue } = req.body.obj
+    const result = await databaseService.saveValueToBase(idw, param, formula, dopValue) //сохранение порогового значения по параметру
     res.json(result)
 }
-exports.getValueToBase = async (req, res) => {
-    const idw = req.body.id
+exports.getConfigParam = async (req, res) => {
+    const idw = req.body.idw
     const param = req.body.param
-    const result = param ? await databaseService.getValuePWRToBase(idw, param) : await databaseService.getValuePWRToBase(idw) //получение порогового значения по параметру
+    console.log(idw, param)
+    const result = await databaseService.getConfigParam(idw, param) //получение порогового значения по параметру
     res.json(result)
 }
 

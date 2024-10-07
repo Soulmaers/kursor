@@ -18,10 +18,11 @@ module.exports = function (passport) { //натсройка аутентифик
     passport.use(
         new JwtStrategy(opts, async (payload, done) => {
             try {
-                //  console.log(payload)
+                console.log(payload)
                 const pool = await connection;
                 const post = `SELECT idx, name, role, incriment FROM users WHERE idx='${payload.userId}'`
                 const result = await pool.request().query(post);
+                console.log(result.recordset[0])
                 const user = result.recordset[0];
                 if (user.name) {
                     done(null, user);
@@ -29,8 +30,8 @@ module.exports = function (passport) { //натсройка аутентифик
                     done(null, false);
                 }
             } catch (error) {
-                console.log('Ошибка: ' + error);
-                done(error, false);
+                console.log('Ошибка');
+                done('Пользователь не найден', false);
             } finally {
                 sql.close();
             }

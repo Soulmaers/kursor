@@ -1,5 +1,5 @@
 const databaseService = require('../services/database.service');
-
+const { ReportsControllClass } = require('../modules/reportsModule/class/ReportsControllClass')
 
 exports.getGuide = async (req, res) => {
     const idw = req.body.idw
@@ -56,4 +56,23 @@ exports.updateTemplates = async (req, res) => {
     const result = await databaseService.updateTemplatesToBase(obj, id)
     res.json({ mess: 'Отчет обновлен' })
 }
+exports.getReport = async (req, res) => {
+    const object = req.body.object
+    const instance = new ReportsControllClass(object)
+    const result = await instance.init()
+    res.json(result)
+}
+exports.setReportsAttribute = async (req, res) => {
+    const object = req.body.obj
+    const result = await databaseService.setReportsAttributeToBase(object)
+    res.json(result)
+}
+exports.getReportsAttribute = async (req, res) => {
+    const idw = req.body.idw
+    const result = await databaseService.getReportsAttribute(idw)
+    res.json(result)
+}
+
+
+
 

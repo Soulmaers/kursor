@@ -4,12 +4,13 @@ import { AddMapClass } from './AddMapClass.js'
 import { NewReportTemplate } from './NewReportsTemplate.js'
 import { GetUpdateStruktura } from '../../../GetUpdateStruktura.js'
 
-
+import { GetReports } from './ControlTemplatesCalendar.js'
 export class CentalClassReports {
     constructor(container) {
         this.container = container
         this.resourses = GetUpdateStruktura.resourseData
         this.permisions = GetUpdateStruktura.propertyResourse
+        this.params = {}
         this.init()
     }
 
@@ -22,7 +23,10 @@ export class CentalClassReports {
         this.getTemplatesAndCreateListElements()
         this.jobMap()
         new NewReportTemplate(this.container, this.wrapReports)
+        new GetReports(this.interval, this.object, this.shablons, this.container)
     }
+
+
 
     caseElements() {
         this.wrapReports = this.container.querySelectorAll('.toggle_reports')
@@ -30,6 +34,9 @@ export class CentalClassReports {
         this.createReports = this.container.querySelector('.create_reports')
         this.deleteTemplate = this.container.querySelector('.delete_template')
         this.editionTemplate = this.container.querySelector('.edition_template')
+        this.interval = this.container.querySelector('.interval_reports')
+        this.shablons = this.container.querySelector('.up_shablons')
+        this.object = this.container.querySelector('.object')
     }
 
     dostupControll() {
@@ -41,6 +48,7 @@ export class CentalClassReports {
     }
     getObjectAndCreateListElements() {
         this.objects = GetDataRequests.getObjects()
+        console.log(this.objects)
         this.wrapReports[1].innerHTML = Content.addContent(this.objects)
     }
 

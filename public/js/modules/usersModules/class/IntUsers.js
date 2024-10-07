@@ -120,6 +120,7 @@ export class IntUsers extends IntarfaceBase {
         const groupsId = [...groupsCar].map(el => el.nextElementSibling.getAttribute('uniqid'))
         const resourse = this.check_container[2].querySelectorAll('.activ_check')
         const resourseId = [...resourse].map(el => el.nextElementSibling.getAttribute('uniqid'))
+        console.log(resourseId)
         this.obj = {
             login: this.username.value,
             password: this.confirmPasswordInput.value,
@@ -130,6 +131,7 @@ export class IntUsers extends IntarfaceBase {
             resourse: resourseIDCheck
         }
         console.log(this.obj)
+        console.log(resourse)
         const messUser = await Requests.saveUser(this.obj, objectsId, groupsId, resourseId)
         Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message)
         this.add = 'add'

@@ -200,6 +200,7 @@ export class EditUser {
             action: action, table: 'usersHistory', columns: 'uniqUsersIDLow', data: String(Math.floor((new Date().getTime()) / 1000)),
             uniqUsersID: Number(this.creator), uniqEntityID: Number(this.property.incriment[1]), nameAccount: Number(this.property.incriment[0])
         }
+        console.log(obj)
         const resu = await Requests.setHistory(obj)
 
         if (!messUser.flag) {

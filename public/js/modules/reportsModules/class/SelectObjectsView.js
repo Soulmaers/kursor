@@ -53,7 +53,6 @@ export class SelectObjectsView {
         this.buttons.children[1].addEventListener('click', this.requestDataTitleReport.bind(this))
     }
 
-
     async createCalendar() {
         const calendar = this.interval.nextElementSibling
         const id = `#${!calendar.children[0] ? calendar.id : calendar.children[0].id}`

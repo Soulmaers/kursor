@@ -180,6 +180,13 @@ class UpdateSetStor {
                     value.forEach(e => {
                         obj[e.params] = e.value
                     })
+                    if (coefEngine) {
+                        data.forEach(el => {
+                            if (el.params === 'engine') {
+                                obj['engine'] = el.value
+                            }
+                        });
+                    }
                     if (coefPWR) {
                         data.forEach(el => {
                             if (el.params === 'pwr') {
@@ -197,7 +204,7 @@ class UpdateSetStor {
                         const summatorValue = this.calculateSummatorOil(value, params)
                         obj['summatorOil'] = summatorValue ? String(summatorValue) : summatorValue
                     }
-                    // console.log(idw)
+                    //  console.log(obj)
                     await databaseService.setAddDataToGlobalBase(obj)  //запись отфильтрованных параметров и значений в накопительную таблицу датчиков
                     await HelpersUpdateParams.temporary(obj)
                 }

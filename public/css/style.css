@@ -8685,9 +8685,10 @@ i.filterEvent {
   flex-direction: column;
   align-items: center;
   z-index: 4;
-  border: 2px solid rgba(6, 28, 71, 1);
-  background-color: rgba(6, 28, 71, 1);
+  border: 2px solid rgba(6, 28, 71, 0.7);
+  background-color: rgba(6, 28, 71, 0.7);
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
 }
 
 i.acEvent {
@@ -8747,7 +8748,7 @@ i.acEvent {
   background-color: #fff;
   justify-content: center;
   align-items: center;
-  color: rgba(6, 28, 71, 1);
+  color: rgba(6, 28, 71, 0.8);
   font-size: 2rem;
   font-weight: bold;
   border-top: 3px solid rgba(6, 28, 71, 1);
@@ -9090,20 +9091,11 @@ i.changeColorCheck {
 }
 
 
-.down_block {
-  width: 97%;
-  height: 60%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  position: relative;
-}
+
 
 .content_statistika,
 .content_lower_charts,
-.up_content,
-.down_content {
+.up_content {
   width: 100%;
   background-color: #fff;
   border-radius: 5px;
@@ -9146,6 +9138,14 @@ i.changeColorCheck {
 .config_params {
   margin-top: 10px;
   width: 98%;
+  display: none;
+  justify-content: space-around;
+}
+
+.set_params_stor {
+  margin-top: 10px;
+  width: 98%;
+  height: 776px;
   display: none;
   justify-content: space-around;
 }
@@ -9214,59 +9214,6 @@ i.changeColorCheck {
   width: 150px;
 }
 
-.list_meta {
-  width: 98%;
-  margin: 0;
-  padding: 0;
-  overflow-y: auto;
-}
-
-.item_stor,
-.item_meta {
-  border-bottom: 1px solid rgba(6, 28, 71, 1);
-  padding: 2px 0;
-  list-style-type: none;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.item_stor {
-  position: relative;
-}
-
-.item_meta {
-  width: 48.6%;
-  color: rgba(6, 28, 71, 1);
-  font-size: 0.9rem;
-  box-sizing: border-box;
-
-}
-
-.item_meta:hover {
-  font-weight: bold;
-}
-
-.sensor_stor,
-.param_stor,
-.param_meta {
-  color: rgba(6, 28, 71, 1);
-  font-size: 0.9rem;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  width: 33%;
-}
-
-.param_meta_name,
-.param_stor_name,
-.sensor_stor_name {
-  color: #fff;
-  font-size: 1rem;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-}
 
 .chart_title {
   color: #fff;
@@ -9319,11 +9266,11 @@ i.changeColorCheck {
   color: #fff;
   width: 100%;
   font-weight: bold;
-  background-color: rgba(6, 28, 71, 1);
+  background-color: rgba(6, 28, 71, 0.7);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 2px 0;
+  padding: 5px 0;
   font-size: 0.8rem;
 }
 
@@ -9366,23 +9313,6 @@ i.changeColorCheck {
 }
 
 
-
-.wrapper_file {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-}
-
-.file {
-  padding: 2px 5px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  border: 1px solid #fff;
-  border-radius: 5px;
-}
 
 .title_statistika,
 .title_lower_charts {
@@ -9503,7 +9433,7 @@ i.changeColorCheck {
 .wraaper {
   width: 100%;
   height: 100%;
-  background-color: rgba(6, 28, 71, 1);
+  background-color: rgba(6, 28, 71, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9516,53 +9446,6 @@ i.changeColorCheck {
   justify-content: space-around;
   padding: 5px;
   box-sizing: border-box;
-}
-
-
-
-.wrapper_shablon {
-  width: 33%;
-  display: flex;
-  flex-direction: column;
-  border: 2px solid rgba(6, 28, 71, 1);
-  box-sizing: border-box;
-  border-radius: 5px;
-}
-
-.wrapper_result {
-  width: 33%;
-  border-radius: 5px;
-  border: 2px solid rgba(6, 28, 71, 1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.wrapper_reports_map {
-  width: 33%;
-  border-radius: 5px;
-  border: 2px solid rgba(6, 28, 71, 1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.title_result_reports {
-  width: 100%;
-  height: 30px;
-  background-color: rgba(6, 28, 71, 1);
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1rem;
-
-}
-
-.down_content {
-  width: 100%;
-  padding: 5px;
-  display: flex;
 }
 
 
@@ -9652,21 +9535,8 @@ i.changeColorCheck {
   height: 100%;
 }
 
-.titleNameReport:active {
-  background-color: rgba(6, 28, 71, 1);
-  color: #fff
-}
-
-.titleNameReport:hover {
-  border-bottom: 2px dashed rgba(6, 28, 71, 1);
-}
 
 
-
-.activeTitleReports {
-  background-color: rgba(6, 28, 71, 1);
-  color: #fff
-}
 
 .cell_params {
   font-size: 0.8rem;
@@ -9685,16 +9555,6 @@ i.changeColorCheck {
   font-size: 0.75rem;
   padding: 2px 5px;
   border: 1px solid rgba(6, 28, 71, 1);
-}
-
-.wrapper_reports {
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
-  border: 2px solid rgba(6, 28, 71, 1);
-  text-align: center;
-  overflow-y: scroll;
-  position: relative;
 }
 
 
@@ -10048,7 +9908,7 @@ i.changeColorCheck {
   border: 2px solid rgba(6, 28, 71, 1);
   display: none;
   flex-direction: column;
-  z-index: 3;
+  z-index: 5;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
@@ -10131,7 +9991,7 @@ i.changeColorCheck {
 
 .header_modal,
 .header_tarir {
-  background-color: rgba(6, 28, 71, 1);
+  background-color: rgba(6, 28, 71, 0.7);
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -10191,11 +10051,11 @@ i.changeColorCheck {
   cursor: pointer;
   padding: 2px 5px;
   border-radius: 5px;
-  border: 2px solid rgba(6, 28, 71, 1);
+  border: 2px solid rgba(6, 28, 71, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(6, 28, 71, 1);
+  background-color: rgba(6, 28, 71, 0.8);
   margin: 2px 5px;
 
 }
@@ -10638,4 +10498,13 @@ i.deleteGroup {
 .save_cancel {
   color: darkred;
   font-size: 0.6rem;
+}
+
+
+.set_params {
+  color: rgba(6, 28, 71, 0.8);
+  position: absolute;
+  right: 30px;
+  font-size: 0.8rem;
+  cursor: pointer;
 }

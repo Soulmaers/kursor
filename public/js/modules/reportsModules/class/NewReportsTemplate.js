@@ -4,7 +4,7 @@ import { ComponentAndGraficControll } from './ComponentAndGraficClassControll.js
 import { Helpers } from './Helpers.js'
 import { GetUpdateStruktura } from '../../../GetUpdateStruktura.js'
 import { GetDataRequests } from './GetDataRequests.js'
-import { storStatistika, storComponentOil, storComponentTravel, storComponentMoto, storComponentTO } from "../stor/stor.js";
+import { Validation } from './Validation.js'
 
 export class NewReportTemplate {
     constructor(container, wrapReports) {
@@ -12,7 +12,7 @@ export class NewReportTemplate {
         this.wrapReports = wrapReports
         this.pop = document.querySelector('.popup-background')
         this.wrapSet = document.querySelector('.wrapper_set')
-        this.wrapReports = this.container.querySelectorAll('.toggle_reports')
+        //   this.wrapReports = this.container.querySelectorAll('.toggle_reports')
         this.btnCreateReport = this.container.querySelector('.create_reports')
         this.editionTemplate = this.container.querySelector('.edition_template')
         this.deleteTemplate = this.container.querySelector('.delete_template')
@@ -47,7 +47,6 @@ export class NewReportTemplate {
         this.grafix = this.wrapSet.querySelector('.grafics_temp').querySelector('.body_checkbox_fields')
         this.nameTemplate = this.wrapSet.querySelector('.name_template')
         this.mess = this.wrapSet.querySelector('.valid_message')
-
     }
 
     eventListener(close) {
@@ -80,11 +79,9 @@ export class NewReportTemplate {
             const selectElement = this.wrapReports[0]
             const nameReports = selectElement.options[selectElement.selectedIndex].textContent;
             this.idResourse = Number(selectElement.options[selectElement.selectedIndex].getAttribute('rel'))
-            console.log(this.idResourse)
             this.attributes = await GetDataRequests.getAttributeTemplace(this.idTemplate)
+            this.setTemplates = await this.getRenderSetValue(this.idTemplate)
             this.nameTemplate.value = nameReports
-            //  this.idResourse = undefined
-            console.log(nameReports, this.idTemplate)
         }
         else {
             this.nameTemplate.value = ''
@@ -101,6 +98,17 @@ export class NewReportTemplate {
         this.addListCheckbox()
         this.save()
     }
+
+
+    async getRenderSetValue() {
+        this.setReports = await GetDataRequests.getReportsAttribute(Number(this.idTemplate))
+        if (this.setReports.length !== 0) {
+            return JSON.parse(this.setReports[0].jsonsetAttribute)
+        }
+        else {
+            return []
+        }
+    }
     save() {
         this.saveAttribute.addEventListener('click', async () => {
             if (!this.validationNameTemplate()) {
@@ -111,7 +119,11 @@ export class NewReportTemplate {
                 Helpers.viewRemark(this.mess, 'red', 'Добавьте отчет к ресурсу')
                 return
             }
-            console.log(this.instanceControll.checkboxStates)
+
+            //   if (Object.values(Validation.status).some(value => value === false)) {
+            //Helpers.viewRemark(this.mess, 'red', 'Введите корректно параметры настроек')
+            // return
+            //    }
             this.object = {
                 idUser: Number(this.idUser),
                 idResourse: this.idResourse,
@@ -119,7 +131,7 @@ export class NewReportTemplate {
                 nameTemplate: this.nameTemplate.value,
                 proreptyTamplate: 'reports'
             }
-            console.log(this.object)
+            //  this.webpackObjectsSettings()
             if (!this.idTemplate) {
                 const res = await GetDataRequests.saveTemplates(this.object)
             }
@@ -130,6 +142,32 @@ export class NewReportTemplate {
             this.modalActivity(this.pop, 'none', 1)
             this.getTemplatesAndCreateListElements()
         })
+    }
+
+    webpackObjectsSettings() {
+        const distanceMin = document.querySelector('#min_distance').checked ? document.querySelector('#min_distance').nextElementSibling.nextElementSibling.value : ''
+        const distanceMax = document.querySelector('#max_distance').checked ? document.querySelector('#max_distance').nextElementSibling.nextElementSibling.value : ''
+        const mileageMin = document.querySelector('#min_mileage').checked ? document.querySelector('#min_mileage').nextElementSibling.nextElementSibling.value : ''
+        const mileageMax = document.querySelector('#max_mileage').checked ? document.querySelector('#max_mileage').nextElementSibling.nextElementSibling.value : ''
+        const minDistanceProstoy = document.querySelector('#min_distance_prostoy').checked ? document.querySelector('#min_distance_prostoy').nextElementSibling.nextElementSibling.value : ''
+
+        let datchikUgla = ['', '']
+        const dat = document.querySelector('#datchik_ugla')
+        if (dat && dat.checked) {
+            const items = dat.parentElement.querySelectorAll('.porog_value')
+            datchikUgla = [items[0].value, items[1].value]
+        }
+        this.set = {
+            idw: this.idTemplate,
+            object: JSON.stringify({
+                'Топливо': null,
+                'Поездки': { distance: [distanceMin, distanceMax], mileageSet: [mileageMin, mileageMax] },
+                'Стоянки': null,
+                'Остановки': null,
+                'Моточасы': null,
+                'Простои на холостом ходу': { longTime: minDistanceProstoy, datchikUgla: datchikUgla }
+            })
+        }
     }
 
     async getTemplatesAndCreateListElements() {
@@ -183,26 +221,34 @@ export class NewReportTemplate {
     }
 
     addListCheckbox() {
-        this.stat.innerHTML = Content.renderContent('statistic', '0', this.attributes.statistic['statistic'])
+        this.stat.innerHTML = Content.renderContent('Статистика', '0', this.attributes.statistic['Статистика'])
         this.instanceControll = new ComponentAndGraficControll([this.stat, this.component, this.grafix], [
             {
-                block: this.component, arrayButtons: ['Топливо', 'Поездки', 'Моточасы', 'Техническое обслуживание'], indexs: '1',
+                block: this.component, arrayButtons: ['Топливо', 'Поездки', 'Стоянки', 'Остановки', 'Моточасы', 'Простои на холостом ходу', 'Техническое обслуживание', 'СКДШ'], indexs: '1',
                 stores: {
                     'Топливо': this.attributes.component['Топливо'],
                     'Поездки': this.attributes.component['Поездки'],
+                    'Стоянки': this.attributes.component['Стоянки'],
+                    'Остановки': this.attributes.component['Остановки'],
                     'Моточасы': this.attributes.component['Моточасы'],
+                    'Простои на холостом ходу': this.attributes.component['Простои на холостом ходу'],
                     'Техническое обслуживание': this.attributes.component['Техническое обслуживание'],
+                    'СКДШ': this.attributes.component['СКДШ']
                 }
             },
             {
-                block: this.grafix, arrayButtons: ['Топливо', 'Поездки', 'Моточасы', 'Техническое обслуживание'], indexs: '2',
+                block: this.grafix, arrayButtons: ['Топливо', 'Поездки', 'Стоянки', 'Остановки', 'Моточасы', 'Техническое обслуживание', 'СКДШ'], indexs: '2',
                 stores: {
                     'Топливо': this.attributes.graphic['Топливо'],
                     'Поездки': this.attributes.graphic['Поездки'],
+                    'Стоянки': this.attributes.graphic['Стоянки'],
+                    'Остановки': this.attributes.graphic['Остановки'],
                     'Моточасы': this.attributes.graphic['Моточасы'],
+                    'Простои на холостом ходу': this.attributes.graphic['Простои на холостом ходу'],
                     'Техническое обслуживание': this.attributes.graphic['Техническое обслуживание'],
+                    'СКДШ': this.attributes.graphic['СКДШ']
                 }
             }
-        ]);
+        ], this.setTemplates);
     }
 }

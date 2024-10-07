@@ -624,7 +624,6 @@ export class PressureCharts {
                 line2.style("display", "block")
                 area2.style("display", "block")
             }
-
         })
     }
 
@@ -643,8 +642,10 @@ export class PressureCharts {
         })
         const t1 = this.t1
         const t2 = this.t2 + 86399
-        const num = 1
+        const num = 0
         const workerKey = 'pressure'
+
+        console.log(idw, t1, t2, arrayColumns, num, workerKey)
         const paramssNew = {
             method: "POST",
             headers: {
@@ -654,7 +655,7 @@ export class PressureCharts {
         }
         const resNew = await fetch('/api/getPressureOil', paramssNew)
         const dataNew = await resNew.json();
-
+        console.log(dataNew)
         if (dataNew.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')

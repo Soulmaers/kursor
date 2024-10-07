@@ -37,6 +37,7 @@ class WialonOrigin {
                 const el = dataArray[i];
                 const phone = phones[i];
                 const idw = el.id;
+
                 // console.log(phone)
                 if (!phone?.item?.uid) continue;
                 const res = await databaseService.objectsWialonImei(String(phone.item.uid));
@@ -53,7 +54,6 @@ class WialonOrigin {
                 const result = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i', this.session);
                 //  console.log('здесь!')
                 if (!result) continue;
-
                 const allArrayData = [];
 
                 for (const e of result.messages) {
@@ -90,7 +90,6 @@ class WialonOrigin {
 
                     allArrayData.push(allObject);
                 }
-                //   console.log(allArrayData)
                 // Запись в базу данных
                 await this.updateDatabase(allArrayData, res[0].idx);
 

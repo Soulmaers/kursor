@@ -38,7 +38,7 @@ export class EditObject {
         this.container.innerHTML = ContentGeneration.editObj(this.login, this.prava, this.property, this.creator, this.creators, this.property.objectname, this.data)
         this.recored()
         this.cacheElements()
-        new ControllNaviEdit(this.container, this.obj)
+        new ControllNaviEdit(this.container, this.obj, this.idx)
         this.applyValidation();
         this.modalActivity(this.pop, 'flex', 3)
         await this.viewObjects(this.idx)
@@ -55,7 +55,6 @@ export class EditObject {
         this.prava = document.querySelector('.role').getAttribute('rel')
         this.objectname = this.container.querySelector('#objectname');
         this.typedevice = this.container.querySelector('#typedevice');
-        this.typeobject = this.container.querySelector('#typeobject');
         this.port = this.container.querySelector('#port');
         this.imeidevice = this.container.querySelector('#imeidevice');
         this.addressserver = this.container.querySelector('#addressserver');
@@ -68,8 +67,10 @@ export class EditObject {
         this.buttonsMenu = this.container.querySelectorAll('.buttons_menu');
         this.bodyIndex = this.container.querySelector('.body_indexs');
         this.configParams = this.container.querySelector('.config_params');
+        this.setParamsStor = this.container.querySelector('.set_params_stor');
         this.uz = this.container.querySelector('.uz');
         this.tp = this.container.querySelector('.tp');
+        this.type = this.container.querySelector('.type_objects_index');
         this.createsUser = this.container.querySelector('.creates');
         this.modal = this.container.querySelector('.wrap_lk')
         this.retra = this.property.name_retra
@@ -81,6 +82,7 @@ export class EditObject {
         Validation.filterCreater(this.createsUser, this.uz)
         Validation.creator(this.createsUser, this.property.creater)
         Validation.account(this.uz, this.property.incriment[1])
+        Validation.type(this.type, this.property.typeobject)
     }
 
     async viewObjects(idw) {
@@ -93,8 +95,7 @@ export class EditObject {
         };
         const res = await fetch('/api/getSensStorMeta', params)
         const fetchSensStorMeta = await res.json()
-        this.instanceConfig = new ConfiguratorParams(this.idx, 'wialon', this.property.imeidevice, fetchSensStorMeta, this.property.idbitrixobject
-        );
+        this.instanceConfig = new ConfiguratorParams(this.idx, 'wialon', this.property.imeidevice, fetchSensStorMeta, this.property.idbitrixobject)
     }
 
 
@@ -113,8 +114,9 @@ export class EditObject {
 
     save() {
         const button = this.container.querySelector('.bnt_set')
+        console.log(button)
         const recover = this.container.querySelector('.recover')
-        this.mess = this.container.querySelector('.valid_message')
+        this.mess = this.container.querySelector('.mess_edit_object')
         button.addEventListener('click', this.validationAndPackObject.bind(this))
         recover.addEventListener('click', this.reco.bind(this))
     }
@@ -124,15 +126,21 @@ export class EditObject {
         this.validationAndPackObject()
     }
     async validationAndPackObject() {
+        console.log('тут')
         this.idButton = this.container.querySelector('.click_button_object').id
         if (this.idButton === 'configID') {
             console.log('конфиг')
             const mess = await this.instanceConfig.setToBaseSensStorMeta()
             Helpers.viewRemark(this.mess, 'green', mess);
         }
+        else if (this.idButton === 'settingsObject') {
+            this.webpackObjectsSettings()
+            console.log('привет')
+        }
         else {
             console.log('объект')
             if (this.objectname.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите название объекта');
+            if (this.type.value === '') return Helpers.viewRemark(this.mess, 'red', 'Выберите тип объекта');
             if (this.typedevice.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите тип устройства');
             if (this.port.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите порт');
             if (this.imeidevice.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите уникальный IMEI');
@@ -142,7 +150,7 @@ export class EditObject {
             this.obj = {
                 objectname: this.objectname.value,
                 typedevice: this.typedevice.value,
-                typeobject: this.typeobject.value,
+                typeobject: this.type.value,
                 port: this.port.value,
                 imeidevice: this.imeidevice.value,
                 addressserver: this.addressserver.value,
@@ -166,6 +174,9 @@ export class EditObject {
                 uniqUsersID: Number(this.creator), uniqEntityID: Number(this.property.incriment[0]), nameAccount: Number(oldUz)
             }
             const resu = await Requests.setHistory(obj)
+            console.log(resu)
+            console.log(this.mess)
+            console.log(messUser)
             Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message);
 
             if (messUser.flag && !this.retra && oldUz !== Number(this.uz.value)) {
@@ -174,11 +185,48 @@ export class EditObject {
                 Helpers.viewRemark(this.mess, messObj.flag ? 'green' : 'red', messObj.message);
             }
             if (this.instance) this.instance.create();
+
+            const typeIndex = ContentGeneration.storTypeObject().find(e => e.type === this.type.value)
+            console.log(typeIndex)
+            document.querySelector('.stor_type_index').setAttribute('rel', typeIndex.typeIndex)
         }
     }
 
 
     getStruktura() {
         this.property = (this.usersData.filter(e => e.idx[0] === this.idx))[0]
+    }
+
+    async webpackObjectsSettings() {
+        const distanceMin = document.querySelector('#min_distance').checked ? document.querySelector('#min_distance').nextElementSibling.nextElementSibling.value : ''
+        const distanceMax = document.querySelector('#max_distance').checked ? document.querySelector('#max_distance').nextElementSibling.nextElementSibling.value : ''
+        const mileageMin = document.querySelector('#min_mileage').checked ? document.querySelector('#min_mileage').nextElementSibling.nextElementSibling.value : ''
+        const mileageMax = document.querySelector('#max_mileage').checked ? document.querySelector('#max_mileage').nextElementSibling.nextElementSibling.value : ''
+        const minDistanceProstoy = document.querySelector('#min_distance_prostoy').checked ? document.querySelector('#min_distance_prostoy').nextElementSibling.nextElementSibling.value : ''
+
+        let datchikUgla = ['', '']
+        const dat = document.querySelector('#datchik_ugla')
+        if (dat && dat.checked) {
+            const items = dat.parentElement.querySelectorAll('.porog_value')
+            datchikUgla = [items[0].value, items[1].value]
+        }
+        this.set = {
+            idw: this.idx,
+            object: JSON.stringify({
+                'Топливо': null,
+                'Поездки': { distance: [distanceMin, distanceMax], mileageSet: [mileageMin, mileageMax] },
+                'Стоянки': null,
+                'Остановки': null,
+                'Моточасы': null,
+                'Простои на холостом ходу': { longTime: minDistanceProstoy, datchikUgla: datchikUgla }
+            })
+        }
+
+        if (Object.values(Validation.status).some(value => value === false)) {
+            Helpers.viewRemark(this.mess, 'red', 'Введите корректно параметры настроек')
+            return
+        }
+        const res = await Requests.setReportsAttribute(this.set)
+        Helpers.viewRemark(this.mess, 'green', res);
     }
 }

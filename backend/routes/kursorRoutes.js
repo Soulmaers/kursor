@@ -15,8 +15,11 @@ router.post('/api/getMetas', controllerKursor.getMetas)
 router.post('/api/setSensStorMeta', controllerKursor.setSensStorMeta)
 router.post('/api/getSensStorMeta', controllerKursor.getSensStorMeta)
 router.post('/api/getSens', controllerKursor.getSens)
-router.post('/api/saveValuePWR', controllerKursor.saveValuePWR)
-router.post('/api/getValuePWR', controllerKursor.getValueToBase)
+router.post('/api/saveSetParams', controllerKursor.saveSetParams)
+
+
+
+router.post('/api/getConfigParam', controllerKursor.getConfigParam)
 router.post('/api/deleteParams', controllerKursor.deleteParams)
 router.post('/api/getDataParamsInterval', controllerKursor.getDataParamsInterval)
 router.post('/api/getPressureOil', controllerKursor.getParamsToPressureAndOil)

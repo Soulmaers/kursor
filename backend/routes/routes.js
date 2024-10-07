@@ -96,7 +96,9 @@ router.post('/api/getTemplates', controllerShablon.getTemplates)
 router.post('/api/getAttributeTemplace', controllerShablon.getAttributeTemplace)
 router.post('/api/deleteTemplace', controllerShablon.deleteTemplace)
 router.post('/api/updateTemplates', controllerShablon.updateTemplates)
-
+router.post('/api/getReport', controllerShablon.getReport)
+router.post('/api/setReportsAttribute', controllerShablon.setReportsAttribute)
+router.post('/api/getReportsAttribute', controllerShablon.getReportsAttribute)
 
 
 

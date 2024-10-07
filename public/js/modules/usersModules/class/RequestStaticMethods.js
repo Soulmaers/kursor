@@ -92,6 +92,37 @@ export class Requests {
         return response
     }
 
+    static async setReportsAttribute(obj) {
+        console.log(obj)
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ obj })
+        }
+
+        const result = await fetch('/api/setReportsAttribute', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
+    static async getReportsAttribute(idw) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idw })
+        }
+
+        const result = await fetch('/api/getReportsAttribute', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
     static async setHistory(obj) {
         console.log(obj)
         const params = {

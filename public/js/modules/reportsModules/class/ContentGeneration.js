@@ -1,12 +1,41 @@
-import { storStatistika, storComponentOil, storComponentTravel, storComponentMoto, storComponentTO } from "../stor/stor.js";
-
+import { storStatistika, storComponentOil, storComponentTravel, storComponentProstoy, storComponentSKDSHComp, storComponentSKDSHGraf, storComponentParkings, storComponentStops, storComponentMoto, storComponentTO } from "../stor/stor.js";
+import { Helpers } from './Helpers.js'
 export class Content {
 
 
+    static renderComponentsReport(data) {
+        if (!data[0].result) return 'Нет данных'
+        const attributesCell = data[0].result.map((e, index) => {
+            const cell = data.map(it => `<td class="cell_reports">${it.result[index]} ${it.local}</td>`).join('')
+            return `<tr>${cell}</tr>`
+        }).join('')
+        const titlerows = data.map(e => `<td class="cell_reports cell_title_reports">${e.name}</td>`).join('')
+        return `<table class="cell_params stat_reports"><tr>${titlerows}</tr>${attributesCell}</table> `
+    }
+    static renderTableStatic(data) {
+        const row = data.map(e => `<tr><td class="cell_reports">${e.name}</td><td class="cell_reports">${e.result !== undefined ? e.result : 'Н/Д'} ${e.local ? e.local : ''}</td></tr>`).join('')
+        return `<table class="cell_params">${row}</table> `
+    }
+
+
+    static renderTitlesReport(data) {
+        const resultArray = Helpers.trueTitles(data)
+        const titleName = resultArray.map((e, index) => `<li class="titleNameReport  ${index === 0 ? 'activeTitleReports' : ''}" id=${e}>${e}</li>`).join('')
+        return titleName
+    }
     static addContent(data) {
         console.log(data)
-        const lists = data.map(e => `<option value="${e.id}"  rel="${e.idResoure}"class='row_list_element'>${e.name}</option>)`).join('')
-        return lists
+        const properties = ['idResoure', 'groupName']; // добавьте все возможные имена свойств
+        const lists = data.map(e => {
+            let attributes = '';
+            properties.forEach(property => {
+                if (e.hasOwnProperty(property)) { // проверяет, существует ли свойство в объекте
+                    attributes = e[property];
+                }
+            });
+            return `<option value="${e.id}" rel="${attributes}" type="${e.typeobject ? e.typeobject : null}"class='row_list_element'>${e.name}</option>`;
+        }).join('');
+        return lists;
     }
 
     static addButtonTypeBlock(arraynameBtn, indexs, updatedStores) {
@@ -25,14 +54,15 @@ export class Content {
     }
     // Метод для генерации списка чекбоксов
     static generateCheckboxList(fields, indexs, type) {
-        //  console.log(indexs);
+        console.log(fields, indexs, type);
         return fields
             .map((field, index) => {
                 // Формируем id чекбокса
                 const checkboxId = `${field.name}${indexs}${type}`;
                 // Устанавливаем атрибуты checked и disabled
                 const checkedAttr = field.checked ? 'checked' : '';
-                const disabledAttr = indexs === '0' && index < 4 ? 'checked disabled' : '';
+                const disabledAttr = indexs === '0' && index < 4 ? 'checked disabled' : '' ||
+                    indexs === '2' && index === 0 ? 'checked disabled' : '';
 
                 // Объединяем атрибуты
                 const checkboxAttrs = [checkedAttr, disabledAttr].filter(Boolean).join(' ');
@@ -49,9 +79,10 @@ export class Content {
 
     // Метод для рендеринга контента на основе типа
     static renderContent(type, indexs, fields) {
+        console.log(type, indexs, fields)
         if (!fields) {
             switch (type) {
-                case 'statistic':
+                case 'Статистика':
                     fields = storStatistika
                     break;
                 case 'Топливо':
@@ -60,11 +91,23 @@ export class Content {
                 case 'Поездки':
                     fields = storComponentTravel
                     break;
+                case 'Стоянки':
+                    fields = storComponentParkings
+                    break;
+                case 'Остановки':
+                    fields = storComponentStops
+                    break;
                 case 'Моточасы':
                     fields = storComponentMoto
                     break;
+                case 'Простои на холостом ходу':
+                    fields = storComponentProstoy
+                    break;
                 case 'Техническое обслуживание':
                     fields = storComponentTO
+                    break;
+                case 'СКДШ':
+                    fields = indexs === '1' ? storComponentSKDSHComp : storComponentSKDSHGraf
                     break;
                 default:
                     break;
@@ -92,6 +135,9 @@ export class Content {
 
     }
     static addContentTemplate() {
+        /* const buttons = ['Топливо', 'Поездки', 'Стоянки', 'Остановки', 'Моточасы', 'Простои на холостом ходу', 'Техническое обслуживание', 'СКДШ'].map((e, index) => {
+             return Content.createSet(index)
+         }).join('')*/
         return `<div class="wrapper_template">
          <div class="header_template">
         <input class="name_template" placeholder="Введите название отчета">
@@ -104,11 +150,12 @@ export class Content {
 </div>
 <div class="body_type_tamplate components_temp">
 <div class="title_type_template">Компонентный</div>
-<div class="body_checkbox_fields" data-att="component""></div>
+<div class="body_checkbox_fields" data-att="component"></div>
 </div>
 <div class="body_type_tamplate grafics_temp">
 <div class="title_type_template">Графический</div>
-<div class="body_checkbox_fields" data-att="graphic""></div>
+<div class="body_checkbox_fields" data-att="graphic"></div>
+
 </div>
 </div>
 <div class="footer_index">
@@ -119,8 +166,88 @@ export class Content {
                        </div>`
     }
 
-
-
+    /*
+        static createSet(index) {
+            console.log(index)
+            let html;
+            switch (index) {
+                case 0: html = Content.renderDefault()
+                    break;
+                case 1: html = Content.renderTraveling()
+                    break;
+                case 2: html = Content.renderDefault()
+                    break;
+                case 3: html = Content.renderDefault()
+                    break;
+                case 4: html = Content.renderDefault()
+                    break;
+                case 5: html = Content.renderProstoy()
+                    break;
+                case 6: html = Content.renderDefault()
+                    break;
+                case 7: html = Content.renderDefault()
+                    break;
+            }
+            return html
+        }
+    
+        static renderDefault() {
+            return `<div class="celevoy_card"></div>`
+        }
+        static renderProstoy() {
+            return `   
+            <div class="celevoy_card">
+          <div class="card_set_prostoy card_rep">
+         <div class="checkbox_item">
+                        <input class="input_set" type="checkbox" id="min_distance_prostoy">
+                        <label class="label_check_set label_check_set_prostoy" for="min_distance_prostoy">Мин. длительность простоя(чч:мм:сс)</label>
+                        <input class="value_set" value=00:00:00 disabled>
+                    </div>
+    
+                    </div>
+          <div class="card_set_prostoy datchik_min_max card_rep">
+         <div class="checkbox_item">
+                        <input type="checkbox" id="datchik_ugla">
+                        <label class="label_check_set_prostoy uniq_set_prostoy" for="datchik_ugla">Датчик угла наклона</label>
+                     <div class="porog">min</div><input class="porog_value">
+                          <div class="porog">max</div><input class="porog_value">
+                    </div>
+                                  </div></div>`
+        }
+    
+        static renderTraveling() {
+            return `
+                 <div class="celevoy_card">
+        <div class="card_set card_rep">
+        <div class="distance">Длительность</div>
+        <div class="checkbox_item">
+                        <input class="input_time" type="checkbox" id="min_distance">
+                        <label class="label_check_set" for="min_distance">Мин. длительность (чч:мм:сс)</label>
+                        <input class="value_set" value=00:00:00 disabled>
+                    </div>
+                    <div class="checkbox_item">
+                        <input class="input_time" type="checkbox" id="max_distance">
+                        <label class="label_check_set" for="max_distance">Макс. длительность (чч:мм:сс)</label>
+                        <input class="value_set" value=24:00:00 disabled>
+                    </div>
+                    </div>
+    
+                      <div class="card_set card_rep">
+        <div class="distance">Пробег</div>
+        <div class="checkbox_item">
+                        <input class="input_distance" type="checkbox" id="min_mileage">
+                        <label class="label_check_set set_mileage" for="min_mileage">Мин. пробег, км</label>
+                        <input class="value_set set_mil"  maxlength="6" value=0 disabled>
+                    </div>
+                    <div class="checkbox_item">
+                        <input class="input_distance" type="checkbox" id="max_mileage">
+                        <label class="label_check_set set_mileage" for="max_mileage">Макс. пробег, км</label>
+                        <input class="value_set set_mil"  maxlength="6" value=0 disabled>
+                    </div>
+                    </div>
+                    </div>
+                    `
+        }*/
 
     static addRazmetka() {
         return ` <div class="wraaper reports_module">
@@ -174,17 +301,14 @@ export class Content {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="create_reports">Создать отчет</div>
+                                <div class="create_reports">Создать шаблон</div>
                                 <div class="inform"></div>
                             </div>
                         </div>
                         <div class="wrapper_result">
                             <div class="title_result_reports">Заголовки отчетов</div>
                             <ul class="list_reports">
-                                <div class="loaders_report">
-                                    <div class="loaders-globe-report"></div>
-                                </div>
-                            </ul>
+                                                         </ul>
                         </div>
                         <div class="wrapper_reports_map">
                             <div class="title_result_reports">Карта</div>
@@ -200,19 +324,9 @@ export class Content {
                     <div class="wrapper_file">
                         <div class="file">
                             <div class="titleChange_list">
-                                <div class="titleChange_list_name title_file" rel="'Экспорт'">Экспорт
-                                </div><i class="fas fa-angle-down toggle_reports toggle_file"></i>
-                            </div>
-                            <ul class="list_file">
-                                <li class="item_type_file" rel="8" data-attribute="xlsx"><i
-                                        class="fas fa-file-excel type_file"></i>
-                                    <p class="text_type text_file">XLSX</p>
-                                </li>
-                                <li class="item_type_file" rel="2" data-attribute="pdf"><i
-                                        class="fas fa-file-pdf type_file"></i>
-                                    <p class="text_type text_file">PDF</p>
-                                </li>
-                            </ul>
+                            <i class="fas fa-file-excel icon_print" data-attribute="xlsx" rel="8"></i>
+                             <i class="fas fa-file-pdf icon_print" data-attribute="pdf" rel="2"></i>
+                                                  
                         </div>
                     </div>
                 </div>

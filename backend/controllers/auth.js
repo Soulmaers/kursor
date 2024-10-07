@@ -1795,8 +1795,6 @@ exports.deleteAccount = async function (req, res) {
 };
 
 async function registerUser(pool, login, password, role, idx, uz, creater, objectsId = [], groupsid = [], resourse, resourseId = []) {
-    console.log(resourse)
-    console.log(resourseId)
     const time = String(Math.floor((new Date().getTime()) / 1000));
 
     // Проверка наличия пользователя с таким же логином
@@ -1868,37 +1866,36 @@ async function registerUser(pool, login, password, role, idx, uz, creater, objec
                     .query(insertGroupsQuery);
             }
         }
-        if (resourseId.length !== 0) {
+        // if (resourseId.length !== 0) {
 
-            // Список всех возможных колонок, совпадающих с именами ресурсов
-            const columns = ['reports', 'geozones', 'events', 'settings'];
-            // Формируем строки для вставки колонок и значений
-            const columnsString = columns.join(', ');
-            const valuesString = columns.map(col => `@${col}`).join(', ');
-            // Формируем запрос один раз
-            const insertObjectsQuery = `INSERT INTO usersPermissions (uniqUsersID, uniqResourseID, ${columnsString}) VALUES (@uniqUsersID, @uniqResourseID, ${valuesString})`;
-            // Итерируем по массиву ID ресурсов
-            //   for (let resours of resourseId) {
-            // Создаем объект с флагами доступа для каждой колонки
-            const accessFlags = columns.reduce((flags, col) => {
-                // Устанавливаем true, если ресурс присутствует в массиве
-                flags[col] = resourseId.some(resource => resource === col) ? 'true' : 'false';
-                return flags;
-            }, {});
-            // Создаем запрос с подстановкой значений
-            const request = pool.request()
-                .input('uniqUsersID', sql.Int, Number(userIncriment))
-                .input('uniqResourseID', sql.Int, resourse);
+        // Список всех возможных колонок, совпадающих с именами ресурсов
+        const columns = ['reports', 'geozones', 'events', 'settings'];
+        // Формируем строки для вставки колонок и значений
+        const columnsString = columns.join(', ');
+        const valuesString = columns.map(col => `@${col}`).join(', ');
+        // Формируем запрос один раз
+        const insertObjectsQuery = `INSERT INTO usersPermissions (uniqUsersID, uniqResourseID, ${columnsString}) VALUES (@uniqUsersID, @uniqResourseID, ${valuesString})`;
+        // Итерируем по массиву ID ресурсов
+        // Создаем объект с флагами доступа для каждой колонки
+        const accessFlags = columns.reduce((flags, col) => {
+            // Устанавливаем true, если ресурс присутствует в массиве
+            flags[col] = resourseId.some(resource => resource === col) ? 'true' : 'false';
+            return flags;
+        }, {});
+        // Создаем запрос с подстановкой значений
+        const request = pool.request()
+            .input('uniqUsersID', sql.Int, Number(userIncriment))
+            .input('uniqResourseID', sql.Int, resourse);
 
-            // Добавляем значения флагов в запрос
-            columns.forEach(col => {
-                request.input(col, String(accessFlags[col]));
-            });
+        // Добавляем значения флагов в запрос
+        columns.forEach(col => {
+            request.input(col, String(accessFlags[col]));
+        });
 
-            // Выполняем запрос
-            await request.query(insertObjectsQuery);
-            // }
-        }
+        // Выполняем запрос
+        await request.query(insertObjectsQuery);
+        // }
+        //  }
 
         // Запись в историю
         const post = `INSERT INTO usersHistory (action, data, uniqUsersID, uniqUsersIDLow, nameAccount) 
@@ -1995,8 +1992,11 @@ module.exports.sing = async function (req, res) { // авторизация
         const users = result.recordset;
         let matchedUser = null;
         // Проверяем пароли асинхронно с помощью цикла for
+
         for (const user of users) {
+            console.log(user.password)
             const isMatch = await bcrypt.compare(req.body.password, user.password);
+            console.log(isMatch)
             if (isMatch) {
                 matchedUser = user;
                 break; // Выходим из цикла, если нашли совпадение

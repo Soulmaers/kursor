@@ -54,12 +54,12 @@
 }
 
 .create_reports {
-    width: 30%;
+    width: 33%;
     padding: 5px;
     color: #fff;
     font-size: 0.9rem;
     font-weight: 200;
-    background-color: rgba(6, 28, 71, 1);
+    background-color: rgba(6, 28, 71, 0.8);
     border: 1px solid rgb(28, 123, 160);
     border-radius: 5px;
     margin: 5px 0;
@@ -95,7 +95,7 @@
 
 .control {
     color: #fff;
-    background-color: rgba(6, 28, 71, 1);
+    background-color: rgba(6, 28, 71, 0.8);
     border: 1px solid rgb(28, 123, 160);
 }
 
@@ -147,9 +147,8 @@
 }
 
 .name_template {
-    color: #fff;
+    color: rgba(6, 28, 71, 0.8);
     font-weight: bold;
-    background: none;
     border: none;
     border-bottom: 1px solid #fff;
     outline: none;
@@ -333,6 +332,163 @@
     animation-iteration-count: 1;
 }
 
-.name_template {
+
+.cell_params {
+    width: 100%;
+}
+
+
+
+.cell_reports {
+    text-align: left;
+    padding-left: 5px;
+}
+
+.cell_title_reports {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    text-align: center;
+    padding: 0;
+    font-weight: bold;
+    height: 15px;
+}
+
+.wrapper_reports {
+    height: 490px;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid rgba(6, 28, 71, 0.8);
+    text-align: center;
+    overflow-y: auto;
+    position: relative;
+    scrollbar-width: none;
+    /* для Firefox */
+    -ms-overflow-style: none;
+    /* для Internet Explorer и Edge */
+}
+
+.down_content {
+    width: 100%;
+    height: 95%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.down_block {
+    width: 97%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+}
+
+.wrapper_file {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    width: 70px;
+}
+
+.file {
+    padding: 2px 5px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 95%;
+}
+
+.icon_print {
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin: 0 5px;
+}
+
+.celevoy_card {
+    width: 98%;
+    margin: 15px auto;
+    border: 2px solid rgba(6, 28, 71, 0.8);
+    border-radius: 5px;
+}
+
+.card_rep {
+    width: 100%;
+}
+
+
+.title_result_reports {
+    width: 100%;
+    height: 30px;
+    background-color: rgba(6, 28, 71, 0.8);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+
+}
+
+.wrapper_shablon {
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid rgba(6, 28, 71, 0.8);
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+.wrapper_result {
+    width: 33%;
+    border-radius: 5px;
+    border: 2px solid rgba(6, 28, 71, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wrapper_reports_map {
+    width: 33%;
+    border-radius: 5px;
+    border: 2px solid rgba(6, 28, 71, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+.down_content {
+    width: 100%;
+    padding: 5px;
+    display: flex;
+}
+
+.loaders_report {
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(6, 28, 71, 0.8);
+}
+
+.activeTitleReports {
+    background-color: rgba(6, 28, 71, 0.8);
     color: #fff
+}
+
+.titleNameReport:active {
+    background-color: rgba(6, 28, 71, 0.8);
+    color: #fff
+}
+
+.titleNameReport:hover {
+    border-bottom: 2px dashed rgba(6, 28, 71, 0.8);
 }

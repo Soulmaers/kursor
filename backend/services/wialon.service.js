@@ -131,6 +131,7 @@ exports.getPropertyObjects = async (session) => {
             'Content-Type': 'application/json'
         };
         const response = await axios.post(url, {}, { headers: headers });
+        //  console.log(response)
         return response.data.items
     }
     catch (e) {

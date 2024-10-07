@@ -26,7 +26,7 @@ export class CreateDOMElements {
             const group = document.createElement('div')
             group.classList.add('groupsSklad')
             const nameGroup = el.group_name
-            group.classList.add(`${nameGroup}`)
+            //   group.classList.add(`${nameGroup}`)
             group.setAttribute('id', el.group_id)
             group.style.display = 'flex',
                 group.style.flexDirection = 'column'
@@ -38,7 +38,7 @@ export class CreateDOMElements {
             group.appendChild(titleModal)
             const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModalSklad')
-            group.classList.add(`${nameGroup}`)
+            //   group.classList.add(`${nameGroup}`)
             group.setAttribute('rel', `${nameGroup}`)
             group.appendChild(hiddenModal)
             console.log(el)

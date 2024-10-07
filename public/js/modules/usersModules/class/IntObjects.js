@@ -18,7 +18,6 @@ export class IntObjects extends IntarfaceBase {
     caseElements() {
         this.objectname = this.container.querySelector('#objectname');
         this.typedevice = this.container.querySelector('#typedevice');
-        this.typeobject = this.container.querySelector('#typeobject');
         this.port = this.container.querySelector('#port');
         this.imeidevice = this.container.querySelector('#imeidevice');
         this.addressserver = this.container.querySelector('#addressserver');
@@ -29,6 +28,7 @@ export class IntObjects extends IntarfaceBase {
         this.gosnomerobject = this.container.querySelector('#gosnomerobject');
         this.idbitrixobject = this.container.querySelector('#idbitrixobject');
         this.uz = this.container.querySelector('.uz');
+        this.type = this.container.querySelector('.type_objects_index');
         this.tp = this.container.querySelector('.tp');
         this.createsUser = this.container.querySelector('.creates');
         this.modal = this.container.querySelector('.wrap_lk')
@@ -45,6 +45,7 @@ export class IntObjects extends IntarfaceBase {
     }
     async validationAndPackObject() {
         if (this.objectname.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите название объекта');
+        if (this.type.value === '') return Helpers.viewRemark(this.mess, 'red', 'Выберите тип объекта');
         if (this.typedevice.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите тип устройства');
         if (this.port.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите порт');
         if (this.imeidevice.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите уникальный IMEI');
@@ -52,10 +53,12 @@ export class IntObjects extends IntarfaceBase {
         if (this.uz.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите учетную запись');
         if (this.tp.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите тарифный план');
 
+
+
         this.obj = {
             objectname: this.objectname.value,
             typedevice: this.typedevice.value,
-            typeobject: this.typeobject.value,
+            typeobject: this.type.value,
             port: this.port.value,
             imeidevice: this.imeidevice.value,
             addressserver: this.addressserver.value,

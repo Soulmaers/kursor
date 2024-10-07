@@ -2,7 +2,197 @@
 
 export class ContentGeneration {
 
+  static storTypeObject() {
+    const stor = [
+      { type: 'Экскаватор', typeIndex: 10 },
+      { type: 'Бульдозер', typeIndex: 10 },
+      { type: 'Фронтальный погрузчик', typeIndex: 10 },
+      { type: 'Экскаватор-погрузчик', typeIndex: 10 },
+      { type: 'Трактор', typeIndex: 11 },
+      { type: 'Каток', typeIndex: 11 },
+      { type: 'Кран', typeIndex: 20 },
+      { type: 'Манипулятор', typeIndex: 20 },
+      { type: 'Газель', typeIndex: 30 },
+      { type: 'Фургон', typeIndex: 30 },
+      { type: 'Легковой автомобиль', typeIndex: 30 },
+      { type: 'Фура', typeIndex: 30 },
+      { type: 'Самосвал', typeIndex: 30 },
+      { type: 'Бетономешалка', typeIndex: 40 },
+      { type: 'Бензовоз', typeIndex: 40 },
+      { type: 'Миксер', typeIndex: 40 },
+      { type: 'ЖКХ', typeIndex: 50 },
+      { type: 'Другое', typeIndex: 60 }
 
+    ]
+
+    return stor
+  }
+
+  static addButtonParams(data) {
+    const buttons = data.map(e => `<div class= "type_navi" data-att="${e.meta}">${e.sens} {${e.meta}} (${e.value})
+      <i class="fas fa-angle-down srows"></i ></div ><div class="body_settings_content body_set_params">
+      ${ContentGeneration.renderControllSetParams(e)}
+      </div>`).join('')
+    return `
+    <div class="navi_block navi_set_params">
+        ${buttons}
+    </div>`;
+  }
+
+
+  static renderControllSetParams(e) {
+    let html;
+    switch ('Топливо') {
+      case 'Топливо': html = ContentGeneration.renderOil(e)
+    }
+    return html
+  }
+
+
+  static renderOil(e) {
+    return ` <div class="card_set oil_props">
+        <div class="name_params">Название <span class="span_sens">${e.sens}</span></div>
+             <div class="name_params">Параметр <span class="span_sens">${e.meta}</span></div>
+                  <div class="name_params">Тарировка <div class="span_sens all_props_button">
+                  <div class="btn_props table_tarir" rel=${e.params}>Таблица</div>
+                       <div class="btn_props">График</div>
+                            <div class="btn_props excel_tarir_export" rel=${e.params}>Экспорт</div>
+                  </div></div>
+                    <div class="name_params">Коэффициент <input class="span_sens val_koef" value="1.0000"  type="number" step="0.01"></div>
+     </div>`
+  }
+
+  static addButtonTypeBlock(type) {
+    const buttons = ['Топливо', 'Поездки', 'Стоянки', 'Остановки', 'Моточасы', 'Простои на холостом ходу', 'Техническое обслуживание'].map(
+      (e, index) =>
+        `<div class="type_navi" data-att="${index}">${e}<i class="fas fa-angle-down srows"></i></div><div class="body_settings_content">${ContentGeneration.createSet(index, type)}</div>`
+    ).join('');
+    return `
+    <div class="navi_block">
+        ${buttons}
+    </div>`;
+  }
+
+  static createSet(index, type) {
+    console.log(index, type)
+    let html;
+    switch (index) {
+      case 0:
+        break;
+      case 1: html = ContentGeneration.renderTraveling()
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
+      case 5: html = ContentGeneration.renderProstoy(type)
+        break;
+      case 6:
+        break;
+    }
+
+    return html
+  }
+  static renderProstoy(type) {
+    let html;
+    switch (type) {
+      case '10':
+      case '11': html = ` <div class="card_set_prostoy">
+     <div class="checkbox_item">
+                    <input class="input_set" type="checkbox" id="min_distance_prostoy">
+                    <label class="label_check_set label_check_set_prostoy" for="min_distance_prostoy">Мин. длительность простоя(чч:мм:сс)</label>
+                    <input class="value_set" value=00:00:00 disabled>
+                </div>
+                              </div>
+                                <div class="checkbox_item">
+                                      <input type="radio" id="Датчик угла наклона" name="angleSensor" value="Датчик угла наклона" checked>
+            <label class="radio_sensor" for="Датчик угла наклона">Датчик угла наклона</label>
+                     <input type="radio" id="Работа навесного оборудования" name="angleSensor" value="Работа навесного оборудования">
+            <label class="radio_sensor" for="Работа навесного оборудования">Работа навесного оборудования</label>
+      
+                              </div>`
+        break;
+      case '30': html = ` <div class="card_set_prostoy">
+     <div class="checkbox_item">
+                    <input class="input_set" type="checkbox" id="min_distance_prostoy">
+                    <label class="label_check_set label_check_set_prostoy" for="min_distance_prostoy">Мин. длительность простоя(чч:мм:сс)</label>
+                    <input class="value_set" value=00:00:00 disabled>
+                </div>
+              
+                </div>`
+        break;
+      case '20': html = ` 
+      <div class="card_set_prostoy">
+     <div class="checkbox_item">
+                    <input class="input_set" type="checkbox" id="min_distance_prostoy">
+                    <label class="label_check_set label_check_set_prostoy" for="min_distance_prostoy">Мин. длительность простоя(чч:мм:сс)</label>
+                    <input class="value_set" value=00:00:00 disabled>
+                </div>
+
+                </div>
+      <div class="card_set_prostoy datchik_min_max">
+     <div class="checkbox_item">
+                    <input type="checkbox" id="datchik_ugla">
+                    <label class="label_check_set_prostoy uniq_set_prostoy" for="datchik_ugla">Датчик угла наклона</label>
+                 <div class="porog">min</div><input class="porog_value">
+                      <div class="porog">max</div><input class="porog_value">
+                </div>
+                              </div>`
+        break;
+
+      default: html = ` <div class="card_set_prostoy">
+     <div class="checkbox_item">
+                    <input class="input_set" type="checkbox" id="min_distance_prostoy">
+                    <label class="label_check_set label_check_set_prostoy" for="min_distance_prostoy">Мин. длительность простоя(чч:мм:сс)</label>
+                    <input class="value_set" value=00:00:00 disabled>
+                </div>
+              
+                </div>`
+
+    }
+
+    return html
+  }
+
+  static renderTraveling() {
+    return `
+    <div class="card_set">
+    <div class="distance">Длительность</div>
+    <div class="checkbox_item">
+                    <input class="input_time" type="checkbox" id="min_distance">
+                    <label class="label_check_set" for="min_distance">Мин. длительность (чч:мм:сс)</label>
+                    <input class="value_set" value=00:00:00 disabled>
+                </div>
+                <div class="checkbox_item">
+                    <input class="input_time" type="checkbox" id="max_distance">
+                    <label class="label_check_set" for="max_distance">Макс. длительность (чч:мм:сс)</label>
+                    <input class="value_set" value=24:00:00 disabled>
+                </div>
+                </div>
+
+                  <div class="card_set">
+    <div class="distance">Пробег</div>
+    <div class="checkbox_item">
+                    <input class="input_distance" type="checkbox" id="min_mileage">
+                    <label class="label_check_set set_mileage" for="min_mileage">Мин. пробег, км</label>
+                    <input class="value_set set_mil"  maxlength="6" value=0 disabled>
+                </div>
+                <div class="checkbox_item">
+                    <input class="input_distance" type="checkbox" id="max_mileage">
+                    <label class="label_check_set set_mileage" for="max_mileage">Макс. пробег, км</label>
+                    <input class="value_set set_mil"  maxlength="6" value=0 disabled>
+                </div>
+                </div>
+                `
+  }
+
+
+
+  static renderSettingsContent() {
+    return `<div class=body_indexs_set></div>`
+  }
   static addListStor(data) {
 
     const html = data.map(e => `<div class="row_stor_history">
@@ -248,13 +438,10 @@ export class ContentGeneration {
 
 
   static editUser(login, role, creator, property, creators, name, data) {
-    console.log(property)
-    console.log(login)
     const accounts = data.uniqueAccounts
     const objects = data.uniqueObjects
     const groups = data.uniqueGroups
     const usersAcc = data.uniqueUsers
-    console.log(objects)
     const objectsHTML = ContentGeneration.renderModalCheckList(objects, 'объекты')
     const groupsHTML = ContentGeneration.renderModalCheckList(groups, 'группы')
     const propertyResourseHTML = ContentGeneration.renderModalCheckList([{ name: 'Редактирование отчетов', incriment: 'reports' },
@@ -336,6 +523,7 @@ export class ContentGeneration {
 
 
   static createObj(login, role, creator, creators, data) {
+    const selectType = (ContentGeneration.storTypeObject()).map(e => `<option value="${e.type}" rel="${e.typeIndex}">${e.type}</option>`).join('')
     const accounts = data.uniqueAccounts
     const usersAcc = data.uniqueUsers
     const creatorsRows = creators !== undefined ? [...creators].map(e => `<option value= "${e.incriment}" rel = '${e.idx}' data - att="${e.role}"'>${e.name}</option>`).join('') : ''
@@ -351,7 +539,9 @@ export class ContentGeneration {
                   <div class="text_index optional_field">Имя объекта</div><input rel="nameObject" id="objectname" class="input_index">
                 </div>
                   <div class="row_index">
-                  <div class="text_index no_optional">Тип объекта</div><input rel="typeObject" id="typeobject" class="input_index">
+                  <div class="text_index no_optional">Тип объекта</div>  <select class="select_index type_objects_index">
+                  <option value="" rel="typeObject"></option>
+                  ${selectType}</select>
                  </div>
                <div class="row_index">
                 <div class="text_index optional_field">Тип устройства</div><input rel="typeDevice" id="typedevice" class="input_index">
@@ -416,9 +606,10 @@ export class ContentGeneration {
   }
 
   static editObj(login, role, property, creator, creators, names, data) {
-    //  console.log(login, role, creator, property, creators, names, data)
-    console.log(data)
-    const { name_retra, incriment_retra, name, typeobject, typeDevice, port, addressserver, imeidevice, idbitrixobject, phonenumber, markaobject, modelobject, vinobject, gosnomerobject } = property
+    const selectType = (ContentGeneration.storTypeObject()).map(e => `<option value="${e.type}" rel="${e.typeIndex}">${e.type}</option>`).join('')
+    const typeIndex = ContentGeneration.storTypeObject().find(e => e.type === property.typeobject)
+    console.log(typeIndex)
+    const { name_retra, incriment_retra, name, typeDevice, port, addressserver, imeidevice, idbitrixobject, phonenumber, markaobject, modelobject, vinobject, gosnomerobject } = property
     const accounts = data.uniqueAccounts
     const usersAcc = data.uniqueUsers
     function filt(obj) {
@@ -431,16 +622,20 @@ export class ContentGeneration {
     const account = accounts.find(e => incriment_account === e.incriment)
 
     return ` <div class="wrap_lk wrap_object wrap_edit">
-        <div class="header_index header_edit"><div class="buttons_menu click_button_object" id='objectID'>Объект</div>
-         <div class="buttons_menu">Журнал событий</div>
-        <div class="buttons_menu" id='configID'>Конфигуратор параметров</div>${names}<i class="fas fa fa-times close_modal_window"></i></div>
-        <div class="body_indexs">
-                     
-             <div class="row_index">
-                  <div class="text_index optional_field">Имя объекта</div><input rel="nameObject" id="objectname" class="input_index" value="${names}">
+        <div class="header_index header_edit"><div class="buttons_menu click_button_object stor_type_index" rel="${typeIndex ? typeIndex.typeIndex : ''}" id='objectID'>${names}</div>
+          <div class="buttons_menu" id='configID'>Конфигуратор параметров</div>
+                      <div class="buttons_menu" id='settingsObject'>Настройки событий</div>
+        <div class="buttons_menu">Журнал событий</div>
+              <i class="fas fa fa-times close_modal_window"></i></div>
+         
+               <div class="body_indexs">
+                    <div class="row_index">
+                  <div class="text_index optional_field">${name}</div><input rel="nameObject" id="objectname" class="input_index" value="${names}">
                 </div>
                   <div class="row_index">
-                  <div class="text_index no_optional">Тип объекта</div><input rel="typeObject" id="typeobject" class="input_index" value="${filt(typeobject)}">
+                  <div class="text_index no_optional">Тип объекта</div> <select class="select_index type_objects_index">
+                    <option value="" rel="typeObject"></option>
+                                ${selectType}</select>
                  </div>
                <div class="row_index">
                 <div class="text_index optional_field">Тип устройства</div><input rel="typeDevice" id="typedevice" class="input_index" value="${filt(typeDevice)}">
@@ -514,8 +709,9 @@ export class ContentGeneration {
             </div>
                <div class="sostav_indexs"></div>
                <div class="history_stor"></div>
-            <div class="footer_index">
-              <div class="valid_message"></div>
+                      <div class="settings_stor"></div>
+                                <div class="footer_index">
+              <div class="valid_message mess_edit_object"></div>
               <div class="button_setting recover">Восстановить</div>
               <div class="button_setting bnt_set">Сохранить</div>
               </div>

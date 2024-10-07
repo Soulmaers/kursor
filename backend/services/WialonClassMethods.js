@@ -17,8 +17,12 @@ class WialonClassMethods {
     async init() {
         try {
             await this.getSessionWialon();
-            await this.getObjects();
-            await this.addGroup();
+            if (!this.session) setTimeout(async () => await this.getSessionWialon(), 60)
+            if (this.session) {
+                await this.getObjects();
+                await this.addGroup();
+            }
+
             this.controllStartClass();
             setInterval(() => this.controllStartClass(), 180000)
         } catch (error) {
@@ -38,7 +42,7 @@ class WialonClassMethods {
 
     }
     async getSessionWialon() {
-        this.session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c652CFC619A64BBDB70BB8C849676415227B7DE6A66"`);
+        this.session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c65EDBD6CECD5D9288DE9C0AA805146E09D6E9E31DF"`);
         console.log(this.session.eid)
     }
 

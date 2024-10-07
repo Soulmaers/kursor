@@ -11,6 +11,7 @@ export class TarirTable {
         this.wrapper_data = this.container.querySelector('.list_table_tarir')
         this.values = this.container.querySelectorAll('.value_data')
         this.message = this.container.querySelector('.validation_message')
+        this.pop = document.querySelector('.popup-background')
         this.boundClose = this.clos.bind(this);
         this.boundOk = this.ok.bind(this);
         this.boundAdd = this.add.bind(this, '', '');
@@ -21,6 +22,7 @@ export class TarirTable {
 
     async init() {
         this.container.style.display = 'flex'
+        this.indexUpLow(this.pop, this.container, 5, 6)
         const values = await this.getTarirData()
         console.log(values)
         if (values.length !== 0) {
@@ -34,6 +36,10 @@ export class TarirTable {
         }
     }
 
+    indexUpLow(pop, container, num1, num2) {
+        pop.style.zIndex = num1
+        container.style.zIndex = num2
+    }
     createRowsViewValue(values) {
         values.forEach(e => {
             this.add(e.dut, e.litrazh)
@@ -92,9 +98,8 @@ export class TarirTable {
 
 
     clos() {
-        console.log(this.id)
-        console.log(this.container)
         this.container.style.display = 'none'
+        this.indexUpLow(this.pop, this.container, 3, 6)
     }
 
 
@@ -146,13 +151,14 @@ export class TarirTable {
 
 
     approximateValue(x, y, degree) {
+        console.log(x, y, degree)
         const coeffs = this.polynomialApproximation(x, y, degree);
         //  const approximated = this.evaluatePolynomial([value], coeffs)[0];
         return coeffs
     }
     polynomialApproximation(x, y, degree) {
         const n = x.length;
-        const m = degree + 1;
+        const m = degree + 1; console.log(m, degree)
         let A = Array.from({ length: m }, () => new Array(m).fill(0));
         let B = new Array(m).fill(0);
         let a = new Array(m).fill(0);
@@ -195,6 +201,7 @@ export class TarirTable {
             }
             a[j] = tmp / val;
         }
+        console.log(a)
         return a;
     }
 

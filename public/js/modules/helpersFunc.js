@@ -36,6 +36,13 @@ export function timeConvert(d) {
 }
 
 
+export function viewRemark(element, color, text) {
+    console.log(element, color, text)
+    element.textContent = text
+    element.style.color = color
+    setTimeout(() => element.textContent = '', 5000)
+}
+
 export function removeArrElem(arr) {
     arr.forEach(el => {
         el.remove()
