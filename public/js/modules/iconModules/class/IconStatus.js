@@ -167,6 +167,7 @@ export class IconStatus {
             signal: signal
         }
         const editParams = await this.iconFindParamsEdit(param)
+        console.log(editParams)
         this.coefficient = await this.validationIngition(idw)
         this.pushObjectProperty(this.info, editParams)
         await this.statusTSI(param)
@@ -212,6 +213,7 @@ export class IconStatus {
         return res
     }
     async validationIngition(id) {
+        console.log(id)
         const params = {
             method: 'POST',
             headers: {

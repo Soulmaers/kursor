@@ -18,7 +18,7 @@ router.post('/api/getSens', controllerKursor.getSens)
 router.post('/api/saveSetParams', controllerKursor.saveSetParams)
 
 
-
+router.post('/api/deleteConfigParam', controllerKursor.deleteConfigParam)
 router.post('/api/getConfigParam', controllerKursor.getConfigParam)
 router.post('/api/deleteParams', controllerKursor.deleteParams)
 router.post('/api/getDataParamsInterval', controllerKursor.getDataParamsInterval)
@@ -31,6 +31,10 @@ router.post('/api/updateIdOBjectToBase', controllerKursor.updateIdOBjectToBase)
 
 router.post('/api/getAccountResourseID', controllerKursor.getAccountResourseID)
 router.post('/api/getPropertyPermissions', controllerKursor.getPropertyPermissions)
+router.post('/api/getValuePWR', controllerKursor.getValueToBase)
+
+
+router.post('/api/getRefills', controllerKursor.getRefills)
 
 
 

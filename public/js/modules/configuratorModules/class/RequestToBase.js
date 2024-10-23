@@ -28,4 +28,17 @@ export class RequestToBse {
         const result = await res.json()
         return result
     }
+
+    static async deleteConfigParam(idw, param) {
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ idw, param })
+        }
+        const res = await fetch('api/deleteConfigParam', params)
+        const result = await res.json()
+        return result
+    }
 }

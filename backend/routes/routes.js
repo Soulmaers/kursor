@@ -99,6 +99,12 @@ router.post('/api/updateTemplates', controllerShablon.updateTemplates)
 router.post('/api/getReport', controllerShablon.getReport)
 router.post('/api/setReportsAttribute', controllerShablon.setReportsAttribute)
 router.post('/api/getReportsAttribute', controllerShablon.getReportsAttribute)
+router.post('/api/setDefaultSettings', controllerShablon.setDefaultSettings)
+router.post('/api/updateDefaultSettings', controllerShablon.updateDefaultSettings)
+router.post('/api/getSettings', controllerShablon.getSettings)
+
+
+
 
 
 

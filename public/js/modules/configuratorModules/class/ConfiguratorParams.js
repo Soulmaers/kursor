@@ -132,34 +132,6 @@ export class ConfiguratorParams {
 
 
         }
-        /*if (el.classList.contains('clear_params')) {
-            this.itemMeta.forEach(elem => {
-                //  console.log(el.previousElementSibling)
-                //  console.log(el.previousElementSibling.textContent, elem.textContent)
-                if (el.previousElementSibling.textContent === elem.textContent) {
-                    console.log(elem)
-                    elem.style.borderLeft = 'none'
-                    elem.classList.remove('clickMeta')
-                }
-            })
-            el.previousElementSibling.textContent = ''
- 
-            /*  const param = el.parentNode.children[1].textContent
-              if (param === 'pwr') {
-                  el.parentNode.children[4].style.color = 'rgba(6, 28, 71, 1)'
-                  this.deleteParams(this.id, param)
-              }
-              if (param === 'engine') {
-                  el.parentNode.children[4].style.display = 'none'
-                  this.deleteParams(this.id, param)
-              }
-              if (param === 'summatorOil') {
-                  el.parentNode.children[4].style.color = 'rgba(6, 28, 71, 1)'
-                  el.parentNode.children[2].style.color = 'rgba(6, 28, 71, 1)'
-                  el.parentNode.children[2].textContent = 'OFF'
-                  this.setSummator([])
-              }
-   } */
     }
 
     async setSummator(data) {
@@ -217,13 +189,14 @@ export class ConfiguratorParams {
 
     async setToBaseSensStorMeta() {
         const login = document.querySelectorAll('.log')[1].textContent
-        const id = this.id
+
+        console.log(this.itemStor)
         const data = this.itemStor.filter(e => e.children[2].textContent).map(el => ({
             id: this.id, port: this.port,
             sens: el.children[0].value ? el.children[0].value : el.children[0].placeholder,
             params: el.children[1].textContent,
             meta: el.children[2].textContent,
-            value: null,
+            value: el.nextElementSibling.querySelector('.metaname').getAttribute('rel'),
             status: null,
             time: Math.floor(new Date().getTime() / 1000),
             login: login,
@@ -269,53 +242,6 @@ export class ConfiguratorParams {
     }
 
 
-
-
-    test() {
-        const formula = this.modalka.querySelector('.val_koef')
-
-        console.log(formula.value)
-        const res = formula.value
-        //  const res = `${5000 + formula.value}`
-        console.log(res)
-        const rr = eval(res);
-        console.log(rr)
-        console.log()
-        const array = [{ dut: 100, l: 10 }, { dut: 1500, l: 50 }, { dut: 4040, l: 120 }]
-        console.log(Math.exp(100))
-        console.log(4E-7 * Math.pow(4022, 2) + 0.1702 * 4022 - 0.0655)
-        //= 0,0279x + 7,5945
-        function transformExpressionWithExponent(expression, x) {
-            // Убираем пробелы вокруг x и степеней
-            expression = expression.replace(/\s+/g, '');
-            // Добавляем знак умножения перед 'x', если его нет
-            expression = expression.replace(/(\d)(x)/g, '$1*$2');
-            // Заменяем выражения вида x2 на Math.pow(x, 2)
-            expression = expression.replace(/x(\d+)/g, 'Math.pow(x, $1)');
-            // Заменяем все оставшиеся 'x' на значение переменной x
-            expression = expression.replace(/x/g, x);
-
-            return expression;
-        }
-
-        const x = 4022;
-        const inputExpression = "4E-07x2 + 0,1702x - 0,0655";
-        // Преобразуем запятые в точки, чтобы JavaScript мог их правильно обработать
-        const formattedExpression = inputExpression.replace(/,/g, '.');
-
-        const transformedExpression = transformExpressionWithExponent(formattedExpression, x);
-        console.log("Преобразованное выражение:", transformedExpression);
-
-        // Вычисляем результат
-        try {
-            const result = eval(transformedExpression);
-            console.log("Результат вычисления:", result);
-        } catch (error) {
-            console.error("Ошибка при вычислении:", error);
-        }
-
-    }
-
     createSummatorOil(el) {
         if (!this.activeClassSummator) {
             this.activeClassSummator = new Summator(this.id, el, this.dat, this.listMeta)
@@ -323,13 +249,7 @@ export class ConfiguratorParams {
             this.activeClassSummator.reinitialize(this.id, el, this.dat, this.listMeta);
         }
     }
-    createTarir(el, param) {
-        if (!this.activeClassTarir) {
-            this.activeClassTarir = new TarirTable(this.id, el, param)
-        } else {
-            this.activeClassTarir.reinitialize(this.id, el, param);
-        }
-    }
+
     async getValueToBase(parent) {
         const param = parent.children[1].textContent
         const id = this.id
@@ -351,11 +271,17 @@ export class ConfiguratorParams {
         if (clickStor) {
             !el.classList.contains('clickMeta') ? el.children[0].classList.add('clickMeta') : null
             clickStor.children[2].textContent = el.children[0].textContent
-            clickStor.nextElementSibling.children[1].querySelector('.span_sens').textContent = el.children[0].textContent
-            clickStor.nextElementSibling.children[2].querySelector('.val_koef').value = ''
+            clickStor.nextElementSibling.children[1].querySelector('.metaname').textContent = `${el.children[0].textContent} ${el.children[1].textContent}`
+            clickStor.nextElementSibling.children[1].querySelector('.metaname').setAttribute('rel', el.children[1].textContent)
+            const odometrTS = clickStor.nextElementSibling.querySelector('.val_koef_ts')
+            const odometrTerminal = clickStor.nextElementSibling.querySelector('.odometr_terminal')
+            if (odometrTerminal) odometrTerminal.textContent = el.children[1].textContent
+            if (odometrTS) odometrTS.value = el.children[1].textContent
+
             this.itemMeta.forEach(el => { el.children[0].classList.remove('clickMeta') })
             this.dat = null
             this.controllFlashBorder()
         }
     }
 }
+

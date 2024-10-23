@@ -12,7 +12,6 @@ export class NewReportTemplate {
         this.wrapReports = wrapReports
         this.pop = document.querySelector('.popup-background')
         this.wrapSet = document.querySelector('.wrapper_set')
-        //   this.wrapReports = this.container.querySelectorAll('.toggle_reports')
         this.btnCreateReport = this.container.querySelector('.create_reports')
         this.editionTemplate = this.container.querySelector('.edition_template')
         this.deleteTemplate = this.container.querySelector('.delete_template')
@@ -55,7 +54,6 @@ export class NewReportTemplate {
             close.addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1));
         }
         else {
-            //  console.log(this.deleteTemplate)
             if (this.btnCreateReport) this.btnCreateReport.addEventListener('click', () => this.startTemplateForm(false));
             if (this.editionTemplate) this.editionTemplate.addEventListener('click', () => this.startTemplateForm(true));
             if (this.deleteTemplate) this.deleteTemplate.addEventListener('click', () => this.deleteTemplace());
@@ -119,11 +117,6 @@ export class NewReportTemplate {
                 Helpers.viewRemark(this.mess, 'red', 'Добавьте отчет к ресурсу')
                 return
             }
-
-            //   if (Object.values(Validation.status).some(value => value === false)) {
-            //Helpers.viewRemark(this.mess, 'red', 'Введите корректно параметры настроек')
-            // return
-            //    }
             this.object = {
                 idUser: Number(this.idUser),
                 idResourse: this.idResourse,
@@ -144,31 +137,6 @@ export class NewReportTemplate {
         })
     }
 
-    webpackObjectsSettings() {
-        const distanceMin = document.querySelector('#min_distance').checked ? document.querySelector('#min_distance').nextElementSibling.nextElementSibling.value : ''
-        const distanceMax = document.querySelector('#max_distance').checked ? document.querySelector('#max_distance').nextElementSibling.nextElementSibling.value : ''
-        const mileageMin = document.querySelector('#min_mileage').checked ? document.querySelector('#min_mileage').nextElementSibling.nextElementSibling.value : ''
-        const mileageMax = document.querySelector('#max_mileage').checked ? document.querySelector('#max_mileage').nextElementSibling.nextElementSibling.value : ''
-        const minDistanceProstoy = document.querySelector('#min_distance_prostoy').checked ? document.querySelector('#min_distance_prostoy').nextElementSibling.nextElementSibling.value : ''
-
-        let datchikUgla = ['', '']
-        const dat = document.querySelector('#datchik_ugla')
-        if (dat && dat.checked) {
-            const items = dat.parentElement.querySelectorAll('.porog_value')
-            datchikUgla = [items[0].value, items[1].value]
-        }
-        this.set = {
-            idw: this.idTemplate,
-            object: JSON.stringify({
-                'Топливо': null,
-                'Поездки': { distance: [distanceMin, distanceMax], mileageSet: [mileageMin, mileageMax] },
-                'Стоянки': null,
-                'Остановки': null,
-                'Моточасы': null,
-                'Простои на холостом ходу': { longTime: minDistanceProstoy, datchikUgla: datchikUgla }
-            })
-        }
-    }
 
     async getTemplatesAndCreateListElements() {
         this.resoursesID = this.resourses.map(e => e.idResourse)

@@ -1,7 +1,7 @@
 const net = require('net');
 const databaseService = require('../../services/database.service');
 const JobToBase = require('../navtelecom/JobToBase')
-const { UpdateSetStor } = require('../../services/UpdateSetStor.js')
+const { UpdateSetStor } = require('../dataProcessorModule/class/UpdateSetStor.js')
 
 class ListenPortIPS {
 

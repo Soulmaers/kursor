@@ -1,7 +1,7 @@
 import { Requests } from "./RequestStaticMethods.js";
 import { ContentGeneration } from './CreateContent.js'
 import { Helpers } from './Helpers.js'
-import { ControllSettingsReportsObject } from './ControllSettingsReportsObject.js'
+import { ControllSettingsReportsObject } from '../../settingsEventAttributesModules/class/ManagerAttributes.js'
 
 
 

@@ -55,7 +55,6 @@ export class CentalClassReports {
     async getTemplatesAndCreateListElements() {
         this.resoursesID = this.resourses.map(e => e.idResourse)
         this.templates = await GetDataRequests.getTemplates(this.resoursesID, 'reports')
-        console.log(this.templates)
         if (this.templates.length === 0) return
         this.temp = this.templates.map(e => ({ id: e.uniqTemplateID, name: e.nameTemplate, idResoure: e.uniqResourseID }))
         this.wrapReports[0].innerHTML = Content.addContent(this.temp)

@@ -58,11 +58,11 @@ export const storComponentProstoy = [
     { name: 'Начальное положение', checked: false },
     { name: 'Конец', checked: false },
     { name: 'Конечное положение', checked: false },
-    { name: 'Моточасы', checked: false },
-    { name: 'Потрачено по ДУТ', checked: false },
-    { name: 'Средний расход по ДУТ в моточасах', checked: false },
-    { name: 'Начальный уровень топлива', checked: false },
-    { name: 'Конечный уровень топлива', checked: false }
+    { name: 'Моточасы', checked: false }
+    // { name: 'Потрачено по ДУТ', checked: false },
+    //{ name: 'Средний расход по ДУТ в моточасах', checked: false },
+    // { name: 'Начальный уровень топлива', checked: false },
+    // { name: 'Конечный уровень топлива', checked: false }
 ]
 
 export const storComponentTO = [

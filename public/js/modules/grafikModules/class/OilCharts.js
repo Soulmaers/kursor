@@ -1,5 +1,6 @@
 import { Tooltip } from '../../../class/Tooltip.js'
 import { GeoCreateMapsMini } from '../../geoModules/class/GeoCreateMapsMini.js'
+import { Request } from './Request.js'
 
 let isCanceled = false;
 export class OilCharts {
@@ -27,8 +28,18 @@ export class OilCharts {
             return Promise.reject(new Error('Запрос отменен'));
         }
         isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
-        this.data = await this.createStructura() //получение и подготовка структуры данных
-        console.log(this.data)
+        this.struktura = await this.createStructura() //получение и подготовка структуры данных
+        this.filtration = await this.getFilter()
+
+
+        this.data = this.runFormula(this.medianFilters())
+
+        this.derivative = this.addDerivative(this.data)
+        this.chartDerivative()
+        console.log(this.derivative)
+        this.average = this.runFormula(this.filtersOil())
+        //   console.log(this.struktura)
+
         if (this.data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')
@@ -40,11 +51,224 @@ export class OilCharts {
             isCanceled = false;
             return
         }
-        this.objOil = this.findMarkerReFill() //поиск заправок
+        this.objOil = await this.findMarkerReFill() //поиск заправок
+        //  console.log(this.objOil)
         this.createChart()
 
 
     }
+    async getFilter() {
+        const idw = Number(document.querySelector('.color').id)
+        const param = 'oil'
+        const params = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ idw, param })
+        }
+        const res = await fetch('api/getConfigParam', params)
+        const result = await res.json()
+        console.log(result)
+        return result
+    }
+    filtersOil() {
+        const koef = Number(this.filtration[0].dopValue)
+        const average = this.struktura
+            .filter(e => Number(e.dut) < 4097)
+            .map(it => ({
+                ...it,
+                dut: Number(it.dut)
+            }));
+        for (let i = koef; i < average.length; i++) {
+            const previousElements = average.slice(i - koef, i + 1);
+            const validPreviousElements = previousElements.filter(val =>
+                val.dut !== undefined &&
+                !isNaN(val.dut)
+            );
+            if (validPreviousElements.length > 0) {
+                const sum = validPreviousElements.reduce((acc, val) => acc + Number(val.dut), 0);
+                const averages = sum / validPreviousElements.length;
+                average[i].dut = Math.round(averages); // Округляем
+            } else {
+                average[i].dut = 0;
+            }
+        }
+        return average
+    }
+
+    addDerivative(data) {
+        // Проверяем, что массив не пуст и содержит хотя бы два элемента
+        if (data.length < 2) {
+            return data;
+        }
+        // Добавляем поле "derivative" в каждый элемент массива, начиная со второго
+        for (let i = 1; i < data.length; i++) {
+            const deltaDut = Number(data[i].oil) - Number(data[i - 1].oil); // Разница в объеме топлива
+            const deltaTime = (Number(data[i].time) - Number((data[i - 1].time))) / 1000; // Разница во времени
+            // Если разница во времени не нулевая, вычисляем производную
+            //  console.log(deltaDut, deltaTime, data[i].time)
+            data[i].derivative = deltaTime !== 0 ? Number((deltaDut / deltaTime).toFixed(2)) : 0;
+            console.log(data[i].derivative, deltaDut, deltaTime, data[i].time)
+        }
+
+        // Добавляем поле "derivative" со значением null или 0 для первого элемента
+        data[0].derivative = 0; // Или 0, в зависимости от ваших требований
+
+        return data;
+    }
+
+    chartDerivative() {
+        const oldChart = document.querySelector('.infoGrafs')
+        if (oldChart) oldChart.remove()
+        const deriva = document.createElement('div')
+        const grafics = document.querySelector('.grafics')
+        deriva.classList.add('infoGrafs')
+        grafics.appendChild(deriva)
+
+        var widthWind = document.querySelector('body').offsetWidth;
+        const wrapper = grafics.offsetWidth
+        // устанавливаем размеры контейнера
+        const margin = { top: 10, right: 60, bottom: 50, left: 60 },
+            width = widthWind >= 860 ? wrapper - 250 : widthWind - 80,
+            height = 500 - margin.top - margin.bottom;
+        this.width = width
+        this.height = height
+        // создаем svg контейнер
+        const svg = d3.select(".infoGrafs").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+        const minVal = d3.min(this.derivative, (d) => +d.derivative || 0) - 10;
+        const maxVal = d3.max(this.derivative, (d) => +d.derivative || 0) + 10;
+
+
+        const x = d3.scaleTime()
+            .domain(d3.extent(this.derivative, (d) => new Date(d.time)))
+            .range([0, this.width])
+        // задаем y-шкалу для первой оси y
+        const y1 = d3.scaleLinear()
+            .domain([Math.min(minVal, 0), Math.max(maxVal, 0)])
+            .range([this.height, 0]);
+
+        const yAxis1 = d3.axisLeft(y1)
+        const xAxis = d3.axisBottom(x)
+
+        const line1 = d3.line()
+            .x((d) => x(new Date(d.time)))
+            .y((d) => y1(+d.derivative || 0))
+            .curve(d3.curveLinear);
+
+        svg.append("g")
+            .attr("class", "osx")
+            .attr("clip-path", "url(#clip)")
+            .attr("transform", "translate(0," + this.height + ")")
+            .call(xAxis
+                .ticks(10)
+                .tickFormat(function (d) {
+                    return d3.timeFormat("%H:%M")(d);
+                }))
+
+        svg.append("g")
+            .attr("class", "os1y")
+            .call(yAxis1)
+            .attr("transform", "translate(0, 0)")
+        // добавляем линии для сигнальные оси y
+        svg.append("path")
+            .datum(this.derivative)
+            .attr("class", "lineDerivative")
+            .attr("fill", "none")
+            .attr("stroke", "blue")
+            .attr("stroke-width", 1.5)
+            .attr("d", line1)
+            .attr("transform", "translate(0, 0)")
+    }
+    medianFilters() {
+        const koef = Number(this.filtration[0].dopValue)
+        let celevoy = this.struktura
+            .filter(e => Number(e.dut) < 4097)
+            .map(it => ({
+                ...it,
+                dut: Number(it.dut)
+            }));
+
+        const medianArray = []
+        if (celevoy.length < 3) {
+            return [...celevoy]
+        }
+        if (koef === 0) {
+            medianArray.push(...celevoy.slice(0, 3));
+            for (let i = 3; i < celevoy.length; i++) {
+                const previuosElements = celevoy.slice(i - 3, i)
+                previuosElements.sort((a, b) => Number(a.dut) - Number(b.dut))
+                const median = previuosElements[1].dut
+                const newElement = { ...celevoy[i], dut: median };
+                medianArray.push(newElement);
+            }
+        }
+        else {
+            const window = koef * 5
+            medianArray.push(...celevoy.slice(0, window));
+            for (let i = window; i < celevoy.length; i++) {
+                const windowElements = celevoy.slice(i - window, i)
+                windowElements.sort((a, b) => Number(a.dut) - Number(b.dut))
+                let median;
+                if (windowElements.length % 2 === 0) {
+                    const indexNumber = windowElements.length / 2
+                    median = (parseInt(Number(windowElements[indexNumber - 1].dut) + Number(windowElements[indexNumber].dut))) / 2
+                }
+                else {
+                    const indexNumber = Math.floor(windowElements.length / 2)
+                    median = Number(windowElements[indexNumber].dut)
+
+                }
+                const newElement = { ...celevoy[i], dut: median };
+                medianArray.push(newElement);
+            }
+        }
+        return medianArray
+    }
+    runFormula(data) {
+        return data.map(e => {
+            //   console.log(e)
+            const calculatedOil = this.calcut(e.dut); // убедитесь, что это не просто e.dut
+            return {
+                ...e,
+                oil: calculatedOil
+            }
+        })
+    }
+    calcut(x) {
+        const formula = this.filtration[0].formula
+        function transformExpressionWithExponent(str, x) {
+            // Убираем пробелы вокруг x и степеней
+            str = str.replace(/\s+/g, '');
+            // Добавляем знак умножения перед 'x', если его нет
+            str = str.replace(/(\d)(x)/g, '$1*$2');
+            // Заменяем выражения вида x2 на Math.pow(x, 2)
+            str = str.replace(/x\^(\d+)/g, 'Math.pow(x, $1)');  //str.replace(/x(\d+)/g, 'Math.pow(x, $1)');
+            // Заменяем все оставшиеся 'x' на значение переменной x
+            str = str.replace(/x/g, x);
+
+            return str;
+        }
+
+        const formattedExpression = formula.replace(/,/g, '.');
+        const transformedExpression = transformExpressionWithExponent(formattedExpression, x);
+
+        // Вычисляем результат
+        try {
+            return Number(eval(transformedExpression).toFixed(2))
+
+        } catch (error) {
+            console.error("Ошибка при вычислении:", error);
+        }
+    }
+
+
 
     createChart() {
         this.createContainer()
@@ -113,7 +337,8 @@ export class OilCharts {
             .style("left", `${xPosition + 100}px`)
             .style("top", `${yPosition + 100}px`)
             .style("display", "block")
-            .html(`Время: ${(selectedTime)}<br/>Топливо: ${oilTool}<br/>Бортовое питание: ${d.pwr}`)
+            .html(`Время: ${(selectedTime)}<br/>Топливо: ${oilTool}<br/>ДУТ: ${d.dut}<br/>Бортовое питание: ${d.pwr}<br/>Двигатель:${d.engineOn}
+            <br/>Зажигание:${d.engine} <br/>Пробег:${d.mileage}, <br/>Скорость:${d.speed} <br/>Спутники:${d.sats}`)
             .transition()
             .duration(200)
             .style("opacity", 0.9);
@@ -129,7 +354,8 @@ export class OilCharts {
         const day = date.getDate();
         const hours = date.getHours();
         const minutes = date.getMinutes();
-        const timeString = `${month} ${day}, ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+        const seconds = date.getSeconds();
+        const timeString = `${month} ${day}, ${hours}:${minutes < 10 ? "0" : ""}${minutes}:${seconds}`;
         return timeString;
 
     }
@@ -181,7 +407,8 @@ export class OilCharts {
     }
 
     createBodyCharts() {
-        const parametr = this.data[this.data.length - 1].summatorOil ? 'summatorOil' : 'oil'
+        console.log(this.data.length, this.struktura.length)
+        const parametr = this.struktura[this.struktura.length - 1].summatorOil ? 'summatorOil' : 'oil'
         this.parametr = parametr
         // задаем x-шкалу
         const x = d3.scaleTime()
@@ -190,12 +417,12 @@ export class OilCharts {
         this.x = x
         // задаем y-шкалу для первой оси y
         const y1 = d3.scaleLinear()
-            .domain([0, d3.max(this.data, (d) => +d[parametr] || 0)])
+            .domain([0, d3.max(this.struktura, (d) => +d[parametr] || 0)])
             .range([(this.height - 40), 0]);
         this.y1 = y1
         // задаем y-шкалу для второй оси y
         const y2 = d3.scaleLinear()
-            .domain(d3.extent(this.data, (d) => d.pwr))
+            .domain(d3.extent(this.struktura, (d) => d.pwr))
             .range([(this.height - 40), 0]);
         this.y2 = y2
         const yAxis1 = d3.axisLeft(y1)
@@ -205,23 +432,23 @@ export class OilCharts {
         const line1 = d3.line()
             .x((d) => x(new Date(d.time)))
             .y((d) => y1(+d[parametr] || 0))
-            .curve(d3.curveStepAfter);
+            .curve(d3.curveLinear);
         const line2 = d3.line()
             .x((d) => x(new Date(d.time)))
             .y((d) => y2(d.pwr))
-            .curve(d3.curveStepAfter);
+            .curve(d3.curveLinear);
 
         const area1 = d3.area()
             .x(d => x(new Date(d.time)))
             .y0(this.height)
             .y1(d => y1(+d[parametr] || 0))
-            .curve(d3.curveStepAfter);
+            .curve(d3.curveLinear);
 
         const area2 = d3.area()
             .x(d => x(new Date(d.time)))
             .y0(this.height)
             .y1(d => y2(d.pwr))
-            .curve(d3.curveStepAfter);
+            .curve(d3.curveLinear);
 
         this.svg.append("defs").append("clipPath")
             .attr("id", "clip")
@@ -274,18 +501,39 @@ export class OilCharts {
             .style("text-anchor", "start")
 
 
-        // добавляем линии для первой оси y
+        // добавляем линии для медиана оси y
         chartGroup.append("path")
             .datum(this.data)
             .attr("class", "line1")
             .attr("fill", "none")
-            .attr("stroke", "black")
+            .attr("stroke", "blue")
+            .attr("stroke-width", 1.5)
+            .attr("d", line1)
+            .attr("transform", "translate(0, " + (40) + ")")
+
+        // добавляем линии для сигнальные оси y
+        chartGroup.append("path")
+            .datum(this.struktura)
+            .attr("class", "line3")
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-width", 1.5)
+            .attr("d", line1)
+            .attr("transform", "translate(0, " + (40) + ")")
+
+
+        // добавляем линии для скользящая оси y
+        chartGroup.append("path")
+            .datum(this.average)
+            .attr("class", "line4")
+            .attr("fill", "none")
+            .attr("stroke", "green")
             .attr("stroke-width", 1.5)
             .attr("d", line1)
             .attr("transform", "translate(0, " + (40) + ")")
         // добавляем линии для второй оси y
         chartGroup.append("path")
-            .datum(this.data)
+            .datum(this.struktura)
             .attr("class", "line2")
             .attr("fill", "none")
             .attr("stroke", "black")
@@ -298,7 +546,7 @@ export class OilCharts {
             .datum(this.data)
             .attr("class", "area1")
             .attr("d", area1)
-            .attr("fill", "blue")
+            .attr("fill", "transparent")
             .attr("fill-opacity", 0.5)
             .attr("stroke", "black")
             .attr("stroke-width", 1)
@@ -335,6 +583,7 @@ export class OilCharts {
         this.createTooltip()
     }
     zoomed() {
+        console.log(this)
         const transform = d3.event.transform;
         // Масштабируем оси с помощью текущего масштабного коэффициента
         const new_xScale = transform.rescaleX(this.x);
@@ -359,29 +608,31 @@ export class OilCharts {
         const updateLine1 = d3.line()
             .x((d) => new_xScale(new Date(d.time)))
             .y((d) => this.y1(+d[this.parametr] || 0))
-            .curve(d3.curveStepAfter);
+            .curve(d3.curveLinear);
 
         const updateLine2 = d3.line()
             .x((d) => new_xScale(new Date(d.time)))
             .y((d) => this.y2(d.pwr))
-            .curve(d3.curveStepAfter);
+            .curve(d3.curveLinear);
 
         const updateArea1 = d3.area()
             .x(d => new_xScale(new Date(d.time)))
             .y0(this.height)
             .y1(d => this.y1(+d[this.parametr] || 0))
-            .curve(d3.curveStepAfter);
+            .curve(d3.curveLinear);
 
         const updateArea2 = d3.area()
             .x(d => new_xScale(new Date(d.time)))
             .y0(this.height)
             .y1(d => this.y2(d.pwr))
-            .curve(d3.curveStepAfter);
+            .curve(d3.curveLinear);
 
         d3.select('.line1').attr('d', updateLine1(this.data));
         d3.select('.area1').attr('d', updateArea1(this.data));
-        d3.select('.line2').attr('d', updateLine2(this.data));
-        d3.select('.area2').attr('d', updateArea2(this.data));
+        d3.select('.line2').attr('d', updateLine2(this.struktura));
+        d3.select('.area2').attr('d', updateArea2(this.struktura));
+        d3.select('.line3').attr('d', updateLine1(this.struktura));
+        d3.select('.line4').attr('d', updateLine1(this.average));
         this.createIcons()
         this.createTooltip()
     }
@@ -517,109 +768,35 @@ export class OilCharts {
             .style("display", "none"); // Скрыть тултип при инициализации
 
     }
-    findMarkerReFill() {
-        const dat = [...this.data];
-        for (let i = 0; i < dat.length - 1; i++) {
-            if (dat[i].oil === dat[i + 1].oil) {
-                dat.splice(i, 1);
-                i--; // уменьшаем индекс, чтобы не пропустить следующий объект после удаления
-            }
-        }
-        const increasingIntervals = [];
-        let start = 0;
-        let end = 0;
-        for (let i = 0; i < dat.length - 1; i++) {
-            const currentObj = dat[i];
-            const nextObj = dat[i + 1];
-            if (currentObj.oil < nextObj.oil) {
-                if (start === end) {
-                    start = i;
-                }
-                end = i + 1;
-            } else if (currentObj.oil > nextObj.oil) {
-                if (start !== end) {
-                    increasingIntervals.push([dat[start], dat[end]]);
-                }
-                start = end = i + 1;
-            }
-        }
-        if (start !== end) {
-            increasingIntervals.push([dat[start], dat[end]]);
-        }
+    async findMarkerReFill() {
+        const idw = Number(document.querySelector('.color').id)
 
-        const zapravkaAll = increasingIntervals.filter((interval, index) => {
-            const firstOil = interval[0].oil;
-            const lastOil = interval[interval.length - 1].oil;
-            const difference = lastOil - firstOil;
-            const threshold = firstOil * 0.15;
-            if (index < increasingIntervals.length - 1) {
-                const nextInterval = increasingIntervals[index + 1];
-                const currentTime = interval[interval.length - 1].time;
-                const nextTime = nextInterval[0].time;
-                const timeDifference = nextTime - currentTime;
-                if (timeDifference < 5 * 60 * 1000) {
-                    interval.push(nextInterval[nextInterval.length - 1]);
-                    interval.splice(1, 1)
-                }
-            }
-            return firstOil > 5 && difference > 40 && difference >= threshold;
-        });
-        for (let i = 0; i < zapravkaAll.length - 1; i++) {
-            if (zapravkaAll[i][1].time === zapravkaAll[i + 1][1].time) {
-                zapravkaAll.splice(i + 1, 1);
-            }
-        }
+        const refill = await Request.refill(idw, this.info)
 
-        const zapravka = zapravkaAll.filter(e => e[0].pwr >= 11 || e[0].pwr == null);
-        const filteredZapravka = zapravka.filter(e => {
-            const time0 = (e[0].time).getTime() / 1000;
-            const time1 = (e[1].time).getTime() / 1000;
-            const initTime = time1 - time0;
-            const diff = e[1].oil - e[0].oil
-            return initTime >= 5 * 60 && diff > 40;
-        });
-        const rash = [];
-        const firstData = this.data[0].oil;
-        const lastData = this.data[this.data.length - 1].oil;
-        if (filteredZapravka.length !== 0) {
-            rash.push(firstData - filteredZapravka[0][0].oil);
-            for (let i = 0; i < filteredZapravka.length - 1; i++) {
-                rash.push(filteredZapravka[i][1].oil - filteredZapravka[i + 1][0].oil);
-            }
-            rash.push(filteredZapravka[filteredZapravka.length - 1][1].oil - lastData);
-        }
-        else {
-            rash.push(firstData - lastData)
-        }
 
-        const rashod = rash.reduce((el, acc) => el + acc, 0)
-        const objOil = filteredZapravka.reduce((result, it) => {
-            const oilValue = it[1].oil - it[0].oil;
-            if (oilValue > 10) {
-                const date = new Date(it[0].time);
-                const day = date.getDate();
-                const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                const year = date.getFullYear();
-                const hours = date.getHours().toString().padStart(2, '0');
-                const minutes = date.getMinutes().toString().padStart(2, '0');
-                const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-
-                result.push({
-                    data: it[0].time,
-                    geo: it[0].geo,
-                    zapravka: oilValue,
-                    time: formattedDate,
-                    icon: "../../../image/refuel.png"
-                });
+        const objOil = refill[1].map(it => {
+            const date = new Date(Number(it.time) * 1000);
+            const day = date.getDate();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+            return {
+                data: date,
+                geo: it.geo,
+                zapravka: it.value,
+                time: formattedDate,
+                icon: "../../../image/refuel.png"
             }
-            return result;
-        }, []);
+
+        })
         return objOil
     }
 
     async createStructura() {
         const idw = Number(document.querySelector('.color').id)
-        const arrayColumns = ['last_valid_time', 'lat', 'lon', 'pwr', 'oil']
+        const arrayColumns = ['last_valid_time', 'lat', 'lon', 'pwr', 'oil', 'dut', 'engineOn', 'engine', 'mileage', 'speed', 'sats']
         const t1 = this.t1
         const t2 = this.t2 + 86399
         const num = 0
@@ -633,20 +810,21 @@ export class OilCharts {
         }
         const res = await fetch('/api/getPressureOil', paramss)
         const data = await res.json();
+        console.log(data)
+        this.info = data
         const newGlobal = data.map(it => {
             return {
                 id: it.idw,
                 time: new Date(Number(it.last_valid_time) * 1000),
-                speed: Number(it.speed),
                 geo: [Number(it.lat), Number(it.lon)],
                 oil: Number(it.oil),
                 pwr: Number(it.pwr),
+                dut: Number(it.dut),
                 engine: Number(it.engine),
                 mileage: Number(it.mileage),
-                curse: Number(it.course),
+                speed: Number(it.speed),
                 sats: Number(it.sats),
-                engineOn: Number(it.engineOn),
-                summatorOil: it.summatorOil ? Number(it.summatorOil) : 0
+                engineOn: it.engineOn
             }
         })
         newGlobal.sort((a, b) => a.time - b.time)

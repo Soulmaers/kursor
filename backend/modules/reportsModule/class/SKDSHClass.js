@@ -207,14 +207,15 @@ class SCDSHClass {
 
 
     convertTime(seconds) {
+        // console.log(seconds)
         var days = Math.floor(seconds / (24 * 60 * 60));
-        var hours = Math.floor((seconds % (24 * 60 * 60)) / (60 * 60));
+        var hours = Math.floor(seconds / (60 * 60))// / (60 * 60));
         var minutes = Math.floor((seconds % (60 * 60)) / 60);
         var remainingSeconds = seconds % 60; // Рассчитываем оставшиеся секунды
 
-        if (days > 0) {
-            return `${days} д. ${hours} ч. ${minutes} м.`;
-        } else if (hours > 0) {
+        //  if (days > 0) {
+        //  return `${days} д. ${hours} ч. ${minutes} м.`;
+        if (hours > 0) {
             return `${hours} ч. ${minutes} м.`;
         } else if (minutes === 0) {
             // Включаем секунды в последнее условие

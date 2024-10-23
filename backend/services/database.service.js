@@ -506,6 +506,8 @@ exports.geoLastInterval = async (time1, time2, idw) => {
     }
 
 }
+
+
 exports.getReportsAttribute = async (idw) => {
     try {
         const pool = await connection
@@ -526,33 +528,16 @@ exports.getReportsAttribute = async (idw) => {
 
 }
 
-
-exports.setReportsAttributeToBase = async (obj) => {
-    console.log(obj)
-    const { idw, object } = obj
-    console.log(idw)
+exports.deleteConfigParam = async (idw, param) => {
     try {
         const pool = await connection
-        const postModel = `SELECT * FROM setReports WHERE idw=@idw `
+        const postModel = `DELETE FROM config_params WHERE idw=@idw AND param=@param`
         const result = await pool.request()
             .input('idw', idw)
+            .input('param', param)
             .query(postModel)
-        if (result.recordset.length === 0) {
-            const postModel = `INSERT INTO setReports (idw, jsonsetAttribute) VALUES(@idw,@jsonsetAttribute)`
-            const result = await pool.request()
-                .input('idw', idw)
-                .input('jsonsetAttribute', object)
-                .query(postModel)
-            return 'Настройки сохранены'
-        }
-        else {
-            const postModel = `UPDATE  setReports SET jsonsetAttribute=@jsonsetAttribute WHERE idw=@idw`
-            const result = await pool.request()
-                .input('idw', idw)
-                .input('jsonsetAttribute', object)
-                .query(postModel)
-            return 'Настройки обновлены'
-        }
+
+        return 'удалено'
     }
     catch (e) {
         console.log(e)
@@ -561,17 +546,15 @@ exports.setReportsAttributeToBase = async (obj) => {
 }
 
 
-
 exports.getParamsToPressureAndOilToBase = async (time1, time2, idw, columns, num) => {
     const value = columns.filter(e => e !== null)
-    //  console.log(value)
     try {
         const pool = await connection;
         const selectedTColumnsTest = value.join(", ")
         const postModel = `
             SELECT ${selectedTColumnsTest}
             FROM globalStor
-            WHERE idw=@idw AND last_valid_time >= @time1 AND last_valid_time <= @time2
+            WHERE idw=@idw AND last_valid_time >= @time1 AND last_valid_time <= @time2 ORDER BY last_valid_time
         `;
         const postModel2 = `
             SELECT ${selectedTColumnsTest}
@@ -583,7 +566,6 @@ exports.getParamsToPressureAndOilToBase = async (time1, time2, idw, columns, num
             .input('time2', String(time2))
             .input('time1', String(time1))
             .query(num === 0 ? postModel : postModel2);
-        //  console.log(result.recordset.find(e => e.last_valid_time === '1726771847'))
         return result.recordset.length ? result.recordset : [];
     } catch (e) {
         console.error(e);
@@ -859,6 +841,7 @@ exports.getSensStorMetaFilter = async (imei, port, id) => {
     }
 }
 exports.setAddDataToGlobalBase = async (obj) => {
+    //console.log(obj)
     try {
         const pool = await connection;
         const columns = Object.keys(obj).filter((column) => obj[column] !== null);
@@ -910,8 +893,6 @@ exports.getValuePWRToBase = async (idw, param) => {
 }
 
 exports.getConfigParam = async (idw, param) => {
-    console.log(idw)
-    console.log(param)
     const pool = await connection;
     try {
 
@@ -1087,8 +1068,10 @@ exports.setSensStorMeta = async (data) => {
         const selectParamsQuery = `SELECT DISTINCT params FROM sens_stor_meta WHERE idw=@idw`;
         const paramsRes = await pool.request().input('idw', String(data[0].id)).query(selectParamsQuery);
         const existingParams = paramsRes.recordset.map(row => row.params);
+
         // Удаляем строки с params, которых нет в data
         const paramsToDelete = existingParams.filter(param => !uniqueParams.includes(param));
+
         for (const param of paramsToDelete) {
             const deleteQuery = `DELETE FROM sens_stor_meta WHERE params=@params AND idw=@idw`;
             await pool.request().input('params', param).input('idw', String(data[0].id)).query(deleteQuery);
@@ -1100,20 +1083,23 @@ exports.setSensStorMeta = async (data) => {
                 .input('idw', String(id))
                 .input('params', params)
                 .query(post);
+            //   console.log(res.recordset.length)
             if (res.recordset.length === 0) {
-                const insertQuery = `INSERT INTO sens_stor_meta (idw,port, sens, prefix,params, meta, time, login, imei,idBitrixObject) VALUES (@idw,@port, @sens, @params, @meta, @time, @login, @prefix,@imei,@idBitrixObject)`;
+                const insertQuery = `INSERT INTO sens_stor_meta (idw,port, sens, params, meta, value,time, login, imei,idBitrixObject,prefix) VALUES (@idw,@port, @sens, @params, @meta, @value,@time, @login, @prefix,@imei,@idBitrixObject)`;
                 const res = await pool.request()
                     .input('idw', String(id))
                     .input('port', port)
                     .input('sens', sens)
                     .input('params', params)
                     .input('meta', meta)
+                    .input('value', value)
                     .input('time', time)
                     .input('login', login)
                     .input('imei', imei)
                     .input('prefix', index)
                     .input('idBitrixObject', idBitrix)
                     .query(insertQuery);
+
             }
             else {
                 const updateQuery = `UPDATE sens_stor_meta SET idw=@idw, port=@port, prefix=@prefix,sens=@sens, time=@time, params=@params, meta=@meta, login=@login, imei=@imei, idBitrixObject=@idBitrixObject 
@@ -2122,7 +2108,6 @@ exports.getTemplatesProperty = async (arrayID, prop) => {
             .input('nameProperty', sql.VarChar, prop)  // Устанавливаем значение параметра nameProperty
             .query(postModel);
 
-        console.log(results.recordset);
         return results.recordset;
 
     } catch (e) {
@@ -2134,8 +2119,6 @@ exports.getTemplatesProperty = async (arrayID, prop) => {
 exports.updateTemplatesToBase = async (obj, id, set) => {
     const pool = await connection;
     const transaction = pool.transaction();
-    //   console.log(obj)
-    console.log(id)
     try {
         // Начинаем транзакцию
         await transaction.begin();
@@ -2160,7 +2143,6 @@ exports.updateTemplatesToBase = async (obj, id, set) => {
             .input('uniqUsersID', obj.idUser)
             .query(postResourse);
 
-        console.log(set)
         //   const result = await databaseService.setReportsAttributeToBase(set)
         // Подтверждаем транзакцию
         await transaction.commit();

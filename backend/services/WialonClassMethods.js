@@ -16,18 +16,31 @@ class WialonClassMethods {
 
     async init() {
         try {
-            await this.getSessionWialon();
-            if (!this.session) setTimeout(async () => await this.getSessionWialon(), 60)
-            if (this.session) {
-                await this.getObjects();
-                await this.addGroup();
-            }
+            await this.fetchSession(); // Ждем, пока сессия будет получена
+            // console.log(this.session)
+            console.log('тут;')
+            await this.getObjects();
+            await this.addGroup();
 
             this.controllStartClass();
-            setInterval(() => this.controllStartClass(), 180000)
+            setInterval(() => this.controllStartClass(), 180000);
         } catch (error) {
             console.error('Ошибка при инициализации WialonClassMethods:', error);
             throw error;
+        }
+    }
+
+    async fetchSession() {
+        while (!this.session) {
+            try {
+                await this.getSessionWialon();
+            } catch (error) {
+                console.error("Ошибка при получении сессии:", error);
+            }
+            if (!this.session) {
+                console.log("Сессия не получена, повторная попытка через 60 секунд...");
+                await new Promise(resolve => setTimeout(resolve, 60000)); // Ждем 60 секунд перед повтором
+            }
         }
     }
 
@@ -42,7 +55,7 @@ class WialonClassMethods {
 
     }
     async getSessionWialon() {
-        this.session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c65EDBD6CECD5D9288DE9C0AA805146E09D6E9E31DF"`);
+        this.session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c65EA58006309FF667A6B6108AEBD25C2DF93CDFAA2"`);
         console.log(this.session.eid)
     }
 
@@ -62,11 +75,12 @@ class WialonClassMethods {
                 arrayIdObjects: filteredObjects
             };
         });
-        //  console.log(this.allObjects)
     }
 
     async addGroup() {
+        //  console.log(this.allObjects)
         try {
+            if (this.allObjects.length === 0 || !this.allObjects) return
             await Promise.all([await databaseRetranslation.updateFlagForExistingObjects(this.uniqRetraID, 'groups'),
             await databaseRetranslation.updateFlagForExistingObjects(this.uniqRetraID, 'objects')]);
 

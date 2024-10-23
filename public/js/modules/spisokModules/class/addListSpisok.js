@@ -50,6 +50,7 @@ export class AddListSpisok {
         new ToggleHiddenList() //запускаем класс управления списком
         initSummary = new SummaryViewControll(this.allId)
         initCharts = new ChartsViewControll(this.allId)
+        console.log(initCharts)
         await this.viewList(this.login)
         this.validRole()
         this.finishload = true

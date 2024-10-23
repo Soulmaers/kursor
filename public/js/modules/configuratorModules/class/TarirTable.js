@@ -1,3 +1,5 @@
+import { RenderHTML } from "./RenderHTML.js"
+import { RequestToBse } from './RequestToBase.js'
 
 export class TarirTable {
     constructor(id, el, param) {
@@ -5,112 +7,132 @@ export class TarirTable {
         this.id = id
         this.param = param
         this.container = document.querySelector('.container_tarir')
-        this.close = this.container.querySelector('.closes')
-        this.save = this.container.querySelector('.ok_modal')
-        this.addRow = this.container.querySelector('.add_modal')
-        this.wrapper_data = this.container.querySelector('.list_table_tarir')
-        this.values = this.container.querySelectorAll('.value_data')
-        this.message = this.container.querySelector('.validation_message')
         this.pop = document.querySelector('.popup-background')
-        this.boundClose = this.clos.bind(this);
-        this.boundOk = this.ok.bind(this);
-        this.boundAdd = this.add.bind(this, '', '');
         this.init()
-        this.initEventListeners()
     }
 
 
     async init() {
         this.container.style.display = 'flex'
         this.indexUpLow(this.pop, this.container, 5, 6)
-        const values = await this.getTarirData()
-        console.log(values)
-        if (values.length !== 0) {
-            const rows = this.wrapper_data.querySelectorAll('.row_tarir_data');
-            rows.forEach(row => { row.remove() });
-            this.createRowsViewValue(values)
-            const valueArray = values.map(e => {
-                return [1, 2, 3, Number(e.dut), Number(e.litrazh)]
-            });
-            this.approcsimationsViewParabola(valueArray)
+        await this.getData()
+        this.addContent()
+        this.caseElements()
+        this.initEventListeners()
+        if (this.values.length !== 0) {
+            this.jobProps()
+            this.approcsimationsViewParabola(this.valueArray)
         }
     }
 
+    jobProps() {
+        this.valueArray = this.values.map(e => {
+            return [1, 2, 3, Number(e.dut), Number(e.litrazh)]
+        });
+
+    }
+    async getData() {
+        this.values = await this.getTarirData()
+    }
+    addContent() {
+        this.container.innerHTML = RenderHTML.addTarirHTML(this.values)
+    }
+    caseElements() {
+        this.close = this.container.querySelector('.closes')
+        this.save = this.container.querySelector('.ok_modal')
+        this.addRow = this.container.querySelector('.add_modal')
+        this.wrapper_data = this.container.querySelector('.list_table_tarir')
+        this.message = this.container.querySelector('.validation_message')
+        this.downButton = this.container.querySelector('#downButton')
+        this.fileInput = this.container.querySelector('#fileInput')
+        this.koefOil = this.container.querySelector('.koef_oil')
+
+    }
     indexUpLow(pop, container, num1, num2) {
         pop.style.zIndex = num1
         container.style.zIndex = num2
     }
-    createRowsViewValue(values) {
-        values.forEach(e => {
-            this.add(e.dut, e.litrazh)
-        });
 
-    }
-    reinitialize(newId, el, param) {
-        this.removeEventListeners(); // Удаление старых слушателей событий
-        this.id = newId; // Обновление id
-        this.param = param
-        this.element = el//Обновление иконки
-        this.resetInputs(); // Сброс состояния инпутов
-        this.init(); // Переинициализация с новым id
-        this.add('', '')
-        this.add('', '')
-        this.initEventListeners(); // Повторное добавление слушателей событий
-        const chartTarirer = document.querySelector('.chartTarir')
-        if (chartTarirer) {
-            chartTarirer.remove()
-        }
-    }
-    resetInputs() {
-        // Удалить все лишние строки, оставив только две начальные
-        const rows = this.wrapper_data.querySelectorAll('.row_tarir_data');
-        console.log(rows)
-        rows.forEach((row, index) => {
-            if (index >= 2) { // Если индекс строки больше 1, удаляем её
-                row.remove();
-            }
-        });
-
-        // Сбросить значения и стили для первых двух строк
-        const inputs = this.wrapper_data.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.value = ''; // Сброс значения
-            input.style.border = ''; // Удаление красной обводки
-        });
-    }
     initEventListeners() {
-        this.close.addEventListener('click', this.boundClose);
-        this.save.addEventListener('click', this.boundOk);
-        this.addRow.addEventListener('click', this.boundAdd);
+        this.close.addEventListener('click', () => this.clos());
+        this.save.addEventListener('click', () => this.ok());
+        this.addRow.addEventListener('click', () => this.add('', ''));
+        this.downButton.addEventListener('click', () => { this.fileInput.click() });
+        this.fileInput.addEventListener('change', (event) => this.fileReader(event))
         // Добавление слушателя на весь контейнер для валидации инпутов
         this.container.addEventListener('input', event => {
             if (event.target.matches('.value_data')) {
                 this.validateInput(event);
             }
         });
+
+        this.koefOil.addEventListener('keydown', (event) => this.validationInput(event))
     }
-    removeEventListeners() {
-        this.close.removeEventListener('click', this.boundClose);
-        this.save.removeEventListener('click', this.boundOk);
-        this.addRow.removeEventListener('click', this.boundAdd);
-        this.container.removeEventListener('input', this.validateInput);
+
+    validationInput(event) {
+        const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', 'Backspace', 'ArrowLeft', 'ArrowRight'];
+        if (!allowedKeys.includes(event.key)) {
+            event.preventDefault(); // Запрещаем ввод любых символов, кроме цифр и навигационных клавиш
+        }
+        this.koefOil.value = this.koefOil.value.replace(',', '.');
     }
 
 
+    fileReader(event) {
+        const file = event.target.files[0];
+        if (!file) {
+            console.log('нет файла');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => { // Используем стрелочную функцию
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            // Получаем первый лист
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            this.jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+            this.wrapper_data.innerHTML = RenderHTML.updateRows(this.jsonData.slice(1));
+            const values = this.saveToBaseAndCreateChart();
+            this.approcsimationsViewParabola(values)
+        };
+        reader.readAsArrayBuffer(file); // Не забудьте вызвать метод чтения
+    }
     clos() {
         this.container.style.display = 'none'
         this.indexUpLow(this.pop, this.container, 3, 6)
     }
 
+    add(dut, litrazh) {
+        // Создаем элемент списка
+        const li = document.createElement('li');
+        li.classList.add('row_tarir_data');
+        const inputDut = document.createElement('input');
+        inputDut.classList.add('value_data', 'value_dut');
+        inputDut.value = dut;
+        inputDut.addEventListener('input', this.validateInput); // Добавляем обработчик
+        li.appendChild(inputDut);
+        const inputOil = document.createElement('input');
+        inputOil.classList.add('value_data', 'value_oil');
+        inputOil.value = litrazh;
+        inputOil.addEventListener('input', this.validateInput); // Добавляем обработчик
+        li.appendChild(inputOil);
+        this.wrapper_data.appendChild(li);
+    }
 
     async ok() {
         if (this.validateRows()) {
             const values = this.saveToBaseAndCreateChart();
             await this.updateTarirTable(values)
-            console.log(values[0].length)
-            values[0].length > 2 ? this.element.style.color = 'green' : this.element.style.color = 'rgba(6, 28, 71, 1)'
-            //  this.container.style.display = 'none';
+
             this.approcsimationsViewParabola(values)
+            this.setFormula(values)
+            if (values[0].length <= 2) {
+                this.formula = null
+                await this.deleteConfig()
+            }
+            else {
+                this.setSaveConfig()
+            }
         } else {
             // Здесь можно установить сообщение о некорректных данных
             this.message.textContent = "Некорректные данные";
@@ -118,10 +140,24 @@ export class TarirTable {
             this.message.style.fontWeigth = 'bold'
         }
     }
+    async deleteConfig() {
+        const res = await RequestToBse.deleteConfigParam(this.id, this.param)
+    }
+    setFormula(values) {
+        this.formula = `(${this.formula})*${this.koefOil.value}`
+        this.element.closest('.name_params').nextElementSibling.querySelector('.val_koef').value = values[0].length > 2 ? this.formula : ''
+    }
 
-
-
-
+    async setSaveConfig() {
+        const dopValue = this.element.closest('.name_params').nextElementSibling.nextElementSibling.querySelector('.val_koef_ts_oil').value
+        const obj = {
+            idw: this.id,
+            param: this.param,
+            formula: this.formula,
+            dopValue: dopValue
+        }
+        const res = await RequestToBse.setConfigParam(obj)
+    }
     approcsimationsViewParabola(values) {
         const x = [];
         const y = [];
@@ -134,31 +170,14 @@ export class TarirTable {
             point.push(Number(el[4]))
             points.push(point)
         })
-        console.log(points)
-        let degree;
-        if (x.length < 3) {
-            degree = 1
-        }
-        if (x.length >= 3) {
-            degree = 6
-        }
-        const approximated = this.approximateValue(x, y, degree);
-        //   const znak = Number((approximated[0] * 0.9987).toFixed(0))
-        console.log(approximated)
-        this.grafikPoly(points, 6, approximated)
+        const degree = x.length < 3 ? 1 : 6
+        const approximated = this.polynomialApproximation(x, y, degree);
+        this.grafikPoly(points, approximated)
     }
 
-
-
-    approximateValue(x, y, degree) {
-        console.log(x, y, degree)
-        const coeffs = this.polynomialApproximation(x, y, degree);
-        //  const approximated = this.evaluatePolynomial([value], coeffs)[0];
-        return coeffs
-    }
     polynomialApproximation(x, y, degree) {
         const n = x.length;
-        const m = degree + 1; console.log(m, degree)
+        const m = degree + 1;
         let A = Array.from({ length: m }, () => new Array(m).fill(0));
         let B = new Array(m).fill(0);
         let a = new Array(m).fill(0);
@@ -201,12 +220,28 @@ export class TarirTable {
             }
             a[j] = tmp / val;
         }
-        console.log(a)
+        this.formulaFunc(a)
         return a;
     }
 
+    formulaFunc(coefficients) {
+        coefficients.reverse()
+        const res = coefficients.reduce((acc, coeff, index) => {
+            const exponent = coefficients.length - 1 - index;
+            let term;
+            if (exponent === 0) {
+                term = `${coeff}`;
+            } else if (exponent === 1) {
+                term = `${coeff}x`;
+            } else {
+                term = `${coeff}x^${exponent}`;
+            }
+            return acc + (coeff < 0 ? ` - ${term.replace('-', '')}` : ` + ${term}`);
+        }, '');
+        this.formula = res.replace(/^ \+ /, '');
+    }
 
-    grafikPoly(points, degree, coeffs) {
+    grafikPoly(points, coeffs) {
         const tarir = document.querySelector('.chart_tarir')
         const polyEval = (x, coeffs) => coeffs.reduce((acc, coeff, i) => acc + coeff * x ** i, 0);
         const margin = { top: 20, right: 20, bottom: 50, left: 40 };
@@ -245,13 +280,13 @@ export class TarirTable {
         const line = d3.line()
             .x(d => xScale(d[0]))
             .y(d => yScale(d[1]));
-        svg.append("path")
-            .datum(polyData)
-            .attr("class", "line")
-            .attr("d", line)
-            .attr("fill", "none")
-            .attr("stroke", "steelblue")
-            .attr("stroke-width", 2)
+        /*  svg.append("path")
+              .datum(polyData)
+              .attr("class", "line")
+              .attr("d", line)
+              .attr("fill", "none")
+              .attr("stroke", "steelblue")
+              .attr("stroke-width", 2)*/
         svg.append("path")
             .datum(points)
             .attr("fill", "none")
@@ -272,7 +307,6 @@ export class TarirTable {
     async getTarirData() {
         const idw = this.id
         const param = this.param
-        console.log(idw, param)
         const params = {
             method: 'POST',
             headers: {
@@ -285,7 +319,6 @@ export class TarirTable {
         return result
     }
     async updateTarirTable(values) {
-        console.log(values)
         const params = {
             method: 'POST',
             headers: {
@@ -299,7 +332,7 @@ export class TarirTable {
         this.message.style.color = 'green'
         this.message.style.fontWeigth = 'bold'
     }
-    // this.message
+
     saveToBaseAndCreateChart() {
         const values = [...this.wrapper_data.querySelectorAll('.row_tarir_data')]
             .filter(e => e.children[0].value !== '' && e.children[1].value !== '')
@@ -325,31 +358,17 @@ export class TarirTable {
         return isValid;
     }
 
-    add(dut, litrazh) {
-        const li = document.createElement('li')
-        li.classList.add('row_tarir_data')
-        this.wrapper_data.appendChild(li)
-        const inputDut = document.createElement('input')
-        inputDut.classList.add('value_data')
-        inputDut.classList.add('value_dut')
-        inputDut.value = dut
-        li.appendChild(inputDut)
-        inputDut.addEventListener('input', this.validateInput);
-        const inputOil = document.createElement('input')
-        inputOil.classList.add('value_data')
-        inputOil.classList.add('value_oil')
-        inputOil.value = litrazh
-        li.appendChild(inputOil)
-        inputOil.addEventListener('input', this.validateInput);
-    }
-
     validateInput(event) {
-        // Разрешаем ввод целых чисел и чисел с плавающей точкой (например, 123, 1.23, .23)
-        if (!/^\d*\.?\d*$/.test(event.target.value)) {
-            event.target.style.border = '1px solid red';
+        const input = event.target;
+        // Удаляем все символы, кроме цифр и точки
+        const sanitizedValue = input.value.replace(/[^0-9.]/g, '');
+        // Если значение содержит больше одной точки, удаляем лишние
+        const dotCount = (sanitizedValue.match(/\./g) || []).length;
+        if (dotCount > 1) {
+            const firstDotIndex = sanitizedValue.indexOf('.');
+            input.value = sanitizedValue.slice(0, firstDotIndex + 1) + sanitizedValue.slice(firstDotIndex + 1).replace(/\./g, '');
         } else {
-            // Если ввод корректен или поле пустое, сбрасываем стиль границы
-            event.target.style.border = '';
+            input.value = sanitizedValue;
         }
     }
 

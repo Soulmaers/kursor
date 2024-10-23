@@ -4,6 +4,7 @@ import { Requests } from './RequestStaticMethods.js'
 import { Helpers } from './Helpers.js'
 import { EditContollClick } from './EditControllClick.js'
 import { Validation } from './Validation.js'
+
 export class IntObjects extends IntarfaceBase {
     constructor(index, buttons, settingWrap, container, login, prava, creator, creators) {
         super(index, buttons, settingWrap, container, login, prava, creator, creators);
@@ -76,6 +77,7 @@ export class IntObjects extends IntarfaceBase {
         console.log(this.obj)
         const messUser = await Requests.saveObject(this.obj, this.prava)
         Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message)
+        if (messUser.flag) await Requests.setDefaultSettings(this.obj.idx, this.obj.typeobject)
         this.add = 'add'
         this.create()
     }

@@ -49,7 +49,7 @@ export class ResizeContainer {
         if (!this.isResizing) return; // добавляем проверку
         this.isResizing = false;
         this.sliderBar.style.removeProperty('user-select');
-        console.log('дубль!!!')
-        setTimeout(function () { initCharts.createChart(); }, 300);
+        console.log(initCharts)
+        setTimeout(function () { initCharts.createChart(); }, 100);
     }
 }

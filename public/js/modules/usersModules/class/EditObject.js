@@ -4,7 +4,7 @@ import { Requests } from './RequestStaticMethods.js'
 import { Validation } from './Validation.js'
 import { ConfiguratorParams } from '../../configuratorModules/class/ConfiguratorParams.js'
 import { ControllNaviEdit } from './ControllNaviEdit.js'
-
+import { ValidationStatus } from '../../settingsEventAttributesModules/class/ValidationStatus.js'
 export class EditObject {
     constructor(data, element, container, login, role, creator, creators, instance, usersdata) {
         this.data = data
@@ -46,6 +46,7 @@ export class EditObject {
         this.save()
     }
     recored() {
+        this.container.style.display = 'flex'
         this.recoredbtn = this.container.querySelector('.recover')
         if (this.property.delStatus === 'true') {
             this.recoredbtn.style.display = 'flex'
@@ -135,10 +136,8 @@ export class EditObject {
         }
         else if (this.idButton === 'settingsObject') {
             this.webpackObjectsSettings()
-            console.log('привет')
         }
         else {
-            console.log('объект')
             if (this.objectname.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите название объекта');
             if (this.type.value === '') return Helpers.viewRemark(this.mess, 'red', 'Выберите тип объекта');
             if (this.typedevice.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите тип устройства');
@@ -147,6 +146,13 @@ export class EditObject {
             if (this.addressserver.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите адрес сервера');
             if (this.uz.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите учетную запись');
             if (this.tp.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите тарифный план');
+
+            const typeListReports = document.querySelectorAll('.row_list_element')
+            if (typeListReports.length !== 0) {
+                const element = [...typeListReports].find(e => e.value == this.property.idx[0])
+                element.setAttribute('type', this.type.value)
+            }
+
             this.obj = {
                 objectname: this.objectname.value,
                 typedevice: this.typedevice.value,
@@ -167,27 +173,29 @@ export class EditObject {
                 del: !this.del ? this.property.delStatus : 'false'
             }
             const oldUz = this.property.incriment[1]
+            const oldType = this.property.typeobject
+            const idx = this.property.idx[0]
             const messUser = await Requests.editObject(this.obj);
+            if (messUser.flag && oldType !== this.obj.typeobject) await Requests.updateDefaultSettings(idx, this.obj.typeobject);
+            console.log(messUser.flag, oldType, this.obj.typeobject)
+            if (messUser.flag && oldType !== this.obj.typeobject) await Requests.updateDefaultSettings(idx, this.obj.typeobject);
+
             const action = oldUz === Number(this.uz.value) ? 'Обновлён' : 'Смена учётной записи'
             const obj = {
                 action: action, table: 'objectsHistory', columns: 'uniqObjectID', data: String(Math.floor((new Date().getTime()) / 1000)),
                 uniqUsersID: Number(this.creator), uniqEntityID: Number(this.property.incriment[0]), nameAccount: Number(oldUz)
             }
             const resu = await Requests.setHistory(obj)
-            console.log(resu)
-            console.log(this.mess)
-            console.log(messUser)
+
             Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message);
 
             if (messUser.flag && !this.retra && oldUz !== Number(this.uz.value)) {
-                console.log('дааа')
                 const messObj = await Requests.updateObjectsAndUsers(this.obj);
                 Helpers.viewRemark(this.mess, messObj.flag ? 'green' : 'red', messObj.message);
             }
             if (this.instance) this.instance.create();
 
             const typeIndex = ContentGeneration.storTypeObject().find(e => e.type === this.type.value)
-            console.log(typeIndex)
             document.querySelector('.stor_type_index').setAttribute('rel', typeIndex.typeIndex)
         }
     }
@@ -198,31 +206,69 @@ export class EditObject {
     }
 
     async webpackObjectsSettings() {
-        const distanceMin = document.querySelector('#min_distance').checked ? document.querySelector('#min_distance').nextElementSibling.nextElementSibling.value : ''
-        const distanceMax = document.querySelector('#max_distance').checked ? document.querySelector('#max_distance').nextElementSibling.nextElementSibling.value : ''
-        const mileageMin = document.querySelector('#min_mileage').checked ? document.querySelector('#min_mileage').nextElementSibling.nextElementSibling.value : ''
-        const mileageMax = document.querySelector('#max_mileage').checked ? document.querySelector('#max_mileage').nextElementSibling.nextElementSibling.value : ''
-        const minDistanceProstoy = document.querySelector('#min_distance_prostoy').checked ? document.querySelector('#min_distance_prostoy').nextElementSibling.nextElementSibling.value : ''
+        const distanceMin = document.querySelector('#min_distance').nextElementSibling.nextElementSibling.value
+        const distanceMax = document.querySelector('#max_distance').nextElementSibling.nextElementSibling.value
+        const mileageMin = document.querySelector('#min_mileage').nextElementSibling.nextElementSibling.value
+        const mileageMax = document.querySelector('#max_mileage').nextElementSibling.nextElementSibling.value
+        const minDistanceProstoy = document.querySelector('#min_distance_prostoy').nextElementSibling.nextElementSibling.value
+        const minDurationParking = document.querySelector('#min_duration_parking').nextElementSibling.nextElementSibling.value
+        const minDurationStop = document.querySelector('#min_duration_stop').nextElementSibling.nextElementSibling.value
+        const minDurationMoto = document.querySelector('#min_duration_moto').nextElementSibling.nextElementSibling.value
+        const timeRefillValue = document.querySelector('#min_diration_refill').nextElementSibling.nextElementSibling.value
+        const timeDrainValue = document.querySelector('#min_diration_drain').nextElementSibling.nextElementSibling.value
+        const volumeRefillValue = document.querySelector('#min_value_refill').nextElementSibling.nextElementSibling.value
+        const volumeDrainValue = document.querySelector('#min_value_drain').nextElementSibling.nextElementSibling.value
 
-        let datchikUgla = ['', '']
         const dat = document.querySelector('#datchik_ugla')
-        if (dat && dat.checked) {
-            const items = dat.parentElement.querySelectorAll('.porog_value')
-            datchikUgla = [items[0].value, items[1].value]
-        }
+        const angleSensorElement = document.querySelector('#angleSensor')
+        const attachmentsSensorElement = document.querySelector('#attachmentsSensor')
+
+        console.log(dat)
         this.set = {
             idw: this.idx,
             object: JSON.stringify({
-                'Топливо': null,
-                'Поездки': { distance: [distanceMin, distanceMax], mileageSet: [mileageMin, mileageMax] },
-                'Стоянки': null,
-                'Остановки': null,
-                'Моточасы': null,
-                'Простои на холостом ходу': { longTime: minDistanceProstoy, datchikUgla: datchikUgla }
+                'Топливо': {
+                    duration: {
+                        timeRefill: timeRefillValue,
+                        timeDrain: timeDrainValue
+                    },
+                    volume: {
+                        volumeRefill: volumeRefillValue,
+                        volumeDrain: volumeDrainValue
+                    }
+                },
+                'Поездки': {
+                    duration:
+                    {
+                        minDuration: distanceMin,
+                        maxDuration: distanceMax
+                    },
+                    mileage: {
+                        minMileage: mileageMin,
+                        maxMileage: mileageMax
+                    }
+                },
+                'Стоянки': { minDuration: minDurationParking },
+                'Остановки': { minDuration: minDurationStop },
+                'Моточасы': { minDuration: minDurationMoto },
+                'Простои на холостом ходу': {
+                    minDuration: minDistanceProstoy,
+                    ...(dat ? {
+                        angleSensorSettings: {
+                            minValue: dat.parentElement.querySelectorAll('.porog_value')[0]?.value || null,
+                            maxValue: dat.parentElement.querySelectorAll('.porog_value')[1]?.value || null
+                        }
+                    } : {
+
+                        angleSensor: angleSensorElement?.checked || false,
+                        attachmentsSensor: attachmentsSensorElement?.checked || false
+                    })
+                },
+                'Техническое обслуживание': null
             })
         }
-
-        if (Object.values(Validation.status).some(value => value === false)) {
+        console.log(this.set)
+        if (Object.values(ValidationStatus.status).some(value => value === false)) {
             Helpers.viewRemark(this.mess, 'red', 'Введите корректно параметры настроек')
             return
         }

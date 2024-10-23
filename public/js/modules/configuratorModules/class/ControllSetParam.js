@@ -18,7 +18,7 @@ export class ControllSetParam {
     init() {
         this.renderWindow()
         this.caseElements()
-        this.validationInput()
+        this.validationInput([this.val_koef_ts, this.val_koef_ts_oil])
         this.flexNone()
         this.eventListener()
 
@@ -33,25 +33,26 @@ export class ControllSetParam {
     caseElements() {
         this.listRows = [...this.container.querySelectorAll('.item_stor')]
         this.val_koef_ts = this.container.querySelector('.val_koef_ts')
+        this.val_koef_ts_oil = this.container.querySelector('.val_koef_ts_oil')
         this.buttonTarirTable = this.container.querySelectorAll('.table_tarir');
         this.excelTarirExport = this.container.querySelectorAll('.excel_tarir_export');
         this.setSaveParams = [...this.container.querySelectorAll('.set_save_param')]
     }
 
 
-    validationInput() {
-        console.log(this.val_koef_ts)
-        this.val_koef_ts.addEventListener('keydown', (event) => {
+    validationInput(arr) {
+        console.log(arr)
+        arr.forEach((e, index) => e.addEventListener('keydown', (event) => {
             const key = event.key;
-            const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', '.'];
+            const allowedKeys = index === 0 ? ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', '.'] :
+                ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
             if (!/^\d$/.test(key) && !allowedKeys.includes(key)) {
                 event.preventDefault();
             }
         })
-
-
-
+        )
     }
+
     flexNone() {
         this.listRows.forEach((e) => e.nextElementSibling.classList.add('flex_none'));
     }
@@ -100,25 +101,31 @@ export class ControllSetParam {
     }
 
     addFieldsValue(button) {
+        console.log(this.config)
+        //  console.log(fieldFormula)
         const fieldFormula = button.nextElementSibling.querySelector('.val_koef')
         const fieldOdometrTS = button.nextElementSibling.querySelector('.val_koef_ts')
+        const fieldOdometrTSOil = button.nextElementSibling.querySelector('.val_koef_ts_oil')
         fieldFormula.value = this.config[0].formula
+        console.log(fieldOdometrTSOil)
         if (fieldOdometrTS) fieldOdometrTS.value = this.config[0].dopValue
+        if (fieldOdometrTSOil) fieldOdometrTSOil.value = this.config[0].dopValue
     }
     async sendConfig(btn) {
         this.parent = btn.closest('.body_set_params')
         const bool = this.validation(btn)
         this.mess = btn.previousElementSibling
         if (!bool) {
-            viewRemark(this.mess, 'red', 'Добавьте формулу')
+            viewRemark(this.mess, 'red', this.parent.classList.contains('oils') ? 'Сохраните тарировочную таблицу' : 'Добавьте формулу')
         }
         else {
-
+            const tsElement = this.parent.querySelector('.val_koef_ts');
+            const tsOilElement = this.parent.querySelector('.val_koef_ts_oil');
             const obj = {
                 idw: this.id,
                 param: btn.getAttribute('rel'),
                 formula: this.parent.querySelector('.val_koef').value,
-                dopValue: this.parent.querySelector('.val_koef_ts') ? this.parent.querySelector('.val_koef_ts').value : null
+                dopValue: tsElement ? tsElement.value : (tsOilElement ? tsOilElement.value : null)
             }
             const res = await RequestToBse.setConfigParam(obj)
             viewRemark(this.mess, 'green', res)
@@ -132,11 +139,7 @@ export class ControllSetParam {
     }
     createTarir(el) {
         this.param = el.getAttribute('rel')
-        if (!this.activeClassTarir) {
-            this.activeClassTarir = new TarirTable(this.id, el, this.param)
-        } else {
-            this.activeClassTarir.reinitialize(this.id, el, this.param);
-        }
+        new TarirTable(this.id, el, this.param)
     }
 
     validation(btn) {

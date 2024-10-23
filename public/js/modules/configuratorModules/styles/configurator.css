@@ -113,3 +113,19 @@
     justify-content: start;
     align-items: center;
 }
+
+.item_meta_value {
+    margin-left: 5px;
+}
+
+.item_meta_value:before {
+    content: ':';
+}
+
+.list_table_tarir {
+    height: 660px
+}
+
+.flex_none {
+    display: none;
+}

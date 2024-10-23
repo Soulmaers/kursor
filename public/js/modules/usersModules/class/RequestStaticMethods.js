@@ -22,7 +22,7 @@ export class Requests {
         try {
             const complete = await fetch('/api/findLastIdUser', params);
             const result = await complete.json();
-
+            console.log(result)
             let id = 1;
 
             if (result.length > 0) {
@@ -108,20 +108,36 @@ export class Requests {
         return response
     }
 
-    static async getReportsAttribute(idw) {
+
+    static async setDefaultSettings(idw, typeobject) {
         const params = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ idw })
+            body: JSON.stringify({ idw, typeobject })
         }
 
-        const result = await fetch('/api/getReportsAttribute', params)
+        const result = await fetch('/api/setDefaultSettings', params)
         const response = await result.json()
         console.log(response)
         return response
     }
+    static async updateDefaultSettings(idw, typeobject) {
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idw, typeobject })
+        }
+        console.log(idw, typeobject)
+        const result = await fetch('/api/updateDefaultSettings', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
 
     static async setHistory(obj) {
         console.log(obj)

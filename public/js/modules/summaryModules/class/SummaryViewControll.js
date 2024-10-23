@@ -176,9 +176,9 @@ export class SummaryViewControll {
         arraySummaryView.push(this.calculateParam(data, 'rashod'))
         arraySummaryView.push(this.calculateParam(data, 'zapravka'))
         arraySummaryView.push(this.calculateParam(data, 'dumpTrack'))
-        arraySummaryView.push(this.calculateParam(data, 'moto') / 1000)
+        arraySummaryView.push(this.calculateParam(data, 'moto'))
         arraySummaryView.push(this.calculateParam(data, 'prostoy'))
-        arraySummaryView.push(this.calculateParam(data, 'moto') / 1000 - this.calculateParam(data, 'prostoy'))
+        arraySummaryView.push(this.calculateParam(data, 'moto') - this.calculateParam(data, 'prostoy'))
         arraySummaryView.push(data.length === 0 || this.calculateParam(data, 'medium') === 0 ? 0 : parseFloat((this.calculateParam(data, 'medium') / data.filter(el => el.medium > 0).length).toFixed(0)))
         arraySummaryView.push(data.filter(el => el.oilHH > 0).length === 0 ? 0 : parseFloat((this.calculateParam(data, 'oilHH') / data.filter(el => el.oilHH > 0).length).toFixed(0)))
         const structura = arraySummaryView.reduce((acc, el, index) => {
@@ -238,9 +238,9 @@ export class SummaryViewControll {
         arraySummaryView.push(this.calculateParam(data, 'rashod'))
         arraySummaryView.push(this.calculateParam(data, 'zapravka'))
         arraySummaryView.push(this.calculateParam(data, 'dumpTrack'))
-        arraySummaryView.push(this.calculateParam(data, 'moto') / 1000)
+        arraySummaryView.push(this.calculateParam(data, 'moto'))
         arraySummaryView.push(this.calculateParam(data, 'prostoy'))
-        arraySummaryView.push(this.calculateParam(data, 'moto') / 1000 - this.calculateParam(data, 'prostoy'))
+        arraySummaryView.push(this.calculateParam(data, 'moto') - this.calculateParam(data, 'prostoy'))
         arraySummaryView.push(data.length === 0 || this.calculateParam(data, 'medium') === 0 ? 0 : parseFloat((this.calculateParam(data, 'medium') / data.filter(el => el.medium > 0).length).toFixed(0)))
         arraySummaryView.push(data.filter(el => el.oilHH > 0).length === 0 ? 0 : parseFloat((this.calculateParam(data, 'oilHH') / data.filter(el => el.oilHH > 0).length).toFixed(0)))
         const structura = arraySummaryView.reduce((acc, el, index) => {

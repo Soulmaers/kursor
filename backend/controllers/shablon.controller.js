@@ -1,5 +1,6 @@
 const databaseService = require('../services/database.service');
 const { ReportsControllClass } = require('../modules/reportsModule/class/ReportsControllClass')
+const { ReportSettingsManager } = require('../modules/reportSettingsManagerModule/class/ReportSettingsManager')
 
 exports.getGuide = async (req, res) => {
     const idw = req.body.idw
@@ -63,15 +64,43 @@ exports.getReport = async (req, res) => {
     res.json(result)
 }
 exports.setReportsAttribute = async (req, res) => {
-    const object = req.body.obj
-    const result = await databaseService.setReportsAttributeToBase(object)
+    const { idw, object } = req.body.obj
+    const instance = new ReportSettingsManager(idw, null, object)
+    const result = await instance.updateSettings()
     res.json(result)
+
+
 }
 exports.getReportsAttribute = async (req, res) => {
     const idw = req.body.idw
     const result = await databaseService.getReportsAttribute(idw)
     res.json(result)
 }
+
+exports.setDefaultSettings = async (req, res) => {
+    const idw = req.body.idw
+    const typeobject = req.body.typeobject
+    const instance = new ReportSettingsManager(idw, typeobject)
+    const result = instance.setSettings()
+    res.json(result)
+}
+
+
+exports.updateDefaultSettings = async (req, res) => {
+    const idw = req.body.idw
+    const typeobject = req.body.typeobject
+    const instance = new ReportSettingsManager(idw, typeobject)
+    const result = instance.updateSettingsDefault()
+    res.json(result)
+}
+
+exports.getSettings = async (req, res) => {
+    const idw = req.body.idw
+    const instance = new ReportSettingsManager(idw)
+    const result = await instance.getSettings()
+    res.json(JSON.parse(result[0].jsonsetAttribute))
+}
+
 
 
 

@@ -1,6 +1,9 @@
 
 
 const databaseService = require('../services/database.service');
+
+const { JobToBase } = require('../modules/reportSettingsManagerModule/class/JobToBase')
+const { OilCalculator } = require('../modules/reportsModule/class/OilControllCalculater')
 const { Worker } = require('worker_threads');
 const path = require('path');
 
@@ -147,7 +150,6 @@ exports.getParamsToPressureAndOil = async (req, res) => {
     const arrayColumns = req.body.arrayColumns
     const num = req.body.num
     const workerKey = req.body.workerKey
-    console.log(workerKey)
     // Завершаем предыдущего воркера, если он существует
     if (activeWorkers[workerKey]) {
         activeWorkers[workerKey].terminate();
@@ -177,19 +179,34 @@ exports.saveSetParams = async (req, res) => {
     const result = await databaseService.saveValueToBase(idw, param, formula, dopValue) //сохранение порогового значения по параметру
     res.json(result)
 }
+
+exports.getRefills = async (req, res) => {
+    const idw = req.body.idw
+    const data = req.body.data
+    const result = await JobToBase.getSettingsToBase(String(idw))
+    const settings = JSON.parse(result[0].jsonsetAttribute)
+    const instance = new OilCalculator(data, settings, idw)
+
+    res.json(await instance.init())
+
+}
+
 exports.getConfigParam = async (req, res) => {
     const idw = req.body.idw
     const param = req.body.param
-    console.log(idw, param)
     const result = await databaseService.getConfigParam(idw, param) //получение порогового значения по параметру
+    res.json(result)
+}
+exports.deleteConfigParam = async (req, res) => {
+    const idw = req.body.idw
+    const param = req.body.param
+    const result = await databaseService.deleteConfigParam(idw, param) //получение порогового значения по параметру
     res.json(result)
 }
 
 exports.deleteParams = async (req, res) => {
     const idw = req.body.id
     const param = req.body.param
-    console.log('туту?')
-    console.log(idw, param)
     const result = await databaseService.deleteParamsToBase(idw, param) //удаление порогового значения по параметру
     res.json(result)
 }
@@ -263,4 +280,11 @@ exports.geoLastInterval = async (req, res) => {
         })
     }
     res.json({ resTrack: geo })
+}
+
+exports.getValueToBase = async (req, res) => {
+    const idw = req.body.id
+    const param = req.body.param
+    const result = param ? await databaseService.getValuePWRToBase(idw, param) : await databaseService.getValuePWRToBase(idw) //получение порогового значения по параметру
+    res.json(result)
 }

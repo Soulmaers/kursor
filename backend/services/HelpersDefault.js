@@ -1,5 +1,5 @@
 const databaseService = require('./database.service');
-
+const XLSX = require('xlsx');
 class HelpersDefault {
 
 
@@ -17,6 +17,209 @@ class HelpersDefault {
         return arrayData
     }
 
+    static filtersOil(array, koef) {
+        if (koef === 0) {
+            return array
+        }
+        const celevoy = array
+            .filter(e => Number(e.dut) < 4097)
+            .map(it => ({
+                ...it,
+                dut: Number(it.dut)
+            }));
+
+        for (let i = koef; i < celevoy.length; i++) {
+            const previousElements = celevoy.slice(i - koef, i + 1);
+            const validPreviousElements = previousElements.filter(val =>
+                val.dut !== undefined &&
+                !isNaN(val.dut)
+            );
+            if (validPreviousElements.length > 0) {
+                const sum = validPreviousElements.reduce((acc, val) => acc + Number(val.dut), 0);
+                const average = sum / validPreviousElements.length;
+                celevoy[i].dut = Math.round(average); // Округляем
+            } else {
+                celevoy[i].dut = 0; // Или сохраняем предыдущее значение, если вам это нужно.
+            }
+        }
+        return celevoy; // возвращаем измененный массив
+    }
+
+    static medianFilters(array, koef) {
+        let celevoy = array
+            .filter(e => Number(e.dut) < 4097)
+            .map(it => ({
+                ...it,
+                dut: Number(it.dut)
+            }));
+
+        const medianArray = []
+        if (celevoy.length < 3) {
+            return [...celevoy]
+        }
+        if (koef === 0) {
+            medianArray.push(...celevoy.slice(0, 3));
+            for (let i = 3; i < celevoy.length; i++) {
+                const previuosElements = celevoy.slice(i - 3, i)
+                previuosElements.sort((a, b) => Number(a.dut) - Number(b.dut))
+                const median = previuosElements[1].dut
+                const newElement = { ...celevoy[i], dut: median };
+                medianArray.push(newElement);
+            }
+        }
+        else {
+            const window = koef * 5
+            medianArray.push(...celevoy.slice(0, window));
+            for (let i = window; i < celevoy.length; i++) {
+                const windowElements = celevoy.slice(i - window, i)
+                windowElements.sort((a, b) => Number(a.dut) - Number(b.dut))
+                let median;
+                if (windowElements.length % 2 === 0) {
+                    const indexNumber = windowElements.length / 2
+                    median = (parseInt(Number(windowElements[indexNumber - 1].dut) + Number(windowElements[indexNumber].dut))) / 2
+                }
+                else {
+                    const indexNumber = Math.floor(windowElements.length / 2)
+                    median = Number(windowElements[indexNumber].dut)
+                }
+                const newElement = { ...celevoy[i], dut: median };
+                medianArray.push(newElement);
+            }
+        }
+        return medianArray
+    }
+
+    static datatime(timestamp) {
+
+        // Создаем новый объект Date с временем в миллисекундах
+        const date = new Date(timestamp * 1000);
+
+        // Получаем часы, минуты и секунды
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        // Получаем дату в формате "ГГГГ-ММ-ДД ЧЧ:ММ:СС"
+        const formattedDate = date.toISOString().split('T')[0] + ' ' + `${hours}:${minutes}:${seconds}`;
+
+        return formattedDate
+    }
+    static excel(array, modifiedArray, koef) {
+        // Создаем книгу Excel и лист
+        const wb = XLSX.utils.book_new();
+
+        // Создаем заголовки для столбцов
+        const header = ['Index', 'Original Value', 'Modified Value'];
+        // Создаем данные для листа
+        const data = [header]; // Начинаем с заголовков
+        array.forEach((value, index) => {
+            //  console.log(Number(value.last_valid_time))
+            data.push([HelpersDefault.datatime(Number(value.last_valid_time)), Number(value.dut), Number(modifiedArray[index].dut)]);
+        });
+
+        // Создаем лист из данных
+        const ws = XLSX.utils.aoa_to_sheet(data);
+
+        // Добавляем лист в книгу
+        XLSX.utils.book_append_sheet(wb, ws, 'Modified Data');
+
+        // Сохраняем книгу с именем файла
+        XLSX.writeFile(wb, `${koef}modified_data.xlsx`);
+    }
+    static sortTarirOil = (data, dut) => {
+        const x = [];
+        const y = [];
+        const points = []
+        data.forEach(el => {
+            const point = []
+            x.push(Number(el.dut))
+            y.push(Number(el.litrazh))
+            point.push(Number(el.dut))
+            point.push(Number(el.litrazh))
+            points.push(point)
+        })
+        let degree = x.length < 3 ? 1 : 6
+        const coeffs = this.polynomialApproximation(x, y, degree)
+        const approximated = this.evaluatePolynomial([dut], coeffs)[0];
+        const znak = Number((approximated * 0.9987).toFixed(0))
+        return znak
+    }
+    static polynomialApproximation(x, y, degree) {
+        const n = x.length;
+        const m = degree + 1;
+        let A = Array.from({ length: m }, () => new Array(m).fill(0));
+        let B = new Array(m).fill(0);
+        let a = new Array(m).fill(0);
+        for (let i = 0; i < n; i++) {
+            let xi = x[i];
+            let yi = y[i];
+            for (let j = 0; j < m; j++) {
+                for (let k = 0; k < m; k++) {
+                    let val = Math.pow(xi, j + k);
+                    if (Number.isFinite(val)) {
+                        A[j][k] += val;
+                    }
+                }
+                let val = Math.pow(xi, j) * yi;
+                if (Number.isFinite(val)) {
+                    B[j] += val;
+                }
+            }
+        }
+        for (let j = 0; j < m; j++) {
+            for (let k = j + 1; k < m; k++) {
+                let coef = A[k][j] / A[j][j];
+                B[k] -= coef * B[j];
+                for (let l = j; l < m; l++) {
+                    let val = A[j][l] * coef;
+                    if (Number.isFinite(val)) {
+                        A[k][l] -= val;
+                    }
+                }
+            }
+        }
+        for (let j = m - 1; j >= 0; j--) {
+            let tmp = B[j];
+            for (let k = j + 1; k < m; k++) {
+                tmp -= a[k] * A[j][k];
+            }
+            let val = A[j][j];
+            if (!Number.isFinite(val)) {
+                val = Number.MAX_VALUE;
+            }
+            a[j] = tmp / val;
+        }
+
+        return a;
+    }
+
+    static formula(coefficients) {
+        coefficients.reverse()
+        const formula = coefficients.reduce((acc, coeff, index) => {
+            const exponent = coefficients.length - 1 - index;
+            let term;
+            if (exponent === 0) {
+                term = `${coeff}`;
+            } else if (exponent === 1) {
+                term = `${coeff}x`;
+            } else {
+                term = `${coeff}x^${exponent}`;
+            }
+            return acc + (coeff < 0 ? ` - ${term.replace('-', '')}` : ` + ${term}`);
+        }, '');
+        return formula.replace(/^ \+ /, ''); // remove leading '+'
+    }
+    static evaluatePolynomial(x, a) {
+        const n = a.length;
+        const y = new Array(x.length).fill(0);
+        for (let i = 0; i < x.length; i++) {
+            let xi = x[i];
+            for (let j = n - 1; j >= 0; j--) {
+                y[i] = y[i] * xi + a[j];
+            }
+        }
+        return y;
+    }
 
     static timefn = () => { //форматирование интервала времени с 0 часов
         const currentDate = new Date();
@@ -46,9 +249,10 @@ class HelpersDefault {
             ...account.groups.flatMap(group => group.objects),
             ...account.ungroupedObjects
         ]);
+        // console.log(res)
         const filteredObjects = res
             .filter(obj => obj) // Фильтруем по наличию ключа '6'
-            .map(obj => [obj.object_id, obj.object_name, obj.group_name ? obj.group_name : 'Без группы', obj.group_id ? obj.group_id : 'ungrouped']); // Извлекаем значение по ключу '6'
+            .map(obj => [obj.object_id, obj.object_name, obj.group_name ? obj.group_name : 'Без группы', obj.group_id ? obj.group_id : 'ungrouped', obj.typeobject]); // Извлекаем значение по ключу '6'
 
         return filteredObjects
     }

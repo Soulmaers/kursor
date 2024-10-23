@@ -1,7 +1,7 @@
 
 const { connection, sql } = require('../config/db')
 const databaseRetranslation = require('./databaseRetranslation.service');
-
+const { ReportSettingsManager } = require('../modules/reportSettingsManagerModule/class/ReportSettingsManager')
 exports.addObjects = async (object) => {
     const { idx, objectname, phonenumber, imeidevice, uz, uniqRetraID, nameRetra } = object
     try {
@@ -21,6 +21,8 @@ exports.addObjects = async (object) => {
                 .query(updateFlagQuery);
             return
         }
+        const instance = new ReportSettingsManager(String(object.idx))
+        await instance.setSettings()
         // Вставляем новый объект в таблицу objects
         const insertObjectsQuery = `
             INSERT INTO objects (idx, objectname, phonenumber, imeidevice, uz,incriment_retra,name_retra)

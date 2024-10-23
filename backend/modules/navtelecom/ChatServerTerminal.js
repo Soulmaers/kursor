@@ -1,7 +1,7 @@
 
 const { NavtelecomResponceData, CheckSumm, BitsCount, WriteFile } = require('./Helpers');
 const SendingCommandToTerminal = require('./SendingCommandToTerminal')
-const { UpdateSetStor } = require('../../services/UpdateSetStor.js')
+const { UpdateSetStor } = require('../dataProcessorModule/class/UpdateSetStor.js')
 const net = require('net');
 
 class ListenPortTP {

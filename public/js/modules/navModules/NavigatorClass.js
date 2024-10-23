@@ -1,6 +1,6 @@
 
 
-import { initCharts } from '../spisokModules/class/addListSpisok.js'
+import { initCharts } from '../spisokModules/class/AddListSpisok.js'
 import { kartaContainer } from './karta.js'
 import { reportsContainer } from './reports.js'
 import { Servis } from './servis.js'
