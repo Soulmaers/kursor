@@ -29,7 +29,7 @@ export class ContentGeneration {
     static addButtonTypeBlock(type) {
         const buttons = ['Топливо', 'Поездки', 'Стоянки', 'Остановки', 'Моточасы', 'Простои на холостом ходу', 'Техническое обслуживание'].map(
             (e, index) =>
-                `<div class="type_navi" data-att="${index}">${e}<i class="fas fa-angle-down srows"></i></div><div class="body_settings_content">${ContentGeneration.createSet(index, type)}</div>`
+                `<div class="type_navi" rel="${e}" data-att="${index}">${e}<i class="fas fa-angle-down srows"></i></div><div class="body_settings_content">${ContentGeneration.createSet(index, type)}</div>`
         ).join('');
         return `
     <div class="navi_block">

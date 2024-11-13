@@ -10,7 +10,9 @@ class SCDSHClass {
 
     async init() {
         await this.getDataGlobalStor()
-        return this.calcilator()
+        return {
+            components: this.calcilator(), grafics: this.struktura, model: this.data[0].result
+        }
     }
 
     async getDataGlobalStor() {

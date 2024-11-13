@@ -182,8 +182,8 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login, ses
     const eid = sess.eid;
     const prms2 = {
         "itemId": active,
-        "timeFrom": timeOld,
-        "timeTo": timeNow,
+        "timeFrom": timeOld,// 1729627200,//
+        "timeTo": timeNow,//1729648800,//
         "flags": 1,
         "flagsMask": 1,
         "loadCount": 180000

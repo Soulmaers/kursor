@@ -28,17 +28,10 @@ export class OilCharts {
             return Promise.reject(new Error('Запрос отменен'));
         }
         isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
-        this.struktura = await this.createStructura() //получение и подготовка структуры данных
         this.filtration = await this.getFilter()
-
-
+        this.struktura = await this.createStructura() //получение и подготовка структуры данных
+        console.log(this.struktura)
         this.data = this.runFormula(this.medianFilters())
-
-        this.derivative = this.addDerivative(this.data)
-        this.chartDerivative()
-        console.log(this.derivative)
-        this.average = this.runFormula(this.filtersOil())
-        //   console.log(this.struktura)
 
         if (this.data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
@@ -52,11 +45,10 @@ export class OilCharts {
             return
         }
         this.objOil = await this.findMarkerReFill() //поиск заправок
-        //  console.log(this.objOil)
+        console.log(this.objOil)
         this.createChart()
-
-
     }
+
     async getFilter() {
         const idw = Number(document.querySelector('.color').id)
         const param = 'oil'
@@ -80,6 +72,10 @@ export class OilCharts {
                 ...it,
                 dut: Number(it.dut)
             }));
+
+        const medianArray = []
+
+        medianArray.push(...average.slice(0, koef));
         for (let i = koef; i < average.length; i++) {
             const previousElements = average.slice(i - koef, i + 1);
             const validPreviousElements = previousElements.filter(val =>
@@ -89,105 +85,20 @@ export class OilCharts {
             if (validPreviousElements.length > 0) {
                 const sum = validPreviousElements.reduce((acc, val) => acc + Number(val.dut), 0);
                 const averages = sum / validPreviousElements.length;
-                average[i].dut = Math.round(averages); // Округляем
+                //   average[i].dut = Math.round(averages); // Округляем
+
+                const newElement = { ...average[i], dut: Math.round(averages) };
+                medianArray.push(newElement);
             } else {
                 average[i].dut = 0;
             }
         }
-        return average
+        return medianArray
     }
 
-    addDerivative(data) {
-        // Проверяем, что массив не пуст и содержит хотя бы два элемента
-        if (data.length < 2) {
-            return data;
-        }
-        // Добавляем поле "derivative" в каждый элемент массива, начиная со второго
-        for (let i = 1; i < data.length; i++) {
-            const deltaDut = Number(data[i].oil) - Number(data[i - 1].oil); // Разница в объеме топлива
-            const deltaTime = (Number(data[i].time) - Number((data[i - 1].time))) / 1000; // Разница во времени
-            // Если разница во времени не нулевая, вычисляем производную
-            //  console.log(deltaDut, deltaTime, data[i].time)
-            data[i].derivative = deltaTime !== 0 ? Number((deltaDut / deltaTime).toFixed(2)) : 0;
-            console.log(data[i].derivative, deltaDut, deltaTime, data[i].time)
-        }
-
-        // Добавляем поле "derivative" со значением null или 0 для первого элемента
-        data[0].derivative = 0; // Или 0, в зависимости от ваших требований
-
-        return data;
-    }
-
-    chartDerivative() {
-        const oldChart = document.querySelector('.infoGrafs')
-        if (oldChart) oldChart.remove()
-        const deriva = document.createElement('div')
-        const grafics = document.querySelector('.grafics')
-        deriva.classList.add('infoGrafs')
-        grafics.appendChild(deriva)
-
-        var widthWind = document.querySelector('body').offsetWidth;
-        const wrapper = grafics.offsetWidth
-        // устанавливаем размеры контейнера
-        const margin = { top: 10, right: 60, bottom: 50, left: 60 },
-            width = widthWind >= 860 ? wrapper - 250 : widthWind - 80,
-            height = 500 - margin.top - margin.bottom;
-        this.width = width
-        this.height = height
-        // создаем svg контейнер
-        const svg = d3.select(".infoGrafs").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-        const minVal = d3.min(this.derivative, (d) => +d.derivative || 0) - 10;
-        const maxVal = d3.max(this.derivative, (d) => +d.derivative || 0) + 10;
-
-
-        const x = d3.scaleTime()
-            .domain(d3.extent(this.derivative, (d) => new Date(d.time)))
-            .range([0, this.width])
-        // задаем y-шкалу для первой оси y
-        const y1 = d3.scaleLinear()
-            .domain([Math.min(minVal, 0), Math.max(maxVal, 0)])
-            .range([this.height, 0]);
-
-        const yAxis1 = d3.axisLeft(y1)
-        const xAxis = d3.axisBottom(x)
-
-        const line1 = d3.line()
-            .x((d) => x(new Date(d.time)))
-            .y((d) => y1(+d.derivative || 0))
-            .curve(d3.curveLinear);
-
-        svg.append("g")
-            .attr("class", "osx")
-            .attr("clip-path", "url(#clip)")
-            .attr("transform", "translate(0," + this.height + ")")
-            .call(xAxis
-                .ticks(10)
-                .tickFormat(function (d) {
-                    return d3.timeFormat("%H:%M")(d);
-                }))
-
-        svg.append("g")
-            .attr("class", "os1y")
-            .call(yAxis1)
-            .attr("transform", "translate(0, 0)")
-        // добавляем линии для сигнальные оси y
-        svg.append("path")
-            .datum(this.derivative)
-            .attr("class", "lineDerivative")
-            .attr("fill", "none")
-            .attr("stroke", "blue")
-            .attr("stroke-width", 1.5)
-            .attr("d", line1)
-            .attr("transform", "translate(0, 0)")
-    }
     medianFilters() {
         const koef = Number(this.filtration[0].dopValue)
+        // console.log(this.alternativa)
         let celevoy = this.struktura
             .filter(e => Number(e.dut) < 4097)
             .map(it => ({
@@ -210,21 +121,14 @@ export class OilCharts {
             }
         }
         else {
-            const window = koef * 5
+            const window = koef % 2 === 0 ? (koef) - 1 : koef
             medianArray.push(...celevoy.slice(0, window));
             for (let i = window; i < celevoy.length; i++) {
                 const windowElements = celevoy.slice(i - window, i)
                 windowElements.sort((a, b) => Number(a.dut) - Number(b.dut))
                 let median;
-                if (windowElements.length % 2 === 0) {
-                    const indexNumber = windowElements.length / 2
-                    median = (parseInt(Number(windowElements[indexNumber - 1].dut) + Number(windowElements[indexNumber].dut))) / 2
-                }
-                else {
-                    const indexNumber = Math.floor(windowElements.length / 2)
-                    median = Number(windowElements[indexNumber].dut)
-
-                }
+                const indexNumber = Math.floor(windowElements.length / 2)
+                median = Number(windowElements[indexNumber].dut)
                 const newElement = { ...celevoy[i], dut: median };
                 medianArray.push(newElement);
             }
@@ -233,7 +137,6 @@ export class OilCharts {
     }
     runFormula(data) {
         return data.map(e => {
-            //   console.log(e)
             const calculatedOil = this.calcut(e.dut); // убедитесь, что это не просто e.dut
             return {
                 ...e,
@@ -289,27 +192,33 @@ export class OilCharts {
         this.chartGroup.selectAll("image")
             .remove();
 
+        const iconsData = [
+            ...this.objOil.refill.map(d => ({ ...d, type: 'refill' })),
+            ...this.objOil.drain.map(d => ({ ...d, type: 'drain' }))
+        ];
+        console.log(iconsData)
         const self = this
         this.chartGroup.selectAll("image")
-            .data(this.objOil)
+            .data(iconsData)
             .enter()
             .append("image")
-            .attr('class', 'iconOil')
-            .attr("x", d => this.new_xScale ? this.new_xScale(new Date(d.data)) : this.x(new Date(d.data)))
-            .attr("xlink:href", "../../../image/ref.png") // путь к иконке
+            .attr('class', d => d.type === 'refill' ? 'iconRefill' : 'iconDrain') // Уникальные классы
+            .attr("x", d => this.new_xScale ? this.new_xScale(d.data) : this.x(d.data))
+            //   .attr("y", d => d.type === 'refill' ? this.height - 30 : this.height - 60) // Установка y-координаты
+            .attr("xlink:href", d => d.icon)
             .attr("width", 24) // ширина вашей иконки
             .attr("height", 24) // высота вашей иконки
             .style("opacity", 0.5)
             .attr("transform", "translate(-12,0)")
             .on("click", function (d) { self.click(d) })
             .on("mousemove", function (d) { self.mousemove(d, tooltipOil) })
-            .on("mouseout", function (d) { self.mouseout(tooltipOil) })
+            .on("mouseout", function (d) { self.mouseout(tooltipOil) });
     }
 
     createTooltip() {
         const self = this
-        this.svg.on("mousemove", function (d) { self.toolMousemove(d) })
-            .on("mouseout", function (d) { self.toolMouseout(d) })
+        this.svg.on("mousemove", function (d) { self.toolMousemove() })
+            .on("mouseout", function (d) { self.toolMouseout() })
 
     }
     toolMouseout(d) {
@@ -365,6 +274,7 @@ export class OilCharts {
             .style("opacity", 0);
     }
     mousemove(d, tooltipOil) {
+        console.log(d)
         d3.select('.tooltip')
             .style("opacity", 0)
         tooltipOil.transition()
@@ -373,7 +283,7 @@ export class OilCharts {
         tooltipOil.attr("x", this.x(new Date(d.data)) - 40)
             .attr("y", 35)
             .attr("text-anchor", "middle")
-            .text(`Заправка: ${d.zapravka} л.`)
+            .text(d.type === 'refill' ? `Заправка: ${d.val} л.` : `Слив: ${d.val} л.`)
     }
 
 
@@ -407,7 +317,8 @@ export class OilCharts {
     }
 
     createBodyCharts() {
-        console.log(this.data.length, this.struktura.length)
+        //  console.log(this.data)
+        //  console.log()
         const parametr = this.struktura[this.struktura.length - 1].summatorOil ? 'summatorOil' : 'oil'
         this.parametr = parametr
         // задаем x-шкалу
@@ -417,7 +328,7 @@ export class OilCharts {
         this.x = x
         // задаем y-шкалу для первой оси y
         const y1 = d3.scaleLinear()
-            .domain([0, d3.max(this.struktura, (d) => +d[parametr] || 0)])
+            .domain([0, d3.max(this.struktura, (d) => +d[parametr] + 30 || 0)])
             .range([(this.height - 40), 0]);
         this.y1 = y1
         // задаем y-шкалу для второй оси y
@@ -436,7 +347,7 @@ export class OilCharts {
         const line2 = d3.line()
             .x((d) => x(new Date(d.time)))
             .y((d) => y2(d.pwr))
-            .curve(d3.curveLinear);
+            .curve(d3.curveStepAfter);
 
         const area1 = d3.area()
             .x(d => x(new Date(d.time)))
@@ -448,7 +359,7 @@ export class OilCharts {
             .x(d => x(new Date(d.time)))
             .y0(this.height)
             .y1(d => y2(d.pwr))
-            .curve(d3.curveLinear);
+            .curve(d3.curveStepAfter);
 
         this.svg.append("defs").append("clipPath")
             .attr("id", "clip")
@@ -522,15 +433,7 @@ export class OilCharts {
             .attr("transform", "translate(0, " + (40) + ")")
 
 
-        // добавляем линии для скользящая оси y
-        chartGroup.append("path")
-            .datum(this.average)
-            .attr("class", "line4")
-            .attr("fill", "none")
-            .attr("stroke", "green")
-            .attr("stroke-width", 1.5)
-            .attr("d", line1)
-            .attr("transform", "translate(0, " + (40) + ")")
+
         // добавляем линии для второй оси y
         chartGroup.append("path")
             .datum(this.struktura)
@@ -583,7 +486,6 @@ export class OilCharts {
         this.createTooltip()
     }
     zoomed() {
-        console.log(this)
         const transform = d3.event.transform;
         // Масштабируем оси с помощью текущего масштабного коэффициента
         const new_xScale = transform.rescaleX(this.x);
@@ -632,7 +534,6 @@ export class OilCharts {
         d3.select('.line2').attr('d', updateLine2(this.struktura));
         d3.select('.area2').attr('d', updateArea2(this.struktura));
         d3.select('.line3').attr('d', updateLine1(this.struktura));
-        d3.select('.line4').attr('d', updateLine1(this.average));
         this.createIcons()
         this.createTooltip()
     }
@@ -771,10 +672,10 @@ export class OilCharts {
     async findMarkerReFill() {
         const idw = Number(document.querySelector('.color').id)
 
-        const refill = await Request.refill(idw, this.info)
+        const refill = await Request.refill(idw, this.info, 'refill')
+        const drain = await Request.refill(idw, this.info, 'drain')
 
-
-        const objOil = refill[1].map(it => {
+        const objOilRefill = refill[1].map(it => {
             const date = new Date(Number(it.time) * 1000);
             const day = date.getDate();
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -785,13 +686,31 @@ export class OilCharts {
             return {
                 data: date,
                 geo: it.geo,
-                zapravka: it.value,
+                val: it.value,
                 time: formattedDate,
-                icon: "../../../image/refuel.png"
+                icon: "../../../../image/ref.png"
             }
 
         })
-        return objOil
+        const objOilDrain = drain[1].map(it => {
+            const date = new Date(Number(it.time) * 1000);
+            const day = date.getDate();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+            return {
+                data: date,
+                geo: it.geo,
+                val: it.value2,
+                time: formattedDate,
+                icon: "../../../../image/drain.png"
+            }
+
+        })
+        console.log({ refill: objOilRefill, drain: objOilDrain })
+        return { refill: objOilRefill, drain: objOilDrain }
     }
 
     async createStructura() {
@@ -828,6 +747,7 @@ export class OilCharts {
             }
         })
         newGlobal.sort((a, b) => a.time - b.time)
+        //  console.log(newGlobal)
         if (data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')
@@ -840,7 +760,21 @@ export class OilCharts {
             return []
         }
         document.querySelector('.noGraf').style.display = 'none'
-
         return newGlobal
+    }
+
+    async actualData(idw, t1, t2) {
+        //  console.log(idw, t1, t2)
+        const paramss = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw, t1, t2 }))
+        }
+        const res = await fetch('/api/wialonOil', paramss)
+
+        this.alternativa = await res.json()
+
     }
 }

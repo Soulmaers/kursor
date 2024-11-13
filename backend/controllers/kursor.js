@@ -4,6 +4,8 @@ const databaseService = require('../services/database.service');
 
 const { JobToBase } = require('../modules/reportSettingsManagerModule/class/JobToBase')
 const { OilCalculator } = require('../modules/reportsModule/class/OilControllCalculater')
+const { DrainCalculate } = require('../modules/reportsModule/class/DrainControllCalculate')
+
 const { Worker } = require('worker_threads');
 const path = require('path');
 
@@ -150,6 +152,8 @@ exports.getParamsToPressureAndOil = async (req, res) => {
     const arrayColumns = req.body.arrayColumns
     const num = req.body.num
     const workerKey = req.body.workerKey
+    const window = req.body.window
+    //   console.log(window)
     // Завершаем предыдущего воркера, если он существует
     if (activeWorkers[workerKey]) {
         activeWorkers[workerKey].terminate();
@@ -170,7 +174,7 @@ exports.getParamsToPressureAndOil = async (req, res) => {
             console.log('выход воркера', code);
         }
     });
-    workerPress.postMessage({ time1: time1, time2: time2, idw: idw, arrayColumns: arrayColumns, num: num });
+    workerPress.postMessage({ time1: time1, time2: time2, idw: idw, arrayColumns: arrayColumns, num: num, window: window });
 
 }
 
@@ -183,12 +187,18 @@ exports.saveSetParams = async (req, res) => {
 exports.getRefills = async (req, res) => {
     const idw = req.body.idw
     const data = req.body.data
+    const metka = req.body.metka
     const result = await JobToBase.getSettingsToBase(String(idw))
     const settings = JSON.parse(result[0].jsonsetAttribute)
-    const instance = new OilCalculator(data, settings, idw)
 
+    let instance;
+    if (metka === 'refill') {
+        instance = new OilCalculator(data, settings, idw)
+    }
+    else {
+        instance = new DrainCalculate(data, settings, idw)
+    }
     res.json(await instance.init())
-
 }
 
 exports.getConfigParam = async (req, res) => {

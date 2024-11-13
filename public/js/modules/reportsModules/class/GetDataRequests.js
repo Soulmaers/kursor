@@ -78,6 +78,7 @@ export class GetDataRequests {
     }
 
     static async deleteTemplace(id) {
+        console.log(id)
         const params = {
             method: 'POST',
             headers: {
@@ -90,13 +91,13 @@ export class GetDataRequests {
         return result
     }
 
-    static async getReport(object) {
+    static async getReport(object, sett) {
         const params = {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({ object })
+            body: JSON.stringify({ object, sett })
         }
         const res = await fetch('/api/getReport', params)
         const result = await res.json()

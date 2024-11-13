@@ -1,6 +1,7 @@
 const wialonModule = require('../modules/wialon.module');
 const wialonService = require('./wialon.service');
 const databaseRetranslation = require('./databaseRetranslation.service');
+const { HelpersDefault } = require('./HelpersDefault.js')
 const WialonOrigin = require('../modules/wialon/WialonOrigin.js');
 class WialonClassMethods {
     constructor(retranslation) {
@@ -17,13 +18,11 @@ class WialonClassMethods {
     async init() {
         try {
             await this.fetchSession(); // Ждем, пока сессия будет получена
-            // console.log(this.session)
-            console.log('тут;')
-            await this.getObjects();
-            await this.addGroup();
+            //    await this.getObjects();
+            //   await this.addGroup();
 
-            this.controllStartClass();
-            setInterval(() => this.controllStartClass(), 180000);
+            //   this.controllStartClass();
+            //  setInterval(() => this.controllStartClass(), 180000);
         } catch (error) {
             console.error('Ошибка при инициализации WialonClassMethods:', error);
             throw error;
@@ -31,21 +30,22 @@ class WialonClassMethods {
     }
 
     async fetchSession() {
-        while (!this.session) {
-            try {
-                await this.getSessionWialon();
-            } catch (error) {
-                console.error("Ошибка при получении сессии:", error);
-            }
-            if (!this.session) {
-                console.log("Сессия не получена, повторная попытка через 60 секунд...");
-                await new Promise(resolve => setTimeout(resolve, 60000)); // Ждем 60 секунд перед повтором
-            }
+        //    while (!this.session || !this.session.eid) {
+        try {
+            this.session = await HelpersDefault.getSessionWialon();
+        } catch (error) {
+            console.error("Ошибка при получении сессии:", error);
         }
+        if (!this.session) {
+            console.log("Сессия не получена, повторная попытка через 60 секунд...");
+            await new Promise(resolve => setTimeout(resolve, 60000)); // Ждем 60 секунд перед повтором
+        }
+        //  }
     }
 
 
-    controllStartClass() {
+    async controllStartClass() {
+        if (!this.session || !this.session.eid) await this.fetchSession();
         if (this.instance) {
             this.instance.inits()
         }
@@ -55,7 +55,7 @@ class WialonClassMethods {
 
     }
     async getSessionWialon() {
-        this.session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c65EA58006309FF667A6B6108AEBD25C2DF93CDFAA2"`);
+        this.session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c6550EFE83A07938FF193D6A242F500F37EA39ED54B"`);
         console.log(this.session.eid)
     }
 
@@ -78,7 +78,6 @@ class WialonClassMethods {
     }
 
     async addGroup() {
-        //  console.log(this.allObjects)
         try {
             if (this.allObjects.length === 0 || !this.allObjects) return
             await Promise.all([await databaseRetranslation.updateFlagForExistingObjects(this.uniqRetraID, 'groups'),

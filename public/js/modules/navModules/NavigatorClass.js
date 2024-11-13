@@ -87,14 +87,12 @@ export class NavigationMenu {
     dash(elem) {
         elem.style.display = 'flex'
         this.globalContainer.style.display = 'flex'
-        //   dashContainer()
     }
 
     servis(elem) {
         this.globalContainer.style.display = 'none'
         elem.style.display = 'flex'
         new Servis(this.final)
-        //    servisContainer(elem)
     }
     statistika(elem) {
         this.reportUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
@@ -103,7 +101,6 @@ export class NavigationMenu {
         elem.style.width = 98 + '%'
         setTimeout(function () { initCharts.createChart(); }, 300);
         this.globalContainer.style.display = 'flex'
-        //   dashContainer()
     }
 
     karta(elem) {
@@ -126,16 +123,15 @@ export class NavigationMenu {
     }
 
     reports(elem, avl, num) {
-        this.globalContainer.style.display = 'flex'
+        this.globalContainer.style.display = 'none'
         this.reportUnit.forEach(e => { e.style.display = 'none', e.classList.remove('act_modules') })
         this.mapUnit.forEach(e => { e.style.display = 'block', e.classList.remove('act_modules') })
         if (num) {
             num.classList.add('act_modules')
         }
         elem.style.display = 'flex'
-        //  console.log(elem)
         new CentalClassReports(elem)
-        // reportsContainer(avl)
+
     }
 
     sklad(elem) {

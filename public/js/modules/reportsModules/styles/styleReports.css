@@ -334,14 +334,23 @@
 
 
 .cell_params {
-    width: 100%;
+    display: none;
+    margin-left: 25px;
 }
 
-
+.short_btn {
+    width: 150px;
+}
 
 .cell_reports {
     text-align: left;
     padding-left: 5px;
+}
+
+
+
+.templates_title {
+    margin: 0 10px;
 }
 
 .cell_title_reports {
@@ -352,6 +361,7 @@
     padding: 0;
     font-weight: bold;
     height: 15px;
+    width: 200px;
 }
 
 .wrapper_reports {
@@ -362,6 +372,7 @@
     text-align: center;
     overflow-y: auto;
     position: relative;
+    color: rgba(6, 28, 71, 0.8);
     scrollbar-width: none;
     /* для Firefox */
     -ms-overflow-style: none;
@@ -384,6 +395,52 @@
     align-items: center;
     justify-content: space-around;
     position: relative;
+}
+
+.list_reports {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 5px;
+
+}
+
+.titleNameReport {
+    width: 100%;
+    font-size: 0.8rem;
+    list-style-type: none;
+    border-bottom: 1px solid rgba(6, 28, 71, 1);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding: 1px 0;
+    width: 100%;
+    cursor: pointer;
+    color: rgba(6, 28, 71, 1);
+}
+
+.spoyler_report {
+    width: 100%;
+    font-size: 1rem;
+    list-style-type: none;
+    border-bottom: 1px solid rgba(6, 28, 71, 1);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding: 1px 0;
+    width: 100%;
+    cursor: pointer;
+    color: rgba(6, 28, 71, 1);
+}
+
+.body_content_report {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .wrapper_file {
@@ -491,4 +548,243 @@
 
 .titleNameReport:hover {
     border-bottom: 2px dashed rgba(6, 28, 71, 0.8);
+}
+
+.list_objects_reports {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 90%;
+    background-color: #fff;
+    z-index: 2;
+}
+
+.field_find {
+    background: none;
+    border: 1px solid rgba(6, 28, 71, 0.8);
+    border-radius: 3px;
+    box-sizing: border-box;
+    width: 55%;
+}
+
+.rows_objects_reports {
+    overflow-y: auto;
+    height: 400px;
+    scrollbar-width: none;
+    /* для Firefox */
+    -ms-overflow-style: none;
+    /* для Internet Explorer и Edge */
+}
+
+.footer_rows_reports {
+    padding: 2px 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-top: 1px solid rgba(6, 28, 71, 0.8);
+    box-sizing: border-box;
+}
+
+.btn_list_rows {
+    cursor: pointer;
+    color: #fff;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(6, 28, 71, 0.8);
+}
+
+.btn_list_rows:active {
+    background-color: #fff;
+    color: rgba(6, 28, 71, 0.8);
+}
+
+.group_list {
+    color: #fff;
+    background-color: rgba(6, 28, 71, 0.5);
+    padding: 1px 0;
+}
+
+.rows_list {
+    width: 100%;
+    height: 20px;
+}
+
+.object_list {
+    font-size: 0.75rem;
+}
+
+.iconRefill {
+    display: block;
+}
+
+.switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 13.5px;
+    height: 13.5px;
+    background-color: #fff;
+    color: rgba(6, 28, 71, 0.8);
+    cursor: pointer;
+    margin-left: 3px;
+}
+
+
+.objects_container {
+    display: none;
+    padding-left: 16px;
+}
+
+.numberOfChoise {
+    margin: 0 5px;
+    font-weight: 300;
+    font-size: 1rem;
+}
+
+
+.item_reports {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 2px 0;
+    padding: 2px 0;
+    border-bottom: 1px solid rgba(6, 28, 71, 0.4);
+}
+
+.rows_spoyler {
+    margin: 0 10px;
+    width: 20%;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.swich {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+    width: 13px;
+    height: 13px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(6, 28, 71, 0.8);
+    cursor: pointer;
+}
+
+.chart_container {
+    width: 100%;
+    display: none;
+    background-color: #fff;
+}
+
+.chart_class {
+    width: 100%;
+    position: relative;
+}
+
+.line1 {
+    z-index: 2;
+}
+
+.tooltip_reports {
+    position: absolute;
+    background-color: #fff;
+    padding: 2px;
+    border: 1px solid rgba(6, 28, 71, 0.8);
+    ;
+    opacity: 0;
+    width: 300px;
+    pointer-events: none;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.header_tooltip_report {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(6, 28, 71, 0.8);
+    padding: 2px 3px;
+    color: rgba(6, 28, 71, 0.8);
+    font-size: 0.8rem;
+    box-sizing: border-box;
+}
+
+.body_report_tooltip {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px 3px;
+    box-sizing: border-box;
+    font-size: 0.8rem;
+    color: rgba(6, 28, 71, 0.8);
+}
+
+.row_report_tooltip {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 3px;
+}
+
+.elem_tooltip {
+    margin: 0 2px;
+}
+
+.color_line_tooltip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 2px;
+    margin: 0 5px;
+
+}
+
+.name_line_tooltip {
+    width: 170px;
+    text-align: left;
+}
+
+.value_line_tooltip {
+    width: 100px;
+    text-align: left;
+}
+
+.icon_model {
+    width: 20px;
+    margin: 0 10px;
+    margin-bottom: 2px;
+    border: 1px solid black;
+    padding: 1px;
+
+}
+
+.last_icon_model {
+    margin-bottom: 30px;
+}
+
+
+.text_refill_drain {
+    font-size: 0.9rem;
+}
+
+.full_screen {
+    display: none;
+    color: rgba(6, 28, 71, 0.8);
+    cursor: pointer;
+    flex-grow: 1;
+    text-align: end;
+    margin-right: 15px;
+}
+
+.center_element {
+    padding: 150px 10px;
+    box-sizing: border-box;
 }

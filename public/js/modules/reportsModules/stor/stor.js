@@ -1,64 +1,64 @@
 
 
 export const storStatistika = [
-    { name: 'Группа объектов', checked: true },
-    { name: 'Объект', checked: true },
-    { name: 'Начало интервала', checked: true },
-    { name: 'Конец интервала', checked: true },
-    { name: 'Пробег', checked: false },
-    { name: 'Потрачено по ДУТ', checked: false },
-    { name: 'Средний расход по ДУТ на 100км', checked: false },
-    { name: 'Средний расход по ДУТ в моточасах', checked: false },
-    { name: 'Начальный уровень топлива', checked: false },
-    { name: 'Конечный уровень топлива', checked: false },
-    { name: 'Объем топливного бака', checked: false },
-    { name: 'Моточасы', checked: false },
-    { name: 'Всего заправлено', checked: false },
-    { name: 'Всего слито', checked: false },
-    { name: 'Количество заправок', checked: false },
-    { name: 'Количество сливов', checked: false }]
+    { name: 'Группа объектов', checked: true, disabled: true },
+    { name: 'Объект', checked: true, disabled: true },
+    { name: 'Начало интервала', checked: true, disabled: true },
+    { name: 'Конец интервала', checked: true, disabled: true },
+    { name: 'Пробег', checked: true },
+    { name: 'Потрачено по ДУТ', checked: true },
+    { name: 'Средний расход по ДУТ на 100км', checked: true },
+    { name: 'Средний расход по ДУТ в моточасах', checked: true },
+    { name: 'Начальный уровень топлива', checked: true },
+    { name: 'Конечный уровень топлива', checked: true },
+    { name: 'Объем топливного бака', checked: true },
+    { name: 'Моточасы', checked: true },
+    { name: 'Всего заправлено', checked: true },
+    { name: 'Всего слито', checked: true },
+    { name: 'Количество заправок', checked: true },
+    { name: 'Количество сливов', checked: true }]
 
 export const storComponentOil = [
-    { name: 'Дата и время', checked: false },
-    { name: 'Местоположение', checked: false },
-    { name: 'Начальный уровень топлива', checked: false },
-    { name: 'Конечный уровень топлива', checked: false },
-    { name: 'Всего заправлено', checked: false },
-    { name: 'Всего слито', checked: false }
+    { name: 'Дата и время', checked: true },
+    { name: 'Местоположение', checked: true },
+    { name: 'Начальный уровень топлива', checked: true },
+    { name: 'Конечный уровень топлива', checked: true },
+    { name: 'Всего заправлено', checked: true },
+    { name: 'Всего слито', checked: true }
 ]
 
 export const storComponentTravel = [
-    { name: 'Начало', checked: false },
-    { name: 'Начальное положение', checked: false },
-    { name: 'Конец', checked: false },
-    { name: 'Конечное положение', checked: false },
-    { name: 'Длительность', checked: false },
-    { name: 'Пробег', checked: false },
-    { name: 'Средняя скорость', checked: false },
-    { name: 'Максимальная скорость', checked: false }
+    { name: 'Начало', checked: true },
+    { name: 'Начальное положение', checked: true },
+    { name: 'Конец', checked: true },
+    { name: 'Конечное положение', checked: true },
+    { name: 'Длительность', checked: true },
+    { name: 'Пробег', checked: true },
+    { name: 'Средняя скорость', checked: true },
+    { name: 'Максимальная скорость', checked: true }
 ]
 
 export const storComponentMoto = [
-    { name: 'Начало', checked: false },
-    { name: 'Начальное положение', checked: false },
-    { name: 'Конец', checked: false },
-    { name: 'Конечное положение', checked: false },
-    { name: 'Моточасы', checked: false },
-    { name: 'Пробег', checked: false },
-    { name: 'Средние обороты двигателя', checked: false },
-    { name: 'Максимальные обороты двигателя', checked: false },
-    { name: 'Потрачено по ДУТ', checked: false },
-    { name: 'Средний расход по ДУТ на 100км', checked: false },
-    { name: 'Начальный уровень топлива', checked: false },
-    { name: 'Конечный уровень топлива', checked: false }
+    { name: 'Начало', checked: true },
+    { name: 'Начальное положение', checked: true },
+    { name: 'Конец', checked: true },
+    { name: 'Конечное положение', checked: true },
+    { name: 'Моточасы', checked: true },
+    { name: 'Пробег', checked: true },
+    { name: 'Средние обороты двигателя', checked: true },
+    { name: 'Максимальные обороты двигателя', checked: true },
+    { name: 'Потрачено по ДУТ', checked: true },
+    { name: 'Средний расход по ДУТ на 100км', checked: true },
+    { name: 'Начальный уровень топлива', checked: true },
+    { name: 'Конечный уровень топлива', checked: true }
 ]
 
 export const storComponentProstoy = [
-    { name: 'Начало', checked: false },
-    { name: 'Начальное положение', checked: false },
-    { name: 'Конец', checked: false },
-    { name: 'Конечное положение', checked: false },
-    { name: 'Моточасы', checked: false }
+    { name: 'Начало', checked: true },
+    { name: 'Начальное положение', checked: true },
+    { name: 'Конец', checked: true },
+    { name: 'Конечное положение', checked: true },
+    { name: 'Моточасы', checked: true }
     // { name: 'Потрачено по ДУТ', checked: false },
     //{ name: 'Средний расход по ДУТ в моточасах', checked: false },
     // { name: 'Начальный уровень топлива', checked: false },
@@ -66,48 +66,59 @@ export const storComponentProstoy = [
 ]
 
 export const storComponentTO = [
-    { name: 'Интервал техобслуживания', checked: false },
-    { name: 'Состояние', checked: false },
-    { name: 'Состояние по пробегу', checked: false },
-    { name: 'Состояние по моточасам', checked: false },
-    { name: 'Периодичность', checked: false }
+    { name: 'Интервал техобслуживания', checked: true },
+    { name: 'Состояние', checked: true },
+    { name: 'Состояние по пробегу', checked: true },
+    { name: 'Состояние по моточасам', checked: true },
+    { name: 'Периодичность', checked: true }
 ]
 
 export const storComponentParkings = [
-    { name: 'Начало', checked: false },
-    { name: 'Длительность', checked: false },
-    { name: 'Положение', checked: false }
+    { name: 'Начало', checked: true },
+    { name: 'Длительность', checked: true },
+    { name: 'Положение', checked: true }
 ]
 
 export const storComponentStops = [
-    { name: 'Начало', checked: false },
-    { name: 'Длительность', checked: false },
-    { name: 'Положение', checked: false }
+    { name: 'Начало', checked: true },
+    { name: 'Длительность', checked: true },
+    { name: 'Положение', checked: true }
 ]
 
 export const storComponentSKDSHComp = [
     { name: 'Колесо', checked: true },
-    { name: 'Ожидание', checked: false },
-    { name: 'Низкое', checked: false },
-    { name: 'Ниже нормы', checked: false },
-    { name: 'Нормальное', checked: false },
-    { name: 'Выше нормы', checked: false },
-    { name: 'Высокое', checked: false },
-    { name: 'Всего', checked: false },
-    { name: 'Минимальное давление в БАР', checked: false },
-    { name: 'Максимальное давление в БАР', checked: false },
-    { name: 'Среднее давление в БАР', checked: false }
+    { name: 'Ожидание', checked: true },
+    { name: 'Низкое', checked: true },
+    { name: 'Ниже нормы', checked: true },
+    { name: 'Нормальное', checked: true },
+    { name: 'Выше нормы', checked: true },
+    { name: 'Высокое', checked: true },
+    { name: 'Всего', checked: true },
+    { name: 'Минимальное давление в БАР', checked: true },
+    { name: 'Максимальное давление в БАР', checked: true },
+    { name: 'Среднее давление в БАР', checked: true }
 ]
 
 
 export const storComponentSKDSHGraf = [
-    { name: 'График бортового питания', checked: true },
-    { name: 'График давления', checked: false },
-    { name: 'График температуры', checked: false },
+    { name: 'График давления', checked: true },
+    { name: 'График температуры', checked: true },
+    { name: 'Подсветка графика', checked: true },
     { name: 'Совместить график давления и температуры', checked: false }
 ]
 
+export const storComponentOilGraf = [
+    { name: 'Дата и время', checked: true, disabled: true }, // Заблокировано
+    { name: 'Обработанные значения', checked: true, disabled: true }, // Заблокировано
+    { name: 'Исходные значения', checked: true, disabled: false },
+    { name: 'Движение', checked: true, disabled: false },
+    { name: 'Работа двигателя', checked: true, disabled: false }
+];
+export const storComponentMotoGraf = [
+    { name: 'Моточасы', checked: true, disabled: true }, // Заблокировано
+    { name: 'В работе', checked: true, disabled: true }, // Заблокировано
 
+];
 export const stor = [
     { type: 'Экскаватор', typeIndex: 10 },
     { type: 'Бульдозер', typeIndex: 10 },

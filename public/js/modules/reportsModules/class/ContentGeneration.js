@@ -1,30 +1,72 @@
-import { storStatistika, storComponentOil, storComponentTravel, storComponentProstoy, storComponentSKDSHComp, storComponentSKDSHGraf, storComponentParkings, storComponentStops, storComponentMoto, storComponentTO } from "../stor/stor.js";
+import { storStatistika, storComponentOil, storComponentMotoGraf, storComponentOilGraf, storComponentTravel, storComponentProstoy, storComponentSKDSHComp, storComponentSKDSHGraf, storComponentParkings, storComponentStops, storComponentMoto, storComponentTO } from "../stor/stor.js";
 import { Helpers } from './Helpers.js'
+
 export class Content {
 
 
-    static renderComponentsReport(data) {
-        if (!data[0].result) return 'Нет данных'
-        const attributesCell = data[0].result.map((e, index) => {
-            const cell = data.map(it => `<td class="cell_reports">${it.result[index]} ${it.local}</td>`).join('')
-            return `<tr>${cell}</tr>`
+    static renderComponentsReport(data, stata) {
+        const newRows = data.map((el, index) => {
+            const name = stata[index][1].result
+            const group = stata[index][0].result
+            if (!el[0].result) {
+                return `<div class="item_reports"><div class="swich">+</div><div class="rows_spoyler object_new_rows">${name}</div>
+                <div class="rows_spoyler group_new_rows">${group}</div></div>
+                      <div class="cell_params stat_reports">Нет данных</div>`
+            }
+            const attributesCell = el[0].result.map((e, index) => {
+                const cell = el.map(it => `<td class="cell_reports">${it.result[index]} ${it.local}</td>`).join('')
+                return `<tr>${cell}</tr>`
+            }).join('')
+            const titlerows = el.map(e => `<td class="cell_reports cell_title_reports">${e.name}</td>`).join('')
+            return `<div class="item_reports"><div class="swich">+</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div></div>
+                      <table class="cell_params stat_reports"><tr>${titlerows}</tr>${attributesCell}</table>`
         }).join('')
-        const titlerows = data.map(e => `<td class="cell_reports cell_title_reports">${e.name}</td>`).join('')
-        return `<table class="cell_params stat_reports"><tr>${titlerows}</tr>${attributesCell}</table> `
-    }
-    static renderTableStatic(data) {
-        const row = data.map(e => `<tr><td class="cell_reports">${e.name}</td><td class="cell_reports">${e.result !== undefined ? e.result : 'Н/Д'} ${e.local ? e.local : ''}</td></tr>`).join('')
-        return `<table class="cell_params">${row}</table> `
+        return newRows
     }
 
+    static renderChartsContent(data, stata, types) {
+        const newRows = data.map((el, index) => {
+            const name = stata[index][1].result
+            const group = stata[index][0].result
+            const chartHtml = `<div class="chart_container" id="${types}${index}"></div>`;
+            if (!el.graphic[types][0].result) {
+                return `<div class="item_reports"><div class="swich">+</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div></div>
+                      <div class="chart_container">Нет данных</div>`
+            }
+            1
+            return `<div class="item_reports"><div class="swich">+</div><div class="rows_spoyler object_new_rows">${name}</div>
+            <div class="rows_spoyler group_new_rows">${group}</div><i class="fas fa-expand full_screen"></i></div>
+                    ${chartHtml}`
+        }).join('')
+
+        return newRows
+    }
+
+    static renderTableStatic(data) {
+        const newRows = data.map(el => {
+            const row = el.map(e => `<tr><td class="cell_reports">${e.name}</td><td class="cell_reports">${e.result !== undefined ? e.result : 'Н/Д'} ${e.local ? e.local : ''}</td></tr>`).join('')
+            return `<div class="item_reports"><div class="swich">+</div><div class="rows_spoyler object_new_rows">${el[1].result}</div><div class="rows_spoyler group_new_rows">${el[0].result}</div></div>
+            <table class="cell_params">
+            <tr><td class="cell_reports">Название</td><td class="cell_reports">Значение</td></tr>
+        ${row}</table> `
+        }).join('')
+
+        return newRows
+
+
+    }
 
     static renderTitlesReport(data) {
-        const resultArray = Helpers.trueTitles(data)
-        const titleName = resultArray.map((e, index) => `<li class="titleNameReport  ${index === 0 ? 'activeTitleReports' : ''}" id=${e}>${e}</li>`).join('')
-        return titleName
+        const stats = Helpers.trueTitles(data[0])
+        const components = Helpers.trueTitles(data[1])
+        const graphics = Helpers.trueTitles(data[2])
+        const statName = stats.map((e, index) => `<li class="titleNameReport spoyler_report ${index === 0 ? 'activeTitleReports' : ''}" id=${e}>${e}</li>`).join('')
+        const componentName = components.map((e, index) => `<li class="titleNameReport " id=${e}>${e}</li>`).join('')
+        const graphicName = graphics.map((e, index) => `<li class="titleNameReport" id=${e}>${e}</li>`).join('')
+
+        return `${statName}<div class="body_content_report flex_none"></div><div class="spoyler_report">Компонентный</div><div class="body_content_report flex_none" id="components">${componentName}</div> <div class="spoyler_report">Графический</div><div class="body_content_report flex_none"  id="grafics">${graphicName}</div>`
     }
     static addContent(data) {
-        console.log(data)
         const properties = ['idResoure', 'groupName']; // добавьте все возможные имена свойств
         const lists = data.map(e => {
             let attributes = '';
@@ -37,6 +79,29 @@ export class Content {
         }).join('');
         return lists;
     }
+
+    static addContentHTML(data) {
+        const list = data.map((e) => {
+            const objectsElements = e[1].map((el, index) => `
+       <div class="checkbox_item rows_list object_list" group="${e[0]}" name="${el.name}" idobject="${el.id}" rel="${el.typeobject}">
+           <input class="object_checks"  type="checkbox" id="${el.id}_${index}">
+           <label class="label_check_tambplate" for="${el.id}_${index}" rel="${el.typeobject}">${el.name}</label>
+       </div>`).join('');
+            return `<div class="container_group_object">
+               <div class="checkbox_item rows_list group_list">
+               <div class="switch">+</div>
+           <input class="group_checks"  type="checkbox" id="${e[0]}">
+           <label class="label_check_tambplate" for="${e[0]}"">${e[0]}</label>
+       </div>
+        <div class="objects_container">${objectsElements}</div>
+                </div>`}).join('')
+
+        return `<div class="rows_objects_reports">${list}</div><div class="footer_rows_reports">
+        <div class="btn_list_rows start_save">ОК</div>
+              <div class="btn_list_rows cancel_start">Отмена</div>
+        </div>`
+    }
+
 
     static addButtonTypeBlock(arraynameBtn, indexs, updatedStores) {
         const buttons = arraynameBtn
@@ -54,19 +119,16 @@ export class Content {
     }
     // Метод для генерации списка чекбоксов
     static generateCheckboxList(fields, indexs, type) {
-        console.log(fields, indexs, type);
         return fields
             .map((field, index) => {
                 // Формируем id чекбокса
                 const checkboxId = `${field.name}${indexs}${type}`;
                 // Устанавливаем атрибуты checked и disabled
                 const checkedAttr = field.checked ? 'checked' : '';
-                const disabledAttr = indexs === '0' && index < 4 ? 'checked disabled' : '' ||
-                    indexs === '2' && index === 0 ? 'checked disabled' : '';
+                const disabledAttr = field.disabled ? 'disabled' : '';
 
                 // Объединяем атрибуты
                 const checkboxAttrs = [checkedAttr, disabledAttr].filter(Boolean).join(' ');
-
                 return `
                 <div class="checkbox_item">
                     <input type="checkbox" id="${checkboxId}" name="${field.name}" ${checkboxAttrs}>
@@ -79,14 +141,13 @@ export class Content {
 
     // Метод для рендеринга контента на основе типа
     static renderContent(type, indexs, fields) {
-        console.log(type, indexs, fields)
         if (!fields) {
             switch (type) {
                 case 'Статистика':
                     fields = storStatistika
                     break;
                 case 'Топливо':
-                    fields = storComponentOil
+                    fields = indexs === '1' ? storComponentOil : storComponentOilGraf
                     break;
                 case 'Поездки':
                     fields = storComponentTravel
@@ -98,7 +159,7 @@ export class Content {
                     fields = storComponentStops
                     break;
                 case 'Моточасы':
-                    fields = storComponentMoto
+                    fields = indexs === '1' ? storComponentMoto : storComponentMotoGraf
                     break;
                 case 'Простои на холостом ходу':
                     fields = storComponentProstoy
@@ -166,88 +227,19 @@ export class Content {
                        </div>`
     }
 
-    /*
-        static createSet(index) {
-            console.log(index)
-            let html;
-            switch (index) {
-                case 0: html = Content.renderDefault()
-                    break;
-                case 1: html = Content.renderTraveling()
-                    break;
-                case 2: html = Content.renderDefault()
-                    break;
-                case 3: html = Content.renderDefault()
-                    break;
-                case 4: html = Content.renderDefault()
-                    break;
-                case 5: html = Content.renderProstoy()
-                    break;
-                case 6: html = Content.renderDefault()
-                    break;
-                case 7: html = Content.renderDefault()
-                    break;
-            }
-            return html
-        }
-    
-        static renderDefault() {
-            return `<div class="celevoy_card"></div>`
-        }
-        static renderProstoy() {
-            return `   
-            <div class="celevoy_card">
-          <div class="card_set_prostoy card_rep">
-         <div class="checkbox_item">
-                        <input class="input_set" type="checkbox" id="min_distance_prostoy">
-                        <label class="label_check_set label_check_set_prostoy" for="min_distance_prostoy">Мин. длительность простоя(чч:мм:сс)</label>
-                        <input class="value_set" value=00:00:00 disabled>
-                    </div>
-    
-                    </div>
-          <div class="card_set_prostoy datchik_min_max card_rep">
-         <div class="checkbox_item">
-                        <input type="checkbox" id="datchik_ugla">
-                        <label class="label_check_set_prostoy uniq_set_prostoy" for="datchik_ugla">Датчик угла наклона</label>
-                     <div class="porog">min</div><input class="porog_value">
-                          <div class="porog">max</div><input class="porog_value">
-                    </div>
-                                  </div></div>`
-        }
-    
-        static renderTraveling() {
-            return `
-                 <div class="celevoy_card">
-        <div class="card_set card_rep">
-        <div class="distance">Длительность</div>
-        <div class="checkbox_item">
-                        <input class="input_time" type="checkbox" id="min_distance">
-                        <label class="label_check_set" for="min_distance">Мин. длительность (чч:мм:сс)</label>
-                        <input class="value_set" value=00:00:00 disabled>
-                    </div>
-                    <div class="checkbox_item">
-                        <input class="input_time" type="checkbox" id="max_distance">
-                        <label class="label_check_set" for="max_distance">Макс. длительность (чч:мм:сс)</label>
-                        <input class="value_set" value=24:00:00 disabled>
-                    </div>
-                    </div>
-    
-                      <div class="card_set card_rep">
-        <div class="distance">Пробег</div>
-        <div class="checkbox_item">
-                        <input class="input_distance" type="checkbox" id="min_mileage">
-                        <label class="label_check_set set_mileage" for="min_mileage">Мин. пробег, км</label>
-                        <input class="value_set set_mil"  maxlength="6" value=0 disabled>
-                    </div>
-                    <div class="checkbox_item">
-                        <input class="input_distance" type="checkbox" id="max_mileage">
-                        <label class="label_check_set set_mileage" for="max_mileage">Макс. пробег, км</label>
-                        <input class="value_set set_mil"  maxlength="6" value=0 disabled>
-                    </div>
-                    </div>
-                    </div>
-                    `
-        }*/
+
+    static formaFilters(type, name, templates) {
+        return `<div class="wrap_lk wrap_object wrap_edit">
+        <div class="header_index header_edit"><div class="buttons_menu" rel="${type ? type : ''}" id='objectID'>${name}</div>
+                    <div class="buttons_menu templates_title">${templates}</div>
+        <i class="fas fa fa-times close_modal_window"></i></div>
+                      <div class="settings_stor"></div>
+                                <div class="footer_index">
+              <div class="valid_message mess_edit_object"></div>
+              <div class="button_setting short_btn">Выполнить</div>
+                     </div>
+                                        `
+    }
 
     static addRazmetka() {
         return ` <div class="wraaper reports_module">
@@ -257,6 +249,15 @@ export class Content {
                         <div class="wrapper_shablon">
                             <div class="title_result_reports">Шаблоны</div>
                             <div class="wrapper_preferens">
+                             <div class="object">
+                                        <div class="select_list">
+                                            <div class="titleChange_list_name" rel="Выбор объектов">Выбор объекта </div>
+                                               <input class="field_find">
+                                                 <div class="toggle_reports list_objects_reports">
+                                                  </div><div class="numberOfChoise">(0)</div>
+                                                                                   </div>
+                                                                                   </div>
+
                                 <div class="up_shablons">
                                          <div class="select_list">
                                              <div class="titleChange_list_name" rel="Выбор отчета">Выбор отчета
@@ -267,13 +268,7 @@ export class Content {
                                                      </div>
                                                         </div>
                                          
-                                     <div class="object">
-                                        <div class="select_list">
-                                            <div class="titleChange_list_name" rel="Выбор объекта">Выбор объекта </div>
-                                          <select class="toggle_reports">
-                                                  </select>
-                                                                                   </div>
-                                                                                   </div>
+                                    
                                   <div class="interval_reports">
                                       <div class="select_list">
                                                 <div class="titleChange_list">
@@ -296,8 +291,8 @@ export class Content {
                                         <input class="input_data" type="text" id="dateranges5"
                                             placeholder="Выберите диапазон дат">
                                         <div class="btn_speedStart_reports">
-                                            <button class="clear_report btm_formStart">Очистить</button>
-                                            <button class="complite btm_formStart control">Выполнить</button>
+                                                                                      <button class="complite btm_formStart control">Выполнить</button>
+                                                 <button class="complite control btm_formStart addWindowFilters">Выполнить с редактированием</button>
                                         </div>
                                     </div>
                                 </div>

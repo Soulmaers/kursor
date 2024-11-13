@@ -1,24 +1,24 @@
 import { ContentGeneration } from './CreateContent.js'
 import { Requests } from './Requests.js'
 import { ValidationStatus } from './ValidationStatus.js'
-
+import { stor } from './stor.js'
 
 export class ControllSettingsReportsObject {
-    constructor(container, idw) {
-        console.log(container)
+    constructor(container, idw, type) {
         this.container = container
         this.idx = idw
-        console.log(document.querySelector('.stor_type_index'))
-        this.typeIndex = document.querySelector('.stor_type_index').getAttribute('rel')
-        this.mess = this.container.parentElement.querySelector('.valid_message')
+        this.typeIndex = type ? (stor.find(e => e.type === type)).typeIndex : document.querySelector('.stor_type_index').getAttribute('rel')
+        this.mess = !type ? this.container.parentElement.querySelector('.valid_message') : this.container.querySelector('.valid_message')
+        this.secondFlag = type
         this.init()
     }
 
 
-
     init() {
+
         this.addContentSettingsReport()
         this.caseElements()
+
         this.flexNone()
         this.addEventListeners()
     }
@@ -77,7 +77,6 @@ export class ControllSettingsReportsObject {
 
     async getRenderSetValue() {
         this.attributeValue = await Requests.getSettings(this.idx)
-        console.log(this.attributeValue)
         this.addValueToDOMElements()
     }
 
@@ -112,8 +111,6 @@ export class ControllSettingsReportsObject {
         const { minDuration } = this.attributeValue['Простои на холостом ходу'];
 
         this.minDistanceProstoyValue.value = minDuration ? minDuration : this.minDistanceProstoyValue.value
-        /*  this.check([this.bodySettings[5].querySelector('#min_distance_prostoy')],
-              [minDuration])*/
 
         const dat = document.querySelector('#datchik_ugla')
         const att = document.querySelector('#attachmentsSensor')
@@ -150,24 +147,14 @@ export class ControllSettingsReportsObject {
 
     updateTrevaling() {
         const { duration, mileage } = this.attributeValue['Поездки'];
-
         this.minDistanceValue.value = duration.minDuration
         this.maxMileageValue.value = duration.maxDuration
         this.minMileageValue.value = mileage.minMileage
         this.maxMileageValue.value = mileage.maxMileage
 
-        /* this.check(
-             [this.bodySettings[1].querySelector('#min_distance'),
-             this.bodySettings[1].querySelector('#max_distance'),
-             this.bodySettings[1].querySelector('#min_mileage'),
-             this.bodySettings[1].querySelector('#max_mileage')],
-             [minDistance, maxDistance, minMileage, maxMileage]
-         );*/
     }
 
     check(arrayDOM, arrayValue) {
-        console.log(arrayDOM)
-        console.log(arrayValue)
         arrayValue.forEach((e, index) => {
             if (e) {
                 arrayDOM[index].checked = true

@@ -22,6 +22,7 @@ class WialonOrigin {
     getObjectData = (() => {
         const timeCache = new Map(); // Кэш для хранения времени по каждому idw
         return async function (data) {
+            //  console.log(data)
             const dataArray = data?.items ?? [];
             const now = Math.floor(Date.now() / 1000);
             const phones = [];

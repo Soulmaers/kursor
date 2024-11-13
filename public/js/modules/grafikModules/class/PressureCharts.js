@@ -71,6 +71,8 @@ export class PressureCharts {
             // Используем nodes[i] для доступа к текущему элементу DOM
             const chartContainer = d3.select(nodes[i]);
             const data = d
+            console.log(data)
+
             const isLastChart = i === count - 1;
             const he = isLastChart ? height + 30 : height;
             // Создаем контейнер для SVG
@@ -420,6 +422,7 @@ export class PressureCharts {
             return div
         })
         this.char[this.char.length - 1].children[0].classList.add('last')
+        console.log(this.model)
         this.model.sort((a, b) => parseInt(a.osi) - parseInt(b.osi));
         im1.forEach((it, index) => {
             this.model.forEach(({ trailer, tyres }) => {

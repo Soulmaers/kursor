@@ -59,7 +59,8 @@ exports.updateTemplates = async (req, res) => {
 }
 exports.getReport = async (req, res) => {
     const object = req.body.object
-    const instance = new ReportsControllClass(object)
+    const sett = req.body.sett
+    const instance = new ReportsControllClass(object, sett)
     const result = await instance.init()
     res.json(result)
 }
@@ -100,6 +101,34 @@ exports.getSettings = async (req, res) => {
     const result = await instance.getSettings()
     res.json(JSON.parse(result[0].jsonsetAttribute))
 }
+
+
+const wialonService = require('../services/wialon.service')
+const wialonModule = require('../modules/wialon.module');
+exports.wialonOil = async (req, res) => {
+    const idw = req.body.idw
+    const t1 = req.body.t1
+    const t2 = req.body.t2
+    this.session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c65EA58006309FF667A6B6108AEBD25C2DF93CDFAA2"`);
+    //  console.log(idw, t1, t2)
+    const result = await wialonService.loadIntervalDataFromWialon(idw, t1, t2, 'i', this.session);
+    //   console.log(result)
+    const rst = result.messages.map(e => {
+        // console.log(e)
+        return {
+            'dut': e.p.rs485fuel_level1,
+            'time': e.p.last_valid_time,
+            'lat': e.lat,
+            'lon': e.lon,
+            'pwr': e.p.pwr_ext,
+            'oil': 0
+        }
+    })
+
+    //  console.log(rst)
+    res.json({ res: rst })
+}
+
 
 
 

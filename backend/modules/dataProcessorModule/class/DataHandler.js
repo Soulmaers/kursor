@@ -44,7 +44,7 @@ class DataHandlerUpdateBase {
                 switch (result) {
                     case true: computedValue = 1; break;
                     case false: computedValue = 0; break;
-                    default: computedValue = parseFloat(result.toFixed(2));
+                    default: computedValue = result ? result.toFixed(2) : result //parseFloat(result.toFixed(2));
                 }
             }
             return { key: el.meta, params: el.params, value: String(computedValue), status, data: dataTime };

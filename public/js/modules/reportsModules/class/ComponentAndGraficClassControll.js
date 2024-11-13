@@ -1,6 +1,6 @@
 
 import { Content } from './ContentGeneration.js'
-import { Validation } from './Validation.js'
+//import { Validation } from './Validation.js'
 
 export class ComponentAndGraficControll {
     constructor(arrayBlocks, block, setTemplates) {
@@ -75,7 +75,8 @@ export class ComponentAndGraficControll {
             const containerRel = container.getAttribute('rel'); // Например, 'button1', 'button2'
             this.checkboxStates[blockRel][containerRel] = Array.from(container.querySelectorAll('input[type="checkbox"]')).map(cb => ({
                 name: cb.name,
-                checked: cb.checked
+                checked: cb.checked,
+                disabled: cb.disabled
             }));
         });
     }

@@ -15,9 +15,10 @@ class DrainCalculate {
         this.config = await ToBaseMethods.getConfigs(this.id)
         if (!this.config) { return null }
         await this.filtration()
+        this.addDerivative(this.data)
         this.calculateIntervals(this.data);
         this.volume = this.filterIntervals();
-
+        // console.log(this.volume)
         this.oil = this.volume.reduce((acc, el) => {
             const diff = this.calkut(Number(el[0].dut) - Number(el[el.length - 1].dut))
             return acc + diff;
@@ -51,27 +52,17 @@ class DrainCalculate {
     }
     calculateIntervals(data) {
         let segment = [];
-        let segmentStarted = false; // Флаг, указывающий, что сегмент уже начался
+
 
         for (let i = 0; i < data.length; i++) {
             // Если сегмент еще не начался
-            if (!segmentStarted) {
+            if (segment.length === 0) {
                 segment.push(data[i]);
-                segmentStarted = true; // Установим флаг, что сегмент начался
             } else {
-                const lastDut = Number(segment[segment.length - 1].dut);
-                const currentDut = Number(data[i].dut);
-
+                const currentDerivative = Number(data[i].derivative);
                 // Если текущее значение больше последнего в сегменте, продлеваем сегмент
-                if (currentDut < lastDut) {
+                if (currentDerivative < this.averageDerivative) {
                     segment.push(data[i]);
-                }
-                // Если текущее значение равно последнему в сегменте, проверяем, если сегмент уже был начат.
-                else if (currentDut === lastDut) {
-                    // Равные значения не добавляются в сегмент, если предыдущее значение было больше
-                    if (segment.length > 0 && lastDut < Number(segment[segment.length - 1].dut)) {
-                        segment.push(data[i]);
-                    }
                 }
                 // Если текущее значение меньше последнего, мы завершаем сегмент
                 else {
@@ -81,7 +72,6 @@ class DrainCalculate {
                     }
                     // Начать новый сегмент
                     segment = [data[i]];
-                    segmentStarted = true; // Сброс флага и снова начнем сегмент
                 }
             }
         }
@@ -90,56 +80,55 @@ class DrainCalculate {
         if (segment.length > 1) {
             this.increasingIntervals.push(segment);
         }
+        //   console.log(this.increasingIntervals)
+    }
+
+    addDerivative(data) {
+        // Проверяем, что массив не пуст и содержит хотя бы два элемента
+        if (data.length < 2) {
+            return data;
+        }
+        // Добавляем поле "derivative" в каждый элемент массива, начиная со второго
+        for (let i = 1; i < data.length; i++) {
+            const deltaDut = Number(data[i].dut) - Number(data[i - 1].dut); // Разница в объеме топлива
+            //  console.log(Number(data[i].last_valid_time), Number((data[i - 1].last_valid_time)))
+            const deltaTime = (Number(data[i].last_valid_time) - Number((data[i - 1].last_valid_time)))// Разница во времени
+            // Если разница во времени не нулевая, вычисляем производную
+            //   console.log(deltaDut, deltaTime, data[i].last_valid_time)
+            data[i].derivative = deltaTime !== 0 ? Number((deltaDut / deltaTime).toFixed(2)) : 0;
+        }
+        // Добавляем поле "derivative" со значением null или 0 для первого элемента
+        data[0].derivative = 0; // Или 0, в зависимости от ваших требований
+        const averageDerivative = data.filter(e => e.derivative < 0).map(el => [el.derivative, el.last_valid_time])
+        //console.log(averageDerivative)
+        const summ = averageDerivative.reduce((acc, el) => {
+            acc += el[0]
+            return acc
+        }, 0)
+        //   console.log(summ, averageDerivative.length)
+        this.averageDerivative = Number((summ / averageDerivative.length).toFixed(2))
+        //  console.log(this.averageDerivative)
     }
 
     async filtration() {
-        this.data = HelpersDefault.filtersOil(this.dataOrigin, Number(this.config.dopValue))
+        //   this.data = HelpersDefault.filtersOil(this.dataOrigin, Number(this.config.dopValue))
+        this.data = HelpersDefault.medianFilters(this.dataOrigin, Number(this.config.dopValue))
     }
     filterIntervals() {
-        const time = 300
+
         const { volume, duration } = this.settings['Топливо'];
         const minTime = this.timeStringToUnix(duration.timeDrain)
         const volumeValue = Number(volume.volumeDrain)
-
-        // Шаг 1: Объединяем интервалы
-        /* let mergedIntervals = [];
-         let index = 0;
-         while (index < this.increasingIntervals.length) {
-             const currentInterval = this.increasingIntervals[index];
- 
-             // Проверяем, есть ли следующий интервал
-             if (index < this.increasingIntervals.length - 1) {
-                 const nextInterval = this.increasingIntervals[index + 1];
-                 const currentTime = currentInterval[currentInterval.length - 1].last_valid_time;
-                 const nextTime = nextInterval[0].last_valid_time;
- 
-                 const timeDifference = Number(nextTime) - Number(currentTime);
- 
-                 // Если временной промежуток меньше minTime, объединяем интервалы
-                 if (timeDifference < minTime) {
-                     // Объединяем текущий интервал с следующим
-                     // Добавляем все элементы следующего интервала в текущий
-                     currentInterval.push(...nextInterval);
-                     // Удаляем следующий интервал, так как он объединен
-                     index++; // Пропускаем следующий интервал, так как он объединен
-                 }
-             }
- 
-             // Добавляем текущий интервал (либо объединенный, либо без изменений) в массив
-             mergedIntervals.push(currentInterval);
-             index++; // Переходим к следующему интервалу
-         }*/
 
         return this.increasingIntervals.filter(interval => {
             const firstOil = interval[0].dut;
             const startTime = interval[0].last_valid_time
             const lastOil = interval[interval.length - 1].dut;
             const finishTime = interval[interval.length - 1].last_valid_time
-            const differenceDUT = Number(firstOil) - Number(lastOil);
             const diffenenceTime = Number(finishTime) - Number(startTime)
+            const differenceOil = this.calkut(firstOil) - this.calkut(lastOil);
 
-            const differenceOil = this.calkut(differenceDUT);
-            return differenceOil > volumeValue && diffenenceTime < time;
+            return interval.length > 2 && differenceOil > volumeValue
         });
     }
     timeStringToUnix(timeString) {

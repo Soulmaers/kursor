@@ -4,7 +4,7 @@ const { ToBaseMethods } = require('./ToBaseMethods')
 
 class OilCalculator {
     constructor(data, settings, id) {
-        this.dataOrigin = data;
+        this.dataOrigin = data.filter(e => e.oil);
         this.settings = settings;
         this.id = id
         this.increasingIntervals = [];
@@ -18,11 +18,6 @@ class OilCalculator {
         this.calculateIntervals(this.data);
 
         this.volume = this.filterIntervals();
-        //   console.log(this.volume)
-        if (this.config.dopValue !== 0) {
-            // this.increasingIntervals = []
-            //  this.overlay()
-        }
         this.oil = this.volume.reduce((acc, el) => {
             const diff = this.calkut(Number(el[el.length - 1].dut) - Number(el[0].dut))
             return acc + diff;
@@ -40,6 +35,7 @@ class OilCalculator {
                 value2: 0  // Устанавливаем в value2 если не refill
             };
         });
+
         return [this.oil, count];
     }
 
@@ -69,12 +65,19 @@ class OilCalculator {
         this.volume = volume.filter(e => e !== undefined);
     }
     async filtration() {
-        //  this.data = HelpersDefault.filtersOil(this.dataOrigin, Number(this.config.dopValue))
-        this.data = HelpersDefault.medianFilters(this.dataOrigin, Number(this.config.dopValue))
+        // this.data = HelpersDefault.filtersOil(this.dataOrigin, Number(this.config.dopValue))
+        const data = HelpersDefault.medianFilters(this.dataOrigin, Number(this.config.dopValue))
+        this.data = data.map(e => {
+            const oil = this.calkut(e.dut)
+            return {
+                ...e,
+                oil: oil
+            }
+        })
     }
 
     fuelConsumption() {
-        if (!this.config) { return 0 }
+        if (!this.config || this.data.length === 0) { return 0 }
         const fuelCons = this.calkut(this.data[0].dut) + this.oil - this.calkut(this.data[this.data.length - 1].dut)
         return fuelCons > 0 ? fuelCons : 0
     }
@@ -108,7 +111,7 @@ class OilCalculator {
                 // Если d отрицательное, завершение заправки
                 else if (d < 0) {
                     // Добавим текущий элемент в сегмент и завершим его
-                    segment.push(currentData);
+                    //   segment.push(currentData);
                     if (segment.length > 1) {
                         this.increasingIntervals.push(segment);
                     }
@@ -146,34 +149,6 @@ class OilCalculator {
     filterIntervals() {
         const { volume, duration } = this.settings['Топливо'];
         const volumeValue = Number(volume.volumeRefill);
-        // Шаг 1: Объединяем интервалы
-        /*   let mergedIntervals = [];
-           let index = 0;
-           while (index < this.increasingIntervals.length) {
-               const currentInterval = this.increasingIntervals[index];
-   
-               // Проверяем, есть ли следующий интервал
-               if (index < this.increasingIntervals.length - 1) {
-                   const nextInterval = this.increasingIntervals[index + 1];
-                   const currentTime = currentInterval[currentInterval.length - 1].last_valid_time;
-                   const nextTime = nextInterval[0].last_valid_time;
-   
-                   const timeDifference = Number(nextTime) - Number(currentTime);
-   
-                   // Если временной промежуток меньше minTime, объединяем интервалы
-                   if (timeDifference < minTime) {
-                       // Объединяем текущий интервал с следующим
-                       // Добавляем все элементы следующего интервала в текущий
-                       currentInterval.push(...nextInterval);
-                       // Удаляем следующий интервал, так как он объединен
-                       index++; // Пропускаем следующий интервал, так как он объединен
-                   }
-               }
-   
-               // Добавляем текущий интервал (либо объединенный, либо без изменений) в массив
-               mergedIntervals.push(currentInterval);
-               index++; // Переходим к следующему интервалу
-           }*/
 
         // Шаг 2: Фильтруем по D.U.T.
         return this.increasingIntervals.filter(interval => {

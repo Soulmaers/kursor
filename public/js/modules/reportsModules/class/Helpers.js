@@ -92,4 +92,42 @@ export class Helpers {
         const milliseconds = (hours * 3600 + minutes * 60 + seconds);
         return milliseconds
     }
+
+    static toggleWiewList(e) {
+        e.classList.toggle('toggleClass')
+        const full = e.parentElement.querySelector('.full_screen')
+        const wrapObject = e.parentElement.nextElementSibling
+        if (e.classList.contains('toggleClass')) {
+            if (full) full.style.display = 'block'
+            Helpers.hiddenWiewElements(wrapObject, e, 'block', '-')
+        }
+        else {
+            if (full) full.style.display = 'none'
+            Helpers.hiddenWiewElements(wrapObject, e, 'none', '+')
+        }
+    }
+
+    static hiddenWiewElements(wrap, swich, prop, text) {
+        wrap.style.display = `${prop}`
+        swich.textContent = text
+
+    }
+
+    static formatUnixTime(unixTimestamp) {
+
+        // Создаем объект Date из UNIX времени (умножаем на 1000, так как Date принимает миллисекунды)
+        const date = new Date(unixTimestamp * 1000);
+
+        // Получаем часы, минуты и секунды
+        const hours = String(date.getHours()).padStart(2, '0'); // Форматируем с ведущим нулем
+        const minutes = String(date.getMinutes()).padStart(2, '0'); // Форматируем с ведущим нулем
+        const seconds = String(date.getSeconds()).padStart(2, '0'); // Форматируем с ведущим нулем
+        // Получаем день и месяц
+        const day = String(date.getDate()).padStart(2, '0'); // Форматируем с ведущим нулем
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
+        // Форматируем время и дату
+        const timeString = `${hours}:${minutes}:${seconds}`;
+        const dateString = `${day}.${month}`;
+        return { timeString, dateString };
+    }
 }

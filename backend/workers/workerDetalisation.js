@@ -5,8 +5,8 @@ const databaseService = require('../services/database.service');
 
 
 parentPort.on('message', (data) => {
-    const { time1, time2, idw, arrayColumns, num } = data;
-    processSensorData(time1, time2, idw, arrayColumns, num)
+    const { time1, time2, idw, arrayColumns, num, window } = data;
+    processSensorData(time1, time2, idw, arrayColumns, num, window)
         .then(processedData => {
             parentPort.postMessage(processedData);
         })
@@ -16,9 +16,9 @@ parentPort.on('message', (data) => {
         });
 });
 
-async function processSensorData(time1, time2, idw, arrayColumns, num) {
-    console.log('туту')
-    const result = await databaseService.getParamsToPressureAndOilToBase(time1, time2, idw, arrayColumns, num)
+async function processSensorData(time1, time2, idw, arrayColumns, num, window) {
+    //   console.log(time1, time2, idw, arrayColumns, num, window)
+    const result = await databaseService.getParamsToPressureAndOilToBase(time1, time2, idw, arrayColumns, num, window)
     return result
 }
 

@@ -551,6 +551,7 @@ exports.getParamsToPressureAndOilToBase = async (time1, time2, idw, columns, num
     try {
         const pool = await connection;
         const selectedTColumnsTest = value.join(", ")
+
         const postModel = `
             SELECT ${selectedTColumnsTest}
             FROM globalStor
@@ -567,7 +568,10 @@ exports.getParamsToPressureAndOilToBase = async (time1, time2, idw, columns, num
             .input('time1', String(time1))
             .query(num === 0 ? postModel : postModel2);
         return result.recordset.length ? result.recordset : [];
-    } catch (e) {
+    }
+
+
+    catch (e) {
         console.error(e);
         return [];
     }

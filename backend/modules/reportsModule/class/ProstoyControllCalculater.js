@@ -16,7 +16,7 @@ class ProstoyControll {
 
     controll() {
         let rest;
-        if (this.index === '') return []
+        if (!this.index) return []
         switch (this.index) {
             case 30: rest = this.index30(this.data)
                 break;
@@ -26,6 +26,7 @@ class ProstoyControll {
                 break;
             case 11: rest = this.index11(this.data)
                 break;
+            default: rest = this.index30(this.data)
         }
         return rest
     }
@@ -35,7 +36,8 @@ class ProstoyControll {
         const ress = rest.reduce((acc, el) => {
             const time = Number(el[el.length - 1].last_valid_time) - Number(el[0].last_valid_time)
             if (time > minTime) {
-                const instance = new OilCalculator(el, this.filters, this.id);
+                const instance = new OilCalculator(el, this.filters, this.id)
+                    ;
                 const zapravka = (instance.init())[0]
                 const rashodDUT = el[0].oil ? parseFloat(Number(el[0].oil) + zapravka - Number(el[el.length - 1].oil)).toFixed(2) : 'Н/Д'
                 const rashodDUTMCH = parseFloat(((rashodDUT / time) * 3600).toFixed(2))

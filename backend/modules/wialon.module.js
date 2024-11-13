@@ -27,7 +27,7 @@ exports.login = async (token) => {
             }
 
             // Рекомендуется добавить небольшую задержку перед повторной попыткой
-            await new Promise(resolve => setTimeout(resolve, 2000)); // Задержка 2 секунды
+            await new Promise(resolve => setTimeout(resolve, 5000)); // Задержка 2 секунды
         }
     }
 };

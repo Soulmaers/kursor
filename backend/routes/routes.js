@@ -122,3 +122,6 @@ router.get('/api/getModelTyresGuide', controllerTyres.getModelTyresGuide)
 router.post('/postWappi', controllerBitrix.postWappi)
 
 
+router.post('/api/wialonOil', controllerShablon.wialonOil)
+
+

@@ -12,7 +12,7 @@ export class ResizeContainer {
         this.sliderBar.addEventListener('mousedown', this.startResize.bind(this));
         document.addEventListener('mousemove', this.resize.bind(this));
         document.addEventListener('mouseup', this.stopResize.bind(this));
-        window.addEventListener('resize', this.handleResize.bind(this));
+        // window.addEventListener('resize', this.handleResize.bind(this));
     }
     startResize(event) {
         this.isResizing = true;
@@ -35,7 +35,7 @@ export class ResizeContainer {
     }
     handleResize() {
         const newWidth = this.leftContainer.offsetWidth;
-
+        console.log('ресайз')
         if (newWidth < 100) {
             this.leftContainer.style.width = '100px';
             this.rightContainer.style.width = `calc(100% - 100px)`;

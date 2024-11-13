@@ -4,7 +4,12 @@ import { GetDataTime } from '../../../class/GetDataTime.js'
 import { Helpers } from './Helpers.js'
 import { GetDataRequests } from './GetDataRequests.js'
 import { Content } from './ContentGeneration.js'
+import { ControllSettingsReportsObject } from '../../settingsEventAttributesModules/class/ManagerAttributes.js'
+import { ValidationStatus } from '../../settingsEventAttributesModules/class/ValidationStatus.js'
+import { ChartsClass } from './chartsCompomemts/ChartsClass.js'
+import { PressureCharts } from './chartsCompomemts/ChartPressureClass.js'
 import { stor } from '../stor/stor.js'
+
 
 export class GetReports {
     constructor(interval, object, templates, container) {
@@ -12,13 +17,14 @@ export class GetReports {
             this.object = object,
             this.templates = templates
         this.container = container
-
+        this.instansCharts = {}
+        this.pop = document.querySelector('.popup-background')
+        this.wrapSet = document.querySelector('.wrapper_set')
         this.init()
     }
 
 
     init() {
-        //    console.log(this.objects)
         this.timeInterval = Helpers.getTimeInterval('Сегодня')
         this.caseElements()
         this.createCalendar()
@@ -40,12 +46,75 @@ export class GetReports {
 
     evenListener() {
         this.checkInterval.addEventListener('change', () => this.timeInterval = Helpers.getTimeInterval(this.checkInterval.value))
-        this.buttons[0].addEventListener('click', () => { this.input.value = '' })
-        this.buttons[1].addEventListener('click', () => this.getReportAndCreateContent())
+        this.buttons[0].addEventListener('click', () => this.getReportAndCreateContent())
+        this.buttons[1].addEventListener('click', () => this.startClassWiewFilters())
         this.prints[0].addEventListener('click', () => this.excelprint())
     }
 
+    async startClassWiewFilters() {
+        const objects = this.checkObjects.querySelectorAll('.object_checks')
+        const objectCheked = [...objects].filter(e => e.checked)
+        console.log(objectCheked)
+        if (objectCheked.length !== 1) {
+            return
+        }
+        const selectedTemplates = this.checkShablons.querySelector('option:checked');
+        const typeName = stor.find(e => e.type === objectCheked[0].parentElement.getAttribute('rel'))
+        this.type = typeName ? typeName.typeIndex : ''
+        this.name = objectCheked[0].parentElement.getAttribute('name')
+        this.id = objectCheked[0].parentElement.getAttribute('idobject')
+        this.group = objectCheked[0].parentElement.getAttribute('group')
+        const templates = selectedTemplates.textContent
+        this.idTemplate = selectedTemplates.value
+        await this.getComponents()
+        this.wrapSet.innerHTML = Content.formaFilters(this.type, this.name, templates)
+        this.caseElementsSecond()
+        this.modalActivity(this.pop, 'flex', 2)
+        console.log(this.type)
+        new ControllSettingsReportsObject(this.modal, Number(this.id), objectCheked[0].parentElement.getAttribute('rel'))
+        this.hiddenBlocks()
+        this.close.addEventListener('click', () => this.modalActivity(this.pop, 'none', 1))
+        this.start.addEventListener('click', async () => this.reports())
+    }
 
+    caseElementsSecond() {
+        this.modal = this.wrapSet.querySelector('.settings_stor')
+        this.close = this.wrapSet.querySelector('.close_modal_window')
+        this.start = this.wrapSet.querySelector('.short_btn')
+    }
+    async getComponents() {
+        console.log(this.idTemplate)
+        this.attributes = await GetDataRequests.getAttributeTemplace(Number(this.idTemplate))
+        console.log(this.attributes)
+    }
+
+    hiddenBlocks() {
+        const { component, graphic } = this.attributes
+        this.arrayTitleComponents = Helpers.trueTitles(component)
+        const blocks = this.modal.querySelectorAll('.type_navi')
+        blocks.forEach(e => {
+            if (!this.arrayTitleComponents.includes(e.getAttribute('rel'))) {
+                e.style.display = 'none'
+                e.nextElementSibling.style.display = 'none'
+            }
+
+        })
+    }
+    modalActivity(pop, flex, num) {
+        this.wrapSet.children[0].style.display = `${flex}`;
+        this.modal.style.display = `${flex}`;
+        pop.style.display = `${flex}`
+        pop.style.zIndex = num;
+    }
+
+    async reports() {
+        this.webpackObjectsSettings()
+        await this.getReportAndCreateContent(this.set)
+        //  await this.getStrukturaReports(this.set)
+        this.createCalendar()
+        this.modalActivity(this.pop, 'none', 1)
+
+    }
     excelprint() {
         if (!this.arrayStruktura) return;
 
@@ -62,7 +131,6 @@ export class GetReports {
             });
             return acc;
         }, {});
-        console.log(this.templates);
         const wb = XLSX.utils.book_new(); // Создание новой рабочей книги
         for (const key in res) {
             if (res.hasOwnProperty(key)) {
@@ -80,13 +148,10 @@ export class GetReports {
                     data.push(headers);
 
                     // Обработка результатов
-                    console.log(currentRes[0])
                     const numberOfResults = currentRes[0].result.length;
-                    console.log(numberOfResults)
                     if (numberOfResults.legth !== 0) {
                         const body = Array.from({ length: numberOfResults }, (_, index) =>
                             currentRes.map(e =>
-                                //  console.log(e.result[index])
                                 (Array.isArray(e.result[index]) ? e.result[index].join(',') : e.result[index])
                             )
                         );
@@ -104,15 +169,11 @@ export class GetReports {
                             ws['!cols'][i] = { wpx: fixedWidth }; // Установка фиксированной ширины столбцов
                         }
                     }
-
-
-
                 }
             }
         }
 
         function staticExel(key, data) {
-            console.log(data);
             const ws = XLSX.utils.aoa_to_sheet(data);
             XLSX.utils.book_append_sheet(wb, ws, key);
 
@@ -132,48 +193,31 @@ export class GetReports {
         XLSX.writeFile(wb, `${nameReport}.xlsx`);
     }
 
-    async getReportAndCreateContent() {
-        this.getType()
-        this.bool = this.building()
-
-        if (!this.bool) {
-            console.log(this.mess)
+    async getReportAndCreateContent(sett) {
+        const objects = this.checkObjects.querySelectorAll('.object_checks')
+        const objectCheked = [...objects].filter(e => e.checked)
+        this.objects = objectCheked.map(el => {
+            return ({
+                data: this.timeInterval,
+                idObject: el.parentElement.getAttribute('idobject'),
+                idTemplates: this.checkShablons.value,
+                objectName: el.parentElement.getAttribute('name'),
+                groupName: el.parentElement.getAttribute('group'),
+                typeIndex: el.parentElement.getAttribute('rel')
+            })
+        })
+        if (this.objects.length === 0) {
             Helpers.viewRemark(this.mess, 'red', 'Выберите все параметры отчета')
             return
         }
-        await this.getStrukturaReports()
+        await this.getStrukturaReports(sett)
         this.createCalendar()
     }
 
-    building() {
-        const selectedOption = this.checkObjects.querySelector('option:checked');
-        this.object = {
-            data: this.timeInterval,
-            idObject: this.checkObjects.value,
-            idTemplates: this.checkShablons.value,
-            objectName: selectedOption.textContent,
-            groupName: selectedOption.getAttribute('rel'),
-            typeIndex: this.typeIndex
-        }
-        let bool = true;
-        for (let key in this.object) {
-            this.object[key] == null ? bool = false : null
-        }
-        return bool
-    }
-
-
-
-    getType() {
-        const selectedOption = this.checkObjects.options[this.checkObjects.selectedIndex];
-        const typeValue = stor.find(e => e.type === selectedOption.getAttribute('type'));
-        console.log(typeValue)
-        this.typeIndex = typeValue ? typeValue.typeIndex : ""
-    }
-    async getStrukturaReports() {
-        console.log(this.object)
+    async getStrukturaReports(sett) {
         this.titleReports.innerHTML = `<div class="loaders_report" style="display:flex"> <div class="loaders-globe-report"></div></div>`
-        this.data = await GetDataRequests.getReport(this.object)
+        console.log(this.objects)
+        this.data = await GetDataRequests.getReport(this.objects, sett)
         console.log(this.data)
         this.analysisComponents()
         this.createListTitleReports(this.arrayStruktura)
@@ -184,47 +228,178 @@ export class GetReports {
         const id = `#${calendar.id}`
         const getTime = new GetDataTime()
         this.timeInterval = await getTime.getTimeInterval(calendar, id)
-        console.log(this.timeInterval)
     }
 
-
+    sorting() {
+        this.data.sort((a, b) => b.statistic['Статистика'][0].result > a.statistic['Статистика'][0].result)
+    }
     analysisComponents() {
-        this.arrayStruktura = [this.data.statistic, this.data.component]
-        console.log(this.arrayStruktura)
-        this.statistic = this.data.statistic
-        this.components = this.data.component
-        this.grapfics = this.data.grapfic
+        this.arrayStruktura = [this.data[0].statistic, this.data[0].component, this.data[0].graphic]
     }
 
 
     createListTitleReports() {
         this.titleReports.innerHTML = Content.renderTitlesReport(this.arrayStruktura)
+        this.activeTitleReports = this.container.querySelector('.activeTitleReports')
         this.createStatsTable()
         this.eventListenetTitleReports()
     }
 
     eventListenetTitleReports() {
         this.titleNameReports = this.container.querySelectorAll('.titleNameReport')
+        this.spoyler = this.container.querySelectorAll('.spoyler_report')
         this.titleNameReports.forEach(el => el.addEventListener('click', () => this.createMetaTable(el)))
-
+        this.spoyler.forEach(el => el.addEventListener('click', () => this.controllStows(el)))
     }
 
     createMetaTable(el) {
+        console.log(el)
+        console.log(el.parentElement.id)
         const idElement = el.id
         Helpers.ToggleClassElements(this.titleNameReports, el)
         if (idElement === 'Статистика') { this.createStatsTable() }
+        else if (el.parentElement.id === 'components') {
+            const trueAttributes = this.data.map(e => Helpers.trueAttributes(e.component[el.textContent]))
+            this.reports_module.innerHTML = Content.renderComponentsReport(trueAttributes, this.statistics);
+            this.swich = this.container.querySelectorAll('.swich')
+            this.swich.forEach(e => e.addEventListener('click', () => Helpers.toggleWiewList(e)))
+
+        }
         else {
-            this.trueAttributes = Helpers.trueAttributes(this.components[el.textContent])
-            console.log(this.trueAttributes)
-            this.reports_module.innerHTML = Content.renderComponentsReport(this.trueAttributes);
+            this.reports_module.innerHTML = Content.renderChartsContent(this.data, this.statistics, el.textContent);
+            this.createCharts(el.textContent)
+            this.swich = this.container.querySelectorAll('.swich')
+            this.fullButtons = this.container.querySelectorAll('.full_screen')
+
+            this.fullButtons.forEach(e => e.addEventListener('click', () => this.fullScreen(e)))
+            this.swich.forEach(e => e.addEventListener('click', () => Helpers.toggleWiewList(e)))
         }
     }
 
 
+
+    fullScreen(e) {
+        const svg = e.parentElement.nextElementSibling
+        if (svg.requestFullscreen) {
+            svg.requestFullscreen();
+        } else if (svg.webkitRequestFullscreen) { // Safari
+            svg.webkitRequestFullscreen();
+        } else if (svg.msRequestFullscreen) { // IE11
+            svg.msRequestFullscreen();
+        }
+
+
+    }
+    createCharts(types) {
+        this.data.forEach((el, index) => {
+            const chartContainer = document.getElementById(`${types}${index}`);
+            if (chartContainer) { // Проверяем, что элемент существует
+                if (types !== 'СКДШ') {
+                    if (el.graphic[types][0].result) {
+                        this.instansCharts[`${types}${index}`] = new ChartsClass(el.graphic[types], chartContainer);
+                    }
+                }
+                else {
+                    this.instansCharts[`${types}${index}`] = new PressureCharts(el.graphic[types], chartContainer);
+                }
+
+            }
+
+        });
+        console.log(this.instansCharts)
+    }
     createStatsTable() {
-        const statistics = this.statistic['Статистика'].filter(e => e.checked === true).map(it => it)
-        this.reports_module.innerHTML = Content.renderTableStatic(statistics)
+        this.statistics = this.data.map(el => el.statistic['Статистика'].filter(e => e.checked))
+        this.reports_module.innerHTML = Content.renderTableStatic(this.statistics)
+        this.swich = this.container.querySelectorAll('.swich')
+        this.swich.forEach(e => e.addEventListener('click', () => Helpers.toggleWiewList(e)))
     }
 
 
+    controllStows(button) {
+        this.activeTitleReports.classList.remove('activeTitleReports')
+        const currentContainer = button.nextElementSibling;
+        this.spoyler.forEach(btn => {
+            if (btn !== button) {
+                const siblingContainer = btn.nextElementSibling;
+                if (siblingContainer) {
+                    siblingContainer.classList.add('flex_none'); // Скрываем другой контейнер
+                    btn.classList.remove('activ_fon')
+                }
+            }
+        });
+        let isVisible = !currentContainer.classList.contains('flex_none');
+        // Управление видимостью текущего контейнера
+        currentContainer.classList.toggle('flex_none', isVisible);
+        button.classList.toggle('activ_fon', !isVisible);
+    }
+
+
+    async webpackObjectsSettings() {
+        const distanceMin = document.querySelector('#min_distance').nextElementSibling.nextElementSibling.value
+        const distanceMax = document.querySelector('#max_distance').nextElementSibling.nextElementSibling.value
+        const mileageMin = document.querySelector('#min_mileage').nextElementSibling.nextElementSibling.value
+        const mileageMax = document.querySelector('#max_mileage').nextElementSibling.nextElementSibling.value
+        const minDistanceProstoy = document.querySelector('#min_distance_prostoy').nextElementSibling.nextElementSibling.value
+        const minDurationParking = document.querySelector('#min_duration_parking').nextElementSibling.nextElementSibling.value
+        const minDurationStop = document.querySelector('#min_duration_stop').nextElementSibling.nextElementSibling.value
+        const minDurationMoto = document.querySelector('#min_duration_moto').nextElementSibling.nextElementSibling.value
+        const timeRefillValue = document.querySelector('#min_diration_refill').nextElementSibling.nextElementSibling.value
+        const timeDrainValue = document.querySelector('#min_diration_drain').nextElementSibling.nextElementSibling.value
+        const volumeRefillValue = document.querySelector('#min_value_refill').nextElementSibling.nextElementSibling.value
+        const volumeDrainValue = document.querySelector('#min_value_drain').nextElementSibling.nextElementSibling.value
+
+        const dat = document.querySelector('#datchik_ugla')
+        const angleSensorElement = document.querySelector('#angleSensor')
+        const attachmentsSensorElement = document.querySelector('#attachmentsSensor')
+
+        this.set = {
+            idw: this.idx,
+            object: JSON.stringify({
+                'Топливо': {
+                    duration: {
+                        timeRefill: timeRefillValue,
+                        timeDrain: timeDrainValue
+                    },
+                    volume: {
+                        volumeRefill: volumeRefillValue,
+                        volumeDrain: volumeDrainValue
+                    }
+                },
+                'Поездки': {
+                    duration:
+                    {
+                        minDuration: distanceMin,
+                        maxDuration: distanceMax
+                    },
+                    mileage: {
+                        minMileage: mileageMin,
+                        maxMileage: mileageMax
+                    }
+                },
+                'Стоянки': { minDuration: minDurationParking },
+                'Остановки': { minDuration: minDurationStop },
+                'Моточасы': { minDuration: minDurationMoto },
+                'Простои на холостом ходу': {
+                    minDuration: minDistanceProstoy,
+                    ...(dat ? {
+                        angleSensorSettings: {
+                            minValue: dat.parentElement.querySelectorAll('.porog_value')[0]?.value || null,
+                            maxValue: dat.parentElement.querySelectorAll('.porog_value')[1]?.value || null
+                        }
+                    } : {
+
+                        angleSensor: angleSensorElement?.checked || false,
+                        attachmentsSensor: attachmentsSensorElement?.checked || false
+                    })
+                },
+                'Техническое обслуживание': null
+            })
+        }
+        if (Object.values(ValidationStatus.status).some(value => value === false)) {
+            Helpers.viewRemark(this.mess, 'red', 'Введите корректно параметры настроек')
+            return false
+        }
+        return true
+    }
 }

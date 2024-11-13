@@ -77,7 +77,7 @@ export class Application {
         new IndexClassSettings(this.login)
         new RemClassControll(this.login, final)
         this.formatContainer() //метод который корректирует границы контейнеров взависимости от разрешения экрана
-        this.adaptiv()  //адаптив
+        //  this.adaptiv()  //адаптив
         this.activButton()
         await this.startClass()
         new LogsEvent(this.data, this.allId, this.final, this.login)

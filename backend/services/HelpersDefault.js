@@ -1,7 +1,14 @@
 const databaseService = require('./database.service');
+const wialonModule = require('../modules/wialon.module');
 const XLSX = require('xlsx');
 class HelpersDefault {
 
+
+    static async getSessionWialon() {
+        const session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c65EA58006309FF667A6B6108AEBD25C2DF93CDFAA2"`);
+        console.log('сессия', session)
+        return session
+    }
 
     static async getDataToInterval(active, t1, t2) {
         const columns = ['idw', 'data', 'lat', 'lon', 'speed', 'sats', 'oil', 'course', 'pwr', 'engine', 'mileage', 'engineOn', 'last_valid_time']
@@ -9,7 +16,6 @@ class HelpersDefault {
         const arrayData = resnew1.map(e => {
             return Object.keys(e).reduce((acc, key) => {
                 if (columns.includes(key)) {
-                    acc[key] = e[key];
                 }
                 return acc;
             }, {});
@@ -18,31 +24,35 @@ class HelpersDefault {
     }
 
     static filtersOil(array, koef) {
-        if (koef === 0) {
-            return array
-        }
-        const celevoy = array
+        //  const koef = Number(this.filtration[0].dopValue)
+        const average = array
             .filter(e => Number(e.dut) < 4097)
             .map(it => ({
                 ...it,
                 dut: Number(it.dut)
             }));
 
-        for (let i = koef; i < celevoy.length; i++) {
-            const previousElements = celevoy.slice(i - koef, i + 1);
+        const medianArray = []
+
+        medianArray.push(...average.slice(0, koef));
+        for (let i = koef; i < average.length; i++) {
+            const previousElements = average.slice(i - koef, i + 1);
             const validPreviousElements = previousElements.filter(val =>
                 val.dut !== undefined &&
                 !isNaN(val.dut)
             );
             if (validPreviousElements.length > 0) {
                 const sum = validPreviousElements.reduce((acc, val) => acc + Number(val.dut), 0);
-                const average = sum / validPreviousElements.length;
-                celevoy[i].dut = Math.round(average); // Округляем
+                const averages = sum / validPreviousElements.length;
+                //   average[i].dut = Math.round(averages); // Округляем
+
+                const newElement = { ...average[i], dut: Math.round(averages) };
+                medianArray.push(newElement);
             } else {
-                celevoy[i].dut = 0; // Или сохраняем предыдущее значение, если вам это нужно.
+                average[i].dut = 0;
             }
         }
-        return celevoy; // возвращаем измененный массив
+        return medianArray
     }
 
     static medianFilters(array, koef) {
@@ -68,20 +78,21 @@ class HelpersDefault {
             }
         }
         else {
-            const window = koef * 5
+            const window = koef % 2 === 0 ? koef - 1 : koef
             medianArray.push(...celevoy.slice(0, window));
             for (let i = window; i < celevoy.length; i++) {
                 const windowElements = celevoy.slice(i - window, i)
                 windowElements.sort((a, b) => Number(a.dut) - Number(b.dut))
                 let median;
-                if (windowElements.length % 2 === 0) {
-                    const indexNumber = windowElements.length / 2
-                    median = (parseInt(Number(windowElements[indexNumber - 1].dut) + Number(windowElements[indexNumber].dut))) / 2
-                }
-                else {
-                    const indexNumber = Math.floor(windowElements.length / 2)
-                    median = Number(windowElements[indexNumber].dut)
-                }
+                /* if (windowElements.length % 2 === 0) {
+                     const indexNumber = windowElements.length / 2
+                     median = (parseInt(Number(windowElements[indexNumber - 1].dut) + Number(windowElements[indexNumber].dut))) / 2
+                 }
+                 else {*/
+
+                const indexNumber = Math.floor(windowElements.length / 2)
+                median = Number(windowElements[indexNumber].dut)
+                //   }
                 const newElement = { ...celevoy[i], dut: median };
                 medianArray.push(newElement);
             }

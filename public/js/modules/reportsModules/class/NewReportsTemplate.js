@@ -4,7 +4,7 @@ import { ComponentAndGraficControll } from './ComponentAndGraficClassControll.js
 import { Helpers } from './Helpers.js'
 import { GetUpdateStruktura } from '../../../GetUpdateStruktura.js'
 import { GetDataRequests } from './GetDataRequests.js'
-import { Validation } from './Validation.js'
+//import { Validation } from './Validation.js'
 
 export class NewReportTemplate {
     constructor(container, wrapReports) {
@@ -49,7 +49,6 @@ export class NewReportTemplate {
     }
 
     eventListener(close) {
-
         if (close) {
             close.addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1));
         }
@@ -58,11 +57,10 @@ export class NewReportTemplate {
             if (this.editionTemplate) this.editionTemplate.addEventListener('click', () => this.startTemplateForm(true));
             if (this.deleteTemplate) this.deleteTemplate.addEventListener('click', () => this.deleteTemplace());
         }
-
     }
 
     async deleteTemplace() {
-        const idTemplate = Number(this.wrapReports[0].value);
+        const idTemplate = Number(this.wrapReports[1].value);
         const mess = await GetDataRequests.deleteTemplace(idTemplate)
         console.log(mess)
         this.getTemplatesAndCreateListElements()
@@ -73,13 +71,16 @@ export class NewReportTemplate {
         this.caseElements()
         // Если это режим редактирования, используем выбранное значение
         if (isEditing) {
-            this.idTemplate = Number(this.wrapReports[0].value);
-            const selectElement = this.wrapReports[0]
+            this.idTemplate = Number(this.wrapReports[1].value);
+            const selectElement = this.wrapReports[1]
             const nameReports = selectElement.options[selectElement.selectedIndex].textContent;
             this.idResourse = Number(selectElement.options[selectElement.selectedIndex].getAttribute('rel'))
             this.attributes = await GetDataRequests.getAttributeTemplace(this.idTemplate)
+            console.log(this.attributes)
+
             this.setTemplates = await this.getRenderSetValue(this.idTemplate)
             this.nameTemplate.value = nameReports
+            console.log(this.setTemplates)
         }
         else {
             this.nameTemplate.value = ''
@@ -124,6 +125,7 @@ export class NewReportTemplate {
                 nameTemplate: this.nameTemplate.value,
                 proreptyTamplate: 'reports'
             }
+
             //  this.webpackObjectsSettings()
             if (!this.idTemplate) {
                 const res = await GetDataRequests.saveTemplates(this.object)
@@ -144,7 +146,7 @@ export class NewReportTemplate {
         console.log(this.templates)
         if (this.templates.length === 0) return
         this.temp = this.templates.map(e => ({ id: e.uniqTemplateID, name: e.nameTemplate, idResoure: e.uniqResourseID }))
-        this.wrapReports[0].innerHTML = Content.addContent(this.temp)
+        this.wrapReports[1].innerHTML = Content.addContent(this.temp)
     }
 
     controllCountResourse() {
