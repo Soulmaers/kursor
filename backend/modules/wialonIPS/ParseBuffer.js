@@ -8,25 +8,33 @@ class ListenPortIPS {
     constructor(port) {
         this.port = port
         this.createServer(this.port)
+        // this.sendPacket()
         //  this.object = {}
 
 
     }
     createServer(port) {
+        console.log('тут')
         console.log(port)
         const tcpServer = net.createServer((socket) => {
-            console.log('TCP Client connected new');
+            //   console.log('TCP Client connected new');
             new ParseBuffer(socket, port)
 
         })
         tcpServer.listen(port, () => {
-            console.log(`TCP протокол слушаем порт ${port}`);
+            //  console.log(`TCP протокол слушаем порт ${port}`);
         });
     }
+
+
 }
+
+
+
 
 class ParseBuffer {
     constructor(socket, port) {
+        //console.log(socket, port)
         this.socket = socket
         this.port = port
         this.buffer = [];
@@ -38,21 +46,58 @@ class ParseBuffer {
         //   this.listenPortIPS = listenPortIPS
     }
 
+    sendPacket(message) {
+        const packet = `b'#L#863051064960882;NA\r\n`;
+        const msg = `b'${message}\r\n`;
+        const client = new net.Socket();
+        console.log('мы' + ' ' + packet);
+
+        let isMsgSent = false; // Флаг для отслеживания отправки сообщения
+
+        client.connect(20332, '193.193.165.165', () => {
+            client.write(packet); // Отправляем пакет
+        });
+
+        client.on('data', (data) => {
+            console.log('wialon ips: ' + data);
+            if (!isMsgSent) { // Проверяем флаг
+                console.log(msg)
+                client.write(msg);
+                isMsgSent = true; // Устанавливаем флаг в true после отправки
+            }
+            // client.destroy(); // Уничтожаем соединение после получения ответа (если это необходимо)
+        });
+
+        client.on('error', (err) => {
+            console.error('Connection error: ' + err);
+        });
+
+        client.on('close', () => {
+            console.log('Connection closed');
+        });
+    }
+
     socketOn() { //расшифровка буффера пакетов сообщений
         this.socket.on('data', async (data) => {
             console.log('датаIPS')
+            //   console.log(data)
             this.buffer.push(data);
         })
         this.socket.on('end', async () => {
             console.log('энд')
             let data = Buffer.concat(this.buffer);
             let buf = data.toString()
+
             const message = buf.toString()
+
+            console.log(message)
             const validateReqExp1 = /.*(\r\n|\n)/g;
             const bool = validateReqExp1.test(message); //проверка на конец строки
             if (bool) {
                 const validateReqExp = /^#(?<type>L|D|P|SD|B|M|I)#(?<message>.*)/gm;
                 const validate = [...message.matchAll(validateReqExp)];
+                //console.log(validate)
+                //  this.sendPacket(validate[1][0])
                 for (const match of validate) {
                     const messageType = match.groups['type']
                     const messageBody = match.groups['message']
@@ -64,6 +109,7 @@ class ParseBuffer {
                             const imei = paramsFromMessage[0]
                             const password = paramsFromMessage[1]
                             this.imei = imei
+                            console.log(this.imei)
                             break
                         case 'D':
                             const paramsFromMessageD = messageBody.split(';');
@@ -94,6 +140,7 @@ class ParseBuffer {
                 }
                 const res = await databaseService.objectsImei(String(this.imei))
                 if (res.length !== 0) {
+                    console.log(this.arrayData)
                     new UpdateSetStor(this.imei, this.port, this.arrayData, res[0].idObject)
                     this.setValidationImeiToBase(res[0].idObject)
                 }

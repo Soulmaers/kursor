@@ -30,7 +30,6 @@ class WialonOrigin {
             for (const el of dataArray) {
                 const phone = await wialonService.getUniqImeiAndPhoneIdDataFromWialon(el.id, this.session);
                 phones.push(phone);
-                // console.log('тут!')
             }
 
             // Обработка данных из Wialon
@@ -54,9 +53,8 @@ class WialonOrigin {
 
                 const result = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i', this.session);
                 //  console.log('здесь!')
-                if (!result) continue;
+                if (!result || !result.messages) continue;
                 const allArrayData = [];
-
                 for (const e of result.messages) {
                     const allObject = {
                         port: 'wialon',
@@ -88,11 +86,10 @@ class WialonOrigin {
                             allObject[`out${index + 1}`] = bit;
                         });
                     }
-
                     allArrayData.push(allObject);
                 }
                 // Запись в базу данных
-                await this.updateDatabase(allArrayData, res[0].idx);
+                await this.updateDatabase(allArrayData, idw);
 
                 // Обновляем кэш с новым временем
                 timeCache.set(idw, now);
@@ -106,12 +103,10 @@ class WialonOrigin {
         if (allArrayData.length !== 0) {
             new UpdateSetStor(allArrayData[0].imei, allArrayData[0].port, allArrayData, res)
             await this.setValidationImeiToBase(allArrayData);
-
         }
-
     }
     async setValidationImeiToBase(allArrayData) {
-        const table = 'wialon_origin';
+        const table = 'wialon_origin2';
         const base = new JobToBase();
 
         // Создание таблицы
@@ -127,7 +122,7 @@ class WialonOrigin {
             await base.fillingTableRows(elem, table);
         }
 
-        // console.log('Все данные успешно обработаны и записаны в базу');
+        //   console.log('Все данные успешно обработаны и записаны в базу');
     }
 }
 

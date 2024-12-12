@@ -84,11 +84,13 @@ export class SummaryViewControll {
     async choisIntervalDate(calendar) {
         const getTime = new GetDataTime()
         const time = await getTime.getTimeInterval(calendar)
+        console.log(time)
         const date = time.map(el => {
             const date = new Date(el * 1000);
             const year = date.getFullYear();
             const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
             const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
+            console.log(`${year}-${month}-${day}`)
             return `${year}-${month}-${day}`;
         })
 
@@ -143,7 +145,6 @@ export class SummaryViewControll {
         })
         el.children[0].classList.toggle('clickToggle')
     }
-
 
     //основной метод . готовить интервалы, запрашивает данные из базы, считает показатели, выводит в таблицу
     async getSummaryToBase(el, slot) {

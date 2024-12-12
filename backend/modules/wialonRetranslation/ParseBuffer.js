@@ -20,9 +20,9 @@ class ListenPortTPNew {
             console.log(`TCP протокол слушаем порт ${port}`);
         });
     }
+
+
 }
-
-
 class ParseBuffer {
     constructor(socket, port) {
         this.socket = socket
@@ -38,7 +38,7 @@ class ParseBuffer {
 
     socketOn() { //расшифровка буффера пакетов сообщений
         this.socket.on('data', async (data) => {
-            console.log('дата')
+            //   console.log(data)
             this.buffer.push(data);
         })
         this.socket.on('end', async () => {
@@ -50,6 +50,7 @@ class ParseBuffer {
             buf = buf.slice(4)
             const imei = buf.slice(0, 15).toString()
             this.imei = imei
+            console.log(imei)
             this.allData['imei'] = this.imei
             buf = buf.slice(16)
             const time = buf.readUInt32BE()

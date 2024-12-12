@@ -11,7 +11,7 @@ class SCDSHClass {
     async init() {
         await this.getDataGlobalStor()
         return {
-            components: this.calcilator(), grafics: this.struktura, model: this.data[0].result
+            components: this.calcilator()//, grafics: this.struktura, model: this.data[0].result
         }
     }
 
@@ -65,12 +65,12 @@ class SCDSHClass {
                 totalMileageAll += totalTime.mileageInterval;
                 // Заменяем массив интервалов суммарным временем и пробегом для данной категории
                 sensor.intervals.intervals[category] = {
-                    totalTime: totalTime.totalTime !== 0 ? this.convertTime(totalTime.totalTime) : '-',
-                    totalMileage: totalTime.mileageInterval !== 0 ? `${totalTime.mileageInterval} км` : '-'
+                    totalTime: totalTime.totalTime !== 0 ? totalTime.totalTime : 0,//'-',
+                    totalMileage: totalTime.mileageInterval !== 0 ? `${totalTime.mileageInterval} км` : 0//'-'
                 };;
             });
             // Добавляем свойства all с суммарным временем и общим пробегом всех интервалов в текущем сенсоре
-            sensor.intervals.all = { totalTime: totalTimeAll !== 0 ? this.convertTime(totalTimeAll) : '-', totalMileage: totalMileageAll !== 0 ? `${totalMileageAll} км` : '-' };
+            sensor.intervals.all = { totalTime: totalTimeAll !== 0 ? totalTimeAll : '-', totalMileage: totalMileageAll !== 0 ? `${totalMileageAll} км` : 0 }// '-' };
             return sensor;
         });
         return resultWithDurations;
@@ -155,11 +155,13 @@ class SCDSHClass {
         }, Infinity);
 
 
-        const cel = sensorData.val.filter(e => e.value !== -0.1 && e.stop === 'ВКЛ' && e.speed > 6).map(it => it)
+        const cel = sensorData.val.filter(e => e.value !== -0.1 && e.stop === 'ВКЛ' && e.speed > 6)
+        //   cel.forEach(e => console.log(e.value))
         const mediumPressure = parseFloat((cel.reduce((acc, obj) => {
+            // console.log(obj.value)
             return acc + obj.value; // Суммируем значения
         }, 0) / cel.length).toFixed(2)) // Делим на количество элементов
-
+        // console.log(mediumPressure)
         return { intervals: intervals, porogy: [minPressure, maxPressure, mediumPressure] };
     }
     strukturas() {
@@ -178,6 +180,7 @@ class SCDSHClass {
                     parametr: el.pressure,
                     bar: osssMap[el.osNumber],
                     val: this.pressure.map(elem => {
+                        // console.log(elem[el.pressure])
                         return ({
                             dates: new Date(Number(elem.last_valid_time) * 1000),
                             geo: [Number(elem.lat), Number(elem.lon)],

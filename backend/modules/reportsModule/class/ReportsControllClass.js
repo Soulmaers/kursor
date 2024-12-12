@@ -18,7 +18,8 @@ class ReportsControllClass {
 
 
     async init() {
-
+        this.date = CalculateReports.convertFormatTime(this.interval)
+        console.log(this.date)
         this.attributes = await this.getAttributesTemplates()
         const globalStruktura = Promise.all(this.object.map(async el => {
             const localCopyAttributes = JSON.parse(JSON.stringify(this.attributes))
@@ -35,6 +36,7 @@ class ReportsControllClass {
             localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Объект') { e.result = objectName, e.local = '' } })
             return localCopyAttributes
         }
+        const motoChartsData = await databaseService.sumIdwToBase(this.date, idObject)
         const instanceRefill = new OilCalculator(data, setAttributes, idObject)
         const refill = await instanceRefill.init()
         const instanceDrain = new DrainCalculate(data, setAttributes, idObject)
@@ -55,12 +57,12 @@ class ReportsControllClass {
 
         this.instanceSKDSH = new SCDSHClass(object)
         const skdsh = await this.instanceSKDSH.init()
-        // console.log(this.instanceSKDSH.struktura)
         const rashodDUT = data[0].dut ? parseFloat((startOil + zapravleno - finishOil).toFixed(2)) : 'Н/Д'
         const rashodDUTKM = data[0].dut && data[0].mileage ? parseFloat(((rashodDUT / mileage) * 100).toFixed(2)) : 'Н/Д'
         const rashodDUTMCH = data[0].dut && moto.motoAll !== 0 ? parseFloat(((rashodDUT / moto.motoAll) * 3600).toFixed(2)) : 'Н/Д'
 
-        const allOil = countZapravka.concat(countSliv)//this.data[0].dut ?  : []
+        const allOil = countZapravka.concat(countSliv)
+
         localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Группа объектов') { e.result = groupName, e.local = '' } })
         localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Объект') { e.result = objectName, e.local = '' } })
         localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Начало интервала') { e.result = CalculateReports.converterTimes(this.interval[0]), e.local = '' } })
@@ -128,17 +130,16 @@ class ReportsControllClass {
 
 
         localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Колесо') { e.result = skdsh.components.map(e => e.sensor), e.local = '' } })
-        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Ожидание') { e.result = skdsh.components.map(e => e.intervals.intervals.potery.totalTime), e.local = '' } })
-        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Низкое') { e.result = skdsh.components.map(e => e.intervals.intervals.belowKnd.totalTime), e.local = '' } })
-        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Ниже нормы') { e.result = skdsh.components.map(e => e.intervals.intervals.betweenKndDnn.totalTime), e.local = '' } })
-        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Нормальное') { e.result = skdsh.components.map(e => e.intervals.intervals.betweenDnnDvn.totalTime), e.local = '' } })
-        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Выше нормы') { e.result = skdsh.components.map(e => e.intervals.intervals.betweenDvnKvd.totalTime), e.local = '' } })
-        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Высокое') { e.result = skdsh.components.map(e => e.intervals.intervals.aboveKvd.totalTime), e.local = '' } })
-        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Всего') { e.result = skdsh.components.map(e => e.intervals.all.totalTime), e.local = '' } })
+        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Ожидание') { e.result = skdsh.components.map(e => CalculateReports.convertTime(e.intervals.intervals.potery.totalTime)), e.local = '' } })
+        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Низкое') { e.result = skdsh.components.map(e => CalculateReports.convertTime(e.intervals.intervals.belowKnd.totalTime)), e.local = '' } })
+        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Ниже нормы') { e.result = skdsh.components.map(e => CalculateReports.convertTime(e.intervals.intervals.betweenKndDnn.totalTime)), e.local = '' } })
+        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Нормальное') { e.result = skdsh.components.map(e => CalculateReports.convertTime(e.intervals.intervals.betweenDnnDvn.totalTime)), e.local = '' } })
+        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Выше нормы') { e.result = skdsh.components.map(e => CalculateReports.convertTime(e.intervals.intervals.betweenDvnKvd.totalTime)), e.local = '' } })
+        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Высокое') { e.result = skdsh.components.map(e => CalculateReports.convertTime(e.intervals.intervals.aboveKvd.totalTime)), e.local = '' } })
+        localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Всего') { e.result = skdsh.components.map(e => CalculateReports.convertTime(e.intervals.all.totalTime)), e.local = '' } })
         localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Минимальное давление в БАР') { e.result = skdsh.components.map(e => e.intervals.porogy[0]), e.local = 'Бар' } })
         localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Максимальное давление в БАР') { e.result = skdsh.components.map(e => e.intervals.porogy[1]), e.local = 'Бар' } })
         localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Среднее давление в БАР') { e.result = skdsh.components.map(e => e.intervals.porogy[2]), e.local = 'Бар' } })
-
 
 
         localCopyAttributes.graphic['Топливо'].forEach(e => { if (e.name === 'Дата и время') { e.result = instanceRefill.dataOrigin.map(e => e.last_valid_time) } e.chartType = 'osX' })
@@ -149,10 +150,22 @@ class ReportsControllClass {
         localCopyAttributes.graphic['Топливо'].push({ name: 'Заправки', checked: true, result: countZapravka, icon: "../../../../image/ref.png", chartType: 'icon' })
         localCopyAttributes.graphic['Топливо'].push({ name: 'Сливы', checked: true, result: countSliv, icon: "../../../../image/drain.png", chartType: 'icon' })
 
+        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'Колесо') { e.result = skdsh.components.map(e => e.sensor), e.y = ([this.interval[1] - this.interval[0]]), e.chartType = 'osX', e.local = '' } })
+        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'Ожидание') { e.result = skdsh.components.map(e => e.intervals.intervals.potery.totalTime), e.color = 'lightgray', e.chartType = 'rect', e.local = '' } })
+        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'Низкое') { e.result = skdsh.components.map(e => e.intervals.intervals.belowKnd.totalTime), e.color = '#e34040', e.chartType = 'rect', e.local = '' } })
+        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'Ниже нормы') { e.result = skdsh.components.map(e => e.intervals.intervals.betweenKndDnn.totalTime), e.color = '#e8eb65', e.chartType = 'rect', e.local = '' } })
+        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'Нормальное') { e.result = skdsh.components.map(e => e.intervals.intervals.betweenDnnDvn.totalTime), e.color = 'darkgreen', e.chartType = 'rect', e.local = '' } })
+        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'Выше нормы') { e.result = skdsh.components.map(e => e.intervals.intervals.betweenDvnKvd.totalTime), e.color = '#9e9913', e.chartType = 'rect', e.local = '' } })
+        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'Высокое') { e.result = skdsh.components.map(e => e.intervals.intervals.aboveKvd.totalTime), e.color = 'darkred', e.chartType = 'rect', e.local = '' } })
+        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'Всего') { e.result = skdsh.components.map(e => e.intervals.all.totalTime), e.local = '' } })
+        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'Минимум') { e.result = skdsh.components.map(e => e.intervals.porogy[0]), e.local = 'Бар' } })
+        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'Максимум') { e.result = skdsh.components.map(e => e.intervals.porogy[1]), e.local = 'Бар' } })
+        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'Среднее') { e.result = skdsh.components.map(e => e.intervals.porogy[2]), e.local = 'Бар' } })
 
-        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'График давления') { e.chartType = 'area', e.color = "#009933", e.result = skdsh.grafics, e.model = skdsh.model } })
-        localCopyAttributes.graphic['СКДШ'].forEach(e => { if (e.name === 'График температуры') { e.chartType = 'line', e.color = "blue", e.result = skdsh.grafics, e.model = skdsh.model } })
 
+        localCopyAttributes.graphic['Моточасы'].forEach(e => { if (e.name === 'Моточасы') { e.chartType = 'rect', e.color = "#3333FF", e.local = '', e.result = motoChartsData.map(e => Number(e.moto)) } })
+        localCopyAttributes.graphic['Моточасы'].forEach(e => { if (e.name === 'В работе') { e.chartType = 'rect', e.color = "#FF6633", e.local = '', e.result = motoChartsData.map(e => Number(e.moto) - Number(e.prostoy)) } })
+        localCopyAttributes.graphic['Моточасы'].unshift({ name: 'Подпись оси', checked: true, chartType: 'osX', result: motoChartsData.map(e => (e.data)), y: motoChartsData.map(e => Number(e.moto)) })
         return localCopyAttributes
 
     }

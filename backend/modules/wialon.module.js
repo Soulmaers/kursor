@@ -8,6 +8,7 @@ const MAX_RETRIES = 10; // Максимальное количество поп�
 
 exports.login = async (token) => {
     const url = `https://hst-api.watchit.ru/wialon/ajax.html?svc=token/login&params={"token":${token}}`;
+    //console.log(url)
     const headers = {
         'Content-Type': 'application/json'
     };
@@ -17,6 +18,7 @@ exports.login = async (token) => {
     while (attempt < MAX_RETRIES) {
         try {
             const response = await axios.post(url, {}, { headers: headers, timeout: 60000 });
+            //console.log(response.data)
             return response.data
         } catch (error) {
             attempt++;

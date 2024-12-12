@@ -29,7 +29,8 @@ export class Content {
             const name = stata[index][1].result
             const group = stata[index][0].result
             const chartHtml = `<div class="chart_container" id="${types}${index}"></div>`;
-            if (!el.graphic[types][0].result) {
+            console.log(el.graphic[types][0].result, types)
+            if (!el.graphic[types][0].result || el.graphic[types][0]?.result.length === 0) {
                 return `<div class="item_reports"><div class="swich">+</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div></div>
                       <div class="chart_container">Нет данных</div>`
             }

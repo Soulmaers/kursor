@@ -1,6 +1,6 @@
 const databaseService = require('../../services/database.service');
 const fs = require('fs');
-
+const net = require('net');
 
 
 
@@ -63,6 +63,8 @@ class BitsCount { // расчет битов
     }
 }
 
+
+
 class WriteFile { //запись расшифрованных данных в файл txt
     static async writeDataFile(globalArrayMSG, imei) {
         const res = await databaseService.objectsImei(String(imei))
@@ -72,25 +74,14 @@ class WriteFile { //запись расшифрованных данных в ф
             })
             const table = 'navtelecom'
             const obj = new JobToBase()
-            obj.createTable(table)
-            const writeStream = fs.createWriteStream('./backend/modules/navtelecom/data.txt', { flags: 'w' });
-            globalArrayMSG.forEach(async msg => {
+            //   obj.createTable(table)
+            for (const msg of globalArrayMSG) {
                 await obj.fillingTableColumns(msg, table)
-                obj.fillingTableRows(msg, table)
-                let content = '';
-                for (let key in msg) {
-                    if (msg.hasOwnProperty(key)) {
-                        content += `${key}: ${msg[key]}\n`;
-                    }
-                }
-                content += `\n`
-                writeStream.write(content)
-            });
+                await obj.fillingTableRows(msg, table)
+            }
         }
     }
 }
-
-
 
 module.exports = {
     NavtelecomResponceData,

@@ -98,6 +98,7 @@ export class Helpers {
         const full = e.parentElement.querySelector('.full_screen')
         const wrapObject = e.parentElement.nextElementSibling
         if (e.classList.contains('toggleClass')) {
+            console.log(full)
             if (full) full.style.display = 'block'
             Helpers.hiddenWiewElements(wrapObject, e, 'block', '-')
         }
@@ -115,9 +116,8 @@ export class Helpers {
 
     static formatUnixTime(unixTimestamp) {
 
-        // Создаем объект Date из UNIX времени (умножаем на 1000, так как Date принимает миллисекунды)
+        // Создаем оъект Date из UNIX времени (умножаем на 1000, так как Date принимает миллисекунды)
         const date = new Date(unixTimestamp * 1000);
-
         // Получаем часы, минуты и секунды
         const hours = String(date.getHours()).padStart(2, '0'); // Форматируем с ведущим нулем
         const minutes = String(date.getMinutes()).padStart(2, '0'); // Форматируем с ведущим нулем
@@ -130,4 +130,14 @@ export class Helpers {
         const dateString = `${day}.${month}`;
         return { timeString, dateString };
     }
+
+    static timesFormat(dates) {
+        const totalSeconds = Math.floor(dates);
+        const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+        const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+        const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+        const motoHours = `${hours}:${minutes}`;
+        return motoHours;
+    }
+
 }

@@ -1,15 +1,36 @@
 const databaseService = require('./database.service');
 const wialonModule = require('../modules/wialon.module');
+const axios = require('axios');
 const XLSX = require('xlsx');
 class HelpersDefault {
 
-
+    //39e1405494b595e6890a684bdb998c65381701F3CB8D7773666633574238F6E412740CC9
     static async getSessionWialon() {
-        const session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c65EA58006309FF667A6B6108AEBD25C2DF93CDFAA2"`);
-        console.log('сессия', session)
+
+
+        const session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c657B0E5B18E670CCE536AD11EB368A1DD86776273D"`);
+        //  console.log('сессия', session.eid)
+        //  const res = await HelpersDefault.updateToken()
         return session
     }
 
+
+    static async updateToken() {
+        const url = `https://hst-api.watchit.ru/wialon/ajax.html?svc=token/update&params={
+        "callMode":"create","h":"","app":"cursor-gps", "at":0,"dur":0,"fl":-1,"p":"{}","items":[],"deleteAll":false}`;
+
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+
+        try {
+            const response = await axios.post(url, {}, { headers: headers })
+            console.log(response.data)
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
     static async getDataToInterval(active, t1, t2) {
         const columns = ['idw', 'data', 'lat', 'lon', 'speed', 'sats', 'oil', 'course', 'pwr', 'engine', 'mileage', 'engineOn', 'last_valid_time']
         const resnew1 = await databaseService.getParamsToPressureAndOilToBase(t1, t2, active, columns, 0)  //получение параметров за интервал
@@ -24,7 +45,7 @@ class HelpersDefault {
     }
 
     static filtersOil(array, koef) {
-        //  const koef = Number(this.filtration[0].dopValue)
+
         const average = array
             .filter(e => Number(e.dut) < 4097)
             .map(it => ({

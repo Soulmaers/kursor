@@ -4,7 +4,21 @@ import { Helpers } from '../Helpers.js'
 export class ChartUtils {
 
 
+    static createTooltipRect(arrayTool) {
 
+        const text = arrayTool.map(e => {
+            const value = e.local === '' ? Helpers.timesFormat(e.value) : e.value
+            const local = e.local === '' ? 'чч:мм' : e.local
+            return `<div class="row_report_tooltip">
+            <div class="elem_tooltip color_line_tooltip" style="height:20px; background-color: ${e.color};"></div>
+             <div class="elem_tooltip name_line_tooltip" style="width:100px">${e.name}</div>
+             <div class="elem_tooltip value_line_tooltip">${value} ${local}</div>
+            </div>`
+        }).join('')
+
+
+        return `<div class="body_report_tooltip">${text}</div>`
+    }
     static createTooltip(chartGroup, container, data, x) {
         const tooltip = d3.select('[data-chart-id="' + container + '"]').append('div')
             .attr("class", `tooltip_reports ${container}`)
@@ -31,7 +45,7 @@ export class ChartUtils {
                     .style("opacity", .9)
                     .style("display", "block");
                 tooltip.html(`${text}`)
-                    .style("left", xPosition < 24 ? `${xPosition + 80}px` : (xPosition > 1314 ? `${xPosition - 220}px` : `${xPosition + 40}px`))
+                    .style("left", xPosition < 24 ? `${xPosition + 80}px` : (xPosition > 1314 ? `${xPosition - 240}px` : `${xPosition + 40}px`))
                     .style("top", yPosition <= 241 ? `${yPosition + 55}px` : `${yPosition - 35}px`);
             })
             .on("mouseout", () => {
@@ -115,6 +129,16 @@ export class ChartUtils {
             xStart: xStart,
             width: width,
             height: height,
+            color: color,
+            strokeWidth: strokeWidth
+        };
+    }
+
+    static createRectSecond(data, xScale, color, strokeWidth) {
+        return {
+            xStart: xScale(data),
+            width: 70,
+            height: data,
             color: color,
             strokeWidth: strokeWidth
         };

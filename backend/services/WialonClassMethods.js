@@ -18,11 +18,11 @@ class WialonClassMethods {
     async init() {
         try {
             await this.fetchSession(); // Ждем, пока сессия будет получена
-            //    await this.getObjects();
-            //   await this.addGroup();
+            await this.getObjects();
+            await this.addGroup();
 
-            //   this.controllStartClass();
-            //  setInterval(() => this.controllStartClass(), 180000);
+            this.controllStartClass();
+            setInterval(() => this.controllStartClass(), 180000);
         } catch (error) {
             console.error('Ошибка при инициализации WialonClassMethods:', error);
             throw error;
@@ -30,19 +30,18 @@ class WialonClassMethods {
     }
 
     async fetchSession() {
-        //    while (!this.session || !this.session.eid) {
-        try {
-            this.session = await HelpersDefault.getSessionWialon();
-        } catch (error) {
-            console.error("Ошибка при получении сессии:", error);
+        while (!this.session || !this.session.eid) {
+            try {
+                this.session = await HelpersDefault.getSessionWialon();
+            } catch (error) {
+                console.error("Ошибка при получении сессии:", error);
+            }
+            if (!this.session) {
+                console.log("Сессия не получена, повторная попытка через 60 секунд...");
+                await new Promise(resolve => setTimeout(resolve, 60000)); // Ждем 60 секунд перед повтором
+            }
         }
-        if (!this.session) {
-            console.log("Сессия не получена, повторная попытка через 60 секунд...");
-            await new Promise(resolve => setTimeout(resolve, 60000)); // Ждем 60 секунд перед повтором
-        }
-        //  }
     }
-
 
     async controllStartClass() {
         if (!this.session || !this.session.eid) await this.fetchSession();
@@ -52,11 +51,6 @@ class WialonClassMethods {
         else {
             this.instance = new WialonOrigin(this.session);
         }
-
-    }
-    async getSessionWialon() {
-        this.session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c6550EFE83A07938FF193D6A242F500F37EA39ED54B"`);
-        console.log(this.session.eid)
     }
 
     async getObjects() {
@@ -76,6 +70,7 @@ class WialonClassMethods {
             };
         });
     }
+
 
     async addGroup() {
         try {

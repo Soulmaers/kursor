@@ -321,7 +321,7 @@ exports.getOldObjectsToBaseWialonOrigin = async (arrayObjects) => {
                 idObject, 
                 imei,
                 ROW_NUMBER() OVER (PARTITION BY imei ORDER BY (SELECT NULL)) AS rn
-            FROM wialon_origin
+            FROM wialon_origin2
             WHERE imei IN (${imeiList})
             AND idObject NOT IN (${idObjectList})
         )
@@ -404,7 +404,7 @@ exports.getMeta = async (idObject, port, imei) => {
     } else if (port === '21626' || !port) {
         table = 'navtelecom';
     } else if (port === 'wialon' || !port) {
-        table = 'wialon_origin';
+        table = 'wialon_origin2';
     } else {
         return [];
     }
@@ -437,7 +437,7 @@ exports.getMeta = async (idObject, port, imei) => {
 exports.getLastTimeMessage = async (idw) => {
     try {
         const pool = await connection
-        const postModel = `SELECT TOP (1) time_reg FROM wialon_origin WHERE idObject = ${idw} ORDER BY time_reg DESC`
+        const postModel = `SELECT TOP (1) time_reg FROM wialon_origin2 WHERE idObject = ${idw} ORDER BY time_reg DESC`
         const result = await pool.request()
             .input('idObject', String(idw))
             .query(postModel)
@@ -2892,6 +2892,7 @@ module.exports.summaryYestodayToBase = async (data, arrayId) => {
 };
 
 module.exports.sumIdwToBase = async (data, idw) => {
+    //console.log(data, idw)
     const pool = await connection
     if (data.length === 1) {
         try {

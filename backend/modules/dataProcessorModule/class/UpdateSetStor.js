@@ -57,61 +57,12 @@ class UpdateSetStor {
                 ...el
             })
         })
+
         await databaseService.setStatistiksPressure(arrayData)
     }
-
-
-
-
-
 }
 
 
 
 module.exports = { UpdateSetStor }
 
-
-
-/*
-const summator = data.find(e => e.params === 'summatorOil');
-if (summator && summator.meta === 'ON') {
-    const params = await databaseService.getSummatorToBase(idw) //получение параметров в сумматоре топлива
-    if (params.length === 0) {
-        const objectToUpdate = value.find(e => e.params === 'summatorOil');
-        objectToUpdate.meta = 'OFF'
-        objectToUpdate.data = objectToUpdate.data
-        objectToUpdate.status = 'false'
-        return
-    }
-    const summatorValue = this.calculateSummatorOil(value, params)
-    const objectToUpdate = value.find(e => e.params === 'summatorOil');
-    objectToUpdate.value = summatorValue ? String(summatorValue) : summatorValue
-    objectToUpdate.data = nowTime
-    objectToUpdate.status = 'true'
-}
-    // для хистори
-      const summator = data.find(e => e.params === 'summatorOil');
-                if (summator && summator.meta === 'ON') {
-                    const params = await databaseService.getSummatorToBase(idw)
-                    if (params.length === 0) {
-                        obj['summatorOil'] = null
-                        return
-                    }
-                    const summatorValue = this.calculateSummatorOil(value, params)
-                    obj['summatorOil'] = summatorValue ? String(summatorValue) : summatorValue
-                }
-
-
-
-   calculateSummatorOil(value, params) {
-        const values = params.map(it => it.param)
-        const summatorValue = value.reduce((acc, e) => {
-            if (acc === null) return null; // Если уже встретился null, возвращаем null для всех последующих итераций
-            if (values.includes(e.params)) {
-                if (e.value === null) return null; // Возвращаем null, если значение null и params в списке values
-                return acc + Number(e.value); // Суммируем значения, если они не null
-            }
-            return acc; // Возвращаем текущий аккумулятор, если params не в списке values
-        }, 0);// Начальное значение аккумулятора
-        return summatorValue
-    }*/

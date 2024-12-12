@@ -7,7 +7,8 @@ import { Content } from './ContentGeneration.js'
 import { ControllSettingsReportsObject } from '../../settingsEventAttributesModules/class/ManagerAttributes.js'
 import { ValidationStatus } from '../../settingsEventAttributesModules/class/ValidationStatus.js'
 import { ChartsClass } from './chartsCompomemts/ChartsClass.js'
-import { PressureCharts } from './chartsCompomemts/ChartPressureClass.js'
+import { ChartsClassSecond } from './chartsCompomemts/ChartClassSecond.js'
+
 import { stor } from '../stor/stor.js'
 
 
@@ -228,6 +229,7 @@ export class GetReports {
         const id = `#${calendar.id}`
         const getTime = new GetDataTime()
         this.timeInterval = await getTime.getTimeInterval(calendar, id)
+        this.timeInterval[1] += 86399
     }
 
     sorting() {
@@ -253,8 +255,6 @@ export class GetReports {
     }
 
     createMetaTable(el) {
-        console.log(el)
-        console.log(el.parentElement.id)
         const idElement = el.id
         Helpers.ToggleClassElements(this.titleNameReports, el)
         if (idElement === 'Статистика') { this.createStatsTable() }
@@ -293,14 +293,19 @@ export class GetReports {
     createCharts(types) {
         this.data.forEach((el, index) => {
             const chartContainer = document.getElementById(`${types}${index}`);
+            console.log(chartContainer)
             if (chartContainer) { // Проверяем, что элемент существует
-                if (types !== 'СКДШ') {
+                console.log(el.graphic[types])
+
+                if (types !== 'СКДШ' && types !== 'Моточасы') {
                     if (el.graphic[types][0].result) {
                         this.instansCharts[`${types}${index}`] = new ChartsClass(el.graphic[types], chartContainer);
                     }
                 }
                 else {
-                    this.instansCharts[`${types}${index}`] = new PressureCharts(el.graphic[types], chartContainer);
+                    //  if (el.graphic[types][0].y) {
+                    this.instansCharts[`${types}${index}`] = new ChartsClassSecond(el.graphic[types], chartContainer, types);
+                    //  }
                 }
 
             }

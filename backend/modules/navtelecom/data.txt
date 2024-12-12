@@ -1,11 +1,11 @@
 port: 21626
-imei: 868184064811311
-protocol: Flex 1.0
+imei: 863051064960882
+protocol: Flex 3.0
 msg_type: A
-timeRagistration: 1709108035
-msg_number: 19298
-event_code: 5897
-time: 1709108007
+timeRagistration: 1732786795
+msg_number: 20302
+event_code: 5899
+time: 1732658891
 status1: Рабочий режим
 status2: Оповещение о тревоге(выключено)
 status3: Тревога(выключена)
@@ -14,7 +14,7 @@ status7: Режим Энергосбережения(да)
 status8: Калибровка акселерометра(откалиброван)
 status4: Наблюдение
 modules_st1: GSM включен
-modules_st2: USB выключен
+modules_st2: USB включен
 modules_st3: Дополнительный высокоточный навигационный приемник включен
 modules_st4: Часы не синхронизированы по GPS
 modules_st5: Работает первая SIM-карта
@@ -23,25 +23,25 @@ modules_st7: Роуминг
 modules_st8: Двигатель (генератор) выключен
 modules_st21: Нет глушения GSM
 modules_st23: Нет глушения GNSS
-modules_st24: Усреднение координат GNSS(нет)
+modules_st24: Усреднение координат GNSS(да)
 modules_st25: Статус акселерометра (штатная работа)
 modules_st26: Статус модуля Bluetooth(включен)
 modules_st27: Статус модуля Wi-Fi(выключен)
-modules_st28: Тип генератора для RTC:(внешний часовой кварцевый генератор)
+modules_st28: Тип генератора для RTC:(внутренний генератор процессора)
 gsm: -109..-53 Дб/м
 nav_rcvr_state: Навигационный приемник включен
-valid_nav: Валидная навигация
-sats: 19
-last_valid_time: 1709108007
-lat: 59.84569166666667
-lon: 30.342541666666666
-altitude: -33.5
-speed: 3.4447200298309326
-course: 359
-meliage: 299.167236328125
-pwr_ext: 21.414
-pwr_int: 4150
-in1: 1
+valid_nav: Невалидная навигация
+sats: 4
+last_valid_time: 1732658853
+lat: 59.84614333333334
+lon: 30.342646666666667
+altitude: -11.700000000000001
+speed: 0
+course: 164
+meliage: 1.484331727027893
+pwr_ext: 0
+pwr_int: 4132
+in1: 0
 in2: 0
 in3: 0
 in4: 0
@@ -49,14 +49,637 @@ in5: 0
 in6: 0
 in7: 0
 in8: 0
-out1: Выход O1(выключен)
-out2: Выход O2(выключен)
-out3: Выход O3(выключен)
-out4: Выход O4(выключен)
-out5: Выход O5(выключен)
-out6: Выход O6(выключен)
-out7: Выход O7(выключен)
-out8: Выход O8(выключен)
-engine_hours: 685002
-idObject: 1024
+out1: 0
+out2: 0
+out3: 0
+out4: 0
+out5: 0
+out6: 0
+out7: 0
+out8: 0
+engine_hours: 79
+hdop: 110
+pdop: 150
+tyres_number_3: 0
+tpms_pressure_3: 0
+tpms_temp_3: -128
+tyres_number_4: 0
+tpms_pressure_4: 0
+tpms_temp_4: -128
+tyres_number_5: 0
+tpms_pressure_5: 0
+tpms_temp_5: -128
+tyres_number_6: 0
+tpms_pressure_6: 0
+tpms_temp_6: -128
+connection_st1: 2G
+connection_st4: 0
+connection_st5: 0
+connection_st6: 0
+connection_st7: 0
+connection_st8: 0
+accel_st1: 0
+accel_st2: 0
+accel_st3: 0
+accel_st4: 0
+accel_st5: 0
+idObject: undefined
+
+port: 21626
+imei: 863051064960882
+protocol: Flex 3.0
+msg_type: A
+timeRagistration: 1732786795
+msg_number: 20303
+event_code: 5899
+time: 1732658921
+status1: Рабочий режим
+status2: Оповещение о тревоге(выключено)
+status3: Тревога(выключена)
+status6: Эвакуация(незафиксирована)
+status7: Режим Энергосбережения(да)
+status8: Калибровка акселерометра(откалиброван)
+status4: Наблюдение
+modules_st1: GSM включен
+modules_st2: USB включен
+modules_st3: Дополнительный высокоточный навигационный приемник включен
+modules_st4: Часы не синхронизированы по GPS
+modules_st5: Работает вторая SIM-карта
+modules_st6: Регистрации в сотовой сети
+modules_st7: Роуминг
+modules_st8: Двигатель (генератор) выключен
+modules_st21: Нет глушения GSM
+modules_st23: Нет глушения GNSS
+modules_st24: Усреднение координат GNSS(да)
+modules_st25: Статус акселерометра (штатная работа)
+modules_st26: Статус модуля Bluetooth(включен)
+modules_st27: Статус модуля Wi-Fi(выключен)
+modules_st28: Тип генератора для RTC:(внутренний генератор процессора)
+gsm: -109..-53 Дб/м
+nav_rcvr_state: Навигационный приемник включен
+valid_nav: Невалидная навигация
+sats: 4
+last_valid_time: 1732658853
+lat: 59.84614333333334
+lon: 30.342646666666667
+altitude: -11.700000000000001
+speed: 0
+course: 164
+meliage: 1.484331727027893
+pwr_ext: 0
+pwr_int: 4132
+in1: 0
+in2: 0
+in3: 0
+in4: 0
+in5: 0
+in6: 0
+in7: 0
+in8: 0
+out1: 0
+out2: 0
+out3: 0
+out4: 0
+out5: 0
+out6: 0
+out7: 0
+out8: 0
+engine_hours: 79
+hdop: 110
+pdop: 150
+tyres_number_3: 0
+tpms_pressure_3: 0
+tpms_temp_3: -128
+tyres_number_4: 0
+tpms_pressure_4: 0
+tpms_temp_4: -128
+tyres_number_5: 0
+tpms_pressure_5: 0
+tpms_temp_5: -128
+tyres_number_6: 0
+tpms_pressure_6: 0
+tpms_temp_6: -128
+connection_st1: 2G
+connection_st4: 0
+connection_st5: 0
+connection_st6: 0
+connection_st7: 0
+connection_st8: 0
+accel_st1: 0
+accel_st2: 0
+accel_st3: 0
+accel_st4: 0
+accel_st5: 0
+idObject: undefined
+
+port: 21626
+imei: 863051064960882
+protocol: Flex 3.0
+msg_type: A
+timeRagistration: 1732786795
+msg_number: 20301
+event_code: 5899
+time: 1732658862
+status1: Рабочий режим
+status2: Оповещение о тревоге(выключено)
+status3: Тревога(выключена)
+status6: Эвакуация(незафиксирована)
+status7: Режим Энергосбережения(да)
+status8: Калибровка акселерометра(откалиброван)
+status4: Наблюдение
+modules_st1: GSM включен
+modules_st2: USB включен
+modules_st3: Дополнительный высокоточный навигационный приемник включен
+modules_st4: Часы не синхронизированы по GPS
+modules_st5: Работает первая SIM-карта
+modules_st6: Регистрации в сотовой сети
+modules_st7: Роуминг
+modules_st8: Двигатель (генератор) выключен
+modules_st21: Нет глушения GSM
+modules_st23: Нет глушения GNSS
+modules_st24: Усреднение координат GNSS(да)
+modules_st25: Статус акселерометра (штатная работа)
+modules_st26: Статус модуля Bluetooth(включен)
+modules_st27: Статус модуля Wi-Fi(выключен)
+modules_st28: Тип генератора для RTC:(внутренний генератор процессора)
+gsm: -109..-53 Дб/м
+nav_rcvr_state: Навигационный приемник включен
+valid_nav: Невалидная навигация
+sats: 5
+last_valid_time: 1732658853
+lat: 59.84614333333334
+lon: 30.342646666666667
+altitude: -11.700000000000001
+speed: 0
+course: 164
+meliage: 1.484331727027893
+pwr_ext: 0
+pwr_int: 4132
+in1: 0
+in2: 0
+in3: 0
+in4: 0
+in5: 0
+in6: 0
+in7: 0
+in8: 0
+out1: 0
+out2: 0
+out3: 0
+out4: 0
+out5: 0
+out6: 0
+out7: 0
+out8: 0
+engine_hours: 79
+hdop: 110
+pdop: 150
+tyres_number_3: 0
+tpms_pressure_3: 0
+tpms_temp_3: -128
+tyres_number_4: 0
+tpms_pressure_4: 0
+tpms_temp_4: -128
+tyres_number_5: 0
+tpms_pressure_5: 0
+tpms_temp_5: -128
+tyres_number_6: 0
+tpms_pressure_6: 0
+tpms_temp_6: -128
+connection_st1: 2G
+connection_st4: 0
+connection_st5: 0
+connection_st6: 0
+connection_st7: 0
+connection_st8: 0
+accel_st1: 0
+accel_st2: 0
+accel_st3: 0
+accel_st4: 0
+accel_st5: 0
+idObject: undefined
+
+port: 21626
+imei: 863051064960882
+protocol: Flex 3.0
+msg_type: A
+timeRagistration: 1732786795
+msg_number: 20304
+event_code: 5899
+time: 1732658952
+status1: Рабочий режим
+status2: Оповещение о тревоге(выключено)
+status3: Тревога(выключена)
+status6: Эвакуация(незафиксирована)
+status7: Режим Энергосбережения(да)
+status8: Калибровка акселерометра(откалиброван)
+status4: Наблюдение
+modules_st1: GSM включен
+modules_st2: USB включен
+modules_st3: Дополнительный высокоточный навигационный приемник включен
+modules_st4: Часы не синхронизированы по GPS
+modules_st5: Работает первая SIM-карта
+modules_st6: Нет регистрации в сотовой сети
+modules_st7: Роуминг
+modules_st8: Двигатель (генератор) выключен
+modules_st21: Нет глушения GSM
+modules_st23: Нет глушения GNSS
+modules_st24: Усреднение координат GNSS(да)
+modules_st25: Статус акселерометра (штатная работа)
+modules_st26: Статус модуля Bluetooth(выключен)
+modules_st27: Статус модуля Wi-Fi(выключен)
+modules_st28: Тип генератора для RTC:(внутренний генератор процессора)
+gsm: Нет сигнала сотовой сети. 
+nav_rcvr_state: Навигационный приемник включен
+valid_nav: Невалидная навигация
+sats: 4
+last_valid_time: 1732658853
+lat: 59.84614333333334
+lon: 30.342646666666667
+altitude: -11.700000000000001
+speed: 0
+course: 164
+meliage: 1.484331727027893
+pwr_ext: 0
+pwr_int: 4132
+in1: 0
+in2: 0
+in3: 0
+in4: 0
+in5: 0
+in6: 0
+in7: 0
+in8: 0
+out1: 0
+out2: 0
+out3: 0
+out4: 0
+out5: 0
+out6: 0
+out7: 0
+out8: 0
+engine_hours: 79
+hdop: 110
+pdop: 150
+tyres_number_3: 0
+tpms_pressure_3: 0
+tpms_temp_3: -128
+tyres_number_4: 0
+tpms_pressure_4: 0
+tpms_temp_4: -128
+tyres_number_5: 0
+tpms_pressure_5: 0
+tpms_temp_5: -128
+tyres_number_6: 0
+tpms_pressure_6: 0
+tpms_temp_6: -128
+connection_st1: Отсутствует
+connection_st4: 0
+connection_st5: 0
+connection_st6: 0
+connection_st7: 0
+connection_st8: 0
+accel_st1: 0
+accel_st2: 0
+accel_st3: 0
+accel_st4: 0
+accel_st5: 0
+idObject: undefined
+
+port: 21626
+imei: 863051064960882
+protocol: Flex 3.0
+msg_type: A
+timeRagistration: 1732786795
+msg_number: 20306
+event_code: 5899
+time: 1732659011
+status1: Рабочий режим
+status2: Оповещение о тревоге(выключено)
+status3: Тревога(выключена)
+status6: Эвакуация(незафиксирована)
+status7: Режим Энергосбережения(да)
+status8: Калибровка акселерометра(откалиброван)
+status4: Наблюдение
+modules_st1: GSM включен
+modules_st2: USB включен
+modules_st3: Дополнительный высокоточный навигационный приемник включен
+modules_st4: Часы не синхронизированы по GPS
+modules_st5: Работает первая SIM-карта
+modules_st6: Регистрации в сотовой сети
+modules_st7: Роуминг
+modules_st8: Двигатель (генератор) выключен
+modules_st21: Нет глушения GSM
+modules_st23: Нет глушения GNSS
+modules_st24: Усреднение координат GNSS(да)
+modules_st25: Статус акселерометра (штатная работа)
+modules_st26: Статус модуля Bluetooth(включен)
+modules_st27: Статус модуля Wi-Fi(выключен)
+modules_st28: Тип генератора для RTC:(внутренний генератор процессора)
+gsm: -109..-53 Дб/м
+nav_rcvr_state: Навигационный приемник включен
+valid_nav: Невалидная навигация
+sats: 5
+last_valid_time: 1732658994
+lat: 59.84614333333334
+lon: 30.342646666666667
+altitude: -11.700000000000001
+speed: 0
+course: 195
+meliage: 1.484331727027893
+pwr_ext: 0
+pwr_int: 4131
+in1: 0
+in2: 0
+in3: 0
+in4: 0
+in5: 0
+in6: 0
+in7: 0
+in8: 0
+out1: 0
+out2: 0
+out3: 0
+out4: 0
+out5: 0
+out6: 0
+out7: 0
+out8: 0
+engine_hours: 79
+hdop: 200
+pdop: 220
+tyres_number_3: 0
+tpms_pressure_3: 0
+tpms_temp_3: -128
+tyres_number_4: 0
+tpms_pressure_4: 0
+tpms_temp_4: -128
+tyres_number_5: 0
+tpms_pressure_5: 0
+tpms_temp_5: -128
+tyres_number_6: 0
+tpms_pressure_6: 0
+tpms_temp_6: -128
+connection_st1: 2G
+connection_st4: 0
+connection_st5: 0
+connection_st6: 0
+connection_st7: 0
+connection_st8: 0
+accel_st1: 0
+accel_st2: 0
+accel_st3: 0
+accel_st4: 0
+accel_st5: 0
+idObject: undefined
+
+port: 21626
+imei: 863051064960882
+protocol: Flex 3.0
+msg_type: A
+timeRagistration: 1732786795
+msg_number: 20300
+event_code: 5899
+time: 1732658832
+status1: Рабочий режим
+status2: Оповещение о тревоге(выключено)
+status3: Тревога(выключена)
+status6: Эвакуация(незафиксирована)
+status7: Режим Энергосбережения(да)
+status8: Калибровка акселерометра(откалиброван)
+status4: Наблюдение
+modules_st1: GSM включен
+modules_st2: USB включен
+modules_st3: Дополнительный высокоточный навигационный приемник включен
+modules_st4: Часы не синхронизированы по GPS
+modules_st5: Работает первая SIM-карта
+modules_st6: Регистрации в сотовой сети
+modules_st7: Роуминг
+modules_st8: Двигатель (генератор) выключен
+modules_st21: Нет глушения GSM
+modules_st23: Нет глушения GNSS
+modules_st24: Усреднение координат GNSS(да)
+modules_st25: Статус акселерометра (штатная работа)
+modules_st26: Статус модуля Bluetooth(включен)
+modules_st27: Статус модуля Wi-Fi(выключен)
+modules_st28: Тип генератора для RTC:(внутренний генератор процессора)
+gsm: -109..-53 Дб/м
+nav_rcvr_state: Навигационный приемник включен
+valid_nav: Невалидная навигация
+sats: 4
+last_valid_time: 1732658788
+lat: 59.84614333333334
+lon: 30.342646666666667
+altitude: -11.700000000000001
+speed: 0
+course: 356
+meliage: 1.484331727027893
+pwr_ext: 0
+pwr_int: 4132
+in1: 0
+in2: 0
+in3: 0
+in4: 0
+in5: 0
+in6: 0
+in7: 0
+in8: 0
+out1: 0
+out2: 0
+out3: 0
+out4: 0
+out5: 0
+out6: 0
+out7: 0
+out8: 0
+engine_hours: 79
+hdop: 120
+pdop: 150
+tyres_number_3: 0
+tpms_pressure_3: 0
+tpms_temp_3: -128
+tyres_number_4: 0
+tpms_pressure_4: 0
+tpms_temp_4: -128
+tyres_number_5: 0
+tpms_pressure_5: 0
+tpms_temp_5: -128
+tyres_number_6: 0
+tpms_pressure_6: 0
+tpms_temp_6: -128
+connection_st1: 2G
+connection_st4: 0
+connection_st5: 0
+connection_st6: 0
+connection_st7: 0
+connection_st8: 0
+accel_st1: 0
+accel_st2: 0
+accel_st3: 0
+accel_st4: 0
+accel_st5: 0
+idObject: undefined
+
+port: 21626
+imei: 863051064960882
+protocol: Flex 3.0
+msg_type: A
+timeRagistration: 1732786795
+msg_number: 20305
+event_code: 5899
+time: 1732658982
+status1: Рабочий режим
+status2: Оповещение о тревоге(выключено)
+status3: Тревога(выключена)
+status6: Эвакуация(незафиксирована)
+status7: Режим Энергосбережения(да)
+status8: Калибровка акселерометра(откалиброван)
+status4: Наблюдение
+modules_st1: GSM включен
+modules_st2: USB включен
+modules_st3: Дополнительный высокоточный навигационный приемник включен
+modules_st4: Часы не синхронизированы по GPS
+modules_st5: Работает первая SIM-карта
+modules_st6: Регистрации в сотовой сети
+modules_st7: Роуминг
+modules_st8: Двигатель (генератор) выключен
+modules_st21: Нет глушения GSM
+modules_st23: Нет глушения GNSS
+modules_st24: Усреднение координат GNSS(да)
+modules_st25: Статус акселерометра (штатная работа)
+modules_st26: Статус модуля Bluetooth(включен)
+modules_st27: Статус модуля Wi-Fi(выключен)
+modules_st28: Тип генератора для RTC:(внутренний генератор процессора)
+gsm: Нет сигнала сотовой сети. 
+nav_rcvr_state: Навигационный приемник включен
+valid_nav: Невалидная навигация
+sats: 5
+last_valid_time: 1732658853
+lat: 59.84614333333334
+lon: 30.342646666666667
+altitude: -11.700000000000001
+speed: 0
+course: 164
+meliage: 1.484331727027893
+pwr_ext: 0
+pwr_int: 4131
+in1: 0
+in2: 0
+in3: 0
+in4: 0
+in5: 0
+in6: 0
+in7: 0
+in8: 0
+out1: 0
+out2: 0
+out3: 0
+out4: 0
+out5: 0
+out6: 0
+out7: 0
+out8: 0
+engine_hours: 79
+hdop: 110
+pdop: 150
+tyres_number_3: 0
+tpms_pressure_3: 0
+tpms_temp_3: -128
+tyres_number_4: 0
+tpms_pressure_4: 0
+tpms_temp_4: -128
+tyres_number_5: 0
+tpms_pressure_5: 0
+tpms_temp_5: -128
+tyres_number_6: 0
+tpms_pressure_6: 0
+tpms_temp_6: -128
+connection_st1: 2G
+connection_st4: 0
+connection_st5: 0
+connection_st6: 0
+connection_st7: 0
+connection_st8: 0
+accel_st1: 0
+accel_st2: 0
+accel_st3: 0
+accel_st4: 0
+accel_st5: 0
+idObject: undefined
+
+port: 21626
+imei: 863051064960882
+protocol: Flex 3.0
+msg_type: A
+timeRagistration: 1732786795
+msg_number: 20307
+event_code: 5899
+time: 1732659041
+status1: Рабочий режим
+status2: Оповещение о тревоге(выключено)
+status3: Тревога(выключена)
+status6: Эвакуация(незафиксирована)
+status7: Режим Энергосбережения(да)
+status8: Калибровка акселерометра(откалиброван)
+status4: Наблюдение
+modules_st1: GSM включен
+modules_st2: USB включен
+modules_st3: Дополнительный высокоточный навигационный приемник включен
+modules_st4: Часы не синхронизированы по GPS
+modules_st5: Работает первая SIM-карта
+modules_st6: Регистрации в сотовой сети
+modules_st7: Роуминг
+modules_st8: Двигатель (генератор) выключен
+modules_st21: Нет глушения GSM
+modules_st23: Нет глушения GNSS
+modules_st24: Усреднение координат GNSS(да)
+modules_st25: Статус акселерометра (штатная работа)
+modules_st26: Статус модуля Bluetooth(включен)
+modules_st27: Статус модуля Wi-Fi(выключен)
+modules_st28: Тип генератора для RTC:(внутренний генератор процессора)
+gsm: -109..-53 Дб/м
+nav_rcvr_state: Навигационный приемник включен
+valid_nav: Невалидная навигация
+sats: 5
+last_valid_time: 1732658994
+lat: 59.84614333333334
+lon: 30.342646666666667
+altitude: -11.700000000000001
+speed: 0
+course: 195
+meliage: 1.484331727027893
+pwr_ext: 0
+pwr_int: 4131
+in1: 0
+in2: 0
+in3: 0
+in4: 0
+in5: 0
+in6: 0
+in7: 0
+in8: 0
+out1: 0
+out2: 0
+out3: 0
+out4: 0
+out5: 0
+out6: 0
+out7: 0
+out8: 0
+engine_hours: 79
+hdop: 200
+pdop: 220
+tyres_number_3: 0
+tpms_pressure_3: 0
+tpms_temp_3: -128
+tyres_number_4: 0
+tpms_pressure_4: 0
+tpms_temp_4: -128
+tyres_number_5: 0
+tpms_pressure_5: 0
+tpms_temp_5: -128
+tyres_number_6: 0
+tpms_pressure_6: 0
+tpms_temp_6: -128
+idObject: undefined
 

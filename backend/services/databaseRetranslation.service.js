@@ -14,10 +14,11 @@ exports.addObjects = async (object) => {
 
         if (result.recordset.length > 0) {
             const updateFlagQuery = `
-        UPDATE objects SET flag = 'true' WHERE idx=@idx AND incriment_retra = @uniqRetraID`;
+        UPDATE objects SET flag = 'true',imeidevice=@imeidevice  WHERE idx=@idx AND incriment_retra = @uniqRetraID`;
             await pool.request()
                 .input('uniqRetraID', uniqRetraID)
                 .input('idx', String(object.idx))
+                .input('imeidevice', String(imeidevice))
                 .query(updateFlagQuery);
             return
         }
@@ -69,6 +70,8 @@ exports.addObjects = async (object) => {
         throw error;
     }
 };
+
+
 
 
 exports.deleteObjects = async (table) => {

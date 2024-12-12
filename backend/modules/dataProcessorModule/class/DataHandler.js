@@ -14,6 +14,7 @@ class DataHandlerUpdateBase {
 
 
     async init() {
+        //  console.log(this.id)
         this.getTime()
         this.checkTarirovka()
         await this.defaultUpdateParams()
@@ -53,6 +54,7 @@ class DataHandlerUpdateBase {
 
 
     async convertionEval(formula, value) {
+
         let x = Number(value)
         let formattedFormula;
         // Выполняем замену 'x' на значение переменной
@@ -60,6 +62,7 @@ class DataHandlerUpdateBase {
             if (x > 4100) return null
             if (Number(formula.dopValue) > 1) {
                 const array = await this.getValueKoef(formula, this.id)
+                //  console.log(this.id)
                 array.push({ 'dut': x })
                 x = this.average(array)
             }

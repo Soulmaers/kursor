@@ -41,8 +41,6 @@ export class ChartsClass {
         this.height = height
         this.createContainer()
         this.updateSize(width, height); // Устанавливаем начальные размеры
-        //  this.createBodyCharts()
-        ChartUtils.createTooltip(this.svg, this.container.id, this.data, this.x)
 
     }
 
@@ -57,6 +55,7 @@ export class ChartsClass {
 
         // Обновляем оси и другие элементы графика
         this.createBodyCharts(); // Вызовите createBodyCharts для обновления графика
+        ChartUtils.createTooltip(this.rectTool, this.container.id, this.data, this.x)
     }
 
     createContainer() {
@@ -80,7 +79,7 @@ export class ChartsClass {
     chartIcon(data) {
         data.result.forEach(e => {
             console.log(e)
-            this.svg.append("image")
+            this.rectToolIcon = this.svg.append("image")
                 .attr("x", this.x(new Date(Number(e.time) * 1000)))
                 .attr("href", data.icon)
                 .attr('class', 'icon_image_reports')
@@ -90,9 +89,10 @@ export class ChartsClass {
                 .attr("width", 18)
                 .attr("height", 18)
                 .attr("transform", "translate(-12,-20)")
+
+            ChartUtils.createTooltip(this.rectToolIcon, this.container.id, this.data, this.x)
         });
     }
-
 
     chartLine(data) {
         const lineData = ChartUtils.createLine(data.result, this.time, this.x, this.y1, data.color, 2);
@@ -104,7 +104,7 @@ export class ChartsClass {
             .attr("stroke", lineData.color)
             .attr("stroke-width", lineData.strokeWidth)
             .attr("d", lineData.path)
-            .attr("transform", "translate(0, " + (40) + ")")
+            .attr("transform", "translate(0, " + (0) + ")")
 
     }
 
@@ -140,7 +140,7 @@ export class ChartsClass {
         // задаем x-шкалу
         const x = d3.scaleTime()
             .domain(d3.extent(this.time, (d) => new Date(Number(d) * 1000)))
-            .range([0, this.width])
+            .range([0, this.width - 60])
         this.x = x
         // задаем y-шкалу для первой оси y
         const y1 = d3.scaleLinear()
@@ -167,10 +167,7 @@ export class ChartsClass {
         this.chartGroup = this.svg.append("g")
             .attr("clip-path", "url(#clip)")
 
-        this.svg.append('rect')
-            .attr("width", this.width - 60) // Ширина, соответствующая размеру вашего графика
-            .attr("height", this.height - 60) // Высота, соответствующая размеру вашего графика
-            .attr("fill", "white")
+
 
 
         // добавляем ось x
@@ -183,7 +180,7 @@ export class ChartsClass {
                 .tickFormat(function (d) {
                     return d3.timeFormat("%H:%M")(d);
                 }))
-
+        // добавляем ось x 2
         this.svg.append("g")
             .attr("transform", `translate(0, ${(this.height - 50)})`)
             .attr('class', 'osx2')
@@ -195,13 +192,28 @@ export class ChartsClass {
                 })
             )
             .style("stroke-width", 0)
-        // добавляем первую ось y
+
+
+
+        // добавляем  ось y
         this.svg.append("g")
             .attr("class", "os1y")
             .call(ChartUtils.createAxis(y1, 'left'))
             .attr("transform", "translate(0, " + (0) + ")")
 
+        const ticks = y1.ticks(10);
+        ticks[ticks.length - 1] = Math.max(...originOil.map(e => Number(e)))
+        console.log(Math.max(...originOil.map(e => Number(e))))
+        this.svg.select('.os1y')
+            .call(ChartUtils.createAxis(y1, 'left').tickValues(ticks))
+
+
         this.controller()
+
+        this.rectTool = this.svg.append('rect')
+            .attr("width", this.width - 60) // Ширина, соответствующая размеру вашего графика
+            .attr("height", this.height - 60) // Высота, соответствующая размеру вашего графика
+            .attr("fill", "transparent")
 
         this.svg.append("text")
             .attr("class", 'obv')

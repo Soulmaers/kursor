@@ -29,6 +29,7 @@ class DataWriteHistory {
     }
     defaultUpdateParams() {
         for (let elem of this.lastObject) {
+
             const obj = {}
             this.data.forEach(el => {
                 const nowTime = Math.floor(new Date().getTime() / 1000)
@@ -42,8 +43,14 @@ class DataWriteHistory {
                 let computedValue = elem.hasOwnProperty(el.meta) ? elem[el.meta] : null;
                 const findConfig = this.configs.find(it => it.param === el.params)
 
-                if (findConfig) {
+
+
+                if (findConfig && elem[el.meta]) {
+                    //  if (this.id == 28526128) {
+                    // console.log(elem[el.meta], findConfig)
+                    //  }
                     const result = this.convertionEval(findConfig, elem[el.meta])
+
                     switch (result) {
                         case true: computedValue = 1
                             break;
@@ -52,6 +59,9 @@ class DataWriteHistory {
                         default: computedValue = result ? result.toFixed(2) : result
                     }
                 }
+                //  if (this.id == 28526128) {
+                //  console.log(computedValue)
+                //   }
                 obj[el.params] = computedValue
                 if (el.params === 'oil') {
                     obj['dut'] = String(elem[el.meta])
@@ -61,6 +71,8 @@ class DataWriteHistory {
             const pwr = this.data.find(e => e.params === 'pwr')
             if (pwr) obj['pwr'] = String(elem[pwr.meta])
             obj['oil'] = !this.bool ? null : obj['oil']
+
+
             this.setWriteParams(obj)
         }
     }

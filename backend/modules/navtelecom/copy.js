@@ -1,5 +1,5 @@
 
-const { NavtelecomResponceData, CheckSumm, BitsCount, WriteFile } = require('./Helpers');
+/*const { NavtelecomResponceData, CheckSumm, BitsCount } = require('./Helpers');
 const UploadWialonIPS = require('./UploadWialonIPS.js')
 const SendingCommandToTerminal = require('./SendingCommandToTerminal')
 const { UpdateSetStor } = require('../dataProcessorModule/class/UpdateSetStor.js')
@@ -18,7 +18,7 @@ class ListenPortTP {
 
         const tcpServer = net.createServer((socket) => {
             //  console.log(socket)
-            // console.log('TCP Client connected:', socket.remoteAddress);
+            console.log('TCP Client connected:', socket.remoteAddress);
 
 
             try {
@@ -112,11 +112,9 @@ class ChartServerTerminal {
                     let count = type === '~A' ? buf.readUInt8() : 1
                     this.telemetrationFields(buf, type, count)
                     const res = await databaseService.objectsImei(String(this.imei))
-                    // console.log(res)
                     if (res.length !== 0) {
-                        new UpdateSetStor(this.imei, this.port, this.globalArrayMSG, res[0].idx)
+                        //   new UpdateSetStor(this.imei, this.port, this.globalArrayMSG, res[0].idx)
                         new UploadWialonIPS(this.globalArrayMSG, this.imei)
-                        WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
                         this.globalArrayMSG = []
                         const response = Buffer.alloc(type === '~A' ? 3 : 2);
                         response.write(type, 'ascii');
@@ -132,9 +130,8 @@ class ChartServerTerminal {
                     this.telemetrationFields(buf, type, 1)
                     const res = await databaseService.objectsImei(String(this.imei))
                     if (res.length !== 0) {
-                        new UpdateSetStor(this.imei, this.port, this.globalArrayMSG, res[0].idx)
+                        //  new UpdateSetStor(this.imei, this.port, this.globalArrayMSG, res[0].idx)
                         new UploadWialonIPS(this.globalArrayMSG, this.imei)
-                        WriteFile.writeDataFile(this.globalArrayMSG, this.imei)
                         this.globalArrayMSG = []
                         const response = Buffer.alloc(6);
                         response.write(type, 'ascii');
@@ -215,80 +212,78 @@ class ChartServerTerminal {
                             break;
                         case 4:
                             val = buf.readUInt8()
-                            global.status1 = BitsCount.check(val, 0) ? 1 : 0// 'Тестовый режим' : 'Рабочий режим'
-                            global.status2 = BitsCount.check(val, 1) ? 1 : 0//'Оповещение о тревоге(включено)' : 'Оповещение о тревоге(выключено)'
-                            global.status3 = BitsCount.check(val, 2) ? 1 : 0//'Тревога(включена)' : 'Тревога(выключена)'
-                            global.status6 = BitsCount.check(val, 5) ? 1 : 0//'Эвакуация(зафиксирована)' : 'Эвакуация(незафиксирована)'
-                            global.status7 = BitsCount.check(val, 6) ? 1 : 0//'Режим Энергосбережения(нет)' : 'Режим Энергосбережения(да)'
-                            global.status8 = BitsCount.check(val, 7) ? 1 : 0//'Калибровка акселерометра(не откалиброван)' : 'Калибровка акселерометра(откалиброван)'
+                            global.status1 = BitsCount.check(val, 0) ? 'Тестовый режим' : 'Рабочий режим'
+                            global.status2 = BitsCount.check(val, 1) ? 'Оповещение о тревоге(включено)' : 'Оповещение о тревоге(выключено)'
+                            global.status3 = BitsCount.check(val, 2) ? 'Тревога(включена)' : 'Тревога(выключена)'
+                            global.status6 = BitsCount.check(val, 5) ? 'Эвакуация(зафиксирована)' : 'Эвакуация(незафиксирована)'
+                            global.status7 = BitsCount.check(val, 6) ? 'Режим Энергосбережения(нет)' : 'Режим Энергосбережения(да)'
+                            global.status8 = BitsCount.check(val, 7) ? 'Калибровка акселерометра(не откалиброван)' : 'Калибровка акселерометра(откалиброван)'
                             const stat = ['Наблюдение', 'Охрана', 'До.охрана', 'Сервис']
-                            global.status4 = BitsCount.between(val, 3, 4)// stat[BitsCount.between(val, 3, 4)]
+                            global.status4 = stat[BitsCount.between(val, 3, 4)]
                             buf = buf.slice(1)
                             break;
                         case 5:
                             val = buf.readUInt8()
-                            global.modules_st1 = BitsCount.check(val, 0) ? 1 : 0// 'GSM включен' : 'GSM выключен'
-                            global.modules_st2 = BitsCount.check(val, 1) ? 1 : 0//'USB включен' : 'USB выключен'
-                            global.modules_st3 = BitsCount.check(val, 2) ? 1 : 0// 'Дополнительный высокоточный навигационный приемник выключен'
-                            //    : 'Дополнительный высокоточный навигационный приемник включен'
-                            global.modules_st4 = BitsCount.check(val, 3) ? 1 : 0// 'Часы не синхронизированы по GPS'
-                            //   : 'Часы синхронизированы по GPS'
-                            global.modules_st5 = BitsCount.check(val, 4) ? 1 : 0// 'Работает вторая SIM-карта'
-                            //  : 'Работает первая SIM-карта'
-                            global.modules_st6 = BitsCount.check(val, 5) ? 1 : 0//'Регистрации в сотовой сети'
-                            // : 'Нет регистрации в сотовой сети'
-                            global.modules_st7 = BitsCount.check(val, 6) ? 1 : 0// 'Домашняя сотовая сеть'
-                            // : 'Роуминг'
-                            global.modules_st8 = BitsCount.check(val, 7) ? 1 : 0//'Двигатель (генератор) включен'
-                            // : 'Двигатель (генератор) выключен'
+                            global.modules_st1 = BitsCount.check(val, 0) ? 'GSM включен' : 'GSM выключен'
+                            global.modules_st2 = BitsCount.check(val, 1) ? 'USB включен' : 'USB выключен'
+                            global.modules_st3 = BitsCount.check(val, 2) ? 'Дополнительный высокоточный навигационный приемник выключен'
+                                : 'Дополнительный высокоточный навигационный приемник включен'
+                            global.modules_st4 = BitsCount.check(val, 3) ? 'Часы не синхронизированы по GPS'
+                                : 'Часы синхронизированы по GPS'
+                            global.modules_st5 = BitsCount.check(val, 4) ? 'Работает вторая SIM-карта'
+                                : 'Работает первая SIM-карта'
+                            global.modules_st6 = BitsCount.check(val, 5) ? 'Регистрации в сотовой сети'
+                                : 'Нет регистрации в сотовой сети'
+                            global.modules_st7 = BitsCount.check(val, 6) ? 'Домашняя сотовая сеть'
+                                : 'Роуминг'
+                            global.modules_st8 = BitsCount.check(val, 7) ? 'Двигатель (генератор) включен'
+                                : 'Двигатель (генератор) выключен'
                             buf = buf.slice(1)
                             break;
                         case 6:
                             val = buf.readUInt8()
-                            global.modules_st21 = BitsCount.between(val, 0, 1)
-                            /* if (BitsCount.between(val, 0, 1) === 0) {
-                                 global.modules_st21 = 'Нет глушения GSM'
-                             }
-                             if (BitsCount.between(val, 0, 1) === 1) {
-                                 global.modules_st21 = 'Обнаружено глушение GSM'
-                             }
-                             if (BitsCount.between(val, 0, 1) === 2) {
-                                 global.modules_st21 = 'Обнаружены промышленные помехи '
-                             }*/
-                            global.modules_st23 = BitsCount.check(val, 2) ? 1 : 0//'Обнаружено глушение GNSS' : 'Нет глушения GNSS'
-                            global.modules_st24 = BitsCount.check(val, 3) ? 1 : 0//'Усреднение координат GNSS(да)' : 'Усреднение координат GNSS(нет)'
-                            global.modules_st25 = BitsCount.check(val, 4) ? 1 : 0//'Статус акселерометра (ошибка)' : 'Статус акселерометра (штатная работа)'
-                            global.modules_st26 = BitsCount.check(val, 5) ? 1 : 0//'Статус модуля Bluetooth(включен)' : 'Статус модуля Bluetooth(выключен)'
-                            global.modules_st27 = BitsCount.check(val, 6) ? 1 : 0// 'Статус модуля Wi-Fi(включен)' : 'Статус модуля Wi-Fi(выключен)'
-                            global.modules_st28 = BitsCount.check(val, 7) ? 1 : 0// 'Тип генератора для RTC:(внутренний генератор процессора)'
-                            // : 'Тип генератора для RTC:(внешний часовой кварцевый генератор)'
+                            if (BitsCount.between(val, 0, 1) === 0) {
+                                global.modules_st21 = 'Нет глушения GSM'
+                            }
+                            if (BitsCount.between(val, 0, 1) === 1) {
+                                global.modules_st21 = 'Обнаружено глушение GSM'
+                            }
+                            if (BitsCount.between(val, 0, 1) === 2) {
+                                global.modules_st21 = 'Обнаружены промышленные помехи '
+                            }
+                            global.modules_st23 = BitsCount.check(val, 2) ? 'Обнаружено глушение GNSS' : 'Нет глушения GNSS'
+                            global.modules_st24 = BitsCount.check(val, 3) ? 'Усреднение координат GNSS(да)' : 'Усреднение координат GNSS(нет)'
+                            global.modules_st25 = BitsCount.check(val, 4) ? 'Статус акселерометра (ошибка)' : 'Статус акселерометра (штатная работа)'
+                            global.modules_st26 = BitsCount.check(val, 5) ? 'Статус модуля Bluetooth(включен)' : 'Статус модуля Bluetooth(выключен)'
+                            global.modules_st27 = BitsCount.check(val, 6) ? 'Статус модуля Wi-Fi(включен)' : 'Статус модуля Wi-Fi(выключен)'
+                            global.modules_st28 = BitsCount.check(val, 7) ? 'Тип генератора для RTC:(внутренний генератор процессора)'
+                                : 'Тип генератора для RTC:(внешний часовой кварцевый генератор)'
 
                             buf = buf.slice(1)
                             break;
                         case 7:
                             val = buf.readUInt8()
-                            global.gsm = val
-                            /* if (val === 0) {
-                                 global.gsm = '-113 Дб/м или меньше'
-                             }
-                             if (val === 1) {
-                                 global.gsm = '-111 Дб/м'
-                             }
-                             if (val >= 2 && val <= 30) {
-                                 global.gsm = '-109..-53 Дб/м'
-                             }
-                             if (val === 31) {
-                                 global.gsm = '-51 Дб/м или больше'
-                             }
-                             if (val === 99) {
-                                 global.gsm = 'Нет сигнала сотовой сети. '
-                             }*/
+                            if (val === 0) {
+                                global.gsm = '-113 Дб/м или меньше'
+                            }
+                            if (val === 1) {
+                                global.gsm = '-111 Дб/м'
+                            }
+                            if (val >= 2 && val <= 30) {
+                                global.gsm = '-109..-53 Дб/м'
+                            }
+                            if (val === 31) {
+                                global.gsm = '-51 Дб/м или больше'
+                            }
+                            if (val === 99) {
+                                global.gsm = 'Нет сигнала сотовой сети. '
+                            }
                             buf = buf.slice(1)
                             break;
                         case 8:
                             val = buf.readUInt8()
-                            global.nav_rcvr_state = BitsCount.check(val, 0) ? 1 : 0// 'Навигационный приемник включен' : 'Навигационный приемник выключен'
-                            global.valid_nav = BitsCount.check(val, 1) ? 1 : 0// 'Валидная навигация' : 'Невалидная навигация'
+                            global.nav_rcvr_state = BitsCount.check(val, 0) ? 'Навигационный приемник включен' : 'Навигационный приемник выключен'
+                            global.valid_nav = BitsCount.check(val, 1) ? 'Валидная навигация' : 'Невалидная навигация'
                             global.sats = BitsCount.from(val, 2)
                             buf = buf.slice(1)
                             break;
@@ -298,7 +293,10 @@ class ChartServerTerminal {
                             buf = buf.slice(4)
                             break;
                         case 10:
+                            // console.log(buf)
+                            console.log(buf.readInt32LE())
                             val = buf.readInt32LE() * 0.0001 / 60;
+                            console.log(val)
                             global.lat = val
                             buf = buf.slice(4)
                             break;
@@ -461,6 +459,7 @@ class ChartServerTerminal {
                             buf = buf.slice(1)
                             break;
                         case 53:
+                            console.log('53', buf.length)
                             val = buf.readUInt16LE()
                             if (val != 0x7FFF) {
                                 if (BitsCount.check(val, 15)) {
@@ -470,6 +469,7 @@ class ChartServerTerminal {
                                 }
                             }
                             buf = buf.slice(2)
+                            console.log('53', buf.length)
                             break;
                         case 54:
                             val = buf.readFloatLE() * 0.5
@@ -577,7 +577,7 @@ class ChartServerTerminal {
                             break;
                         case 72:
                             val = buf.readUInt8()
-                            global.prec_info = BitsCount.check(val, 0) ? 1 : 0// 'fixed' : 'float'//Навигационная информация в fixed point' : 'Навигационная информация в float point'
+                            global.prec_info = BitsCount.check(val, 0) ? 'fixed' : 'float'//Навигационная информация в fixed point' : 'Навигационная информация в float point'
                             global.prec_info = BitsCount.check(val, 1) ? 1 : 0//'Приёмник работает в режиме RTK (навигация достоверна)' : 'Приёмник не работает в режиме RTK'
                             global.prec_sats = BitsCount.from(val, 2)
                             buf = buf.slice(1)
@@ -704,19 +704,19 @@ class ChartServerTerminal {
                         case 98:
                             val = buf.readUInt8()
                             const driver1 = ['Отдых', 'Готовность к работе', 'Работа не связанна управлением ТС', ' Управление ТС'];
-                            global.tacho_active_driver1 = BitsCount.between(val, 0, 1) //driver1[BitsCount.between(val, 0, 1)];
+                            global.tacho_active_driver1 = driver1[BitsCount.between(val, 0, 1)];
                             const slot1 = ['Нет карты', 'Не авторизована', 'Авторизована', ' Не удалось извлечь'];
-                            global.tacho_slot1 = BitsCount.between(val, 0, 1) //slot1[BitsCount.between(val, 2, 3)];
+                            global.tacho_slot1 = slot1[BitsCount.between(val, 2, 3)];
                             const driver2 = ['Отдых', 'Готовность к работе', 'Работа не связанна управлением ТС', ' Управление ТС'];
-                            global.tacho_active_driver2 = BitsCount.between(val, 0, 1) //driver2[BitsCount.between(val, 4, 5)];
+                            global.tacho_active_driver2 = driver2[BitsCount.between(val, 4, 5)];
                             const slot2 = ['Нет карты', 'Не авторизована', 'Авторизована', ' Не удалось извлечь'];
-                            global.tacho_slot2 = BitsCount.between(val, 0, 1) //slot2[BitsCount.between(val, 6, 7)];
+                            global.tacho_slot2 = slot2[BitsCount.between(val, 6, 7)];
                             buf = buf.slice(1)
                             break;
                         case 99:
                             val = buf.readUInt8()
                             const taho = ['Тахограф отключен', 'Водитель', 'Мастер', 'Контролер', 'Предприятие', 'Экипаж'];
-                            global.tacho_mode = val//taho[val]
+                            global.tacho_mode = taho[val]
                             buf = buf.slice(1)
                             break;
                         case 100:
@@ -731,9 +731,9 @@ class ChartServerTerminal {
                                 'Ограничение #2: превышение 4,5 ч. непрерывного вождения', ' Ограничение #3: 15 мин до дополнительного Предупреждения 1 ',
                                 'Ограничение #4: произошло Предупреждение 1', 'ограничение #5: 15 мин до дополнительного Предупреждения 2',
                                 'Ограничение #6: произошло Предупреждение 2', ' Резерв'];
-                            global.tacho_state7 = BitsCount.between(val, 6, 8) //tachoArray[BitsCount.between(val, 6, 8)];
-                            global.tacho_state10 = BitsCount.between(val, 9, 11)// tachoArray[BitsCount.between(val, 9, 11)];
-                            global.tacho_state = BitsCount.check(val, 12) || BitsCount.check(val, 13) || BitsCount.check(val, 14) || BitsCount.check(val, 15) ? 1 : 0
+                            global.tacho_state7 = tachoArray[BitsCount.between(val, 6, 8)];
+                            global.tacho_state10 = tachoArray[BitsCount.between(val, 9, 11)];
+                            global.tacho_state = BitsCount.check(val, 12) || BitsCount.check(val, 13) || BitsCount.check(val, 14) || BitsCount.check(val, 15) ? 'Резерв' : null
                             buf = buf.slice(2)
                             break;
                         case 101:
@@ -755,12 +755,12 @@ class ChartServerTerminal {
                             val = buf.readUInt8()
                             const condition = [null, 'На вызове', 'На рейсе', 'Свободен', 'Ожидание', "Возвращение", 'Резерв', 'В работе',
                                 'Перерыв', 'Готовность', 'Обед', 'Отдых', 'Ремонт', 'Загрузка', 'Разгрузка', 'Поломка', 'ДТП']
-                            global.dm_status = val//condition[val]
+                            global.dm_status = condition[val]
                             buf = buf.slice(1)
                             break;
                         case 105:
                             val = buf.readUInt32LE()
-                            global.dm_mess_n = val // === 0 ? 'Нет полученных сообщений' : val === 0xFFFFFFFF ? 'Получено/прочитано сообщение, переданное командой NTCT' : val
+                            global.dm_mess_n = val === 0 ? 'Нет полученных сообщений' : val === 0xFFFFFFFF ? 'Получено/прочитано сообщение, переданное командой NTCT' : val
                             buf = buf.slice(4)
                             break;
                         case 106:
@@ -836,7 +836,7 @@ class ChartServerTerminal {
                             global.autoinf_status5 = BitsCount.check(val, 4) ? 1 : 0 //'Ошибка при работе с SD-картой' : 'Нет ошибок'
                             global.autoinf_status6 = BitsCount.check(val, 5) ? 1 : 0 //'Нарушение режима движения' : 'Нет нарушения'
                             global.autoinf_status7 = BitsCount.check(val, 6) ? 1 : 0 //'Ручной режим' : 'Автоматический режим'
-                            global.autoinf_status = BitsCount.check(val, 7) ? 1 : 0
+                            global.autoinf_status = BitsCount.check(val, 7) ? 'Резерв' : null
                             buf = buf.slice(1)
                             break;
                         case 119:
@@ -861,7 +861,7 @@ class ChartServerTerminal {
                             global.camera_status3 = BitsCount.check(val, 2) ? 1 : 0 //'Кол-во хранимых снимков превысило максимум' : 'Штатный режим работы'
                             global.camera_status4 = BitsCount.check(val, 3) ? 1 : 0 //'Ошибка при работе с SD-картой' : 'Нет ошибок'
                             for (let i = 4; i <= 7; i++) {
-                                global.camera_status = BitsCount.check(val, i) ? 1 : 0;
+                                global.camera_status = BitsCount.check(val, i) ? 'Резерв' : null;
                             }
                             buf = buf.slice(1)
                             break;
@@ -869,9 +869,9 @@ class ChartServerTerminal {
                             val = buf.readUInt8()
                             global.status21 = BitsCount.check(val, 0) ? 1 : 0 //'корпус вскрыт' : 'в норме';
                             const st12 = ['Контроль не производится', 'Перегрузка', 'Не подключена', 'Норма']
-                            global.status22 = BitsCount.between(val, 1, 2)//st12[BitsCount.between(val, 1, 2)]
+                            global.status22 = st12[BitsCount.between(val, 1, 2)]
                             const st35 = ['Нет программы', 'Ошибка', 'Остановлена', 'резерв', 'На паузе', 'Исполняется', 'Резерв', 'Резерв']
-                            global.status23 = BitsCount.between(val, 3, 5) //st35[BitsCount.between(val, 3, 5)]
+                            global.status23 = st35[BitsCount.between(val, 3, 5)]
                             //  for (i = 6; i <= 7; i++) {
                             // global.status20 = BitsCount.check(val, i) ? 'Резерв' : null;
                             //  }
@@ -890,7 +890,7 @@ class ChartServerTerminal {
                         case 125:
                             val = buf.readUInt8()
                             const st = ['Отсутствует', '2G', '3G', '4G', 'резерв', 'резерв', 'резерв', 'резерв']
-                            global.connection_st1 = BitsCount.between(val, 0, 2) //st[BitsCount.between(val, 0, 2)]
+                            global.connection_st1 = st[BitsCount.between(val, 0, 2)]
                             for (let i = 4; i <= 8; i++) {
                                 global[`connection_st${i}`] = BitsCount.check(val, i - 1) ? 1 : 0 //'Подключен' : 'Не подключен';
                             }
@@ -990,320 +990,322 @@ class ChartServerTerminal {
                             buf = buf.slice(1)
                             val = buf.readUInt8()
                             for (let i = 0; i <= 7; i++) {
-                                i < 4 ? global[`thld_vert_st${i + 1}`] = BitsCount.check(val, 0) ? 1 : 0 /* 'Датчик сработал' : 'Датчик в нормальном состоянии'*/ :
-                                    null // global.thld_vert_st = BitsCount.check(val, 0) ? 'Резерв' :
-                            }
-                            buf = buf.slice(1)
-                            break;
-                        case 147:
-                        case 148:
-                        case 149:
-                        case 150:
-                        case 151:
-                        case 152:
-                        case 153:
-                        case 154:
-                        case 155:
-                        case 156:
-                        case 157:
-                        case 158:
-                        case 159:
-                        case 160:
-                        case 161:
-                        case 162:
-                            val = buf.readUInt16LE()
-                            global[`rs485fuel_freq${this.bits[j] - 146}`] = val
-                            buf = buf.slice(2)
-                            break;
-                        case 163:
-                        case 164:
-                        case 165:
-                        case 166:
-                            val = buf.readInt16LE()
-                            global[`hp_temp${this.bits[j] - 162}`] = val !== 0x8000 ? val * 0.05 : null
-                            buf = buf.slice(2)
-                            break;
-                        case 167:
-                        case 168:
-                        case 169:
-                        case 170:
-                            val = buf.readUInt8()
-                            global[`hp_humidity${this.bits[j] - 162}`] = val !== 0xFF ? val * 0.5 : 'Нет данных'
-                            buf = buf.slice(1)
-                            break;
-                        case 171:
-                            val = buf.readUInt16LE()
-                            const msg = ['холостой ход', 'номинальный режим', 'перегрузка', 'накрутка', 'отрицательный', 'вмешательство',
-                                'резерв', 'резерв', 'резерв', 'резерв', 'резерв', 'резерв', 'резерв', 'резерв', 'резерв', 'резерв']
-                            global.flowsens_feed_mode = BitsCount.between(val, 0, 3) //msg[BitsCount.between(val, 0, 3)]
-                            global.flowsens_return_mode = BitsCount.between(val, 4, 7) //msg[BitsCount.between(val, 4, 7)]
-                            global.flowsens_cons_mode = BitsCount.between(val, 8, 11) //msg[BitsCount.between(val, 8, 11)]
-                            global.flowsens_pwr_mode = BitsCount.between(val, 12, 13) //msg[BitsCount.between(val, 12, 13)]
-                            //   for (i = 14; i <= 15; i++) {
-                            //global.flowsens_st = BitsCount.check(val, i) ? 'Резерв' : null;
-                            //  }
-                            buf = buf.slice(2)
-                            break;
-                        case 172:
-                            val = buf.readUInt32LE()
-                            global.flowsens_fault = 1
-                            buf = buf.slice(4)
-                            break;
-                        case 173:
-                            val = buf.readUInt32LE()
-                            global.flowsens_total_cons = val// val !== 0xFFFFFFFF ? val : null
-                            buf = buf.slice(4)
-                            break;
-                        case 174:
-                            val = buf.readUInt32LE()
-                            global.flowsens_trip_cons = val// !== 0xFFFFFFFF ? val : null
-                            buf = buf.slice(4)
-                            break;
-                        case 175:
-                            val = buf.readInt16LE()
-                            global.flowsens_flow_spd = val// !== 0x8000 ? val : null
-                            buf = buf.slice(2)
-                            break;
-                        case 176:
-                            val = buf.readUInt32LE()
-                            global.flowsens_feed_cons = val// !== 0xFFFFFFFF ? val : null
-                            buf = buf.slice(4)
-                            break;
-                        case 177:
-                            val = buf.readInt16LE()
-                            global.flowsens_feed_flow_spd = val// !== 0x8000 ? val : null
-                            buf = buf.slice(2)
-                            break;
-                        case 178:
-                            val = buf.readInt16LE()
-                            global.flowsens_feed_temp = val// !== 0x8000 ? val : null
-                            buf = buf.slice(2)
-                            break;
-                        case 179:
-                            val = buf.readUInt32LE()
-                            global.flowsens_return_cons = val// !== 0xFFFFFFFF ? val : null
-                            buf = buf.slice(4)
-                            break;
-                        case 180:
-                            val = buf.readInt16LE()
-                            global.flowsens_return_flow_spd = val// !== 0x8000 ? val : null
-                            buf = buf.slice(2)
-                            break;
-                        case 181:
-                            val = buf.readInt16LE()
-                            global.flowsens_return_temp = val// !== 0x8000 ? val : null
-                            buf = buf.slice(2)
-                            break;
-                        case 182:
-                            val = buf.readUInt8()
-                            global.fridge_connect = BitsCount.check(val, 0) ? 1 : 0 //'На связи' : 'Отсутствует'
-                            global.fridge_door = BitsCount.check(val, 1) ? 1 : 0 //'Открыта' : 'Закрыта'
-                            const msgs = ['неизвестная', 'ThermoKing серии SLX', 'Carrier Standard32', 'Zanotti', 'ThermalMaster', 'Carrier NDP33LN6FB']
-                            global.fridge_type = BitsCount.between(val, 2, 4)//msgs[BitsCount.between(val, 2, 4)]
-                            buf = buf.slice(1)
-                            val = buf.readUInt8()
-                            const msgs2 = ['нет данных', 'Двигатель выключен', 'Нагрев', 'Охлаждение', 'Оттайка']
-                            global.fridge_mode = val//msgs2[val] <= 4 ? msgs2[val] : val
-                            buf = buf.slice(1)
-                            break;
-                        case 183:
-                        case 184:
-                        case 185:
-                            val = buf.readInt16LE()
-                            global[`fridge_temp${this.bits[j] - 182}`] = val !== 0x8000 ? val * 0.01 : null
-                            buf = buf.slice(2)
-                            break;
-                        case 186:
-                        case 187:
-                        case 188:
-                            val = buf.readInt16LE()
-                            global[`fridge_set_temp${this.bits[j] - 185}`] = val !== 0x8000 ? val * 0.01 : null
-                            buf = buf.slice(2)
-                            break;
-                        case 189:
-                            val = buf.readInt16LE()
-                            global.fridge_outside_temp = val !== 0x8000 ? val * 0.01 : null
-                            buf = buf.slice(2)
-                            break;
-                        case 190:
-                            val = buf.readInt16LE()
-                            global.fridge_coolant_temp = val !== 0x8000 ? val * 0.01 : null
-                            buf = buf.slice(2)
-                            break;
-                        case 191:
-                            val = buf.readUInt16LE()
-                            global.fridge_pwr_vlt = val !== 0xFFFF ? val : null
-                            buf = buf.slice(2)
-                            break;
-                        case 192:
-                            val = buf.readUInt16LE()
-                            global.fridge_pwr_cur = val !== 0xFFFF ? val : null
-                            buf = buf.slice(2)
-                            break;
-                        case 193:
-                            val = buf.readUInt32LE()
-                            global.fridge_eng_moto_hours = val !== 0xFFFF ? val * 0.01 : null
-                            buf = buf.slice(4)
-                            break;
-                        case 194:
-                            val = buf.readUInt32LE()
-                            global.fridge_elec_moto_hours = val !== 0xFFFF ? val * 0.01 : null
-                            buf = buf.slice(4)
-                            break;
-                        case 195:
-                            val = buf.readUInt16LE()
-                            global.fridge_fault_count = val
-                            buf = buf.slice(2)
-                            val = buf.readUInt16LE()
-                            global.fridge_fault1 = val
-                            buf = buf.slice(2)
-                            break;
-                        case 196:
-                            val = buf.readUInt16LE()
-                            global.fridge_fault2 = val
-                            buf = buf.slice(2)
-                            val = buf.readUInt16LE()
-                            global.fridge_fault3 = val
-                            buf = buf.slice(2)
-                            break;
-                        case 197:
-                            val = buf.readUInt16LE()
-                            global.fridge_fault4 = val
-                            buf = buf.slice(2)
-                            val = buf.readUInt16LE()
-                            global.fridge_fault5 = val
-                            buf = buf.slice(2)
-                            val = buf.readUInt16LE()
-                            global.fridge_fault6 = val
-                            buf = buf.slice(2)
-                            break;
-                        case 198:
-                            val = buf.readUInt8()
-                            const msgfridge = ['нет данных', 'оборотов нет, двигатель остановлен', 'работает дизель, малые обороты', 'работает дизель, высокие обороты;', 'Работает от сети']
-                            global.fridge_engine_mode = val//msgfridge[val]
-                            buf = buf.slice(1)
-                            val = buf.readUInt16LE()
-                            global.fridge_engine_rpm = val !== 0xFFFF ? val : null
-                            buf = buf.slice(2)
-                            break;
-                        case 199:
-                            val = buf.readUInt8()
-                            const msgComp = ['нет данных', 'Start/Stop - режим с остановкой двигателя', 'Continuous - режим постоянной работы']
-                            global.fridge_comp_mode = val// msgComp[val] <= 2 ? msgComp[val] : val
-                            buf = buf.slice(1)
-                            break;
-                        case 200:
-                            val = buf.readUInt16LE()
-                            for (let i = 0; i < 10; i++) {
-                                global[`geo_st${i + 1}`] = BitsCount.check(val, i) ? 1 : 0//'В геозоне' : 'Вне геозоны'
-                            }
-
-                            buf = buf.slice(2)
-                            break;
-                        case 201:
-                            val = buf.readUInt16LE()
-                            const arr = ['Зажигание включено', 'Штатная сигнализация поставлена на охрану (находится в режиме тревоги)', 'Автомобиль закрыт при помощи штатного брелока'
-                                , 'Ключ находится в замке зажигания', 'Включено динамичное зажигание 2', 'Открыта передняя пассажирская дверь', 'Открыты задние пассажирские двери',
-                                'Сцепление выжато', 'Открыта дверь водителя', 'Открыты двери пассажира', 'Открыт багажник', 'Открыт капот', 'Затянут рычаг ручного тормоза',
-                                'Нажат ножной тормоз', 'Двигатель работает', 'Webasto']
-                            for (let i = 0; i < 16; i++) {
-                                global[`can_info_st${i + 1}`] = BitsCount.check(val, i)// ? arr[i] : null
-                            }
-                            buf = buf.slice(2)
-                            break;
-                        case 202:
-                            val = buf.readUInt8()
-                            const arr1 = ['Нет события', 'Автомобиль закрыт при помощи штатного брелока', ' Автомобиль открыт при помощи штатного брелока',
-                                'Багажник открыт при помощи штатного брелока', 'Модуль выслал сигнал перепостановки в сигнализацию', 'Зарезервировано', 'Зарезервировано',
-                                'модуль перешел в режим экономии энергии «sleep mode»']
-                            global.can_security_evt = val// < 8 ? arr1[val] : 'Зарезервировано'
-                            buf = buf.slice(1)
-                            break;
-                        case 203:
-                            val = buf.readUInt32LE()
-                            const arr203 = ['STOP', 'Давление / уровень масла', 'Температура / уровень хладагента', 'Система ручного тормоза', 'Зарядка батареи',
-                                'AIRBAG (подушка безопасности)', 'ESP выключена', 'EPS включен (электро усилитель руля)', 'Проверьте двигатель', 'Неисправность освещения',
-                                'Низкое давление воздуха в шине', 'Изношенные тормозные колодки', 'Предупреждение', 'ABS (антиблокировочная система)', 'Низкий уровень топлива',
-                                'Приближающееся сервисное обслуживание', 'ESP (электронный регулятор устойчивости)', 'Индикатор запальной свечи', 'FAP (фильтр макрочастиц)',
-                                'EPC (электрическая регулировка давления)', 'Габаритные огни', 'Ближний свет фар', 'Дальний свет фар', 'Аварийная сигнализация', 'Готовность начать движение',
-                                'Круиз-контроль', 'Ретардер автоматический', 'Ретардер ручной', 'Кондиционер включен', 'Коробка отбора мощности (PTO)', 'Ремень водителя', 'Ремень пассажира']
-                            for (let i = 0; i < 32; i++) {
-                                global[`can_alarm_st${i + 1}`] = BitsCount.check(val, i)// ? arr203[i] : null
-                            }
-                            buf = buf.slice(4)
-                            break;
-                        case 204:
-                            val = buf.readUInt8()
-                            const arr204 = ['Горит лампа индикации неисправности', 'Горит красная лампа «Stop»', 'Горит желтая лампа «Предупреждение»', 'Горит лампа «Защита»',
-                                'Мигает лампа неисправности', 'Мигает красная лампа «Stop»', 'Мигает желтая лампа «Предупреждение»', 'Мигает лампа «Защита»']
-                            for (let i = 0; i < 8; i++) {
-                                global[`can_fault_st${i + 1}`] = BitsCount.check(val, i)// ? arr204[i] : null
-                            }
-                            buf = buf.slice(1)
-                            val = buf.readUInt32LE()
-                            global.can_fault = val
-                            buf = buf.slice(4)
-                            break;
-                        case 205:
-                            val = buf.readUInt32LE()
-                            global.engine_hours_work = val
-                            buf = buf.slice(4)
-                            break;
-                        case 206:
-                            val = buf.readUInt32LE()
-                            global.diag = val
-                            buf = buf.slice(4)
-                            break;
-                        default:
-                            if ((207 <= this.bits[j]) && (this.bits[j] <= 222)) {
-                                val = buf.readInt8()
-                                global[`user_1u_${this.bits[j] - 206}`] = val
-                                buf = buf.slice(1)
-                            }
-                            else if ((223 <= this.bits[j]) && (this.bits[j] <= 237)) {
-                                val = buf.readUInt16LE()
-                                global[`user_2u_${this.bits[j] - 222}`] = val
-                                buf = buf.slice(2)
-                            }
-                            else if ((238 <= this.bits[j]) && (this.bits[j] <= 252)) {
-                                val = buf.readUInt32LE()
-                                global[`user_4u_${this.bits[j] - 237}`] = val
-                                buf = buf.slice(4)
-                            }
-                            else if ((253 <= this.bits[j]) && (this.bits[j] <= 255)) {
-                                val = buf.readUInt64LE()
-                                global[`user_8u_${this.bits[j] - 252}`] = val
-                                buf = buf.slice(8)
-                            }
-                            break;
-                    }
-                }
-            }
-            this.globalArrayMSG.push(global)
-            function funct2(buf, index) {
-                let val = buf.readUInt8()
-                global[`p_count${index}`] = val !== 255 ? val : 0
-                buf = buf.slice(1)
-                return buf
-            }
-            function funct(buf, index) {
-                let val = buf.readUInt8()
-                // global[`tyres_number_${index}`] = val
-                buf = buf.slice(1)
-                val = buf.readUInt8()
-                global[`tpms_pressure_${index}`] = val !== 0 ? (val * 0.1).toFixed(1) : 0
-                buf = buf.slice(1)
-                val = buf.readInt8()
-                global[`tpms_temp_${index}`] = val !== -128 ? val : -128
-                buf = buf.slice(1)
-
-                return buf
-            }
-        }
+                                i < 4 ? global[`thld_vert_st${i + 1}`] = BitsCount.check(val, 0) ? 1 : 0 /* 'Датчик сработал' : 'Датчик в нормальном состоянии'*/ //:
+/*            null
     }
+    buf = buf.slice(1)
+    break;
+case 147:
+case 148:
+case 149:
+case 150:
+case 151:
+case 152:
+case 153:
+case 154:
+case 155:
+case 156:
+case 157:
+case 158:
+case 159:
+case 160:
+case 161:
+case 162:
+    val = buf.readUInt16LE()
+    global[`rs485fuel_freq${this.bits[j] - 146}`] = val
+    buf = buf.slice(2)
+    break;
+case 163:
+case 164:
+case 165:
+case 166:
+    val = buf.readInt16LE()
+    global[`hp_temp${this.bits[j] - 162}`] = val !== 0x8000 ? val * 0.05 : null
+    buf = buf.slice(2)
+    break;
+case 167:
+case 168:
+case 169:
+case 170:
+    val = buf.readUInt8()
+    global[`hp_humidity${this.bits[j] - 162}`] = val !== 0xFF ? val * 0.5 : 'Нет данных'
+    buf = buf.slice(1)
+    break;
+case 171:
+    val = buf.readUInt16LE()
+    const msg = ['холостой ход', 'номинальный режим', 'перегрузка', 'накрутка', 'отрицательный', 'вмешательство',
+        'резерв', 'резерв', 'резерв', 'резерв', 'резерв', 'резерв', 'резерв', 'резерв', 'резерв', 'резерв']
+    global.flowsens_feed_mode = msg[BitsCount.between(val, 0, 3)]
+    global.flowsens_return_mode = msg[BitsCount.between(val, 4, 7)]
+    global.flowsens_cons_mode = msg[BitsCount.between(val, 8, 11)]
+    global.flowsens_pwr_mode = msg[BitsCount.between(val, 12, 13)]
+    //   for (i = 14; i <= 15; i++) {
+    //global.flowsens_st = BitsCount.check(val, i) ? 'Резерв' : null;
+    //  }
+    buf = buf.slice(2)
+    break;
+case 172:
+    val = buf.readUInt32LE()
+    global.flowsens_fault = 'Резерв'
+    buf = buf.slice(4)
+    break;
+case 173:
+    val = buf.readUInt32LE()
+    global.flowsens_total_cons = val !== 0xFFFFFFFF ? val : null
+    buf = buf.slice(4)
+    break;
+case 174:
+    val = buf.readUInt32LE()
+    global.flowsens_trip_cons = val !== 0xFFFFFFFF ? val : null
+    buf = buf.slice(4)
+    break;
+case 175:
+    val = buf.readInt16LE()
+    global.flowsens_flow_spd = val !== 0x8000 ? val : null
+    buf = buf.slice(2)
+    break;
+case 176:
+    val = buf.readUInt32LE()
+    global.flowsens_feed_cons = val !== 0xFFFFFFFF ? val : null
+    buf = buf.slice(4)
+    break;
+case 177:
+    val = buf.readInt16LE()
+    global.flowsens_feed_flow_spd = val !== 0x8000 ? val : null
+    buf = buf.slice(2)
+    break;
+case 178:
+    val = buf.readInt16LE()
+    global.flowsens_feed_temp = val !== 0x8000 ? val : null
+    buf = buf.slice(2)
+    break;
+case 179:
+    val = buf.readUInt32LE()
+    global.flowsens_return_cons = val !== 0xFFFFFFFF ? val : null
+    buf = buf.slice(4)
+    break;
+case 180:
+    val = buf.readInt16LE()
+    global.flowsens_return_flow_spd = val !== 0x8000 ? val : null
+    buf = buf.slice(2)
+    break;
+case 181:
+    val = buf.readInt16LE()
+    global.flowsens_return_temp = val !== 0x8000 ? val : null
+    buf = buf.slice(2)
+    break;
+case 182:
+    val = buf.readUInt8()
+    global.fridge_connect = BitsCount.check(val, 0) ? 1 : 0 //'На связи' : 'Отсутствует'
+    global.fridge_door = BitsCount.check(val, 1) ? 1 : 0 //'Открыта' : 'Закрыта'
+    const msgs = ['неизвестная', 'ThermoKing серии SLX', 'Carrier Standard32', 'Zanotti', 'ThermalMaster', 'Carrier NDP33LN6FB']
+    global.fridge_type = msgs[BitsCount.between(val, 2, 4)]
+    buf = buf.slice(1)
+    val = buf.readUInt8()
+    const msgs2 = ['нет данных', 'Двигатель выключен', 'Нагрев', 'Охлаждение', 'Оттайка']
+    global.fridge_mode = msgs2[val] <= 4 ? msgs2[val] : val
+    buf = buf.slice(1)
+    break;
+case 183:
+case 184:
+case 185:
+    val = buf.readInt16LE()
+    global[`fridge_temp${this.bits[j] - 182}`] = val !== 0x8000 ? val * 0.01 : null
+    buf = buf.slice(2)
+    break;
+case 186:
+case 187:
+case 188:
+    val = buf.readInt16LE()
+    global[`fridge_set_temp${this.bits[j] - 185}`] = val !== 0x8000 ? val * 0.01 : null
+    buf = buf.slice(2)
+    break;
+case 189:
+    val = buf.readInt16LE()
+    global.fridge_outside_temp = val !== 0x8000 ? val * 0.01 : null
+    buf = buf.slice(2)
+    break;
+case 190:
+    val = buf.readInt16LE()
+    global.fridge_coolant_temp = val !== 0x8000 ? val * 0.01 : null
+    buf = buf.slice(2)
+    break;
+case 191:
+    val = buf.readUInt16LE()
+    global.fridge_pwr_vlt = val !== 0xFFFF ? val : null
+    buf = buf.slice(2)
+    break;
+case 192:
+    val = buf.readUInt16LE()
+    global.fridge_pwr_cur = val !== 0xFFFF ? val : null
+    buf = buf.slice(2)
+    break;
+case 193:
+    val = buf.readUInt32LE()
+    global.fridge_eng_moto_hours = val !== 0xFFFF ? val * 0.01 : null
+    buf = buf.slice(4)
+    break;
+case 194:
+    val = buf.readUInt32LE()
+    global.fridge_elec_moto_hours = val !== 0xFFFF ? val * 0.01 : null
+    buf = buf.slice(4)
+    break;
+case 195:
+    val = buf.readUInt16LE()
+    global.fridge_fault_count = val
+    buf = buf.slice(2)
+    val = buf.readUInt16LE()
+    global.fridge_fault1 = val
+    buf = buf.slice(2)
+    break;
+case 196:
+    val = buf.readUInt16LE()
+    global.fridge_fault2 = val
+    buf = buf.slice(2)
+    val = buf.readUInt16LE()
+    global.fridge_fault3 = val
+    buf = buf.slice(2)
+    break;
+case 197:
+    val = buf.readUInt16LE()
+    global.fridge_fault4 = val
+    buf = buf.slice(2)
+    val = buf.readUInt16LE()
+    global.fridge_fault5 = val
+    buf = buf.slice(2)
+    val = buf.readUInt16LE()
+    global.fridge_fault6 = val
+    buf = buf.slice(2)
+    break;
+case 198:
+    val = buf.readUInt8()
+    const msgfridge = ['нет данных', 'оборотов нет, двигатель остановлен', 'работает дизель, малые обороты', 'работает дизель, высокие обороты;', 'Работает от сети']
+    global.fridge_engine_mode = msgfridge[val]
+    buf = buf.slice(1)
+    val = buf.readUInt16LE()
+    global.fridge_engine_rpm = val !== 0xFFFF ? val : null
+    buf = buf.slice(2)
+    break;
+case 199:
+    val = buf.readUInt8()
+    const msgComp = ['нет данных', 'Start/Stop - режим с остановкой двигателя', 'Continuous - режим постоянной работы']
+    global.fridge_comp_mode = msgComp[val] <= 2 ? msgComp[val] : val
+    buf = buf.slice(1)
+    break;
+case 200:
+    val = buf.readUInt16LE()
+    for (let i = 0; i < 10; i++) {
+        global[`geo_st${i + 1}`] = BitsCount.check(val, i) ? 1 : 0//'В геозоне' : 'Вне геозоны'
+    }
+
+    buf = buf.slice(2)
+    break;
+case 201:
+    val = buf.readUInt16LE()
+    const arr = ['Зажигание включено', 'Штатная сигнализация поставлена на охрану (находится в режиме тревоги)', 'Автомобиль закрыт при помощи штатного брелока'
+        , 'Ключ находится в замке зажигания', 'Включено динамичное зажигание 2', 'Открыта передняя пассажирская дверь', 'Открыты задние пассажирские двери',
+        'Сцепление выжато', 'Открыта дверь водителя', 'Открыты двери пассажира', 'Открыт багажник', 'Открыт капот', 'Затянут рычаг ручного тормоза',
+        'Нажат ножной тормоз', 'Двигатель работает', 'Webasto']
+    for (let i = 0; i < 16; i++) {
+        global[`can_info_st${i + 1}`] = BitsCount.check(val, i) ? arr[i] : null
+    }
+    buf = buf.slice(2)
+    break;
+case 202:
+    val = buf.readUInt8()
+    const arr1 = ['Нет события', 'Автомобиль закрыт при помощи штатного брелока', ' Автомобиль открыт при помощи штатного брелока',
+        'Багажник открыт при помощи штатного брелока', 'Модуль выслал сигнал перепостановки в сигнализацию', 'Зарезервировано', 'Зарезервировано',
+        'модуль перешел в режим экономии энергии «sleep mode»']
+    global.can_security_evt = val < 8 ? arr1[val] : 'Зарезервировано'
+    buf = buf.slice(1)
+    break;
+case 203:
+    val = buf.readUInt32LE()
+    const arr203 = ['STOP', 'Давление / уровень масла', 'Температура / уровень хладагента', 'Система ручного тормоза', 'Зарядка батареи',
+        'AIRBAG (подушка безопасности)', 'ESP выключена', 'EPS включен (электро усилитель руля)', 'Проверьте двигатель', 'Неисправность освещения',
+        'Низкое давление воздуха в шине', 'Изношенные тормозные колодки', 'Предупреждение', 'ABS (антиблокировочная система)', 'Низкий уровень топлива',
+        'Приближающееся сервисное обслуживание', 'ESP (электронный регулятор устойчивости)', 'Индикатор запальной свечи', 'FAP (фильтр макрочастиц)',
+        'EPC (электрическая регулировка давления)', 'Габаритные огни', 'Ближний свет фар', 'Дальний свет фар', 'Аварийная сигнализация', 'Готовность начать движение',
+        'Круиз-контроль', 'Ретардер автоматический', 'Ретардер ручной', 'Кондиционер включен', 'Коробка отбора мощности (PTO)', 'Ремень водителя', 'Ремень пассажира']
+    for (let i = 0; i < 32; i++) {
+        global[`can_alarm_st${i + 1}`] = BitsCount.check(val, i) ? arr203[i] : null
+    }
+    buf = buf.slice(4)
+    break;
+case 204:
+    val = buf.readUInt8()
+    const arr204 = ['Горит лампа индикации неисправности', 'Горит красная лампа «Stop»', 'Горит желтая лампа «Предупреждение»', 'Горит лампа «Защита»',
+        'Мигает лампа неисправности', 'Мигает красная лампа «Stop»', 'Мигает желтая лампа «Предупреждение»', 'Мигает лампа «Защита»']
+    for (let i = 0; i < 8; i++) {
+        global[`can_fault_st${i + 1}`] = BitsCount.check(val, i) ? arr204[i] : null
+    }
+    buf = buf.slice(1)
+    val = buf.readUInt32LE()
+    global.can_fault = val
+    buf = buf.slice(4)
+    break;
+case 205:
+    val = buf.readUInt32LE()
+    global.engine_hours_work = val
+    buf = buf.slice(4)
+    break;
+case 206:
+    val = buf.readUInt32LE()
+    global.diag = val
+    buf = buf.slice(4)
+    break;
+default:
+    if ((207 <= this.bits[j]) && (this.bits[j] <= 222)) {
+        val = buf.readInt8()
+        global[`user_1u_${this.bits[j] - 206}`] = val
+        buf = buf.slice(1)
+    }
+    else if ((223 <= this.bits[j]) && (this.bits[j] <= 237)) {
+        val = buf.readUInt16LE()
+        global[`user_2u_${this.bits[j] - 222}`] = val
+        buf = buf.slice(2)
+    }
+    else if ((238 <= this.bits[j]) && (this.bits[j] <= 252)) {
+        val = buf.readUInt32LE()
+        global[`user_4u_${this.bits[j] - 237}`] = val
+        buf = buf.slice(4)
+    }
+    else if ((253 <= this.bits[j]) && (this.bits[j] <= 255)) {
+        val = buf.readUInt64LE()
+        global[`user_8u_${this.bits[j] - 252}`] = val
+        buf = buf.slice(8)
+    }
+    break;
+}
+}
+}
+//  console.log(global)
+this.globalArrayMSG.push(global)
+//  console.log(this.globalArrayMSG)
+function funct2(buf, index) {
+let val = buf.readUInt8()
+global[`p_count${index}`] = val !== 255 ? val : 0
+buf = buf.slice(1)
+return buf
+}
+function funct(buf, index) {
+let val = buf.readUInt8()
+global[`tyres_number_${index}`] = val
+buf = buf.slice(1)
+val = buf.readUInt8()
+global[`tpms_pressure_${index}`] = val !== 0 ? (val * 0.1).toFixed(1) : 0
+buf = buf.slice(1)
+val = buf.readInt8()
+global[`tpms_temp_${index}`] = val !== -128 ? val : -128
+buf = buf.slice(1)
+
+return buf
+}
+}
+}
 
 
 
 }
 
-module.exports = ListenPortTP
+module.exports = ListenPortTP*/

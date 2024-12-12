@@ -27,10 +27,12 @@ class JobToBase {
 
 
     async fillingTableColumns(object, table) { //проверка и создание столбцов в таблице БД
-        const tableName = table;
-        const columnsQuery = `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '${tableName}'`;
-        const pool = await connection;
         try {
+            // console.log(table)
+            const tableName = table;
+            const columnsQuery = `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '${tableName}'`;
+            const pool = await connection;
+
             const result = await pool.request().query(columnsQuery);
             const columns = result.recordset;
             for (const key in object) {
@@ -42,7 +44,6 @@ class JobToBase {
                         const addColumnQuery = `ALTER TABLE ${tableName} ADD ${key} ${dataType}`;
                         await pool.request().query(addColumnQuery);
                     }
-
                 }
             }
         } catch (e) {
@@ -51,10 +52,15 @@ class JobToBase {
     }
 
     async fillingTableRows(object, table) { //запись строк в таблицу БД
-        const tableName = table;
-        const columns = Object.keys(object).join(', ');
-        const values = Object.values(object).map(value => `'${value}'`).join(', ');
+        //   console.log('сроки')
+        //  console.log(object)
+        //  console.log(table)
+        //  console.log('записьс строк в таблицу')
         try {
+            const tableName = table;
+            const columns = Object.keys(object).join(', ');
+            const values = Object.values(object).map(value => `'${value}'`).join(', ');
+
             const addValueQuery = `INSERT INTO ${tableName} (${columns}) VALUES (${String(values)})`;
             const pool = await connection;
             await pool.request().query(addValueQuery);

@@ -121,7 +121,7 @@ export class ViewTyresValue {
                                 tireLink.children[1].setAttribute('rel', `${item.temp}`);
                                 break;
                             default:
-                                tireLink.children[1].textContent = temp.value + '°C';
+                                tireLink.children[1].textContent = parseInt(temp.value) + '°C';
                                 tireLink.children[1].setAttribute('rel', `${item.temp}`);
                         }
                         const nowTime = new Date();

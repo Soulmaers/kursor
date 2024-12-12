@@ -44,6 +44,38 @@ class CalculateReports {
         return formattedTime
     }
 
+    static convertFormatTime(times) {
+        const date = times.map(el => {
+            const date = new Date(el * 1000);
+            const year = date.getFullYear();
+            const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
+            const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
+            console.log(`${year}-${month}-${day}`)
+            return `${year}-${month}-${day}`;
+        })
+        return date
+    }
+
+    static convertTime(seconds) {
+        // console.log(seconds)
+        var days = Math.floor(seconds / (24 * 60 * 60));
+        var hours = Math.floor(seconds / (60 * 60))// / (60 * 60));
+        var minutes = Math.floor((seconds % (60 * 60)) / 60);
+        var remainingSeconds = seconds % 60; // Рассчитываем оставшиеся секунды
+
+        //  if (days > 0) {
+        //  return `${days} д. ${hours} ч. ${minutes} м.`;
+        if (hours > 0) {
+            return `${hours} ч. ${minutes} м.`;
+        } else if (minutes === 0) {
+            // Включаем секунды в последнее условие
+            return `${minutes} м. ${remainingSeconds} с.`;
+        }
+        else {
+            return `${minutes} м.`
+        }
+    }
+
     static formatTime(num) {
         var hours = Math.floor(num / 3600);
         var minutes = Math.floor((num % 3600) / 60);
@@ -71,6 +103,7 @@ class CalculateReports {
     }
 
     static async moto(data, settings, id) {
+
 
         const { minDuration } = settings['Моточасы']
         const minTime = CalculateReports.timeStringToUnix(minDuration)
@@ -133,6 +166,8 @@ class CalculateReports {
             acc += e[2].time
             return acc
         }, 0)
+
+        // 
         return { moto: filteredRess, motoAll: motoAll }
     }
 

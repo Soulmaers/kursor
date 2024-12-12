@@ -11,7 +11,9 @@ class ControllRetranslations {
     }
 
     async init() {
-        //   new ListenPortTP(21626);
+        new ListenPortTP(21626);//21626
+        new ListenPortIPS(20332)
+        // new ListenPortTPNew(20163)
         await this.getProtokolRetranslation() //получение протоколов ретрансяции
         this.protokols.forEach(e => this.ifControllClassProtocol(e))
     }
@@ -19,7 +21,6 @@ class ControllRetranslations {
 
     ifControllClassProtocol(e) {
         this.protokol = e.protokol
-
         switch (this.protokol) {
             case 'Wialon API': new WialonClassMethods(e)
                 break;
@@ -32,8 +33,11 @@ class ControllRetranslations {
 
     async getProtokolRetranslation() {
         this.protokols = await databaseService.getProtokolRetranslations()
-        //  console.log(this.protokols)
+        // console.log(this.protokols)
     }
+
+
+
 }
 
 

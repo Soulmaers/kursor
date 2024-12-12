@@ -110,7 +110,7 @@ class SummaryStatistiks {
         strustura.job = strustura.probeg > 5 ? 1 : 0
         strustura.zapravka = await this.calculationOil(data, strustura); //получение статистики по заправкам и расходам
         strustura.rashod = this.instance.fuelConsumption()
-        strustura.moto = this.calculateDuration(data, strustura); //получение статистики по времени работы
+        strustura.moto = await this.calculateDuration(data, strustura); //получение статистики по времени работы
         strustura.prostoy = this.calculateDowntime(data, strustura); //получение статистики по времени работы
         strustura.medium = strustura.probeg !== 0 ? parseInt((strustura.rashod / strustura.probeg) * 100) : 0
     }
@@ -130,8 +130,8 @@ class SummaryStatistiks {
 
     }
 
-    calculateDuration(data, id) {
-        const result = CalculateReports.moto(data, this.settings, id.id)
+    async calculateDuration(data, id) {
+        const result = await CalculateReports.moto(data, this.settings, id.id)
         return result.motoAll
     }
 

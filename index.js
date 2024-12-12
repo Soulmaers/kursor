@@ -11,13 +11,14 @@ const http = require('http');
 const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
+const pako = require('pako');
 const { Worker, isMainThread } = require('worker_threads');
 const app = express();
-//const wialonModule = require('./backend/modules/wialon.module');
+11
 const WebSocket = require('ws');
 require('events').EventEmitter.prototype._maxListeners = 0;
 require('dotenv').config();
-//const clinic = require('clinic');
+1
 const ControllRetranslations = require('./backend/services/ControllRetranslations.js');
 
 const port = process.env.PORT || 3333;
@@ -27,8 +28,6 @@ const options = {
     key: fs.readFileSync('./cursor-gps.ru/certificate.key'),
     cert: fs.readFileSync('./cursor-gps.ru/certificate.crt'),
 };
-
-
 
 
 // Запуск HTTPS-сервера
@@ -56,9 +55,9 @@ if (isMainThread) {
     app.use(configRoutes);
     app.use(kursorRoutes);
 
-
     async function init() {
         try {
+            //  deflate()
             await initServer();
             new ControllRetranslations()
         } catch (error) {
@@ -72,3 +71,9 @@ if (isMainThread) {
 } else {
     console.log('Этот код не должен выполняться внутри воркера.');
 }
+
+
+
+
+
+

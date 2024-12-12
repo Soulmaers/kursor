@@ -744,6 +744,7 @@
     width: 20px;
     height: 2px;
     margin: 0 5px;
+    border-radius: 5px;
 
 }
 
@@ -775,7 +776,7 @@
     font-size: 0.9rem;
 }
 
-.full_screen {
+i.full_screen {
     display: none;
     color: rgba(6, 28, 71, 0.8);
     cursor: pointer;
@@ -787,4 +788,28 @@
 .center_element {
     padding: 150px 10px;
     box-sizing: border-box;
+}
+
+.tooltip_reports_moto {
+    display: none;
+    opacity: 0;
+    min-width: 120px;
+    position: absolute;
+    border: 1px solid rgba(6, 28, 71, 0.8);
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 2px;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: start;
+}
+
+.textContent_reporots {
+    margin: 2px 0;
+    font-size: 0.9rem;
+    color: rgba(6, 28, 71, 0.8);
+}
+
+.span_reports_moto {
+    font-size: 0.8rem;
 }

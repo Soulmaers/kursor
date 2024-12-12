@@ -101,10 +101,17 @@ export const storComponentSKDSHComp = [
 
 
 export const storComponentSKDSHGraf = [
-    { name: 'График давления', checked: true },
-    { name: 'График температуры', checked: true },
-    { name: 'Подсветка графика', checked: true },
-    { name: 'Совместить график давления и температуры', checked: false }
+    { name: 'Колесо', checked: true, disabled: true },
+    { name: 'Ожидание', checked: true },
+    { name: 'Низкое', checked: true },
+    { name: 'Ниже нормы', checked: true },
+    { name: 'Нормальное', checked: true },
+    { name: 'Выше нормы', checked: true },
+    { name: 'Высокое', checked: true },
+    { name: 'Всего', checked: true },
+    { name: 'Минимум', checked: true },
+    { name: 'Максимум', checked: true },
+    { name: 'Среднее', checked: true }
 ]
 
 export const storComponentOilGraf = [

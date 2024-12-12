@@ -108,7 +108,6 @@ export class ChartsViewControll {
     }
 
     createChart(datas, nameCharts) {
-
         let nameChart;
         let data;
         if (datas && nameCharts) {
