@@ -265,11 +265,10 @@ export class Validation {
             });
         };
 
-
-        console.log(property.resourse[0])
+        console.log(property)
         if (objects) activateFlags(objects.querySelectorAll('.row_kritery'), property.objects.map(e => String(e.incriment)));
         if (groups) activateFlags(groups.querySelectorAll('.row_kritery'), property.groups.map(e => String(e.incriment)));
-        if (property.resourse[0]) {
+        if (property.resourse && property.resourse[0]) {
             const getTrueKeys = Object.keys(property.resourse[0]).filter(key => property.resourse[0][key] === "true");
             activateFlags(resourses.querySelectorAll('.row_kritery'), getTrueKeys)
 

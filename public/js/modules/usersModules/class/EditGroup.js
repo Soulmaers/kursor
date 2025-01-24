@@ -171,7 +171,7 @@ export class EditGroup {
             Helpers.viewRemark(this.mess, messUser.flag ? 'green' : 'red', messUser.message);
         }
         this.updateListObjects(objectsCar)
-        if (this.instance) this.instance.createTableGroup();
+        if (this.instance) this.instance.create();
     }
 
     updateListObjects(objectsCar) {

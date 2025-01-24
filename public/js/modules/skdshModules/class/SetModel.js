@@ -11,16 +11,14 @@ export class SetModel {
 
 
     async init() {
-        console.log('тут')
         const wrapRight = document.querySelector('.wrapper_right')
         wrapRight.style.zIndex = 0,
             document.querySelector('.popup-background').style.display = 'none'
         const arrModel = [];
         const arrTyres = [];
-        const active = document.querySelector('.color')
+        this.active = document.querySelector('.color')
         const idw = this.id
-        const activePost = active.getAttribute('name')
-        console.log(activePost)
+        this.activePost = this.active.getAttribute('name')
         const osi = wrapRight.querySelectorAll('.osiTest')
         const linkTyres = wrapRight.querySelectorAll('.tires_link_test')
         const go = wrapRight.querySelector('.gosNumber')
@@ -39,11 +37,10 @@ export class SetModel {
             el.setAttribute('id', `${indexTyres}`)
             arrTyres.push(this.fnsortTyresTest(el))
         })
-        const selectedOption = this.selectType.options[this.selectType.selectedIndex];
-        const selectedText = selectedOption.text;
-        console.log(arrModel, activePost, idw, selectedText, go, go1, goCar, goCar1)
-        await this.changeBase(arrModel, activePost, idw, selectedText, go, go1, goCar, goCar1)
-        await this.postTyres(arrTyres, activePost, idw);
+
+        console.log(arrModel, this.activePost, idw, go, go1, goCar, goCar1)
+        await this.changeBase(arrModel, go, go1, goCar, goCar1)
+        await this.postTyres(arrTyres);
         this.sensors.style.display = 'none';
     }
 
@@ -52,7 +49,6 @@ export class SetModel {
         let typeOs;
         let sparka;
         el.children[1].classList.contains('pricepT') ? typeOs = 'Прицеп' : typeOs = 'Тягач'
-        console.log(el)
         const spark = el.querySelector('.sparkCheck')
         if (spark) {
             spark.checked ? sparka = 4 : sparka = 2
@@ -71,10 +67,9 @@ export class SetModel {
     }
 
     async postTyres(tyres) {
-        const active = document.querySelector('.color')
-        console.log(active)
-        const activePost = active.getAttribute('name')
-        const idw = document.querySelector('.color').id
+
+        const activePost = this.activePost
+        const idw = this.id
         const params = {
             method: "POST",
             headers: {
@@ -83,7 +78,8 @@ export class SetModel {
             body: JSON.stringify({ tyres, activePost, idw })
         }
         const results = await fetch('/api/tyres', params)
-        const res = results.json()
+        const res = await results.json()
+        console.log(res)
     }
 
     async reqDelete(idw) {
@@ -106,10 +102,12 @@ export class SetModel {
         return result
     }
     //конфигуратор оси
-    async changeBase(massModel, activePost, idw, type, go, go1, goCar, goCar1) {
+    async changeBase(massModel, go, go1, goCar, goCar1) {
+        const activePost = this.activePost
+        const idw = this.id
+        console.log(idw)
         massModel.length !== 0 ? massModel : massModel.push(['-', '-', '-'])
         await this.reqDelete(idw);
-        console.log('тат')
         let gosp;
         let frontGosp;
         let gosp1;
@@ -118,16 +116,16 @@ export class SetModel {
         goCar ? frontGosp = goCar.value : frontGosp = ''
         go1 ? gosp1 = go1.value : gosp1 = ''
         goCar1 ? frontGosp1 = goCar1.value : frontGosp1 = ''
-        console.log(gosp, gosp1, frontGosp, frontGosp1)
         const param = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: (JSON.stringify({ massModel, idw, activePost, gosp, gosp1, frontGosp, frontGosp1, type }))
+            body: (JSON.stringify({ massModel, idw, activePost, gosp, gosp1, frontGosp, frontGosp1 }))
         }
         const res = await fetch('/api/updateModel', param)
         const response = await res.json()
+        console.log(response)
         const modalCenterOs = document.querySelector('.modalCenterOs')
         modalCenterOs.style.display = 'none'
         const checkAlt = document.getElementById('check_Title')

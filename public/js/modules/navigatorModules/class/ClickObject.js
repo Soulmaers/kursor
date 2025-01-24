@@ -41,7 +41,6 @@ export class ClickObject {
         })
         e.classList.add('active')
         this.visual('check')
-        console.log('визуал')
         if (this.btnShina[1].classList.contains('active')) {
             detalisation.style.display = 'none'
             stata.style.display = 'flex'
@@ -79,8 +78,8 @@ export class ClickObject {
     }
 
     filterData(id) {
-        const foundElement = GetUpdateStruktura.globalData.final.find(el => el[4] === Number(id));
-        this.info = [foundElement[0].result, foundElement[1].result, foundElement[2].result, foundElement[3].result]
+        const foundElement = GetUpdateStruktura.globalData.final.find(el => el[6].object_id === id);
+        this.info = foundElement ? [foundElement[0].result, foundElement[1].result, foundElement[2].result, foundElement[3].result] : []
     }
 
     handleClick(event) {
@@ -120,7 +119,6 @@ export class ClickObject {
         //  new SKDSHClass(this.info, idw)
         this.reinitializeOrCreateInstance('instanceSKDH', SKDSHClass, this.info, idw);
 
-        console.log(this.info)
         if (!check) {
             this.specific(this.element)//метод который обрабатывает специфические условия
             this.reinitializeOrCreateInstance('createEvent', CreateMarkersEvent, idw);
@@ -133,7 +131,6 @@ export class ClickObject {
                 clearInterval(this.createEvent.updateInterval);
                 this.createEvent.hiddenTrackAndMarkersEnent();
             }
-            console.log(this.info)
             alarmFind(this.info)
         }
         kranParams()

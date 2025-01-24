@@ -28,7 +28,6 @@ export class Servis {
             'Бензовоз': '../../../image/benzovoz.png',
             'ЖКХ': '../../../image/zkh.png',
             '-': '../../../image/tehnika.png'
-
         }
         this.init()
     }

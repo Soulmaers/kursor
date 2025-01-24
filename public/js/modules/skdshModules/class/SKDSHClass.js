@@ -20,11 +20,10 @@ export class SKDSHClass {
     init() {
         if (this.model.length !== 0) {
             new ViewModel(this.model) // класс отрисовывает саму модель СКДШ
-
             this.viewTyresValueInstance = new ViewTyresValue(this.tyres, this.params, this.osi); // класс отрисовывает состояние давления и температуры на колесах
-            this.controllTyresInstance = new ControllTyres(); // Создание и сохранение экземпляра ControllTyres
-        }
 
+        }
+        this.controllTyresInstance = new ControllTyres(); // Создание и сохранение экземпляра ControllTyres
         // Управление жизненным циклом SetPressureOs
         if (!SKDSHClass.pressureOsInstance) {
             SKDSHClass.pressureOsInstance = new SetPressureOs(this.id); // управление настройками оси

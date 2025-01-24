@@ -12,8 +12,8 @@ export class ViewModel {
 
 
     createViewModel() {
-        const type = this.model[0].type
-        this.controllViewType(type)
+        // const type = this.model[0].type
+        // this.controllViewType(type)
         if (this.model.length === 1 && this.model[0].osi === '-') return
         this.createContainer()
         this.createOsi()

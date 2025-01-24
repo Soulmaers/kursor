@@ -7,6 +7,7 @@ const userRoutes = require('./backend/routes/userRoutes.js');
 const configRoutes = require('./backend/routes/configRoutes');
 const kursorRoutes = require('./backend/routes/kursorRoutes');
 const https = require('https');
+const cors = require('cors');
 const http = require('http');
 const morgan = require('morgan');
 const fs = require('fs');
@@ -20,6 +21,7 @@ require('events').EventEmitter.prototype._maxListeners = 0;
 require('dotenv').config();
 1
 const ControllRetranslations = require('./backend/services/ControllRetranslations.js');
+const { y } = require('pdfkit');
 
 const port = process.env.PORT || 3333;
 
@@ -48,6 +50,7 @@ if (isMainThread) {
     app.use(passport.initialize());
     require('./backend/middleware/passport')(passport);
     app.use(cookieParser());
+
     app.set('view engine', 'ejs');
     app.use(express.static(__dirname + '/public'));
     app.use(routes);
@@ -57,7 +60,6 @@ if (isMainThread) {
 
     async function init() {
         try {
-            //  deflate()
             await initServer();
             new ControllRetranslations()
         } catch (error) {
@@ -71,6 +73,9 @@ if (isMainThread) {
 } else {
     console.log('Этот код не должен выполняться внутри воркера.');
 }
+
+
+
 
 
 

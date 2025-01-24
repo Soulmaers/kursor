@@ -8,9 +8,7 @@ exports.updateModel = async (req, res) => {
     const gosp1 = req.body.gosp1
     const frontGosp = req.body.frontGosp
     const frontGosp1 = req.body.frontGosp1
-    const type = req.body.type
-    const tsiControll = req.body.tsiControll
-    const message = await databaseService.updateModelSaveToBase(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll) //добавление, обновление модели объекта в БД
+    const message = await databaseService.updateModelSaveToBase(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1) //добавление, обновление модели объекта в БД
     res.json({ message: 'успех' })
 }
 exports.tyres = async (req, res) => {
@@ -24,7 +22,6 @@ exports.tyres = async (req, res) => {
 exports.modalBar = async (req, res) => {
     const value = [req.body.arrValue];
     const message = await databaseService.modalBarSaveToBase(value) // добавление, обновление  пороговых значений давления на колеса осей
-    console.log(message)
     res.json(message)
 }
 

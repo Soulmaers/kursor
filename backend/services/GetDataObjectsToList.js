@@ -274,7 +274,7 @@ class GetDataObjectsToList {
                 })
             ),
             ...account.ungroupedObjects.map(async (obj) => {
-                const params = await databaseService.loadParamsViewList(obj.object_name, Number(obj.object_id), obj);
+                const params = await databaseService.loadParamsViewList(obj.object_name, obj.object_id, obj);
                 const cleanParams = JSON.parse(JSON.stringify(params)); // Убираем циклические ссылки
                 Object.assign(obj, cleanParams); // Обновляем объект данными из loadParamsViewList
             })

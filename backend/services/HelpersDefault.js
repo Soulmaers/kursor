@@ -9,7 +9,7 @@ class HelpersDefault {
 
 
         const session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c657B0E5B18E670CCE536AD11EB368A1DD86776273D"`);
-        //  console.log('сессия', session.eid)
+        console.log('сессия', session.eid)
         //  const res = await HelpersDefault.updateToken()
         return session
     }

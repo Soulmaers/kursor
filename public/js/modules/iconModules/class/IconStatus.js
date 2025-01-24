@@ -265,7 +265,7 @@ export class IconStatus {
 
     //расчет статуса объекта
     async status(data) {
-        if (data.lengh === 0) return
+        if (data.length === 0) return
         const lastValidTime = data.find(e => e[1] === 'last_valid_time')
         const nowTime = Math.floor(new Date().getTime() / 1000)
         const status = (nowTime - Number(lastValidTime[3])) > 3600 ? 0 : 1

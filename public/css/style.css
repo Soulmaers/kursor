@@ -109,7 +109,12 @@ body {
   margin-right: 45px;
 }
 
-
+.simulator {
+  color: #fff;
+  font-weight: bold;
+  padding-top: 3px;
+  cursor: pointer;
+}
 
 .headerLogoMenu {
   display: flex;

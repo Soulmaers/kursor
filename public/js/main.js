@@ -34,6 +34,7 @@ export class Application {
         this.servis = document.querySelector('.servis')
         this.adminPanel = document.querySelector('.global_settings')
         this.rem = document.querySelector('.rem')
+        this.simulator = document.querySelector('.simulator')
         this.role = role   //получаем роль прав доступа
         this.login = login //получаем логин пользователя
         this.incriment = incriment
@@ -54,6 +55,7 @@ export class Application {
         }
         if (this.role !== 'Курсор') {
             this.rem.style.display = 'none'
+            this.simulator.style.display = 'none'
         }
         if (this.role === 'Пользователь' || this.role === 'Администратор') {
             await GetUpdateStruktura.getPermissions(this.incriment)
@@ -77,6 +79,7 @@ export class Application {
         new IndexClassSettings(this.login)
         new RemClassControll(this.login, final)
         this.formatContainer() //метод который корректирует границы контейнеров взависимости от разрешения экрана
+        this.insideApplication()
         //  this.adaptiv()  //адаптив
         this.activButton()
         await this.startClass()
@@ -95,6 +98,12 @@ export class Application {
     }
 
 
+
+    insideApplication() {
+        this.simulator.addEventListener('click', async () => {
+            window.open('http://46.229.209.30:3001', '_blank');
+        });
+    }
     async logs() {
         const login = this.login
         const param = {

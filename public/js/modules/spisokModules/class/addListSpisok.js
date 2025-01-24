@@ -36,8 +36,6 @@ export class AddListSpisok {
         new AddparametrsIcons(this.final, this.lists)
     }
     async init() {
-        console.log('запуск')
-
         this.simulateLoader()
         this.findDomElement()  //поиск и удаление старых элементов
         Helpers.sorting(this.data)
@@ -50,7 +48,6 @@ export class AddListSpisok {
         new ToggleHiddenList() //запускаем класс управления списком
         initSummary = new SummaryViewControll(this.allId)
         initCharts = new ChartsViewControll(this.allId)
-        console.log(initCharts)
         await this.viewList(this.login)
         this.validRole()
         this.finishload = true
@@ -133,7 +130,6 @@ export class AddListSpisok {
         }
         const ress = await fetch('/api/viewList', param)
         const results = await ress.json()
-        console.log(results)
         if (results.res.length === 0) {
             const instance = new FilterElements()
             instance.draggable()
@@ -156,7 +152,6 @@ export class AddListSpisok {
             }
             const uniqBar = document.querySelectorAll('.uniqBar')
             uniqBar.forEach(el => {
-                console.log(el.children[0].id)
                 if (parsedObj[el.children[0].id].view) {
                     el.children[0].checked = parsedObj[el.children[0].id].view === false ? false : true
                 }

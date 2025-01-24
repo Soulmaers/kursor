@@ -18,11 +18,11 @@ export class GetUpdateStruktura {
         const models = await mods.json()
         const arrayList = models.result
 
-        console.log(arrayList)
         const allId = Helpers.format(arrayList, 0)
         const final = Helpers.format(arrayList, 1)
         const groupId = Helpers.format(arrayList, 2)
         const finalGroup = Helpers.format(arrayList, 3)
+
         GetUpdateStruktura.globalData = { data: arrayList, allId: allId, final: final, groupId: groupId, finalGroup: finalGroup }
         // Вызываем событие 'dataReceived' с полученными данными
         SimpleEventEmitter.emit('dataReceived', { data: arrayList, allId, final, groupId });
@@ -52,8 +52,6 @@ export class GetUpdateStruktura {
         const mods = await fetch('/api/getAccountResourseID', params)
         const models = await mods.json()
         GetUpdateStruktura.resourseData = models
-        console.log(models)
-        //    const arrayList = models.result
     }
     static async getPermissions(incriment) {
         const params = {

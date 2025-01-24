@@ -4,6 +4,7 @@ const JobToBase = require('../navtelecom/JobToBase')
 const wialonService = require('../../services/wialon.service.js')
 const { HelpersUpdateParams } = require('../../services/HelpersUpdateParams.js')
 const { UpdateSetStor } = require('../dataProcessorModule/class/UpdateSetStor.js')
+const CompilingStruktura = require('../simulater/CompilingStruktura.js')
 class WialonOrigin {
     constructor(session) {
         this.session = session
@@ -103,6 +104,11 @@ class WialonOrigin {
         if (allArrayData.length !== 0) {
             new UpdateSetStor(allArrayData[0].imei, allArrayData[0].port, allArrayData, res)
             await this.setValidationImeiToBase(allArrayData);
+            console.log(allArrayData[0].imei)
+            if (allArrayData[0].imei === '868184066640817' || allArrayData[0].imei === '868184066389167') {
+                const instance = new CompilingStruktura(allArrayData, res)
+                const result = await instance.init()
+            }
         }
     }
     async setValidationImeiToBase(allArrayData) {

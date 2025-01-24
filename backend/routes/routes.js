@@ -1,5 +1,7 @@
 
 const express = require('express')
+const CompilingStruktura = require('../modules/simulater/CompilingStruktura')
+
 const controllerWialon = require('../controllers/dataWialon')
 const controllerModel = require('../controllers/modelController')
 const controllerIcon = require('../controllers/icons.controller')
@@ -124,4 +126,15 @@ router.post('/postWappi', controllerBitrix.postWappi)
 
 router.post('/api/wialonOil', controllerShablon.wialonOil)
 
+
+
+
+router.post('/api/getDataSimulater', async (req, res) => {
+    const value = req.body.value
+    console.log('сим')
+    console.log(value)
+    const instance = new CompilingStruktura(value)
+    const data = await instance.init()
+    res.json(data)
+})
 

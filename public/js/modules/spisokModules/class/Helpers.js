@@ -222,7 +222,7 @@ export class Helpers {
     }
 
     static format(datas, num) {
-        let result;
+           let result;
         if (num === 1) {
             // Функция для извлечения всех объектов из группы
             const res = datas.flatMap(account => [
@@ -235,7 +235,7 @@ export class Helpers {
             result = Array.from(uniqueObjectsMap.values());
         }
         if (num === 0) {
-            // Функция для извлечения всех idx объектов из группы
+                       // Функция для извлечения всех idx объектов из группы
             const res = datas.flatMap(account => [
                 ...account.groups.flatMap(group => group.objects.map(obj => obj.object_id)),
                 ...account.ungroupedObjects.map(obj => obj.object_id)

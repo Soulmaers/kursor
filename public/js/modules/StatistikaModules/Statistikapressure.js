@@ -26,9 +26,7 @@ export class StatistikaPressure {
     async init() {
         if (!this.time) this.installTime()
         await this.getParamsToInterval()
-        console.log('тут')
         const content = this.calcilator()
-        console.log(content)
         this.createTableContent(content)
         this.viewTime()
     }
@@ -43,7 +41,6 @@ export class StatistikaPressure {
             return formattedDate
         })
         const bool = dataTime[0] === dataTime[1] ? true : false
-        console.log(dataTime)
         this.spanDate.textContent = bool ? dataTime[0] : `${dataTime[0]} - ${dataTime[1]}`
     }
     initEventListeners() {
@@ -69,10 +66,8 @@ export class StatistikaPressure {
     }
 
     async toggleCalendar(event) {
-        console.log('запуск')
         const element = event.target
         element.classList.toggle('clickUp')
-        console.log(element)
         if (element.classList.contains('clickUp')) {
             this.calendar.style.display = 'flex'
             await this.calendarOpen()
@@ -82,15 +77,12 @@ export class StatistikaPressure {
         }
     }
     ok() {
-        console.log(this.time)
         this.calendar.style.display = 'none'
-        console.log(this.clickIcon)
         this.iconStata.classList.remove('clickUp')
         this.calendar.children[0].children[0].value = ''
         this.init()
     }
     clear() {
-        console.log('здесь')
         this.calendar.style.display = 'none'
         this.iconStata.classList.remove('clickUp')
         this.calendar.children[0].children[0].value = ''
@@ -133,7 +125,6 @@ export class StatistikaPressure {
         })
     }
     calcilator() {
-        console.log(this.structura);
         const result = this.structura.map(sensor => ({
             sensor: sensor.sens,
             intervals: this.processSensor(sensor, Number(sensor.bar.knd), Number(sensor.bar.kvd), Number(sensor.bar.dnn), Number(sensor.bar.dvn))
@@ -142,7 +133,6 @@ export class StatistikaPressure {
             // Инициализируем переменную для хранения суммарного времени и общего пробега всех интервалов
             let totalTimeAll = 0;
             let totalMileageAll = 0;
-            // console.log(sensor.intervals)
             // Для каждой категории интервала в каждом сенсоре рассчитываем общее время и пробег
             Object.keys(sensor.intervals).forEach(category => {
                 const totalTime = sensor.intervals[category].reduce((acc, interval) => {
@@ -246,7 +236,6 @@ export class StatistikaPressure {
         const t2 = this.time[1] + 86399
         const idw = this.id
         const arrayColumns = ['last_valid_time', 'speed', 'lat', 'lon', 'mileage', 'engineOn']
-        console.log(tyres)
         tyres.forEach(el => {
             arrayColumns.push(el.pressure, el.temp)
         })
@@ -306,7 +295,6 @@ export class StatistikaPressure {
             return 0;
         }))
         this.structura = paramnew
-        console.log(this.structura)
     }
     installTime() {
         const now = new Date();

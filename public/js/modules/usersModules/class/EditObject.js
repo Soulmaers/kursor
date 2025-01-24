@@ -96,7 +96,9 @@ export class EditObject {
         };
         const res = await fetch('/api/getSensStorMeta', params)
         const fetchSensStorMeta = await res.json()
-        this.instanceConfig = new ConfiguratorParams(this.idx, 'wialon', this.property.imeidevice, fetchSensStorMeta, this.property.idbitrixobject)
+        console.log(this.property)
+        const port = this.property.port ? this.property.port : 'wialon'
+        this.instanceConfig = new ConfiguratorParams(this.idx, port, this.property.imeidevice, fetchSensStorMeta, this.property.idbitrixobject)
     }
 
 

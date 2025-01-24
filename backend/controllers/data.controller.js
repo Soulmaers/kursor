@@ -8,8 +8,7 @@ const getDataObjectsToList = require('../services/GetDataObjectsToList')
 exports.dannie = async (req, res) => {
     const role = req.body.role
     const incriment = req.body.incriment
-    console.log(role + 'данные')
-    let datas;
+       let datas;
     let result;
     try {
         switch (role) {
@@ -30,8 +29,7 @@ exports.dannie = async (req, res) => {
                 break;
 
             default: result = await getDataObjectsToList.getUserGroupsAndObjects(incriment) //получем данные из БД по объектам wialona
-                console.log(result)
-                res.json({ result });
+                               res.json({ result });
         }
 
     }

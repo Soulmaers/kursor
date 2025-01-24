@@ -88,6 +88,50 @@ export class ConfiguratorParams {
             { 'id': 70, index: 21, 'sensor': 't° топлива в баке 5', 'parametr': 'oiltemp5' },
             { 'id': 71, index: 20, 'sensor': 'Топливо 6', 'parametr': 'oil6' },
             { 'id': 72, index: 21, 'sensor': 't° топлива в баке 6', 'parametr': 'oiltemp6' },
+            { 'id': 73, index: 110, 'sensor': 'Колесо 11', 'parametr': 'tpms_pressure_11' },
+            { 'id': 74, index: 110, 'sensor': 'Колесо 12', 'parametr': 'tpms_pressure_12' },
+            { 'id': 75, index: 110, 'sensor': 'Колесо 13', 'parametr': 'tpms_pressure_13' },
+            { 'id': 76, index: 110, 'sensor': 'Колесо 14', 'parametr': 'tpms_pressure_14' },
+            { 'id': 77, index: 110, 'sensor': 'Колесо 15', 'parametr': 'tpms_pressure_15' },
+            { 'id': 78, index: 110, 'sensor': 'Колесо 16', 'parametr': 'tpms_pressure_16' },
+            { 'id': 79, index: 110, 'sensor': 'Колесо 18', 'parametr': 'tpms_pressure_18' },
+            { 'id': 80, index: 110, 'sensor': 'Колесо 19', 'parametr': 'tpms_pressure_19' },
+            { 'id': 81, index: 110, 'sensor': 'Колесо 21', 'parametr': 'tpms_pressure_21' },
+            { 'id': 82, index: 110, 'sensor': 'Колесо 22', 'parametr': 'tpms_pressure_22' },
+            { 'id': 83, index: 110, 'sensor': 'Колесо 23', 'parametr': 'tpms_pressure_23' },
+            { 'id': 84, index: 110, 'sensor': 'Колесо 24', 'parametr': 'tpms_pressure_24' },
+            { 'id': 85, index: 110, 'sensor': 'Колесо 25', 'parametr': 'tpms_pressure_25' },
+            { 'id': 86, index: 110, 'sensor': 'Колесо 26', 'parametr': 'tpms_pressure_26' },
+            { 'id': 87, index: 110, 'sensor': 'Колесо 27', 'parametr': 'tpms_pressure_27' },
+            { 'id': 88, index: 110, 'sensor': 'Колесо 28', 'parametr': 'tpms_pressure_28' },
+            { 'id': 89, index: 110, 'sensor': 'Колесо 29', 'parametr': 'tpms_pressure_29' },
+            { 'id': 90, index: 110, 'sensor': 'Колесо 30', 'parametr': 'tpms_pressure_30' },
+            { 'id': 91, index: 110, 'sensor': 'Колесо 31', 'parametr': 'tpms_pressure_31' },
+            { 'id': 92, index: 110, 'sensor': 'Колесо 32', 'parametr': 'tpms_pressure_32' },
+            { 'id': 93, index: 110, 'sensor': 'Колесо 42', 'parametr': 'tpms_pressure_42' },
+            { 'id': 94, index: 110, 'sensor': 'Колесо 43', 'parametr': 'tpms_pressure_43' },
+            { 'id': 95, index: 111, 'sensor': 'Колесо temp 11', 'parametr': 'tpms_temp_11' },
+            { 'id': 96, index: 111, 'sensor': 'Колесо temp 12', 'parametr': 'tpms_temp_12' },
+            { 'id': 97, index: 111, 'sensor': 'Колесо temp 13', 'parametr': 'tpms_temp_13' },
+            { 'id': 98, index: 111, 'sensor': 'Колесо temp 14', 'parametr': 'tpms_temp_14' },
+            { 'id': 99, index: 111, 'sensor': 'Колесо temp 15', 'parametr': 'tpms_temp_15' },
+            { 'id': 100, index: 111, 'sensor': 'Колесо temp 16', 'parametr': 'tpms_temp_16' },
+            { 'id': 101, index: 111, 'sensor': 'Колесо temp 18', 'parametr': 'tpms_temp_18' },
+            { 'id': 102, index: 111, 'sensor': 'Колесо temp 19', 'parametr': 'tpms_temp_19' },
+            { 'id': 103, index: 111, 'sensor': 'Колесо temp 21', 'parametr': 'tpms_temp_21' },
+            { 'id': 104, index: 111, 'sensor': 'Колесо temp 22', 'parametr': 'tpms_temp_22' },
+            { 'id': 105, index: 111, 'sensor': 'Колесо temp 23', 'parametr': 'tpms_temp_23' },
+            { 'id': 106, index: 111, 'sensor': 'Колесо temp 24', 'parametr': 'tpms_temp_24' },
+            { 'id': 107, index: 111, 'sensor': 'Колесо temp 25', 'parametr': 'tpms_temp_25' },
+            { 'id': 108, index: 111, 'sensor': 'Колесо temp 26', 'parametr': 'tpms_temp_26' },
+            { 'id': 109, index: 111, 'sensor': 'Колесо temp 27', 'parametr': 'tpms_temp_27' },
+            { 'id': 110, index: 111, 'sensor': 'Колесо temp 28', 'parametr': 'tpms_temp_28' },
+            { 'id': 111, index: 111, 'sensor': 'Колесо temp 29', 'parametr': 'tpms_temp_29' },
+            { 'id': 112, index: 111, 'sensor': 'Колесо temp 30', 'parametr': 'tpms_temp_30' },
+            { 'id': 113, index: 111, 'sensor': 'Колесо temp 31', 'parametr': 'tpms_temp_31' },
+            { 'id': 114, index: 111, 'sensor': 'Колесо temp 32', 'parametr': 'tpms_temp_32' },
+            { 'id': 115, index: 111, 'sensor': 'Колесо temp 42', 'parametr': 'tpms_temp_42' },
+            { 'id': 116, index: 111, 'sensor': 'Колесо temp 43', 'parametr': 'tpms_temp_43' }
         ]
         this.listMeta = document.querySelector('.list_meta')
         this.listOldData = document.querySelector('.list_old_data')
@@ -222,6 +266,7 @@ export class ConfiguratorParams {
         const idw = this.id
         const port = this.port
         const imei = this.imei
+        console.log(port)
         const params = {
             method: "POST",
             headers: {
@@ -231,6 +276,7 @@ export class ConfiguratorParams {
         }
         const parametrs = await fetch('api/getMetas', params)
         const lastParams = await parametrs.json()
+        console.log(lastParams)
         return lastParams
     }
 

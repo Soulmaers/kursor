@@ -23,7 +23,7 @@ export class Configurator {
 
     getDOM() {
         this.altConfig = document.getElementById('check_Title')
-        this.selectType = document.querySelector('.select_type')
+        // this.selectType = document.querySelector('.select_type')
         this.disk = document.querySelector('.disk')
         this.sensors = document.querySelector('.sensors')
         this.btnsens = document.querySelectorAll('.btnsens')
@@ -82,34 +82,18 @@ export class Configurator {
     }
 
     startConfig() {
-        const selectOld = this.selectType.options[this.selectType.selectedIndex].textContent
+        // const selectOld = this.selectType.options[this.selectType.selectedIndex].textContent
         const checkAlt = document.getElementById('check_Title')
-        console.log(checkAlt.checked)
-        checkAlt.checked ? this.createConfig(selectOld) : this.clearConfig()
+        checkAlt.checked ? this.createConfig() : this.clearConfig()
     }
 
-    createConfig(selectOld) {
-        console.log('тута?')
+    createConfig() {
         const tiresActiv = document.querySelector('.tiresActiv')
         tiresActiv ? tiresActiv.classList.remove('tiresActiv') : null
         const checkAlt = document.querySelector('.checkAlt')
         checkAlt.style.color = 'red'
         checkAlt.style.fontWeight = 'bold'
 
-        for (let i = 0; i < this.selectType.options.length; i++) {
-            if (this.selectType.options[i].textContent === selectOld) {
-                this.selectType.options[i].selected = true;
-                break;
-            }
-        }
-        this.selectType.style.display = 'flex'
-        this.selectType.style.appearance = '';
-        this.selectType.disabled = false;
-        // Отображаем все скрытые элементы
-        Array.from(this.selectType.children).forEach(el => {
-            el.hidden = false;
-            el.disabled = false;
-        });
         const altConfig = document.querySelector('.altConfig')
         const alt = document.querySelector('.containerAlt')
         const disketa = document.querySelector('.disketa')
@@ -201,7 +185,6 @@ export class Configurator {
         document.querySelector('.actBTN') ? document.querySelector('.actBTN').classList.remove('actBTN') : null
         this.sensors.style.display === 'flex' ? (this.sensors.style.display = 'none', wrapRight.style.zIndex = 0,
             document.querySelector('.popup-background').style.display = 'none') : null
-        this.selectType.style.display = 'none'
         const checkAlt = document.querySelector('.checkAlt')
         checkAlt.style.color = 'black'
         checkAlt.style.fontWeight = '400'
@@ -215,7 +198,7 @@ export class Configurator {
         }
         const idw = document.querySelector('.color').id
         const data = await this.getNewData(idw)
-        console.log(data)
+        // console.log(data)
         new SKDSHClass(data, idw)
     }
 

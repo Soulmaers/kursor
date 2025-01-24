@@ -28,7 +28,6 @@ export class Detalisation {
             const nav = document.querySelector('.activStatic')?.id;
             for (const entry of entries) {
                 const { width } = entry.contentRect;
-                console.log(this.currentWidth, width)
                 if (Math.abs(this.currentWidth !== width)) {
                     this.currentWidth = width;
                     this.performResizeActions(nav);
@@ -38,7 +37,6 @@ export class Detalisation {
     }
 
     performResizeActions(nav) {
-        console.log(this.container)
         switch (nav) {
             case 'nav1':
                 // Выполняем перерисовку, так как размер изменился
@@ -135,7 +133,6 @@ export class Detalisation {
                 break;
             case 'nav3':
                 const datas = await this.getParamsOilAndMileage(3)
-                console.log(datas)
                 let zap = datas.reduce((acc, el) => Number(el.zapravka) + acc, 0)
                 let ras = datas.reduce((acc, el) => Number(el.rashod) + acc, 0)
                 const structura = [
@@ -263,7 +260,6 @@ export class Detalisation {
         }
         else {
             obj = models.map(el => ({ zapravka: Number(el.zapravka), rashod: Number(el.rashod) }))
-            console.log(obj)
             return obj
         }
     }
@@ -281,7 +277,6 @@ export class Detalisation {
     }
 
     updateHTML() {
-        console.log('работает апдейт')
         const jobTSDetalisationGraf = document.querySelector(".jobTSDetalisationGraf")
         jobTSDetalisationGraf.style.flexDirection = 'row'
         jobTSDetalisationGraf.style.justifyContent = 'center'
@@ -358,7 +353,6 @@ export class Detalisation {
         }
     }
     condition(element, key, index) {
-        console.log(element, key, index)
         const intStopNew = this.prostoy(element)
         if (intStopNew) {
             intStopNew.forEach(el => {
@@ -497,7 +491,6 @@ export class Detalisation {
         const nowTime = Math.floor(new Date().getTime() / 1000)
         const oldTime = nowTime - 604800
         this.time = [oldTime, nowTime]
-        console.log(this.time)
     }
     async getDataStor() {
         const arrayColumns = ['last_valid_time', 'speed', 'lat', 'lon', 'engine', 'sats', 'engineOn']

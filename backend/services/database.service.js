@@ -1,7 +1,7 @@
 
 const { connection, sql } = require('../config/db')
 const databaseService = require('./database.service');
-
+const { stor } = require('./storFlex.js')
 const send = require('./send.service.js');
 const { HelpersDefault } = require('./HelpersDefault.js')
 const getEvent = require('../controllers/bitrix.controller.js')
@@ -396,6 +396,7 @@ exports.objectsWialonImei = async (imei) => {
 }
 
 exports.getMeta = async (idObject, port, imei) => {
+    console.log(idObject, port, imei)
     let table;
     if (port === '20163') {
         table = 'wialon_retranslation';
@@ -405,12 +406,15 @@ exports.getMeta = async (idObject, port, imei) => {
         table = 'navtelecom';
     } else if (port === 'wialon' || !port) {
         table = 'wialon_origin2';
-    } else {
+    } else if (port === 'simulator' || !port) {
+        return stor
+    }
+    else {
         return [];
     }
     try {
         const pool = await connection;
-        const postModel = `SELECT TOP (1) * FROM ${table} WHERE idObject =@idw AND imei=@imei ORDER BY id DESC`
+        const postModel = `SELECT TOP (1) * FROM ${table} WHERE idObject =@idw ORDER BY id DESC`
         const result = await pool.request()
             .input('idw', idObject)
             .input('imei', imei)
@@ -1685,6 +1689,7 @@ exports.alarmBase = async (data, tyres, alarm) => {
 
 
 exports.loadParamsViewList = async (car, el, object, kursor) => {
+    // console.log(car, el, object, kursor)
     const idw = el;
     const pool = await connection;
 
@@ -1701,7 +1706,7 @@ exports.loadParamsViewList = async (car, el, object, kursor) => {
 
     // Параллельные запросы
     const [modelData, tyreData, metaData, osiData] = await Promise.all([
-        executeQuery(`SELECT osi, trailer, tyres, type, tsiControll FROM model WHERE idw='${idw}'`),
+        executeQuery(`SELECT osi, trailer, tyres FROM model WHERE idw='${idw}'`),
         executeQuery(`SELECT tyresdiv, pressure, temp, osNumber FROM tyres WHERE idw='${idw}'`),
         executeQuery(`SELECT * FROM sens_stor_meta WHERE idw='${idw}'`),
         executeQuery(`SELECT * FROM ifBar WHERE idw='${idw}'`)
@@ -1851,22 +1856,24 @@ exports.quantitySaveToBase = async (login, quantity) => {
         throw e; // Это прервет выполнение функции и выбросит ошибку наверх.
     }
 }
-exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll) => {
+exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1) => {
+    //   console.log(idw, massiv, nameCar, gosp, gosp1, frontGosp, frontGosp1)
     const pool = await connection;
     const promises = massiv.map(async el => {
         el.push(gosp)
         el.push(gosp1)
         el.push(frontGosp)
         el.push(frontGosp1)
-        el.push(type)
-        el.push(tsiControll)
         el.unshift(nameCar)
         el.unshift(idw)
+        console.log(el)
         try {
-            const selectBase = `SELECT osi FROM model WHERE idw='${el[0]}' AND osi='${el[2]}'`
-            const results = await pool.query(selectBase)
+            const selectBase = `SELECT osi FROM model WHERE idw=@idw AND osi=@osi`
+            const results = await pool.request().input('idw', el[0]).input('osi', el[2]).query(selectBase)
+            console.log(results.recordset)
             if (results.recordset.length === 0) {
-                const selectBase = `INSERT INTO model(idw, nameCar, osi, trailer, tyres, gosp, gosp1, frontGosp, frontGosp1,type, tsiControll) VALUES(@idw,@nameCar,@osi,@trailer,@tyres,@gosp,@gosp1,@frontGosp,@frontGosp1,@type,@tsiControll)`
+                const selectBase = `INSERT INTO model(idw, nameCar, osi, trailer, tyres, gosp, gosp1, frontGosp, frontGosp1)
+                 VALUES(@idw,@nameCar,@osi,@trailer,@tyres,@gosp,@gosp1,@frontGosp,@frontGosp1)`
                 const results = await pool.request()
                     .input('idw', idw)
                     .input('nameCar', nameCar)
@@ -1877,13 +1884,11 @@ exports.updateModelSaveToBase = async (idw, massiv, nameCar, gosp, gosp1, frontG
                     .input('gosp1', gosp1)
                     .input('frontGosp', frontGosp)
                     .input('frontGosp1', frontGosp1)
-                    .input('type', type)
-                    .input('tsiControll', tsiControll)
                     .query(selectBase)
                 return { message: 'успех' }
             }
             if (results.length > 0) {
-                const postModel = `UPDATE model SET idw='${el[0]}', nameCar='${el[1]}',  osi='${String(el[2])}', trailer='${el[3]}', tyres='${String(el[4])}',gosp='${gosp}',gosp1='${gosp1}', frontGosp='${frontGosp}', frontGosp1='${frontGosp1}', type='${type}',tsiControll='${tsiControll}' WHERE idw='${el[0]}' AND osi='${el[2]}'`
+                const postModel = `UPDATE model SET idw='${el[0]}', nameCar='${el[1]}',  osi='${String(el[2])}', trailer='${el[3]}', tyres='${String(el[4])}',gosp='${gosp}',gosp1='${gosp1}', frontGosp='${frontGosp}', frontGosp1='${frontGosp1}' WHERE idw='${el[0]}' AND osi='${el[2]}'`
                 const results = await pool.request()
                     .query(postModel)
                 return { message: 'апдейт' }
@@ -1904,9 +1909,11 @@ exports.tyresSaveToBase = async (nameCar, tyres, idw) => {
         el.unshift(nameCar);
         el.unshift(idw);
         try {
-            const results = await pool.query(
-                `SELECT tyresdiv FROM tyres WHERE idw='${el[0]}' AND tyresdiv='${el[2]}'`)
+            const post = `SELECT tyresdiv FROM tyres WHERE idw=@idw AND tyresdiv=@tyresdiv`
+            const results = await pool.request().input('idw', el[0]).input('tyresdiv', el[2]).query(post)
             if (results.recordset.length === 0) {
+                const post = `INSERT INTO tyres(idw, nameCar, tyresdiv, pressure, temp, osNumber)
+                 VALUES(@idw, @nameCar,@tyresdiv,@pressure,@temp,@osNumber)`
                 const results = await pool.request()
                     .input('idw', el[0])
                     .input('nameCar', el[1])
@@ -1914,11 +1921,20 @@ exports.tyresSaveToBase = async (nameCar, tyres, idw) => {
                     .input('pressure', el[3])
                     .input('temp', el[4])
                     .input('osNumber', el[5])
-                    .query(
-                        'INSERT INTO tyres(idw, nameCar, tyresdiv, pressure, temp, osNumber) VALUES(@idw, @nameCar,@tyresdiv,@pressure,@temp,@osNumber)')
+                    .query(post)
+
             }
-            if (results.recordset.length > 0) {
-                await pool.query(`UPDATE tyres SET idw='${el[0]}', nameCar='${el[1]}', tyresdiv='${el[2]}', pressure='${el[3]}', temp='${el[4]}', osNumber='${el[5]}' WHERE idw='${el[0]}' AND tyresdiv='${el[2]}'`)
+            else {
+                const post = `UPDATE tyres SET idw =@idw, nameCar =@nameCar, tyresdiv =@tyresdiv, pressure =@pressure, temp =@temp,
+                 osNumber =@osNumber WHERE idw =@idw AND tyresdiv =@tyresdiv`
+                await pool.request()
+                    .input('idw', el[0])
+                    .input('nameCar', el[1])
+                    .input('tyresdiv', el[2])
+                    .input('pressure', el[3])
+                    .input('temp', el[4])
+                    .input('osNumber', el[5])
+                    .query(post)
             }
         }
         catch (e) {
@@ -2411,7 +2427,7 @@ module.exports.tarirViewToBase = async (idw) => {
 
 exports.modelViewToBase = async (idw) => {
     try {
-        const selectBase = `SELECT idw, nameCar, osi, trailer,tyres, gosp, gosp1, frontGosp, frontGosp1, type, tsiControll FROM model WHERE  idw = @idw`;
+        const selectBase = `SELECT idw, nameCar, osi, trailer,tyres, gosp, gosp1, frontGosp, frontGosp1 FROM model WHERE  idw = @idw`;
         const pool = await connection;
         const results = await pool.request().input('idw', String(idw)).query(selectBase)
         return results.recordset;
@@ -2426,7 +2442,7 @@ exports.tyresViewToBase = async (idw) => {
     try {
         const selectBase = `SELECT tyresdiv, pressure,temp, osNumber FROM tyres WHERE idw=@idw`;
         const pool = await connection;
-        const results = await pool.request().input('idw', sql.Int, idw).query(selectBase);
+        const results = await pool.request().input('idw', idw).query(selectBase);
         return results.recordset;
     } catch (err) {
         console.error(err);
