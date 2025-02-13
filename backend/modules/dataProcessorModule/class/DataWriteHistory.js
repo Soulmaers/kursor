@@ -20,6 +20,9 @@ class DataWriteHistory {
 
     }
     async setWriteParams(obj) {
+        if (this.id == '28526627ido') {
+            //  console.log(obj)
+        }
         await ToBaseMethods.setAddDataToGlobalBase(obj)
         await HelpersUpdateParams.temporary(obj)
     }

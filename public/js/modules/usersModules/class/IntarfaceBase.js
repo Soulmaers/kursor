@@ -2,7 +2,7 @@
 import { Validation } from './Validation.js'
 import { Requests } from './RequestStaticMethods.js'
 import { Helpers } from './Helpers.js'
-
+import { GetUpdateStruktura } from '../../../GetUpdateStruktura.js'
 
 export class IntarfaceBase {
     constructor(index, buttons, settingWrap, container, login, prava, creator, creators) {
@@ -72,20 +72,25 @@ export class IntarfaceBase {
         close.addEventListener('click', this.modalActivity.bind(this, this.pop, 'none', 1))
     }
 
-    eventListenerConfirm() {
+    eventListenerConfirm(idw) {
         const okButton = this.modalConfirmElement.querySelector('.ok_podtver');
         const cancelButton = this.modalConfirmElement.querySelector('.cancel_podtver');
         cancelButton.addEventListener('click', this.closeConfirm.bind(this))
-        okButton.addEventListener('click', this.delete.bind(this))
+        okButton.addEventListener('click', this.delete.bind(this, idw))
     }
 
 
-    async delete() {
+    async delete(idw) {
+        console.log(this.idDelete, this.index, this.prava, this.creatorId)
         await Requests.deleteAccount(this.idDelete, this.index, this.prava, this.creatorId)
         const obj = this.createHistoryObject(this.idDelete);
         const resu = await Requests.setHistory(obj)
+        if (idw) {
+            await Requests.deleteAltableObject(idw)
+        }
         this.closeConfirm()
         this.create()
+        await GetUpdateStruktura.zaprosData()
     }
 
     closeConfirm() {

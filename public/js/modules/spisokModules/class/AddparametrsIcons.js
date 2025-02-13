@@ -19,7 +19,7 @@ export class AddparametrsIcons {
         for (const el of this.list) {
             const datas = this.filtersStruktura(el.id)
             this.findParams(datas[2].result, el, datas.typeobject)
-            if (datas[0].result.length < 2) continue;
+            if (datas[0].result.length === 0) continue;
             this.drawOsi(datas, el)
             this.colorWheels(datas, el)
         }

@@ -1,8 +1,10 @@
-
+const GetToBaseClass = require('./GetToBaseClass')
 
 class MutationClass {
-    constructor(setting, data, params) {
-
+    constructor(setting, data, params, tyres) {
+        this.setting = setting
+        this.params = params
+        this.tyresModel = tyres.map(e => e.pressure)
         this.lastValidTime = (params.find(e => e.params === 'last_valid_time')).value
         this.low = [setting.low_min, setting.low_max]
         this.normal = [setting.norma_min, setting.norma_max]
@@ -17,63 +19,57 @@ class MutationClass {
         this.lowPorog = 8.5
         this.timeDiff = Number(setting.time_parking) //время определеия парковки
         this.data = data //массив с данными
-        this.defaultStateCube = this.diapazonsState['normal']//стартовый диапазон для первого сообщения  1
-        this.stateCube = null //состояние кубика  1
-        this.prevStateCube = 'normal' //предыдущее состояние кубика  1
-        this.stateTravel = 1 //состояние объекта (рейс или парковка 1-рейс 0-парковка)  1
-        this.timeParking = 0; //время рейса с выкл двигателем   1
-        this.lastParkingTime = null;//предыдущее время сообщения   1
-        this.flagMutation = false   //1
-        this.timeMsg = 0;  //1
-        this.lastTimeMsg = null;  //1
-        this.flagLowpressure = false  //1
+        this.defaultStateCube = this.diapazonsState['normal']//стартовый диапазон для первого сообщения  
+        this.stateCube = setting.stateCube //состояние кубика  1
+        this.prevStateCube = setting.prevStateCube //предыдущее состояние кубика  1
+        this.stateTravel = setting.stateTravel //состояние объекта (рейс или парковка 1-рейс 0-парковка)  1
+        this.timeParking = setting.timeParking; //время рейса с выкл двигателем   1
+        this.lastParkingTime = setting.lastParkingTime;//предыдущее время сообщения   1
+        this.flagMutation = setting.flagMutation === 'true'  //1
+        this.timeMsg = setting.timeMsg;  //1
+        this.lastTimeMsg = setting.lastTimeMsg;  //1
+        this.flagLowpressure = setting.flagLowpressure === 'true'   //1
         this.indexTyres = {}
         this.swap = [8.6, 9.2]
-        this.flagstartReys = false  //1
-        console.log(this.lastValidTime)
+        this.flagstartReys = setting.flagstartReys === 'true'   //1
     }
 
 
 
-    updateProps(newsetting, newdata) {
-        this.low = [newsetting.low_min, newsetting.low_max]
-        this.normal = [newsetting.norma_min, newsetting.norma_max]
-        this.high = [newsetting.high_min, newsetting.high_max]
-        this.diapazonsState = {
-            'low': this.low,
-            'normal': this.normal,
-            'high': this.high
-        }
-        this.timeDiff = Number(newsetting.time_parking) //время определеия парковки
-        this.data = newdata
-
-        this.init()
-    }
-    init() {
+    async init() {
         this.processTemplate() //собираем стор состояний шагов и условий
         this.process()
+        await GetToBaseClass.updateTemplateVariables(this.setting.id, this.stateCube, this.prevStateCube,
+            this.stateTravel, this.timeParking, this.lastParkingTime, this.flagMutation, this.timeMsg, this.lastTimeMsg,
+            this.flagLowpressure, this.flagstartReys)
     }
 
     process() {
         this.randomCube() //бросаем кубик  и обновляем состояние кубика текущее и предыдущее
         this.iteration()
-        console.log(this.indexTyres)
 
     }
 
     iteration() {
-
-        this.data[0].val.forEach((tyres, index) => {
+        this.data.forEach((tyres, index) => {
             this.installStateMsg(tyres)  //меняем состояние статуса мутировать или нет в зависимости от интервала времени и обновляем переменные времени
             this.installStateTravel(tyres, index) //определяем состояние рейс или паркин и меняем переменные
-            if (!this.lastValidTime && index === 0) { this.mutationFirstMsg(index) } //мутируем первое сообщение
-            else this.mutation(index) //мутируем другие сообщения
+            if (!this.lastValidTime && index === 0) { this.mutationFirstMsg(tyres) } //мутируем первое сообщение
+            else this.mutation(tyres, index) //мутируем другие сообщения
         })
+        /* if (this.setting.id_object == '28526628ido') {
+             this.data.forEach(e => {
+                 this.tyresModel.forEach(it => {
+                     console.log(e[it])
+                 })
+             })
+ 
+         }*/
     }
 
 
     installStateMsg(msg) {
-        const currentTime = Math.floor(new Date(msg.dates).getTime() / 1000);
+        const currentTime = msg.last_valid_time
         if (this.timeMsg >= this.timeDiff) {
             this.flagMutation = true
             this.timeMsg = 0
@@ -87,25 +83,40 @@ class MutationClass {
             }
             this.flagMutation = false
         }
+        if (this.setting.id_object == '28526628ido') {
+            console.log('состояние мутации')
+            console.log(this.flagMutation)
+        }
     }
-    mutation(index) {
-        const vector = this.stor[`${this.prevStateCube}${this.stateCube}`]
-        this.celevoy = vector.celevoy
-        this.data.forEach((tyres, indx) => {
+    mutation(tyres, index) {
+
+        const param = this.params.filter(e => this.tyresModel.includes(e.params))
+
+        param.forEach(item => {
+            if (this.flagMutation) {
+                this.randomCube()
+            }
+            const vector = this.stor[`${this.prevStateCube}${this.stateCube}`]
+            this.celevoy = vector.celevoy
             this.step = this.randomStep(vector.arrayStep)
-            const ind = index - 1
-            this.mutationValue = this.getMutationValue(tyres.val[ind], tyres.val[index].dates, this.celevoy, this.step, indx)
-            tyres.val[index].value = this.mutationValue
-            tyres.val[index].state = this.stateTravel === 1 ? 'рейс' : 'парковка'
-            tyres.val[index].cube = this.stateCube
+
+            tyres.cube = this.stateCube
+            tyres.state = this.stateTravel === 1 ? 'рейс' : 'парковка'
+            const mutationValue = this.getMutationValue(item, tyres, this.celevoy, this.step, index)
+            tyres[item.params] = mutationValue
 
         })
     }
 
-    getMutationValue(tyres, timevalue, celevoy, step, indx) {
-        const value = tyres.value
+    getMutationValue(tyresOld, tyres, celevoy, step, index) {
+        if (this.setting.id_object == '28526628ido') {
+            console.log('не первое сообщение или первое после фильтрующей')
+            console.log(this.step, this.stateCube, this.stateTravel, this.data.length, tyres.state, index, this.setting.id_object, this.flagMutation, celevoy)
+        }
+        const value = index === 0 || this.data.length === 1 ? Number(tyresOld.value) : (this.data[index - 1][tyresOld.params] ? Number(this.data[index - 1][tyresOld.params]) : Number(tyresOld.value))
         let mutationValue;
         if (this.stateTravel === 1) {
+
             if (tyres.state === 'парковка') {
                 mutationValue = value <= this.lowPorog ? (Math.random() * (this.swap[1] - this.swap[0]) + this.swap[0]) :
                     value
@@ -120,23 +131,25 @@ class MutationClass {
                         mutationValue = value;
                     }
                 } else {
-                    this.randomCube()
+                    //  this.randomCube()
                     mutationValue = value;
                 }
             }
 
         } else {
-            mutationValue = this.lowDinalicalPressureParking(value, timevalue, tyres, indx)
+            mutationValue = this.lowDinalicalPressureParking(tyresOld, tyres, value, index)
         }
-        return parseFloat(mutationValue.toFixed(1))
+        //  console.log('валуе')
+        // console.log(mutationValue)
+        return parseFloat(Number(mutationValue).toFixed(1))
     }
 
-    lowDinalicalPressureParking(value, timevalue, tyres, indx) {
-        const timenow = Math.floor(new Date(timevalue).getTime() / 1000)
-        const timeold = Math.floor(new Date(tyres.dates).getTime() / 1000)
+    lowDinalicalPressureParking(tyresOld, tyres, value, index) {
+        const timenow = tyres.last_valid_time
+        const timeold = index === 0 || this.data.length === 1 ? this.lastValidTime : this.data[index - 1].last_valid_time
         const step = this.UTCSecBAR * (timenow - timeold)
         let newValue;
-        if (this.indexTyres[indx] && value > 9) {
+        if (this.indexTyres[tyresOld.params] && value > 9) {
             newValue = value - step < 9 ? 9 : value - step
         }
         else {
@@ -146,12 +159,19 @@ class MutationClass {
     }
 
 
-    mutationFirstMsg(index) {
-        this.data.forEach(tyres => {
-            const randomValue = this.randomPressureToDiapazon(index)
-            tyres.val[index].value = randomValue
-            tyres.val[index].state = this.stateTravel === 1 ? 'рейс' : 'парковка'
-        })
+    mutationFirstMsg(tyres) {
+
+        for (let elem of this.tyresModel) {
+            const randomValue = this.randomPressureToDiapazon()
+            tyres[elem] = randomValue
+            tyres.cube = this.stateCube
+            tyres.state = this.stateTravel === 1 ? 'рейс' : 'парковка'
+        }
+        if (this.setting.id_object == '28526628ido') {
+            console.log('первое сообщение')
+            console.log(tyres.state)
+            console.log(this.tyresModel)
+        }
     }
 
     installStateTravel(msg, index) {
@@ -169,8 +189,12 @@ class MutationClass {
                 this.timeParking = 0;
                 this.lastParkingTime = null
                 if (!this.flagLowpressure) {
-                    this.data.forEach((it, indexTyres) => {
-                        it.val[index - 1].value >= 9.3 ? this.indexTyres[indexTyres] = true : this.indexTyres[indexTyres] = false
+                    const param = this.params.filter(e => this.tyresModel.includes(e.params))
+                    param.forEach(item => {
+                        if (item.value !== '') {
+                            value = index === 0 || this.data.length === 1 ? item.value : this.data[index - 1][item.params]
+                            value >= 9.3 ? this.indexTyres[item.params] = true : this.indexTyres[item.params] = false
+                        }
                     })
                     this.flagLowpressure = true
                 }
@@ -184,6 +208,10 @@ class MutationClass {
             this.lastParkingTime = null
             this.stateTravel = 1
 
+        }
+        if (this.setting.id_object == '28526628ido') {
+            console.log('состояние рейс/парковка')
+            console.log(this.stateTravel)
         }
     }
 

@@ -50,7 +50,8 @@ export class CentalClassReports {
     getObjectAndCreateListElements() {
         this.objects = GetDataRequests.getObjects()
         const collection = Object.entries(this.objects.reduce((acc, e) => {
-            const group = e.groupName;
+            console.log(e.groupName)
+            const group = e.groupName ? e.groupName : 'Без группы';
             if (!acc[group]) {
                 acc[group] = []
             }

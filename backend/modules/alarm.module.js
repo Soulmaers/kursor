@@ -11,7 +11,7 @@ class AlarmControll {
     async init() {
         await this.getparams()
         await this.process()
-        this.proverka(this.massItog)
+        // this.proverka(this.massItog)
     }
 
 
@@ -84,9 +84,11 @@ class AlarmControll {
     };
 
     proverka(arr) {
+        //  console.log(arr)
         const time = new Date()
         arr.forEach(async el => {
-            if (el[4] === undefined) {
+            console.log(el[3])
+            if (el[4] === undefined || !isNaN(el[3])) {
                 return
             }
             else {

@@ -27,7 +27,6 @@ export class PressureCharts {
         }
         isCanceled = true; // Устанавливаем флаг в значение true, чтобы прервать предыдущее выполнение
         this.data = await this.createStructura()
-        console.log(this.data)
         if (this.data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')
@@ -71,7 +70,6 @@ export class PressureCharts {
             // Используем nodes[i] для доступа к текущему элементу DOM
             const chartContainer = d3.select(nodes[i]);
             const data = d
-            console.log(data)
 
             const isLastChart = i === count - 1;
             const he = isLastChart ? height + 30 : height;
@@ -422,7 +420,6 @@ export class PressureCharts {
             return div
         })
         this.char[this.char.length - 1].children[0].classList.add('last')
-        console.log(this.model)
         this.model.sort((a, b) => parseInt(a.osi) - parseInt(b.osi));
         im1.forEach((it, index) => {
             this.model.forEach(({ trailer, tyres }) => {
@@ -637,8 +634,8 @@ export class PressureCharts {
         osibar.forEach(e => {
             osssMap[e.idOs] = e;
         });
-        const idw = Number(document.querySelector('.color').id)
-        console.log(tyres)
+
+        const idw = document.querySelector('.color').id
         const arrayColumns = ['last_valid_time', 'speed', 'lat', 'lon', 'engineOn']
         tyres.forEach(el => {
             arrayColumns.push(el.pressure, el.temp)
@@ -648,7 +645,6 @@ export class PressureCharts {
         const num = 0
         const workerKey = 'pressure'
 
-        console.log(idw, t1, t2, arrayColumns, num, workerKey)
         const paramssNew = {
             method: "POST",
             headers: {
@@ -658,7 +654,6 @@ export class PressureCharts {
         }
         const resNew = await fetch('/api/getPressureOil', paramssNew)
         const dataNew = await resNew.json();
-        console.log(dataNew)
         if (dataNew.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')

@@ -1,4 +1,4 @@
-
+import { arrayTableStor } from './stor.js'
 export class Requests {
 
 
@@ -279,6 +279,22 @@ export class Requests {
         console.log(response)
         return response
     }
+    static async deleteAltableObject(idw) {
+
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (JSON.stringify({ idw, arrayTableStor }))
+        }
+
+        const result = await fetch('/api/deleteAltableObject', params)
+        const response = await result.json()
+        console.log(response)
+        return response
+    }
+
 
     static async editAccount(obj) {
         const { incriment, name, uniqCreater, uniqTP, oldUniqCreator } = obj

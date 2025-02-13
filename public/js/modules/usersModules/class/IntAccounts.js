@@ -13,6 +13,7 @@ export class IntAccounts extends IntarfaceBase {
 
 
     fetchContent() {
+        this.container.style.display = 'flex'
         this.container.innerHTML = ContentGeneration.createLK(this.login, this.prava, this.creator, this.creators)
         this.caseElements()
     }

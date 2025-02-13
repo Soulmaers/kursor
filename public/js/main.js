@@ -5,7 +5,7 @@ import { AddTooltip } from './modules/event.js'
 import { LogsEvent } from './modules/eventModules/class/LogsEvent.js'
 import { IndexClassSettings } from './modules/usersModules/class/IndexClassSettings.js'
 import { RemClassControll } from './modules/remModules/class/RemSettingControll.js'
-import { AddListSpisok } from './modules/spisokModules/class/AddListSpisok.js'
+import { AddListSpisok } from './modules/spisokModules/class/addListSpisok.js'
 import { GetUpdateStruktura } from './GetUpdateStruktura.js'
 import { PermissionControllClass } from './modules/permissionModules/class/PermissionControllClass.js'
 

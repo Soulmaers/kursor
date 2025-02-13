@@ -13,6 +13,7 @@ export class IntRetra extends IntarfaceBase {
     }
 
     fetchContent() {
+        this.container.style.display = 'flex'
         this.container.innerHTML = ContentGeneration.createRetra(this.login, this.prava, this.creator, this.creators, this.data)
         this.caseElements()
     }

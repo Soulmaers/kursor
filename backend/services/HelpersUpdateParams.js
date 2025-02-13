@@ -12,6 +12,7 @@ class HelpersUpdateParams {
         console.time('updatedata')
         const datas = await getDataObjectsToList.getAccountsAddListKursor() //получем данные из БД по объектам wialona
         const result = await getDataObjectsToList.getAccountGroupsAndObjects(datas) //получем данные из БД по объектам wialona
+        //console.log(result)
         await Promise.all([
             new AlarmControll(result),
             //   new Events(result, session),
@@ -38,7 +39,7 @@ class HelpersUpdateParams {
                 await databaseService.clearTemporary(); // Очищаем таблицу, если день изменился
                 lastDayChecked = currentDate; // Обновляем последний проверенный день
             }
-            await databaseService.setTemporary(filteredValue); // Записываем данные в таблицу
+            return await databaseService.setTemporary(filteredValue); // Записываем данные в таблицу
         };
     })();
 }

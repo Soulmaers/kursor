@@ -5,6 +5,7 @@ import { Validation } from './Validation.js'
 import { ConfiguratorParams } from '../../configuratorModules/class/ConfiguratorParams.js'
 import { ControllNaviEdit } from './ControllNaviEdit.js'
 import { ValidationStatus } from '../../settingsEventAttributesModules/class/ValidationStatus.js'
+import { GetUpdateStruktura } from '../../../GetUpdateStruktura.js'
 export class EditObject {
     constructor(data, element, container, login, role, creator, creators, instance, usersdata) {
         this.data = data
@@ -30,12 +31,16 @@ export class EditObject {
 
 
     init() {
+        this.getSelectObjectsDonor()
         this.createModalEdit()
+    }
+    getSelectObjectsDonor() {
+        this.objects = GetUpdateStruktura.globalData.final.filter(e => e[1].result.length !== 0).map(el => ({ id: el[6].object_id, name: el[6].object_name }))
     }
 
     async createModalEdit() {
         this.getStruktura()
-        this.container.innerHTML = ContentGeneration.editObj(this.login, this.prava, this.property, this.creator, this.creators, this.property.objectname, this.data)
+        this.container.innerHTML = ContentGeneration.editObj(this.login, this.prava, this.property, this.creator, this.creators, this.property.objectname, this.data, this.objects)
         this.recored()
         this.cacheElements()
         new ControllNaviEdit(this.container, this.obj, this.idx)
@@ -74,6 +79,7 @@ export class EditObject {
         this.type = this.container.querySelector('.type_objects_index');
         this.createsUser = this.container.querySelector('.creates');
         this.modal = this.container.querySelector('.wrap_lk')
+        this.donor = this.container.querySelector('.donor');
         this.retra = this.property.name_retra
 
     }
@@ -84,6 +90,7 @@ export class EditObject {
         Validation.creator(this.createsUser, this.property.creater)
         Validation.account(this.uz, this.property.incriment[1])
         Validation.type(this.type, this.property.typeobject)
+        Validation.type(this.donor, this.property.idbitrixobject)
     }
 
     async viewObjects(idw) {
@@ -135,6 +142,7 @@ export class EditObject {
             console.log('конфиг')
             const mess = await this.instanceConfig.setToBaseSensStorMeta()
             Helpers.viewRemark(this.mess, 'green', mess);
+            await GetUpdateStruktura.zaprosData()
         }
         else if (this.idButton === 'settingsObject') {
             this.webpackObjectsSettings()
@@ -167,7 +175,7 @@ export class EditObject {
                 modelobject: this.modelobject.value,
                 vinobject: this.vinobject.value,
                 gosnomerobject: this.gosnomerobject.value,
-                idbitrixobject: this.idbitrixobject.value,
+                idbitrixobject: this.donor.value,
                 uz: this.uz.value,
                 tp: this.tp.value ? this.tp.value : '-',
                 creater: this.createsUser.value,
@@ -199,6 +207,7 @@ export class EditObject {
 
             const typeIndex = ContentGeneration.storTypeObject().find(e => e.type === this.type.value)
             document.querySelector('.stor_type_index').setAttribute('rel', typeIndex.typeIndex)
+            await GetUpdateStruktura.zaprosData()
         }
     }
 

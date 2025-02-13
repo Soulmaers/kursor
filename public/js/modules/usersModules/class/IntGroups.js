@@ -11,6 +11,7 @@ export class IntGroups extends IntarfaceBase {
 
 
     fetchContent() {
+        this.container.style.display = 'flex'
         this.container.innerHTML = ContentGeneration.createGroup(this.login, this.prava, this.creator, this.creators, this.data)
         this.caseElements()
     }

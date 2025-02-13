@@ -60,6 +60,9 @@ class ReportsControllClass {
         const rashodDUT = data[0].dut ? parseFloat((startOil + zapravleno - finishOil).toFixed(2)) : 'Н/Д'
         const rashodDUTKM = data[0].dut && data[0].mileage ? parseFloat(((rashodDUT / mileage) * 100).toFixed(2)) : 'Н/Д'
         const rashodDUTMCH = data[0].dut && moto.motoAll !== 0 ? parseFloat(((rashodDUT / moto.motoAll) * 3600).toFixed(2)) : 'Н/Д'
+        if (idObject == '28526626ido') {
+            console.log(skdsh.components[0].intervals)
+        }
 
         const allOil = countZapravka.concat(countSliv)
 

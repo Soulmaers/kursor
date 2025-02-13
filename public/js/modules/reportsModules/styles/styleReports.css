@@ -581,6 +581,7 @@
     display: flex;
     align-items: center;
     width: 100%;
+    height: 34px;
     border-top: 1px solid rgba(6, 28, 71, 0.8);
     box-sizing: border-box;
 }
@@ -589,6 +590,8 @@
     cursor: pointer;
     color: #fff;
     width: 50%;
+    height: 100%;
+    font-size: 1.2rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -812,4 +815,12 @@ i.full_screen {
 
 .span_reports_moto {
     font-size: 0.8rem;
+}
+
+.start_save {
+    border-right: 1px solid #fff;
+}
+
+.cancel_start {
+    border-left: 1px solid #fff;
 }

@@ -25,6 +25,7 @@ export class ControllSetParam {
     }
 
     renderWindow() {
+        console.log(this.container)
         this.container.innerHTML = RenderHTML.renderStor(this.stor, this.meta)
 
 

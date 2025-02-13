@@ -73,10 +73,12 @@ export class ControllListWindow {
             this.toggleClass.forEach(e => e.classList.remove('toggleClass'))
             this.switch.forEach(e => e.textContent = '+')
             this.numberOfChoise.textContent = '(0)'
+            this.find.value = ''
         }
         else {
             this.objectCheked = [...this.container.querySelectorAll('.object_checks')].filter(e => e.checked)
             this.numberOfChoise.textContent = `(${this.objectCheked.length})`
+            this.find.value = `(выбрано ${this.objectCheked.length} объекта)`
         }
     }
 

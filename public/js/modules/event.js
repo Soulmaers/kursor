@@ -8,7 +8,7 @@ import { CloseBTN } from '../class/CloseBTN.js'
 import { ResizeContainer } from '../class/ResizeContainer.js'
 import { settingsRotate, objViewContent, jobFormSET } from './settingsRotate.js'
 import { storTitleList } from './content.js'
-import { initCharts, initSummary } from './spisokModules/class/AddListSpisok.js'
+import { initCharts, initSummary } from './spisokModules/class/addListSpisok.js'
 
 
 

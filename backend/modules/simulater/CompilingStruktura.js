@@ -19,27 +19,30 @@ class CompilingStruktura {
     async getData() {
 
         this.settings = await GetToBaseClass.getSettingSimulation(this.idDonor)
-        console.log(this.data)
-        if (!this.settings || this.settings.start === 0) return
-        this.id = this.settings[0].id_object //получаем id сима
+
+        if (!this.settings) return
 
         const promises = this.settings.map(async e => {
-            this.tyres = await GetToBaseClass.getTyres(e.id_object)
-            this.parametrs = await GetToBaseClass.getParametrs(e.id_object)
+            try {
+                const dataCopy = this.data.map(item => ({ ...item }))
+                const tyres = await GetToBaseClass.getTyres(e.id_object)
+                const parametrs = await GetToBaseClass.getParametrs(e.id_object)
 
-            if (!this.tyres) return []
+                if (!tyres || e.start === 0) return null
 
-            this.data = await this.processFormStrukture(e)
-
-
-            const instance = new MutationClass(e, this.data, this.parametrs)
-            const mutationData = instance.init()
-            // this.exportToExcel(this.data[8].val);
-            return { data: this.data, idObject: e.id_object }
+                const dopdata = await this.processFormStrukture(e, dataCopy)
+                const instance = new MutationClass(e, dopdata, parametrs, tyres)
+                await instance.init()
+                return { data: dopdata, idObject: e.id_object }
+            }
+            catch (e) {
+                console.log(e)
+            }
         })
         const result = await Promise.all(promises)
         //  console.log(result)
-        console.log(result[0].data[0].val)
+        return result
+
     }
 
 
@@ -89,39 +92,22 @@ class CompilingStruktura {
     }
 
 
-    async processFormStrukture(settings) {
+    async processFormStrukture(e, dataCopy) {
         const porog = await GetToBaseClass.getPorog(this.idDonor, 'pwr')
-        console.log(porog)
-        const { low_min, low_max, normal_min, normal_max, high_min, high_max } = settings
-        this.data.sort((a, b) => Number(a.last_valid_time) - Number(b.last_valid_time));
-        const paramnew = this.tyres.reduce((acc, el) => {
-            const sens = this.parametrs.find(it => Object.values(it).includes(el.pressure));
-            if (!sens) return acc;
-            const processedData = this.data.map(elem => ({
-                dates: new Date(Number(elem.last_valid_time) * 1000),
-                sats: Number(elem.sats),
-                speed: Number(elem.speed),
-                stop: elem.pwr >= Number(porog[0].value) ? 1 : 0,//Number(elem.engineOn),
-                value: elem[el.pressure] ? Number(elem[el.pressure]) : -0.1,
-                tvalue: elem[el.temp] ? (Number(elem[el.temp]) !== -128 && Number(elem[el.temp]) !== -50 && Number(elem[el.temp]) !== -51 ? Number(elem[el.temp]) : -0.1) : -0.1
-            }));
+        dataCopy.sort((a, b) => Number(a.last_valid_time) - Number(b.last_valid_time));
+        const processedData = dataCopy.map(elem => {
+            return {
+                ...elem,
+                stop: elem.pwr >= Number(porog[0].value) ? 1 : 0,
+                port: 'simulator',
+                idObject: e.id_object,
+                imei: e.imei_object
+            }
 
-            acc.push({
-                sens: sens.sens,
-                position: Number(el.tyresDiv),
-                parametr: el.pressure,
-                bar: { low: [low_min, low_max], normal: [normal_min, normal_max], high: [high_min, high_max] },
-                val: processedData
-            });
+        });
+        return processedData
 
-            return acc;
-        }, []);
-        paramnew.sort((a, b) => a.position - b.position);
-        //  console.log(paramnew)
-        return paramnew;
     }
-
-
 }
 
 

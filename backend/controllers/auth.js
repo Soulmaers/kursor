@@ -351,7 +351,6 @@ exports.editObject = async (req, res) => { //сохранение контакт
     }
 };
 
-
 exports.updateObjectsAndUsers = async (req, res) => { //сохранение контактов
     const { incrimentObject, uz } = req.body.obj;
     try {

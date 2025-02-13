@@ -14,17 +14,21 @@ class DataHandlerUpdateBase {
 
 
     async init() {
-        //  console.log(this.id)
         this.getTime()
         this.checkTarirovka()
         await this.defaultUpdateParams()
         await this.setUpdateParams()
     }
     async setUpdateParams() {
+
+        //  console.log(this.imei, this.port, this.id)
         await ToBaseMethods.setUpdateValueSensStorMeta(this.imei, this.port, this.object)
     }
 
     checkTarirovka() {
+        if (this.d == '28526622ido') {
+            console.log(this.configs)
+        }
         this.bool = this.configs.find(e => e.param === 'oil')
     }
     async defaultUpdateParams() {
@@ -54,7 +58,7 @@ class DataHandlerUpdateBase {
 
 
     async convertionEval(formula, value) {
-
+        //   console.log(this.id)
         let x = Number(value)
         let formattedFormula;
         // Выполняем замену 'x' на значение переменной
@@ -95,6 +99,7 @@ class DataHandlerUpdateBase {
         return parseInt(total / array.length);
     }
     async getValueKoef(filtr, id) {
+
         const res = await ToBaseMethods.getOil(filtr.dopValue, id)
         return res
     }

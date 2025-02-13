@@ -29,18 +29,33 @@ export class AddListSpisok {
 
     }
 
-    render({ data, allId, final, groupId }) {
+    async render({ data, allId, final, groupId }) {
+        const inspect = this.final.length === final.length
         this.data = data;
         this.allId = allId;
         this.final = final;
-        new AddparametrsIcons(this.final, this.lists)
+        console.log('ТУТА')
+        if (inspect) {
+            const elem = [document.querySelector('.border'), document.querySelector('.color')].filter(element => element !== null)
+            console.log(elem)
+            this.updateElement(elem)
+            this.controllConnectParams()
+            new AddparametrsIcons(this.final, elem)
+        }
+        else {
+            this.init()
+        }
+
+
     }
     async init() {
         this.simulateLoader()
         this.findDomElement()  //поиск и удаление старых элементов
         Helpers.sorting(this.data)
+        console.log(this.final)
         new CreateList(this.data, this.login, this.role)
         this.lists = this.lowList.querySelectorAll('.listItem')
+        this.controllConnectParams()
         new AddparametrsIcons(this.final, this.lists)
         new ClickObject(this.lists, this.final)
         this.sensorsName = true
@@ -54,6 +69,34 @@ export class AddListSpisok {
 
     }
 
+    controllConnectParams() {
+        console.log(this.final)
+        const wrench = [...this.lists].map(e => e.querySelector('.fa-wrench'))
+        wrench.forEach(e => {
+            const data = this.final.find(it => {
+                return String(it[4]) === e.getAttribute('idx')
+            })
+            /* if (data[2].result.length === 0) {
+                 e.style.color = 'red'
+             }*/
+        })
+    }
+    updateElement(elem) {
+        elem.forEach(it => {
+            const property = this.final.find(e => e.object_id === it.id);
+            it.getAttribute('name', property.object_name)
+            it.children[0].childNodes[8].textContent = property.object_name
+            it.children[0].getAttribute('rel', property.inc_object)
+            it.children[0].getAttribute('idx', property.inc_object)
+            it.children[1].getAttribute('rel', property.object_name)
+            it.children[1].getAttribute('id', property.object_name)
+            it.children[2].getAttribute('rel', property.object_name)
+            it.children[2].getAttribute('id', property.object_name)
+            it.children[3].getAttribute('rel', property.object_name)
+            it.children[3].getAttribute('id', property.object_name)
+        })
+
+    }
     simulateLoader() {
         let progress = 0;
         let loaderProgress = document.querySelector('.loaders-progress');
@@ -92,7 +135,6 @@ export class AddListSpisok {
         } else {
             progress += 2 * (load === 1 ? 2 : (load === 2 ? 3 : 1));
         }
-
         return progress;
     }
     validRole() {

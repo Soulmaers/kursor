@@ -64,3 +64,5 @@ router.post('/api/getHistoryStor', controller.getHistoryStor)
 
 
 router.post('/api/getObjectsGroups', controller.getObjectsGroups)
+
+

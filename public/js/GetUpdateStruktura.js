@@ -5,7 +5,9 @@ export class GetUpdateStruktura {
     static globalData = null
     static resourseData = null
     static propertyResourse = null
-    static async zaprosData(incriment, role) {
+    static async zaprosData() {
+        const role = document.querySelector('.role').getAttribute('rel')
+        const incriment = document.querySelector('.role').getAttribute('data-att')
         const params = {
             method: "POST",
             headers: {
@@ -35,9 +37,7 @@ export class GetUpdateStruktura {
         SimpleEventEmitter.on('dataReceived', callback);
     }
     static updateData() {
-        const role = document.querySelector('.role').getAttribute('rel')
-        const incriment = document.querySelector('.role').getAttribute('data-att')
-        setInterval(async () => await GetUpdateStruktura.zaprosData(incriment, role), 120000)
+        setInterval(async () => await GetUpdateStruktura.zaprosData(), 120000)
     }
 
     static async getAccountResourse(incriment, role) {
@@ -66,6 +66,5 @@ export class GetUpdateStruktura {
         const models = await mods.json()
         GetUpdateStruktura.propertyResourse = models
     }
-
 
 }

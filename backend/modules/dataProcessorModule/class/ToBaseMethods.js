@@ -4,11 +4,12 @@ class ToBaseMethods {
 
 
     static async getConfigs(idw) {
+        // console.log(idw)
         try {
             const pool = await connection
             const selectBase = `SELECT * FROM config_params WHERE idw=@idw`
             const result = await pool.request()
-                .input('idw', idw)
+                .input('idw', String(idw))
                 .query(selectBase);
             return result.recordset
         }
@@ -65,7 +66,7 @@ class ToBaseMethods {
             // Формируем SQL-запрос с сортировкой по дате и ограничением по количеству записей
             const post = `SELECT TOP ${topCount} dut, last_valid_time FROM globalStor WHERE idw = @idw ORDER BY last_valid_time DESC`;
             const result = await pool.request()
-                .input('idw', id)
+                .input('idw', String(id))
                 .query(post);
             return result.recordset;
         } catch (error) {

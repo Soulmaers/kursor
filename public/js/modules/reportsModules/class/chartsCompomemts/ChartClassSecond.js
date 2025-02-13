@@ -7,7 +7,7 @@ export class ChartsClassSecond {
     constructor(data, container, types) {
         this.types = types
         this.data = data
-        this.container = container
+            this.container = container
         this.cumulativeHeight = {};
         this.chartType = {
             'osX': null,
@@ -36,8 +36,7 @@ export class ChartsClassSecond {
         this.updateSize(newWidth, newHeight); // Обновляем размеры графиков
     }
     init() {
-        console.log(this.data)
-        this.createChart(this.originalWidth, this.originalHeight);
+              this.createChart(this.originalWidth, this.originalHeight);
     }
 
     createChart(width, height) {
@@ -209,9 +208,7 @@ export class ChartsClassSecond {
                 .attr("height", this.height - rectHeight - 60) // Высота прямоугольника
                 .attr("fill", 'transparent') // Цвет прямоугольника
                 .on("mousemove", (event, d) => {
-                    console.log(d)
                     const [xPosition, yPosition] = d3.mouse(this.svg.node());
-                    console.log(yPosition)
                     const yPos = this.types === 'Моточасы' ?
                         yPosition + 15 :
                         (yPosition > 300 ? yPosition - 300 :

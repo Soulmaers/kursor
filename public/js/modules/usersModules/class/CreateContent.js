@@ -397,12 +397,13 @@ export class ContentGeneration {
   }
 
 
-  static createObj(login, role, creator, creators, data) {
+  static createObj(login, role, creator, creators, data, objects) {
     const selectType = (ContentGeneration.storTypeObject()).map(e => `<option value="${e.type}" rel="${e.typeIndex}">${e.type}</option>`).join('')
     const accounts = data.uniqueAccounts
     const usersAcc = data.uniqueUsers
     const creatorsRows = creators !== undefined ? [...creators].map(e => `<option value= "${e.incriment}" rel = '${e.idx}' data - att="${e.role}"'>${e.name}</option>`).join('') : ''
     const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
+    const donors = objects.map(e => `<option value="${e.id}" >${e.name}</option>`).join('')
     const acc = usersAcc.find(e => e.incriment === Number(creator))
     const incriment_account = acc ? acc.incriment_account : null
     const account = accounts.find(e => incriment_account === e.incriment)
@@ -441,7 +442,8 @@ export class ContentGeneration {
         : `<option value="${account.incriment}" rel="${account.idx}" use="${acc.incriment}" global_creator="${account.global_creator}" data-att="${account.incriment}" selected>${account.name}</option>`}
     </select>
 </div>
-                                                                          <div class="row_index"><div class="text_index optional_field">Тарифный план</div><select class="select_index tp">
+                                                                          <div class="row_index"><div class="text_index optional_field">Тарифный план</div>
+                                                                          <select class="select_index tp">
  <option value="" disabled selected></option>
                         <option value="ТП1">ТП1</option>
                         <option value="ТП2">ТП2</option>
@@ -469,7 +471,10 @@ export class ContentGeneration {
                   <div class="text_index no_optional">Угол наклона</div><input rel="angle" class="input_index">
                </div>
                    <div class="row_index">
-                  <div class="text_index no_optional">ID Bitrix</div><input rel="idBitrix" id="idbitrixobject" class="input_index">
+                  <div class="text_index no_optional">ID Bitrix</div> <select class="select_index donor">
+ <option value="" selected></option>
+                    ${donors}
+                    </select>
                 </div>
             </div>
             <div class="footer_index">
@@ -480,7 +485,7 @@ export class ContentGeneration {
     </div>`
   }
 
-  static editObj(login, role, property, creator, creators, names, data) {
+  static editObj(login, role, property, creator, creators, names, data, objects) {
     const selectType = (ContentGeneration.storTypeObject()).map(e => `<option value="${e.type}" rel="${e.typeIndex}">${e.type}</option>`).join('')
     const typeIndex = ContentGeneration.storTypeObject().find(e => e.type === property.typeobject)
     console.log(typeIndex)
@@ -492,6 +497,7 @@ export class ContentGeneration {
     }
     const creatorsRows = creators !== undefined ? [...creators].filter(it => it.incriment !== property.incriment[1]).map(e => `<option value="${e.incriment}" rel='${e.idx}' data-att="${e.role}"'>${e.name}</option>`).join('') : ''
     const accountsRows = accounts !== undefined ? [...accounts].map(e => `<option value="${e.incriment}" rel='${e.idx}' del="${e.del}" global_creator="${e.global_creator}" data-att="${e.uniqCreater}"'>${e.name}</option>`).join('') : ''
+    const donors = objects.map(e => `<option value="${e.id}" >${e.name}</option>`).join('')
     const acc = usersAcc.find(e => e.incriment === Number(creator))
     const incriment_account = acc ? acc.incriment_account : null
     const account = accounts.find(e => incriment_account === e.incriment)
@@ -560,7 +566,10 @@ export class ContentGeneration {
                   <div class="text_index no_optional">Угол наклона</div><input rel="angle" class="input_index">
                </div>
                    <div class="row_index">
-                  <div class="text_index no_optional">ID Bitrix</div><input rel="idBitrix" id="idbitrixobject" class="input_index"  value="${filt(idbitrixobject)}">
+                  <div class="text_index no_optional">ID Bitrix</div><select class="select_index donor">
+ <option value="" selected></option>
+                    ${donors}
+                    </select>
                 </div>
             </div>
             <div class="config_params config_params_wrap">

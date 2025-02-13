@@ -124,6 +124,15 @@ exports.updateIdOBjectToBase = async (req, res) => {
     res.json(result);
 };
 
+exports.deleteAllTableObjects = async (req, res) => {
+    const idw = req.body.idw;
+    const storTable = req.body.arrayTableStor;
+    // Получаем записи из базы данных
+    const result = await databaseService.deleteAllTableObjects(idw, storTable);
+    res.json(result);
+};
+
+
 
 exports.getSummator = async (req, res) => {
     const idw = req.body.idw

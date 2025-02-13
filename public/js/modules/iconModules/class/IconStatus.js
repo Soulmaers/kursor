@@ -19,18 +19,27 @@ export class IconStatus {
         this.params = null
         this.coefficient = null
         this.bool = false
-        this.getParams(this.info)
+        this.init()
+
         GetUpdateStruktura.onDataReceived(this.render.bind(this));
         this.handleCardClick = this.toogleModalWindow.bind(this)
+
+    }
+
+
+    init() {
+        this.getParams(this.info)
         this.initEventListeners();
+        console.log(this.info)
+        if (this.info.length === 0) return
     }
     reinitialize(newElem, info) {
+        this.info = info
+        console.log(info)
         this.removeEventListeners(); // Удаление старых слушателей событий
         this.elem = newElem; // Обновление id
         this.bool = false
-        this.getParams(info)
-
-        this.initEventListeners(); // Повторное добавление слушателей событий
+        this.init()
     }
 
     initEventListeners() {
@@ -54,8 +63,9 @@ export class IconStatus {
         return res
     }
     getParams(res) {
-        this.info = this.bool ? res[2].result.map(e => [e.sens, e.params, Number(e.idw), Number(e.value)]) :
-            res[2].map(e => [e.sens, e.params, Number(e.idw), Number(e.value)])
+        console.log(res)
+        this.info = this.bool ? res[2].result.map(e => [e.sens, e.params, e.idw, Number(e.value)]) :
+            res[2].map(e => [e.sens, e.params, e.idw, Number(e.value)])
     }
 
     async listeModalWindow(elem) {
@@ -167,8 +177,7 @@ export class IconStatus {
             signal: signal
         }
         const editParams = await this.iconFindParamsEdit(param)
-        console.log(editParams)
-        this.coefficient = await this.validationIngition(idw)
+
         this.pushObjectProperty(this.info, editParams)
         await this.statusTSI(param)
 
@@ -178,8 +187,10 @@ export class IconStatus {
 
 
     async pushObjectProperty(params, editParams) {
+        //  console.log(editParams)
         this.card.forEach(e => this.valueparamsObject[e.id] = '---')
         params.forEach(el => {
+            // console.log(el)
             switch (el[1]) {
                 case 'speed':
                     this.valueparamsObject['speed-card'] = Number(Number(el[3]).toFixed(0))
@@ -196,34 +207,28 @@ export class IconStatus {
                 }
             })
         })
-        const engine = this.valueparamsObject['ign-card']
-        if (this.valueparamsObject['ign-card'] > 1) {
-            this.getValue('engine')
-            this.valueparamsObject['ign-card'] = this.getValue('engine') ? engine > Number(this.getValue('engine')) ? 'ВКЛ' : 'ВЫКЛ' : '-'
-        }
-        else {
-            this.valueparamsObject['ign-card'] = engine === 1 ? 'ВКЛ' : 'ВЫКЛ'
-        }
+        this.coefficient = await this.validationIngition('engine')
+        const eng = (this.info.find(e => e[1] === 'engine')) ? ((this.info.find(e => e[1] === 'engine')))[3] : null
+        const res = this.coefficient ? eval(this.coefficient.formula.replace(/x/g, eng)) : null
+
+        this.valueparamsObject['ign-card'] = res ? 'ВКЛ' : 'ВЫКЛ'
+
+
     }
 
-    getValue(params) {
-        let res;
-        const value = this.coefficient ? this.coefficient.find(e => e.params === params) : null
-        value ? res = value.value : false
-        return res
-    }
-    async validationIngition(id) {
-        console.log(id)
+
+    async validationIngition(param) {
+        const idw = this.elem.id
         const params = {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({ id })
+            body: JSON.stringify({ idw, param })
         }
-        const res = await fetch('/api/getValuePWR', params)
+        const res = await fetch('api/getConfigParam', params)
         const result = await res.json()
-        return result
+        return result ? result[0] : null
     }
     // запрос параметров (params)
     async iconFindParams(param) {
@@ -244,10 +249,11 @@ export class IconStatus {
         return result
     }
     //расчет  работы двигателя
-    async statusTSI(param) {
-        this.getValue('pwr')
-        this.valueparamsObject['tsi-card'] = this.getValue('pwr') ? Number(this.valueparamsObject['akb-card']) > Number(this.getValue('pwr')) && this.valueparamsObject['ign-card'] === 'ВКЛ' ?
-            'ВКЛ' : 'ВЫКЛ' : '-'
+    async statusTSI() {
+        this.coefficient = await this.validationIngition('pwr')
+        const pwr = (this.info.find(e => e[1] === 'pwr')) ? ((this.info.find(e => e[1] === 'pwr')))[3] : null
+        const tsi = this.coefficient ? eval(this.coefficient.formula.replace(/x/g, pwr)) : null
+        this.valueparamsObject['tsi-card'] = tsi && this.valueparamsObject['ign-card'] === 'ВКЛ' ? 'ВКЛ' : 'ВЫКЛ'
         let statName;
         let statNameIng;
         this.valueparamsObject['tsi-card'] === 'ВКЛ' ? statName = 'Включен' : this.valueparamsObject['tsi-card'] === '-' ? statName = '-' : statName = 'Выключен'
@@ -267,6 +273,7 @@ export class IconStatus {
     async status(data) {
         if (data.length === 0) return
         const lastValidTime = data.find(e => e[1] === 'last_valid_time')
+        console.log(lastValidTime)
         const nowTime = Math.floor(new Date().getTime() / 1000)
         const status = (nowTime - Number(lastValidTime[3])) > 3600 ? 0 : 1
         let sats;
@@ -313,6 +320,7 @@ export class IconStatus {
                     role === 'Администратор' ? new Tooltip(elem, [elem.getAttribute('rel'), it.params]) : new Tooltip(elem, [elem.getAttribute('rel')]);
                 }
             })
+            console.log(this.valueparamsObject)
             const parametrs = this.valueparamsObject[elem.id] === -348201.3876 ? '---' : this.valueparamsObject[elem.id]
             switch (elem.id) {
                 case 'odom-card': console.log(parametrs)

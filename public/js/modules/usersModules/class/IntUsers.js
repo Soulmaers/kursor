@@ -13,6 +13,7 @@ export class IntUsers extends IntarfaceBase {
 
 
     fetchContent() {
+        this.container.style.display = 'flex'
         this.container.innerHTML = ContentGeneration.createUser(this.login, this.prava, this.creator, this.creators, this.data)
         this.caseElements()
     }

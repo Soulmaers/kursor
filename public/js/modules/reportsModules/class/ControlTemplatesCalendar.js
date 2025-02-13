@@ -197,6 +197,7 @@ export class GetReports {
     async getReportAndCreateContent(sett) {
         const objects = this.checkObjects.querySelectorAll('.object_checks')
         const objectCheked = [...objects].filter(e => e.checked)
+        console.log(this.timeInterval)
         this.objects = objectCheked.map(el => {
             return ({
                 data: this.timeInterval,

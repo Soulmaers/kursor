@@ -4,7 +4,7 @@ import { Requests } from './RequestStaticMethods.js'
 import { Helpers } from './Helpers.js'
 import { EditContollClick } from './EditControllClick.js'
 import { Validation } from './Validation.js'
-
+import { GetUpdateStruktura } from '../../../GetUpdateStruktura.js'
 export class IntObjects extends IntarfaceBase {
     constructor(index, buttons, settingWrap, container, login, prava, creator, creators) {
         super(index, buttons, settingWrap, container, login, prava, creator, creators);
@@ -12,8 +12,15 @@ export class IntObjects extends IntarfaceBase {
     }
 
     fetchContent() {
-        this.container.innerHTML = ContentGeneration.createObj(this.login, this.prava, this.creator, this.creators, this.data)
+        this.container.style.display = 'flex'
+        this.getSelectObjectsDonor()
+        this.container.innerHTML = ContentGeneration.createObj(this.login, this.prava, this.creator, this.creators, this.data, this.objects)
         this.caseElements()
+    }
+
+
+    getSelectObjectsDonor() {
+        this.objects = GetUpdateStruktura.globalData.final.filter(e => e[1].result.length !== 0).map(el => ({ id: el[6].object_id, name: el[6].object_name }))
     }
 
     caseElements() {
@@ -29,6 +36,7 @@ export class IntObjects extends IntarfaceBase {
         this.gosnomerobject = this.container.querySelector('#gosnomerobject');
         this.idbitrixobject = this.container.querySelector('#idbitrixobject');
         this.uz = this.container.querySelector('.uz');
+        this.donor = this.container.querySelector('.donor');
         this.type = this.container.querySelector('.type_objects_index');
         this.tp = this.container.querySelector('.tp');
         this.createsUser = this.container.querySelector('.creates');
@@ -68,7 +76,7 @@ export class IntObjects extends IntarfaceBase {
             modelobject: this.modelobject.value,
             vinobject: this.vinobject.value,
             gosnomerobject: this.gosnomerobject.value,
-            idbitrixobject: this.idbitrixobject.value,
+            idbitrixobject: this.donor.value,
             uz: this.uz.value,
             tp: this.tp.value,
             creater: this.createsUser.value,
@@ -80,6 +88,8 @@ export class IntObjects extends IntarfaceBase {
         if (messUser.flag) await Requests.setDefaultSettings(this.obj.idx, this.obj.typeobject)
         this.add = 'add'
         this.create()
+        console.log('ап')
+        await GetUpdateStruktura.zaprosData()
     }
     addContent() {
         const tableParent = this.table.querySelector('.table_stata')
@@ -136,11 +146,14 @@ export class IntObjects extends IntarfaceBase {
     async updateTable(lastRow) {
         const name = lastRow.children[0].textContent
         this.accountIncriment = lastRow.children[3].getAttribute('rel')
+        const idObject = lastRow.children[0].getAttribute('idx')
+        console.log(idObject)
         this.container.insertAdjacentHTML('beforeend', ContentGeneration.confirm('объект', name));
         this.idDelete = lastRow.getAttribute('data-id'); // Получаем id из data-атрибута
         this.modalConfirmElement = this.container.querySelector('.modal_podtver');
         this.modalConfirm()
-        this.eventListenerConfirm()
+        this.eventListenerConfirm(idObject)
+
     }
 
     createHistoryObject() {

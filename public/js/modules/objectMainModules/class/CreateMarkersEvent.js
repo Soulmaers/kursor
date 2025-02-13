@@ -202,6 +202,8 @@ export class CreateMarkersEvent {
 
     async update() {
         const geo = await this.lastGeo()
+        if (geo.length === 0) return
+        console.log(geo)
         this.createMapMainObject(geo)
         if (!this.markerCreator) {
             this.markerCreator = new MarkerCreator(mapLocal);

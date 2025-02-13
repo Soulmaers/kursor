@@ -38,7 +38,6 @@ export class CreateDOMElements {
             group.appendChild(titleModal)
             const hiddenModal = document.createElement('div')
             hiddenModal.classList.add('hiddenModalSklad')
-            //   group.classList.add(`${nameGroup}`)
             group.setAttribute('rel', `${nameGroup}`)
             group.appendChild(hiddenModal)
             console.log(el)
@@ -50,17 +49,19 @@ export class CreateDOMElements {
     }
 
     static createIconsAndLeftSpisok(elem, hiddenModal) {
+        console.log(elem)
         const listItemCar = document.createElement('div')
         listItemCar.classList.add('listItemSklad')
-        listItemCar.classList.add(`${Number(elem.object_id)}`)
-        listItemCar.setAttribute('rel', `${Number(elem.object_id)}`)
-        listItemCar.setAttribute('id', `${Number(elem.object_id)}`)
+        listItemCar.classList.add(`${elem.object_id}`)
+        listItemCar.setAttribute('rel', `${elem.object_id}`)
+        listItemCar.setAttribute('id', `${elem.object_id}`)
         listItemCar.textContent = elem.object_name
         hiddenModal.appendChild(listItemCar)
     }
 
 
     static createModelCar(data, elements) {
+        console.log(data)
         const idw = data[4]
         const tyresCar = elements.filter(el => el.flag_status === '0' && el.idObject === String(idw))
         const sensors = data[1].result

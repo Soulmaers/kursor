@@ -144,24 +144,23 @@ class SCDSHClass {
         });
 
         const maxPressure = sensorData.val.reduce((max, obj) => {
-            return obj.value > max ? obj.value : max;
-        }, -Infinity);
+            if (obj.value !== -0.1 && obj.stop === 'ВКЛ' && obj.speed > 6) {
+                return obj.value > max ? obj.value : max;
+            }
+            return max;
+        }, 0);
 
         const minPressure = sensorData.val.reduce((min, obj) => {
             if (obj.value !== -0.1 && obj.stop === 'ВКЛ' && obj.speed > 6) {
                 return obj.value < min ? obj.value : min;
             }
             return min;
-        }, Infinity);
-
+        }, 0);
 
         const cel = sensorData.val.filter(e => e.value !== -0.1 && e.stop === 'ВКЛ' && e.speed > 6)
-        //   cel.forEach(e => console.log(e.value))
         const mediumPressure = parseFloat((cel.reduce((acc, obj) => {
-            // console.log(obj.value)
             return acc + obj.value; // Суммируем значения
         }, 0) / cel.length).toFixed(2)) // Делим на количество элементов
-        // console.log(mediumPressure)
         return { intervals: intervals, porogy: [minPressure, maxPressure, mediumPressure] };
     }
     strukturas() {

@@ -140,7 +140,7 @@ export class Helpers {
         }
 
         let oil;
-        const summator = data.find(i => i.params === 'summatorOil') || null;;
+        const summator = data.find(i => i.params === 'summatorOil') || null;
         if (summator && summator.meta === 'ON') {
             oil = `${Number(summator.value).toFixed(0)} л.`
         }
@@ -149,7 +149,7 @@ export class Helpers {
             oil = oilValue ? oilValue.value === null || Number(oilValue.value).toFixed(0) < 1 ? 'Н/Д' : `${Number(oilValue.value).toFixed(0)} л.` : 'Н/Д';
         }
 
-        const pwrValue = data.find(i => i.params === 'pwr') || null;;
+        const pwrValue = data.find(i => i.params === 'pwr') || null;
         const pwr = pwrValue ? parseFloat(Number(pwrValue.value).toFixed(1)) : 'Н/Д';
         const meliageValue = data.find(i => i.params === 'mileage') || null;;
         const meliage = meliageValue ? `${Number(meliageValue.value).toFixed(0)} км.` : 'Н/Д';
@@ -222,7 +222,7 @@ export class Helpers {
     }
 
     static format(datas, num) {
-           let result;
+        let result;
         if (num === 1) {
             // Функция для извлечения всех объектов из группы
             const res = datas.flatMap(account => [
@@ -235,7 +235,7 @@ export class Helpers {
             result = Array.from(uniqueObjectsMap.values());
         }
         if (num === 0) {
-                       // Функция для извлечения всех idx объектов из группы
+            // Функция для извлечения всех idx объектов из группы
             const res = datas.flatMap(account => [
                 ...account.groups.flatMap(group => group.objects.map(obj => obj.object_id)),
                 ...account.ungroupedObjects.map(obj => obj.object_id)

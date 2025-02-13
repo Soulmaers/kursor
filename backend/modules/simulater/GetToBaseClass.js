@@ -20,6 +20,35 @@ class GetToBaseClass {
         }
     }
 
+    static async updateTemplateVariables(id, stateCube, prevStateCube,
+        stateTravel, timeParking, lastParkingTime, flagMutation, timeMsg, lastTimeMsg, flagLowpressure, flagstartReys) {
+        const post = `UPDATE   templates_simulation   SET stateCube=@stateCube,prevStateCube=@prevStateCube,stateTravel=@stateTravel,
+        timeParking=@timeParking,lastParkingTime=@lastParkingTime,flagMutation=@flagMutation,timeMsg=@timeMsg,lastTimeMsg=@lastTimeMsg,
+        flagLowpressure=@flagLowpressure,flagstartReys=@flagstartReys WHERE id=@id`
+        try {
+            const pool = await connection
+            const result = await pool.request()
+                .input('id', id)
+                .input('stateCube', stateCube)
+                .input('prevStateCube', prevStateCube)
+                .input('stateTravel', stateTravel)
+                .input('timeParking', timeParking)
+                .input('lastParkingTime', lastParkingTime)
+                .input('flagMutation', String(flagMutation))
+                .input('timeMsg', timeMsg)
+                .input('lastTimeMsg', lastTimeMsg)
+                .input('flagLowpressure', String(flagLowpressure))
+                .input('flagstartReys', String(flagstartReys))
+                .query(post)
+            console.log('update')
+            return 'update'
+        }
+        catch (e) {
+            console.log(e)
+            return null
+        }
+
+    }
     static async getSettingSimulation(id) {
         const post = `SELECT * FROM templates_simulation WHERE id_donor=@id`
         try {

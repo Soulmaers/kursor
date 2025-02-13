@@ -30,6 +30,7 @@ class WialonOrigin {
             // Получаем телефоны и IMEI, но без Promise.all
             for (const el of dataArray) {
                 const phone = await wialonService.getUniqImeiAndPhoneIdDataFromWialon(el.id, this.session);
+                //  console.log(phone.item.psw)
                 phones.push(phone);
             }
 
@@ -38,7 +39,8 @@ class WialonOrigin {
                 const el = dataArray[i];
                 const phone = phones[i];
                 const idw = el.id;
-
+                const psw = phones[i].item.psw
+                // console.log(sim)
                 // console.log(phone)
                 if (!phone?.item?.uid) continue;
                 const res = await databaseService.objectsWialonImei(String(phone.item.uid));
@@ -90,7 +92,7 @@ class WialonOrigin {
                     allArrayData.push(allObject);
                 }
                 // Запись в базу данных
-                await this.updateDatabase(allArrayData, idw);
+                await this.updateDatabase(allArrayData, idw, psw);
 
                 // Обновляем кэш с новым временем
                 timeCache.set(idw, now);
@@ -99,15 +101,27 @@ class WialonOrigin {
             console.log('Все итерации завершены');
         }
     })();
-    async updateDatabase(allArrayData, res) {
+    async updateDatabase(allArrayData, res, psw) {
 
         if (allArrayData.length !== 0) {
             new UpdateSetStor(allArrayData[0].imei, allArrayData[0].port, allArrayData, res)
             await this.setValidationImeiToBase(allArrayData);
-            console.log(allArrayData[0].imei)
-            if (allArrayData[0].imei === '868184066640817' || allArrayData[0].imei === '868184066389167') {
+            if (psw === '7777') {
+                //console.log(psw)
+                // console.log(allArrayData[0].imei)
                 const instance = new CompilingStruktura(allArrayData, res)
                 const result = await instance.init()
+
+                if (!result) return
+                for (let item of result) {
+                    if (!item) return
+                    if (item.data[0].idObject == '28526629ido') {
+                        console.log(result)
+                    }
+                    new UpdateSetStor(item.data[0].imei, 'simulator', item.data, item.data[0].idObject)
+
+                }
+
             }
         }
     }

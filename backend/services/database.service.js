@@ -309,6 +309,30 @@ exports.updateIdOBjectToBaseNew = async (arrayId, stor) => {
     }
 };
 
+exports.deleteAllTableObjects = async (idw, stor) => {
+    console.log(idw, stor)
+    const pool = await connection;
+    try {
+        for (const item of stor) {
+            const tableName = item.table;
+            const columnName = item.column;
+            const post = `
+                DELETE  ${tableName} 
+                WHERE ${columnName} = @idw
+            `;
+            await pool.request()
+                .input('idw', idw).query(post);
+
+            // await retryTransaction(post, { idw }); 
+
+        }
+        return { message: 'Delete successful' };
+    } catch (e) {
+        console.log(e);
+        throw e;
+    }
+};
+
 exports.getOldObjectsToBaseWialonOrigin = async (arrayObjects) => {
     // Преобразуем массив IMEI и idObject в строки для использования в запросе
     const imeiList = arrayObjects.map(obj => `'${obj.imei}'`).join(',');
@@ -901,6 +925,7 @@ exports.getValuePWRToBase = async (idw, param) => {
 }
 
 exports.getConfigParam = async (idw, param) => {
+    console.log(idw, param)
     const pool = await connection;
     try {
 
@@ -1093,7 +1118,7 @@ exports.setSensStorMeta = async (data) => {
                 .query(post);
             //   console.log(res.recordset.length)
             if (res.recordset.length === 0) {
-                const insertQuery = `INSERT INTO sens_stor_meta (idw,port, sens, params, meta, value,time, login, imei,idBitrixObject,prefix) VALUES (@idw,@port, @sens, @params, @meta, @value,@time, @login, @prefix,@imei,@idBitrixObject)`;
+                const insertQuery = `INSERT INTO sens_stor_meta (idw,port, sens, params, meta, value,time, login, imei,idBitrixObject,prefix) VALUES (@idw,@port, @sens, @params, @meta, @value,@time, @login,@imei, @idBitrixObject,@prefix)`;
                 const res = await pool.request()
                     .input('idw', String(id))
                     .input('port', port)
@@ -1689,7 +1714,6 @@ exports.alarmBase = async (data, tyres, alarm) => {
 
 
 exports.loadParamsViewList = async (car, el, object, kursor) => {
-    // console.log(car, el, object, kursor)
     const idw = el;
     const pool = await connection;
 

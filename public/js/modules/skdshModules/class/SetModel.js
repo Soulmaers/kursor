@@ -1,4 +1,4 @@
-
+import { GetUpdateStruktura } from '../../../GetUpdateStruktura.js'
 
 
 export class SetModel {
@@ -38,9 +38,9 @@ export class SetModel {
             arrTyres.push(this.fnsortTyresTest(el))
         })
 
-        console.log(arrModel, this.activePost, idw, go, go1, goCar, goCar1)
         await this.changeBase(arrModel, go, go1, goCar, goCar1)
         await this.postTyres(arrTyres);
+        await GetUpdateStruktura.zaprosData()
         this.sensors.style.display = 'none';
     }
 

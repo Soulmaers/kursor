@@ -198,8 +198,7 @@ export class Configurator {
         }
         const idw = document.querySelector('.color').id
         const data = await this.getNewData(idw)
-        // console.log(data)
-        new SKDSHClass(data, idw)
+              new SKDSHClass(data, idw)
     }
 
     async getNewData(idw) {
@@ -365,6 +364,7 @@ export class Configurator {
                 const nomerP = document.createElement('div')
                 nomerP.classList.add('nomerP')
                 nomerP.style.top = '65px'
+                if (osi.length === 0) return
                 osi[osi.length - 1].previousElementSibling.children.length === 2 ? nomerP.style.left = '15px' : nomerP.style.left = '63.5px'
                 osi[osi.length - 1].style.position = 'relative'
                 nomerP.style.display = 'flex'
@@ -402,7 +402,6 @@ export class Configurator {
                 let count = e.parentElement.previousElementSibling.children[1].textContent
                 count++
                 elemKolvo.textContent = count
-                console.log(e.parentElement.parentElement.nextElementSibling.children.length)
                 this.createOsNow(e.parentElement.parentElement.nextElementSibling)
             })
         })

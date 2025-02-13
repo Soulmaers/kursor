@@ -179,6 +179,7 @@ export class ConfiguratorParams {
     }
 
     async setSummator(data) {
+
         const idw = this.id
         const params = {
             method: 'POST',
@@ -234,21 +235,22 @@ export class ConfiguratorParams {
     async setToBaseSensStorMeta() {
         const login = document.querySelectorAll('.log')[1].textContent
 
-        console.log(this.itemStor)
-        const data = this.itemStor.filter(e => e.children[2].textContent).map(el => ({
-            id: this.id, port: this.port,
-            sens: el.children[0].value ? el.children[0].value : el.children[0].placeholder,
-            params: el.children[1].textContent,
-            meta: el.children[2].textContent,
-            value: el.nextElementSibling.querySelector('.metaname').getAttribute('rel'),
-            status: null,
-            time: Math.floor(new Date().getTime() / 1000),
-            login: login,
-            data: null,
-            imei: this.imei,
-            idBitrix: this.idBitrix,
-            index: Number(el.children[1].getAttribute('index'))
-        }))
+        this.itemStor.filter(e => e.children[2].textContent).forEach(t => console.log(t.nextElementSibling))
+        const data = this.itemStor.filter(e => e.children[2].textContent).map(el => (
+            {
+                id: this.id, port: this.port,
+                sens: el.children[0].value ? el.children[0].value : el.children[0].placeholder,
+                params: el.children[1].textContent,
+                meta: el.children[2].textContent,
+                value: el.nextElementSibling.querySelector('.metaname').getAttribute('rel'),
+                status: null,
+                time: Math.floor(new Date().getTime() / 1000),
+                login: login,
+                data: null,
+                imei: this.imei,
+                idBitrix: this.idBitrix,
+                index: Number(el.children[1].getAttribute('index'))
+            }))
         console.log(data)
         const params = {
             method: "POST",

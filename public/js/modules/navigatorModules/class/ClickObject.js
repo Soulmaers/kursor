@@ -84,6 +84,7 @@ export class ClickObject {
 
     handleClick(event) {
         this.element = event.currentTarget;
+        console.log(this.element)
         this.filterData(this.element.id)
         this.windowAdaptiv()
 
@@ -133,8 +134,8 @@ export class ClickObject {
             }
             alarmFind(this.info)
         }
-        kranParams()
-        setInterval(kranParams, 300000)
+        // kranParams()
+        // setInterval(kranParams, 300000)
     }
 
     reinitializeOrCreateInstance(property, Constructor, ...args) {

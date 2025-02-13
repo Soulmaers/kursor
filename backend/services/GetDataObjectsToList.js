@@ -157,13 +157,13 @@ class GetDataObjectsToList {
             await Promise.all([
                 ...accounts[0].groups.flatMap(group =>
                     group.objects.map(async (obj) => {
-                        const params = await databaseService.loadParamsViewList(obj.object_name, Number(obj.object_id), obj);
+                        const params = await databaseService.loadParamsViewList(obj.object_name, obj.object_id, obj);
                         const cleanParams = JSON.parse(JSON.stringify(params)); // Убираем циклические ссылки
                         Object.assign(obj, cleanParams); // Обновляем объект данными из loadParamsViewList
                     })
                 ),
                 ...accounts[0].ungroupedObjects.map(async (obj) => {
-                    const params = await databaseService.loadParamsViewList(obj.object_name, Number(obj.object_id), obj);
+                    const params = await databaseService.loadParamsViewList(obj.object_name, obj.object_id, obj);
                     const cleanParams = JSON.parse(JSON.stringify(params)); // Убираем циклические ссылки
                     Object.assign(obj, cleanParams); // Обновляем объект данными из loadParamsViewList
                 })
@@ -268,7 +268,7 @@ class GetDataObjectsToList {
         await Promise.all([
             ...account.groups.flatMap(group =>
                 group.objects.map(async (obj) => {
-                    const params = await databaseService.loadParamsViewList(obj.object_name, Number(obj.object_id), obj);
+                    const params = await databaseService.loadParamsViewList(obj.object_name, obj.object_id, obj);
                     const cleanParams = JSON.parse(JSON.stringify(params)); // Убираем циклические ссылки
                     Object.assign(obj, cleanParams); // Обновляем объект данными из loadParamsViewList
                 })

@@ -402,7 +402,8 @@ export class SkladTyres {
     }
 
     addShema() {
-        this.modelCar = this.uniqData.find(e => e[4] === Number(this.lastClickedElement.getAttribute('rel')))
+        console.log(this.lastClickedElement)
+        this.modelCar = this.uniqData.find(e => e[4] === this.lastClickedElement.getAttribute('rel'))
         this.container_shema.innerHTML = CreateDOMElements.createModelCar(this.modelCar, this.allTyres)
         this.container_shema.previousElementSibling.textContent = this.modelCar[0].message
         Helpers.tooltipView('tyres_shema_car', 'Остаток протектора', this.container_shema)

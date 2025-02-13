@@ -28,6 +28,8 @@ export class ViewTyresValue {
     }
 
     sortParams(final) {
+        if (!document.querySelector('.color')) return
+
         const idw = document.querySelector('.color').id
         const res = final.find(e => e.object_id === idw)
         this.tyres = res[1].result
@@ -76,7 +78,7 @@ export class ViewTyresValue {
                 if (pressure && tireLink) {
                     const wheel = pressure.idTyres
                     //   const done = active.id === '26702383' ? parseFloat((pressure.value / 10).toFixed(1)) : pressure.value !== null ? parseFloat(pressure.value) : '-';
-                    const done = pressure.value !== null ? parseFloat(pressure.value) : '-';
+                    const done = pressure.value !== null || pressure.value !== '' ? parseFloat(pressure.value) : '-';
                     const signal = element ? this.objColor[this.generDav(done, element)] : null;
                     tireLink.children[0].style.position = 'relative';
                     tireLink.children[0].style.border = 'none';
@@ -113,10 +115,12 @@ export class ViewTyresValue {
                             case '-128':
                             case '-50':
                             case '-51':
+
                                 tireLink.children[1].style.color = 'darkred';
                                 tireLink.children[1].textContent = 'err';
                                 break;
                             case null:
+                            case '':
                                 tireLink.children[1].textContent = '-' + '°C';
                                 tireLink.children[1].setAttribute('rel', `${item.temp}`);
                                 break;
@@ -127,7 +131,7 @@ export class ViewTyresValue {
                         const nowTime = new Date();
                         const nowDate = Math.floor(nowTime.getTime() / 1000);
                         const timeStor = pressure.data ? getHoursDiff(parseInt(pressure.data), nowDate) : '-'
-                        if (role === 'Администратор') {
+                        if (role !== 'Пользователь') {
                             new Tooltip(tireLink, [pressure.sens + '(' + pressure.params + ')', temp.sens + '(' + temp.params + ')', 'Актуальность данных:' + timeStor]);
                         }
                         else {
