@@ -50,7 +50,6 @@ export class CentalClassReports {
     getObjectAndCreateListElements() {
         this.objects = GetDataRequests.getObjects()
         const collection = Object.entries(this.objects.reduce((acc, e) => {
-            console.log(e.groupName)
             const group = e.groupName ? e.groupName : 'Без группы';
             if (!acc[group]) {
                 acc[group] = []
@@ -59,12 +58,11 @@ export class CentalClassReports {
             return acc
         }, {}))
         //  this.wrapReports[0].innerHTML = Content.addContent(this.objects)
-        console.log(collection)
         collection.sort((a, b) => a[0].localeCompare(b[0]));
         collection.forEach(e => {
             e[1].sort((a, b) => a.name.localeCompare(b.name))
         })
-        console.log(collection)
+
         this.wrapReports[0].innerHTML = Content.addContentHTML(collection)
     }
 

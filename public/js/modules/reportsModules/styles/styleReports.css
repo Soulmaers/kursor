@@ -636,7 +636,7 @@
 
 
 .objects_container {
-    display: none;
+    display: block;
     padding-left: 16px;
 }
 
@@ -823,4 +823,73 @@ i.full_screen {
 
 .cancel_start {
     border-left: 1px solid #fff;
+}
+
+
+.visible_list_objects {
+    display: flex;
+    align-items: center;
+    width: 60px;
+    border-right: 2px solid rgba(6, 28, 71, 0.8);
+}
+
+.header_rows_reports {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 0;
+    box-sizing: border-box;
+}
+
+.span_controll {
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+    padding: 2px;
+    font-size: 1rem;
+    border: 1px solid rgba(6, 28, 71, 0.8);
+    border-radius: 2px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.discription_header_visible_list {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vis {
+    display: flex;
+}
+
+.wrap_visible_reports {
+    display: none;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.visible_reports {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 2px 5px;
+    box-sizing: border-box;
+}
+
+.one_element_icon_toggle_reports {
+    border-right: 2px solid #fff;
+    margin: 0;
 }

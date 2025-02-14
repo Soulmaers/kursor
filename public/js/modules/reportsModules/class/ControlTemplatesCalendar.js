@@ -21,6 +21,7 @@ export class GetReports {
         this.instansCharts = {}
         this.pop = document.querySelector('.popup-background')
         this.wrapSet = document.querySelector('.wrapper_set')
+        this.objectVisibleSpoyler = {}
         this.init()
     }
 
@@ -32,7 +33,6 @@ export class GetReports {
         this.evenListener()
     }
     caseElements() {
-
         this.buttons = this.container.querySelectorAll('.btm_formStart')
         this.input = this.container.querySelector('.input_data')
         this.checkInterval = this.interval.querySelector('.toggle_reports')
@@ -43,6 +43,9 @@ export class GetReports {
         this.mess = this.container.querySelector('.inform')
         this.loaders = document.querySelector('.loaders_report')
         this.prints = this.container.querySelectorAll('.icon_print')
+        this.vis_reports = this.container.querySelector('.wrap_visible_reports')
+        this.visible_reports = this.vis_reports.querySelectorAll('.visible_reports')
+
     }
 
     evenListener() {
@@ -55,7 +58,6 @@ export class GetReports {
     async startClassWiewFilters() {
         const objects = this.checkObjects.querySelectorAll('.object_checks')
         const objectCheked = [...objects].filter(e => e.checked)
-        console.log(objectCheked)
         if (objectCheked.length !== 1) {
             return
         }
@@ -72,7 +74,7 @@ export class GetReports {
         this.caseElementsSecond()
         this.modalActivity(this.pop, 'flex', 2)
         console.log(this.type)
-        new ControllSettingsReportsObject(this.modal, Number(this.id), objectCheked[0].parentElement.getAttribute('rel'))
+        new ControllSettingsReportsObject(this.modal, this.id, objectCheked[0].parentElement.getAttribute('rel'))
         this.hiddenBlocks()
         this.close.addEventListener('click', () => this.modalActivity(this.pop, 'none', 1))
         this.start.addEventListener('click', async () => this.reports())
@@ -84,9 +86,7 @@ export class GetReports {
         this.start = this.wrapSet.querySelector('.short_btn')
     }
     async getComponents() {
-        console.log(this.idTemplate)
         this.attributes = await GetDataRequests.getAttributeTemplace(Number(this.idTemplate))
-        console.log(this.attributes)
     }
 
     hiddenBlocks() {
@@ -111,7 +111,6 @@ export class GetReports {
     async reports() {
         this.webpackObjectsSettings()
         await this.getReportAndCreateContent(this.set)
-        //  await this.getStrukturaReports(this.set)
         this.createCalendar()
         this.modalActivity(this.pop, 'none', 1)
 
@@ -197,7 +196,6 @@ export class GetReports {
     async getReportAndCreateContent(sett) {
         const objects = this.checkObjects.querySelectorAll('.object_checks')
         const objectCheked = [...objects].filter(e => e.checked)
-        console.log(this.timeInterval)
         this.objects = objectCheked.map(el => {
             return ({
                 data: this.timeInterval,
@@ -218,12 +216,10 @@ export class GetReports {
 
     async getStrukturaReports(sett) {
         this.titleReports.innerHTML = `<div class="loaders_report" style="display:flex"> <div class="loaders-globe-report"></div></div>`
-        console.log(this.objects)
         this.data = await GetDataRequests.getReport(this.objects, sett)
-        console.log(this.data)
         this.analysisComponents()
         this.createListTitleReports(this.arrayStruktura)
-
+        if (this.objects.length > 1) this.vis_reports.style.display = 'flex'
     }
     async createCalendar() {
         const calendar = this.interval.nextElementSibling.querySelector('.input_data')
@@ -258,27 +254,55 @@ export class GetReports {
     createMetaTable(el) {
         const idElement = el.id
         Helpers.ToggleClassElements(this.titleNameReports, el)
-        if (idElement === 'Статистика') { this.createStatsTable() }
+        this.activeTitleReports = this.container.querySelector('.activeTitleReports')
+        if (idElement === 'Статистика') {
+            this.createStatsTable()
+        }
         else if (el.parentElement.id === 'components') {
             const trueAttributes = this.data.map(e => Helpers.trueAttributes(e.component[el.textContent]))
-            this.reports_module.innerHTML = Content.renderComponentsReport(trueAttributes, this.statistics);
-            this.swich = this.container.querySelectorAll('.swich')
-            this.swich.forEach(e => e.addEventListener('click', () => Helpers.toggleWiewList(e)))
+            this.reports_module.innerHTML = Content.renderComponentsReport(trueAttributes, this.statistics, this.activeTitleReports.id, this.objectVisibleSpoyler);
+            this.visible_process()
 
         }
         else {
-            this.reports_module.innerHTML = Content.renderChartsContent(this.data, this.statistics, el.textContent);
+            this.reports_module.innerHTML = Content.renderChartsContent(this.data, this.statistics, el.textContent, this.activeTitleReports.id, this.objectVisibleSpoyler);
             this.createCharts(el.textContent)
-            this.swich = this.container.querySelectorAll('.swich')
             this.fullButtons = this.container.querySelectorAll('.full_screen')
-
             this.fullButtons.forEach(e => e.addEventListener('click', () => this.fullScreen(e)))
-            this.swich.forEach(e => e.addEventListener('click', () => Helpers.toggleWiewList(e)))
+            this.visible_process()
         }
+
     }
 
+    visible_process() {
+        this.swich = this.container.querySelectorAll('.swich')
+        this.swich.forEach(e => e.addEventListener('click', () => {
+            Helpers.toggleWiewList(e, 'vis')
+            const boolean = e.classList.contains('toggleClass')
+            const key = e.nextElementSibling.textContent;
+            this.buildObject(key, boolean)
+        }))
 
 
+        this.visible_reports.forEach((e, index) => {
+            e.addEventListener('click', () => {
+                index === 0 ? (Helpers.visible_all_objects(this.swich, '-', 'flex')) :
+                    (Helpers.visible_all_objects(this.swich, '+', 'none'))
+                this.statistics.forEach((e, index) => {
+                    const name = e[1].result
+                    const boolean = this.swich[index].classList.contains('toggleClass')
+                    this.buildObject(name, boolean)
+                })
+            })
+        })
+    }
+
+    buildObject(name, boolean) {
+        if (!this.objectVisibleSpoyler[name]) {
+            this.objectVisibleSpoyler[name] = {};
+        }
+        this.objectVisibleSpoyler[name][this.activeTitleReports.id] = boolean;
+    }
     fullScreen(e) {
         const svg = e.parentElement.nextElementSibling
         if (svg.requestFullscreen) {
@@ -288,37 +312,29 @@ export class GetReports {
         } else if (svg.msRequestFullscreen) { // IE11
             svg.msRequestFullscreen();
         }
-
-
     }
     createCharts(types) {
         this.data.forEach((el, index) => {
             const chartContainer = document.getElementById(`${types}${index}`);
-            console.log(chartContainer)
             if (chartContainer) { // Проверяем, что элемент существует
-                console.log(el.graphic[types])
-
                 if (types !== 'СКДШ' && types !== 'Моточасы') {
                     if (el.graphic[types][0].result) {
                         this.instansCharts[`${types}${index}`] = new ChartsClass(el.graphic[types], chartContainer);
                     }
                 }
                 else {
-                    //  if (el.graphic[types][0].y) {
                     this.instansCharts[`${types}${index}`] = new ChartsClassSecond(el.graphic[types], chartContainer, types);
-                    //  }
                 }
 
             }
 
         });
-        console.log(this.instansCharts)
+
     }
     createStatsTable() {
         this.statistics = this.data.map(el => el.statistic['Статистика'].filter(e => e.checked))
-        this.reports_module.innerHTML = Content.renderTableStatic(this.statistics)
-        this.swich = this.container.querySelectorAll('.swich')
-        this.swich.forEach(e => e.addEventListener('click', () => Helpers.toggleWiewList(e)))
+        this.reports_module.innerHTML = Content.renderTableStatic(this.statistics, this.activeTitleReports.id, this.objectVisibleSpoyler)
+        this.visible_process()
     }
 
 

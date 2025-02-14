@@ -4,38 +4,43 @@ import { Helpers } from './Helpers.js'
 export class Content {
 
 
-    static renderComponentsReport(data, stata) {
+    static renderComponentsReport(data, stata, prop, object) {
+
         const newRows = data.map((el, index) => {
             const name = stata[index][1].result
             const group = stata[index][0].result
+
+            const [displayClass, currentSymbol] = Helpers.returnVariable(stata, object, name, prop)
             if (!el[0].result) {
-                return `<div class="item_reports"><div class="swich">+</div><div class="rows_spoyler object_new_rows">${name}</div>
+                return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div>
                 <div class="rows_spoyler group_new_rows">${group}</div></div>
-                      <div class="cell_params stat_reports">Нет данных</div>`
+                      <div class="cell_params ${displayClass} stat_reports">Нет данных</div>`
             }
             const attributesCell = el[0].result.map((e, index) => {
                 const cell = el.map(it => `<td class="cell_reports">${it.result[index]} ${it.local}</td>`).join('')
                 return `<tr>${cell}</tr>`
             }).join('')
             const titlerows = el.map(e => `<td class="cell_reports cell_title_reports">${e.name}</td>`).join('')
-            return `<div class="item_reports"><div class="swich">+</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div></div>
-                      <table class="cell_params stat_reports"><tr>${titlerows}</tr>${attributesCell}</table>`
+            return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div></div>
+                      <table class="cell_params ${displayClass} stat_reports"><tr>${titlerows}</tr>${attributesCell}</table>`
         }).join('')
         return newRows
     }
 
-    static renderChartsContent(data, stata, types) {
+    static renderChartsContent(data, stata, types, prop, object) {
+
         const newRows = data.map((el, index) => {
             const name = stata[index][1].result
             const group = stata[index][0].result
-            const chartHtml = `<div class="chart_container" id="${types}${index}"></div>`;
-            console.log(el.graphic[types][0].result, types)
+            const [displayClass, currentSymbol] = Helpers.returnVariable(stata, object, name, prop)
+
+            const chartHtml = `<div class="chart_container ${displayClass}" id="${types}${index}"></div>`;
+
             if (!el.graphic[types][0].result || el.graphic[types][0]?.result.length === 0) {
-                return `<div class="item_reports"><div class="swich">+</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div></div>
-                      <div class="chart_container">Нет данных</div>`
+                return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div></div>
+                      <div class="chart_container ${displayClass}">Нет данных</div>`
             }
-            1
-            return `<div class="item_reports"><div class="swich">+</div><div class="rows_spoyler object_new_rows">${name}</div>
+            return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div>
             <div class="rows_spoyler group_new_rows">${group}</div><i class="fas fa-expand full_screen"></i></div>
                     ${chartHtml}`
         }).join('')
@@ -43,27 +48,28 @@ export class Content {
         return newRows
     }
 
-    static renderTableStatic(data) {
-        const newRows = data.map(el => {
+    static renderTableStatic(stata, prop, object) {
+
+        const newRows = stata.map((el, index) => {
+            const name = stata[index][1].result
+            const [displayClass, currentSymbol] = Helpers.returnVariable(stata, object, name, prop)
             const row = el.map(e => `<tr><td class="cell_reports">${e.name}</td><td class="cell_reports">${e.result !== undefined ? e.result : 'Н/Д'} ${e.local ? e.local : ''}</td></tr>`).join('')
-            return `<div class="item_reports"><div class="swich">+</div><div class="rows_spoyler object_new_rows">${el[1].result}</div><div class="rows_spoyler group_new_rows">${el[0].result}</div></div>
-            <table class="cell_params">
+            return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${el[1].result}</div><div class="rows_spoyler group_new_rows">${el[0].result}</div></div>
+            <table class="cell_params ${displayClass}">
             <tr><td class="cell_reports">Название</td><td class="cell_reports">Значение</td></tr>
         ${row}</table> `
         }).join('')
-
         return newRows
-
-
     }
+
 
     static renderTitlesReport(data) {
         const stats = Helpers.trueTitles(data[0])
         const components = Helpers.trueTitles(data[1])
         const graphics = Helpers.trueTitles(data[2])
         const statName = stats.map((e, index) => `<li class="titleNameReport spoyler_report ${index === 0 ? 'activeTitleReports' : ''}" id=${e}>${e}</li>`).join('')
-        const componentName = components.map((e, index) => `<li class="titleNameReport " id=${e}>${e}</li>`).join('')
-        const graphicName = graphics.map((e, index) => `<li class="titleNameReport" id=${e}>${e}</li>`).join('')
+        const componentName = components.map((e, index) => `<li class="titleNameReport " id=${'components' + e}>${e}</li>`).join('')
+        const graphicName = graphics.map((e, index) => `<li class="titleNameReport" id=${'graphics' + e}>${e}</li>`).join('')
 
         return `${statName}<div class="body_content_report flex_none"></div><div class="spoyler_report">Компонентный</div><div class="body_content_report flex_none" id="components">${componentName}</div> <div class="spoyler_report">Графический</div><div class="body_content_report flex_none"  id="grafics">${graphicName}</div>`
     }
@@ -90,14 +96,21 @@ export class Content {
        </div>`).join('');
             return `<div class="container_group_object">
                <div class="checkbox_item rows_list group_list">
-               <div class="switch">+</div>
+               <div class="switch">-</div>
            <input class="group_checks"  type="checkbox" id="${e[0]}">
            <label class="label_check_tambplate" for="${e[0]}"">${e[0]}</label>
        </div>
         <div class="objects_container">${objectsElements}</div>
                 </div>`}).join('')
 
-        return `<div class="rows_objects_reports">${list}</div><div class="footer_rows_reports">
+        return `<div class="header_rows_reports">
+        <div class="visible_list_objects">
+         <div class="span_controll on_hidden">+</div>
+          <div class="span_controll off_hidden">-</div>
+            </div>
+               <div class="discription_header_visible_list">Свернуть/Развернуть</div>
+          </div>
+        <div class="rows_objects_reports">${list}</div><div class="footer_rows_reports">
         <div class="btn_list_rows start_save">ОК</div>
               <div class="btn_list_rows cancel_start">Отмена</div>
         </div>`
@@ -313,6 +326,10 @@ export class Content {
                     </div>
                 </div>
                 <div class="down_block">
+                <div class="wrap_visible_reports">
+                            <span class="fas fa-plus visible_reports one_element_icon_toggle_reports"></span>
+                             <span class="fas fa-minus visible_reports active_btn"></span>
+</div>
                     <div class="down_title" rel="Детализация">Детализация</div>
                     <div class="down_content">
                         <div class="wrapper_reports"></div>

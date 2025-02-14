@@ -23,7 +23,7 @@ export class GetDataRequests {
     }
 
     static async updateTemplates(obj, id) {
-        //   console.log(set)
+        console.log(id)
         const params = {
             method: 'POST',
             headers: {
@@ -38,6 +38,7 @@ export class GetDataRequests {
 
 
     static async getTemplates(id, prop) {
+        console.log(id)
         const params = {
             method: 'POST',
             headers: {
@@ -50,6 +51,7 @@ export class GetDataRequests {
         return result
     }
     static async getAttributeTemplace(id) {
+        console.log(id)
         const params = {
             method: 'POST',
             headers: {

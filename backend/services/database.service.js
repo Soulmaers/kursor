@@ -537,6 +537,7 @@ exports.geoLastInterval = async (time1, time2, idw) => {
 
 
 exports.getReportsAttribute = async (idw) => {
+    console.log(idw)
     try {
         const pool = await connection
         const postModel = `SELECT * FROM setReports WHERE idw=@idw`
@@ -551,6 +552,7 @@ exports.getReportsAttribute = async (idw) => {
         }
     }
     catch (e) {
+        console.log('тут')
         console.log(e)
     }
 
@@ -2121,7 +2123,6 @@ exports.getAttributeTemplaceToBase = async (id) => {
         const results = await pool.request()
             .input('incriment', Number(id))
             .query(postModel)
-        //  console.log(results.recordset)
         return results.recordset
 
     }

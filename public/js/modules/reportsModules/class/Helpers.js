@@ -87,24 +87,51 @@ export class Helpers {
         return res
     }
 
+    static returnVariable(stata, object, name, prop) {
+        const visibleClass = stata.length === 1 ? 'vis' : '';
+        const toggleSymbol = stata.length === 1 ? '-' : '+';
+
+        const isVisible = object[name]?.[prop] === true;
+        const displayClass = isVisible ? 'vis' : visibleClass; // Используем переменную видимости
+        const currentSymbol = isVisible ? '-' : toggleSymbol;
+
+        return [displayClass, currentSymbol]
+    }
     static timeStringToUnix(timeString) {
         const [hours, minutes, seconds] = timeString.split(':').map(Number);
         const milliseconds = (hours * 3600 + minutes * 60 + seconds);
         return milliseconds
     }
 
-    static toggleWiewList(e) {
+    static visiale_toggle_global(objects, znak, styleparent) {
+        objects.forEach(e => {
+            e.parentElement.previousElementSibling.children[0].textContent = `${znak}`
+            styleparent === 'none' ? e.parentElement.previousElementSibling.children[0].classList.add('toggleClass') :
+                e.parentElement.previousElementSibling.children[0].classList.remove('toggleClass')
+            e.parentElement.style.display = `${styleparent}`
+        })
+    }
+
+    static visible_all_objects(reports, znak, style) {
+        reports.forEach(e => {
+            e.textContent = `${znak}`
+            console.log(e.parentElement)
+            e.parentElement.nextElementSibling.style.display = `${style}`
+            style === 'none' ? e.classList.remove('toggleClass') :
+                e.classList.add('toggleClass')
+        })
+    }
+    static toggleWiewList(e, vis) {
         e.classList.toggle('toggleClass')
         const full = e.parentElement.querySelector('.full_screen')
         const wrapObject = e.parentElement.nextElementSibling
         if (e.classList.contains('toggleClass')) {
-            console.log(full)
             if (full) full.style.display = 'block'
-            Helpers.hiddenWiewElements(wrapObject, e, 'block', '-')
+            !vis ? Helpers.hiddenWiewElements(wrapObject, e, 'none', '+') : Helpers.hiddenWiewElements(wrapObject, e, 'block', '-')
         }
         else {
             if (full) full.style.display = 'none'
-            Helpers.hiddenWiewElements(wrapObject, e, 'none', '+')
+            !vis ? Helpers.hiddenWiewElements(wrapObject, e, 'block', '-') : Helpers.hiddenWiewElements(wrapObject, e, 'none', '+')
         }
     }
 

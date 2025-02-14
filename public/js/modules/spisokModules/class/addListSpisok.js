@@ -34,10 +34,8 @@ export class AddListSpisok {
         this.data = data;
         this.allId = allId;
         this.final = final;
-        console.log('ТУТА')
         if (inspect) {
             const elem = [document.querySelector('.border'), document.querySelector('.color')].filter(element => element !== null)
-            console.log(elem)
             this.updateElement(elem)
             this.controllConnectParams()
             new AddparametrsIcons(this.final, elem)
@@ -52,7 +50,6 @@ export class AddListSpisok {
         this.simulateLoader()
         this.findDomElement()  //поиск и удаление старых элементов
         Helpers.sorting(this.data)
-        console.log(this.final)
         new CreateList(this.data, this.login, this.role)
         this.lists = this.lowList.querySelectorAll('.listItem')
         this.controllConnectParams()
@@ -70,7 +67,6 @@ export class AddListSpisok {
     }
 
     controllConnectParams() {
-        console.log(this.final)
         const wrench = [...this.lists].map(e => e.querySelector('.fa-wrench'))
         wrench.forEach(e => {
             const data = this.final.find(it => {

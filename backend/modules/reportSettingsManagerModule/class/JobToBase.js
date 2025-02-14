@@ -39,6 +39,7 @@ class JobToBase {
     };
 
     static getSettingsToBase = async (idw) => {
+        console.log(idw)
         const sqls = `SELECT * FROM setReports WHERE idw=@idw`;
         const pool = await connection;
         try {

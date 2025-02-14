@@ -37,7 +37,7 @@ export class Search {
         const value = event.target.value.trim();
         if (value === '') {
             this.afterFilterArray = []; // Или можно оставить пустым массивом
-            this.viewAllObjects(); // Вызовите find, чтобы скрыть все элементы
+            this.viewAllObjects(); // Вызовите find, чтобы открыть все элементы
             return;
         }
         this.afterFilterArray = this.globalArray.filter(e => e.toLowerCase().indexOf(value.toLowerCase()) !== -1)
@@ -50,7 +50,7 @@ export class Search {
             e.style.display = 'none'
             e.parentElement.previousElementSibling.style.display = 'none'
             e.parentElement.previousElementSibling.children[0].textContent = '+'
-            e.parentElement.previousElementSibling.children[0].classList.remove('toggleClass')
+            e.parentElement.previousElementSibling.children[0].classList.add('toggleClass')
             e.parentElement.style.display = 'none'
         })
     }
@@ -60,9 +60,9 @@ export class Search {
         this.objects.forEach(e => {
             e.style.display = 'flex'
             e.parentElement.previousElementSibling.style.display = 'flex'
-            e.parentElement.previousElementSibling.children[0].textContent = '+'
+            e.parentElement.previousElementSibling.children[0].textContent = '-'
             e.parentElement.previousElementSibling.children[0].classList.remove('toggleClass')
-            e.parentElement.style.display = 'none'
+            e.parentElement.style.display = 'block'
         })
     }
     find() {

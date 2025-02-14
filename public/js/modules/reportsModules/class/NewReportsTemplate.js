@@ -71,6 +71,7 @@ export class NewReportTemplate {
         this.caseElements()
         // Если это режим редактирования, используем выбранное значение
         if (isEditing) {
+            console.log(this.wrapReports[1])
             this.idTemplate = Number(this.wrapReports[1].value);
             const selectElement = this.wrapReports[1]
             const nameReports = selectElement.options[selectElement.selectedIndex].textContent;
@@ -78,9 +79,9 @@ export class NewReportTemplate {
             this.attributes = await GetDataRequests.getAttributeTemplace(this.idTemplate)
             console.log(this.attributes)
 
-            this.setTemplates = await this.getRenderSetValue(this.idTemplate)
+            //this.setTemplates = await this.getRenderSetValue()
             this.nameTemplate.value = nameReports
-            console.log(this.setTemplates)
+            //  console.log(this.setTemplates)
         }
         else {
             this.nameTemplate.value = ''
@@ -100,7 +101,8 @@ export class NewReportTemplate {
 
 
     async getRenderSetValue() {
-        this.setReports = await GetDataRequests.getReportsAttribute(Number(this.idTemplate))
+        this.setReports = await GetDataRequests.getReportsAttribute(this.idTemplate)
+        console.log(this.setReports)
         if (this.setReports.length !== 0) {
             return JSON.parse(this.setReports[0].jsonsetAttribute)
         }
@@ -125,7 +127,6 @@ export class NewReportTemplate {
                 nameTemplate: this.nameTemplate.value,
                 proreptyTamplate: 'reports'
             }
-
             //  this.webpackObjectsSettings()
             if (!this.idTemplate) {
                 const res = await GetDataRequests.saveTemplates(this.object)
