@@ -111,6 +111,7 @@ export class NewReportTemplate {
         }
     }
     save() {
+        console.log(this.idResourse)
         this.saveAttribute.addEventListener('click', async () => {
             if (!this.validationNameTemplate()) {
                 Helpers.viewRemark(this.mess, 'red', 'Укажите имя отчета')

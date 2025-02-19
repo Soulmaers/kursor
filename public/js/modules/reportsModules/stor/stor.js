@@ -24,7 +24,9 @@ export const storComponentOil = [
     { name: 'Начальный уровень топлива', checked: true },
     { name: 'Конечный уровень топлива', checked: true },
     { name: 'Всего заправлено', checked: true },
-    { name: 'Всего слито', checked: true }
+    { name: 'Всего слито', checked: true },
+    { name: 'Объём бака', checked: true },
+    { name: 'До MAX уровня', checked: true }
 ]
 
 export const storComponentTravel = [

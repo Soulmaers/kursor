@@ -654,12 +654,14 @@
     margin: 2px 0;
     padding: 2px 0;
     border-bottom: 1px solid rgba(6, 28, 71, 0.4);
+    margin-top: 8px;
 }
 
 .rows_spoyler {
     margin: 0 10px;
     width: 20%;
     font-size: 0.9rem;
+    font-weight: 600;
     text-align: left;
 }
 
@@ -684,6 +686,10 @@
 .chart_class {
     width: 100%;
     position: relative;
+}
+
+.cell_params_statistics {
+    font-size: 1rem;
 }
 
 .line1 {
@@ -734,6 +740,11 @@
     display: flex;
     align-items: center;
     margin: 3px;
+}
+
+.center_no_data {
+    align-items: center;
+    justify-content: center;
 }
 
 .elem_tooltip {

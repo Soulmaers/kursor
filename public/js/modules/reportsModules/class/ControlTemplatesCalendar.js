@@ -210,6 +210,7 @@ export class GetReports {
             Helpers.viewRemark(this.mess, 'red', 'Выберите все параметры отчета')
             return
         }
+        this.objectVisibleSpoyler = {}
         await this.getStrukturaReports(sett)
         this.createCalendar()
     }

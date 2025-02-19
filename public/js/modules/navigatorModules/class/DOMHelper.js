@@ -33,13 +33,17 @@ export class DOMHelper {
     }
 
     static createListItems(containerSelector, count, className, params) {
+        const arrayClearParams = ['speed', 'sats', 'lon', 'lat', 'course', 'last_valid_time']
         const container = document.querySelector(containerSelector);
-
+        params.sort((a, b) => {
+            return a.params.localeCompare(b.params);
+        });
         params.forEach((el, index) => {
             const li = document.createElement('li');
             li.className = className;
-            li.textContent = `${el.params}:${el.value !== null ? el.value : '-'}`
+            li.textContent = `${el.params}: ${el.value !== null ? el.value : '-'}`
             container.append(li);
+            if (arrayClearParams.includes(el.params)) li.remove()
         })
     }
 

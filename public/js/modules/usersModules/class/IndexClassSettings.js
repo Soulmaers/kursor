@@ -36,6 +36,7 @@ export class IndexClassSettings {
     async getAccounts() {
         if (this.prava === 'Курсор' || this.prava === 'Интегратор') this.creators = await Requests.getUsers(this.prava, this.creater)
         this.struktura = await Helpers.getAccountAll()
+        console.log(this.struktura)
         this.addIerarhia()
     }
     initEvent() {
@@ -106,16 +107,16 @@ export class IndexClassSettings {
         this.wrapIcons = this.container.querySelector('.icons_clear_rows')
         this.wrapIcons.classList.add('flex_element')
     }
-    addContainer(event) {
+    addContainer(el) {
         this.viewIcons()
         this.table = this.container.querySelector('.table_data_info')
         this.table.innerHTML = ''
-        const elements = event.target.children[0]
-        const row = event.target
+        const elements = el.children[0]
+        const row = el
         const buttonText = row.getAttribute('rel')
         const index = row.getAttribute('data-att')
         this.deleteHTML()
-        this.controllStows(elements, row, buttonText, index, event.target)
+        this.controllStows(elements, row, buttonText, index, el)
         this.filterRows()
     }
 
@@ -178,6 +179,7 @@ export class IndexClassSettings {
         this.buttons = this.naviContainer.querySelectorAll('.button_setting')
     }
     controllStows(elements, row, buttonText, index, targetElements) {
+        console.log(elements)
         this.type_navi.forEach(e => {
             if (e.children[0] !== elements) {
                 e.children[0].classList.remove('fa-angle-up');
@@ -200,7 +202,7 @@ export class IndexClassSettings {
         elements.parentElement.classList.toggle('activ_fon')
     }
     clickNavi() {
-        this.type_navi.forEach(e => e.addEventListener('click', this.addContainer.bind(this)))
+        this.type_navi.forEach(e => e.addEventListener('click', this.addContainer.bind(this, e)))
     }
 
 }

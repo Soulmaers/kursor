@@ -1,7 +1,7 @@
 
 
 import { IntObjects } from './IntObjects.js'
-import { IntGroups } from './IntGroups.js'
+import { IntGroups } from './intGroups.js'
 import { IntUsers } from './IntUsers.js'
 import { IntRetra } from './IntRetra.js'
 import { IntAccounts } from './IntAccounts.js'
@@ -30,6 +30,7 @@ export class ControllModal {
 
     async controll() {
         console.log('тутааа')
+        console.log(this.index)
         let inst;
         switch (this.index) {
             case '0': inst = new IntAccounts(this.index, this.buttons, this.settingWrap, this.container, this.login, this.prava, this.creater, this.creators)

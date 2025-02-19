@@ -115,7 +115,6 @@ export class Helpers {
     static visible_all_objects(reports, znak, style) {
         reports.forEach(e => {
             e.textContent = `${znak}`
-            console.log(e.parentElement)
             e.parentElement.nextElementSibling.style.display = `${style}`
             style === 'none' ? e.classList.remove('toggleClass') :
                 e.classList.add('toggleClass')

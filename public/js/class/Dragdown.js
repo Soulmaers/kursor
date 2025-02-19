@@ -2,8 +2,9 @@
 console.log('дроп')
 
 export class DraggableContainer {
-    constructor(element) {
+    constructor(element, config) {
         console.log(element)
+        this.config = config
         //  this.container = element.parentElement;
         this.elem = element
         this.isDragging = false;
@@ -43,8 +44,9 @@ export class DraggableContainer {
             this.currentY = event.clientY - this.initialY;
             this.xOffset = this.currentX;
             this.yOffset = this.currentY;
-            this.elem.style.transform = `translate3d(${this.currentX}px, ${this.currentY}px, 0)`;
-            this.elem.style.opacity = 0.8
+            const celevoy = this.config ? this.elem.parentElement : this.elem
+            celevoy.style.transform = `translate3d(${this.currentX}px, ${this.currentY}px, 0)`;
+            celevoy.style.opacity = 0.8
         }
     }
     destroy() {

@@ -20,37 +20,34 @@ export class IconStatus {
         this.coefficient = null
         this.bool = false
         this.init()
-
+        this.initEventListeners();
         GetUpdateStruktura.onDataReceived(this.render.bind(this));
-        this.handleCardClick = this.toogleModalWindow.bind(this)
+        //  this.handleCardClick = this.toogleModalWindow.bind(this)
 
     }
 
 
     init() {
+        console.log('инит')
         this.getParams(this.info)
-        this.initEventListeners();
+        console.log('гет')
+        this.listeModalWindow(this.elem)
         console.log(this.info)
         if (this.info.length === 0) return
     }
     reinitialize(newElem, info) {
         this.info = info
-        console.log(info)
-        this.removeEventListeners(); // Удаление старых слушателей событий
         this.elem = newElem; // Обновление id
         this.bool = false
         this.init()
     }
 
     initEventListeners() {
-        this.listeModalWindow(this.elem)
-        this.card.forEach(el => el.addEventListener('click', this.handleCardClick));
+        console.log('слушатель')
+        console.log(this.card)
+        this.card.forEach(el => el.addEventListener('click', () => this.toogleModalWindow(event)));
 
     }
-    removeEventListeners() {
-        this.card.forEach(el => el.removeEventListener('click', this.handleCardClick));
-    }
-
 
     render({ final }) {
         this.bool = true
@@ -114,7 +111,7 @@ export class IconStatus {
 
         })
         const checkConfig = document.getElementById('check_Title')
-        checkConfig.checked ? (this.targetCard.classList.add('acto'), sensors.style.display = 'flex', new DraggableContainer(sensors), wRight.style.zIndex = 2,
+        checkConfig.checked ? (this.targetCard.classList.add('acto'), sensors.style.display = 'flex', new DraggableContainer(sensors.firstElementChild, 'config'), wRight.style.zIndex = 2,
             document.querySelector('.popup-background').style.display = 'block',
             this.msg = document.querySelectorAll('.msg'),
             this.msg.forEach(el => el.addEventListener('click', this.viewValueToSaveBase.bind(this, el))))
@@ -320,7 +317,6 @@ export class IconStatus {
                     role === 'Администратор' ? new Tooltip(elem, [elem.getAttribute('rel'), it.params]) : new Tooltip(elem, [elem.getAttribute('rel')]);
                 }
             })
-            console.log(this.valueparamsObject)
             const parametrs = this.valueparamsObject[elem.id] === -348201.3876 ? '---' : this.valueparamsObject[elem.id]
             switch (elem.id) {
                 case 'odom-card': console.log(parametrs)

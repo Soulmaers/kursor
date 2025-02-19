@@ -28,6 +28,7 @@ export class ControllListWindow {
         this.numberOfChoise = this.container.querySelector('.numberOfChoise')
         this.object_list = this.container.querySelectorAll('.object_list')
         this.group_list = this.container.querySelectorAll('.group_list')
+        this.reports = document.querySelector('.reports')
     }
 
 
@@ -58,8 +59,12 @@ export class ControllListWindow {
     }
 
     closeOnClickOutside(event) {
-        if (!this.list_objects_reports.contains(event.target) && !this.find.contains(event.target)) {
+        console.log('тут')
+        if (!this.list_objects_reports.contains(event.target) && !this.find.contains(event.target) && !this.reports.contains(event.target)) {
             this.openRows('none');
+            this.objectCheked = [...this.container.querySelectorAll('.object_checks')].filter(e => e.checked)
+            this.numberOfChoise.textContent = `(${this.objectCheked.length})`
+            this.find.value = `(выбрано ${this.objectCheked.length} объектов)`
         }
     }
     toggleCheck(e) {
@@ -82,7 +87,7 @@ export class ControllListWindow {
             this.toggleClass = this.container.querySelectorAll('.toggleClass')
             this.checkedCheckboxes.forEach(e => e.checked = false)
             this.objectsContainer.forEach(e => e.style.display = 'block')
-            //  this.toggleClass.forEach(e => e.classList.remove('toggleClass'))
+            this.toggleClass.forEach(e => e.classList.remove('toggleClass'))
             this.switch.forEach(e => e.textContent = '-')
             this.numberOfChoise.textContent = '(0)'
             this.find.value = ''

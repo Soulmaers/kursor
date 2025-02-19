@@ -114,7 +114,7 @@ export class IntUsers extends IntarfaceBase {
             if (this.uz.value === '') return Helpers.viewRemark(this.mess, 'red', 'Укажите учетную запись');
         }
 
-        const resourseIDCheck = this.uz.options[this.uz.selectedIndex].getAttribute('resourse')
+        const resourseIDCheck = this.uz.options[this.uz.selectedIndex] ? this.uz.options[this.uz.selectedIndex].getAttribute('resourse') : null
         const objectsCar = this.check_container[0].querySelectorAll('.activ_check')
         const objectsId = [...objectsCar].map(el => el.nextElementSibling.getAttribute('uniqid'))
         const groupsCar = this.check_container[1].querySelectorAll('.activ_check')

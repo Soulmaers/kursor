@@ -73,7 +73,7 @@ export class ControllTyres {
                 this.close()
 
 
-                new DraggableContainer(this.sensors);
+                new DraggableContainer(this.sensors.firstElementChild, 'config');
                 this.wright.style.zIndex = 2;
                 document.querySelector('.popup-background').style.display = 'block';
             }

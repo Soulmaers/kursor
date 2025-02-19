@@ -67,6 +67,7 @@ export class CentalClassReports {
     }
 
     async getTemplatesAndCreateListElements() {
+        console.log(this.resourses)
         this.resoursesID = this.resourses.map(e => e.idResourse)
         this.templates = await GetDataRequests.getTemplates(this.resoursesID, 'reports')
         if (this.templates.length === 0) return

@@ -5,7 +5,7 @@ export class Content {
 
 
     static renderComponentsReport(data, stata, prop, object) {
-
+        console.log(data)
         const newRows = data.map((el, index) => {
             const name = stata[index][1].result
             const group = stata[index][0].result
@@ -14,10 +14,10 @@ export class Content {
             if (!el[0].result) {
                 return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div>
                 <div class="rows_spoyler group_new_rows">${group}</div></div>
-                      <div class="cell_params ${displayClass} stat_reports">Нет данных</div>`
+                      <div class="cell_params ${displayClass} stat_reports center_no_data">Нет данных</div>`
             }
             const attributesCell = el[0].result.map((e, index) => {
-                const cell = el.map(it => `<td class="cell_reports">${it.result[index]} ${it.local}</td>`).join('')
+                const cell = el.map(it => `<td class="cell_reports" style="background-color: ${it.color?.[index] ? it.color[index] : null}">${it.result[index]} ${it.local}</td>`).join('')
                 return `<tr>${cell}</tr>`
             }).join('')
             const titlerows = el.map(e => `<td class="cell_reports cell_title_reports">${e.name}</td>`).join('')
@@ -38,7 +38,7 @@ export class Content {
 
             if (!el.graphic[types][0].result || el.graphic[types][0]?.result.length === 0) {
                 return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div></div>
-                      <div class="chart_container ${displayClass}">Нет данных</div>`
+                      <div class="chart_container ${displayClass} center_no_data">Нет данных</div>`
             }
             return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div>
             <div class="rows_spoyler group_new_rows">${group}</div><i class="fas fa-expand full_screen"></i></div>
@@ -55,7 +55,7 @@ export class Content {
             const [displayClass, currentSymbol] = Helpers.returnVariable(stata, object, name, prop)
             const row = el.map(e => `<tr><td class="cell_reports">${e.name}</td><td class="cell_reports">${e.result !== undefined ? e.result : 'Н/Д'} ${e.local ? e.local : ''}</td></tr>`).join('')
             return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${el[1].result}</div><div class="rows_spoyler group_new_rows">${el[0].result}</div></div>
-            <table class="cell_params ${displayClass}">
+            <table class="cell_params  cell_params_statistics ${displayClass}">
             <tr><td class="cell_reports">Название</td><td class="cell_reports">Значение</td></tr>
         ${row}</table> `
         }).join('')
