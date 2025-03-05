@@ -5,6 +5,8 @@ const { SCDSHClass } = require('./SKDSHClass')
 const { JobToBase } = require('../../reportSettingsManagerModule/class/JobToBase')
 const { OilCalculator } = require('./OilControllCalculater')
 const { DrainCalculate } = require('./DrainControllCalculate')
+const Runs = require('./Runs')
+const Helpers = require('./Helpers')
 
 const XLSX = require('xlsx');
 class ReportsControllClass {
@@ -18,8 +20,9 @@ class ReportsControllClass {
 
 
     async init() {
+
         this.date = CalculateReports.convertFormatTime(this.interval)
-        console.log(this.date)
+
         this.attributes = await this.getAttributesTemplates()
         const globalStruktura = Promise.all(this.object.map(async el => {
             const localCopyAttributes = JSON.parse(JSON.stringify(this.attributes))
@@ -30,16 +33,19 @@ class ReportsControllClass {
         return await globalStruktura
     }
     async startCalculate(object, localCopyAttributes, data, setAttributes) {
+        const runsObject = Helpers.getDateIntervals(...this.interval)
         const { idObject, objectName, groupName, typeIndex } = object
-
         if (!data || data.length === 0) {
             localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Группа объектов') { e.result = groupName, e.local = '' } })
-            localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Объект') { e.result = objectName, e.local = '' } })
+            localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Объект') { e.result = objectName, e.local = '', e.setAttributes = setAttributes } })
             localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Начало интервала') { e.result = CalculateReports.converterTimes(this.interval[0]), e.local = '' } })
             localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Конец интервала') { e.result = CalculateReports.converterTimes(this.interval[1]), e.local = '' } })
             localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Пробег') { e.result = 0, e.local = 'км' } })
             return localCopyAttributes
         }
+
+        const instanceRuns = new Runs(data, runsObject, setAttributes, idObject)
+        const runs = await instanceRuns.init()
         const motoChartsData = await databaseService.sumIdwToBase(this.date, idObject)
         let volume = await databaseService.getTarirData(idObject, 'oil')
         volume = volume.length !== 0 ? Number(volume[volume.length - 1].litrazh) : 'Н/Д'
@@ -53,8 +59,9 @@ class ReportsControllClass {
         const slito = drain ? drain[0] : 'Н/Д'
         const countSliv = drain ? drain[1] : []
         const finishOil = data[0].dut ? (CalculateReports.startAndFinishOil(data))[1] : 'Н/Д'
-        const mileage = data[0].mileage ? parseFloat(CalculateReports.calculationMileage(data).toFixed(2)) : 'Н/Д'
+        const mileage = data[0].mileage ? Math.max(0, CalculateReports.calculationMileage(data).toFixed(2)) : 'Н/Д'
         const traveling = CalculateReports.traveling(data, setAttributes)
+        console.log(traveling)
         const parkings = CalculateReports.parkings(data, setAttributes)
         const stops = CalculateReports.stops(data, setAttributes)
         const moto = await CalculateReports.moto(data, setAttributes, idObject)
@@ -63,13 +70,13 @@ class ReportsControllClass {
 
         this.instanceSKDSH = new SCDSHClass(object)
         const skdsh = await this.instanceSKDSH.init()
-        const rashodDUT = data[0].dut ? parseFloat((startOil + zapravleno - finishOil).toFixed(2)) : 'Н/Д'
-        const rashodDUTKM = data[0].dut && data[0].mileage ? parseFloat(((rashodDUT / mileage) * 100).toFixed(2)) : 'Н/Д'
+        const rashodDUT = data[0].dut ? Math.max(0, parseFloat((startOil + zapravleno - finishOil).toFixed(2))) : 'Н/Д'
+        const rashodDUTKM = data[0].dut && mileage ? parseFloat(((rashodDUT / mileage) * 100).toFixed(2)) : 'Н/Д'
         const rashodDUTMCH = data[0].dut && moto.motoAll !== 0 ? parseFloat(((rashodDUT / moto.motoAll) * 3600).toFixed(2)) : 'Н/Д'
         const allOil = countZapravka.concat(countSliv)
 
         localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Группа объектов') { e.result = groupName, e.local = '' } })
-        localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Объект') { e.result = objectName, e.local = '' } })
+        localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Объект') { e.result = objectName, e.local = '', e.setAttributes = setAttributes } })
         localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Начало интервала') { e.result = CalculateReports.converterTimes(this.interval[0]), e.local = '' } })
         localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Конец интервала') { e.result = CalculateReports.converterTimes(this.interval[1]), e.local = '' } })
         localCopyAttributes.statistic['Статистика'].forEach(e => { if (e.name === 'Пробег') { e.result = mileage, e.local = 'км' } })
@@ -107,10 +114,16 @@ class ReportsControllClass {
         // this.attributes.component['Простои на холостом ходу'].forEach(e => { if (e.name === 'Средний расход по ДУТ в моточасах') { e.result = prostoy.map(e => e[2].rashodDUTMCH), e.local = 'л' } })
         // this.attributes.component['Простои на холостом ходу'].forEach(e => { if (e.name === 'Начальный уровень топлива') { e.result = prostoy.map(e => e[0].oil), e.local = 'л' } })
         //  this.attributes.component['Простои на холостом ходу'].forEach(e => { if (e.name === 'Конечный уровень топлива') { e.result = prostoy.map(e => e[1].oil), e.local = 'л' } })
+        localCopyAttributes.component['Пробеги']?.forEach(e => { if (e.name === 'Дата') { e.result = runs.rows.map(e => e.date), e.local = '' } })
+        localCopyAttributes.component['Пробеги']?.forEach(e => { if (e.name === 'Километраж') { e.result = runs.rows.map(e => e.mileages), e.local = '' } })
+        localCopyAttributes.component['Пробеги']?.forEach(e => { if (e.name === 'Время в движении') { e.result = runs.rows.map(e => e.timeMove), e.local = '' } })
+        localCopyAttributes.component['Пробеги']?.forEach(e => { if (e.name === 'Потрачено по ДУТ') { e.result = runs.rows.map(e => e.rashod), e.local = '' } })
+        localCopyAttributes.component['Пробеги']?.forEach(e => { if (e.name === 'Средний расход л/100км') { e.result = runs.rows.map(e => e.medium), e.local = '' } })
+        localCopyAttributes.component['Пробеги']?.forEach(e => { if (e.name === 'Итоговая информация') { e.result = runs.summary, e.local = '', e.flag = true } })
 
 
         localCopyAttributes.component['Топливо'].forEach(e => { if (e.name === 'Дата и время') { e.result = allOil.map(e => CalculateReports.converterTimes(e.time)), e.local = '' } })
-        localCopyAttributes.component['Топливо'].forEach(e => { if (e.name === 'Местоположение') { e.result = allOil.map(e => e.geo), e.local = '' } })
+        localCopyAttributes.component['Топливо'].forEach(e => { if (e.name === 'Местоположение') { e.result = allOil.map(e => e.geo), e.colorMarker = allOil.map(e => e.value === 0 ? 'red' : 'green'), e.typeIcon = allOil.map(e => e.value === 0 ? 'fas fa-fill-drip' : 'fas fa-gas-pump'), e.geo = allOil.map(e => e.geo), e.local = '' } })
         localCopyAttributes.component['Топливо'].forEach(e => { if (e.name === 'Начальный уровень топлива') { e.result = allOil.map(e => e.startOil), e.local = 'л' } })
         localCopyAttributes.component['Топливо'].forEach(e => { if (e.name === 'Конечный уровень топлива') { e.result = allOil.map(e => e.finishOil), e.local = 'л' } })
         localCopyAttributes.component['Топливо'].forEach(e => { if (e.name === 'Всего заправлено') { e.result = allOil.map(e => e.value), e.local = 'л' } })
@@ -119,21 +132,22 @@ class ReportsControllClass {
         localCopyAttributes.component['Топливо'].forEach(e => { if (e.name === 'До MAX уровня') { e.result = allOil.map(e => volume - e.finishOil), e.local = 'л', e.color = allOil.map(it => (volume - it.finishOil) < 0 ? '#F9966B' : null) } })
 
         localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Начало') { e.result = traveling.map(e => CalculateReports.converterTimes(e[0].time)), e.local = '' } })
-        localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Начальное положение') { e.result = traveling.map(e => e[0].geo), e.local = '' } })
+        localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Начальное положение') { e.result = traveling.map(e => e[0].geo), e.typeIcon = traveling.map(e => 'fas fa-map-marker-alt'), e.colorMarker = traveling.map(e => 'rgba(6, 28, 71, 1)'), e.geo = traveling.map(e => e[0].geo), e.local = '' } })
         localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Конец') { e.result = traveling.map(e => CalculateReports.converterTimes(e[1].time)), e.local = '' } })
-        localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Конечное положение') { e.result = traveling.map(e => e[1].geo), e.local = '' } })
-        localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Длительность') { e.result = traveling.map(e => CalculateReports.formatTime(e[2].time)), e.local = 'чч:мм:сс' } })
+        localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Конечное положение') { e.result = traveling.map(e => e[1].geo), e.typeIcon = traveling.map(e => 'fas fa-map-marker-alt'), e.colorMarker = traveling.map(e => 'rgba(6, 28, 71, 1)'), e.geo = traveling.map(e => e[1].geo), e.local = '' } })
+        localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Длительность') { e.result = traveling.map(e => CalculateReports.formatTime(e[2].time)), e.local = '' } })
         localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Пробег') { e.result = traveling.map(e => e[2].distance), e.local = 'км' } })
         localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Средняя скорость') { e.result = traveling.map(e => e[2].averageSpeed), e.local = 'км/ч' } })
-        localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Максимальная скорость') { e.result = traveling.map(e => e[2].maxSpeed), e.local = 'км/ч' } })
+        localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Максимальная скорость') { e.result = traveling.map(e => e[2].maxSpeed), e.typeIcon = traveling.map(e => 'fas fa-map-marker-alt'), e.maxSpeedColorBack = traveling.map(e => e[2].maxSpeedFieldColor), e.colorMarker = traveling.map(e => 'darkred'), e.geo = traveling.map(e => e[2].geoSpeed), e.local = 'км/ч' } })
+        localCopyAttributes.component['Поездки'].forEach(e => { if (e.name === 'Максимальная скорость') { e.result = traveling.map(e => e[2].maxSpeed), e.typeIcon = traveling.map(e => 'fas fa-map-marker-alt'), e.main = traveling.map(e => e[2].main), e.sub = traveling.map(e => e[2].sub), e.colorMarker = traveling.map(e => 'darkred'), e.geo = traveling.map(e => e[2].geoSpeed), e.local = 'км/ч' } })
 
         localCopyAttributes.component['Стоянки'].forEach(e => { if (e.name === 'Начало') { e.result = parkings.map(e => CalculateReports.converterTimes(e.time)), e.local = '' } })
-        localCopyAttributes.component['Стоянки'].forEach(e => { if (e.name === 'Длительность') { e.result = parkings.map(e => CalculateReports.formatTime(e.diff)), e.local = 'чч:мм:сс' } })
-        localCopyAttributes.component['Стоянки'].forEach(e => { if (e.name === 'Положение') { e.result = parkings.map(e => e.geo), e.local = '' } })
+        localCopyAttributes.component['Стоянки'].forEach(e => { if (e.name === 'Длительность') { e.result = parkings.map(e => CalculateReports.formatTime(e.diff)), e.local = '' } })
+        localCopyAttributes.component['Стоянки'].forEach(e => { if (e.name === 'Положение') { e.result = parkings.map(e => e.geo), e.geo = parkings.map(e => e.geo), e.typeIcon = parkings.map(e => 'fas fa-map-marker-alt'), e.colorMarker = parkings.map(e => 'rgba(6, 28, 71, 1)'), e.local = '' } })
 
         localCopyAttributes.component['Остановки'].forEach(e => { if (e.name === 'Начало') { e.result = stops.map(e => CalculateReports.converterTimes(e.time)), e.local = '' } })
-        localCopyAttributes.component['Остановки'].forEach(e => { if (e.name === 'Длительность') { e.result = stops.map(e => CalculateReports.formatTime(e.diff)), e.local = 'чч:мм:сс' } })
-        localCopyAttributes.component['Остановки'].forEach(e => { if (e.name === 'Положение') { e.result = stops.map(e => e.geo), e.local = '' } })
+        localCopyAttributes.component['Остановки'].forEach(e => { if (e.name === 'Длительность') { e.result = stops.map(e => CalculateReports.formatTime(e.diff)), e.local = '' } })
+        localCopyAttributes.component['Остановки'].forEach(e => { if (e.name === 'Положение') { e.result = stops.map(e => e.geo), e.geo = stops.map(e => e.geo), e.typeIcon = stops.map(e => 'fas fa-map-marker-alt'), e.colorMarker = stops.map(e => 'rgba(6, 28, 71, 1)'), e.local = '' } })
 
 
         localCopyAttributes.component['СКДШ'].forEach(e => { if (e.name === 'Колесо') { e.result = skdsh.components.map(e => e.sensor), e.local = '' } })

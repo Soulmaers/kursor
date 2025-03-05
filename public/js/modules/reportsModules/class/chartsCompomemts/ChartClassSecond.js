@@ -7,7 +7,7 @@ export class ChartsClassSecond {
     constructor(data, container, types) {
         this.types = types
         this.data = data
-            this.container = container
+        this.container = container
         this.cumulativeHeight = {};
         this.chartType = {
             'osX': null,
@@ -36,7 +36,7 @@ export class ChartsClassSecond {
         this.updateSize(newWidth, newHeight); // Обновляем размеры графиков
     }
     init() {
-              this.createChart(this.originalWidth, this.originalHeight);
+        this.createChart(this.originalWidth, this.originalHeight);
     }
 
     createChart(width, height) {
@@ -166,17 +166,16 @@ export class ChartsClassSecond {
             .range([(this.height - 60), 0])
 
         this.y1 = y1
-
+        console.log(this.svg)
         // добавляем ось x
         this.svg.append("g")
             .attr("class", "osx")
             .attr("transform", "translate(0," + (this.height - 60) + ")") //
-            .call(ChartUtils.createAxis(x, 'bottom'));
+            .call(ChartUtils.createAxis(x, 'bottom', this.svg))
 
-        // добавляем  ось y
         this.svg.append("g")
             .attr("class", "os1y")
-            .call(ChartUtils.createAxis(y1, 'left')
+            .call(ChartUtils.createAxis(y1, 'left', this.svg)
                 .tickFormat((d) => {
                     return Helpers.timesFormat(this.axisYData);
                 }))

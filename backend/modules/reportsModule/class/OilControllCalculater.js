@@ -35,7 +35,6 @@ class OilCalculator {
                 value2: 0  // Устанавливаем в value2 если не refill
             };
         });
-
         return [this.oil, count];
     }
 

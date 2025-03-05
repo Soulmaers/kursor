@@ -175,7 +175,7 @@ export class ChartsClass {
             .attr("class", "osx")
             .attr("clip-path", "url(#clip)")
             .attr("transform", "translate(0," + (this.height - 60) + ")")
-            .call(ChartUtils.createAxis(x, 'bottom')
+            .call(ChartUtils.createAxis(x, 'bottom', this.svg, 'oil')
                 .ticks(10)
                 .tickFormat(function (d) {
                     return d3.timeFormat("%H:%M")(d);
@@ -185,7 +185,7 @@ export class ChartsClass {
             .attr("transform", `translate(0, ${(this.height - 50)})`)
             .attr('class', 'osx2')
             .attr("clip-path", "url(#clip)")
-            .call(ChartUtils.createAxis(x, 'bottom')
+            .call(ChartUtils.createAxis(x, 'bottom', this.svg, 'oil')
                 .ticks(10)
                 .tickFormat(function (d) {
                     return d3.timeFormat("%d.%m")(d);
@@ -198,14 +198,14 @@ export class ChartsClass {
         // добавляем  ось y
         this.svg.append("g")
             .attr("class", "os1y")
-            .call(ChartUtils.createAxis(y1, 'left'))
+            .call(ChartUtils.createAxis(y1, 'left', this.svg))
             .attr("transform", "translate(0, " + (0) + ")")
 
         const ticks = y1.ticks(10);
         ticks[ticks.length - 1] = Math.max(...originOil.map(e => Number(e)))
         console.log(Math.max(...originOil.map(e => Number(e))))
         this.svg.select('.os1y')
-            .call(ChartUtils.createAxis(y1, 'left').tickValues(ticks))
+            .call(ChartUtils.createAxis(y1, 'left', this.svg).tickValues(ticks))
 
 
         this.controller()

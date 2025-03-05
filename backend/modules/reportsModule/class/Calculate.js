@@ -1,5 +1,5 @@
 const { OilCalculator } = require('./OilControllCalculater')
-
+const Helpers = require('./Helpers')
 class CalculateReports {
 
     static calculationMileage(data) {
@@ -50,14 +50,12 @@ class CalculateReports {
             const year = date.getFullYear();
             const month = ("0" + (date.getMonth() + 1)).slice(-2); // добавляем ведущий ноль, если месяц < 10
             const day = ("0" + date.getDate()).slice(-2); // добавляем ведущий ноль, если день < 10
-            console.log(`${year}-${month}-${day}`)
             return `${year}-${month}-${day}`;
         })
         return date
     }
 
     static convertTime(seconds) {
-        // console.log(seconds)
         var days = Math.floor(seconds / (24 * 60 * 60));
         var hours = Math.floor(seconds / (60 * 60))// / (60 * 60));
         var minutes = Math.floor((seconds % (60 * 60)) / 60);
@@ -191,8 +189,8 @@ class CalculateReports {
         }
     }
 
-    static traveling(data, settings) {
-        const { duration, mileage } = settings['Поездки']
+    static traveling(data, settings, runs) {
+        const { duration, mileage, speed } = settings['Поездки']
 
         const minTime = duration.minDuration ? CalculateReports.timeStringToUnix(duration.minDuration) : null
         const maxTime = duration.maxDuration ? CalculateReports.timeStringToUnix(duration.maxDuration) : null
@@ -224,21 +222,93 @@ class CalculateReports {
             const totalSpeed = el.reduce((sum, current) => {
                 return sum + Number(current.speed);
             }, 0);
+            const objectMaxSpeed = el.find(e => Number(e.speed) === maxSpeed)
 
             const averageSpeed = totalSpeed / el.length;
             const distance = Number(el[el.length - 1].mileage) - Number(el[0].mileage)
             const time = Number(el[el.length - 1].last_valid_time) - Number(el[0].last_valid_time)
+
             if (mileageCondition(distance) && timeCondition(time)) {
+                const subs = CalculateReports.funcSubInterval(el, speed)
+                const timeExcessEnabled = speed?.flagTimeExcess // Явно проверяем на true
+                const timeExcessCondition = timeExcessEnabled && subs.length !== 0;
+                subs.some(el => Number(el.time) >= Number(speed?.flagTimeExcess));
+                const maxSpeedCondition = speed?.flag && maxSpeed >= speed?.maxSpeed;
+
+                const backColor = (timeExcessEnabled ? (maxSpeedCondition && timeExcessCondition)
+                    : maxSpeedCondition) ? '#F9966B' : '';
+
+                const subCount = subs.length
                 acc.push([{ time: el[0].last_valid_time, oil: el[0].oil, geo: [el[0].lat, el[0].lon] },
                 { time: el[el.length - 1].last_valid_time, oil: el[el.length - 1].oil, geo: [el[el.length - 1].lat, el[el.length - 1].lon] }, {
-                    maxSpeed: maxSpeed, averageSpeed: parseFloat(averageSpeed.toFixed(0)), distance: parseFloat(distance.toFixed(2)), time: time
+                    maxSpeed: maxSpeed, geoSpeed: [objectMaxSpeed.lat, objectMaxSpeed.lon], maxSpeedFieldColor: backColor, averageSpeed: parseFloat(averageSpeed.toFixed(0)), distance: parseFloat(distance.toFixed(2)), time: time,
+                    main: subCount
                 }])
+                if (!runs) {
+                    if (subs.length !== 0) acc.push(...subs);
+                }
             }
             return acc
         }, [])
         return res
     }
 
+    static funcSubInterval(el, settings) {
+        if (settings && !settings.flagTimeExcess && settings.flag) {
+            let speedThreshold = Number(settings.maxSpeed);
+            let result = [];
+            let currentInterval = [];
+
+            el.forEach((item, index) => {
+                if (Number(item.speed) >= speedThreshold) {
+                    currentInterval.push(item);  // Добавляем объект в текущий интервал
+                } else {
+                    // Если текущий интервал не пустой, добавляем его в результат и сбрасываем
+                    if (currentInterval.length > 0) {
+
+                        const row = Helpers.processArrayRow(currentInterval)
+                        if (row) result.push(row);
+                        currentInterval = [];  // Сбрасываем текущий интервал
+                    }
+                }
+            });
+            // Если в конце есть непрерывный интервал, добавляем его в результат
+            if (currentInterval.length > 0) {
+                const row = Helpers.processArrayRow(currentInterval)
+                if (row) result.push(row);
+            }
+            return result;  // Возвращаем массив подмассивов
+        }
+        if (settings && settings.flagTimeExcess) {
+            let speedThreshold = Number(settings.maxSpeed);
+            let timeExcess = Number(settings.timeExcess)
+            let result = [];
+            let currentInterval = [];
+
+            el.forEach((item, index) => {
+                if (Number(item.speed) >= speedThreshold) {
+                    currentInterval.push(item);  // Добавляем объект в текущий интервал
+                } else {
+                    // Если текущий интервал не пустой, добавляем его в результат и сбрасываем
+                    if (currentInterval.length > 0) {
+
+                        const row = Helpers.processArrayRow(currentInterval, timeExcess)
+                        if (row) result.push(row);
+                        currentInterval = [];  // Сбрасываем текущий интервал
+                    }
+                }
+            });
+            // Если в конце есть непрерывный интервал, добавляем его в результат
+            if (currentInterval.length > 0) {
+                const row = Helpers.processArrayRow(currentInterval, timeExcess)
+                if (row) result.push(row);
+            }
+            return result;  // Возвращаем массив подмассивов
+
+
+        }
+        return []; // Возвращаем пустой массив, если условия не выполнены
+    }
     static parkings(data, settings) {
         const { minDuration } = settings['Стоянки']
         const minTime = CalculateReports.timeStringToUnix(minDuration)

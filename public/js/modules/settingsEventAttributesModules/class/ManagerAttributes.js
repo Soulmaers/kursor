@@ -91,20 +91,26 @@ export class ControllSettingsReportsObject {
     }
 
     valid() {
+        console.log(this.bodySettings)
         ValidationStatus.validationData([this.minDistanceProstoyValue, this.minDistanceValue, this.maxDistanceValue])
         ValidationStatus.validDistance([this.minMileageValue, this.maxMileageValue])
+        ValidationStatus.validDistance([this.maxSpeed])
+        ValidationStatus.validDistance([this.timeExcess])
         ValidationStatus.validationMoreLittle(this.minDistanceValue, this.maxDistanceValue, this.mess, 'statusTime', 'keydown')
         ValidationStatus.validationMoreLittle(this.minMileageValue, this.maxMileageValue, this.mess, 'statusDistance', 'input')
         ValidationStatus.inputsCheck(this.inputsTime, this.mess, 'statusTime')
         ValidationStatus.inputsCheck(this.inputsDistance, this.mess, 'statusDistance')
         ValidationStatus.inputsOne(this.inputsProstoyTime)
         ValidationStatus.inputsOne(this.bodySettings[2].querySelector('#min_duration_parking'))
+        ValidationStatus.inputsOne(this.bodySettings[1].querySelector('#max_speed'))
+        ValidationStatus.inputsOne(this.bodySettings[1].querySelector('#time_excess'))
         ValidationStatus.inputsOne(this.bodySettings[3].querySelector('#min_duration_stop'))
         ValidationStatus.inputsOne(this.bodySettings[4].querySelector('#min_duration_moto'))
         ValidationStatus.inputsOne(this.bodySettings[0].querySelector('#min_diration_refill'))
         ValidationStatus.inputsOne(this.bodySettings[0].querySelector('#min_diration_drain'))
         ValidationStatus.inputsOne(this.bodySettings[0].querySelector('#min_value_refill'))
         ValidationStatus.inputsOne(this.bodySettings[0].querySelector('#min_value_drain'))
+
         if (this.angleSensor) ValidationStatus.inputsAngle(this.angleSensor)
     }
     updateProstoy() {
@@ -146,12 +152,16 @@ export class ControllSettingsReportsObject {
 
 
     updateTrevaling() {
-        const { duration, mileage } = this.attributeValue['Поездки'];
+        const { duration, mileage, speed } = this.attributeValue['Поездки'];
+        console.log(speed)
         this.minDistanceValue.value = duration.minDuration
         this.maxMileageValue.value = duration.maxDuration
         this.minMileageValue.value = mileage.minMileage
         this.maxMileageValue.value = mileage.maxMileage
-
+        this.maxSpeed.value = speed?.maxSpeed || this.maxSpeed.value
+        this.bodySettings[1].querySelector('#max_speed').checked = speed?.flag
+        this.timeExcess.value = speed?.timeExcess || this.timeExcess.value
+        this.bodySettings[1].querySelector('#time_excess').checked = speed?.flagTimeExcess
     }
 
     check(arrayDOM, arrayValue) {
@@ -188,5 +198,7 @@ export class ControllSettingsReportsObject {
         this.timeDrainValue = this.bodySettings[0].querySelector('#min_diration_drain').nextElementSibling.nextElementSibling
         this.volumeRefillValue = this.bodySettings[0].querySelector('#min_value_refill').nextElementSibling.nextElementSibling
         this.volumeDrainValue = this.bodySettings[0].querySelector('#min_value_drain').nextElementSibling.nextElementSibling
+        this.maxSpeed = this.bodySettings[1].querySelector('#max_speed').nextElementSibling.nextElementSibling
+        this.timeExcess = this.bodySettings[1].querySelector('#time_excess').nextElementSibling.nextElementSibling
     }
 }

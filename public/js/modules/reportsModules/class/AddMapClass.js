@@ -31,4 +31,30 @@ export class AddMapClass {
             }, 0);
         }
     }
+
+    createMarker(geo, color, typeIcon) {
+        const newHtml = `<i class="${typeIcon} geo_position" style="color: ${color}"></i>`;
+        const greenIcon = L.divIcon({
+            html: newHtml,
+            iconSize: [30, 20],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, 0],
+            className: 'custom-marker'
+        });
+
+
+        if (this.marker) {
+            this.marker._icon.innerHTML = newHtml;
+            // Если маркер уже существует, обновляем его координаты
+            this.marker.setLatLng(geo);
+            this.map.setView(geo, 13);
+        } else {
+            // Если маркера нет, создаем его и сохраняем ссылку
+            this.marker = L.marker(geo, {
+                icon: greenIcon,
+            }).addTo(this.map);
+            this.map.setView(geo, 13);
+        }
+
+    }
 }

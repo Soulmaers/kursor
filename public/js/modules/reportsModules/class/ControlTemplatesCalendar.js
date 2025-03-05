@@ -13,7 +13,8 @@ import { stor } from '../stor/stor.js'
 
 
 export class GetReports {
-    constructor(interval, object, templates, container) {
+    constructor(interval, object, templates, container, thisMap) {
+        this.instanceMap = thisMap
         this.interval = interval,
             this.object = object,
             this.templates = templates
@@ -27,7 +28,7 @@ export class GetReports {
 
 
     init() {
-        this.timeInterval = Helpers.getTimeInterval('Сегодня')
+        this.timeInterval = Helpers.getTimeInterval('Выбранный интервал')
         this.caseElements()
         this.createCalendar()
         this.evenListener()
@@ -45,14 +46,52 @@ export class GetReports {
         this.prints = this.container.querySelectorAll('.icon_print')
         this.vis_reports = this.container.querySelector('.wrap_visible_reports')
         this.visible_reports = this.vis_reports.querySelectorAll('.visible_reports')
+        this.window_choice_date = this.container.querySelector('.window_choice_date')
+        this.fieldsData = this.container.querySelectorAll('.field_data')
+        this.fieldsTime = this.container.querySelectorAll('.field_time')
 
     }
 
+
+    startValueData() {
+        const data = Math.floor(new Date().getTime() / 1000)
+        const dataTime = Helpers.processConvertData(data)
+        this.fieldsData.forEach((e => e.value = dataTime))
+    }
+
     evenListener() {
-        this.checkInterval.addEventListener('change', () => this.timeInterval = Helpers.getTimeInterval(this.checkInterval.value))
+        this.checkInterval.addEventListener('change', () => {
+            if (this.checkInterval.value === 'Выбранный интервал') {
+                this.fieldsTime[0].value = '00:00'
+                this.fieldsTime[1].value = '23:59'
+                this.createCalendar()
+                this.window_choice_date.style.display = 'flex'
+            }
+            else {
+                this.window_choice_date.style.display = 'none'
+            }
+            this.timeInterval = Helpers.getTimeInterval(this.checkInterval.value)
+        })
         this.buttons[0].addEventListener('click', () => this.getReportAndCreateContent())
         this.buttons[1].addEventListener('click', () => this.startClassWiewFilters())
         this.prints[0].addEventListener('click', () => this.excelprint())
+        this.fieldsTime.forEach(e => e.addEventListener('input', () => {
+            const selectionStart = e.selectionStart;
+            const prefix = selectionStart <= 2 ? 'hours' : null;
+            Helpers.validateTime(e, prefix)
+        }));
+
+
+        this.fieldsTime.forEach(e => e.addEventListener('click', () => {
+            const selectionStart = e.selectionStart;
+            if (selectionStart <= 2) {
+                e.setSelectionRange(0, 2); // Выделяем часы
+            } else {
+                e.setSelectionRange(3, 5); // Выделяем минуты
+            }
+        }));
+
+
     }
 
     async startClassWiewFilters() {
@@ -111,7 +150,7 @@ export class GetReports {
     async reports() {
         this.webpackObjectsSettings()
         await this.getReportAndCreateContent(this.set)
-        this.createCalendar()
+        // this.createCalendar()
         this.modalActivity(this.pop, 'none', 1)
 
     }
@@ -193,9 +232,15 @@ export class GetReports {
         XLSX.writeFile(wb, `${nameReport}.xlsx`);
     }
 
+
+
     async getReportAndCreateContent(sett) {
         const objects = this.checkObjects.querySelectorAll('.object_checks')
         const objectCheked = [...objects].filter(e => e.checked)
+        if (this.checkInterval.value === 'Выбранный интервал') {
+            this.calcTimeInterval() //приводим введенные минуты и часы в секунды и добавляем к времнеи юникс
+        }
+
         this.objects = objectCheked.map(el => {
             return ({
                 data: this.timeInterval,
@@ -212,9 +257,21 @@ export class GetReports {
         }
         this.objectVisibleSpoyler = {}
         await this.getStrukturaReports(sett)
-        this.createCalendar()
-    }
+        if (this.checkInterval.value === 'Выбранный интервал') {
+            this.timeInterval = Helpers.getTimeInterval('Выбранный интервал')
+        }
 
+    }
+    calcTimeInterval() {
+        this.timeInterval.forEach((e, index) => {
+            let timeParts = this.fieldsTime[index].value.split(':');
+            let hours = parseInt(timeParts[0], 10); // Получаем часы
+            let minutes = parseInt(timeParts[1], 10); // Получаем минуты
+            // Переводим часы и минуты в секунды
+            let totalSeconds = (hours * 3600) + (minutes * 60);
+            this.timeInterval[index] = e + totalSeconds;
+        });
+    }
     async getStrukturaReports(sett) {
         this.titleReports.innerHTML = `<div class="loaders_report" style="display:flex"> <div class="loaders-globe-report"></div></div>`
         this.data = await GetDataRequests.getReport(this.objects, sett)
@@ -223,12 +280,22 @@ export class GetReports {
         if (this.objects.length > 1) this.vis_reports.style.display = 'flex'
     }
     async createCalendar() {
-        const calendar = this.interval.nextElementSibling.querySelector('.input_data')
-        const id = `#${calendar.id}`
-        const getTime = new GetDataTime()
-        this.timeInterval = await getTime.getTimeInterval(calendar, id)
-        this.timeInterval[1] += 86399
+        const arrayId = [...this.fieldsData].map(e => e.id);
+
+        arrayId.forEach(((inputId, index) => {
+            const getDataTime = new GetDataTime(); // Создаем новый экземпляр для каждого input
+
+            // Функция для обновления this.timeInterval
+            const updateTimeInterval = (newTime) => {
+                this.timeInterval[index] = newTime;
+                console.log("this.timeInterval обновлен:", this.timeInterval);
+            };
+
+            getDataTime.initDatePickers(inputId, updateTimeInterval, this.timeInterval[index]);
+        }));
     }
+
+
 
     sorting() {
         this.data.sort((a, b) => b.statistic['Статистика'][0].result > a.statistic['Статистика'][0].result)
@@ -247,25 +314,41 @@ export class GetReports {
 
     eventListenetTitleReports() {
         this.titleNameReports = this.container.querySelectorAll('.titleNameReport')
-        this.spoyler = this.container.querySelectorAll('.spoyler_report')
+        this.swich_reports_title = this.container.querySelectorAll('.swich_reports_title')
         this.titleNameReports.forEach(el => el.addEventListener('click', () => this.createMetaTable(el)))
-        this.spoyler.forEach(el => el.addEventListener('click', () => this.controllStows(el)))
+        this.swich_reports_title.forEach(el => el.addEventListener('click', () => this.toggleListSubMenu(el)))
     }
 
+    toggleListSubMenu(element) {
+        element.classList.toggle('toggleClass')
+        if (element.classList.contains('toggleClass')) {
+            element.textContent = '+'
+            element.parentElement.nextElementSibling.style.display = 'none'
+        } else {
+            element.textContent = '-'
+            element.parentElement.nextElementSibling.style.display = 'flex'
+        }
+    }
     createMetaTable(el) {
+        const spoyler = this.container.querySelector('.activ_fon')
+        spoyler.classList.remove('activ_fon')
         const idElement = el.id
         Helpers.ToggleClassElements(this.titleNameReports, el)
         this.activeTitleReports = this.container.querySelector('.activeTitleReports')
         if (idElement === 'Статистика') {
+            el.classList.add('activ_fon')
             this.createStatsTable()
         }
         else if (el.parentElement.id === 'components') {
+            el.parentElement.previousElementSibling.lastElementChild.classList.add('activ_fon')
             const trueAttributes = this.data.map(e => Helpers.trueAttributes(e.component[el.textContent]))
             this.reports_module.innerHTML = Content.renderComponentsReport(trueAttributes, this.statistics, this.activeTitleReports.id, this.objectVisibleSpoyler);
             this.visible_process()
+            this.clickGeoVieMarkerMap()
 
         }
         else {
+            el.parentElement.previousElementSibling.lastElementChild.classList.add('activ_fon')
             this.reports_module.innerHTML = Content.renderChartsContent(this.data, this.statistics, el.textContent, this.activeTitleReports.id, this.objectVisibleSpoyler);
             this.createCharts(el.textContent)
             this.fullButtons = this.container.querySelectorAll('.full_screen')
@@ -273,6 +356,21 @@ export class GetReports {
             this.visible_process()
         }
 
+    }
+
+    clickGeoVieMarkerMap() {
+        this.pointer = this.container.querySelectorAll('.pointer')
+        if (this.pointer.length === 0) return
+        this.pointer.forEach(e => e.addEventListener('click', () => {
+            console.log(e)
+            const coordinates = e.getAttribute('rel').split(',');
+            const colorMarker = e.getAttribute('color_marker');
+            const typeIcon = e.getAttribute('type');
+            const lat = parseFloat(coordinates[0].trim());
+            const lon = parseFloat(coordinates[1].trim());
+            this.instanceMap.createMarker([lat, lon], colorMarker, typeIcon)
+
+        }))
     }
 
     visible_process() {
@@ -283,7 +381,6 @@ export class GetReports {
             const key = e.nextElementSibling.textContent;
             this.buildObject(key, boolean)
         }))
-
 
         this.visible_reports.forEach((e, index) => {
             e.addEventListener('click', () => {
@@ -296,6 +393,10 @@ export class GetReports {
                 })
             })
         })
+        this.swichSub = this.container.querySelectorAll('.swich_sub')
+        this.swichSub.forEach(e => e.addEventListener('click', () => {
+            Helpers.toggleTrList(e)
+        }))
     }
 
     buildObject(name, boolean) {
@@ -338,24 +439,6 @@ export class GetReports {
         this.visible_process()
     }
 
-
-    controllStows(button) {
-        this.activeTitleReports.classList.remove('activeTitleReports')
-        const currentContainer = button.nextElementSibling;
-        this.spoyler.forEach(btn => {
-            if (btn !== button) {
-                const siblingContainer = btn.nextElementSibling;
-                if (siblingContainer) {
-                    siblingContainer.classList.add('flex_none'); // Скрываем другой контейнер
-                    btn.classList.remove('activ_fon')
-                }
-            }
-        });
-        let isVisible = !currentContainer.classList.contains('flex_none');
-        // Управление видимостью текущего контейнера
-        currentContainer.classList.toggle('flex_none', isVisible);
-        button.classList.toggle('activ_fon', !isVisible);
-    }
 
 
     async webpackObjectsSettings() {

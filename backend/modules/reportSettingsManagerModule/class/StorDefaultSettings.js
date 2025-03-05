@@ -53,6 +53,12 @@ class StorDefaultSettings {
                 mileage: {
                     minMileage: 1,
                     maxMileage: null
+                },
+                speed: {
+                    maxSpeed: 96,
+                    flag: false,
+                    timeExcess: 60,
+                    flagTimeExcess: false
                 }
             },
             'Стоянки': { minDuration: '00:10:00' },

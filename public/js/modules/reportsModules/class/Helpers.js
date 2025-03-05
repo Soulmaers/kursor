@@ -23,6 +23,11 @@ export class Helpers {
         let now = Math.floor(new Date(nows.getFullYear(), nows.getMonth(), nows.getDate(), 0, 0, 0).getTime() / 1000);
         let start, end;
 
+        if (interval === 'Выбранный интервал') {
+            start = now;
+            end = now; // Добавляем 1 день
+
+        }
         if (interval === 'Неделя') {
             const time = Helpers.getPreviousWeekUnixTimestamps()
             start = time[0]
@@ -42,6 +47,7 @@ export class Helpers {
             start = now;
             end = start + 86399; // Добавляем 1 день
         }
+        console.log([start, end])
         return [start, end]
     }
 
@@ -66,6 +72,114 @@ export class Helpers {
     }
 
 
+    static validateTime(input, prefix) {
+        let value = input.value;
+        let selectionStart = input.selectionStart; // Сохраняем позицию курсора
+        let selectionEnd = input.selectionEnd;
+        // Убираем все символы, кроме цифр и двоеточия
+        value = value.replace(/[^0-9:]/g, '');
+
+        // Разбиваем на часы и минуты
+        let [hours, minutes] = value.split(':');
+
+        // Валидация часов
+        if (prefix) {
+            if (hours !== undefined) {
+                hours = hours.replace(/[^0-9]/g, ''); // Убираем нецифровые символы
+
+                if (hours.length > 2) {
+                    hours = hours.slice(0, 2); // Ограничиваем до 2 символов
+
+                }
+                if (hours.length === 2) {
+                    hours = hours[1] + hours[0]
+                }
+
+
+                const hoursValue = parseInt(hours);
+                if (hoursValue > 23) {
+                    hours = '23'; // Максимальное значение - 23
+                }
+
+
+                if (hours.length === 1 && selectionStart === 1) {
+                    //добавляем ноль и сдвигаем курсор
+                    hours = '0' + hours
+                    input.value = `${hours || '00'}:${minutes || '00'}`;
+                    input.setSelectionRange(0, 1);
+                    return
+                }
+                if (hours.length === 1 && selectionStart === 0) {
+                    input.value = `${'00'}:${minutes || '00'}`;
+                    input.setSelectionRange(0, 2);
+                    return
+                }
+
+                if (hours.length === 2) {
+                    input.value = `${hours || '00'}:${minutes || '00'}`;
+                    // Ничего не делаем, просто даем ввести второй символ
+                    if (selectionStart === 1) {
+                        input.setSelectionRange(2, 2);
+                    } else {
+                        input.setSelectionRange(0, 0);
+                    }
+                }
+
+                if (hours.length === 0) {
+                    hours = '00';
+                }
+            } else {
+                hours = '00';
+            }
+
+        }
+        else {
+            // Валидация минут
+            if (minutes !== undefined) {
+                minutes = minutes.replace(/[^0-9]/g, ''); // Убираем нецифровые символы
+                if (minutes.length > 2) {
+                    minutes = minutes.slice(0, 2); // Ограничиваем до 2 символов
+                }
+                if (minutes.length === 2) {
+                    minutes = minutes[1] + minutes[0]
+                }
+                const minutesValue = parseInt(minutes);
+
+                if (minutesValue > 59) {
+                    minutes = '59'; // Максимальное значение - 59
+                }
+
+                if (minutes.length === 1 && selectionStart === 4) {
+                    minutes = '0' + minutes
+                    input.value = `${hours || '00'}:${minutes || '00'}`;
+                    input.setSelectionRange(3, 4);
+                    return
+                }
+                if (minutes.length === 1 && selectionStart === 3) {
+                    minutes = '0' + minutes
+                    input.value = `${hours || '00'}:${'00'}`;
+                    input.setSelectionRange(3, 5);
+                    return
+                }
+                if (minutes.length === 2) {
+                    if (selectionStart === 4) {
+                        console.log(selectionStart)
+                        input.setSelectionRange(5, 5);
+                    } else {
+                        input.setSelectionRange(3, 3);
+                    }
+                }
+
+                else if (minutes.length === 0) {
+                    minutes = '00';
+                }
+            } else {
+                minutes = '00';
+            }
+            input.value = `${hours || '00'}:${minutes || '00'}`;
+        }
+
+    }
     static trueTitles(obj) {
         const resultArray = [];
         const checkProperties = (obj) => {
@@ -90,12 +204,16 @@ export class Helpers {
     static returnVariable(stata, object, name, prop) {
         const visibleClass = stata.length === 1 ? 'vis' : '';
         const toggleSymbol = stata.length === 1 ? '-' : '+';
-
+        const lastClassRow = stata.length === 1 ? '-' : 'vis';
+        console.log(lastClassRow)
         const isVisible = object[name]?.[prop] === true;
+
         const displayClass = isVisible ? 'vis' : visibleClass; // Используем переменную видимости
         const currentSymbol = isVisible ? '-' : toggleSymbol;
-
-        return [displayClass, currentSymbol]
+        console.log(isVisible, displayClass)
+        const symbolRow = displayClass === 'vis' ? '-' : 'vis';
+        console.log(symbolRow)
+        return [displayClass, currentSymbol, symbolRow]
     }
     static timeStringToUnix(timeString) {
         const [hours, minutes, seconds] = timeString.split(':').map(Number);
@@ -116,11 +234,17 @@ export class Helpers {
         reports.forEach(e => {
             e.textContent = `${znak}`
             e.parentElement.nextElementSibling.style.display = `${style}`
+            const summary = e.parentElement.nextElementSibling.nextElementSibling
+            if (summary) {
+                console.log(znak)
+                summary.style.display = `${znak === '-' ? 'none' : 'flex'}`
+
+            }
             style === 'none' ? e.classList.remove('toggleClass') :
                 e.classList.add('toggleClass')
         })
     }
-    static toggleWiewList(e, vis) {
+    static toggleWiewList(e, vis, prop) {
         e.classList.toggle('toggleClass')
         const full = e.parentElement.querySelector('.full_screen')
         const wrapObject = e.parentElement.nextElementSibling
@@ -134,8 +258,37 @@ export class Helpers {
         }
     }
 
+    static toggleTrList(e) {
+        e.classList.toggle('toggleClass')
+        const count = Number(e.id)
+        let currentElement = e.closest('.row_table_tr').nextElementSibling;
+        if (e.classList.contains('toggleClass')) {
+            e.textContent = '-'
+            e.closest('.row_table_tr').style.backgroundColor = 'lightgray'
+            for (let i = 0; i < count && currentElement; i++) {
+                if (currentElement.classList.contains('sub_interval')) {
+                    currentElement.style.display = 'table-row'; // Показываем элемент
+                }
+                currentElement = currentElement.nextElementSibling; // Переходим к следующему элементу
+            }
+        }
+        else {
+            e.textContent = '+'
+            e.closest('.row_table_tr').style.backgroundColor = '#fff'  // Начинаем с первого соседнего элемента
+            for (let i = 0; i < count && currentElement; i++) {
+                if (currentElement.classList.contains('sub_interval')) {
+                    currentElement.style.display = 'none'; // Скрываем элемент
+                }
+                currentElement = currentElement.nextElementSibling; // Переходим к следующему элементу
+            }
+        }
+    }
     static hiddenWiewElements(wrap, swich, prop, text) {
         wrap.style.display = `${prop}`
+        const summary = wrap.nextElementSibling
+        if (summary) {
+            summary.style.display = `${text === '-' ? 'none' : 'flex'}`
+        }
         swich.textContent = text
 
     }
@@ -164,6 +317,15 @@ export class Helpers {
         const seconds = (totalSeconds % 60).toString().padStart(2, '0');
         const motoHours = `${hours}:${minutes}`;
         return motoHours;
+    }
+    static processConvertData(unixtime) {
+        const date = new Date(unixtime * 1000);
+        const day = date.getDate();
+        const month = date.toLocaleString('ru-RU', { month: 'long' });
+        const year = date.getFullYear();
+        // Форматируем дату в нужный формат
+        const formattedDate = `${day} ${month} ${year}`;
+        return formattedDate
     }
 
 }

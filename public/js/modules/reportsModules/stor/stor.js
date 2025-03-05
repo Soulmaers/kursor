@@ -28,6 +28,14 @@ export const storComponentOil = [
     { name: 'Объём бака', checked: true },
     { name: 'До MAX уровня', checked: true }
 ]
+export const storComponentRuns = [
+    { name: 'Дата', checked: true },
+    { name: 'Километраж', checked: true },
+    { name: 'Время в движении', checked: true },
+    { name: 'Потрачено по ДУТ', checked: true },
+    { name: 'Средний расход л/100км', checked: false },
+    { name: 'Итоговая информация', checked: true },
+]
 
 export const storComponentTravel = [
     { name: 'Начало', checked: true },

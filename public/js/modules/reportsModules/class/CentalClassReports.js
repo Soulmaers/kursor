@@ -21,9 +21,9 @@ export class CentalClassReports {
         this.dostupControll()
         this.getObjectAndCreateListElements()
         this.getTemplatesAndCreateListElements()
-        this.jobMap()
+        this.instanceMap = new AddMapClass(this.wrapMap)
         new NewReportTemplate(this.container, this.wrapReports)
-        new GetReports(this.interval, this.object, this.shablons, this.container)
+        new GetReports(this.interval, this.object, this.shablons, this.container, this.instanceMap)
         new ControllListWindow(this.container)
     }
 
@@ -74,7 +74,5 @@ export class CentalClassReports {
         this.temp = this.templates.map(e => ({ id: e.uniqTemplateID, name: e.nameTemplate, idResoure: e.uniqResourseID }))
         this.wrapReports[1].innerHTML = Content.addContent(this.temp)
     }
-    jobMap() {
-        new AddMapClass(this.wrapMap)
-    }
+
 }

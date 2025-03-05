@@ -39,7 +39,7 @@ class WialonOrigin {
                 const el = dataArray[i];
                 const phone = phones[i];
                 const idw = el.id;
-                const psw = phones[i].item.psw
+                const psw = phones[i]?.item?.psw
                 // console.log(sim)
                 // console.log(phone)
                 if (!phone?.item?.uid) continue;

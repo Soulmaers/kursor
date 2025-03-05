@@ -5,7 +5,7 @@
     border-radius: 5px;
     display: flex;
     align-items: center;
-    padding: 5px;
+    padding: 5px 0;
     box-sizing: border-box;
 }
 
@@ -37,10 +37,99 @@
     /* для Internet Explorer и Edge */
 }
 
+
 .down_calendar {
-    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 55%;
+    height: 80px;
     border-radius: 5px;
     box-sizing: border-box;
+}
+
+.title_text {
+    color: rgba(6, 28, 71, 0.8);
+    font-size: 0.9rem;
+    font-weight: 400;
+    ;
+}
+
+.bold_font {
+    font-weight: bold;
+    border-top: 1px solid rgba(6, 28, 71, 0.8);
+}
+
+.title_data {
+    width: 80px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-around;
+}
+
+.wrap_inputs {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.value_data_time {
+    width: 230px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.value_time {
+    width: 50%;
+    text-align: center;
+    outline: none;
+    border: 1px solid rgba(6, 28, 71, 0.8);
+    color: rgba(6, 28, 71, 0.8);
+    border-radius: 3px;
+    margin: 0 1px;
+}
+
+.geo_position {
+    font-size: 1.2rem;
+}
+
+.low_span {
+    position: relative;
+}
+
+.data_span,
+.time_span {
+    color: rgba(6, 28, 71, 0.8);
+    font-size: 0.8rem;
+    position: absolute;
+    top: -15px;
+}
+
+.data_span {
+    left: 45px;
+}
+
+.time_span {
+    left: 160px;
+}
+
+
+
+.last_row {
+    width: 100%;
+    display: none;
+    align-items: center;
+    margin-left: 25px;
+}
+
+.last_row_cel {
+    font-size: 0.9rem;
+    width: 200px;
+    border: 1px solid lightgray;
 }
 
 .add_resourse {
@@ -345,6 +434,7 @@
 .cell_reports {
     text-align: left;
     padding-left: 5px;
+    position: relative;
 }
 
 
@@ -354,14 +444,26 @@
 }
 
 .cell_title_reports {
-    position: sticky;
-    top: 0;
     background-color: #fff;
     text-align: center;
     padding: 0;
     font-weight: bold;
     height: 15px;
     width: 200px;
+}
+
+
+.text-container {
+    width: 200px;
+    /* Задайте желаемую ширину */
+    white-space: normal;
+    /* Это позволяет тексту автоматически переноситься */
+    overflow: hidden;
+    /* Скрывает текст, выходящий за пределы контейнера */
+    font-family: Arial, sans-serif;
+    /* Установите нужный шрифт */
+    font-size: 14px;
+    /* Установите нужный размер текста */
 }
 
 .wrapper_reports {
@@ -378,6 +480,7 @@
     -ms-overflow-style: none;
     /* для Internet Explorer и Edge */
 }
+
 
 .down_content {
     width: 100%;
@@ -404,43 +507,76 @@
     width: 100%;
     height: 100%;
     margin: 0;
-    padding: 5px;
-
+    padding: 5px 0;
+    box-sizing: border-box;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* для Firefox */
+    -ms-overflow-style: none;
 }
 
 .titleNameReport {
-    width: 100%;
+    width: calc(100% - 51px);
     font-size: 0.8rem;
     list-style-type: none;
     border-bottom: 1px solid rgba(6, 28, 71, 1);
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-content: center;
     padding: 1px 0;
-    width: 100%;
     cursor: pointer;
     color: rgba(6, 28, 71, 1);
+    margin-left: 51px;
+    position: relative;
+}
+
+.titleNameReport:before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: -20px;
+    bottom: .6em;
+    width: 15px;
+    height: 0;
+    border-bottom: 1px solid #333;
+}
+
+.titleNameReport::before {
+    height: 100%;
+    border: 1px solid #333;
+    border-width: 0 0 1px 1px
+}
+
+.st::before {
+    content: none;
+    display: none;
 }
 
 .spoyler_report {
-    width: 100%;
+    width: calc(100% - 3px);
     font-size: 1rem;
     list-style-type: none;
     border-bottom: 1px solid rgba(6, 28, 71, 1);
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-content: center;
+    margin-left: 3px;
     padding: 1px 0;
-    width: 100%;
-    cursor: pointer;
     color: rgba(6, 28, 71, 1);
+}
+
+.st {
+    width: calc(100% - 40px);
+    margin-left: 40px;
+    border-bottom: none
 }
 
 .body_content_report {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
+    margin: 5px 0;
 }
 
 .wrapper_file {
@@ -491,6 +627,8 @@
 
 }
 
+
+
 .wrapper_shablon {
     width: 33%;
     display: flex;
@@ -537,8 +675,17 @@
 }
 
 .activeTitleReports {
-    background-color: rgba(6, 28, 71, 0.8);
-    color: #fff
+    background-color: #828DA3;
+    color: #fff;
+    padding-left: 3px;
+    box-sizing: border-box;
+}
+
+.activ_fon {
+    background-color: #828DA3;
+    color: #fff;
+    padding-left: 3px;
+    box-sizing: border-box;
 }
 
 .titleNameReport:active {
@@ -561,10 +708,12 @@
 
 .field_find {
     background: none;
+    color: rgba(6, 28, 71, 0.8);
     border: 1px solid rgba(6, 28, 71, 0.8);
     border-radius: 3px;
     box-sizing: border-box;
     width: 55%;
+    font-size: 0.9rem;
 }
 
 .rows_objects_reports {
@@ -654,7 +803,9 @@
     margin: 2px 0;
     padding: 2px 0;
     border-bottom: 1px solid rgba(6, 28, 71, 0.4);
+    border-top: 1px solid rgba(6, 28, 71, 0.4);
     margin-top: 8px;
+    box-sizing: border-box;
 }
 
 .rows_spoyler {
@@ -663,6 +814,16 @@
     font-size: 0.9rem;
     font-weight: 600;
     text-align: left;
+}
+
+
+
+.wrap_compon {
+    width: calc(100% - 24px);
+    display: flex;
+    align-items: center;
+    text-align: left;
+    margin-left: 24px;
 }
 
 .swich {
@@ -677,10 +838,65 @@
     cursor: pointer;
 }
 
+.sub_interval {
+    display: none;
+}
+
+.swich_sub {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+    width: 13px;
+    height: 13px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(6, 28, 71, 0.8);
+    cursor: pointer;
+    position: absolute;
+    left: -30px;
+}
+
+
+.set_report_legend {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    right: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.set_report_legend span:nth-child(n+2) {
+    width: 90px;
+    text-align: right;
+}
+
+.center_border {
+    margin: 0 3px;
+    padding: 0 5px;
+    border-left: 2px solid rgba(6, 28, 71, 0.8);
+    border-right: 2px solid rgba(6, 28, 71, 0.8);
+    box-sizing: border-box;
+    color: #F9966B
+}
+
+.swich_reports_title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 13px;
+    height: 13px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(6, 28, 71, 0.8);
+    cursor: pointer;
+}
+
 .chart_container {
     width: 100%;
     display: none;
     background-color: #fff;
+    margin-bottom: 38px;
 }
 
 .chart_class {
@@ -854,6 +1070,11 @@ i.full_screen {
     box-sizing: border-box;
 }
 
+
+.row_table_tr {
+    position: relative;
+}
+
 .span_controll {
     width: 15px;
     height: 15px;
@@ -903,4 +1124,12 @@ i.full_screen {
 .one_element_icon_toggle_reports {
     border-right: 2px solid #fff;
     margin: 0;
+}
+
+.componentsСКДШ {
+    width: 245px;
+}
+
+.componentsСКДШ:nth-child(n+2) {
+    width: 150px;
 }

@@ -64,7 +64,7 @@ export class ControllListWindow {
             this.openRows('none');
             this.objectCheked = [...this.container.querySelectorAll('.object_checks')].filter(e => e.checked)
             this.numberOfChoise.textContent = `(${this.objectCheked.length})`
-            this.find.value = `(выбрано ${this.objectCheked.length} объектов)`
+            this.find.value = `Выбрано ${this.objectCheked.length} объектов`
         }
     }
     toggleCheck(e) {
@@ -95,7 +95,7 @@ export class ControllListWindow {
         else {
             this.objectCheked = [...this.container.querySelectorAll('.object_checks')].filter(e => e.checked)
             this.numberOfChoise.textContent = `(${this.objectCheked.length})`
-            this.find.value = `(выбрано ${this.objectCheked.length} объектов)`
+            this.find.value = `Выбрано ${this.objectCheked.length} объектов`
         }
     }
 

@@ -32,7 +32,7 @@ export class OilCharts {
         this.struktura = await this.createStructura() //получение и подготовка структуры данных
         console.log(this.struktura)
         this.data = this.runFormula(this.medianFilters())
-
+        console.log(this.data)
         if (this.data.length === 0) {
             document.querySelector('.noGraf').style.display = 'block'
             const grafOld = document.querySelector('.infoGraf')
@@ -50,7 +50,7 @@ export class OilCharts {
     }
 
     async getFilter() {
-        const idw = Number(document.querySelector('.color').id)
+        const idw = document.querySelector('.color').id
         const param = 'oil'
         const params = {
             method: 'POST',
@@ -670,7 +670,7 @@ export class OilCharts {
 
     }
     async findMarkerReFill() {
-        const idw = Number(document.querySelector('.color').id)
+        const idw = document.querySelector('.color').id
 
         const refill = await Request.refill(idw, this.info, 'refill')
         const drain = await Request.refill(idw, this.info, 'drain')
@@ -714,7 +714,8 @@ export class OilCharts {
     }
 
     async createStructura() {
-        const idw = Number(document.querySelector('.color').id)
+        const idw = document.querySelector('.color').id
+        console.log(idw)
         const arrayColumns = ['last_valid_time', 'lat', 'lon', 'pwr', 'oil', 'dut', 'engineOn', 'engine', 'mileage', 'speed', 'sats']
         const t1 = this.t1
         const t2 = this.t2 + 86399

@@ -145,10 +145,66 @@ export class ChartUtils {
     }
 
     // Метод для создания оси
-    static createAxis(scale, orientation, height) {
-        const axis = (orientation === 'left') ? d3.axisLeft(scale) : d3.axisBottom(scale);
-        return axis;
+    static createAxis(scale, orientation, svg, type) {
+        // console.log(svg)
+        if (type) {
+            return orientation === 'left' ? d3.axisLeft(scale) : d3.axisBottom(scale);
+        }
+        else {
+            if (orientation === 'left') {
+                const axis = d3.axisLeft(scale)
+                return axis
+            }
+            else { //разбиваем строку чтобы сделать перенос если ширина текста превышает порог
+                const axis = d3.axisBottom(scale);
+                return function (g) {
+                    g.call(axis)
+                    svg.selectAll(".tick text")
+                        .style("text-anchor", "middle")
+                        .attr("dy", "0.5em")
+                        .each((d, i, nodes) => { // Используем each, чтобы обработать каждый элемент text отдельно
+                            const text = d3.select(nodes[i]);
+                            const words = text.text().split(/\s+/); // Разбиваем текст на слова
+                            text.text(null); // Очищаем исходный текст
+
+                            let lineNumber = 0;
+                            const lineHeight = 1.2; // ems, Adjust as needed
+                            const y = text.attr("y");
+                            const dy = parseFloat(text.attr("dy"));
+
+                            let tspan = text.append("tspan")
+                                .attr("x", 0)
+                                .attr("y", y)
+                                .attr("dy", dy + "em")
+                                .style("text-anchor", "middle"); // Ensure text is centered
+
+                            let line = [];
+                            // console.log(words)
+                            for (let i = 0; i < words.length; i++) {
+                                const word = words[i];
+                                line.push(word);
+                                tspan.text(line.join(" "));
+
+                                if (line.length > 2) {
+                                    // Если строка слишком длинная и содержит больше одного слова
+                                    line.pop(); // Удаляем последнее слово
+                                    tspan.text(line.join(" ")); // Обновляем текст tspan
+                                    lineNumber++; // Переходим на новую строку
+                                    tspan = text.append("tspan")
+                                        .attr("x", 0)
+                                        .attr("y", y)
+                                        .attr("dy", (lineNumber * lineHeight) + dy + "em") // Смещаем новую строку вниз
+                                        .style("text-anchor", "middle")
+                                        .text(word); // Добавляем последнее слово на новую строку
+                                    line = [word]; // Начинаем новую строку
+                                }
+                            }
+                        });
+                };
+            }
+        }
     }
+
 }
 
 

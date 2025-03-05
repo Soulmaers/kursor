@@ -229,12 +229,12 @@ export class EditObject {
         const timeDrainValue = document.querySelector('#min_diration_drain').nextElementSibling.nextElementSibling.value
         const volumeRefillValue = document.querySelector('#min_value_refill').nextElementSibling.nextElementSibling.value
         const volumeDrainValue = document.querySelector('#min_value_drain').nextElementSibling.nextElementSibling.value
-
+        const maxSpeedValue = document.querySelector('#max_speed').nextElementSibling.nextElementSibling.value
+        const timeExcess = document.querySelector('#time_excess').nextElementSibling.nextElementSibling.value
         const dat = document.querySelector('#datchik_ugla')
         const angleSensorElement = document.querySelector('#angleSensor')
         const attachmentsSensorElement = document.querySelector('#attachmentsSensor')
 
-        console.log(dat)
         this.set = {
             idw: this.idx,
             object: JSON.stringify({
@@ -257,6 +257,12 @@ export class EditObject {
                     mileage: {
                         minMileage: mileageMin,
                         maxMileage: mileageMax
+                    },
+                    speed: {
+                        maxSpeed: maxSpeedValue,
+                        flag: document.querySelector('#max_speed').checked,
+                        timeExcess: timeExcess,
+                        flagTimeExcess: document.querySelector('#time_excess').checked
                     }
                 },
                 'Стоянки': { minDuration: minDurationParking },

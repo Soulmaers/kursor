@@ -188,6 +188,7 @@ export class ContentGeneration {
         return html
     }
 
+
     static renderTraveling() {
         return `
     <div class="card_set">
@@ -202,7 +203,7 @@ export class ContentGeneration {
                     <label class="label_check_set" for="max_distance">Макс. длительность (чч:мм:сс)</label>
                     <input class="value_set" value=24:00:00 disabled>
                 </div>
-                </div>
+                              </div>
 
                   <div class="card_set">
     <div class="distance">Пробег</div>
@@ -215,6 +216,20 @@ export class ContentGeneration {
                     <input class="input_distance" type="checkbox" id="max_mileage">
                     <label class="label_check_set set_mileage" for="max_mileage">Макс. пробег, км</label>
                     <input class="value_set set_mil"  maxlength="6" value=0 disabled>
+                </div>
+                </div>
+
+  <div class="card_set">
+    <div class="distance">Скорость</div>
+                     <div class="checkbox_item">
+                    <input class="input_set" type="checkbox" id="max_speed">
+                    <label class="label_check_set max_speed" for="max_speed">Макс. скорость, км/ч</label>
+                    <input class="value_set"  maxlength="3" value="96" disabled>
+                </div> 
+                   <div class="checkbox_item">
+                    <input class="input_set" type="checkbox" id="time_excess">
+                    <label class="label_check_set max_speed" for="time_excess">Время превышения, сек.</label>
+                    <input class="value_set"  maxlength="3" value="60" disabled>
                 </div>
                 </div>
                 `

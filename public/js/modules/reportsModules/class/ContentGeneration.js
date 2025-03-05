@@ -1,28 +1,76 @@
-import { storStatistika, storComponentOil, storComponentMotoGraf, storComponentOilGraf, storComponentTravel, storComponentProstoy, storComponentSKDSHComp, storComponentSKDSHGraf, storComponentParkings, storComponentStops, storComponentMoto, storComponentTO } from "../stor/stor.js";
+import { storStatistika, storComponentOil, storComponentRuns, storComponentMotoGraf, storComponentOilGraf, storComponentTravel, storComponentProstoy, storComponentSKDSHComp, storComponentSKDSHGraf, storComponentParkings, storComponentStops, storComponentMoto, storComponentTO } from "../stor/stor.js";
 import { Helpers } from './Helpers.js'
 
 export class Content {
 
 
     static renderComponentsReport(data, stata, prop, object) {
-        console.log(data)
+
         const newRows = data.map((el, index) => {
             const name = stata[index][1].result
             const group = stata[index][0].result
-
-            const [displayClass, currentSymbol] = Helpers.returnVariable(stata, object, name, prop)
+            const [displayClass, currentSymbol, symbolRow] = Helpers.returnVariable(stata, object, name, prop)
             if (!el[0].result) {
                 return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div>
                 <div class="rows_spoyler group_new_rows">${group}</div></div>
                       <div class="cell_params ${displayClass} stat_reports center_no_data">Нет данных</div>`
             }
             const attributesCell = el[0].result.map((e, index) => {
-                const cell = el.map(it => `<td class="cell_reports" style="background-color: ${it.color?.[index] ? it.color[index] : null}">${it.result[index]} ${it.local}</td>`).join('')
-                return `<tr>${cell}</tr>`
+                const count = el[el.length - 1].main?.[index]
+                const swich = count > 1 ? `<span class="swich_sub" id="${count}">+</span>` : ''
+                const cell = el.map((it, ind) => {
+                    if (it.flag) return ''
+                    if (it.result.length === 1) return ''
+                    const attributeColorMarker = it.colorMarker?.[index] || null
+                    const typeIcon = it.typeIcon?.[index] || null
+                    const backgroundFon = it.color?.[index] || it.maxSpeedColorBack?.[index] || null; //ищем есть ли свойство для фона
+
+                    return `<td class="cell_reports ${it.geo ? 'pointer' : null} ${prop}" type="${typeIcon}"color_marker="${attributeColorMarker}" 
+                    rel="${it.geo ? it.geo[index] : null}"style="background-color: ${backgroundFon}">${ind === 0 ? swich : ''}
+                    ${it.result[index]} ${it.local}</td>`
+                }).join('')
+
+                console.log(swich)
+                return `<tr  class="row_table_tr ${el[el.length - 1].sub?.[index] ? 'sub_interval' : ''}">
+                ${cell}</tr>`
             }).join('')
-            const titlerows = el.map(e => `<td class="cell_reports cell_title_reports">${e.name}</td>`).join('')
-            return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div></div>
-                      <table class="cell_params ${displayClass} stat_reports"><tr>${titlerows}</tr>${attributesCell}</table>`
+
+            let allRuns = ''
+            let allRunsSpan = ''
+            let settingsTravel = ''
+            if (prop === 'componentsПробеги') {
+                const itog = el.filter(e => e.flag)
+                allRuns = el.map(e => {
+                    if (itog[0]?.result[e.name]) {
+                        return `<td class="cell_reports bold_font"> ${itog[0]?.result[e.name]}</td>`
+                    }
+
+                }).join('')
+                allRunsSpan = el.map(e => {
+                    if (itog[0]?.result[e.name]) {
+                        return `<span class="cell_reports bold_font last_row_cel"> ${itog[0]?.result[e.name]}</span>`
+                    }
+                }).join('')
+            }
+            if (prop === 'componentsПоездки') {
+                const travel = stata[index][1].setAttributes['Поездки'] || {};
+                console.log(travel)
+                const maxSpeed = travel.speed?.maxSpeed || '-';
+                const timeExcess = travel.speed?.timeExcess || '-';
+                settingsTravel = `<div class="set_report_legend">
+                <span>Max. скорость</span>
+                 <span class="center_border">${travel.speed?.flag ? `${maxSpeed} км/ч` : '-'}</span>
+                  <span>${travel.speed?.flagTimeExcess ? `${timeExcess} сек` : '-'}</span></div>`
+
+            }
+
+            const titlerows = el.map(e => {
+                if (e.flag) return ''
+                return `<td class="cell_reports cell_title_reports">${e.name}</td>`
+            }).join('')
+            return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div>${settingsTravel}</div>
+                      <table class="cell_params ${displayClass} stat_reports"><tr>${titlerows}</tr>${attributesCell}<tr class="tr_last">${allRuns}</tr></table>
+                      <div class="last_row ${symbolRow}">${allRunsSpan}</div>`
         }).join('')
         return newRows
     }
@@ -32,7 +80,7 @@ export class Content {
         const newRows = data.map((el, index) => {
             const name = stata[index][1].result
             const group = stata[index][0].result
-            const [displayClass, currentSymbol] = Helpers.returnVariable(stata, object, name, prop)
+            const [displayClass, currentSymbol, symbolRow] = Helpers.returnVariable(stata, object, name, prop)
 
             const chartHtml = `<div class="chart_container ${displayClass}" id="${types}${index}"></div>`;
 
@@ -42,7 +90,7 @@ export class Content {
             }
             return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div>
             <div class="rows_spoyler group_new_rows">${group}</div><i class="fas fa-expand full_screen"></i></div>
-                    ${chartHtml}`
+                    ${chartHtml}<div class="last_row ${symbolRow}"></div> `
         }).join('')
 
         return newRows
@@ -52,12 +100,12 @@ export class Content {
 
         const newRows = stata.map((el, index) => {
             const name = stata[index][1].result
-            const [displayClass, currentSymbol] = Helpers.returnVariable(stata, object, name, prop)
-            const row = el.map(e => `<tr><td class="cell_reports">${e.name}</td><td class="cell_reports">${e.result !== undefined ? e.result : 'Н/Д'} ${e.local ? e.local : ''}</td></tr>`).join('')
+            const [displayClass, currentSymbol, symbolRow] = Helpers.returnVariable(stata, object, name, prop)
+            const row = el.map(e => `<tr><td class="cell_reports static_title_content">${e.name}</td><td class="cell_reports">${e.result !== undefined ? e.result : 'Н/Д'} ${e.local ? e.local : ''}</td></tr>`).join('')
             return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${el[1].result}</div><div class="rows_spoyler group_new_rows">${el[0].result}</div></div>
             <table class="cell_params  cell_params_statistics ${displayClass}">
             <tr><td class="cell_reports">Название</td><td class="cell_reports">Значение</td></tr>
-        ${row}</table> `
+        ${row}</table> <div class="last_row ${symbolRow}"></div> `
         }).join('')
         return newRows
     }
@@ -67,11 +115,12 @@ export class Content {
         const stats = Helpers.trueTitles(data[0])
         const components = Helpers.trueTitles(data[1])
         const graphics = Helpers.trueTitles(data[2])
-        const statName = stats.map((e, index) => `<li class="titleNameReport spoyler_report ${index === 0 ? 'activeTitleReports' : ''}" id=${e}>${e}</li>`).join('')
+        const statName = stats.map((e, index) => `<li class="titleNameReport st activ_fon spoyler_report ${index === 0 ? 'activeTitleReports' : ''}" id=${e}>${e}</li>`).join('')
         const componentName = components.map((e, index) => `<li class="titleNameReport " id=${'components' + e}>${e}</li>`).join('')
         const graphicName = graphics.map((e, index) => `<li class="titleNameReport" id=${'graphics' + e}>${e}</li>`).join('')
 
-        return `${statName}<div class="body_content_report flex_none"></div><div class="spoyler_report">Компонентный</div><div class="body_content_report flex_none" id="components">${componentName}</div> <div class="spoyler_report">Графический</div><div class="body_content_report flex_none"  id="grafics">${graphicName}</div>`
+        return `${statName}<div class="wrap_compon"> <span class="swich_reports_title">-</span><div class="spoyler_report">Компонентный</div></div>
+        <div class="body_content_report" id="components">${componentName}</div><div class="wrap_compon"> <span class="swich_reports_title">-</span> <div class="spoyler_report">Графический</div></div><div class="body_content_report"  id="grafics">${graphicName}</div>`
     }
     static addContent(data) {
         const properties = ['idResoure', 'groupName']; // добавьте все возможные имена свойств
@@ -162,6 +211,9 @@ export class Content {
                     break;
                 case 'Топливо':
                     fields = indexs === '1' ? storComponentOil : storComponentOilGraf
+                    break;
+                case 'Пробеги':
+                    fields = storComponentRuns
                     break;
                 case 'Поездки':
                     fields = storComponentTravel
@@ -290,7 +342,8 @@ export class Content {
                                                         интервала
                                                     </div>
                                                       <select class="toggle_reports">
-                                                   <option value="Сегодня">Сегодня</option>
+                                                   <option value="Выбранный интервал">Выбранный интервал</option>
+                                                      <option value="Сегодня">Сегодня</option>
                                                     <option value="Вчера">Вчера</option>
                                                        <option value="Неделя">Неделя</option>
                                                     <option value="Месяц">Месяц</option>
@@ -299,17 +352,31 @@ export class Content {
 
                                             </div>
                                                                                    </div>
-                                <div class="down_calendar">
-                                    <div class="calendarReports">
-                                                                                   
-                                        <input class="input_data" type="text" id="dateranges5"
-                                            placeholder="Выберите диапазон дат">
-                                        <div class="btn_speedStart_reports">
-                                                                                      <button class="complite btm_formStart control">Выполнить</button>
-                                                 <button class="complite control btm_formStart addWindowFilters">Выполнить с редактированием</button>
+                                                                                       <div class="titleChange_list window_choice_date">
+   <div class="titleChange_list_name"></div>
+                                                                                    <div class="down_calendar">
+   <div class="title_data">
+     <div class="title_text">Начало</div>
+      <div class="title_text">Конец</div>
+   </div>
+      <div class="title_data value_data_time">
+        <div class="wrap_inputs low_span">
+          <span class="data_span">Дата</span>
+            <span class="time_span">Время</span>
+          <input class="value_time field_data" id="daterangesStart">
+          <input class="value_time field_time" value=00:00 maxlength="5" autocomplete="off">
+        </div>
+        <div class="wrap_inputs">
+          <input class="value_time field_data"  id="daterangesEnd" >
+          <input class="value_time field_time" value=23:59 maxlength="5" autocomplete="off">
+        </div>
+      </div>     </div></div>
+
+
+                                 <div class="btn_speedStart_reports">
+                         <button class="complite btm_formStart control">Выполнить</button>
+                <button class="complite control btm_formStart addWindowFilters">Выполнить с редактированием</button>
                                         </div>
-                                    </div>
-                                </div>
                                 <div class="create_reports">Создать шаблон</div>
                                 <div class="inform"></div>
                             </div>
@@ -346,3 +413,12 @@ export class Content {
             </div>`
     }
 }
+
+
+/*
+                                <div class="down_calendar">
+                                    <div class="calendarReports">
+                                    <input class="input_data" type="text" id="dateranges5"
+                                            placeholder="Выберите диапазон дат">
+                                                                           </div>
+                                </div>*/

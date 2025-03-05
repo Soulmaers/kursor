@@ -17,7 +17,7 @@ export class ValidationStatus {
             })
         })
         elements.forEach(e => e.addEventListener('keydown', function (e) {
-            const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'ArrowLeft', 'ArrowRight'];
+            const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'ArrowLeft', 'ArrowRight', 'Backspace'];
             if (!allowedKeys.includes(e.key)) {
                 e.preventDefault(); // Запрещаем ввод любых символов, кроме цифр и навигационных клавиш
             }
@@ -118,11 +118,29 @@ export class ValidationStatus {
 
 
     static inputsOne(inputsElement) {
-        console.log(inputsElement)
         inputsElement.addEventListener('change', () => {
-            inputsElement.nextElementSibling.nextElementSibling.disabled = !inputsElement.checked;  // используем логическое отрицание
 
-        });
+            if (inputsElement.id === 'time_excess') {
+                const maxSpeed = inputsElement.closest('.card_set').querySelector('#max_speed')
+                maxSpeed.checked = inputsElement.checked
+                maxSpeed.nextElementSibling.nextElementSibling.disabled = !maxSpeed.checked;
+                inputsElement.nextElementSibling.nextElementSibling.disabled = !inputsElement.checked;
+            }
+            else if (inputsElement.id === 'max_speed') {
+                const timeExcess = inputsElement.closest('.card_set').querySelector('#time_excess')
+
+                if (timeExcess.checked) {
+                    inputsElement.checked = timeExcess.checked;
+                }
+                inputsElement.nextElementSibling.nextElementSibling.disabled = !inputsElement.checked;
+
+
+            }
+            else {
+                inputsElement.nextElementSibling.nextElementSibling.disabled = !inputsElement.checked;  // используем логическое отрицание
+            }
+        })
+
     }
     static inputsAngle(inputsElement) {
         inputsElement.addEventListener('change', () => {
