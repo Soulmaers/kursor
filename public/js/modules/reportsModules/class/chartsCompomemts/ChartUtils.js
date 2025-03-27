@@ -11,7 +11,7 @@ export class ChartUtils {
             const local = e.local === '' ? 'чч:мм' : e.local
             return `<div class="row_report_tooltip">
             <div class="elem_tooltip color_line_tooltip" style="height:20px; background-color: ${e.color};"></div>
-             <div class="elem_tooltip name_line_tooltip" style="width:100px">${e.name}</div>
+             <div class="elem_tooltip name_line_tooltip" style="min-width:100px">${e.name}</div>
              <div class="elem_tooltip value_line_tooltip">${value} ${local}</div>
             </div>`
         }).join('')
@@ -20,22 +20,26 @@ export class ChartUtils {
         return `<div class="body_report_tooltip">${text}</div>`
     }
     static createTooltip(chartGroup, container, data, x) {
-        const tooltip = d3.select('[data-chart-id="' + container + '"]').append('div')
-            .attr("class", `tooltip_reports ${container}`)
-            .style("opacity", 0) // Изначально скрываем tooltip
-            .style("display", "none"); // Задаем display: none
+        // Выбираем тултип, если он уже существует
+        let tooltip = d3.select('[data-chart-id="' + container + '"]').select('.tooltip_reports');
+
+        // Если тултип не существует, создаем его
+        if (tooltip.empty()) {
+            tooltip = d3.select('[data-chart-id="' + container + '"]').append('div')
+                .attr("class", `tooltip_reports ${container}`)
+                .style("opacity", 0) // Изначально скрываем tooltip
+                .style("display", "none"); // Задаем display: none
+        }
 
         chartGroup
-            .data(data[0].result)
             .on("mousemove", (event) => {
-                console.log(d3.event.target)
                 const [xPosition, yPosition] = d3.mouse(chartGroup.node());
                 let text;
 
                 if (d3.event.target.classList.contains('icon_image_reports')) {
-                    const time = d3.event.target.id
-                    const value = d3.event.target.getAttribute('rel')
-                    const type = d3.event.target.getAttribute('type')
+                    const time = d3.event.target.id;
+                    const value = d3.event.target.getAttribute('rel');
+                    const type = d3.event.target.getAttribute('type');
                     text = `<div class="text_refill_drain">Время:${time}  ${type}: ${value} л.</div>`;
                 } else {
                     text = ChartUtils.findTimeAndContentReturn(x, xPosition, data);
@@ -146,7 +150,7 @@ export class ChartUtils {
 
     // Метод для создания оси
     static createAxis(scale, orientation, svg, type) {
-        // console.log(svg)
+
         if (type) {
             return orientation === 'left' ? d3.axisLeft(scale) : d3.axisBottom(scale);
         }

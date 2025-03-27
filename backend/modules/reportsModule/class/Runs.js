@@ -4,12 +4,16 @@ const { CalculateReports } = require('./Calculate')
 const { OilCalculator } = require('./OilControllCalculater')
 const Helpers = require('./Helpers')
 class Runs {
-    constructor(data, thisAray, setAttributes, idObject) {
+    constructor(data, thisAray, setAttributes, idObject, traveling, parkings, stops, prostoy) {
         this.data = data
         this.report = thisAray
         this.setAttributes = setAttributes
         this.idObject = idObject
-        this.init()
+        this.traveling = traveling
+        this.prostoy = prostoy
+        this.parkings = parkings
+        this.stops = stops
+        //  this.init()
     }
 
 
@@ -24,6 +28,12 @@ class Runs {
                 this.rashodPoDUT(celevoyInterval),
                 this.timeMoves(celevoyInterval)]); // Ждем оба
 
+            const travelAndAlarm = this.countTraveling(e)
+            e.countTraveling = travelAndAlarm[0]
+            e.alarm = travelAndAlarm[1]
+            e.countParkings = this.countEvents(e, this.parkings, 'flag')
+            e.countStops = this.countEvents(e, this.stops, 'flag')
+            e.prostoy = this.countEvents(e, this.prostoy)
             e.mileages = mileages ?? 'Н/Д';
             e.rashod = rashod ?? 'Н/Д';
             e.timeMove = timeMove[0]
@@ -32,6 +42,7 @@ class Runs {
             return e;
         });
         this.report = await Promise.all(promises);
+
         const summary = this.summary()
         return { rows: this.report, summary: summary }
     }
@@ -39,6 +50,48 @@ class Runs {
     mileageFunc(data) {
         let meliage = data.length !== 0 ? parseInt(data[data.length - 1].mileage) - parseInt(data[0].mileage) : 0
         return meliage
+    }
+
+
+    countTraveling(e) {
+        const startTime = e.startUnix
+        const finishTime = e.endUnix
+        const countTraveling = this.traveling.reduce((acc, el) => {
+            const timeStart = Number(el[0].time)
+            const travel = timeStart >= startTime && timeStart <= finishTime
+            if (travel) {
+                !el[2].sub ? acc[0]++ : acc[1]++
+            }
+            return acc
+        }, [0, 0])
+        return countTraveling
+
+    }
+
+    countEvents(e, events, flag) {
+        const startTime = e.startUnix
+        const finishTime = e.endUnix
+
+        const intervalTravelingDay = this.traveling.filter(e => {
+            const timeStart = Number(e[0].time)
+            const travel = timeStart >= startTime && timeStart <= finishTime
+            if (travel) return e
+        })
+
+        if (intervalTravelingDay.length === 0) return 0
+        const finishTimeOneTraveling = Number(intervalTravelingDay[0][1].time)
+
+        const countEvents = events.reduce((acc, el) => {
+            const timeStart = flag ? el.time : Number(el[0].time)
+            const travel = timeStart >= startTime && timeStart <= finishTime
+
+            if (travel && finishTimeOneTraveling <= timeStart) {
+                acc++
+            }
+            return acc
+        }, 0)
+        return countEvents
+
     }
 
     async rashodPoDUT(data) {
@@ -67,11 +120,39 @@ class Runs {
 
     summary() {
         const countDay = this.report.length
-
         const mileages = this.report.reduce((acc, e) => {
             const mileage = Number(e.mileages); // Преобразуем в число
             if (!isNaN(mileage) && mileage > 0) { // Проверяем, что это число и больше 0
                 return acc + mileage;  // Добавляем, если условие выполняется
+            }
+            return acc; // Не добавляем, если не выполняется
+        }, 0);
+
+        const countTraveling = this.report.reduce((acc, e) => {
+            const value = Number(e.countTraveling); // Преобразуем в число
+            if (!isNaN(value)) { // Проверяем, что это число и больше 0
+                return acc + value;  // Добавляем, если условие выполняется
+            }
+            return acc; // Не добавляем, если не выполняется
+        }, 0);
+        const countParkings = this.report.reduce((acc, e) => {
+            const value = Number(e.countParkings); // Преобразуем в число
+            if (!isNaN(value)) { // Проверяем, что это число и больше 0
+                return acc + value;  // Добавляем, если условие выполняется
+            }
+            return acc; // Не добавляем, если не выполняется
+        }, 0);
+        const countStops = this.report.reduce((acc, e) => {
+            const value = Number(e.countStops); // Преобразуем в число
+            if (!isNaN(value)) { // Проверяем, что это число и больше 0
+                return acc + value;  // Добавляем, если условие выполняется
+            }
+            return acc; // Не добавляем, если не выполняется
+        }, 0);
+        const prostoy = this.report.reduce((acc, e) => {
+            const value = Number(e.prostoy); // Преобразуем в число
+            if (!isNaN(value)) { // Проверяем, что это число и больше 0
+                return acc + value;  // Добавляем, если условие выполняется
             }
             return acc; // Не добавляем, если не выполняется
         }, 0);
@@ -83,7 +164,13 @@ class Runs {
             }
             return acc; // Не добавляем, если не выполняется
         }, 0);
-
+        const alarms = this.report.reduce((acc, e) => {
+            const value = Number(e.alarm); // Преобразуем в число
+            if (!isNaN(value)) { // Проверяем, что это число и больше 0
+                return acc + value;  // Добавляем, если условие выполняется
+            }
+            return acc; // Не добавляем, если не выполняется
+        }, 0);
         const { sum, count } = this.report.reduce((acc, e) => {
             let currentMedium = e.medium;
             if (currentMedium === 'Н/Д') {
@@ -102,7 +189,8 @@ class Runs {
         const timeMove = Helpers.formatHMS(this.report.reduce((acc, e) => acc + e.timeMoveUnix, 0))
 
         return {
-            'Дата': `${countDay} дней`, 'Километраж': `${mileages} км`, 'Потрачено по ДУТ': `${parseFloat(rashod.toFixed(1))} л.`, 'Время в движении': `${timeMove} (Ч:М:С)`, 'Средний расход л/100км': `${medium} л/100км`
+            'Дата': `${countDay} дней`, 'Километраж': `${mileages} км`, 'Потрачено по ДУТ': `${parseFloat(rashod.toFixed(1))} л.`, 'Время в движении': `${timeMove} (Ч:М:С)`, 'Средний расход л/100км': `${medium} л/100км`,
+            'Поездки (количество)': `${countTraveling}`, 'Стоянки (количество)': `${countParkings}`, 'Остановки (количество)': `${countStops}`, 'Простои на ХХ (количество)': `${prostoy}`, 'Кол-во нарушений (количество)': `${alarms}`
         }
 
     }

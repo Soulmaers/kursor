@@ -210,10 +210,10 @@ export class NewReportTemplate {
                 }
             },
             {
-                block: this.grafix, arrayButtons: ['Топливо', 'Поездки', 'Моточасы', 'Техническое обслуживание', 'СКДШ'], indexs: '2',
+                block: this.grafix, arrayButtons: ['Топливо', 'Поездки по дням', 'Моточасы', 'Техническое обслуживание', 'СКДШ'], indexs: '2',
                 stores: {
                     'Топливо': this.attributes.graphic['Топливо'],
-                    'Поездки': this.attributes.graphic['Поездки'],
+                    'Поездки по дням': this.attributes.graphic['Поездки по дням'],
                     'Моточасы': this.attributes.graphic['Моточасы'],
                     'Простои на холостом ходу': this.attributes.graphic['Простои на холостом ходу'],
                     'Техническое обслуживание': this.attributes.graphic['Техническое обслуживание'],

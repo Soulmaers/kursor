@@ -33,14 +33,14 @@ class CalculateReports {
 
     static converterTimes(data) {
         let date = new Date(data * 1000); // Преобразование в миллисекунды
-        let year = date.getFullYear();
+        let year = date.getFullYear().toString().slice(-2);;
         let month = ("0" + (date.getMonth() + 1)).slice(-2); // Месяцы начинаются с 0
         let day = ("0" + date.getDate()).slice(-2);
         let hours = ("0" + date.getHours()).slice(-2);
         let minutes = ("0" + date.getMinutes()).slice(-2);
         let seconds = ("0" + date.getSeconds()).slice(-2);
 
-        let formattedTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        let formattedTime = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
         return formattedTime
     }
 
@@ -102,7 +102,6 @@ class CalculateReports {
 
     static async moto(data, settings, id) {
 
-
         const { minDuration } = settings['Моточасы']
         const minTime = CalculateReports.timeStringToUnix(minDuration)
 
@@ -151,21 +150,22 @@ class CalculateReports {
                     mediumEngineRPM: !isNaN(mediumEngineRPM) ? mediumEngineRPM : 'Н/Д',
                     maxEngineRPM: !isNaN(maxEngineRPM) ? maxEngineRPM : 'Н/Д',
                     moto: diffMoto,
-                    rashodDUT: rashodDUT,
-                    rashodDUTKM: rashodDUTKM,
+                    rashodDUT: rashodDUT < 0 ? 0 : rashodDUT,
+                    rashodDUTKM: rashodDUTKM < 0 ? 0 : rashodDUTKM,
                     distance: parseFloat(distance.toFixed(2)),
                     time: Number(time)
                 }]
             }
 
         }))
+        //   console.log(ress)
         const filteredRess = ress.filter(item => item !== undefined);
         const motoAll = filteredRess.reduce((acc, e) => {
             acc += e[2].time
             return acc
         }, 0)
 
-        // 
+        // console.log(filteredRess, motoAll)
         return { moto: filteredRess, motoAll: motoAll }
     }
 
@@ -189,6 +189,14 @@ class CalculateReports {
         }
     }
 
+
+    static geoTreks(data, traveling) {
+        if (traveling.length === 0) return []
+        const geoTime = [traveling[0][0].time, traveling[traveling.length - 1][1].time]
+        const arrayGeoZone = data.filter(el => el.last_valid_time >= geoTime[0] && el.last_valid_time <= geoTime[1])
+            .map(e => [Number(e.lat), Number(e.lon), { time: Number(e.last_valid_time) }])
+        return arrayGeoZone
+    }
     static traveling(data, settings, runs) {
         const { duration, mileage, speed } = settings['Поездки']
 
@@ -245,11 +253,17 @@ class CalculateReports {
                     main: subCount
                 }])
                 if (!runs) {
-                    if (subs.length !== 0) acc.push(...subs);
+                    const subInterval = subs.map(e =>
+                        e[2].distance === 0
+                            ? [e[0], e[1], { ...e[2], distance: 0.1 }]
+                            : e
+                    );
+                    if (subInterval.length !== 0) acc.push(...subInterval);
                 }
             }
             return acc
         }, [])
+        //  console.log(res[0][0].time)
         return res
     }
 

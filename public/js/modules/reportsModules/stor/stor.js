@@ -7,8 +7,8 @@ export const storStatistika = [
     { name: 'Конец интервала', checked: true, disabled: true },
     { name: 'Пробег', checked: true },
     { name: 'Потрачено по ДУТ', checked: true },
-    { name: 'Средний расход по ДУТ на 100км', checked: true },
-    { name: 'Средний расход по ДУТ в моточасах', checked: true },
+    { name: 'Средний расход по ДУТ на 100 км', checked: true },
+    { name: 'Средний расход по ДУТ в м/ч', checked: true },
     { name: 'Начальный уровень топлива', checked: true },
     { name: 'Конечный уровень топлива', checked: true },
     { name: 'Объем топливного бака', checked: true },
@@ -33,7 +33,12 @@ export const storComponentRuns = [
     { name: 'Километраж', checked: true },
     { name: 'Время в движении', checked: true },
     { name: 'Потрачено по ДУТ', checked: true },
-    { name: 'Средний расход л/100км', checked: false },
+    { name: 'Средний расход л/100км', checked: true },
+    { name: 'Поездки (количество)', checked: false },
+    { name: 'Стоянки (количество)', checked: false },
+    { name: 'Остановки (количество)', checked: false },
+    { name: 'Простои на ХХ (количество)', checked: false },
+    { name: 'Кол-во нарушений (количество)', checked: false },
     { name: 'Итоговая информация', checked: true },
 ]
 
@@ -58,7 +63,7 @@ export const storComponentMoto = [
     { name: 'Средние обороты двигателя', checked: true },
     { name: 'Максимальные обороты двигателя', checked: true },
     { name: 'Потрачено по ДУТ', checked: true },
-    { name: 'Средний расход по ДУТ на 100км', checked: true },
+    { name: 'Средний расход по ДУТ на 100 км', checked: true },
     { name: 'Начальный уровень топлива', checked: true },
     { name: 'Конечный уровень топлива', checked: true }
 ]
@@ -132,8 +137,8 @@ export const storComponentOilGraf = [
     { name: 'Работа двигателя', checked: true, disabled: false }
 ];
 export const storComponentMotoGraf = [
-    { name: 'Моточасы', checked: true, disabled: true }, // Заблокировано
-    { name: 'В работе', checked: true, disabled: true }, // Заблокировано
+    { name: 'Двигатель заведён', checked: true, disabled: true }, // Заблокировано
+    { name: 'Техника в работе', checked: true, disabled: true }, // Заблокировано
 
 ];
 export const stor = [

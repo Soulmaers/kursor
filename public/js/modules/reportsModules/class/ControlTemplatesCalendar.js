@@ -7,8 +7,10 @@ import { Content } from './ContentGeneration.js'
 import { ControllSettingsReportsObject } from '../../settingsEventAttributesModules/class/ManagerAttributes.js'
 import { ValidationStatus } from '../../settingsEventAttributesModules/class/ValidationStatus.js'
 import { ChartsClass } from './chartsCompomemts/ChartsClass.js'
+import { ChartMileage } from './chartsCompomemts/ChartMileage.js'
 import { ChartsClassSecond } from './chartsCompomemts/ChartClassSecond.js'
-
+import { ChartPressureClass } from './chartsCompomemts/ChartPressureClass.js'
+import { ChartCondition } from './chartsCompomemts/ChartCondition.js'
 import { stor } from '../stor/stor.js'
 
 
@@ -41,6 +43,8 @@ export class GetReports {
         this.checkShablons = this.templates.querySelector('.toggle_reports')
         this.titleReports = this.container.querySelector('.list_reports')
         this.reports_module = this.container.querySelector('.wrapper_reports')
+        this.legend_container = this.container.querySelector('.legend_container')
+
         this.mess = this.container.querySelector('.inform')
         this.loaders = document.querySelector('.loaders_report')
         this.prints = this.container.querySelectorAll('.icon_print')
@@ -112,7 +116,6 @@ export class GetReports {
         this.wrapSet.innerHTML = Content.formaFilters(this.type, this.name, templates)
         this.caseElementsSecond()
         this.modalActivity(this.pop, 'flex', 2)
-        console.log(this.type)
         new ControllSettingsReportsObject(this.modal, this.id, objectCheked[0].parentElement.getAttribute('rel'))
         this.hiddenBlocks()
         this.close.addEventListener('click', () => this.modalActivity(this.pop, 'none', 1))
@@ -150,7 +153,7 @@ export class GetReports {
     async reports() {
         this.webpackObjectsSettings()
         await this.getReportAndCreateContent(this.set)
-        // this.createCalendar()
+        //  this.createCalendar()
         this.modalActivity(this.pop, 'none', 1)
 
     }
@@ -237,7 +240,9 @@ export class GetReports {
     async getReportAndCreateContent(sett) {
         const objects = this.checkObjects.querySelectorAll('.object_checks')
         const objectCheked = [...objects].filter(e => e.checked)
+        const oildTimeInterval = [...this.timeInterval]
         if (this.checkInterval.value === 'Выбранный интервал') {
+
             this.calcTimeInterval() //приводим введенные минуты и часы в секунды и добавляем к времнеи юникс
         }
 
@@ -258,11 +263,15 @@ export class GetReports {
         this.objectVisibleSpoyler = {}
         await this.getStrukturaReports(sett)
         if (this.checkInterval.value === 'Выбранный интервал') {
-            this.timeInterval = Helpers.getTimeInterval('Выбранный интервал')
+            console.log(oildTimeInterval)
+            this.timeInterval = oildTimeInterval
+            // this.calcTimeInterval()
+            console.log(this.timeInterval)
         }
 
     }
     calcTimeInterval() {
+        //    console.log(this.timeInterval)
         this.timeInterval.forEach((e, index) => {
             let timeParts = this.fieldsTime[index].value.split(':');
             let hours = parseInt(timeParts[0], 10); // Получаем часы
@@ -287,6 +296,7 @@ export class GetReports {
 
             // Функция для обновления this.timeInterval
             const updateTimeInterval = (newTime) => {
+                console.log(newTime)
                 this.timeInterval[index] = newTime;
                 console.log("this.timeInterval обновлен:", this.timeInterval);
             };
@@ -330,6 +340,7 @@ export class GetReports {
         }
     }
     createMetaTable(el) {
+        this.legend_container.style.display = 'none'
         const spoyler = this.container.querySelector('.activ_fon')
         spoyler.classList.remove('activ_fon')
         const idElement = el.id
@@ -344,13 +355,18 @@ export class GetReports {
             const trueAttributes = this.data.map(e => Helpers.trueAttributes(e.component[el.textContent]))
             this.reports_module.innerHTML = Content.renderComponentsReport(trueAttributes, this.statistics, this.activeTitleReports.id, this.objectVisibleSpoyler);
             this.visible_process()
-            this.clickGeoVieMarkerMap()
+            this.processMapClass() //логика работы с картой -очистка поли и маркеров. прослушка поинтеров
+
 
         }
         else {
             el.parentElement.previousElementSibling.lastElementChild.classList.add('activ_fon')
+            const trueAttributes = this.data.map(e => Helpers.trueAttributes(e.graphic[el.textContent]))
             this.reports_module.innerHTML = Content.renderChartsContent(this.data, this.statistics, el.textContent, this.activeTitleReports.id, this.objectVisibleSpoyler);
+            this.legend_container.innerHTML = Content.renderChartsLegend(trueAttributes, this.statistics, el.textContent, this.activeTitleReports.id, this.objectVisibleSpoyler, this.legend_container);
             this.createCharts(el.textContent)
+            this.controllLegend()
+
             this.fullButtons = this.container.querySelectorAll('.full_screen')
             this.fullButtons.forEach(e => e.addEventListener('click', () => this.fullScreen(e)))
             this.visible_process()
@@ -358,17 +374,82 @@ export class GetReports {
 
     }
 
+    controllLegend() {
+        this.uniqum_legend = this.container.querySelectorAll('.uniqum_legend')
+        if (this.uniqum_legend.length !== 0) {
+            this.uniqum_legend.forEach(e => {
+                e.lastElementChild.addEventListener('click', () => {
+                    e.lastElementChild.classList.toggle('disabled_icon')
+                    const attribute = e.lastElementChild.getAttribute('rel')
+                    const elements = document.querySelectorAll(`[type="${attribute}"]`);
+                    elements.forEach(el => {
+                        el.style.display = e.lastElementChild.classList.contains('disabled_icon') ? 'none' : 'block'
+                    })
+                })
+            })
+        }
+
+    }
+
+    processMapClass() {
+        this.instanceMap.clearMarker()
+        this.instanceMap.clearPoly()
+
+        if (this.data.length === 1 && this.activeTitleReports.id === 'componentsПоездки') this.createAllTrek()
+        this.clickGeoVieMarkerMap()
+
+    }
+    createAllTrek() {
+        this.allArrayGeo = this.data[0].statistic['Статистика'][1].geoTrek || null
+        if (!this.allArrayGeo) return
+        const allTrek = this.allArrayGeo.map(e => [e[0], e[1]])
+        this.instanceMap.createPolyLine(allTrek, 'rgb(0, 0, 204)', 2)
+    }
+
     clickGeoVieMarkerMap() {
         this.pointer = this.container.querySelectorAll('.pointer')
         if (this.pointer.length === 0) return
         this.pointer.forEach(e => e.addEventListener('click', () => {
-            console.log(e)
             const coordinates = e.getAttribute('rel').split(',');
             const colorMarker = e.getAttribute('color_marker');
             const typeIcon = e.getAttribute('type');
             const lat = parseFloat(coordinates[0].trim());
             const lon = parseFloat(coordinates[1].trim());
             this.instanceMap.createMarker([lat, lon], colorMarker, typeIcon)
+        }))
+
+
+        this.icon_trek = this.container.querySelectorAll('.icon_trek')
+        this.icon_trek.forEach(e => e.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const isCurrentlyGreen = e.classList.contains('green_apple');
+            this.icon_trek.forEach(el => el.classList.remove('green_apple'))
+            if (!isCurrentlyGreen) {
+                e.classList.add('green_apple');
+                const time = e.getAttribute('rel').split(',')
+
+
+                if (this.data.length > 1) {
+                    const nameObject = e.getAttribute('data-att')
+                    const object = this.data.find(e => e.statistic['Статистика'][1].result === nameObject)
+                    this.allArrayGeo = object.statistic['Статистика'][1].geoTrek || null
+                    if (!this.allArrayGeo) return
+                    const allTrek = this.allArrayGeo.map(e => [e[0], e[1]])
+                    this.instanceMap.createPolyLine(allTrek, 'rgb(0, 0, 204)', 2)
+                }
+
+                const trek = this.allArrayGeo.filter(e => {
+                    const startTime = Number(time[0]);
+                    const endTime = Number(time[1]);
+                    const elementTime = Number(e[2].time);
+                    return startTime <= elementTime && endTime >= elementTime;
+                }).map(el => [el[0], el[1]]);
+
+
+                this.instanceMap.createPolyLine(trek, '#DC381F', 6, true)
+            } else {
+                this.instanceMap.createPolyLine([], 'red', 4, true)
+            }
 
         }))
     }
@@ -419,14 +500,29 @@ export class GetReports {
         this.data.forEach((el, index) => {
             const chartContainer = document.getElementById(`${types}${index}`);
             if (chartContainer) { // Проверяем, что элемент существует
-                if (types !== 'СКДШ' && types !== 'Моточасы') {
+                if (types === 'Топливо') {
                     if (el.graphic[types][0].result) {
-                        this.instansCharts[`${types}${index}`] = new ChartsClass(el.graphic[types], chartContainer);
+                        this.instansCharts[`${types}${index}`] = new ChartsClass(el.graphic[types], chartContainer, this.data.length);
                     }
                 }
-                else {
-                    this.instansCharts[`${types}${index}`] = new ChartsClassSecond(el.graphic[types], chartContainer, types);
+                else if (types === 'Поездки по дням') {
+                    if (el.graphic[types][0].result) {
+                        this.instansCharts[`${types}${index}`] = new ChartMileage(el.graphic[types], chartContainer, this.data.length);
+                    }
                 }
+                else if (types === 'СКДШ') {
+                    if (el.graphic[types][0].result) {
+                        this.instansCharts[`${types}${index}`] = new ChartPressureClass(el.graphic[types], chartContainer, this.data.length);
+                    }
+                }
+                else if (types === 'Моточасы') {
+                    console.log(chartContainer.nextElementSibling)
+                    console.log(index)
+                    this.instansCharts[`${types}${index}`] = new ChartsClassSecond(el.graphic[types], chartContainer, types, this.timeInterval, index);
+                    el.graphic[types][0].condition.forEach(e => new ChartCondition(e, chartContainer.nextElementSibling, types, this.timeInterval, index));
+                }
+
+
 
             }
 

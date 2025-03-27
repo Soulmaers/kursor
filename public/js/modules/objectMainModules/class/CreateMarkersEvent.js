@@ -93,12 +93,12 @@ export class CreateMarkersEvent {
     async viewTrackAndMarkersEnent() {
         this.track = await this.getIntervalTrack()
         const track = this.track.map(e => e.geo)
-        const prostoy = await this.getEventProstoy()
-
-        this.eventMarkers = await this.getEventObject(track, prostoy)
-        console.log(this.eventMarkers)
-        this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
-        console.log(this.poly)
+        //   const prostoy = await this.getEventProstoy()
+        //  console.log(prostoy)
+        //  this.eventMarkers = await this.getEventObject(track, prostoy)
+        //  console.log(this.eventMarkers)
+        // this.eventMarkers ? this.markerCreator.createMarker(this.eventMarkers, this.track) : null
+        // console.log(this.poly)
         if (this.poly) {
             mapLocal.removeLayer(this.poly);
             this.startTrack ? mapLocal.removeLayer(this.startTrack) : null
@@ -250,6 +250,7 @@ export class CreateMarkersEvent {
 
     async getEventProstoy() {
         const idw = this.id
+
         let nowDate = Math.round(new Date().getTime() / 1000);
         let nDate = new Date();
         let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);
@@ -367,6 +368,7 @@ export class CreateMarkersEvent {
 
     async getEventObject(track, prostoy) {
         const id = this.id
+        console.log(id)
         let nowDate = Math.round(new Date().getTime() / 1000);
         let nDate = new Date();
         let timeFrom = Math.round(nDate.setHours(nDate.getHours() - 10) / 1000);

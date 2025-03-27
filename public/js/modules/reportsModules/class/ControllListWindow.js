@@ -59,7 +59,6 @@ export class ControllListWindow {
     }
 
     closeOnClickOutside(event) {
-        console.log('тут')
         if (!this.list_objects_reports.contains(event.target) && !this.find.contains(event.target) && !this.reports.contains(event.target)) {
             this.openRows('none');
             this.objectCheked = [...this.container.querySelectorAll('.object_checks')].filter(e => e.checked)

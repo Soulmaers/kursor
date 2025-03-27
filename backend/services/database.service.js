@@ -2373,6 +2373,7 @@ exports.logsFindToBaseId = async (t1, t2, idw) => {
         try {
             const pool = await connection
             const result = await pool.query(postModel);
+            console.log(result.recordset)
             return result.recordset
         } catch (err) {
             console.error(err);

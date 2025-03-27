@@ -205,14 +205,10 @@ export class Helpers {
         const visibleClass = stata.length === 1 ? 'vis' : '';
         const toggleSymbol = stata.length === 1 ? '-' : '+';
         const lastClassRow = stata.length === 1 ? '-' : 'vis';
-        console.log(lastClassRow)
         const isVisible = object[name]?.[prop] === true;
-
         const displayClass = isVisible ? 'vis' : visibleClass; // Используем переменную видимости
         const currentSymbol = isVisible ? '-' : toggleSymbol;
-        console.log(isVisible, displayClass)
         const symbolRow = displayClass === 'vis' ? '-' : 'vis';
-        console.log(symbolRow)
         return [displayClass, currentSymbol, symbolRow]
     }
     static timeStringToUnix(timeString) {
@@ -223,28 +219,53 @@ export class Helpers {
 
     static visiale_toggle_global(objects, znak, styleparent) {
         objects.forEach(e => {
-            e.parentElement.previousElementSibling.children[0].textContent = `${znak}`
             styleparent === 'none' ? e.parentElement.previousElementSibling.children[0].classList.add('toggleClass') :
                 e.parentElement.previousElementSibling.children[0].classList.remove('toggleClass')
             e.parentElement.style.display = `${styleparent}`
+            e.parentElement.previousElementSibling.children[0].textContent = `${znak}`
+
         })
     }
 
+    static convertFormatTime(times) {
+        const dateArray = [];
+        for (let time = times[0]; time <= times[1]; time += 86400) { // 86400 секунд в дне
+            const date = new Date(time * 1000);
+            const year = date.getFullYear();
+            const month = ("0" + (date.getMonth() + 1)).slice(-2);
+            const day = ("0" + date.getDate()).slice(-2);
+            dateArray.push(`${year}-${month}-${day}`);
+        }
+        return dateArray
+    }
+
+
+
+    static timeDay() {
+        const step = 86400 / 12
+        const axisXmoto = []
+        for (let i = 0; i <= 12; i++) {
+            axisXmoto.push(i * step)
+        }
+        return axisXmoto
+    }
     static visible_all_objects(reports, znak, style) {
         reports.forEach(e => {
             e.textContent = `${znak}`
-            e.parentElement.nextElementSibling.style.display = `${style}`
-            const summary = e.parentElement.nextElementSibling.nextElementSibling
-            if (summary) {
-                console.log(znak)
-                summary.style.display = `${znak === '-' ? 'none' : 'flex'}`
-
-            }
             style === 'none' ? e.classList.remove('toggleClass') :
                 e.classList.add('toggleClass')
+            console.log(e.parentElement.nextElementSibling?.nextElementSibling)
+            const summary = e.parentElement.nextElementSibling?.nextElementSibling?.classList.contains('last_table')
+            console.log(summary)
+            if (summary) {
+                e.parentElement.nextElementSibling.nextElementSibling.style.display = `${znak === '-' ? 'none' : 'flex'}`
+
+            }
+            e.parentElement.nextElementSibling.style.display = `${style}`
         })
     }
     static toggleWiewList(e, vis, prop) {
+        console.log(e)
         e.classList.toggle('toggleClass')
         const full = e.parentElement.querySelector('.full_screen')
         const wrapObject = e.parentElement.nextElementSibling
@@ -286,7 +307,8 @@ export class Helpers {
     static hiddenWiewElements(wrap, swich, prop, text) {
         wrap.style.display = `${prop}`
         const summary = wrap.nextElementSibling
-        if (summary) {
+        console.log(summary)
+        if (summary && !summary.classList.contains('sub_charts')) {
             summary.style.display = `${text === '-' ? 'none' : 'flex'}`
         }
         swich.textContent = text

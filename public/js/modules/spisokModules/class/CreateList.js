@@ -77,9 +77,7 @@ export class CreateList {
                 <div class="list_name2" rel="name">
                   <i class="fas fa-wrench pref icon_controll" rel="${object.inc_object}"  idx="${object.object_id}"></i>
                     <i class="fa fa-check checkInList icon_controll" rel="${object.object_name}" id="${object.object_name}"></i>
-                          <i class="fa fa-print report_map_InList report_unit icon_controll" rel="${object.object_name}" id="${object.object_name}"></i>
-                                <i class="fa fa-map-marker-alt report_map_InList map_unit icon_controll last_elem" rel="${object.object_name}" id="${object.object_name}"></i>
-                    ${object.object_name}
+                                              ${object.object_name}
                 </div>
                   <div class="newCelChange list_profil2" rel="pressure tagach"></div>
                 <div class="newCelChange list_trail2" rel="pressure pricep"></div>

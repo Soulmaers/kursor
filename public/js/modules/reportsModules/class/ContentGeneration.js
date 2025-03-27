@@ -5,7 +5,6 @@ export class Content {
 
 
     static renderComponentsReport(data, stata, prop, object) {
-
         const newRows = data.map((el, index) => {
             const name = stata[index][1].result
             const group = stata[index][0].result
@@ -13,30 +12,34 @@ export class Content {
             if (!el[0].result) {
                 return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div>
                 <div class="rows_spoyler group_new_rows">${group}</div></div>
-                      <div class="cell_params ${displayClass} stat_reports center_no_data">Нет данных</div>`
+                      <div class="cell_params ${displayClass} stat_reports center_no_data">Нет данных</div>
+                      <span class="last_row_cel_no"></span>`
             }
             const attributesCell = el[0].result.map((e, index) => {
                 const count = el[el.length - 1].main?.[index]
                 const swich = count > 1 ? `<span class="swich_sub" id="${count}">+</span>` : ''
+                const marker = el[el.length - 1].interval?.[index] ?
+                    `<span class="marker_trek" id="${count}"><i class="fas fa-route icon_trek" data-att="${name}"rel="${el[el.length - 1].interval[index].join()}"></i></span>` : ''
+
                 const cell = el.map((it, ind) => {
                     if (it.flag) return ''
-                    if (it.result.length === 1) return ''
+                    if (!it.result || it.result.length === 1 && prop === 'componentsПробеги') return ''
                     const attributeColorMarker = it.colorMarker?.[index] || null
                     const typeIcon = it.typeIcon?.[index] || null
                     const backgroundFon = it.color?.[index] || it.maxSpeedColorBack?.[index] || null; //ищем есть ли свойство для фона
-
+                    const isLastElement = ind === el.length - 1;
                     return `<td class="cell_reports ${it.geo ? 'pointer' : null} ${prop}" type="${typeIcon}"color_marker="${attributeColorMarker}" 
-                    rel="${it.geo ? it.geo[index] : null}"style="background-color: ${backgroundFon}">${ind === 0 ? swich : ''}
+                    rel="${it.geo ? it.geo[index] : null}"style="background-color: ${backgroundFon}">${ind === 0 ? swich : ''}${isLastElement ? marker : ''}
                     ${it.result[index]} ${it.local}</td>`
                 }).join('')
 
-                console.log(swich)
                 return `<tr  class="row_table_tr ${el[el.length - 1].sub?.[index] ? 'sub_interval' : ''}">
                 ${cell}</tr>`
             }).join('')
 
             let allRuns = ''
             let allRunsSpan = ''
+            let allRunsSpanTitle = ''
             let settingsTravel = ''
             if (prop === 'componentsПробеги') {
                 const itog = el.filter(e => e.flag)
@@ -51,17 +54,23 @@ export class Content {
                         return `<span class="cell_reports bold_font last_row_cel"> ${itog[0]?.result[e.name]}</span>`
                     }
                 }).join('')
+                console.log(itog[0]?.result)
+                console.log(el)
+                allRunsSpanTitle = el.map(e => {
+                    if (itog[0]?.result[e.name]) {
+                        return `<span class="cell_reports bold_font last_row_cel"> ${e.name}</span>`
+                    }
+                }).join('')
             }
             if (prop === 'componentsПоездки') {
                 const travel = stata[index][1].setAttributes['Поездки'] || {};
-                console.log(travel)
                 const maxSpeed = travel.speed?.maxSpeed || '-';
                 const timeExcess = travel.speed?.timeExcess || '-';
                 settingsTravel = `<div class="set_report_legend">
-                <span>Max. скорость</span>
-                 <span class="center_border">${travel.speed?.flag ? `${maxSpeed} км/ч` : '-'}</span>
-                  <span>${travel.speed?.flagTimeExcess ? `${timeExcess} сек` : '-'}</span></div>`
-
+                <span>Настройка объекта:</span>
+                <span class="Vmax">Vmax:</span>
+                 <span class="center_border">${travel.speed?.flag ? `${maxSpeed} км/ч,` : '-'}</span>
+                  <span>${travel.speed?.flagTimeExcess ? `Δt: ${timeExcess}` : '-'}</span></div>`
             }
 
             const titlerows = el.map(e => {
@@ -70,7 +79,8 @@ export class Content {
             }).join('')
             return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div>${settingsTravel}</div>
                       <table class="cell_params ${displayClass} stat_reports"><tr>${titlerows}</tr>${attributesCell}<tr class="tr_last">${allRuns}</tr></table>
-                      <div class="last_row ${symbolRow}">${allRunsSpan}</div>`
+                      <div  class="last_table ${symbolRow}"><div class="last_row">${allRunsSpanTitle}</div>
+                      <div class="last_row">${allRunsSpan}</div></div>`
         }).join('')
         return newRows
     }
@@ -88,14 +98,71 @@ export class Content {
                 return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div></div>
                       <div class="chart_container ${displayClass} center_no_data">Нет данных</div>`
             }
+
             return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div>
             <div class="rows_spoyler group_new_rows">${group}</div><i class="fas fa-expand full_screen"></i></div>
-                    ${chartHtml}<div class="last_row ${symbolRow}"></div> `
+                    ${chartHtml}<div class="sub_charts last_row ${symbolRow}"></div> `
         }).join('')
 
         return newRows
     }
 
+
+    static renderChartsLegend(data, stata, types, prop, object, container) {
+        let containers;
+        if (types === 'Топливо') {
+            container.style.display = 'flex'
+            const arrayTitle = [{
+                title: 'Заправки:',
+                icon: '<div class="wrap_icon" rel="Заправка"><i class="fas  fa-gas-pump  " style="color:green"></i></div>'
+            },
+            {
+                title: 'Сливы:',
+                icon: '<div class="wrap_icon"  rel="Слив"><i class="fas fa-fill-drip  " style="color:red"></i></div>'
+            }, {
+                title: 'Уровень топлива:',
+                icon: '<div class="rect_legend" rel="lineOil"></div>'
+            }, {
+                title: 'Поездки:',
+                icon: '<div class="rect_legend" rel="Движение" style="background-color:rgb(183,170,14)"></div>'
+            }, {
+                title: 'Моточасы:',
+                icon: '<div class="rect_legend" rel="Работа двигателя" style="background-color:rgb(255,209,215)"></div>'
+            }]
+            containers = arrayTitle.map(e => {
+                return `<div class="uniqum_legend"><div class="title_legend">${e.title}</div>${e.icon}</div>`
+
+
+            }).join('')
+        }
+        if (types === 'Моточасы') {
+            container.style.display = 'flex'
+            const arrayTitle = [{
+                title: 'Движение:',
+                icon: '<div class="rect_legend_moto" rel="Движение" style="background-color:#8fd14f">Движение</div>'
+            },
+            {
+                title: 'Парковка:',
+                icon: '<div class="rect_legend_moto" rel="Движение" style="background-color:#3399ff">Парковка</div>'
+            }, {
+                title: 'Повёрнут ключ зажигания:',
+                icon: '<div class="rect_legend_moto" rel="Движение" style="background-color:#fef445">Повёрнут ключ зажигания</div>'
+            }, {
+                title: 'Работа на холостом ходу:',
+                icon: '<div class="rect_legend_moto" rel="Движение" style="background-color:#f24726">Работа на холостом ходу</div>'
+            }]
+            containers = arrayTitle.map(e => {
+                return `<div class="uniqum_legend">${e.icon}</div>`
+
+
+            }).join('')
+        }
+
+
+        return `<div class="title_legend">Легенда:</div>
+        <div class="body_legend">${containers}
+        </div>`
+    }
     static renderTableStatic(stata, prop, object) {
 
         const newRows = stata.map((el, index) => {
@@ -182,6 +249,7 @@ export class Content {
     }
     // Метод для генерации списка чекбоксов
     static generateCheckboxList(fields, indexs, type) {
+        // console.log(fields, indexs, type)
         return fields
             .map((field, index) => {
                 // Формируем id чекбокса
@@ -204,6 +272,7 @@ export class Content {
 
     // Метод для рендеринга контента на основе типа
     static renderContent(type, indexs, fields) {
+        console.log(type, fields)
         if (!fields) {
             switch (type) {
                 case 'Статистика':
@@ -216,6 +285,9 @@ export class Content {
                     fields = storComponentRuns
                     break;
                 case 'Поездки':
+                    fields = storComponentTravel
+                    break;
+                case 'Поездки по дням':
                     fields = storComponentTravel
                     break;
                 case 'Стоянки':
@@ -310,11 +382,9 @@ export class Content {
     static addRazmetka() {
         return ` <div class="wraaper reports_module">
                 <div class="up_block">
-                    <div class="up_title">Отчеты</div>
-                    <div class="up_content">
+                                     <div class="up_content">
                         <div class="wrapper_shablon">
-                            <div class="title_result_reports">Шаблоны</div>
-                            <div class="wrapper_preferens">
+                                                     <div class="wrapper_preferens">
                              <div class="object">
                                         <div class="select_list">
                                             <div class="titleChange_list_name" rel="Выбор объектов">Выбор объекта </div>
@@ -382,13 +452,11 @@ export class Content {
                             </div>
                         </div>
                         <div class="wrapper_result">
-                            <div class="title_result_reports">Заголовки отчетов</div>
-                            <ul class="list_reports">
+                                                   <ul class="list_reports">
                                                          </ul>
                         </div>
                         <div class="wrapper_reports_map">
-                            <div class="title_result_reports">Карта</div>
-                            <div class="reports_maps"></div>
+                                                    <div class="reports_maps"></div>
                         </div>
                     </div>
                 </div>
@@ -400,6 +468,7 @@ export class Content {
                     <div class="down_title" rel="Детализация">Детализация</div>
                     <div class="down_content">
                         <div class="wrapper_reports"></div>
+                        <div class="legend_container"></div>
                     </div>
                     <div class="wrapper_file">
                         <div class="file">
