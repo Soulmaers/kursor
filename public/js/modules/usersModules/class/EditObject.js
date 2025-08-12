@@ -103,8 +103,9 @@ export class EditObject {
         };
         const res = await fetch('/api/getSensStorMeta', params)
         const fetchSensStorMeta = await res.json()
-        console.log(this.property)
-        const port = this.property.port ? this.property.port : 'wialon'
+        console.log(this.property.port)
+        const port = this.property.port && this.property.port !== '-' ? this.property.port : 'wialon'
+        console.log(port)
         this.instanceConfig = new ConfiguratorParams(this.idx, port, this.property.imeidevice, fetchSensStorMeta, this.property.idbitrixobject)
     }
 
@@ -185,6 +186,7 @@ export class EditObject {
             const oldUz = this.property.incriment[1]
             const oldType = this.property.typeobject
             const idx = this.property.idx[0]
+            console.log(this.obj)
             const messUser = await Requests.editObject(this.obj);
             if (messUser.flag && oldType !== this.obj.typeobject) await Requests.updateDefaultSettings(idx, this.obj.typeobject);
             console.log(messUser.flag, oldType, this.obj.typeobject)

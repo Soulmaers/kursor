@@ -32,6 +32,7 @@ export class AddMapClass {
     }
 
     createMarker(geo, color, typeIcon) {
+        console.log(geo)
         const newHtml = `<i class="${typeIcon} geo_position" style="color: ${color}"></i>`;
         const greenIcon = this.paramsIcon(newHtml)
         if (this.marker) {
@@ -84,6 +85,7 @@ export class AddMapClass {
 
     // Метод для добавления полилинии трека
     addTrackPolyline(track, color, weight) {
+        console.log(track)
         if (this.trackPoly) {
             this.clearPoly(this.trackPoly)
         }
@@ -109,6 +111,7 @@ export class AddMapClass {
         if (this.finish) (this.map.removeLayer(this.finish), this.finish = null);
     }
     createMarkerTrek(track) {
+        console.log(track)
         if (track.length === 0) {
             this.clearMarker()
             return

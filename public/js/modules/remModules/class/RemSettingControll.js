@@ -55,6 +55,7 @@ export class RemClassControll {
 
 
     async getOldIdObjects() {
+        console.log(this.elements)
         this.res = await RequestToBase.getIdObject(this.elements)
         console.log(this.res)
         console.log(arrayTableStor)

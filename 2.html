@@ -1,0 +1,288 @@
+
+                 <html>
+            <head>
+                <style>.header_logo {
+    width: 100%;
+    height: 60px;
+    background-color: #061c47;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+.img_logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    /* или cover — смотри ниже */
+}
+
+.head_meta {
+    width: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-self: flex-start;
+}
+
+.chart_head_meta {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nadpis {
+    font-size: 1.2rem;
+    color: #061c47
+}
+
+.body_pdf {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.contant_title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title_type {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.next {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 4px 0;
+    box-sizing: border-box;
+}
+
+.title_name {
+    color: #061c47;
+    font-size: 1.4rem;
+}
+
+.title_number {
+    color: #061c47;
+    font-size: 1.4rem;
+}
+
+.dashes {
+    width: 100%;
+    border-bottom: 2px dotted #061c47;
+    padding-top: 12px;
+    margin: 0 5px;
+}
+
+.title_component_sub {
+    padding-left: 26px;
+    box-sizing: border-box;
+    margin: 2px 0;
+}
+
+.component_title {
+    font-size: 1.2rem;
+    color: #061c47;
+    white-space: nowrap;
+}
+
+
+.page_break {
+    page-break-before: always;
+    margin-top: 20px;
+}
+
+.statistika_page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
+.components_page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.name_object {
+    font-size: 1.4rem;
+    color: #061c47;
+    align-self: center;
+}
+
+.name_component {
+    width: 50%;
+    margin: 10px 0;
+    font-size: 1.4rem;
+    color: #061c47;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.statistika_table {
+    width: 50%;
+    border-collapse: collapse;
+}
+
+.components_table {
+    max-width: 100%;
+    border-collapse: collapse;
+    word-wrap: break-word;
+}
+
+.components_table td {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.components_table th {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+    word-wrap: break-word;
+}
+
+.statistika_table td {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+}
+
+.left_stat {
+    text-align: left;
+}
+
+.right_stat {
+    text-align: center;
+}
+
+.page_component {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.components_table .left_stat {
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.components_table td.last-row-cell {
+    border-top: 3px solid #38496C;
+    font-weight: bold;
+}
+
+.wrap_icon {
+    margin-right: 20px;
+    margin-left: 8px;
+    width: 25px;
+    height: 25px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+.uniqum_legend {
+    display: flex;
+    align-items: center;
+}
+
+
+.body_legend {
+    width: 100%;
+    margin: 0 20px;
+    display: flex;
+    align-items: center;
+}
+
+.legend_container {
+    width: 100%;
+    min-height: 30px;
+    background-color: #38496C;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    color: #fff
+}
+
+.rect_legend {
+    margin-right: 20px;
+    margin-left: 8px;
+    width: 52px;
+    height: 25px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.rect_legend_moto {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: rgba(6, 28, 71, 0.8);
+    margin-right: 4px;
+    box-sizing: border-box;
+}
+
+.skdsh_leg {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: transparent;
+    padding: 2px 0;
+}
+
+.value_tool_skdah {
+    text-align: left;
+}
+
+.info_window {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    color: rgba(6, 28, 71, 1);
+    background-color: #fff;
+    min-width: 52px;
+    height: 20px;
+    margin-right: 8px;
+    box-sizing: border-box;
+}</style>
+            </head>
+            <body class="body_pdf">
+                       <div class="page_component">
+                <div class="head_meta"><div class="nadpis">SIM_FOTON763</div><div class="nadpis">Демо</div><div class="name_component">Пробеги</div></div>
+                <table class="components_table">
+                    <thead><tr><th class="colums">Дата</th><th class="colums">Километраж</th><th class="colums">Время в движении</th><th class="colums">Потрачено по ДУТ</th><th class="colums">Средний расход л/100км</th><th class="colums">Поездки (количество)</th><th class="colums">Стоянки (количество)</th><th class="colums">Остановки (количество)</th><th class="colums">Простои на ХХ (количество)</th><th class="colums">Кол-во нарушений (количество)</th></tr></thead>
+                    <tbody><tr><td class=" ">01.04.2025</td><td class=" ">784</td><td class=" ">8:39:15</td><td class=" ">262.6</td><td class=" ">33.5</td><td class=" ">9</td><td class=" ">2</td><td class=" ">1</td><td class=" ">-</td><td class=" ">1</td></tr><tr><td class=" ">02.04.2025</td><td class=" ">952</td><td class=" ">11:34:05</td><td class=" ">311.9</td><td class=" ">32.8</td><td class=" ">8</td><td class=" ">1</td><td class=" ">-</td><td class=" ">-</td><td class=" ">2</td></tr><tr><td class=" ">03.04.2025</td><td class=" ">367</td><td class=" ">3:59:03</td><td class=" ">179.9</td><td class=" ">49</td><td class=" ">3</td><td class=" ">5</td><td class=" ">1</td><td class=" ">-</td><td class=" ">8</td></tr><tr><td class=" ">04.04.2025</td><td class=" ">532</td><td class=" ">6:40:54</td><td class=" ">246.8</td><td class=" ">46.4</td><td class=" ">6</td><td class=" ">2</td><td class=" ">3</td><td class=" ">-</td><td class=" ">3</td></tr><tr><td class=" ">05.04.2025</td><td class=" ">1270</td><td class=" ">13:58:09</td><td class=" ">499</td><td class=" ">39.3</td><td class=" ">15</td><td class=" ">4</td><td class=" ">-</td><td class=" ">-</td><td class=" ">16</td></tr><tr><td class=" ">06.04.2025</td><td class=" ">523</td><td class=" ">4:38:14</td><td class=" ">273.9</td><td class=" ">52.4</td><td class=" ">9</td><td class=" ">4</td><td class=" ">1</td><td class=" ">-</td><td class=" ">2</td></tr><tr><td class=" ">07.04.2025</td><td class=" ">234</td><td class=" ">0:21:18</td><td class=" ">180.5</td><td class=" ">77.1</td><td class=" ">1</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td></tr><tr><td class=" ">08.04.2025</td><td class=" ">547</td><td class=" ">1:15:59</td><td class=" ">88.4</td><td class=" ">16.2</td><td class=" ">5</td><td class=" ">6</td><td class=" ">1</td><td class=" ">-</td><td class=" ">4</td></tr><tr><td class=" ">09.04.2025</td><td class=" ">688</td><td class=" ">5:30:24</td><td class=" ">269.1</td><td class=" ">39.1</td><td class=" ">16</td><td class=" ">3</td><td class=" ">-</td><td class=" ">-</td><td class=" ">9</td></tr><tr><td class=" ">10.04.2025</td><td class=" ">1027</td><td class=" ">10:35:05</td><td class=" ">404.9</td><td class=" ">39.4</td><td class=" ">15</td><td class=" ">3</td><td class=" ">1</td><td class=" ">-</td><td class=" ">25</td></tr><tr><td class=" ">11.04.2025</td><td class=" ">533</td><td class=" ">6:29:04</td><td class=" ">213.8</td><td class=" ">40.1</td><td class=" ">8</td><td class=" ">4</td><td class=" ">4</td><td class=" ">-</td><td class=" ">24</td></tr><tr><td class=" ">12.04.2025</td><td class=" ">-</td><td class=" ">0:00:00</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td></tr><tr><td class=" ">13.04.2025</td><td class=" ">-</td><td class=" ">0:00:00</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td></tr><tr><td class=" ">14.04.2025</td><td class=" ">12</td><td class=" ">0:00:00</td><td class=" ">8.5</td><td class=" ">70.8</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td></tr><tr><td class=" ">15.04.2025</td><td class=" ">-</td><td class=" ">0:00:00</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td></tr><tr><td class=" ">16.04.2025</td><td class=" ">686</td><td class=" ">8:18:40</td><td class=" ">304.8</td><td class=" ">44.4</td><td class=" ">7</td><td class=" ">2</td><td class=" ">1</td><td class=" ">-</td><td class=" ">7</td></tr><tr><td class=" ">17.04.2025</td><td class=" ">1028</td><td class=" ">11:24:50</td><td class=" ">228.4</td><td class=" ">22.2</td><td class=" ">15</td><td class=" ">3</td><td class=" ">2</td><td class=" ">-</td><td class=" ">19</td></tr><tr><td class=" ">18.04.2025</td><td class=" ">756</td><td class=" ">7:49:18</td><td class=" ">360.9</td><td class=" ">47.7</td><td class=" ">13</td><td class=" ">4</td><td class=" ">-</td><td class=" ">-</td><td class=" ">1</td></tr><tr><td class=" ">19.04.2025</td><td class=" ">742</td><td class=" ">5:06:05</td><td class=" ">210.8</td><td class=" ">28.4</td><td class=" ">14</td><td class=" ">8</td><td class=" ">2</td><td class=" ">-</td><td class=" ">4</td></tr><tr><td class=" ">20.04.2025</td><td class=" ">796</td><td class=" ">8:03:08</td><td class=" ">319.9</td><td class=" ">40.2</td><td class=" ">11</td><td class=" ">2</td><td class=" ">7</td><td class=" ">2</td><td class=" ">5</td></tr><tr><td class=" ">21.04.2025</td><td class=" ">451</td><td class=" ">5:11:25</td><td class=" ">152.5</td><td class=" ">33.8</td><td class=" ">13</td><td class=" ">8</td><td class=" ">4</td><td class=" ">1</td><td class=" ">-</td></tr><tr><td class=" ">22.04.2025</td><td class=" ">725</td><td class=" ">8:30:42</td><td class=" ">160.4</td><td class=" ">22.1</td><td class=" ">10</td><td class=" ">3</td><td class=" ">-</td><td class=" ">-</td><td class=" ">3</td></tr><tr><td class=" ">23.04.2025</td><td class=" ">480</td><td class=" ">4:37:00</td><td class=" ">29.1</td><td class=" ">6.1</td><td class=" ">7</td><td class=" ">10</td><td class=" ">2</td><td class=" ">-</td><td class=" ">2</td></tr><tr><td class=" ">24.04.2025</td><td class=" ">333</td><td class=" ">1:43:50</td><td class=" ">142.2</td><td class=" ">42.7</td><td class=" ">6</td><td class=" ">6</td><td class=" ">-</td><td class=" ">-</td><td class=" ">1</td></tr><tr><td class=" ">25.04.2025</td><td class=" ">865</td><td class=" ">9:45:12</td><td class=" ">345.6</td><td class=" ">40</td><td class=" ">16</td><td class=" ">1</td><td class=" ">1</td><td class=" ">-</td><td class=" ">5</td></tr><tr><td class=" ">26.04.2025</td><td class=" ">1033</td><td class=" ">12:09:36</td><td class=" ">397.7</td><td class=" ">38.5</td><td class=" ">13</td><td class=" ">3</td><td class=" ">2</td><td class=" ">-</td><td class=" ">20</td></tr><tr><td class=" ">27.04.2025</td><td class=" ">340</td><td class=" ">3:59:08</td><td class=" ">143.8</td><td class=" ">42.3</td><td class=" ">2</td><td class=" ">1</td><td class=" ">-</td><td class=" ">-</td><td class=" ">9</td></tr><tr><td class=" ">28.04.2025</td><td class=" ">12</td><td class=" ">0:00:00</td><td class=" ">19.2</td><td class=" ">160</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td></tr><tr><td class=" ">29.04.2025</td><td class=" ">16</td><td class=" ">0:00:00</td><td class=" ">8.3</td><td class=" ">51.9</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td></tr><tr><td class=" ">30.04.2025</td><td class=" ">-</td><td class=" ">0:00:00</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td><td class=" ">-</td></tr></tbody>
+                </table>
+                        </div>                                     
+                          </body>
+        </html>     

@@ -12,6 +12,7 @@ class WialonOrigin {
     }
     async inits() {
         const data = await wialonService.getDataFromWialon(this.session); //получение объектов с wialon
+        //  console.log(data)
         if (data) {
             Promise.all([this.getObjectData(data), HelpersUpdateParams.update(this.session)])
         } else {
@@ -23,17 +24,17 @@ class WialonOrigin {
     getObjectData = (() => {
         const timeCache = new Map(); // Кэш для хранения времени по каждому idw
         return async function (data) {
-            //  console.log(data)
+            //   console.log(data?.items)
             const dataArray = data?.items ?? [];
             const now = Math.floor(Date.now() / 1000);
             const phones = [];
             // Получаем телефоны и IMEI, но без Promise.all
             for (const el of dataArray) {
                 const phone = await wialonService.getUniqImeiAndPhoneIdDataFromWialon(el.id, this.session);
-                //  console.log(phone.item.psw)
+                //   console.log(phone)
                 phones.push(phone);
             }
-
+            //  console.log(phones)
             // Обработка данных из Wialon
             for (let i = 0; i < dataArray.length; i++) {
                 const el = dataArray[i];
@@ -41,10 +42,10 @@ class WialonOrigin {
                 const idw = el.id;
                 const psw = phones[i]?.item?.psw
                 // console.log(sim)
-                // console.log(phone)
-                if (!phone?.item?.uid) continue;
+                //      console.log(phone)
+                //   if (!phone?.item?.uid) continue;
                 const res = await databaseService.objectsWialonImei(String(phone.item.uid));
-                if (!res?.length) continue;
+                //   if (!res?.length) continue;
 
                 let oldTime = timeCache.get(idw);
                 if (!oldTime) {
@@ -53,8 +54,9 @@ class WialonOrigin {
                     oldTime = timeBase?.[0]?.time_reg ? Number(timeBase[0].time_reg) : now - 1000;
                     timeCache.set(idw, oldTime); // Сохраняем время в кэш
                 }
-
+                //  console.log(oldTime)
                 const result = await wialonService.loadIntervalDataFromWialon(el.id, oldTime + 1, now, 'i', this.session);
+                //  console.log(result)
                 //  console.log('здесь!')
                 if (!result || !result.messages) continue;
                 const allArrayData = [];
@@ -71,7 +73,7 @@ class WialonOrigin {
                         speed: e.pos?.s,
                         time_reg: Math.floor(new Date().getTime() / 1000)
                     };
-
+                    //  console.log(idw, el.nm, phone.item.uid)
                     Object.keys(e.p || {}).forEach(key => {
                         allObject[key] = e.p[key];
                     });
@@ -91,6 +93,7 @@ class WialonOrigin {
                     }
                     allArrayData.push(allObject);
                 }
+                // console.log(allArrayData.length)
                 // Запись в базу данных
                 await this.updateDatabase(allArrayData, idw, psw);
 
@@ -102,10 +105,12 @@ class WialonOrigin {
         }
     })();
     async updateDatabase(allArrayData, res, psw) {
-
+        // console.log(res, allArrayData.length)
+        // console.log('тут')
         if (allArrayData.length !== 0) {
-            new UpdateSetStor(allArrayData[0].imei, allArrayData[0].port, allArrayData, res)
             await this.setValidationImeiToBase(allArrayData);
+            new UpdateSetStor(allArrayData[0].imei, allArrayData[0].port, allArrayData, res)
+            //  console.log(psw)
             if (psw === '7777') {
                 //console.log(psw)
                 // console.log(allArrayData[0].imei)
@@ -116,7 +121,7 @@ class WialonOrigin {
                 for (let item of result) {
                     if (!item) return
                     if (item.data[0].idObject == '28526629ido') {
-                        console.log(result)
+                        //   console.log(result)
                     }
                     new UpdateSetStor(item.data[0].imei, 'simulator', item.data, item.data[0].idObject)
 

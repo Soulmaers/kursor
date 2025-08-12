@@ -68,6 +68,16 @@ export const arrayTableStor = [
     {
         table: 'tyres_table_tire',
         column: 'idObject',
+    },
+    {
+        table: 'templates_simulation',
+        column: 'id_donor'
+    },
+    {
+        table: 'config_params',
+        column: 'idw'
     }
+
+
 
 ]

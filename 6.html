@@ -1,0 +1,288 @@
+
+                 <html>
+            <head>
+                <style>.header_logo {
+    width: 100%;
+    height: 60px;
+    background-color: #061c47;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+.img_logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    /* или cover — смотри ниже */
+}
+
+.head_meta {
+    width: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-self: flex-start;
+}
+
+.chart_head_meta {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nadpis {
+    font-size: 1.2rem;
+    color: #061c47
+}
+
+.body_pdf {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.contant_title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title_type {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.next {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 4px 0;
+    box-sizing: border-box;
+}
+
+.title_name {
+    color: #061c47;
+    font-size: 1.4rem;
+}
+
+.title_number {
+    color: #061c47;
+    font-size: 1.4rem;
+}
+
+.dashes {
+    width: 100%;
+    border-bottom: 2px dotted #061c47;
+    padding-top: 12px;
+    margin: 0 5px;
+}
+
+.title_component_sub {
+    padding-left: 26px;
+    box-sizing: border-box;
+    margin: 2px 0;
+}
+
+.component_title {
+    font-size: 1.2rem;
+    color: #061c47;
+    white-space: nowrap;
+}
+
+
+.page_break {
+    page-break-before: always;
+    margin-top: 20px;
+}
+
+.statistika_page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
+.components_page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.name_object {
+    font-size: 1.4rem;
+    color: #061c47;
+    align-self: center;
+}
+
+.name_component {
+    width: 50%;
+    margin: 10px 0;
+    font-size: 1.4rem;
+    color: #061c47;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.statistika_table {
+    width: 50%;
+    border-collapse: collapse;
+}
+
+.components_table {
+    max-width: 100%;
+    border-collapse: collapse;
+    word-wrap: break-word;
+}
+
+.components_table td {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.components_table th {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+    word-wrap: break-word;
+}
+
+.statistika_table td {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+}
+
+.left_stat {
+    text-align: left;
+}
+
+.right_stat {
+    text-align: center;
+}
+
+.page_component {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.components_table .left_stat {
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.components_table td.last-row-cell {
+    border-top: 3px solid #38496C;
+    font-weight: bold;
+}
+
+.wrap_icon {
+    margin-right: 20px;
+    margin-left: 8px;
+    width: 25px;
+    height: 25px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+.uniqum_legend {
+    display: flex;
+    align-items: center;
+}
+
+
+.body_legend {
+    width: 100%;
+    margin: 0 20px;
+    display: flex;
+    align-items: center;
+}
+
+.legend_container {
+    width: 100%;
+    min-height: 30px;
+    background-color: #38496C;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    color: #fff
+}
+
+.rect_legend {
+    margin-right: 20px;
+    margin-left: 8px;
+    width: 52px;
+    height: 25px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.rect_legend_moto {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: rgba(6, 28, 71, 0.8);
+    margin-right: 4px;
+    box-sizing: border-box;
+}
+
+.skdsh_leg {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: transparent;
+    padding: 2px 0;
+}
+
+.value_tool_skdah {
+    text-align: left;
+}
+
+.info_window {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    color: rgba(6, 28, 71, 1);
+    background-color: #fff;
+    min-width: 52px;
+    height: 20px;
+    margin-right: 8px;
+    box-sizing: border-box;
+}</style>
+            </head>
+            <body class="body_pdf">
+                       <div class="page_component">
+                <div class="head_meta"><div class="nadpis">SIM_FOTON763</div><div class="nadpis">Демо</div><div class="name_component">Моточасы</div></div>
+                <table class="components_table">
+                    <thead><tr><th class="colums">Начало</th><th class="colums">Начальное местоположение</th><th class="colums">Конец</th><th class="colums">Конечное местоположение</th><th class="colums">Моточасы</th><th class="colums">Пробег</th><th class="colums">Средние обороты двигателя</th><th class="colums">Максимальные обороты двигателя</th><th class="colums">Потрачено по ДУТ</th><th class="colums">Средний расход по ДУТ на 100 км</th><th class="colums">Начальный уровень топлива</th><th class="colums">Конечный уровень топлива</th></tr></thead>
+                    <tbody><tr><td class=" ">01.04.25 07:36:17</td><td class="left_stat ">59.1626316667,35.327005</td><td class=" ">01.04.25 13:59:44</td><td class="left_stat ">58.0697966667,40.08868</td><td class=" ">06:23:27</td><td class=" ">452.06</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">129.10</td><td class=" ">28.56</td><td class=" ">370.85</td><td class=" ">241.75</td></tr><tr><td class=" ">01.04.25 14:05:55</td><td class="left_stat ">58.069855,40.0886516667</td><td class=" ">01.04.25 15:28:05</td><td class="left_stat ">57.5431233333,39.8022733333</td><td class=" ">01:22:10</td><td class=" ">76.47</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">35.70</td><td class=" ">46.69</td><td class=" ">241.16</td><td class=" ">205.46</td></tr><tr><td class=" ">01.04.25 15:46:31</td><td class="left_stat ">57.5431816667,39.802355</td><td class=" ">01.04.25 16:08:57</td><td class="left_stat ">57.5408483333,40.1199533333</td><td class=" ">00:22:26</td><td class=" ">20.81</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">6.15</td><td class=" ">29.55</td><td class=" ">755.78</td><td class=" ">749.63</td></tr><tr><td class=" ">01.04.25 20:03:06</td><td class="left_stat ">57.5410016667,40.119875</td><td class=" ">02.04.25 12:04:10</td><td class="left_stat ">58.3289333333,48.26526</td><td class=" ">16:01:04</td><td class=" ">562.22</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">181.85</td><td class=" ">32.35</td><td class=" ">754.19</td><td class=" ">572.34</td></tr><tr><td class=" ">02.04.25 12:36:37</td><td class="left_stat ">58.3289833333,48.2650566667</td><td class=" ">02.04.25 17:40:59</td><td class="left_stat ">58.8569133333,53.1882566667</td><td class=" ">05:04:22</td><td class=" ">356.48</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">114.83</td><td class=" ">32.21</td><td class=" ">571.15</td><td class=" ">456.32</td></tr><tr><td class=" ">02.04.25 17:58:30</td><td class="left_stat ">58.85687,53.1887866667</td><td class=" ">02.04.25 18:04:58</td><td class="left_stat ">58.85583,53.2424216667</td><td class=" ">00:06:28</td><td class=" ">3.41</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">0.39</td><td class=" ">11.45</td><td class=" ">455.33</td><td class=" ">454.94</td></tr><tr><td class=" ">02.04.25 18:14:39</td><td class="left_stat ">58.8558216667,53.2424566667</td><td class=" ">02.04.25 20:32:36</td><td class="left_stat ">57.9790233333,55.3106783333</td><td class=" ">02:17:57</td><td class=" ">177.73</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">62.27</td><td class=" ">35.04</td><td class=" ">454.54</td><td class=" ">392.27</td></tr><tr><td class=" ">02.04.25 20:40:54</td><td class="left_stat ">57.97893,55.3107533333</td><td class=" ">03.04.25 08:44:35</td><td class="left_stat ">57.01462,57.4685283333</td><td class=" ">12:03:41</td><td class=" ">214.39</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">76.95</td><td class=" ">35.89</td><td class=" ">392.27</td><td class=" ">315.32</td></tr><tr><td class=" ">03.04.25 09:15:11</td><td class="left_stat ">57.014685,57.4683216667</td><td class=" ">03.04.25 11:58:05</td><td class="left_stat ">56.7655066667,60.5566933333</td><td class=" ">02:42:54</td><td class=" ">214.92</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">68.22</td><td class=" ">31.74</td><td class=" ">314.73</td><td class=" ">246.51</td></tr><tr><td class=" ">03.04.25 13:31:35</td><td class="left_stat ">56.7657783333,60.5591183333</td><td class=" ">03.04.25 13:43:19</td><td class="left_stat ">56.7674866667,60.5609533333</td><td class=" ">00:11:44</td><td class=" ">0.34</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">241.95</td><td class=" ">242.35</td></tr><tr><td class=" ">03.04.25 14:23:51</td><td class="left_stat ">56.7658783333,60.558895</td><td class=" ">03.04.25 15:14:18</td><td class="left_stat ">56.8856166667,60.01584</td><td class=" ">00:50:27</td><td class=" ">43.25</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">72.45</td><td class=" ">167.51</td><td class=" ">248.89</td><td class=" ">231.44</td></tr><tr><td class=" ">04.04.25 06:02:15</td><td class="left_stat ">56.88562,60.01571</td><td class=" ">04.04.25 06:24:21</td><td class="left_stat ">56.8858666667,60.0156516667</td><td class=" ">00:22:06</td><td class=" ">0.41</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">0.99</td><td class=" ">243.69</td><td class=" ">234.61</td><td class=" ">233.62</td></tr><tr><td class=" ">04.04.25 07:48:06</td><td class="left_stat ">56.885795,60.0154566667</td><td class=" ">04.04.25 08:12:03</td><td class="left_stat ">56.907615,59.9650216667</td><td class=" ">00:23:57</td><td class=" ">5.67</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">3.17</td><td class=" ">55.89</td><td class=" ">230.25</td><td class=" ">227.08</td></tr><tr><td class=" ">04.04.25 09:15:11</td><td class="left_stat ">56.9073683333,59.96463</td><td class=" ">04.04.25 09:46:17</td><td class="left_stat ">56.8856233333,60.015395</td><td class=" ">00:31:06</td><td class=" ">5.66</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">3.37</td><td class=" ">59.58</td><td class=" ">224.10</td><td class=" ">220.73</td></tr><tr><td class=" ">04.04.25 12:30:23</td><td class="left_stat ">56.8858183333,60.0157683333</td><td class=" ">04.04.25 14:49:38</td><td class="left_stat ">56.653425,57.7847183333</td><td class=" ">02:19:15</td><td class=" ">165.09</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">65.19</td><td class=" ">39.49</td><td class=" ">219.74</td><td class=" ">359.55</td></tr><tr><td class=" ">04.04.25 15:03:50</td><td class="left_stat ">56.6536116667,57.7847116667</td><td class=" ">04.04.25 21:13:15</td><td class="left_stat ">54.6695766667,56.1651716667</td><td class=" ">06:09:25</td><td class=" ">351.95</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">166.58</td><td class=" ">47.33</td><td class=" ">359.15</td><td class=" ">192.57</td></tr><tr><td class=" ">05.04.25 05:42:00</td><td class="left_stat ">54.669725,56.16528</td><td class=" ">05.04.25 09:56:26</td><td class="left_stat ">54.065105,52.1393883333</td><td class=" ">04:14:26</td><td class=" ">293.48</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">204.79</td><td class=" ">69.78</td><td class=" ">192.97</td><td class=" ">50.18</td></tr><tr><td class=" ">05.04.25 10:28:10</td><td class="left_stat ">54.06519,52.1396933333</td><td class=" ">05.04.25 12:31:25</td><td class="left_stat ">53.4975483333,50.0784766667</td><td class=" ">02:03:15</td><td class=" ">163.63</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">51.77</td><td class=" ">59.11</td></tr><tr><td class=" ">05.04.25 12:55:36</td><td class="left_stat ">53.4975283333,50.0780266667</td><td class=" ">05.04.25 14:56:56</td><td class="left_stat ">53.134665,48.6017566667</td><td class=" ">02:01:20</td><td class=" ">155.03</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">20.82</td><td class=" ">13.43</td><td class=" ">770.05</td><td class=" ">749.23</td></tr><tr><td class=" ">05.04.25 15:07:25</td><td class="left_stat ">53.0374933333,48.7758466667</td><td class=" ">05.04.25 16:01:44</td><td class="left_stat ">52.6628883333,48.2130016667</td><td class=" ">00:54:19</td><td class=" ">94.02</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">31.13</td><td class=" ">33.11</td><td class=" ">749.03</td><td class=" ">717.90</td></tr><tr><td class=" ">05.04.25 16:31:30</td><td class="left_stat ">52.663025,48.2130283333</td><td class=" ">06.04.25 00:01:30</td><td class="left_stat ">48.9806233333,44.67176</td><td class=" ">07:30:00</td><td class=" ">535.98</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">238.96</td><td class=" ">44.58</td><td class=" ">717.30</td><td class=" ">478.34</td></tr><tr><td class=" ">06.04.25 06:58:45</td><td class="left_stat ">48.9799933333,44.672155</td><td class=" ">06.04.25 11:19:59</td><td class="left_stat ">48.264865,41.041415</td><td class=" ">04:21:14</td><td class=" ">284.77</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">133.47</td><td class=" ">46.87</td><td class=" ">479.53</td><td class=" ">346.06</td></tr><tr><td class=" ">06.04.25 11:47:54</td><td class="left_stat ">48.2649733333,41.0414716667</td><td class=" ">06.04.25 15:24:33</td><td class="left_stat ">47.2389083333,38.930235</td><td class=" ">03:36:39</td><td class=" ">226.17</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">117.60</td><td class=" ">52.00</td><td class=" ">344.68</td><td class=" ">227.08</td></tr><tr><td class=" ">06.04.25 21:19:51</td><td class="left_stat ">47.303655,39.469765</td><td class=" ">07.04.25 02:05:51</td><td class="left_stat ">47.38233,39.43741</td><td class=" ">04:46:00</td><td class=" ">2.95</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">2.98</td><td class=" ">100.91</td><td class=" ">224.30</td><td class=" ">221.32</td></tr><tr><td class=" ">07.04.25 02:06:14</td><td class="left_stat ">47.37257,39.442445</td><td class=" ">07.04.25 02:12:18</td><td class="left_stat ">47.302965,39.525135</td><td class=" ">00:06:04</td><td class=" ">0.06</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">221.32</td><td class=" ">227.27</td></tr><tr><td class=" ">07.04.25 02:24:03</td><td class="left_stat ">47.3349883333,39.6019016667</td><td class=" ">07.04.25 02:32:02</td><td class="left_stat ">47.3124716667,39.4304966667</td><td class=" ">00:07:59</td><td class=" ">0.22</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">1.59</td><td class=" ">726.86</td><td class=" ">219.94</td><td class=" ">218.35</td></tr><tr><td class=" ">07.04.25 11:51:18</td><td class="left_stat ">47.2393116667,38.9270633333</td><td class=" ">07.04.25 12:33:18</td><td class="left_stat ">47.2385183333,38.927035</td><td class=" ">00:42:00</td><td class=" ">1.13</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">1.79</td><td class=" ">159.11</td><td class=" ">217.76</td><td class=" ">215.97</td></tr><tr><td class=" ">07.04.25 13:17:06</td><td class="left_stat ">47.2390133333,38.9303566667</td><td class=" ">07.04.25 14:53:43</td><td class="left_stat ">47.20105,39.70703</td><td class=" ">01:36:37</td><td class=" ">37.41</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">86.54</td><td class=" ">231.35</td><td class=" ">216.57</td><td class=" ">185.03</td></tr><tr><td class=" ">07.04.25 14:59:32</td><td class="left_stat ">47.2009316667,39.7070733333</td><td class=" ">07.04.25 15:04:39</td><td class="left_stat ">47.2030766667,39.7042483333</td><td class=" ">00:05:07</td><td class=" ">0.59</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">191.18</td><td class=" ">191.58</td></tr><tr><td class=" ">07.04.25 16:56:41</td><td class="left_stat ">47.20315,39.70443</td><td class=" ">07.04.25 17:03:30</td><td class="left_stat ">47.2031,39.704515</td><td class=" ">00:06:49</td><td class=" ">0.2</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">0.99</td><td class=" ">487.38</td><td class=" ">192.37</td><td class=" ">191.38</td></tr><tr><td class=" ">07.04.25 18:36:23</td><td class="left_stat ">47.2028566667,39.7046966667</td><td class=" ">07.04.25 20:37:08</td><td class="left_stat ">46.307515,39.3784833333</td><td class=" ">02:00:45</td><td class=" ">73.69</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">44.22</td><td class=" ">60.01</td><td class=" ">190.98</td><td class=" ">146.76</td></tr><tr><td class=" ">07.04.25 20:37:08</td><td class="left_stat ">46.307515,39.3784833333</td><td class=" ">07.04.25 22:41:08</td><td class="left_stat ">45.5724866667,38.871795</td><td class=" ">02:04:00</td><td class=" ">106.89</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">50.57</td><td class=" ">47.31</td><td class=" ">145.57</td><td class=" ">95.00</td></tr><tr><td class=" ">07.04.25 22:41:08</td><td class="left_stat ">45.5724866667,38.871795</td><td class=" ">08.04.25 08:43:27</td><td class="left_stat ">45.4975633333,38.2515966667</td><td class=" ">10:02:19</td><td class=" ">88.56</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">102.93</td><td class=" ">103.33</td></tr><tr><td class=" ">08.04.25 08:49:56</td><td class="left_stat ">45.5267233333,38.1047566667</td><td class=" ">08.04.25 10:15:00</td><td class="left_stat ">45.4669066667,38.2275983333</td><td class=" ">01:25:04</td><td class=" ">135.44</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">18.44</td><td class=" ">13.62</td><td class=" ">80.72</td><td class=" ">62.28</td></tr><tr><td class=" ">08.04.25 10:35:21</td><td class="left_stat ">45.5506533333,38.13035</td><td class=" ">08.04.25 10:50:08</td><td class="left_stat ">45.5276066667,38.1060966667</td><td class=" ">00:14:47</td><td class=" ">27.25</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">2.77</td><td class=" ">10.17</td><td class=" ">65.05</td><td class=" ">62.28</td></tr><tr><td class=" ">08.04.25 13:17:19</td><td class="left_stat ">45.3613083333,38.2409333333</td><td class=" ">08.04.25 13:51:17</td><td class="left_stat ">45.361365,38.24079</td><td class=" ">00:33:58</td><td class=" ">0.88</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">63.27</td><td class=" ">63.67</td></tr><tr><td class=" ">08.04.25 15:57:24</td><td class="left_stat ">45.361365,38.2407633333</td><td class=" ">08.04.25 16:18:45</td><td class="left_stat ">45.3458166667,38.2229633333</td><td class=" ">00:21:21</td><td class=" ">4.14</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">63.27</td><td class=" ">66.05</td></tr><tr><td class=" ">08.04.25 16:26:33</td><td class="left_stat ">45.34589,38.22313</td><td class=" ">08.04.25 16:32:42</td><td class="left_stat ">45.3438633333,38.219365</td><td class=" ">00:06:09</td><td class=" ">0.55</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">1.39</td><td class=" ">254.17</td><td class=" ">60.89</td><td class=" ">59.50</td></tr><tr><td class=" ">08.04.25 16:34:09</td><td class="left_stat ">45.3438616667,38.219375</td><td class=" ">08.04.25 16:49:09</td><td class="left_stat ">45.3646316667,38.2381366667</td><td class=" ">00:15:00</td><td class=" ">3.19</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">1.19</td><td class=" ">37.33</td><td class=" ">59.11</td><td class=" ">57.92</td></tr><tr><td class=" ">08.04.25 17:14:49</td><td class="left_stat ">45.3647483333,38.23805</td><td class=" ">08.04.25 18:17:05</td><td class="left_stat ">45.635975,38.9577566667</td><td class=" ">01:02:16</td><td class=" ">70.56</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">26.77</td><td class=" ">37.94</td><td class=" ">56.13</td><td class=" ">29.36</td></tr><tr><td class=" ">08.04.25 18:25:00</td><td class="left_stat ">45.6359683333,38.9579433333</td><td class=" ">08.04.25 19:45:00</td><td class="left_stat ">46.3046216667,39.3851233333</td><td class=" ">01:20:00</td><td class=" ">84.41</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">28.17</td><td class=" ">28.96</td></tr><tr><td class=" ">08.04.25 20:09:47</td><td class="left_stat ">46.29985,39.3815266667</td><td class=" ">08.04.25 20:45:01</td><td class="left_stat ">46.4406866667,39.70966</td><td class=" ">00:35:14</td><td class=" ">29.88</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">20.82</td><td class=" ">69.69</td><td class=" ">770.65</td><td class=" ">749.83</td></tr><tr><td class=" ">09.04.25 08:34:38</td><td class="left_stat ">46.5767383333,39.6725116667</td><td class=" ">09.04.25 10:23:40</td><td class="left_stat ">47.75472,40.144655</td><td class=" ">01:49:02</td><td class=" ">125.58</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">48.79</td><td class=" ">38.85</td><td class=" ">750.03</td><td class=" ">701.24</td></tr><tr><td class=" ">09.04.25 10:44:43</td><td class="left_stat ">47.75468,40.1446533333</td><td class=" ">09.04.25 11:43:20</td><td class="left_stat ">48.175005,40.56313</td><td class=" ">00:58:37</td><td class=" ">72.61</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">28.75</td><td class=" ">39.60</td><td class=" ">703.22</td><td class=" ">674.47</td></tr><tr><td class=" ">09.04.25 12:07:26</td><td class="left_stat ">48.1750416667,40.563195</td><td class=" ">09.04.25 19:09:31</td><td class="left_stat ">50.0924883333,45.357235</td><td class=" ">07:02:05</td><td class=" ">473.66</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">190.98</td><td class=" ">40.32</td><td class=" ">677.05</td><td class=" ">486.07</td></tr><tr><td class=" ">10.04.25 08:12:05</td><td class="left_stat ">50.09254,45.3573966667</td><td class=" ">10.04.25 11:20:20</td><td class="left_stat ">51.92237,46.56321</td><td class=" ">03:08:15</td><td class=" ">247.7</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">99.15</td><td class=" ">40.03</td><td class=" ">494.00</td><td class=" ">394.85</td></tr><tr><td class=" ">10.04.25 11:42:45</td><td class="left_stat ">51.9225016667,46.5631516667</td><td class=" ">10.04.25 16:26:49</td><td class="left_stat ">53.4958516667,50.0620816667</td><td class=" ">04:44:04</td><td class=" ">305.25</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">138.82</td><td class=" ">45.48</td><td class=" ">393.06</td><td class=" ">254.24</td></tr><tr><td class=" ">10.04.25 16:58:26</td><td class="left_stat ">53.4958366667,50.06207</td><td class=" ">10.04.25 23:03:13</td><td class="left_stat ">54.66908,56.1659166667</td><td class=" ">06:04:47</td><td class=" ">461.64</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">163.21</td><td class=" ">35.35</td><td class=" ">761.33</td><td class=" ">598.12</td></tr><tr><td class=" ">11.04.25 05:40:44</td><td class="left_stat ">54.6689883333,56.166035</td><td class=" ">11.04.25 06:37:41</td><td class="left_stat ">54.8322983333,56.9806183333</td><td class=" ">00:56:57</td><td class=" ">58.25</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">31.34</td><td class=" ">53.80</td><td class=" ">601.69</td><td class=" ">570.35</td></tr><tr><td class=" ">11.04.25 06:54:12</td><td class="left_stat ">54.832325,56.980925</td><td class=" ">11.04.25 09:35:36</td><td class="left_stat ">55.1794266667,58.1441566667</td><td class=" ">02:41:24</td><td class=" ">101.25</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">55.13</td><td class=" ">54.45</td><td class=" ">570.55</td><td class=" ">515.42</td></tr><tr><td class=" ">11.04.25 09:44:21</td><td class="left_stat ">55.179435,58.14417</td><td class=" ">11.04.25 13:59:37</td><td class="left_stat ">56.7966833333,59.4397866667</td><td class=" ">04:15:16</td><td class=" ">313.91</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">114.83</td><td class=" ">36.58</td><td class=" ">515.03</td><td class=" ">400.20</td></tr><tr><td class=" ">11.04.25 14:22:16</td><td class="left_stat ">56.7967333333,59.4398483333</td><td class=" ">11.04.25 14:59:45</td><td class="left_stat ">56.8856416667,60.015845</td><td class=" ">00:37:29</td><td class=" ">48.39</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">21.42</td><td class=" ">44.26</td><td class=" ">399.41</td><td class=" ">377.99</td></tr><tr><td class=" ">14.04.25 07:29:49</td><td class="left_stat ">56.885905,60.016185</td><td class=" ">14.04.25 08:42:35</td><td class="left_stat ">56.9075633333,59.96498</td><td class=" ">01:12:46</td><td class=" ">6.31</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">9.32</td><td class=" ">147.64</td><td class=" ">378.78</td><td class=" ">369.46</td></tr><tr><td class=" ">14.04.25 10:46:59</td><td class="left_stat ">56.90761,59.96494</td><td class=" ">14.04.25 10:57:23</td><td class="left_stat ">56.8931916667,59.9836716667</td><td class=" ">00:10:24</td><td class=" ">2.7</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">28.35</td><td class=" ">1048.79</td><td class=" ">373.03</td><td class=" ">344.68</td></tr><tr><td class=" ">14.04.25 11:13:38</td><td class="left_stat ">56.893155,59.9838816667</td><td class=" ">14.04.25 11:20:19</td><td class="left_stat ">56.8860133333,60.0178016667</td><td class=" ">00:06:41</td><td class=" ">2.75</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">366.29</td><td class=" ">369.07</td></tr><tr><td class=" ">16.04.25 11:16:31</td><td class="left_stat ">56.88582,60.015315</td><td class=" ">16.04.25 11:45:15</td><td class="left_stat ">56.90761,59.9649866667</td><td class=" ">00:28:44</td><td class=" ">5.61</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">6.15</td><td class=" ">109.64</td><td class=" ">370.26</td><td class=" ">364.11</td></tr><tr><td class=" ">16.04.25 12:51:21</td><td class="left_stat ">56.9076533333,59.9648716667</td><td class=" ">16.04.25 13:58:59</td><td class="left_stat ">56.8291433333,59.01613</td><td class=" ">01:07:38</td><td class=" ">78.53</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">37.09</td><td class=" ">47.23</td><td class=" ">361.14</td><td class=" ">324.05</td></tr><tr><td class=" ">16.04.25 14:26:21</td><td class="left_stat ">56.8291533333,59.01604</td><td class=" ">16.04.25 22:41:54</td><td class="left_stat ">54.7041383333,54.8552166667</td><td class=" ">08:15:33</td><td class=" ">600.48</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">254.83</td><td class=" ">42.44</td><td class=" ">324.05</td><td class=" ">69.22</td></tr><tr><td class=" ">17.04.25 07:46:30</td><td class="left_stat ">54.704145,54.8553866667</td><td class=" ">17.04.25 10:53:24</td><td class="left_stat ">54.065005,52.1382466667</td><td class=" ">03:06:54</td><td class=" ">204.56</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">54.54</td><td class=" ">76.56</td></tr><tr><td class=" ">17.04.25 11:01:44</td><td class="left_stat ">54.0649933333,52.138425</td><td class=" ">17.04.25 12:35:23</td><td class="left_stat ">53.5636116667,50.5542616667</td><td class=" ">01:33:39</td><td class=" ">122.23</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">1.19</td><td class=" ">0.97</td><td class=" ">70.41</td><td class=" ">69.22</td></tr><tr><td class=" ">17.04.25 13:14:09</td><td class="left_stat ">53.563705,50.5541833333</td><td class=" ">17.04.25 13:55:39</td><td class="left_stat ">53.4975433333,50.07819</td><td class=" ">00:41:30</td><td class=" ">41.89</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">68.62</td><td class=" ">71.40</td></tr><tr><td class=" ">17.04.25 14:18:28</td><td class="left_stat ">53.4974966667,50.07816</td><td class=" ">17.04.25 18:34:54</td><td class="left_stat ">52.162715,47.1210016667</td><td class=" ">04:16:26</td><td class=" ">351.86</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">114.43</td><td class=" ">32.52</td><td class=" ">767.08</td><td class=" ">652.65</td></tr><tr><td class=" ">17.04.25 19:00:33</td><td class="left_stat ">52.08461,47.1009983333</td><td class=" ">17.04.25 22:53:47</td><td class="left_stat ">50.0940333333,45.3605733333</td><td class=" ">03:53:14</td><td class=" ">295.48</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">117.60</td><td class=" ">39.80</td><td class=" ">653.45</td><td class=" ">535.85</td></tr><tr><td class=" ">18.04.25 08:55:25</td><td class="left_stat ">50.0911133333,45.355425</td><td class=" ">18.04.25 11:01:14</td><td class="left_stat ">48.9800233333,44.6720316667</td><td class=" ">02:05:49</td><td class=" ">152.34</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">65.45</td><td class=" ">42.96</td><td class=" ">540.81</td><td class=" ">475.36</td></tr><tr><td class=" ">18.04.25 11:11:58</td><td class="left_stat ">48.9801366667,44.6721766667</td><td class=" ">18.04.25 13:03:22</td><td class="left_stat ">48.6870833333,43.4397633333</td><td class=" ">01:51:24</td><td class=" ">119.39</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">58.31</td><td class=" ">48.84</td><td class=" ">473.78</td><td class=" ">415.47</td></tr><tr><td class=" ">18.04.25 13:04:24</td><td class="left_stat ">48.6825266667,43.4214116667</td><td class=" ">18.04.25 14:58:06</td><td class="left_stat ">48.32743,41.5875566667</td><td class=" ">01:53:42</td><td class=" ">140.7</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">55.33</td><td class=" ">39.32</td><td class=" ">422.22</td><td class=" ">366.89</td></tr><tr><td class=" ">18.04.25 15:25:10</td><td class="left_stat ">48.3275166667,41.58756</td><td class=" ">18.04.25 17:17:37</td><td class="left_stat ">47.8744683333,40.2076233333</td><td class=" ">01:52:27</td><td class=" ">143.66</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">67.23</td><td class=" ">46.80</td><td class=" ">367.48</td><td class=" ">300.25</td></tr><tr><td class=" ">18.04.25 18:47:28</td><td class="left_stat ">47.8745183333,40.207725</td><td class=" ">18.04.25 22:58:12</td><td class="left_stat ">45.66671,38.9739383333</td><td class=" ">04:10:44</td><td class=" ">169.14</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">104.11</td><td class=" ">61.55</td><td class=" ">300.25</td><td class=" ">196.14</td></tr><tr><td class=" ">18.04.25 23:17:52</td><td class="left_stat ">45.6385916667,38.9658433333</td><td class=" ">19.04.25 00:06:12</td><td class="left_stat ">45.3752466667,38.4634266667</td><td class=" ">00:48:20</td><td class=" ">22.66</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">20.82</td><td class=" ">91.90</td><td class=" ">195.94</td><td class=" ">175.12</td></tr><tr><td class=" ">19.04.25 06:21:11</td><td class="left_stat ">45.3752233333,38.463415</td><td class=" ">19.04.25 08:43:27</td><td class="left_stat ">44.7590733333,37.7397733333</td><td class=" ">02:22:16</td><td class=" ">197.89</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">48.78</td><td class=" ">24.65</td><td class=" ">175.91</td><td class=" ">127.13</td></tr><tr><td class=" ">19.04.25 10:11:57</td><td class="left_stat ">44.7595616667,37.7363833333</td><td class=" ">19.04.25 10:31:32</td><td class="left_stat ">44.7321316667,37.8098933333</td><td class=" ">00:19:35</td><td class=" ">7.89</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">1.79</td><td class=" ">22.69</td><td class=" ">109.48</td><td class=" ">107.69</td></tr><tr><td class=" ">19.04.25 10:47:38</td><td class="left_stat ">44.7322483333,37.8100966667</td><td class=" ">19.04.25 10:57:36</td><td class="left_stat ">44.736945,37.814015</td><td class=" ">00:09:58</td><td class=" ">0.84</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">108.49</td><td class=" ">114.63</td></tr><tr><td class=" ">19.04.25 12:19:16</td><td class="left_stat ">44.7369183333,37.8139216667</td><td class=" ">19.04.25 13:10:10</td><td class="left_stat ">44.80619,37.6494916667</td><td class=" ">00:50:54</td><td class=" ">18.31</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">12.50</td><td class=" ">68.26</td><td class=" ">129.51</td><td class=" ">117.01</td></tr><tr><td class=" ">19.04.25 13:44:59</td><td class="left_stat ">44.83084,37.6537516667</td><td class=" ">19.04.25 14:28:57</td><td class="left_stat ">44.9833783333,38.003265</td><td class=" ">00:43:58</td><td class=" ">38.5</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">6.35</td><td class=" ">16.49</td><td class=" ">111.46</td><td class=" ">105.11</td></tr><tr><td class=" ">19.04.25 14:29:32</td><td class="left_stat ">44.9836483333,38.003285</td><td class=" ">19.04.25 14:57:26</td><td class="left_stat ">45.5622233333,38.1743816667</td><td class=" ">00:27:54</td><td class=" ">25.44</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">109.68</td><td class=" ">111.06</td></tr><tr><td class=" ">19.04.25 15:22:01</td><td class="left_stat ">45.554575,38.138325</td><td class=" ">19.04.25 16:46:11</td><td class="left_stat ">45.6360166667,38.95777</td><td class=" ">01:24:10</td><td class=" ">138.8</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">36.09</td><td class=" ">26.00</td><td class=" ">109.08</td><td class=" ">72.99</td></tr><tr><td class=" ">19.04.25 16:55:18</td><td class="left_stat ">45.6360383333,38.9577016667</td><td class=" ">19.04.25 18:19:43</td><td class="left_stat ">46.299875,39.381515</td><td class=" ">01:24:25</td><td class=" ">100.3</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">43.23</td><td class=" ">43.10</td><td class=" ">74.57</td><td class=" ">31.34</td></tr><tr><td class=" ">19.04.25 18:43:00</td><td class="left_stat ">46.299855,39.381515</td><td class=" ">19.04.25 19:30:29</td><td class="left_stat ">46.4637033333,39.53302</td><td class=" ">00:47:29</td><td class=" ">44.73</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">15.87</td><td class=" ">35.48</td><td class=" ">779.18</td><td class=" ">763.31</td></tr><tr><td class=" ">19.04.25 19:31:42</td><td class="left_stat ">46.5767916667,39.67268</td><td class=" ">19.04.25 21:21:11</td><td class="left_stat ">47.68961,40.08169</td><td class=" ">01:49:29</td><td class=" ">99.98</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">51.36</td><td class=" ">51.37</td><td class=" ">763.31</td><td class=" ">711.95</td></tr><tr><td class=" ">20.04.25 07:35:46</td><td class="left_stat ">47.6897,40.0817283333</td><td class=" ">20.04.25 12:05:24</td><td class="left_stat ">50.531475,40.0830533333</td><td class=" ">04:29:38</td><td class=" ">246.58</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">125.53</td><td class=" ">50.91</td><td class=" ">719.88</td><td class=" ">594.35</td></tr><tr><td class=" ">20.04.25 12:48:36</td><td class="left_stat ">50.53176,40.0829466667</td><td class=" ">20.04.25 18:53:38</td><td class="left_stat ">54.1711133333,38.0773133333</td><td class=" ">06:05:02</td><td class=" ">419.14</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">140.41</td><td class=" ">33.50</td><td class=" ">582.85</td><td class=" ">442.44</td></tr><tr><td class=" ">20.04.25 19:13:48</td><td class="left_stat ">54.17105,38.0772766667</td><td class=" ">20.04.25 22:32:12</td><td class="left_stat ">54.7891166667,38.1040666667</td><td class=" ">03:18:24</td><td class=" ">71.08</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">22.21</td><td class=" ">31.25</td><td class=" ">442.84</td><td class=" ">420.63</td></tr><tr><td class=" ">20.04.25 22:33:27</td><td class="left_stat ">54.7891166667,38.1040666667</td><td class=" ">21.04.25 03:11:47</td><td class="left_stat ">55.913375,37.5005133333</td><td class=" ">04:38:20</td><td class=" ">252.2</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">92.01</td><td class=" ">36.48</td><td class=" ">420.23</td><td class=" ">328.22</td></tr><tr><td class=" ">21.04.25 08:51:39</td><td class="left_stat ">55.9134216667,37.5012766667</td><td class=" ">21.04.25 09:32:33</td><td class="left_stat ">55.9131366667,37.5010066667</td><td class=" ">00:40:54</td><td class=" ">0.78</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">6.34</td><td class=" ">811.52</td><td class=" ">326.23</td><td class=" ">319.89</td></tr><tr><td class=" ">21.04.25 10:05:37</td><td class="left_stat ">55.9131633333,37.5009183333</td><td class=" ">21.04.25 12:02:16</td><td class="left_stat ">55.75173,36.8894816667</td><td class=" ">01:56:39</td><td class=" ">97.13</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">29.74</td><td class=" ">30.62</td><td class=" ">323.85</td><td class=" ">294.11</td></tr><tr><td class=" ">21.04.25 12:02:49</td><td class="left_stat ">55.751485,36.8892116667</td><td class=" ">21.04.25 12:12:01</td><td class="left_stat ">55.6886683333,36.8862516667</td><td class=" ">00:09:12</td><td class=" ">6.45</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">1.99</td><td class=" ">30.84</td><td class=" ">290.54</td><td class=" ">288.55</td></tr><tr><td class=" ">21.04.25 12:12:18</td><td class="left_stat ">55.688525,36.8864016667</td><td class=" ">21.04.25 13:06:09</td><td class="left_stat ">55.3421783333,37.4740533333</td><td class=" ">00:53:51</td><td class=" ">62.7</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">12.69</td><td class=" ">20.24</td><td class=" ">288.55</td><td class=" ">275.86</td></tr><tr><td class=" ">21.04.25 13:37:54</td><td class="left_stat ">55.3422533333,37.473985</td><td class=" ">21.04.25 14:21:12</td><td class="left_stat ">55.4967466667,37.8517633333</td><td class=" ">00:43:18</td><td class=" ">49.8</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">13.49</td><td class=" ">27.09</td><td class=" ">269.12</td><td class=" ">255.63</td></tr><tr><td class=" ">21.04.25 15:31:52</td><td class="left_stat ">55.4967983333,37.85084</td><td class=" ">21.04.25 16:15:46</td><td class="left_stat ">55.3389966667,37.8170383333</td><td class=" ">00:43:54</td><td class=" ">31.73</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">13.68</td><td class=" ">43.11</td><td class=" ">256.82</td><td class=" ">243.14</td></tr><tr><td class=" ">21.04.25 22:43:15</td><td class="left_stat ">55.3365416667,37.8156533333</td><td class=" ">21.04.25 22:59:36</td><td class="left_stat ">55.33416,37.8164166667</td><td class=" ">00:16:21</td><td class=" ">1.28</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">7.34</td><td class=" ">572.88</td><td class=" ">246.31</td><td class=" ">238.97</td></tr><tr><td class=" ">22.04.25 00:12:25</td><td class="left_stat ">55.3342383333,37.8163316667</td><td class=" ">22.04.25 00:24:41</td><td class="left_stat ">55.3338333333,37.8159833333</td><td class=" ">00:12:16</td><td class=" ">1.41</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">0.60</td><td class=" ">42.67</td><td class=" ">241.95</td><td class=" ">241.35</td></tr><tr><td class=" ">22.04.25 00:34:21</td><td class="left_stat ">55.3338966667,37.81647</td><td class=" ">22.04.25 00:43:24</td><td class="left_stat ">55.3345933333,37.8227183333</td><td class=" ">00:09:03</td><td class=" ">0.53</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">240.36</td><td class=" ">248.30</td></tr><tr><td class=" ">22.04.25 07:39:11</td><td class="left_stat ">55.334575,37.822705</td><td class=" ">22.04.25 12:55:25</td><td class="left_stat ">52.39419,38.9113266667</td><td class=" ">05:16:14</td><td class=" ">377.47</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">161.23</td><td class=" ">42.71</td><td class=" ">239.57</td><td class=" ">78.34</td></tr><tr><td class=" ">22.04.25 12:56:10</td><td class="left_stat ">52.3934183333,38.9160366667</td><td class=" ">22.04.25 13:33:26</td><td class="left_stat ">52.151465,39.154815</td><td class=" ">00:37:16</td><td class=" ">32.83</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">39.07</td><td class=" ">119.01</td><td class=" ">110.47</td><td class=" ">71.40</td></tr><tr><td class=" ">22.04.25 13:47:29</td><td class="left_stat ">52.151445,39.1548666667</td><td class=" ">22.04.25 17:34:17</td><td class="left_stat ">49.82736,40.5277533333</td><td class=" ">03:46:48</td><td class=" ">237.58</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">1.39</td><td class=" ">0.59</td><td class=" ">76.56</td><td class=" ">75.17</td></tr><tr><td class=" ">22.04.25 17:47:48</td><td class="left_stat ">49.8406566667,40.49752</td><td class=" ">22.04.25 19:00:46</td><td class="left_stat ">49.0556033333,40.5177633333</td><td class=" ">01:12:58</td><td class=" ">69.39</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">77.75</td><td class=" ">80.72</td></tr><tr><td class=" ">23.04.25 08:33:47</td><td class="left_stat ">49.0555633333,40.5176633333</td><td class=" ">23.04.25 11:43:36</td><td class="left_stat ">47.0676766667,39.746435</td><td class=" ">03:09:49</td><td class=" ">210.75</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">80.32</td><td class=" ">83.89</td></tr><tr><td class=" ">23.04.25 12:10:36</td><td class="left_stat ">47.067765,39.7465516667</td><td class=" ">23.04.25 13:21:25</td><td class="left_stat ">46.2856033333,39.8275933333</td><td class=" ">01:10:49</td><td class=" ">90.48</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">75.76</td><td class=" ">78.54</td></tr><tr><td class=" ">23.04.25 13:31:55</td><td class="left_stat ">46.2855133333,39.82764</td><td class=" ">23.04.25 15:33:19</td><td class="left_stat ">45.11045,39.1428516667</td><td class=" ">02:01:24</td><td class=" ">155.52</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">11.10</td><td class=" ">7.14</td><td class=" ">78.34</td><td class=" ">67.24</td></tr><tr><td class=" ">23.04.25 15:44:44</td><td class="left_stat ">45.1103983333,39.1428183333</td><td class=" ">23.04.25 16:18:40</td><td class="left_stat ">45.1114933333,39.1488466667</td><td class=" ">00:33:56</td><td class=" ">4.97</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">0.60</td><td class=" ">12.08</td><td class=" ">65.65</td><td class=" ">65.05</td></tr><tr><td class=" ">23.04.25 16:47:08</td><td class="left_stat ">45.1103883333,39.1291883333</td><td class=" ">23.04.25 16:53:13</td><td class="left_stat ">45.107085,39.1143083333</td><td class=" ">00:06:05</td><td class=" ">2.88</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">2.38</td><td class=" ">82.78</td><td class=" ">60.69</td><td class=" ">58.31</td></tr><tr><td class=" ">23.04.25 17:12:58</td><td class="left_stat ">45.1025983333,39.1143316667</td><td class=" ">23.04.25 17:20:18</td><td class="left_stat ">45.0974316667,39.1329583333</td><td class=" ">00:07:20</td><td class=" ">3.02</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">5.15</td><td class=" ">170.78</td><td class=" ">57.12</td><td class=" ">51.97</td></tr><tr><td class=" ">23.04.25 18:14:44</td><td class="left_stat ">45.1102233333,39.1223883333</td><td class=" ">23.04.25 18:24:06</td><td class="left_stat ">45.1108866667,39.1206983333</td><td class=" ">00:09:22</td><td class=" ">0.66</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">1.78</td><td class=" ">271.24</td><td class=" ">53.75</td><td class=" ">51.97</td></tr><tr><td class=" ">24.04.25 10:44:38</td><td class="left_stat ">45.1102816667,39.1224833333</td><td class=" ">24.04.25 10:51:28</td><td class="left_stat ">45.1108966667,39.1208233333</td><td class=" ">00:06:50</td><td class=" ">0.61</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">51.57</td><td class=" ">54.54</td></tr><tr><td class=" ">24.04.25 11:46:21</td><td class="left_stat ">45.1105783333,39.1216183333</td><td class=" ">24.04.25 12:58:19</td><td class="left_stat ">45.0954216667,38.66124</td><td class=" ">01:11:58</td><td class=" ">66.63</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">45.01</td><td class=" ">67.56</td><td class=" ">49.98</td><td class=" ">4.97</td></tr><tr><td class=" ">24.04.25 16:50:21</td><td class="left_stat ">45.09476,38.6613266667</td><td class=" ">24.04.25 17:17:30</td><td class="left_stat ">45.214395,38.4352466667</td><td class=" ">00:27:09</td><td class=" ">22.34</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">14.67</td><td class=" ">65.66</td><td class=" ">25.39</td><td class=" ">10.72</td></tr><tr><td class=" ">24.04.25 17:38:44</td><td class="left_stat ">45.23638,38.4303533333</td><td class=" ">24.04.25 17:58:46</td><td class="left_stat ">45.5091566667,38.254695</td><td class=" ">00:20:02</td><td class=" ">44.34</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">7.94</td><td class=" ">17.91</td><td class=" ">764.11</td><td class=" ">756.17</td></tr><tr><td class=" ">24.04.25 17:59:53</td><td class="left_stat ">45.5357716667,38.2443333333</td><td class=" ">24.04.25 20:29:36</td><td class="left_stat ">46.3091733333,39.3682516667</td><td class=" ">02:29:43</td><td class=" ">94</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">50.77</td><td class=" ">54.01</td><td class=" ">755.58</td><td class=" ">704.81</td></tr><tr><td class=" ">24.04.25 20:47:03</td><td class="left_stat ">46.4444516667,39.2429633333</td><td class=" ">24.04.25 22:25:13</td><td class="left_stat ">47.0681133333,39.7473283333</td><td class=" ">01:38:10</td><td class=" ">65.02</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">35.50</td><td class=" ">54.60</td><td class=" ">699.26</td><td class=" ">663.76</td></tr><tr><td class=" ">25.04.25 07:06:24</td><td class="left_stat ">47.0683333333,39.747365</td><td class=" ">25.04.25 13:00:10</td><td class="left_stat ">48.686605,43.9536266667</td><td class=" ">05:53:46</td><td class=" ">388.91</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">162.03</td><td class=" ">41.66</td><td class=" ">667.73</td><td class=" ">505.70</td></tr><tr><td class=" ">25.04.25 13:02:14</td><td class="left_stat ">48.68544,43.9913283333</td><td class=" ">25.04.25 13:11:00</td><td class="left_stat ">48.678085,44.065585</td><td class=" ">00:08:46</td><td class=" ">5.53</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">5.35</td><td class=" ">96.72</td><td class=" ">503.52</td><td class=" ">498.17</td></tr><tr><td class=" ">25.04.25 13:11:04</td><td class="left_stat ">48.678085,44.065585</td><td class=" ">25.04.25 16:29:00</td><td class="left_stat ">50.0922616667,45.3567066667</td><td class=" ">03:17:56</td><td class=" ">221.45</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">74.77</td><td class=" ">33.76</td><td class=" ">505.31</td><td class=" ">430.54</td></tr><tr><td class=" ">25.04.25 17:26:53</td><td class="left_stat ">50.0922466667,45.3566383333</td><td class=" ">26.04.25 08:52:08</td><td class="left_stat ">52.1078666667,47.4003833333</td><td class=" ">15:25:15</td><td class=" ">310.78</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">119.38</td><td class=" ">38.41</td><td class=" ">409.52</td><td class=" ">290.14</td></tr><tr><td class=" ">26.04.25 09:10:37</td><td class="left_stat ">52.0929233333,47.5417183333</td><td class=" ">26.04.25 13:11:32</td><td class="left_stat ">53.49592,50.0620933333</td><td class=" ">04:00:55</td><td class=" ">317.75</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">114.82</td><td class=" ">36.14</td><td class=" ">283.99</td><td class=" ">169.17</td></tr><tr><td class=" ">26.04.25 13:25:59</td><td class="left_stat ">53.49592,50.0623766667</td><td class=" ">26.04.25 15:31:48</td><td class="left_stat ">54.064955,52.14031</td><td class=" ">02:05:49</td><td class=" ">166.59</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">61.27</td><td class=" ">36.78</td><td class=" ">755.97</td><td class=" ">694.70</td></tr><tr><td class=" ">26.04.25 15:59:49</td><td class="left_stat ">54.0649816667,52.140265</td><td class=" ">26.04.25 20:33:24</td><td class="left_stat ">54.8320933333,56.9805783333</td><td class=" ">04:33:35</td><td class=" ">352.3</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">131.48</td><td class=" ">37.32</td><td class=" ">693.70</td><td class=" ">562.22</td></tr><tr><td class=" ">26.04.25 20:52:58</td><td class="left_stat ">54.8320933333,56.9805783333</td><td class=" ">27.04.25 01:32:46</td><td class="left_stat ">56.125615,58.0214083333</td><td class=" ">04:39:48</td><td class=" ">232.92</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">101.34</td><td class=" ">43.51</td><td class=" ">562.42</td><td class=" ">461.08</td></tr><tr><td class=" ">27.04.25 09:02:07</td><td class="left_stat ">56.1256716667,58.0214416667</td><td class=" ">27.04.25 12:07:17</td><td class="left_stat ">56.8856633333,60.0156933333</td><td class=" ">03:05:10</td><td class=" ">230.67</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">101.53</td><td class=" ">44.01</td><td class=" ">462.67</td><td class=" ">361.14</td></tr><tr><td class=" ">28.04.25 08:13:47</td><td class="left_stat ">56.8857366667,60.0157266667</td><td class=" ">28.04.25 08:58:08</td><td class="left_stat ">56.9075833333,59.9649283333</td><td class=" ">00:44:21</td><td class=" ">5.73</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">23.21</td><td class=" ">404.75</td><td class=" ">376.21</td><td class=" ">353.00</td></tr><tr><td class=" ">28.04.25 09:57:57</td><td class="left_stat ">56.907725,59.96504</td><td class=" ">28.04.25 10:11:19</td><td class="left_stat ">56.893175,59.983715</td><td class=" ">00:13:22</td><td class=" ">2.7</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">2.18</td><td class=" ">80.65</td><td class=" ">356.18</td><td class=" ">354.00</td></tr><tr><td class=" ">28.04.25 10:25:18</td><td class="left_stat ">56.8931783333,59.9838266667</td><td class=" ">28.04.25 10:33:33</td><td class="left_stat ">56.8857083333,60.01576</td><td class=" ">00:08:15</td><td class=" ">2.81</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">-</td><td class=" ">-</td><td class=" ">352.41</td><td class=" ">353.20</td></tr><tr><td class=" ">28.04.25 16:55:32</td><td class="left_stat ">56.8856683333,60.0156833333</td><td class=" ">29.04.25 08:19:03</td><td class="left_stat ">56.9075933333,59.9650633333</td><td class=" ">15:23:31</td><td class=" ">6.19</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">5.16</td><td class=" ">83.39</td><td class=" ">353.40</td><td class=" ">348.24</td></tr><tr><td class=" ">29.04.25 10:22:13</td><td class="left_stat ">56.90765,59.9648883333</td><td class=" ">29.04.25 10:38:22</td><td class="left_stat ">56.8856833333,60.0156766667</td><td class=" ">00:16:09</td><td class=" ">5.52</td><td class=" ">Н/Д</td><td class=" ">Н/Д</td><td class=" ">9.32</td><td class=" ">168.97</td><td class=" ">349.83</td><td class=" ">340.51</td></tr></tbody>
+                </table>
+                        </div>                                     
+                          </body>
+        </html>     

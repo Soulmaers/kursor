@@ -2,8 +2,12 @@
 const { connection, sql } = require('../config/db')
 const databaseRetranslation = require('./databaseRetranslation.service');
 const { ReportSettingsManager } = require('../modules/reportSettingsManagerModule/class/ReportSettingsManager')
+
+
 exports.addObjects = async (object) => {
+    // console.log(object)
     const { idx, objectname, phonenumber, imeidevice, uz, uniqRetraID, nameRetra } = object
+    //   console.log(idx, objectname, phonenumber, imeidevice, uz, uniqRetraID, nameRetra)
     try {
         const pool = await connection;
         const query = `SELECT incriment FROM objects WHERE idx=@idx AND incriment_retra=@incriment_retra`;
@@ -11,7 +15,7 @@ exports.addObjects = async (object) => {
             .input('idx', String(object.idx))
             .input('incriment_retra', String(uniqRetraID))
             .query(query)
-
+        //  console.log(result.recordset)
         if (result.recordset.length > 0) {
             const updateFlagQuery = `
         UPDATE objects SET flag = 'true',imeidevice=@imeidevice  WHERE idx=@idx AND incriment_retra = @uniqRetraID`;
@@ -41,7 +45,7 @@ exports.addObjects = async (object) => {
             .query(insertObjectsQuery);
 
         const insertedIds = insertObjectsResult.recordset.map(row => row.incriment);
-
+        //  console.log(insertedIds)
         const insertAccountObjectsQuery = `
             INSERT INTO accountObjects (uniqAccountID, uniqObjectID)
             VALUES (@accountIncriment, @objectIncriment)
@@ -164,7 +168,9 @@ exports.addGroups = async (object) => {
                     .input('groupsIncriment', sql.Int, insertedIds)
                     .query(insertRetraObjectsQuery)
             ]);
+            //   console.log(incrimentsObjects)
             const insertGroupsAndObjectsPromises = incrimentsObjects.map(currentObject => {
+                console.log(currentObject)
                 const insertGroupsAndObjectsQuery = `
                 INSERT INTO groupsAndObjects (uniqObjectID, uniqGroupID)
                 VALUES (@uniqObjectID, @groupIncriment)
@@ -174,7 +180,7 @@ exports.addGroups = async (object) => {
                     .input('groupIncriment', sql.Int, insertedIds)
                     .query(insertGroupsAndObjectsQuery);
             });
-
+            //   console.log(insertGroupsAndObjectsPromises)
             await Promise.all(insertGroupsAndObjectsPromises);
         }
 

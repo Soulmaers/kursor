@@ -16,6 +16,7 @@ export class ChartPressureClass {
             'rect': (data) => this.chartRect(data),
             'icon': (data) => this.chartIcon(data)
         };
+        this.infoWindow = document.querySelectorAll('.info_window')
         this.originalWidth = document.querySelector('.wrapper_reports').offsetWidth - 10;
         this.originalHeight = 400;
         window.addEventListener('resize', () => this.handleResize());
@@ -153,7 +154,6 @@ export class ChartPressureClass {
 
 
     createBodyCharts() {
-
         this.svg.selectAll("*").remove()
         this.axisData = this.data[0].result
         //  console.log(this.axisData)
@@ -201,7 +201,7 @@ export class ChartPressureClass {
             const rect = ChartUtils.createRectSecond(e, this.x, 'green', 2);
             const rectHeight = this.y1(this.axisYData);
             const xPosition = rect.xStart + 10 / 2
-
+            console.log(textContent)
             this.svg.append("rect")
                 .attr("class", 'rectReports')
                 .attr("x", xPosition) // Позиция по оси X
@@ -222,8 +222,22 @@ export class ChartPressureClass {
                         .html(ChartUtils.createTooltipRect(textContent))// `<div class"textContent_reporots">${el.name}<span class="span_reports_moto">:${Helpers.timesFormat(el.value)} чч:mm</span></div>`).join(''))
                         .style("left", (xPosition + 80) + "px")
                         .style("top", yPos + "px");
+
+                    [...this.infoWindow].forEach(e => {
+                        const findVar = textContent.find(el => el.name === e.getAttribute('rel'))
+                        console.log(findVar)
+                        if (findVar && e.getAttribute('rel') !== 'Максимум') {
+                            e.textContent = Helpers.timesFormat(findVar.value)
+                        }
+                        else {
+                            e.textContent = `${findVar.value} БАР`
+                        }
+                    })
                 })
                 .on("mouseout", () => {
+                    [...this.infoWindow].forEach(e => {
+                        e.textContent = ''
+                    })
                     // Код для скрытия тултипа
                     this.tooltip.style("display", 'none')
                     this.tooltip.style('opacity', 0)

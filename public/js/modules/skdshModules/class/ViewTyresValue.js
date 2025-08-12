@@ -101,7 +101,6 @@ export class ViewTyresValue {
                         tireLink.style.backgroundImage = 'url("../../../../image/wheel_gray.png")';
                         tireLink.style.backgroundColor = "#000"
                     }
-
                     if (signal === '#FF0000') {
                         tireLink.parentElement.style.borderRadius = '15px';
                     }

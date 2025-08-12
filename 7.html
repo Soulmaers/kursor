@@ -1,0 +1,288 @@
+
+                 <html>
+            <head>
+                <style>.header_logo {
+    width: 100%;
+    height: 60px;
+    background-color: #061c47;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+.img_logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    /* или cover — смотри ниже */
+}
+
+.head_meta {
+    width: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-self: flex-start;
+}
+
+.chart_head_meta {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nadpis {
+    font-size: 1.2rem;
+    color: #061c47
+}
+
+.body_pdf {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.contant_title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title_type {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.next {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 4px 0;
+    box-sizing: border-box;
+}
+
+.title_name {
+    color: #061c47;
+    font-size: 1.4rem;
+}
+
+.title_number {
+    color: #061c47;
+    font-size: 1.4rem;
+}
+
+.dashes {
+    width: 100%;
+    border-bottom: 2px dotted #061c47;
+    padding-top: 12px;
+    margin: 0 5px;
+}
+
+.title_component_sub {
+    padding-left: 26px;
+    box-sizing: border-box;
+    margin: 2px 0;
+}
+
+.component_title {
+    font-size: 1.2rem;
+    color: #061c47;
+    white-space: nowrap;
+}
+
+
+.page_break {
+    page-break-before: always;
+    margin-top: 20px;
+}
+
+.statistika_page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
+.components_page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.name_object {
+    font-size: 1.4rem;
+    color: #061c47;
+    align-self: center;
+}
+
+.name_component {
+    width: 50%;
+    margin: 10px 0;
+    font-size: 1.4rem;
+    color: #061c47;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.statistika_table {
+    width: 50%;
+    border-collapse: collapse;
+}
+
+.components_table {
+    max-width: 100%;
+    border-collapse: collapse;
+    word-wrap: break-word;
+}
+
+.components_table td {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.components_table th {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+    word-wrap: break-word;
+}
+
+.statistika_table td {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+}
+
+.left_stat {
+    text-align: left;
+}
+
+.right_stat {
+    text-align: center;
+}
+
+.page_component {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.components_table .left_stat {
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.components_table td.last-row-cell {
+    border-top: 3px solid #38496C;
+    font-weight: bold;
+}
+
+.wrap_icon {
+    margin-right: 20px;
+    margin-left: 8px;
+    width: 25px;
+    height: 25px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+.uniqum_legend {
+    display: flex;
+    align-items: center;
+}
+
+
+.body_legend {
+    width: 100%;
+    margin: 0 20px;
+    display: flex;
+    align-items: center;
+}
+
+.legend_container {
+    width: 100%;
+    min-height: 30px;
+    background-color: #38496C;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    color: #fff
+}
+
+.rect_legend {
+    margin-right: 20px;
+    margin-left: 8px;
+    width: 52px;
+    height: 25px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.rect_legend_moto {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: rgba(6, 28, 71, 0.8);
+    margin-right: 4px;
+    box-sizing: border-box;
+}
+
+.skdsh_leg {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: transparent;
+    padding: 2px 0;
+}
+
+.value_tool_skdah {
+    text-align: left;
+}
+
+.info_window {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    color: rgba(6, 28, 71, 1);
+    background-color: #fff;
+    min-width: 52px;
+    height: 20px;
+    margin-right: 8px;
+    box-sizing: border-box;
+}</style>
+            </head>
+            <body class="body_pdf">
+                       <div class="page_component">
+                <div class="head_meta"><div class="nadpis">SIM_FOTON763</div><div class="nadpis">Демо</div><div class="name_component">Простои на холостом ходу</div></div>
+                <table class="components_table">
+                    <thead><tr><th class="colums">Начало</th><th class="colums">Начальное местоположение</th><th class="colums">Конец</th><th class="colums">Конечное местоположение</th><th class="colums">Моточасы</th></tr></thead>
+                    <tbody><tr><td class=" ">07.04.25 12:00:02</td><td class="left_stat ">47.2392266667,38.9269116667</td><td class=" ">07.04.25 12:20:59</td><td class="left_stat ">47.2391933333,38.9271033333</td><td class=" ">00:20:57</td></tr><tr><td class=" ">07.04.25 18:56:49</td><td class="left_stat ">47.1670983333,39.7509516667</td><td class=" ">07.04.25 19:20:32</td><td class="left_stat ">46.914625,39.7060166667</td><td class=" ">00:23:43</td></tr><tr><td class=" ">14.04.25 07:34:46</td><td class="left_stat ">56.885675,60.0159016667</td><td class=" ">14.04.25 08:07:24</td><td class="left_stat ">56.8857666667,60.0163283333</td><td class=" ">00:32:38</td></tr><tr><td class=" ">20.04.25 20:32:39</td><td class="left_stat ">54.7571483333,38.1407616667</td><td class=" ">20.04.25 21:04:23</td><td class="left_stat ">54.7650466667,38.1358</td><td class=" ">00:31:44</td></tr><tr><td class=" ">20.04.25 21:05:29</td><td class="left_stat ">54.7658016667,38.1359133333</td><td class=" ">20.04.25 21:54:38</td><td class="left_stat ">54.7766116667,38.1321266667</td><td class=" ">00:49:09</td></tr><tr><td class=" ">21.04.25 08:54:51</td><td class="left_stat ">55.9134716667,37.5017283333</td><td class=" ">21.04.25 09:32:33</td><td class="left_stat ">55.9131366667,37.5010066667</td><td class=" ">00:37:42</td></tr><tr><td class=" ">28.04.25 08:13:47</td><td class="left_stat ">56.8857366667,60.0157266667</td><td class=" ">28.04.25 08:43:02</td><td class="left_stat ">56.885935,60.017645</td><td class=" ">00:29:15</td></tr><tr><td class=" ">29.04.25 07:14:47</td><td class="left_stat ">56.88572,60.0156033333</td><td class=" ">29.04.25 07:45:27</td><td class="left_stat ">56.8859233333,60.0171766667</td><td class=" ">00:30:40</td></tr><tr><td class=" last-row-cell">Итого</td><td class="left_stat last-row-cell">-</td><td class=" last-row-cell">-</td><td class="left_stat last-row-cell">-</td><td class=" last-row-cell">04:15:48</td></tr></tbody>
+                </table>
+                        </div>                                     
+                          </body>
+        </html>     

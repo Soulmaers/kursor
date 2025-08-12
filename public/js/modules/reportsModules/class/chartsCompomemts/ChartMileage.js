@@ -76,7 +76,9 @@ export class ChartMileage {
         this.svg.selectAll("*").remove()
         this.date = (this.data.filter(e => e.name === 'Начало').map(e => (e.result)))[0]
         this.mileage = (this.data.filter(e => e.name === 'Пробег').map(e => (e.result)))[0]
-        this.date = this.date.map(el => el.slice(0, 5))
+        //   this.date = this.date.map(el => el.slice(0, 5))
+
+
         const chartData = this.date.map((date, index) => ({
             date: date,
             mileage: this.mileage[index]
@@ -86,17 +88,55 @@ export class ChartMileage {
         const axisMax = Math.max(...this.mileage)
         const xScale = d3.scaleBand()
             .domain(this.date.map(function (d) { return d; }))
-            .range([0, this.date.length * 33])
+            .range([0, this.date.length * 36 + 5])
+
+
 
         const self = this
         const yScale = d3.scaleLinear()
             .domain([0, axisMax * 1.05])
             .range([(this.height - 60), 0]);
 
-        this.svg.append("g")
+        const tiksX = this.svg.append("g")
             .attr("transform", "translate(0," + (this.height - 60) + ")")
             .call(d3.axisBottom(xScale));
 
+        tiksX.selectAll('text')
+            .style("fill", function (d) {
+
+                const newDate = new Date(d.split(".").reverse().join("-")).getDay();
+                console.log(newDate)
+                // Проверяем, равен ли текст "сб" или "вск"
+                if (newDate === 6 || newDate === 0) {
+                    return "red"; // Окрашиваем в красный цвет
+                } else {
+                    return "black"; // Оставляем черным по умолчанию
+                }
+            })
+            .style('font-weight', function (d) {
+                const day = parseInt(d.substring(0, 2), 10)
+                if (day === 1) return '900'
+            })
+            .text(function (d) {
+                // Преобразуем дату из строки
+                const newDate = d.slice(0, 5)
+
+                // Изменяем текст на значение newDate
+                return newDate;
+            })
+            .attr("transform", "translate(4, 0)");
+
+        tiksX.selectAll(".tick line")
+            .attr("x1", 4) // Сдвигаем риски на 8 px вправо
+            .attr("x2", 4);
+
+        this.svg.append("text")
+            .attr("y", -25)
+            .attr("x", -7)
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("км")
+            .style('color', 'rgba(6, 28, 71, 1)')
         // Добавляем последний тик для максимального значения
         const ticks = yScale.ticks(14); // Получаем 10 тиков для оси
         ticks[ticks.length - 1] = axisMax
@@ -105,16 +145,11 @@ export class ChartMileage {
             .attr("transform", "translate(0, " + (0) + ")")
             .call(d3.axisLeft(yScale).tickValues(ticks))
 
-        this.svg.selectAll(".tick line")
-            .each(function (d, i, nodes) {
-                d3.select(this)
-                    .attr("x", d => xScale(d.date) + 5)
-            })
-
+        console.log(chartData)
         this.svg.selectAll('rect')
             .data(chartData)
             .enter().append('rect')
-            .attr("x", d => xScale(d.date) + 5)
+            .attr("x", d => xScale(d.date) + 8)
             .attr("y", d => yScale(d.mileage))
             .attr("height", d => (this.height - 60) - yScale(d.mileage))
             .attr("width", barWidth)
@@ -124,7 +159,7 @@ export class ChartMileage {
 
         chartData.forEach(function (d) {
             self.svg.append("text")
-                .attr("x", xScale(d.date) + 4 + xScale.bandwidth() / 2)
+                .attr("x", xScale(d.date) + xScale.bandwidth() / 2 + 4)
                 .attr("y", yScale(d.mileage) - 10)
                 .text(d.mileage)
                 .attr("font-size", "10px")

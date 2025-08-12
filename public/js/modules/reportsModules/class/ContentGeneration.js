@@ -5,6 +5,8 @@ export class Content {
 
 
     static renderComponentsReport(data, stata, prop, object) {
+        console.log(prop)
+        const componentBorder = ['componentsПоездки', 'componentsПростои', 'componentsСтоянки', 'componentsОстановки', 'componentsТопливо'].includes(prop)
         const newRows = data.map((el, index) => {
             const name = stata[index][1].result
             const group = stata[index][0].result
@@ -28,13 +30,20 @@ export class Content {
                     const typeIcon = it.typeIcon?.[index] || null
                     const backgroundFon = it.color?.[index] || it.maxSpeedColorBack?.[index] || null; //ищем есть ли свойство для фона
                     const isLastElement = ind === el.length - 1;
-                    return `<td class="cell_reports ${it.geo ? 'pointer' : null} ${prop}" type="${typeIcon}"color_marker="${attributeColorMarker}" 
-                    rel="${it.geo ? it.geo[index] : null}"style="background-color: ${backgroundFon}">${ind === 0 ? swich : ''}${isLastElement ? marker : ''}
-                    ${it.result[index]} ${it.local}</td>`
+                    console.log(it.geo)
+                    const pointer = it.geo && it.geo[index] !== '-' ? 'pointer' : null
+                    console.log(pointer)
+                    return `<td class="cell_reports ${pointer} ${prop}"  type="${typeIcon}"color_marker="${attributeColorMarker}" 
+                    rel="${it.geo ? it.geo[index] : null}" style="background-color: ${backgroundFon};
+                     text-align:${it.textAlign ? it.textAlign : ''};
+                     font-weight:${index === el[0].result.length - 1 && it.fontWeight ? it.fontWeight : ''};
+                       border-top:${index === el[0].result.length - 1 && componentBorder ? '3px solid #38496C' : ''};
+                     width: ${it.width ? it.width : ''}">${ind === 0 ? swich : ''}${isLastElement && pointer ? marker : ''}
+                    ${it.reversGeo?.[index] ? it.reversGeo[index] : it.result[index]} ${it.result[index] !== '-' ? it.local : ''}</td>`
                 }).join('')
 
-                return `<tr  class="row_table_tr ${el[el.length - 1].sub?.[index] ? 'sub_interval' : ''}">
-                ${cell}</tr>`
+                return `<tr class="row_table_tr  ${el[el.length - 1]?.sub?.[index] ? 'sub_interval' : ''}">
+                    ${cell}</tr>`
             }).join('')
 
             let allRuns = ''
@@ -54,8 +63,6 @@ export class Content {
                         return `<span class="cell_reports bold_font last_row_cel"> ${itog[0]?.result[e.name]}</span>`
                     }
                 }).join('')
-                console.log(itog[0]?.result)
-                console.log(el)
                 allRunsSpanTitle = el.map(e => {
                     if (itog[0]?.result[e.name]) {
                         return `<span class="cell_reports bold_font last_row_cel"> ${e.name}</span>`
@@ -75,13 +82,14 @@ export class Content {
 
             const titlerows = el.map(e => {
                 if (e.flag) return ''
-                return `<td class="cell_reports cell_title_reports">${e.name}</td>`
+                return `<td class="cell_reports cell_title_reports" style="width: ${e.width ? e.width : ''}">${e.name}</td>`;
             }).join('')
             return `<div class="item_reports"><div class="swich ${currentSymbol === '-' ? 'toggleClass' : ''}">${currentSymbol}</div><div class="rows_spoyler object_new_rows">${name}</div><div class="rows_spoyler group_new_rows">${group}</div>${settingsTravel}</div>
                       <table class="cell_params ${displayClass} stat_reports"><tr>${titlerows}</tr>${attributesCell}<tr class="tr_last">${allRuns}</tr></table>
                       <div  class="last_table ${symbolRow}"><div class="last_row">${allRunsSpanTitle}</div>
                       <div class="last_row">${allRunsSpan}</div></div>`
         }).join('')
+
         return newRows
     }
 
@@ -110,7 +118,7 @@ export class Content {
 
     static renderChartsLegend(data, stata, types, prop, object, container) {
         let containers;
-        if (types === 'Топливо') {
+        if (types === 'Учёт топлива') {
             container.style.display = 'flex'
             const arrayTitle = [{
                 title: 'Заправки:',
@@ -139,17 +147,51 @@ export class Content {
             container.style.display = 'flex'
             const arrayTitle = [{
                 title: 'Движение:',
-                icon: '<div class="rect_legend_moto" rel="Движение" style="background-color:#8fd14f">Движение</div>'
+                icon: '<div class="rect_legend_moto" rel="Движение" style="background-color:#8fd14f">Движение</div><div class="info_window" rel="Движение"></div>'
             },
             {
                 title: 'Парковка:',
-                icon: '<div class="rect_legend_moto" rel="Движение" style="background-color:#3399ff">Парковка</div>'
+                icon: '<div class="rect_legend_moto" rel="Парковка" style="background-color:#3399ff">Парковка</div><div class="info_window" rel="Парковка"></div>'
             }, {
                 title: 'Повёрнут ключ зажигания:',
-                icon: '<div class="rect_legend_moto" rel="Движение" style="background-color:#fef445">Повёрнут ключ зажигания</div>'
+                icon: '<div class="rect_legend_moto" rel="Повёрнут ключ зажигания:" style="background-color:#fef445">Повёрнут ключ зажигания</div><div class="info_window" rel="Повёрнут ключ зажигания"></div>'
             }, {
                 title: 'Работа на холостом ходу:',
-                icon: '<div class="rect_legend_moto" rel="Движение" style="background-color:#f24726">Работа на холостом ходу</div>'
+                icon: '<div class="rect_legend_moto" rel="Работа на холостом ходу" style="background-color:#f24726">Работа на холостом ходу</div><div class="info_window" rel="Работа на холостом ходу"></div>'
+            }]
+            containers = arrayTitle.map(e => {
+                return `<div class="uniqum_legend">${e.icon}</div>`
+
+
+            }).join('')
+        }
+        if (types === 'СКДШ') {
+            container.style.display = 'flex'
+            const arrayTitle = [{
+                title: 'Низкое:',
+                icon: '<div class="rect_legend_moto skdsh_leg" rel="Низкое">Низкое:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Низкое"></div>'
+            },
+            {
+                title: 'Ниже нормы:',
+                icon: '<div class="rect_legend_moto skdsh_leg" rel="Ниже нормы">Ниже нормы:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Ниже нормы"></div>'
+            }, {
+                title: 'Нормальное:',
+                icon: '<div class="rect_legend_moto skdsh_leg" rel="Нормальное">Нормальное:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Нормальное"></div>'
+            }, {
+                title: 'Выше нормы:',
+                icon: '<div class="rect_legend_moto skdsh_leg" rel="Выше нормы">Выше нормы:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Выше нормы"></div>'
+            },
+            {
+                title: 'Высокое:',
+                icon: '<div class="rect_legend_moto skdsh_leg" rel="Высокое">Высокое:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Высокое"></div>'
+            },
+            {
+                title: 'Всего:',
+                icon: '<div class="rect_legend_moto skdsh_leg" rel="Всего">Всего:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Всего"></div>'
+            },
+            {
+                title: 'Максимальное:',
+                icon: '<div class="rect_legend_moto skdsh_leg" rel="Максимальное">Максимальное:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Максимум"></div>'
             }]
             containers = arrayTitle.map(e => {
                 return `<div class="uniqum_legend">${e.icon}</div>`
@@ -159,7 +201,7 @@ export class Content {
         }
 
 
-        return `<div class="title_legend">Легенда:</div>
+        return `<div class="title_legend">${types === 'СКДШ' ? '' : 'Легенда'}</div>
         <div class="body_legend">${containers}
         </div>`
     }
@@ -234,6 +276,7 @@ export class Content {
 
 
     static addButtonTypeBlock(arraynameBtn, indexs, updatedStores) {
+        console.log(arraynameBtn)
         const buttons = arraynameBtn
             .map(
                 (e, index) =>
@@ -278,7 +321,7 @@ export class Content {
                 case 'Статистика':
                     fields = storStatistika
                     break;
-                case 'Топливо':
+                case 'Учёт топлива':
                     fields = indexs === '1' ? storComponentOil : storComponentOilGraf
                     break;
                 case 'Пробеги':
@@ -404,10 +447,10 @@ export class Content {
                                                      </div>
                                                         </div>
                                          
-                                    
+                                      <div class="create_reports">Создать шаблон</div>
                                   <div class="interval_reports">
                                       <div class="select_list">
-                                                <div class="titleChange_list">
+                                          
                                                     <div class="titleChange_list_name" rel="Выбор интервала">Выбор
                                                         интервала
                                                     </div>
@@ -418,11 +461,11 @@ export class Content {
                                                        <option value="Неделя">Неделя</option>
                                                     <option value="Месяц">Месяц</option>
                                                 </select>
-                                                </div>
+                                                
 
                                             </div>
                                                                                    </div>
-                                                                                       <div class="titleChange_list window_choice_date">
+                                                                                       <div class="select_list window_choice_date">
    <div class="titleChange_list_name"></div>
                                                                                     <div class="down_calendar">
    <div class="title_data">
@@ -441,14 +484,10 @@ export class Content {
           <input class="value_time field_time" value=23:59 maxlength="5" autocomplete="off">
         </div>
       </div>     </div></div>
-
-
-                                 <div class="btn_speedStart_reports">
-                         <button class="complite btm_formStart control">Выполнить</button>
-                <button class="complite control btm_formStart addWindowFilters">Выполнить с редактированием</button>
-                                        </div>
-                                <div class="create_reports">Создать шаблон</div>
-                                <div class="inform"></div>
+                                     
+                         <div class="complite btm_formStart control">Построить</div>
+                                                      
+                                                           <div class="inform"></div>
                             </div>
                         </div>
                         <div class="wrapper_result">
@@ -483,7 +522,7 @@ export class Content {
     }
 }
 
-
+/*<button class="complite control btm_formStart addWindowFilters">Построить с <i class="fas fa-edit"></i></button>*/
 /*
                                 <div class="down_calendar">
                                     <div class="calendarReports">

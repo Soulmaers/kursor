@@ -3,12 +3,12 @@ const wialonModule = require('../modules/wialon.module');
 const axios = require('axios');
 const XLSX = require('xlsx');
 class HelpersDefault {
-
+    //39e1405494b595e6890a684bdb998c657B0E5B18E670CCE536AD11EB368A1DD86776273D
     //39e1405494b595e6890a684bdb998c65381701F3CB8D7773666633574238F6E412740CC9
     static async getSessionWialon() {
 
 
-        const session = await wialonModule.login(`"39e1405494b595e6890a684bdb998c657B0E5B18E670CCE536AD11EB368A1DD86776273D"`);
+        const session = await wialonModule.login(`"a3f748fdc918b08cc0836aa5cc826519EB81C78E87D3A3C9D01EB8F5B81E764702220EED"`);
         console.log('сессия', session.eid)
         //  const res = await HelpersDefault.updateToken()
         return session

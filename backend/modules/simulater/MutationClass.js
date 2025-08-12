@@ -109,10 +109,7 @@ class MutationClass {
     }
 
     getMutationValue(tyresOld, tyres, celevoy, step, index) {
-        if (this.setting.id_object == '28526628ido') {
-            console.log('не первое сообщение или первое после фильтрующей')
-            console.log(this.step, this.stateCube, this.stateTravel, this.data.length, tyres.state, index, this.setting.id_object, this.flagMutation, celevoy)
-        }
+
         const value = index === 0 || this.data.length === 1 ? Number(tyresOld.value) : (this.data[index - 1][tyresOld.params] ? Number(this.data[index - 1][tyresOld.params]) : Number(tyresOld.value))
         let mutationValue;
         if (this.stateTravel === 1) {
@@ -167,11 +164,6 @@ class MutationClass {
             tyres.cube = this.stateCube
             tyres.state = this.stateTravel === 1 ? 'рейс' : 'парковка'
         }
-        if (this.setting.id_object == '28526628ido') {
-            console.log('первое сообщение')
-            console.log(tyres.state)
-            console.log(this.tyresModel)
-        }
     }
 
     installStateTravel(msg, index) {
@@ -208,10 +200,6 @@ class MutationClass {
             this.lastParkingTime = null
             this.stateTravel = 1
 
-        }
-        if (this.setting.id_object == '28526628ido') {
-            console.log('состояние рейс/парковка')
-            console.log(this.stateTravel)
         }
     }
 

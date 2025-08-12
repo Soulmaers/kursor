@@ -196,9 +196,9 @@ export class NewReportTemplate {
         this.stat.innerHTML = Content.renderContent('Статистика', '0', this.attributes.statistic['Статистика'])
         this.instanceControll = new ComponentAndGraficControll([this.stat, this.component, this.grafix], [
             {
-                block: this.component, arrayButtons: ['Топливо', 'Пробеги', 'Поездки', 'Стоянки', 'Остановки', 'Моточасы', 'Простои на холостом ходу', 'Техническое обслуживание', 'СКДШ'], indexs: '1',
+                block: this.component, arrayButtons: ['Учёт топлива', 'Пробеги', 'Поездки', 'Стоянки', 'Остановки', 'Моточасы', 'Простои на холостом ходу', 'Техническое обслуживание', 'СКДШ'], indexs: '1',
                 stores: {
-                    'Топливо': this.attributes.component['Топливо'],
+                    'Учёт топлива': this.attributes.component['Учёт топлива'],
                     'Пробеги': this.attributes.component['Пробеги'],
                     'Поездки': this.attributes.component['Поездки'],
                     'Стоянки': this.attributes.component['Стоянки'],
@@ -210,9 +210,9 @@ export class NewReportTemplate {
                 }
             },
             {
-                block: this.grafix, arrayButtons: ['Топливо', 'Поездки по дням', 'Моточасы', 'Техническое обслуживание', 'СКДШ'], indexs: '2',
+                block: this.grafix, arrayButtons: ['Учёт топлива', 'Поездки по дням', 'Моточасы', 'Техническое обслуживание', 'СКДШ'], indexs: '2',
                 stores: {
-                    'Топливо': this.attributes.graphic['Топливо'],
+                    'Учёт топлива': this.attributes.graphic['Учёт топлива'],
                     'Поездки по дням': this.attributes.graphic['Поездки по дням'],
                     'Моточасы': this.attributes.graphic['Моточасы'],
                     'Простои на холостом ходу': this.attributes.graphic['Простои на холостом ходу'],

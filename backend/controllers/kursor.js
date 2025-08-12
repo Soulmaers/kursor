@@ -99,20 +99,25 @@ exports.getOldObjects = async (req, res) => {
     const arrayObjects = req.body.array;
     // Получаем записи из базы данных
     const result = await databaseService.getOldObjectsToBaseWialonOrigin(arrayObjects);
+    // console.log('rez', result)
     // Создаем мапу для быстрого поиска idObject по imei
     const resultMap = new Map(result.map(obj => [obj.imei, obj.idObject]));
-
+    // console.log(resultMap)
+    // console.log(arrayObjects)
     // Создаем массив объектов с новыми свойствами
     const mismatchedObjects = arrayObjects
         .filter(obj => {
+            const imei = obj.imei
             // Проверяем, если существует запись с таким imei и отличается idObject
-            return resultMap.has(obj.imei) && resultMap.get(obj.imei) !== obj.idObject;
+            return resultMap.has(imei) && resultMap.get(imei) !== obj.idObject;
         })
         .map(obj => ({
-            oldId: resultMap.get(obj.imei),  // Старый idObject из базы данных
-            newId: obj.idObject,  // Новый idObject из входного массива
-            imei: obj.imei  // IMEI объекта
+
+            oldId: resultMap.get(obj.imei),   // Старый idObject из базы данных
+            newId: obj.idObject,   // Новый idObject из входного массива
+            imei: obj.imei // IMEI объекта
         }));
+    console.log(mismatchedObjects)
     res.json(mismatchedObjects);
 };
 

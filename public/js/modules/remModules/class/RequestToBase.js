@@ -20,6 +20,7 @@ export class RequestToBase {
 
 
     static async updateIdOBjectToBase(arrayId, storTable) {
+        console.log(arrayId, storTable)
         const params = {
             method: 'POST',
             headers: {

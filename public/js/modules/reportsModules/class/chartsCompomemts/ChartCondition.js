@@ -9,11 +9,11 @@ export class ChartCondition {
         this.data = data
         this.container = container
         this.index = index
-
+        this.infoWindow = document.querySelectorAll('.info_window')
         this.objColor = {
-            'Движется': ' #8fd14f',
+            'Движение': ' #8fd14f',
             'Парковка': '#3399ff',
-            'Повернут ключ зажигания': '#fef445',
+            'Повёрнут ключ зажигания': '#fef445',
             'Работа на холостом ходу': '#f24726'
         }
 
@@ -56,6 +56,7 @@ export class ChartCondition {
 
     }
 
+
     updateSize(newWidth, newHeight) {
         this.cumulativeHeight = {};
         this.width = newWidth;
@@ -92,7 +93,6 @@ export class ChartCondition {
         const startUnix = this.data.startUnix
         const endUnix = this.data.endUnix
         this.svg.selectAll("*").remove()
-        console.log(startUnix, endUnix)
 
         // Генерируем массив с датами Unix с шагом в 1 секунду
         const unixArray = [];
@@ -114,7 +114,6 @@ export class ChartCondition {
             const unixTime = startUnix + i * 3600; // Добавляем кратные 3600
             ticks.push(unixTime);
         }
-        console.log(ticks)
         // добавляем ось x
         this.svg.append("g")
             .attr("class", "osx")
@@ -129,8 +128,6 @@ export class ChartCondition {
                         .style("transform", "translateX(-15px)");
                 }
             })
-
-
 
 
         this.data.detalisation.forEach((e, index) => {
@@ -149,7 +146,6 @@ export class ChartCondition {
                 .attr("width", this.x(finishtime) - this.x(time)) // Вычисляем ширину
                 .attr("height", 30) // Высота 10px
                 .attr("fill", this.objColor[e.condition])
-
         })
 
         this.svg.append("text")
@@ -157,7 +153,30 @@ export class ChartCondition {
             .attr("x", 5)
             .attr("y", 18)
             .text(`${this.formatDate(this.data.date)}`)
+
+        const globalRect = this.svg.append("rect")
+            .attr("class", 'rectReports_all')
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", this.width) // Вычисляем ширину
+            .attr("height", 30) // Высота 10px
+            .attr("fill", 'transparent')
+
+        globalRect
+            .on("mousemove", (event, d) => {
+                [...this.infoWindow].forEach(e => {
+                    if (this.data.allConditionTime[e.getAttribute('rel')]) {
+                        e.textContent = Helpers.timesFormat(this.data.allConditionTime[e.getAttribute('rel')])
+                    }
+                })
+            })
+            .on("mouseout", () => {
+                [...this.infoWindow].forEach(e => {
+                    e.textContent = ''
+                })
+            });
     }
+
 
     formatDate(date) {
         // Разделяем дату по точке

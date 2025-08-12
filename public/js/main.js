@@ -77,6 +77,7 @@ export class Application {
         this.finalGroup = finalGroup
         GetUpdateStruktura.updateData()
         new IndexClassSettings(this.login)
+        console.log(final)
         new RemClassControll(this.login, final)
         this.formatContainer() //метод который корректирует границы контейнеров взависимости от разрешения экрана
         this.insideApplication()

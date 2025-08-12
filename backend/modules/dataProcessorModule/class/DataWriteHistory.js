@@ -92,12 +92,22 @@ class DataWriteHistory {
         else {
             formattedFormula = formula.formula.replace(/x/g, x);
         }
-        // Используем eval для оценки выражения
-        const result = eval(formattedFormula);
-        //   if (this.id == '28602115') {
-        // console.log(result)
-        //  }
-        return result
+        try {
+            if (!formattedFormula || typeof formattedFormula !== 'string') {
+                throw new Error('Пустая или некорректная формула');
+            }
+            const result = eval(formattedFormula);
+            return result;
+        } catch (e) {
+            /* console.error('Ошибка при вычислении формулы:', {
+                 formula: formula.formula,
+                 formatted: formattedFormula,
+                 value: x,
+                 error: e.message
+             });*/
+            return null; // или другое дефолтное значение
+        }
+
     }
 
     transformExpressionWithExponent(str, x) {

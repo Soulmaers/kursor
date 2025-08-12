@@ -1,6 +1,6 @@
 
 
-
+const axios = require('axios')
 
 class Helpers {
 
@@ -69,6 +69,131 @@ class Helpers {
             maxSpeed: maxSpeed, geoSpeed: [objectMaxSpeed.lat, objectMaxSpeed.lon], maxSpeedFieldColor: '', averageSpeed: parseFloat(averageSpeed.toFixed(0)), distance: parseFloat(distance.toFixed(2)), time: time, sub: true
         }]
         return row
+    }
+
+    static async geocoding(geo) {
+
+        const apiKey = '9614b4770a4f42de900e70207075c2b8'
+        try {
+            const url = `https://api.opencagedata.com/geocode/v1/json?q=${Number(geo[0])},${Number(geo[1])}&key=${apiKey}&language=ru`;
+            const response = await axios.get(url);
+            // console.log(response.data.results[0].components)
+            const { city = '', road = '', house_number = '' } = response.data.results[0].components;
+            const fullAddress = [city, road, house_number].filter(Boolean).join(', ');
+
+            if (!city && !road && !house_number) {
+                return '-'; // Если ни одно свойство не задано, возвращаем пустую строку
+            }
+
+            return fullAddress || '-'
+        }
+
+        catch (error) {
+            //   console.error('Ошибка при запросе:', error);
+            return ''
+        }
+    }
+
+    static calcSumm(data, pref) {
+
+        if (data.length === 0) return data
+        switch (pref) {
+            case 'traveling':
+                const distance = data.reduce((acc, e) => {
+                    //  console.log(e)
+                    if (!e[2].sub) acc += e[2].distance
+                    return acc
+                }, 0)
+                const time = data.reduce((acc, e) => {
+                    if (!e[2].sub) acc += e[2].time
+                    return acc
+                }, 0)
+
+                const maxSpeed = Math.max(...data.map(e => e[2].maxSpeed));
+                const averageSpeedValueArray = data.reduce((acc, e) => {
+                    if (!e[2].sub) {
+                        // console.log(acc)
+                        return acc + (e[2]?.averageSpeed || 0);
+                    }
+                    return acc;
+                }, 0)
+                const averageSpeedValue = averageSpeedValueArray / data.filter(e => !e[2].sub).length
+
+                data.push([{
+                    time: null,
+                    oil: '-',
+                    geo: '-'//['-', '-']
+                },
+                {
+                    time: null,
+                    oil: '-',
+                    geo: '-'//['-', '-']
+                }, {
+                    maxSpeed: maxSpeed,
+                    geoSpeed: '-',//['-', '-']
+                    maxSpeedFieldColor: '',
+                    averageSpeed: averageSpeedValue.toFixed(0),
+                    distance: distance.toFixed(2),
+                    time: time,
+                    main: 0
+                }])
+                break;
+            case 'parkings':
+            case 'stops':
+                const diffSumm = data.reduce((acc, e) => {
+                    acc += e.diff
+                    return acc
+                }, 0)
+                data.push({ time: null, geo: '-', diff: diffSumm })
+                break;
+            case 'prostoy':
+                console.log('тут')
+                // console.log(data)
+                const MotoSumm = data.reduce((acc, e) => {
+                    acc += e[2].moto
+                    return acc
+                }, 0)
+                console.log(MotoSumm)
+                data.push([{
+                    time: null,
+                    oil: '-',
+                    geo: '-'//['-', '-']
+                },
+                {
+                    time: null,
+                    oil: '-',
+                    geo: '-'//['-', '-']
+                }, {
+                    moto: MotoSumm,
+                    rashodDUT: '-',//['-', '-']
+                    rashodDUTMCH: '-',
+                    time: '-'
+
+                }])
+                break;
+            case 'oil':
+                //  console.log(allOil)
+                const allzapravleno = data.reduce((acc, e) => {
+                    acc += e.value
+                    return acc
+                }, 0)
+                const allslito = data.reduce((acc, e) => {
+                    acc += e.value2
+                    return acc
+                }, 0)
+
+                data.push({
+                    value: allzapravleno,
+                    value2: allslito,
+                    time: null,
+                    geo: '-',
+                    startOil: '-',
+                    finishOil: '-'
+                })
+                break;
+        }
+
+        return data
     }
 }
 

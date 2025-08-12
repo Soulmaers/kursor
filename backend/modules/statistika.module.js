@@ -2,6 +2,7 @@ const databaseService = require('../services/database.service');
 const { HelpersDefault } = require('../services/HelpersDefault.js')
 const { CalculateReports } = require('./reportsModule/class/Calculate.js')
 const { OilCalculator } = require('./reportsModule/class/OilControllCalculater.js')
+const { DrainCalculate } = require('./reportsModule/class/DrainControllCalculate.js')
 const { JobToBase } = require('./reportSettingsManagerModule/class/JobToBase.js')
 const { ProstoyControll } = require('./reportsModule/class/ProstoyControllCalculater.js')
 const { Worker } = require('worker_threads');
@@ -22,6 +23,7 @@ class SummaryStatistiks {
         this.probeg = '-'
         this.zapravka = '-'
         this.rashod = '-'
+        this.drain = ''
         this.checkAndResetStateIfNeeded();
         this.init()
     }
@@ -100,6 +102,7 @@ class SummaryStatistiks {
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const datas = `${year}-${month}-${day}`;
+        //  console.log(this.strustura)
         await Promise.all(arraySummary.map(([idw, arrayInfo]) =>
             databaseService.summaryToBase(idw, arrayInfo, datas)
         ));
@@ -109,6 +112,7 @@ class SummaryStatistiks {
         strustura.probeg = this.calculationMileage(data); //получение статистики по пробегу
         strustura.job = strustura.probeg > 5 ? 1 : 0
         strustura.zapravka = await this.calculationOil(data, strustura); //получение статистики по заправкам и расходам
+        strustura.drain = await this.calculationDrainOil(data, strustura)
         strustura.rashod = this.instance.fuelConsumption()
         strustura.moto = await this.calculateDuration(data, strustura); //получение статистики по времени работы
         strustura.prostoy = this.calculateDowntime(data, strustura); //получение статистики по времени работы
@@ -116,7 +120,7 @@ class SummaryStatistiks {
     }
 
     initializeStrustura(id, nameCar, group, type) {
-        return { id, ts: 1, nameCar, group, type, probeg: '-', job: '-', rashod: '-', zapravka: '-', medium: '-', moto: '-', prostoy: '-' };
+        return { id, ts: 1, nameCar, group, type, probeg: '-', job: '-', rashod: '-', zapravka: '-', drain: '', medium: '-', moto: '-', prostoy: '-' };
     }
 
     calculationMileage(data) {
@@ -126,6 +130,12 @@ class SummaryStatistiks {
     async calculationOil(data, struktura) {
         this.instance = new OilCalculator(data, this.settings, struktura.id)
         const res = await this.instance.init()
+        return res ? res[0] : 0
+
+    }
+    async calculationDrainOil(data, struktura) {
+        const drainInstance = new DrainCalculate(data, this.settings, struktura.id)
+        const res = await drainInstance.init()
         return res ? res[0] : 0
 
     }

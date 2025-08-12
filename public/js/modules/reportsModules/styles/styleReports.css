@@ -21,7 +21,7 @@
 .titleChange_list_name {
     font-size: 0.9rem;
     font-weight: 400;
-    width: 35%;
+    width: 140px;
 }
 
 .toggle_reports {
@@ -30,7 +30,7 @@
     background: none;
     border: 1px solid rgba(6, 28, 71, 0.8);
     border-radius: 3px;
-    width: 55%;
+    width: 300px;
     scrollbar-width: none;
     /* для Firefox */
     -ms-overflow-style: none;
@@ -42,7 +42,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 55%;
+    width: 300px;
     height: 80px;
     border-radius: 5px;
     box-sizing: border-box;
@@ -172,7 +172,7 @@
 }
 
 .create_reports {
-    width: 33%;
+    width: 125px;
     padding: 5px;
     color: #fff;
     font-size: 0.9rem;
@@ -186,6 +186,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: 50px;
+    margin-top: 19px;
 }
 
 .wrapper_preferens {
@@ -198,18 +200,30 @@
 }
 
 .complite {
-    margin-left: 5px;
     background-color: rgba(6, 28, 71, 1);
 }
 
 .btm_formStart {
-    padding: 5px 8px;
-    color: rgb(28, 123, 160);
-    background-color: #fff;
-    border: 1px solid gray;
-    cursor: pointer;
+    width: 125px;
+    padding: 5px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 200;
+    background-color: rgba(6, 28, 71, 0.8);
+    border: 1px solid rgb(28, 123, 160);
     border-radius: 5px;
+    margin: 5px 0;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 50px;
+    position: absolute;
+    bottom: 80px;
 }
+
+
 
 .control {
     color: #fff;
@@ -334,6 +348,11 @@
 .btn_speedStart_reports {
     margin-top: 5px;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    margin-right: 30px;
+    box-sizing: border-box;
 }
 
 .input_data {
@@ -440,7 +459,7 @@
     font-size: 0.9rem;
     margin-left: 5px;
     cursor: pointer;
-    color: darkred
+    color: darkred;
 }
 
 .edition_template:hover {
@@ -450,6 +469,9 @@
     animation-iteration-count: 1;
 }
 
+.bold {
+    font-weight: bold;
+}
 
 .cell_params {
     display: none;
@@ -461,9 +483,10 @@
 }
 
 .cell_reports {
-    text-align: left;
+    text-align: center;
     padding-left: 5px;
     position: relative;
+    box-sizing: border-box;
 }
 
 
@@ -642,6 +665,7 @@
     top: 0;
     right: 20px;
     width: 70px;
+    display: none;
 }
 
 .file {
@@ -688,32 +712,36 @@
 
 
 .wrapper_shablon {
-    width: calc(100% - 1300px);
+    width: 524px;
+    /* width: calc(100% - 1300px);*/
     display: flex;
     flex-direction: column;
     border: 2px solid rgba(6, 28, 71, 0.8);
-    box-sizing: border-box;
     border-radius: 5px;
     padding-top: 20px;
+    box-sizing: border-box;
+    position: relative;
 }
 
 .wrapper_result {
-    min-width: 500px;
+    width: 400px;
     border-radius: 5px;
     border: 2px solid rgba(6, 28, 71, 0.8);
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 20px;
+    box-sizing: border-box;
 }
 
 .wrapper_reports_map {
-    min-width: 800px;
+    width: calc(100% - 924px);
     border-radius: 5px;
     border: 2px solid rgba(6, 28, 71, 0.8);
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;
 }
 
 
@@ -771,7 +799,7 @@
     border: 1px solid rgba(6, 28, 71, 0.8);
     border-radius: 3px;
     box-sizing: border-box;
-    width: 55%;
+    width: 300px;
     font-size: 0.9rem;
 }
 
@@ -865,6 +893,8 @@
     border-top: 1px solid rgba(6, 28, 71, 0.4);
     margin-top: 8px;
     box-sizing: border-box;
+    color: #fff;
+    background-color: #828DA3;
 }
 
 .rows_spoyler {
@@ -895,6 +925,8 @@
     font-size: 0.9rem;
     border: 1px solid rgba(6, 28, 71, 0.8);
     cursor: pointer;
+    background-color: #fff;
+    color: rgba(6, 28, 71, 0.8);
 }
 
 .sub_interval {
@@ -992,8 +1024,20 @@
     padding: 2px 5px;
     border-radius: 3px;
     color: rgba(6, 28, 71, 0.8);
+    margin-right: 4px;
+    box-sizing: border-box;
 }
 
+.info_window {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    color: rgba(6, 28, 71, 1);
+    background-color: #fff;
+    min-width: 52px;
+    height: 20px;
+    margin-right: 8px;
+    box-sizing: border-box;
+}
 
 
 .uniqum_legend:nth-child(n+2) .rect_legend_moto {
@@ -1038,6 +1082,14 @@
     position: relative;
 }
 
+.skdsh_leg {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: transparent;
+    padding: 2px 0;
+}
+
 
 
 .chart_class_condition {
@@ -1046,6 +1098,9 @@
     position: relative;
 }
 
+.value_tool_skdah {
+    text-align: left;
+}
 
 
 .block {
@@ -1309,4 +1364,8 @@ i.full_screen {
 
 .disabled_icon {
     background-color: #D3D3D3 !important
+}
+
+.last_row_border {
+    border: 3px solid blue;
 }

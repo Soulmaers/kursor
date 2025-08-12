@@ -205,7 +205,9 @@ export class ConfiguratorParams {
 
     async createListMeta() {
         const data = await this.getMetaParams()
+        console.log(data)
         if (data.length === 0) { return }
+        console.log(data)
         const meta = Object.entries(data[0]).filter((element) => element[0] !== 'nameCar' && element[0] !== 'imei' && element[0] !== 'id' && element[0] !== 'port' && element[0] !== 'idObject');
         const list = document.querySelectorAll('.item_meta')
         if (list) {
@@ -268,7 +270,7 @@ export class ConfiguratorParams {
         const idw = this.id
         const port = this.port
         const imei = this.imei
-        console.log(port)
+        console.log(idw, port, imei)
         const params = {
             method: "POST",
             headers: {

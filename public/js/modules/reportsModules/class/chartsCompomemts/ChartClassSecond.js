@@ -38,7 +38,9 @@ export class ChartsClassSecond {
         this.updateSize(newWidth, newHeight); // Обновляем размеры графиков
     }
     init() {
+        console.log(this.data)
         if (this.types === 'Моточасы') this.uniqFunc()
+        this.count = this.data[0].condition.length
         this.createChart(this.originalWidth, this.originalHeight);
     }
 
@@ -69,22 +71,95 @@ export class ChartsClassSecond {
         this.createBodyCharts(); // Вызовите createBodyCharts для обновления графика
     }
 
+    // Пример расчета (нужно адаптировать под ваш код):
+    calculateTotalDataWidth() {
+        let totalWidth = 0;
+        const rectWidth = 51; // Ширина прямоугольника
+        const rectMargin = 5;    // Интервал между прямоугольниками (если есть)
+
+        if (this.data[0].condition && this.data[0].condition.length > 0) {
+            console.log(this.data[0].condition.length)
+            totalWidth = this.data[0].condition.length * (rectWidth + rectMargin);
+
+            // Добавьте учет смещений, если необходимо
+            totalWidth += 60 // Учитываем смещение transform translate(60, 30)
+            totalWidth += 30 // Учитываем смещение transform translate(60, 30)
+
+        }
+
+        console.log(totalWidth)
+        return totalWidth;
+    }
 
     createContainer() {
+
+
+
         this.graf = document.createElement('div');
         this.graf.classList.add('chart_class')
         this.graf.setAttribute('data-chart-id', this.container.id); // Уникальный data-атрибут
         this.container.appendChild(this.graf);
 
         // Создаем svg контейнер, выбирая элемент по data-атрибуту
-        this.svg = d3.select('[data-chart-id="' + this.container.id + '"]').append("svg")
-            .attr("width", this.width)
-            .attr("height", this.height)
+        const container = d3.select('[data-chart-id="' + this.container.id + '"]')
+            .style('width', `${this.width}px`) // Установите ширину контейнера
+            .style('position', 'relative')
+            .style('overflow-x', this.count > 31 ? 'auto' : 'none') // Важно: scroll -> auto
+
+
+
+
+
+        let isDragging = false;
+        let startX = 0;
+
+        let startScrollLeft = 0
+        const dragStart = () => {
+            isDragging = true;
+            startX = d3.event.clientX;
+            startScrollLeft = container.node().scrollLeft
+        };
+        const dragMove = () => {
+            if (!isDragging) return;
+            const currentX = d3.event.clientX; // Получаем event из d3.event
+            const deltaX = currentX - startX;
+
+            // Ограничение перемещения (пример):
+            const maxScrollLeft = this.calculateTotalDataWidth() - this.width + 60; // Учитываем отступ
+            const minScrollLeft = 0;
+
+            const newScrollLeft = startScrollLeft - deltaX; // Инвертируем deltaX
+
+            container.node().scrollLeft = Math.max(minScrollLeft, Math.min(maxScrollLeft, newScrollLeft))
+            startX = currentX;
+            startScrollLeft = container.node().scrollLeft
+
+        };
+
+        const dragEnd = () => {
+            isDragging = false;
+        };
+
+
+        container.on("mousedown", dragStart)
+            .on("mousemove", dragMove)
+            .on("mouseup", dragEnd)
+            .on("mouseleave", dragEnd)
+
+        // Создание SVG элемента
+        this.svg = container.append("svg")
+            .attr("height", this.height) // Высота SVG
             .attr('class', 'svg_reports')
             .style("border", "1px solid black")
-            .style('position', 'relative')
+            .style("width", `${this.count > 31 ? this.calculateTotalDataWidth() : this.width}px`) // Ширина SVG
             .append("g")
-            .attr("transform", "translate(" + 60 + "," + 30 + ")");
+            .attr("transform", "translate(60, 30)")
+            .style("width", `${this.count > 31 ? this.calculateTotalDataWidth() : this.width}px`)
+
+
+
+
+
         this.tooltip = d3.select('[data-chart-id="' + this.container.id + '"]').append('div')
             .attr("class", `tooltip_reports`)
             .style("opacity", 0) // Изначально скрываем tooltip
@@ -122,13 +197,14 @@ export class ChartsClassSecond {
     }
 
     chartRect(data) {
+
         data.result.forEach((e, index) => {
-            if (e !== 0) {
+
+            if (e > 0) {
                 const rect = ChartUtils.createRectSecond(this.axisData[index], this.x, data.color, 2);
                 const rectHeight = this.y1(this.originData.includes(this.axisData[index]) ? e : 0);
                 const xPosition = rect.xStart
                 const currentCumulativeHeight = this.cumulativeHeight[index] || this.height - 60;
-                console.log(rect.xStart)
                 const height = this.height - rectHeight - 60
                 const yPosition = currentCumulativeHeight - height;
 
@@ -136,7 +212,7 @@ export class ChartsClassSecond {
                 this.svg.append("rect")
                     .attr("class", `rect${index + 1}`) // Уникальный класс для каждого прямоугольника
                     .attr("class", 'rectReports')
-                    .attr("x", xPosition) // Позиция по оси X
+                    .attr("x", xPosition + 2.5) // Позиция по оси X
                     .attr("y", yInvert)
                     .attr("width", 51) // Ширина прямоугольника
                     .attr("height", height) // Высота прямоугольника
@@ -164,7 +240,6 @@ export class ChartsClassSecond {
 
         this.svg.selectAll("*").remove()
         this.axisData = this.data[0].result
-        //  console.log(this.axisData)
         this.axisYData = Math.max(...Helpers.timeDay())
         // задаем x-шкалу
         const x = d3.scaleBand()
@@ -179,7 +254,7 @@ export class ChartsClassSecond {
 
         this.y1 = y1
         // добавляем ось x
-        this.svg.append("g")
+        const tiksX = this.svg.append("g")
             .attr("class", "osx")
             .attr("transform", "translate(0," + (this.height - 60) + ")") //
             .call(ChartUtils.createAxis(x, 'bottom', this.svg))
@@ -203,18 +278,31 @@ export class ChartsClassSecond {
 
         this.controller()
 
+        tiksX.selectAll('text')
+            .style('font-weight', function (d) {
+                const dateParts = d.split("-");
+                const day = parseInt(dateParts[2].substring(0, 2), 10)
+                if (day === 1) return '900'
+            })
+            .text(function (d) {
+                // Преобразуем дату из строки
+                const dateParts = d.split("-");
+                const newDate = `${dateParts[2]}.${dateParts[1]}`;
+                // Изменяем текст на значение newDate
+                return newDate;
+            })
+
         this.axisData.forEach((e, index) => {
-            const textContent = this.data.slice(1).map(e => ({ name: e.name, color: e.color, value: e.result[index], local: e.local }))
-            console.log(textContent)
+            const textContent = this.data.slice(1).map(e => ({ name: e.name, color: e.color, value: e.result[index] >= 0 ? e.result[index] : 0, local: e.local }))
             const rect = ChartUtils.createRectSecond(e, this.x, 'green', 2);
             const rectHeight = this.y1(this.axisYData);
             const xPosition = rect.xStart
 
             this.svg.append("rect")
                 .attr("class", 'rectReports')
-                .attr("x", xPosition) // Позиция по оси X
+                .attr("x", xPosition + 2.5) // Позиция по оси X
                 .attr("y", rectHeight)
-                .attr("width", 50) // Ширина прямоугольника
+                .attr("width", 51) // Ширина прямоугольника
                 .attr("height", this.height - rectHeight - 60) // Высота прямоугольника
                 .attr("fill", 'transparent') // Цвет прямоугольника
                 .on("mousemove", (event, d) => {
@@ -248,16 +336,20 @@ export class ChartsClassSecond {
 
 
         })
-
+        this.svg.append("text")
+            .attr("y", -25)
+            .attr("x", -22)
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Время")
+            .style('color', 'rgba(6, 28, 71, 0.9)')
         // После создания чекбокса добавляем слушатель события
         d3.selectAll(".checkbox_motos").on("change", function () {
             // Здесь можно получить состояние чекбокса
             const isChecked = this.checked;  // Это будет true или false
             const id = this.id;              // Это ID чекбокса
             const conditionChart = this.closest('.chart_container').nextElementSibling.querySelectorAll('.chart_class_condition')
-            console.log(conditionChart)
             conditionChart.forEach(e => {
-                console.log(e.getAttribute('data-chart-id'), id)
                 if (e.getAttribute('data-chart-id') === id) {
                     e.classList.toggle('block')
                 }
@@ -265,6 +357,7 @@ export class ChartsClassSecond {
             //  console.log(conditionChart)
 
         });
+
     }
 
     formatDate(date) {

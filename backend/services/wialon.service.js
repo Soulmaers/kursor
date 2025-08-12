@@ -59,7 +59,7 @@ exports.getFileReportsToWialon = async (format, formatToWialon) => {
     const writeStream = fs.createWriteStream(filePath);
 
     const response = await axios.post(
-        `https://hst-api.wialon.com/wialon/ajax.html?svc=report/export_result&params={"format":${formatToWialon},"attachMap":1,"compress":0}&sid=${eid}`,
+        `https://local3.mielta.ru/wialon/ajax.html?svc=report/export_result&params={"format":${formatToWialon},"attachMap":1,"compress":0}&sid=${eid}`,
         {},
         { responseType: 'stream', headers: headers }
     );
@@ -76,8 +76,6 @@ exports.getFileReportsToWialon = async (format, formatToWialon) => {
         });
     });
 };
-
-
 
 exports.getPropertyGroups = async (session) => {
     const eid = session.eid;
@@ -96,7 +94,7 @@ exports.getPropertyGroups = async (session) => {
         "to": 0
     }
     try {
-        const url = `https://hst-api.watchit.ru/wialon/ajax.html?svc=core/search_items&params=${encodeURIComponent(JSON.stringify(prms))}&sid=${eid}`;
+        const url = `https://local3.mielta.ru/wialon/ajax.html?svc=core/search_items&params=${encodeURIComponent(JSON.stringify(prms))}&sid=${eid}`;
         const headers = {
             'Content-Type': 'application/json'
         };
@@ -110,6 +108,7 @@ exports.getPropertyGroups = async (session) => {
 
 exports.getPropertyObjects = async (session) => {
     const eid = session.eid;
+    console.log(eid)
     const prms = {
         "spec": {
             "itemsType": "avl_unit",
@@ -126,12 +125,11 @@ exports.getPropertyObjects = async (session) => {
     }
 
     try {
-        const url = `https://hst-api.watchit.ru/wialon/ajax.html?svc=core/search_items&params=${encodeURIComponent(JSON.stringify(prms))}&sid=${eid}`;
+        const url = `https://local3.mielta.ru/wialon/ajax.html?svc=core/search_items&params=${encodeURIComponent(JSON.stringify(prms))}&sid=${eid}`;
         const headers = {
             'Content-Type': 'application/json'
         };
         const response = await axios.post(url, {}, { headers: headers });
-        //  console.log(response)
         return response.data.items
     }
     catch (e) {
@@ -144,7 +142,7 @@ exports.getDataFromWialon = async (session) => {
     const eid = session.eid;
 
     try {
-        const url = `https://hst-api.watchit.ru/wialon/ajax.html?svc=core/search_items&params=${encodeURIComponent(JSON.stringify(prms))}&sid=${eid}`;
+        const url = `https://local3.mielta.ru/wialon/ajax.html?svc=core/search_items&params=${encodeURIComponent(JSON.stringify(prms))}&sid=${eid}`;
         const headers = {
             'Content-Type': 'application/json'
         };
@@ -164,7 +162,7 @@ exports.getUniqImeiAndPhoneIdDataFromWialon = async (id, sess) => {
     };
     try {
 
-        const url = `https://hst-api.watchit.ru/wialon/ajax.html?svc=core/search_item&params=${encodeURIComponent(JSON.stringify(prmsId))}&sid=${eid}`;
+        const url = `https://local3.mielta.ru/wialon/ajax.html?svc=core/search_item&params=${encodeURIComponent(JSON.stringify(prmsId))}&sid=${eid}`;
         const headers = {
             'Content-type': 'application/json'
         }
@@ -189,7 +187,7 @@ exports.loadIntervalDataFromWialon = async (active, timeOld, timeNow, login, ses
         "loadCount": 180000
     }
     try {
-        const url = `https://hst-api.watchit.ru/wialon/ajax.html?svc=messages/load_interval&params=${encodeURIComponent(JSON.stringify(prms2))}&sid=${eid}`;
+        const url = `https://local3.mielta.ru/wialon/ajax.html?svc=messages/load_interval&params=${encodeURIComponent(JSON.stringify(prms2))}&sid=${eid}`;
         const headers = {
             'Content-type': 'application/json'
         }
@@ -221,7 +219,7 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr, sess) => {
 
     try {
         // Первый запрос к 'events/update_units'
-        const updateUnitsUrl = `https://hst-api.watchit.ru/wialon/ajax.html?svc=events/update_units&params=${encodeURIComponent(JSON.stringify(prms))}&sid=${eid}`;
+        const updateUnitsUrl = `https://local3.mielta.ru/wialon/ajax.html?svc=events/update_units&params=${encodeURIComponent(JSON.stringify(prms))}&sid=${eid}`;
         const headers = {
             'Content-Type': 'application/json'
         };
@@ -239,7 +237,7 @@ exports.getUpdateLastAllSensorsIdDataFromWialon = async (arr, sess) => {
         console.log('First request successful, proceeding to the second request.');
 
         // Второй запрос к 'events/check_updates'
-        const checkUpdatesUrl = `https://hst-api.watchit.ru/wialon/ajax.html?svc=events/check_updates&params=${encodeURIComponent(JSON.stringify(prmsUp))}&sid=${eid}`;
+        const checkUpdatesUrl = `https://local3.mielta.ru/wialon/ajax.html?svc=events/check_updates&params=${encodeURIComponent(JSON.stringify(prmsUp))}&sid=${eid}`;
 
         // Выполнение второго запроса
         const checkUpdatesResponse = await axios.post(checkUpdatesUrl, {}, { headers: headers, timeout: 20000 });

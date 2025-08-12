@@ -294,54 +294,54 @@ exports.editGroup = async (req, res) => { //сохранение контакт�
 };
 
 exports.editObject = async (req, res) => { //сохранение контактов
-
+    console.log(req.body.obj)
     const { objectname, incrimentObject, uz, addressserver, gosnomerobject, idbitrixobject, imeidevice, markaobject, modelobject, phonenumber,
         port, typedevice, typeobject, tp, creater, del, vinobject
     } = req.body.obj;
     try {
         const pool = await connection
-        const sqlS = `SELECT * FROM objects WHERE objectname = @objectname AND uz=@uz AND incriment!=@incrimentObject`;
-        const rows = await pool.request()
-            .input('objectname', objectname)
-            .input('uz', uz)
-            .input('incrimentObject', incrimentObject)
-            .query(sqlS);
-        if (rows.recordset.length > 0) {
-            res.json({
-                message: `Объект с таким именем - ${rows.recordset[0].objectname} уже есть`, flag: false
-            });
-            //  return;
-        }
-        else {
-            const insertUserQuery = `
+        /*  const sqlS = `SELECT * FROM objects WHERE incriment = @incrimentObject AND uz=@uz`;
+          const rows = await pool.request()
+              .input('objectname', objectname)
+              .input('uz', uz)
+              .input('incrimentObject', incrimentObject)
+              .query(sqlS);
+          if (rows.recordset.length > 0) {
+              res.json({
+                  message: `Объект с таким именем - ${rows.recordset[0].objectname} уже есть`, flag: false
+              });
+              //  return;
+          }
+          else {*/
+        const insertUserQuery = `
                 UPDATE objects SET objectname=@objectname, del=@del,addressserver=@addressserver, gosnomerobject=@gosnomerobject, 
                 idbitrixobject=@idbitrixobject,imeidevice=@imeidevice,markaobject=@markaobject,
                 modelobject=@modelobject, phonenumber=@phonenumber,port=@port,tp=@tp,
                 typedevice=@typedevice, typeobject=@typeobject,creater=@creater,vinobject=@vinobject WHERE incriment=@incrimentObject `;
-            const userResult = await pool.request()
-                .input('objectname', objectname)
-                .input('addressserver', addressserver)
-                .input('gosnomerobject', gosnomerobject)
-                .input('idbitrixobject', idbitrixobject)
-                .input('imeidevice', imeidevice)
-                .input('markaobject', markaobject)
-                .input('modelobject', modelobject)
-                .input('phonenumber', phonenumber)
-                .input('port', port)
-                .input('tp', tp)
-                .input('typedevice', typedevice)
-                .input('typeobject', typeobject)
-                .input('vinobject', vinobject)
-                .input('creater', creater)
-                .input('del', del)
-                .input('incrimentObject', incrimentObject)
-                .query(insertUserQuery);
+        const userResult = await pool.request()
+            .input('objectname', objectname)
+            .input('addressserver', addressserver)
+            .input('gosnomerobject', gosnomerobject)
+            .input('idbitrixobject', idbitrixobject)
+            .input('imeidevice', imeidevice)
+            .input('markaobject', markaobject)
+            .input('modelobject', modelobject)
+            .input('phonenumber', phonenumber)
+            .input('port', port)
+            .input('tp', tp)
+            .input('typedevice', typedevice)
+            .input('typeobject', typeobject)
+            .input('vinobject', vinobject)
+            .input('creater', creater)
+            .input('del', del)
+            .input('incrimentObject', incrimentObject)
+            .query(insertUserQuery);
 
-            res.json({
-                message: 'Данные объекта обновлены', flag: true
-            });
+        res.json({
+            message: 'Данные объекта обновлены', flag: true
+        });
 
-        }
+        //  }
 
     } catch (error) {
         console.error(error);

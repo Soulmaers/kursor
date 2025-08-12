@@ -16,7 +16,12 @@ class UpdateSetStor {
 
 
     async init() {
+        if (this.id == 28526128) {
+            // console.log(this.imei, this.port, this.id)
+        }
+        //   console.log(this.imei, this.port, this.id)
         this.data = await databaseService.getSensStorMetaFilter(this.imei, this.port, this.id) //получение привязанных параметров
+        // console.log(this.id, this.data.length)
         if (this.data.length === 0) return
         this.configs = await ToBaseMethods.getConfigs(this.id)
         new DataHandlerUpdateBase(this.imei, this.port, this.info, this.id, this.data, this.configs)

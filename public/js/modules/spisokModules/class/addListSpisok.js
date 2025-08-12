@@ -81,6 +81,7 @@ export class AddListSpisok {
         elem.forEach(it => {
             const property = this.final.find(e => e.object_id === it.id);
             it.getAttribute('name', property.object_name)
+            console.log(it.children[0].childNodes.childNodes[3])
             it.children[0].childNodes[8].textContent = property.object_name
             it.children[0].getAttribute('rel', property.inc_object)
             it.children[0].getAttribute('idx', property.inc_object)

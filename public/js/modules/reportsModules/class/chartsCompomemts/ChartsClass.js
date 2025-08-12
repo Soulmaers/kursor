@@ -12,6 +12,7 @@ export class ChartsClass {
             'rect': (data) => this.chartRect(data),
             'icon': (data) => this.chartIcon(data)
         };
+
         this.originalWidth = document.querySelector('.wrapper_reports').offsetWidth - 10;
         this.originalHeight = 400;
         window.addEventListener('resize', () => this.handleResize());
@@ -79,8 +80,9 @@ export class ChartsClass {
     }
 
     chartIcon(data) {
+        console.log(data)
         data.result.forEach((e, index) => {
-            const iconClass = `icon_image_reports${index}`
+            const iconClass = `icon_image_reports${index + data.name}`
             this.rectToolIcon = this.chartGroup.append("image")
                 .attr("x", this.x(new Date(Number(e.time) * 1000)))
                 .attr("href", data.icon)
@@ -130,6 +132,7 @@ export class ChartsClass {
     }
 
     controller() {
+        console.log(this.data)
         for (let i = this.data.length - 1; i >= 0; i--) { // Цикл с обратным порядком перебора
             const e = this.data[i];
             if (e.checked && this.chartType[e.chartType]) {
@@ -273,8 +276,9 @@ export class ChartsClass {
                 });
             }
             else if (dataset.chartType === 'icon') {
+                console.log(dataset.result)
                 dataset.result.forEach((e, index) => {
-                    const iconClass = `icon_image_reports${index}`
+                    const iconClass = `icon_image_reports${index + dataset.name}`
                     this.rectToolIcon = this.chartGroup.select(`.${iconClass}`)
                         .attr("x", new_xScale(new Date(Number(e.time) * 1000)));
                     //   ChartUtils.createTooltip(this.rectToolIcon, this.container.id, this.data, new_xScale)

@@ -32,6 +32,7 @@ class CalculateReports {
     }
 
     static converterTimes(data) {
+        if (!data) return '-'
         let date = new Date(data * 1000); // Преобразование в миллисекунды
         let year = date.getFullYear().toString().slice(-2);;
         let month = ("0" + (date.getMonth() + 1)).slice(-2); // Месяцы начинаются с 0
@@ -191,8 +192,9 @@ class CalculateReports {
 
 
     static geoTreks(data, traveling) {
+        // console.log(traveling)
         if (traveling.length === 0) return []
-        const geoTime = [traveling[0][0].time, traveling[traveling.length - 1][1].time]
+        const geoTime = [traveling[0][0].time, traveling[traveling.length - 2][1].time]
         const arrayGeoZone = data.filter(el => el.last_valid_time >= geoTime[0] && el.last_valid_time <= geoTime[1])
             .map(e => [Number(e.lat), Number(e.lon), { time: Number(e.last_valid_time) }])
         return arrayGeoZone

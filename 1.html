@@ -1,0 +1,288 @@
+
+                 <html>
+            <head>
+                <style>.header_logo {
+    width: 100%;
+    height: 60px;
+    background-color: #061c47;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+.img_logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    /* или cover — смотри ниже */
+}
+
+.head_meta {
+    width: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-self: flex-start;
+}
+
+.chart_head_meta {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nadpis {
+    font-size: 1.2rem;
+    color: #061c47
+}
+
+.body_pdf {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.contant_title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title_type {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.next {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 4px 0;
+    box-sizing: border-box;
+}
+
+.title_name {
+    color: #061c47;
+    font-size: 1.4rem;
+}
+
+.title_number {
+    color: #061c47;
+    font-size: 1.4rem;
+}
+
+.dashes {
+    width: 100%;
+    border-bottom: 2px dotted #061c47;
+    padding-top: 12px;
+    margin: 0 5px;
+}
+
+.title_component_sub {
+    padding-left: 26px;
+    box-sizing: border-box;
+    margin: 2px 0;
+}
+
+.component_title {
+    font-size: 1.2rem;
+    color: #061c47;
+    white-space: nowrap;
+}
+
+
+.page_break {
+    page-break-before: always;
+    margin-top: 20px;
+}
+
+.statistika_page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
+.components_page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.name_object {
+    font-size: 1.4rem;
+    color: #061c47;
+    align-self: center;
+}
+
+.name_component {
+    width: 50%;
+    margin: 10px 0;
+    font-size: 1.4rem;
+    color: #061c47;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.statistika_table {
+    width: 50%;
+    border-collapse: collapse;
+}
+
+.components_table {
+    max-width: 100%;
+    border-collapse: collapse;
+    word-wrap: break-word;
+}
+
+.components_table td {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.components_table th {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+    word-wrap: break-word;
+}
+
+.statistika_table td {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+}
+
+.left_stat {
+    text-align: left;
+}
+
+.right_stat {
+    text-align: center;
+}
+
+.page_component {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.components_table .left_stat {
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.components_table td.last-row-cell {
+    border-top: 3px solid #38496C;
+    font-weight: bold;
+}
+
+.wrap_icon {
+    margin-right: 20px;
+    margin-left: 8px;
+    width: 25px;
+    height: 25px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+.uniqum_legend {
+    display: flex;
+    align-items: center;
+}
+
+
+.body_legend {
+    width: 100%;
+    margin: 0 20px;
+    display: flex;
+    align-items: center;
+}
+
+.legend_container {
+    width: 100%;
+    min-height: 30px;
+    background-color: #38496C;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    color: #fff
+}
+
+.rect_legend {
+    margin-right: 20px;
+    margin-left: 8px;
+    width: 52px;
+    height: 25px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.rect_legend_moto {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: rgba(6, 28, 71, 0.8);
+    margin-right: 4px;
+    box-sizing: border-box;
+}
+
+.skdsh_leg {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: transparent;
+    padding: 2px 0;
+}
+
+.value_tool_skdah {
+    text-align: left;
+}
+
+.info_window {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    color: rgba(6, 28, 71, 1);
+    background-color: #fff;
+    min-width: 52px;
+    height: 20px;
+    margin-right: 8px;
+    box-sizing: border-box;
+}</style>
+            </head>
+            <body class="body_pdf">
+                       <div class="page_component">
+                <div class="head_meta"><div class="nadpis">SIM_FOTON763</div><div class="nadpis">Демо</div><div class="name_component">Топливо</div></div>
+                <table class="components_table">
+                    <thead><tr><th class="colums">Дата и время</th><th class="colums">Местоположение</th><th class="colums">Начальный уровень топлива</th><th class="colums">Конечный уровень топлива</th><th class="colums">Всего заправлено</th><th class="colums">Всего слито</th><th class="colums">Объём бака</th><th class="colums">До MAX уровня</th></tr></thead>
+                    <tbody><tr><td class=" ">01.04.25 15:37:52</td><td class="left_stat ">57.5431416667,39.8022466667</td><td class=" ">198</td><td class=" ">764</td><td class=" ">566</td><td class=" ">-</td><td class=" ">800</td><td class=" ">36</td></tr><tr><td class=" ">03.04.25 14:25:38</td><td class="left_stat ">56.76805,60.5527833333</td><td class=" ">210</td><td class=" ">264</td><td class=" ">54</td><td class=" ">-</td><td class=" ">800</td><td class=" ">536</td></tr><tr><td class=" ">04.04.25 12:48:23</td><td class="left_stat ">56.8769383333,60.0237533333</td><td class=" ">213</td><td class=" ">418</td><td class=" ">205</td><td class=" ">-</td><td class=" ">800</td><td class=" ">382</td></tr><tr><td class=" ">05.04.25 09:32:47</td><td class="left_stat ">54.1103433333,52.5082266667</td><td class=" ">15</td><td class=" ">76</td><td class=" ">61</td><td class=" ">-</td><td class=" ">800</td><td class=" ">724</td></tr><tr><td class=" ">05.04.25 12:44:33</td><td class="left_stat ">53.4973933333,50.078095</td><td class=" ">47</td><td class=" ">770</td><td class=" ">723</td><td class=" ">-</td><td class=" ">800</td><td class=" ">30</td></tr><tr><td class=" ">07.04.25 13:29:05</td><td class="left_stat ">47.25359,38.9354616667</td><td class=" ">188</td><td class=" ">242</td><td class=" ">54</td><td class=" ">-</td><td class=" ">800</td><td class=" ">558</td></tr><tr><td class=" ">08.04.25 19:51:32</td><td class="left_stat ">46.299115,39.3819966667</td><td class=" ">24</td><td class=" ">770</td><td class=" ">746</td><td class=" ">-</td><td class=" ">800</td><td class=" ">30</td></tr><tr><td class=" ">10.04.25 16:50:03</td><td class="left_stat ">53.4958233333,50.06207</td><td class=" ">254</td><td class=" ">768</td><td class=" ">514</td><td class=" ">-</td><td class=" ">800</td><td class=" ">32</td></tr><tr><td class=" ">17.04.25 14:12:24</td><td class="left_stat ">53.4975183333,50.0780566667</td><td class=" ">72</td><td class=" ">771</td><td class=" ">699</td><td class=" ">-</td><td class=" ">800</td><td class=" ">29</td></tr><tr><td class=" ">19.04.25 18:33:09</td><td class="left_stat ">46.299905,39.3816066667</td><td class=" ">34</td><td class=" ">784</td><td class=" ">750</td><td class=" ">-</td><td class=" ">800</td><td class=" ">16</td></tr><tr><td class=" ">24.04.25 17:31:40</td><td class="left_stat ">45.2225216667,38.4359483333</td><td class=" ">11</td><td class=" ">764</td><td class=" ">753</td><td class=" ">-</td><td class=" ">800</td><td class=" ">36</td></tr><tr><td class=" ">26.04.25 13:20:16</td><td class="left_stat ">53.4959283333,50.0621566667</td><td class=" ">161</td><td class=" ">755</td><td class=" ">594</td><td class=" ">-</td><td class=" ">800</td><td class=" ">45</td></tr><tr><td class=" ">02.04.25 14:11:37</td><td class="left_stat ">58.68208,49.66595</td><td class=" ">542</td><td class=" ">518</td><td class=" ">-</td><td class=" ">24</td><td class=" ">800</td><td class=" ">282</td></tr><tr><td class=" ">21.04.25 15:46:17</td><td class="left_stat ">55.4859666667,37.75076</td><td class=" ">274</td><td class=" ">251</td><td class=" ">-</td><td class=" ">23</td><td class=" ">800</td><td class=" ">549</td></tr><tr><td class=" ">22.04.25 12:59:34</td><td class="left_stat ">52.3868866667,38.9366316667</td><td class=" ">120</td><td class=" ">79</td><td class=" ">-</td><td class=" ">41</td><td class=" ">800</td><td class=" ">721</td></tr><tr><td class=" last-row-cell">Итого</td><td class="left_stat last-row-cell">-</td><td class=" last-row-cell">-</td><td class=" last-row-cell">-</td><td class=" last-row-cell">5719</td><td class=" last-row-cell">88</td><td class=" last-row-cell">800</td><td class=" last-row-cell">-</td></tr></tbody>
+                </table>
+                        </div>                                     
+                          </body>
+        </html>     

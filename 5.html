@@ -1,0 +1,288 @@
+
+                 <html>
+            <head>
+                <style>.header_logo {
+    width: 100%;
+    height: 60px;
+    background-color: #061c47;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+.img_logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    /* или cover — смотри ниже */
+}
+
+.head_meta {
+    width: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-self: flex-start;
+}
+
+.chart_head_meta {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nadpis {
+    font-size: 1.2rem;
+    color: #061c47
+}
+
+.body_pdf {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.contant_title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title_type {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.next {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 4px 0;
+    box-sizing: border-box;
+}
+
+.title_name {
+    color: #061c47;
+    font-size: 1.4rem;
+}
+
+.title_number {
+    color: #061c47;
+    font-size: 1.4rem;
+}
+
+.dashes {
+    width: 100%;
+    border-bottom: 2px dotted #061c47;
+    padding-top: 12px;
+    margin: 0 5px;
+}
+
+.title_component_sub {
+    padding-left: 26px;
+    box-sizing: border-box;
+    margin: 2px 0;
+}
+
+.component_title {
+    font-size: 1.2rem;
+    color: #061c47;
+    white-space: nowrap;
+}
+
+
+.page_break {
+    page-break-before: always;
+    margin-top: 20px;
+}
+
+.statistika_page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
+.components_page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.name_object {
+    font-size: 1.4rem;
+    color: #061c47;
+    align-self: center;
+}
+
+.name_component {
+    width: 50%;
+    margin: 10px 0;
+    font-size: 1.4rem;
+    color: #061c47;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.statistika_table {
+    width: 50%;
+    border-collapse: collapse;
+}
+
+.components_table {
+    max-width: 100%;
+    border-collapse: collapse;
+    word-wrap: break-word;
+}
+
+.components_table td {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.components_table th {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+    word-wrap: break-word;
+}
+
+.statistika_table td {
+    border: 1px solid #061c47;
+    padding: 8px;
+    color: #061c47;
+}
+
+.left_stat {
+    text-align: left;
+}
+
+.right_stat {
+    text-align: center;
+}
+
+.page_component {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.components_table .left_stat {
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.components_table td.last-row-cell {
+    border-top: 3px solid #38496C;
+    font-weight: bold;
+}
+
+.wrap_icon {
+    margin-right: 20px;
+    margin-left: 8px;
+    width: 25px;
+    height: 25px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+.uniqum_legend {
+    display: flex;
+    align-items: center;
+}
+
+
+.body_legend {
+    width: 100%;
+    margin: 0 20px;
+    display: flex;
+    align-items: center;
+}
+
+.legend_container {
+    width: 100%;
+    min-height: 30px;
+    background-color: #38496C;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    color: #fff
+}
+
+.rect_legend {
+    margin-right: 20px;
+    margin-left: 8px;
+    width: 52px;
+    height: 25px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.rect_legend_moto {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: rgba(6, 28, 71, 0.8);
+    margin-right: 4px;
+    box-sizing: border-box;
+}
+
+.skdsh_leg {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: transparent;
+    padding: 2px 0;
+}
+
+.value_tool_skdah {
+    text-align: left;
+}
+
+.info_window {
+    font-size: 0.9rem;
+    padding: 2px 5px;
+    color: rgba(6, 28, 71, 1);
+    background-color: #fff;
+    min-width: 52px;
+    height: 20px;
+    margin-right: 8px;
+    box-sizing: border-box;
+}</style>
+            </head>
+            <body class="body_pdf">
+                       <div class="page_component">
+                <div class="head_meta"><div class="nadpis">SIM_FOTON763</div><div class="nadpis">Демо</div><div class="name_component">Остановки</div></div>
+                <table class="components_table">
+                    <thead><tr><th class="colums">Начало</th><th class="colums">Длительность</th><th class="colums">Местоположение</th></tr></thead>
+                    <tbody><tr><td class=" ">01.04.25 20:03:06</td><td class=" ">00:05:29</td><td class="left_stat ">57.5410016667,40.119875</td></tr><tr><td class=" ">03.04.25 13:31:35</td><td class=" ">00:11:44</td><td class="left_stat ">56.7657783333,60.5591183333</td></tr><tr><td class=" ">04.04.25 06:02:15</td><td class=" ">00:06:48</td><td class="left_stat ">56.88562,60.01571</td></tr><tr><td class=" ">04.04.25 06:09:17</td><td class=" ">00:15:04</td><td class="left_stat ">56.885745,60.0163666667</td></tr><tr><td class=" ">04.04.25 07:48:06</td><td class=" ">00:05:35</td><td class="left_stat ">56.885795,60.0154566667</td></tr><tr><td class=" ">04.04.25 09:15:11</td><td class=" ">00:05:37</td><td class="left_stat ">56.9073683333,59.96463</td></tr><tr><td class=" ">04.04.25 09:33:41</td><td class=" ">00:12:36</td><td class="left_stat ">56.885685,60.0154933333</td></tr><tr><td class=" ">04.04.25 12:38:02</td><td class=" ">00:10:52</td><td class="left_stat ">56.8769216667,60.0238266667</td></tr><tr><td class=" ">04.04.25 19:04:28</td><td class=" ">00:10:19</td><td class="left_stat ">54.9999583333,57.65677</td></tr><tr><td class=" ">04.04.25 19:26:04</td><td class=" ">00:09:01</td><td class="left_stat ">54.998975,57.6275916667</td></tr><tr><td class=" ">04.04.25 21:07:47</td><td class=" ">00:05:28</td><td class="left_stat ">54.6698516667,56.165885</td></tr><tr><td class=" ">05.04.25 05:42:00</td><td class=" ">00:08:48</td><td class="left_stat ">54.669725,56.16528</td></tr><tr><td class=" ">06.04.25 08:13:17</td><td class=" ">00:05:52</td><td class="left_stat ">48.6844766667,43.8575833333</td></tr><tr><td class=" ">07.04.25 11:57:06</td><td class=" ">00:23:53</td><td class="left_stat ">47.23927,38.9267966667</td></tr><tr><td class=" ">07.04.25 12:23:25</td><td class=" ">00:09:12</td><td class="left_stat ">47.238755,38.92675</td></tr><tr><td class=" ">07.04.25 13:17:06</td><td class=" ">00:09:16</td><td class="left_stat ">47.2390133333,38.9303566667</td></tr><tr><td class=" ">07.04.25 16:57:14</td><td class=" ">00:06:16</td><td class="left_stat ">47.203005,39.7043216667</td></tr><tr><td class=" ">07.04.25 18:56:49</td><td class=" ">00:23:43</td><td class="left_stat ">47.1670983333,39.7509516667</td></tr><tr><td class=" ">08.04.25 13:24:56</td><td class=" ">00:26:21</td><td class="left_stat ">45.3612383333,38.2407816667</td></tr><tr><td class=" ">10.04.25 13:05:49</td><td class=" ">00:15:16</td><td class="left_stat ">52.167495,47.82685</td></tr><tr><td class=" ">11.04.25 05:40:44</td><td class=" ">00:10:58</td><td class="left_stat ">54.6689883333,56.166035</td></tr><tr><td class=" ">11.04.25 07:16:32</td><td class=" ">00:05:24</td><td class="left_stat ">54.8984533333,57.3242816667</td></tr><tr><td class=" ">11.04.25 07:33:29</td><td class=" ">00:05:11</td><td class="left_stat ">54.9077616667,57.3531366667</td></tr><tr><td class=" ">11.04.25 07:52:46</td><td class=" ">00:09:51</td><td class="left_stat ">54.9830583333,57.5464583333</td></tr><tr><td class=" ">11.04.25 08:31:24</td><td class=" ">00:05:08</td><td class="left_stat ">54.9938616667,57.59969</td></tr><tr><td class=" ">14.04.25 07:31:27</td><td class=" ">00:38:41</td><td class="left_stat ">56.8856983333,60.0158366667</td></tr><tr><td class=" ">14.04.25 08:22:09</td><td class=" ">00:20:26</td><td class="left_stat ">56.9077183333,59.965635</td></tr><tr><td class=" ">16.04.25 11:17:18</td><td class=" ">00:13:13</td><td class="left_stat ">56.8856783333,60.0157833333</td></tr><tr><td class=" ">16.04.25 20:58:26</td><td class=" ">00:07:27</td><td class="left_stat ">55.176845,55.8533233333</td></tr><tr><td class=" ">17.04.25 07:46:30</td><td class=" ">00:08:15</td><td class="left_stat ">54.704145,54.8553866667</td></tr><tr><td class=" ">17.04.25 13:46:47</td><td class=" ">00:08:52</td><td class="left_stat ">53.4974216667,50.0786266667</td></tr><tr><td class=" ">17.04.25 20:33:05</td><td class=" ">00:05:52</td><td class="left_stat ">51.58013,45.7646233333</td></tr><tr><td class=" ">19.04.25 10:52:26</td><td class=" ">00:05:10</td><td class="left_stat ">44.736725,37.814125</td></tr><tr><td class=" ">19.04.25 12:26:27</td><td class=" ">00:10:56</td><td class="left_stat ">44.7325283333,37.8101233333</td></tr><tr><td class=" ">20.04.25 07:35:46</td><td class=" ">00:11:55</td><td class="left_stat ">47.6897,40.0817283333</td></tr><tr><td class=" ">20.04.25 20:03:26</td><td class=" ">00:12:36</td><td class="left_stat ">54.7518116667,38.147515</td></tr><tr><td class=" ">20.04.25 20:16:43</td><td class=" ">01:41:23</td><td class="left_stat ">54.75405,38.1447416667</td></tr><tr><td class=" ">20.04.25 21:58:49</td><td class=" ">00:13:46</td><td class="left_stat ">54.77988,38.1274383333</td></tr><tr><td class=" ">20.04.25 22:14:18</td><td class=" ">00:06:42</td><td class="left_stat ">54.7836933333,38.1170283333</td></tr><tr><td class=" ">20.04.25 22:21:28</td><td class=" ">00:09:00</td><td class="left_stat ">54.784255,38.1156083333</td></tr><tr><td class=" ">20.04.25 22:33:44</td><td class=" ">00:14:48</td><td class="left_stat ">54.7894066667,38.10348</td></tr><tr><td class=" ">20.04.25 22:49:59</td><td class=" ">00:13:14</td><td class="left_stat ">54.7979166667,38.0884283333</td></tr><tr><td class=" ">21.04.25 00:05:15</td><td class=" ">00:06:15</td><td class="left_stat ">55.2868066667,37.8563816667</td></tr><tr><td class=" ">21.04.25 02:58:46</td><td class=" ">00:13:01</td><td class="left_stat ">55.91344,37.5008866667</td></tr><tr><td class=" ">21.04.25 08:54:51</td><td class=" ">00:37:42</td><td class="left_stat ">55.9134716667,37.5017283333</td></tr><tr><td class=" ">21.04.25 10:05:37</td><td class=" ">00:15:55</td><td class="left_stat ">55.9131633333,37.5009183333</td></tr><tr><td class=" ">21.04.25 22:53:26</td><td class=" ">00:06:10</td><td class="left_stat ">55.3341283333,37.81668</td></tr><tr><td class=" ">22.04.25 07:39:11</td><td class=" ">00:05:18</td><td class="left_stat ">55.334575,37.822705</td></tr><tr><td class=" ">23.04.25 15:52:31</td><td class=" ">00:09:29</td><td class="left_stat ">45.1229216667,39.1671116667</td></tr><tr><td class=" ">23.04.25 16:03:21</td><td class=" ">00:14:00</td><td class="left_stat ">45.11846,39.160025</td></tr><tr><td class=" ">25.04.25 18:37:58</td><td class=" ">00:05:54</td><td class="left_stat ">50.8520116667,45.5685716667</td></tr><tr><td class=" ">26.04.25 22:22:14</td><td class=" ">00:10:03</td><td class="left_stat ">54.98865,57.7545266667</td></tr><tr><td class=" ">26.04.25 23:31:56</td><td class=" ">00:06:29</td><td class="left_stat ">55.1793933333,58.144155</td></tr><tr><td class=" ">27.04.25 01:19:56</td><td class=" ">00:05:07</td><td class="left_stat ">56.079835,58.0867066667</td></tr><tr><td class=" ">28.04.25 08:13:47</td><td class=" ">00:30:33</td><td class="left_stat ">56.8857366667,60.0157266667</td></tr><tr><td class=" ">28.04.25 09:57:57</td><td class=" ">00:09:08</td><td class="left_stat ">56.907725,59.96504</td></tr><tr><td class=" ">29.04.25 07:14:47</td><td class=" ">00:33:46</td><td class="left_stat ">56.88572,60.0156033333</td></tr><tr><td class=" ">29.04.25 08:00:40</td><td class=" ">00:18:23</td><td class="left_stat ">56.9075683333,59.9650133333</td></tr><tr><td class=" last-row-cell">Итого</td><td class=" last-row-cell">13:13:11</td><td class="left_stat last-row-cell">-</td></tr></tbody>
+                </table>
+                        </div>                                     
+                          </body>
+        </html>     

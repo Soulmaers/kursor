@@ -287,13 +287,15 @@ const retryTransaction = async (query, params, maxRetries = 3) => {
 };
 
 exports.updateIdOBjectToBaseNew = async (arrayId, stor) => {
+    console.log(arrayId)
     try {
         for (const item of stor) {
 
             const tableName = item.table;
             const columnName = item.column;
-            console.log(tableName)
+            console.log(tableName,)
             for (const { oldId, newId } of arrayId) {
+                console.log(oldId, newId, columnName)
                 const query = `
                     UPDATE ${tableName}
                     SET ${columnName} = @newId
@@ -334,26 +336,21 @@ exports.deleteAllTableObjects = async (idw, stor) => {
 };
 
 exports.getOldObjectsToBaseWialonOrigin = async (arrayObjects) => {
+    console.log(arrayObjects)
     // Преобразуем массив IMEI и idObject в строки для использования в запросе
-    const imeiList = arrayObjects.map(obj => `'${obj.imei}'`).join(',');
+    const imeiList = arrayObjects
+        .map(obj => `'${obj.imei}'`).join(',');
+
     const idObjectList = arrayObjects.map(obj => `'${obj.idObject}'`).join(',');
 
-    // Формируем запрос для поиска первой строки по каждому imei, где idObject отличается
-    const query = `
-        WITH RankedObjects AS (
-            SELECT 
-                idObject, 
-                imei,
-                ROW_NUMBER() OVER (PARTITION BY imei ORDER BY (SELECT NULL)) AS rn
-            FROM wialon_origin2
-            WHERE imei IN (${imeiList})
-            AND idObject NOT IN (${idObjectList})
-        )
-        SELECT idObject, imei
-        FROM RankedObjects
-        WHERE rn = 1
-    `;
 
+    const query = `
+    SELECT TOP(1) idObject, imei
+    FROM wialon_origin2
+    WHERE imei IN (${imeiList})
+          AND idObject NOT IN (${idObjectList})
+    ORDER BY time_reg ASC;
+ `;
     try {
         const pool = await connection;
         const result = await pool.request().query(query);
@@ -830,7 +827,8 @@ exports.getSensStorMeta = async (idw) => {
             .query(post);
         return result.recordset
     } catch (error) {
-        console.log(error)
+        console.error('Ошибка при выполнении запроса getSensStorMeat:', error);
+        throw error;
     }
 }
 
@@ -860,7 +858,7 @@ exports.setUpdateValueSensStorMeta = async (imei, port, data) => {
 
 
 exports.getSensStorMetaFilter = async (imei, port, id) => {
-    // console.log(id, port)
+    // console.log(imei, id, port)
     try {
         const pool = await connection;
         const post = `SELECT idw,imei,port,params,meta, value,idTyres,idBitrix,data FROM sens_stor_meta WHERE imei=@imei AND port=@port AND idw=@idw`;
@@ -869,9 +867,11 @@ exports.getSensStorMetaFilter = async (imei, port, id) => {
             .input('idw', String(id))
             .input('port', String(port))
             .query(post);
+        // console.log(result.recordset)
         return result.recordset
     } catch (error) {
-        console.log(error)
+        console.error('Ошибка при выполнении запроса getSensStorMeatFilter:', error);
+        throw error;
     }
 }
 exports.setAddDataToGlobalBase = async (obj) => {
@@ -2820,6 +2820,7 @@ exports.techViewAllToBase = async (idw) => {
 }
 
 exports.summaryToBase = async (idw, arr, data) => {
+    //   console.log(data)
     const value = []
     value.push(idw)
     value.push(data)
@@ -2828,7 +2829,7 @@ exports.summaryToBase = async (idw, arr, data) => {
     value.push(arr.job)
     value.push(arr.probeg)
     value.push(arr.rashod)
-    value.push(arr.rashod)
+    value.push(arr.drain)
     value.push(arr.lifting ? arr.lifting : 0)
     value.push(arr.moto)
     value.push(arr.prostoy)
@@ -2841,7 +2842,8 @@ exports.summaryToBase = async (idw, arr, data) => {
         const pool = await connection
         const results = await pool.request().input('idw', idw).input('data', sql.NVarChar, data).query(selectBase)
         if (results.recordset.length === 0) {
-            const sqls = `INSERT INTO  summary(idw, data, type, nameCar, jobTS, probeg, rashod, zapravka, dumpTrack,moto, prostoy, medium, oilHH, company) VALUES (@idw, @data, @type, @nameCar, @jobTS, @probeg, @rashod, @zapravka, @dumpTrack, @moto, @prostoy, @medium, @oilHH, @company)`;
+            const sqls = `INSERT INTO  summary(idw, data, type, nameCar, jobTS, probeg, rashod, zapravka, drain,dumpTrack,moto, prostoy, medium, oilHH, company)
+             VALUES (@idw, @data, @type, @nameCar, @jobTS, @probeg, @rashod, @zapravka, @drain,@dumpTrack, @moto, @prostoy, @medium, @oilHH, @company)`;
             await pool.request()
                 .input('idw', idw)
                 .input('data', data)
@@ -2851,6 +2853,7 @@ exports.summaryToBase = async (idw, arr, data) => {
                 .input('probeg', arr.probeg)
                 .input('rashod', arr.rashod)
                 .input('zapravka', arr.zapravka)
+                .input('drain', arr.drain)
                 .input('dumpTrack', arr.lifting)
                 .input('moto', arr.moto)
                 .input('prostoy', arr.prostoy)
@@ -2862,10 +2865,11 @@ exports.summaryToBase = async (idw, arr, data) => {
         }
         else {
             const sqls = `UPDATE summary SET  idw='${idw}',data='${data}', type='${arr.type}', nameCar='${arr.nameCar}', jobTS='${arr.job}',
-                     probeg='${arr.probeg}', rashod='${arr.rashod}',zapravka='${arr.zapravka}',dumpTrack='${arr.lifting}',moto='${arr.moto}',
+                     probeg='${arr.probeg}', rashod='${arr.rashod}',zapravka='${arr.zapravka}',drain='${arr.drain}',dumpTrack='${arr.lifting}',moto='${arr.moto}',
                      prostoy='${arr.prostoy}',medium='${arr.medium}',oilHH='${arr.hhOil}',company='${arr.group}'  WHERE  idw='${idw}' AND data='${data}'`;
 
             await pool.request().query(sqls)
+            console.log('данные обновлены')
             return { message: 'данные обновлены' }
         }
     } catch (err) {

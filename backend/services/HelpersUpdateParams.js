@@ -12,7 +12,7 @@ class HelpersUpdateParams {
         console.time('updatedata')
         const datas = await getDataObjectsToList.getAccountsAddListKursor() //получем данные из БД по объектам wialona
         const result = await getDataObjectsToList.getAccountGroupsAndObjects(datas) //получем данные из БД по объектам wialona
-        //console.log(result)
+        //  console.log(result)
         await Promise.all([
             new AlarmControll(result),
             //   new Events(result, session),

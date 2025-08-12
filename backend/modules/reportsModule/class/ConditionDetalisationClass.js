@@ -18,7 +18,7 @@ class ConditionDetalisationClass {
             this.condition(celevoy, e);
             return e
         })
-
+        //   console.log(result)
         return result
     }
 
@@ -56,21 +56,21 @@ class ConditionDetalisationClass {
                 }
             })
         }
-
+        //  console.log(element)
         const { datas } = this.calculateIntervalsAndTotalTime(element, reports);
         this.convertation(reports, datas)
 
         return
     }
 
-    calculateIntervalsAndTotalTime(data) {
+    calculateIntervalsAndTotalTime(data, reports) {
         let totalStateDurations = {}; // Для хранения общего времени каждого состояния
         let currentState = null;
         let stateStart = null;
 
         data.forEach((item, index, arr) => {
-            const newState = item.condition || (item.speed > 0 && item.engineOn === 1 ? 'Движется'
-                : item.speed === 0 && item.engine === 1 ? 'Повернут ключ зажигания' : 'Парковка');
+            const newState = item.condition || (item.speed > 0 && item.engineOn === 1 ? 'Движение'
+                : item.speed === 0 && item.engine === 1 ? 'Повёрнут ключ зажигания' : 'Парковка');
             if (newState !== currentState || index === 0) {
                 if (stateStart !== null && currentState !== null) {
                     // Закрытие предыдущего интервала и добавление его продолжительности
@@ -104,7 +104,9 @@ class ConditionDetalisationClass {
                 }
             }
         });
+        reports.allConditionTime = totalStateDurations
         return {
+
             datas: data, // Данные с интервалами по каждому состоянию
         };
     }
@@ -129,21 +131,22 @@ class ConditionDetalisationClass {
     }
 
     prostoy(newdata) {
+        // console.log(newdata)
         if (newdata.length === 0) {
             return undefined
         }
         else {
             const res = newdata.reduce((acc, e) => {
-                if (e.engineOn === 1 && e.speed === 0 && e.sats > 4) {
+                if (e.engineOn === 1 && e.speed < 6 && e.sats >= 7) {
                     if (Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length > 0
-                        && acc[acc.length - 1][0].engineOn === 1 && acc[acc.length - 1][0].speed === 0 && acc[acc.length - 1][0].sats > 4) {
+                        && acc[acc.length - 1][0].engineOn === 1 && acc[acc.length - 1][0].speed < 6 && acc[acc.length - 1][0].sats >= 7) {
                         acc[acc.length - 1].push(e);
                     } else {
                         acc.push([e]);
                     }
                 } else if (e.engineOn === 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
-                    || e.speed > 0 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
-                    || e.sats <= 4 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
+                    || e.speed >= 6 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0
+                    || e.sats > 7 && Array.isArray(acc[acc.length - 1]) && acc[acc.length - 1].length !== 0) {
                     acc.push([]);
                 }
 

@@ -56,6 +56,7 @@ class GetToBaseClass {
             const result = await pool.request()
                 .input('id', id)
                 .query(post)
+            //  console.log(result.recordset)
             return result.recordset.length === 0 ? null : result.recordset
         }
         catch (e) {
@@ -110,7 +111,7 @@ class GetToBaseClass {
     }
 
     static async getParams(id, time, params) {
-        console.log(time)
+        //  console.log(time)
         const value = params.filter(e => e !== null)
         const selectedTColumnsTest = value.join(", ")
         const post = `

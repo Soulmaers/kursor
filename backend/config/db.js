@@ -7,15 +7,16 @@ const config = {
     server: process.env.DB_HOST,
     database: process.env.DB_NAME,
     pool: {
-        max: 100, // Максимальное количество соединений в пуле
-        min: 0,  // Минимальное количество соединений в пуле
-        idleTimeoutMillis: 30000 // Время ожидания перед закрытием неиспользуемого соединения
+        max: 100,
+        min: 0,
+        idleTimeoutMillis: 30000
     },
     options: {
-        trustServerCertificate: true // если используете самоподписанный сертификат SSL
-    }
+        trustServerCertificate: true
+    },
+    requestTimeout: 600000,      // ⬅️ до 60 сек на выполнение запроса
+    connectionTimeout: 15000    // ⬅️ до 15 сек на подключение
 };
-
 const pool = new sql.ConnectionPool(config);
 const connection = pool.connect();
 

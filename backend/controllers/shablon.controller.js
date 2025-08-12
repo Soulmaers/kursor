@@ -58,6 +58,7 @@ exports.updateTemplates = async (req, res) => {
     res.json({ mess: 'Отчет обновлен' })
 }
 exports.getReport = async (req, res) => {
+    console.log(req.body)
     const object = req.body.object
     const sett = req.body.sett
     const instance = new ReportsControllClass(object, sett)

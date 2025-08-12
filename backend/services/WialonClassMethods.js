@@ -19,10 +19,11 @@ class WialonClassMethods {
         try {
             await this.fetchSession(); // Ждем, пока сессия будет получена
             await this.getObjects();
+            //  console.log(this.allObjects)
             await this.addGroup();
 
             this.controllStartClass();
-            setInterval(() => this.controllStartClass(), 180000);
+            setInterval(() => this.controllStartClass(), 300000);
         } catch (error) {
             console.error('Ошибка при инициализации WialonClassMethods:', error);
             throw error;
@@ -36,7 +37,7 @@ class WialonClassMethods {
             } catch (error) {
                 console.error("Ошибка при получении сессии:", error);
             }
-            if (!this.session) {
+            if (!this.session || !this.session.eid) {
                 console.log("Сессия не получена, повторная попытка через 60 секунд...");
                 await new Promise(resolve => setTimeout(resolve, 60000)); // Ждем 60 секунд перед повтором
             }
@@ -55,12 +56,21 @@ class WialonClassMethods {
 
     async getObjects() {
         const [propertyObjects, propertyGroups] = await Promise.all([
-            //    wialonService.getDataFromWialon(this.session),
+            //   wialonService.getDataFromWialon(this.session),
             wialonService.getPropertyObjects(this.session),
             wialonService.getPropertyGroups(this.session)
         ]);
+        // console.log(propertyGroups[0])
+
+
         this.propertyObjects = propertyObjects ? propertyObjects.map(e => ({ idx: e.id, objectname: e.nm, phonenumber: e.ph, imeidevice: e.uid, uz: this.uz, nameRetra: this.nameRetra, uniqRetraID: this.uniqRetraID })) : []
         this.propertyGroups = propertyGroups ? propertyGroups.map(e => ({ idx: e.id, nameGroup: e.nm, uz: this.uz, arrayIdObjects: e.u, nameRetra: this.nameRetra, uniqRetraID: this.uniqRetraID })) : []
+        //  console.log('fy', this.propertyGroups)
+        //  if (this.propertyObjects) {
+        // const promises = this.propertyObjects.map(async e => await databaseRetranslation.addObjects(e))
+        // const incrimentsObjects = await Promise.all(promises)
+
+
         // Создаем allObjects
         this.allObjects = this.propertyGroups.map(group => {
             const filteredObjects = this.propertyObjects.filter(obj => group.arrayIdObjects.includes(obj.idx));
@@ -69,10 +79,13 @@ class WialonClassMethods {
                 arrayIdObjects: filteredObjects
             };
         });
+        //   console.log(this.allObjects)
+        //  }
     }
 
 
     async addGroup() {
+        //  console.log(this.allObjects.length)
         try {
             if (this.allObjects.length === 0 || !this.allObjects) return
             await Promise.all([await databaseRetranslation.updateFlagForExistingObjects(this.uniqRetraID, 'groups'),

@@ -14,6 +14,7 @@ class DataHandlerUpdateBase {
 
 
     async init() {
+        //console.log(this.imei, this.port, this.id)
         this.getTime()
         this.checkTarirovka()
         await this.defaultUpdateParams()
@@ -26,9 +27,6 @@ class DataHandlerUpdateBase {
     }
 
     checkTarirovka() {
-        if (this.d == '28526622ido') {
-            console.log(this.configs)
-        }
         this.bool = this.configs.find(e => e.param === 'oil')
     }
     async defaultUpdateParams() {
@@ -56,29 +54,38 @@ class DataHandlerUpdateBase {
         }));
     }
 
-
     async convertionEval(formula, value) {
-        //   console.log(this.id)
-        let x = Number(value)
+        let x = Number(value);
         let formattedFormula;
+
         // Выполняем замену 'x' на значение переменной
         if (formula.param === 'oil') {
-            if (x > 4100) return null
+            if (x > 4100) return null;
             if (Number(formula.dopValue) > 1) {
-                const array = await this.getValueKoef(formula, this.id)
-                //  console.log(this.id)
-                array.push({ 'dut': x })
-                x = this.average(array)
+                const array = await this.getValueKoef(formula, this.id);
+                array.push({ 'dut': x });
+                x = this.average(array);
             }
             const formattedExpression = formula.formula.replace(/,/g, '.');
             formattedFormula = this.transformExpressionWithExponent(formattedExpression, x);
-        }
-        else {
+        } else {
             formattedFormula = formula.formula.replace(/x/g, x);
         }
-        // Используем eval для оценки выражения
-        const result = eval(formattedFormula);
-        return result
+
+        // console.log('Формула для вычисления:', formattedFormula);
+
+        try {
+            const result = eval(formattedFormula);
+            return result;
+        } catch (error) {
+            /* console.error('Ошибка при вычислении формулы:', {
+               //  raw: formula.formula,
+              //   formatted: formattedFormula,
+               //  value: x,
+               //  error
+             });*/
+            return null; // или 0, или любое безопасное значение
+        }
     }
 
     transformExpressionWithExponent(str, x) {

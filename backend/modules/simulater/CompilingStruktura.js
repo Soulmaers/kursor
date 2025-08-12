@@ -10,6 +10,7 @@ class CompilingStruktura {
     }
 
     async init() {
+        // console.log(this.idDonor)
         // this.dateConvert()
 
         return await this.getData()
@@ -19,7 +20,7 @@ class CompilingStruktura {
     async getData() {
 
         this.settings = await GetToBaseClass.getSettingSimulation(this.idDonor)
-
+        //   console.log(this.settings)
         if (!this.settings) return
 
         const promises = this.settings.map(async e => {

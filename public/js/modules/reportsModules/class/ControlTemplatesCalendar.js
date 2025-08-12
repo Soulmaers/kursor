@@ -25,6 +25,7 @@ export class GetReports {
         this.pop = document.querySelector('.popup-background')
         this.wrapSet = document.querySelector('.wrapper_set')
         this.objectVisibleSpoyler = {}
+        this.flag = true
         this.init()
     }
 
@@ -36,7 +37,7 @@ export class GetReports {
         this.evenListener()
     }
     caseElements() {
-        this.buttons = this.container.querySelectorAll('.btm_formStart')
+        this.button = this.container.querySelector('.btm_formStart')
         this.input = this.container.querySelector('.input_data')
         this.checkInterval = this.interval.querySelector('.toggle_reports')
         this.checkObjects = this.object.querySelector('.toggle_reports')
@@ -47,6 +48,7 @@ export class GetReports {
 
         this.mess = this.container.querySelector('.inform')
         this.loaders = document.querySelector('.loaders_report')
+        this.wrapper_file = this.container.querySelector('.wrapper_file')
         this.prints = this.container.querySelectorAll('.icon_print')
         this.vis_reports = this.container.querySelector('.wrap_visible_reports')
         this.visible_reports = this.vis_reports.querySelectorAll('.visible_reports')
@@ -76,9 +78,10 @@ export class GetReports {
             }
             this.timeInterval = Helpers.getTimeInterval(this.checkInterval.value)
         })
-        this.buttons[0].addEventListener('click', () => this.getReportAndCreateContent())
-        this.buttons[1].addEventListener('click', () => this.startClassWiewFilters())
+        this.button.addEventListener('click', () => this.getReportAndCreateContent())
+        //   this.buttons[1].addEventListener('click', () => this.startClassWiewFilters())
         this.prints[0].addEventListener('click', () => this.excelprint())
+        this.prints[1].addEventListener('click', () => this.PDFprint())
         this.fieldsTime.forEach(e => e.addEventListener('input', () => {
             const selectionStart = e.selectionStart;
             const prefix = selectionStart <= 2 ? 'hours' : null;
@@ -98,38 +101,14 @@ export class GetReports {
 
     }
 
-    async startClassWiewFilters() {
-        const objects = this.checkObjects.querySelectorAll('.object_checks')
-        const objectCheked = [...objects].filter(e => e.checked)
-        if (objectCheked.length !== 1) {
-            return
-        }
-        const selectedTemplates = this.checkShablons.querySelector('option:checked');
-        const typeName = stor.find(e => e.type === objectCheked[0].parentElement.getAttribute('rel'))
-        this.type = typeName ? typeName.typeIndex : ''
-        this.name = objectCheked[0].parentElement.getAttribute('name')
-        this.id = objectCheked[0].parentElement.getAttribute('idobject')
-        this.group = objectCheked[0].parentElement.getAttribute('group')
-        const templates = selectedTemplates.textContent
-        this.idTemplate = selectedTemplates.value
-        await this.getComponents()
-        this.wrapSet.innerHTML = Content.formaFilters(this.type, this.name, templates)
-        this.caseElementsSecond()
-        this.modalActivity(this.pop, 'flex', 2)
-        new ControllSettingsReportsObject(this.modal, this.id, objectCheked[0].parentElement.getAttribute('rel'))
-        this.hiddenBlocks()
-        this.close.addEventListener('click', () => this.modalActivity(this.pop, 'none', 1))
-        this.start.addEventListener('click', async () => this.reports())
-    }
-
     caseElementsSecond() {
         this.modal = this.wrapSet.querySelector('.settings_stor')
         this.close = this.wrapSet.querySelector('.close_modal_window')
         this.start = this.wrapSet.querySelector('.short_btn')
     }
-    async getComponents() {
-        this.attributes = await GetDataRequests.getAttributeTemplace(Number(this.idTemplate))
-    }
+    //  async getComponents() {
+    // this.attributes = await GetDataRequests.getAttributeTemplace(Number(this.idTemplate))
+    // }
 
     hiddenBlocks() {
         const { component, graphic } = this.attributes
@@ -153,10 +132,67 @@ export class GetReports {
     async reports() {
         this.webpackObjectsSettings()
         await this.getReportAndCreateContent(this.set)
+
         //  this.createCalendar()
-        this.modalActivity(this.pop, 'none', 1)
+        // this.modalActivity(this.pop, 'none', 1)
 
     }
+
+    async PDFprint() {
+        console.log(this.arrayStruktura)
+        const globalObject = this.arrayStruktura
+
+        const selectedText = this.checkShablons.options[this.checkShablons.selectedIndex].textContent;
+
+        console.log(this.data)
+        const nameObjects = this.data.map(e => e.statistic['Статистика'][1].result)
+        console.log(globalObject)
+        console.log(selectedText)
+        console.log(nameObjects)
+        const params = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ globalObject, selectedText, nameObjects })
+        }
+        const resfile = await fetch('/api/fileDown', params)
+        const blob = await resfile.blob()
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob)
+        link.download = `report.pdf`
+        link.click()
+
+
+    }
+
+    getSvgAsImage(svgElementId, callback) {
+        const svg = document.getElementById(svgElementId);
+
+        const serializer = new XMLSerializer();
+        const svgString = serializer.serializeToString(svg);
+
+        const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+
+        const image = new Image();
+        image.onload = function () {
+            const canvas = document.createElement('canvas');
+            canvas.width = image.width;
+            canvas.height = image.height;
+
+            const context = canvas.getContext('2d');
+            context.drawImage(image, 0, 0);
+
+            const base64 = canvas.toDataURL('image/png');
+            callback(base64);
+
+            URL.revokeObjectURL(url);
+        };
+        image.src = url;
+    }
+
+
     excelprint() {
         if (!this.arrayStruktura) return;
 
@@ -268,7 +304,8 @@ export class GetReports {
             // this.calcTimeInterval()
             console.log(this.timeInterval)
         }
-
+        console.log(this.wrapper_file)
+        this.wrapper_file.style.display = 'flex'
     }
     calcTimeInterval() {
         //    console.log(this.timeInterval)
@@ -282,10 +319,14 @@ export class GetReports {
         });
     }
     async getStrukturaReports(sett) {
+        console.log(this.titleReports.parentElement)
         this.titleReports.innerHTML = `<div class="loaders_report" style="display:flex"> <div class="loaders-globe-report"></div></div>`
+        this.titleReports.parentElement.style.padding = '0'
+        this.titleReports.style.padding = '0'
         this.data = await GetDataRequests.getReport(this.objects, sett)
         this.analysisComponents()
         this.createListTitleReports(this.arrayStruktura)
+        this.titleReports.parentElement.style.paddingTop = '20px'
         if (this.objects.length > 1) this.vis_reports.style.display = 'flex'
     }
     async createCalendar() {
@@ -343,9 +384,10 @@ export class GetReports {
         this.legend_container.style.display = 'none'
         const spoyler = this.container.querySelector('.activ_fon')
         spoyler.classList.remove('activ_fon')
-        const idElement = el.id
+        const oldActivBTN = this.container.querySelector('.activeTitleReports')
         Helpers.ToggleClassElements(this.titleNameReports, el)
         this.activeTitleReports = this.container.querySelector('.activeTitleReports')
+        const idElement = el.id
         if (idElement === 'Статистика') {
             el.classList.add('activ_fon')
             this.createStatsTable()
@@ -355,25 +397,46 @@ export class GetReports {
             const trueAttributes = this.data.map(e => Helpers.trueAttributes(e.component[el.textContent]))
             this.reports_module.innerHTML = Content.renderComponentsReport(trueAttributes, this.statistics, this.activeTitleReports.id, this.objectVisibleSpoyler);
             this.visible_process()
+            const geo = this.container.querySelectorAll('.pointer')
+            console.log(geo)
             this.processMapClass() //логика работы с картой -очистка поли и маркеров. прослушка поинтеров
-
-
         }
         else {
+
             el.parentElement.previousElementSibling.lastElementChild.classList.add('activ_fon')
             const trueAttributes = this.data.map(e => Helpers.trueAttributes(e.graphic[el.textContent]))
             this.reports_module.innerHTML = Content.renderChartsContent(this.data, this.statistics, el.textContent, this.activeTitleReports.id, this.objectVisibleSpoyler);
             this.legend_container.innerHTML = Content.renderChartsLegend(trueAttributes, this.statistics, el.textContent, this.activeTitleReports.id, this.objectVisibleSpoyler, this.legend_container);
             this.createCharts(el.textContent)
             this.controllLegend()
-
             this.fullButtons = this.container.querySelectorAll('.full_screen')
             this.fullButtons.forEach(e => e.addEventListener('click', () => this.fullScreen(e)))
             this.visible_process()
         }
 
+        if (oldActivBTN.id === idElement) {
+            this.toggleDoubleClick(el)
+        }
+        else {
+            oldActivBTN.classList.remove('flag_two_controll')
+        }
+
+
     }
 
+    toggleDoubleClick(el) {
+        if (!el.classList.contains('flag_two_controll')) {
+            console.log(this.data.length)
+            this.data.length === 1 ? Helpers.visible_all_objects(this.swich, '+', 'none') :
+                Helpers.visible_all_objects(this.swich, '-', 'flex')
+            el.classList.add('flag_two_controll')
+        }
+        else {
+            this.data.length === 1 ? Helpers.visible_all_objects(this.swich, '-', 'flex') :
+                Helpers.visible_all_objects(this.swich, '+', 'none')
+            el.classList.remove('flag_two_controll')
+        }
+    }
     controllLegend() {
         this.uniqum_legend = this.container.querySelectorAll('.uniqum_legend')
         if (this.uniqum_legend.length !== 0) {
@@ -400,14 +463,17 @@ export class GetReports {
 
     }
     createAllTrek() {
+        console.log(this.data[0].statistic['Статистика'][1])
         this.allArrayGeo = this.data[0].statistic['Статистика'][1].geoTrek || null
-        if (!this.allArrayGeo) return
+        console.log(this.allArrayGeo)
+        if (!this.allArrayGeo || this.allArrayGeo.length === 0) return
         const allTrek = this.allArrayGeo.map(e => [e[0], e[1]])
         this.instanceMap.createPolyLine(allTrek, 'rgb(0, 0, 204)', 2)
     }
 
     clickGeoVieMarkerMap() {
         this.pointer = this.container.querySelectorAll('.pointer')
+        console.log(this.pointer)
         if (this.pointer.length === 0) return
         this.pointer.forEach(e => e.addEventListener('click', () => {
             const coordinates = e.getAttribute('rel').split(',');
@@ -500,7 +566,7 @@ export class GetReports {
         this.data.forEach((el, index) => {
             const chartContainer = document.getElementById(`${types}${index}`);
             if (chartContainer) { // Проверяем, что элемент существует
-                if (types === 'Топливо') {
+                if (types === 'Учёт топлива') {
                     if (el.graphic[types][0].result) {
                         this.instansCharts[`${types}${index}`] = new ChartsClass(el.graphic[types], chartContainer, this.data.length);
                     }

@@ -44,24 +44,24 @@ export const storComponentRuns = [
 
 export const storComponentTravel = [
     { name: 'Начало', checked: true },
-    { name: 'Начальное положение', checked: true },
+    { name: 'Начальное местоположение', checked: true },
     { name: 'Конец', checked: true },
-    { name: 'Конечное положение', checked: true },
+    { name: 'Конечное местоположение', checked: true },
     { name: 'Длительность', checked: true },
     { name: 'Пробег', checked: true },
     { name: 'Средняя скорость', checked: true },
-    { name: 'Максимальная скорость', checked: true }
+    { name: 'Max, скорость', checked: true }
 ]
 
 export const storComponentMoto = [
     { name: 'Начало', checked: true },
-    { name: 'Начальное положение', checked: true },
+    { name: 'Начальное местоположение', checked: true },
     { name: 'Конец', checked: true },
-    { name: 'Конечное положение', checked: true },
+    { name: 'Конечное местоположение', checked: true },
     { name: 'Моточасы', checked: true },
     { name: 'Пробег', checked: true },
-    { name: 'Средние обороты двигателя', checked: true },
-    { name: 'Максимальные обороты двигателя', checked: true },
+    { name: 'Средние обороты двигателя', checked: false },
+    { name: 'Максимальные обороты двигателя', checked: false },
     { name: 'Потрачено по ДУТ', checked: true },
     { name: 'Средний расход по ДУТ на 100 км', checked: true },
     { name: 'Начальный уровень топлива', checked: true },
@@ -70,9 +70,9 @@ export const storComponentMoto = [
 
 export const storComponentProstoy = [
     { name: 'Начало', checked: true },
-    { name: 'Начальное положение', checked: true },
+    { name: 'Начальное местоположение', checked: true },
     { name: 'Конец', checked: true },
-    { name: 'Конечное положение', checked: true },
+    { name: 'Конечное местоположение', checked: true },
     { name: 'Моточасы', checked: true }
     // { name: 'Потрачено по ДУТ', checked: false },
     //{ name: 'Средний расход по ДУТ в моточасах', checked: false },
@@ -81,23 +81,23 @@ export const storComponentProstoy = [
 ]
 
 export const storComponentTO = [
-    { name: 'Интервал техобслуживания', checked: true },
-    { name: 'Состояние', checked: true },
-    { name: 'Состояние по пробегу', checked: true },
-    { name: 'Состояние по моточасам', checked: true },
-    { name: 'Периодичность', checked: true }
+    { name: 'Интервал техобслуживания', checked: false },
+    { name: 'Состояние', checked: false },
+    { name: 'Состояние по пробегу', checked: false },
+    { name: 'Состояние по моточасам', checked: false },
+    { name: 'Периодичность', checked: false }
 ]
 
 export const storComponentParkings = [
     { name: 'Начало', checked: true },
     { name: 'Длительность', checked: true },
-    { name: 'Положение', checked: true }
+    { name: 'Местоположение', checked: true }
 ]
 
 export const storComponentStops = [
     { name: 'Начало', checked: true },
     { name: 'Длительность', checked: true },
-    { name: 'Положение', checked: true }
+    { name: 'Местоположение', checked: true }
 ]
 
 export const storComponentSKDSHComp = [

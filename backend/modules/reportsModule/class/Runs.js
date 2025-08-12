@@ -101,6 +101,7 @@ class Runs {
         const instanceRefill = new OilCalculator(data, this.setAttributes, this.idObject)
         const refill = await instanceRefill.init()
 
+        // console.log(data, this.setAttributes, this.idObject)
         const rashodDUT = data[0].dut ? Math.max(0, parseFloat((startOil + refill[0] - finishOil).toFixed(1))) : 'Н/Д'
         if (startOil === 'Н/Д' || finishOil === 'Н/Д' || !refill || refill.length === 0 || isNaN(startOil) || isNaN(finishOil) || isNaN(refill[0])) {
             return null;

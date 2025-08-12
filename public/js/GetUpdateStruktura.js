@@ -8,6 +8,7 @@ export class GetUpdateStruktura {
     static async zaprosData() {
         const role = document.querySelector('.role').getAttribute('rel')
         const incriment = document.querySelector('.role').getAttribute('data-att')
+        console.log(role, incriment)
         const params = {
             method: "POST",
             headers: {
@@ -19,7 +20,7 @@ export class GetUpdateStruktura {
         const mods = await fetch('/api/dannie', params)
         const models = await mods.json()
         const arrayList = models.result
-
+        console.log(arrayList)
         const allId = Helpers.format(arrayList, 0)
         const final = Helpers.format(arrayList, 1)
         const groupId = Helpers.format(arrayList, 2)
