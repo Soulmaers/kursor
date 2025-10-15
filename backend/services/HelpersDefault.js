@@ -8,7 +8,7 @@ class HelpersDefault {
     static async getSessionWialon() {
 
 
-        const session = await wialonModule.login(`"a3f748fdc918b08cc0836aa5cc826519EB81C78E87D3A3C9D01EB8F5B81E764702220EED"`);
+        const session = await wialonModule.login(`"a3f748fdc918b08cc0836aa5cc8265198E8CA903791530EAA7F11945BDB2B4ABBCA520E1"`);
         console.log('сессия', session.eid)
         //  const res = await HelpersDefault.updateToken()
         return session
@@ -28,6 +28,7 @@ class HelpersDefault {
             console.log(response.data)
         }
         catch (e) {
+            pm
             console.log(e)
         }
     }

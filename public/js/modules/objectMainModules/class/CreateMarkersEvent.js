@@ -120,29 +120,7 @@ export class CreateMarkersEvent {
                     html: `<div class="wrapContainerArrowStart" style="pointer-events: none;transform: rotate(${it.course}deg);"><img src="../../image/arr.png" style="width: 15px; height:15px"></div>`
                 });
 
-                let direction;
-                let offset;
-                if (it.course >= 315 || it.course < 45) {
-                    direction = "right";
-                    offset = [15, 0]
-                } else if (it.course >= 45 && it.course < 135) {
-                    direction = "bottom";
-                    offset = [0, 15]
-                } else if (it.course >= 135 && it.course < 225) {
-                    direction = "left";
-                    offset = [-15, 0]
-
-                } else if (it.course >= 225 && it.course < 315) {
-                    direction = "top";
-                    offset = [0, -15]
-                }
-                const eventMarkers = L.marker(it.geo, { icon: divIconUpdated }).addTo(mapLocal)
-                eventMarkers.bindTooltip(`${time}<br>${it.speed} км/ч`, {
-                    permanent: true,    // делает тултип постоянным
-                    direction: direction,
-                    offset: offset,
-                    className: 'custom-tooltip',  // указываем класс тултипа для дальнейшего стилизования
-                })
+            p
                 eventMarkers.setOpacity(0);
                 this.trackMarkers[i] = { marker: eventMarkers, tooltipText: `${time}<br>${it.speed} км/ч` };
             }

@@ -1,20 +1,17 @@
-const pdfmake = require('pdfmake/build/pdfmake');
-// const { PdfMakeWrapper } = require('pdfmake-wrapper');
-const vfsFonts = require('pdfmake/build/vfs_fonts');
+
 const fs = require('fs')
 const puppeteer = require('puppeteer');
 const { PDFDocument } = require('pdf-lib');
 const path = require('path'); // Подключаем модуль path
-const { createCanvas } = require('canvas');
-const ChartOil = require('./ChartOil')
-const TravelToDay = require('./TravelToDay')
+const { renderChartsLegend } = require('./renderChartsLegend')
+const { createRowComponentTitle, createHeaderLowPages, createHeaderLowGroupAndObjectPages, pageStart, pageStatic, pageNavi, pageComponents } = require('./generationHTML')
+const { addPageNumbers, addTocLinks, trueAttributes } = require('./servisNumberNavgationPages')
+const { chartRegistry, renderDefault } = require('./chartRegistrary');
 
 class PDFClassReports {
     constructor(nameObjects, nameReports, data, filePath) {
-        //  console.log(nameObjects)
-        // console.log(nameReports)
-        //  console.log(data)
-        this.imagePath = path.join(__dirname, './assets/logo_reports.png'); // Создаем абсолютный путь к файлу
+        this.imagePath = path.join(__dirname, './assets/logo_kursor.png'); // Создаем абсолютный путь к файлу
+        this.imagePathLogoMini = path.join(__dirname, './assets/logo_mini.png');
         this.data = data
         this.filePath = filePath
         this.nameReports = nameReports
@@ -26,26 +23,17 @@ class PDFClassReports {
         this.pageNumberMap = {};
         this.styles = fs.readFileSync(path.join(__dirname, './report.css'), 'utf-8');
         this.image = `data:image/png;base64,${fs.readFileSync(this.imagePath, 'base64')}`;
+        this.imageLogoMini = `data:image/png;base64,${fs.readFileSync(this.imagePathLogoMini, 'base64')}`;
     }
 
 
 
 
     async init() {
-
         this.pdfDoc = await PDFDocument.create();
-        const browser = await puppeteer.launch({
-            headless: 'new',
-            args: ['--no-sandbox', '--disable-dev-shm-usage'],
-            ignoreHTTPSErrors: true,
-            protocolTimeout: 180_000, // <-- общий протокольный таймаут Puppeteer (3 мин)
-        });
-        const page = await browser.newPage();
-        //  console.log(page)
-        console.time('сборка')
-        await this.buildHTML(page); // ← передаём page внутрь
-        console.timeEnd('сборка')
-        await browser.close();
+        await this.buildHTML();   // он сам внутри поднимет браузер один раз
+        addTocLinks(this.pdfDoc, this.pageNumberMap, this.data, this.typeTitleReports);             // ← добавили кликабельные переходы внутри PDF
+        await addPageNumbers(this.pdfDoc);
         await this.savePDF();
         return this.filePath;
     }
@@ -53,114 +41,71 @@ class PDFClassReports {
 
 
     createPageStatistika() {
-        //  console.log(this.data[0])
-        const title = this.data[0]['Статистика'][1].result
-        const titleTable = 'Статистика'
+        const group_name = this.data[0]['Статистика'][0].result
+        const object_name = this.data[0]['Статистика'][1].result
+        const titleTable = 'СТАТИСТИКА'
+        const header = createHeaderLowPages(titleTable, this.imageLogoMini)
+        const low_header = createHeaderLowGroupAndObjectPages(group_name, object_name)
         const rows = this.data[0]['Статистика'].map(e => {
             return `<tr><td class="left_stat">${e.name}</td> 
             <td class="right_stat"> ${e.result || 'Н/Д'} ${e.local || ''}</td> 
              </tr>`
         }).join('')
-        return `
-          <html>
-            <head>
-                <style>${this.styles}</style>
-            </head>
-            <body class="body_pdf"><div class="statistika_page">
-      <div class="name_object">${title}</div>
-      <div class="name_component">${titleTable}</div>
-         <table class="statistika_table">
-                           <tbody>
-                ${rows}
-              </tbody>
-            </table>
-      </div>
-          </body>
-        </html>`
+        return pageStatic(this.styles, header, low_header, rows)
     }
-    createRowComponentTitle(key, e) {
-        return `
-                    <div class="title_type title_component_sub">
-                        <div class="component_title">${key}</div>
-                              <div class="dashes"></div>
-                <div class="title_number">${this.pageNumberMap[e + key] || '?'}</div>
-                                          </div>
-                `;
-    }
-
-
 
     createPageStart() {
         const startTime = this.data[0]['Статистика'][2].result.slice(0, 8)
         const endTime = this.data[0]['Статистика'][3].result.slice(0, 8)
+        const titleGroup = [this.data[0]['Статистика'][0].result]
+        return pageStart(this.styles, this.image, this.nameReports, startTime, endTime, titleGroup, this.nameObjects)
+    }
+
+    createNavigationPages(sectionStartIndexes) {
         const titleTypeReports = this.typeTitleReports.map((e, index) => {
             if (index === 0) {
                 return `
             <div class="title_type first">
                 <div class="title_name">${e}</div>
                 <div class="dashes"></div>
-                <div class="title_number">${this.pageNumberMap[e] || '?'}</div>
+                <div class="title_number">${sectionStartIndexes[e] || '?'}</div>
             </div>
-        `;
+            `;
             } else {
                 const componentsBlock = Object.keys(this.data[index])
                     .map(key => {
                         const rawList = this.data[index][key];
-                        const filtered = this.trueAttributes(rawList); // отфильтровали только checked
+                        const filtered = trueAttributes(rawList); // отфильтровали только checked
                         if (!filtered || filtered.length === 0) return ''; // если ничего — пропускаем
-                        return this.createRowComponentTitle(key, e)
+                        return createRowComponentTitle(key, e, sectionStartIndexes)
                     })
                     .join('');
-                return `<div class="next"><div class="title_name">${e}</div>${componentsBlock}</div>`;
+                return `<div class="next"><div class="title_name">${e}</div>${componentsBlock}</div> `;
             }
         }).join('');
 
-        return `
-        <html>
-            <head>
-                <style>${this.styles}</style>
-            </head>
-            <body class="body_pdf">
-                             <div class="header_logo"><img class="img_logo" src="${this.image}" /></div>
-                             <div class="title_container_meta">
-                             <div class="row_meta"><div class="title_meta">Отчет:</div><div class="body_meta">${this.nameReports}</div></div>
-                             <div class="row_meta"><div class="title_meta">Начало/Конец:</div><div class="body_meta">
-                             ${startTime} / ${endTime}</div></div>
-                            <div class="row_meta"><div class="title_meta">Объекты:</div><div class="body_meta">${this.nameObjects.join(', ')}</div></div>
-                             </div>
-                <div class="contant_title">${titleTypeReports}</div>
-                                                         
-                          </body>
-        </html>
-        `;
+        const header = createHeaderLowPages('ОГЛАВЛЕНИЕ', this.imageLogoMini)
+        return pageNavi(this.styles, header, titleTypeReports)
     }
+
+
+
 
     createComponent(data, key) {
         const componentBorder = ['Поездки', 'Простои на холостом ходу', 'Стоянки', 'Остановки', 'Учёт топлива'].includes(key)
         const titleObject = this.data[0]['Статистика'][1].result
         const titleGroup = this.data[0]['Статистика'][0].result
         const landscape = key === 'Стоянки' || key === 'Остановки' ? false : true
-        const titleComponent = data.map(elem => `<th class="colums">${elem.name}</th>`).join('');
-        //   console.log(data)
+
+        const width = landscape ? '100%' : '50%'
+        const titleComponent = data.map(elem => `<th class="colums"> ${elem.name}</th >`).join('');
+        //  console.log(key.toUpperCase())
+        const header = createHeaderLowPages(key.toUpperCase(), this.imageLogoMini)
+        const low_header = createHeaderLowGroupAndObjectPages(titleGroup, titleObject)
+        //  console.log(header)
         if (!data[0].result) {
-            console.error(`Нет данных для компонента: ${key}`);
-            return {
-                html: `
-                 <html>
-            <head>
-                <style>${this.styles}</style>
-            </head>
-            <body class="body_pdf">
-                       <div class="page_component">
-                <div class="head_meta"><div class="nadpis">${titleObject}</div><div class="nadpis">${titleGroup}</div><div class="name_component">${key}</div></div>
-                <table class="components_table">
-                    <thead><tr>${titleComponent}</tr></thead>
-                  
-                </table>
-                        </div>                                     
-                          </body>
-        </html>     `, landscape: landscape
-            }
+            console.error(`Нет данных для компонента: ${key} `);
+            return pageComponents(this.styles, header, low_header, titleComponent, landscape, width)
 
         }
         const tableBody = data[0]?.result.map((el, index) => {
@@ -170,278 +115,182 @@ class PDFClassReports {
                 const classleft = this.title.includes(it.name) ? 'left_stat' : ''
                 const isLastRow = index === data[0].result.length - 1; // Проверяем, является ли это последней строкой
                 const cellClass = isLastRow && componentBorder ? 'last-row-cell' : '';
-                return `<td class="${classleft} ${cellClass}">${it.result[index] || '-'}</td>`
+                return `<td class="${classleft} ${cellClass}" > ${it.result[index] || '-'}</td > `
             }).join('');
             return `<tr>${cell}</tr>`;
         }).join('') || ''; // Обработка случая, когда data[0]?.result пуст
 
-        return {
-            html: `
-                 <html>
-            <head>
-                <style>${this.styles}</style>
-            </head>
-            <body class="body_pdf">
-                       <div class="page_component">
-                <div class="head_meta"><div class="nadpis">${titleObject}</div><div class="nadpis">${titleGroup}</div><div class="name_component">${key}</div></div>
-                <table class="components_table">
-                    <thead><tr>${titleComponent}</tr></thead>
-                    <tbody>${tableBody}</tbody>
-                </table>
-                        </div>                                     
-                          </body>
-        </html>     `, landscape: landscape
-        }
+        return pageComponents(this.styles, header, low_header, titleComponent, landscape, width, tableBody)
 
     }
 
-    async createChart(data, key) {
-        if (key === 'Поездки по дням') {
-            const renderer = new TravelToDay(data);
-            const charts = await renderer.renderChartImageBase64();
-            const pages = [];
-            for (let i = 0; i < charts.length; i += 2) {
-                const pageCharts = charts.slice(i, i + 2);
-                const imagesHtml = pageCharts.map(chart => `
-                <div class="chart_oil">
-                    <img src="data:image/png;base64,${chart.base64}" />
-                              </div>
-            `).join('');
-
-                const html = `
-                <html><head>
-             <style>${this.styles}</style>
-                                  
-                </head>
-                <body class="body_pdf">
-                  <div class="page_component">
-                    <div class="head_meta chart_head_meta">
-                     <div class="name_component">${i === 0 ? key : ''}</div>
-                    </div>
-                </div>
-                </div>
-                    ${imagesHtml}
-                                    </div>
-                </body>
-              </html>
-            `;
-
-                pages.push({ html, landscape: true, sectionTitle: `${this.typeTitleReports[2]}${key}` });
+    // простой лимитер параллелизма (без доп. библиотек)
+    pLimit(concurrency) {
+        const queue = [];
+        let activeCount = 0;
+        const next = () => {
+            activeCount--;
+            if (queue.length > 0) {
+                const fn = queue.shift();
+                fn();
             }
+        };
+        return (fn) =>
+            new Promise((resolve, reject) => {
+                const run = () => {
+                    activeCount++;
+                    fn().then(
+                        (val) => { resolve(val); next(); },
+                        (err) => { reject(err); next(); }
+                    );
+                };
+                if (activeCount < concurrency) run();
+                else queue.push(run);
+            });
+    }
 
-            return pages;
-        }
-        // Default for other keys
-        else if (key === 'Учёт топлива') {
-            const renderer = new ChartOil(data);
-            await renderer.saveChartHtml(path.join(__dirname, 'debug_chart.html'));
-            const chartImageBase64 = await renderer.renderChartImageBase64();
-
-            if (!chartImageBase64) return;
-            return [{
-                html: `<html><head><style>${this.styles}</style></head>
-            <body class="body_pdf">
-              <div class="page_component">
-                <div class="head_meta chart_head_meta">
-                  <div class="name_component">${key}</div>
-                </div>
-                <div class="chart_oil">
-                  <img src="data:image/png;base64,${chartImageBase64}" />
-                </div>
-                ${this.renderChartsLegend(key)}
-              </div>
-            </body></html>`,
-                landscape: true,
-                sectionTitle: `${this.typeTitleReports[2]}${key}`
-            }];
-        }
-        else {
-            return [{
-                html: `<html><head><style>${this.styles}</style></head>
-            <body class="body_pdf">
-              <div class="page_component">
-                <div class="head_meta chart_head_meta">
-                  <div class="name_component">${key}</div>
-                </div>
-                <div class="chart_oil">
-                                </div>
-                ${this.renderChartsLegend(key)}
-              </div>
-            </body></html>`,
-                landscape: true,
-                sectionTitle: `${this.typeTitleReports[2]}${key}`
-            }];
-        }
+    // единый helper: HTML → PDF Buffer
+    async renderHtmlToPdf(page, html, opts = {}) {
+        await page.setContent(html, { waitUntil: 'load' }); // если есть внешние ресурсы — 'networkidle0'
+        await page.emulateMediaType('screen');
+        return page.pdf({
+            format: 'A4',
+            printBackground: true,
+            preferCSSPageSize: true,
+            landscape: !!opts.landscape,
+            margin: { top: '0mm', bottom: '5mm', left: '5mm', right: '5mm' },
+            displayHeaderFooter: false,
+            headerTemplate: '<span></span>',
+            footerTemplate: '<span></span>',
+        });
     }
 
     async buildHTML() {
-        console.log('тута')
-        const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+        // 0) собрать задачи
         const pagesToRender = [];
 
-        // собираем все страницы
-        pagesToRender.push({ html: this.createPageStatistika(), landscape: false, sectionTitle: 'Статистика' });
-        for (let key in this.data[1]) {
-            const data = this.trueAttributes(this.data[1][key]);
-            if (!data || data.length === 0 || key === 'Техническое обслуживание') continue;
-            if (key === 'Пробеги') data.pop();
-            const component = this.createComponent(data, key);
-            pagesToRender.push({ ...component, sectionTitle: this.typeTitleReports[1] + key });
-        }
-        /*   for (let key in this.data[2]) {
-               console.log(key)
-               const data = this.trueAttributes(this.data[2][key]);
-               if (!data || data.length === 0) continue;
-               const components = await this.createChart(data, key);
-               if (Array.isArray(components)) {
-                   components.forEach(c => pagesToRender.push(c));
-               } else {
-                   pagesToRender.push(components);
-               }
-           }*/
-        console.log(pagesToRender)
-        // генерим страницы параллельно
-        const pdfBuffers = await Promise.all(pagesToRender.map(async (pageConfig) => {
-            const page = await browser.newPage();
-            await page.setContent(pageConfig.html, { waitUntil: 'networkidle0' });
-
-            const pdfBuffer = await page.pdf({
-                format: 'A4',
-                printBackground: true,
-                landscape: pageConfig.landscape,
-                margin: { top: '5mm', bottom: '10mm', left: '5mm', right: '5mm' },
-                footerTemplate: `...`,
-                headerTemplate: `<div></div>`
-            });
-
-            await page.close();
-            return { pdfBuffer, sectionTitle: pageConfig.sectionTitle };
-        }));
-
-        await browser.close();
-
-        // копируем страницы в итоговый pdf
-        for (const { pdfBuffer, sectionTitle } of pdfBuffers) {
-            const doc = await PDFDocument.load(pdfBuffer);
-            this.pageNumberMap[sectionTitle] = this.pdfDoc.getPageCount() + 1;
-            const copied = await this.pdfDoc.copyPages(doc, doc.getPageIndices());
-            copied.forEach(p => this.pdfDoc.addPage(p));
-        }
-
-        // создаём оглавление
-        const tocHtml = this.createPageStart();
-        const tocPage = await puppeteer.launch({ args: ['--no-sandbox'] }).then(async b => {
-            const p = await b.newPage();
-            await p.setContent(tocHtml);
-            const buf = await p.pdf({ format: 'A4', printBackground: true });
-            await b.close();
-            return buf;
+        pagesToRender.push({
+            html: this.createPageStatistika(),
+            landscape: false,
+            sectionTitle: 'Статистика',
         });
 
-        const tocDoc = await PDFDocument.load(tocPage);
-        const tocPages = await this.pdfDoc.copyPages(tocDoc, tocDoc.getPageIndices());
-        const totalPages = this.pdfDoc.getPageCount();
-        this.pdfDoc.insertPage(0, tocPages[0]);
+        for (const key in this.data[1]) {
+            const data = trueAttributes(this.data[1][key]);
+            if (!data || data.length === 0 || key === 'Техническое обслуживание') continue;
+            if (key === 'Пробеги') data.pop();
+
+            const component = this.createComponent(data, key); // { html, landscape? }
+            pagesToRender.push({
+                ...component,
+                sectionTitle: this.typeTitleReports[1] + key,
+            });
+        }
+        // Чарты (если нужны)
+        for (const key in this.data[2]) {
+            const data = trueAttributes(this.data[2][key]);
+            if (!data || data.length === 0) continue;
+            const components = await this.createChart(data, key); // может вернуть один или массив
+            //
+            if (Array.isArray(components)) {
+                components.forEach((c) =>
+                    pagesToRender.push({ ...c, sectionTitle: (c.sectionTitle || key) })
+                );
+            } else {
+                pagesToRender.push(components);
+            }
+        }
+
+        // 1) один браузер на всё
+        const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+        const limit = this.pLimit(8); // параллелизм: подбери под сервер
+
+        // 2) рендерим секции параллельно (с лимитом)
+        const rendered = await Promise.all(
+            pagesToRender.map(({ html, landscape = false, sectionTitle }) =>
+                limit(async () => {
+                    const page = await browser.newPage();
+                    try {
+                        const pdfBuffer = await this.renderHtmlToPdf(page, html, { landscape });
+                        return { sectionTitle, pdfBuffer };
+                    } finally {
+                        await page.close();
+                    }
+                })
+            )
+        );
+
+        // 3) посчитаем количества страниц в каждой секции
+        const sectionPageCounts = {};
+        for (const { sectionTitle, pdfBuffer } of rendered) {
+            const tmpDoc = await PDFDocument.load(pdfBuffer);
+            sectionPageCounts[sectionTitle] = tmpDoc.getPageCount();
+        }
+
+        // 4) посчитаем будущие стартовые номера (c учётом 2 страниц оглавления)
+        const TOC_PAGES = 2;
+        const sectionStartIndexes = {};
+        {
+            let acc = TOC_PAGES; // после двух страниц TOC
+            for (const { sectionTitle } of rendered) {
+                sectionStartIndexes[sectionTitle] = acc + 1; // страницы с 1
+                acc += sectionPageCounts[sectionTitle];
+            }
+        }
+        // 5) отрисуем 2 страницы оглавления (TOC + навигация), зная sectionStartIndexes
+        const tocHtml = this.createPageStart(sectionStartIndexes);
+        const tocNaviHtml = this.createNavigationPages(sectionStartIndexes);
+
+        const tocBuf = await (async () => {
+            const p = await browser.newPage();
+            try { return await this.renderHtmlToPdf(p, tocHtml); }
+            finally { await p.close(); }
+        })();
+
+        const naviBuf = await (async () => {
+            const p = await browser.newPage();
+            try { return await this.renderHtmlToPdf(p, tocNaviHtml); }
+            finally { await p.close(); }
+        })();
+
+        // 6) браузер больше не нужен
+        await browser.close();
+
+        // 7) собрать итоговый PDF: сначала 2 страницы TOC, потом все секции
+        const tocDoc = await PDFDocument.load(tocBuf);
+        const naviDoc = await PDFDocument.load(naviBuf);
+
+        const copiedToc = await this.pdfDoc.copyPages(tocDoc, tocDoc.getPageIndices());
+        this.pdfDoc.addPage(copiedToc[0]);
+
+        const copiedNavi = await this.pdfDoc.copyPages(naviDoc, naviDoc.getPageIndices());
+        this.pdfDoc.addPage(copiedNavi[0]);
+
+        for (const { sectionTitle, pdfBuffer } of rendered) {
+            const doc = await PDFDocument.load(pdfBuffer);
+            const copied = await this.pdfDoc.copyPages(doc, doc.getPageIndices());
+            copied.forEach((p) => this.pdfDoc.addPage(p));
+        }
+
+        // 8) заполним карту "секция → страница"
+        this.pageNumberMap = sectionStartIndexes;
     }
 
     async savePDF() {
         const pdfBytes = await this.pdfDoc.save();
         fs.writeFileSync(this.filePath, pdfBytes);
     }
-    trueAttributes(obj) {
-        const res = obj.filter(e => e.checked === true).map(it => it)
-        return res
+
+    async createChart(data, key) {
+        const titleObject = this.data[0]['Статистика'][1].result
+        const titleGroup = this.data[0]['Статистика'][0].result
+        const header = createHeaderLowPages(key.toUpperCase(), this.imageLogoMini)
+        const low_header = createHeaderLowGroupAndObjectPages(titleGroup, titleObject)
+        const typeTitle = this.typeTitleReports[2]; // "Графический"
+        const renderer = chartRegistry.get(key) || renderDefault;
+        return renderer({ key, data, styles: this.styles, typeTitle, header, low_header });
     }
 
-
-    renderChartsLegend(types) {
-        // console.log(types)
-        let containers;
-        if (types === 'Учёт топлива') {
-
-            const arrayTitle = [{
-                title: 'Заправки:',
-                icon: '<div class="wrap_icon" rel="Заправка"><i class="fas fa-gas-pump" style="color:green"></i></div>'
-            },
-            {
-                title: 'Сливы:',
-                icon: '<div class="wrap_icon"  rel="Слив"><i class="fas fa-fill-drip  " style="color:red"></i></div>'
-            }, {
-                title: 'Уровень топлива:',
-                icon: '<div class="rect_legend" rel="lineOil"></div>'
-            }, {
-                title: 'Поездки:',
-                icon: '<div class="rect_legend" rel="Движение" style="background-color:rgb(183,170,14)"></div>'
-            }, {
-                title: 'Моточасы:',
-                icon: '<div class="rect_legend" rel="Работа двигателя" style="background-color:rgb(255,209,215)"></div>'
-            }]
-            containers = arrayTitle.map(e => {
-                return `<div class="uniqum_legend"><div class="title_legend">${e.title}</div>${e.icon}</div>`
-
-
-            }).join('')
-        }
-        if (types === 'Моточасы') {
-            const arrayTitle = [{
-                title: 'Движение:',
-                icon: '<div class="rect_legend_moto" rel="Движение" style="background-color:#8fd14f">Движение</div><div class="info_window" rel="Движение"></div>'
-            },
-            {
-                title: 'Парковка:',
-                icon: '<div class="rect_legend_moto" rel="Парковка" style="background-color:#3399ff">Парковка</div><div class="info_window" rel="Парковка"></div>'
-            }, {
-                title: 'Повёрнут ключ зажигания:',
-                icon: '<div class="rect_legend_moto" rel="Повёрнут ключ зажигания:" style="background-color:#fef445">Повёрнут ключ зажигания</div><div class="info_window" rel="Повёрнут ключ зажигания"></div>'
-            }, {
-                title: 'Работа на холостом ходу:',
-                icon: '<div class="rect_legend_moto" rel="Работа на холостом ходу" style="background-color:#f24726">Работа на холостом ходу</div><div class="info_window" rel="Работа на холостом ходу"></div>'
-            }]
-            containers = arrayTitle.map(e => {
-                return `<div class="uniqum_legend">${e.icon}</div>`
-
-
-            }).join('')
-        }
-        if (types === 'СКДШ') {
-            const arrayTitle = [{
-                title: 'Низкое:',
-                icon: '<div class="rect_legend_moto skdsh_leg" rel="Низкое">Низкое:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Низкое"></div>'
-            },
-            {
-                title: 'Ниже нормы:',
-                icon: '<div class="rect_legend_moto skdsh_leg" rel="Ниже нормы">Ниже нормы:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Ниже нормы"></div>'
-            }, {
-                title: 'Нормальное:',
-                icon: '<div class="rect_legend_moto skdsh_leg" rel="Нормальное">Нормальное:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Нормальное"></div>'
-            }, {
-                title: 'Выше нормы:',
-                icon: '<div class="rect_legend_moto skdsh_leg" rel="Выше нормы">Выше нормы:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Выше нормы"></div>'
-            },
-            {
-                title: 'Высокое:',
-                icon: '<div class="rect_legend_moto skdsh_leg" rel="Высокое">Высокое:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Высокое"></div>'
-            },
-            {
-                title: 'Всего:',
-                icon: '<div class="rect_legend_moto skdsh_leg" rel="Всего">Всего:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Всего"></div>'
-            },
-            {
-                title: 'Максимальное:',
-                icon: '<div class="rect_legend_moto skdsh_leg" rel="Максимальное">Максимальное:</div><div class="info_window skdsh_leg value_tool_skdah" rel="Максимум"></div>'
-            }]
-            containers = arrayTitle.map(e => {
-                return `<div class="uniqum_legend">${e.icon}</div>`
-
-
-            }).join('')
-        }
-
-
-        return `<div class="legend_container"><div class="title_legend">${types === 'СКДШ' ? '' : 'Легенда'}</div>
-        <div class="body_legend">${containers}
-        </div></div>`
-    }
 }
 
 

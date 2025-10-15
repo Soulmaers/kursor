@@ -43,19 +43,21 @@ exports.fileDown = async (req, res) => {
     const path = require('path');
 
     try {
+        // console.log(req.body)
         const data = req.body.globalObject;
         const titleName = req.body.selectedText
         const nameObjects = req.body.nameObjects
-        console.log('gla')
+        // console.log('gla')
         //  console.log(nameObjects)
         // Уникальное имя файла
         const filePath = path.join(__dirname, `rep_${Date.now()}.pdf`);
         const instance = new PDFClassReports(nameObjects, titleName, data, filePath);
-        console.time('пдф')
+        //  console.time('пдф')
         const report = await instance.init();
-        console.log('репорт?')
-        console.log(report)
-        console.timeEnd('пдф')
+        // console.log('репорт?')
+        // console.log(report)
+        // console.timeEnd('пдф')
+
         // Проверка, что файл создан
         if (!fs.existsSync(report)) {
             return res.status(500).send('Файл не создан');
@@ -70,6 +72,7 @@ exports.fileDown = async (req, res) => {
 
         // Поток + удаление после отправки
         const fileStream = fs.createReadStream(report);
+        //  console.log(fileStream)
         fileStream.pipe(res);
 
         fileStream.on('close', () => {

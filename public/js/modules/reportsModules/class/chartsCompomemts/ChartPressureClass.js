@@ -5,6 +5,7 @@ import { Helpers } from '../Helpers.js'
 export class ChartPressureClass {
 
     constructor(data, container, types, interval) {
+        console.log(data)
         this.timeInterval = interval
         this.types = types
         this.data = data

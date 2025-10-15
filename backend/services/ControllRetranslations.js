@@ -11,8 +11,8 @@ class ControllRetranslations {
     }
 
     async init() {
-        new ListenPortTP(21626);//21626
-        new ListenPortIPS(20332)
+        //   new ListenPortTP(21626);//21626
+        //   new ListenPortIPS(20332)
         // new ListenPortTPNew(20163)
         await this.getProtokolRetranslation() //получение протоколов ретрансяции
         this.protokols.forEach(e => this.ifControllClassProtocol(e))
@@ -26,8 +26,8 @@ class ControllRetranslations {
                 break;
             case 'Wialon Retranslation': new ListenPortTPNew(20163)
                 break;
-            case 'Wialon IPS': new ListenPortIPS(20332)
-                break;
+            //@ts-check  case 'Wialon IPS': new ListenPortIPS(20332)
+            //   break;
         }
     }
 
@@ -40,6 +40,7 @@ class ControllRetranslations {
 
 }
 
-
-
 module.exports = ControllRetranslations
+
+
+
